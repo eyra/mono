@@ -20,7 +20,6 @@ defmodule Systems.Project.PublicTest do
                %Systems.Project.ItemModel{
                  id: ^item_id,
                  node_id: ^node_id,
-                 tool_ref_id: nil,
                  assignment_id: ^assignment_id
                }
              ] = Project.Public.list_items(node, {:assignment, :benchmark_challenge})

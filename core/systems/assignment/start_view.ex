@@ -7,7 +7,7 @@ defmodule Systems.Assignment.StartView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept
 
-  alias Systems.Project
+  alias Systems.Workflow
 
   def update(%{id: id, participant: participant, work_item: work_item, loading: loading}, socket) do
     {
@@ -47,7 +47,7 @@ defmodule Systems.Assignment.StartView do
   def compose(:icon, %{work_item: {%{group: group}, _}}), do: String.downcase(group)
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item, participant) do
-    Project.ToolRefModel.tool(tool_ref)
+    Workflow.ToolRefModel.tool(tool_ref)
     |> Concept.ToolModel.launcher()
     |> start_action(item, participant)
   end

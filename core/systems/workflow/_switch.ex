@@ -2,16 +2,12 @@ defmodule Systems.Workflow.Switch do
   use Frameworks.Signal.Handler
 
   alias Frameworks.Signal
-
-  alias Systems.{
-    Workflow,
-    Project
-  }
+  alias Systems.Workflow
 
   @impl true
   def intercept(
         {:tool_ref, _} = signal,
-        %{tool_ref: %Project.ToolRefModel{} = tool_ref} = message
+        %{tool_ref: %Workflow.ToolRefModel{} = tool_ref} = message
       ) do
     workflow_item = Workflow.Public.get_item_by_tool_ref(tool_ref, [:workflow, :tool_ref])
 

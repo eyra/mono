@@ -10,13 +10,15 @@ defmodule Systems.Graphite.SubmissionModel do
   schema "graphite_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
+    field(:locked, :boolean)
     belongs_to(:tool, Graphite.ToolModel)
     belongs_to(:auth_node, Core.Authorization.Node)
+    has_many(:scores, Graphite.ScoreModel, foreign_key: :submission_id)
 
     timestamps()
   end
 
-  @fields ~w(description github_commit_url)a
+  @fields ~w(description github_commit_url locked)a
   @required_fields @fields
   @valid_github_commit_url ~r"https:\/\/github\.com(?:\/[^\/]+)*\/commit\/[0-9a-f]{40}"
 

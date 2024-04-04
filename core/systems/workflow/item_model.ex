@@ -4,11 +4,7 @@ defmodule Systems.Workflow.ItemModel do
   alias Frameworks.Concept
 
   import Ecto.Changeset
-
-  alias Systems.{
-    Project,
-    Workflow
-  }
+  alias Systems.Workflow
 
   schema "workflow_items" do
     field(:group, :string)
@@ -17,7 +13,7 @@ defmodule Systems.Workflow.ItemModel do
     field(:description, :string)
 
     belongs_to(:workflow, Workflow.Model)
-    belongs_to(:tool_ref, Project.ToolRefModel)
+    belongs_to(:tool_ref, Workflow.ToolRefModel)
 
     timestamps()
   end
@@ -44,7 +40,7 @@ defmodule Systems.Workflow.ItemModel do
   end
 
   defp tool_ready?(%{tool_ref: tool_ref}) do
-    Project.ToolRefModel.flatten(tool_ref)
+    Workflow.ToolRefModel.flatten(tool_ref)
     |> Concept.ToolModel.ready?()
   end
 
@@ -62,10 +58,10 @@ defmodule Systems.Workflow.ItemModel do
         :tool_ref
       ])
 
-  def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
+  def preload_graph(:tool_ref), do: [tool_ref: Workflow.ToolRefModel.preload_graph(:down)]
 
   def external_path(%{tool_ref: tool_ref}, next_id),
-    do: Project.ToolRefModel.external_path(tool_ref, next_id)
+    do: Workflow.ToolRefModel.external_path(tool_ref, next_id)
 
-  def flatten(%{tool_ref: tool_ref}), do: Project.ToolRefModel.flatten(tool_ref)
+  def flatten(%{tool_ref: tool_ref}), do: Workflow.ToolRefModel.flatten(tool_ref)
 end

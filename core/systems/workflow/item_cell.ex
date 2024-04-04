@@ -2,11 +2,7 @@ defmodule Systems.Workflow.ItemCell do
   use CoreWeb, :live_component
 
   alias Frameworks.Concept
-
-  alias Systems.{
-    Project,
-    Workflow
-  }
+  alias Systems.Workflow
 
   @impl true
   def update(
@@ -63,7 +59,7 @@ defmodule Systems.Workflow.ItemCell do
 
   defp update_item_form(%{assigns: %{id: id, item: %{tool_ref: tool_ref} = item}} = socket) do
     group_enabled? =
-      Project.ToolRefModel.flatten(tool_ref)
+      Workflow.ToolRefModel.flatten(tool_ref)
       |> Concept.ToolModel.group_enabled?()
 
     item_form = %{
@@ -86,8 +82,8 @@ defmodule Systems.Workflow.ItemCell do
            }
          } = socket
        ) do
-    tool = Project.ToolRefModel.flatten(tool_ref)
-    tool_form_module = Project.ToolRefModel.form(tool_ref)
+    tool = Workflow.ToolRefModel.flatten(tool_ref)
+    tool_form_module = Workflow.ToolRefModel.form(tool_ref)
 
     callback_path = ~p"/assignment/callback/#{item_id}"
     callback_url = uri_origin <> callback_path

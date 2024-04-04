@@ -48,7 +48,6 @@ defmodule Systems.Project.AssemblyTest do
     assert %{
              name: ^item_name,
              project_path: [^root_id],
-             tool_ref: nil,
              assignment: %Systems.Assignment.Model{
                info: %Systems.Assignment.InfoModel{},
                workflow: %Systems.Workflow.Model{
@@ -72,13 +71,11 @@ defmodule Systems.Project.AssemblyTest do
 
   test "update_path/1 succeeds with project and node depth of 1" do
     item1 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     item2 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     %{id: project_id} =
@@ -124,23 +121,19 @@ defmodule Systems.Project.AssemblyTest do
 
   test "update_path/1 succeeds with project and node depth of 2" do
     item_a_1 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     item_a_2 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     item_b_1 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     item_b_2 =
-      Project.Factories.build_tool()
-      |> Project.Factories.build_tool_ref()
+      Project.Factories.build_assignment()
       |> Project.Factories.build_item()
 
     node_a = Project.Factories.build_node(items: [item_a_1, item_a_2])

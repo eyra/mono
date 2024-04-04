@@ -9,8 +9,6 @@ defmodule Systems.Graphite.Public do
 
   alias Frameworks.Signal
   alias Systems.Graphite
-  alias Systems.Assignment
-  alias Systems.Workflow
 
   # FIXME: should come from CMS
   @main_category "f1_score"
@@ -32,7 +30,7 @@ defmodule Systems.Graphite.Public do
 
   def get_submission(tool, user, role, preload \\ []) do
     submissions =
-      submission_query(tool, user, role)
+      submission_query({tool, user, role}, locked: false)
       |> Repo.all()
       |> Repo.preload(preload)
 
@@ -91,11 +89,25 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
-  def list_submissions(%Assignment.Model{workflow: workflow}) do
-    Workflow.Public.list_tools(workflow, :submit)
-    |> Enum.map(& &1.id)
-    |> submission_query()
+  def list_submissions(%Graphite.ToolModel{} = tool, locked \\ false, preload \\ []) do
+    tool
+    |> submission_query(locked: locked)
     |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def lock_submissions(%Multi{} = multi, %Graphite.LeaderboardModel{tool: tool}) do
+    submission_query =
+      submission_query(tool, locked: false)
+      |> update(set: [locked: true])
+      |> select([submission: s], s)
+
+    multi
+    |> Multi.update_all(:update_all, submission_query, [])
+    |> Multi.run(:graphite_submissions, fn _, %{update_all: {_, submissions}} ->
+      {:ok, submissions}
+    end)
+    |> Signal.Public.multi_dispatch({:graphite_submissions, :updated})
   end
 
   defp parse_entry(line) do
@@ -198,14 +210,6 @@ defmodule Systems.Graphite.Public do
       |> Ecto.Changeset.put_assoc(:leaderboard, leaderboard)
       |> Ecto.Changeset.put_assoc(:submission, submission)
     end)
-  end
-
-  def list_submissions(tool_id, preload \\ []) do
-    from(submission in Graphite.SubmissionModel,
-      where: submission.tool_id == ^tool_id,
-      preload: ^preload
-    )
-    |> Repo.all()
   end
 
   def list_leaderboard_categories(tool_id, preload \\ []) do

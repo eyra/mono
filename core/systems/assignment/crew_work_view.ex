@@ -12,7 +12,6 @@ defmodule Systems.Assignment.CrewWorkView do
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
-  alias Systems.Project
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Document
@@ -177,7 +176,7 @@ defmodule Systems.Assignment.CrewWorkView do
         } = assigns
       ) do
     %{
-      module: Project.ToolRefView,
+      module: Workflow.ToolRefView,
       params: %{
         title: title,
         tool_ref: tool_ref,
@@ -198,7 +197,7 @@ defmodule Systems.Assignment.CrewWorkView do
       ) do
     launcher =
       tool_ref
-      |> Project.ToolRefModel.tool()
+      |> Workflow.ToolRefModel.tool()
       |> Concept.ToolModel.launcher()
 
     compose(:tool_ref_view, Map.put(assigns, :launcher, launcher))

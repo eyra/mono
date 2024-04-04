@@ -38,10 +38,6 @@ defmodule Systems.Project.Factories do
     build_node(arguments)
   end
 
-  def build_item(%Project.ToolRefModel{} = tool_ref) do
-    Factories.build(:project_item, %{name: "project-item", project_path: [], tool_ref: tool_ref})
-  end
-
   def build_item(%Assignment.Model{} = assignment) do
     Factories.build(:project_item, %{
       name: "project-item",

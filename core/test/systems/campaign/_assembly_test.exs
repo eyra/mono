@@ -305,7 +305,7 @@ defmodule Systems.Campaign.AssemblyTest do
           workflow: %{
             items: [
               %{
-                tool_ref: %Systems.Project.ToolRefModel{
+                tool_ref: %Systems.Workflow.ToolRefModel{
                   alliance_tool: tool
                 }
               }

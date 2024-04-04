@@ -1,4 +1,4 @@
-defmodule Systems.Project.ToolRefModel do
+defmodule Systems.Workflow.ToolRefModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -7,7 +7,7 @@ defmodule Systems.Project.ToolRefModel do
 
   alias Frameworks.Concept
 
-  alias Systems.Project
+  alias Systems.Workflow
   alias Systems.Document
   alias Systems.Alliance
   alias Systems.Lab
@@ -25,7 +25,7 @@ defmodule Systems.Project.ToolRefModel do
     belongs_to(:document_tool, Document.ToolModel)
     belongs_to(:instruction_tool, Instruction.ToolModel)
 
-    has_one(:item, Project.ItemModel, foreign_key: :tool_ref_id)
+    has_one(:workflow_item, Workflow.ItemModel, foreign_key: :tool_ref_id)
 
     timestamps()
   end
@@ -68,7 +68,7 @@ defmodule Systems.Project.ToolRefModel do
   def preload_graph(:instruction_tool),
     do: [instruction_tool: Instruction.ToolModel.preload_graph(:down)]
 
-  def auth_tree(%Project.ToolRefModel{} = tool_ref) do
+  def auth_tree(%Workflow.ToolRefModel{} = tool_ref) do
     Concept.ToolModel.auth_tree(tool(tool_ref))
   end
 
@@ -92,13 +92,13 @@ defmodule Systems.Project.ToolRefModel do
   def tool(%{graphite_tool: %{id: _id} = tool}), do: tool
   def tool(%{instruction_tool: %{id: _id} = tool}), do: tool
 
-  def tag(%Project.ToolRefModel{special: :questionnaire}),
+  def tag(%Workflow.ToolRefModel{special: :questionnaire}),
     do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
 
-  def tag(%Project.ToolRefModel{special: :graphite}),
+  def tag(%Workflow.ToolRefModel{special: :graphite}),
     do: dgettext("eyra-project", "tool_ref.tag.graphite")
 
-  def tag(%Project.ToolRefModel{special: _special}) do
+  def tag(%Workflow.ToolRefModel{special: _special}) do
     dgettext("eyra-project", "tool_ref.tag.default")
   end
 end
