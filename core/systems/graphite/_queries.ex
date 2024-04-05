@@ -1,9 +1,4 @@
 defmodule Systems.Graphite.Queries do
-  @moduledoc """
-  Queries in this module support the following options:
-  - :locked, :boolean, default: false
-  """
-
   require Ecto.Query
   require Frameworks.Utility.Query
 
@@ -20,24 +15,16 @@ defmodule Systems.Graphite.Queries do
     from(Graphite.SubmissionModel, as: :submission)
   end
 
-  def submission_query(opts) do
-    locked = Keyword.get(opts, :locked, false)
-
+  def submission_query(%Graphite.ToolModel{id: id}) do
     build(submission_query(), :submission, [
-      locked == ^locked
-    ])
-  end
-
-  def submission_query(%Graphite.ToolModel{id: id}, opts) do
-    build(submission_query(opts), :submission, [
       tool_id == ^id
     ])
   end
 
-  def submission_query({%Graphite.ToolModel{} = tool, user_ref, role}, opts) do
+  def submission_query({%Graphite.ToolModel{} = tool, user_ref, role}) do
     user_id = User.user_id(user_ref)
 
-    build(submission_query(tool, opts), :submission,
+    build(submission_query(tool), :submission,
       auth_node: [
         role_assignments: [
           role == ^role,
@@ -47,8 +34,8 @@ defmodule Systems.Graphite.Queries do
     )
   end
 
-  def submission_ids(selector, opts) do
-    submission_query(selector, opts)
+  def submission_ids(selector) do
+    submission_query(selector)
     |> select([submission: s], s.id)
     |> distinct(true)
   end

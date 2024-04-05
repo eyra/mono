@@ -30,7 +30,7 @@ defmodule Systems.Graphite.Public do
 
   def get_submission(tool, user, role, preload \\ []) do
     submissions =
-      submission_query({tool, user, role}, locked: false)
+      submission_query({tool, user, role})
       |> Repo.all()
       |> Repo.preload(preload)
 
@@ -89,25 +89,11 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
-  def list_submissions(%Graphite.ToolModel{} = tool, locked \\ false, preload \\ []) do
+  def list_submissions(%Graphite.ToolModel{} = tool, preload \\ []) do
     tool
-    |> submission_query(locked: locked)
+    |> submission_query()
     |> Repo.all()
     |> Repo.preload(preload)
-  end
-
-  def lock_submissions(%Multi{} = multi, %Graphite.LeaderboardModel{tool: tool}) do
-    submission_query =
-      submission_query(tool, locked: false)
-      |> update(set: [locked: true])
-      |> select([submission: s], s)
-
-    multi
-    |> Multi.update_all(:update_all, submission_query, [])
-    |> Multi.run(:graphite_submissions, fn _, %{update_all: {_, submissions}} ->
-      {:ok, submissions}
-    end)
-    |> Signal.Public.multi_dispatch({:graphite_submissions, :updated})
   end
 
   defp parse_entry(line) do

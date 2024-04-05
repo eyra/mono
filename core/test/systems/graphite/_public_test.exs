@@ -1,7 +1,6 @@
 defmodule Systems.Graphite.PublicTest do
   use Core.DataCase
 
-  alias Ecto.Multi
   alias Core.Repo
   alias Systems.Graphite
   alias Systems.Graphite.Factories
@@ -32,75 +31,6 @@ defmodule Systems.Graphite.PublicTest do
                %Systems.Graphite.SubmissionModel{id: ^submission2_id, tool_id: ^tool_id},
                %Systems.Graphite.SubmissionModel{id: ^submission3_id, tool_id: ^tool_id}
              ] = Graphite.Public.list_submissions(tool)
-    end
-  end
-
-  describe "lock_submissions/1" do
-    test "no submissions" do
-      tool = Core.Factories.insert!(:graphite_tool)
-      leaderboard = Factories.create_leaderboard(tool)
-
-      {:ok, %{graphite_submissions: submissions}} =
-        Multi.new()
-        |> Graphite.Public.lock_submissions(leaderboard)
-        |> Repo.transaction()
-
-      assert [] = submissions
-    end
-
-    test "one submission" do
-      tool = %{id: tool_id} = Core.Factories.insert!(:graphite_tool)
-      leaderboard = Factories.create_leaderboard(tool)
-      %{id: submission_id} = Factories.add_submission(tool)
-
-      {:ok, %{graphite_submissions: submissions}} =
-        Multi.new()
-        |> Graphite.Public.lock_submissions(leaderboard)
-        |> Repo.transaction()
-
-      assert [
-               %Systems.Graphite.SubmissionModel{tool_id: ^tool_id, id: ^submission_id}
-             ] = submissions
-    end
-
-    test "multiple submissions" do
-      tool = %{id: tool_id} = Core.Factories.insert!(:graphite_tool)
-      leaderboard = Factories.create_leaderboard(tool)
-      %{id: submission1_id} = Factories.add_submission(tool)
-      %{id: submission2_id} = Factories.add_submission(tool)
-      %{id: submission3_id} = Factories.add_submission(tool)
-
-      {:ok, %{graphite_submissions: submissions}} =
-        Multi.new()
-        |> Graphite.Public.lock_submissions(leaderboard)
-        |> Repo.transaction()
-
-      assert [
-               %Systems.Graphite.SubmissionModel{id: ^submission1_id, tool_id: ^tool_id},
-               %Systems.Graphite.SubmissionModel{id: ^submission2_id, tool_id: ^tool_id},
-               %Systems.Graphite.SubmissionModel{id: ^submission3_id, tool_id: ^tool_id}
-             ] = submissions
-    end
-
-    test "multiple runs" do
-      tool = Core.Factories.insert!(:graphite_tool)
-      leaderboard = Factories.create_leaderboard(tool)
-
-      Factories.add_submission(tool)
-      Factories.add_submission(tool)
-      Factories.add_submission(tool)
-
-      {:ok, _} =
-        Multi.new()
-        |> Graphite.Public.lock_submissions(leaderboard)
-        |> Repo.transaction()
-
-      {:ok, %{graphite_submissions: submissions}} =
-        Multi.new()
-        |> Graphite.Public.lock_submissions(leaderboard)
-        |> Repo.transaction()
-
-      assert [] = submissions
     end
   end
 
