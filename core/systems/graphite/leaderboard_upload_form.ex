@@ -40,7 +40,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         csv_lines: nil
       )
       |> init_file_uploader(:csv)
-      |> prepare_process_button("processign")
+      |> prepare_process_button("processing")
     }
   end
 

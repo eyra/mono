@@ -26,15 +26,24 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
         leaderboard: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
-        berakpoint: breakpoint,
-        placeholder: "Upload file",
-        select_button: "Select file",
-        replace_button: "Replace file",
-        csv_local_path: nil,
-        csv_remote_file: nil,
-        csv_lines: nil
+        berakpoint: breakpoint
       )
+      |> prepare_download_button("Download")
     }
+  end
+
+  defp prepare_download_button(socket, label) do
+    download_button = %{
+      action: %{type: :send, event: "download"},
+      face: %{type: :primary, label: label}
+    }
+
+    assign(socket, download_button: download_button)
+  end
+
+  @impl true
+  def handle_event("download", _params, socket) do
+    {:noreply, socket}
   end
 
   @impl true
@@ -47,6 +56,8 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
           <Text.title2>Download submission details</Text.title2>
           <Text.body_medium>Info on current submissions  here</Text.body_medium>
           <Text.body_medium>Also: download button</Text.body_medium>
+
+          <Button.dynamic {@download_button} />
         </div>
       </.form>
     </div>
