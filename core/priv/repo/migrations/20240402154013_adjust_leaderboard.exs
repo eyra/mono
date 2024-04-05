@@ -17,7 +17,7 @@ defmodule Core.Repo.Migrations.AdjustLeaderboard do
       add(:leaderboard_id, references(:graphite_leaderboards))
     end
 
-    drop_if_exist(constraint(:project_items, :must_have_at_least_one_reference))
+    drop_if_exists(constraint(:project_items, :must_have_at_least_one_reference))
 
     create(
       constraint(:project_items, :must_have_at_least_one_reference,
