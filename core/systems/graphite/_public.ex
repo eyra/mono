@@ -131,6 +131,42 @@ defmodule Systems.Graphite.Public do
     end)
   end
 
+  def import_csv_lines(leaderboard, lines) do
+    now = NaiveDateTime.utc_now()
+
+    Multi.new()
+    |> Multi.insert_all(
+      :add_scores,
+      Graphite.ScoreModel,
+      Enum.flat_map(
+        lines,
+        fn line -> create_scores(line, leaderboard, now) end
+      ),
+      returning: true
+    )
+    |> update_leaderboard_generation_date(leaderboard, now)
+    |> Repo.transaction()
+  end
+
+  defp create_scores(line, leaderboard, dt) do
+    leaderboard.metrics
+    |> Enum.map(fn metric ->
+      %{
+        metric: metric,
+        score: String.to_float(line[metric]),
+        leaderboard_id: leaderboard.id,
+        submission_id: String.to_integer(line["submission"]),
+        inserted_at: dt,
+        updated_at: dt
+      }
+    end)
+  end
+
+  defp update_leaderboard_generation_date(multi, leaderboard, dt) do
+    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: dt})
+    Multi.update(multi, :leaderboard_generation_date, changeset)
+  end
+
   def import_csv_lines(csv_lines) do
     csv_lines
     |> Enum.filter(&(Map.get(&1, "status") == "success"))

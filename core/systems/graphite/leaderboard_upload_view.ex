@@ -22,7 +22,7 @@ defmodule Systems.Graphite.LeaderboardUploadView do
       socket
       |> assign(
         id: id,
-        entity: leaderboard,
+        leaderboard: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
@@ -32,11 +32,19 @@ defmodule Systems.Graphite.LeaderboardUploadView do
   end
 
   @impl true
-  def compose(:upload, %{entity: leaderboard}) do
+  def compose(:upload, %{
+        leaderboard: leaderboard,
+        uri_origin: uri_origin,
+        viewport: viewport,
+        breakpoint: breakpoint
+      }) do
     %{
       module: Graphite.LeaderboardUploadForm,
       params: %{
         leaderboard: leaderboard,
+        uri_origin: uri_origin,
+        viewport: viewport,
+        breakpoint: breakpoint,
         page_key: :upload,
         opt_in?: false,
         on_text: "upload view on text",
