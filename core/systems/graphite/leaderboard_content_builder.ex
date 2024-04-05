@@ -126,7 +126,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
   end
 
   defp get_tab_keys() do
-    [:settings, :upload]
+    [:settings, :download, :upload]
   end
 
   defp create_tab(:settings, leaderboard, show_errors, assigns) do
@@ -148,6 +148,30 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       title: "Settings",
       forward_title: "Change settings",
       backward_title: "Change settings",
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(:download, leaderboard, show_errors, assigns) do
+    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
+      assigns
+
+    child =
+      Fabric.prepare_child(fabric, :download_form, Graphite.LeaderboardDownloadView, %{
+        entity: leaderboard,
+        uri_origin: uri_origin,
+        viewport: viewport,
+        breakpoint: breakpoint
+      })
+
+    %{
+      id: "download_form",
+      ready: false,
+      show_errors: show_errors,
+      title: "Download submissions",
+      forward_title: "Download submissions",
+      backward_title: "Download submissions",
       type: :fullpage,
       child: child
     }

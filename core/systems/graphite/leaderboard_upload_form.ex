@@ -96,10 +96,9 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
     <div>
       <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
         <div>
-          <Area.content>
-            <Text.title2>Scores upload</Text.title2>
-            <Text.body_medium>Expecting the following columns to be present in the file: <%= Enum.join(@columns, ", ") %></Text.body_medium>
-          </Area.content>
+          <.spacing value="L" />
+          <Text.title2>Scores upload</Text.title2>
+          <Text.body_medium>Expecting the following columns to be present in the file: <%= Enum.join(@columns, ", ") %></Text.body_medium>
         </div>
         <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
           <div class="flex flex-row items-center h-full">
