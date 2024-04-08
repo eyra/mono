@@ -168,3 +168,23 @@ msgstr "Dien methode in"
 #, elixir-autogen, elixir-format
 msgid "submit.failed.message"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "retract.button"
+msgstr "Github voorbeeld repository"

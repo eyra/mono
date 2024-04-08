@@ -27,7 +27,8 @@ defmodule Systems.Graphite.LeaderboardModel do
   import Ecto.Changeset
 
   alias Systems.{
-    Graphite
+    Graphite,
+    Project
   }
 
   schema "graphite_leaderboards" do
@@ -43,6 +44,8 @@ defmodule Systems.Graphite.LeaderboardModel do
     has_many(:scores, Graphite.ScoreModel, foreign_key: :leaderboard_id)
     belongs_to(:tool, Graphite.ToolModel)
     belongs_to(:auth_node, Core.Authorization.Node)
+
+    has_one(:project_item, Project.ItemModel, foreign_key: :leaderboard_id)
 
     timestamps()
   end

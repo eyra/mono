@@ -10,13 +10,14 @@ defmodule Systems.Graphite.ScoreModel do
 
   schema "graphite_scores" do
     field(:score, :float)
+    field(:metric, :string)
     belongs_to(:leaderboard, Graphite.LeaderboardModel)
     belongs_to(:submission, Graphite.SubmissionModel)
 
     timestamps()
   end
 
-  @fields ~w(score)a
+  @fields ~w(score metric)a
   @required_fields ~w()a
 
   def changeset(tool, params) do

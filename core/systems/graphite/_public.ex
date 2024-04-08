@@ -79,6 +79,14 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
+  def update_leaderboard(leaderboard, attrs) do
+    Multi.new()
+    |> Multi.update(:graphite_leaderboard, fn _ ->
+      Graphite.LeaderboardModel.changeset(leaderboard, attrs)
+    end)
+    |> Repo.transaction()
+  end
+
   def update_submission(submission, attrs) do
     Multi.new()
     |> Multi.update(:graphite_submission, fn _ ->
@@ -128,6 +136,42 @@ defmodule Systems.Graphite.Public do
         score: score
       }
     end)
+  end
+
+  def import_csv_lines(leaderboard, lines) do
+    now = NaiveDateTime.utc_now()
+
+    Multi.new()
+    |> Multi.insert_all(
+      :add_scores,
+      Graphite.ScoreModel,
+      Enum.flat_map(
+        lines,
+        fn line -> create_scores(line, leaderboard, now) end
+      ),
+      returning: true
+    )
+    |> update_leaderboard_generation_date(leaderboard, now)
+    |> Repo.transaction()
+  end
+
+  defp create_scores(line, leaderboard, datetime) do
+    leaderboard.metrics
+    |> Enum.map(fn metric ->
+      %{
+        metric: metric,
+        score: String.to_float(line[metric]),
+        leaderboard_id: leaderboard.id,
+        submission_id: String.to_integer(line["submission"]),
+        inserted_at: datetime,
+        updated_at: datetime
+      }
+    end)
+  end
+
+  defp update_leaderboard_generation_date(multi, leaderboard, datetime) do
+    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: datetime})
+    Multi.update(multi, :leaderboard_generation_date, changeset)
   end
 
   def import_csv_lines(csv_lines) do
