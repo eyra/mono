@@ -148,7 +148,7 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
-  defp create_scores(line, leaderboard, dt) do
+  defp create_scores(line, leaderboard, datetime) do
     leaderboard.metrics
     |> Enum.map(fn metric ->
       %{
@@ -156,14 +156,14 @@ defmodule Systems.Graphite.Public do
         score: String.to_float(line[metric]),
         leaderboard_id: leaderboard.id,
         submission_id: String.to_integer(line["submission"]),
-        inserted_at: dt,
-        updated_at: dt
+        inserted_at: datetime,
+        updated_at: datetime
       }
     end)
   end
 
-  defp update_leaderboard_generation_date(multi, leaderboard, dt) do
-    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: dt})
+  defp update_leaderboard_generation_date(multi, leaderboard, datetime) do
+    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: datetime})
     Multi.update(multi, :leaderboard_generation_date, changeset)
   end
 

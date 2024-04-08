@@ -45,13 +45,13 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           action: preview_action,
           face: %{
             type: :primary,
-            label: dgettext("eyra-assignment", "preview.button"),
+            label: dgettext("eyra-graphite", "preview.button"),
             bg_color: "bg-primary"
           }
         },
         icon: %{
           action: preview_action,
-          face: %{type: :icon, icon: :preview, alt: dgettext("eyra-assignment", "preview.button")}
+          face: %{type: :icon, icon: :preview, alt: dgettext("eyra-graphite", "preview.button")}
         }
       },
       publish: %{
@@ -59,13 +59,13 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           action: publish_action,
           face: %{
             type: :primary,
-            label: dgettext("eyra-assignment", "publish.button"),
+            label: dgettext("eyra-graphite", "publish.button"),
             bg_color: "bg-success"
           }
         },
         icon: %{
           action: publish_action,
-          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-assignment", "preview.button")}
+          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-graphite", "preview.button")}
         },
         handle_click: &handle_publish/1
       },
@@ -74,7 +74,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           action: retract_action,
           face: %{
             type: :secondary,
-            label: dgettext("eyra-assignment", "retract.button"),
+            label: dgettext("eyra-graphite", "retract.button"),
             text_color: "text-error",
             border_color: "border-error"
           }
@@ -94,12 +94,12 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           action: close_action,
           face: %{
             type: :primary,
-            label: dgettext("eyra-assignment", "close.button")
+            label: dgettext("eyra-graphite", "close.button")
           }
         },
         icon: %{
           action: close_action,
-          face: %{type: :icon, icon: :close, alt: dgettext("eyra-assignment", "close.button")}
+          face: %{type: :icon, icon: :close, alt: dgettext("eyra-graphite", "close.button")}
         },
         handle_click: &handle_close/1
       },
@@ -108,12 +108,12 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           action: open_action,
           face: %{
             type: :primary,
-            label: dgettext("eyra-assignment", "open.button")
+            label: dgettext("eyra-graphite", "open.button")
           }
         },
         icon: %{
           action: open_action,
-          face: %{type: :icon, icon: :open, alt: dgettext("eyra-assignment", "open.button")}
+          face: %{type: :icon, icon: :open, alt: dgettext("eyra-graphite", "open.button")}
         },
         handle_click: &handle_open/1
       }
@@ -158,7 +158,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       assigns
 
     child =
-      Fabric.prepare_child(fabric, :download_form, Graphite.LeaderboardDownloadView, %{
+      Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardDownloadView, %{
         entity: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
@@ -182,7 +182,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       assigns
 
     child =
-      Fabric.prepare_child(fabric, :settings_form, Graphite.LeaderboardUploadView, %{
+      Fabric.prepare_child(fabric, :scores_form, Graphite.LeaderboardUploadView, %{
         entity: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
