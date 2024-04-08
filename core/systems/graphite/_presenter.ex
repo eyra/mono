@@ -10,5 +10,10 @@ defmodule Systems.Graphite.Presenter do
     builder(page).view_model(tool, assigns)
   end
 
+  def view_model(page, %Graphite.LeaderboardModel{} = tool, assigns) do
+    builder(page).view_model(tool, assigns)
+  end
+
   defp builder(Graphite.ToolPage), do: Graphite.ToolPageBuilder
+  defp builder(Graphite.LeaderboardContentPage), do: Graphite.LeaderboardContentBuilder
 end

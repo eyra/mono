@@ -421,3 +421,27 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "project_item_templates.leaderboard"
 msgstr "Benchmark Leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.concept"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.offline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.online"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.private"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.private_with_date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.public"
+msgstr ""

@@ -204,7 +204,7 @@ defmodule Systems.Project.ItemModel do
            %{
              id: id,
              name: name,
-             leaderboard: %{id: _leaderboard_id, status: status} = leaderboard
+             leaderboard: %{id: leaderboard_id, status: status} = leaderboard
            },
            {Project.NodePage, :item_card},
            _user
@@ -222,7 +222,7 @@ defmodule Systems.Project.ItemModel do
       %{
         type: :secondary,
         id: id,
-        path: ~p"/",
+        path: ~p"/graphite/leaderboard/#{leaderboard_id}/content",
         label: get_label(status),
         title: name,
         tags: get_card_tags(leaderboard),
