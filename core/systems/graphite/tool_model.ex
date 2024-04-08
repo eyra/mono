@@ -9,10 +9,12 @@ defmodule Systems.Graphite.ToolModel do
   import CoreWeb.Gettext
 
   alias Systems.Graphite
+  alias Systems.Workflow
 
   schema "graphite_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
     has_many(:submissions, Graphite.SubmissionModel, foreign_key: :tool_id)
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :graphite_tool_id)
 
     timestamps()
   end

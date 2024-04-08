@@ -1,14 +1,11 @@
-defmodule Systems.Project.ToolRefView do
+defmodule Systems.Workflow.ToolRefView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
   require Logger
 
   alias Frameworks.Concept
-
-  alias Systems.{
-    Project
-  }
+  alias Systems.Workflow
 
   def update(
         %{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible, user: user},
@@ -33,7 +30,7 @@ defmodule Systems.Project.ToolRefView do
   def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
     launcher =
       tool_ref
-      |> Project.ToolRefModel.tool()
+      |> Workflow.ToolRefModel.tool()
       |> Concept.ToolModel.launcher()
 
     socket |> update_launcher(launcher)

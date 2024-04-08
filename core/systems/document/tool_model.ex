@@ -5,11 +5,15 @@ defmodule Systems.Document.ToolModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
+  alias Systems.Workflow
+
   schema "document_tools" do
     field(:name, :string)
     field(:ref, :string)
     field(:director, Ecto.Enum, values: [:assignment])
     belongs_to(:auth_node, Core.Authorization.Node)
+
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :document_tool_id)
 
     timestamps()
   end

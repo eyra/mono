@@ -6,11 +6,14 @@ defmodule Systems.Instruction.ToolModel do
   import CoreWeb.Gettext
 
   alias Systems.Instruction
+  alias Systems.Workflow
 
   schema "instruction_tools" do
+    belongs_to(:auth_node, Core.Authorization.Node)
+
     has_many(:assets, Instruction.AssetModel, foreign_key: :tool_id)
     has_many(:pages, Instruction.PageModel, foreign_key: :tool_id)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :instruction_tool_id)
 
     timestamps()
   end

@@ -17,7 +17,6 @@ defmodule Systems.Project.ItemModel do
     field(:name, :string)
     field(:project_path, {:array, :integer})
     belongs_to(:node, Project.NodeModel)
-    belongs_to(:tool_ref, Project.ToolRefModel)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:leaderboard, Graphite.LeaderboardModel)
     timestamps()
@@ -42,28 +41,17 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :tool_ref,
         :assignment,
         :leaderboard
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
-  def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
 
   def preload_graph(:leaderboard),
     do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
-  def special(%{tool_ref: %{id: _id} = special}), do: special
   def special(%{assignment: %{id: _id} = special}), do: special
-
-  def auth_tree(%Project.ItemModel{tool_ref: %Ecto.Association.NotLoaded{}} = item) do
-    auth_tree(Repo.preload(item, :tool_ref))
-  end
-
-  def auth_tree(%Project.ItemModel{tool_ref: tool_ref}) when not is_nil(tool_ref) do
-    Project.ToolRefModel.auth_tree(tool_ref)
-  end
 
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
@@ -85,7 +73,6 @@ defmodule Systems.Project.ItemModel do
     Enum.map(items, &auth_tree/1)
   end
 
-  def tag(%{tool_ref: %{id: _} = tool_ref}), do: Project.ToolRefModel.tag(tool_ref)
   def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
   def tag(%{leaderboard: %{id: _} = leaderboard}), do: Graphite.LeaderboardModel.tag(leaderboard)
 
@@ -147,63 +134,6 @@ defmodule Systems.Project.ItemModel do
            %{
              id: id,
              name: name,
-             tool_ref: %{
-               graphite_tool:
-                 %{
-                   id: graphite_id,
-                   status: status,
-                   director: _director,
-                   spots: spots,
-                   leaderboards: _leaderboards
-                 } = tool
-             }
-           },
-           {Project.NodePage, :item_card},
-           _user
-         ) do
-      tags = get_card_tags(tool)
-      path = ~p"/graphite/#{graphite_id}/content"
-      label = get_label(status)
-
-      edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
-      }
-
-      delete = %{
-        action: %{type: :send, event: "delete", item: id},
-        face: %{type: :icon, icon: :delete}
-      }
-
-      team_info = dngettext("eyra-graphite", "1 team", "%{count} teams", Enum.count(spots))
-
-      submission_info =
-        dngettext(
-          "eyra-graphite",
-          "1 submission",
-          "%{count} submissions",
-          count_submissions(spots)
-        )
-
-      info_line_1 = "#{team_info}  |  #{submission_info}"
-
-      %{
-        type: :secondary,
-        id: id,
-        path: path,
-        label: label,
-        title: name,
-        tags: tags,
-        info: [info_line_1],
-        left_actions: [edit],
-        right_actions: [delete]
-      }
-    end
-
-    defp vm(
-           %{
-             id: id,
-             name: name,
              leaderboard: %{id: leaderboard_id, status: status} = leaderboard
            },
            {Project.NodePage, :item_card},
@@ -230,14 +160,6 @@ defmodule Systems.Project.ItemModel do
         left_actions: [edit],
         right_actions: [delete]
       }
-    end
-
-    defp count_submissions(spots) when is_list(spots) do
-      Enum.reduce(spots, 0, fn spot, acc -> acc + count_submissions(spot) end)
-    end
-
-    defp count_submissions(%{submissions: submissions}) do
-      Enum.count(submissions)
     end
 
     defp get_label(:concept),

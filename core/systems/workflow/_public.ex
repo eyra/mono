@@ -1,9 +1,11 @@
 defmodule Systems.Workflow.Public do
   import Ecto.Query, warn: false
+  import Systems.Workflow.Queries
+
   alias Ecto.Multi
   alias Core.Repo
-
   alias Core.Authorization
+
   alias Frameworks.Signal
 
   alias Systems.Workflow
@@ -12,7 +14,6 @@ defmodule Systems.Workflow.Public do
   alias Systems.Feldspar
   alias Systems.Lab
   alias Systems.Graphite
-  alias Systems.Project
   alias Systems.Instruction
 
   def list_items(workflow, preload \\ [])
@@ -39,7 +40,7 @@ defmodule Systems.Workflow.Public do
 
   def get_item_by_tool_ref(tool_ref, preload \\ [])
 
-  def get_item_by_tool_ref(%Project.ToolRefModel{id: id}, preload) do
+  def get_item_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload) do
     get_item_by_tool_ref(id, preload)
   end
 
@@ -60,7 +61,7 @@ defmodule Systems.Workflow.Public do
   def get_item_by_tool!([hd | tl] = _keys, tool_id, preload) when is_integer(tool_id) do
     query =
       from(item in Workflow.ItemModel,
-        inner_join: tool_ref in Project.ToolRefModel,
+        inner_join: tool_ref in Workflow.ToolRefModel,
         on: tool_ref.id == item.tool_ref_id,
         where: field(tool_ref, ^hd) == ^tool_id,
         preload: ^preload
@@ -96,6 +97,16 @@ defmodule Systems.Workflow.Public do
     |> Repo.transaction()
   end
 
+  def list_tools(%Workflow.Model{} = workflow, special) do
+    preload = Workflow.ItemModel.preload_graph(:down)
+
+    item_query(workflow, special)
+    |> Repo.all()
+    |> Repo.preload(preload)
+    |> Enum.map(& &1.tool_ref)
+    |> Enum.map(&Workflow.ToolRefModel.tool/1)
+  end
+
   def item_count(%Workflow.Model{id: workflow_id}) do
     from(item in Workflow.ItemModel,
       where: item.workflow_id == ^workflow_id,
@@ -112,8 +123,8 @@ defmodule Systems.Workflow.Public do
   end
 
   def prepare_tool_ref(special, tool_type, tool) do
-    %Project.ToolRefModel{}
-    |> Project.ToolRefModel.changeset(%{special: special})
+    %Workflow.ToolRefModel{}
+    |> Workflow.ToolRefModel.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
 

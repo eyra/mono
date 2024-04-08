@@ -8,10 +8,15 @@ defmodule Systems.Lab.ToolModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
+  alias Systems.Lab
+  alias Systems.Workflow
+
   schema "lab_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    has_many(:time_slots, Systems.Lab.TimeSlotModel,
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :lab_tool_id)
+
+    has_many(:time_slots, Lab.TimeSlotModel,
       foreign_key: :tool_id,
       preload_order: [asc: :start_time],
       on_delete: :delete_all

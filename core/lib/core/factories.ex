@@ -242,15 +242,23 @@ defmodule Core.Factories do
   end
 
   def build(:graphite_submission) do
-    build(:graphite_submission, %{description: "description"})
+    build(:graphite_submission, %{
+      description: "description",
+      github_commit_url:
+        "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
+    })
   end
 
   def build(:graphite_tool) do
     build(:graphite_tool, %{})
   end
 
+  def build(:graphite_leaderboard) do
+    build(:graphite_leaderboard, %{})
+  end
+
   def build(:workflow) do
-    build(:workflow, %{})
+    build(:workflow, %{type: :many_optional})
   end
 
   def build(:workflow_item) do
@@ -434,11 +442,9 @@ defmodule Core.Factories do
   end
 
   def build(:project_item, %{} = attributes) do
-    {tool_ref, attributes} = get_optional(:tool_ref, attributes)
     {assignment, attributes} = get_optional(:assignment, attributes)
 
     %Project.ItemModel{
-      tool_ref: tool_ref,
       assignment: assignment
     }
     |> struct!(attributes)
@@ -451,7 +457,7 @@ defmodule Core.Factories do
     {lab_tool, attributes} = get_optional(:lab_tool, attributes)
     {graphite_tool, attributes} = get_optional(:graphite_tool, attributes)
 
-    %Project.ToolRefModel{
+    %Workflow.ToolRefModel{
       alliance_tool: alliance_tool,
       document_tool: document_tool,
       lab_tool: lab_tool,
@@ -614,6 +620,17 @@ defmodule Core.Factories do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
     %Graphite.SubmissionModel{
+      tool: tool,
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:graphite_leaderboard, %{} = attributes) do
+    {tool, attributes} = Map.pop(attributes, :tool, build(:graphite_tool))
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Graphite.LeaderboardModel{
       tool: tool,
       auth_node: auth_node
     }

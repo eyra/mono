@@ -10,8 +10,10 @@ defmodule Systems.Graphite.SubmissionModel do
   schema "graphite_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
+
     belongs_to(:tool, Graphite.ToolModel)
     belongs_to(:auth_node, Core.Authorization.Node)
+    has_many(:scores, Graphite.ScoreModel, foreign_key: :submission_id)
 
     timestamps()
   end

@@ -30,7 +30,7 @@ defmodule Systems.Graphite.Public do
 
   def get_submission(tool, user, role, preload \\ []) do
     submissions =
-      submission_query(tool, user, role)
+      submission_query({tool, user, role})
       |> Repo.all()
       |> Repo.preload(preload)
 
@@ -95,6 +95,13 @@ defmodule Systems.Graphite.Public do
     end)
     |> Signal.Public.multi_dispatch({:graphite_submission, :updated})
     |> Repo.transaction()
+  end
+
+  def list_submissions(%Graphite.ToolModel{} = tool, preload \\ []) do
+    tool
+    |> submission_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   defp parse_entry(line) do
@@ -233,14 +240,6 @@ defmodule Systems.Graphite.Public do
       |> Ecto.Changeset.put_assoc(:leaderboard, leaderboard)
       |> Ecto.Changeset.put_assoc(:submission, submission)
     end)
-  end
-
-  def list_submissions(tool_id, preload \\ []) do
-    from(submission in Graphite.SubmissionModel,
-      where: submission.tool_id == ^tool_id,
-      preload: ^preload
-    )
-    |> Repo.all()
   end
 
   def list_leaderboard_categories(tool_id, preload \\ []) do

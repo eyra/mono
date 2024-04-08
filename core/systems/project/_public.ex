@@ -1,16 +1,16 @@
 defmodule Systems.Project.Public do
   import Ecto.Query, warn: false
   import CoreWeb.Gettext
+  import Systems.Project.Queries
 
   alias Core.Repo
   alias Core.Accounts.User
   alias Core.Authorization
 
-  alias Systems.{
-    Assignment,
-    Graphite,
-    Project
-  }
+  alias Systems.Workflow
+  alias Systems.Assignment
+  alias Systems.Graphite
+  alias Systems.Project
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,
@@ -46,7 +46,7 @@ defmodule Systems.Project.Public do
 
   def get_item_by_tool_ref(tool_ref, preload \\ [])
 
-  def get_item_by_tool_ref(%Project.ToolRefModel{id: tool_ref_id}, preload) do
+  def get_item_by_tool_ref(%Workflow.ToolRefModel{id: tool_ref_id}, preload) do
     get_item_by_tool_ref(tool_ref_id, preload)
   end
 
@@ -73,7 +73,7 @@ defmodule Systems.Project.Public do
   end
 
   def get_tool_ref_by_tool(%{id: id} = tool, preload \\ []) do
-    field = Project.ToolRefModel.tool_id_field(tool)
+    field = Workflow.ToolRefModel.tool_id_field(tool)
 
     query_tool_refs_by_tool(id, field, preload)
     |> Repo.one()
@@ -81,7 +81,7 @@ defmodule Systems.Project.Public do
 
   def query_tool_refs_by_tool(tool_id, field, preload \\ [])
       when is_integer(tool_id) and is_atom(field) do
-    from(tool_ref in Project.ToolRefModel,
+    from(tool_ref in Workflow.ToolRefModel,
       where: field(tool_ref, ^field) == ^tool_id,
       preload: ^preload
     )
@@ -105,6 +105,12 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.all()
+  end
+
+  def list_items(node, {:assignment, template}, preload \\ []) do
+    item_query_by_assignment(node, template)
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def exists?(user, name) do
@@ -178,7 +184,7 @@ defmodule Systems.Project.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_item(attrs, %Project.ToolRefModel{} = tool_ref) do
+  def prepare_item(attrs, %Workflow.ToolRefModel{} = tool_ref) do
     prepare_item(attrs, :tool_ref, tool_ref)
   end
 
@@ -198,12 +204,6 @@ defmodule Systems.Project.Public do
     %Project.ItemModel{}
     |> Project.ItemModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(field_name, concrete)
-  end
-
-  def prepare_tool_ref(special, tool_key, tool) do
-    %Project.ToolRefModel{}
-    |> Project.ToolRefModel.changeset(%{special: special})
-    |> Ecto.Changeset.put_assoc(tool_key, tool)
   end
 
   def add_item(%Project.ItemModel{} = item, %Project.NodeModel{} = node) do
