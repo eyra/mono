@@ -17,7 +17,7 @@ defmodule Systems.Graphite.ExportControllerTest do
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
       })
 
-    expected_id = "#{id}:Team-Unknown:#{submission.description}"
+    expected_id = "#{id}"
 
     assert %{
              id: ^expected_id,
@@ -38,7 +38,7 @@ defmodule Systems.Graphite.ExportControllerTest do
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd"
       })
 
-    expected_id = "#{id}:Team-Unknown:#{submission.description}"
+    expected_id = "#{id}"
 
     assert %{
              id: ^expected_id,

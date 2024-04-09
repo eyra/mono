@@ -9,6 +9,18 @@ defmodule Systems.Graphite.Queries do
   alias Systems.Graphite
   alias Systems.Assignment
 
+  # Leaderboards
+
+  def leaderboard_query() do
+    from(Graphite.LeaderboardModel, as: :leaderboard)
+  end
+
+  def leaderboard_query(%Graphite.ToolModel{id: id}) do
+    build(leaderboard_query(), :leaderboard, [
+      tool_id == ^id
+    ])
+  end
+
   # Submissions
 
   def submission_query() do
@@ -25,6 +37,25 @@ defmodule Systems.Graphite.Queries do
     user_id = User.user_id(user_ref)
 
     build(submission_query(tool), :submission,
+      auth_node: [
+        role_assignments: [
+          role == ^role,
+          principal_id == ^user_id
+        ]
+      ]
+    )
+  end
+
+  def submission_query(%Graphite.LeaderboardModel{tool_id: id}) do
+    build(submission_query(), :submission, [
+      tool_id == ^id
+    ])
+  end
+
+  def submission_query(%Graphite.LeaderboardModel{} = leaderboard, user_ref, role) do
+    user_id = User.user_id(user_ref)
+
+    build(submission_query(leaderboard), :submission,
       auth_node: [
         role_assignments: [
           role == ^role,

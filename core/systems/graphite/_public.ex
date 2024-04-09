@@ -97,9 +97,17 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
-  def list_submissions(%Graphite.ToolModel{} = tool, preload \\ []) do
+  def list_submissions(struct, preload \\ [])
+
+  def list_submissions(%Graphite.ToolModel{} = tool, preload) do
     tool
     |> submission_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_submissions(%Graphite.LeaderboardModel{} = leaderboard, preload) do
+    submission_query(leaderboard)
     |> Repo.all()
     |> Repo.preload(preload)
   end

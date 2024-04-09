@@ -9,7 +9,10 @@ defmodule Systems.Graphite.ExportController do
   @github_url_template "git@github.com:${owner_repo}.git"
 
   def submissions(conn, %{"id" => id}) do
-    submissions = Graphite.Public.list_submissions(id, [])
+    submissions =
+      Graphite.Public.get_leaderboard!(id)
+      |> Graphite.Public.list_submissions()
+
     csv_data = export(submissions)
 
     filename = "graphite-#{id}-submissions.csv"
@@ -17,9 +20,6 @@ defmodule Systems.Graphite.ExportController do
     conn
     |> put_resp_content_type("text/csv")
     |> put_resp_header("content-disposition", "attachment; filename=\"#{filename}\"")
-    # FIXME: Figure out why this breaks
-    # Settings root layout breaks giving a return value
-    # |> put_root_layout(false)
     |> send_resp(200, csv_data)
   end
 
@@ -37,14 +37,12 @@ defmodule Systems.Graphite.ExportController do
         auth_node: _auth_node
       }) do
     # TODO: fetch name of collab out of auth_node
-    name = "Team-Unknown"
-
-    id = "#{submission_id}:#{name}:#{description}"
+    id = "#{submission_id}"
 
     case Regex.run(@extract_owner_repo_and_ref, github_commit_url) do
       [_, owner_repo, ref] ->
         url = String.replace(@github_url_template, "${owner_repo}", owner_repo)
-        %{id: id, url: url, ref: ref}
+        %{id: id, description: description, url: url, ref: ref}
 
       _ ->
         %{id: id, url: github_commit_url, ref: ""}
