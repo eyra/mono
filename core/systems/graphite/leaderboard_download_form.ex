@@ -28,7 +28,7 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
         submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
-        berakpoint: breakpoint
+        breakpoint: breakpoint
       )
       |> prepare_download_button()
     }

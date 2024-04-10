@@ -23,6 +23,13 @@ defmodule Systems.Graphite.Public do
     |> Repo.get!(id)
   end
 
+  def get_submission(id) do
+    from(submission in Graphite.SubmissionModel,
+      where: submission.id == ^id
+    )
+    |> Repo.one()
+  end
+
   def get_submission!(id, preload \\ []) do
     from(submission in Graphite.SubmissionModel, preload: ^preload)
     |> Repo.get!(id)
@@ -147,7 +154,7 @@ defmodule Systems.Graphite.Public do
   end
 
   def import_csv_lines(leaderboard, lines) do
-    now = NaiveDateTime.utc_now()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     Multi.new()
     |> Multi.insert_all(

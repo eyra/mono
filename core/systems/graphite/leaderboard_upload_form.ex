@@ -31,7 +31,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         leaderboard: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
-        berakpoint: breakpoint,
+        breakpoint: breakpoint,
         placeholder: "Upload file",
         select_button: "Select file",
         replace_button: "Replace file",
@@ -61,7 +61,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
 
   @impl true
   def handle_event("process", _params, %{assigns: %{csv_local_path: csv_local_path}} = socket) do
-    %{assigns: %{entity: leaderboard}} = socket
+    %{assigns: %{leaderboard: leaderboard}} = socket
 
     lines =
       csv_local_path
@@ -74,20 +74,42 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
       |> Stream.map(fn {:ok, line} -> line end)
       |> Enum.filter(fn line -> check_line(line, leaderboard) end)
 
-    Graphite.Public.import_csv_lines(socket.assigns.entity, lines_ok)
+    Graphite.Public.import_csv_lines(socket.assigns.leaderboard, lines_ok)
     {:noreply, assign(socket, csv_lines: lines_ok)}
+  end
+
+  def handle_event("change", _params, socket) do
+    {:noreply, socket}
   end
 
   defp filter_ok({:ok, _line}), do: true
   defp filter_ok({:error, _line}), do: false
 
-  defp check_line(line, metrics) do
-    line
-    |> contains_all_metrics?(metrics)
+  defp check_line(%{} = line, %Graphite.LeaderboardModel{} = leaderboard) do
+    with :ok <- contains_all_metrics?(line, leaderboard.metrics),
+         :ok <- has_valid_submission?(line) do
+      true
+    else
+      _ ->
+        false
+    end
   end
 
   defp contains_all_metrics?(line, metrics) do
-    Enum.all?(metrics, fn metric -> Map.has_key?(line, metric) end)
+    if Enum.all?(metrics, fn metric -> Map.has_key?(line, metric) end) do
+      :ok
+    else
+      {:error, "Not all required metrics for a leaderboard entry are present."}
+    end
+  end
+
+  defp has_valid_submission?(line) do
+    # TODO check whether the provided submissions actually connects to the leaderboard
+    # the score is being uploaded for?
+    case Graphite.Public.get_submission(line["submission"]) do
+      nil -> {:error, "Submission not found"}
+      _ -> :ok
+    end
   end
 
   @impl true
