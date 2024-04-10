@@ -7,6 +7,7 @@ defmodule Systems.Graphite.Routes do
         live("/leaderboard/:id/content", LeaderboardContentPage)
 
         live("/:id/content", ContentPage)
+        # TODO everything related to Spots should be removed (?)
         live("/:id/:spot", ToolPage)
 
         get("/:id", ToolController, :ensure_spot)
@@ -15,6 +16,7 @@ defmodule Systems.Graphite.Routes do
 
       scope "/graphite", Systems.Graphite do
         pipe_through([:browser])
+        live("/leaderboard/:leaderboard_id/page", LeaderboardPage)
         live("/:id/public/leaderboard", LeaderboardPage)
       end
     end

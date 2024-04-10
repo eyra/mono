@@ -6,15 +6,15 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
          submission: %{
            updated_at: updated_at,
            github_commit_url: github_commit_url,
-           description: description,
-           spot: %{name: name}
+           description: description
          }
        }) do
     # max 6 decimal precision
     score = trunc(score * 1_000_000) / 1_000_000
 
     %{
-      name: name,
+      # TODO change to participant name?
+      name: description,
       description: description,
       score: score,
       link: github_commit_url,

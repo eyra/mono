@@ -21,6 +21,17 @@ defmodule Systems.Graphite.Queries do
     ])
   end
 
+  # Scores
+  def score_query() do
+    from(Graphite.ScoreModel, as: :score)
+  end
+
+  def score_query(%Graphite.LeaderboardModel{id: id}) do
+    build(score_query(), :score, [
+      leaderboard_id == ^id
+    ])
+  end
+
   # Submissions
 
   def submission_query() do
