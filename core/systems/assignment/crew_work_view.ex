@@ -127,15 +127,25 @@ defmodule Systems.Assignment.CrewWorkView do
   # Compose
 
   @impl true
-  def compose(:start_view, %{
-        selected_item: selected_item,
-        tool_started: tool_started,
-        tool_initialized: tool_initialized,
-        crew: crew,
-        user: user
-      })
+  def compose(
+        :start_view,
+        %{
+          selected_item: selected_item,
+          tool_started: tool_started,
+          tool_initialized: tool_initialized,
+          crew: crew,
+          user: user
+        } = assigns
+      )
       when not is_nil(selected_item) do
-    %{public_id: participant} = Crew.Public.member(crew, user)
+    # In case of an external panel, the particiant id given by the panel should be forwarded to external systems
+    participant =
+      if participant = get_in(assigns, [:panel_info, :participant]) do
+        participant
+      else
+        %{public_id: participant} = Crew.Public.member(crew, user)
+        participant
+      end
 
     %{
       module: Assignment.StartView,
