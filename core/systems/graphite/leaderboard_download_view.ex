@@ -17,23 +17,27 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
         },
         socket
       ) do
+    submissions = Graphite.Public.list_submissions(leaderboard)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> compose_child(:upload)
+      |> compose_child(:download)
     }
   end
 
   @impl true
-  def compose(:upload, %{
+  def compose(:download, %{
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
@@ -42,6 +46,7 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
       module: Graphite.LeaderboardDownloadForm,
       params: %{
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,
@@ -58,7 +63,7 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
     ~H"""
     <div>
       <Area.content>
-        <.child name={:upload} fabric={@fabric} >
+        <.child name={:download} fabric={@fabric} >
           <:header>
           </:header>
           <:footer>

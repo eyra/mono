@@ -9,51 +9,56 @@ defmodule Systems.Graphite.LeaderboardPage do
   }
 
   @impl true
-  def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Graphite.Public.get_leaderboard!(String.to_integer(id))
+  def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do
+    Graphite.Public.get_leaderboard!(String.to_integer(leaderboard_id))
   end
 
-  @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => leaderboard_id}, _session, socket) do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> update_title()
+      |> assign(leaderboard_id: leaderboard_id)
       |> update_leaderboard()
-      |> update_forward_button()
+      |> update_title()
     }
   end
 
-  defp update_title(%{assigns: %{id: tool_id}} = socket) do
-    %{title: title} = Graphite.Public.get_tool!(tool_id)
-    assign(socket, title: title)
+  defp update_title(%{assigns: %{leaderboard: leaderboard}} = socket) do
+    assign(socket, title: leaderboard.name)
   end
 
-  defp update_forward_button(%{assigns: %{id: tool_id}} = socket) do
-    forward_button = %{
-      action: %{type: :http_get, to: ~p"/graphite/#{tool_id}"},
-      face: %{
-        type: :plain,
-        label: dgettext("eyra-graphite", "challenge.forward.button"),
-        icon: :forward
-      }
+  defp update_leaderboard(%{assigns: %{leaderboard_id: leaderboard_id}} = socket) do
+    leaderboard =
+      Graphite.Public.get_leaderboard!(leaderboard_id, [:auth_node, :tool, {:scores, :submission}])
+
+    categories = group_scores(leaderboard)
+
+    leaderboard_live = %{
+      id: :leaderboard_live,
+      open: information_open?(leaderboard.open_date),
+      categories: categories,
+      module: Graphite.LeaderboardView
     }
 
-    assign(socket, forward_button: forward_button)
+    assign(socket, leaderboard: leaderboard, leaderboard_live: leaderboard_live)
   end
 
-  defp update_leaderboard(%{assigns: %{id: tool_id}} = socket) do
-    categories =
-      Graphite.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
+  defp information_open?(nil), do: true
 
-    leaderboard = %{
-      id: :leaderboard,
-      module: Graphite.LeaderboardView,
-      categories: categories
-    }
+  defp information_open?(datetime) do
+    NaiveDateTime.diff(datetime, NaiveDateTime.local_now()) > 0
+  end
 
-    assign(socket, leaderboard: leaderboard)
+  defp group_scores(leaderboard) do
+    Enum.map(
+      leaderboard.metrics,
+      fn metric ->
+        %{
+          name: metric,
+          scores: leaderboard.scores |> Enum.filter(&(&1.metric == metric))
+        }
+      end
+    )
   end
 
   @impl true
@@ -66,9 +71,8 @@ defmodule Systems.Graphite.LeaderboardPage do
              <Text.title2><%= @title %></Text.title2>
           </Align.horizontal_center>
           <.spacing value="M" />
-          <.live_component {@leaderboard} />
+          <.live_component {@leaderboard_live} />
           <.spacing value="XL" />
-          <Button.dynamic {@forward_button} />
         </Area.content>
       </.stripped>
     """
