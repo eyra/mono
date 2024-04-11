@@ -23,6 +23,13 @@ defmodule Systems.Graphite.Public do
     |> Repo.get!(id)
   end
 
+  def get_submission(id) do
+    from(submission in Graphite.SubmissionModel,
+      where: submission.id == ^id
+    )
+    |> Repo.one()
+  end
+
   def get_submission!(id, preload \\ []) do
     from(submission in Graphite.SubmissionModel, preload: ^preload)
     |> Repo.get!(id)
@@ -97,9 +104,17 @@ defmodule Systems.Graphite.Public do
     |> Repo.transaction()
   end
 
-  def list_submissions(%Graphite.ToolModel{} = tool, preload \\ []) do
+  def list_submissions(struct, preload \\ [])
+
+  def list_submissions(%Graphite.ToolModel{} = tool, preload) do
     tool
     |> submission_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_submissions(%Graphite.LeaderboardModel{} = leaderboard, preload) do
+    submission_query(leaderboard)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -139,7 +154,7 @@ defmodule Systems.Graphite.Public do
   end
 
   def import_csv_lines(leaderboard, lines) do
-    now = NaiveDateTime.utc_now()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     Multi.new()
     |> Multi.insert_all(

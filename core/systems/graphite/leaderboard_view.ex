@@ -22,13 +22,15 @@ defmodule Systems.Graphite.LeaderboardView do
 
   @impl true
   def update(%{id: id, categories: categories}, socket) do
+    %{name: active_category} = List.first(categories)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         categories: categories,
-        active_category_name: "f1_score"
+        active_category_name: active_category
       )
       |> prepare_selector()
       |> update_category()
