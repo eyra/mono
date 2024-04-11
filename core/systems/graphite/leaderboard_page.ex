@@ -9,11 +9,11 @@ defmodule Systems.Graphite.LeaderboardPage do
   }
 
   @impl true
-  def get_authorization_context(%{"leaderboard_id" => leaderboard_id}, _session, _socket) do
+  def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do
     Graphite.Public.get_leaderboard!(String.to_integer(leaderboard_id))
   end
 
-  def mount(%{"leaderboard_id" => leaderboard_id}, _session, socket) do
+  def mount(%{"id" => leaderboard_id}, _session, socket) do
     {
       :ok,
       socket

@@ -16,7 +16,7 @@ defmodule Systems.Graphite.Routes do
 
       scope "/graphite", Systems.Graphite do
         pipe_through([:browser])
-        live("/leaderboard/:leaderboard_id/page", LeaderboardPage)
+        live("/leaderboard/:id/page", LeaderboardPage)
         live("/:id/public/leaderboard", LeaderboardPage)
       end
     end
