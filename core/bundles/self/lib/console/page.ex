@@ -71,41 +71,4 @@ defmodule Self.Console.Page do
       quick_summary: ""
     }
   end
-
-  def convert_to_vm(
-        _socket,
-        %{
-          id: spot_id,
-          name: name,
-          updated_at: updated_at,
-          tool: %{
-            id: tool_id,
-            title: title,
-            status: status
-          }
-        }
-      ) do
-    tag = get_tag(status)
-
-    quick_summary =
-      updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
-      |> Macro.camelize()
-
-    %{
-      path: ~p"/graphite/#{tool_id}/#{spot_id}",
-      title: title,
-      subtitle: "#{name}",
-      tag: tag,
-      level: :critical,
-      image: nil,
-      quick_summary: quick_summary
-    }
-  end
-
-  defp get_tag(:concept), do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
-  defp get_tag(:online), do: %{type: :success, text: dgettext("eyra-project", "label.online")}
-  defp get_tag(:offline), do: %{type: :delete, text: dgettext("eyra-project", "label.offline")}
-  defp get_tag(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 end

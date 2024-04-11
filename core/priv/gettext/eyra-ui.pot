@@ -155,10 +155,6 @@ msgid "start.page.projects"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "title.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "start.page.home"
 msgstr ""
 
@@ -212,4 +208,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.tomorrow"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.nextweek"
 msgstr ""

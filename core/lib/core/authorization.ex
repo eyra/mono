@@ -55,8 +55,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Graphite.ContentPage, [:researcher, :owner])
-  grant_access(Systems.Graphite.ToolPage, [:owner])
   grant_access(Systems.Graphite.LeaderboardPage, [:visitor, :member])
   grant_access(Systems.Graphite.LeaderboardContentPage, [:researcher, :owner])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])

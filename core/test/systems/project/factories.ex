@@ -39,17 +39,19 @@ defmodule Systems.Project.Factories do
     build_node(arguments)
   end
 
-  def build_item(%Assignment.Model{} = assignment) do
+  def build_item(_, name \\ "project-item")
+
+  def build_item(%Assignment.Model{} = assignment, name) do
     Factories.build(:project_item, %{
-      name: "project-item",
+      name: name,
       project_path: [],
       assignment: assignment
     })
   end
 
-  def build_item(%Graphite.LeaderboardModel{} = leaderboard) do
+  def build_item(%Graphite.LeaderboardModel{} = leaderboard, name) do
     Factories.build(:project_item, %{
-      name: "project-item",
+      name: name,
       project_path: [],
       leaderboard: leaderboard
     })

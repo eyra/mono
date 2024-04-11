@@ -82,7 +82,13 @@ defmodule Systems.Project.Public do
     |> Repo.all()
   end
 
-  def list_items(_, _, preload \\ [])
+  def list_items(_, selector \\ nil, preload \\ [])
+
+  def list_items(node, nil, preload) do
+    item_query(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
 
   def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
@@ -101,6 +107,11 @@ defmodule Systems.Project.Public do
     |> Enum.find(&(&1.name == name)) != nil
   end
 
+  def item_exists?(project_node, name) do
+    list_items(project_node)
+    |> Enum.find(&(&1.name == name)) != nil
+  end
+
   def new_project_name(user) do
     name = dgettext("eyra-project", "default.name")
 
@@ -116,6 +127,24 @@ defmodule Systems.Project.Public do
 
     if exists?(user, new_name) do
       new_project_name(user, name, attempt + 1)
+    else
+      new_name
+    end
+  end
+
+  def new_item_name(project_node, name) do
+    if item_exists?(project_node, name) do
+      new_item_name(project_node, name, 2)
+    else
+      name
+    end
+  end
+
+  def new_item_name(project_node, name, attempt) do
+    new_name = "#{name} (#{attempt})"
+
+    if item_exists?(project_node, new_name) do
+      new_item_name(project_node, name, attempt + 1)
     else
       new_name
     end

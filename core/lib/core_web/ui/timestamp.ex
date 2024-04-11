@@ -182,20 +182,25 @@ defmodule CoreWeb.UI.Timestamp do
     day_of_month = Timex.format!(date, "%e", :strftime)
     always_include_time = Keyword.get(opts, :always_include_time, false)
 
-    case days_until(date) do
-      1 ->
+    days = days_until(date)
+
+    cond do
+      days > 1 and days < 7 ->
+        dgettext("eyra-ui", "timestamp.nextweek", weekday: weekday, time: time)
+
+      days == 1 ->
         dgettext("eyra-ui", "timestamp.tomorrow", time: time)
 
-      0 ->
+      days == 0 ->
         dgettext("eyra-ui", "timestamp.today", time: time)
 
-      -1 ->
+      days == -1 ->
         dgettext("eyra-ui", "timestamp.yesterday", time: time)
 
-      days when days > -8 ->
+      days < -1 and days > -7 ->
         dgettext("eyra-ui", "timestamp.yesterweek", weekday: weekday, time: time)
 
-      _ ->
+      true ->
         if always_include_time do
           dgettext("eyra-ui", "timestamp.datetime",
             weekday: weekday,

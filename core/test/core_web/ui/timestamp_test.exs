@@ -3,6 +3,59 @@ defmodule CoreWeb.Ui.TimestampTest do
 
   alias CoreWeb.UI.Timestamp
 
+  describe "humanize/1" do
+    test "future" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 7)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "#{weekday},"
+    end
+
+    test "next week (end)" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 6)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "next #{weekday} at"
+    end
+
+    test "next week (begin)" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 2)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "next #{weekday} at"
+    end
+
+    test "tomorrow" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 1)
+      assert Timestamp.humanize(date) =~ "tomorrow at"
+    end
+
+    test "today" do
+      date = DateTime.now!("Etc/UTC")
+      assert Timestamp.humanize(date) =~ "today at"
+    end
+
+    test "yesterday" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -1)
+      assert Timestamp.humanize(date) =~ "yesterday at"
+    end
+
+    test "weekday (begin)" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -2)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "last #{weekday} at"
+    end
+
+    test "weekday (end)" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -6)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "last #{weekday} at"
+    end
+
+    test "past" do
+      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -7)
+      weekday = Timex.format!(date, "%A", :strftime)
+      assert Timestamp.humanize(date) =~ "#{weekday},"
+    end
+  end
+
   describe "convert/2" do
     test "from Europe/Amsterdam to Etc/UTC" do
       now =

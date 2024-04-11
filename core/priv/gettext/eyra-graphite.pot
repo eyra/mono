@@ -16,32 +16,6 @@ msgid "tabbar.item.leaderboard"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool.page.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "expectations.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.deadline.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.spots.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.submissions.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "1 day"
-msgid_plural "%{count} days"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
 msgid "submission.form.url.label"
 msgstr ""
 
@@ -55,30 +29,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.dataset.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.template.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "dataset.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "template.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -103,10 +53,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "challenge.forward.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -182,14 +128,6 @@ msgid "closed_for_submissions.error.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard.title"
 msgstr ""
 
@@ -206,10 +144,6 @@ msgid "no.submission.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "submission.round.closed.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard.create.button"
 msgstr ""
 
@@ -223,4 +157,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.published.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.locked.message"
 msgstr ""

@@ -72,21 +72,32 @@ defmodule Systems.Graphite.ToolView do
     assign(socket, leaderboard_description: leaderboard_description)
   end
 
-  defp update_leaderboard_button(%{assigns: %{tool: %{leaderboard: nil}}} = socket) do
-    assign(socket, leaderboard_button: nil)
-  end
-
-  defp update_leaderboard_button(socket) do
+  defp update_leaderboard_button(
+         %{
+           assigns: %{
+             open_for_submissions?: false,
+             tool: %{leaderboard: %{status: :online, id: leaderboard_id}}
+           }
+         } = socket
+       ) do
     leaderboard_button = %{
-      action: %{type: :send, event: "go_to_leaderboard"},
+      action: %{
+        type: :http_get,
+        to: ~p"/graphite/leaderboard/#{leaderboard_id}",
+        target: "_blank"
+      },
       face: %{
         type: :plain,
         icon: :forward,
-        label: dgettext("eyra-graphite", "leaderboard.button")
+        label: dgettext("eyra-graphite", "leaderboard.goto.button")
       }
     }
 
     assign(socket, leaderboard_button: leaderboard_button)
+  end
+
+  defp update_leaderboard_button(socket) do
+    assign(socket, leaderboard_button: nil)
   end
 
   defp update_done_button(socket) do
@@ -154,25 +165,26 @@ defmodule Systems.Graphite.ToolView do
           <%= if exists?(@fabric, :submission_form) do %>
             <.child name={:submission_form} fabric={@fabric} />
           <% else %>
-            <Text.body><%= dgettext("eyra-graphite", "submission.round.closed.description") %></Text.body>
             <.spacing value="S" />
             <%= if @submission do %>
-              <Text.body><%= @submission.description %></Text.body>
-              <Text.body><%= @submission.url %></Text.body>
+              <Text.body><%= dgettext("eyra-graphite", "submission.locked.message") %></Text.body>
+              <.spacing value="S" />
+              <Graphite.SubmissionView.panel {@submission |> Map.from_struct()} timezone={@timezone}/>
             <% else %>
               <Text.body><%= dgettext("eyra-graphite", "no.submission.message") %></Text.body>
             <% end %>
           <% end %>
           <.spacing value="L" />
 
-          <Text.title2><%= dgettext("eyra-graphite", "leaderboard.title") %></Text.title2>
-          <.spacing value="M" />
-          <Text.body><%= @leaderboard_description %></Text.body>
+          <Text.title3><%= dgettext("eyra-graphite", "leaderboard.title") %></Text.title3>
           <.spacing value="M" />
 
           <%= if @leaderboard_button do %>
-            <Text.body><%= dgettext("eyra-graphite", "leaderboard.description") %></Text.body>
+            <Text.body><%= dgettext("eyra-graphite", "leaderboard.published.message") %></Text.body>
+            <.spacing value="S" />
             <Button.dynamic_bar buttons={[@leaderboard_button]} />
+          <% else %>
+            <Text.body><%= @leaderboard_description %></Text.body>
           <% end %>
           <.spacing value="L" />
 

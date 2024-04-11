@@ -12,7 +12,7 @@ defmodule Systems.Graphite.AssemblyTest do
         Project.Factories.build_node(items: [])
         |> Repo.insert!()
 
-      assert "Benchmark Leaderboard 1" = Assembly.get_leaderboard_name(project_node)
+      assert "Benchmark Leaderboard" = Assembly.get_leaderboard_name(project_node)
     end
 
     test "with other leaderboards" do
@@ -25,8 +25,8 @@ defmodule Systems.Graphite.AssemblyTest do
       leaderboard_1 = Factories.create_leaderboard(tool_1)
       leaderboard_2 = Factories.create_leaderboard(tool_2)
 
-      challenge_1_item = Project.Factories.build_item(challenge_1)
-      challenge_2_item = Project.Factories.build_item(challenge_2)
+      challenge_1_item = Project.Factories.build_item(challenge_1, "Benchmark Leaderboard")
+      challenge_2_item = Project.Factories.build_item(challenge_2, "Benchmark Leaderboard (2)")
 
       leaderboard_1_item = Project.Factories.build_item(leaderboard_1)
       leaderboard_2_item = Project.Factories.build_item(leaderboard_2)
@@ -37,7 +37,7 @@ defmodule Systems.Graphite.AssemblyTest do
         )
         |> Repo.insert!()
 
-      assert "Benchmark Leaderboard 3" = Assembly.get_leaderboard_name(project_node)
+      assert "Benchmark Leaderboard (3)" = Assembly.get_leaderboard_name(project_node)
     end
   end
 

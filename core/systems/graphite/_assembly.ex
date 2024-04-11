@@ -35,9 +35,10 @@ defmodule Systems.Graphite.Assembly do
   end
 
   def get_leaderboard_name(project_node) do
-    leaderboards = Project.Public.list_items(project_node, :leaderboard)
-    count = Enum.count(leaderboards)
-    dgettext("eyra-graphite", "leaderboard.default.name", count: count + 1)
+    Project.Public.new_item_name(
+      project_node,
+      dgettext("eyra-graphite", "leaderboard.default.name")
+    )
   end
 
   defp prepare_leaderboard_project_item(
@@ -48,13 +49,17 @@ defmodule Systems.Graphite.Assembly do
        ) do
     auth_node = Core.Authorization.prepare_node(parent_auth_node)
 
-    leaderboard =
-      Graphite.Public.prepare_leaderboard(%{status: :concept}, auth_node)
-      |> Changeset.put_assoc(:tool, tool)
-
     Project.Public.prepare_item(
       %{name: name, project_path: project_path ++ [project_node_id]},
-      leaderboard
+      %{
+        name: name,
+        status: :concept,
+        visibility: :private,
+        allow_anonymous: false,
+        metrics: []
+      }
+      |> Graphite.Public.prepare_leaderboard(auth_node)
+      |> Changeset.put_assoc(:tool, tool)
     )
     |> Changeset.put_assoc(:node, project_node)
   end

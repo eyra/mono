@@ -154,10 +154,6 @@ msgstr "Projects"
 msgid "start.page.projects"
 msgstr "Go to console"
 
-#, elixir-autogen, elixir-format
-msgid "title.placeholder"
-msgstr "Here comes the title.."
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Go to console"
@@ -208,8 +204,12 @@ msgstr "%{weekday}, %{month} %{day_of_month} at %{time}"
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.yesterweek"
-msgstr "%{weekday} at %{time}"
+msgstr "last %{weekday} at %{time}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.tomorrow"
-msgstr "today at %{time}"
+msgstr "tomorrow at %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "timestamp.nextweek"
+msgstr "next %{weekday} at %{time}"
