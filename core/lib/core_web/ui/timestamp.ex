@@ -5,6 +5,10 @@ defmodule CoreWeb.UI.Timestamp do
   use Timex
   import CoreWeb.Gettext
 
+  def convert(datetime, timezone \\ "Etc/UTC") do
+    Timex.Timezone.convert(datetime, timezone)
+  end
+
   def to_date(%{year: year, month: month, day: day}) do
     %Date{
       year: year,
@@ -51,7 +55,7 @@ defmodule CoreWeb.UI.Timestamp do
     |> NaiveDateTime.truncate(:second)
   end
 
-  def days_until(%DateTime{} = date) do
+  def days_until(%{} = date) do
     Timex.diff(date, now(), :days)
   end
 
@@ -129,8 +133,22 @@ defmodule CoreWeb.UI.Timestamp do
     end
   end
 
+  def parse_user_input_datetime(input, timezone) do
+    case Timex.parse(input, "%Y-%m-%dT%H:%M", :strftime) do
+      {:ok, result} -> DateTime.from_naive!(result, timezone)
+      _ -> nil
+    end
+  end
+
   def format_user_input_date(%DateTime{} = timestamp) do
     case Timex.format(timestamp, "%Y-%m-%d", :strftime) do
+      {:ok, result} -> result
+      _ -> nil
+    end
+  end
+
+  def format_user_input_datetime(%DateTime{} = timestamp) do
+    case Timex.format(timestamp, "%Y-%m-%dT%H:%M", :strftime) do
       {:ok, result} -> result
       _ -> nil
     end
@@ -144,35 +162,55 @@ defmodule CoreWeb.UI.Timestamp do
     Timex.format!(date, "%A %d %b '%y", :strftime)
   end
 
-  def humanize(%NaiveDateTime{} = timestamp) do
-    time = Timex.format!(timestamp, "%H:%M", :strftime)
+  def humanize(_datetime, opts \\ [])
 
-    cond do
-      Timex.before?(Timex.shift(Timex.today(), days: -1), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.today")} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
-
-      Timex.before?(Timex.shift(Timex.today(), days: -2), NaiveDateTime.to_date(timestamp)) ->
-        "#{dgettext("eyra-ui", "timestamp.yesterday")} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
-
-      Timex.before?(Timex.shift(Timex.today(), days: -8), NaiveDateTime.to_date(timestamp)) ->
-        weekday = Timex.format!(timestamp, "%A", :strftime)
-        "#{weekday} #{dgettext("eyra-ui", "timestamp.at")} #{time}"
-
-      true ->
-        weekday = Timex.format!(timestamp, "%A", :strftime)
-        month = Timex.format!(timestamp, "%B", :strftime)
-        day_of_month = Timex.format!(timestamp, "%e", :strftime)
-
-        if Timex.Translator.current_locale() == "nl" do
-          "#{weekday}, #{day_of_month} #{month}"
-        else
-          "#{weekday}, #{month} #{day_of_month}"
-        end
-    end
+  def humanize(%NaiveDateTime{} = datetime, opts) do
+    date = NaiveDateTime.to_date(datetime)
+    time = Timex.format!(datetime, "%H:%M", :strftime)
+    humanize(date, time, opts)
   end
 
-  def humanize(_) do
-    "?"
+  def humanize(%DateTime{} = datetime, opts) do
+    date = DateTime.to_date(datetime)
+    time = Timex.format!(datetime, "%H:%M", :strftime)
+    humanize(date, time, opts)
+  end
+
+  def humanize(%Date{} = date, time, opts) when is_binary(time) do
+    weekday = Timex.format!(date, "%A", :strftime)
+    month = Timex.format!(date, "%B", :strftime)
+    day_of_month = Timex.format!(date, "%e", :strftime)
+    always_include_time = Keyword.get(opts, :always_include_time, false)
+
+    case days_until(date) do
+      1 ->
+        dgettext("eyra-ui", "timestamp.tomorrow", time: time)
+
+      0 ->
+        dgettext("eyra-ui", "timestamp.today", time: time)
+
+      -1 ->
+        dgettext("eyra-ui", "timestamp.yesterday", time: time)
+
+      days when days > -8 ->
+        dgettext("eyra-ui", "timestamp.yesterweek", weekday: weekday, time: time)
+
+      _ ->
+        if always_include_time do
+          dgettext("eyra-ui", "timestamp.datetime",
+            weekday: weekday,
+            day_of_month: day_of_month,
+            month: month,
+            time: time
+          )
+        else
+          dgettext("eyra-ui", "timestamp.date",
+            weekday: weekday,
+            day_of_month: day_of_month,
+            month: month
+          )
+        end
+    end
   end
 
   def humanize_en(%NaiveDateTime{} = timestamp) do

@@ -95,10 +95,6 @@ msgid "menu.item.support"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "timestamp.at"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "timestamp.today"
 msgstr ""
 
@@ -200,4 +196,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "done.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.datetime"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.yesterweek"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.tomorrow"
 msgstr ""

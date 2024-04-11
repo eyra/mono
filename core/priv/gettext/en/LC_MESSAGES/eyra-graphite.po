@@ -20,10 +20,6 @@ msgid "tool.page.title"
 msgstr "Challenge"
 
 #, elixir-autogen, elixir-format
-msgid "submission.form.title"
-msgstr "Submission"
-
-#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr "Description"
 
@@ -60,18 +56,6 @@ msgstr "Submit"
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
 msgstr "Invalid GitHub commit URL (see challenge repo instructions)"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "1 submission"
-msgid_plural "%{count} submissions"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "1 team"
-msgid_plural "%{count} teams"
-msgstr[0] ""
-msgstr[1] ""
 
 #, elixir-autogen, elixir-format
 msgid "preparation.dataset.title"
@@ -188,3 +172,55 @@ msgstr "Publish"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
 msgstr "Retract"
+
+#, elixir-autogen, elixir-format
+msgid "deadline.label"
+msgstr "Deadline (%{timezone} time)"
+
+#, elixir-autogen, elixir-format
+msgid "closed_for_submissions.error.message"
+msgstr "The leaderboard is closed for submissions"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.button"
+msgstr "Go to leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.description"
+msgstr "Click the link below to open the leaderboard."
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.title"
+msgstr "Leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "submission.title"
+msgstr "Submission"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.open.description"
+msgstr "The leaderboard is open for submissions until %{deadline}."
+
+#, elixir-autogen, elixir-format
+msgid "no.submission.message"
+msgstr "You did not submit a method for this leaderboard."
+
+#, elixir-autogen, elixir-format
+msgid "submission.round.closed.description"
+msgstr "The leaderboard is closed for submissions."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.create.button"
+msgstr "Create leaderboard"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.goto.button"
+msgstr "Go to leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.closed.description"
+msgstr "The leaderboard is closed for submissions. As soon as the leaderboard is available a link can be found here."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.default.name"
+msgstr "Benchmark Leaderboard %{count}"

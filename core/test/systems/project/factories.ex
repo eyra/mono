@@ -3,6 +3,7 @@ defmodule Systems.Project.Factories do
   alias Systems.Project
   alias Systems.Alliance
   alias Systems.Assignment
+  alias Systems.Graphite
 
   def build_project() do
     Factories.build(:project, %{name: "project"})
@@ -43,6 +44,14 @@ defmodule Systems.Project.Factories do
       name: "project-item",
       project_path: [],
       assignment: assignment
+    })
+  end
+
+  def build_item(%Graphite.LeaderboardModel{} = leaderboard) do
+    Factories.build(:project_item, %{
+      name: "project-item",
+      project_path: [],
+      leaderboard: leaderboard
     })
   end
 

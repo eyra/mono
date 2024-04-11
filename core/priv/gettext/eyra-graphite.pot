@@ -20,10 +20,6 @@ msgid "tool.page.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "submission.form.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "expectations.title"
 msgstr ""
 
@@ -60,18 +56,6 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "1 submission"
-msgid_plural "%{count} submissions"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "1 team"
-msgid_plural "%{count} teams"
-msgstr[0] ""
-msgstr[1] ""
 
 #, elixir-autogen, elixir-format
 msgid "preparation.dataset.title"
@@ -187,4 +171,56 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "closed_for_submissions.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.open.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "no.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.round.closed.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.closed.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.default.name"
 msgstr ""

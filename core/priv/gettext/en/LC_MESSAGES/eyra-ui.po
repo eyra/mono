@@ -95,16 +95,12 @@ msgid "menu.item.support"
 msgstr "Support"
 
 #, elixir-autogen, elixir-format
-msgid "timestamp.at"
-msgstr "at"
-
-#, elixir-autogen, elixir-format
 msgid "timestamp.today"
-msgstr "today"
+msgstr "today at %{time}"
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.yesterday"
-msgstr "yesterday"
+msgstr "yesterday at %{time}"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.message"
@@ -201,3 +197,19 @@ msgstr "Close"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "done.button"
 msgstr "Done"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.date"
+msgstr "%{weekday}, %{month} %{day_of_month}"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.datetime"
+msgstr "%{weekday}, %{month} %{day_of_month} at %{time}"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.yesterweek"
+msgstr "%{weekday} at %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "timestamp.tomorrow"
+msgstr "today at %{time}"
