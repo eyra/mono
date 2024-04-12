@@ -296,4 +296,16 @@ defmodule Systems.Graphite.Public do
   def delete(%Graphite.SubmissionModel{} = submission) do
     Repo.delete(submission)
   end
+
+  def can_update?(%Graphite.SubmissionModel{tool: %Ecto.Association.NotLoaded{}} = submission) do
+    can_update?(Repo.preload(submission, [:tool]))
+  end
+
+  def can_update?(%Graphite.SubmissionModel{tool: tool}) do
+    open_for_submissions?(tool)
+  end
+
+  def open_for_submissions?(%Graphite.ToolModel{} = tool) do
+    Graphite.ToolModel.open_for_submissions?(tool)
+  end
 end

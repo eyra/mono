@@ -24,4 +24,8 @@ defmodule Systems.Project.Queries do
       ]
     )
   end
+
+  def item_query_by_leaderboard(%Project.NodeModel{} = node) do
+    build(item_query(node), :item, leaderboard_id != nil)
+  end
 end

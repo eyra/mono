@@ -3,11 +3,8 @@ defmodule Systems.Assignment.Director do
 
   alias Frameworks.Concept.Directable
 
-  alias Systems.{
-    Assignment,
-    Project,
-    Workflow
-  }
+  alias Systems.Assignment
+  alias Systems.Workflow
 
   @impl true
   def apply_member_and_activate_task(tool, user) do
@@ -30,7 +27,8 @@ defmodule Systems.Assignment.Director do
   @impl true
   def authorization_context(tool, user) do
     {member, _} = search_subject(tool, user)
-    tool_ref = Project.Public.get_tool_ref_by_tool(tool)
+
+    tool_ref = Workflow.Public.get_tool_ref_by_tool(tool)
     item = Workflow.Public.get_item_by_tool_ref(tool_ref)
     assignment = Assignment.Public.get_by_tool(tool)
 

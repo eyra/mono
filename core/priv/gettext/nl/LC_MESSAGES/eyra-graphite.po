@@ -15,36 +15,6 @@ msgstr ""
 msgid "tabbar.item.leaderboard"
 msgstr "Ranglijst"
 
-#, elixir-autogen, elixir-format
-msgid "tool.page.title"
-msgstr "Challenge"
-
-#, elixir-autogen, elixir-format
-msgid "submission.form.title"
-msgstr "Dien methode in"
-
-#, elixir-autogen, elixir-format
-msgid "expectations.title"
-msgstr "Beschrijving"
-
-#, elixir-autogen, elixir-format
-msgid "highlight.deadline.title"
-msgstr "Dagen tot deadline"
-
-#, elixir-autogen, elixir-format
-msgid "highlight.spots.title"
-msgstr "Aantal teams"
-
-#, elixir-autogen, elixir-format
-msgid "highlight.submissions.title"
-msgstr "Aantal ingediend"
-
-#, elixir-autogen, elixir-format
-msgid "1 day"
-msgid_plural "%{count} days"
-msgstr[0] "%{count} dag"
-msgstr[1] "%{count} dagen"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
 msgstr "Jouw GitHub commit URL"
@@ -60,42 +30,6 @@ msgstr "Indienen"
 #, elixir-autogen, elixir-format
 msgid "invalid.github.commit.url.message"
 msgstr "Ongeldige GitHub commit URL (zie challenge repo instructies)"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "1 submission"
-msgid_plural "%{count} submissions"
-msgstr[0] "1 methode"
-msgstr[1] "%{count} methodes"
-
-#, elixir-autogen, elixir-format
-msgid "1 team"
-msgid_plural "%{count} teams"
-msgstr[0] "1 team"
-msgstr[1] "%{count} teams"
-
-#, elixir-autogen, elixir-format
-msgid "preparation.dataset.title"
-msgstr "Download de voorbeeld data om jouw methode te trainen"
-
-#, elixir-autogen, elixir-format
-msgid "preparation.description"
-msgstr "Voordat je jouw methode indient volg je de stappen hieronder."
-
-#, elixir-autogen, elixir-format
-msgid "preparation.template.title"
-msgstr "Fork and clone de voorbeeld repository en volg de instructies voor het indienen."
-
-#, elixir-autogen, elixir-format
-msgid "preparation.title"
-msgstr "Voorbereiding"
-
-#, elixir-autogen, elixir-format
-msgid "dataset.button"
-msgstr "Download data"
-
-#, elixir-autogen, elixir-format
-msgid "template.button"
-msgstr "Github voorbeeld repository"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
@@ -120,10 +54,6 @@ msgstr "Kies bestand"
 #, elixir-autogen, elixir-format
 msgid "csv-select-placeholder"
 msgstr "Kies een ranglijst csv bestand"
-
-#, elixir-autogen, elixir-format
-msgid "challenge.forward.button"
-msgstr "Naar de challenge"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.forward.button"
@@ -188,3 +118,51 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
 msgstr "Github voorbeeld repository"
+
+#, elixir-autogen, elixir-format
+msgid "deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "closed_for_submissions.error.message"
+msgstr "De ranglijst is gesloten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.title"
+msgstr "Ranglijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.title"
+msgstr "Dien methode in"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.open.description"
+msgstr "De ranglijst staat open voor submissies tot %{deadline}."
+
+#, elixir-autogen, elixir-format
+msgid "no.submission.message"
+msgstr "Je hebt geen methode ingediend voor deze ranglijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.create.button"
+msgstr "Ga naar ranglijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.goto.button"
+msgstr "Ga naar ranglijst"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.closed.description"
+msgstr "De ranglijst is gesloten voor submissies. Zodra de ranglijst beschikbaar is verschijnt hieronder een link."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.default.name"
+msgstr "Team"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.published.message"
+msgstr "De ranglijst staat open voor submissies tot %{deadline}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.locked.message"
+msgstr "Je hebt geen methode ingediend voor deze ranglijst"

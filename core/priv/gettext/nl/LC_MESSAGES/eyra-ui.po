@@ -95,16 +95,12 @@ msgid "menu.item.support"
 msgstr "Support"
 
 #, elixir-autogen, elixir-format
-msgid "timestamp.at"
-msgstr "om"
-
-#, elixir-autogen, elixir-format
 msgid "timestamp.today"
-msgstr "vandaag"
+msgstr "vandaag om %{time}"
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.yesterday"
-msgstr "gisteren"
+msgstr "gisteren om %{time}"
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.message"
@@ -158,10 +154,6 @@ msgstr "Projecten"
 msgid "start.page.projects"
 msgstr "Ga naar console"
 
-#, elixir-autogen, elixir-format
-msgid "title.placeholder"
-msgstr "Hier komt de titel.."
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Ga naar console"
@@ -201,3 +193,23 @@ msgstr "Sluiten"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "done.button"
 msgstr "Klaar"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.date"
+msgstr "%{weekday} %{day_of_month} %{month}"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.datetime"
+msgstr "%{weekday} %{day_of_month} %{month} om %{time}"
+
+#, elixir-autogen, elixir-format
+msgid "timestamp.yesterweek"
+msgstr "afgelopen %{weekday} om %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "timestamp.tomorrow"
+msgstr "morgen om %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "timestamp.nextweek"
+msgstr "aanstaande %{weekday} om %{time}"
