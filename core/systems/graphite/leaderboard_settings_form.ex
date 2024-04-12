@@ -6,19 +6,11 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
 
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @visibility_options [
     %{id: "public", value: "public", active: true},
-    %{id: "private", value: "private", active: false},
-    %{id: "private with date", value: "private with date", active: false}
-  ]
-
-  @allow_anonymous_options [
-    %{id: "false", value: false, active: true},
-    %{id: "true", value: true, active: false}
+    %{id: "private", value: "private", active: false}
   ]
 
   @impl true
@@ -32,8 +24,7 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
         id: id,
         leaderboard: leaderboard,
         changeset: changeset,
-        visibility_options: @visibility_options,
-        allow_anonymous_options: @allow_anonymous_options
+        visibility_options: @visibility_options
       )
     }
   end
@@ -79,12 +70,10 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
       <.form id={"#{@id}_settings"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <.spacing value="L" />
         <Text.title2>Settings</Text.title2>
-        <.text_input form={form} field={:name} label_text="Name" />
-        <.text_input form={form} field={:version} label_text="Version" />
-        <.number_input form={form} field={:tool_id} label_text="Challenge ID" />
+        <.text_input form={form} field={:title} label_text="Title" />
+        <.text_input form={form} field={:subtitle} label_text="Subtitle" />
         <.list_input form={form} field={:metrics} label_text="Metrics" value={metrics_to_string(@changeset.data.metrics)} />
         <.radio_group form={form} field={:visibility} items={@visibility_options} label_text="Visibility" />
-        <.radio_group form={form} field={:allow_anonymous} items={@allow_anonymous_options} label_text="Allow anonymous" />
       </.form>
     </div>
     """

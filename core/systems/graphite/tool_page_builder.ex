@@ -60,36 +60,8 @@ defmodule Systems.Graphite.ToolPageBuilder do
       active?: active?
     }
 
-    categories =
-      Graphite.Public.list_leaderboard_categories(tool.id, scores: [submission: [:spot]])
-
-    leaderboard =
-      if Enum.count(categories) > 0 do
-        forward_button = %{
-          action: %{
-            type: :http_get,
-            to: ~p"/graphite/#{tool.id}/public/leaderboard",
-            target: "_blank"
-          },
-          face: %{
-            type: :plain,
-            label: dgettext("eyra-graphite", "leaderboard.forward.button"),
-            icon: :forward
-          }
-        }
-
-        %{
-          title: dgettext("eyra-graphite", "tabbar.item.leaderboard"),
-          forward_button: forward_button,
-          component: %{
-            id: :leaderboard,
-            module: Graphite.LeaderboardView,
-            categories: categories
-          }
-        }
-      else
-        nil
-      end
+    # TODO: Is this used for anything?
+    leaderboard = nil
 
     %{
       hero_title: dgettext("eyra-graphite", "tool.page.title"),

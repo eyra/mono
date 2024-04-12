@@ -32,14 +32,13 @@ defmodule Systems.Graphite.LeaderboardModel do
   }
 
   schema "graphite_leaderboards" do
-    field(:name, :string)
-    field(:version, :string)
+    field(:title, :string)
+    field(:subtitle, :string)
     field(:status, Ecto.Enum, values: Graphite.LeaderboardStatus.values())
     field(:metrics, {:array, :string})
     field(:visibility, Ecto.Enum, values: Graphite.LeaderboardVisibility.values())
     field(:open_date, :naive_datetime)
     field(:generation_date, :naive_datetime)
-    field(:allow_anonymous, :boolean)
 
     has_many(:scores, Graphite.ScoreModel, foreign_key: :leaderboard_id)
     belongs_to(:tool, Graphite.ToolModel)
@@ -50,7 +49,7 @@ defmodule Systems.Graphite.LeaderboardModel do
     timestamps()
   end
 
-  @fields ~w(name version status metrics visibility open_date generation_date allow_anonymous)a
+  @fields ~w(title subtitle status metrics visibility open_date generation_date)a
   @required_fields ~w()a
 
   def changeset(tool, params) do
