@@ -24,43 +24,21 @@ defmodule Mix.Tasks.Eyra.Graphite.Gen.Submissions do
         create_submissions(id, amount, prefix)
 
       {[leaderboard: id, amount: amount], _, _} ->
-        create_submissions(id, amount, "auto-gen")
+        create_submissions(id, amount)
 
       _ ->
         print_missing_arguments()
     end
   end
 
-  defp create_submissions(leaderboard_id, amount, prefix) do
-    leaderboard = Graphite.Public.get_leaderboard!(leaderboard_id, [{:tool, :auth_node}])
-
-    multi = Ecto.Multi.new()
-
-    {:ok, result} =
-      Enum.reduce(1..amount, multi, fn i, multi ->
-        submission =
-          Core.Factories.build(:graphite_submission, %{
-            tool: leaderboard.tool,
-            auth_node: leaderboard.tool.auth_node,
-            github_commit_url: gen_commit_url(),
-            description: "#{prefix}-#{i}"
-          })
-
-        Ecto.Multi.insert(multi, {:insert, i}, submission)
-      end)
-      |> Core.Repo.transaction(returning: true)
+  defp create_submissions(leaderboard_id, amount, prefix \\ "auto-gen") do
+    {:ok, result} = Graphite.Gen.create_submissions(leaderboard_id, amount, prefix)
 
     IO.puts(
       IO.ANSI.green() <>
         "#{length(Map.keys(result))} submissions created" <>
         IO.ANSI.reset()
     )
-  end
-
-  defp gen_commit_url() do
-    s = for _ <- 1..40, into: "", do: <<Enum.random('0123456789abcdefghijklmnopqrstuvwxyz')>>
-
-    "https://github.com/eyra/mono/commit/" <> s
   end
 
   defp print_missing_arguments() do
