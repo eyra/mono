@@ -179,7 +179,7 @@ defmodule Systems.Graphite.ToolView do
           <Text.title3><%= dgettext("eyra-graphite", "leaderboard.title") %></Text.title3>
           <.spacing value="M" />
 
-          <%= if @leaderboard_button do %>
+          <%= if feature_enabled?(:leaderboard) and @leaderboard_button do %>
             <Text.body><%= dgettext("eyra-graphite", "leaderboard.published.message") %></Text.body>
             <.spacing value="S" />
             <Button.dynamic_bar buttons={[@leaderboard_button]} />

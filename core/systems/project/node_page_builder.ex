@@ -1,4 +1,6 @@
 defmodule Systems.Project.NodePageBuilder do
+  use Core.FeatureFlags
+
   alias Frameworks.Utility.ViewModelBuilder
 
   alias Systems.{
@@ -32,7 +34,14 @@ defmodule Systems.Project.NodePageBuilder do
 
   defp to_item_cards(%{items: items}, assigns) do
     items
+    |> Enum.filter(&item_feature_enabled?/1)
     |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
     |> Enum.map(&ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns))
   end
+
+  defp item_feature_enabled?(%{leaderboard_id: leaderboard_id}) when not is_nil(leaderboard_id) do
+    feature_enabled?(:leaderboard)
+  end
+
+  defp item_feature_enabled?(_), do: true
 end
