@@ -136,8 +136,8 @@ msgid "submission.title"
 msgstr "Submission"
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.open.description"
-msgstr "The leaderboard is open for submissions until %{deadline}. As soon as the leaderboard is available a link can be found here."
+msgid "leaderboard.description"
+msgstr "As soon as the leaderboard is available a link can be found here."
 
 #, elixir-autogen, elixir-format
 msgid "no.submission.message"
@@ -151,10 +151,6 @@ msgstr "Create leaderboard"
 msgid "leaderboard.goto.button"
 msgstr "Go to leaderboard"
 
-#, elixir-autogen, elixir-format
-msgid "leaderboard.closed.description"
-msgstr "The leaderboard is closed for submissions. As soon as the leaderboard is available a link can be found here."
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.default.name"
 msgstr "Benchmark Leaderboard"
@@ -164,5 +160,13 @@ msgid "leaderboard.published.message"
 msgstr "The leaderboard has been published."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "submission.locked.message"
-msgstr "Your submission is locked and can no longer be changed."
+msgid "submission.closed.message"
+msgstr "Closed for submissions"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.open.message"
+msgstr "Open for submissions until %{deadline}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "locked.submission.message"
+msgstr "The following submission will be included in the leaderboard:"
