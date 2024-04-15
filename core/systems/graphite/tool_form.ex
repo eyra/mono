@@ -70,6 +70,7 @@ defmodule Systems.Graphite.ToolForm do
 
   @impl true
   def handle_event("create_leaderboard", _payload, %{assigns: %{entity: entity}} = socket) do
+    require_feature(:leaderboard)
     Graphite.Assembly.create_leaderboard(entity)
     {:noreply, socket}
   end
@@ -94,8 +95,10 @@ defmodule Systems.Graphite.ToolForm do
     <div id={"#{@id}_timezone"} class="timezone" phx-hook="TimeZone">
       <.form id={"#{@id}_graphite_tool_form"} :let={form} for={@changeset} phx-change="change" phx-target="" >
         <.datetime_input form={form} field={:deadline_string} label_text={dgettext("eyra-graphite", "deadline.label", timezone: @timezone)}/>
-        <.spacing value="XS" />
-        <Button.dynamic_bar buttons={[@leaderboard_button]} />
+        <%= if feature_enabled?(:leaderboard) do %>
+          <.spacing value="XS" />
+          <Button.dynamic_bar buttons={[@leaderboard_button]} />
+        <% end %>
         <.spacing value="M" />
       </.form>
     </div>
