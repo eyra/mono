@@ -169,4 +169,4 @@ msgstr "You can submit your method until %{deadline}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
-msgstr "Thank you for your submission. Your submission below will be processed for a position on the leaderboard."
+msgstr "Thank you. The following submission will be processed for a position on the leaderboard:"
