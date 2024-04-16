@@ -26,7 +26,7 @@ defmodule Systems.Graphite.LeaderboardContentPage do
     ~H"""
     <.content_page
       actions={@actions}
-      title={@vm.title}
+      title={"Benchmark Leaderboard"}
       show_errors={@vm.show_errors}
       tabs={@vm.tabs}
       menus={@menus}
