@@ -169,9 +169,8 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "download_form",
       ready: false,
       show_errors: show_errors,
-      title: "Submissions",
-      forward_title: "Download submissions",
-      backward_title: "Download submissions",
+      title: dgettext("eyra-graphite", "label.submissions"),
+      forward_title: dgettext("eyra-graphite", "label.submissions"),
       type: :fullpage,
       child: child
     }
@@ -193,9 +192,8 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "upload_form",
       ready: false,
       show_errors: show_errors,
-      title: "Upload results",
-      forward_title: "Upload results",
-      backward_title: "Upload results",
+      title: dgettext("eyra-graphite", "label.upload_results"),
+      forward_title: dgettext("eyra-graphite", "label.upload_results"),
       type: :fullpage,
       child: child
     }

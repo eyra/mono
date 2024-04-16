@@ -192,13 +192,16 @@ defmodule Systems.Project.ItemModel do
       deadline_str = format_datetime(tool.deadline)
       nr_submissions = Graphite.Public.get_submission_count(tool)
 
-      "Deadline: #{deadline_str} | #{nr_submissions} submissions"
+      dgettext("eyra-project", "leaderboard.info",
+        deadline: deadline_str,
+        nr_submissions: nr_submissions
+      )
     end
 
     defp format_datetime(nil), do: "None"
 
     defp format_datetime(datetime) do
-      Timex.format!(datetime, "%Y-%m-%dT%H:%M", :strftime)
+      CoreWeb.UI.Timestamp.format_user_input_datetime(datetime)
     end
   end
 end

@@ -146,3 +146,15 @@ msgstr "Thank you. The following submission will be processed for a position on 
 #, elixir-autogen, elixir-format
 msgid "settings.form.metrics.hint"
 msgstr "Please provide the metric titles for the leaderboards, separated by comma's (e.g. F1, Precision, Recall, Accuracy), check out 'Preview' to view the result."
+
+#, elixir-autogen, elixir-format
+msgid "label.submissions"
+msgstr "Submissions"
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_results"
+msgstr "Upload results"
+
+#, elixir-autogen, elixir-format
+msgid "title.benchmark_leaderboard"
+msgstr "Benchmark Leaderboard"

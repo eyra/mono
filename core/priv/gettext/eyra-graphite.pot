@@ -146,3 +146,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "settings.form.metrics.hint"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.benchmark_leaderboard"
+msgstr ""

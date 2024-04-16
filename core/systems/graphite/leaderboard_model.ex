@@ -59,17 +59,18 @@ defmodule Systems.Graphite.LeaderboardModel do
   end
 
   def preload_graph(:down),
-    do: [
-      :auth_node,
-      :scores,
-      :tool
-    ]
+    do:
+      preload_graph([
+        :auth_node,
+        :scores,
+        :tool
+      ])
 
   def preload_graph(:scores), do: [scores: Graphite.ScoreModel.preload_graph(:down)]
 
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
-  def preload_graph(:tool), do: []
+  def preload_graph(:tool), do: [tool: []]
 
   def auth_tree(%Graphite.LeaderboardModel{auth_node: auth_node}), do: auth_node
 

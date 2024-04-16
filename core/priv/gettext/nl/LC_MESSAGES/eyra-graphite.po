@@ -146,3 +146,15 @@ msgstr "Bedankt! De volgende submissie komt in aanmerking voor een positie op he
 #, elixir-autogen, elixir-format
 msgid "settings.form.metrics.hint"
 msgstr "Voeg hier de te meten metrics toe, gescheiden door komma's, (bv. F1, Precision, Recall, Accuracy), bekijk de 'preview' om te zien hoe het leaderboard er dan uit ziet."
+
+#, elixir-autogen, elixir-format
+msgid "label.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.benchmark_leaderboard"
+msgstr ""

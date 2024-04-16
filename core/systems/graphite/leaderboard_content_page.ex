@@ -26,7 +26,7 @@ defmodule Systems.Graphite.LeaderboardContentPage do
     ~H"""
     <.content_page
       actions={@actions}
-      title={"Benchmark Leaderboard"}
+      title={dgettext("eyra-graphite", "title.benchmark_leaderboard")}
       show_errors={@vm.show_errors}
       tabs={@vm.tabs}
       menus={@menus}
