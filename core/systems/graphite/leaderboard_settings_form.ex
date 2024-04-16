@@ -70,9 +70,11 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
       <.form id={"#{@id}_settings"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <.spacing value="L" />
         <Text.title2>Settings</Text.title2>
-        <.text_input form={form} field={:title} label_text="Title" />
-        <.text_input form={form} field={:subtitle} label_text="Subtitle" />
-        <.list_input form={form} field={:metrics} label_text="Metrics" value={metrics_to_string(@changeset.data.metrics)} />
+        <.text_input form={form} field={:title} label_text={dgettext("eyra-graphite", "label.title")} />
+        <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-graphite", "label.subtitle")} />
+        <.list_input form={form} field={:metrics} label_text={dgettext("eyra-graphite", "label.metrics")} value={metrics_to_string(@changeset.data.metrics)} />
+        <Text.hint><%= dgettext("eyra-graphite", "settings.form.metrics.hint") %></Text.hint>
+        <.spacing value="M"/>
         <.radio_group form={form} field={:visibility} items={@visibility_options} label_text="Visibility" />
       </.form>
     </div>

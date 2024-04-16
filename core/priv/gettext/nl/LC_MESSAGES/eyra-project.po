@@ -166,3 +166,7 @@ msgstr "Vragenlijst"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.text"
 msgstr "Project instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.info"
+msgstr "Deadline: %{deadline} | %{nr_submissions} submissies"

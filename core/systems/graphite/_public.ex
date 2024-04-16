@@ -40,6 +40,11 @@ defmodule Systems.Graphite.Public do
     List.first(submissions)
   end
 
+  def get_submission_count(tool) do
+    Graphite.Queries.submission_query(tool)
+    |> Repo.aggregate(:count)
+  end
+
   def set_tool_status(%Graphite.ToolModel{} = tool, status) do
     tool
     |> Graphite.ToolModel.changeset(%{status: status})

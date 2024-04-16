@@ -11,10 +11,6 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard"
-msgstr "Ranglijst"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
 msgstr "Jouw GitHub commit URL"
@@ -34,30 +30,6 @@ msgstr "Ongeldige GitHub commit URL (zie challenge repo instructies)"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
 msgstr "Methodes"
-
-#, elixir-autogen, elixir-format
-msgid "import.leaderboard.title"
-msgstr "Importeren"
-
-#, elixir-autogen, elixir-format
-msgid "csv-import-button"
-msgstr "Importeer gekozen bestand"
-
-#, elixir-autogen, elixir-format
-msgid "csv-replace-file-button"
-msgstr "Vervang bestand"
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-file-button"
-msgstr "Kies bestand"
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-placeholder"
-msgstr "Kies een ranglijst csv bestand"
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard.forward.button"
-msgstr "Publiek"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.github.label"
@@ -170,3 +142,55 @@ msgstr "Je kunt jouw methode indienen tot %{deadline}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
 msgstr "Bedankt! De volgende submissie komt in aanmerking voor een positie op het leaderboard:"
+
+#, elixir-autogen, elixir-format
+msgid "settings.form.metrics.hint"
+msgstr "Voeg hier de te meten metrics toe, gescheiden door komma's, (bv. F1, Precision, Recall, Accuracy), bekijk de 'preview' om te zien hoe het leaderboard er dan uit ziet."
+
+#, elixir-autogen, elixir-format
+msgid "label.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.benchmark_leaderboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.metrics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tag.leaderboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "label.processing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.replace_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.select"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "label.upload_file"
+msgstr ""
