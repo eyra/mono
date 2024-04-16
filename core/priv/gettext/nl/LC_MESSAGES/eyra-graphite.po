@@ -125,15 +125,15 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "closed_for_submissions.error.message"
-msgstr "De ranglijst is gesloten"
+msgstr "De submissie deadline is voorbij"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.title"
-msgstr "Ranglijst"
+msgstr "Leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.title"
-msgstr "Dien methode in"
+msgstr "Indienen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.description"
