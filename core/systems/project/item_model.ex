@@ -139,6 +139,8 @@ defmodule Systems.Project.ItemModel do
            {Project.NodePage, :item_card},
            _user
          ) do
+      # image = "bla"
+      # image_info = ImageHelpers.get_image_info(400, 200)
       edit = %{
         action: %{type: :send, event: "edit", item: id},
         face: %{type: :label, label: "Edit", wrap: true}
@@ -153,10 +155,11 @@ defmodule Systems.Project.ItemModel do
         type: :secondary,
         id: id,
         path: ~p"/graphite/leaderboard/#{leaderboard_id}/content",
+        # image_info: image_info,
         label: get_label(status),
         title: name,
         tags: get_card_tags(leaderboard),
-        info: ["Something more meaningful here"],
+        info: [get_leaderboard_info(leaderboard)],
         left_actions: [edit],
         right_actions: [delete]
       }
@@ -181,5 +184,18 @@ defmodule Systems.Project.ItemModel do
     defp get_card_tags(%Graphite.LeaderboardModel{}), do: ["Leaderboard"]
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
+
+    defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}) do
+      deadline_str = format_datetime(tool.deadline)
+      nr_submissions = Graphite.Public.get_submission_count(tool)
+
+      "Deadline: #{deadline_str} | #{nr_submissions} submissions"
+    end
+
+    defp format_datetime(nil), do: "None"
+
+    defp format_datetime(datetime) do
+      Timex.format!(datetime, "%Y-%m-%dT%H:%M", :strftime)
+    end
   end
 end

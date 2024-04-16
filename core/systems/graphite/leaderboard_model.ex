@@ -59,12 +59,11 @@ defmodule Systems.Graphite.LeaderboardModel do
   end
 
   def preload_graph(:down),
-    do:
-      preload_graph([
-        :auth_node,
-        :scores,
-        :tool
-      ])
+    do: [
+      :auth_node,
+      :scores,
+      :tool
+    ]
 
   def preload_graph(:scores), do: [scores: Graphite.ScoreModel.preload_graph(:down)]
 
