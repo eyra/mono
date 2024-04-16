@@ -117,7 +117,7 @@ msgstr "Publish"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
-msgstr "Retract"
+msgstr "Withdraw"
 
 #, elixir-autogen, elixir-format
 msgid "deadline.label"
@@ -125,7 +125,7 @@ msgstr "Deadline (%{timezone} time)"
 
 #, elixir-autogen, elixir-format
 msgid "closed_for_submissions.error.message"
-msgstr "The leaderboard is closed for submissions"
+msgstr "The submission deadline has passed"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.title"
@@ -137,11 +137,11 @@ msgstr "Submission"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.description"
-msgstr "As soon as the leaderboard is available a link can be found here."
+msgstr "After the submission deadline, all submitted methods will be run on the holdout data. If successful, methods will be ranked per metric on the leaderboard. A link to the leaderboard will become available here, as soon as the leaderboard is ready."
 
 #, elixir-autogen, elixir-format
 msgid "no.submission.message"
-msgstr "You did not submit a method for this leaderboard."
+msgstr "The submission deadline has passed. You did not submit a method. Unfortunately, it is no longer possible to submit a method for this leaderboard."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.create.button"
@@ -161,12 +161,12 @@ msgstr "The leaderboard has been published."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
-msgstr "Closed for submissions"
+msgstr "Submission deadline passed"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.open.message"
-msgstr "Open for submissions until %{deadline}"
+msgstr "You can submit your method until %{deadline}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
-msgstr "The following submission will be included in the leaderboard:"
+msgstr "Thank you. The following submission will be processed for a position on the leaderboard:"
