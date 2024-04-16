@@ -137,7 +137,7 @@ msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.description"
-msgstr "Na de submissie deadline zal een leaderboard gegenereerd worden waarop alle ingediende methodes gerangschikt worden op basis van de metrics. Op deze plek zal een link naar het leaderboard beschikbaar komen, zodra deze klaar is."
+msgstr "Na de submissie deadline zullen alle ingediende methodes toegepast worden op de holdout data. Methodes waarbij dit goed gaat, worden vervolgens per metric gerangschikt op het leaderboard. Op deze plek zal een link naar het leaderboard beschikbaar komen, zodra deze klaar is."
 
 #, elixir-autogen, elixir-format
 msgid "no.submission.message"
@@ -161,12 +161,12 @@ msgstr "Het leaderboard is gepubliceerd."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
-msgstr "Gesloten voor submissies."
+msgstr "Submissie deadline voorbij"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.open.message"
-msgstr "Je kunt jouw methode indienen tot %{deadline}."
+msgstr "Je kunt jouw methode indienen tot %{deadline}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
-msgstr "De volgende methode wordt opgenomen in het leaderboard."
+msgstr "De volgende methode wordt opgenomen in het leaderboard:"
