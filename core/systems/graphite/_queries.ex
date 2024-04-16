@@ -76,6 +76,15 @@ defmodule Systems.Graphite.Queries do
     )
   end
 
+  def submissions_by_pattern(field, pattern) when is_atom(field) and is_binary(pattern) do
+    submission_query()
+    |> where([submission: s], like(field(s, ^field), ^pattern))
+  end
+
+  def submissions_by_prefix(field, prefix) when is_atom(field) and is_binary(prefix) do
+    submissions_by_pattern(field, "#{prefix}-%")
+  end
+
   def submission_ids(selector) do
     submission_query(selector)
     |> select([submission: s], s.id)
