@@ -117,7 +117,7 @@ msgstr "Publish"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
-msgstr "Retract"
+msgstr "Withdraw"
 
 #, elixir-autogen, elixir-format
 msgid "deadline.label"
@@ -125,7 +125,7 @@ msgstr "Deadline (%{timezone} time)"
 
 #, elixir-autogen, elixir-format
 msgid "closed_for_submissions.error.message"
-msgstr "The leaderboard is closed for submissions"
+msgstr "The submission deadline has passed"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.title"
