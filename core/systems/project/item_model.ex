@@ -139,8 +139,10 @@ defmodule Systems.Project.ItemModel do
            {Project.NodePage, :item_card},
            _user
          ) do
-      # image = "bla"
-      # image_info = ImageHelpers.get_image_info(400, 200)
+      assignment = Assignment.Public.get_by_tool(leaderboard.tool, [:info])
+      image_info = ImageHelpers.get_image_info(assignment.info.image_id, 400, 200)
+      logo_url = assignment.info.logo_url
+
       edit = %{
         action: %{type: :send, event: "edit", item: id},
         face: %{type: :label, label: "Edit", wrap: true}
@@ -155,7 +157,8 @@ defmodule Systems.Project.ItemModel do
         type: :secondary,
         id: id,
         path: ~p"/graphite/leaderboard/#{leaderboard_id}/content",
-        # image_info: image_info,
+        image_info: image_info,
+        icon_url: logo_url,
         label: get_label(status),
         title: name,
         tags: get_card_tags(leaderboard),
