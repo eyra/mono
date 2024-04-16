@@ -145,9 +145,8 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "settings_form",
       ready: false,
       show_errors: show_errors,
-      title: "Settings",
-      forward_title: "Change settings",
-      backward_title: "Change settings",
+      title: dgettext("eyra-graphite", "label.settings"),
+      forward_title: dgettext("eyra-graphite", "label.settings"),
       type: :fullpage,
       child: child
     }

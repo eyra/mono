@@ -20,6 +20,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
+  import CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Systems.{
@@ -55,7 +56,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   end
 
   def tag(%Graphite.LeaderboardModel{} = _leaderboard) do
-    "Leaderboard"
+    dgettext("eyra-graphite", "tag.leaderboard")
   end
 
   def preload_graph(:down),

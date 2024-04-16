@@ -32,15 +32,15 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,
-        placeholder: "Upload file",
-        select_button: "Select file",
-        replace_button: "Replace file",
+        placeholder: dgettext("eyra-graphite", "label.upload_file"),
+        select_button: dgettext("eyra-graphite", "label.select"),
+        replace_button: dgettext("eyra-graphite", "label.replace_file"),
         csv_local_path: nil,
         csv_remote_file: nil,
         csv_lines: nil
       )
       |> init_file_uploader(:csv)
-      |> prepare_process_button("processing")
+      |> prepare_process_button(dgettext("eyra-graphite", "label.processing"))
     }
   end
 

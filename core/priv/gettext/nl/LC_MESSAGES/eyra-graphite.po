@@ -158,3 +158,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "title.benchmark_leaderboard"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.metrics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tag.leaderboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "label.processing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.replace_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.select"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "label.upload_file"
+msgstr ""
