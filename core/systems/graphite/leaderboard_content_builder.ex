@@ -169,7 +169,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "download_form",
       ready: false,
       show_errors: show_errors,
-      title: "Download submissions",
+      title: "Submissions",
       forward_title: "Download submissions",
       backward_title: "Download submissions",
       type: :fullpage,
