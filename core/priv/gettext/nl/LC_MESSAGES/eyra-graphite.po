@@ -145,11 +145,11 @@ msgstr "De submissie deadline is voorbij. Je hebt geen methode ingediend. Helaas
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.create.button"
-msgstr "Ga naar ranglijst"
+msgstr "Maak leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.goto.button"
-msgstr "Ga naar ranglijst"
+msgstr "Ga naar leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.default.name"
@@ -157,16 +157,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.published.message"
-msgstr "De ranglijst staat open voor submissies tot %{deadline}."
+msgstr "Het leaderboard is gepubliceerd."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
-msgstr "Je kan niet langer een methode indienen."
+msgstr "Gesloten voor submissies."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.open.message"
-msgstr "Je kan een methode indienen tot %{deadline}."
+msgstr "Je kunt jouw methode indienen tot %{deadline}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
-msgstr "Je kan niet langer een methode indienen."
+msgstr "De volgende methode wordt opgenomen in het leaderboard."
