@@ -20,7 +20,7 @@ defmodule Systems.Graphite.SubmissionModel do
 
   @fields ~w(description github_commit_url)a
   @required_fields @fields
-  @valid_github_commit_url ~r"https:\/\/github\.com(?:\/[^\/]+)*\/commit\/[0-9a-f]{40}"
+  @valid_github_commit_url ~r"https:\/\/github\.com(?:\/[^\/]+)*\/commits?\/[0-9a-f]{40}"
 
   def prepare(tool, params) do
     tool

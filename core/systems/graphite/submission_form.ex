@@ -19,7 +19,6 @@ defmodule Systems.Graphite.SubmissionForm do
       |> update_submission()
       |> update_changeset()
       |> update_submit_button()
-      |> update_cancel_button()
     }
   end
 
@@ -40,28 +39,24 @@ defmodule Systems.Graphite.SubmissionForm do
   end
 
   defp update_submit_button(%{assigns: %{id: id, submission: submission}} = socket) do
-    submit_button_face =
+    submit_button_label =
       if submission do
-        %{type: :primary, label: dgettext("eyra-graphite", "submission.form.update.button")}
+        dgettext("eyra-graphite", "submission.form.update.button")
       else
-        %{type: :primary, label: dgettext("eyra-graphite", "submission.form.submit.button")}
+        dgettext("eyra-graphite", "submission.form.submit.button")
       end
 
     submit_button = %{
       action: %{type: :submit, form_id: id},
-      face: submit_button_face
+      face: %{
+        type: :primary,
+        bg_color: "bg-tertiary",
+        text_color: "text-grey1",
+        label: submit_button_label
+      }
     }
 
-    socket |> assign(submit_button: submit_button)
-  end
-
-  defp update_cancel_button(%{assigns: %{myself: myself}} = socket) do
-    cancel_button = %{
-      action: %{type: :send, event: "cancel", target: myself},
-      face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
-    }
-
-    socket |> assign(cancel_button: cancel_button)
+    assign(socket, submit_button: submit_button)
   end
 
   # Handle Events
@@ -82,7 +77,27 @@ defmodule Systems.Graphite.SubmissionForm do
 
   # Submit
 
-  defp handle_submit(%{assigns: %{submission: nil, tool: tool, user: user}} = socket, attrs) do
+  defp handle_submit(%{assigns: %{tool: tool, submission: nil}} = socket, attrs) do
+    if Systems.Graphite.Public.open_for_submissions?(tool) do
+      socket |> add_submission(attrs)
+    else
+      socket |> notify_closed_for_submissions()
+    end
+  end
+
+  defp handle_submit(%{assigns: %{tool: tool}} = socket, attrs) do
+    if Systems.Graphite.Public.open_for_submissions?(tool) do
+      socket |> update_submission(attrs)
+    else
+      socket |> notify_closed_for_submissions()
+    end
+  end
+
+  defp notify_closed_for_submissions(socket) do
+    socket |> put_flash(:error, dgettext("eyra-graphite", "closed_for_submissions.error.message"))
+  end
+
+  defp add_submission(%{assigns: %{tool: tool, user: user}} = socket, attrs) do
     case Graphite.Public.add_submission(tool, user, attrs) do
       {:ok, %{graphite_submission: submission}} ->
         socket
@@ -97,7 +112,7 @@ defmodule Systems.Graphite.SubmissionForm do
     end
   end
 
-  defp handle_submit(%{assigns: %{submission: submission}} = socket, attrs) do
+  defp update_submission(%{assigns: %{submission: submission}} = socket, attrs) do
     case Graphite.Public.update_submission(submission, attrs) do
       {:ok, %{graphite_submission: _submission}} ->
         socket |> send_event(:parent, "submitted")
@@ -113,13 +128,10 @@ defmodule Systems.Graphite.SubmissionForm do
     <div id="submission_content" phx-hook="LiveContent" data-show-errors={true}>
       <.spacing value="XS" />
       <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
-        <.text_input form={form} field={:description} label_text={dgettext("eyra-graphite", "submission.form.description.label")} />
-        <.text_input form={form} field={:github_commit_url} placeholder="https://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-graphite", "submission.form.url.label")} />
+        <.text_input form={form} field={:description} label_text={dgettext("eyra-graphite", "submission.form.description.label")}/>
+        <.text_input form={form} field={:github_commit_url} placeholder="https://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-graphite", "submission.form.url.label")}/>
         <.spacing value="XS" />
-        <div class="flex flex-row gap-4">
-          <Button.dynamic {@submit_button} />
-          <Button.dynamic {@cancel_button} />
-        </div>
+        <Button.dynamic_bar buttons={[@submit_button]} />
       </.form>
     </div>
     """
