@@ -8,6 +8,10 @@ defmodule Systems.Graphite.Factories do
     Factories.insert!(:graphite_tool, %{})
   end
 
+  def create_leaderboard() do
+    create_leaderboard(create_tool())
+  end
+
   def create_leaderboard(%Graphite.ToolModel{} = tool) do
     Factories.insert!(:graphite_leaderboard, %{tool: tool})
   end
