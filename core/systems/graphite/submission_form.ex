@@ -2,11 +2,13 @@ defmodule Systems.Graphite.SubmissionForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
 
+  alias CoreWeb.UI.Timestamp
+
   alias Systems.Graphite
 
   # Handle initial update
   @impl true
-  def update(%{id: id, tool: tool, user: user}, socket) do
+  def update(%{id: id, tool: tool, user: user, open?: open?, timezone: timezone}, socket) do
     {
       :ok,
       socket
@@ -14,9 +16,15 @@ defmodule Systems.Graphite.SubmissionForm do
         id: id,
         tool: tool,
         user: user,
+        open?: open?,
+        timezone: timezone,
         show_errors: false
       )
       |> update_submission()
+      |> update_humanized_deadline()
+      |> update_closed_message()
+      |> update_open_message()
+      |> update_url()
       |> update_changeset()
       |> update_submit_button()
     }
@@ -25,6 +33,45 @@ defmodule Systems.Graphite.SubmissionForm do
   defp update_submission(%{assigns: %{tool: tool, user: user}} = socket) do
     submission = Graphite.Public.get_submission(tool, user, :owner)
     socket |> assign(submission: submission)
+  end
+
+  defp update_humanized_deadline(%{assigns: %{timezone: nil}} = socket) do
+    assign(socket, humanized_deadline: "<deadline?>")
+  end
+
+  defp update_humanized_deadline(%{assigns: %{tool: %{deadline: nil}}} = socket) do
+    assign(socket, humanized_deadline: "<deadline?>")
+  end
+
+  defp update_humanized_deadline(
+         %{assigns: %{tool: %{deadline: deadline}, timezone: timezone}} = socket
+       ) do
+    humanized_deadline =
+      deadline
+      |> Timestamp.convert(timezone)
+      |> Timestamp.humanize(always_include_time: true)
+
+    assign(socket, humanized_deadline: humanized_deadline)
+  end
+
+  defp update_open_message(%{assigns: %{humanized_deadline: humanized_deadline}} = socket) do
+    open_message =
+      dgettext("eyra-graphite", "submission.open.message", deadline: humanized_deadline)
+
+    assign(socket, open_message: open_message)
+  end
+
+  defp update_closed_message(socket) do
+    closed_message = dgettext("eyra-graphite", "submission.closed.message")
+    assign(socket, closed_message: closed_message)
+  end
+
+  defp update_url(%{assigns: %{submission: %{github_commit_url: github_commit_url}}} = socket) do
+    assign(socket, github_commit_url: github_commit_url)
+  end
+
+  defp update_url(socket) do
+    assign(socket, github_commit_url: "")
   end
 
   defp update_changeset(%{assigns: %{submission: submission}} = socket) do
@@ -126,12 +173,35 @@ defmodule Systems.Graphite.SubmissionForm do
   def render(assigns) do
     ~H"""
     <div id="submission_content" phx-hook="LiveContent" data-show-errors={true}>
-      <.spacing value="XS" />
       <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-target={@myself} >
-        <.text_input form={form} field={:description} label_text={dgettext("eyra-graphite", "submission.form.description.label")}/>
-        <.text_input form={form} field={:github_commit_url} placeholder="https://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-graphite", "submission.form.url.label")}/>
-        <.spacing value="XS" />
-        <Button.dynamic_bar buttons={[@submit_button]} />
+        <%= if @open? do %>
+          <.text_input form={form} field={:description} label_text={dgettext("eyra-graphite", "submission.form.description.label")} reserve_error_space={false} />
+          <.spacing value="M" />
+          <.text_input form={form} field={:github_commit_url} placeholder="https://github/<owner>/<repo>/commit/<sha>" label_text={dgettext("eyra-graphite", "submission.form.url.label")} reserve_error_space={false} />
+          <.spacing value="M" />
+          <Text.sub_head color="text-success"><%= @open_message %></Text.sub_head>
+          <.spacing value="M" />
+          <Button.dynamic_bar buttons={[@submit_button]} />
+        <% else %>
+          <%= if @submission do %>
+            <Text.body><%= dgettext("eyra-graphite", "locked.submission.message") %></Text.body>
+            <.spacing value="M" />
+            <Text.form_field_label id={:description}><%= dgettext("eyra-graphite", "submission.form.description.label") %> </Text.form_field_label>
+            <.spacing value="XXS" />
+            <Text.body_medium><%= @submission.description %></Text.body_medium>
+            <.spacing value="M" />
+
+            <Text.form_field_label id={:github_commit_url}><%= dgettext("eyra-graphite", "submission.form.url.label") %> </Text.form_field_label>
+            <.spacing value="XXS" />
+            <Text.body_medium>
+              <a class="text-primary underline" href={@github_commit_url} target="_blank" ><%= @github_commit_url %></a>
+            </Text.body_medium>
+            <.spacing value="M" />
+            <Text.sub_head color="text-error"><%= @closed_message %></Text.sub_head>
+          <% else %>
+            <Text.body><%= dgettext("eyra-graphite", "no.submission.message") %></Text.body>
+          <% end %>
+        <% end %>
       </.form>
     </div>
     """

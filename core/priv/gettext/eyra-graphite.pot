@@ -136,7 +136,7 @@ msgid "submission.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.open.description"
+msgid "leaderboard.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -152,10 +152,6 @@ msgid "leaderboard.goto.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.closed.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard.default.name"
 msgstr ""
 
@@ -164,5 +160,13 @@ msgid "leaderboard.published.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "submission.locked.message"
+msgid "submission.closed.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.open.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "locked.submission.message"
 msgstr ""

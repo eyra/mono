@@ -136,7 +136,7 @@ msgid "submission.title"
 msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "leaderboard.open.description"
+msgid "leaderboard.description"
 msgstr "De ranglijst staat open voor submissies tot %{deadline}."
 
 #, elixir-autogen, elixir-format
@@ -152,17 +152,21 @@ msgid "leaderboard.goto.button"
 msgstr "Ga naar ranglijst"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "leaderboard.closed.description"
-msgstr "De ranglijst is gesloten voor submissies. Zodra de ranglijst beschikbaar is verschijnt hieronder een link."
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.default.name"
-msgstr "Team"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.published.message"
 msgstr "De ranglijst staat open voor submissies tot %{deadline}."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "submission.locked.message"
-msgstr "Je hebt geen methode ingediend voor deze ranglijst"
+msgid "submission.closed.message"
+msgstr "Je kan niet langer een methode indienen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.open.message"
+msgstr "Je kan een methode indienen tot %{deadline}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "locked.submission.message"
+msgstr "Je kan niet langer een methode indienen."
