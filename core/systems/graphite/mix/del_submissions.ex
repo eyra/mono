@@ -21,7 +21,18 @@ defmodule Mix.Tasks.Eyra.Graphite.Del.Submissions do
   end
 
   defp delete_submissions(prefix) do
-    Graphite.Gen.delete_submissions(prefix)
+    {:ok,
+     %{
+       submissions: {submission_count, nil},
+       users: {user_count, nil}
+     }} = Graphite.Gen.delete_submissions(prefix)
+
+    print("#{submission_count} submissions deleted")
+    print("#{user_count} users deleted")
+  end
+
+  def print(message) do
+    IO.puts(IO.ANSI.green() <> message <> IO.ANSI.reset())
   end
 
   defp print_usage() do
