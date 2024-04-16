@@ -169,4 +169,4 @@ msgstr "Je kunt jouw methode indienen tot %{deadline}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
-msgstr "De volgende methode wordt opgenomen in het leaderboard:"
+msgstr "Bedankt! De volgende submissie komt in aanmerking voor een positie op het leaderboard:"
