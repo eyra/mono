@@ -1,6 +1,4 @@
 defmodule Systems.Graphite.Gen do
-  import Ecto.Query
-
   alias Core.Factories
   alias Systems.Graphite
 
@@ -59,28 +57,16 @@ defmodule Systems.Graphite.Gen do
   with `prefix`.
   """
   def delete_submissions(prefix) do
-    submissions_to_delete = get_submissions(prefix)
-    # users_to_delete = get_users(prefix)
+    submissions_to_delete = Graphite.Queries.submissions_by_prefix(:description, prefix)
+    users_to_delete = Core.Accounts.Queries.users_by_prefix(:displayname, prefix)
+    features_to_delete = Core.Accounts.Queries.features_by_users(users_to_delete)
+    profiles_to_delete = Core.Accounts.Queries.profiles_by_users(users_to_delete)
 
     Ecto.Multi.new()
     |> Ecto.Multi.delete_all(:submissions, submissions_to_delete)
-    # |> Ecto.Multi.delete_all(:users, users_to_delete)
+    |> Ecto.Multi.delete_all(:features, features_to_delete)
+    |> Ecto.Multi.delete_all(:profiles, profiles_to_delete)
+    |> Ecto.Multi.delete_all(:users, users_to_delete)
     |> Core.Repo.transaction()
-  end
-
-  defp get_submissions(prefix) do
-    like = "#{prefix}-%"
-
-    from(submission in Graphite.SubmissionModel,
-      where: like(submission.description, ^like)
-    )
-  end
-
-  def get_users(prefix) do
-    like = "#{prefix}-%"
-
-    from(user in Core.Accounts.User,
-      where: like(user.displayname, ^like)
-    )
   end
 end
