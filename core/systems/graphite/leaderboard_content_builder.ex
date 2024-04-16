@@ -7,14 +7,14 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
     Graphite
   }
 
-  def view_model(%{id: id, name: name} = leaderboard, assigns) do
+  def view_model(%Graphite.LeaderboardModel{id: id, title: title} = leaderboard, assigns) do
     action_map = action_map(leaderboard, assigns)
 
     tabs = create_tabs(leaderboard, false, assigns)
 
     %{
       id: id,
-      title: name,
+      title: title,
       tabs: tabs,
       actions: actions(leaderboard, action_map),
       show_errors: false

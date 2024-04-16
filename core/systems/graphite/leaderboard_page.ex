@@ -24,7 +24,7 @@ defmodule Systems.Graphite.LeaderboardPage do
   end
 
   defp update_title(%{assigns: %{leaderboard: leaderboard}} = socket) do
-    assign(socket, title: leaderboard.name)
+    assign(socket, title: leaderboard.title)
   end
 
   defp update_leaderboard(%{assigns: %{leaderboard_id: leaderboard_id}} = socket) do
