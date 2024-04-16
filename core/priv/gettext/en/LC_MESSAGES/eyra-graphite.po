@@ -11,10 +11,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard"
-msgstr "Leaderboard"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.form.url.label"
 msgstr "Your GitHub commit URL"
@@ -34,30 +30,6 @@ msgstr "Invalid GitHub commit URL (see challenge repo instructions)"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
 msgstr "Submissions"
-
-#, elixir-autogen, elixir-format
-msgid "import.leaderboard.title"
-msgstr "Import"
-
-#, elixir-autogen, elixir-format
-msgid "csv-import-button"
-msgstr "Import selected file"
-
-#, elixir-autogen, elixir-format
-msgid "csv-replace-file-button"
-msgstr "Replace file"
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-file-button"
-msgstr "Select file"
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-placeholder"
-msgstr "Select a leaderboard csv file"
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard.forward.button"
-msgstr "Public"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.github.label"
@@ -170,3 +142,7 @@ msgstr "Open for submissions until %{deadline}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
 msgstr "The following submission will be included in the leaderboard:"
+
+#, elixir-autogen, elixir-format
+msgid "settings.form.metrics.hint"
+msgstr "Please provide the metric titles for the leaderboards, separated by comma's (e.g. F1, Precision, Recall, Accuracy), check out 'Preview' to view the result."

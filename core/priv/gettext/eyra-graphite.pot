@@ -12,10 +12,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "submission.form.url.label"
 msgstr ""
 
@@ -33,30 +29,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import.leaderboard.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-import-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-replace-file-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-file-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard.forward.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -169,4 +141,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "locked.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.form.metrics.hint"
 msgstr ""

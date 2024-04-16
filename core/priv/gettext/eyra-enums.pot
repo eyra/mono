@@ -439,9 +439,5 @@ msgid "leaderboard_visibility.private"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard_visibility.private_with_date"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.public"
 msgstr ""

@@ -73,6 +73,8 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
         <.text_input form={form} field={:title} label_text="Title" />
         <.text_input form={form} field={:subtitle} label_text="Subtitle" />
         <.list_input form={form} field={:metrics} label_text="Metrics" value={metrics_to_string(@changeset.data.metrics)} />
+        <Text.hint><%= dgettext("eyra-graphite", "settings.form.metrics.hint") %></Text.hint>
+        <.spacing value="M"/>
         <.radio_group form={form} field={:visibility} items={@visibility_options} label_text="Visibility" />
       </.form>
     </div>
