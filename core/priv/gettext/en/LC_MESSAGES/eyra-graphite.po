@@ -137,11 +137,11 @@ msgstr "Submission"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.description"
-msgstr "As soon as the leaderboard is available a link can be found here."
+msgstr "After the submission deadline, a leaderboard will be generated that ranks all submitted methods based on the metrics. A link to the leaderboard will become available here, as soon as the leaderboard is ready."
 
 #, elixir-autogen, elixir-format
 msgid "no.submission.message"
-msgstr "You did not submit a method for this leaderboard."
+msgstr "The submission deadline has passed. You did not submit a method. Unfortunately, it is no longer possible to submit a method for this leaderboard."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.create.button"
