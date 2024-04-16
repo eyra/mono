@@ -137,11 +137,11 @@ msgstr "Dien methode in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.description"
-msgstr "De ranglijst staat open voor submissies tot %{deadline}."
+msgstr "Na de submissie deadline zal een leaderboard gegenereerd worden waarop alle ingediende methodes gerangschikt worden op basis van de metrics. Op deze plek zal een link naar het leaderboard beschikbaar komen, zodra deze klaar is."
 
 #, elixir-autogen, elixir-format
 msgid "no.submission.message"
-msgstr "Je hebt geen methode ingediend voor deze ranglijst"
+msgstr "De submissie deadline is voorbij. Je hebt geen methode ingediend. Helaas, is het niet langer mogelijk om een methode in te dienen voor dit leaderboard."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.create.button"
