@@ -161,11 +161,11 @@ msgstr "The leaderboard has been published."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
-msgstr "Closed for submissions"
+msgstr "Closed for submissions."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.open.message"
-msgstr "Open for submissions until %{deadline}"
+msgstr "You can submit your method until %{deadline}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
