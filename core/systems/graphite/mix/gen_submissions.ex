@@ -32,23 +32,7 @@ defmodule Mix.Tasks.Eyra.Graphite.Gen.Submissions do
   end
 
   defp create_submissions(leaderboard_id, amount, prefix \\ "auto-gen") do
-    {:ok, result} = Graphite.Gen.create_submissions(leaderboard_id, amount, prefix)
-
-    submission_count = count(result, :submission)
-    user_count = count(result, :user)
-
-    print("#{submission_count} submissions created")
-    print("#{user_count} users created")
-  end
-
-  def print(message) do
-    IO.puts(IO.ANSI.green() <> message <> IO.ANSI.reset())
-  end
-
-  defp count(result, type) do
-    result
-    |> Map.keys()
-    |> Enum.count(fn {key, _} -> key == type end)
+    Graphite.Gen.create_submissions(leaderboard_id, amount, prefix)
   end
 
   defp print_missing_arguments() do
