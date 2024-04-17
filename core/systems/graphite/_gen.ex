@@ -8,19 +8,38 @@ defmodule Systems.Graphite.Gen do
   number.
   """
   def create_submissions(leaderboard_id, amount, prefix) do
+    Application.ensure_all_started(:core)
+
     leaderboard = Graphite.Public.get_leaderboard!(leaderboard_id, [{:tool, :auth_node}])
 
     multi = Ecto.Multi.new()
 
-    Enum.reduce(1..amount, multi, fn i, multi ->
-      name = "#{prefix}-#{i}"
+    {:ok, result} =
+      Enum.reduce(1..amount, multi, fn i, multi ->
+        name = "#{prefix}-#{i}"
 
-      multi
-      |> create_user(name)
-      |> create_auth_node(name)
-      |> create_submission(name, leaderboard.tool)
-    end)
-    |> Core.Repo.transaction(returning: true)
+        multi
+        |> create_user(name)
+        |> create_auth_node(name)
+        |> create_submission(name, leaderboard.tool)
+      end)
+      |> Core.Repo.transaction(returning: true)
+
+    submission_count = count(result, :submission)
+    user_count = count(result, :user)
+
+    print("#{submission_count} submissions created")
+    print("#{user_count} users created")
+  end
+
+  defp print(message) do
+    IO.puts(IO.ANSI.green() <> message <> IO.ANSI.reset())
+  end
+
+  defp count(result, type) do
+    result
+    |> Map.keys()
+    |> Enum.count(fn {key, _} -> key == type end)
   end
 
   defp gen_commit_url() do
@@ -57,16 +76,27 @@ defmodule Systems.Graphite.Gen do
   with `prefix`.
   """
   def delete_submissions(prefix) do
+    Application.ensure_all_started(:core)
+
     submissions_to_delete = Graphite.Queries.submissions_by_prefix(:description, prefix)
     users_to_delete = Core.Accounts.Queries.users_by_prefix(:displayname, prefix)
     features_to_delete = Core.Accounts.Queries.features_by_users(users_to_delete)
     profiles_to_delete = Core.Accounts.Queries.profiles_by_users(users_to_delete)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.delete_all(:submissions, submissions_to_delete)
-    |> Ecto.Multi.delete_all(:features, features_to_delete)
-    |> Ecto.Multi.delete_all(:profiles, profiles_to_delete)
-    |> Ecto.Multi.delete_all(:users, users_to_delete)
-    |> Core.Repo.transaction()
+    {:ok, result} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.delete_all(:submissions, submissions_to_delete)
+      |> Ecto.Multi.delete_all(:features, features_to_delete)
+      |> Ecto.Multi.delete_all(:profiles, profiles_to_delete)
+      |> Ecto.Multi.delete_all(:users, users_to_delete)
+      |> Core.Repo.transaction()
+
+    %{
+      submissions: {submission_count, nil},
+      users: {user_count, nil}
+    } = result
+
+    print("#{submission_count} submissions deleted")
+    print("#{user_count} users deleted")
   end
 end
