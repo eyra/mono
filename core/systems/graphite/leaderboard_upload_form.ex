@@ -20,7 +20,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         },
         socket
       ) do
-    columns = ["submission" | leaderboard.metrics]
+    columns = ["submission-id" | leaderboard.metrics]
 
     {
       :ok,
@@ -106,7 +106,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
   defp has_valid_submission?(line) do
     # TODO check whether the provided submissions actually connects to the leaderboard
     # the score is being uploaded for?
-    case Graphite.Public.get_submission(line["submission"]) do
+    case Graphite.Public.get_submission(line["submission-id"]) do
       nil -> {:error, "Submission not found"}
       _ -> :ok
     end

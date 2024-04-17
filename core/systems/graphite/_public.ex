@@ -158,7 +158,7 @@ defmodule Systems.Graphite.Public do
         metric: metric,
         score: String.to_float(line[metric]),
         leaderboard_id: leaderboard.id,
-        submission_id: String.to_integer(line["submission"]),
+        submission_id: String.to_integer(line["submission-id"]),
         inserted_at: datetime,
         updated_at: datetime
       }
