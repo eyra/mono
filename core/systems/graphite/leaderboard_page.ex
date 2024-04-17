@@ -49,7 +49,9 @@ defmodule Systems.Graphite.LeaderboardPage do
     assign(socket, title: leaderboard.title)
   end
 
-  defp update_leaderboard(%{assigns: %{leaderboard_id: leaderboard_id}} = socket) do
+  defp update_leaderboard(
+         %{assigns: %{leaderboard_id: leaderboard_id, current_user: _user}} = socket
+       ) do
     leaderboard =
       Graphite.Public.get_leaderboard!(leaderboard_id, [:auth_node, :tool, {:scores, :submission}])
 
@@ -59,6 +61,7 @@ defmodule Systems.Graphite.LeaderboardPage do
       id: :leaderboard_live,
       open: information_open?(leaderboard.open_date),
       categories: categories,
+      leaderboard: leaderboard,
       module: Graphite.LeaderboardView
     }
 
@@ -77,7 +80,10 @@ defmodule Systems.Graphite.LeaderboardPage do
       fn metric ->
         %{
           name: metric,
-          scores: leaderboard.scores |> Enum.filter(&(&1.metric == metric))
+          scores:
+            leaderboard.scores
+            |> Enum.filter(&(&1.metric == metric))
+            |> Enum.sort(&(&1.score < &2.score))
         }
       end
     )
