@@ -27,21 +27,19 @@ defmodule Systems.Graphite.ExportController do
   def export(submissions) when is_list(submissions) do
     submissions
     |> Enum.map(&export/1)
-    |> CSV.encode(headers: [:id, :url, :ref])
+    |> CSV.encode(headers: [:submission, :repo, :ref, :url])
     |> Enum.to_list()
   end
 
   def export(%Graphite.SubmissionModel{
         id: submission_id,
-        description: description,
         github_commit_url: github_commit_url,
         auth_node: _auth_node
       }) do
-    # TODO: fetch name of collab out of auth_node
-    id = "#{submission_id}"
+    submission_str = "#{submission_id}"
 
-    {url, ref} = extract(github_commit_url)
-    %{id: id, description: description, url: url, ref: ref}
+    {repo, ref} = extract(github_commit_url)
+    %{submission: submission_str, repo: repo, ref: ref, url: github_commit_url}
   end
 
   defp extract(url) do
