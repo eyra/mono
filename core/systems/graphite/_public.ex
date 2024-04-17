@@ -45,6 +45,11 @@ defmodule Systems.Graphite.Public do
     |> Repo.all()
   end
 
+  def get_submission_count(tool) do
+    Graphite.Queries.submission_query(tool)
+    |> Repo.aggregate(:count)
+  end
+
   def set_tool_status(%Graphite.ToolModel{} = tool, status) do
     tool
     |> Graphite.ToolModel.changeset(%{status: status})
@@ -82,6 +87,13 @@ defmodule Systems.Graphite.Public do
     submission = prepare_submission(attrs, user, tool)
 
     Multi.new()
+    |> Multi.run(:open_for_submissions?, fn _, _ ->
+      if open_for_submissions?(tool) do
+        {:ok, true}
+      else
+        {:error, false}
+      end
+    end)
     |> Multi.insert(:graphite_submission, submission)
     |> Signal.Public.multi_dispatch({:graphite_submission, :inserted})
     |> Repo.transaction()
@@ -97,6 +109,13 @@ defmodule Systems.Graphite.Public do
 
   def update_submission(submission, attrs) do
     Multi.new()
+    |> Multi.run(:can_update?, fn _, _ ->
+      if can_update?(submission) do
+        {:ok, true}
+      else
+        {:error, false}
+      end
+    end)
     |> Multi.update(:graphite_submission, fn _ ->
       Graphite.SubmissionModel.change(submission, attrs)
       |> Graphite.SubmissionModel.validate()
@@ -158,5 +177,27 @@ defmodule Systems.Graphite.Public do
 
   def delete(%Graphite.SubmissionModel{} = submission) do
     Repo.delete(submission)
+  end
+
+  def can_update?(%Graphite.SubmissionModel{tool_id: tool_id}) do
+    open_for_submissions?(tool_id)
+  end
+
+  def open_for_submissions?(%Graphite.ToolModel{id: tool_id}) do
+    open_for_submissions?(tool_id)
+  end
+
+  def open_for_submissions?(tool_id) do
+    Graphite.Public.get_tool!(tool_id)
+    |> Graphite.ToolModel.open_for_submissions?()
+  end
+end
+
+defimpl Core.Persister, for: Systems.Graphite.ToolModel do
+  def save(_tool, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :graphite_tool) do
+      {:ok, %{graphite_tool: graphite_tool}} -> {:ok, graphite_tool}
+      _ -> {:error, changeset}
+    end
   end
 end

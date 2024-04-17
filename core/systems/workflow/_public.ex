@@ -38,6 +38,11 @@ defmodule Systems.Workflow.Public do
     |> Repo.get!(id)
   end
 
+  def get_tool_ref_by_tool(%{id: id} = tool, preload \\ []) do
+    field = Workflow.ToolRefModel.tool_id_field(tool)
+    get_item_by_tool!(field, id, preload)
+  end
+
   def get_item_by_tool_ref(tool_ref, preload \\ [])
 
   def get_item_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload) do

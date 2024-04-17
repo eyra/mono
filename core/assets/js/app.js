@@ -29,6 +29,7 @@ import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { Sticky } from "./sticky";
+import { TimeZone } from "./timezone";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -105,6 +106,7 @@ let Hooks = {
   Wysiwyg,
   AutoSubmit,
   Sticky,
+  TimeZone,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

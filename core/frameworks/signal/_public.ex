@@ -3,6 +3,7 @@ defmodule Frameworks.Signal.Public do
 
   import Frameworks.Utililty.PrettyPrint
 
+  # FIXME: move this registration outside of framework
   @signal_handlers [
     "Core.Accounts.SignalHandlers",
     "Core.Mailer.SignalHandlers",
@@ -18,7 +19,8 @@ defmodule Frameworks.Signal.Public do
     "Systems.Campaign.Switch",
     "Systems.NextAction.Switch",
     "Systems.Crew.Switch",
-    "Systems.Instruction.Switch"
+    "Systems.Instruction.Switch",
+    "Systems.Graphite.Switch"
   ]
 
   def dispatch(signal, message) do

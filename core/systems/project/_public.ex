@@ -7,8 +7,8 @@ defmodule Systems.Project.Public do
   alias Core.Accounts.User
   alias Core.Authorization
 
-  alias Systems.Workflow
   alias Systems.Assignment
+  alias Systems.Workflow
   alias Systems.Graphite
   alias Systems.Project
 
@@ -36,26 +36,16 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
+  def get_node_by_item!(%Project.ItemModel{node_id: node_id}, preload \\ []) do
+    get_node!(node_id, preload)
+  end
+
   def get_item!(id, preload \\ []) do
     from(item in Project.ItemModel,
       where: item.id == ^id,
       preload: ^preload
     )
     |> Repo.one!()
-  end
-
-  def get_item_by_tool_ref(tool_ref, preload \\ [])
-
-  def get_item_by_tool_ref(%Workflow.ToolRefModel{id: tool_ref_id}, preload) do
-    get_item_by_tool_ref(tool_ref_id, preload)
-  end
-
-  def get_item_by_tool_ref(tool_ref_id, preload) when is_integer(tool_ref_id) do
-    from(item in Project.ItemModel,
-      where: item.tool_ref_id == ^tool_ref_id,
-      preload: ^preload
-    )
-    |> Repo.one()
   end
 
   def get_item_by_assignment(assignment, preload \\ [])
@@ -66,25 +56,10 @@ defmodule Systems.Project.Public do
 
   def get_item_by_assignment(assignment_id, preload) do
     from(item in Project.ItemModel,
-      where: item.assignment_id in ^assignment_id,
+      where: item.assignment_id == ^assignment_id,
       preload: ^preload
     )
     |> Repo.one()
-  end
-
-  def get_tool_ref_by_tool(%{id: id} = tool, preload \\ []) do
-    field = Workflow.ToolRefModel.tool_id_field(tool)
-
-    query_tool_refs_by_tool(id, field, preload)
-    |> Repo.one()
-  end
-
-  def query_tool_refs_by_tool(tool_id, field, preload \\ [])
-      when is_integer(tool_id) and is_atom(field) do
-    from(tool_ref in Workflow.ToolRefModel,
-      where: field(tool_ref, ^field) == ^tool_id,
-      preload: ^preload
-    )
   end
 
   @doc """
@@ -107,14 +82,33 @@ defmodule Systems.Project.Public do
     |> Repo.all()
   end
 
-  def list_items(node, {:assignment, template}, preload \\ []) do
+  def list_items(_, selector \\ nil, preload \\ [])
+
+  def list_items(node, nil, preload) do
+    item_query(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, :leaderboard, preload) do
+    item_query_by_leaderboard(node)
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def exists?(user, name) do
     list_owned_projects(user)
+    |> Enum.find(&(&1.name == name)) != nil
+  end
+
+  def item_exists?(project_node, name) do
+    list_items(project_node)
     |> Enum.find(&(&1.name == name)) != nil
   end
 
@@ -133,6 +127,24 @@ defmodule Systems.Project.Public do
 
     if exists?(user, new_name) do
       new_project_name(user, name, attempt + 1)
+    else
+      new_name
+    end
+  end
+
+  def new_item_name(project_node, name) do
+    if item_exists?(project_node, name) do
+      new_item_name(project_node, name, 2)
+    else
+      name
+    end
+  end
+
+  def new_item_name(project_node, name, attempt) do
+    new_name = "#{name} (#{attempt})"
+
+    if item_exists?(project_node, new_name) do
+      new_item_name(project_node, name, attempt + 1)
     else
       new_name
     end
@@ -194,6 +206,10 @@ defmodule Systems.Project.Public do
 
   def prepare_item(attrs, %Graphite.LeaderboardModel{} = leaderboard) do
     prepare_item(attrs, :leaderboard, leaderboard)
+  end
+
+  def prepare_item(attrs, %Ecto.Changeset{data: %Graphite.LeaderboardModel{}} = changeset) do
+    prepare_item(attrs, :leaderboard, changeset)
   end
 
   def prepare_item(

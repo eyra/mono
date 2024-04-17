@@ -4,9 +4,7 @@ defmodule Systems.Assignment.Switch do
 
   alias Core.Authorization
 
-  alias Frameworks.{
-    Signal
-  }
+  alias Frameworks.Signal
 
   alias Systems.Assignment
   alias Systems.Workflow

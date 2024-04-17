@@ -9,7 +9,6 @@ defmodule Systems.Project.Assembly do
 
   alias Systems.Project
   alias Systems.Assignment
-  alias Systems.Graphite
 
   def delete(%Project.Model{auth_node: %{id: node_id}}) do
     from(ra in Authorization.RoleAssignment,
@@ -103,20 +102,6 @@ defmodule Systems.Project.Assembly do
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
-  end
-
-  defp prepare_item(:leaderboard, name) do
-    {:ok, leaderboard} =
-      Graphite.Public.prepare_leaderboard(%{
-        name: name,
-        status: :concept,
-        visibility: :private,
-        allow_anonymous: false,
-        metrics: []
-      })
-      |> Changeset.apply_action(:prepare)
-
-    Project.Public.prepare_item(%{name: name, project_path: []}, leaderboard)
   end
 
   # PROJECT PATH

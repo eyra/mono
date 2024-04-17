@@ -12,40 +12,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.leaderboard"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tool.page.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submission.form.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "expectations.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.deadline.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.spots.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "highlight.submissions.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "1 day"
-msgid_plural "%{count} days"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
 msgid "submission.form.url.label"
 msgstr ""
 
@@ -62,71 +28,7 @@ msgid "invalid.github.commit.url.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "1 submission"
-msgid_plural "%{count} submissions"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "1 team"
-msgid_plural "%{count} teams"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.dataset.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.template.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "preparation.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "dataset.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "template.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import.leaderboard.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-import-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-replace-file-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-file-button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "csv-select-placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "challenge.forward.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard.forward.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -187,4 +89,108 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "closed_for_submissions.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "no.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.published.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.closed.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.open.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "locked.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.form.metrics.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_results"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.benchmark_leaderboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.metrics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tag.leaderboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.processing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.replace_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.select"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_file"
 msgstr ""
