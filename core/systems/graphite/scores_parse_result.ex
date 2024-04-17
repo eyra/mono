@@ -4,7 +4,7 @@ defmodule Systems.Graphite.ScoresParseResult do
 
   @base_fields ["submission", "github_commit_url"]
 
-  defstruct [:csv, :duplicate_count, :records]
+  defstruct [:csv, :duplicate_count, :rejected, :valid]
 
   def from_file(local_path, leaderboard) do
     lines =
@@ -27,10 +27,18 @@ defmodule Systems.Graphite.ScoresParseResult do
       |> to_records()
       |> Stream.map(fn record -> check_fields(record, leaderboard.metrics, :missing_metric) end)
       |> Stream.map(fn record -> check_fields(record, @base_fields, :missing_base_field) end)
+      |> Stream.map(fn record -> convert_ints(record, ["submission"]) end)
+      |> Stream.map(fn record -> convert_floats(record, leaderboard.metrics) end)
       |> Stream.map(fn record -> check_submission(record, submission_map) end)
       |> Enum.map(fn record -> check_github_url(record, submission_map) end)
 
-    %Result{csv: lines, records: records}
+    {valid, rejected} =
+      Enum.split_with(records, fn
+        {_, _, []} -> true
+        {_, _, [_ | _]} -> false
+      end)
+
+    %Result{csv: lines, rejected: rejected, valid: valid}
   end
 
   defp to_records(lines) do
@@ -54,9 +62,10 @@ defmodule Systems.Graphite.ScoresParseResult do
 
   defp check_submission({_, nil, _} = record, _submission_map), do: record
 
-  defp check_submission({line_nr, line, errors} = record, submission_map) do
+  defp check_submission({line_nr, line, errors}, submission_map) do
     if Map.has_key?(submission_map, line["submission"]) do
-      record
+      submission = Map.get(submission_map, line["submission"])
+      {line_nr, Map.put(line, "submission_record", submission), errors}
     else
       {line_nr, line, [:missing_submission | errors]}
     end
@@ -72,5 +81,35 @@ defmodule Systems.Graphite.ScoresParseResult do
     else
       {line_nr, line, [:incorrect_url | errors]}
     end
+  end
+
+  def convert_ints({_, nil, _} = record), do: record
+
+  def convert_ints({line_nr, line, errors}, fields) do
+    updated =
+      fields
+      |> Enum.reduce(
+        line,
+        fn field, acc ->
+          Map.update!(acc, field, fn value -> String.to_integer(value) end)
+        end
+      )
+
+    {line_nr, updated, errors}
+  end
+
+  def convert_floats({_, nil, _} = record), do: record
+
+  def convert_floats({line_nr, line, errors}, fields) do
+    updated =
+      fields
+      |> Enum.reduce(
+        line,
+        fn field, acc ->
+          Map.update!(acc, field, fn value -> String.to_float(value) end)
+        end
+      )
+
+    {line_nr, updated, errors}
   end
 end

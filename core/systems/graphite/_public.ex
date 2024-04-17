@@ -139,7 +139,7 @@ defmodule Systems.Graphite.Public do
     |> Repo.preload(preload)
   end
 
-  def import_csv_lines(leaderboard, lines) do
+  def import_scores(leaderboard, %Graphite.ScoresParseResult{valid: valid_records}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     Multi.new()
@@ -147,8 +147,8 @@ defmodule Systems.Graphite.Public do
       :add_scores,
       Graphite.ScoreModel,
       Enum.flat_map(
-        lines,
-        fn line -> create_scores(line, leaderboard, now) end
+        valid_records,
+        fn {_, record, _} -> create_scores(record, leaderboard, now) end
       ),
       returning: true
     )
@@ -161,9 +161,9 @@ defmodule Systems.Graphite.Public do
     |> Enum.map(fn metric ->
       %{
         metric: metric,
-        score: String.to_float(line[metric]),
+        score: line[metric],
         leaderboard_id: leaderboard.id,
-        submission_id: String.to_integer(line["submission"]),
+        submission_id: line["submission"],
         inserted_at: datetime,
         updated_at: datetime
       }

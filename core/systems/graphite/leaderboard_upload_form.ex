@@ -76,15 +76,23 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
   end
 
   @impl true
-  def handle_event("process", _params, %{assigns: %{csv_local_path: _csv_local_path}} = socket) do
-    # %{assigns: %{leaderboard: leaderboard}} = socket
+  def handle_event(
+        "process",
+        _params,
+        %{assigns: %{leaderboard: leaderboard, csv_local_path: csv_local_path}} = socket
+      ) do
+    result = Graphite.ScoresParseResult.from_file(csv_local_path, leaderboard)
 
-    # process lines here.
-    {:noreply, socket}
+    {:noreply, assign(socket, :parsed_results, result)}
   end
 
-  def handle_event("submit", _params, socket) do
-    {:noreply, socket}
+  def handle_event(
+        "submit",
+        _params,
+        %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket
+      ) do
+    Graphite.Public.import_scores(leaderboard, parsed_results)
+    {:noreply, redirect(socket, to: ~p"/graphite/leaderboard/#{leaderboard.id}")}
   end
 
   def handle_event("change", _params, socket) do
@@ -132,9 +140,8 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         <Text.title3>Validate uploaded information</Text.title3>
         <Text.title4>File and leaderboard metrics</Text.title4>
         Number of submissions for leaderboard: <%= length(@submissions) %> <br />
-        Number of submissions in file: <%= length(@parsed_results) %> <br />
-        Duplicated entries in file: <br />
-        <Text.title4>Individual records</Text.title4>
+        Number of valid submissions in file: <%= length(@parsed_results.valid) %> <br />
+        Number of invalid submissions in file: <%= length(@parsed_results.rejected) %> <br />
         <.wrap>
           <Button.dynamic {@submit_button} />
         </.wrap>
