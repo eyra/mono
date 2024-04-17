@@ -12,6 +12,7 @@ defmodule Systems.Graphite.LeaderboardView do
 
   @impl true
   def update(%{active_item_id: active_item_id, selector_id: :leaderboard_category}, socket) do
+    IO.inspect(socket.assigns.categories)
     {
       :ok,
       socket
@@ -22,6 +23,7 @@ defmodule Systems.Graphite.LeaderboardView do
 
   @impl true
   def update(%{id: id, categories: categories}, socket) do
+    IO.inspect(socket.assigns.categories)
     %{name: active_category} = List.first(categories)
 
     {

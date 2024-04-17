@@ -8,7 +8,7 @@ defmodule Systems.Graphite.Routes do
 
         live("/:id/content", ContentPage)
         # TODO everything related to Spots should be removed (?)
-        live("/:id/:spot", ToolPage)
+        # live("/:id/:spot", ToolPage)
 
         get("/:id", ToolController, :ensure_spot)
         get("/:id/export/submissions", ExportController, :submissions)
