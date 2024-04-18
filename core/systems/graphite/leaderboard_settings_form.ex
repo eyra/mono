@@ -8,11 +8,6 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
 
   alias Systems.Graphite
 
-  @visibility_options [
-    %{id: "public", value: "public", active: true},
-    %{id: "private", value: "private", active: false}
-  ]
-
   @impl true
   def update(%{id: id, leaderboard: leaderboard}, socket) do
     changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{})
@@ -24,7 +19,7 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
         id: id,
         leaderboard: leaderboard,
         changeset: changeset,
-        visibility_options: @visibility_options
+        visibility_options: Graphite.LeaderboardVisibility.labels(leaderboard.visibility)
       )
     }
   end
@@ -69,13 +64,13 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
     <div>
       <.form id={"#{@id}_settings"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
         <.spacing value="L" />
-        <Text.title2>Settings</Text.title2>
-        <.text_input form={form} field={:title} label_text={dgettext("eyra-graphite", "label.title")} />
-        <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-graphite", "label.subtitle")} />
-        <.list_input form={form} field={:metrics} label_text={dgettext("eyra-graphite", "label.metrics")} value={metrics_to_string(@changeset.data.metrics)} />
+        <Text.title2><%= dgettext("eyra-graphite", "settings.title.settings") %></Text.title2>
+        <.text_input form={form} field={:title} label_text={dgettext("eyra-graphite", "settings.label.title")} />
+        <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-graphite", "settings.label.subtitle")} />
+        <.list_input form={form} field={:metrics} label_text={dgettext("eyra-graphite", "settings.label.metrics")} value={metrics_to_string(@changeset.data.metrics)} />
         <Text.hint><%= dgettext("eyra-graphite", "settings.form.metrics.hint") %></Text.hint>
         <.spacing value="M"/>
-        <.radio_group form={form} field={:visibility} items={@visibility_options} label_text="Visibility" />
+        <.radio_group form={form} field={:visibility} items={@visibility_options} label_text={dgettext("eyra-graphite", "settings.label.visibility")} />
       </.form>
     </div>
     """

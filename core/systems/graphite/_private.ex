@@ -6,6 +6,6 @@ defmodule Systems.Graphite.Private do
   }
 
   def get_preview_url(%Graphite.LeaderboardModel{id: id}) do
-    ~p"/graphite/leaderboard/#{id}"
+    ~p"/graphite/leaderboard/#{id}/page"
   end
 end

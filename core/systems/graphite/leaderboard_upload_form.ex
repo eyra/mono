@@ -20,7 +20,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         },
         socket
       ) do
-    columns = ["submission-id" | leaderboard.metrics]
+    columns = ["submission-id", "github_commit_url" | leaderboard.metrics]
 
     {
       :ok,
@@ -37,11 +37,18 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         replace_button: dgettext("eyra-graphite", "label.replace_file"),
         csv_local_path: nil,
         csv_remote_file: nil,
-        csv_lines: nil
+        csv_lines: nil,
+        parsed_results: nil
       )
       |> init_file_uploader(:csv)
+      |> prepare_submissions()
+      |> prepare_submit_button("submit")
       |> prepare_process_button(dgettext("eyra-graphite", "label.processing"))
     }
+  end
+
+  defp prepare_submissions(%{assigns: %{leaderboard: %{tool: tool}}} = socket) do
+    assign(socket, :submissions, Graphite.Public.get_submissions(tool))
   end
 
   defp prepare_process_button(socket, label) do
@@ -53,6 +60,15 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
     assign(socket, process_button: process_button)
   end
 
+  defp prepare_submit_button(socket, label) do
+    submit_button = %{
+      action: %{type: :send, event: "submit"},
+      face: %{type: :primary, label: label}
+    }
+
+    assign(socket, submit_button: submit_button)
+  end
+
   @impl true
   def process_file(socket, {path, _url, original_file_name}) do
     socket
@@ -60,56 +76,27 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
   end
 
   @impl true
-  def handle_event("process", _params, %{assigns: %{csv_local_path: csv_local_path}} = socket) do
-    %{assigns: %{leaderboard: leaderboard}} = socket
+  def handle_event(
+        "process",
+        _params,
+        %{assigns: %{leaderboard: leaderboard, csv_local_path: csv_local_path}} = socket
+      ) do
+    result = Graphite.ScoresParseResult.from_file(csv_local_path, leaderboard)
 
-    lines =
-      csv_local_path
-      |> File.stream!()
-      |> CSV.decode(headers: true)
+    {:noreply, assign(socket, :parsed_results, result)}
+  end
 
-    lines_ok =
-      lines
-      |> Stream.filter(&filter_ok/1)
-      |> Stream.map(fn {:ok, line} -> line end)
-      |> Enum.filter(fn line -> check_line(line, leaderboard) end)
-
-    Graphite.Public.import_csv_lines(socket.assigns.leaderboard, lines_ok)
-    {:noreply, assign(socket, csv_lines: lines_ok)}
+  def handle_event(
+        "submit",
+        _params,
+        %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket
+      ) do
+    Graphite.Public.import_scores(leaderboard, parsed_results)
+    {:noreply, redirect(socket, to: ~p"/graphite/leaderboard/#{leaderboard.id}")}
   end
 
   def handle_event("change", _params, socket) do
     {:noreply, socket}
-  end
-
-  defp filter_ok({:ok, _line}), do: true
-  defp filter_ok({:error, _line}), do: false
-
-  defp check_line(%{} = line, %Graphite.LeaderboardModel{} = leaderboard) do
-    with :ok <- contains_all_metrics?(line, leaderboard.metrics),
-         :ok <- has_valid_submission?(line) do
-      true
-    else
-      _ ->
-        false
-    end
-  end
-
-  defp contains_all_metrics?(line, metrics) do
-    if Enum.all?(metrics, fn metric -> Map.has_key?(line, metric) end) do
-      :ok
-    else
-      {:error, "Not all required metrics for a leaderboard entry are present."}
-    end
-  end
-
-  defp has_valid_submission?(line) do
-    # TODO check whether the provided submissions actually connects to the leaderboard
-    # the score is being uploaded for?
-    case Graphite.Public.get_submission(line["submission-id"]) do
-      nil -> {:error, "Submission not found"}
-      _ -> :ok
-    end
   end
 
   @impl true
@@ -149,8 +136,15 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
           </.wrap>
       <% end %>
       <.spacing value="M" />
-      <%= if @csv_lines do %>
-        Uploaded <%= length(@csv_lines) %> scores.
+      <%= if @parsed_results do %>
+        <Text.title3>Validate uploaded information</Text.title3>
+        <Text.title4>File and leaderboard metrics</Text.title4>
+        Number of submissions for leaderboard: <%= length(@submissions) %> <br />
+        Number of valid submissions in file: <%= length(@parsed_results.valid) %> <br />
+        Number of invalid submissions in file: <%= length(@parsed_results.rejected) %> <br />
+        <.wrap>
+          <Button.dynamic {@submit_button} />
+        </.wrap>
       <% end %>
     </div>
     """

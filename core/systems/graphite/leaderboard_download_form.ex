@@ -35,11 +35,6 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
   end
 
   @impl true
-  def handle_event("download", _params, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
     <div>

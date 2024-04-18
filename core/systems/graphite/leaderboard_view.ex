@@ -11,17 +11,26 @@ defmodule Systems.Graphite.LeaderboardView do
   import Graphite.LeaderboardCategoryView
 
   @impl true
-  def update(%{active_item_id: active_item_id, selector_id: :leaderboard_category}, socket) do
+  def update(
+        %{
+          active_item_id: active_item_id,
+          selector_id: :leaderboard_category,
+          leaderboard: leaderboard
+        },
+        socket
+      ) do
     {
       :ok,
       socket
-      |> assign(active_category_name: active_item_id)
+      |> assign(active_category_name: active_item_id, leaderboard: leaderboard)
       |> update_category()
     }
   end
 
   @impl true
-  def update(%{id: id, categories: categories}, socket) do
+  def update(%{id: id, categories: categories, leaderboard: leaderboard}, socket) do
+    %{name: active_category} = List.first(categories)
+
     {
       :ok,
       socket
@@ -29,6 +38,7 @@ defmodule Systems.Graphite.LeaderboardView do
         id: id,
         categories: categories
       )
+      |> assign(active_category_name: active_category, leaderboard: leaderboard)
       |> prepare_active_category_name()
       |> prepare_selector()
       |> update_category()
@@ -87,7 +97,7 @@ defmodule Systems.Graphite.LeaderboardView do
       </Align.horizontal_center>
       <.spacing value="M" />
       <%= if @active_category do %>
-        <.category name={@active_category.name} scores={@active_category.scores} />
+        <.category name={@active_category.name} scores={@active_category.scores} leaderboard={@leaderboard} />
       <% end %>
     </div>
     """

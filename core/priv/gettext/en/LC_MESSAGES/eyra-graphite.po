@@ -160,20 +160,8 @@ msgid "title.benchmark_leaderboard"
 msgstr "Benchmark Leaderboard"
 
 #, elixir-autogen, elixir-format
-msgid "label.metrics"
-msgstr "Metrics"
-
-#, elixir-autogen, elixir-format
 msgid "label.settings"
 msgstr "Settings"
-
-#, elixir-autogen, elixir-format
-msgid "label.subtitle"
-msgstr "Subtitle"
-
-#, elixir-autogen, elixir-format
-msgid "label.title"
-msgstr "Title"
 
 #, elixir-autogen, elixir-format
 msgid "tag.leaderboard"
@@ -194,3 +182,23 @@ msgstr "Select"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "label.upload_file"
 msgstr "Upload file"
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.metrics"
+msgstr "Metrics"
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.subtitle"
+msgstr "Subtitle"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.label.title"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.visibility"
+msgstr "Visibility"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title.settings"
+msgstr "Settings"

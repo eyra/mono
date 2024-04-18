@@ -1,16 +1,45 @@
 defmodule Systems.Graphite.LeaderboardCategoryView do
   use CoreWeb, :html
 
-  defp to_item(%{
-         score: score,
-         submission: %{
-           updated_at: updated_at,
-           github_commit_url: github_commit_url,
-           description: description
-         }
-       }) do
+  alias Systems.Graphite
+
+  defp to_item(
+         %{
+           score: score,
+           submission: %{
+             updated_at: updated_at,
+             github_commit_url: _github_commit_url,
+             description: _description
+           }
+         },
+         %Graphite.LeaderboardModel{visibility: :private}
+       ) do
     # max 6 decimal precision
     score = trunc(score * 1_000_000) / 1_000_000
+
+    %{
+      # TODO change to participant name?
+      name: "Anonymous",
+      description: "Anonymous",
+      score: score,
+      link: "https://github.com",
+      updated_at: updated_at
+    }
+  end
+
+  defp to_item(
+         %{
+           score: score,
+           submission: %{
+             updated_at: updated_at,
+             github_commit_url: github_commit_url,
+             description: description
+           }
+         },
+         _
+       ) do
+    # max 6 decimal precision
+    score = truncate_score(score)
 
     %{
       # TODO change to participant name?
@@ -22,13 +51,16 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
     }
   end
 
+  defp truncate_score(score), do: trunc(score * 1_000_000) / 1_000_000
+
   attr(:name, :string, required: true)
   attr(:scores, :list, required: true)
+  attr(:leaderboard, :any, required: true)
 
-  def category(%{scores: scores} = assigns) do
+  def category(%{scores: scores, leaderboard: leaderboard} = assigns) do
     items =
       scores
-      |> Enum.map(&to_item/1)
+      |> Enum.map(&to_item(&1, leaderboard))
       |> Enum.sort_by(& &1.updated_at, {:asc, NaiveDateTime})
       |> Enum.sort_by(& &1.score, :desc)
 

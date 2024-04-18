@@ -5,6 +5,7 @@ defmodule Systems.Graphite.Routes do
         pipe_through([:browser, :require_authenticated_user])
 
         live("/leaderboard/:id/content", LeaderboardContentPage)
+        live("/leaderboard/:id/page", LeaderboardPage)
         get("/:id", ToolController, :ensure_spot)
         get("/:id/export/submissions", ExportController, :submissions)
       end
