@@ -2,7 +2,7 @@ defmodule Systems.Graphite.ScoresParseResult do
   alias __MODULE__, as: Result
   alias Systems.Graphite
 
-  @base_fields ["submission", "github_commit_url"]
+  @base_fields ["submission-id", "github_commit_url"]
 
   defstruct [:csv, :duplicate_count, :rejected, :valid]
 
@@ -27,7 +27,7 @@ defmodule Systems.Graphite.ScoresParseResult do
       |> to_records()
       |> Stream.map(fn record -> check_fields(record, leaderboard.metrics, :missing_metric) end)
       |> Stream.map(fn record -> check_fields(record, @base_fields, :missing_base_field) end)
-      |> Stream.map(fn record -> convert_ints(record, ["submission"]) end)
+      |> Stream.map(fn record -> convert_ints(record, ["submission-id"]) end)
       |> Stream.map(fn record -> convert_floats(record, leaderboard.metrics) end)
       |> Stream.map(fn record -> check_submission(record, submission_map) end)
       |> Enum.map(fn record -> check_github_url(record, submission_map) end)
@@ -63,8 +63,8 @@ defmodule Systems.Graphite.ScoresParseResult do
   defp check_submission({_, nil, _} = record, _submission_map), do: record
 
   defp check_submission({line_nr, line, errors}, submission_map) do
-    if Map.has_key?(submission_map, line["submission"]) do
-      submission = Map.get(submission_map, line["submission"])
+    if Map.has_key?(submission_map, line["submission-id"]) do
+      submission = Map.get(submission_map, line["submission-id"])
       {line_nr, Map.put(line, "submission_record", submission), errors}
     else
       {line_nr, line, [:missing_submission | errors]}
@@ -76,7 +76,7 @@ defmodule Systems.Graphite.ScoresParseResult do
   defp check_github_url({_, _, [:missing_submission | _]} = record, _), do: record
 
   defp check_github_url({line_nr, line, errors} = record, submission_map) do
-    if line["github_commit_url"] == submission_map[line["submission"]] do
+    if line["github_commit_url"] == submission_map[line["submission-id"]] do
       record
     else
       {line_nr, line, [:incorrect_url | errors]}

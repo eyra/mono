@@ -16,7 +16,7 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
         },
         socket
       ) do
-    columns = ["submission" | leaderboard.metrics]
+    columns = ["submission-id" | leaderboard.metrics]
 
     {
       :ok,

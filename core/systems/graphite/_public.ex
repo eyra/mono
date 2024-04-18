@@ -163,7 +163,7 @@ defmodule Systems.Graphite.Public do
         metric: metric,
         score: line[metric],
         leaderboard_id: leaderboard.id,
-        submission_id: line["submission"],
+        submission_id: line["submission-id"],
         inserted_at: datetime,
         updated_at: datetime
       }
