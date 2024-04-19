@@ -5,10 +5,6 @@ defmodule Systems.Graphite.ExportController do
     Graphite
   }
 
-  @extract_owner_repo_and_ref_basic ~r/https:\/\/github\.com\/(.*)\/commit\/([0-9a-f]{40})$/
-  @extract_owner_repo_and_ref_pull ~r/https:\/\/github\.com\/(.*)\/pull\/\d+\/commits?\/([0-9a-f]{40})$/
-  @github_url_template "git@github.com:${owner_repo}.git"
-
   def submissions(conn, %{"id" => id}) do
     submissions =
       Graphite.Public.get_leaderboard!(id)
@@ -27,37 +23,12 @@ defmodule Systems.Graphite.ExportController do
   def export(submissions) when is_list(submissions) do
     submissions
     |> Enum.map(&export/1)
-    |> CSV.encode(headers: [:submission, :repo, :ref, :url])
+    |> CSV.encode(headers: ["submission-id", "url", "ref"])
     |> Enum.to_list()
   end
 
-  def export(%Graphite.SubmissionModel{
-        id: submission_id,
-        github_commit_url: github_commit_url,
-        auth_node: _auth_node
-      }) do
-    submission_str = "#{submission_id}"
-
-    {repo, ref} = extract(github_commit_url)
-    %{submission: submission_str, repo: repo, ref: ref, url: github_commit_url}
-  end
-
-  defp extract(url) do
-    if String.contains?(url, "/pull/") do
-      extract(@extract_owner_repo_and_ref_pull, url)
-    else
-      extract(@extract_owner_repo_and_ref_basic, url)
-    end
-  end
-
-  defp extract(regex, url) do
-    case Regex.run(regex, url) do
-      [_, owner_repo, ref] ->
-        url = String.replace(@github_url_template, "${owner_repo}", owner_repo)
-        {url, ref}
-
-      _ ->
-        {url, ""}
-    end
+  def export(%Graphite.SubmissionModel{id: submission_id} = submission) do
+    {url, ref} = Graphite.SubmissionModel.repo_url_and_ref(submission)
+    %{"submission-id" => "#{submission_id}", "url" => url, "ref" => ref}
   end
 end

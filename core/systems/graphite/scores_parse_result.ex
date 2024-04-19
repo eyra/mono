@@ -4,7 +4,7 @@ defmodule Systems.Graphite.ScoresParseResult do
 
   require Logger
 
-  @base_fields ["submission-id", "github_commit_url"]
+  @base_fields ["submission-id", "url", "ref"]
 
   defstruct [:csv, :duplicate_count, :rejected, :valid]
 
@@ -18,15 +18,20 @@ defmodule Systems.Graphite.ScoresParseResult do
   def from_url(csv_url, leaderboard) do
     %{body: body} = HTTPoison.get!(csv_url)
 
-    CSV.decode([body], headers: true)
-    |> from_lines(leaderboard)
+    lines =
+      body
+      |> String.split("\n")
+      |> CSV.decode(headers: true)
+
+    from_lines(lines, leaderboard)
   end
 
   def from_lines(lines, leaderboard) do
     submission_map =
       Graphite.Public.get_submissions(leaderboard.tool)
       |> Enum.reduce(%{}, fn submission, acc ->
-        Map.put(acc, submission.id, submission.github_commit_url)
+        {url, ref} = Graphite.SubmissionModel.repo_url_and_ref(submission)
+        Map.put(acc, submission.id, {url, ref})
       end)
 
     records =
@@ -37,7 +42,7 @@ defmodule Systems.Graphite.ScoresParseResult do
       |> Stream.map(fn record -> convert_ints(record, ["submission-id"]) end)
       |> Stream.map(fn record -> convert_floats(record, leaderboard.metrics) end)
       |> Stream.map(fn record -> check_submission(record, submission_map) end)
-      |> Enum.map(fn record -> check_github_url(record, submission_map) end)
+      |> Enum.map(fn record -> check_url_ref(record, submission_map) end)
 
     {valid, rejected} =
       Enum.split_with(records, fn
@@ -82,12 +87,14 @@ defmodule Systems.Graphite.ScoresParseResult do
     end
   end
 
-  defp check_github_url({_, nil, _} = record, _submission_map), do: record
+  defp check_url_ref({_, nil, _} = record, _submission_map), do: record
 
-  defp check_github_url({_, _, [:missing_submission | _]} = record, _), do: record
+  defp check_url_ref({_, _, [:missing_submission | _]} = record, _), do: record
 
-  defp check_github_url({line_nr, line, errors} = record, submission_map) do
-    if line["github_commit_url"] == submission_map[line["submission-id"]] do
+  defp check_url_ref({line_nr, line, errors} = record, submission_map) do
+    {url, ref} = submission_map[line["submission-id"]]
+
+    if line["url"] == url and line["ref"] == ref do
       record
     else
       {line_nr, line, [:incorrect_url | errors]}

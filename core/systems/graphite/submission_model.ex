@@ -7,6 +7,8 @@ defmodule Systems.Graphite.SubmissionModel do
 
   alias Systems.Graphite
 
+  @github_url_template "git@github.com:${owner_repo}.git"
+
   schema "graphite_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
@@ -20,7 +22,9 @@ defmodule Systems.Graphite.SubmissionModel do
 
   @fields ~w(description github_commit_url)a
   @required_fields @fields
-  @valid_github_commit_url ~r"https:\/\/github\.com(?:\/[^\/]+)*\/commits?\/[0-9a-f]{40}"
+  @valid_github_commit_url ~r"https:\/\/github\.com\/(\w+\/\w+)(?:\/pull\/\d+)?\/commits?\/([0-9a-f]{40})\/?$"
+
+  def valid_github_commit_url(), do: @valid_github_commit_url
 
   def prepare(tool, params) do
     tool
@@ -41,4 +45,19 @@ defmodule Systems.Graphite.SubmissionModel do
   end
 
   def preload_graph(:down), do: preload_graph([])
+
+  def repo_url_and_ref(%__MODULE__{github_commit_url: github_commit_url}) do
+    extract(Graphite.SubmissionModel.valid_github_commit_url(), github_commit_url)
+  end
+
+  defp extract(regex, url) do
+    case Regex.run(regex, url) do
+      [_, owner_repo, ref] ->
+        url = String.replace(@github_url_template, "${owner_repo}", owner_repo)
+        {url, ref}
+
+      _ ->
+        {url, ""}
+    end
+  end
 end

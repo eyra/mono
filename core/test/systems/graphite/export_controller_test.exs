@@ -20,9 +20,9 @@ defmodule Systems.Graphite.ExportControllerTest do
     expected_id = "#{id}"
 
     assert %{
-             submission: ^expected_id,
-             repo: "git@github.com:eyra/mono.git",
-             ref: "5405deccef0aa1a594cc09da99185860bc3e0cd2"
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:eyra/mono.git",
+             "ref" => "5405deccef0aa1a594cc09da99185860bc3e0cd2"
            } = Graphite.ExportController.export(submission)
   end
 
@@ -41,9 +41,9 @@ defmodule Systems.Graphite.ExportControllerTest do
     expected_id = "#{id}"
 
     assert %{
-             submission: ^expected_id,
-             repo: "git@github.com:eyra/mono.git",
-             ref: "119d6db9138837e63d102ba39d157e986066fba3"
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:eyra/mono.git",
+             "ref" => "119d6db9138837e63d102ba39d157e986066fba3"
            } = Graphite.ExportController.export(submission)
   end
 
@@ -62,9 +62,10 @@ defmodule Systems.Graphite.ExportControllerTest do
     expected_id = "#{id}"
 
     assert %{
-             submission: ^expected_id,
-             url: "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd",
-             ref: ""
+             "submission-id" => ^expected_id,
+             "url" =>
+               "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd",
+             "ref" => ""
            } = Graphite.ExportController.export(submission)
   end
 end
