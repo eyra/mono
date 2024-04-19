@@ -35,9 +35,8 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         placeholder: dgettext("eyra-graphite", "label.upload_file"),
         select_button: dgettext("eyra-graphite", "label.select"),
         replace_button: dgettext("eyra-graphite", "label.replace_file"),
-        csv_local_path: nil,
+        csv_url: nil,
         csv_remote_file: nil,
-        csv_lines: nil,
         parsed_results: nil
       )
       |> init_file_uploader(:csv)
@@ -70,18 +69,18 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
   end
 
   @impl true
-  def process_file(socket, {path, _url, original_file_name}) do
+  def process_file(socket, {_local_path, url, original_file_name}) do
     socket
-    |> assign(csv_local_path: path, csv_remote_file: original_file_name)
+    |> assign(csv_url: url, csv_remote_file: original_file_name)
   end
 
   @impl true
   def handle_event(
         "process",
         _params,
-        %{assigns: %{leaderboard: leaderboard, csv_local_path: csv_local_path}} = socket
+        %{assigns: %{leaderboard: leaderboard, csv_url: csv_url}} = socket
       ) do
-    result = Graphite.ScoresParseResult.from_file(csv_local_path, leaderboard)
+    result = Graphite.ScoresParseResult.from_url(csv_url, leaderboard)
 
     {:noreply, assign(socket, :parsed_results, result)}
   end
@@ -130,7 +129,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         </div>
       </.form>
       <.spacing value="M" />
-      <%= if @csv_local_path do %>
+      <%= if @csv_url do %>
           <.wrap>
             <Button.dynamic {@process_button} />
           </.wrap>
