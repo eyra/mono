@@ -2,17 +2,24 @@ defmodule Systems.Graphite.ScoresParseResult do
   alias __MODULE__, as: Result
   alias Systems.Graphite
 
+  require Logger
+
   @base_fields ["submission-id", "github_commit_url"]
 
   defstruct [:csv, :duplicate_count, :rejected, :valid]
 
   def from_file(local_path, leaderboard) do
-    lines =
-      local_path
-      |> File.stream!()
-      |> CSV.decode(headers: true)
+    local_path
+    |> File.stream!()
+    |> CSV.decode(headers: true)
+    |> from_lines(leaderboard)
+  end
 
-    from_lines(lines, leaderboard)
+  def from_url(csv_url, leaderboard) do
+    %{body: body} = HTTPoison.get!(csv_url)
+
+    CSV.decode([body], headers: true)
+    |> from_lines(leaderboard)
   end
 
   def from_lines(lines, leaderboard) do
@@ -48,7 +55,11 @@ defmodule Systems.Graphite.ScoresParseResult do
   end
 
   defp unpack({{:ok, line}, line_nr}), do: {line_nr, line, []}
-  defp unpack({{:error, _}, line_nr}), do: {line_nr, nil, [:parse_error]}
+
+  defp unpack({{:error, error}, line_nr}) do
+    Logger.error("Unable to unpack csv line: #{error}")
+    {line_nr, nil, [:parse_error]}
+  end
 
   defp check_fields({_, nil, _} = record, _fields, _error), do: record
 
