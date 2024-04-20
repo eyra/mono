@@ -20,7 +20,7 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         },
         socket
       ) do
-    columns = ["submission-id", "github_commit_url" | leaderboard.metrics]
+    columns = ["submission-id", "url", "ref" | leaderboard.metrics]
 
     {
       :ok,
