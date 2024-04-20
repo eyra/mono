@@ -142,7 +142,10 @@ defmodule Systems.Graphite.Public do
   def import_scores(leaderboard, %Graphite.ScoresParseResult{valid: valid_records}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
+    scores_to_delete = score_query(leaderboard)
+
     Multi.new()
+    |> Multi.delete_all(:delete_scores, scores_to_delete)
     |> Multi.insert_all(
       :add_scores,
       Graphite.ScoreModel,
