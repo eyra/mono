@@ -29,8 +29,6 @@ defmodule Systems.Graphite.LeaderboardView do
 
   @impl true
   def update(%{id: id, categories: categories, leaderboard: leaderboard}, socket) do
-    %{name: active_category} = List.first(categories)
-
     {
       :ok,
       socket
@@ -38,7 +36,7 @@ defmodule Systems.Graphite.LeaderboardView do
         id: id,
         categories: categories
       )
-      |> assign(active_category_name: active_category, leaderboard: leaderboard)
+      |> assign(leaderboard: leaderboard)
       |> prepare_active_category_name()
       |> prepare_selector()
       |> update_category()
