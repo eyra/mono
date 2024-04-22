@@ -38,13 +38,19 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
   def render(assigns) do
     ~H"""
     <div>
-      <div>
-        <.submission_list submissions={@submissions} />
-      </div>
       <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
+        <div class="flex flex-row items-center">
+          <Text.title2 margin="mb-0">
+            <%= dgettext("eyra-graphite","tabbar.item.submissions.title") %>
+            <span class="text-primary"> <%= Enum.count(@submissions) %></span>
+          </Text.title2>
+          <div class="flex-grow" />
+          <div>
+            <Button.dynamic {@download_button} />
+          </div>
+        </div>
         <div>
-          <.spacing value="L" />
-          <Button.dynamic {@download_button} />
+          <.submission_list submissions={@submissions} />
         </div>
       </.form>
     </div>
@@ -56,8 +62,6 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
   defp submission_list(assigns) do
     ~H"""
       <%= if Enum.count(@submissions) > 0 do %>
-        <.spacing value="L" />
-        <Text.title2>Current submissions</Text.title2>
         <table>
           <thead>
             <tr>
@@ -107,7 +111,11 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
         to: ~p"/graphite/#{id}/export/submissions",
         target: "_blank"
       },
-      face: %{type: :label, label: "Export", icon: :export}
+      face: %{
+        type: :label,
+        label: dgettext("eyra-graphite", "export.submissions.button"),
+        icon: :export
+      }
     }
 
     assign(socket, download_button: download_button)

@@ -148,7 +148,7 @@ msgid "settings.form.metrics.hint"
 msgstr "Please provide the metric titles for the leaderboards, separated by comma's (e.g. F1, Precision, Recall, Accuracy), check out 'Preview' to view the result."
 
 #, elixir-autogen, elixir-format
-msgid "label.submissions"
+msgid "tabbar.item.submissions.title"
 msgstr "Submissions"
 
 #, elixir-autogen, elixir-format
@@ -160,7 +160,7 @@ msgid "title.benchmark_leaderboard"
 msgstr "Benchmark Leaderboard"
 
 #, elixir-autogen, elixir-format
-msgid "label.settings"
+msgid "tabbar.item.settings.title"
 msgstr "Settings"
 
 #, elixir-autogen, elixir-format
@@ -202,3 +202,11 @@ msgstr "Visibility"
 #, elixir-autogen, elixir-format
 msgid "settings.title.settings"
 msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "export.submissions.button"
+msgstr "Export submissions"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.submissions.forward"
+msgstr "Got to Submissions"

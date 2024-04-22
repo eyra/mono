@@ -10,7 +10,3 @@
 #
 msgid ""
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "assignment.button"
-msgstr ""

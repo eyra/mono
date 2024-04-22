@@ -54,7 +54,6 @@ defmodule Systems.Graphite.LeaderboardSettingsView do
           <:header>
           </:header>
           <:footer>
-            <.spacing value="L" />
           </:footer>
         </.child>
       </Area.content>

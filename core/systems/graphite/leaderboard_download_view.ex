@@ -2,9 +2,7 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
   def update(
@@ -63,13 +61,8 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
     ~H"""
     <div>
       <Area.content>
-        <.child name={:download} fabric={@fabric} >
-          <:header>
-          </:header>
-          <:footer>
-            <.spacing value="L" />
-          </:footer>
-        </.child>
+        <Margin.y id={:page_top} />
+        <.child name={:download} fabric={@fabric} />
       </Area.content>
     </div>
     """

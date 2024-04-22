@@ -148,7 +148,7 @@ msgid "settings.form.metrics.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.submissions"
+msgid "tabbar.item.submissions.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -160,7 +160,7 @@ msgid "title.benchmark_leaderboard"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.settings"
+msgid "tabbar.item.settings.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -201,4 +201,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.title.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.submissions.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions.forward"
 msgstr ""

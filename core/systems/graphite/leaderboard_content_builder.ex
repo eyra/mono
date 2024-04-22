@@ -84,7 +84,7 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
           face: %{
             type: :icon,
             icon: :retract,
-            alt: dgettext("eyra-benchmark", "assignment.button")
+            alt: dgettext("eyra-graphite", "retract.button")
           }
         },
         handle_click: &handle_retract/1
@@ -145,8 +145,8 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "settings_form",
       ready: false,
       show_errors: show_errors,
-      title: dgettext("eyra-graphite", "label.settings"),
-      forward_title: dgettext("eyra-graphite", "label.settings"),
+      title: dgettext("eyra-graphite", "tabbar.item.settings.title"),
+      forward_title: dgettext("eyra-graphite", "tabbar.item.settings.title"),
       type: :fullpage,
       child: child
     }
@@ -168,8 +168,8 @@ defmodule Systems.Graphite.LeaderboardContentBuilder do
       id: "download_form",
       ready: false,
       show_errors: show_errors,
-      title: dgettext("eyra-graphite", "label.submissions"),
-      forward_title: dgettext("eyra-graphite", "label.submissions"),
+      title: dgettext("eyra-graphite", "tabbar.item.submissions.title"),
+      forward_title: dgettext("eyra-graphite", "tabbar.item.submissions.forward"),
       type: :fullpage,
       child: child
     }
