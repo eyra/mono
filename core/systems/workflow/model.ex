@@ -11,6 +11,7 @@ defmodule Systems.Workflow.Model do
     field(:type, Ecto.Enum, values: [:one, :many_optional, :many_mandatory])
     has_many(:items, Workflow.ItemModel, foreign_key: :workflow_id)
     has_one(:assignment, Assignment.Model, foreign_key: :workflow_id)
+    belongs_to(:auth_node, Core.Authorization.Node)
     timestamps()
   end
 

@@ -28,7 +28,7 @@ defmodule Frameworks.Signal.Public do
 
     Logger.notice(
       "SIGNAL: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}",
-      ansi_color: :light_magenta
+      ansi_color: :blue
     )
 
     results = Enum.map(signal_handlers(), & &1.intercept(signal, message))

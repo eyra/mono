@@ -11,7 +11,7 @@ defmodule Systems.Graphite.LeaderboardPage do
 
   @impl true
   def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do
-    Graphite.Public.get_leaderboard!(String.to_integer(leaderboard_id))
+    Graphite.Public.get_leaderboard!(String.to_integer(leaderboard_id), [:auth_node])
   end
 
   def mount(%{"id" => leaderboard_id}, _session, socket) do

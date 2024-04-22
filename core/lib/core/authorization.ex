@@ -55,7 +55,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Graphite.LeaderboardPage, [:visitor, :member])
+  grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
   grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
@@ -314,5 +314,61 @@ defmodule Core.Authorization do
       |> Ecto.Changeset.put_assoc(:parent, parent)
 
     Multi.update(multi, Ecto.UUID.generate(), changeset)
+  end
+
+  def print_roles(%{auth_node_id: node_id} = entity) do
+    print_roles(node_id)
+    entity
+  end
+
+  def print_roles(%Core.Authorization.Node{id: node_id} = node) do
+    print_roles(node_id)
+    node
+  end
+
+  @entities [
+    Systems.Project.Model,
+    Systems.Project.NodeModel,
+    Systems.Workflow.Model,
+    Systems.Assignment.Model,
+    Systems.Crew.Model,
+    Systems.Graphite.ToolModel,
+    Systems.Graphite.LeaderboardModel
+  ]
+
+  def print_roles(node_id) when is_integer(node_id) do
+    node_id
+    |> get_parent_nodes()
+    |> Enum.each(fn node_id ->
+      roles =
+        from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
+        |> Core.Repo.all()
+        |> Enum.map(fn %{role: role} ->
+          ":#{role}"
+        end)
+
+      if Enum.empty?(roles) do
+        Logger.notice("0 roles for #{find_entity(node_id)} ##{node_id}", ansi_color: :blue)
+      else
+        Logger.notice(
+          "#{Enum.count(roles)} roles for #{find_entity(node_id)} ##{node_id}: [#{roles |> Enum.join(", ")}]",
+          ansi_color: :magenta
+        )
+      end
+    end)
+  end
+
+  defp find_entity(node_id) do
+    @entities
+    |> Enum.reduce("Unkown", fn entity, acc ->
+      if from(e in entity, where: e.auth_node_id == ^node_id)
+         |> Core.Repo.exists?() do
+        entity
+        |> Atom.to_string()
+        |> String.replace("Elixir.Systems.", "")
+      else
+        acc
+      end
+    end)
   end
 end

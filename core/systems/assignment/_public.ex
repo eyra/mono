@@ -143,15 +143,17 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, [_ | _] = items, type) do
+  def prepare_workflow(special, [_ | _] = items, type, auth_node) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Ecto.Changeset.put_assoc(:items, items)
   end
 
-  def prepare_workflow(special, _, type) do
+  def prepare_workflow(special, _, type, auth_node) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
   def prepare_workflow_items(tool_refs) when is_list(tool_refs) do

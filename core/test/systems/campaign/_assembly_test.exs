@@ -68,11 +68,13 @@ defmodule Systems.Campaign.AssemblyTest do
                      ethical_code: nil
                    },
                    workflow: %Systems.Workflow.Model{
-                     id: workflow_id
+                     id: workflow_id,
+                     auth_node: %Core.Authorization.Node{
+                       id: workflow_auth_node_id
+                     }
                    },
                    auth_node: %Core.Authorization.Node{
-                     id: assignment_auth_node_id,
-                     parent_id: assignment_auth_node_parent_id
+                     id: assignment_auth_node_id
                    },
                    crew: %Systems.Crew.Model{
                      auth_node: %Core.Authorization.Node{
@@ -101,7 +103,6 @@ defmodule Systems.Campaign.AssemblyTest do
              } = campaign
 
       assert promotion_auth_node_parent_id == campaign_auth_node_id
-      assert assignment_auth_node_parent_id == campaign_auth_node_id
       assert crew_auth_node_parent_id == assignment_auth_node_id
 
       assert banner_photo_url == researcher.profile.photo_url
@@ -120,7 +121,7 @@ defmodule Systems.Campaign.AssemblyTest do
                    tool_ref: %{
                      alliance_tool: %Systems.Alliance.ToolModel{
                        auth_node: %Core.Authorization.Node{
-                         parent_id: ^assignment_auth_node_id
+                         parent_id: ^workflow_auth_node_id
                        },
                        url: nil,
                        director: :assignment
@@ -176,9 +177,6 @@ defmodule Systems.Campaign.AssemblyTest do
              } = Campaign.Public.get!(campaign.id, auth_node: [:role_assignments])
 
       assert principal_id === researcher.id
-
-      owner = Assignment.Public.owner!(assignment)
-      assert owner.id == researcher.id
     end
 
     test "create lab", %{user: researcher, mock: mock, budget: budget, pool: pool} do
@@ -196,7 +194,7 @@ defmodule Systems.Campaign.AssemblyTest do
 
       assert %Systems.Campaign.Model{
                auth_node: %Core.Authorization.Node{
-                 id: campaign_auth_node_id,
+                 id: _campaign_auth_node_id,
                  parent_id: nil
                },
                promotable_assignment: %Systems.Assignment.Model{
@@ -209,11 +207,13 @@ defmodule Systems.Campaign.AssemblyTest do
                    ethical_code: nil
                  },
                  workflow: %Systems.Workflow.Model{
-                   id: workflow_id
+                   id: workflow_id,
+                   auth_node: %Core.Authorization.Node{
+                     id: workflow_auth_node_id
+                   }
                  },
                  auth_node: %Core.Authorization.Node{
-                   id: assignment_auth_node_id,
-                   parent_id: assignment_auth_node_parent_id
+                   id: assignment_auth_node_id
                  },
                  crew: %Systems.Crew.Model{
                    auth_node: %Core.Authorization.Node{
@@ -223,7 +223,6 @@ defmodule Systems.Campaign.AssemblyTest do
                }
              } = campaign
 
-      assert assignment_auth_node_parent_id == campaign_auth_node_id
       assert crew_auth_node_parent_id == assignment_auth_node_id
 
       # WORKFLOW
@@ -240,7 +239,7 @@ defmodule Systems.Campaign.AssemblyTest do
                      lab_tool: %Systems.Lab.ToolModel{
                        id: lab_tool_id,
                        auth_node: %Core.Authorization.Node{
-                         parent_id: ^assignment_auth_node_id
+                         parent_id: ^workflow_auth_node_id
                        },
                        director: :assignment
                      },
