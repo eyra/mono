@@ -14,15 +14,14 @@ defmodule Systems.Graphite.LeaderboardView do
   def update(
         %{
           active_item_id: active_item_id,
-          selector_id: :leaderboard_category,
-          leaderboard: leaderboard
+          selector_id: :leaderboard_category
         },
         socket
       ) do
     {
       :ok,
       socket
-      |> assign(active_category_name: active_item_id, leaderboard: leaderboard)
+      |> assign(active_category_name: active_item_id)
       |> update_category()
     }
   end
