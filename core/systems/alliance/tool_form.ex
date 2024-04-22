@@ -41,26 +41,6 @@ defmodule Systems.Alliance.ToolForm do
 
   # Handle Events
 
-  # @impl true
-  # def handle_event(
-  #       "test-roundtrip",
-  #       _params,
-  #       %{assigns: %{user: user, changeset: changeset, entity: entity}} = socket
-  #     ) do
-  #   changeset = Alliance.ToolModel.validate(changeset, :roundtrip)
-
-  #   if changeset.valid? do
-  #     Directable.director(entity).assign_tester_role(entity, user)
-
-  #     fake_next_id = "TEST-" <> Faker.UUID.v4()
-  #     external_path = Alliance.ToolModel.external_path(entity, fake_next_id)
-
-  #     {:noreply, LiveView.redirect(socket, external: external_path)}
-  #   else
-  #     {:noreply, socket |> assign(changeset: changeset)}
-  #   end
-  # end
-
   @impl true
   def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {

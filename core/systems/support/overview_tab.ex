@@ -32,13 +32,13 @@ defmodule Systems.Support.OverviewTab do
                fullname: subtitle,
                photo_url: photo_url
              },
-             features: %{
-               gender: gender
-             }
+             features: features
            }
          } = ticket,
          socket
        ) do
+    gender = gender(features)
+
     quick_summery =
       updated_at
       |> CoreWeb.UI.Timestamp.apply_timezone()
@@ -59,7 +59,8 @@ defmodule Systems.Support.OverviewTab do
     }
   end
 
-  # data(items, :list)
+  defp gender(%{gender: gender}), do: gender
+  defp gender(_), do: :x
 
   attr(:tickets, :list, required: true)
   @impl true
