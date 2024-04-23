@@ -29,7 +29,7 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   defp migrate_crew([assignment_id, assignment_auth_node_id, crew_id]) do
     "Migrate crew #{crew_id}" |> Logger.notice()
-    crew_auth_node_id = query_field(:crews, "auth_node_id", "id = #{crew_id}")
+    crew_auth_node_id = query_id(:crews, "auth_node_id", "id = #{crew_id}")
 
     "Link crew #{crew_id} to assignment #{assignment_id}" |> Logger.notice()
     update(:authorization_nodes, crew_auth_node_id, :parent_id, assignment_auth_node_id)
@@ -45,10 +45,10 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   defp migrate_workflow([id]) do
     "Migrate workflow #{id}" |> Logger.notice()
     workflow_auth_node_id = create_auth_node(:workflows, id)
-    crew_id = query_field(:assignments, "crew_id", "workflow_id = #{id}")
+    crew_id = query_id(:assignments, "crew_id", "workflow_id = #{id}")
 
     "Link workflow #{id} to crew #{crew_id}" |> Logger.notice()
-    crew_auth_node_id = query_field(:crews, :auth_node_id, "id = #{crew_id}")
+    crew_auth_node_id = query_id(:crews, :auth_node_id, "id = #{crew_id}")
     update(:authorization_nodes, workflow_auth_node_id, :parent_id, crew_auth_node_id)
 
     flush()
@@ -61,9 +61,9 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   defp migrate_graphite_tool([tool_id, tool_auth_node_id]) do
     "Migrate tool #{tool_id}" |> Logger.notice()
-    tool_ref_id = query_field(:tool_refs, "id", "graphite_tool_id = #{tool_id}")
-    workflow_id = query_field(:workflow_items, "workflow_id", "id = #{tool_ref_id}")
-    workflow_auth_node_id = query_field(:workflows, "auth_node_id", "id = #{workflow_id}")
+    tool_ref_id = query_id(:tool_refs, "id", "graphite_tool_id = #{tool_id}")
+    workflow_id = query_id(:workflow_items, "workflow_id", "id = #{tool_ref_id}")
+    workflow_auth_node_id = query_id(:workflows, "auth_node_id", "id = #{workflow_id}")
 
     "Link tool #{tool_id} to workflow #{workflow_id}" |> Logger.notice()
     update(:authorization_nodes, tool_auth_node_id, :parent_id, workflow_auth_node_id)
@@ -80,7 +80,7 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
     "Migrate leaderboard #{leaderboard_id}" |> Logger.notice()
 
     graphite_tool_auth_node_id =
-      query_field(:graphite_tools, "auth_node_id", "id = #{graphite_tool_id}")
+      query_id(:graphite_tools, "auth_node_id", "id = #{graphite_tool_id}")
 
     "Link leaderboard #{leaderboard_id} to graphite_tool #{graphite_tool_id}" |> Logger.notice()
     update(:authorization_nodes, leaderboard_auth_node_id, :parent_id, graphite_tool_auth_node_id)
@@ -100,7 +100,7 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
     flush()
 
-    query_field(table, :auth_node_id, "id = #{id}")
+    query_id(table, :auth_node_id, "id = #{id}")
   end
 
   defp query_all(table, fields) do
@@ -108,11 +108,11 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
     rows
   end
 
-  def query_field(table, field, where) do
-    {:ok, %{rows: [[value] | _]}} =
-      query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
-
-    value
+  def query_id(table, field, where) do
+    case query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
+      {:ok, %{rows: [[value] | _]}} -> value
+      _ -> 0
+    end
   end
 
   defp update(table, id, field, value) when is_integer(value) do
