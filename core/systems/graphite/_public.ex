@@ -211,3 +211,12 @@ defimpl Core.Persister, for: Systems.Graphite.ToolModel do
     end
   end
 end
+
+defimpl Core.Persister, for: Systems.Graphite.LeaderboardModel do
+  def save(_leaderboard, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :graphite_leaderboard) do
+      {:ok, %{graphite_leaderboard: graphite_leaderboard}} -> {:ok, graphite_leaderboard}
+      _ -> {:error, changeset}
+    end
+  end
+end

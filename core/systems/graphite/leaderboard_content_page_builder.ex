@@ -215,7 +215,8 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   end
 
   defp set_status(%{assigns: %{model: leaderboard}} = socket, status) do
-    {:ok, leaderboard} = Graphite.Public.update_leaderboard(leaderboard, %{status: status})
+    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{status: status})
+    {:ok, leaderboard} = Core.Persister.save(leaderboard, changeset)
     socket |> Phoenix.Component.assign(leaderboard: leaderboard)
   end
 end

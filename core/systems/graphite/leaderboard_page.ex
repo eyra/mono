@@ -31,6 +31,10 @@ defmodule Systems.Graphite.LeaderboardPage do
     }
   end
 
+  def handle_view_model_updated(socket) do
+    socket |> compose_child(:leaderboard_table)
+  end
+
   @impl true
   def compose(:leaderboard_table, %{vm: %{leaderboard_table: leaderboard_table}}) do
     leaderboard_table

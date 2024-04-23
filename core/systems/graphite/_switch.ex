@@ -3,6 +3,7 @@ defmodule Systems.Graphite.Switch do
   require Logger
 
   alias Frameworks.Signal
+  alias Systems.Graphite
   alias Systems.Assignment
 
   @impl true
@@ -33,5 +34,26 @@ defmodule Systems.Graphite.Switch do
     end
 
     :ok
+  end
+
+  @impl true
+  def intercept(
+        {:graphite_leaderboard, _},
+        %{graphite_leaderboard: leaderboard, from_pid: from_pid}
+      ) do
+    update_pages(leaderboard, from_pid)
+    :ok
+  end
+
+  defp update_pages(%Graphite.LeaderboardModel{} = leaderboard, from_pid) do
+    [
+      Graphite.LeaderboardPage,
+      Graphite.LeaderboardContentPage
+    ]
+    |> Enum.each(&update_page(&1, leaderboard, from_pid))
+  end
+
+  defp update_page(page, model, from_pid) do
+    dispatch!({:page, page}, %{id: model.id, model: model, from_pid: from_pid})
   end
 end
