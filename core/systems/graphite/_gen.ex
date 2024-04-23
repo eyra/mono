@@ -2,6 +2,8 @@ defmodule Systems.Graphite.Gen do
   alias Core.Factories
   alias Systems.Graphite
 
+  require Logger
+
   @doc """
   Create `amount` submissions for the specified `leaderboard`, where the
   submission description is created with the `prefix`, followed by a
@@ -33,7 +35,7 @@ defmodule Systems.Graphite.Gen do
   end
 
   defp print(message) do
-    IO.puts(IO.ANSI.green() <> message <> IO.ANSI.reset())
+    Logger.notice(message)
   end
 
   defp count(result, type) do

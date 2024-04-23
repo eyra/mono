@@ -78,4 +78,12 @@ defmodule Systems.Graphite.LeaderboardModel do
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(leaderboard), do: leaderboard.auth_node_id
   end
+
+  def online?(%Graphite.LeaderboardModel{status: status}) do
+    status == :online
+  end
+
+  def offline?(leaderboard) do
+    not online?(leaderboard)
+  end
 end

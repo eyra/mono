@@ -210,3 +210,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.submissions.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "anonymous.label"
+msgstr "Anoniem"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.offline.title"
+msgstr "Niet beschikbaar op dit moment"

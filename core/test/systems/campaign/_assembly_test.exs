@@ -57,31 +57,30 @@ defmodule Systems.Campaign.AssemblyTest do
                  id: campaign_auth_node_id,
                  parent_id: nil
                },
-               promotable_assignment:
-                 %Systems.Assignment.Model{
-                   info: %Systems.Assignment.InfoModel{
-                     subject_count: nil,
-                     duration: nil,
-                     language: :en,
-                     devices: [:phone, :tablet, :desktop],
-                     ethical_approval: nil,
-                     ethical_code: nil
-                   },
-                   workflow: %Systems.Workflow.Model{
-                     id: workflow_id,
-                     auth_node: %Core.Authorization.Node{
-                       id: workflow_auth_node_id
-                     }
-                   },
+               promotable_assignment: %Systems.Assignment.Model{
+                 info: %Systems.Assignment.InfoModel{
+                   subject_count: nil,
+                   duration: nil,
+                   language: :en,
+                   devices: [:phone, :tablet, :desktop],
+                   ethical_approval: nil,
+                   ethical_code: nil
+                 },
+                 workflow: %Systems.Workflow.Model{
+                   id: workflow_id,
                    auth_node: %Core.Authorization.Node{
-                     id: assignment_auth_node_id
-                   },
-                   crew: %Systems.Crew.Model{
-                     auth_node: %Core.Authorization.Node{
-                       parent_id: crew_auth_node_parent_id
-                     }
+                     id: workflow_auth_node_id
                    }
-                 } = assignment,
+                 },
+                 auth_node: %Core.Authorization.Node{
+                   id: assignment_auth_node_id
+                 },
+                 crew: %Systems.Crew.Model{
+                   auth_node: %Core.Authorization.Node{
+                     parent_id: crew_auth_node_parent_id
+                   }
+                 }
+               },
                promotion: %Systems.Promotion.Model{
                  auth_node: %Core.Authorization.Node{
                    parent_id: promotion_auth_node_parent_id

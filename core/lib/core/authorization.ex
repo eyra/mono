@@ -110,6 +110,16 @@ defmodule Core.Authorization do
     }
   end
 
+  def prepare_role(%Core.Authorization.Node{id: node_id}, principal, role) when is_atom(role) do
+    principal_id = GreenLight.Principal.id(principal)
+
+    %Core.Authorization.RoleAssignment{
+      principal_id: principal_id,
+      role: role,
+      node_id: node_id
+    }
+  end
+
   def create_node(parent \\ nil) do
     case prepare_node(parent) |> Core.Repo.insert() do
       {:ok, node} -> {:ok, node.id}
@@ -326,16 +336,6 @@ defmodule Core.Authorization do
     node
   end
 
-  @entities [
-    Systems.Project.Model,
-    Systems.Project.NodeModel,
-    Systems.Workflow.Model,
-    Systems.Assignment.Model,
-    Systems.Crew.Model,
-    Systems.Graphite.ToolModel,
-    Systems.Graphite.LeaderboardModel
-  ]
-
   def print_roles(node_id) when is_integer(node_id) do
     node_id
     |> get_parent_nodes()
@@ -357,6 +357,16 @@ defmodule Core.Authorization do
       end
     end)
   end
+
+  @entities [
+    Systems.Project.Model,
+    Systems.Project.NodeModel,
+    Systems.Workflow.Model,
+    Systems.Assignment.Model,
+    Systems.Crew.Model,
+    Systems.Graphite.ToolModel,
+    Systems.Graphite.LeaderboardModel
+  ]
 
   defp find_entity(node_id) do
     @entities

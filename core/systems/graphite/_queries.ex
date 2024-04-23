@@ -32,6 +32,12 @@ defmodule Systems.Graphite.Queries do
     ])
   end
 
+  def score_ids(selector) do
+    score_query(selector)
+    |> select([score: s], s.id)
+    |> distinct(true)
+  end
+
   # Submissions
 
   def submission_query() do
@@ -115,5 +121,26 @@ defmodule Systems.Graphite.Queries do
     tool_query(selector)
     |> select([tool: t], t.id)
     |> distinct(true)
+  end
+
+  # Participants
+
+  def participant_query() do
+    from(User, as: :participant)
+  end
+
+  def participants_by_submissions(%Ecto.Query{} = submissions) do
+    principal_ids =
+      build(submissions, :submission,
+        auth_node: [
+          role_assignments: []
+        ]
+      )
+      |> select([role_assignments: ra], ra.principal_id)
+      |> distinct(true)
+
+    build(participant_query(), :participant, [
+      id in subquery(principal_ids)
+    ])
   end
 end

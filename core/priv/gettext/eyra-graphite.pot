@@ -210,3 +210,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "anonymous.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.offline.title"
+msgstr ""

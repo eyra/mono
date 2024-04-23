@@ -210,3 +210,11 @@ msgstr "Export submissions"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.submissions.forward"
 msgstr "Got to Submissions"
+
+#, elixir-autogen, elixir-format
+msgid "anonymous.label"
+msgstr "Anonymous"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.offline.title"
+msgstr "Unavailable at this moment"

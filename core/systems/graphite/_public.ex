@@ -50,6 +50,13 @@ defmodule Systems.Graphite.Public do
     |> Repo.aggregate(:count)
   end
 
+  def get_participants(%Graphite.LeaderboardModel{} = leaderboard) do
+    leaderboard
+    |> submission_query()
+    |> participants_by_submissions()
+    |> Repo.all()
+  end
+
   def set_tool_status(%Graphite.ToolModel{} = tool, status) do
     tool
     |> Graphite.ToolModel.changeset(%{status: status})

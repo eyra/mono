@@ -1,69 +1,9 @@
-defmodule Systems.Graphite.LeaderboardCategoryView do
+defmodule Systems.Graphite.LeaderboardScoreHTML do
   use CoreWeb, :html
 
-  alias Systems.Graphite
-
-  defp to_item(
-         %{
-           score: score,
-           submission: %{
-             updated_at: updated_at,
-             github_commit_url: _github_commit_url,
-             description: _description
-           }
-         },
-         %Graphite.LeaderboardModel{visibility: :private}
-       ) do
-    # max 6 decimal precision
-    score = trunc(score * 1_000_000) / 1_000_000
-
-    %{
-      # TODO change to participant name?
-      name: "Anonymous",
-      description: "Anonymous",
-      score: score,
-      link: "https://github.com",
-      updated_at: updated_at
-    }
-  end
-
-  defp to_item(
-         %{
-           score: score,
-           submission: %{
-             updated_at: updated_at,
-             github_commit_url: github_commit_url,
-             description: description
-           }
-         },
-         _
-       ) do
-    # max 6 decimal precision
-    score = truncate_score(score)
-
-    %{
-      # TODO change to participant name?
-      name: description,
-      description: description,
-      score: score,
-      link: github_commit_url,
-      updated_at: updated_at
-    }
-  end
-
-  defp truncate_score(score), do: trunc(score * 1_000_000) / 1_000_000
-
-  attr(:name, :string, required: true)
   attr(:scores, :list, required: true)
-  attr(:leaderboard, :any, required: true)
 
-  def category(%{scores: scores, leaderboard: leaderboard} = assigns) do
-    items =
-      scores
-      |> Enum.map(&to_item(&1, leaderboard))
-      |> Enum.sort_by(& &1.updated_at, {:asc, NaiveDateTime})
-      |> Enum.sort_by(& &1.score, :desc)
-
+  def table(assigns) do
     head_cells = [
       dgettext("eyra-graphite", "leaderboard.position.label"),
       dgettext("eyra-graphite", "leaderboard.team.label"),
@@ -76,11 +16,11 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
       %{type: :text, width: "w-24", align: "text-left"},
       %{type: :text, width: "flex-1", align: "text-left"},
       %{type: :text, width: "flex-1", align: "text-left"},
-      %{type: :href, width: "w-24", align: "text-center"},
+      %{type: :href, width: "w-28", align: "text-center"},
       %{type: :text, width: "w-24", align: "text-right"}
     ]
 
-    assigns = assign(assigns, %{items: items, head_cells: head_cells, layout: layout})
+    assigns = assign(assigns, %{head_cells: head_cells, layout: layout})
 
     ~H"""
     <div class="overflow-hidden border-2 border-grey4 rounded-lg">
@@ -88,10 +28,10 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
         <div class="h-12">
           <.row top={true} cells={@head_cells} layout={@layout}/>
         </div>
-        <%= for {item, index} <- Enum.with_index(@items) do %>
+        <%= for {%{team: team, description: description, url: url, value: value}, index} <- Enum.with_index(@scores) do %>
           <.row
-            bottom={index == Enum.count(@items)-1}
-            cells={["#{index+1}.", item.name, item.description, item.link, item.score]}
+            bottom={index == Enum.count(@scores)-1}
+            cells={["#{index+1}.", team, description, url, value]}
             layout={@layout}
           />
         <% end %>
@@ -132,9 +72,16 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
   attr(:left, :boolean, default: false)
   attr(:right, :boolean, default: false)
 
-  def cell(assigns) do
+  def cell(%{layout: layout, content: content} = assigns) do
+    layout =
+      if layout.type == :href and not valid_url?(content) do
+        %{layout | type: :string}
+      else
+        layout
+      end
+
     padding = cell_padding(assigns)
-    assigns = assign(assigns, %{padding: padding})
+    assigns = assign(assigns, %{padding: padding, layout: layout})
 
     ~H"""
     <div class={@layout.width}>
@@ -167,5 +114,10 @@ defmodule Systems.Graphite.LeaderboardCategoryView do
       </div>
     </div>
     """
+  end
+
+  defp valid_url?(string) do
+    uri = URI.parse(string)
+    uri.scheme != nil && uri.host =~ "."
   end
 end

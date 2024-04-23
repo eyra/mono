@@ -1,5 +1,6 @@
-defmodule Systems.Graphite.LeaderboardView do
-  use CoreWeb, :live_component
+defmodule Systems.Graphite.LeaderboardTableView do
+  use CoreWeb, :live_component_fabric
+  use Fabric.LiveComponent
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align
@@ -8,60 +9,67 @@ defmodule Systems.Graphite.LeaderboardView do
     Graphite
   }
 
-  import Graphite.LeaderboardCategoryView
+  import Graphite.LeaderboardScoreHTML
 
   @impl true
   def update(
         %{
           active_item_id: active_item_id,
-          selector_id: :leaderboard_category
+          selector_id: :metric_selector
         },
         socket
       ) do
     {
       :ok,
       socket
-      |> assign(active_category_name: active_item_id)
-      |> update_category()
+      |> assign(active_metric: active_item_id)
+      |> update_scores()
     }
   end
 
   @impl true
-  def update(%{id: id, categories: categories, leaderboard: leaderboard}, socket) do
+  def update(%{id: id, metrics: metrics, metric_scores: metric_scores}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        categories: categories
+        metrics: metrics,
+        metric_scores: metric_scores
       )
-      |> assign(leaderboard: leaderboard)
-      |> prepare_active_category_name()
-      |> prepare_selector()
-      |> update_category()
+      |> update_active_metric()
+      |> update_scores()
+      |> update_selector()
     }
   end
 
-  defp prepare_active_category_name(
-         %{assigns: %{categories: [%{name: active_category_name} | _]}} = socket
-       ) do
-    assign(socket, active_category_name: active_category_name)
+  defp update_active_metric(%{assigns: %{metrics: [first_metric | _]}} = socket) do
+    assign(socket, active_metric: first_metric)
   end
 
-  defp prepare_active_category_name(%{assigns: %{categories: []}} = socket) do
-    assign(socket, active_category_name: nil)
+  defp update_active_metric(%{assigns: %{metrics: []}} = socket) do
+    assign(socket, active_metric: nil)
   end
 
-  defp prepare_selector(
-         %{assigns: %{id: id, categories: categories, active_category_name: active_category_name}} =
-           socket
+  defp update_scores(%{assigns: %{active_metric: nil}} = socket) do
+    assign(socket, scores: [])
+  end
+
+  defp update_scores(
+         %{assigns: %{active_metric: active_metric, metric_scores: metric_scores}} = socket
        ) do
-    items = Enum.map(categories, &to_selector_item(&1, active_category_name))
+    assign(socket, scores: Map.get(metric_scores, active_metric, []))
+  end
+
+  defp update_selector(
+         %{assigns: %{id: id, metrics: metrics, active_metric: active_metric}} = socket
+       ) do
+    metric_items = Enum.map(metrics, &to_selector_item(&1, active_metric))
 
     selector = %{
-      id: :leaderboard_category,
+      id: :metric_selector,
       module: Selector,
-      items: items,
+      items: metric_items,
       type: :segmented,
       parent: %{type: __MODULE__, id: id}
     }
@@ -69,19 +77,11 @@ defmodule Systems.Graphite.LeaderboardView do
     assign(socket, selector: selector)
   end
 
-  defp update_category(
-         %{assigns: %{categories: categories, active_category_name: active_category_name}} =
-           socket
-       ) do
-    active_category = categories |> Enum.find(&(&1.name == active_category_name))
-    assign(socket, active_category: active_category)
-  end
-
-  defp to_selector_item(%{name: name}, active_category) do
+  defp to_selector_item(metric, active_metric) do
     %{
-      id: name,
-      value: String.capitalize(String.replace(name, "_", " ")),
-      active: name == active_category
+      id: metric,
+      value: String.capitalize(String.replace(metric, "_", " ")),
+      active: metric == active_metric
     }
   end
 
@@ -93,8 +93,8 @@ defmodule Systems.Graphite.LeaderboardView do
         <.live_component {@selector} />
       </Align.horizontal_center>
       <.spacing value="M" />
-      <%= if @active_category do %>
-        <.category name={@active_category.name} scores={@active_category.scores} leaderboard={@leaderboard} />
+      <%= if @active_metric do %>
+        <.table scores={@scores} />
       <% end %>
     </div>
     """

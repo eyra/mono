@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.LeaderboardContentBuilder do
+defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   use CoreWeb, :verified_routes
 
   import CoreWeb.Gettext

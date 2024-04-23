@@ -226,7 +226,8 @@ defmodule Core.Accounts.User do
   def label(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
     do: displayname
 
-  def label(%{email: email}), do: email
+  def label(%{email: nil}), do: "?"
+  def label(%{email: email}), do: String.split(email, "@") |> List.first()
 
   def user_id(%{assigns: assigns}), do: user_id(assigns)
   def user_id(%{current_user: user}), do: user_id(user)

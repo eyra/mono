@@ -1,6 +1,8 @@
 defmodule Core.Repo.Migrations.LeaderboardAuth do
   use Ecto.Migration
 
+  require Logger
+
   import Ecto.Adapters.SQL
 
   def up do
@@ -26,10 +28,10 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   end
 
   defp migrate_crew([assignment_id, assignment_auth_node_id, crew_id]) do
-    "Migrate crew #{crew_id}" |> dbg()
+    "Migrate crew #{crew_id}" |> Logger.notice()
     crew_auth_node_id = query_field(:crews, "auth_node_id", "id = #{crew_id}")
 
-    "Link crew #{crew_id} to assignment #{assignment_id}" |> dbg()
+    "Link crew #{crew_id} to assignment #{assignment_id}" |> Logger.notice()
     update(:authorization_nodes, crew_auth_node_id, :parent_id, assignment_auth_node_id)
 
     flush()
@@ -41,11 +43,11 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   end
 
   defp migrate_workflow([id]) do
-    "Migrate workflow #{id}" |> dbg()
+    "Migrate workflow #{id}" |> Logger.notice()
     workflow_auth_node_id = create_auth_node(:workflows, id)
     crew_id = query_field(:assignments, "crew_id", "workflow_id = #{id}")
 
-    "Link workflow #{id} to crew #{crew_id}" |> dbg()
+    "Link workflow #{id} to crew #{crew_id}" |> Logger.notice()
     crew_auth_node_id = query_field(:crews, :auth_node_id, "id = #{crew_id}")
     update(:authorization_nodes, workflow_auth_node_id, :parent_id, crew_auth_node_id)
 
@@ -58,12 +60,12 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   end
 
   defp migrate_graphite_tool([tool_id, tool_auth_node_id]) do
-    "Migrate tool #{tool_id}" |> dbg()
+    "Migrate tool #{tool_id}" |> Logger.notice()
     tool_ref_id = query_field(:tool_refs, "id", "graphite_tool_id = #{tool_id}")
     workflow_id = query_field(:workflow_items, "workflow_id", "id = #{tool_ref_id}")
     workflow_auth_node_id = query_field(:workflows, "auth_node_id", "id = #{workflow_id}")
 
-    "Link tool #{tool_id} to workflow #{workflow_id}" |> dbg()
+    "Link tool #{tool_id} to workflow #{workflow_id}" |> Logger.notice()
     update(:authorization_nodes, tool_auth_node_id, :parent_id, workflow_auth_node_id)
 
     flush()
@@ -75,12 +77,12 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   end
 
   defp migrate_leaderboard([leaderboard_id, leaderboard_auth_node_id, graphite_tool_id]) do
-    "Migrate leaderboard #{leaderboard_id}" |> dbg()
+    "Migrate leaderboard #{leaderboard_id}" |> Logger.notice()
 
     graphite_tool_auth_node_id =
       query_field(:graphite_tools, "auth_node_id", "id = #{graphite_tool_id}")
 
-    "Link leaderboard #{leaderboard_id} to graphite_tool #{graphite_tool_id}" |> dbg()
+    "Link leaderboard #{leaderboard_id} to graphite_tool #{graphite_tool_id}" |> Logger.notice()
     update(:authorization_nodes, leaderboard_auth_node_id, :parent_id, graphite_tool_auth_node_id)
 
     flush()

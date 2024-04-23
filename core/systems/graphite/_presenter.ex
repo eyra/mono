@@ -8,5 +8,6 @@ defmodule Systems.Graphite.Presenter do
     builder(page).view_model(tool, assigns)
   end
 
-  defp builder(Graphite.LeaderboardContentPage), do: Graphite.LeaderboardContentBuilder
+  defp builder(Graphite.LeaderboardPage), do: Graphite.LeaderboardPageBuilder
+  defp builder(Graphite.LeaderboardContentPage), do: Graphite.LeaderboardContentPageBuilder
 end

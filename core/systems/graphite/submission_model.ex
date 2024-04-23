@@ -44,7 +44,8 @@ defmodule Systems.Graphite.SubmissionModel do
     )
   end
 
-  def preload_graph(:down), do: preload_graph([])
+  def preload_graph(:down), do: preload_graph([:auth_node])
+  def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
   def repo_url_and_ref(%__MODULE__{github_commit_url: github_commit_url}) do
     extract(Graphite.SubmissionModel.valid_github_commit_url(), github_commit_url)
