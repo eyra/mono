@@ -29,12 +29,12 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   defp migrate_crew([assignment_id, assignment_auth_node_id, crew_id]) do
     "Migrate crew #{crew_id}" |> Logger.notice()
-    crew_auth_node_id = query_id(:crews, "auth_node_id", "id = #{crew_id}")
 
-    "Link crew #{crew_id} to assignment #{assignment_id}" |> Logger.notice()
-    update(:authorization_nodes, crew_auth_node_id, :parent_id, assignment_auth_node_id)
-
-    flush()
+    if {:ok, crew_auth_node_id} = query_id(:crews, "auth_node_id", "id = #{crew_id}") do
+      "Link crew #{crew_id} to assignment #{assignment_id}" |> Logger.notice()
+      update(:authorization_nodes, crew_auth_node_id, :parent_id, assignment_auth_node_id)
+      flush()
+    end
   end
 
   defp migrate_workflows() do
@@ -44,12 +44,13 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   defp migrate_workflow([id]) do
     "Migrate workflow #{id}" |> Logger.notice()
-    workflow_auth_node_id = create_auth_node(:workflows, id)
-    crew_id = query_id(:assignments, "crew_id", "workflow_id = #{id}")
+    {:ok, workflow_auth_node_id} = create_auth_node(:workflows, id)
 
-    "Link workflow #{id} to crew #{crew_id}" |> Logger.notice()
-    crew_auth_node_id = query_id(:crews, :auth_node_id, "id = #{crew_id}")
-    update(:authorization_nodes, workflow_auth_node_id, :parent_id, crew_auth_node_id)
+    with {:ok, crew_id} <- query_id(:assignments, "crew_id", "workflow_id = #{id}"),
+         {:ok, crew_auth_node_id} <- query_id(:crews, "auth_node_id", "id = #{crew_id}") do
+      "Link workflow #{id} to crew #{crew_id}" |> Logger.notice()
+      update(:authorization_nodes, workflow_auth_node_id, :parent_id, crew_auth_node_id)
+    end
 
     flush()
   end
@@ -61,14 +62,15 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   defp migrate_graphite_tool([tool_id, tool_auth_node_id]) do
     "Migrate tool #{tool_id}" |> Logger.notice()
-    tool_ref_id = query_id(:tool_refs, "id", "graphite_tool_id = #{tool_id}")
-    workflow_id = query_id(:workflow_items, "workflow_id", "id = #{tool_ref_id}")
-    workflow_auth_node_id = query_id(:workflows, "auth_node_id", "id = #{workflow_id}")
 
-    "Link tool #{tool_id} to workflow #{workflow_id}" |> Logger.notice()
-    update(:authorization_nodes, tool_auth_node_id, :parent_id, workflow_auth_node_id)
-
-    flush()
+    with {:ok, tool_ref_id} <- query_id(:tool_refs, "id", "graphite_tool_id = #{tool_id}"),
+         {:ok, workflow_id} <- query_id(:workflow_items, "workflow_id", "id = #{tool_ref_id}"),
+         {:ok, workflow_auth_node_id} <-
+           query_id(:workflows, "auth_node_id", "id = #{workflow_id}") do
+      "Link tool #{tool_id} to workflow #{workflow_id}" |> Logger.notice()
+      update(:authorization_nodes, tool_auth_node_id, :parent_id, workflow_auth_node_id)
+      flush()
+    end
   end
 
   defp migrate_leaderboards() do
@@ -79,13 +81,19 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   defp migrate_leaderboard([leaderboard_id, leaderboard_auth_node_id, graphite_tool_id]) do
     "Migrate leaderboard #{leaderboard_id}" |> Logger.notice()
 
-    graphite_tool_auth_node_id =
-      query_id(:graphite_tools, "auth_node_id", "id = #{graphite_tool_id}")
+    if {:ok, graphite_tool_auth_node_id} =
+         query_id(:graphite_tools, "auth_node_id", "id = #{graphite_tool_id}") do
+      "Link leaderboard #{leaderboard_id} to graphite_tool #{graphite_tool_id}" |> Logger.notice()
 
-    "Link leaderboard #{leaderboard_id} to graphite_tool #{graphite_tool_id}" |> Logger.notice()
-    update(:authorization_nodes, leaderboard_auth_node_id, :parent_id, graphite_tool_auth_node_id)
+      update(
+        :authorization_nodes,
+        leaderboard_auth_node_id,
+        :parent_id,
+        graphite_tool_auth_node_id
+      )
 
-    flush()
+      flush()
+    end
   end
 
   defp create_auth_node(table, id) do
@@ -110,8 +118,8 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
 
   def query_id(table, field, where) do
     case query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
-      {:ok, %{rows: [[value] | _]}} -> value
-      _ -> 0
+      {:ok, %{rows: [[value] | _]}} -> {:ok, value}
+      _ -> :error
     end
   end
 
