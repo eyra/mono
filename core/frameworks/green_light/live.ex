@@ -28,7 +28,8 @@ defmodule Frameworks.GreenLight.Live do
         defp access_allowed?(params, session, socket) do
           @greenlight_authmodule.can_access?(
             socket,
-            get_authorization_context(params, session, socket),
+            get_authorization_context(params, session, socket)
+            |> Core.Authorization.print_roles(),
             __MODULE__
           )
         end
