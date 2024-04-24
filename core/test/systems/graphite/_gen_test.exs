@@ -72,6 +72,7 @@ defmodule Systems.Graphite.GenTest do
       create_submissions(leaderboard_id, 2, "aap")
       delete_submissions("aap")
 
+      assert [] = from(Graphite.ScoreModel) |> Repo.all()
       assert [] = from(Graphite.SubmissionModel) |> Repo.all()
       assert [] = from(Core.Accounts.User) |> Repo.all()
       assert [] = from(Core.Accounts.Features) |> Repo.all()

@@ -32,6 +32,16 @@ defmodule Systems.Graphite.Queries do
     ])
   end
 
+  def scores_by_submissions(%Ecto.Query{} = submissions) do
+    submission_ids =
+      submissions
+      |> select([submission: s], s.id)
+      |> distinct(true)
+
+    score_query()
+    |> where([score: s], s.submission_id in subquery(submission_ids))
+  end
+
   def score_ids(selector) do
     score_query(selector)
     |> select([score: s], s.id)

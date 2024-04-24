@@ -1,9 +1,9 @@
-defmodule Mix.Tasks.Eyra.Graphite.Del.Submissions do
+defmodule Mix.Tasks.Core.Graphite.Del.Submissions do
   @moduledoc """
   Remove Submissions generated with the generate submissions command.
 
   Usage:
-    $ mix Eyra.Graphite.Del.Submissions PREFIX
+    $ mix core.graphite.del.submissions PREFIX
   """
   use Mix.Task
 
