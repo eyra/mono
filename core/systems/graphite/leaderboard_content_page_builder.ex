@@ -25,10 +25,11 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     [preview: preview, publish: publish]
   end
 
-  defp actions(%{status: :offline}, %{publish: publish, close: close}),
-    do: [publish: publish, close: close]
+  defp actions(%{status: :offline}, %{preview: preview, publish: publish, close: close}),
+    do: [preview: preview, publish: publish, close: close]
 
-  defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
+  defp actions(%{status: :online}, %{preview: preview, retract: retract}),
+    do: [preview: preview, retract: retract]
 
   defp action_map(leaderboard, %{current_user: %{id: _user_id}}) do
     preview_url = Graphite.Private.get_preview_url(leaderboard)

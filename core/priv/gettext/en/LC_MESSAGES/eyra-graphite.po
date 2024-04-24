@@ -230,3 +230,7 @@ msgstr "Go to Scores"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "scores.csv.success.valid.message"
 msgstr "Number of valid scores: %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "scores.form.submit.button"
+msgstr "Submit"

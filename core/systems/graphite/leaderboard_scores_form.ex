@@ -41,22 +41,12 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
       )
       |> init_file_uploader(:csv)
       |> prepare_submissions()
-      |> prepare_submit_button("Submit")
-      |> prepare_process_button(dgettext("eyra-graphite", "parse.csv.button"))
+      |> prepare_submit_button(dgettext("eyra-graphite", "scores.form.submit.button"))
     }
   end
 
   defp prepare_submissions(%{assigns: %{leaderboard: %{tool: tool}}} = socket) do
     assign(socket, :submissions, Graphite.Public.get_submissions(tool))
-  end
-
-  defp prepare_process_button(socket, label) do
-    process_button = %{
-      action: %{type: :send, event: "process"},
-      face: %{type: :primary, label: label}
-    }
-
-    assign(socket, process_button: process_button)
   end
 
   defp prepare_submit_button(socket, label) do
@@ -83,7 +73,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
         %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket
       ) do
     Graphite.Public.import_scores(leaderboard, parsed_results)
-    {:noreply, redirect(socket, to: ~p"/graphite/leaderboard/#{leaderboard.id}")}
+    {:noreply, socket |> assign(parsed_results: nil)}
   end
 
   def handle_event("change", _params, socket) do

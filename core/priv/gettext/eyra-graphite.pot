@@ -230,3 +230,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "scores.csv.success.valid.message"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.form.submit.button"
+msgstr ""
