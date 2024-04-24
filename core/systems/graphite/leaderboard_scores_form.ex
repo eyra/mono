@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.LeaderboardUploadForm do
+defmodule Systems.Graphite.LeaderboardScoresForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
   use CoreWeb.FileUploader, accept: ~w(.csv)
@@ -20,14 +20,14 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
         },
         socket
       ) do
-    columns = ["submission-id", "url", "ref" | leaderboard.metrics]
+    headers = ["submission-id", "url", "ref", "status", "error_message" | leaderboard.metrics]
 
     {
       :ok,
       socket
       |> assign(
         id: id,
-        columns: columns,
+        headers: headers,
         leaderboard: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
@@ -41,8 +41,8 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
       )
       |> init_file_uploader(:csv)
       |> prepare_submissions()
-      |> prepare_submit_button("submit")
-      |> prepare_process_button(dgettext("eyra-graphite", "label.processing"))
+      |> prepare_submit_button("Submit")
+      |> prepare_process_button(dgettext("eyra-graphite", "parse.csv.button"))
     }
   end
 
@@ -69,20 +69,12 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
   end
 
   @impl true
-  def process_file(socket, {_local_path, url, original_file_name}) do
-    socket
-    |> assign(csv_url: url, csv_remote_file: original_file_name)
-  end
-
-  @impl true
-  def handle_event(
-        "process",
-        _params,
-        %{assigns: %{leaderboard: leaderboard, csv_url: csv_url}} = socket
+  def process_file(
+        %{assigns: %{leaderboard: leaderboard}} = socket,
+        {_local_path, csv_url, original_file_name}
       ) do
-    result = Graphite.ScoresParseResult.from_url(csv_url, leaderboard)
-
-    {:noreply, assign(socket, :parsed_results, result)}
+    result = Graphite.ScoresParser.from_url(csv_url, leaderboard)
+    assign(socket, csv_url: csv_url, csv_remote_file: original_file_name, parsed_results: result)
   end
 
   def handle_event(
@@ -103,11 +95,10 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
     ~H"""
     <div>
       <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
-        <div>
-          <.spacing value="L" />
-          <Text.title2>Scores upload</Text.title2>
-          <Text.body_medium>Expecting the following columns to be present in the file: <%= Enum.join(@columns, ", ") %></Text.body_medium>
-        </div>
+        <Text.body><%= dgettext("eyra-graphite", "scores.csv.headers.message") %></Text.body>
+        <.spacing value="XS" />
+        <Text.body_medium color="text-grey2">[ <%=  Enum.join(@headers, "  |  ") %> ]</Text.body_medium>
+        <.spacing value="M" />
         <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
           <div class="flex flex-row items-center h-full">
             <div class="flex-grow">
@@ -128,24 +119,43 @@ defmodule Systems.Graphite.LeaderboardUploadForm do
           </div>
         </div>
       </.form>
-      <.spacing value="M" />
-      <%= if @csv_url do %>
-          <.wrap>
-            <Button.dynamic {@process_button} />
-          </.wrap>
-      <% end %>
-      <.spacing value="M" />
+      <.spacing value="L" />
       <%= if @parsed_results do %>
-        <Text.title3>Validate uploaded information</Text.title3>
-        <Text.title4>File and leaderboard metrics</Text.title4>
-        Number of submissions for leaderboard: <%= length(@submissions) %> <br />
-        Number of valid submissions in file: <%= length(@parsed_results.valid) %> <br />
-        Number of invalid submissions in file: <%= length(@parsed_results.rejected) %> <br />
+        <Text.title3>Success <span class="text-primary"><%= length(elem(@parsed_results.success,0)) + length(elem(@parsed_results.success,1)) %></span></Text.title3>
+        <.spacing value="M" />
+        <Text.sub_head color="text-success"><%= dgettext("eyra-graphite", "scores.csv.success.valid.message", count: length(elem(@parsed_results.success,0))) %></Text.sub_head>
+        <.spacing value="M" />
         <.wrap>
           <Button.dynamic {@submit_button} />
         </.wrap>
+        <.spacing value="M" />
+        <%= if length(elem(@parsed_results.success,1)) > 0 do %>
+          <.spacing value="M" />
+          <.table items={elem(@parsed_results.success,1)}/>
+        <% end %>
+        <.spacing value="M" />
+        <Text.title3>Error <span class="text-primary"><%= length(elem(@parsed_results.error,0)) + length(elem(@parsed_results.error,1)) %></span></Text.title3>
+        <.spacing value="S" />
+        <.table items={elem(@parsed_results.error,0)}/>
+        <.table items={elem(@parsed_results.error,1)}/>
       <% end %>
     </div>
+    """
+  end
+
+  attr(:items, :list, required: true)
+
+  def table(assigns) do
+    ~H"""
+    <table>
+      <%= for {line_nr, line, parse_errors} <- @items do %>
+        <tr>
+          <td class="pr-4"><Text.body>Line <%= line_nr %></Text.body></td>
+          <td class="pr-4"><Text.body color="text-warning"><%= line["error_message"] %></Text.body></td>
+          <td><Text.sub_head color="text-error"><%= Enum.join(parse_errors, ", ") %></Text.sub_head></td>
+        </tr>
+      <% end %>
+    </table>
     """
   end
 end

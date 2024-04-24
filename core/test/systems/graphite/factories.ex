@@ -8,12 +8,12 @@ defmodule Systems.Graphite.Factories do
     Factories.insert!(:graphite_tool, %{})
   end
 
-  def create_leaderboard() do
-    create_leaderboard(create_tool())
+  def create_leaderboard(opts) do
+    create_leaderboard(create_tool(), opts)
   end
 
-  def create_leaderboard(%Graphite.ToolModel{} = tool) do
-    Factories.insert!(:graphite_leaderboard, %{tool: tool})
+  def create_leaderboard(%Graphite.ToolModel{} = tool, opts) do
+    Factories.insert!(:graphite_leaderboard, Map.put(opts, :tool, tool))
   end
 
   def create_challenge() do

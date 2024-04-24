@@ -1,10 +1,8 @@
-defmodule Systems.Graphite.LeaderboardUploadView do
+defmodule Systems.Graphite.LeaderboardSubmissionsView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
   def update(
@@ -17,38 +15,43 @@ defmodule Systems.Graphite.LeaderboardUploadView do
         },
         socket
       ) do
+    submissions = Graphite.Public.list_submissions(leaderboard)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> compose_child(:upload)
+      |> compose_child(:download)
     }
   end
 
   @impl true
-  def compose(:upload, %{
+  def compose(:download, %{
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       }) do
     %{
-      module: Graphite.LeaderboardUploadForm,
+      module: Graphite.LeaderboardSubmissionsForm,
       params: %{
         leaderboard: leaderboard,
+        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,
         page_key: :upload,
         opt_in?: false,
-        on_text: "upload view on text",
-        off_text: "upload view off text"
+        on_text: "download view on text",
+        off_text: "download view off text"
       }
     }
   end
@@ -58,13 +61,8 @@ defmodule Systems.Graphite.LeaderboardUploadView do
     ~H"""
     <div>
       <Area.content>
-        <.child name={:upload} fabric={@fabric} >
-          <:header>
-          </:header>
-          <:footer>
-            <.spacing value="L" />
-          </:footer>
-        </.child>
+        <Margin.y id={:page_top} />
+        <.child name={:download} fabric={@fabric} />
       </Area.content>
     </div>
     """

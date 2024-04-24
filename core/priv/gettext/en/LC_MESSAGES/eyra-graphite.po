@@ -152,8 +152,8 @@ msgid "tabbar.item.submissions.title"
 msgstr "Submissions"
 
 #, elixir-autogen, elixir-format
-msgid "label.upload_results"
-msgstr "Upload results"
+msgid "tabbar.item.scores"
+msgstr "Scores"
 
 #, elixir-autogen, elixir-format
 msgid "title.benchmark_leaderboard"
@@ -168,8 +168,8 @@ msgid "tag.leaderboard"
 msgstr "Leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "label.processing"
-msgstr "Processing"
+msgid "parse.csv.button"
+msgstr "Parse"
 
 #, elixir-autogen, elixir-format
 msgid "label.replace_file"
@@ -218,3 +218,15 @@ msgstr "Anonymous"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.offline.title"
 msgstr "Unavailable at this moment"
+
+#, elixir-autogen, elixir-format
+msgid "scores.csv.headers.message"
+msgstr "Below you can upload the score CSV file. The following headers should be present in the file:"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.scores.forward"
+msgstr "Scores"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "scores.csv.success.valid.message"
+msgstr "Number of valid scores: %{count}"

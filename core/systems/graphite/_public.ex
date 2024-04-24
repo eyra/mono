@@ -146,7 +146,7 @@ defmodule Systems.Graphite.Public do
     |> Repo.preload(preload)
   end
 
-  def import_scores(leaderboard, %Graphite.ScoresParseResult{valid: valid_records}) do
+  def import_scores(leaderboard, %Graphite.ScoresParseResult{success: {valid_records, _}}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     scores_to_delete = score_query(leaderboard)

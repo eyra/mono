@@ -152,7 +152,7 @@ msgid "tabbar.item.submissions.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.upload_results"
+msgid "tabbar.item.scores"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -168,7 +168,7 @@ msgid "tag.leaderboard"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.processing"
+msgid "parse.csv.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -217,4 +217,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.offline.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.csv.headers.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.scores.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.csv.success.valid.message"
 msgstr ""

@@ -10,7 +10,7 @@ defmodule Systems.Graphite.GenTest do
 
   describe "create_submissions/3" do
     test "create 2 submissions" do
-      %{id: leaderboard_id} = Factories.create_leaderboard()
+      %{id: leaderboard_id} = Factories.create_leaderboard(%{})
       create_submissions(leaderboard_id, 2, "aap")
 
       assert [
@@ -68,7 +68,7 @@ defmodule Systems.Graphite.GenTest do
 
   describe "delete_submissions/1" do
     test "create and delete 2 submissions" do
-      %{id: leaderboard_id} = Factories.create_leaderboard()
+      %{id: leaderboard_id} = Factories.create_leaderboard(%{})
       create_submissions(leaderboard_id, 2, "aap")
       delete_submissions("aap")
 

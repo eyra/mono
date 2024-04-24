@@ -22,8 +22,8 @@ defmodule Systems.Graphite.AssemblyTest do
       tool_1 = Factories.add_tool(challenge_1)
       tool_2 = Factories.add_tool(challenge_2)
 
-      leaderboard_1 = Factories.create_leaderboard(tool_1)
-      leaderboard_2 = Factories.create_leaderboard(tool_2)
+      leaderboard_1 = Factories.create_leaderboard(tool_1, %{})
+      leaderboard_2 = Factories.create_leaderboard(tool_2, %{})
 
       challenge_1_item = Project.Factories.build_item(challenge_1, "Benchmark Leaderboard")
       challenge_2_item = Project.Factories.build_item(challenge_2, "Benchmark Leaderboard (2)")

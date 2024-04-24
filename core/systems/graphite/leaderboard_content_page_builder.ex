@@ -157,7 +157,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       assigns
 
     child =
-      Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardDownloadView, %{
+      Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardSubmissionsView, %{
         entity: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
@@ -180,7 +180,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       assigns
 
     child =
-      Fabric.prepare_child(fabric, :scores_form, Graphite.LeaderboardUploadView, %{
+      Fabric.prepare_child(fabric, :scores_form, Graphite.LeaderboardScoresView, %{
         entity: leaderboard,
         uri_origin: uri_origin,
         viewport: viewport,
@@ -191,8 +191,8 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       id: "upload_form",
       ready: false,
       show_errors: show_errors,
-      title: dgettext("eyra-graphite", "label.upload_results"),
-      forward_title: dgettext("eyra-graphite", "label.upload_results"),
+      title: dgettext("eyra-graphite", "tabbar.item.scores"),
+      forward_title: dgettext("eyra-graphite", "tabbar.item.scores.forward"),
       type: :fullpage,
       child: child
     }

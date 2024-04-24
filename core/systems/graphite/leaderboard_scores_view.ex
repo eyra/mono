@@ -1,8 +1,10 @@
-defmodule Systems.Graphite.LeaderboardDownloadView do
+defmodule Systems.Graphite.LeaderboardScoresView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
-  alias Systems.Graphite
+  alias Systems.{
+    Graphite
+  }
 
   @impl true
   def update(
@@ -15,43 +17,38 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
         },
         socket
       ) do
-    submissions = Graphite.Public.list_submissions(leaderboard)
-
     {
       :ok,
       socket
       |> assign(
         id: id,
         leaderboard: leaderboard,
-        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       )
-      |> compose_child(:download)
+      |> compose_child(:upload)
     }
   end
 
   @impl true
-  def compose(:download, %{
+  def compose(:upload, %{
         leaderboard: leaderboard,
-        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       }) do
     %{
-      module: Graphite.LeaderboardDownloadForm,
+      module: Graphite.LeaderboardScoresForm,
       params: %{
         leaderboard: leaderboard,
-        submissions: submissions,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,
         page_key: :upload,
         opt_in?: false,
-        on_text: "download view on text",
-        off_text: "download view off text"
+        on_text: "upload view on text",
+        off_text: "upload view off text"
       }
     }
   end
@@ -62,7 +59,13 @@ defmodule Systems.Graphite.LeaderboardDownloadView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <.child name={:download} fabric={@fabric} />
+        <.child name={:upload} fabric={@fabric} >
+          <:header>
+            <Text.title2><%= dgettext("eyra-graphite", "tabbar.item.scores") %></Text.title2>
+          </:header>
+          <:footer>
+          </:footer>
+        </.child>
       </Area.content>
     </div>
     """

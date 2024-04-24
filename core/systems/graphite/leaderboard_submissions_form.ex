@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.LeaderboardDownloadForm do
+defmodule Systems.Graphite.LeaderboardSubmissionsForm do
   use CoreWeb.LiveForm, :fabric
   use Fabric.LiveComponent
 
@@ -16,14 +16,11 @@ defmodule Systems.Graphite.LeaderboardDownloadForm do
         },
         socket
       ) do
-    columns = ["submission-id" | leaderboard.metrics]
-
     {
       :ok,
       socket
       |> assign(
         id: id,
-        columns: columns,
         leaderboard: leaderboard,
         submissions: submissions,
         uri_origin: uri_origin,
