@@ -225,7 +225,7 @@ msgstr "Below you can upload the score CSV file. The following headers should be
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.scores.forward"
-msgstr "Scores"
+msgstr "Go to Scores"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "scores.csv.success.valid.message"

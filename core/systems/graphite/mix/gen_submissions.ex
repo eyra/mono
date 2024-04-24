@@ -1,9 +1,9 @@
-defmodule Mix.Tasks.Eyra.Graphite.Gen.Submissions do
+defmodule Mix.Tasks.Core.Graphite.Gen.Submissions do
   @moduledoc """
   Generate a number of submissions for a `leaderboard`.
 
   Usage:
-    $ mix eyra.graphite.gen.submissions -l LEADERBOARD -n AMOUNT -p PREFIX
+    $ mix core.graphite.gen.submissions -l LEADERBOARD -n AMOUNT -p PREFIX
   """
 
   use Mix.Task

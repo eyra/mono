@@ -46,9 +46,10 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
             <Button.dynamic {@download_button} />
           </div>
         </div>
-        <div>
+        <%= if length(@submissions) > 0 do %>
+          <.spacing value="L" />
           <.submission_list submissions={@submissions} />
-        </div>
+        <% end %>
       </.form>
     </div>
     """
