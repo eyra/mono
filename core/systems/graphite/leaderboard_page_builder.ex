@@ -54,7 +54,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   defp scores_for_metric(scores, metric, participants, user, owner?, visibility) do
     scores
     |> Enum.filter(&(&1.metric == metric))
-    |> Enum.sort(&(&1.score < &2.score))
+    |> Enum.sort_by(& &1.score, :desc)
     |> Enum.map(&score_vm(&1, participants, user, owner?, visibility))
   end
 
