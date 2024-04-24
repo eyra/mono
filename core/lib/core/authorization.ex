@@ -337,14 +337,18 @@ defmodule Core.Authorization do
   end
 
   def print_roles(node_id) when is_integer(node_id) do
+    Logger.notice(
+      "------------------------------------------------------------------------------------------"
+    )
+
     node_id
     |> get_parent_nodes()
     |> Enum.each(fn node_id ->
       roles =
         from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
         |> Core.Repo.all()
-        |> Enum.map(fn %{role: role} ->
-          ":#{role}"
+        |> Enum.map(fn %{role: role, principal_id: principal_id} ->
+          "##{principal_id} => :#{role}"
         end)
 
       if Enum.empty?(roles) do
@@ -356,6 +360,10 @@ defmodule Core.Authorization do
         )
       end
     end)
+
+    Logger.notice(
+      "------------------------------------------------------------------------------------------"
+    )
   end
 
   @entities [

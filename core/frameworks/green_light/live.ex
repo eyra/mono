@@ -1,4 +1,6 @@
 defmodule Frameworks.GreenLight.Live do
+  require Logger
+
   @moduledoc """
   The Live module enables automatic authorization checks for LiveViews.
   """
@@ -26,12 +28,18 @@ defmodule Frameworks.GreenLight.Live do
     quote do
       if Module.defines?(__MODULE__, {:get_authorization_context, 3}) do
         defp access_allowed?(params, session, socket) do
-          @greenlight_authmodule.can_access?(
-            socket,
-            get_authorization_context(params, session, socket)
-            |> Core.Authorization.print_roles(),
-            __MODULE__
-          )
+          user = Map.get(socket.assigns, :current_user)
+
+          can_access? =
+            @greenlight_authmodule.can_access?(
+              socket,
+              get_authorization_context(params, session, socket)
+              |> Core.Authorization.print_roles(),
+              __MODULE__
+            )
+
+          Logger.notice("User #{user.id} can_access? #{__MODULE__}: #{can_access?}")
+          can_access?
         end
       else
         defp access_allowed?(_params, session, socket) do
