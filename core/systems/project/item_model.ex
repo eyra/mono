@@ -5,6 +5,7 @@ defmodule Systems.Project.ItemModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
+  alias CoreWeb.UI.Timestamp
   alias Core.ImageHelpers
 
   alias Systems.{
@@ -79,8 +80,8 @@ defmodule Systems.Project.ItemModel do
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
 
-    def view_model(%Project.ItemModel{} = item, page, %{current_user: user}) do
-      vm(item, page, user)
+    def view_model(%Project.ItemModel{} = item, page, %{current_user: user, timezone: timezone}) do
+      vm(item, page, user, timezone)
     end
 
     defp vm(
@@ -92,14 +93,14 @@ defmodule Systems.Project.ItemModel do
                  id: assignment_id,
                  status: status,
                  info: %{
-                   subject_count: subject_count,
                    image_id: image_id,
                    logo_url: logo_url
                  }
                } = assignment
            },
            {Project.NodePage, :item_card},
-           _user
+           _user,
+           _timezone
          ) do
       image_info = ImageHelpers.get_image_info(image_id, 400, 200)
       tags = get_card_tags(assignment)
@@ -124,7 +125,7 @@ defmodule Systems.Project.ItemModel do
         label: get_label(status),
         title: name,
         tags: tags,
-        info: ["#{subject_count} participants  |  0 donations"],
+        info: get_assignment_info(assignment),
         left_actions: [edit],
         right_actions: [delete]
       }
@@ -137,7 +138,8 @@ defmodule Systems.Project.ItemModel do
              leaderboard: %{id: leaderboard_id, status: status} = leaderboard
            },
            {Project.NodePage, :item_card},
-           _user
+           _user,
+           timezone
          ) do
       assignment = Assignment.Public.get_by_tool(leaderboard.tool, [:info])
       image_info = ImageHelpers.get_image_info(assignment.info.image_id, 400, 200)
@@ -162,7 +164,7 @@ defmodule Systems.Project.ItemModel do
         label: get_label(status),
         title: name,
         tags: get_card_tags(leaderboard),
-        info: [get_leaderboard_info(leaderboard)],
+        info: get_leaderboard_info(leaderboard, timezone),
         left_actions: [edit],
         right_actions: [delete]
       }
@@ -188,20 +190,37 @@ defmodule Systems.Project.ItemModel do
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
 
-    defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}) do
-      deadline_str = format_datetime(tool.deadline)
-      nr_submissions = Graphite.Public.get_submission_count(tool)
-
-      dgettext("eyra-project", "leaderboard.info",
-        deadline: deadline_str,
-        nr_submissions: nr_submissions
-      )
+    defp get_assignment_info(%Assignment.Model{info: info}) do
+      subject_count = Map.get(info, :subject_count) || 0
+      [dgettext("eyra-project", "assignment.participant.info", count: subject_count)]
     end
 
-    defp format_datetime(nil), do: "None"
+    defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do
+      deadline_str = format_datetime(tool.deadline, timezone)
+      nr_submissions = Graphite.Public.get_submission_count(tool)
 
-    defp format_datetime(datetime) do
-      CoreWeb.UI.Timestamp.format_user_input_datetime(datetime)
+      submission_info =
+        dgettext("eyra-project", "leaderboard.submission.info", count: nr_submissions)
+
+      deadline_info =
+        dgettext("eyra-project", "leaderboard.deadline.info", deadline: deadline_str)
+
+      [
+        [submission_info, deadline_info]
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.join("  |  ")
+      ]
+    end
+
+    defp format_datetime(nil, _timezone),
+      do: dgettext("eyra-project", "leaderboard.unspecified.label")
+
+    defp format_datetime(_, nil), do: ""
+
+    defp format_datetime(datetime, timezone) do
+      datetime
+      |> Timestamp.convert(timezone)
+      |> Timestamp.format!()
     end
   end
 end

@@ -33,6 +33,13 @@ import { TimeZone } from "./timezone";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
+window.addEventListener("phx:page-loading-start", (info) => {
+  if (info.detail.kind == "initial") {
+    console.log("INITIAL");
+    TimeZone.sendToServer();
+  }
+});
+
 window.blurHash = () => {
   return {
     show: true,

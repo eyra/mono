@@ -167,10 +167,6 @@ msgstr ""
 msgid "tag.leaderboard"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "parse.csv.button"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "label.replace_file"
 msgstr ""

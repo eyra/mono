@@ -6,15 +6,14 @@ defmodule Systems.Campaign.MonitorView do
   import CoreWeb.UI.ProgressBar
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
+
   import Systems.Campaign.MonitorTableView
 
-  alias Systems.{
-    Pool,
-    Crew,
-    Campaign,
-    Lab,
-    Workflow
-  }
+  alias Systems.Pool
+  alias Systems.Crew
+  alias Systems.Campaign
+  alias Systems.Lab
+  alias Systems.Workflow
 
   alias Frameworks.Pixel.Text
 

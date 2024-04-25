@@ -168,5 +168,17 @@ msgid "form.text"
 msgstr "Project settings"
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.info"
-msgstr "Deadline: %{deadline} | %{nr_submissions} submissons"
+msgid "leaderboard.unspecified.label"
+msgstr "None"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.participant.info"
+msgstr "%{count} participants"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.deadline.info"
+msgstr "%{deadline}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.submission.info"
+msgstr "%{count} submissons"

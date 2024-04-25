@@ -154,6 +154,10 @@ defmodule CoreWeb.UI.Timestamp do
     end
   end
 
+  def format!(datetime) do
+    Timex.format!(datetime, "%Y-%m-%d %H:%M", :strftime)
+  end
+
   def humanize_time(timestamp) do
     Timex.format!(timestamp, "%H:%M", :strftime)
   end
