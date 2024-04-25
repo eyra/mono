@@ -49,7 +49,7 @@ msgstr "Score"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.team.label"
-msgstr "Team"
+msgstr "Name"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.button"
