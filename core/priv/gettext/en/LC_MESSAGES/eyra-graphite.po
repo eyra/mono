@@ -249,7 +249,7 @@ msgstr "%{count}"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.submissions.title"
-msgstr "Number of submissions"
+msgstr "Submissions"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.generated_on.text"
