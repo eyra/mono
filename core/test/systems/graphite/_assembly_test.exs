@@ -12,7 +12,7 @@ defmodule Systems.Graphite.AssemblyTest do
         Project.Factories.build_node(items: [])
         |> Repo.insert!()
 
-      assert "Benchmark Leaderboard" = Assembly.get_leaderboard_name(project_node)
+      assert "Benchmark Leaderboard" = Assembly.get_leaderboard_name(nil, project_node)
     end
 
     test "with other leaderboards" do
@@ -37,7 +37,7 @@ defmodule Systems.Graphite.AssemblyTest do
         )
         |> Repo.insert!()
 
-      assert "Benchmark Leaderboard (3)" = Assembly.get_leaderboard_name(project_node)
+      assert "Benchmark Leaderboard (3)" = Assembly.get_leaderboard_name(nil, project_node)
     end
   end
 
@@ -46,7 +46,7 @@ defmodule Systems.Graphite.AssemblyTest do
       tool = Factories.create_tool()
 
       assert_raise RuntimeError, fn ->
-        Assembly.create_leaderboard(tool)
+        Assembly.create_leaderboard(tool, "name")
       end
     end
 
@@ -61,9 +61,10 @@ defmodule Systems.Graphite.AssemblyTest do
         |> Project.Factories.build_project()
         |> Repo.insert!()
 
-      {:ok, %{project_item: project_item}} = Assembly.create_leaderboard(tool)
+      {:ok, %{project_item: project_item}} = Assembly.create_leaderboard(tool, "name")
 
       assert %Systems.Project.ItemModel{
+               name: "name",
                project_path: [^project_root_id],
                leaderboard: %Systems.Graphite.LeaderboardModel{
                  tool: %Systems.Graphite.ToolModel{id: ^tool_id},

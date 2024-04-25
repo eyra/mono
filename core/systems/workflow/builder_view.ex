@@ -4,12 +4,9 @@ defmodule Systems.Workflow.BuilderView do
   require Logger
 
   import Frameworks.Pixel.SidePanel
+  import Systems.Workflow.ItemViews
 
-  alias Systems.{
-    Workflow
-  }
-
-  import Workflow.ItemViews
+  alias Systems.Workflow
 
   @impl true
   def update(%{action: "delete", item: item}, socket) do
@@ -36,6 +33,7 @@ defmodule Systems.Workflow.BuilderView do
           workflow: %{items: items} = workflow,
           config: config,
           user: user,
+          timezone: timezone,
           uri_origin: uri_origin
         },
         socket
@@ -50,6 +48,7 @@ defmodule Systems.Workflow.BuilderView do
         workflow: workflow,
         config: config,
         user: user,
+        timezone: timezone,
         uri_origin: uri_origin,
         ordering_enabled?: ordering_enabled?
       )
@@ -120,7 +119,7 @@ defmodule Systems.Workflow.BuilderView do
             <Text.title2><%= @config.list.title %></Text.title2>
             <Text.body><%= @config.list.description %></Text.body>
             <.spacing value="M" />
-            <.list items={@ordered_items} types={@item_types} ordering_enabled?={@ordering_enabled?} user={@user} uri_origin={@uri_origin} parent={%{type: __MODULE__, id: @id}} />
+            <.list items={@ordered_items} types={@item_types} ordering_enabled?={@ordering_enabled?} user={@user} timezone={@timezone} uri_origin={@uri_origin} parent={%{type: __MODULE__, id: @id}} />
           </Area.content>
         </div>
         <%= if @config.library.render? do %>

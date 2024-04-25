@@ -100,6 +100,7 @@ defmodule Systems.Workflow.ItemViews do
   attr(:items, :list, required: true)
   attr(:types, :list, required: true)
   attr(:user, :map, required: true)
+  attr(:timezone, :string, required: true)
   attr(:uri_origin, :string, required: true)
   attr(:ordering_enabled?, :boolean, default: false)
   attr(:parent, :map, required: true)
@@ -119,6 +120,7 @@ defmodule Systems.Workflow.ItemViews do
           type={Enum.at(@types, index)}
           item={item}
           user={@user}
+          timezone={@timezone}
           uri_origin={@uri_origin}
           parent={@parent}
           relative_position={relative_position(item.position, Enum.count(@items))}

@@ -13,11 +13,12 @@ defmodule Systems.Graphite.LeaderboardContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, session, socket) do
     leaderboard =
       Graphite.Public.get_leaderboard!(id, Graphite.LeaderboardModel.preload_graph(:down))
 
-    {:ok, socket |> initialize(id, leaderboard, "leaderboard_content/#{id}", "settings_form")}
+    {:ok,
+     socket |> initialize(session, id, leaderboard, "leaderboard_content/#{id}", "settings_form")}
   end
 
   @impl true

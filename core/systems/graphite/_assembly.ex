@@ -11,21 +11,25 @@ defmodule Systems.Graphite.Assembly do
   alias Systems.Project
   alias Systems.Assignment
 
-  def create_leaderboard(%Graphite.ToolModel{} = tool) do
+  def create_leaderboard(%Graphite.ToolModel{} = tool, name) do
     if challenge = Assignment.Public.get_by_tool(tool) do
-      create_leaderboard(challenge, tool)
+      create_leaderboard(challenge, tool, name)
     else
       raise "Can not create leaderboard for tool without Benchmark Challenge"
     end
   end
 
-  def create_leaderboard(%Assignment.Model{special: :benchmark_challenge} = challenge, tool) do
+  def create_leaderboard(
+        %Assignment.Model{special: :benchmark_challenge} = challenge,
+        tool,
+        name
+      ) do
     project_node =
       challenge
       |> Project.Public.get_item_by_assignment()
       |> Project.Public.get_node_by_item!([:auth_node])
 
-    leaderboard_name = get_leaderboard_name(project_node)
+    leaderboard_name = get_leaderboard_name(name, project_node)
     project_item = prepare_leaderboard_project_item(project_node, tool, leaderboard_name)
 
     Multi.new()
@@ -34,11 +38,18 @@ defmodule Systems.Graphite.Assembly do
     |> Repo.transaction()
   end
 
-  def get_leaderboard_name(project_node) do
+  def get_leaderboard_name(nil, project_node) do
     Project.Public.new_item_name(
       project_node,
       dgettext("eyra-graphite", "leaderboard.default.name")
     )
+  end
+
+  def get_leaderboard_name(name, project_node) when is_binary(name) do
+    case name do
+      "" -> get_leaderboard_name(nil, project_node)
+      name -> name
+    end
   end
 
   defp prepare_leaderboard_project_item(

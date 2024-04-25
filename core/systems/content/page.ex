@@ -87,6 +87,7 @@ defmodule Systems.Content.Page do
     quote do
       use CoreWeb.Layouts.Workspace.Component, :projects
       use CoreWeb.UI.Responsive.Viewport
+      use CoreWeb.LiveTimezone
       use Systems.Observatory.Public
 
       alias CoreWeb.LiveLocale
@@ -95,7 +96,7 @@ defmodule Systems.Content.Page do
       import CoreWeb.Gettext
       import Systems.Content.Page, except: [helpers: 0]
 
-      defp initialize(socket, id, model, tabbar_id, initial_tab) do
+      defp initialize(socket, session, id, model, tabbar_id, initial_tab) do
         socket
         |> assign(
           id: id,
@@ -111,6 +112,7 @@ defmodule Systems.Content.Page do
           action_map: %{},
           more_actions: []
         )
+        |> update_timezone(session)
         |> assign_viewport()
         |> assign_breakpoint()
         |> update_tabbar_size()

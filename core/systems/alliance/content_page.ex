@@ -12,14 +12,14 @@ defmodule Systems.Alliance.ContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id} = params, _, socket) do
+  def mount(%{"id" => id} = params, session, socket) do
     initial_tab = Map.get(params, "tab")
     model = Alliance.Public.get_tool!(String.to_integer(id))
     tabbar_id = "alliance_content/#{id}"
 
     {
       :ok,
-      socket |> initialize(id, model, tabbar_id, initial_tab)
+      socket |> initialize(session, id, model, tabbar_id, initial_tab)
     }
   end
 

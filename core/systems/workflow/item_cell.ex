@@ -14,7 +14,8 @@ defmodule Systems.Workflow.ItemCell do
           relative_position: relative_position,
           user: user,
           uri_origin: uri_origin,
-          ordering_enabled?: ordering_enabled?
+          ordering_enabled?: ordering_enabled?,
+          timezone: timezone
         },
         socket
       ) do
@@ -29,7 +30,8 @@ defmodule Systems.Workflow.ItemCell do
         relative_position: relative_position,
         user: user,
         uri_origin: uri_origin,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        timezone: timezone
       )
       |> update_item_view()
       |> update_item_form()
@@ -76,9 +78,10 @@ defmodule Systems.Workflow.ItemCell do
          %{
            assigns: %{
              id: id,
-             item: %{id: item_id, tool_ref: tool_ref},
+             item: %{id: item_id, tool_ref: tool_ref, title: title},
              user: user,
-             uri_origin: uri_origin
+             uri_origin: uri_origin,
+             timezone: timezone
            }
          } = socket
        ) do
@@ -92,6 +95,8 @@ defmodule Systems.Workflow.ItemCell do
       id: "#{id}_tool_form",
       module: tool_form_module,
       entity: tool,
+      title: title,
+      timezone: timezone,
       callback_url: callback_url,
       user: user
     }

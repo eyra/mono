@@ -4,7 +4,6 @@ defmodule Systems.Workflow.Public do
 
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Authorization
 
   alias Frameworks.Signal
 
@@ -84,7 +83,15 @@ defmodule Systems.Workflow.Public do
   end
 
   def add_item(
-        %Workflow.Model{} = workflow,
+        %Workflow.Model{auth_node: %Ecto.Association.NotLoaded{}} = workflow,
+        item,
+        director
+      ) do
+    add_item(Repo.preload(workflow, :auth_node), item, director)
+  end
+
+  def add_item(
+        %Workflow.Model{auth_node: workflow_auth_node} = workflow,
         %{special: special, tool: tool_type} = _item,
         director
       )
@@ -93,7 +100,7 @@ defmodule Systems.Workflow.Public do
     |> Multi.run(:position, fn _, _ ->
       {:ok, item_count(workflow)}
     end)
-    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}))
+    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}, workflow_auth_node))
     |> Multi.insert(:workflow_item, fn %{position: position, tool: tool} ->
       tool_ref = prepare_tool_ref(special, tool_type, tool)
       prepare_item(workflow, position, tool_ref)
@@ -132,8 +139,6 @@ defmodule Systems.Workflow.Public do
     |> Workflow.ToolRefModel.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
-
-  def prepare_tool(_, _, auth_node \\ Authorization.prepare_node())
 
   def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
     do: Alliance.Public.prepare_tool(attrs, auth_node)

@@ -8,15 +8,14 @@ defmodule Systems.Graphite.ToolForm do
   alias Systems.Graphite
 
   @impl true
-  def update(%{id: id, entity: entity}, socket) do
-    timezone = Map.get(socket.assigns, :timezone, nil)
-
+  def update(%{id: id, entity: entity, title: title, timezone: timezone}, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         entity: entity,
+        title: title,
         timezone: timezone
       )
       |> update_changeset()
@@ -59,19 +58,13 @@ defmodule Systems.Graphite.ToolForm do
   end
 
   @impl true
-  def handle_event("timezone", timezone, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(timezone: timezone)
-      |> update_changeset()
-    }
-  end
-
-  @impl true
-  def handle_event("create_leaderboard", _payload, %{assigns: %{entity: entity}} = socket) do
+  def handle_event(
+        "create_leaderboard",
+        _payload,
+        %{assigns: %{entity: entity, title: title}} = socket
+      ) do
     require_feature(:leaderboard)
-    Graphite.Assembly.create_leaderboard(entity)
+    Graphite.Assembly.create_leaderboard(entity, title)
     {:noreply, socket}
   end
 
@@ -92,7 +85,7 @@ defmodule Systems.Graphite.ToolForm do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={"#{@id}_timezone"} class="timezone" phx-hook="TimeZone">
+    <div>
       <.form id={"#{@id}_graphite_tool_form"} :let={form} for={@changeset} phx-change="change" phx-target="" >
         <.datetime_input form={form} field={:deadline_string} label_text={dgettext("eyra-graphite", "deadline.label", timezone: @timezone)}/>
         <%= if feature_enabled?(:leaderboard) do %>
