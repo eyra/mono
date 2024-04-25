@@ -45,6 +45,7 @@ defmodule Systems.Assignment.CrewPage do
       )
       |> update_panel_info(session)
       |> observe_view_model()
+      |> update_image_info()
       |> signal_started()
       |> update_flow()
     }

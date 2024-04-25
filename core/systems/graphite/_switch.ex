@@ -45,6 +45,17 @@ defmodule Systems.Graphite.Switch do
     :ok
   end
 
+  @impl true
+  def intercept(
+        {:assignment, _},
+        %{assignment: %{special: :benchmark_challenge} = assignment, from_pid: from_pid}
+      ) do
+    Graphite.Public.list_leaderboards(assignment, Graphite.LeaderboardModel.preload_graph(:down))
+    |> Enum.each(&update_pages(&1, from_pid))
+
+    :ok
+  end
+
   defp update_pages(%Graphite.LeaderboardModel{} = leaderboard, from_pid) do
     [
       Graphite.LeaderboardPage,

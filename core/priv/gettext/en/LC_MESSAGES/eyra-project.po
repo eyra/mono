@@ -169,7 +169,7 @@ msgstr "Project settings"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.unspecified.label"
-msgstr "None"
+msgstr "No deadline"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.participant.info"

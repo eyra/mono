@@ -13,10 +13,13 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
     online? = Graphite.LeaderboardModel.online?(leaderboard)
     owner? = Core.Authorization.roles_intersect?(user, leaderboard, [:owner])
 
+    %{info: info} = Graphite.Public.get_challenge(leaderboard, [:info])
+
     if online? or owner? do
       %{
         id: id,
         title: title,
+        info: info,
         leaderboard_table: %{
           module: Graphite.LeaderboardTableView,
           params: %{
@@ -29,6 +32,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
       %{
         id: id,
         title: dgettext("eyra-graphite", "leaderboard.offline.title"),
+        info: info,
         leaderboard_table: nil
       }
     end

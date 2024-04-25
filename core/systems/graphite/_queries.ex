@@ -21,6 +21,14 @@ defmodule Systems.Graphite.Queries do
     ])
   end
 
+  def leaderboards_by_tools(tools) when is_list(tools) do
+    tool_ids = Enum.map(tools, & &1.id)
+
+    build(leaderboard_query(), :leaderboard, [
+      tool_id in ^tool_ids
+    ])
+  end
+
   # Scores
   def score_query() do
     from(Graphite.ScoreModel, as: :score)

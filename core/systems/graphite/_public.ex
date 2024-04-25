@@ -8,10 +8,26 @@ defmodule Systems.Graphite.Public do
 
   alias Frameworks.Signal
   alias Systems.Graphite
+  alias Systems.Assignment
+  alias Systems.Workflow
+
+  def get_challenge(%Graphite.LeaderboardModel{tool: tool}, preload \\ []) do
+    Assignment.Public.get_by_tool(tool, preload)
+  end
 
   def get_leaderboard!(id, preload \\ []) do
     from(leaderboard in Graphite.LeaderboardModel, preload: ^preload)
     |> Repo.get!(id)
+  end
+
+  def list_leaderboards(
+        %Assignment.Model{special: :benchmark_challenge, workflow: workflow},
+        preload \\ []
+      ) do
+    Workflow.Public.list_tools(workflow, :submit)
+    |> leaderboards_by_tools()
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def get_tool!(id, preload \\ []) do
