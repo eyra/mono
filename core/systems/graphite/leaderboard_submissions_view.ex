@@ -11,12 +11,11 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
           entity: leaderboard,
           uri_origin: uri_origin,
           viewport: viewport,
-          breakpoint: breakpoint
+          breakpoint: breakpoint,
+          submissions: submissions
         },
         socket
       ) do
-    submissions = Graphite.Public.list_submissions(leaderboard)
-
     {
       :ok,
       socket

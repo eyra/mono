@@ -5,6 +5,11 @@ defmodule Frameworks.Utility.EctoHelper do
   alias Core.Repo
   alias Frameworks.Signal
 
+  def get_assoc(entity, assoc) when is_atom(assoc) do
+    Repo.preload(entity, [assoc])
+    |> Map.get(assoc)
+  end
+
   def put_assoc(changeset, key, value, execute?) do
     if execute? do
       Changeset.put_assoc(changeset, key, value)

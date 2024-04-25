@@ -26,13 +26,13 @@ defmodule Systems.Graphite.SubmissionModel do
 
   def valid_github_commit_url(), do: @valid_github_commit_url
 
-  def prepare(tool, params) do
-    tool
+  def prepare(submission, params) do
+    submission
     |> cast(params, @fields)
   end
 
-  def change(tool, params) do
-    tool
+  def change(submission, params) do
+    submission
     |> cast(params, @fields)
   end
 

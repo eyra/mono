@@ -2,6 +2,7 @@ defmodule Systems.Graphite.Switch do
   use Frameworks.Signal.Handler
   require Logger
 
+  alias Frameworks.Utility.EctoHelper
   alias Frameworks.Signal
   alias Systems.Graphite
   alias Systems.Assignment
@@ -32,6 +33,32 @@ defmodule Systems.Graphite.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    if leaderboard =
+         Graphite.Public.get_leaderboard_by_tool(
+           tool,
+           Graphite.LeaderboardModel.preload_graph(:down)
+         ) do
+      dispatch!(
+        {:graphite_leaderboard, signal},
+        Map.merge(message, %{graphite_leaderboard: leaderboard})
+      )
+    end
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
+        {:graphite_submission, _} = signal,
+        %{graphite_submission: submission} = message
+      ) do
+    tool = EctoHelper.get_assoc(submission, :tool)
+
+    dispatch!(
+      {:graphite_tool, signal},
+      Map.merge(message, %{graphite_tool: tool})
+    )
 
     :ok
   end

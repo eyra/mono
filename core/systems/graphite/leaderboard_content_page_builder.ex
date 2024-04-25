@@ -127,7 +127,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:settings, :download, :upload]
+    [:settings, :submissions, :scores]
   end
 
   defp create_tab(:settings, leaderboard, show_errors, assigns) do
@@ -153,20 +153,21 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:download, leaderboard, show_errors, assigns) do
+  defp create_tab(:submissions, leaderboard, show_errors, assigns) do
     %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
       assigns
 
     child =
       Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardSubmissionsView, %{
         entity: leaderboard,
+        submissions: Graphite.Public.list_submissions(leaderboard),
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint
       })
 
     %{
-      id: "download_form",
+      id: "submissions_form",
       ready: false,
       show_errors: show_errors,
       title: dgettext("eyra-graphite", "tabbar.item.submissions.title"),
@@ -176,7 +177,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:upload, leaderboard, show_errors, assigns) do
+  defp create_tab(:scores, leaderboard, show_errors, assigns) do
     %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
       assigns
 
@@ -189,7 +190,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       })
 
     %{
-      id: "upload_form",
+      id: "scores_form",
       ready: false,
       show_errors: show_errors,
       title: dgettext("eyra-graphite", "tabbar.item.scores"),

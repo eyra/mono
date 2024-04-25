@@ -20,6 +20,12 @@ defmodule Systems.Graphite.Public do
     |> Repo.get!(id)
   end
 
+  def get_leaderboard_by_tool(%Graphite.ToolModel{} = tool, preload \\ []) do
+    leaderboard_query(tool)
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
   def list_leaderboards(
         %Assignment.Model{special: :benchmark_challenge, workflow: workflow},
         preload \\ []

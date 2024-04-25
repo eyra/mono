@@ -230,3 +230,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "scores.form.submit.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.list.header.link"
+msgstr "Methode omschrijving voor leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.number"
+msgstr ""

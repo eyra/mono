@@ -230,3 +230,15 @@ msgstr "Number of valid scores: %{count}"
 #, elixir-autogen, elixir-format
 msgid "scores.form.submit.button"
 msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.description"
+msgstr "Method description"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "submission.list.header.link"
+msgstr "Github commit url"
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.number"
+msgstr "Number"

@@ -63,9 +63,9 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
         <table>
           <thead>
             <tr>
-              <th class="pl-0"><Text.title6>Number</Text.title6></th>
-              <th class="pl-8"><Text.title6>Description</Text.title6></th>
-              <th class="pl-8"><Text.title6>Link</Text.title6></th>
+              <th class="pl-0"><Text.title6 align="text-left"><%= dgettext("eyra-graphite","submission.list.header.number") %></Text.title6></th>
+              <th class="pl-8"><Text.title6 align="text-left"><%= dgettext("eyra-graphite","submission.list.header.description") %></Text.title6></th>
+              <th class="pl-8"><Text.title6 align="text-left"><%= dgettext("eyra-graphite","submission.list.header.link") %></Text.title6></th>
             </tr>
           </thead>
           <tbody>
@@ -79,7 +79,6 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
   end
 
   attr(:description, :string, required: true)
-  attr(:team, :string, default: nil)
   attr(:summary, :string, required: true)
   attr(:url, :string, required: true)
   attr(:buttons, :list, required: true)
@@ -95,7 +94,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
       </td>
       <td class="pl-8">
         <Text.body_medium>
-          <a class="text-primary underline" target="_blank" href={@github_commit_url}>Github</a>
+          <a class="text-primary underline" target="_blank" href={@github_commit_url}>Link</a>
         </Text.body_medium>
       </td>
     </tr>
