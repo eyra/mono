@@ -73,9 +73,11 @@ defmodule Systems.Workflow.ItemViews do
         <Align.vertical_center>
           <div class="flex flex-row gap-6 items-center">
             <%= if @status == :pending do %>
-              <.step_indicator bg_color="bg-grey4" text={@index+1} />
+              <div class="flex-shrink-0">
+                <.step_indicator bg_color="bg-grey4" text={@index+1} />
+              </div>
             <% else %>
-              <div class="h-6 w-6">
+              <div class="h-6 w-6 flex-shrink-0">
                 <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>

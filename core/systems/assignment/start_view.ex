@@ -88,7 +88,7 @@ defmodule Systems.Assignment.StartView do
                 <img class="w-24 h-24" src={~p"/images/icons/#{"#{@icon}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>
               <% end %>
             </div>
-            <Text.title2 margin=""><%= @title %></Text.title2>
+            <Text.title2 align="text-center" margin=""><%= @title %></Text.title2>
             <Text.body align="text-center"><%= @description %></Text.body>
             <.wrap>
               <Button.dynamic {@button} />
