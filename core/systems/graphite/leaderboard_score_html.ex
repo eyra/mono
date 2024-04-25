@@ -31,7 +31,13 @@ defmodule Systems.Graphite.LeaderboardScoreHTML do
         <%= for {%{team: team, description: description, url: url, value: value}, index} <- Enum.with_index(@scores) do %>
           <.row
             bottom={index == Enum.count(@scores)-1}
-            cells={["#{index+1}.", team, description, url, value]}
+            cells={[
+              "#{index+1}.",
+              team,
+              description,
+              url,
+              :erlang.float_to_binary(value, [decimals: 2])
+            ]}
             layout={@layout}
           />
         <% end %>
