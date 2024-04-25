@@ -242,3 +242,31 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "submission.list.header.number"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.private.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.public.text"
+msgstr ""

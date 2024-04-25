@@ -173,6 +173,10 @@ defmodule Systems.Graphite.Public do
 
     scores_to_delete = score_query(leaderboard)
 
+    leaderboard_changeset =
+      leaderboard
+      |> Graphite.LeaderboardModel.changeset(%{generation_date: now})
+
     Multi.new()
     |> Multi.delete_all(:delete_scores, scores_to_delete)
     |> Multi.insert_all(
@@ -184,7 +188,8 @@ defmodule Systems.Graphite.Public do
       ),
       returning: true
     )
-    |> update_leaderboard_generation_date(leaderboard, now)
+    |> Multi.update(:graphite_leaderboard, leaderboard_changeset)
+    |> Signal.Public.multi_dispatch({:graphite_leaderboard, :updated})
     |> Repo.transaction()
   end
 
@@ -200,11 +205,6 @@ defmodule Systems.Graphite.Public do
         updated_at: datetime
       }
     end)
-  end
-
-  defp update_leaderboard_generation_date(multi, leaderboard, datetime) do
-    changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: datetime})
-    Multi.update(multi, :leaderboard_generation_date, changeset)
   end
 
   def delete(%Graphite.SubmissionModel{} = submission) do

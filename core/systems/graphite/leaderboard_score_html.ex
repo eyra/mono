@@ -91,9 +91,6 @@ defmodule Systems.Graphite.LeaderboardScoreHTML do
         <% end %>
         <div class="flex-grow">
           <div class="flex flex-row w-full h-full">
-            <%= if not @left do %>
-              <div class="w-border bg-grey4 h-full" />
-            <% end %>
             <div class="flex-1 pl-4 pr-4 text-left">
               <div class={"flex flex-col justify-center h-full #{@layout.align} #{@padding}"}>
               <%= if @top do %>

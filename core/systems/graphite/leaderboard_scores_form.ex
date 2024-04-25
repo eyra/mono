@@ -111,23 +111,23 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
       </.form>
       <.spacing value="L" />
       <%= if @parsed_results do %>
+        <Text.title3>Error <span class="text-primary"><%= length(elem(@parsed_results.error,0)) + length(elem(@parsed_results.error,1)) %></span></Text.title3>
+        <.spacing value="S" />
+        <.table items={elem(@parsed_results.error,0)}/>
+        <.table items={elem(@parsed_results.error,1)}/>
+        <.spacing value="M" />
         <Text.title3>Success <span class="text-primary"><%= length(elem(@parsed_results.success,0)) + length(elem(@parsed_results.success,1)) %></span></Text.title3>
         <.spacing value="M" />
         <Text.sub_head color="text-success"><%= dgettext("eyra-graphite", "scores.csv.success.valid.message", count: length(elem(@parsed_results.success,0))) %></Text.sub_head>
-        <.spacing value="M" />
-        <.wrap>
-          <Button.dynamic {@submit_button} />
-        </.wrap>
-        <.spacing value="M" />
         <%= if length(elem(@parsed_results.success,1)) > 0 do %>
           <.spacing value="M" />
           <.table items={elem(@parsed_results.success,1)}/>
         <% end %>
         <.spacing value="M" />
-        <Text.title3>Error <span class="text-primary"><%= length(elem(@parsed_results.error,0)) + length(elem(@parsed_results.error,1)) %></span></Text.title3>
-        <.spacing value="S" />
-        <.table items={elem(@parsed_results.error,0)}/>
-        <.table items={elem(@parsed_results.error,1)}/>
+        <.wrap>
+          <Button.dynamic {@submit_button} />
+        </.wrap>
+
       <% end %>
     </div>
     """

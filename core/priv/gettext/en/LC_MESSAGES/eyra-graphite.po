@@ -242,3 +242,31 @@ msgstr "Github commit url"
 #, elixir-autogen, elixir-format
 msgid "submission.list.header.number"
 msgstr "Number"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.text"
+msgstr "%{count}"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr "Number of submissions"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.text"
+msgstr "%{date}"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.title"
+msgstr "Generated on"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.private.text"
+msgstr "Private"
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.title"
+msgstr "Visibility"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "highlight.visibility.public.text"
+msgstr "Public"

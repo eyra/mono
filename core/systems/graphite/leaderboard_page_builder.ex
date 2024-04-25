@@ -3,6 +3,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
 
   import CoreWeb.Gettext
 
+  alias CoreWeb.UI.Timestamp
   alias Core.Accounts.User
   alias Systems.Graphite
 
@@ -10,6 +11,16 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
         %Graphite.LeaderboardModel{id: id, title: title, metrics: metrics} = leaderboard,
         %{current_user: user} = _assigns
       ) do
+    leaderboard =
+      Core.Repo.preload(
+        leaderboard,
+        [
+          scores: [Graphite.ScoreModel.preload_graph(:down)],
+          tool: [:submissions]
+        ],
+        force: true
+      )
+
     online? = Graphite.LeaderboardModel.online?(leaderboard)
     owner? = Core.Authorization.roles_intersect?(user, leaderboard, [:owner])
 
@@ -20,6 +31,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
         id: id,
         title: title,
         info: info,
+        highlights: highlights(leaderboard),
         leaderboard_table: %{
           module: Graphite.LeaderboardTableView,
           params: %{
@@ -36,6 +48,53 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
         leaderboard_table: nil
       }
     end
+  end
+
+  defp highlights(leaderboard) do
+    [
+      :submissions,
+      :generated_on,
+      :visibility
+    ]
+    |> Enum.map(&highlight(leaderboard, &1))
+  end
+
+  defp highlight(%Graphite.LeaderboardModel{tool: %{submissions: submissions}}, :submissions) do
+    %{
+      title: dgettext("eyra-graphite", "highlight.submissions.title"),
+      text:
+        dgettext("eyra-graphite", "highlight.submissions.text", count: Enum.count(submissions))
+    }
+  end
+
+  defp highlight(%Graphite.LeaderboardModel{generation_date: nil}, :generated_on) do
+    %{
+      title: dgettext("eyra-graphite", "highlight.generated_on.title"),
+      text: "?"
+    }
+  end
+
+  defp highlight(%Graphite.LeaderboardModel{generation_date: generation_date}, :generated_on) do
+    datestamp = Timestamp.format_date!(generation_date)
+
+    %{
+      title: dgettext("eyra-graphite", "highlight.generated_on.title"),
+      text: dgettext("eyra-graphite", "highlight.generated_on.text", date: datestamp)
+    }
+  end
+
+  defp highlight(%Graphite.LeaderboardModel{visibility: :private}, :visibility) do
+    %{
+      title: dgettext("eyra-graphite", "highlight.visibility.title"),
+      text: dgettext("eyra-graphite", "highlight.visibility.private.text")
+    }
+  end
+
+  defp highlight(%Graphite.LeaderboardModel{visibility: :public}, :visibility) do
+    %{
+      title: dgettext("eyra-graphite", "highlight.visibility.title"),
+      text: dgettext("eyra-graphite", "highlight.visibility.public.text")
+    }
   end
 
   defp map_metrics_to_scores(

@@ -6,6 +6,7 @@ defmodule Systems.Graphite.LeaderboardPage do
   use CoreWeb.Layouts.Stripped.Component, :leaderboard
 
   alias Core.ImageHelpers
+  alias Frameworks.Pixel.Card
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Align
 
@@ -77,6 +78,10 @@ defmodule Systems.Graphite.LeaderboardPage do
     {:noreply, socket}
   end
 
+  defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
+  defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
+  defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -90,7 +95,14 @@ defmodule Systems.Graphite.LeaderboardPage do
             </div>
           </:header>
           <Area.content>
-            <Margin.y id={:page_top} />
+            <div class="mb-20" />
+            <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+             <%= for highlight <- @vm.highlights do %>
+              <Card.highlight {highlight} />
+              <% end %>
+            </div>
+            <div class="mb-20" />
+
             <Align.horizontal_center>
               <Text.title2><%= @vm.title %></Text.title2>
             </Align.horizontal_center>
