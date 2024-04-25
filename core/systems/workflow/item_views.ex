@@ -79,8 +79,9 @@ defmodule Systems.Workflow.ItemViews do
                 <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>
-            <Text.title5 align="text-left"><%= @title %></Text.title5>
-            <div class="flex-grow"></div>
+            <div class="flex-grow">
+              <Text.title6 margin="mb-0" align="text-left"><%= @title %></Text.title6>
+            </div>
             <%= if @icon do %>
               <div class="w-8 h-8">
                 <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>

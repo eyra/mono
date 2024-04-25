@@ -554,7 +554,7 @@ defmodule Systems.Assignment.CrewWorkView do
         <% end %>
         <%= if not tool_visible?(assigns) do %>
           <%= if exists?(@fabric, :work_list_view) do %>
-            <div class="w-left-column flex flex-col py-6 gap-6">
+            <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
               <div class="px-6">
                 <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
               </div>

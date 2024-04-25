@@ -241,7 +241,7 @@ defmodule Frameworks.Pixel.Text do
 
   attr(:margin, :string, default: "mb-2")
   attr(:color, :string, default: "text-grey1")
-  attr(:align, :string, default: "text-center")
+  attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
   def title6(assigns) do
