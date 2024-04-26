@@ -261,7 +261,7 @@ msgstr "Deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.private.text"
-msgstr "Geanonimiseerd"
+msgstr "Geblindeerd"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.title"
