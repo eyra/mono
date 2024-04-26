@@ -129,7 +129,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.published.message"
-msgstr "Het leaderboard is gepubliceerd."
+msgstr "Het leaderboard is beschikbaar. Organisatoren kiezen om het leaderboard ofwel open ofwel geblindeerd te publiceren. Als je een methode ingediend hebt en deze kon succesvol toegepast worden op de holdout data, dan is je methode gerangschikt op het leaderboard. Kun je jouw methode niet vinden? Neem dan even contact op met de organisatoren."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
