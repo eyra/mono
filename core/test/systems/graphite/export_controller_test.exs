@@ -47,6 +47,27 @@ defmodule Systems.Graphite.ExportControllerTest do
            } = Graphite.ExportController.export(submission)
   end
 
+  test "export/1 valid with _ commit" do
+    tool = Factories.insert!(:graphite_tool, %{})
+
+    %{id: id} =
+      submission =
+      Factories.insert!(:graphite_submission, %{
+        tool: tool,
+        description: "description",
+        github_commit_url:
+          "https://github.com/apiraccini/prefer_gas_official/commit/91e30c5cead2a2cfbcb0f219cc3ef6432e15d8d5"
+      })
+
+    expected_id = "#{id}"
+
+    assert %{
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:apiraccini/prefer_gas_official.git",
+             "ref" => "91e30c5cead2a2cfbcb0f219cc3ef6432e15d8d5"
+           } = Graphite.ExportController.export(submission)
+  end
+
   test "export/1 with invalid submission" do
     tool = Factories.insert!(:graphite_tool, %{})
 

@@ -257,7 +257,7 @@ msgstr "%{date}"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.generated_on.title"
-msgstr "Deadline"
+msgstr "Generated on"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.private.text"

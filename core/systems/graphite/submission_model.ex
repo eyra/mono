@@ -21,7 +21,7 @@ defmodule Systems.Graphite.SubmissionModel do
   @fields ~w(description github_commit_url)a
   @required_fields @fields
 
-  @valid_github_commit_url ~r"https:\/\/github\.com\/([a-zA-Z0-9-]+\/[a-zA-Z0-9-]+)(?:\/pull\/\d+)?\/commits?\/([0-9a-f]{40})\/?$"
+  @valid_github_commit_url ~r"https:\/\/github\.com\/([a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+)(?:\/pull\/\d+)?\/commits?\/([0-9a-f]{40})\/?$"
   @github_url_template "git@github.com:${owner_repo}.git"
 
   def valid_github_commit_url(), do: @valid_github_commit_url
