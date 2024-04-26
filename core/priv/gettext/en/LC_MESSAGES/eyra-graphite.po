@@ -129,7 +129,7 @@ msgstr "Benchmark Leaderboard"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.published.message"
-msgstr "The leaderboard has been published."
+msgstr "The leaderboard is available. Organizers choose to publish the leaderboard either open or blinded. If you submitted a method that ran successfully on the holdout data, your method is ranked on the leaderboard. If you cannot find your method on the leaderboard, please contact the organizers."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.closed.message"
