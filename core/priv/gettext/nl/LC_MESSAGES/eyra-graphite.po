@@ -41,7 +41,7 @@ msgstr "Methode"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.position.label"
-msgstr "Poisitie"
+msgstr "Positie"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.score.label"
@@ -49,7 +49,7 @@ msgstr "Score"
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard.team.label"
-msgstr "Team"
+msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.button"
@@ -245,28 +245,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "highlight.submissions.text"
-msgstr ""
+msgstr "%{count}"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.submissions.title"
-msgstr ""
+msgstr "Submissies"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.generated_on.text"
-msgstr ""
+msgstr "%{date}"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.generated_on.title"
-msgstr ""
+msgstr "Deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.private.text"
-msgstr ""
+msgstr "Geanonimiseerd"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.title"
-msgstr ""
+msgstr "Zichtbaarheid"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "highlight.visibility.public.text"
-msgstr ""
+msgstr "Open"
