@@ -257,11 +257,11 @@ msgstr "%{date}"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.generated_on.title"
-msgstr "Generated on"
+msgstr "Deadline"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.private.text"
-msgstr "Private"
+msgstr "Blinded"
 
 #, elixir-autogen, elixir-format
 msgid "highlight.visibility.title"
@@ -269,4 +269,4 @@ msgstr "Visibility"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "highlight.visibility.public.text"
-msgstr "Public"
+msgstr "Open"
