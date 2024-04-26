@@ -145,7 +145,7 @@ msgstr "Thank you. The following submission will be processed for a position on 
 
 #, elixir-autogen, elixir-format
 msgid "settings.form.metrics.hint"
-msgstr "Please provide the metric titles for the leaderboards, separated by comma's (e.g. F1, Precision, Recall, Accuracy), check out 'Preview' to view the result."
+msgstr "Metric titles (e.g. 'F1 score,Accuracy') are used for the leaderboard tabs (see 'Preview') and need to match with the headers in the results CSV file."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submissions.title"
@@ -153,7 +153,7 @@ msgstr "Submissions"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.scores"
-msgstr "Scores"
+msgstr "Results"
 
 #, elixir-autogen, elixir-format
 msgid "title.benchmark_leaderboard"
@@ -181,7 +181,7 @@ msgstr "Upload file"
 
 #, elixir-autogen, elixir-format
 msgid "settings.label.metrics"
-msgstr "Metrics"
+msgstr "Metric titles"
 
 #, elixir-autogen, elixir-format
 msgid "settings.label.subtitle"
@@ -189,7 +189,7 @@ msgstr "Subtitle"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.label.title"
-msgstr "Title"
+msgstr "Leaderboard title"
 
 #, elixir-autogen, elixir-format
 msgid "settings.label.visibility"
