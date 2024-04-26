@@ -8,7 +8,15 @@ defmodule Systems.Workflow.ToolRefView do
   alias Systems.Workflow
 
   def update(
-        %{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible, user: user},
+        %{
+          id: id,
+          title: title,
+          tool_ref: tool_ref,
+          task: task,
+          visible: visible,
+          user: user,
+          timezone: timezone
+        },
         socket
       ) do
     {
@@ -20,7 +28,8 @@ defmodule Systems.Workflow.ToolRefView do
         tool_ref: tool_ref,
         task: task,
         visible: visible,
-        user: user
+        user: user,
+        timezone: timezone
       )
       |> reset_fabric()
       |> update_launcher()
@@ -37,10 +46,18 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   def update_launcher(
-        %{assigns: %{tool_ref: %{id: id}, user: user, title: title, visible: visible}} = socket,
+        %{
+          assigns: %{
+            tool_ref: %{id: id},
+            user: user,
+            timezone: timezone,
+            title: title,
+            visible: visible
+          }
+        } = socket,
         %{module: module, params: params}
       ) do
-    params = Map.merge(params, %{user: user, title: title, visible: visible})
+    params = Map.merge(params, %{user: user, timezone: timezone, title: title, visible: visible})
     child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
     socket |> show_child(child)
   end

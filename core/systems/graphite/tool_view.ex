@@ -7,9 +7,7 @@ defmodule Systems.Graphite.ToolView do
   alias Systems.Graphite
 
   @impl true
-  def update(%{tool: tool, user: user}, socket) do
-    timezone = Map.get(socket.assigns, :timezone, nil)
-
+  def update(%{tool: tool, user: user, timezone: timezone}, socket) do
     {
       :ok,
       socket
@@ -119,19 +117,9 @@ defmodule Systems.Graphite.ToolView do
   end
 
   @impl true
-  def handle_event("timezone", timezone, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(timezone: timezone)
-      |> update_child(:submissions_form)
-    }
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
-      <div id={"#{@id}_timezone"} class="timezone" phx-hook="TimeZone">
+      <div>
         <Area.content>
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-graphite", "submission.title") %></Text.title2>

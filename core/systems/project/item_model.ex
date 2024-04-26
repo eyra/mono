@@ -192,15 +192,14 @@ defmodule Systems.Project.ItemModel do
 
     defp get_assignment_info(%Assignment.Model{info: info}) do
       subject_count = Map.get(info, :subject_count) || 0
-      [dgettext("eyra-project", "assignment.participant.info", count: subject_count)]
+      [dngettext("eyra-project", "1 participant", "* participants", subject_count)]
     end
 
     defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do
       deadline_str = format_datetime(tool.deadline, timezone)
       nr_submissions = Graphite.Public.get_submission_count(tool)
 
-      submission_info =
-        dgettext("eyra-project", "leaderboard.submission.info", count: nr_submissions)
+      submission_info = dngettext("eyra-project", "1 submission", "* submissions", nr_submissions)
 
       deadline_info =
         dgettext("eyra-project", "leaderboard.deadline.info", deadline: deadline_str)
@@ -213,7 +212,7 @@ defmodule Systems.Project.ItemModel do
     end
 
     defp format_datetime(nil, _timezone),
-      do: dgettext("eyra-project", "leaderboard.unspecified.label")
+      do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
 
     defp format_datetime(_, nil), do: ""
 

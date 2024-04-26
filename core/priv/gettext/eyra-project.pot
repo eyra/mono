@@ -168,11 +168,7 @@ msgid "form.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.unspecified.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "assignment.participant.info"
+msgid "leaderboard.unspecified.deadline.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -180,5 +176,13 @@ msgid "leaderboard.deadline.info"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.submission.info"
-msgstr ""
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "1 submission"
+msgid_plural "* submissions"
+msgstr[0] ""
+msgstr[1] ""

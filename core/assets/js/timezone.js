@@ -7,7 +7,7 @@ export const TimeZone = {
   sendToServer() {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    console.log("TIMEZONE", timezone);
+    console.log("[TimeZone]", timezone);
 
     let csrfToken = document
       .querySelector("meta[name='csrf-token']")
@@ -15,23 +15,21 @@ export const TimeZone = {
 
     if (typeof window.localStorage != "undefined") {
       try {
-        // if we sent the timezone already or the timezone changed since last time we sent
-        if (!localStorage["timezone"] || localStorage["timezone"] != timezone) {
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", "/api/timezone", true);
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.setRequestHeader("x-csrf-token", csrfToken);
-          xhr.onreadystatechange = function () {
-            if (
-              this.readyState === XMLHttpRequest.DONE &&
-              this.status === 200
-            ) {
-              localStorage["timezone"] = timezone;
-            }
-          };
-          xhr.send(`{"timezone": "${timezone}"}`);
-        }
-      } catch (e) {}
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/timezone", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("x-csrf-token", csrfToken);
+        xhr.onreadystatechange = function () {
+          console.log(
+            "[TimeZone] POST onreadystatechange",
+            this.status,
+            this.readyState
+          );
+        };
+        xhr.send(`{"timezone": "${timezone}"}`);
+      } catch (e) {
+        console.log("[TimeZone] Error while sending timezone to server", e);
+      }
     }
   },
 };

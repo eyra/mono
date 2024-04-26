@@ -26,6 +26,7 @@ defmodule Systems.Assignment.CrewWorkView do
           support_page_ref: support_page_ref,
           crew: crew,
           user: user,
+          timezone: timezone,
           panel_info: panel_info,
           tester?: tester?
         },
@@ -46,6 +47,7 @@ defmodule Systems.Assignment.CrewWorkView do
         support_page_ref: support_page_ref,
         crew: crew,
         user: user,
+        timezone: timezone,
         tester?: tester?,
         panel_info: panel_info,
         tool_started: tool_started,
@@ -181,6 +183,7 @@ defmodule Systems.Assignment.CrewWorkView do
         :tool_ref_view,
         %{
           user: user,
+          timezone: timezone,
           launcher: %{module: _, params: _},
           selected_item: {%{title: title, tool_ref: tool_ref}, task}
         } = assigns
@@ -192,7 +195,8 @@ defmodule Systems.Assignment.CrewWorkView do
         tool_ref: tool_ref,
         task: task,
         visible: tool_visible?(assigns),
-        user: user
+        user: user,
+        timezone: timezone
       }
     }
   end

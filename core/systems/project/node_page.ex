@@ -125,16 +125,6 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def handle_event("timezone", timezone, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(timezone: timezone)
-      |> update_view_model()
-    }
-  end
-
-  @impl true
   def handle_info({:handle_auto_save_done, :node_page_popup}, socket) do
     {
       :noreply,
@@ -152,8 +142,6 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <.workspace title={@vm.title} menus={@menus}>
-      <div id={"#{@id}_timezone"} class="timezone" phx-hook="TimeZone"/>
-
       <%= if @popup do %>
         <.popup>
           <div class="w-popup-md">

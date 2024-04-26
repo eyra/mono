@@ -36,11 +36,13 @@ defmodule Systems.Graphite.SubmissionForm do
   end
 
   defp update_humanized_deadline(%{assigns: %{timezone: nil}} = socket) do
-    assign(socket, humanized_deadline: "<deadline?>")
+    assign(socket, humanized_deadline: "<timezone?>")
   end
 
   defp update_humanized_deadline(%{assigns: %{tool: %{deadline: nil}}} = socket) do
-    assign(socket, humanized_deadline: "<deadline?>")
+    assign(socket,
+      humanized_deadline: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
+    )
   end
 
   defp update_humanized_deadline(
