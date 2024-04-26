@@ -209,7 +209,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "anonymous.label"
-msgstr "Anoniem"
+msgstr "Geblindeerd"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "leaderboard.offline.title"
