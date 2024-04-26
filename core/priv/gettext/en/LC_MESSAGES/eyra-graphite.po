@@ -177,7 +177,7 @@ msgstr "Select"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "label.upload_file"
-msgstr "Upload file"
+msgstr "Select csv file with results"
 
 #, elixir-autogen, elixir-format
 msgid "settings.label.metrics"
@@ -217,7 +217,7 @@ msgstr "Unavailable at this moment"
 
 #, elixir-autogen, elixir-format
 msgid "scores.csv.headers.message"
-msgstr "Below you can upload the score CSV file. The following headers should be present in the file:"
+msgstr "Upload the results from running the submissions on the holdout dataset. Make sure that the CSV file contains the headers as stated below."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.scores.forward"
