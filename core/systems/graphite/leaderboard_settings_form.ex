@@ -66,7 +66,6 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
         <.spacing value="L" />
         <Text.title2><%= dgettext("eyra-graphite", "settings.title.settings") %></Text.title2>
         <.text_input form={form} field={:title} label_text={dgettext("eyra-graphite", "settings.label.title")} />
-        <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-graphite", "settings.label.subtitle")} />
         <.list_input form={form} field={:metrics} label_text={dgettext("eyra-graphite", "settings.label.metrics")} value={metrics_to_string(@changeset.data.metrics)} />
         <Text.hint><%= dgettext("eyra-graphite", "settings.form.metrics.hint") %></Text.hint>
         <.spacing value="M"/>
