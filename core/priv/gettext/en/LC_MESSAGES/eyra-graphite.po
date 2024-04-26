@@ -137,7 +137,7 @@ msgstr "Submission deadline passed"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "submission.open.message"
-msgstr "You can submit your method until %{deadline}"
+msgstr "You can submit your method until %{deadline} in your time zone (24-hour time format)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "locked.submission.message"
