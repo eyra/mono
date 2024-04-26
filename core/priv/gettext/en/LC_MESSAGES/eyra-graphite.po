@@ -205,7 +205,7 @@ msgstr "Export submissions"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.submissions.forward"
-msgstr "Got to Submissions"
+msgstr "Go to Submissions"
 
 #, elixir-autogen, elixir-format
 msgid "anonymous.label"
