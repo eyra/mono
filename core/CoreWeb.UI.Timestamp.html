@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -80,6 +80,8 @@ core
 
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
+
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
 
     </ul>
   </div>
@@ -155,6 +157,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#convert/2" translate="no">convert(datetime, timezone \\ &quot;Etc/UTC&quot;)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#days_until/1" translate="no">days_until(date)</a>
 
       </div>
@@ -163,7 +173,31 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#format!/1" translate="no">format!(datetime)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#format_date!/1" translate="no">format_date!(datetime)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#format_user_input_date/1" translate="no">format_user_input_date(timestamp)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#format_user_input_datetime/1" translate="no">format_user_input_datetime(timestamp)</a>
 
       </div>
 
@@ -187,7 +221,15 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#humanize/1" translate="no">humanize(timestamp)</a>
+        <a href="#humanize/2" translate="no">humanize(datetime, opts \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#humanize/3" translate="no">humanize(date, time, opts)</a>
 
       </div>
 
@@ -252,6 +294,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#parse_user_input_date/2" translate="no">parse_user_input_date(input, timezone \\ &quot;Etc/UTC&quot;)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#parse_user_input_datetime/2" translate="no">parse_user_input_datetime(input, timezone)</a>
 
       </div>
 
@@ -328,7 +378,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">after?(date1, date2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L90" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L94" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -352,7 +402,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">apply_timezone(timestamp, timezone \\ &quot;Europe/Amsterdam&quot;)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L196" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L247" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -374,7 +424,31 @@ Functions
     </a>
     <h1 class="signature" translate="no">before?(date1, date2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L105" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L109" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="convert/2">
+
+    <span id="convert/1"></span>
+
+  <div class="detail-header">
+    <a href="#convert/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">convert(datetime, timezone \\ &quot;Etc/UTC&quot;)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -396,7 +470,51 @@ Functions
     </a>
     <h1 class="signature" translate="no">days_until(date)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L54" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L58" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="format!/1">
+
+  <div class="detail-header">
+    <a href="#format!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">format!(datetime)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L157" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="format_date!/1">
+
+  <div class="detail-header">
+    <a href="#format_date!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">format_date!(datetime)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -418,7 +536,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">format_user_input_date(timestamp)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L132" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L143" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="format_user_input_datetime/1">
+
+  <div class="detail-header">
+    <a href="#format_user_input_datetime/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">format_user_input_datetime(timestamp)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -440,7 +580,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">from_date_and_time(date, time)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L16" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L20" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -462,7 +602,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">future?(date)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L74" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L78" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -475,16 +615,40 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="humanize/1">
+<section class="detail" id="humanize/2">
+
+    <span id="humanize/1"></span>
 
   <div class="detail-header">
-    <a href="#humanize/1" class="detail-link" title="Link to this function">
+    <a href="#humanize/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">humanize(timestamp)</h1>
+    <h1 class="signature" translate="no">humanize(datetime, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L147" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L173" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="humanize/3">
+
+  <div class="detail-header">
+    <a href="#humanize/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">humanize(date, time, opts)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L187" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -506,7 +670,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">humanize_date(date)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L143" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L169" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -528,7 +692,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">humanize_en(timestamp)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L229" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -550,7 +714,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">humanize_time(timestamp)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L139" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L165" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -572,7 +736,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">naive_from_now(shift_minutes)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L47" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L51" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -594,7 +758,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">naive_now()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L41" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L45" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -618,7 +782,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">now(timezone \\ &quot;Etc/UTC&quot;)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L27" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L31" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -640,7 +804,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">one_week_after(date)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L58" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L62" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -664,7 +828,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">parse_user_input_date(input, timezone \\ &quot;Etc/UTC&quot;)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L120" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L124" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="parse_user_input_datetime/2">
+
+  <div class="detail-header">
+    <a href="#parse_user_input_datetime/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">parse_user_input_datetime(input, timezone)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L136" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -686,7 +872,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">past?(date)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L82" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L86" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -708,7 +894,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">shift_days(date, days)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L70" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L74" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -730,7 +916,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">shift_minutes(date, minutes)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L66" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L70" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -752,7 +938,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">to_date(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L12" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -776,7 +962,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">tomorrow(timezone \\ &quot;Etc/UTC&quot;)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L31" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L35" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -800,7 +986,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">yesterday(timezone \\ &quot;Etc/UTC&quot;)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L36" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/ui/timestamp.ex#L40" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

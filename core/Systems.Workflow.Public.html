@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -80,6 +80,8 @@ core
 
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
+
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
 
     </ul>
   </div>
@@ -175,6 +177,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#get_tool_ref_by_tool/2" translate="no">get_tool_ref_by_tool(tool, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#item_count/1" translate="no">item_count(model)</a>
 
       </div>
@@ -191,6 +201,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#list_tools/2" translate="no">list_tools(workflow, special)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#prepare_item/3" translate="no">prepare_item(workflow, position, tool_ref)</a>
 
       </div>
@@ -199,7 +217,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_tool/3" translate="no">prepare_tool(arg1, attrs, auth_node \\ Authorization.prepare_node())</a>
+        <a href="#prepare_tool/3" translate="no">prepare_tool(atom, attrs, auth_node)</a>
 
       </div>
 
@@ -292,7 +310,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_item(workflow_id, item, director)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L80" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -314,7 +332,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete(item)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L140" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -386,7 +404,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_item_by_tool!(field, tool_id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L54" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L59" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -410,6 +428,30 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_item_by_tool_ref(tool_ref, preload \\ [])</h1>
 
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L45" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_tool_ref_by_tool/2">
+
+    <span id="get_tool_ref_by_tool/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_tool_ref_by_tool/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_tool_ref_by_tool(tool, preload \\ [])</h1>
+
       <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L40" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
@@ -432,7 +474,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">item_count(model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L99" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L122" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -469,6 +511,28 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="list_tools/2">
+
+  <div class="detail-header">
+    <a href="#list_tools/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_tools(workflow, special)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L112" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="prepare_item/3">
 
   <div class="detail-header">
@@ -478,7 +542,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_item(workflow, position, tool_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L107" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L130" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -493,16 +557,14 @@ Functions
 </section>
 <section class="detail" id="prepare_tool/3">
 
-    <span id="prepare_tool/2"></span>
-
   <div class="detail-header">
     <a href="#prepare_tool/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">prepare_tool(arg1, attrs, auth_node \\ Authorization.prepare_node())</h1>
+    <h1 class="signature" translate="no">prepare_tool(atom, attrs, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L120" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L143" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -524,7 +586,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_tool_ref(special, tool_type, tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L137" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -546,7 +608,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_update_position(arg)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L218" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -568,7 +630,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rearrange(items)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L211" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L232" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -590,7 +652,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">rearrange(items, old, new)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L203" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L224" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -612,7 +674,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_position(item_model, new)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L153" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L174" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -634,7 +696,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">validate_new_position(items, pos)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L195" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L216" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -656,7 +718,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">validate_old_position(items, id, pos)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L175" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -678,7 +740,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">validate_old_position(list, id, pos, count)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L179" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/workflow/_public.ex#L200" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

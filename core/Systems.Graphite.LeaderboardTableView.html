@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Project.ToolRefModel — core v0.1.0</title>
+    <title>Systems.Graphite.LeaderboardTableView — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -81,6 +81,8 @@ core
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
 
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+
     </ul>
   </div>
 
@@ -100,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Project.ToolRefModel</span> 
+  <span translate="no">Systems.Graphite.LeaderboardTableView</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -127,7 +129,17 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#auth_tree/1" translate="no">auth_tree(tool_ref)</a>
+        <a href="#compose/2" translate="no">compose(id, assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Fabric.html#c:compose/2"><code class="inline">Fabric.compose/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compose_child/2" translate="no">compose_child(socket, child_name)</a>
 
       </div>
 
@@ -135,7 +147,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#external_path/2" translate="no">external_path(arg1, next_id)</a>
+        <a href="#compose_element/2" translate="no">compose_element(socket, element_id)</a>
 
       </div>
 
@@ -143,7 +155,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#flatten/1" translate="no">flatten(tool_ref)</a>
+        <a href="#current_user/1" translate="no">current_user(arg1)</a>
 
       </div>
 
@@ -151,7 +163,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#form/1" translate="no">form(tool_ref)</a>
+        <a href="#reset_fabric/1" translate="no">reset_fabric(socket)</a>
 
       </div>
 
@@ -159,17 +171,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#preload_graph/1" translate="no">preload_graph(fields)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#tag/1" translate="no">tag(tool_ref_model)</a>
+        <a href="#update_child/2" translate="no">update_child(context, child_name)</a>
 
       </div>
 
@@ -177,7 +179,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tool/1" translate="no">tool(map)</a>
+        <a href="#update_defaults/3" translate="no">update_defaults(socket, props, defaults)</a>
 
       </div>
 
@@ -185,7 +187,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tool_field/1" translate="no">tool_field(tool)</a>
+        <a href="#update_target/2" translate="no">update_target(pid, message)</a>
 
       </div>
 
@@ -193,7 +195,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tool_id_field/1" translate="no">tool_id_field(tool)</a>
+        <a href="#version/0" translate="no">version()</a>
 
       </div>
 
@@ -213,16 +215,38 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="auth_tree/1">
+<section class="detail" id="compose/2">
 
   <div class="detail-header">
-    <a href="#auth_tree/1" class="detail-link" title="Link to this function">
+    <a href="#compose/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">auth_tree(tool_ref)</h1>
+    <h1 class="signature" translate="no">compose(id, assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L71" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Fabric.html#c:compose/2"><code class="inline">Fabric.compose/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="compose_child/2">
+
+  <div class="detail-header">
+    <a href="#compose_child/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">compose_child(socket, child_name)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -235,16 +259,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="external_path/2">
+<section class="detail" id="compose_element/2">
 
   <div class="detail-header">
-    <a href="#external_path/2" class="detail-link" title="Link to this function">
+    <a href="#compose_element/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">external_path(arg1, next_id)</h1>
+    <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L79" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -257,16 +281,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="flatten/1">
+<section class="detail" id="current_user/1">
 
   <div class="detail-header">
-    <a href="#flatten/1" class="detail-link" title="Link to this function">
+    <a href="#current_user/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">flatten(tool_ref)</h1>
+    <h1 class="signature" translate="no">current_user(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -279,16 +303,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="form/1">
+<section class="detail" id="reset_fabric/1">
 
   <div class="detail-header">
-    <a href="#form/1" class="detail-link" title="Link to this function">
+    <a href="#reset_fabric/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">form(tool_ref)</h1>
+    <h1 class="signature" translate="no">reset_fabric(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -301,38 +325,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="preload_graph/1">
+<section class="detail" id="update_child/2">
 
   <div class="detail-header">
-    <a href="#preload_graph/1" class="detail-link" title="Link to this function">
+    <a href="#update_child/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">preload_graph(fields)</h1>
+    <h1 class="signature" translate="no">update_child(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L3" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="tag/1">
-
-  <div class="detail-header">
-    <a href="#tag/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">tag(tool_ref_model)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L95" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -345,16 +347,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="tool/1">
+<section class="detail" id="update_defaults/3">
 
   <div class="detail-header">
-    <a href="#tool/1" class="detail-link" title="Link to this function">
+    <a href="#update_defaults/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tool(map)</h1>
+    <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L88" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -367,16 +369,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="tool_field/1">
+<section class="detail" id="update_target/2">
 
   <div class="detail-header">
-    <a href="#tool_field/1" class="detail-link" title="Link to this function">
+    <a href="#update_target/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tool_field(tool)</h1>
+    <h1 class="signature" translate="no">update_target(pid, message)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -389,16 +391,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="tool_id_field/1">
+<section class="detail" id="version/0">
 
   <div class="detail-header">
-    <a href="#tool_id_field/1" class="detail-link" title="Link to this function">
+    <a href="#version/0" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tool_id_field(tool)</h1>
+    <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/tool_ref_model.ex#L86" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_table_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

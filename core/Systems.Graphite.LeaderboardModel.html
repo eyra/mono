@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -81,6 +81,8 @@ core
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
 
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+
     </ul>
   </div>
 
@@ -111,6 +113,13 @@ core
 </h1>
 
 
+  <section id="moduledoc">
+<p>Data model for the <code class="inline">graphite_leaderboard</code> table.</p><h1>Fields</h1><ul><li>title: :string, Title of the leaderboard as will be displayed on the platform</li><li>subtitle: :string, Short subtitle for the leaderboard</li><li>status: :enum (?)</li><li>metrics: {:array, :string}, List of metrics that will be tracked for
+leaderboard.</li><li>visibility: Enum with values<ul><li>public: everybody (including anonymous users) can see team names</li><li>private: team names are hidden for everybody</li></ul></li><li>open_date: :naive_datetime, datetime after which everybody can see team names
+for the scores on the leaderboard.</li><li>generation_date: :naive_datetime, the day the scores for the leaderboard were
+generated</li><li>tool_id: connects to <a href="Systems.Graphite.ToolModel.html"><code class="inline">Systems.Graphite.ToolModel</code></a></li><li>auth_node_id: connects to <a href="Core.Authorization.Node.html"><code class="inline">Core.Authorization.Node</code></a></li></ul>
+  </section>
+
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
@@ -127,7 +136,31 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#auth_tree/1" translate="no">auth_tree(leaderboard_model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#changeset/2" translate="no">changeset(tool, params)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#offline?/1" translate="no">offline?(leaderboard)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#online?/1" translate="no">online?(leaderboard_model)</a>
 
       </div>
 
@@ -140,6 +173,14 @@ core
       </div>
 
         <div class="summary-synopsis"><p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tag/1" translate="no">tag(leaderboard)</a>
+
+      </div>
 
     </div>
 
@@ -157,6 +198,28 @@ core
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="auth_tree/1">
+
+  <div class="detail-header">
+    <a href="#auth_tree/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">auth_tree(leaderboard_model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L76" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="changeset/2">
 
   <div class="detail-header">
@@ -166,7 +229,51 @@ Functions
     </a>
     <h1 class="signature" translate="no">changeset(tool, params)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L22" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L52" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="offline?/1">
+
+  <div class="detail-header">
+    <a href="#offline?/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">offline?(leaderboard)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L86" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="online?/1">
+
+  <div class="detail-header">
+    <a href="#online?/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">online?(leaderboard_model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L82" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -188,7 +295,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">preload_graph(fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L21" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -199,6 +306,28 @@ Functions
   <section class="docstring">
 
 <p>Callback implementation for <a href="Frameworks.Utility.Schema.html#c:preload_graph/1"><code class="inline">Frameworks.Utility.Schema.preload_graph/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="tag/1">
+
+  <div class="detail-header">
+    <a href="#tag/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">tag(leaderboard)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_model.ex#L58" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
   </section>
 </section>
 

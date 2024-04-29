@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -81,6 +81,8 @@ core
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
 
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+
     </ul>
   </div>
 
@@ -135,7 +137,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#count_leaderboard_versions/0" translate="no">count_leaderboard_versions()</a>
+        <a href="#can_update?/1" translate="no">can_update?(submission_model)</a>
 
       </div>
 
@@ -144,6 +146,46 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#delete/1" translate="no">delete(submission)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_challenge/2" translate="no">get_challenge(leaderboard_model, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_leaderboard!/2" translate="no">get_leaderboard!(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_leaderboard_by_tool/2" translate="no">get_leaderboard_by_tool(tool, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_participants/1" translate="no">get_participants(leaderboard)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_submission/1" translate="no">get_submission(id)</a>
 
       </div>
 
@@ -167,6 +209,22 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#get_submission_count/1" translate="no">get_submission_count(tool)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_submissions/1" translate="no">get_submissions(tool)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#get_tool!/2" translate="no">get_tool!(id, preload \\ [])</a>
 
       </div>
@@ -175,7 +233,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#import_csv_lines/1" translate="no">import_csv_lines(csv_lines)</a>
+        <a href="#import_scores/2" translate="no">import_scores(leaderboard, scores_parse_result)</a>
 
       </div>
 
@@ -183,7 +241,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#import_entries/1" translate="no">import_entries(entries)</a>
+        <a href="#list_leaderboards/2" translate="no">list_leaderboards(model, preload \\ [])</a>
 
       </div>
 
@@ -191,7 +249,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_leaderboard_categories/2" translate="no">list_leaderboard_categories(tool_id, preload \\ [])</a>
+        <a href="#list_submissions/2" translate="no">list_submissions(struct, preload \\ [])</a>
 
       </div>
 
@@ -199,7 +257,15 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_submissions/2" translate="no">list_submissions(tool_id, preload \\ [])</a>
+        <a href="#open_for_submissions?/1" translate="no">open_for_submissions?(tool_id)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#prepare_leaderboard/2" translate="no">prepare_leaderboard(attrs, auth_node \\ Core.Authorization.prepare_node())</a>
 
       </div>
 
@@ -224,6 +290,14 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#set_tool_status/2" translate="no">set_tool_status(tool, status)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_leaderboard/2" translate="no">update_leaderboard(leaderboard, attrs)</a>
 
       </div>
 
@@ -260,7 +334,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">add_submission(tool, user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L62" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L115" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -273,16 +347,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="count_leaderboard_versions/0">
+<section class="detail" id="can_update?/1">
 
   <div class="detail-header">
-    <a href="#count_leaderboard_versions/0" class="detail-link" title="Link to this function">
+    <a href="#can_update?/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">count_leaderboard_versions()</h1>
+    <h1 class="signature" translate="no">can_update?(submission_model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L215" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L214" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -304,7 +378,123 @@ Functions
     </a>
     <h1 class="signature" translate="no">delete(submission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L227" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L210" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_challenge/2">
+
+    <span id="get_challenge/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_challenge/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_challenge(leaderboard_model, preload \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L14" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_leaderboard!/2">
+
+    <span id="get_leaderboard!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_leaderboard!/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_leaderboard!(id, preload \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L18" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_leaderboard_by_tool/2">
+
+    <span id="get_leaderboard_by_tool/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_leaderboard_by_tool/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_leaderboard_by_tool(tool, preload \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L23" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_participants/1">
+
+  <div class="detail-header">
+    <a href="#get_participants/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_participants(leaderboard)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L75" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_submission/1">
+
+  <div class="detail-header">
+    <a href="#get_submission/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_submission(id)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L44" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -328,7 +518,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_submission(tool, user, role, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L26" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L56" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -352,7 +542,51 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_submission!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L21" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L51" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_submission_count/1">
+
+  <div class="detail-header">
+    <a href="#get_submission_count/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_submission_count(tool)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L70" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_submissions/1">
+
+  <div class="detail-header">
+    <a href="#get_submissions/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_submissions(tool)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L65" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -376,7 +610,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">get_tool!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L16" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L39" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -389,16 +623,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="import_csv_lines/1">
+<section class="detail" id="import_scores/2">
 
   <div class="detail-header">
-    <a href="#import_csv_lines/1" class="detail-link" title="Link to this function">
+    <a href="#import_scores/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">import_csv_lines(csv_lines)</h1>
+    <h1 class="signature" translate="no">import_scores(leaderboard, scores_parse_result)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L115" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L171" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -411,40 +645,18 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="import_entries/1">
+<section class="detail" id="list_leaderboards/2">
+
+    <span id="list_leaderboards/1"></span>
 
   <div class="detail-header">
-    <a href="#import_entries/1" class="detail-link" title="Link to this function">
+    <a href="#list_leaderboards/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">import_entries(entries)</h1>
+    <h1 class="signature" translate="no">list_leaderboards(model, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L122" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="list_leaderboard_categories/2">
-
-    <span id="list_leaderboard_categories/1"></span>
-
-  <div class="detail-header">
-    <a href="#list_leaderboard_categories/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">list_leaderboard_categories(tool_id, preload \\ [])</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L191" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L29" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -466,9 +678,55 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">list_submissions(tool_id, preload \\ [])</h1>
+    <h1 class="signature" translate="no">list_submissions(struct, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L183" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L156" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="open_for_submissions?/1">
+
+  <div class="detail-header">
+    <a href="#open_for_submissions?/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">open_for_submissions?(tool_id)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L218" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_leaderboard/2">
+
+    <span id="prepare_leaderboard/1"></span>
+
+  <div class="detail-header">
+    <a href="#prepare_leaderboard/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">prepare_leaderboard(attrs, auth_node \\ Core.Authorization.prepare_node())</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L93" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -490,7 +748,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_submission(attrs, user, tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L52" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L105" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -514,7 +772,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">prepare_tool(attrs, auth_node \\ Core.Authorization.prepare_node())</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L46" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L99" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -536,7 +794,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">set_tool_status(tool, status)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L35" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L82" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_leaderboard/2">
+
+  <div class="detail-header">
+    <a href="#update_leaderboard/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_leaderboard(leaderboard, attrs)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L131" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -558,7 +838,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_submission(submission, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L71" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_public.ex#L139" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

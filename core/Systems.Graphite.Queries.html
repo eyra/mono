@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -81,6 +81,8 @@ core
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
 
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+
     </ul>
   </div>
 
@@ -100,7 +102,7 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/instruction/_queries.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -127,6 +129,86 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#leaderboard_query/0" translate="no">leaderboard_query()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#leaderboard_query/1" translate="no">leaderboard_query(tool_model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#leaderboards_by_tools/1" translate="no">leaderboards_by_tools(tools)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#participant_query/0" translate="no">participant_query()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#participants_by_submissions/1" translate="no">participants_by_submissions(submissions)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#score_ids/1" translate="no">score_ids(selector)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#score_query/0" translate="no">score_query()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#score_query/1" translate="no">score_query(leaderboard_model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#scores_by_submissions/1" translate="no">scores_by_submissions(submissions)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submission_ids/1" translate="no">submission_ids(selector)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#submission_query/0" translate="no">submission_query()</a>
 
       </div>
@@ -135,7 +217,55 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#submission_query/3" translate="no">submission_query(tool_model, user_ref, role)</a>
+        <a href="#submission_query/1" translate="no">submission_query(arg1)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submission_query/3" translate="no">submission_query(leaderboard, user_ref, role)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submissions_by_pattern/2" translate="no">submissions_by_pattern(field, pattern)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#submissions_by_prefix/2" translate="no">submissions_by_prefix(field, prefix)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tool_ids/1" translate="no">tool_ids(selector)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tool_query/0" translate="no">tool_query()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tool_query/1" translate="no">tool_query(model)</a>
 
       </div>
 
@@ -155,6 +285,226 @@ core
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="leaderboard_query/0">
+
+  <div class="detail-header">
+    <a href="#leaderboard_query/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">leaderboard_query()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L14" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="leaderboard_query/1">
+
+  <div class="detail-header">
+    <a href="#leaderboard_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">leaderboard_query(tool_model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L18" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="leaderboards_by_tools/1">
+
+  <div class="detail-header">
+    <a href="#leaderboards_by_tools/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">leaderboards_by_tools(tools)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L24" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="participant_query/0">
+
+  <div class="detail-header">
+    <a href="#participant_query/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">participant_query()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L146" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="participants_by_submissions/1">
+
+  <div class="detail-header">
+    <a href="#participants_by_submissions/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">participants_by_submissions(submissions)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L150" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="score_ids/1">
+
+  <div class="detail-header">
+    <a href="#score_ids/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">score_ids(selector)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L53" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="score_query/0">
+
+  <div class="detail-header">
+    <a href="#score_query/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">score_query()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L33" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="score_query/1">
+
+  <div class="detail-header">
+    <a href="#score_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">score_query(leaderboard_model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L37" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="scores_by_submissions/1">
+
+  <div class="detail-header">
+    <a href="#scores_by_submissions/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">scores_by_submissions(submissions)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L43" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="submission_ids/1">
+
+  <div class="detail-header">
+    <a href="#submission_ids/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submission_ids(selector)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L112" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="submission_query/0">
 
   <div class="detail-header">
@@ -164,7 +514,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">submission_query()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/instruction/_queries.ex#L11" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L61" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="submission_query/1">
+
+  <div class="detail-header">
+    <a href="#submission_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submission_query(arg1)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L65" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -184,9 +556,119 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">submission_query(tool_model, user_ref, role)</h1>
+    <h1 class="signature" translate="no">submission_query(leaderboard, user_ref, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/instruction/_queries.ex#L15" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L90" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="submissions_by_pattern/2">
+
+  <div class="detail-header">
+    <a href="#submissions_by_pattern/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submissions_by_pattern(field, pattern)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L103" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="submissions_by_prefix/2">
+
+  <div class="detail-header">
+    <a href="#submissions_by_prefix/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">submissions_by_prefix(field, prefix)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L108" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="tool_ids/1">
+
+  <div class="detail-header">
+    <a href="#tool_ids/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">tool_ids(selector)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L138" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="tool_query/0">
+
+  <div class="detail-header">
+    <a href="#tool_query/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">tool_query()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L120" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="tool_query/1">
+
+  <div class="detail-header">
+    <a href="#tool_query/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">tool_query(model)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/_queries.ex#L124" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

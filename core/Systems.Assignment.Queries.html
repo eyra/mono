@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Graphite.LeaderboardCategoryView — core v0.1.0</title>
+    <title>Systems.Assignment.Queries — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-22CB7CCF.js"></script>
+    <script src="dist/sidebar_items-6FC2D380.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -81,6 +81,8 @@ core
         <li><a id="modules-list-link" href="#full-list">Modules</a></li>
 
 
+        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+
     </ul>
   </div>
 
@@ -100,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_queries.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Graphite.LeaderboardCategoryView</span> 
+  <span translate="no">Systems.Assignment.Queries</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -127,27 +129,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#category/1" translate="no">category(assigns)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">name</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">scores</code> (<code class="inline">:list</code>) (required)</li></ul></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#cell/1" translate="no">cell(assigns)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">content</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">layout</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">top</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">bottom</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">left</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">right</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#assignment_ids/2" translate="no">assignment_ids(selector, special)</a>
 
       </div>
 
@@ -155,17 +137,23 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#row/1" translate="no">row(assigns)</a>
+        <a href="#assignment_query/0" translate="no">assignment_query()</a>
 
       </div>
-
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">cells</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">layout</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">top</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">bottom</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#version/0" translate="no">version()</a>
+        <a href="#assignment_query/1" translate="no">assignment_query(special)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#assignment_query/2" translate="no">assignment_query(node_model, special)</a>
 
       </div>
 
@@ -185,72 +173,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="category/1">
+<section class="detail" id="assignment_ids/2">
 
   <div class="detail-header">
-    <a href="#category/1" class="detail-link" title="Link to this function">
+    <a href="#assignment_ids/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">category(assigns)</h1>
+    <h1 class="signature" translate="no">assignment_ids(selector, special)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L28" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<h2 id="category/1-attributes" class="section-heading">
-  <a href="#category/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
-  </a>
-  Attributes
-</h2>
-<ul><li><code class="inline">name</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">scores</code> (<code class="inline">:list</code>) (required)</li></ul>
-  </section>
-</section>
-<section class="detail" id="cell/1">
-
-  <div class="detail-header">
-    <a href="#cell/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">cell(assigns)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L103" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<h2 id="cell/1-attributes" class="section-heading">
-  <a href="#cell/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
-  </a>
-  Attributes
-</h2>
-<ul><li><code class="inline">content</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">layout</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">top</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">bottom</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">left</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">right</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul>
-  </section>
-</section>
-<section class="detail" id="current_user/1">
-
-  <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_queries.ex#L31" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -263,16 +195,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="row/1">
+<section class="detail" id="assignment_query/0">
 
   <div class="detail-header">
-    <a href="#row/1" class="detail-link" title="Link to this function">
+    <a href="#assignment_query/0" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">row(assigns)</h1>
+    <h1 class="signature" translate="no">assignment_query()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L76" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_queries.ex#L11" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -282,25 +214,41 @@ Functions
 
   <section class="docstring">
 
-<h2 id="row/1-attributes" class="section-heading">
-  <a href="#row/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
-  </a>
-  Attributes
-</h2>
-<ul><li><code class="inline">cells</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">layout</code> (<code class="inline">:list</code>) (required)</li><li><code class="inline">top</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">bottom</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul>
+
   </section>
 </section>
-<section class="detail" id="version/0">
+<section class="detail" id="assignment_query/1">
 
   <div class="detail-header">
-    <a href="#version/0" class="detail-link" title="Link to this function">
+    <a href="#assignment_query/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">version()</h1>
+    <h1 class="signature" translate="no">assignment_query(special)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_category_view.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_queries.ex#L15" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="assignment_query/2">
+
+  <div class="detail-header">
+    <a href="#assignment_query/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">assignment_query(node_model, special)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/_queries.ex#L21" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
