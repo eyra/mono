@@ -1,6 +1,7 @@
 defmodule Systems.Project.NodePage do
   use CoreWeb, :live_view_fabric
   use Fabric.LiveView, CoreWeb.Layouts
+  use CoreWeb.LiveTimezone
 
   use CoreWeb.Layouts.Workspace.Component, :projects
   use CoreWeb.UI.PlainDialog
@@ -15,7 +16,7 @@ defmodule Systems.Project.NodePage do
   }
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(%{"id" => id}, session, socket) do
     model =
       Project.Public.get_node!(String.to_integer(id), Project.NodeModel.preload_graph(:down))
 
@@ -23,10 +24,12 @@ defmodule Systems.Project.NodePage do
       :ok,
       socket
       |> assign(
+        id: id,
         model: model,
         popup: nil,
         focussed_item: nil
       )
+      |> update_timezone(session)
       |> observe_view_model()
       |> update_menus()
     }
@@ -139,7 +142,6 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <.workspace title={@vm.title} menus={@menus}>
-
       <%= if @popup do %>
         <.popup>
           <div class="w-popup-md">

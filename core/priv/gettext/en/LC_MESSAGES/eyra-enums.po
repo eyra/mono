@@ -417,3 +417,27 @@ msgstr "Download data"
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.fork_instruction"
 msgstr "Prepare method"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.leaderboard"
+msgstr "Benchmark Leaderboard"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.concept"
+msgstr "Concept"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.offline"
+msgstr "Offline"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_status.online"
+msgstr "Online"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.private"
+msgstr "Private"
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.public"
+msgstr "Public"

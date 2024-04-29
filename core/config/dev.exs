@@ -94,6 +94,8 @@ config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
+config :core, :features, leaderboard: true
+
 try do
   import_config "dev.secret.exs"
 rescue

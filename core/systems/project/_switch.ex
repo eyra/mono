@@ -2,55 +2,16 @@ defmodule Systems.Project.Switch do
   use Frameworks.Signal.Handler
 
   alias Frameworks.Signal
-
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   @impl true
-  def intercept({:alliance_tool, _} = signal, %{alliance_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
+  def intercept({:project_item, _} = signal, %{project_item: project_item} = message) do
+    project_node = Project.Public.get_node_by_item!(project_item)
 
-  @impl true
-  def intercept({:lab_tool, _} = signal, %{lab_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
-
-  @impl true
-  def intercept({:feldspar_tool, _} = signal, %{feldspar_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
-
-  @impl true
-  def intercept({:document_tool, _} = signal, %{document_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
-
-  @impl true
-  def intercept({:graphite_tool, _} = signal, %{graphite_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
-
-  @impl true
-  def intercept({:instruction_tool, _} = signal, %{instruction_tool: tool} = message) do
-    handle({:tool, signal}, Map.merge(message, %{tool: tool}))
-    :ok
-  end
-
-  @impl true
-  def intercept({:tool_ref, _} = signal, %{tool_ref: tool_ref} = message) do
-    if project_item = Project.Public.get_item_by_tool_ref(tool_ref) do
-      dispatch!(
-        {:project_item, signal},
-        Map.merge(message, %{project_item: project_item})
-      )
-    end
+    dispatch!(
+      {:project_node, signal},
+      Map.merge(message, %{project_node: project_node})
+    )
 
     :ok
   end
@@ -75,12 +36,6 @@ defmodule Systems.Project.Switch do
     from_pid = Map.get(message, :from_pid, self())
     update_pages(project, from_pid)
     :ok
-  end
-
-  defp handle({:tool, signal}, %{tool: tool} = message) do
-    if tool_ref = Project.Public.get_tool_ref_by_tool(tool) do
-      dispatch!({:tool_ref, signal}, Map.merge(message, %{tool_ref: tool_ref}))
-    end
   end
 
   defp update_pages(%Project.NodeModel{} = node, from_pid) do

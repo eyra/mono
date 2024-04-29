@@ -12,7 +12,6 @@ defmodule Systems.Assignment.CrewWorkView do
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
-  alias Systems.Project
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Document
@@ -27,6 +26,7 @@ defmodule Systems.Assignment.CrewWorkView do
           support_page_ref: support_page_ref,
           crew: crew,
           user: user,
+          timezone: timezone,
           panel_info: panel_info,
           tester?: tester?
         },
@@ -47,6 +47,7 @@ defmodule Systems.Assignment.CrewWorkView do
         support_page_ref: support_page_ref,
         crew: crew,
         user: user,
+        timezone: timezone,
         tester?: tester?,
         panel_info: panel_info,
         tool_started: tool_started,
@@ -182,18 +183,20 @@ defmodule Systems.Assignment.CrewWorkView do
         :tool_ref_view,
         %{
           user: user,
+          timezone: timezone,
           launcher: %{module: _, params: _},
           selected_item: {%{title: title, tool_ref: tool_ref}, task}
         } = assigns
       ) do
     %{
-      module: Project.ToolRefView,
+      module: Workflow.ToolRefView,
       params: %{
         title: title,
         tool_ref: tool_ref,
         task: task,
         visible: tool_visible?(assigns),
-        user: user
+        user: user,
+        timezone: timezone
       }
     }
   end
@@ -208,7 +211,7 @@ defmodule Systems.Assignment.CrewWorkView do
       ) do
     launcher =
       tool_ref
-      |> Project.ToolRefModel.tool()
+      |> Workflow.ToolRefModel.tool()
       |> Concept.ToolModel.launcher()
 
     compose(:tool_ref_view, Map.put(assigns, :launcher, launcher))
@@ -555,7 +558,7 @@ defmodule Systems.Assignment.CrewWorkView do
         <% end %>
         <%= if not tool_visible?(assigns) do %>
           <%= if exists?(@fabric, :work_list_view) do %>
-            <div class="w-left-column flex flex-col py-6 gap-6">
+            <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
               <div class="px-6">
                 <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
               </div>

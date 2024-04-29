@@ -16,7 +16,6 @@ defmodule Systems.Assignment.Public do
   alias Frameworks.Signal
 
   alias Systems.{
-    Project,
     Assignment,
     Content,
     Consent,
@@ -74,7 +73,7 @@ defmodule Systems.Assignment.Public do
 
   def get_by_tool_ref(workflow, preload \\ [])
 
-  def get_by_tool_ref(%Project.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)
+  def get_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)
 
   def get_by_tool_ref(tool_ref_id, preload) do
     query_by_tool_ref(tool_ref_id, preload)
@@ -84,7 +83,7 @@ defmodule Systems.Assignment.Public do
   def get_by_tool(tool, preload \\ [])
 
   def get_by_tool(%{id: id} = tool, preload) do
-    field_name = Project.ToolRefModel.tool_id_field(tool)
+    field_name = Workflow.ToolRefModel.tool_id_field(tool)
 
     query_by_tool(field_name, id, preload)
     |> Repo.one()
@@ -96,7 +95,7 @@ defmodule Systems.Assignment.Public do
       on: workflow.id == assignment.workflow_id,
       join: workflow_item in Workflow.ItemModel,
       on: workflow_item.workflow_id == workflow.id,
-      join: tool_ref in Project.ToolRefModel,
+      join: tool_ref in Workflow.ToolRefModel,
       on: tool_ref.id == workflow_item.tool_ref_id,
       where: field(tool_ref, ^field_name) == ^id,
       preload: ^preload
@@ -109,7 +108,7 @@ defmodule Systems.Assignment.Public do
       on: workflow.id == assignment.workflow_id,
       join: workflow_item in Workflow.ItemModel,
       on: workflow_item.workflow_id == workflow.id,
-      join: tool_ref in Project.ToolRefModel,
+      join: tool_ref in Workflow.ToolRefModel,
       on: tool_ref.id == ^tool_ref_id,
       preload: ^preload
     )
@@ -144,15 +143,17 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, [_ | _] = items, type) do
+  def prepare_workflow(special, [_ | _] = items, type, auth_node) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Ecto.Changeset.put_assoc(:items, items)
   end
 
-  def prepare_workflow(special, _, type) do
+  def prepare_workflow(special, _, type, auth_node) do
     %Workflow.Model{}
     |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
   def prepare_workflow_items(tool_refs) when is_list(tool_refs) do
@@ -168,8 +169,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def prepare_tool_ref(special, tool) do
-    field_name = Project.ToolRefModel.tool_field(tool)
-    Project.Public.prepare_tool_ref(special, field_name, tool)
+    field_name = Workflow.ToolRefModel.tool_field(tool)
+    Workflow.Public.prepare_tool_ref(special, field_name, tool)
   end
 
   def prepare_page_refs(_template, auth_node) do

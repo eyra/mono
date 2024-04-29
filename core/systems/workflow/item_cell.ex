@@ -2,11 +2,7 @@ defmodule Systems.Workflow.ItemCell do
   use CoreWeb, :live_component
 
   alias Frameworks.Concept
-
-  alias Systems.{
-    Project,
-    Workflow
-  }
+  alias Systems.Workflow
 
   @impl true
   def update(
@@ -18,7 +14,8 @@ defmodule Systems.Workflow.ItemCell do
           relative_position: relative_position,
           user: user,
           uri_origin: uri_origin,
-          ordering_enabled?: ordering_enabled?
+          ordering_enabled?: ordering_enabled?,
+          timezone: timezone
         },
         socket
       ) do
@@ -33,7 +30,8 @@ defmodule Systems.Workflow.ItemCell do
         relative_position: relative_position,
         user: user,
         uri_origin: uri_origin,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        timezone: timezone
       )
       |> update_item_view()
       |> update_item_form()
@@ -63,7 +61,7 @@ defmodule Systems.Workflow.ItemCell do
 
   defp update_item_form(%{assigns: %{id: id, item: %{tool_ref: tool_ref} = item}} = socket) do
     group_enabled? =
-      Project.ToolRefModel.flatten(tool_ref)
+      Workflow.ToolRefModel.flatten(tool_ref)
       |> Concept.ToolModel.group_enabled?()
 
     item_form = %{
@@ -80,14 +78,15 @@ defmodule Systems.Workflow.ItemCell do
          %{
            assigns: %{
              id: id,
-             item: %{id: item_id, tool_ref: tool_ref},
+             item: %{id: item_id, tool_ref: tool_ref, title: title},
              user: user,
-             uri_origin: uri_origin
+             uri_origin: uri_origin,
+             timezone: timezone
            }
          } = socket
        ) do
-    tool = Project.ToolRefModel.flatten(tool_ref)
-    tool_form_module = Project.ToolRefModel.form(tool_ref)
+    tool = Workflow.ToolRefModel.flatten(tool_ref)
+    tool_form_module = Workflow.ToolRefModel.form(tool_ref)
 
     callback_path = ~p"/assignment/callback/#{item_id}"
     callback_url = uri_origin <> callback_path
@@ -96,6 +95,8 @@ defmodule Systems.Workflow.ItemCell do
       id: "#{id}_tool_form",
       module: tool_form_module,
       entity: tool,
+      title: title,
+      timezone: timezone,
       callback_url: callback_url,
       user: user
     }

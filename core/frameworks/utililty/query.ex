@@ -33,27 +33,33 @@ defmodule Frameworks.Utility.Query do
     end
   end
 
+  def quote_expr({:!=, _, [{property, _, _}, nil]}, parent) do
+    parent
+    |> quote_property(property)
+    |> quote_is_nil()
+    |> quote_not()
+  end
+
   def quote_expr({:==, _, [{property, _, _}, nil]}, parent) do
-    {:is_nil, [],
-     [
-       {
-         {:., [],
-          [
-            {parent, [], nil},
-            property
-          ]},
-         [],
-         []
-       }
-     ]}
+    parent
+    |> quote_property(property)
+    |> quote_is_nil()
   end
 
   def quote_expr({operator, _, [{property, _, _}, value]}, parent) do
-    {operator, [],
-     [
-       {{:., [], [{parent, [], nil}, property]}, [no_parens: true], []},
-       value
-     ]}
+    {operator, [], [quote_property(parent, property), value]}
+  end
+
+  def quote_not(inner_quote) do
+    {:not, [], [inner_quote]}
+  end
+
+  def quote_is_nil(inner_quote) do
+    {:is_nil, [], [inner_quote]}
+  end
+
+  def quote_property(parent, property) do
+    {{:., [], [{parent, [], nil}, property]}, [no_parens: true], []}
   end
 
   def compile_clauses([], _parent), do: []

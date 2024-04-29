@@ -227,7 +227,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{
            current_user: user,
-           uri_origin: uri_origin
+           uri_origin: uri_origin,
+           timezone: timezone
          }
        ) do
     ready? = false
@@ -242,6 +243,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       live_component: Workflow.BuilderView,
       props: %{
         user: user,
+        timezone: timezone,
         uri_origin: uri_origin,
         workflow: workflow,
         config: %{

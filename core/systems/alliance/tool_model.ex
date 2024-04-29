@@ -12,11 +12,14 @@ defmodule Systems.Alliance.ToolModel do
 
   require Core.Enums.Devices
 
-  schema "alliance_tools" do
-    belongs_to(:auth_node, Core.Authorization.Node)
+  alias Systems.Workflow
 
+  schema "alliance_tools" do
     field(:url, :string)
     field(:director, Ecto.Enum, values: [:assignment])
+    belongs_to(:auth_node, Core.Authorization.Node)
+
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :alliance_tool_id)
 
     timestamps()
   end

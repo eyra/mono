@@ -1,17 +1,22 @@
-defmodule Systems.Project.ToolRefView do
+defmodule Systems.Workflow.ToolRefView do
   use CoreWeb, :live_component_fabric
   use Fabric.LiveComponent
 
   require Logger
 
   alias Frameworks.Concept
-
-  alias Systems.{
-    Project
-  }
+  alias Systems.Workflow
 
   def update(
-        %{id: id, title: title, tool_ref: tool_ref, task: task, visible: visible, user: user},
+        %{
+          id: id,
+          title: title,
+          tool_ref: tool_ref,
+          task: task,
+          visible: visible,
+          user: user,
+          timezone: timezone
+        },
         socket
       ) do
     {
@@ -23,7 +28,8 @@ defmodule Systems.Project.ToolRefView do
         tool_ref: tool_ref,
         task: task,
         visible: visible,
-        user: user
+        user: user,
+        timezone: timezone
       )
       |> reset_fabric()
       |> update_launcher()
@@ -33,17 +39,25 @@ defmodule Systems.Project.ToolRefView do
   def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
     launcher =
       tool_ref
-      |> Project.ToolRefModel.tool()
+      |> Workflow.ToolRefModel.tool()
       |> Concept.ToolModel.launcher()
 
     socket |> update_launcher(launcher)
   end
 
   def update_launcher(
-        %{assigns: %{tool_ref: %{id: id}, user: user, title: title, visible: visible}} = socket,
+        %{
+          assigns: %{
+            tool_ref: %{id: id},
+            user: user,
+            timezone: timezone,
+            title: title,
+            visible: visible
+          }
+        } = socket,
         %{module: module, params: params}
       ) do
-    params = Map.merge(params, %{user: user, title: title, visible: visible})
+    params = Map.merge(params, %{user: user, timezone: timezone, title: title, visible: visible})
     child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
     socket |> show_child(child)
   end

@@ -4,9 +4,8 @@ defmodule Systems.Graphite.Routes do
       scope "/graphite", Systems.Graphite do
         pipe_through([:browser, :require_authenticated_user])
 
-        live("/:id/content", ContentPage)
-        live("/:id/:spot", ToolPage)
-
+        live("/leaderboard/:id/content", LeaderboardContentPage)
+        live("/leaderboard/:id", LeaderboardPage)
         get("/:id", ToolController, :ensure_spot)
         get("/:id/export/submissions", ExportController, :submissions)
       end

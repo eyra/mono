@@ -3,6 +3,7 @@ defmodule Systems.Assignment.CrewPage do
   use Fabric.LiveView, CoreWeb.Layouts
 
   use Systems.Observatory.Public
+  use CoreWeb.LiveTimezone
   use CoreWeb.LiveRemoteIp
   use CoreWeb.UI.Responsive.Viewport
   use CoreWeb.Layouts.Stripped.Component, :projects
@@ -43,8 +44,10 @@ defmodule Systems.Assignment.CrewPage do
         modal: nil,
         panel_form: nil
       )
+      |> update_timezone(session)
       |> update_panel_info(session)
       |> observe_view_model()
+      |> update_image_info()
       |> signal_started()
       |> update_flow()
     }

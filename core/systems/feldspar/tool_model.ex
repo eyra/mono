@@ -5,12 +5,15 @@ defmodule Systems.Feldspar.ToolModel do
   import CoreWeb.Gettext
   import Ecto.Changeset
 
+  alias Systems.Workflow
+
   schema "feldspar_tools" do
     field(:archive_name, :string)
     field(:archive_ref, :string)
     field(:director, Ecto.Enum, values: [:project, :assignment])
-
     belongs_to(:auth_node, Core.Authorization.Node)
+
+    has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :feldspar_tool_id)
 
     timestamps()
   end

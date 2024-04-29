@@ -87,7 +87,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
            page_refs: page_refs,
            crew: crew
          } = assignment,
-         %{fabric: fabric, current_user: user, panel_info: panel_info} = assigns,
+         %{fabric: fabric, current_user: user, panel_info: panel_info, timezone: timezone} =
+           assigns,
          tester?
        ) do
     work_items = work_items(assignment, assigns)
@@ -105,6 +106,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
       support_page_ref: support_page_ref,
       crew: crew,
       user: user,
+      timezone: timezone,
       panel_info: panel_info,
       tester?: tester?
     })

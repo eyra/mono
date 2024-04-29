@@ -45,13 +45,11 @@ defmodule Systems.Campaign.Assembly do
 
     campaign_auth_node = Authorization.create_node!()
     promotion_auth_node = Authorization.create_node!(campaign_auth_node)
-    assignment_auth_node = Authorization.create_node!(campaign_auth_node)
 
     {:ok, promotion} = Promotion.Public.create(promotion_attrs, promotion_auth_node)
     {:ok, submission} = Pool.Public.create_submission(submission_attrs(), pool)
 
-    {:ok, assignment} =
-      Assignment.Assembly.create(template, :campaign, budget, assignment_auth_node)
+    {:ok, assignment} = Assignment.Assembly.create(template, :campaign, budget)
 
     {:ok, campaign} =
       Campaign.Public.create(promotion, assignment, [submission], user, campaign_auth_node)

@@ -73,14 +73,17 @@ defmodule Systems.Workflow.ItemViews do
         <Align.vertical_center>
           <div class="flex flex-row gap-6 items-center">
             <%= if @status == :pending do %>
-              <.step_indicator bg_color="bg-grey4" text={@index+1} />
+              <div class="flex-shrink-0">
+                <.step_indicator bg_color="bg-grey4" text={@index+1} />
+              </div>
             <% else %>
-              <div class="h-6 w-6">
+              <div class="h-6 w-6 flex-shrink-0">
                 <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>
-            <Text.title5 align="text-left"><%= @title %></Text.title5>
-            <div class="flex-grow"></div>
+            <div class="flex-grow">
+              <Text.title6 margin="mb-0" align="text-left"><%= @title %></Text.title6>
+            </div>
             <%= if @icon do %>
               <div class="w-8 h-8">
                 <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
@@ -100,6 +103,7 @@ defmodule Systems.Workflow.ItemViews do
   attr(:items, :list, required: true)
   attr(:types, :list, required: true)
   attr(:user, :map, required: true)
+  attr(:timezone, :string, required: true)
   attr(:uri_origin, :string, required: true)
   attr(:ordering_enabled?, :boolean, default: false)
   attr(:parent, :map, required: true)
@@ -119,6 +123,7 @@ defmodule Systems.Workflow.ItemViews do
           type={Enum.at(@types, index)}
           item={item}
           user={@user}
+          timezone={@timezone}
           uri_origin={@uri_origin}
           parent={@parent}
           relative_position={relative_position(item.position, Enum.count(@items))}

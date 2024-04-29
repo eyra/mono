@@ -52,7 +52,6 @@ defmodule CoreWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      import Core.FeatureFlags
       alias CoreWeb.Router.Helpers, as: Routes
 
       # Routes generation with the ~p sigil
@@ -84,7 +83,6 @@ defmodule CoreWeb do
       alias CoreWeb.Router.Helpers, as: Routes
 
       use CoreWeb.LiveAssignHelper
-      import Core.FeatureFlags
 
       use Frameworks.Pixel.Flash
 
@@ -115,7 +113,6 @@ defmodule CoreWeb do
       alias CoreWeb.Router.Helpers, as: Routes
 
       use CoreWeb.LiveAssignHelper
-      import Core.FeatureFlags
 
       use Frameworks.Pixel.Flash
 
@@ -206,6 +203,7 @@ defmodule CoreWeb do
       alias CoreWeb.UI.Margin
       alias CoreWeb.UI.Area
 
+      import Core.FeatureFlags
       import Core.Authorization, only: [can?: 4]
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder

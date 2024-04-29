@@ -55,9 +55,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Test.Page, [:visitor, :member])
   grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
   grant_access(Systems.Project.NodePage, [:researcher, :owner])
-  grant_access(Systems.Graphite.ContentPage, [:researcher, :owner])
-  grant_access(Systems.Graphite.ToolPage, [:owner])
-  grant_access(Systems.Graphite.LeaderboardPage, [:visitor, :member])
+  grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
+  grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
   grant_access(CoreWeb.User.Signin, [:visitor])
@@ -108,6 +107,16 @@ defmodule Core.Authorization do
     %Core.Authorization.RoleAssignment{
       principal_id: principal_id,
       role: role
+    }
+  end
+
+  def prepare_role(%Core.Authorization.Node{id: node_id}, principal, role) when is_atom(role) do
+    principal_id = GreenLight.Principal.id(principal)
+
+    %Core.Authorization.RoleAssignment{
+      principal_id: principal_id,
+      role: role,
+      node_id: node_id
     }
   end
 
@@ -315,5 +324,69 @@ defmodule Core.Authorization do
       |> Ecto.Changeset.put_assoc(:parent, parent)
 
     Multi.update(multi, Ecto.UUID.generate(), changeset)
+  end
+
+  def print_roles(%{auth_node_id: node_id} = entity) do
+    print_roles(node_id)
+    entity
+  end
+
+  def print_roles(%Core.Authorization.Node{id: node_id} = node) do
+    print_roles(node_id)
+    node
+  end
+
+  def print_roles(node_id) when is_integer(node_id) do
+    Logger.notice(
+      "------------------------------------------------------------------------------------------"
+    )
+
+    node_id
+    |> get_parent_nodes()
+    |> Enum.each(fn node_id ->
+      roles =
+        from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
+        |> Core.Repo.all()
+        |> Enum.map(fn %{role: role, principal_id: principal_id} ->
+          "##{principal_id} => :#{role}"
+        end)
+
+      if Enum.empty?(roles) do
+        Logger.notice("0 roles for #{find_entity(node_id)} ##{node_id}", ansi_color: :blue)
+      else
+        Logger.notice(
+          "#{Enum.count(roles)} roles for #{find_entity(node_id)} ##{node_id}: [#{roles |> Enum.join(", ")}]",
+          ansi_color: :magenta
+        )
+      end
+    end)
+
+    Logger.notice(
+      "------------------------------------------------------------------------------------------"
+    )
+  end
+
+  @entities [
+    Systems.Project.Model,
+    Systems.Project.NodeModel,
+    Systems.Workflow.Model,
+    Systems.Assignment.Model,
+    Systems.Crew.Model,
+    Systems.Graphite.ToolModel,
+    Systems.Graphite.LeaderboardModel
+  ]
+
+  defp find_entity(node_id) do
+    @entities
+    |> Enum.reduce("Unkown", fn entity, acc ->
+      if from(e in entity, where: e.auth_node_id == ^node_id)
+         |> Core.Repo.exists?() do
+        entity
+        |> Atom.to_string()
+        |> String.replace("Elixir.Systems.", "")
+      else
+        acc
+      end
+    end)
   end
 end

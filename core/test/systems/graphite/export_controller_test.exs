@@ -17,12 +17,54 @@ defmodule Systems.Graphite.ExportControllerTest do
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
       })
 
-    expected_id = "#{id}:Team-Unknown:#{submission.description}"
+    expected_id = "#{id}"
 
     assert %{
-             id: ^expected_id,
-             url: "git@github.com:eyra/mono.git",
-             ref: "5405deccef0aa1a594cc09da99185860bc3e0cd2"
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:eyra/mono.git",
+             "ref" => "5405deccef0aa1a594cc09da99185860bc3e0cd2"
+           } = Graphite.ExportController.export(submission)
+  end
+
+  test "export/1 valid with pull request commit" do
+    tool = Factories.insert!(:graphite_tool, %{})
+
+    %{id: id} =
+      submission =
+      Factories.insert!(:graphite_submission, %{
+        tool: tool,
+        description: "description",
+        github_commit_url:
+          "https://github.com/eyra/mono/pull/717/commits/119d6db9138837e63d102ba39d157e986066fba3"
+      })
+
+    expected_id = "#{id}"
+
+    assert %{
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:eyra/mono.git",
+             "ref" => "119d6db9138837e63d102ba39d157e986066fba3"
+           } = Graphite.ExportController.export(submission)
+  end
+
+  test "export/1 valid with _ commit" do
+    tool = Factories.insert!(:graphite_tool, %{})
+
+    %{id: id} =
+      submission =
+      Factories.insert!(:graphite_submission, %{
+        tool: tool,
+        description: "description",
+        github_commit_url:
+          "https://github.com/apiraccini/prefer_gas_official/commit/91e30c5cead2a2cfbcb0f219cc3ef6432e15d8d5"
+      })
+
+    expected_id = "#{id}"
+
+    assert %{
+             "submission-id" => ^expected_id,
+             "url" => "git@github.com:apiraccini/prefer_gas_official.git",
+             "ref" => "91e30c5cead2a2cfbcb0f219cc3ef6432e15d8d5"
            } = Graphite.ExportController.export(submission)
   end
 
@@ -38,12 +80,13 @@ defmodule Systems.Graphite.ExportControllerTest do
           "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd"
       })
 
-    expected_id = "#{id}:Team-Unknown:#{submission.description}"
+    expected_id = "#{id}"
 
     assert %{
-             id: ^expected_id,
-             url: "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd",
-             ref: ""
+             "submission-id" => ^expected_id,
+             "url" =>
+               "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd",
+             "ref" => ""
            } = Graphite.ExportController.export(submission)
   end
 end

@@ -28,6 +28,7 @@ defmodule Systems.Assignment.Model do
     belongs_to(:budget, Budget.Model, on_replace: :update)
     belongs_to(:auth_node, Core.Authorization.Node)
 
+    has_one(:project_item, Project.ItemModel, foreign_key: :assignment_id)
     has_many(:page_refs, Assignment.PageRefModel, foreign_key: :assignment_id)
 
     many_to_many(

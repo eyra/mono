@@ -53,4 +53,4 @@ msgstr "Workflow"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow.forward"
-msgstr "Workflow"
+msgstr "Go to Workflow"

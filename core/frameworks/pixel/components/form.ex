@@ -224,6 +224,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
   attr(:maxlength, :string, default: "1000")
+  attr(:disabled, :boolean, default: false)
 
   def text_input(assigns) do
     ~H"""
@@ -238,6 +239,39 @@ defmodule Frameworks.Pixel.Form do
       debounce={@debounce}
       maxlength={@maxlength}
       type="text"
+      disabled={@disabled}
+    />
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:background, :atom, default: :light)
+  attr(:placeholder, :string, default: "")
+  attr(:reserve_error_space, :boolean, default: true)
+  attr(:debounce, :string, default: "1000")
+  attr(:maxlength, :string, default: "1000")
+  attr(:value, :string, default: "")
+
+  # FIXME: discuss how to make this neater. Now I just force the display of the
+  # provided value
+  # Used for working with providing a list of values in one text field in a form.
+  def list_input(assigns) do
+    ~H"""
+    <.input
+      form={@form}
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      placeholder={@placeholder}
+      reserve_error_space={@reserve_error_space}
+      debounce={@debounce}
+      maxlength={@maxlength}
+      type="text"
+      value={@value}
     />
     """
   end
@@ -308,6 +342,30 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       reserve_error_space={@reserve_error_space}
       type="date"
+      disabled={@disabled}
+      debounce={""}
+    />
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
+  attr(:label_text, :string)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:background, :atom, default: :light)
+  attr(:disabled, :boolean, default: false)
+  attr(:reserve_error_space, :boolean, default: true)
+
+  def datetime_input(assigns) do
+    ~H"""
+    <.input
+      form={@form}
+      field={@field}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      reserve_error_space={@reserve_error_space}
+      type="datetime-local"
       disabled={@disabled}
       debounce={""}
     />

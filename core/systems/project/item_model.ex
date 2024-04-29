@@ -5,6 +5,7 @@ defmodule Systems.Project.ItemModel do
   import Ecto.Changeset
   import CoreWeb.Gettext
 
+  alias CoreWeb.UI.Timestamp
   alias Core.ImageHelpers
 
   alias Systems.{
@@ -17,8 +18,8 @@ defmodule Systems.Project.ItemModel do
     field(:name, :string)
     field(:project_path, {:array, :integer})
     belongs_to(:node, Project.NodeModel)
-    belongs_to(:tool_ref, Project.ToolRefModel)
     belongs_to(:assignment, Assignment.Model)
+    belongs_to(:leaderboard, Graphite.LeaderboardModel)
     timestamps()
   end
 
@@ -41,24 +42,17 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:down),
     do:
       preload_graph([
-        :tool_ref,
-        :assignment
+        :assignment,
+        :leaderboard
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
-  def preload_graph(:tool_ref), do: [tool_ref: Project.ToolRefModel.preload_graph(:down)]
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
 
-  def special(%{tool_ref: %{id: _id} = special}), do: special
+  def preload_graph(:leaderboard),
+    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
+
   def special(%{assignment: %{id: _id} = special}), do: special
-
-  def auth_tree(%Project.ItemModel{tool_ref: %Ecto.Association.NotLoaded{}} = item) do
-    auth_tree(Repo.preload(item, :tool_ref))
-  end
-
-  def auth_tree(%Project.ItemModel{tool_ref: tool_ref}) when not is_nil(tool_ref) do
-    Project.ToolRefModel.auth_tree(tool_ref)
-  end
 
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
@@ -68,18 +62,26 @@ defmodule Systems.Project.ItemModel do
     Assignment.Model.auth_tree(assignment)
   end
 
+  def auth_tree(%Project.ItemModel{leaderboard: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :leaderboard))
+  end
+
+  def auth_tree(%Project.ItemModel{leaderboard: leaderboard}) when not is_nil(leaderboard) do
+    Graphite.LeaderboardModel.auth_tree(leaderboard)
+  end
+
   def auth_tree(items) when is_list(items) do
     Enum.map(items, &auth_tree/1)
   end
 
-  def tag(%{tool_ref: %{id: _} = tool_ref}), do: Project.ToolRefModel.tag(tool_ref)
   def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
+  def tag(%{leaderboard: %{id: _} = leaderboard}), do: Graphite.LeaderboardModel.tag(leaderboard)
 
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
 
-    def view_model(%Project.ItemModel{} = item, page, %{current_user: user}) do
-      vm(item, page, user)
+    def view_model(%Project.ItemModel{} = item, page, %{current_user: user, timezone: timezone}) do
+      vm(item, page, user, timezone)
     end
 
     defp vm(
@@ -91,14 +93,14 @@ defmodule Systems.Project.ItemModel do
                  id: assignment_id,
                  status: status,
                  info: %{
-                   subject_count: subject_count,
                    image_id: image_id,
                    logo_url: logo_url
                  }
                } = assignment
            },
            {Project.NodePage, :item_card},
-           _user
+           _user,
+           _timezone
          ) do
       image_info = ImageHelpers.get_image_info(image_id, 400, 200)
       tags = get_card_tags(assignment)
@@ -123,7 +125,7 @@ defmodule Systems.Project.ItemModel do
         label: get_label(status),
         title: name,
         tags: tags,
-        info: ["#{subject_count} participants  |  0 donations"],
+        info: get_assignment_info(assignment),
         left_actions: [edit],
         right_actions: [delete]
       }
@@ -133,23 +135,15 @@ defmodule Systems.Project.ItemModel do
            %{
              id: id,
              name: name,
-             tool_ref: %{
-               graphite_tool:
-                 %{
-                   id: graphite_id,
-                   status: status,
-                   director: _director,
-                   spots: spots,
-                   leaderboards: _leaderboards
-                 } = tool
-             }
+             leaderboard: %{id: leaderboard_id, status: status} = leaderboard
            },
            {Project.NodePage, :item_card},
-           _user
+           _user,
+           timezone
          ) do
-      tags = get_card_tags(tool)
-      path = ~p"/graphite/#{graphite_id}/content"
-      label = get_label(status)
+      assignment = Assignment.Public.get_by_tool(leaderboard.tool, [:info])
+      image_info = ImageHelpers.get_image_info(assignment.info.image_id, 400, 200)
+      logo_url = assignment.info.logo_url
 
       edit = %{
         action: %{type: :send, event: "edit", item: id},
@@ -161,37 +155,19 @@ defmodule Systems.Project.ItemModel do
         face: %{type: :icon, icon: :delete}
       }
 
-      team_info = dngettext("eyra-graphite", "1 team", "%{count} teams", Enum.count(spots))
-
-      submission_info =
-        dngettext(
-          "eyra-graphite",
-          "1 submission",
-          "%{count} submissions",
-          count_submissions(spots)
-        )
-
-      info_line_1 = "#{team_info}  |  #{submission_info}"
-
       %{
         type: :secondary,
         id: id,
-        path: path,
-        label: label,
+        path: ~p"/graphite/leaderboard/#{leaderboard_id}/content",
+        image_info: image_info,
+        icon_url: logo_url,
+        label: get_label(status),
         title: name,
-        tags: tags,
-        info: [info_line_1],
+        tags: get_card_tags(leaderboard),
+        info: get_leaderboard_info(leaderboard, timezone),
         left_actions: [edit],
         right_actions: [delete]
       }
-    end
-
-    defp count_submissions(spots) when is_list(spots) do
-      Enum.reduce(spots, 0, fn spot, acc -> acc + count_submissions(spot) end)
-    end
-
-    defp count_submissions(%{submissions: submissions}) do
-      Enum.count(submissions)
     end
 
     defp get_label(:concept),
@@ -204,11 +180,46 @@ defmodule Systems.Project.ItemModel do
 
     defp get_label(:idle), do: %{type: :idle, text: dgettext("eyra-project", "label.idle")}
 
+    defp get_label(nil), do: %{type: :idle, text: "Improper label"}
+
     defp get_card_tags(%Assignment.Model{}) do
       ["Assignment"]
     end
 
+    defp get_card_tags(%Graphite.LeaderboardModel{}), do: ["Leaderboard"]
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(_), do: []
+
+    defp get_assignment_info(%Assignment.Model{info: info}) do
+      subject_count = Map.get(info, :subject_count) || 0
+      [dngettext("eyra-project", "1 participant", "* participants", subject_count)]
+    end
+
+    defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do
+      deadline_str = format_datetime(tool.deadline, timezone)
+      nr_submissions = Graphite.Public.get_submission_count(tool)
+
+      submission_info = dngettext("eyra-project", "1 submission", "* submissions", nr_submissions)
+
+      deadline_info =
+        dgettext("eyra-project", "leaderboard.deadline.info", deadline: deadline_str)
+
+      [
+        [submission_info, deadline_info]
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.join("  |  ")
+      ]
+    end
+
+    defp format_datetime(nil, _timezone),
+      do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
+
+    defp format_datetime(_, nil), do: ""
+
+    defp format_datetime(datetime, timezone) do
+      datetime
+      |> Timestamp.convert(timezone)
+      |> Timestamp.format!()
+    end
   end
 end

@@ -6,9 +6,63 @@ defmodule Systems.Workflow.PublicTest do
   alias Systems.Workflow
   alias Systems.Workflow.Factories
 
+  describe "list_tools/2 " do
+    test "no matching tool" do
+      workflow = Factories.create_workflow(:many_optional)
+
+      graphite_tool = Core.Factories.build(:graphite_tool)
+      tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
+      Factories.create_item(workflow, tool_ref, 0)
+
+      assert [] = Workflow.Public.list_tools(workflow, :fake_special)
+    end
+
+    test "one matching tool" do
+      workflow = Factories.create_workflow(:many_optional)
+
+      graphite_tool = Core.Factories.build(:graphite_tool)
+      tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
+      Factories.create_item(workflow, tool_ref, 0)
+
+      assert [
+               %Systems.Graphite.ToolModel{}
+             ] = Workflow.Public.list_tools(workflow, :submit)
+    end
+
+    test "multiple matching tool" do
+      workflow = Factories.create_workflow(:many_optional)
+
+      tool1 = Core.Factories.build(:graphite_tool)
+      tool_ref1 = Factories.create_tool_ref(tool1, :submit)
+      Factories.create_item(workflow, tool_ref1, 0)
+
+      tool2 = Core.Factories.build(:document_tool)
+      tool_ref2 = Factories.create_tool_ref(tool2, :request_manual)
+      Factories.create_item(workflow, tool_ref2, 1)
+
+      tool3 = Core.Factories.build(:graphite_tool)
+      tool_ref3 = Factories.create_tool_ref(tool3, :submit)
+      Factories.create_item(workflow, tool_ref3, 2)
+
+      tool4 = Core.Factories.build(:document_tool)
+      tool_ref4 = Factories.create_tool_ref(tool4, :download_manual)
+      Factories.create_item(workflow, tool_ref4, 3)
+
+      assert [
+               %Systems.Graphite.ToolModel{},
+               %Systems.Graphite.ToolModel{}
+             ] = Workflow.Public.list_tools(workflow, :submit)
+    end
+
+    test "no tools" do
+      workflow = Factories.create_workflow(:many_optional)
+      assert [] = Workflow.Public.list_tools(workflow, :submit)
+    end
+  end
+
   test "rearrange/2 move last to first succeed" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
@@ -42,7 +96,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "rearrange/2 move first to last succeed" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
@@ -76,7 +130,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 move first to last succeed" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = item_a = Factories.create_item(workflow, tool_ref, 0)
@@ -130,7 +184,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 move last to second succeed" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
@@ -184,7 +238,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 move to same position succeeded" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
@@ -218,7 +272,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 out of upper bounds failure" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
@@ -232,7 +286,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 out of lower bounds failure" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
@@ -246,7 +300,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 position out of sync failure" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
@@ -264,7 +318,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "update_position/2 item deleted underwater success" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     Factories.create_item(workflow, tool_ref, 0)
@@ -282,7 +336,7 @@ defmodule Systems.Workflow.PublicTest do
 
   test "delete/1 succeed" do
     tool = Factories.create_tool()
-    tool_ref = Factories.create_tool_ref(tool)
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
     workflow = Factories.create_workflow(:many_optional)
 
     %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)

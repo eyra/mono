@@ -7,7 +7,7 @@ defmodule Systems.Assignment.StartView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept
 
-  alias Systems.Project
+  alias Systems.Workflow
 
   def update(%{id: id, participant: participant, work_item: work_item, loading: loading}, socket) do
     {
@@ -47,7 +47,7 @@ defmodule Systems.Assignment.StartView do
   def compose(:icon, %{work_item: {%{group: group}, _}}), do: String.downcase(group)
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item, participant) do
-    Project.ToolRefModel.tool(tool_ref)
+    Workflow.ToolRefModel.tool(tool_ref)
     |> Concept.ToolModel.launcher()
     |> start_action(item, participant)
   end
@@ -88,7 +88,7 @@ defmodule Systems.Assignment.StartView do
                 <img class="w-24 h-24" src={~p"/images/icons/#{"#{@icon}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@icon}>
               <% end %>
             </div>
-            <Text.title2 margin=""><%= @title %></Text.title2>
+            <Text.title2 align="text-center" margin=""><%= @title %></Text.title2>
             <Text.body align="text-center"><%= @description %></Text.body>
             <.wrap>
               <Button.dynamic {@button} />

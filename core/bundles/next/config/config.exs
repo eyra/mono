@@ -16,7 +16,8 @@ config :core, :features,
   member_google_sign_in: false,
   password_sign_in: true,
   notification_mails: false,
-  debug_expire_force: false
+  debug_expire_force: false,
+  leaderboard: false
 
 config :core, :meta,
   bundle_title: "Eyra",

@@ -1,71 +1,116 @@
 defmodule Systems.Graphite.LeaderboardPage do
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :onboarding
+  use CoreWeb, :live_view_fabric
+  use Fabric.LiveView, CoreWeb.Layouts
+  use Systems.Observatory.Public
+  use CoreWeb.UI.Responsive.Viewport
+  use CoreWeb.Layouts.Stripped.Component, :leaderboard
 
+  alias Core.ImageHelpers
+  alias Frameworks.Pixel.Card
+  alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Align
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
+
+  @impl true
+  def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do
+    Graphite.Public.get_leaderboard!(String.to_integer(leaderboard_id), [:auth_node])
+  end
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
+    model =
+      Graphite.Public.get_leaderboard!(
+        String.to_integer(id),
+        Graphite.LeaderboardModel.preload_graph(:down)
+      )
+
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> update_title()
-      |> update_leaderboard()
-      |> update_forward_button()
+      |> assign(
+        id: id,
+        model: model,
+        image_info: nil
+      )
+      |> observe_view_model()
+      |> update_image_info()
+      |> compose_child(:leaderboard_table)
     }
   end
 
-  defp update_title(%{assigns: %{id: tool_id}} = socket) do
-    %{title: title} = Graphite.Public.get_tool!(tool_id)
-    assign(socket, title: title)
+  @impl true
+  def handle_resize(socket) do
+    socket
+    |> update_image_info()
+    |> update_menus()
   end
 
-  defp update_forward_button(%{assigns: %{id: tool_id}} = socket) do
-    forward_button = %{
-      action: %{type: :http_get, to: ~p"/graphite/#{tool_id}"},
-      face: %{
-        type: :plain,
-        label: dgettext("eyra-graphite", "challenge.forward.button"),
-        icon: :forward
-      }
-    }
-
-    assign(socket, forward_button: forward_button)
+  def handle_view_model_updated(socket) do
+    socket
+    |> update_image_info()
+    |> compose_child(:leaderboard_table)
   end
 
-  defp update_leaderboard(%{assigns: %{id: tool_id}} = socket) do
-    categories =
-      Graphite.Public.list_leaderboard_categories(tool_id, scores: [submission: [:spot]])
+  defp update_image_info(
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
+           socket
+       ) do
+    image_width = viewport_width
+    image_height = 360
+    image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
 
-    leaderboard = %{
-      id: :leaderboard,
-      module: Graphite.LeaderboardView,
-      categories: categories
-    }
-
-    assign(socket, leaderboard: leaderboard)
+    socket
+    |> assign(image_info: image_info)
   end
+
+  defp update_image_info(socket) do
+    socket
+  end
+
+  @impl true
+  def compose(:leaderboard_table, %{vm: %{leaderboard_table: leaderboard_table}}) do
+    leaderboard_table
+  end
+
+  @impl true
+  def handle_event(_, _payload, socket) do
+    {:noreply, socket}
+  end
+
+  defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
+  defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
+  defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped title="Leaderboard" menus={@menus}>
-        <Area.content>
-          <Margin.y id={:page_top} />
-          <Align.horizontal_center>
-             <Text.title2><%= @title %></Text.title2>
-          </Align.horizontal_center>
-          <.spacing value="M" />
-          <.live_component {@leaderboard} />
-          <.spacing value="XL" />
-          <Button.dynamic {@forward_button} />
-        </Area.content>
-      </.stripped>
+      <div id={:leaderboard_page} class="w-full h-full" phx-hook="ViewportResize">
+        <.stripped menus={@menus}>
+          <:header>
+            <div class="h-[180px] bg-grey5">
+            <%= if @image_info do %>
+              <Hero.image title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
+            <% end %>
+            </div>
+          </:header>
+          <Area.content>
+            <div class="mb-20" />
+            <div class={"grid gap-6 sm:gap-8 #{grid_cols(Enum.count(@vm.highlights))}"}>
+             <%= for highlight <- @vm.highlights do %>
+              <Card.highlight {highlight} />
+              <% end %>
+            </div>
+            <div class="mb-20" />
+
+            <Align.horizontal_center>
+              <Text.title2><%= @vm.title %></Text.title2>
+            </Align.horizontal_center>
+            <.spacing value="M" />
+            <.stack fabric={@fabric} />
+          </Area.content>
+        </.stripped>
+      </div>
     """
   end
 end

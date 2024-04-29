@@ -1,9 +1,10 @@
 defmodule Systems.Workflow.Public do
   import Ecto.Query, warn: false
+  import Systems.Workflow.Queries
+
   alias Ecto.Multi
   alias Core.Repo
 
-  alias Core.Authorization
   alias Frameworks.Signal
 
   alias Systems.Workflow
@@ -12,7 +13,6 @@ defmodule Systems.Workflow.Public do
   alias Systems.Feldspar
   alias Systems.Lab
   alias Systems.Graphite
-  alias Systems.Project
   alias Systems.Instruction
 
   def list_items(workflow, preload \\ [])
@@ -37,9 +37,14 @@ defmodule Systems.Workflow.Public do
     |> Repo.get!(id)
   end
 
+  def get_tool_ref_by_tool(%{id: id} = tool, preload \\ []) do
+    field = Workflow.ToolRefModel.tool_id_field(tool)
+    get_item_by_tool!(field, id, preload)
+  end
+
   def get_item_by_tool_ref(tool_ref, preload \\ [])
 
-  def get_item_by_tool_ref(%Project.ToolRefModel{id: id}, preload) do
+  def get_item_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload) do
     get_item_by_tool_ref(id, preload)
   end
 
@@ -60,7 +65,7 @@ defmodule Systems.Workflow.Public do
   def get_item_by_tool!([hd | tl] = _keys, tool_id, preload) when is_integer(tool_id) do
     query =
       from(item in Workflow.ItemModel,
-        inner_join: tool_ref in Project.ToolRefModel,
+        inner_join: tool_ref in Workflow.ToolRefModel,
         on: tool_ref.id == item.tool_ref_id,
         where: field(tool_ref, ^hd) == ^tool_id,
         preload: ^preload
@@ -78,7 +83,15 @@ defmodule Systems.Workflow.Public do
   end
 
   def add_item(
-        %Workflow.Model{} = workflow,
+        %Workflow.Model{auth_node: %Ecto.Association.NotLoaded{}} = workflow,
+        item,
+        director
+      ) do
+    add_item(Repo.preload(workflow, :auth_node), item, director)
+  end
+
+  def add_item(
+        %Workflow.Model{auth_node: workflow_auth_node} = workflow,
         %{special: special, tool: tool_type} = _item,
         director
       )
@@ -87,13 +100,23 @@ defmodule Systems.Workflow.Public do
     |> Multi.run(:position, fn _, _ ->
       {:ok, item_count(workflow)}
     end)
-    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}))
+    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}, workflow_auth_node))
     |> Multi.insert(:workflow_item, fn %{position: position, tool: tool} ->
       tool_ref = prepare_tool_ref(special, tool_type, tool)
       prepare_item(workflow, position, tool_ref)
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :added})
     |> Repo.transaction()
+  end
+
+  def list_tools(%Workflow.Model{} = workflow, special) do
+    preload = Workflow.ItemModel.preload_graph(:down)
+
+    item_query(workflow, special)
+    |> Repo.all()
+    |> Repo.preload(preload)
+    |> Enum.map(& &1.tool_ref)
+    |> Enum.map(&Workflow.ToolRefModel.tool/1)
   end
 
   def item_count(%Workflow.Model{id: workflow_id}) do
@@ -112,12 +135,10 @@ defmodule Systems.Workflow.Public do
   end
 
   def prepare_tool_ref(special, tool_type, tool) do
-    %Project.ToolRefModel{}
-    |> Project.ToolRefModel.changeset(%{special: special})
+    %Workflow.ToolRefModel{}
+    |> Workflow.ToolRefModel.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
-
-  def prepare_tool(_, _, auth_node \\ Authorization.prepare_node())
 
   def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
     do: Alliance.Public.prepare_tool(attrs, auth_node)
