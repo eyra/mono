@@ -28,7 +28,7 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     pools =
       Pool.Public.list_by_director(
         "student",
-        Pool.Model.preload_graph([:org, :participants, :submissions, :auth_node])
+        Pool.Model.preload_graph([:org, :participants, :submission, :auth_node])
       )
       |> Enum.filter(&owner?(&1, user))
 
@@ -120,19 +120,10 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     }
   end
 
-  defp description(%{participants: participants, submissions: submissions}) do
-    submissions = remove_concept_submissions(submissions)
-
+  defp description(%{participants: participants}) do
     [
-      "#{dgettext("link-studentpool", "participants.label")}: #{Enum.count(participants)}",
-      "#{dgettext("link-studentpool", "campaigns.label")}: #{Enum.count(submissions)}"
+      "#{dgettext("link-studentpool", "participants.label")}: #{Enum.count(participants)}"
     ]
-    |> Enum.join("  |  ")
-  end
-
-  defp remove_concept_submissions(submissions) do
-    submissions
-    |> Enum.filter(&Pool.SubmissionModel.submitted?(&1))
   end
 
   attr(:user, :map, required: true)

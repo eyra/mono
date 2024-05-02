@@ -76,14 +76,14 @@ msgstr "Recruit participants for your study"
 
 #, elixir-autogen, elixir-format
 msgid "monitor.empty.description"
-msgstr "Submit your campaign and wait for the pool administrator to publish your campaign. Check out the preview to see what your campaign will look like for participants. Once your campaign is online, you can use this dashboard to manage your participants."
+msgstr "Submit your campaign and wait for the pool administrator to publish your advert. Check out the preview to see what your campaign will look like for participants. Once your campaign is online, you can use this dashboard to manage your participants."
 
 #, elixir-autogen, elixir-format
 msgid "monitor.empty.title"
 msgstr "Campaign submitted?"
 
 #, elixir-autogen, elixir-format
-msgid "campaign.overview.title"
+msgid "advert.overview.title"
 msgstr "Campaigns"
 
 #, elixir-autogen, elixir-format

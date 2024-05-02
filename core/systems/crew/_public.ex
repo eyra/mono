@@ -480,7 +480,7 @@ defmodule Systems.Crew.Public do
     # participants are not redirected to complete the task. This can be caused by
     #   1. bug in third party platform (not redirecting)
     #   2. no end of survey configurated (not redirecting)
-    #   3. end of survey pointing to wrong url (redirecting, but to the wrong campaign)
+    #   3. end of survey pointing to wrong url (redirecting, but to the wrong advert)
 
     tasks = tasks_soft_expired_query()
     users = users_by_task_query(tasks)

@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     Core.Repo.insert!(%Link.SomeSchema{})
+#     Core.Repo.insert!(%Next.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
@@ -62,7 +62,7 @@ _data_donation_promotions =
 #   Core.Factories.insert!(:data_donation_tool, data)
 # end)
 
-# campaigns =
+# adverts =
 # Enum.map(data_donation_tools, fn data_donation_tool ->
 #   %{
 #     title: Faker.Lorem.sentence(),
@@ -100,16 +100,16 @@ Systems.NextAction.Public.create_next_action(
   Core.Accounts.NextActions.CompleteProfile
 )
 
-# for campaign_data <- campaigns do
-#   {tool_type, campaign_data} = Map.pop!(campaign_data, :type)
-#   {tool_data, campaign_data} = Map.pop!(campaign_data, tool_type)
+# for advert_data <- adverts do
+#   {tool_type, advert_data} = Map.pop!(advert_data, :type)
+#   {tool_data, advert_data} = Map.pop!(advert_data, tool_type)
 
 #   # CAMPAIGN
-#   campaign = Core.Factories.insert!(:campaign, campaign_data)
+#   advert = Core.Factories.insert!(:advert, advert_data)
 
 #   Core.Authorization.assign_role(
 #     researcher,
-#     campaign,
+#     advert,
 #     :owner
 #   )
 
@@ -119,12 +119,12 @@ Systems.NextAction.Public.create_next_action(
 #   # promotion =
 #   #   Core.Factories.insert!(
 #   #     :promotion,
-#   #     Map.merge(%{campaign: campaign}, promotion_data)
+#   #     Map.merge(%{advert: advert}, promotion_data)
 #   #   )
 
 #   # # TOOL
 #   # Core.Factories.insert!(
 #   #   tool_type,
-#   #   Map.merge(%{campaign: campaign, promotion: promotion}, tool_data)
+#   #   Map.merge(%{advert: advert, promotion: promotion}, tool_data)
 #   # )
 # end

@@ -29,7 +29,12 @@ defmodule Systems.Pool.SubmissionModel do
     timestamps()
   end
 
-  def preload_graph(:pool), do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node])]
+  def preload_graph(:down), do: preload_graph([:criteria, :pool_minimal])
+
+  def preload_graph(:pool_minimal),
+    do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node, :participants])]
+
+  def preload_graph(:criteria), do: [criteria: []]
 
   @fields ~w(status reward_value schedule_start schedule_end submitted_at accepted_at completed_at)a
 

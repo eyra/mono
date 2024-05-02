@@ -10,13 +10,13 @@ defmodule Systems.Promotion.LandingPageTest do
     Budget
   }
 
-  describe "show landing page for: campaign -> assignment -> alliance_tool" do
+  describe "show landing page for: advert -> assignment -> alliance_tool" do
     setup [:login_as_member]
 
     setup do
-      campaign_auth_node = Factories.insert!(:auth_node)
-      promotion_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
-      assignment_auth_node = Factories.insert!(:auth_node, %{parent: campaign_auth_node})
+      advert_auth_node = Factories.insert!(:auth_node)
+      promotion_auth_node = Factories.insert!(:auth_node, %{parent: advert_auth_node})
+      assignment_auth_node = Factories.insert!(:auth_node, %{parent: advert_auth_node})
       tool_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
 
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
@@ -36,15 +36,14 @@ defmodule Systems.Promotion.LandingPageTest do
           info,
           workflow,
           assignment_auth_node,
-          budget,
-          :campaign
+          budget
         )
 
       promotion =
         Factories.insert!(
           :promotion,
           %{
-            director: :campaign,
+            director: :advert,
             title: "This is a test title",
             themes: ["marketing", "econometrics"],
             expectations: "These are the expectations for the participants",
@@ -58,19 +57,17 @@ defmodule Systems.Promotion.LandingPageTest do
           }
         )
 
-      submission = Factories.insert!(:submission, %{reward_value: 500, pool: pool})
-      author = Factories.build(:author)
+      submission = Factories.insert!(:pool_submission, %{reward_value: 500, pool: pool})
 
-      _campaign =
-        Factories.insert!(:campaign, %{
+      _advert =
+        Factories.insert!(:advert, %{
           assignment: assignment,
           promotion: promotion,
-          authors: [author],
-          submissions: [submission],
-          auth_node: campaign_auth_node
+          submission: submission,
+          auth_node: advert_auth_node
         })
 
-      %{promotion: promotion, assignment: assignment, submissions: [submission]}
+      %{promotion: promotion, assignment: assignment, submission: submission}
     end
 
     test "Initial", %{conn: conn, promotion: promotion} do

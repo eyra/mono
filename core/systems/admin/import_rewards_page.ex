@@ -10,7 +10,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   alias Frameworks.Pixel.Selector
 
   alias Systems.{
-    Campaign,
+    Advert,
     Admin,
     Student,
     Org
@@ -73,7 +73,7 @@ defmodule Systems.Admin.ImportRewardsPage do
         %{assigns: %{session_key: session_key, currency: currency}} = _socket
       ) do
     {status, message} =
-      if Campaign.Public.user_has_currency?(user, currency) do
+      if Advert.Public.user_has_currency?(user, currency) do
         handle_user_has_currency(user, session_key, credits)
       else
         {:incorrect_currency, "Student is not part of #{currency}"}
@@ -98,7 +98,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   end
 
   defp transaction_exists?(user, session_key) do
-    Campaign.Public.import_student_reward_exists?(user.id, session_key)
+    Advert.Public.import_student_reward_exists?(user.id, session_key)
   end
 
   defp process(%{assigns: %{local_file: local_file}} = socket) do
@@ -157,7 +157,7 @@ defmodule Systems.Admin.ImportRewardsPage do
          %{:user_id => user_id, "credits" => credits} = _line
        ) do
     credits = String.to_integer(credits)
-    Campaign.Public.import_student_reward(user_id, credits, session_key, currency)
+    Advert.Public.import_student_reward(user_id, credits, session_key, currency)
 
     socket
   end

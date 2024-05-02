@@ -264,10 +264,6 @@ defmodule Systems.Pool.Public do
     {:ok, criteria.submission}
   end
 
-  def copy(submissions) when is_list(submissions) do
-    Enum.map(submissions, &copy(&1))
-  end
-
   def copy(%Pool.SubmissionModel{pool: pool, criteria: criteria} = submission) do
     attrs =
       submission

@@ -6,7 +6,7 @@ defmodule Systems.Pool.Routes do
         live("/pool", OverviewPage)
         live("/pool/:id", LandingPage)
         live("/pool/:id/detail", DetailPage)
-        live("/pool/campaign/:id", SubmissionPage)
+        live("/pool/advert/:id", SubmissionPage)
         live("/pool/participant/:id", ParticipantPage)
       end
     end

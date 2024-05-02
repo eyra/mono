@@ -118,23 +118,11 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     }
   end
 
-  defp description(%{participants: participants, submissions: submissions}) do
-    submissions = remove_concept_submissions(submissions)
-
+  defp description(%{participants: participants}) do
     [
-      "#{dgettext("link-citizen", "participants.label")}: #{Enum.count(participants)}",
-      "#{dgettext("link-citizen", "campaigns.label")}: #{Enum.count(submissions)}"
+      "#{dgettext("link-citizen", "participants.label")}: #{Enum.count(participants)}"
     ]
-    |> Enum.join("  |  ")
   end
-
-  defp remove_concept_submissions(submissions) do
-    submissions
-    |> Enum.filter(&Pool.SubmissionModel.submitted?(&1))
-  end
-
-  # data(pools, :list)
-  # data(pool_items, :list)
 
   attr(:user, :map, required: true)
 

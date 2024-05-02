@@ -16,7 +16,7 @@ defmodule Core.Factories do
 
   alias Systems.{
     Notification,
-    Campaign,
+    Advert,
     Promotion,
     Assignment,
     Workflow,
@@ -118,8 +118,8 @@ defmodule Core.Factories do
     }
   end
 
-  def build(:campaign) do
-    build(:campaign, %{})
+  def build(:advert) do
+    build(:advert, %{})
   end
 
   def build(:crew) do
@@ -139,13 +139,6 @@ defmodule Core.Factories do
       title: Faker.Lorem.sentence(),
       description: Faker.Lorem.paragraph(),
       user: build(:member)
-    }
-  end
-
-  def build(:author) do
-    %Campaign.AuthorModel{
-      fullname: Faker.Person.name(),
-      displayname: Faker.Person.first_name()
     }
   end
 
@@ -237,8 +230,8 @@ defmodule Core.Factories do
     %Pool.CriteriaModel{}
   end
 
-  def build(:submission) do
-    build(:submission, %{})
+  def build(:pool_submission) do
+    build(:pool_submission, %{})
   end
 
   def build(:graphite_submission) do
@@ -357,30 +350,15 @@ defmodule Core.Factories do
     )
   end
 
-  def build(:author, %{} = attributes) do
-    {researcher, attributes} = Map.pop(attributes, :researcher)
-    {campaign, _attributes} = Map.pop(attributes, :campaign)
-
-    build(:author)
-    |> struct!(%{
-      user: researcher,
-      campaign: campaign
-    })
-  end
-
-  def build(:campaign, %{} = attributes) do
-    {campaign_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-
-    {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
-
-    {submissions, attributes} =
-      Map.pop(attributes, :submissions, many_relationship(:submissions, attributes))
+  def build(:advert, %{} = attributes) do
+    {advert_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {submission, attributes} = Map.pop(attributes, :submission, build(:pool_submission))
 
     {promotion, attributes} =
       case Map.pop(attributes, :promotion, nil) do
         {nil, attributes} ->
           {
-            build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})}),
+            build(:promotion, %{auth_node: build(:auth_node, %{parent: advert_auth_node})}),
             attributes
           }
 
@@ -393,11 +371,10 @@ defmodule Core.Factories do
         {nil, attributes} ->
           {
             build(:assignment, %{
-              director: :campaign,
               auth_node:
                 build(
                   :auth_node,
-                  %{parent: campaign_auth_node}
+                  %{parent: advert_auth_node}
                 )
             }),
             attributes
@@ -407,12 +384,11 @@ defmodule Core.Factories do
           {assignment, attributes}
       end
 
-    %Campaign.Model{
-      auth_node: campaign_auth_node,
-      authors: authors,
+    %Advert.Model{
+      auth_node: advert_auth_node,
       promotion: promotion,
-      promotable_assignment: assignment,
-      submissions: submissions
+      assignment: assignment,
+      submission: submission
     }
     |> struct!(attributes)
   end
@@ -579,7 +555,7 @@ defmodule Core.Factories do
     )
   end
 
-  def build(:submission, %{} = attributes) do
+  def build(:pool_submission, %{} = attributes) do
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
     {pool, attributes} = Map.pop(attributes, :pool, build(:pool))
 

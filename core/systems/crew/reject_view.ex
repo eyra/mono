@@ -28,9 +28,9 @@ defmodule Systems.Crew.RejectView do
 
   @impl true
   def update(%{id: id, target: target}, socket) do
-    title = dgettext("link-campaign", "reject.title")
-    text = dgettext("link-campaign", "reject.text")
-    note = dgettext("link-campaign", "reject.note")
+    title = dgettext("link-advert", "reject.title")
+    text = dgettext("link-advert", "reject.text")
+    note = dgettext("link-advert", "reject.note")
     category = Crew.RejectCategories.values() |> List.first()
     categories = Crew.RejectCategories.labels(category)
 
@@ -100,7 +100,7 @@ defmodule Systems.Crew.RejectView do
         action: %{type: :submit},
         face: %{
           type: :primary,
-          label: dgettext("link-campaign", "reject.button"),
+          label: dgettext("link-advert", "reject.button"),
           bg_color: "bg-delete"
         }
       },
@@ -153,7 +153,7 @@ defmodule Systems.Crew.RejectView do
           <.spacing value="M" />
           <.text_input form={form}
             field={:message}
-            label_text={dgettext("link-campaign", "reject.message.label")}
+            label_text={dgettext("link-advert", "reject.message.label")}
             debounce="0"
           />
           <.spacing value="XXS" />

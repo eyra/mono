@@ -5,7 +5,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
 
   alias Systems.{
     Pool,
-    Campaign,
+    Advert,
     Budget,
     Bookkeeping,
     Student
@@ -22,7 +22,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
          %{initial_tab: initial_tab} = assigns,
          %{participants: participants} = pool
        ) do
-    campaigns = load_campaigns(pool)
+    adverts = load_adverts(pool)
     dashboard = load_dashboard(assigns, pool)
 
     [
@@ -35,12 +35,12 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         active: initial_tab === :students
       },
       %{
-        id: :campaigns,
-        title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        live_component: Pool.CampaignsView,
-        props: %{campaigns: campaigns},
+        id: :adverts,
+        title: dgettext("link-studentpool", "tabbar.item.adverts"),
+        live_component: Advert.ListView,
+        props: %{adverts: adverts},
         type: :fullpage,
-        active: initial_tab === :campaigns
+        active: initial_tab === :adverts
       },
       %{
         id: :dashboard,
@@ -53,12 +53,11 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     ]
   end
 
-  defp load_campaigns(pool) do
-    preload = Campaign.Model.preload_graph(:down)
+  defp load_adverts(pool) do
+    preload = Advert.Model.preload_graph(:down)
 
-    Campaign.Public.list_submitted(pool, preload: preload)
-    |> Enum.map(&Campaign.Model.flatten(&1))
-    |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
+    Advert.Public.list_submitted(pool, preload: preload)
+    |> Enum.map(&Pool.Builders.AdvertItem.view_model(&1))
   end
 
   defp scale({:unknown, _}), do: 5

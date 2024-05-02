@@ -10,7 +10,7 @@ defmodule Systems.Pool.ParticipantPage do
   alias Frameworks.Utility.ViewModelBuilder
 
   alias Systems.{
-    Campaign,
+    Advert,
     Budget
   }
 
@@ -24,11 +24,11 @@ defmodule Systems.Pool.ParticipantPage do
       Budget.Public.list_wallets(user)
       |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, assigns))
 
-    campaign_preload = Campaign.Model.preload_graph(:down)
+    advert_preload = Advert.Model.preload_graph(:down)
 
     contributions =
       user
-      |> Campaign.Public.list_subject_campaigns(preload: campaign_preload)
+      |> Advert.Public.list_subject_adverts(preload: advert_preload)
       |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, assigns))
 
     {
@@ -113,7 +113,7 @@ defmodule Systems.Pool.ParticipantPage do
         <%= if Enum.count(@contributions) > 0 do %>
           <div>
             <Text.title2>
-              <%= dgettext("eyra-campaign", "campaign.subject.title") %>
+              <%= dgettext("eyra-advert", "advert.subject.title") %>
               <span class="text-primary"> <%= Enum.count(@contributions) %></span>
             </Text.title2>
             <.list items={@contributions} />

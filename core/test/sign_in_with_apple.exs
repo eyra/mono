@@ -1,7 +1,7 @@
 defmodule SignInWithApple.Test do
-  use Link.DataCase, async: true
+  use Core.DataCase, async: true
 
-  alias Link.Factories
+  alias Core.Factories
   alias SignInWithApple
 
   describe "get_user_by_sub/1" do

@@ -10,7 +10,7 @@ defmodule Systems.Budget.FundingPage do
   alias Systems.{
     Budget,
     Bookkeeping,
-    Campaign
+    Advert
   }
 
   import Budget.BalanceView
@@ -53,25 +53,25 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
-      |> update_campaigns()
+      |> update_adverts()
     }
   end
 
-  defp update_campaigns(%{assigns: %{selected_budget: nil}} = socket) do
-    socket |> assign(campaign_items: [])
+  defp update_adverts(%{assigns: %{selected_budget: nil}} = socket) do
+    socket |> assign(advert_items: [])
   end
 
-  defp update_campaigns(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
-    campaign_items =
+  defp update_adverts(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
+    advert_items =
       selected_budget
-      |> Campaign.Public.list_by_budget(Campaign.Model.preload_graph(:down))
+      |> Advert.Public.list_by_budget(Advert.Model.preload_graph(:down))
       |> Enum.map(&to_content_list_item(&1, assigns))
 
-    socket |> assign(campaign_items: campaign_items)
+    socket |> assign(advert_items: advert_items)
   end
 
-  defp to_content_list_item(campaign, assigns) do
-    ViewModelBuilder.view_model(campaign, {__MODULE__, :budget_campaigns}, assigns)
+  defp to_content_list_item(advert, assigns) do
+    ViewModelBuilder.view_model(advert, {__MODULE__, :budget_adverts}, assigns)
   end
 
   defp update_budgets(%{assigns: %{current_user: user}} = socket) do
@@ -228,7 +228,7 @@ defmodule Systems.Budget.FundingPage do
       |> assign(selected_budget: selected_budget)
       |> update_balance()
       |> update_squares()
-      |> update_campaigns()
+      |> update_adverts()
     }
   end
 
@@ -279,7 +279,7 @@ defmodule Systems.Budget.FundingPage do
   # data(deposit_button, :map)
   # data(budgets, :list)
   # data(selected_budget, :any, default: nil)
-  # data(campaign_items, :list, default: [])
+  # data(advert_items, :list, default: [])
   # data(balance, :any, default: nil)
   # data(squares, :list)
   # data(popup, :any)
@@ -321,9 +321,9 @@ defmodule Systems.Budget.FundingPage do
             <% end %>
             <Text.title3 margin="">
               <%= dgettext("eyra-budget", "linked.assignments.title") %>
-              <span class="text-primary"> <%= Enum.count(@campaign_items) %></span>
+              <span class="text-primary"> <%= Enum.count(@advert_items) %></span>
             </Text.title3>
-            <.list items={@campaign_items} />
+            <.list items={@advert_items} />
           </div>
         <% end %>
       </Area.content>

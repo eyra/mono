@@ -16,7 +16,7 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 * Banking
 * Bookkeeping
 * Budget
-* Campaign
+* Advert
 * Assignment
 * Lab
 * Questionnaire

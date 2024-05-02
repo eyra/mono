@@ -9,7 +9,7 @@ defmodule Systems.Promotion.LandingPage do
 
   import CoreWeb.UI.Responsive.Viewport
 
-  import Frameworks.Pixel.CampaignBanner
+  import Systems.Advert.BannerView
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
 
@@ -179,7 +179,7 @@ defmodule Systems.Promotion.LandingPage do
         <Text.body_large><%= @vm.description %></Text.body_large>
         <.spacing value="L" />
 
-        <.campaign_banner
+        <.advert_banner
           photo_url={@vm.banner_photo_url}
           placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
           title={@vm.banner_title}

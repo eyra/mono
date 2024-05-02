@@ -6,14 +6,13 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
   alias Systems.{
     Student,
     Pool,
-    Campaign
+    Advert
   }
 
   def view_model(%Pool.SubmissionModel{} = submission, %{current_user: user}) do
-    %{promotion: promotion} =
-      campaign = Campaign.Public.get_by_submission(submission, [:promotion])
+    %{promotion: promotion} = advert = Advert.Public.get_by_submission(submission, [:promotion])
 
-    owners = Campaign.Public.list_owners(campaign, [:profile, :features])
+    owners = Advert.Public.list_owners(advert, [:profile, :features])
     owner = List.first(owners)
     member = Pool.Builders.ResearcherItem.view_model(owner, promotion)
 
@@ -22,7 +21,7 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
     validate? = accepted? or completed?
 
     update_at =
-      campaign.updated_at
+      advert.updated_at
       |> CoreWeb.UI.Timestamp.apply_timezone()
       |> CoreWeb.UI.Timestamp.humanize()
 
@@ -30,10 +29,9 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
 
     preview_path = ~p"/promotion/#{promotion.id}?preview=true"
 
-    excluded_campaigns =
-      Campaign.Public.list_excluded_campaigns([campaign], Campaign.Model.preload_graph(:down))
-      |> Enum.map(&Campaign.Model.flatten(&1))
-      |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
+    excluded_adverts =
+      Advert.Public.list_excluded_adverts([advert], Advert.Model.preload_graph(:down))
+      |> Enum.map(&Pool.Builders.AdvertItem.view_model(&1))
 
     form = %{
       live_component: Student.Pool.SubmissionForm,
@@ -45,8 +43,8 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
       member: member,
       submission: submission,
       promotion_id: promotion.id,
-      campaign_id: campaign.id,
-      excluded_campaigns: excluded_campaigns,
+      advert_id: advert.id,
+      excluded_adverts: excluded_adverts,
       title: promotion.title,
       byline: byline,
       accepted?: accepted?,

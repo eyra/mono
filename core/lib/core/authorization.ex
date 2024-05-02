@@ -24,7 +24,7 @@ defmodule Core.Authorization do
   Core.BundleOverrides.grants()
 
   # Models
-  grant_access(Systems.Campaign.Model, [:visitor, :member])
+  grant_access(Systems.Advert.Model, [:visitor, :member])
   grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
 
@@ -39,8 +39,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Support.HelpdeskPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.NextAction.OverviewPage, [:member])
-  grant_access(Systems.Campaign.OverviewPage, [:researcher])
-  grant_access(Systems.Campaign.ContentPage, [:owner])
+  grant_access(Systems.Advert.OverviewPage, [:researcher])
+  grant_access(Systems.Advert.ContentPage, [:owner])
   grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
   grant_access(Systems.Assignment.ContentPage, [:owner])
   grant_access(Systems.Assignment.LandingPage, [:participant])

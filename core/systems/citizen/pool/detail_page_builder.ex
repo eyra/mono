@@ -4,7 +4,7 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
   alias Systems.{
     Citizen,
     Pool,
-    Campaign
+    Advert
   }
 
   def view_model(pool, assigns) do
@@ -18,7 +18,7 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
          %{initial_tab: initial_tab},
          %{participants: participants} = pool
        ) do
-    campaigns = load_campaigns(pool)
+    adverts = load_adverts(pool)
 
     [
       %{
@@ -30,21 +30,20 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
         active: initial_tab === :citizens
       },
       %{
-        id: :campaigns,
-        title: dgettext("link-citizen", "tabbar.item.campaigns"),
-        live_component: Pool.CampaignsView,
-        props: %{campaigns: campaigns},
+        id: :adverts,
+        title: dgettext("link-citizen", "tabbar.item.adverts"),
+        live_component: Advert.ListView,
+        props: %{adverts: adverts},
         type: :fullpage,
-        active: initial_tab === :campaigns
+        active: initial_tab === :adverts
       }
     ]
   end
 
-  defp load_campaigns(pool) do
-    preload = Campaign.Model.preload_graph(:down)
+  defp load_adverts(pool) do
+    preload = Advert.Model.preload_graph(:down)
 
-    Campaign.Public.list_submitted(pool, preload: preload)
-    |> Enum.map(&Campaign.Model.flatten(&1))
-    |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
+    Advert.Public.list_submitted(pool, preload: preload)
+    |> Enum.map(&Pool.Builders.AdvertItem.view_model(&1))
   end
 end

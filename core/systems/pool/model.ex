@@ -94,7 +94,7 @@ defmodule Systems.Pool.Model do
   def preload_graph(:currency), do: [currency: Budget.CurrencyModel.preload_graph(:full)]
   def preload_graph(:org), do: [org: Org.NodeModel.preload_graph(:full)]
   def preload_graph(:participants), do: [participants: [:profile, :features]]
-  def preload_graph(:submissions), do: [submissions: [:criteria]]
+  def preload_graph(:submission), do: [submission: [:criteria]]
   def preload_graph(:auth_node), do: [auth_node: []]
 
   def labels(pools, active_pool) do

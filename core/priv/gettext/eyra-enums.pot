@@ -203,27 +203,27 @@ msgid "submission_status.submitted"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.closed"
+msgid "advert_status.closed"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.completed"
+msgid "advert_status.completed"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.retracted"
+msgid "advert_status.retracted"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.released"
+msgid "advert_status.released"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.scheduled"
+msgid "advert_status.scheduled"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.submitted"
+msgid "advert_status.submitted"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

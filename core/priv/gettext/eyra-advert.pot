@@ -1,0 +1,91 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.subject.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.content"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "share.dialog.group"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.pool.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.proceed.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.template.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.poor.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.rich.label"
+msgstr ""

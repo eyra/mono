@@ -63,8 +63,7 @@ defmodule Systems.Project.AssemblyTest do
                auth_node: %Core.Authorization.Node{
                  role_assignments: []
                },
-               excluded: [],
-               director: nil
+               excluded: []
              }
            } = item
   end

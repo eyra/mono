@@ -8,5 +8,5 @@
   # Deprecated fiunction raises exception
   {"systems/assignment/_director.ex", :no_return},
   {"systems/assignment/_private.ex", :no_return},
-  {"systems/campaign/builders/promotion_landing_page.ex", :no_return}
+  {"systems/advert/builders/promotion_landing_page.ex", :no_return}
 ]

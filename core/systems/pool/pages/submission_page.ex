@@ -1,6 +1,6 @@
 defmodule Systems.Pool.SubmissionPage do
   @moduledoc """
-   The submission page for a campaign.
+   The submission page for a advert.
   """
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Workspace.Component, :pool_submission
@@ -218,10 +218,10 @@ defmodule Systems.Pool.SubmissionPage do
           />
         <% end %>
 
-        <%= if Enum.count(@vm.excluded_campaigns) > 0 do %>
+        <%= if Enum.count(@vm.excluded_adverts) > 0 do %>
           <Area.content>
-            <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("link-studentpool", "excluded.campaigns.title") %></Text.title3>
-            <.list items={@vm.excluded_campaigns} />
+            <Text.title3 margin="mb-5 sm:mb-8"><%= dgettext("link-studentpool", "excluded.adverts.title") %></Text.title3>
+            <.list items={@vm.excluded_adverts} />
             <.spacing value="M" />
           </Area.content>
         <% end %>

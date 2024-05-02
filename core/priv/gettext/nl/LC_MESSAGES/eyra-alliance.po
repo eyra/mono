@@ -83,7 +83,7 @@ msgid "monitor.empty.title"
 msgstr "Campagne ingediend?"
 
 #, elixir-autogen, elixir-format
-msgid "campaign.overview.title"
+msgid "advert.overview.title"
 msgstr "Campagnes"
 
 #, elixir-autogen, elixir-format

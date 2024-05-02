@@ -7,7 +7,7 @@ defmodule Systems.Admin.ActionsView do
   alias Frameworks.Pixel.Text
 
   alias Systems.{
-    Campaign,
+    Advert,
     Budget,
     Student,
     Assignment
@@ -157,19 +157,19 @@ defmodule Systems.Admin.ActionsView do
 
   @impl true
   def handle_event("sync_rewards", _, socket) do
-    Campaign.Public.sync_student_credits()
+    Advert.Public.sync_student_credits()
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("expire_force", _, socket) do
-    Campaign.Public.mark_expired_debug(true)
+    Advert.Public.mark_expired_debug(true)
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("expire", _, socket) do
-    Campaign.Public.mark_expired_debug()
+    Advert.Public.mark_expired_debug()
     {:noreply, socket}
   end
 
@@ -207,7 +207,7 @@ defmodule Systems.Admin.ActionsView do
         <Button.dynamic {@sync_rewards_button} />
       </.wrap>
       <.spacing value="XL" />
-      <Text.title3 margin="">Campaigns</Text.title3>
+      <Text.title3 margin="">Adverts</Text.title3>
       <.spacing value="S" />
       <.wrap>
         <Button.dynamic {@expire_button} />

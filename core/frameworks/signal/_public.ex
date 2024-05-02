@@ -16,7 +16,7 @@ defmodule Frameworks.Signal.Public do
     "Systems.Workflow.Switch",
     "Systems.Pool.Switch",
     "Systems.Student.Switch",
-    "Systems.Campaign.Switch",
+    "Systems.Advert.Switch",
     "Systems.NextAction.Switch",
     "Systems.Crew.Switch",
     "Systems.Instruction.Switch",
