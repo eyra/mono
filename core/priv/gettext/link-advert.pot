@@ -43,10 +43,6 @@ msgid "exclusion.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "no.previous.campaigns.available"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.status"
 msgstr ""
 
@@ -96,4 +92,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submission.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "no.previous.adverts.available"
 msgstr ""

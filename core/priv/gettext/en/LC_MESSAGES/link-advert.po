@@ -43,10 +43,6 @@ msgid "exclusion.title"
 msgstr "Exclusion"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "no.previous.campaigns.available"
-msgstr "No previous campaigns available yet"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "submission.criteria.status"
 msgstr "Based on the selected criteria, %{sample} out of %{total} people in the %{pool} pool can participate in your study."
 
@@ -97,3 +93,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.submission.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "no.previous.adverts.available"
+msgstr "No previous campaigns available yet"

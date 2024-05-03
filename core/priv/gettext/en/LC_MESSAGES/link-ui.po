@@ -11,10 +11,6 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "delete.confirm.campaign"
-msgstr "campaign"
-
-#, elixir-autogen, elixir-format
 msgid "delete.button"
 msgstr "Delete"
 
@@ -37,3 +33,7 @@ msgstr "Publish"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
 msgstr "Finish up"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "delete.confirm.advert"
+msgstr "campaign"

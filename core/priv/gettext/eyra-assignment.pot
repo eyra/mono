@@ -11,26 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "cancel.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "contact.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr ""
 

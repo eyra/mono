@@ -11,26 +11,6 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "cancel.button"
-msgstr "Cancel"
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.label"
-msgstr "Confirm"
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.text"
-msgstr "We will release your spot to enable others to participate."
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.title"
-msgstr "Release spot?"
-
-#, elixir-autogen, elixir-format
-msgid "contact.button"
-msgstr "Contact researcher"
-
-#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Settings"
 

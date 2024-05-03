@@ -184,10 +184,6 @@ msgid "settings.label.metrics"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.label.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "settings.label.title"
 msgstr ""
 

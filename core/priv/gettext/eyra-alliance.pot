@@ -147,22 +147,6 @@ msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "task.hero.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.pending.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr ""
 
@@ -180,22 +164,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.subtitle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen

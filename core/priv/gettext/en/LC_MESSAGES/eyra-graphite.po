@@ -183,10 +183,6 @@ msgstr "Select csv file with results"
 msgid "settings.label.metrics"
 msgstr "Metric titles"
 
-#, elixir-autogen, elixir-format
-msgid "settings.label.subtitle"
-msgstr "Subtitle"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.label.title"
 msgstr "Leaderboard title"

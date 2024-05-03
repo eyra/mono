@@ -147,22 +147,6 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-autogen, elixir-format
-msgid "task.hero.title"
-msgstr "Studie"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.subtitle"
-msgstr "Je hebt bijgedragen aan deze studie"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.text"
-msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling, wordt jouw bijdrage goedgekeurd of afgekeurd."
-
-#, elixir-autogen, elixir-format
-msgid "task.pending.subtitle"
-msgstr "Instructies"
-
-#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
@@ -181,22 +165,6 @@ msgstr "Taal"
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
 msgstr "Start"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.subtitle"
-msgstr "Jouw bijdrage is goedgekeurd ✅"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.text"
-msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en goedgekeurd. Je ontvangt de beloning voor deze studie. Bedankt voor jouw deelname, jouw bijdrage aan deze studie wordt erg gewaardeerd."
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.subtitle"
-msgstr "Helaas, jouw bijdrage is afgekeurd"
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.text"
-msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"

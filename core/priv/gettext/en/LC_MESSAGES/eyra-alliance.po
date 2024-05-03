@@ -147,22 +147,6 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-autogen, elixir-format
-msgid "task.hero.title"
-msgstr "Study"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.subtitle"
-msgstr "You have contributed to this study"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.text"
-msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
-
-#, elixir-autogen, elixir-format
-msgid "task.pending.subtitle"
-msgstr "Instructions"
-
-#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
@@ -181,22 +165,6 @@ msgstr "Language"
 #, elixir-autogen, elixir-format
 msgid "add.new.button.short"
 msgstr "New"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.subtitle"
-msgstr "Your contribution has been approved ✅"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.text"
-msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.subtitle"
-msgstr "Unfortunately, your contribution is rejected"
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.text"
-msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
