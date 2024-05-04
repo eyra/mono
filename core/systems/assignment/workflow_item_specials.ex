@@ -5,12 +5,14 @@ defmodule Systems.Assignment.WorkflowItemSpecials do
   use Core.Enums.Base,
       {:assignment_workflow_item_types,
        [
-         :donate,
          :questionnaire,
+         :onsite_experiment,
+         :donate,
+         :submit,
          :request_manual,
          :download_manual,
-         :submit,
          :fork_instruction,
-         :download_instruction
+         :download_instruction,
+         :general_instruction
        ]}
 end

@@ -9,7 +9,6 @@ defmodule Systems.Advert.AssemblyTest do
   alias Systems.Assignment
   alias Systems.Workflow
   alias Systems.Alliance
-  alias Systems.Lab
   alias Systems.Pool
   alias Systems.Budget
 
@@ -37,7 +36,7 @@ defmodule Systems.Advert.AssemblyTest do
 
     setup [:login_as_researcher]
 
-    test "create online", %{user: researcher, mock: mock, budget: budget, pool: pool} do
+    test "create questionnaire", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -48,7 +47,8 @@ defmodule Systems.Advert.AssemblyTest do
          }}
       end)
 
-      advert = Advert.Assembly.create(:online, researcher, "New Advertisement", pool, budget)
+      advert =
+        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
 
       assert %Systems.Advert.Model{
                auth_node: %Core.Authorization.Node{
@@ -108,11 +108,11 @@ defmodule Systems.Advert.AssemblyTest do
       # WORKFLOW
 
       assert %Systems.Workflow.Model{
-               type: :one,
+               type: :many_mandatory,
                items: [
                  %Systems.Workflow.ItemModel{
                    group: nil,
-                   position: nil,
+                   position: 0,
                    title: nil,
                    description: nil,
                    tool_ref: %{
@@ -147,81 +147,6 @@ defmodule Systems.Advert.AssemblyTest do
       assert principal_id === researcher.id
     end
 
-    test "create lab", %{user: researcher, mock: mock, budget: budget, pool: pool} do
-      mock
-      |> expect(:get, fn _, "/photos/random", "query=abstract" ->
-        {:ok,
-         %{
-           "urls" => %{"raw" => "http://example.org"},
-           "user" => %{"username" => "tester", "name" => "Miss Test"},
-           "blur_hash" => "asdf"
-         }}
-      end)
-
-      advert = Advert.Assembly.create(:lab, researcher, "New Advertisement", pool, budget)
-
-      assert %Systems.Advert.Model{
-               auth_node: %Core.Authorization.Node{
-                 id: _advert_auth_node_id,
-                 parent_id: nil
-               },
-               assignment: %Systems.Assignment.Model{
-                 info: %Systems.Assignment.InfoModel{
-                   subject_count: nil,
-                   duration: nil,
-                   language: :en,
-                   devices: [],
-                   ethical_approval: nil,
-                   ethical_code: nil
-                 },
-                 workflow: %Systems.Workflow.Model{
-                   id: workflow_id,
-                   auth_node: %Core.Authorization.Node{
-                     id: workflow_auth_node_id
-                   }
-                 },
-                 auth_node: %Core.Authorization.Node{
-                   id: assignment_auth_node_id
-                 },
-                 crew: %Systems.Crew.Model{
-                   auth_node: %Core.Authorization.Node{
-                     parent_id: crew_auth_node_parent_id
-                   }
-                 }
-               }
-             } = advert
-
-      assert crew_auth_node_parent_id == assignment_auth_node_id
-
-      # WORKFLOW
-
-      assert %Systems.Workflow.Model{
-               type: :one,
-               items: [
-                 %Systems.Workflow.ItemModel{
-                   group: nil,
-                   position: nil,
-                   title: nil,
-                   description: nil,
-                   tool_ref: %{
-                     lab_tool: %Systems.Lab.ToolModel{
-                       id: lab_tool_id,
-                       auth_node: %Core.Authorization.Node{
-                         parent_id: ^workflow_auth_node_id
-                       },
-                       director: :assignment
-                     },
-                     feldspar_tool_id: nil,
-                     document_tool_id: nil,
-                     alliance_tool_id: nil
-                   }
-                 }
-               ]
-             } = Assignment.Public.get_workflow!(workflow_id, Workflow.Model.preload_graph(:down))
-
-      assert Lab.Public.get_time_slots(lab_tool_id) == []
-    end
-
     test "delete", %{user: researcher, mock: mock, budget: budget, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
@@ -233,7 +158,8 @@ defmodule Systems.Advert.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Advert.Assembly.create(:online, researcher, "New Advertisement", pool, budget)
+      %{id: id} =
+        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
 
       advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
 
@@ -257,7 +183,8 @@ defmodule Systems.Advert.AssemblyTest do
          }}
       end)
 
-      %{id: id} = Advert.Assembly.create(:online, researcher, "New Advertisement", pool, budget)
+      %{id: id} =
+        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
 
       %{
         id: id,

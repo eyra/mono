@@ -6,13 +6,16 @@ defmodule Systems.Assignment.ParticipantsView do
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
+  alias Systems.Assignment
 
   @impl true
-  def update(%{id: id, assignment: assignment}, socket) do
+  def update(%{id: id, assignment: assignment, template: template}, socket) do
+    content_flags = Assignment.Template.content_flags(template)
+
     {
       :ok,
       socket
-      |> assign(id: id, assignment: assignment)
+      |> assign(id: id, assignment: assignment, content_flags: content_flags)
       |> update_title()
       |> update_annotation()
       |> update_url()
@@ -47,35 +50,42 @@ defmodule Systems.Assignment.ParticipantsView do
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-assignment", "participants.title") %></Text.title2>
           <.spacing value="L" />
+            <div class="flex flex-col gap-4" %>
+            <%= if @content_flags[:advert_in_pool] do %>
+              CREATE ADVERTISEMENT
+            <% end %>
 
-          <Panel.flat bg_color="bg-grey1">
-            <:title>
-              <div class="text-title3 font-title3 text-white">
-                <%= @title %>
-              </div>
-            </:title>
-            <.spacing value="S" />
-            <%= if @annotation do %>
-              <Annotation.view annotation={@annotation} />
-            <% end %>
-            <%= if @url do %>
-              <.spacing value="S" />
-              <div class="flex flex-row gap-6 items-center">
-                <div class="flex-wrap">
-                  <Text.body_large color="text-white"><span class="break-all"><%= @url %></span></Text.body_large>
-                </div>
-                <div class="flex-wrap flex-shrink-0 mt-1">
-                  <div id="copy-assignment-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@url}>
-                    <Button.Face.label_icon
-                      label={dgettext("eyra-ui", "copy.clipboard.button")}
-                      icon={:clipboard_tertiary}
-                      text_color="text-tertiary"
-                    />
+            <%= if @content_flags[:invite_participants] do %>
+              <Panel.flat bg_color="bg-grey1">
+                <:title>
+                  <div class="text-title3 font-title3 text-white">
+                    <%= @title %>
                   </div>
-                </div>
-              </div>
+                </:title>
+                <.spacing value="S" />
+                <%= if @annotation do %>
+                  <Annotation.view annotation={@annotation} />
+                <% end %>
+                <%= if @url do %>
+                  <.spacing value="S" />
+                  <div class="flex flex-row gap-6 items-center">
+                    <div class="flex-wrap">
+                      <Text.body_large color="text-white"><span class="break-all"><%= @url %></span></Text.body_large>
+                    </div>
+                    <div class="flex-wrap flex-shrink-0 mt-1">
+                      <div id="copy-assignment-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@url}>
+                        <Button.Face.label_icon
+                          label={dgettext("eyra-ui", "copy.clipboard.button")}
+                          icon={:clipboard_tertiary}
+                          text_color="text-tertiary"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </Panel.flat>
             <% end %>
-          </Panel.flat>
+          </div>
         </Area.content>
       </div>
     """

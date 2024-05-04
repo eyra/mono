@@ -12,25 +12,14 @@ defmodule Systems.Assignment.ContentPageBuilder do
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
     This builder module supports several specials with each a specific View Model.
+    For a full overview of the template feature see `Systems.Assignment.Template`.
   """
 
   @doc """
-    Returns a view model based on the template table below:
-
-      | Option                | Benchmark Challenge  | Data Donation |
-      | :-------------------- | :------------------: | :-----------: |
-      | General settings      | No                   | Yes           |
-      | Branding settings     | Yes                  | Yes           |
-      | Information page      | Yes                  | Yes           |
-      | Privacy page          | Yes                  | Yes           |
-      | Consent form          | Yes                  | Yes           |
-      | Helpdesk page form    | Yes                  | Yes           |
-      | Panel settings        | No                   | Yes           |
-      | Storage settings      | No                   | Yes           |
-      | Invite participants   | Yes                  | No            |
-      | Worklow initial items | Yes, 3               | No, 0         |
-      | Workflow Library      | No                   | Yes           |
-      | Monitor               | Yes                  | Yes           |
+    Returns a view model based on the templates defined in:
+    * Benchmark Challenge: `Systems.Assignment.TemplateBenchmarkChallenge`
+    * Data Donation: `Systems.Assignment.TemplateDataDonation`
+    * Questionnaire: `Systems.Assignment.TemplateQuestionnaire`
   """
   def view_model(
         %{id: id} = assignment,
@@ -183,11 +172,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
     |> Enum.map(&create_tab(&1, assignment, template, show_errors, assigns))
   end
 
-  defp get_tab_keys(%{workflow: workflow, monitor: monitor, participants: participants} = _config) do
+  defp get_tab_keys(%{} = config) do
     [:settings]
-    |> List.append_if(workflow, :workflow)
-    |> List.append_if(participants, :participants)
-    |> List.append_if(monitor, :monitor)
+    |> List.append_if(:workflow, config[:workflow])
+    |> List.append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
+    |> List.append_if(:monitor, config[:monitor])
   end
 
   defp create_tab(
@@ -261,7 +250,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   defp create_tab(
          :participants,
          assignment,
-         _template,
+         template,
          show_errors,
          _assigns
        ) do
@@ -274,7 +263,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       live_component: Assignment.ParticipantsView,
       props: %{
-        assignment: assignment
+        assignment: assignment,
+        template: template
       }
     }
   end

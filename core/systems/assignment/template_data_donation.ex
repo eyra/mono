@@ -10,9 +10,7 @@ defmodule Systems.Assignment.TemplateDataDonation do
     def title(t), do: Assignment.Templates.translate(t.id)
 
     def content_flags(_t) do
-      Map.merge(Assignment.ContentFlags.new(), %{
-        participants: false
-      })
+      Assignment.ContentFlags.new(opt_out: [:invite_participants, :advert_in_pool])
     end
 
     def workflow(_t),

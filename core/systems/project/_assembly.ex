@@ -104,6 +104,14 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
+  defp prepare_item(:questionnaire, name) do
+    {:ok, assignment} =
+      Assignment.Assembly.prepare(:questionnaire, :project, nil)
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
+  end
+
   # PROJECT PATH
   def update_path(multi, %{project: project}), do: update_path(multi, project)
 

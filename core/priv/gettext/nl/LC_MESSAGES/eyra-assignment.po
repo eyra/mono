@@ -369,3 +369,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
 msgstr "Panel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.general_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.onsite_experiment.description"
+msgstr ""

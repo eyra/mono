@@ -418,10 +418,6 @@ msgstr ""
 msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "project_item_templates.leaderboard"
-msgstr "Benchmark Leaderboard"
-
 #, elixir-autogen, elixir-format
 msgid "leaderboard_status.concept"
 msgstr ""
@@ -440,4 +436,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.public"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.questionnaire"
+msgstr "Data Donatie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.general_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.onsite_experiment"
 msgstr ""
