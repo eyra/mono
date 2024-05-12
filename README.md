@@ -1,6 +1,6 @@
 # Eyra Mono
 
-Primary collection of Eyra projects
+Codebase used by the Next platform, which is also available for self hosting (see [bundles](https://github.com/eyra/mono#bundles)).
 
 ## Projects
 
