@@ -246,22 +246,15 @@ defmodule Systems.Pool.Public do
     |> Repo.update!()
   end
 
-  def create_submission(%{} = attrs, pool) do
-    submission_changeset =
-      %Pool.SubmissionModel{}
-      |> Pool.SubmissionModel.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:pool, pool)
-
-    criteria_changeset =
+  def prepare_submission(%{} = attrs, pool) do
+    criteria =
       %Pool.CriteriaModel{}
-      |> Pool.CriteriaModel.changeset(%{
-        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_1_h, :vu_sbe_iba_1, :vu_sbe_iba_1_h]
-      })
-      |> Ecto.Changeset.put_assoc(:submission, submission_changeset)
+      |> Pool.CriteriaModel.changeset(%{})
 
-    criteria = Repo.insert!(criteria_changeset)
-
-    {:ok, criteria.submission}
+    %Pool.SubmissionModel{}
+    |> Pool.SubmissionModel.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:pool, pool)
+    |> Ecto.Changeset.put_assoc(:criteria, criteria)
   end
 
   def copy(%Pool.SubmissionModel{pool: pool, criteria: criteria} = submission) do

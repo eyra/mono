@@ -3,31 +3,13 @@ defmodule Systems.Crew.RejectView do
 
   require Logger
 
-  alias Frameworks.Pixel.Selector
   import Frameworks.Pixel.Form
+  alias Frameworks.Pixel.Selector
 
-  alias Systems.{
-    Crew
-  }
-
-  import CoreWeb.Gettext
+  alias Systems.Crew
 
   @impl true
-  def update(
-        %{active_item_id: category, selector_id: :category},
-        socket
-      ) do
-    categories = Crew.RejectCategories.labels(category)
-
-    {
-      :ok,
-      socket
-      |> assign(category: category, categories: categories)
-    }
-  end
-
-  @impl true
-  def update(%{id: id, target: target}, socket) do
+  def update(%{id: id}, socket) do
     title = dgettext("link-advert", "reject.title")
     text = dgettext("link-advert", "reject.text")
     note = dgettext("link-advert", "reject.note")
@@ -42,7 +24,6 @@ defmodule Systems.Crew.RejectView do
       socket
       |> assign(
         id: id,
-        target: target,
         title: title,
         text: text,
         note: note,
@@ -51,6 +32,19 @@ defmodule Systems.Crew.RejectView do
         model: model,
         changeset: changeset
       )
+      |> compose_child(:category)
+    }
+  end
+
+  @impl true
+  def compose(:category, %{categories: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio,
+        optional?: false
+      }
     }
   end
 
@@ -69,15 +63,14 @@ defmodule Systems.Crew.RejectView do
   def handle_event(
         "reject",
         %{"reject_model" => %{"message" => message}},
-        %{assigns: %{model: model, target: target, category: category}} = socket
+        %{assigns: %{model: model, category: category}} = socket
       ) do
     attrs = %{category: category, message: message}
     changeset = Crew.RejectModel.changeset(model, :submit, attrs)
 
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, model} ->
-        update_target(target, %{reject: :submit, rejection: model})
-        {:noreply, socket}
+        {:noreply, socket |> send_event(:parent, "reject_submit", %{rejection: model})}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         Enum.each(changeset.errors, fn {key, {error, _}} ->
@@ -89,9 +82,19 @@ defmodule Systems.Crew.RejectView do
   end
 
   @impl true
-  def handle_event("cancel", _params, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{reject: :cancel})
-    {:noreply, socket}
+  def handle_event("cancel", _params, socket) do
+    {:noreply, socket |> send_event(:parent, "reject_cancel")}
+  end
+
+  @impl true
+  def handle_event("active_item_id", %{active_item_id: category, selector_id: :category}, socket) do
+    categories = Crew.RejectCategories.labels(category)
+
+    {
+      :noreply,
+      socket
+      |> assign(category: category, categories: categories)
+    }
   end
 
   defp buttons(target) do
@@ -110,17 +113,6 @@ defmodule Systems.Crew.RejectView do
       }
     ]
   end
-
-  # data(title, :string)
-  # data(text, :string)
-  # data(note, :string)
-  # data(message_input_label, :string)
-  # data(categories, :list)
-  # data(category, :atom)
-  # data(model, :map)
-  # data(changeset, :map)
-
-  attr(:target, :map, required: true)
 
   @impl true
   def render(assigns) do
@@ -142,14 +134,7 @@ defmodule Systems.Crew.RejectView do
           </div>
         </div>
         <.form id="reject_form" :let={form} for={@changeset} phx-change="update" phx-submit="reject" phx-target={@myself} >
-          <.live_component
-          module={Selector}
-            id={:category}
-            items={@categories}
-            type={:radio}
-            optional?={false}
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <.child name={:category} fabric={@fabric} />
           <.spacing value="M" />
           <.text_input form={form}
             field={:message}

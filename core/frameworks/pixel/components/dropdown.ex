@@ -1,5 +1,7 @@
 defmodule Frameworks.Pixel.Dropdown do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
+
+  alias Frameworks.Pixel.Button
 
   attr(:index, :integer, required: true)
   attr(:label, :string, required: true)

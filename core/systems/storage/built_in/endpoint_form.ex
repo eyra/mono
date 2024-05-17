@@ -1,6 +1,5 @@
 defmodule Systems.Storage.BuiltIn.EndpointForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   require Logger
 

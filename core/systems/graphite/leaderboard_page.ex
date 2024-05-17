@@ -1,9 +1,7 @@
 defmodule Systems.Graphite.LeaderboardPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-  use Systems.Observatory.Public
+  use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Composer
   use CoreWeb.UI.Responsive.Viewport
-  use CoreWeb.Layouts.Stripped.Component, :leaderboard
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Card
@@ -18,26 +16,29 @@ defmodule Systems.Graphite.LeaderboardPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
-    model =
-      Graphite.Public.get_leaderboard!(
-        String.to_integer(id),
-        Graphite.LeaderboardModel.preload_graph(:down)
-      )
+  def get_model(%{"id" => id}, _session, _socket) do
+    Graphite.Public.get_leaderboard!(
+      String.to_integer(id),
+      Graphite.LeaderboardModel.preload_graph(:down)
+    )
+  end
 
+  @impl true
+  def mount(%{"id" => id}, _session, socket) do
     {
       :ok,
       socket
       |> assign(
         id: id,
-        model: model,
         image_info: nil
       )
-      |> observe_view_model()
       |> update_image_info()
       |> compose_child(:leaderboard_table)
     }
   end
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   @impl true
   def handle_resize(socket) do
@@ -46,6 +47,7 @@ defmodule Systems.Graphite.LeaderboardPage do
     |> update_menus()
   end
 
+  @impl true
   def handle_view_model_updated(socket) do
     socket
     |> update_image_info()

@@ -8,19 +8,6 @@ defmodule CoreWeb.User.Forms.Features do
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, %{selector_id => active_item_id})
-    }
-  end
-
   @impl true
   def update(%{id: id, user: user}, socket) do
     entity = Accounts.get_features(user)
@@ -55,6 +42,42 @@ defmodule CoreWeb.User.Forms.Features do
     |> assign(gender_labels: gender_labels)
     |> assign(dominanthand_labels: dominanthand_labels)
     |> assign(nativelanguage_labels: nativelanguage_labels)
+    |> compose_child(:gender)
+    |> compose_child(:dominant_hand)
+    |> compose_child(:native_language)
+  end
+
+  @impl true
+  def compose(:gender, %{gender_labels: gender_labels}) do
+    %{
+      module: Selector,
+      params: %{
+        items: gender_labels,
+        type: :radio
+      }
+    }
+  end
+
+  @impl true
+  def compose(:dominant_hand, %{dominanthand_labels: dominanthand_labels}) do
+    %{
+      module: Selector,
+      params: %{
+        items: dominanthand_labels,
+        type: :radio
+      }
+    }
+  end
+
+  @impl true
+  def compose(:native_language, %{nativelanguage_labels: nativelanguage_labels}) do
+    %{
+      module: Selector,
+      params: %{
+        items: nativelanguage_labels,
+        type: :radio
+      }
+    }
   end
 
   # Saving
@@ -66,12 +89,18 @@ defmodule CoreWeb.User.Forms.Features do
     |> update_ui()
   end
 
-  # data(user, :any)
-  # data(entity, :any, default: nil)
-  # data(gender_labels, :any, default: [])
-  # data(dominanthand_labels, :any, default: [])
-  # data(nativelanguage_labels, :any, default: [])
-  # data(changeset, :any, default: nil)
+  @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: active_item_id, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> save(entity, :auto_save, %{selector_id => active_item_id})
+    }
+  end
 
   attr(:user, :map, required: true)
   @impl true
@@ -86,33 +115,15 @@ defmodule CoreWeb.User.Forms.Features do
         <.spacing value="XL" />
 
         <Text.title3><%= dgettext("eyra-account", "features.gender.title") %></Text.title3>
-        <.live_component
-          module={Selector}
-          id={:gender}
-          items={@gender_labels}
-          type={:radio}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:gender} fabric={@fabric} />
         <.spacing value="XL" />
 
         <Text.title3><%= dgettext("eyra-account", "features.nativelanguage.title") %></Text.title3>
-        <.live_component
-          module={Selector}
-          id={:native_language}
-          items={@nativelanguage_labels}
-          type={:radio}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:native_language} fabric={@fabric} />
         <.spacing value="XL" />
 
         <Text.title3><%= dgettext("eyra-account", "features.dominanthand.title") %></Text.title3>
-        <.live_component
-          module={Selector}
-          id={:dominant_hand}
-          items={@dominanthand_labels}
-          type={:radio}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:dominant_hand} fabric={@fabric} />
       </Area.form>
       </Area.content>
     </div>

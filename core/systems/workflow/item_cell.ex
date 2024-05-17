@@ -42,9 +42,8 @@ defmodule Systems.Workflow.ItemCell do
   end
 
   @impl true
-  def handle_event(action, _params, %{assigns: %{parent: parent, item: item}} = socket) do
-    update_target(parent, %{module: __MODULE__, action: action, item: item})
-    {:noreply, socket}
+  def handle_event(action, _params, %{assigns: %{item: item}} = socket) do
+    {:noreply, socket |> send_event(:parent, %{module: __MODULE__, action: action, item: item})}
   end
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do

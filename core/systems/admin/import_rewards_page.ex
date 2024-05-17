@@ -1,9 +1,6 @@
 defmodule Systems.Admin.ImportRewardsPage do
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :import_rewards
+  use Systems.Content.Composer, :live_workspace
   use CoreWeb.FileUploader, accept: ~w(.csv)
-
-  import CoreWeb.Layouts.Workspace.Component
 
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Panel
@@ -32,8 +29,88 @@ defmodule Systems.Admin.ImportRewardsPage do
       lines_unknown: [],
       lines_valid: [],
       local_file: path,
-      uploaded_file: original_filename
+      uploaded_file: original_filename,
+      active_menu_item: :admin
     )
+  end
+
+  @impl true
+  def get_model(_params, _session, _socket) do
+    Systems.Observatory.SingletonModel.instance()
+  end
+
+  def mount(%{"back" => back}, _session, socket) do
+    entity = %Admin.ImportRewardsModel{}
+
+    changeset =
+      entity
+      |> Admin.ImportRewardsModel.changeset(%{})
+
+    process_button = %{
+      action: %{
+        type: :send,
+        event: "process"
+      },
+      face: %{
+        type: :secondary,
+        border_color: "bg-tertiary",
+        text_color: "text-tertiary",
+        label: "Start session"
+      }
+    }
+
+    import_button = %{
+      action: %{
+        type: :send,
+        event: "import_all"
+      },
+      face: %{
+        type: :primary,
+        label: "Import all"
+      }
+    }
+
+    currency_labels =
+      Org.Public.list_nodes(:student_course, ["vu", ":2021"])
+      |> Enum.map(&Student.Course.currency(&1.identifier))
+      |> Enum.map(&%{id: &1, value: &1, active: false})
+
+    {
+      :ok,
+      socket
+      |> assign(
+        local_file: nil,
+        entity: entity,
+        changeset: changeset,
+        process_button: process_button,
+        import_button: import_button,
+        currency_labels: currency_labels,
+        back_path: back,
+        lines_valid: [],
+        lines_unknown: [],
+        lines_error: []
+      )
+      |> init_file_uploader(:csv)
+      |> compose_child(:currency)
+    }
+  end
+
+  @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
+  def compose(:currency, %{currency_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio,
+        background: :dark
+      }
+    }
   end
 
   def filter_ok({:ok, _}), do: true
@@ -162,7 +239,8 @@ defmodule Systems.Admin.ImportRewardsPage do
     socket
   end
 
-  def handle_info(%{active_item_id: currency, selector_id: :currency}, socket) do
+  @impl true
+  def handle_event("active_item_id", %{active_item_id: currency}, socket) do
     {:noreply, socket |> assign(currency: currency)}
   end
 
@@ -225,61 +303,6 @@ defmodule Systems.Admin.ImportRewardsPage do
     {:noreply, socket}
   end
 
-  def mount(%{"back" => back}, _session, socket) do
-    entity = %Admin.ImportRewardsModel{}
-
-    changeset =
-      entity
-      |> Admin.ImportRewardsModel.changeset(%{})
-
-    process_button = %{
-      action: %{
-        type: :send,
-        event: "process"
-      },
-      face: %{
-        type: :secondary,
-        border_color: "bg-tertiary",
-        text_color: "text-tertiary",
-        label: "Start session"
-      }
-    }
-
-    import_button = %{
-      action: %{
-        type: :send,
-        event: "import_all"
-      },
-      face: %{
-        type: :primary,
-        label: "Import all"
-      }
-    }
-
-    currency_labels =
-      Org.Public.list_nodes(:student_course, ["vu", ":2021"])
-      |> Enum.map(&Student.Course.currency(&1.identifier))
-      |> Enum.map(&%{id: &1, value: &1, active: false})
-
-    {
-      :ok,
-      socket
-      |> assign(
-        local_file: nil,
-        entity: entity,
-        changeset: changeset,
-        process_button: process_button,
-        import_button: import_button,
-        currency_labels: currency_labels,
-        back_path: back,
-        lines_valid: [],
-        lines_unknown: [],
-        lines_error: []
-      )
-      |> init_file_uploader(:csv)
-    }
-  end
-
   defp message_color(%{status: :incorrect_currency}), do: "text-delete"
   defp message_color(%{status: :transaction_exists}), do: "text-grey1"
   defp message_color(%{status: :zero_credits}), do: "text-warning"
@@ -288,23 +311,10 @@ defmodule Systems.Admin.ImportRewardsPage do
   defp opacity(%{status: :transaction_exists}), do: "opacity-30"
   defp opacity(_), do: "opacity-100"
 
-  # data(back_path, :any)
-  # data(process_button, :any)
-  # data(import_button, :any)
-  # data(entity, :any)
-  # data(changeset, :any)
-
-  # data(currency, :atom, default: :first)
-  # data(local_file, :any, default: nil)
-  # data(session_key, :string, default: "")
-  # data(uploaded_file, :string, default: "-")
-  # data(lines_error, :any)
-  # data(lines_unknown, :any)
-  # data(lines_valid, :any)
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title="Import rewards" menus={@menus}>
+    <.live_workspace title="Import rewards" menus={@menus} popup={@popup} dialog={@dialog}>
       <Margin.y id={:page_top} />
       <Area.content>
         <Panel.flat bg_color="bg-grey1">
@@ -338,14 +348,7 @@ defmodule Systems.Admin.ImportRewardsPage do
                 <.spacing value="XS" />
                 <Text.title6 color="text-white">Currency</Text.title6>
                 <.spacing value="XS" />
-                <.live_component
-                  module={Selector}
-                  id={:currency}
-                  items={@currency_labels}
-                  type={:radio}
-                  parent={self()}
-                  background={:dark}
-                />
+                <.child name={:currency} fabric={@fabric} />
                 <.spacing value="L" />
                 <.wrap>
                   <Button.dynamic {@process_button} />
@@ -430,7 +433,7 @@ defmodule Systems.Admin.ImportRewardsPage do
         <% end %>
         <Button.back label="Back" path={@back_path} />
       </Area.content>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

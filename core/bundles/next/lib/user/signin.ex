@@ -1,6 +1,7 @@
 defmodule Next.User.Signin do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :signin
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   alias Core.Accounts.User
   alias CoreWeb.User.Form
@@ -11,8 +12,9 @@ defmodule Next.User.Signin do
     {
       :ok,
       socket
-      |> assign(email: Map.get(params, "email"))
+      |> assign(email: Map.get(params, "email"), active_menu_item: :profile)
       |> update_form()
+      |> update_menus()
     }
   end
 

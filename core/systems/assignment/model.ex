@@ -13,6 +13,7 @@ defmodule Systems.Assignment.Model do
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Storage
+  alias Systems.Advert
   alias Systems.Project
 
   schema "assignments" do
@@ -31,6 +32,7 @@ defmodule Systems.Assignment.Model do
 
     has_one(:project_item, Project.ItemModel, foreign_key: :assignment_id)
     has_many(:page_refs, Assignment.PageRefModel, foreign_key: :assignment_id)
+    has_many(:adverts, Advert.Model, foreign_key: :assignment_id)
 
     many_to_many(
       :excluded,
@@ -91,6 +93,7 @@ defmodule Systems.Assignment.Model do
       :excluded,
       info: [],
       page_refs: [:page],
+      adverts: [],
       privacy_doc: [],
       consent_agreement: [:revisions],
       storage_endpoint: Storage.EndpointModel.preload_graph(:down),

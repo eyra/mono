@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.ImagePreview do
   @moduledoc false
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:image_url, :string)
   attr(:placeholder, :string, required: true)

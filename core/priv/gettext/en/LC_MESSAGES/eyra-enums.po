@@ -178,14 +178,6 @@ msgstr "Closed"
 msgid "ticket_status.open"
 msgstr "Open"
 
-#, elixir-autogen, elixir-format
-msgid "templates.lab"
-msgstr "Lab study"
-
-#, elixir-autogen, elixir-format
-msgid "templates.online"
-msgstr "Online study"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.accepted"
 msgstr "Published"
@@ -449,3 +441,7 @@ msgstr "Participant instructions"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.onsite_experiment"
 msgstr "Onsite experiment"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.questionnaire"
+msgstr "Questionnaire"

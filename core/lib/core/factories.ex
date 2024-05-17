@@ -2,7 +2,7 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Core.Accounts.{User, Profile, Features}
+  alias Core.Accounts.{User, Features}
 
   alias Core.{
     Authorization,
@@ -15,6 +15,7 @@ defmodule Core.Factories do
   }
 
   alias Systems.{
+    Account,
     Notification,
     Advert,
     Promotion,
@@ -45,7 +46,7 @@ defmodule Core.Factories do
       hashed_password: Bcrypt.hash_pwd_salt(valid_user_password()),
       displayname: Faker.Person.first_name(),
       confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      profile: %Profile{
+      profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       },
@@ -59,7 +60,7 @@ defmodule Core.Factories do
     :member
     |> build(%{researcher: true})
     |> struct!(%{
-      profile: %Profile{
+      profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       }
@@ -85,7 +86,7 @@ defmodule Core.Factories do
     :member
     |> build(%{student: true})
     |> struct!(%{
-      profile: %Profile{
+      profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       }

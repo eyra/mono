@@ -3,7 +3,8 @@ defmodule CoreWeb.User.ResetPasswordToken do
   The password reset token.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :signup
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   import Frameworks.Pixel.Form
 
@@ -12,15 +13,21 @@ defmodule CoreWeb.User.ResetPasswordToken do
 
   def mount(%{"token" => token}, _session, socket) do
     if user = Accounts.get_user_by_reset_password_token(token) do
-      {:ok,
-       socket
-       |> assign(:user, user)
-       |> assign(:changeset, Accounts.change_user_password(user))}
+      {
+        :ok,
+        socket
+        |> assign(:user, user)
+        |> assign(:active_menu_item, nil)
+        |> assign(:changeset, Accounts.change_user_password(user))
+        |> update_menus()
+      }
     else
-      {:ok,
-       socket
-       |> put_flash(:error, "Reset password link is invalid or it has expired.")
-       |> redirect(to: Routes.live_path(socket, CoreWeb.User.ResetPassword))}
+      {
+        :ok,
+        socket
+        |> put_flash(:error, "Reset password link is invalid or it has expired.")
+        |> redirect(to: ~p"/user/reset-password")
+      }
     end
   end
 
@@ -42,7 +49,6 @@ defmodule CoreWeb.User.ResetPasswordToken do
     end
   end
 
-  # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""

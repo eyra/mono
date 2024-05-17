@@ -13,19 +13,6 @@ defmodule CoreWeb.User.Forms.Student do
     Content
   }
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    active_item_ids =
-      active_item_ids
-      |> Enum.map(&String.to_atom(&1))
-
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
-  end
-
   @impl true
   def update(%{id: id, user: user}, socket) do
     entity = Accounts.get_features(user)
@@ -103,7 +90,20 @@ defmodule CoreWeb.User.Forms.Student do
   end
 
   defp update_ui(socket) do
-    update_student_classes(socket)
+    socket
+    |> update_student_classes()
+    |> compose_child(:study_program_codes)
+  end
+
+  @impl true
+  def compose(:study_program_codes, %{student_class_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :checkbox
+      }
+    }
   end
 
   defp update_student_classes(
@@ -142,13 +142,18 @@ defmodule CoreWeb.User.Forms.Student do
     |> update_ui()
   end
 
-  # data(user, :any)
-  # data(entity, :any)
-  # data(title, :any)
-  # data(student_classes, :any)
-  # data(student_class_labels, :any)
+  @impl true
+  def handle_event(
+        "active_item_ids",
+        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    active_item_ids =
+      active_item_ids
+      |> Enum.map(&String.to_atom(&1))
 
-  # data(changeset, :any)
+    {:noreply, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+  end
 
   attr(:user, :map, required: true)
   @impl true
@@ -163,14 +168,7 @@ defmodule CoreWeb.User.Forms.Student do
         <.spacing value="M" />
         <Text.title4><%= @title %></Text.title4>
         <.spacing value="S" />
-        <.live_component
-          module={Selector}
-          grid_options="grid grid-cols-2 gap-y-3"
-          id={:study_program_codes}
-          items={@student_class_labels}
-          type={:checkbox}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:study_program_codes} fabric={@fabric} />
       </Area.form>
       </Area.content>
     </div>

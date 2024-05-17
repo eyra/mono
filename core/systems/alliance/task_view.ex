@@ -2,7 +2,7 @@ defmodule Systems.Alliance.TaskView do
   use CoreWeb, :live_component
 
   alias Frameworks.Utility.LiveCommand
-  import CoreWeb.UI.Navigation, only: [button_bar: 1]
+  import Frameworks.Pixel.Navigation, only: [button_bar: 1]
 
   @impl true
   def handle_event(event, _params, socket) do

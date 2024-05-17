@@ -1,6 +1,5 @@
 defmodule Systems.Storage.EndpointForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   alias Frameworks.Concept
   alias Frameworks.Pixel.RadioGroup

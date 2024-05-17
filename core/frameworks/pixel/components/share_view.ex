@@ -1,14 +1,13 @@
 defmodule Frameworks.Pixel.ShareView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
-  alias CoreWeb.UI.UserListItem
+  alias Frameworks.Pixel.UserListItem
+  alias Frameworks.Pixel.Button
 
   @impl true
   def update(
         %{
           id: id,
-          content_id: content_id,
           content_name: content_name,
           group_name: group_name,
           users: users,
@@ -26,7 +25,6 @@ defmodule Frameworks.Pixel.ShareView do
       socket
       |> assign(
         id: id,
-        content_id: content_id,
         content_name: content_name,
         group_name: group_name,
         users: users,
@@ -48,7 +46,7 @@ defmodule Frameworks.Pixel.ShareView do
   def handle_event(
         "add",
         %{"item" => user_id},
-        %{assigns: %{users: users, shared_users: shared_users, content_id: content_id}} = socket
+        %{assigns: %{users: users, shared_users: shared_users}} = socket
       ) do
     {
       :noreply,
@@ -56,7 +54,7 @@ defmodule Frameworks.Pixel.ShareView do
         socket
         |> assign(shared_users: [user] ++ shared_users)
         |> filter_users()
-        |> send_event(:parent, "add_user", %{user: user, content_id: content_id})
+        |> send_event(:parent, "add_user", %{user: user})
       else
         socket
       end
@@ -67,7 +65,7 @@ defmodule Frameworks.Pixel.ShareView do
   def handle_event(
         "remove",
         %{"item" => user_id},
-        %{assigns: %{shared_users: shared_users, content_id: content_id}} = socket
+        %{assigns: %{shared_users: shared_users}} = socket
       ) do
     {
       :noreply,
@@ -75,7 +73,7 @@ defmodule Frameworks.Pixel.ShareView do
         socket
         |> assign(shared_users: shared_users |> List.delete(user))
         |> filter_users()
-        |> send_event(:parent, "remove_user", %{user: user, content_id: content_id})
+        |> send_event(:parent, "remove_user", %{user: user})
       else
         socket
       end

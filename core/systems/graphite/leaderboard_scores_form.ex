@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.LeaderboardScoresForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.csv)
 
   alias Frameworks.Pixel.Text

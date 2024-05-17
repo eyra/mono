@@ -57,7 +57,7 @@ defmodule Systems.Advert.ViewModelBuilderTest do
     end
 
     test "With 0 applications yet", %{advert: advert, user: user, author: author} do
-      view_model = Advert.Builders.PromotionLandingPage.view_model(advert, user)
+      view_model = Advert.PromotionLandingPageBuilder.view_model(advert, user)
 
       assert %{
                banner_photo_url: "https://eyra.co/image/1",
@@ -97,7 +97,7 @@ defmodule Systems.Advert.ViewModelBuilderTest do
       {:ok, %{member: member}} =
         Crew.Public.apply_member(advert.assignment.crew, user2, ["task2"])
 
-      view_model = Advert.Builders.PromotionLandingPage.view_model(advert, user)
+      view_model = Advert.PromotionLandingPageBuilder.view_model(advert, user)
 
       assert %{
                highlights: [

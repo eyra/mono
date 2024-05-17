@@ -1,31 +1,12 @@
 defmodule Systems.Graphite.LeaderboardTableView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   import Graphite.LeaderboardScoreHTML
-
-  @impl true
-  def update(
-        %{
-          active_item_id: active_item_id,
-          selector_id: :metric_selector
-        },
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(active_metric: active_item_id)
-      |> update_scores()
-    }
-  end
 
   @impl true
   def update(%{id: id, metrics: metrics, metric_scores: metric_scores}, socket) do
@@ -38,8 +19,21 @@ defmodule Systems.Graphite.LeaderboardTableView do
         metric_scores: metric_scores
       )
       |> update_active_metric()
+      |> compose_child(:metric_selector)
       |> update_scores()
-      |> update_selector()
+    }
+  end
+
+  @impl true
+  def compose(:metric_selector, %{metrics: metrics, active_metric: active_metric}) do
+    items = Enum.map(metrics, &to_selector_item(&1, active_metric))
+
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :segmented
+      }
     }
   end
 
@@ -61,22 +55,6 @@ defmodule Systems.Graphite.LeaderboardTableView do
     assign(socket, scores: Map.get(metric_scores, active_metric, []))
   end
 
-  defp update_selector(
-         %{assigns: %{id: id, metrics: metrics, active_metric: active_metric}} = socket
-       ) do
-    metric_items = Enum.map(metrics, &to_selector_item(&1, active_metric))
-
-    selector = %{
-      id: :metric_selector,
-      module: Selector,
-      items: metric_items,
-      type: :segmented,
-      parent: %{type: __MODULE__, id: id}
-    }
-
-    assign(socket, selector: selector)
-  end
-
   defp to_selector_item(metric, active_metric) do
     %{
       id: metric,
@@ -86,11 +64,25 @@ defmodule Systems.Graphite.LeaderboardTableView do
   end
 
   @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: active_item_id, selector_id: :metric_selector},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(active_metric: active_item_id)
+      |> update_scores()
+    }
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
       <Align.horizontal_center>
-        <.live_component {@selector} />
+        <.child name={:metric_selector} fabric={@fabric} />
       </Align.horizontal_center>
       <.spacing value="M" />
       <%= if @active_metric do %>

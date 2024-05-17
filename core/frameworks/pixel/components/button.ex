@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Button do
   @moduledoc """
   A colored button with white text.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button.Action
   alias Frameworks.Pixel.Button.Face

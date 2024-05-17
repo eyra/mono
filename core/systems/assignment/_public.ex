@@ -504,19 +504,19 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def apply_member_and_activate_task(
-        %Assignment.Model{crew: crew} = assignment,
-        %User{} = user,
-        [_ | _] = identifier,
-        reward_amount
-      )
-      when is_integer(reward_amount) do
-    if not Crew.Public.member?(crew, user) do
-      apply_member(assignment, user, identifier, reward_amount)
-    end
+  # def apply_member_and_activate_task(
+  #       %Assignment.Model{crew: crew} = assignment,
+  #       %User{} = user,
+  #       identifier,
+  #       reward_amount
+  #     )
+  #     when is_integer(reward_amount) do
+  #   if not Crew.Public.member?(crew, user) do
+  #     apply_member(assignment, user, identifier, reward_amount)
+  #   end
 
-    activate_task(crew, identifier)
-  end
+  #   activate_task(crew, identifier)
+  # end
 
   def activate_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
     do: activate_task(crew, identifier)

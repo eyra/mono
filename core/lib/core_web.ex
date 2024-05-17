@@ -21,11 +21,19 @@ defmodule CoreWeb do
     do:
       ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw privacy-statement.pdf landing_page)
 
+  def utility do
+    quote do
+      use Frameworks.Utililty.EnumHelpers
+    end
+  end
+
   def controller(
         opts \\ [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]
       ) do
     quote do
       use Phoenix.Controller, unquote(opts)
+
+      unquote(utility())
 
       import Plug.Conn
       import CoreWeb.Gettext
@@ -41,21 +49,100 @@ defmodule CoreWeb do
     end
   end
 
+  def ui do
+    quote do
+      use Phoenix.Component
+
+      # Use base HTML functionality
+      import Phoenix.HTML, only: [raw: 1]
+      import Phoenix.HTML.Form
+      import Phoenix.HTML.Link, only: [link: 2]
+      import Phoenix.HTML.Tag, only: [csrf_meta_tag: 0]
+
+      import CoreWeb.Gettext
+
+      unquote(verified_routes())
+      unquote(utility())
+    end
+  end
+
+  def pixel do
+    quote do
+      unquote(ui())
+      use CoreWeb.UI
+    end
+  end
+
   def html do
     quote do
-      # Include shared imports and aliases for views
-      unquote(component_helpers())
+      unquote(pixel())
+      use Frameworks.Pixel
 
-      use Phoenix.Component
+      unquote(component_helpers())
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
       alias CoreWeb.Router.Helpers, as: Routes
+    end
+  end
 
-      # Routes generation with the ~p sigil
+  def live_component do
+    quote do
+      use Fabric.LiveComponent
+
+      unquote(pixel())
+      use Frameworks.Pixel
+
+      unquote(component_helpers())
+    end
+  end
+
+  def live_view() do
+    live_view(:base)
+  end
+
+  def live_view(mount_plug_type) do
+    quote do
+      use Fabric.LiveView, CoreWeb.Layouts
+
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      import Phoenix.LiveView.Helpers
+      import Core.Authorization, only: [can_access?: 2]
+
+      unquote(pixel())
+      use Frameworks.Pixel
+
+      unquote(component_helpers())
       unquote(verified_routes())
+
+      unquote do
+        if mount_plug_type == :extended do
+          live_mount_plugs_extended()
+        else
+          live_mount_plugs()
+        end
+      end
+    end
+  end
+
+  def live_mount_plugs do
+    quote do
+      use CoreWeb.LiveLocale
+      use CoreWeb.LiveTimezone
+      use CoreWeb.LiveRemoteIp
+      use Frameworks.Fabric.LiveViewMountPlug
+      use Frameworks.GreenLight.Live, Core.Authorization
+      use CoreWeb.LiveUser
+    end
+  end
+
+  def live_mount_plugs_extended do
+    quote do
+      use Systems.Observatory.Public
+      use CoreWeb.LiveUri
+      unquote(live_mount_plugs())
     end
   end
 
@@ -68,105 +155,8 @@ defmodule CoreWeb do
     end
   end
 
-  def live_view do
+  def auth_helpers() do
     quote do
-      unquote(component_helpers())
-      use Phoenix.LiveView, layout: {CoreWeb.Layouts, :live}
-
-      import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
-
-      alias CoreWeb.LiveLocale
-      use CoreWeb.LiveUri
-      import Core.Authorization, only: [can_access?: 2]
-      use Frameworks.GreenLight.Live, Core.Authorization
-      alias CoreWeb.Router.Helpers, as: Routes
-
-      use CoreWeb.LiveAssignHelper
-
-      use Frameworks.Pixel.Flash
-
-      import CoreWeb.UrlResolver, only: [url_resolver: 1]
-
-      import CoreWeb.UI.Popup
-      import CoreWeb.UI.Empty
-      alias CoreWeb.UI.Margin
-
-      alias CoreWeb.UI.Area
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
-    end
-  end
-
-  def live_view_fabric do
-    quote do
-      unquote(component_helpers())
-
-      import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
-
-      alias CoreWeb.LiveLocale
-      use CoreWeb.LiveUri
-      import Core.Authorization, only: [can_access?: 2]
-      use Frameworks.GreenLight.Live, Core.Authorization
-      alias CoreWeb.Router.Helpers, as: Routes
-
-      use CoreWeb.LiveAssignHelper
-
-      use Frameworks.Pixel.Flash
-
-      import CoreWeb.UrlResolver, only: [url_resolver: 1]
-
-      import CoreWeb.UI.Popup
-      import CoreWeb.UI.Empty
-      alias CoreWeb.UI.Margin
-
-      alias CoreWeb.UI.Area
-
-      # Routes generation with the ~p sigil
-      unquote(verified_routes())
-    end
-  end
-
-  def live_component do
-    quote do
-      unquote(component_helpers())
-
-      use Phoenix.LiveComponent
-
-      unquote(live_component_helpers())
-      unquote(verified_routes())
-    end
-  end
-
-  def live_component_fabric do
-    quote do
-      unquote(component_helpers())
-      unquote(live_component_helpers())
-      unquote(verified_routes())
-    end
-  end
-
-  def live_component_helpers do
-    quote do
-      def update_target(%{id: id, type: type}, message) when is_map(message) do
-        Phoenix.LiveView.send_update(type, message |> Map.put(:id, id))
-      end
-
-      def update_target(pid, message) when is_pid(pid) do
-        send(pid, message)
-      end
-
-      def update_defaults(%{assigns: assigns} = socket, props, defaults) do
-        assigns =
-          Enum.reduce(defaults, assigns, fn {key, default}, acc ->
-            value = Map.get(props, key, default)
-            Map.put(acc, key, value)
-          end)
-
-        Map.put(socket, :assigns, assigns)
-      end
     end
   end
 
@@ -179,37 +169,11 @@ defmodule CoreWeb do
 
   defp component_helpers do
     quote do
-      # Use base HTML functionality
-      import Phoenix.HTML, only: [raw: 1]
-      import Phoenix.HTML.Form
-      import Phoenix.HTML.Link, only: [link: 2]
-      import Phoenix.HTML.Tag, only: [csrf_meta_tag: 0]
-
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
-      import Phoenix.LiveView.Helpers
-
-      # Import basic component functionality
-      import Phoenix.Component
-
-      import Frameworks.Pixel.ErrorHelpers
-      import CoreWeb.Gettext
-      import CoreWeb.UI.FunctionComponent
-
-      import Frameworks.Pixel.Spacing
-      import Frameworks.Pixel.Wrap
-      alias Frameworks.Pixel.Button
-      alias Frameworks.Pixel.Text
-      alias Frameworks.Pixel.Icon
-      alias CoreWeb.UI.Margin
-      alias CoreWeb.UI.Area
-
       import Core.FeatureFlags
       import Core.Authorization, only: [can?: 4]
+
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder
-
-      def current_user(%{assigns: %{current_user: current_user}}), do: current_user
-      def current_user(_conn), do: nil
 
       def version do
         unquote(Application.fetch_env!(:core, :version))

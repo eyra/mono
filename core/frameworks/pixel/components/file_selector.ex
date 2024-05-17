@@ -1,5 +1,8 @@
-defmodule Pixel.Components.FileSelector do
-  use CoreWeb, :html
+defmodule Frameworks.Pixel.Components.FileSelector do
+  use CoreWeb, :pixel
+
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
   attr(:id, :string, required: true)
   attr(:filename, :string, default: nil)

@@ -1,4 +1,4 @@
-defmodule Systems.Advert.Builders.AdvertContentPage do
+defmodule Systems.Advert.ContentPageBuilder do
   use CoreWeb, :verified_routes
   import CoreWeb.Gettext
 
@@ -21,19 +21,13 @@ defmodule Systems.Advert.Builders.AdvertContentPage do
               id: promotion_id
             } = promotion
         } = advert,
-        %{
-          current_user: user,
-          uri_path: uri_path,
-          uri_origin: uri_origin,
-          submit_clicked: submit_clicked,
-          locale: locale
-        }
+        assigns
       ) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
-    show_errors = submit_clicked or submitted?
+    show_errors = submitted?
 
-    tabs = create_tabs(advert, show_errors, user, uri_origin, locale)
-    preview_path = ~p"/promotion/#{promotion_id}?preview=true&back=#{uri_path}"
+    tabs = create_tabs(advert, show_errors, assigns)
+    preview_path = ~p"/promotion/#{promotion_id}?preview=true"
 
     %{
       title: dgettext("link-advert", "content.title"),
@@ -41,35 +35,41 @@ defmodule Systems.Advert.Builders.AdvertContentPage do
       submission: submission,
       promotion: promotion,
       tabs: tabs,
+      actions: [],
       submitted?: submitted?,
       show_errors: show_errors,
-      preview_path: preview_path
+      preview_path: preview_path,
+      active_menu_item: :projects
     }
   end
 
-  defp create_tabs(advert, show_errors, user, uri_origin, locale) do
+  defp create_tabs(advert, show_errors, assigns) do
     advert
     |> get_tab_keys()
-    |> Enum.map(&create_tab(&1, advert, show_errors, user, uri_origin, locale))
+    |> Enum.map(&create_tab(&1, advert, show_errors, assigns))
   end
 
   defp get_tab_keys(%{submission: %{pool: %{currency: %{type: :legal}}}}) do
-    [:promotion, :assignment, :funding, :submission, :monitor]
+    [:promotion, :submission, :monitor]
   end
 
   defp get_tab_keys(_advert) do
-    [:promotion, :assignment, :submission, :monitor]
+    [:promotion, :submission, :monitor]
   end
 
   defp create_tab(
          :promotion,
          %{promotion: promotion},
          show_errors,
-         _user,
-         _uri_origin,
-         _locale
+         %{fabric: fabric}
        ) do
     ready? = Promotion.Public.ready?(promotion)
+
+    child =
+      Fabric.prepare_child(fabric, :promotion_form, Promotion.FormView, %{
+        entity: promotion,
+        themes_module: Themes
+      })
 
     %{
       id: :promotion_form,
@@ -78,107 +78,81 @@ defmodule Systems.Advert.Builders.AdvertContentPage do
       title: dgettext("link-advert", "tabbar.item.promotion"),
       forward_title: dgettext("link-advert", "tabbar.item.promotion.forward"),
       type: :fullpage,
-      live_component: Promotion.FormView,
-      props: %{
-        entity: promotion,
-        themes_module: Themes
-      }
-    }
-  end
-
-  defp create_tab(
-         :assignment,
-         %{assignment: assignment},
-         show_errors,
-         user,
-         uri_origin,
-         _locale
-       ) do
-    ready? = Assignment.Public.ready?(assignment)
-
-    %{
-      id: :assignment_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("link-advert", "tabbar.item.assignment"),
-      forward_title: dgettext("link-advert", "tabbar.item.assignment.forward"),
-      type: :fullpage,
-      live_component: Assignment.AssignmentForm,
-      props: %{
-        entity: assignment,
-        uri_origin: uri_origin,
-        user: user,
-        target: self()
-      }
+      child: child
     }
   end
 
   defp create_tab(
          :submission,
          %{submission: submission},
-         _show_errors,
-         user,
-         _uri_origin,
-         _locale
+         show_errors,
+         %{fabric: fabric, current_user: user}
        ) do
+    child =
+      Fabric.prepare_child(fabric, :submission_form, Advert.SubmissionView, %{
+        entity: submission,
+        user: user
+      })
+
     %{
       id: :submission_form,
+      ready: true,
+      show_errors: show_errors,
       title: dgettext("link-advert", "tabbar.item.submission"),
       forward_title: dgettext("link-advert", "tabbar.item.submission.forward"),
       type: :fullpage,
-      live_component: Advert.SubmissionView,
-      props: %{
-        entity: submission,
-        user: user
-      }
+      child: child
     }
   end
 
   defp create_tab(
          :funding,
          %{assignment: assignment, submission: submission},
-         _show_errors,
-         user,
-         _uri_origin,
-         locale
+         show_errors,
+         %{fabric: fabric, current_user: user}
        ) do
+    child =
+      Fabric.prepare_child(fabric, :funding, Advert.FundingView, %{
+        assignment: assignment,
+        submission: submission,
+        user: user
+      })
+
     %{
       id: :funding,
+      ready: true,
+      show_errors: show_errors,
       title: dgettext("link-advert", "tabbar.item.funding"),
       forward_title: dgettext("link-advert", "tabbar.item.funding.forward"),
       type: :fullpage,
-      live_component: Advert.FundingView,
-      props: %{
-        assignment: assignment,
-        submission: submission,
-        user: user,
-        locale: locale
-      }
+      child: child
     }
   end
 
   defp create_tab(
          :monitor,
          %{assignment: assignment} = advert,
-         _show_errors,
-         _user,
-         _uri_origin,
-         _locale
+         show_errors,
+         %{fabric: fabric}
        ) do
     attention_list_enabled? = Assignment.Public.attention_list_enabled?(assignment)
     task_labels = Assignment.Public.task_labels(assignment)
 
-    %{
-      id: :monitor,
-      title: dgettext("link-advert", "tabbar.item.monitor"),
-      forward_title: dgettext("link-advert", "tabbar.item.monitor.forward"),
-      type: :fullpage,
-      live_component: Advert.MonitorView,
-      props: %{
+    child =
+      Fabric.prepare_child(fabric, :monitor, Advert.MonitorView, %{
         entity: advert,
         attention_list_enabled?: attention_list_enabled?,
         labels: task_labels
-      }
+      })
+
+    %{
+      id: :funding,
+      ready: true,
+      show_errors: show_errors,
+      title: dgettext("link-advert", "tabbar.item.monitor"),
+      forward_title: dgettext("link-advert", "tabbar.item.monitor.forward"),
+      type: :fullpage,
+      child: child
     }
   end
 end

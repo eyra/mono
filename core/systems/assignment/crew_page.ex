@@ -1,12 +1,7 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-
-  use Systems.Observatory.Public
-  use CoreWeb.LiveTimezone
-  use CoreWeb.LiveRemoteIp
+  use CoreWeb, :live_view
+  use CoreWeb.Layouts.Stripped.Composer
   use CoreWeb.UI.Responsive.Viewport
-  use CoreWeb.Layouts.Stripped.Component, :projects
 
   require Logger
 
@@ -26,38 +21,38 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def get_model(%{"id" => id}, _session, _socket) do
+    Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
+  end
+
+  @impl true
   def mount(%{"id" => id}, session, socket) do
     String.to_integer(id)
     |> Assignment.Public.get!([:info])
     |> Assignment.Model.language()
     |> CoreWeb.LiveLocale.put_locale()
 
-    model = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
-
     {
       :ok,
       socket
       |> assign(
         id: id,
-        model: model,
         image_info: nil,
         modal: nil,
         panel_form: nil
       )
       |> update_timezone(session)
       |> update_panel_info(session)
-      |> observe_view_model()
       |> update_image_info()
       |> signal_started()
       |> update_flow()
     }
   end
 
-  def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
-    Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: crew_member})
-    socket
-  end
+  @impl true
+  def handle_uri(socket), do: socket
 
+  @impl true
   def handle_view_model_updated(socket) do
     socket
     |> update_flow()
@@ -70,6 +65,11 @@ defmodule Systems.Assignment.CrewPage do
     socket
     |> update_image_info()
     |> update_menus()
+  end
+
+  def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
+    Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: crew_member})
+    socket
   end
 
   defp update_image_info(

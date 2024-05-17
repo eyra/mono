@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.LeaderboardSubmissionsForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Text
 

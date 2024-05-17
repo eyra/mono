@@ -1,6 +1,6 @@
 defmodule CoreWeb.User.AwaitConfirmation do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :signup
+  import CoreWeb.Layouts.Stripped.Html
 
   alias Frameworks.Pixel.Text
 

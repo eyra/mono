@@ -14,10 +14,14 @@ defmodule CoreWeb.Live.User.Routes do
 
       ## User routes
 
+      scope "/", Systems.Account do
+        pipe_through([:browser, :require_authenticated_user])
+        live("/user/profile", UserProfilePage)
+      end
+
       scope "/", CoreWeb do
         pipe_through([:browser, :require_authenticated_user])
 
-        live("/user/profile", User.Profile)
         get("/user/settingscontroller", UserSettingsController, :edit)
         put("/user/settingscontroller", UserSettingsController, :update)
 

@@ -44,6 +44,6 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
     preload = Advert.Model.preload_graph(:down)
 
     Advert.Public.list_submitted(pool, preload: preload)
-    |> Enum.map(&Pool.Builders.AdvertItem.view_model(&1))
+    |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
   end
 end

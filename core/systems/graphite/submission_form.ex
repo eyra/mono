@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.SubmissionForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   alias CoreWeb.UI.Timestamp
 

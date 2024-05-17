@@ -1,12 +1,14 @@
-defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
+defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
   use Fabric.LiveView, CoreWeb.Layouts
-  alias CoreWeb.UI.ImageCatalogPicker
+  alias Frameworks.Pixel.ImageCatalogPicker
 
   @impl true
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket |> compose_child(:image_picker)
+      socket
+      |> Fabric.new_fabric()
+      |> compose_child(:image_picker)
     }
   end
 
@@ -40,7 +42,7 @@ defmodule CoreWeb.UI.ImageCatalogPicker.Test.View do
   end
 end
 
-defmodule CoreWeb.UI.ImageCatalogPicker.Test do
+defmodule Frameworks.Pixel.ImageCatalogPicker.Test do
   use CoreWeb.ConnCase
   import Phoenix.LiveViewTest
 
@@ -48,7 +50,7 @@ defmodule CoreWeb.UI.ImageCatalogPicker.Test do
     conn = Phoenix.ConnTest.build_conn(:get, "/", nil)
 
     {:ok, view, html} =
-      live_isolated(conn, CoreWeb.UI.ImageCatalogPicker.Test.View,
+      live_isolated(conn, Frameworks.Pixel.ImageCatalogPicker.Test.View,
         connect_params: %{testing: 1124}
       )
 

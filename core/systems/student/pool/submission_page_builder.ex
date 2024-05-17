@@ -14,7 +14,7 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
 
     owners = Advert.Public.list_owners(advert, [:profile, :features])
     owner = List.first(owners)
-    member = Pool.Builders.ResearcherItem.view_model(owner, promotion)
+    member = Pool.ResearcherItemBuilder.view_model(owner, promotion)
 
     accepted? = submission.status == :accepted
     completed? = submission.status == :completed
@@ -31,7 +31,7 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
 
     excluded_adverts =
       Advert.Public.list_excluded_adverts([advert], Advert.Model.preload_graph(:down))
-      |> Enum.map(&Pool.Builders.AdvertItem.view_model(&1))
+      |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
 
     form = %{
       live_component: Student.Pool.SubmissionForm,

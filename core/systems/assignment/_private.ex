@@ -152,10 +152,4 @@ defmodule Systems.Assignment.Private do
       ) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
-
-  # Deprecated
-  def task_identifier(_tool, _user) do
-    raise RuntimeError,
-          "`Systems.Assignment.Private.task_identifier/2` is deprecated; call `task_identifier/3` instead."
-  end
 end

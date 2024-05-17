@@ -6,6 +6,8 @@ defmodule Core.AccountsTest do
   alias Core.Factories
   alias Core.Accounts
   alias Core.Accounts.{User, UserToken}
+
+  alias Systems.Account
   alias Systems.NextAction
 
   alias Core.Accounts.NextActions.{PromotePushStudent}
@@ -582,7 +584,10 @@ defmodule Core.AccountsTest do
       user_changeset = Accounts.User.user_profile_changeset(user, %{})
 
       profile_changeset =
-        Accounts.Profile.changeset(user.profile, %{fullname: "Update Test", displayname: "Update"})
+        Account.UserProfileModel.changeset(user.profile, %{
+          fullname: "Update Test",
+          displayname: "Update"
+        })
 
       {:ok, _} = Accounts.update_user_profile(user_changeset, profile_changeset)
 
@@ -598,7 +603,7 @@ defmodule Core.AccountsTest do
       url_resolver = fn target, _ ->
         case target do
           CoreWeb.User.Settings -> "/settings"
-          CoreWeb.User.Profile -> "/profile"
+          Systems.Account.UserProfilePage -> "/profile"
         end
       end
 

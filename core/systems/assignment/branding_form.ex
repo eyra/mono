@@ -1,13 +1,12 @@
 defmodule Systems.Assignment.BrandingForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
 
   import Core.ImageCatalog, only: [image_catalog: 0]
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text
   alias Core.ImageHelpers
-  alias CoreWeb.UI.ImageCatalogPicker
+  alias Frameworks.Pixel.ImageCatalogPicker
   alias Frameworks.Pixel.Image
 
   alias Systems.Assignment

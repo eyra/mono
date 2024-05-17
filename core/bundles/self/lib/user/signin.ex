@@ -1,6 +1,7 @@
 defmodule Self.User.Signin do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :signin
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   alias Core.Accounts.User
   alias CoreWeb.User.Form
@@ -13,6 +14,7 @@ defmodule Self.User.Signin do
       socket
       |> assign(email: Map.get(params, "email"))
       |> update_form()
+      |> update_menus()
     }
   end
 

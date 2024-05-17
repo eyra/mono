@@ -3,7 +3,8 @@ defmodule CoreWeb.User.ConfirmToken do
   The home screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :confirm_token
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button
@@ -21,9 +22,11 @@ defmodule CoreWeb.User.ConfirmToken do
       socket
       |> assign(
         failed: false,
-        token: token
+        token: token,
+        active_menu_item: nil
       )
       |> update_confirm_button()
+      |> update_menus()
     }
   end
 
@@ -87,7 +90,7 @@ defmodule CoreWeb.User.ConfirmToken do
             # FIXME: Add lockout logic
             Accounts.deliver_user_confirmation_instructions(
               user,
-              &Routes.live_url(socket, CoreWeb.User.ConfirmToken, &1)
+              &~p"/user/confirm/#{&1}"
             )
 
           user ->

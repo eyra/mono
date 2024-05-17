@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.OnboardingView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   alias Systems.Assignment
   alias Systems.Content

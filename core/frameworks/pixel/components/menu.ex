@@ -1,5 +1,7 @@
 defmodule Frameworks.Pixel.Menu do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
+
+  alias Frameworks.Pixel.Button
 
   attr(:home, :map, default: nil)
   attr(:primary, :map, default: nil)

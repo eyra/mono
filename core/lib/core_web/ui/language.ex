@@ -1,5 +1,5 @@
 defmodule CoreWeb.UI.Language do
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
   attr(:redir, :string, required: true)
 

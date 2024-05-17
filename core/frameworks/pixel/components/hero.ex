@@ -2,10 +2,11 @@ defmodule Frameworks.Pixel.Hero do
   @moduledoc """
   The hero is to be used as a large decorative header with page title.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Image
+  alias Frameworks.Pixel.Text
 
   import Frameworks.Pixel.ImagePreview
 

@@ -3,7 +3,8 @@ defmodule CoreWeb.User.Signup do
   The home screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :onboarding
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   alias CoreWeb.User.Form
   alias CoreWeb.Router.Helpers, as: Routes
@@ -17,7 +18,8 @@ defmodule CoreWeb.User.Signup do
 
     {:ok,
      socket
-     |> assign(changeset: changeset)}
+     |> assign(changeset: changeset, active_menu_item: nil)
+     |> update_menus()}
   end
 
   @impl true

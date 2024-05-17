@@ -1,6 +1,5 @@
 defmodule Systems.Feldspar.AppView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   @impl true
   def update(%{key: key, url: url, locale: locale}, socket) do

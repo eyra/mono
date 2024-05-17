@@ -2,8 +2,7 @@ defmodule Systems.Consent.ClickWrapView do
   # Clickwrap agreements are a type of electronic signature that involves a user
   # clicking a simple button to accept the agreement.
 
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   alias Systems.{
     Consent

@@ -3,7 +3,8 @@ defmodule CoreWeb.User.ResetPassword do
   The home screen.
   """
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :signup
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   alias CoreWeb.Router.Helpers, as: Routes
 
@@ -15,9 +16,12 @@ defmodule CoreWeb.User.ResetPassword do
   alias Frameworks.Pixel.Button
 
   def mount(_params, _session, socket) do
-    {:ok,
-     socket
-     |> assign(changeset: User.valid_email_changeset())}
+    {
+      :ok,
+      socket
+      |> assign(changeset: User.valid_email_changeset(), active_menu_item: nil)
+      |> update_menus()
+    }
   end
 
   @impl true

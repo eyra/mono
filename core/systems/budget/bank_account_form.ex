@@ -105,9 +105,8 @@ defmodule Systems.Budget.BankAccountForm do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: "cancel"})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "bank_account_cancelled")}
   end
 
   defp change(
@@ -140,11 +139,10 @@ defmodule Systems.Budget.BankAccountForm do
     )
   end
 
-  defp apply_submit(%{assigns: %{target: target}} = socket, changeset) do
+  defp apply_submit(socket, changeset) do
     case EctoHelper.upsert(changeset) do
       {:ok, _bank_account} ->
-        update_target(target, %{module: __MODULE__, action: "saved"})
-        socket
+        socket |> send_event(:parent, "budget_saved")
 
       {:error, changeset} ->
         socket |> assign(changeset: changeset)

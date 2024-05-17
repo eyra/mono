@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Button.Action do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   slot(:inner_block, required: true)
 

@@ -8,37 +8,11 @@ defmodule Systems.Budget.Form do
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Budget
-  }
-
-  # Selector toggle
-  @impl true
-  def update(%{selector: :toggle}, socket) do
-    {
-      :ok,
-      socket |> assign(currency_error: nil)
-    }
-  end
-
-  # Selector selected
-  @impl true
-  def update(
-        %{selector: :selected, option: %{id: id}},
-        %{assigns: %{currencies: currencies}} = socket
-      ) do
-    selected_currency = currencies |> Enum.find(&(&1.id == id))
-
-    {
-      :ok,
-      socket
-      |> assign(selected_currency: selected_currency)
-    }
-  end
+  alias Systems.Budget
 
   # Initial update create
   @impl true
-  def update(%{id: id, budget: nil, user: user, locale: locale, target: target}, socket) do
+  def update(%{id: id, budget: nil, user: user, locale: locale}, socket) do
     title = dgettext("eyra-budget", "budget.create.title")
     budget = %Budget.Model{}
     changeset = Budget.Model.prepare(budget)
@@ -49,7 +23,6 @@ defmodule Systems.Budget.Form do
       |> assign(
         id: id,
         title: title,
-        target: target,
         user: user,
         locale: locale,
         budget: budget,
@@ -57,14 +30,15 @@ defmodule Systems.Budget.Form do
         validate_changeset?: false
       )
       |> update_currencies()
+      |> update_selected_currency()
+      |> compose_child(:currency_selector)
       |> init_buttons()
-      |> init_currency_selector()
     }
   end
 
   # Initial update edit
   @impl true
-  def update(%{id: id, budget: budget, user: user, locale: locale, target: target}, socket) do
+  def update(%{id: id, budget: budget, user: user, locale: locale}, socket) do
     title = dgettext("eyra-budget", "budget.edit.title")
     changeset = Budget.Model.prepare(budget)
 
@@ -74,7 +48,6 @@ defmodule Systems.Budget.Form do
       |> assign(
         id: id,
         title: title,
-        target: target,
         user: user,
         locale: locale,
         budget: budget,
@@ -82,9 +55,37 @@ defmodule Systems.Budget.Form do
         validate_changeset?: true
       )
       |> update_currencies()
+      |> update_options()
       |> init_buttons()
-      |> init_currency_selector()
+      |> compose_child(:currency_selector)
     }
+  end
+
+  @impl true
+  def compose(:currency_selector, %{options: options, selected_currency: selected_currency}) do
+    selected_option_index = Enum.find_index(options, &(&1.id == selected_currency.id))
+
+    %{
+      module: DropdownSelector,
+      params: %{
+        options: options,
+        selected_option_index: selected_option_index
+      }
+    }
+  end
+
+  defp update_selected_currency(
+         %{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket
+       ) do
+    socket |> assign(selected_currency: currency)
+  end
+
+  defp update_selected_currency(%{assigns: %{currencies: [currency | _]}} = socket) do
+    socket |> assign(selected_currency: currency)
+  end
+
+  defp update_selected_currency(socket) do
+    socket |> assign(selected_currency: nil)
   end
 
   defp update_currencies(socket) do
@@ -95,21 +96,16 @@ defmodule Systems.Budget.Form do
     socket |> assign(currencies: currencies)
   end
 
-  defp init_currency_selector(%{assigns: %{budget: %{currency: %{id: _id}}}} = socket) do
-    socket |> assign(currency_selector: nil, selected_currency: nil)
-  end
+  defp update_options(%{assigns: %{currencies: currencies, locale: locale}} = socket) do
+    options =
+      Enum.map(currencies, fn currency ->
+        %{
+          id: currency.id,
+          value: Budget.CurrencyModel.title(currency, locale)
+        }
+      end)
 
-  defp init_currency_selector(%{assigns: %{currencies: [currency]}} = socket) do
-    socket |> assign(currency_selector: nil, selected_currency: currency)
-  end
-
-  defp init_currency_selector(
-         %{assigns: %{id: id, locale: locale, currencies: currencies}} = socket
-       ) do
-    {currency_selector, selected_currency} =
-      Budget.CurrencySelector.init(currencies, locale, %{type: __MODULE__, id: id})
-
-    socket |> assign(currency_selector: currency_selector, selected_currency: selected_currency)
+    socket |> assign(options: options)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
@@ -142,9 +138,23 @@ defmodule Systems.Budget.Form do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: "cancel"})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "budget_cancelled")}
+  end
+
+  @impl true
+  def handle_event(
+        "dropdown_selected",
+        %{option: %{id: id}},
+        %{assigns: %{currencies: currencies}} = socket
+      ) do
+    selected_currency = currencies |> Enum.find(&(&1.id == id))
+    {:noreply, socket |> assign(selected_currency: selected_currency)}
+  end
+
+  @impl true
+  def handle_event("dropdown_toggle", _payload, socket) do
+    {:noreply, socket |> assign(currency_error: nil)}
   end
 
   defp change(
@@ -191,31 +201,15 @@ defmodule Systems.Budget.Form do
     )
   end
 
-  defp apply_submit(%{assigns: %{target: target}} = socket, changeset) do
+  defp apply_submit(socket, changeset) do
     case EctoHelper.upsert(changeset) do
       {:ok, _budget} ->
-        update_target(target, %{module: __MODULE__, action: "saved"})
-        socket
+        socket |> send_event(:parent, "budget_saved")
 
       {:error, changeset} ->
         socket |> assign(changeset: changeset)
     end
   end
-
-  # data(title, :string)
-  # data(buttons, :list)
-
-  # data(changeset, :map)
-  # data(validate_changeset?, :boolean)
-
-  # data(currencies, :list)
-  # data(currency_selector, :map)
-  # data(selected_currency, :map)
-
-  attr(:budget, :any)
-  attr(:user, :any)
-  attr(:locale, :any)
-  attr(:target, :any)
 
   @impl true
   def render(assigns) do
@@ -239,7 +233,7 @@ defmodule Systems.Budget.Form do
             <%= dgettext("eyra-budget", "budget.currency.label") %>
           </Text.form_field_label>
           <.spacing value="XXS" />
-          <.live_component module={DropdownSelector} {@currency_selector} />
+          <.child name={:currency_selector} fabric={@fabric} />
         <% end %>
 
         <.spacing value="M" />

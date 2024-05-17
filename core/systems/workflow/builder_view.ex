@@ -53,9 +53,47 @@ defmodule Systems.Workflow.BuilderView do
         ordering_enabled?: ordering_enabled?
       )
       |> order_items()
-      |> update_item_types()
+      |> compose_item_cells()
     }
   end
+
+  defp compose_item_cells(%{assigns: %{ordered_items: ordered_items}} = socket) do
+    Enum.reduce(ordered_items, socket, fn item, socket ->
+      compose_child(socket, "item_cell_#{item.id}")
+    end)
+  end
+
+  @impl true
+  def compose(
+        "item_cell_" <> item_id,
+        %{
+          ordered_items: ordered_items,
+          ordering_enabled?: ordering_enabled?,
+          user: user,
+          timezone: timezone,
+          uri_origin: uri_origin
+        } = assigns
+      ) do
+    item = find_by_id(ordered_items, item_id)
+    title = get_title(item, assigns)
+    relative_position = relative_position(item.position, Enum.count(ordered_items))
+
+    %{
+      module: Workflow.ItemCell,
+      params: %{
+        type: title,
+        user: user,
+        timezone: timezone,
+        uri_origin: uri_origin,
+        relative_position: relative_position,
+        ordering_enabled?: ordering_enabled?
+      }
+    }
+  end
+
+  defp relative_position(0, _count), do: :top
+  defp relative_position(position, count) when position == count - 1, do: :bottom
+  defp relative_position(_position, _count), do: :middle
 
   @impl true
   def handle_event(
@@ -77,14 +115,7 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, ordered_items: Workflow.Model.ordered_items(workflow))
   end
 
-  defp update_item_types(%{assigns: %{ordered_items: ordered_items}} = socket) do
-    item_types = Enum.map(ordered_items, &get_title(&1, socket))
-    assign(socket, item_types: item_types)
-  end
-
-  defp get_title(%{tool_ref: %{special: special}}, %{
-         assigns: %{config: %{library: %{items: library_items}}}
-       }) do
+  defp get_title(%{tool_ref: %{special: special}}, %{config: %{library: %{items: library_items}}}) do
     case Enum.find(library_items, &(&1.special == special)) do
       %{title: title} ->
         title
@@ -119,7 +150,14 @@ defmodule Systems.Workflow.BuilderView do
             <Text.title2><%= @config.list.title %></Text.title2>
             <Text.body><%= @config.list.description %></Text.body>
             <.spacing value="M" />
-            <.list items={@ordered_items} types={@item_types} ordering_enabled?={@ordering_enabled?} user={@user} timezone={@timezone} uri_origin={@uri_origin} parent={%{type: __MODULE__, id: @id}} />
+            <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
+              <%= if @ordering_enabled? do %>
+                <Align.horizontal_center>
+                  <Text.hint><%= dgettext("eyra-workflow", "item.list.hint") %></Text.hint>
+                </Align.horizontal_center>
+              <% end %>
+              <.stack fabric={@fabric} />
+            </div>
           </Area.content>
         </div>
         <%= if @config.library.render? do %>

@@ -37,24 +37,6 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_ids: active_theme_ids, selector_id: :themes},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    active_theme_ids =
-      active_theme_ids
-      |> Enum.map(&Atom.to_string(&1))
-
-    {
-      :ok,
-      socket
-      |> save(entity, %{:themes => active_theme_ids})
-    }
-  end
-
-  # Initial update
   @impl true
   def update(
         %{
@@ -77,7 +59,19 @@ defmodule Systems.Promotion.FormView do
       |> update_image_info()
       |> update_image_picker_button()
       |> update_theme_labels()
+      |> compose_child(:themes)
       |> validate_for_publish()
+    }
+  end
+
+  @impl true
+  def compose(:themes, %{theme_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
     }
   end
 
@@ -123,18 +117,23 @@ defmodule Systems.Promotion.FormView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Promotion.Model.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
-
-    send(self(), %{id: id, ready?: changeset.valid?})
 
     socket
     |> assign(changeset: changeset, form: to_form(changeset))
   end
 
-  # Handle Events
+  defp initial_image_query(%{assigns: %{entity: entity}}) do
+    case entity.themes do
+      nil -> ""
+      themes -> themes |> Enum.join(" ")
+    end
+  end
+
+  # Events
 
   @impl true
   def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
@@ -150,11 +149,17 @@ defmodule Systems.Promotion.FormView do
     {:noreply, socket}
   end
 
-  defp initial_image_query(%{assigns: %{entity: entity}}) do
-    case entity.themes do
-      nil -> ""
-      themes -> themes |> Enum.join(" ")
-    end
+  @impl true
+  def handle_event(
+        "active_theme_ids",
+        %{active_theme_ids: active_theme_ids, selector_id: :themes},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> save(entity, %{:themes => Enum.map(active_theme_ids, &Atom.to_string(&1))})
+    }
   end
 
   @impl true
@@ -174,8 +179,7 @@ defmodule Systems.Promotion.FormView do
           <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-promotion", "themes.label") %></Text.body>
           <.spacing value="XS" />
-          <.live_component
-            module={Selector} id={:themes} type={:label} items={@theme_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:themes} fabric={@fabric} />
           <.spacing value="XL" />
 
           <Text.title3><%= dgettext("eyra-promotion", "image.title") %></Text.title3>

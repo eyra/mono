@@ -1,153 +1,72 @@
 defmodule Systems.Support.TicketPage do
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :ticket
-
-  alias Systems.{
-    Support
-  }
+  use Systems.Content.Composer, :live_workspace
 
   import CoreWeb.UI.Member
+  import Frameworks.Pixel.Content
+
   alias Frameworks.Pixel.Text
-  import CoreWeb.UI.Content
+  alias Systems.Support
+
+  @impl true
+  def get_model(%{"id" => id}, _session, _socket) do
+    Support.Public.get_ticket!(id)
+  end
 
   def mount(%{"id" => id}, _session, socket) do
-    ticket = Support.Public.get_ticket!(id)
-
-    timestamp =
-      ticket.updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
-
     {
       :ok,
       socket
-      |> assign(
-        id: id,
-        ticket: ticket,
-        timestamp: timestamp,
-        member: nil
-      )
-      |> update_member()
-      |> update_menus()
-    }
-  end
-
-  defp update_member(%{assigns: %{ticket: ticket}} = socket) do
-    socket
-    |> assign(member: to_member(ticket))
-  end
-
-  defp to_member(%{
-         id: id,
-         title: title,
-         user: %{
-           email: email,
-           researcher: researcher,
-           student: student,
-           coordinator: coordinator,
-           profile: %{
-             fullname: fullname,
-             photo_url: photo_url
-           },
-           features: %{
-             gender: gender
-           }
-         }
-       }) do
-    role =
-      cond do
-        coordinator -> dgettext("eyra-admin", "role.coordinator")
-        researcher -> dgettext("eyra-admin", "role.researcher")
-        student -> dgettext("eyra-admin", "role.student")
-        true -> nil
-      end
-
-    action = %{type: :http_get, to: "mailto:#{email}?subject=Re: [##{id}] #{title}"}
-
-    %{
-      title: fullname,
-      subtitle: role,
-      photo_url: photo_url,
-      gender: gender,
-      button_large: %{
-        action: action,
-        face: %{
-          type: :primary,
-          label: dgettext("eyra-ui", "mailto.button"),
-          bg_color: "bg-tertiary",
-          text_color: "text-grey1"
-        }
-      },
-      button_small: %{
-        action: action,
-        face: %{type: :icon, icon: :contact_tertiary}
-      }
+      |> assign(id: id)
     }
   end
 
   @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def handle_event("close_ticket", _params, %{assigns: %{id: id}} = socket) do
     Support.Public.close_ticket_by_id(id)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Systems.Support.OverviewPage))}
+    {:noreply, push_redirect(socket, to: ~p"/support/ticket")}
   end
 
   @impl true
   def handle_event("reopen_ticket", _params, %{assigns: %{id: id}} = socket) do
     Support.Public.reopen_ticket_by_id(id)
-    {:noreply, push_redirect(socket, to: Routes.live_path(socket, Systems.Support.OverviewPage))}
-  end
-
-  defp button(%{ticket: %{completed_at: completed_at}}) when is_nil(completed_at) do
-    %{
-      action: %{type: :send, event: "close_ticket"},
-      face: %{
-        type: :secondary,
-        label: dgettext("eyra-admin", "close.ticket.button"),
-        text_color: "text-delete"
-      }
-    }
-  end
-
-  defp button(_) do
-    %{
-      action: %{type: :send, event: "reopen_ticket"},
-      face: %{
-        type: :secondary,
-        label: dgettext("eyra-admin", "reopen.ticket.button"),
-        text_color: "text-primary"
-      }
-    }
+    {:noreply, push_redirect(socket, to: ~p"/support/ticket")}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus}>
+    <.live_workspace title={dgettext("eyra-admin", "ticket.title")} menus={@menus} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
-        <%= if @member do %>
-          <.member {@member} />
+        <%= if @vm.member do %>
+          <.member {@vm.member} />
         <% end %>
         <Margin.y id={:page_top} />
         <div class="flex flex-row gap-4 items-center">
           <.wrap>
-            <.tag {Support.TicketModel.tag(@ticket)} />
+            <.tag {@vm.tag} />
           </.wrap>
           <div class="text-label font-label text-grey1">
-            #<%= @ticket.id %>
+            #<%= @vm.id %>
           </div>
           <div class="text-label font-label text-grey2">
-            <%= @timestamp %>
+            <%= @vm.timestamp %>
           </div>
         </div>
         <.spacing value="S" />
-        <Text.title2><%= @ticket.title %></Text.title2>
-        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10"><%=@ticket.description %></div>
+        <Text.title2><%= @vm.title %></Text.title2>
+        <div class="text-bodymedium sm:text-bodylarge font-body mb-6 md:mb-8 lg:mb-10"><%=@vm.description %></div>
         <.wrap>
-          <Button.dynamic {button(assigns)} />
+          <Button.dynamic {@vm.button} />
         </.wrap>
       </Area.content>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

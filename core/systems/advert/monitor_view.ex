@@ -1,8 +1,8 @@
 defmodule Systems.Advert.MonitorView do
   use CoreWeb.LiveForm
 
-  import CoreWeb.UI.Empty
-  import CoreWeb.UI.Popup
+  import Frameworks.Pixel.Empty
+
   import CoreWeb.UI.ProgressBar
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
@@ -17,35 +17,6 @@ defmodule Systems.Advert.MonitorView do
 
   alias Frameworks.Pixel.Text
 
-  # def update(%{checkin: :new_participant}, socket) do
-  #   {
-  #     :ok,
-  #     socket |> update_vm()
-  #   }
-  # end
-
-  @impl true
-  def update(
-        %{reject: :submit, rejection: rejection},
-        %{assigns: %{reject_task: task_id}} = socket
-      ) do
-    Crew.Public.reject_task(task_id, rejection)
-
-    {
-      :ok,
-      socket
-      |> assign(reject_task: nil)
-      |> update_entity()
-      |> update_vm()
-    }
-  end
-
-  @impl true
-  def update(%{reject: :cancel}, socket) do
-    {:ok, socket |> assign(reject_task: nil)}
-  end
-
-  # Handle initial update
   @impl true
   def update(
         %{
@@ -67,6 +38,14 @@ defmodule Systems.Advert.MonitorView do
         reject_task: nil
       )
       |> update_vm()
+    }
+  end
+
+  @impl true
+  def compose(:reject_task, %{}) do
+    %{
+      module: Crew.RejectView,
+      params: %{}
     }
   end
 
@@ -128,8 +107,32 @@ defmodule Systems.Advert.MonitorView do
     {
       :noreply,
       socket
-      |> assign(reject_task: task_id)
+      |> assign(active_task_id: task_id)
+      |> compose_child(:reject_task)
+      |> show_popup(:reject_task)
     }
+  end
+
+  @impl true
+  def handle_event(
+        "reject_submit",
+        %{rejection: rejection},
+        %{assigns: %{active_task_id: task_id}} = socket
+      ) do
+    Crew.Public.reject_task(task_id, rejection)
+
+    {
+      :noreply,
+      socket
+      |> assign(active_task_id: nil)
+      |> update_entity()
+      |> update_vm()
+    }
+  end
+
+  @impl true
+  def handle_event("reject_cancel", _, socket) do
+    {:noreply, socket |> assign(active_task_id: nil)}
   end
 
   defp lab_tool(%{lab_tool: lab_tool}), do: lab_tool
@@ -139,11 +142,6 @@ defmodule Systems.Advert.MonitorView do
   def render(assigns) do
     ~H"""
     <div>
-      <%= if @reject_task do %>
-        <.popup>
-          <.live_component module={Crew.RejectView} id={:reject_view_example} target={%{type: __MODULE__, id: @id}} />
-        </.popup>
-      <% end %>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if not @vm.active? do %>

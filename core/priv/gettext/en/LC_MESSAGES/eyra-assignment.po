@@ -377,3 +377,19 @@ msgstr "Enables you to instruct the participants on (specific parts of) the assi
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.onsite_experiment.description"
 msgstr "Prepares participants for a visit to a lab."
+
+#, elixir-autogen, elixir-format
+msgid "advert.body"
+msgstr "Recruit participants on Panl using an advertisment."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert.create.button"
+msgstr "Create advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "advert.goto.button"
+msgstr "Go to Advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "advert.title"
+msgstr "Advertise in pool"

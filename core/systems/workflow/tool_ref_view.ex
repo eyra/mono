@@ -1,6 +1,5 @@
 defmodule Systems.Workflow.ToolRefView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   require Logger
 

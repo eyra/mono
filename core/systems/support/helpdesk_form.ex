@@ -7,21 +7,6 @@ defmodule Systems.Support.HelpdeskForm do
   alias Core.Accounts
   alias Frameworks.Pixel.Selector
 
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_id: active_item_id}, socket) do
-    type = active_item_id
-    type_labels = Enums.TicketTypes.labels(type)
-
-    {
-      :ok,
-      socket
-      |> assign(:type_labels, type_labels)
-      |> assign(:type, type)
-    }
-  end
-
-  # Initial update
   @impl true
   def update(%{id: id, user: user}, socket) do
     changeset = Support.Public.new_ticket_changeset()
@@ -36,6 +21,18 @@ defmodule Systems.Support.HelpdeskForm do
       |> assign(:changeset, Support.Public.new_ticket_changeset())
       |> assign(:type_labels, type_labels)
       |> assign(:type, type)
+      |> compose_child(:type_selector)
+    }
+  end
+
+  @impl true
+  def compose(:type_selector, %{type_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio
+      }
     }
   end
 
@@ -64,12 +61,18 @@ defmodule Systems.Support.HelpdeskForm do
     {:noreply, assign(socket, :changeset, Support.Public.new_ticket_changeset(ticket))}
   end
 
-  # data(data, :any, default: {})
-  # data(type_labels, :map)
-  # data(type, :atom)
-  # data(changeset, :any)
+  @impl true
+  def handle_event("active_item_id", %{active_item_id: active_item_id}, socket) do
+    type = active_item_id
+    type_labels = Enums.TicketTypes.labels(type)
 
-  attr(:user, :any, required: true)
+    {
+      :noreply,
+      socket
+      |> assign(:type_labels, type_labels)
+      |> assign(:type, type)
+    }
+  end
 
   @impl true
   def render(assigns) do
@@ -86,7 +89,7 @@ defmodule Systems.Support.HelpdeskForm do
           phx-target={@myself}
         >
           <Text.title3><%= dgettext("eyra-support", "ticket.type") %></Text.title3>
-          <.live_component module={Selector} id={:type} items={@type_labels} type={:radio} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:type_selector} fabric={@fabric} />
           <.spacing value="L" />
 
           <.text_input form={form} field={:title} label_text={dgettext("eyra-support", "ticket.title.label")} />

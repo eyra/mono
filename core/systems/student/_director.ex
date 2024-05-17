@@ -18,7 +18,7 @@ defmodule Systems.Student.Director do
   def overview_plugin(user) do
     %{
       module: Student.Pool.OverviewPlugin,
-      props: %{id: :student_pools, user: user}
+      params: %{id: :student_pools, user: user}
     }
   end
 

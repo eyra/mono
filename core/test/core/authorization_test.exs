@@ -28,7 +28,7 @@ defmodule Core.AuthorizationTest do
 
   test "can create authorization child node" do
     {:ok, parent} = Authorization.create_node()
-    {:ok, child} = Authorization.create_node(parent)
+    child = Authorization.create_node(parent)
     assert child != parent
   end
 

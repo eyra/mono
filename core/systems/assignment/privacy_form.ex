@@ -1,9 +1,8 @@
 defmodule Systems.Assignment.PrivacyForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.pdf)
 
-  import Pixel.Components.FileSelector
+  import Frameworks.Pixel.Components.FileSelector
 
   alias Systems.Assignment
   alias Systems.Content

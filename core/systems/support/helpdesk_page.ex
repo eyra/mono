@@ -1,26 +1,33 @@
 defmodule Systems.Support.HelpdeskPage do
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :helpdesk
+  use Systems.Content.Composer, :live_workspace
 
-  import CoreWeb.Layouts.Workspace.Component
-
-  alias Systems.Support.HelpdeskForm
+  @impl true
+  def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
+    user
+  end
 
   def mount(_params, _session, socket) do
-    {:ok,
-     socket
-     |> update_menus()}
+    {:ok, socket |> compose_child(:helpdesk_form)}
   end
 
-  def handle_info({:claim_focus, :helpdesk_form}, socket) do
-    # helpdesk_form is currently only form that can claim focus
-    {:noreply, socket}
+  @impl true
+  def compose(:helpdesk_form, %{vm: %{user: user}}) do
+    %{
+      module: Systems.Support.HelpdeskForm,
+      params: %{user: user}
+    }
   end
+
+  @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace menus={@menus}>
+    <.live_workspace title={@vm.title} menus={@menus} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Area.form>
           <Margin.y id={:page_top} />
@@ -32,8 +39,8 @@ defmodule Systems.Support.HelpdeskPage do
 
       <.spacing value="XL" />
 
-      <.live_component module={HelpdeskForm} id={:helpdesk_form} user={@current_user} />
-    </.workspace>
+      <.child name={:helpdesk_form} fabric={@fabric} />
+    </.live_workspace>
     """
   end
 end

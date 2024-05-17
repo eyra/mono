@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Panel do
   @moduledoc """
     Grouping information in a card-like fashion.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:bg_color, :string, default: "bg-grey6")
   attr(:size, :string, default: "h-full")

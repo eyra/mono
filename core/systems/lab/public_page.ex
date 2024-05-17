@@ -18,9 +18,6 @@ defmodule Systems.Lab.PublicPage do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_event(
         "reserve-time-slot",
         %{"time-slot-id" => time_slot_id},

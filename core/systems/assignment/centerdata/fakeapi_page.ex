@@ -1,9 +1,5 @@
 defmodule Systems.Assignment.Centerdata.FakeApiPage do
   use CoreWeb, :live_view
-  use CoreWeb.LiveAssignHelper
-  use CoreWeb.Layouts.Stripped.Component, :data_donation
-
-  import Phoenix.Component
 
   @impl true
   def mount(

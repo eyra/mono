@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Form do
   @moduledoc false
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   import Frameworks.Pixel.ImagePreview
 
@@ -12,6 +12,8 @@ defmodule Frameworks.Pixel.Form do
   import Frameworks.Pixel.ErrorHelpers, only: [translate_error: 1]
 
   alias Phoenix.LiveView.JS
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   @label "label"
   @input "input"

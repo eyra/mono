@@ -1,7 +1,8 @@
 defmodule Frameworks.Pixel.ModalView do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   attr(:modal, :map, default: nil)
 

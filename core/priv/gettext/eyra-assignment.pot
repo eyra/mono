@@ -377,3 +377,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "workflow_item.onsite_experiment.description"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.title"
+msgstr ""

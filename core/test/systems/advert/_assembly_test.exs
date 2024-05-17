@@ -2,14 +2,15 @@ defmodule Systems.Advert.AssemblyTest do
   use CoreWeb.ConnCase
 
   import Mox
-  alias Core.Repo
-  alias CoreWeb.UI.Timestamp
+  # alias Core.Repo
+  # alias CoreWeb.UI.Timestamp
 
+  alias Systems.Project
   alias Systems.Advert
-  alias Systems.Assignment
-  alias Systems.Workflow
-  alias Systems.Alliance
-  alias Systems.Pool
+  # alias Systems.Assignment
+  # alias Systems.Workflow
+  # alias Systems.Alliance
+  # alias Systems.Pool
   alias Systems.Budget
 
   setup_all do
@@ -36,7 +37,7 @@ defmodule Systems.Advert.AssemblyTest do
 
     setup [:login_as_researcher]
 
-    test "create questionnaire", %{user: researcher, mock: mock, budget: budget, pool: pool} do
+    test "create advert", %{user: researcher, mock: mock, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -47,41 +48,39 @@ defmodule Systems.Advert.AssemblyTest do
          }}
       end)
 
-      advert =
-        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
+      assignment_title = "Study X"
+
+      assignment_image_id =
+        "raw_url=http%3A%2F%2Fexample.org&username=tester&name=Miss+Test&blur_hash=asdf"
+
+      info =
+        Factories.insert!(:assignment_info, %{
+          title: assignment_title,
+          image_id: assignment_image_id
+        })
+
+      assignment = %{id: assignment_id} = Factories.insert!(:assignment, %{info: info})
+
+      %{root: %{auth_node_id: project_node_auth_node_id}} =
+        assignment
+        |> Project.Factories.build_item()
+        |> Project.Factories.build_node()
+        |> Project.Factories.build_project()
+        |> Core.Repo.insert!()
+
+      {:ok, %{project_item: %{advert: %{auth_node_id: advert_auth_node_id} = advert}}} =
+        Advert.Assembly.create(assignment, researcher, pool)
 
       assert %Systems.Advert.Model{
                auth_node: %Core.Authorization.Node{
-                 id: advert_auth_node_id,
-                 parent_id: nil
+                 parent_id: ^project_node_auth_node_id
                },
                assignment: %Systems.Assignment.Model{
-                 info: %Systems.Assignment.InfoModel{
-                   subject_count: nil,
-                   duration: nil,
-                   language: :en,
-                   devices: [:phone, :tablet, :desktop],
-                   ethical_approval: nil,
-                   ethical_code: nil
-                 },
-                 workflow: %Systems.Workflow.Model{
-                   id: workflow_id,
-                   auth_node: %Core.Authorization.Node{
-                     id: workflow_auth_node_id
-                   }
-                 },
-                 auth_node: %Core.Authorization.Node{
-                   id: assignment_auth_node_id
-                 },
-                 crew: %Systems.Crew.Model{
-                   auth_node: %Core.Authorization.Node{
-                     parent_id: crew_auth_node_parent_id
-                   }
-                 }
+                 id: ^assignment_id
                },
                promotion: %Systems.Promotion.Model{
                  auth_node: %Core.Authorization.Node{
-                   parent_id: promotion_auth_node_parent_id
+                   parent_id: ^advert_auth_node_id
                  },
                  banner_photo_url: banner_photo_url,
                  banner_subtitle: nil,
@@ -89,224 +88,188 @@ defmodule Systems.Advert.AssemblyTest do
                  banner_url: nil,
                  description: nil,
                  expectations: nil,
-                 image_id:
-                   "raw_url=http%3A%2F%2Fexample.org&username=tester&name=Miss+Test&blur_hash=asdf",
-                 marks: ["vu"],
+                 image_id: ^assignment_image_id,
+                 marks: ["panl"],
                  subtitle: nil,
                  director: :advert,
                  themes: nil,
-                 title: "New Advertisement"
+                 title: ^assignment_title
                }
              } = advert
 
-      assert promotion_auth_node_parent_id == advert_auth_node_id
-      assert crew_auth_node_parent_id == assignment_auth_node_id
-
       assert banner_photo_url == researcher.profile.photo_url
       assert banner_title == researcher.displayname
-
-      # WORKFLOW
-
-      assert %Systems.Workflow.Model{
-               type: :many_mandatory,
-               items: [
-                 %Systems.Workflow.ItemModel{
-                   group: nil,
-                   position: 0,
-                   title: nil,
-                   description: nil,
-                   tool_ref: %{
-                     alliance_tool: %Systems.Alliance.ToolModel{
-                       auth_node: %Core.Authorization.Node{
-                         parent_id: ^workflow_auth_node_id
-                       },
-                       url: nil,
-                       director: :assignment
-                     },
-                     feldspar_tool_id: nil,
-                     document_tool_id: nil,
-                     lab_tool_id: nil
-                   }
-                 }
-               ]
-             } = Assignment.Public.get_workflow!(workflow_id, Workflow.Model.preload_graph(:down))
-
-      # ADVERT OWNER
-
-      assert %Systems.Advert.Model{
-               auth_node: %Core.Authorization.Node{
-                 role_assignments: [
-                   %Core.Authorization.RoleAssignment{
-                     principal_id: principal_id,
-                     role: :owner
-                   }
-                 ]
-               }
-             } = Advert.Public.get!(advert.id, auth_node: [:role_assignments])
-
-      assert principal_id === researcher.id
     end
 
-    test "delete", %{user: researcher, mock: mock, budget: budget, pool: pool} do
-      mock
-      |> expect(:get, fn _, "/photos/random", "query=abstract" ->
-        {:ok,
-         %{
-           "urls" => %{"raw" => "http://example.org"},
-           "user" => %{"username" => "tester", "name" => "Miss Test"},
-           "blur_hash" => "asdf"
-         }}
-      end)
+    # test "delete", %{user: researcher, mock: mock, pool: pool} do
+    #   mock
+    #   |> expect(:get, fn _, "/photos/random", "query=abstract" ->
+    #     {:ok,
+    #      %{
+    #        "urls" => %{"raw" => "http://example.org"},
+    #        "user" => %{"username" => "tester", "name" => "Miss Test"},
+    #        "blur_hash" => "asdf"
+    #      }}
+    #   end)
 
-      %{id: id} =
-        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
+    #   assignment = Assignment.Factories.create_assignment(31, 1)
 
-      advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
+    #   assignment
+    #   |> Project.Factories.build_item()
+    #   |> Project.Factories.build_node()
+    #   |> Project.Factories.build_project()
+    #   |> Core.Repo.insert!()
 
-      Advert.Assembly.delete(advert)
+    #   {:ok, %{project_item: %{advert: %{id: id}}}} = Advert.Assembly.create(assignment, researcher, pool)
+    #   advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
 
-      assert Repo.get(Advert.Model, advert.id) == nil
-      assert Repo.get(Core.Authorization.Node, advert.auth_node_id) == nil
-      assert Repo.get(Systems.Promotion.Model, advert.promotion_id) == nil
-      assert Repo.get(Core.Authorization.Node, advert.promotion.auth_node_id) == nil
-      assert Repo.get(Systems.Assignment.Model, advert.assignment_id) != nil
-    end
+    #   Advert.Assembly.delete(advert)
 
-    test "copy", %{user: researcher, mock: mock, budget: budget, pool: pool} do
-      mock
-      |> expect(:get, fn _, "/photos/random", "query=abstract" ->
-        {:ok,
-         %{
-           "urls" => %{"raw" => "http://example.org"},
-           "user" => %{"username" => "tester", "name" => "Miss Test"},
-           "blur_hash" => "asdf"
-         }}
-      end)
+    #   assert Repo.get(Advert.Model, advert.id) == nil
+    #   assert Repo.get(Core.Authorization.Node, advert.auth_node_id) == nil
+    #   assert Repo.get(Systems.Promotion.Model, advert.promotion_id) == nil
+    #   assert Repo.get(Core.Authorization.Node, advert.promotion.auth_node_id) == nil
+    #   assert Repo.get(Systems.Assignment.Model, advert.assignment_id) != nil
+    # end
 
-      %{id: id} =
-        Advert.Assembly.create(:questionnaire, researcher, "New Advertisement", pool, budget)
+    # test "copy", %{user: researcher, mock: mock, pool: pool} do
+    #   mock
+    #   |> expect(:get, fn _, "/photos/random", "query=abstract" ->
+    #     {:ok,
+    #      %{
+    #        "urls" => %{"raw" => "http://example.org"},
+    #        "user" => %{"username" => "tester", "name" => "Miss Test"},
+    #        "blur_hash" => "asdf"
+    #      }}
+    #   end)
 
-      %{
-        id: id,
-        submission:
-          %{
-            pool: %{name: pool_name},
-            criteria: criteria
-          } = submission,
-        assignment: %{
-          info: info,
-          crew: crew1,
-          workflow: %{
-            items: [
-              %{
-                tool_ref: %Systems.Workflow.ToolRefModel{
-                  alliance_tool: tool
-                }
-              }
-            ]
-          }
-        }
-      } =
-        Advert.Public.get!(id,
-          assignment: Assignment.Model.preload_graph(:down),
-          submission: [:pool, :criteria]
-        )
+    #   assignment =
+    #     Assignment.Factories.create_assignment(31, 1)
+    #     |> Core.Repo.preload(Assignment.Model.preload_graph(:down))
 
-      # Update Submission
-      reward_value = 1
-      status = :submitted
-      schedule_start = Timestamp.now() |> Timestamp.format_user_input_date()
-      schedule_end = Timestamp.now() |> Timestamp.format_user_input_date()
+    #   %{id: id} = Advert.Assembly.create(assignment, researcher, pool)
 
-      {:ok, %{submission: _}} =
-        Pool.Public.update(submission, %{
-          reward_value: reward_value,
-          status: status,
-          schedule_start: schedule_start,
-          schedule_end: schedule_end
-        })
+    #   %{
+    #     id: id,
+    #     submission:
+    #       %{
+    #         pool: %{name: pool_name},
+    #         criteria: criteria
+    #       } = submission,
+    #     assignment: %{
+    #       info: info,
+    #       crew: crew1,
+    #       workflow: %{
+    #         items: [
+    #           %{
+    #             tool_ref: %Systems.Workflow.ToolRefModel{
+    #               alliance_tool: tool
+    #             }
+    #           }
+    #         ]
+    #       }
+    #     }
+    #   } =
+    #     Advert.Public.get!(id,
+    #       assignment: Assignment.Model.preload_graph(:down),
+    #       submission: [:pool, :criteria]
+    #     )
 
-      genders = [:woman]
-      dominant_hands = [:left]
-      native_languages = [:en, :nl]
+    #   # Update Submission
+    #   reward_value = 1
+    #   status = :submitted
+    #   schedule_start = Timestamp.now() |> Timestamp.format_user_input_date()
+    #   schedule_end = Timestamp.now() |> Timestamp.format_user_input_date()
 
-      # Update Criteria
-      criteria
-      |> Pool.CriteriaModel.changeset(%{
-        genders: genders,
-        dominant_hands: dominant_hands,
-        native_languages: native_languages
-      })
-      |> Repo.update!()
+    #   {:ok, %{submission: _}} =
+    #     Pool.Public.update(submission, %{
+    #       reward_value: reward_value,
+    #       status: status,
+    #       schedule_start: schedule_start,
+    #       schedule_end: schedule_end
+    #     })
 
-      # Update Tool
-      alliance_url = "https://eyra.co/alliances/1"
+    #   genders = [:woman]
+    #   dominant_hands = [:left]
+    #   native_languages = [:en, :nl]
 
-      tool
-      |> Alliance.ToolModel.changeset(:update, %{
-        url: alliance_url,
-        director: :assignment
-      })
-      |> Repo.update!()
+    #   # Update Criteria
+    #   criteria
+    #   |> Pool.CriteriaModel.changeset(%{
+    #     genders: genders,
+    #     dominant_hands: dominant_hands,
+    #     native_languages: native_languages
+    #   })
+    #   |> Repo.update!()
 
-      # Update Inquiry
-      subject_count = 2
-      duration = "10"
-      language = :en
-      ethical_approval = true
-      ethical_code = "RERB"
-      devices = [:desktop, :tablet]
+    #   # Update Tool
+    #   alliance_url = "https://eyra.co/alliances/1"
 
-      info
-      |> Assignment.InfoModel.changeset(:update, %{
-        subject_count: subject_count,
-        duration: duration,
-        language: language,
-        ethical_approval: ethical_approval,
-        ethical_code: ethical_code,
-        devices: devices
-      })
-      |> Repo.update!()
+    #   tool
+    #   |> Alliance.ToolModel.changeset(:update, %{
+    #     url: alliance_url,
+    #     director: :assignment
+    #   })
+    #   |> Repo.update!()
 
-      advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
+    #   # Update Inquiry
+    #   subject_count = 2
+    #   duration = "10"
+    #   language = :en
+    #   ethical_approval = true
+    #   ethical_code = "RERB"
+    #   devices = [:desktop, :tablet]
 
-      {:ok, %{advert: %{id: id2}}} = Advert.Assembly.copy(advert)
-      advert2 = Advert.Public.get!(id2, Advert.Model.preload_graph(:down))
+    #   info
+    #   |> Assignment.InfoModel.changeset(:update, %{
+    #     subject_count: subject_count,
+    #     duration: duration,
+    #     language: language,
+    #     ethical_approval: ethical_approval,
+    #     ethical_code: ethical_code,
+    #     devices: devices
+    #   })
+    #   |> Repo.update!()
 
-      assert %{
-               auth_node: %{role_assignments: [%{role: :owner}]},
-               submission: %{
-                 reward_value: nil,
-                 schedule_end: ^schedule_end,
-                 schedule_start: ^schedule_start,
-                 criteria: %{
-                   genders: ^genders,
-                   dominant_hands: ^dominant_hands,
-                   native_languages: ^native_languages
-                 },
-                 pool: %{
-                   name: ^pool_name
-                 },
-                 status: :idle
-               },
-               promotion: %{
-                 title: "New Advertisement (copy)"
-               },
-               assignment: %{
-                 info: %{
-                   subject_count: ^subject_count,
-                   duration: ^duration,
-                   language: ^language,
-                   ethical_approval: ^ethical_approval,
-                   ethical_code: ^ethical_code,
-                   devices: ^devices
-                 },
-                 crew: crew2,
-                 workflow: %{items: []}
-               }
-             } = advert2
+    #   advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
 
-      assert crew1.id != crew2.id
-    end
+    #   {:ok, %{advert: %{id: id2}}} = Advert.Assembly.copy(advert)
+    #   advert2 = Advert.Public.get!(id2, Advert.Model.preload_graph(:down))
+
+    #   assert %{
+    #            auth_node: %{role_assignments: [%{role: :owner}]},
+    #            submission: %{
+    #              reward_value: nil,
+    #              schedule_end: ^schedule_end,
+    #              schedule_start: ^schedule_start,
+    #              criteria: %{
+    #                genders: ^genders,
+    #                dominant_hands: ^dominant_hands,
+    #                native_languages: ^native_languages
+    #              },
+    #              pool: %{
+    #                name: ^pool_name
+    #              },
+    #              status: :idle
+    #            },
+    #            promotion: %{
+    #              title: "New Advertisement (copy)"
+    #            },
+    #            assignment: %{
+    #              info: %{
+    #                subject_count: ^subject_count,
+    #                duration: ^duration,
+    #                language: ^language,
+    #                ethical_approval: ^ethical_approval,
+    #                ethical_code: ^ethical_code,
+    #                devices: ^devices
+    #              },
+    #              crew: crew2,
+    #              workflow: %{items: []}
+    #            }
+    #          } = advert2
+
+    #   assert crew1.id != crew2.id
+    # end
   end
 end

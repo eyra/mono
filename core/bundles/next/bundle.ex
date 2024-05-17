@@ -23,9 +23,8 @@ defmodule Next.Bundle do
           delete("/user/session", User.SessionController, :delete)
         end
 
-        scope "/", Next do
+        scope "/", Systems do
           pipe_through([:browser, :require_authenticated_user])
-          live("/console", Console.Page)
           live("/next", Console.Page)
         end
       end
@@ -35,7 +34,6 @@ defmodule Next.Bundle do
   def grants do
     if include?() do
       quote do
-        grant_access(Next.Console.Page, [:member])
         grant_access(Next.User.Signin, [:visitor, :member])
       end
     end

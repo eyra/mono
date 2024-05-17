@@ -1,6 +1,7 @@
 defmodule Systems.Admin.LoginPage do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :admin_login
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   import Ecto.Query
   alias Core.Repo

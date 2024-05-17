@@ -8,17 +8,17 @@ defmodule Systems.Project.ItemModel do
   alias CoreWeb.UI.Timestamp
   alias Core.ImageHelpers
 
-  alias Systems.{
-    Project,
-    Assignment,
-    Graphite
-  }
+  alias Systems.Project
+  alias Systems.Assignment
+  alias Systems.Advert
+  alias Systems.Graphite
 
   schema "project_items" do
     field(:name, :string)
     field(:project_path, {:array, :integer})
     belongs_to(:node, Project.NodeModel)
     belongs_to(:assignment, Assignment.Model)
+    belongs_to(:advert, Advert.Model)
     belongs_to(:leaderboard, Graphite.LeaderboardModel)
     timestamps()
   end

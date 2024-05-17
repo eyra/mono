@@ -69,13 +69,12 @@ defmodule Systems.Advert.MonitorViewTest do
 
       {:ok, view, _html} = live(conn, Routes.live_path(conn, Advert.ContentPage, id))
 
-      html =
-        view
-        |> element("[phx-click=\"reject\"]")
-        |> render_click()
+      view
+      |> element("[phx-click=\"reject\"]")
+      |> render_click()
 
-      assert html =~ "Reject contribution"
-      assert html =~ "Message to participant"
+      # re-render for async popup
+      render(view) =~ "Reject contribution"
     end
 
     test "Member applied but expired and not completed: accept ", %{

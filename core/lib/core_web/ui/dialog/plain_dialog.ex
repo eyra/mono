@@ -1,6 +1,7 @@
 defmodule CoreWeb.UI.PlainDialog do
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
+  import CoreWeb.UI.Popup
   import CoreWeb.UI.Dialog
 
   defmacro __using__(_opts) do
@@ -56,6 +57,20 @@ defmodule CoreWeb.UI.PlainDialog do
   def plain_dialog(assigns) do
     ~H"""
     <.dialog title={@title} text={@text} buttons={@buttons} />
+    """
+  end
+
+  attr(:dialog, :map, default: nil)
+
+  def plain_dialog_block(assigns) do
+    ~H"""
+      <%= if @dialog do %>
+        <.popup>
+          <div class="flex-wrap">
+            <.plain_dialog {@dialog} />
+          </div>
+        </.popup>
+      <% end %>
     """
   end
 end

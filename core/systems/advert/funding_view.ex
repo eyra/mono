@@ -43,8 +43,7 @@ defmodule Systems.Advert.FundingView do
           id: id,
           assignment: %{budget: budget} = assignment,
           submission: submission,
-          user: user,
-          locale: locale
+          user: user
         },
         socket
       ) do
@@ -60,7 +59,7 @@ defmodule Systems.Advert.FundingView do
         changeset: changeset,
         selected_budget: budget,
         user: user,
-        locale: locale
+        locale: CoreWeb.LiveLocale.get_locale()
       )
       |> update_state()
       |> update_reward()

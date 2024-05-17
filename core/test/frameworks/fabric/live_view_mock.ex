@@ -6,6 +6,7 @@ defmodule Fabric.LiveViewMock do
     {
       :ok,
       socket
+      |> Fabric.new_fabric()
       |> add_child(:child_a, "Child A")
       |> add_child(:child_b, "Child B")
     }

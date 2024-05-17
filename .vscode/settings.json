@@ -22,5 +22,6 @@
     "tailwindCSS.includeLanguages": {
         "elixir": "html",
         "phoenix-heex": "html"
-    }
+    },
+    "editor.tabCompletion": "on"
 }

@@ -78,4 +78,8 @@ defmodule Systems.Assignment.Factories do
 
     create_assignment(info, workflow, assignment_auth_node, status)
   end
+
+  def build_assignment() do
+    Factories.insert!(:assignment, %{})
+  end
 end

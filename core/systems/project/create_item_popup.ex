@@ -1,6 +1,5 @@
 defmodule Systems.Project.CreateItemPopup do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   import CoreWeb.UI.Dialog
 
@@ -9,21 +8,6 @@ defmodule Systems.Project.CreateItemPopup do
   alias Systems.{
     Project
   }
-
-  # Handle Tool Type Selector Update
-  @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: :template_selector},
-        %{assigns: %{template_labels: template_labels}} = socket
-      ) do
-    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
-
-    {
-      :ok,
-      socket
-      |> assign(selected_template: selected_template)
-    }
-  end
 
   # Initial Update
   @impl true
@@ -35,7 +19,20 @@ defmodule Systems.Project.CreateItemPopup do
       socket
       |> assign(id: id, node: node, title: title)
       |> init_templates()
+      |> compose_child(:template_selector)
       |> init_buttons()
+    }
+  end
+
+  @impl true
+  def compose(:template_selector, %{template_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio,
+        optional?: false
+      }
     }
   end
 
@@ -85,6 +82,21 @@ defmodule Systems.Project.CreateItemPopup do
     {:noreply, socket |> finish()}
   end
 
+  @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: active_item_id, selector_id: :template_selector},
+        %{assigns: %{template_labels: template_labels}} = socket
+      ) do
+    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
+
+    {
+      :ok,
+      socket
+      |> assign(selected_template: selected_template)
+    }
+  end
+
   defp finish(socket) do
     socket |> send_event(:parent, "finish")
   end
@@ -99,14 +111,7 @@ defmodule Systems.Project.CreateItemPopup do
     ~H"""
     <div>
       <.dialog {%{title: @title, buttons: @buttons}}>
-        <.live_component
-          module={Selector}
-          id={:template_selector}
-          items={@template_labels}
-          type={:radio}
-          optional?={false}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:template_selector} fabric={@fabric} />
       </.dialog>
     </div>
     """

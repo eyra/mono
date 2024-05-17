@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Line do
   @moduledoc """
   A line.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:color, :string, default: "bg-grey4")
   attr(:height, :string, default: "h-px")

@@ -1,13 +1,5 @@
 defmodule CoreWeb.LiveForm do
-  defmacro __using__(:fabric) do
-    quote do
-      use CoreWeb, :live_component_fabric
-      unquote(flash_helpers())
-      unquote(form_helpers())
-    end
-  end
-
-  defmacro __using__(_opts) do
+  defmacro __using__(_) do
     quote do
       use CoreWeb, :live_component
       unquote(flash_helpers())

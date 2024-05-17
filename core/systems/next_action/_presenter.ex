@@ -4,7 +4,7 @@ defmodule Systems.NextAction.Presenter do
   alias Systems.NextAction
 
   @impl true
-  def view_model(NextAction.OverviewPage, %Core.Accounts.User{} = user, _) do
-    %{next_actions: NextAction.Public.list_next_actions(user)}
+  def view_model(NextAction.OverviewPage, user, assigns) do
+    NextAction.OverviewPageBuilder.view_model(user, assigns)
   end
 end

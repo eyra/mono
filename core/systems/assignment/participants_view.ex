@@ -1,22 +1,26 @@
 defmodule Systems.Assignment.ParticipantsView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
+
+  require Logger
 
   import CoreWeb.Gettext
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
   alias Systems.Assignment
+  alias Systems.Advert
+  alias Systems.Pool
 
   @impl true
-  def update(%{id: id, assignment: assignment, template: template}, socket) do
+  def update(%{id: id, assignment: assignment, template: template, user: user}, socket) do
     content_flags = Assignment.Template.content_flags(template)
 
     {
       :ok,
       socket
-      |> assign(id: id, assignment: assignment, content_flags: content_flags)
+      |> assign(id: id, assignment: assignment, content_flags: content_flags, user: user)
       |> update_title()
+      |> update_advert_button()
       |> update_annotation()
       |> update_url()
     }
@@ -25,6 +29,33 @@ defmodule Systems.Assignment.ParticipantsView do
   defp update_title(socket) do
     title = dgettext("eyra-assignment", "invite.panel.title")
     assign(socket, title: title)
+  end
+
+  def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
+    advert_button = %{
+      action: %{type: :send, event: "create_advert"},
+      face: %{
+        type: :primary,
+        bg_color: "bg-tertiary",
+        text_color: "text-grey1",
+        label: dgettext("eyra-assignment", "advert.create.button")
+      }
+    }
+
+    assign(socket, advert_button: advert_button)
+  end
+
+  def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id}, _]}}} = socket) do
+    advert_button = %{
+      action: %{type: :redirect, to: ~p"/advert/#{advert_id}/content"},
+      face: %{
+        type: :plain,
+        icon: :forward,
+        label: dgettext("eyra-assignment", "advert.goto.button")
+      }
+    }
+
+    assign(socket, advert_button: advert_button)
   end
 
   defp update_annotation(socket) do
@@ -43,6 +74,22 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   @impl true
+  def handle_event(
+        "create_advert",
+        _payload,
+        %{assigns: %{assignment: assignment, user: user}} = socket
+      ) do
+    if pool = Pool.Public.get_by_name("panl") do
+      Advert.Assembly.create(assignment, user, pool)
+    else
+      Logger.error("Panl pool not found")
+      Frameworks.Pixel.Flash.push_error("Panl pool not found")
+    end
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
       <div>
@@ -50,9 +97,21 @@ defmodule Systems.Assignment.ParticipantsView do
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-assignment", "participants.title") %></Text.title2>
           <.spacing value="L" />
-            <div class="flex flex-col gap-4" %>
+          <div class="flex flex-col gap-8" %>
             <%= if @content_flags[:advert_in_pool] do %>
-              CREATE ADVERTISEMENT
+              <div class="border-grey4 border-2 rounded p-6">
+                <div class="flex flex-row">
+                  <div class="flex-grow">
+                    <Text.title3><%= dgettext("eyra-assignment", "advert.title") %></Text.title3>
+                    <Text.body><%= dgettext("eyra-assignment", "advert.body") %></Text.body>
+                    <.spacing value="S" />
+                    <Button.dynamic_bar buttons={[@advert_button]} />
+                  </div>
+                  <div>
+                    <img src={~p"/images/panl-standing.svg"} alt="Panl logo" />
+                  </div>
+                </div>
+              </div>
             <% end %>
 
             <%= if @content_flags[:invite_participants] do %>

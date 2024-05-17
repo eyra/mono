@@ -7,26 +7,6 @@ defmodule CoreWeb.User.Forms.Debug do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Selector
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: :role_selector},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    attrs =
-      [:student, :researcher]
-      |> Enum.reduce(%{}, fn field, acc ->
-        Map.put(acc, field, field == active_item_id)
-      end)
-
-    {
-      :ok,
-      socket
-      |> save(entity, :auto_save, attrs)
-      |> update_ui()
-    }
-  end
-
   @impl true
   def update(%{id: id, user: user}, socket) do
     profile = Accounts.get_profile(user)
@@ -65,9 +45,39 @@ defmodule CoreWeb.User.Forms.Debug do
 
     socket
     |> assign(changeset: changeset)
+    |> compose_child(:role_selector)
   end
 
-  # Saving
+  @impl true
+  def compose(:role_selector, %{role_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio
+      }
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: active_item_id, selector_id: :role_selector},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    attrs =
+      [:student, :researcher]
+      |> Enum.reduce(%{}, fn field, acc ->
+        Map.put(acc, field, field == active_item_id)
+      end)
+
+    {
+      :noreply,
+      socket
+      |> save(entity, :auto_save, attrs)
+      |> update_ui()
+    }
+  end
 
   @impl true
   def handle_event(
@@ -109,13 +119,7 @@ defmodule CoreWeb.User.Forms.Debug do
       <Area.content>
       <Text.title2>User roles</Text.title2>
       <.form id="main_form" for={@changeset} phx-change="save" phx-target={@myself} >
-        <.live_component
-          module={Selector}
-          id={:role_selector}
-          items={@role_labels}
-          type={:radio}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:selector} fabric={@fabric} />
       </.form>
       </Area.content>
     </div>

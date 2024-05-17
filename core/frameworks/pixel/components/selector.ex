@@ -2,6 +2,8 @@ defmodule Frameworks.Pixel.Selector do
   @moduledoc false
   use CoreWeb, :live_component
 
+  import CoreWeb.LiveDefaults
+
   @defaults [
     background: :light,
     optional?: true,
@@ -45,7 +47,6 @@ defmodule Frameworks.Pixel.Selector do
         %{
           id: id,
           items: items,
-          parent: parent,
           type: type
         } = props,
         socket
@@ -57,7 +58,6 @@ defmodule Frameworks.Pixel.Selector do
         id: id,
         items: items,
         current_items: items,
-        parent: parent,
         type: type
       )
       |> update_defaults(props, @defaults)
@@ -74,17 +74,16 @@ defmodule Frameworks.Pixel.Selector do
       socket
       |> get_active_item_ids()
 
-    update_parent(socket, active_item_ids)
-
-    {:noreply, socket}
+    {:noreply, socket |> send_to_parent(active_item_ids)}
   end
 
-  defp update_parent(
-         %{assigns: %{type: type, parent: parent, current_items: current_items, id: selector_id}},
+  defp send_to_parent(
+         %{assigns: %{type: type, current_items: current_items, id: selector_id}} = socket,
          active_item_ids
        ) do
     if multiselect?(type) do
-      update_target(parent, %{
+      socket
+      |> send_event(:parent, "active_item_ids", %{
         selector_id: selector_id,
         active_item_ids: active_item_ids,
         current_items: current_items
@@ -92,7 +91,8 @@ defmodule Frameworks.Pixel.Selector do
     else
       active_item_id = List.first(active_item_ids)
 
-      update_target(parent, %{
+      socket
+      |> send_event(:parent, "active_item_id", %{
         selector_id: selector_id,
         active_item_id: active_item_id,
         current_items: current_items
@@ -190,7 +190,7 @@ end
 
 defmodule Frameworks.Pixel.Selector.Item do
   @moduledoc false
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:item, :map, required: true)
   attr(:multiselect?, :boolean, default: true)

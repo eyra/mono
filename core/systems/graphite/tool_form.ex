@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.ToolForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import CoreWeb.Gettext
   import Frameworks.Pixel.Form

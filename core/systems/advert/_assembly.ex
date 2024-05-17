@@ -1,17 +1,18 @@
 defmodule Systems.Advert.Assembly do
-  import Core.ImageCatalog, only: [image_catalog: 0]
+  import CoreWeb.Gettext
 
   alias Core.Accounts
   alias Core.Authorization
   alias Core.Repo
   alias Ecto.Multi
+  alias Ecto.Changeset
 
-  alias Systems.{
-    Advert,
-    Assignment,
-    Promotion,
-    Pool
-  }
+  alias Frameworks.Signal
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Promotion
+  alias Systems.Pool
+  alias Systems.Project
 
   def delete(%Advert.Model{} = advert) do
     Multi.new()
@@ -38,33 +39,87 @@ defmodule Systems.Advert.Assembly do
     |> Multi.delete(:promotion_auth_node, auth_node)
   end
 
-  def create(template, user, title, pool, budget) do
+  def create(
+        %Assignment.Model{info: %{image_id: image_id, title: title}} = assignment,
+        user,
+        pool
+      ) do
+    project_node =
+      %{auth_node: project_auth_node} =
+      assignment
+      |> Project.Public.get_item_by_assignment()
+      |> Project.Public.get_node_by_item!([:auth_node])
+
     profile = user |> Accounts.get_profile()
 
-    promotion_attrs = create_promotion_attrs(title, user, profile)
+    promotion_attrs = create_promotion_attrs(image_id, title, user, profile)
 
-    advert_auth_node = Authorization.create_node!()
+    advert_auth_node = Authorization.create_node!(project_auth_node)
     promotion_auth_node = Authorization.create_node!(advert_auth_node)
 
-    {:ok, promotion} = Promotion.Public.create(promotion_attrs, promotion_auth_node)
-    {:ok, submission} = Pool.Public.create_submission(submission_attrs(), pool)
-    {:ok, assignment} = Assignment.Assembly.create(template, :advert, budget)
+    promotion = Promotion.Public.prepare(promotion_attrs, promotion_auth_node)
+    submission = Pool.Public.prepare_submission(%{director: :advert, status: :idle}, pool)
 
-    {:ok, advert} =
-      Advert.Public.create(promotion, assignment, submission, user, advert_auth_node)
+    advert_name = get_advert_name(title, project_node)
 
-    advert
+    project_item =
+      prepare_advert_project_item(
+        project_node,
+        assignment,
+        submission,
+        promotion,
+        advert_name,
+        advert_auth_node
+      )
+
+    Multi.new()
+    |> Multi.insert(:project_item, project_item)
+    |> Signal.Public.multi_dispatch({:project_item, :inserted})
+    |> Repo.transaction()
   end
 
-  defp submission_attrs(), do: %{director: :advert, status: :idle}
+  def get_advert_name(nil, project_node) do
+    Project.Public.new_item_name(
+      project_node,
+      dgettext("eyra-advert", "advert.default.name")
+    )
+  end
 
-  defp create_promotion_attrs(title, user, profile) do
-    image_id = image_catalog().random(:abstract)
+  def get_advert_name(name, project_node) when is_binary(name) do
+    case name do
+      "" -> get_advert_name(nil, project_node)
+      name -> name
+    end
+  end
 
+  defp prepare_advert_project_item(
+         %{id: project_node_id, project_path: project_path} = project_node,
+         assignment,
+         submission,
+         promotion,
+         name,
+         auth_node
+       ) do
+    advert =
+      %Advert.Model{}
+      |> Advert.Model.changeset(%{status: :concept})
+      |> Changeset.put_assoc(:auth_node, auth_node)
+      |> Changeset.put_assoc(:assignment, assignment)
+      |> Changeset.put_assoc(:submission, submission)
+      |> Changeset.put_assoc(:promotion, promotion)
+
+    Project.Public.prepare_item(
+      %{name: name, project_path: project_path ++ [project_node_id]},
+      advert
+    )
+    |> Changeset.put_assoc(:node, project_node)
+  end
+
+  defp create_promotion_attrs(image_id, title, user, profile) do
     %{
       director: :advert,
       title: title,
-      marks: ["vu"],
+      marks: ["panl"],
       banner_photo_url: profile.photo_url,
       banner_title: user.displayname,
       banner_subtitle: profile.title,

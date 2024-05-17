@@ -3,7 +3,7 @@ defmodule Core.Accounts.Queries do
 
   alias Core.Accounts.User
   alias Core.Accounts.Features
-  alias Core.Accounts.Profile
+  alias Systems.Account.UserProfileModel
 
   # User
 
@@ -36,7 +36,7 @@ defmodule Core.Accounts.Queries do
   # Profile
 
   def profiles do
-    from(Profile, as: :profile)
+    from(UserProfileModel, as: :profile)
   end
 
   def profiles_by_users(%Ecto.Query{} = users) do

@@ -20,7 +20,7 @@ defmodule Systems.Citizen.Director do
   def overview_plugin(user) do
     %{
       module: Citizen.Pool.OverviewPlugin,
-      props: %{id: :citizen_pools, user: user}
+      params: %{id: :citizen_pools, user: user}
     }
   end
 

@@ -17,17 +17,6 @@ defmodule Systems.Admin.OrgView do
 
   import Org.ItemView
 
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_ids: active_filters, selector_id: :org_filters}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(active_filters: active_filters)
-      |> prepare_organisations()
-    }
-  end
-
   # Handle Search Bar Update
   @impl true
   def update(%{search_bar: :org_search_bar, query_string: query_string, query: query}, socket) do
@@ -39,6 +28,7 @@ defmodule Systems.Admin.OrgView do
         query_string: query_string
       )
       |> prepare_organisations()
+      |> compose_child(:org_filters)
     }
   end
 
@@ -62,6 +52,31 @@ defmodule Systems.Admin.OrgView do
         query_string: ""
       )
       |> prepare_organisations()
+      |> compose_child(:org_filters)
+      |> compose_child(:org_search_bar)
+    }
+  end
+
+  @impl true
+  def compose(:org_filters, %{filter_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
+    }
+  end
+
+  @impl true
+  def compose(:org_search_bar, %{query_string: query_string}) do
+    %{
+      module: SearchBar,
+      params: %{
+        query_string: query_string,
+        placeholder: dgettext("eyra-org", "search.placeholder"),
+        debounce: "200"
+      }
     }
   end
 
@@ -171,6 +186,20 @@ defmodule Systems.Admin.OrgView do
   end
 
   @impl true
+  def handle_event(
+        "active_item_ids",
+        %{active_item_ids: active_filters, selector_id: :org_filters},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(active_filters: active_filters)
+      |> prepare_organisations()
+    }
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -178,18 +207,10 @@ defmodule Systems.Admin.OrgView do
       <Margin.y id={:page_top} />
       <div class="flex flex-row gap-3 items-center">
         <div class="font-label text-label">Filter:</div>
-        <.live_component
-          module={Selector} id={:org_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:org_filters} fabric={@fabric} />
         <div class="flex-grow" />
         <div class="flex-shrink-0">
-          <.live_component
-            module={SearchBar}
-            id={:org_search_bar}
-            query_string={@query_string}
-            placeholder={dgettext("eyra-org", "search.placeholder")}
-            debounce="200"
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <.child name={:org_search_bar} fabric={@fabric} />
         </div>
       </div>
       <.spacing value="L" />

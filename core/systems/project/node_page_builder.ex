@@ -19,6 +19,7 @@ defmodule Systems.Project.NodePageBuilder do
     %{
       id: id,
       title: node.name,
+      active_menu_item: :projects,
       node_cards: node_cards,
       item_cards: item_cards,
       node: node

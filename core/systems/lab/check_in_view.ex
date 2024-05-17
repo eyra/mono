@@ -44,16 +44,16 @@ defmodule Systems.Lab.CheckInView do
   @impl true
   def handle_event(
         "accept",
-        %{"item" => user_id},
-        %{assigns: %{tool: tool, parent: _parent}} = socket
+        %{"item" => _user_id},
+        %{assigns: %{tool: _tool, parent: _parent}} = _socket
       ) do
-    user =
-      user_id
-      |> String.to_integer()
-      |> Accounts.get_user!()
+    # user =
+    #   user_id
+    #   |> String.to_integer()
+    #   |> Accounts.get_user!()
 
-    Directable.director(tool).apply_member_and_activate_task(tool, user)
-    {:noreply, socket |> assign(query: nil, message: nil)}
+    raise "FIXME: Apply member and activate task"
+    # {:noreply, socket |> assign(query: nil, message: nil)}
   end
 
   @impl true

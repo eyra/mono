@@ -1,6 +1,5 @@
 defmodule Systems.Project.ItemForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import CoreWeb.UI.Dialog
 
@@ -36,10 +35,6 @@ defmodule Systems.Project.ItemForm do
 
   defp update_buttons(%{assigns: %{myself: myself}} = socket) do
     assign(socket, buttons: form_dialog_buttons(myself))
-  end
-
-  def handle_view_model_updated(socket) do
-    socket
   end
 
   # Handle Events

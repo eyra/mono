@@ -8,74 +8,44 @@ defmodule Systems.Lab.DayView do
   import Frameworks.Pixel.Line
   import Frameworks.Pixel.Form
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
   import CoreWeb.Gettext
 
   @impl true
-  def update(%{id: id, day_model: day_model, target: target}, socket) do
-    changeset =
-      day_model
-      |> Lab.DayModel.changeset(:init, %{})
+  def update(%{id: id, day_model: day_model}, socket) do
+    changeset = Lab.DayModel.changeset(day_model, :init, %{})
 
     {
       :ok,
       socket
       |> assign(
         id: id,
-        target: target,
         og_day_model: day_model,
         day_model: day_model,
         changeset: changeset
       )
+      |> compose_entries()
       |> update_ui()
     }
   end
 
-  @impl true
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
-      ) do
-    start_time = selector_id
-    enabled? = not Enum.empty?(active_item_ids)
-
-    entries =
-      entries
-      |> update_changed_entry(start_time, enabled?)
-
-    {
-      :ok,
-      socket
-      |> assign(day_model: %{day_model | entries: entries})
-      |> update_ui()
-    }
+  defp compose_entries(%{assigns: %{day_model: %{entries: entries}}} = socket) do
+    Enum.reduce(entries, socket, fn %{start_time: start_time}, socket ->
+      compose_child(socket, "time_slot_item_#{start_time}")
+    end)
   end
 
   @impl true
-  def update(_params, socket) do
-    {
-      :ok,
-      socket
+  def compose("time_slot_item_" <> start_time, %{day_model: %{entries: entries}}) do
+    entry = find_by(entries, :start_time, start_time)
+
+    %{
+      module: Lab.DayEntryView,
+      params: %{
+        entry: entry
+      }
     }
-  end
-
-  defp update_changed_entry(entries, start_time, enabled?) when is_list(entries) do
-    case entries |> Enum.find_index(&has_start_time(&1, start_time)) do
-      nil ->
-        entries
-
-      index ->
-        entry = Enum.at(entries, index)
-
-        entries
-        |> List.replace_at(
-          index,
-          %{entry | enabled?: enabled?}
-        )
-    end
   end
 
   defp update_entries(
@@ -103,9 +73,6 @@ defmodule Systems.Lab.DayView do
     timeslots
     |> Enum.find_index(&(&1.start_time == timeslot.start_time))
   end
-
-  defp has_start_time(%{start_time: og_start_time}, start_time), do: og_start_time == start_time
-  defp has_start_time(_entry, _start_time), do: false
 
   defp update_ui(socket) do
     socket
@@ -200,7 +167,24 @@ defmodule Systems.Lab.DayView do
     socket |> assign(error: error)
   end
 
+  # Events
+
   @impl true
+  def handle_event(
+        "day_entry_updated",
+        %{entry: entry},
+        %{assigns: %{day_model: %{entries: entries} = day_model}} = socket
+      ) do
+    day_model = %{day_model | entries: replace_by(entries, :start_time, entry)}
+
+    {
+      :noreply,
+      socket
+      |> assign(day_model: day_model)
+      |> update_ui()
+    }
+  end
+
   def handle_event(
         "update",
         %{"day_model" => new_day_model},
@@ -231,14 +215,20 @@ defmodule Systems.Lab.DayView do
             error: nil,
             changeset: changeset,
             og_day_model: og_day_model,
-            day_model: day_model,
-            target: target
+            day_model: day_model
           }
         } = socket
       ) do
-    if changeset.valid? do
-      update_target(target, %{day_view: :submit, og_day_model: og_day_model, day_model: day_model})
-    end
+    socket =
+      if changeset.valid? do
+        socket
+        |> send_event(:parent, "day_view_submit", %{
+          og_day_model: og_day_model,
+          day_model: day_model
+        })
+      else
+        socket
+      end
 
     {:noreply, socket}
   end
@@ -249,9 +239,8 @@ defmodule Systems.Lab.DayView do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{day_view: :hide})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "day_view_hide")}
   end
 
   defp buttons(%{myself: myself}) do
@@ -266,16 +255,6 @@ defmodule Systems.Lab.DayView do
       }
     ]
   end
-
-  # data(date, :date)
-  # data(title, :string)
-  # data(byline, :string)
-  # data(entity, :map)
-  # data(changeset, :map)
-  # data(error, :any, default: nil)
-
-  attr(:day_model, :map, default: nil)
-  attr(:target, :any, required: true)
 
   @impl true
   def render(assigns) do
@@ -326,11 +305,7 @@ defmodule Systems.Lab.DayView do
           <div class="h-lab-day-popup-list overflow-y-scroll overscroll-contain">
             <div class="h-2" />
             <div class="w-full">
-              <%= for entry <- @day_model.entries do %>
-                <div>
-                  <Lab.DayEntry.time_slot_item {entry} />
-                </div>
-              <% end %>
+              <.stack fabric={@fabric} />
             </div>
           </div>
           <.line />

@@ -12,6 +12,7 @@ defmodule Systems.Feldspar.ContentPageBuilder do
     %{
       id: id,
       title: dgettext("eyra-feldspar", "content.title"),
+      active_menu_item: :projects,
       tabs: [],
       actions: [],
       show_errors: false

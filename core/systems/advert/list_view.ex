@@ -6,26 +6,14 @@ defmodule Systems.Advert.ListView do
     NextAction
   }
 
-  import CoreWeb.UI.Empty
-  import CoreWeb.UI.Content
+  import Frameworks.Pixel.Empty
+  import Frameworks.Pixel.Content
 
   alias Core.Accounts
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Systems.Advert
 
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_ids: active_filters, selector_id: :advert_filters}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(active_filters: active_filters)
-      |> prepare_adverts()
-    }
-  end
-
-  # Primary Update
   @impl true
   def update(
         %{id: id, adverts: adverts} = _params,
@@ -45,6 +33,18 @@ defmodule Systems.Advert.ListView do
         filter_labels: filter_labels
       )
       |> prepare_adverts()
+      |> compose_child(:advert_filters)
+    }
+  end
+
+  @impl true
+  def compose(:advert_filters, %{filter_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
     }
   end
 
@@ -70,7 +70,20 @@ defmodule Systems.Advert.ListView do
     |> assign(filtered_adverts: filtered_adverts)
   end
 
-  attr(:adverts, :list, required: true)
+  @impl true
+  def handle_event(
+        "active_item_ids",
+        %{active_item_ids: active_filters, selector_id: :advert_filters},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(active_filters: active_filters)
+      |> prepare_adverts()
+    }
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -80,8 +93,7 @@ defmodule Systems.Advert.ListView do
       <%= if Enum.count(@adverts) > 0 do %>
         <div class="flex flex-row gap-3 items-center">
           <div class="font-label text-label">Filter:</div>
-          <.live_component
-          module={Selector} id={:advert_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:advert_filters} fabric={@fabric} />
         </div>
         <.spacing value="L" />
         <Text.title2><%=dgettext("link-studentpool", "tabbar.item.adverts") %> <span class="text-primary"><%= Enum.count(@filtered_adverts) %></span></Text.title2>

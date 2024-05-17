@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Annotation do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Panel
 

@@ -4,24 +4,13 @@ defmodule Systems.Student.Overview do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Selector
-  import CoreWeb.UI.Content
-  import CoreWeb.UI.Empty
+  import Frameworks.Pixel.Content
+  import Frameworks.Pixel.Empty
 
   alias Systems.{
     Student,
     Pool
   }
-
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_ids: active_filters, selector_id: :student_filters}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(active_filters: active_filters)
-      |> prepare_students()
-    }
-  end
 
   # Handle Search Bar Update
   @impl true
@@ -73,13 +62,32 @@ defmodule Systems.Student.Overview do
         email_button: email_button
       )
       |> prepare_students()
+      |> compose_child(:student_filters)
+      |> compose_child(:student_search_bar)
     }
   end
 
   @impl true
-  def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
-    send(self(), {:email_dialog, %{recipients: filtered_students}})
-    {:noreply, socket}
+  def compose(:student_filters, %{filter_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
+    }
+  end
+
+  @impl true
+  def compose(:student_search_bar, %{query_string: query_string}) do
+    %{
+      module: SearchBar,
+      params: %{
+        query_string: query_string,
+        placeholder: dgettext("link-studentpool", "search.placeholder"),
+        debounce: "200"
+      }
+    }
   end
 
   defp filter(students, nil, _), do: students
@@ -138,7 +146,7 @@ defmodule Systems.Student.Overview do
 
     filtered_student_items =
       filtered_students
-      |> Enum.map(&Pool.Builders.ParticipantItem.view_model(&1, socket))
+      |> Enum.map(&Pool.ParticipantItemBuilder.view_model(&1, socket))
 
     socket
     |> assign(
@@ -147,17 +155,25 @@ defmodule Systems.Student.Overview do
     )
   end
 
-  # data(pool, :map)
-  # data(students, :map)
-  # data(query, :any, default: nil)
-  # data(query_string, :string, default: "")
-  # data(filtered_students, :list)
-  # data(filtered_student_items, :list)
-  # data(filter_labels, :list)
-  # data(email_button, :map)
+  @impl true
+  def handle_event("email", _, %{assigns: %{filtered_students: filtered_students}} = socket) do
+    send(self(), {:email_dialog, %{recipients: filtered_students}})
+    {:noreply, socket}
+  end
 
-  attr(:students, :list, required: true)
-  attr(:pool, :map, required: true)
+  @impl true
+  def handle_event(
+        "active_theme_ids",
+        %{active_theme_ids: active_filters, selector_id: :student_filters},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(active_filters: active_filters)
+      |> prepare_students()
+    }
+  end
 
   @impl true
   def render(assigns) do
@@ -174,18 +190,10 @@ defmodule Systems.Student.Overview do
       <% else %>
         <div class="flex flex-row gap-3 items-center">
           <div class="font-label text-label">Filter:</div>
-          <.live_component
-          module={Selector} id={:student_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:student_filters} fabric={@fabric} />
           <div class="flex-grow" />
           <div class="flex-shrink-0">
-            <.live_component
-              module={SearchBar}
-              id={:student_search_bar}
-              query_string={@query_string}
-              placeholder={dgettext("link-studentpool", "search.placeholder")}
-              debounce="200"
-              parent={%{type: __MODULE__, id: @id}}
-            />
+            <.child name={:student_search_bar} fabric={@fabric} />
           </div>
         </div>
         <.spacing value="L" />

@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.StepIndicator do
   @moduledoc """
     Circle with a number
   """
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
   defp center_correction_for_number(1), do: "mr-px"
   defp center_correction_for_number(4), do: "mr-px"

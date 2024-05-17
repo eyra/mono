@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Widget do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   import CoreWeb.UI.ProgressBar
   alias Frameworks.Pixel.Text

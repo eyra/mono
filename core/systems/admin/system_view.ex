@@ -4,33 +4,9 @@ defmodule Systems.Admin.SystemView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
 
-  alias Systems.{
-    Budget,
-    Citizen,
-    Pool
-  }
-
-  # Popup cancel
-  @impl true
-  def update(%{module: _, action: "cancel"}, socket) do
-    {
-      :ok,
-      socket
-      |> hide_popup()
-    }
-  end
-
-  # Popup saved
-  @impl true
-  def update(%{module: _, action: "saved"}, socket) do
-    {
-      :ok,
-      socket
-      |> update_bank_accounts()
-      |> update_citizen_pools()
-      |> hide_popup()
-    }
-  end
+  alias Systems.Pool
+  alias Systems.Budget
+  alias Systems.Citizen
 
   # Initial update
   @impl true
@@ -45,6 +21,30 @@ defmodule Systems.Admin.SystemView do
       )
       |> update_bank_accounts()
       |> update_citizen_pools()
+    }
+  end
+
+  @impl true
+  def compose(:pool_form, %{user: user, locale: locale, active_pool: pool}) do
+    %{
+      module: Citizen.Pool.Form,
+      params: %{
+        pool: pool,
+        user: user,
+        locale: locale
+      }
+    }
+  end
+
+  @impl true
+  def compose(:bank_account_form, %{user: user, locale: locale, active_bank_account: bank_account}) do
+    %{
+      module: Budget.BankAccountForm,
+      params: %{
+        bank_account: bank_account,
+        user: user,
+        locale: locale
+      }
     }
   end
 
@@ -106,82 +106,56 @@ defmodule Systems.Admin.SystemView do
   def handle_event(
         "edit_bank_account",
         %{"item" => item},
-        %{assigns: %{id: id, user: user, locale: locale, bank_accounts: bank_accounts}} = socket
+        %{assigns: %{bank_accounts: bank_accounts}} = socket
       ) do
     bank_account = Enum.find(bank_accounts, &(&1.id == String.to_integer(item)))
 
-    popup = %{
-      module: Budget.BankAccountForm,
-      bank_account: bank_account,
-      user: user,
-      locale: locale,
-      target: %{type: __MODULE__, id: id}
+    {
+      :noreply,
+      socket
+      |> assign(active_bank_account: bank_account)
+      |> compose_child(:bank_account_form)
+      |> show_popup(:bank_account_form)
     }
-
-    {:noreply, socket |> show_popup(popup)}
   end
 
   @impl true
-  def handle_event(
-        "create_bank_account",
-        _,
-        %{assigns: %{id: id, user: user, locale: locale}} = socket
-      ) do
-    popup = %{
-      module: Budget.BankAccountForm,
-      bank_account: nil,
-      user: user,
-      locale: locale,
-      target: %{type: __MODULE__, id: id}
+  def handle_event("create_bank_account", _, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(active_bank_account: nil)
+      |> compose_child(:bank_account_form)
+      |> show_popup(:bank_account_form)
     }
-
-    {:noreply, socket |> show_popup(popup)}
   end
 
   @impl true
   def handle_event(
         "edit_citizen_pool",
         %{"item" => item},
-        %{assigns: %{id: id, user: user, locale: locale, citizen_pools: citizen_pools}} = socket
+        %{assigns: %{citizen_pools: citizen_pools}} = socket
       ) do
     pool = Enum.find(citizen_pools, &(&1.id == String.to_integer(item)))
 
-    popup = %{
-      module: Citizen.Pool.Form,
-      pool: pool,
-      user: user,
-      locale: locale,
-      target: %{type: __MODULE__, id: id}
+    {
+      :noreply,
+      socket
+      |> assign(active_pool: pool)
+      |> compose_child(:pool_form)
+      |> show_popup(:pool_form)
     }
-
-    {:noreply, socket |> show_popup(popup)}
   end
 
   @impl true
-  def handle_event(
-        "create_citizen_pool",
-        _,
-        %{assigns: %{id: id, user: user, locale: locale}} = socket
-      ) do
-    popup = %{
-      module: Citizen.Pool.Form,
-      pool: nil,
-      user: user,
-      locale: locale,
-      target: %{type: __MODULE__, id: id}
+  def handle_event("create_citizen_pool", _, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(active_pool: nil)
+      |> compose_child(:pool_form)
+      |> show_popup(:pool_form)
     }
-
-    {:noreply, socket |> show_popup(popup)}
-  end
-
-  defp show_popup(socket, popup) do
-    send(self(), {:show_popup, popup})
-    socket
-  end
-
-  defp hide_popup(socket) do
-    send(self(), {:hide_popup})
-    socket
   end
 
   attr(:user, :list, required: true)

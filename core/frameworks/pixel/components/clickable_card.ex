@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.ClickableCard do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
 

@@ -60,9 +60,9 @@ defmodule Systems.Graphite.GenTest do
              ] = from(Core.Accounts.Features) |> Repo.all()
 
       assert [
-               %Core.Accounts.Profile{},
-               %Core.Accounts.Profile{}
-             ] = from(Core.Accounts.Profile) |> Repo.all()
+               %Systems.Account.UserProfileModel{},
+               %Systems.Account.UserProfileModel{}
+             ] = from(Systems.Account.UserProfileModel) |> Repo.all()
     end
   end
 
@@ -76,7 +76,7 @@ defmodule Systems.Graphite.GenTest do
       assert [] = from(Graphite.SubmissionModel) |> Repo.all()
       assert [] = from(Core.Accounts.User) |> Repo.all()
       assert [] = from(Core.Accounts.Features) |> Repo.all()
-      assert [] = from(Core.Accounts.Profile) |> Repo.all()
+      assert [] = from(Systems.Account.UserProfileModel) |> Repo.all()
     end
   end
 end

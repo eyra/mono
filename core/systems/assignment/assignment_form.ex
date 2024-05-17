@@ -12,8 +12,7 @@ defmodule Systems.Assignment.AssignmentForm do
         %{
           id: id,
           entity: %{info: info, workflow: workflow} = entity,
-          user: user,
-          uri_origin: uri_origin
+          user: user
         },
         socket
       ) do
@@ -29,21 +28,23 @@ defmodule Systems.Assignment.AssignmentForm do
         info: info,
         tool: tool,
         tool_form: tool_form,
-        user: user,
-        uri_origin: uri_origin
+        user: user
       )
     }
+  end
+
+  defp get_base_url do
+    Application.get_env(:core, :base_url)
   end
 
   defp forms(%{
          tool_form: tool_form,
          tool: tool,
          info: info,
-         uri_origin: uri_origin,
          user: user
        }) do
     callback_path = ~p"/assignment/callback/#{tool.id}"
-    callback_url = uri_origin <> callback_path
+    callback_url = get_base_url() <> callback_path
 
     [
       # %{

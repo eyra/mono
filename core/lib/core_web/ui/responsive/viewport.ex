@@ -11,6 +11,8 @@ defmodule CoreWeb.UI.Responsive.Viewport do
       import CoreWeb.UI.Responsive.Viewport
       import CoreWeb.UI.Responsive.Breakpoint
 
+      alias CoreWeb.UI.Responsive.Breakpoint
+
       def handle_event("viewport_resize", new_viewport, socket) do
         new_breakpoint = breakpoint(new_viewport)
 

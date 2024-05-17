@@ -2,7 +2,7 @@ defmodule Systems.Support.OverviewTab do
   use CoreWeb, :live_component
 
   alias Core.ImageHelpers
-  import CoreWeb.UI.Content
+  import Frameworks.Pixel.Content
   alias CoreWeb.UI.Area
   alias CoreWeb.Router.Helpers, as: Routes
 

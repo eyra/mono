@@ -2,12 +2,7 @@ defmodule Systems.Promotion.LandingPage do
   @moduledoc """
   The public promotion screen.
   """
-  use CoreWeb, :live_view
-  use CoreWeb.UI.PlainDialog
-  use CoreWeb.Layouts.Website.Component, :promotion
-  use Systems.Observatory.Public
-
-  import CoreWeb.UI.Responsive.Viewport
+  use Systems.Content.Composer, :live_website
 
   import Systems.Advert.BannerView
   alias Frameworks.Pixel.Hero
@@ -19,32 +14,30 @@ defmodule Systems.Promotion.LandingPage do
   import CoreWeb.Devices
   import CoreWeb.Languages
 
-  alias Systems.{
-    Promotion
-  }
+  alias Systems.Promotion
 
+  @impl true
+  def get_model(%{"id" => id}, _session, _socket) do
+    Promotion.Public.get!(id, Promotion.Model.preload_graph(:down))
+  end
+
+  @impl true
   def mount(
-        %{"id" => id, "preview" => preview, "back" => back},
+        %{"preview" => preview, "back" => back},
         _session,
         %{assigns: %{current_user: user}} = socket
       ) do
-    model = Promotion.Public.get!(id)
-
     {
       :ok,
       socket
-      |> assign_viewport()
       |> assign(
-        model: model,
         preview: preview == "true",
         user: user,
         back_path: back,
         dialog: nil,
         image_info: nil
       )
-      |> observe_view_model()
       |> update_image_info()
-      |> update_menus()
     }
   end
 
@@ -64,6 +57,16 @@ defmodule Systems.Promotion.LandingPage do
     )
   end
 
+  @impl true
+  def handle_view_model_updated(socket) do
+    socket
+    |> update_image_info()
+    |> update_menus()
+  end
+
+  @impl true
+  def handle_uri(socket), do: socket
+
   defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
 
   defp update_image_info(
@@ -75,12 +78,6 @@ defmodule Systems.Promotion.LandingPage do
 
     socket
     |> assign(image_info: image_info)
-  end
-
-  def handle_view_model_updated(socket) do
-    socket
-    |> update_image_info()
-    |> update_menus()
   end
 
   @impl true
@@ -124,9 +121,6 @@ defmodule Systems.Promotion.LandingPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  defp show_dialog?(nil), do: false
-  defp show_dialog?(_), do: true
-
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
@@ -134,7 +128,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus}>
+    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} popup={@popup} dialog={@dialog}>
       <:hero>
         <Hero.image title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
           <:call_to_action>
@@ -147,14 +141,6 @@ defmodule Systems.Promotion.LandingPage do
           icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}
         />
       </:hero>
-
-      <%= if show_dialog?(@dialog) do %>
-        <div class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <.plain_dialog {@dialog} />
-          </div>
-        </div>
-      <% end %>
 
       <Area.content>
         <Margin.y id={:page_top} />
@@ -203,7 +189,7 @@ defmodule Systems.Promotion.LandingPage do
           <Button.back label={dgettext("eyra-promotion", "back.button.label")} path={@back_path} />
         </div>
       </Area.content>
-    </.website>
+    </.live_website>
     """
   end
 end

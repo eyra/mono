@@ -72,6 +72,5 @@ defmodule Systems.Promotion.Model do
     promotion
     |> cast(attrs, [:director])
     |> cast(attrs, @fields)
-    |> validate_required([:title])
   end
 end

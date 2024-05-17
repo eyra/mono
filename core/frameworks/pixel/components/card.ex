@@ -2,9 +2,10 @@ defmodule Frameworks.Pixel.Card do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
   attr(:bg_color, :string, default: "bg-grey6")
   attr(:size, :string, default: "h-full")

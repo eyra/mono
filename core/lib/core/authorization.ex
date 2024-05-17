@@ -29,6 +29,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
 
   # Pages
+  grant_access(Systems.Console.Page, [:member])
   grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.ConfigPage, [:admin])
@@ -65,7 +66,7 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.User.ResetPasswordToken, [:visitor])
   grant_access(CoreWeb.User.AwaitConfirmation, [:visitor])
   grant_access(CoreWeb.User.ConfirmToken, [:visitor])
-  grant_access(CoreWeb.User.Profile, [:member])
+  grant_access(Systems.Account.UserProfilePage, [:member])
   grant_access(CoreWeb.User.Settings, [:member])
   grant_access(CoreWeb.User.SecuritySettings, [:member])
   grant_access(CoreWeb.FakeQualtrics, [:member])

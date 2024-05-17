@@ -36,7 +36,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: Assignment.Template.title(template),
       tabs: tabs,
       actions: actions,
-      show_errors: show_errors
+      show_errors: show_errors,
+      active_menu_item: :admin
     }
   end
 
@@ -252,7 +253,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          assignment,
          template,
          show_errors,
-         _assigns
+         %{current_user: user}
        ) do
     %{
       id: :participants,
@@ -264,7 +265,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       live_component: Assignment.ParticipantsView,
       props: %{
         assignment: assignment,
-        template: template
+        template: template,
+        user: user
       }
     }
   end

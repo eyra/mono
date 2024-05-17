@@ -18,69 +18,17 @@ defmodule Systems.Advert.SubmissionView do
     native_languages: NativeLanguages
   }
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{
-          selector_id: :exclude_adverts,
-          active_item_ids: excluded_advert_ids,
-          current_items: current_items
-        },
-        %{assigns: %{assignment: assignment}} = socket
-      ) do
-    socket =
-      socket
-      |> save_closure(fn socket ->
-        Advert.Public.handle_exclusion(assignment, current_items)
-
-        excluded_user_ids = Advert.Public.list_excluded_user_ids(excluded_advert_ids)
-
-        socket
-        |> assign(excluded_user_ids: excluded_user_ids)
-        |> update_ui()
-        |> flash_persister_saved()
-      end)
-
-    {
-      :ok,
-      socket
-    }
-  end
-
-  @impl true
-  def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
-        %{assigns: %{entity: criteria}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(criteria, %{selector_id => active_item_ids})
-    }
-  end
-
-  @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: selector_id},
-        %{assigns: %{entity: criteria}} = socket
-      ) do
-    {
-      :ok,
-      socket
-      |> save(criteria, %{selector_id => active_item_id})
-    }
-  end
-
   # Update adverts only
   @impl true
   def update(
         _,
-        %{assigns: %{id: _}} = socket
+        %{assigns: %{entity: _}} = socket
       ) do
     {
       :ok,
       socket
       |> update_adverts()
+      |> compose_child(:exclude_adverts)
       |> update_ui()
     }
   end
@@ -104,6 +52,38 @@ defmodule Systems.Advert.SubmissionView do
       |> assign(user: user)
       |> update_adverts()
       |> update_ui()
+    }
+  end
+
+  defp compose_inclusion_selectors(%{assigns: %{inclusion_labels: inclusion_labels}} = socket) do
+    inclusion_labels
+    |> Map.keys()
+    |> Enum.reduce(socket, fn key, socket -> compose_child(socket, key) end)
+  end
+
+  @impl true
+  def compose(:exclude_adverts, %{advert_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        grid_options: "flex flex-col flex-wrap gap-y-3",
+        items: items,
+        type: :checkbox
+      }
+    }
+  end
+
+  @impl true
+  def compose(key, %{inclusion_labels: inclusion_labels}) do
+    items = Map.get(inclusion_labels, key)
+
+    %{
+      module: Selector,
+      params: %{
+        grid_options: "flex flex-col flex-wrap gap-y-3",
+        items: items,
+        type: :checkbox
+      }
     }
   end
 
@@ -141,7 +121,10 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   defp update_ui(%{assigns: %{entity: criteria}} = socket) do
-    update_ui(socket, criteria)
+    socket
+    |> compose_child(:exclude_adverts)
+    |> update_ui(criteria)
+    |> compose_inclusion_selectors()
   end
 
   defp update_ui(
@@ -202,18 +185,30 @@ defmodule Systems.Advert.SubmissionView do
   defp inclusion_title(:dominant_hands),
     do: dgettext("eyra-account", "features.dominanthand.title")
 
-  # data(user, :any)
-  # data(entity, :any)
-  # data(inclusion_labels, :any, default: nil)
-  # data(advert_labels, :map)
-  # data(excluded_user_ids, :list)
-  # data(sample_size, :integer)
-  # data(pool_size, :integer)
-  # data(pool_title, :string)
-  # data(changeset, :any)
+  @impl true
+  def handle_event(
+        "active_item_ids",
+        %{
+          active_item_ids: excluded_advert_ids,
+          selector_id: :exclude_adverts,
+          current_items: current_items
+        },
+        %{assigns: %{assignment: assignment}} = socket
+      ) do
+    socket =
+      save_closure(socket, fn socket ->
+        Advert.Public.handle_exclusion(assignment, current_items)
 
-  attr(:entity, :map, required: true)
-  attr(:user, :map, required: true)
+        excluded_user_ids = Advert.Public.list_excluded_user_ids(excluded_advert_ids)
+
+        socket
+        |> assign(excluded_user_ids: excluded_user_ids)
+        |> update_ui()
+        |> flash_persister_saved()
+      end)
+
+    {:noreply, socket}
+  end
 
   @impl true
   def render(assigns) do
@@ -244,13 +239,7 @@ defmodule Systems.Advert.SubmissionView do
               <div>
                 <Text.title4><%= inclusion_title(field) %></Text.title4>
                 <.spacing value="S" />
-                <.live_component
-                  module={Selector}
-                  id={field}
-                  items={Map.get(@inclusion_labels, field)}
-                  type={:checkbox}
-                  parent={%{type: __MODULE__, id: @id}}
-                />
+                <.child name={field} fabric={@fabric} />
               </div>
               <% end %>
             </div>
@@ -266,14 +255,8 @@ defmodule Systems.Advert.SubmissionView do
             <%= if Enum.count(@advert_labels) == 0 do %>
               <Text.title6 color="text-grey2" margin="m-0"><%= dgettext("link-advert", "no.previous.adverts.available") %></Text.title6>
             <% else %>
-              <.live_component
-                module={Selector}
-                grid_options="flex flex-col flex-wrap gap-y-3"
-                id={:exclude_adverts}
-                items={@advert_labels}
-                type={:checkbox}
-                parent={%{type: __MODULE__, id: @id}}
-              />
+              <.child name={:exclude_adverts} fabric={@fabric} />
+
             <% end %>
             <.spacing value="XL" />
           </div>

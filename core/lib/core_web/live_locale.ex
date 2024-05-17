@@ -13,4 +13,22 @@ defmodule CoreWeb.LiveLocale do
   def get_locale() do
     Gettext.get_locale()
   end
+
+  defmacro __using__(_opts \\ nil) do
+    quote do
+      @before_compile CoreWeb.LiveLocale
+      import CoreWeb.LiveLocale
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      defoverridable mount: 3
+
+      @impl true
+      def mount(params, session, socket) do
+        super(params, session, socket |> assign(locale: CoreWeb.LiveLocale.get_locale()))
+      end
+    end
+  end
 end

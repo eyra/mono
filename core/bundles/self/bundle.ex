@@ -18,10 +18,9 @@ defmodule Self.Bundle do
           delete("/user/session", User.SessionController, :delete)
         end
 
-        scope "/", Self do
+        scope "/", Systems do
           pipe_through([:browser, :require_authenticated_user])
           live("/", Console.Page)
-          live("/console", Console.Page)
         end
       end
     end
@@ -30,7 +29,6 @@ defmodule Self.Bundle do
   def grants do
     if include?() do
       quote do
-        grant_access(Self.Console.Page, [:member])
         grant_access(Self.User.Signin, [:visitor, :member])
       end
     end

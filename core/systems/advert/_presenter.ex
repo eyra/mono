@@ -24,7 +24,7 @@ defmodule Systems.Advert.Presenter do
     builder(page).view_model(advert, assigns)
   end
 
-  defp builder(Advert.ContentPage), do: Advert.Builders.AdvertContentPage
+  defp builder(Advert.ContentPage), do: Advert.ContentPageBuilder
   defp builder(Alliance.CallbackPage), do: Advert.Builders.AssignmentCallbackPage
-  defp builder(Promotion.LandingPage), do: Advert.Builders.PromotionLandingPage
+  defp builder(Promotion.LandingPage), do: Advert.PromotionLandingPageBuilder
 end

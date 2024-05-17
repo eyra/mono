@@ -8,8 +8,10 @@ defmodule Core.Accounts do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Accounts.{User, UserToken, UserNotifier, Profile, Features}
+  alias Core.Accounts.{User, UserToken, UserNotifier, Features}
   alias Frameworks.Signal
+
+  alias Systems.Account
 
   ## Listings
 
@@ -427,7 +429,7 @@ defmodule Core.Accounts do
 
   def get_profile(user_id) do
     if !is_nil(user_id) do
-      Repo.get_by(Profile, user_id: user_id) || create_profile!(user_id)
+      Repo.get_by(Account.UserProfileModel, user_id: user_id) || create_profile!(user_id)
     end
   end
 
@@ -446,9 +448,9 @@ defmodule Core.Accounts do
     |> get_display_label()
   end
 
-  def update_profile(%Profile{} = profile, attrs) do
+  def update_profile(%Account.UserProfileModel{} = profile, attrs) do
     profile
-    |> Profile.changeset(attrs)
+    |> Account.UserProfileModel.changeset(attrs)
     |> Repo.update()
   end
 
@@ -469,12 +471,12 @@ defmodule Core.Accounts do
     |> Repo.transaction()
   end
 
-  def change_profile(%Profile{} = profile, attrs \\ %{}) do
-    Profile.changeset(profile, attrs)
+  def change_profile(%Account.UserProfileModel{} = profile, attrs \\ %{}) do
+    Account.UserProfileModel.changeset(profile, attrs)
   end
 
   defp create_profile!(user_id) do
-    %Profile{user_id: user_id}
+    %Account.UserProfileModel{user_id: user_id}
     |> Repo.insert!()
   end
 
@@ -543,6 +545,7 @@ end
 defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
   alias Core.Accounts
   alias Core.Accounts.UserProfileEdit
+  alias Systems.Account
 
   def save(%{user_id: user_id} = _user_profile_edit, %{changes: changes} = changeset) do
     user = Accounts.get_user!(user_id)
@@ -551,7 +554,7 @@ defimpl Core.Persister, for: Core.Accounts.UserProfileEdit do
 
     profile = Accounts.get_profile(user_id)
     profile_attrs = UserProfileEdit.to_profile(changes)
-    profile_changeset = Accounts.Profile.changeset(profile, profile_attrs)
+    profile_changeset = Account.UserProfileModel.changeset(profile, profile_attrs)
 
     case Accounts.update_user_profile(user_changeset, profile_changeset) do
       {:ok, %{user: user, profile: profile}} ->
