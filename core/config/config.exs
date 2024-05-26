@@ -166,3 +166,11 @@ unless is_nil(bundle) do
 end
 
 import_config "#{config_env()}.exs"
+
+if Mix.env() == :dev do
+  config :mix_test_watch,
+    clear: true
+
+  config :mix_test_watch,
+    exclude: [~r/\.#/, ~r{priv/repo/migrations}, ~r/assets\/.*/]
+end

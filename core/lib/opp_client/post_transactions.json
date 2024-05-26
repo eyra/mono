@@ -1,0 +1,174 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "object": {
+            "type": "string",
+            "minLength": 1
+        },
+        "created": {
+            "type": "number"
+        },
+        "updated": {
+            "type": "number"
+        },
+        "merchant_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "profile_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "has_checkout": {
+            "type": "boolean"
+        },
+        "payment_flow": {
+            "type": "string",
+            "minLength": 1
+        },
+        "amount": {
+            "type": "number"
+        },
+        "return_url": {
+            "type": "string",
+            "minLength": 1
+        },
+        "redirect_url": {
+            "type": "string",
+            "minLength": 1
+        },
+        "notify_url": {
+            "type": "string",
+            "minLength": 1
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "created",
+                "pending",
+                "planned",
+                "completed",
+                "reserved",
+                "cancelled",
+                "failed",
+                "expired",
+                "refunded",
+                "chargeback"
+            ]
+        },
+        "metadata": {
+            "type": "array",
+            "items": {
+                "required": [
+                    "key",
+                    "value"
+                ],
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "value": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "statuses": {
+            "type": "array",
+            "items": {
+                "required": [
+                    "uid",
+                    "object",
+                    "created",
+                    "updated",
+                    "status"
+                ],
+                "properties": {
+                    "uid": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "object": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "created": {
+                        "type": "number"
+                    },
+                    "updated": {
+                        "type": "number"
+                    },
+                    "status": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "order": {
+            "type": "array",
+            "items": {
+                "properties": {}
+            }
+        },
+        "fees": {
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "partner_gateway_fee": {
+                            "type": "number"
+                        },
+                        "transaction_fee": {
+                            "type": "number"
+                        },
+                        "merchant_gateway_fee": {
+                            "type": "number"
+                        },
+                        "merchant_transaction_fee": {
+                            "type": "number"
+                        },
+                        "payable_amount": {
+                            "type": "number"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "required": [
+        "uid",
+        "object",
+        "created",
+        "updated",
+        "completed",
+        "merchant_uid",
+        "profile_uid",
+        "has_checkout",
+        "payment_method",
+        "payment_flow",
+        "payment_details",
+        "amount",
+        "return_url",
+        "redirect_url",
+        "notify_url",
+        "status",
+        "metadata",
+        "statuses",
+        "order",
+        "escrow",
+        "fees",
+        "refunds"
+    ]
+}

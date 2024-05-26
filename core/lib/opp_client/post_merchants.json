@@ -1,0 +1,78 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "https://docs.onlinepaymentplatform.com/#create-merchant",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "object": {
+            "type": "string",
+            "minLength": 1
+        },
+        "created": {
+            "type": "number"
+        },
+        "updated": {
+            "type": "number"
+        },
+        "status": {
+            "type": "string",
+            "minLength": 1
+        },
+        "compliance": {
+            "type": "object",
+            "properties": {
+                "level": {
+                    "type": "number"
+                },
+                "status": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "overview_url": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "level",
+                "status",
+                "overview_url"
+            ]
+        },
+        "type": {
+            "type": "string",
+            "minLength": 1
+        },
+        "coc_nr": {
+            "type": "object",
+            "properties": {}
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1
+        },
+        "phone": {
+            "type": "string",
+            "minLength": 1
+        },
+        "country": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "required": [
+        "uid",
+        "object",
+        "created",
+        "updated",
+        "status",
+        "compliance",
+        "type",
+        "name",
+        "phone",
+        "country"
+    ]
+}

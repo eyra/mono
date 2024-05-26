@@ -1,0 +1,77 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "object": {
+            "type": "string",
+            "minLength": 1
+        },
+        "created": {
+            "type": "number"
+        },
+        "updated": {
+            "type": "number"
+        },
+        "settled": {
+            "type": "number"
+        },
+        "type": {
+            "type": "string",
+            "minLength": 1
+        },
+        "from_merchant_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "from_profile_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "to_merchant_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "to_profile_uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "amount": {
+            "type": "number"
+        },
+        "description": {
+            "type": "string",
+            "minLength": 1
+        },
+        "metadata": {
+            "type": "array",
+            "items": {
+                "properties": {}
+            }
+        },
+        "currency": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "required": [
+        "uid",
+        "object",
+        "created",
+        "updated",
+        "settled",
+        "type",
+        "from_merchant_uid",
+        "from_profile_uid",
+        "to_merchant_uid",
+        "to_profile_uid",
+        "amount",
+        "description",
+        "metadata",
+        "currency"
+    ]
+}
