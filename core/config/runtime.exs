@@ -120,9 +120,10 @@ if config_env() == :prod do
 
   config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
 
-  config :core, opp_client_options: [
-    auth: {:bearer, System.fetch_env!("OPP_API_KEY")}
-  ]
+  config :core,
+    opp_client_options: [
+      auth: {:bearer, System.fetch_env!("OPP_API_KEY")}
+    ]
 
   if sentry_dsn = System.get_env("SENTRY_DSN") do
     config :sentry,
