@@ -1,0 +1,177 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "livemode": {
+            "type": "boolean"
+        },
+        "uid": {
+            "type": "string",
+            "minLength": 1
+        },
+        "object": {
+            "type": "string",
+            "minLength": 1
+        },
+        "created": {
+            "type": "number"
+        },
+        "updated": {
+            "type": "number"
+        },
+        "completed": {
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "object",
+                    "properties": {}
+                }
+            ]
+        },
+        "execution": {
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "number"
+                }
+            ]
+        },
+        "expected": {
+            "type": "string",
+            "minLength": 1
+        },
+        "status": {
+            "type": "string",
+            "minLength": 1
+        },
+        "status_reason": {
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "statuses": {
+            "type": "array",
+            "items": {
+                "properties": {}
+            }
+        },
+        "reference": {
+            "type": "string",
+            "minLength": 1
+        },
+        "amount": {
+            "type": "number"
+        },
+        "currency": {
+            "type": "string",
+            "minLength": 1
+        },
+        "receiver": {
+            "type": "string",
+            "minLength": 1
+        },
+        "receiver_details": {
+            "type": "object",
+            "properties": {
+                "object": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "receiver_name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "receiver_account": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "receiver_iban": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "receiver_bic": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "receiver_type": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "object",
+                "receiver_name",
+                "receiver_account",
+                "receiver_iban",
+                "receiver_sort_code",
+                "receiver_bic",
+                "receiver_type"
+            ]
+        },
+        "description": {
+            "type": "string",
+            "minLength": 1
+        },
+        "notify_url": {
+            "type": "string",
+            "minLength": 1
+        },
+        "metadata": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+                "required": [
+                    "key",
+                    "value"
+                ],
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "value": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "fees": {
+            "type": "object",
+            "properties": {}
+        }
+    },
+    "required": [
+        "livemode",
+        "uid",
+        "object",
+        "created",
+        "updated",
+        "completed",
+        "execution",
+        "expected",
+        "status",
+        "status_reason",
+        "statuses",
+        "reference",
+        "amount",
+        "currency",
+        "receiver",
+        "receiver_details",
+        "description",
+        "notify_url",
+        "metadata",
+        "fees"
+    ]
+}

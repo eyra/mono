@@ -35,6 +35,9 @@ defmodule Core.MixProject do
           # :race_conditions,
           :no_opaque
         ]
+      ],
+      preferred_cli_env: [
+        "test.watch": :test
       ]
     ]
   end
@@ -98,6 +101,7 @@ defmodule Core.MixProject do
       {:kadabra, "~> 0.6.0"},
       {:oban, "~> 2.13.3"},
       {:nimble_parsec, "~> 1.2"},
+      {:nimble_options, "~> 1.1"},
       {:typed_struct, "~> 0.2.1"},
       {:logger_json, "~> 4.3"},
       {:statistics, "~> 0.6.2"},
@@ -105,6 +109,9 @@ defmodule Core.MixProject do
       {:sentry, "~> 8.0"},
       {:libcluster, "~> 3.3"},
       {:mime, "~> 2.0"},
+      {:ex_json_schema, "~> 0.10.2"},
+      {:nestru, "~> 1.0"},
+      {:req, "~> 0.4.0"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},
@@ -115,6 +122,8 @@ defmodule Core.MixProject do
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_unit_notifier, "~> 1.2", only: :test},
       {:file_system, "~> 0.2", only: [:dev, :test]},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
