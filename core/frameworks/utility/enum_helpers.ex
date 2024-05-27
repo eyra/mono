@@ -1,5 +1,5 @@
-defmodule Frameworks.Utililty.EnumHelpers do
-  require Frameworks.Utililty.EnumHelpers
+defmodule Frameworks.Utility.EnumHelpers do
+  require Frameworks.Utility.EnumHelpers
 
   defmacro match_id(value) do
     quote do
@@ -36,7 +36,7 @@ defmodule Frameworks.Utililty.EnumHelpers do
 
   defmacro __using__(_) do
     quote do
-      import Frameworks.Utililty.EnumHelpers
+      import Frameworks.Utility.EnumHelpers
     end
   end
 end

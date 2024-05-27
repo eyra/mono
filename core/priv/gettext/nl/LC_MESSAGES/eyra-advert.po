@@ -91,7 +91,7 @@ msgid "retract.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "applied.participants"
+msgid "clicks.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -99,11 +99,11 @@ msgid "monitor.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "visited.participants"
+msgid "views.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "bounce.rate"
+msgid "clickthrough.rate"
 msgstr ""
 
 #, elixir-autogen, elixir-format

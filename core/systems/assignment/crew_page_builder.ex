@@ -91,10 +91,11 @@ defmodule Systems.Assignment.CrewPageBuilder do
            fabric: fabric,
            current_user: user,
            timezone: timezone,
-           session: %{"panel_info" => panel_info}
+           session: session
          } = assigns,
          tester?
        ) do
+    panel_info = Map.get(session, "panel_info")
     work_items = work_items(assignment, assigns)
     context_menu_items = context_menu_items(assignment, assigns)
 

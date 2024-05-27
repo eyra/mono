@@ -23,7 +23,7 @@ defmodule CoreWeb do
 
   def utility do
     quote do
-      use Frameworks.Utililty.EnumHelpers
+      use Frameworks.Utility.EnumHelpers
     end
   end
 

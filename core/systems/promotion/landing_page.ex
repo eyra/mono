@@ -25,8 +25,12 @@ defmodule Systems.Promotion.LandingPage do
   def mount(
         _params,
         _session,
-        %{assigns: %{current_user: user}} = socket
+        %{assigns: %{current_user: user, model: promotion}} = socket
       ) do
+    if Phoenix.LiveView.connected?(socket) do
+      Promotion.Private.log_performance_event(promotion, :views)
+    end
+
     {
       :ok,
       socket

@@ -1,7 +1,7 @@
 defmodule Frameworks.Signal.Public do
   require Logger
 
-  import Frameworks.Utililty.PrettyPrint
+  import Frameworks.Utility.PrettyPrint
 
   # FIXME: move this registration outside of framework
   @signal_handlers [

@@ -260,54 +260,49 @@ defmodule Systems.Advert.ContentPageBuilder do
   end
 
   defp number_widgets(advert) do
-    [:visited, :applied, :bounce_rate]
+    [:visited, :applied, :clickthrough_rate]
     |> Enum.map(&number_widget(&1, advert))
   end
 
-  defp number_widget(:visited, advert) do
+  defp number_widget(:visited, %{promotion: promotion}) do
     metric =
-      Monitor.Public.event(advert, :visited)
-      |> Monitor.Public.unique()
+      Monitor.Public.event({promotion, :views})
+      |> Monitor.Public.count()
 
     %{
-      label: dgettext("eyra-advert", "visited.participants"),
+      label: dgettext("eyra-advert", "views.metric.label"),
       metric: metric,
       color: :primary
     }
   end
 
-  defp number_widget(:applied, advert) do
+  defp number_widget(:applied, %{promotion: promotion}) do
     metric =
-      Monitor.Public.event(advert, :applied)
-      |> Monitor.Public.unique()
+      Monitor.Public.event({promotion, :clicks})
+      |> Monitor.Public.count()
 
     %{
-      label: dgettext("eyra-advert", "applied.participants"),
+      label: dgettext("eyra-advert", "clicks.metric.label"),
       metric: metric,
       color: :positive
     }
   end
 
-  defp number_widget(:bounce_rate, advert) do
-    visited =
-      Monitor.Public.event(advert, :visited)
-      |> Monitor.Public.unique()
-
-    applied =
-      Monitor.Public.event(advert, :applied)
-      |> Monitor.Public.unique()
+  defp number_widget(:clickthrough_rate, %{promotion: promotion}) do
+    views = Monitor.Public.count(Monitor.Public.event({promotion, :views}))
+    clicks = Monitor.Public.count(Monitor.Public.event({promotion, :clicks}))
 
     metric =
-      if visited > 0 do
-        visited / (visited - applied) * 100
+      if clicks > 0 and views > 0 do
+        ceil(clicks / views * 100)
       else
         0
       end
 
     %{
-      label: dgettext("eyra-advert", "bounce.rate"),
+      label: dgettext("eyra-advert", "clickthrough.rate"),
       metric: metric,
-      color: :negative
+      color: :primary
     }
   end
 end

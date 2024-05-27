@@ -91,20 +91,20 @@ msgid "retract.button"
 msgstr "Take offline"
 
 #, elixir-autogen, elixir-format
-msgid "applied.participants"
-msgstr "# Participants applied"
+msgid "clicks.metric.label"
+msgstr "# Clicks"
 
 #, elixir-autogen, elixir-format
 msgid "monitor.title"
 msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
-msgid "visited.participants"
-msgstr "# Participants visited"
+msgid "views.metric.label"
+msgstr "# Views"
 
 #, elixir-autogen, elixir-format
-msgid "bounce.rate"
-msgstr "% Bounce rate"
+msgid "clickthrough.rate"
+msgstr "% Clickthrough rate"
 
 #, elixir-autogen, elixir-format
 msgid "promotion.apply.button"

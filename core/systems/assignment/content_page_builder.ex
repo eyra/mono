@@ -313,7 +313,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:started, assignment) do
     metric =
-      Monitor.Public.event(assignment, :started)
+      Monitor.Public.event({assignment, :started})
       |> Monitor.Public.unique()
 
     %{
@@ -325,7 +325,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:finished, assignment) do
     metric =
-      Monitor.Public.event(assignment, :finished)
+      Monitor.Public.event({assignment, :finished})
       |> Monitor.Public.unique()
 
     %{
@@ -337,7 +337,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:declined, assignment) do
     metric =
-      Monitor.Public.event(assignment, :declined)
+      Monitor.Public.event({assignment, :declined})
       |> Monitor.Public.unique()
 
     color =
@@ -363,8 +363,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
          %Workflow.ItemModel{title: title, group: group} = item,
          %{info: %{subject_count: subject_count}} = assignment
        ) do
-    started = Monitor.Public.unique(Monitor.Public.event(item, :started))
-    finished = Monitor.Public.unique(Monitor.Public.event(item, :finished))
+    started = Monitor.Public.unique(Monitor.Public.event({item, :started}))
+    finished = Monitor.Public.unique(Monitor.Public.event({item, :finished}))
 
     subject_count =
       if subject_count do
@@ -374,8 +374,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       end
 
     current_amount =
-      Monitor.Public.unique(Monitor.Public.event(assignment, :started)) -
-        Monitor.Public.unique(Monitor.Public.event(assignment, :declined))
+      Monitor.Public.unique(Monitor.Public.event({assignment, :started})) -
+        Monitor.Public.unique(Monitor.Public.event({assignment, :declined}))
 
     expected_amount = max(subject_count, current_amount)
 

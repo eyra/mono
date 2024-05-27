@@ -235,4 +235,6 @@ defmodule Core.Accounts.User do
   def user_id(%{user: user}), do: user_id(user)
   def user_id(%__MODULE__{id: id}), do: id
   def user_id(id) when is_integer(id), do: id
+
+  def user_id(_), do: nil
 end

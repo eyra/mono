@@ -20,8 +20,8 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
             %{
               info: %{logo_url: logo_url} = info
             } = assignment
-        },
-        %{current_user: user}
+        } = advert,
+        _assigns
       ) do
     assignment
     |> Assignment.Model.language()
@@ -36,7 +36,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
       logo_url: logo_url,
       themes: themes(promotion),
       highlights: highlights(assignment, submission),
-      call_to_action: apply_call_to_action(assignment, user),
+      call_to_action: apply_call_to_action(advert),
       language: Assignment.Model.language(assignment),
       devices: Assignment.InfoModel.devices(info),
       active_menu_item: :projects
@@ -59,16 +59,23 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     ]
   end
 
-  defp apply_call_to_action(assignment, _user) do
+  defp apply_call_to_action(advert) do
     %{
       label: dgettext("eyra-advert", "promotion.apply.button"),
       target: %{type: :event, value: "apply"},
-      assignment: assignment,
+      advert: advert,
       handle: &handle_apply/1
     }
   end
 
-  def handle_apply(%{assigns: %{vm: %{call_to_action: %{assignment: %{id: id}}}}} = socket) do
+  def handle_apply(
+        %{
+          assigns: %{
+            vm: %{call_to_action: %{advert: %{promotion: promotion, assignment: %{id: id}}}}
+          }
+        } = socket
+      ) do
+    Promotion.Private.log_performance_event(promotion, :clicks)
     LiveView.push_redirect(socket, to: ~p"/assignment/#{id}/apply")
   end
 end

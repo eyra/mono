@@ -1,4 +1,4 @@
-defmodule Frameworks.Utililty.PrettyPrint do
+defmodule Frameworks.Utility.PrettyPrint do
   def pretty_print({left, right}) do
     "{#{pretty_print(left)}, #{pretty_print(right)}}"
   end

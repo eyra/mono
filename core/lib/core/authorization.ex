@@ -47,7 +47,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Assignment.LandingPage, [:participant])
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Lab.PublicPage, [:member])
-  grant_access(Systems.Promotion.LandingPage, [:visitor, :member, :owner])
+  grant_access(Systems.Promotion.LandingPage, [:visitor, :member])
   grant_access(Systems.Pool.OverviewPage, [:researcher])
   grant_access(Systems.Pool.DetailPage, [:researcher])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])

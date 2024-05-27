@@ -5,6 +5,9 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
+  alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
   alias Systems.Assignment
@@ -31,18 +34,25 @@ defmodule Systems.Assignment.Private do
     with {:ok, workflow_item} <- get_workflow_item(crew_task),
          {:ok, user_ref} <- get_crew_member(crew_task),
          false <- Assignment.Public.tester?(assignment, user_ref) do
-      Monitor.Public.log(workflow_item, topic, user_ref)
+      log_performance_event(assignment, {workflow_item, topic, user_ref})
     end
   end
 
   def log_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
     if not Assignment.Public.tester?(assignment, user_ref) do
-      Monitor.Public.log(assignment, topic, user_ref)
+      log_performance_event(assignment, {assignment, topic, user_ref})
     end
   end
 
+  def log_performance_event(%Assignment.Model{} = assignment, event) do
+    Multi.new()
+    |> Monitor.Public.multi_log(event)
+    |> Signal.Public.multi_dispatch({:assignment, :monitor_event}, %{assignment: assignment})
+    |> Repo.transaction()
+  end
+
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
-    Monitor.Public.event(assignment, topic, user_ref)
+    Monitor.Public.event({assignment, topic, user_ref})
     |> Monitor.Public.clear()
   end
 
@@ -147,6 +157,14 @@ defmodule Systems.Assignment.Private do
 
   def task_identifier(
         %{special: :benchmark_challenge},
+        %Workflow.ItemModel{id: item_id},
+        %Crew.MemberModel{id: member_id}
+      ) do
+    ["item=#{item_id}", "member=#{member_id}"]
+  end
+
+  def task_identifier(
+        %{special: :questionnaire},
         %Workflow.ItemModel{id: item_id},
         %Crew.MemberModel{id: member_id}
       ) do
