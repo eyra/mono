@@ -117,11 +117,11 @@ defmodule Systems.Promotion.LandingPage do
     <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} popup={@popup} dialog={@dialog}>
       <:hero>
         <div class="h-[360px] bg-grey5">
-          <Hero.image title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
+          <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
             <:call_to_action>
               <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" />
             </:call_to_action>
-          </Hero.image>
+          </Hero.image_large>
         </div>
         <Hero.banner icon_url={@vm.icon_url} />
       </:hero>

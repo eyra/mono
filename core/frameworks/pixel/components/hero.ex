@@ -60,9 +60,53 @@ defmodule Frameworks.Pixel.Hero do
   attr(:image_info, :any, required: true)
   attr(:logo_url, :string, default: nil)
   attr(:text_color, :string, default: "text-white")
+
+  def image_banner(assigns) do
+    ~H"""
+    <div class="w-full h-full" data-native-title={@title}>
+      <div class="relative overflow-hidden w-full h-full bg-grey4">
+        <%= if @image_info do %>
+          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
+        <% end %>
+        <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
+          <div class="ml-6 mr-6 sm:ml-14 sm:mr-14 text-shadow-md h-full">
+            <div class="flex flex-col gap-8 h-full">
+              <div class="flex-grow" />
+              <div class="flex flex-row gap-12 items-center">
+                <%= if @logo_url do %>
+                <div>
+                  <.image_preview
+                    image_url={@logo_url}
+                    placeholder={"/images/logo_placeholder.svg"}
+                    shape="w-[96px] h-[96px] rounded-full"
+                  />
+                </div>
+                <% end %>
+                <div class="flex flex-col gap-2">
+                  <%= if @title do %>
+                    <Text.title2 margin="" color="text-white"><%= @title %></Text.title2>
+                  <% end %>
+                  <%= if @subtitle do %>
+                    <Text.title6 align="text-left" color="text-white"><%= @subtitle %></Text.title6>
+                  <% end %>
+                </div>
+              </div>
+              <div class="flex-grow" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:title, :string, required: true)
+  attr(:subtitle, :string, required: true)
+  attr(:image_info, :any, required: true)
+  attr(:text_color, :string, default: "text-white")
   slot(:call_to_action)
 
-  def image(assigns) do
+  def image_large(assigns) do
     ~H"""
     <div class="w-full h-full" data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-full bg-grey4">
@@ -74,15 +118,6 @@ defmodule Frameworks.Pixel.Hero do
             <div class="flex flex-col gap-8 h-full">
               <div class="flex-grow" />
               <div class="flex flex-row gap-12">
-                <%= if @logo_url do %>
-                <div>
-                  <.image_preview
-                    image_url={@logo_url}
-                    placeholder={"/images/logo_placeholder.svg"}
-                    shape="w-[96px] h-[96px] rounded-full"
-                  />
-                </div>
-                <% end %>
                 <div class="flex flex-col gap-5">
                   <%= if @title do %>
                     <Text.title1 margin="" color="text-white"><%= @title %></Text.title1>

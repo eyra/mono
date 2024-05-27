@@ -92,7 +92,7 @@ defmodule Systems.Graphite.LeaderboardPage do
           <:header>
             <div class="h-[180px] bg-grey5">
             <%= if @image_info do %>
-              <Hero.image title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
+              <Hero.image_banner title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
             <% end %>
             </div>
           </:header>
