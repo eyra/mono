@@ -13,7 +13,6 @@ defmodule Systems.Promotion.FormView do
   alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Selector
-  alias Frameworks.Pixel.Image
 
   @impl true
   def process_file(
@@ -151,14 +150,14 @@ defmodule Systems.Promotion.FormView do
 
   @impl true
   def handle_event(
-        "active_theme_ids",
-        %{active_theme_ids: active_theme_ids, selector_id: :themes},
+        "active_item_ids",
+        %{active_item_ids: themes, source: %{name: :themes}},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
       :noreply,
       socket
-      |> save(entity, %{:themes => Enum.map(active_theme_ids, &Atom.to_string(&1))})
+      |> save(entity, %{:themes => Enum.map(themes, &Atom.to_string(&1))})
     }
   end
 
@@ -166,37 +165,22 @@ defmodule Systems.Promotion.FormView do
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-        <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-promotion", "form.title") %></Text.title2>
-        <Text.body_large><%= dgettext("eyra-promotion", "form.description") %></Text.body_large>
-        <.spacing value="M" />
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
           <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
           <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
-          <.spacing value="XL" />
+          <.spacing value="L" />
           <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-promotion", "themes.label") %></Text.body>
           <.spacing value="XS" />
           <.child name={:themes} fabric={@fabric} />
           <.spacing value="XL" />
 
-          <Text.title3><%= dgettext("eyra-promotion", "image.title") %></Text.title3>
-          <Text.body><%= dgettext("eyra-promotion", "image.label") %></Text.body>
+          <Text.title3><%= dgettext("eyra-promotion", "copy.title") %></Text.title3>
+          <.text_area form={form} field={:expectations} placeholder={dgettext("eyra-promotion", "expectations.placeholder")} label_text={dgettext("eyra-promotion", "expectations.label")} />
           <.spacing value="XS" />
-          <div class="flex flex-row gap-4">
-            <Image.preview image_url={@image_info.url} placeholder="" />
-            <Button.dynamic {@image_picker_button} />
-          </div>
-          <.spacing value="XL" />
 
-          <Text.title3><%= dgettext("eyra-promotion", "expectations.title") %></Text.title3>
-          <.text_area form={form} field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
-          <.spacing value="L" />
-
-          <Text.title3><%= dgettext("eyra-promotion", "description.title") %></Text.title3>
-          <.text_area form={form} field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
+          <.text_area form={form} field={:description} placeholder={dgettext("eyra-promotion", "background.placeholder")} label_text={dgettext("eyra-promotion", "background.label")} />
           <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
@@ -217,7 +201,6 @@ defmodule Systems.Promotion.FormView do
           />
           <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
         </.form>
-      </Area.content>
     </div>
     """
   end

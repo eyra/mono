@@ -190,7 +190,7 @@ defmodule Systems.Advert.SubmissionView do
         "active_item_ids",
         %{
           active_item_ids: excluded_advert_ids,
-          selector_id: :exclude_adverts,
+          source: %{name: :exclude_adverts},
           current_items: current_items
         },
         %{assigns: %{assignment: assignment}} = socket

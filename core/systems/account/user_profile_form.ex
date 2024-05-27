@@ -19,10 +19,10 @@ defmodule Systems.Account.UserProfileForm do
   # Handle Selector Update
   @impl true
   def update(
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, source: %{name: field}},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+    {:ok, socket |> save(entity, :auto_save, %{field => active_item_ids})}
   end
 
   @impl true

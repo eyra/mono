@@ -83,14 +83,6 @@ msgid "ok.button"
 msgstr "OK"
 
 #, elixir-autogen, elixir-format
-msgid "feature.unavailable.text"
-msgstr "Op dit moment werken we nog aan deze functie. We updaten het platform regelmatig. Probeer het later nog eens."
-
-#, elixir-autogen, elixir-format
-msgid "feature.unavailable.title"
-msgstr "Binnenkort beschikbaar"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr "Support"
 

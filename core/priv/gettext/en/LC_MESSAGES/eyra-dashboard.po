@@ -11,9 +11,5 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "default.study.title"
-msgstr "New study"
-
-#, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr "Recent items"

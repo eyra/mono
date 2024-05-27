@@ -105,11 +105,11 @@ defmodule Systems.Org.NodeContentView do
         <.spacing value="L" />
 
         <Text.title3><%= dgettext("eyra-org", "full.name.title") %></Text.title3>
-        <.text_bundle_input form={form} field={:full_name_bundle} target={@myself} />
+        <.text_bundle_input form={form} field={:full_name_bundle} />
         <.spacing value="M" />
 
         <Text.title3><%= dgettext("eyra-org", "short.name.title") %></Text.title3>
-        <.text_bundle_input form={form} field={:short_name_bundle} target={@myself} />
+        <.text_bundle_input form={form} field={:short_name_bundle} />
       </.form>
       </Area.content>
     </div>

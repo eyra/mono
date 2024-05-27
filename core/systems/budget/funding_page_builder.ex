@@ -28,7 +28,7 @@ defmodule Systems.Budget.FundingPageBuilder do
       edit_button: edit_button,
       deposit_button: deposit_button,
       user: user,
-      active_menu_item: :project
+      active_menu_item: :projects
     }
   end
 end

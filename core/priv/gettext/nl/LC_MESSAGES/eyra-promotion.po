@@ -11,10 +11,6 @@ msgstr ""
 "Language: nl\n"
 
 #, elixir-autogen, elixir-format
-msgid "back.button.label"
-msgstr "Terug"
-
-#, elixir-autogen, elixir-format
 msgid "banner.subtitle.label"
 msgstr "Omschrijving"
 
@@ -39,7 +35,7 @@ msgid "choose.other.banner.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-autogen, elixir-format
-msgid "description.label"
+msgid "background.label"
 msgstr "Geef wat achtergrond informatie over deze studie"
 
 #, elixir-autogen, elixir-format
@@ -47,7 +43,7 @@ msgid "description.public.label"
 msgstr "Over deze studie"
 
 #, elixir-autogen, elixir-format
-msgid "description.title"
+msgid "background.placeholder"
 msgstr "Waarom voer je deze study uit?"
 
 #, elixir-autogen, elixir-format
@@ -67,16 +63,8 @@ msgid "expectations.public.label"
 msgstr "Wat kun je verwachten?"
 
 #, elixir-autogen, elixir-format
-msgid "expectations.title"
+msgid "expectations.placeholder"
 msgstr "Wat moeten deelnemers doen?"
-
-#, elixir-autogen, elixir-format
-msgid "image.label"
-msgstr "Deze afbeelding wordt gebruikt als omslagafbeelding voor jouw advertentiepagina en jouw marktplaats tegel."
-
-#, elixir-autogen, elixir-format
-msgid "image.title"
-msgstr "Omslagafbeelding"
 
 #, elixir-autogen, elixir-format
 msgid "open.spots.label"
@@ -103,14 +91,6 @@ msgid "title.label"
 msgstr "Titel"
 
 #, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr "Advertentie"
-
-#, elixir-autogen, elixir-format
-msgid "form.description"
-msgstr "Advertenties worden op de marktplaats gezet om deelnemers te werven. Bekijk de voorbeeld pagina om te zien hoe deelnemers jouw advertentie pagina zien als ze op jouw marktplaats tegel klikken."
-
-#, elixir-autogen, elixir-format
 msgid "preview.inform.text"
 msgstr "Deze feature werkt niet in preview modus."
 
@@ -119,5 +99,9 @@ msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-autogen, elixir-format
-msgid "languages.available.label"
-msgstr "Taal:"
+msgid "language.available.label"
+msgstr "Taal"
+
+#, elixir-autogen, elixir-format
+msgid "copy.title"
+msgstr ""

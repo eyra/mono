@@ -42,22 +42,22 @@ defmodule Systems.Assignment.ContentPage do
   def handle_resize(socket), do: socket
 
   @impl true
-  def handle_uri(socket), do: socket
+  def handle_uri(socket), do: update_view_model(socket)
 
   @impl true
   def render(assigns) do
     ~H"""
       <.management_page
         title={@vm.title}
-        menus={@menus}
-        popup={@popup}
-        dialog={@dialog}
+        show_errors={@vm.show_errors}
         tabs={@vm.tabs}
+        actions={@actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
-        show_errors={@show_errors}
-        actions={@vm.actions}
+        menus={@menus}
+        popup={@popup}
+        dialog={@dialog}
       />
     """
   end

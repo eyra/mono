@@ -8,10 +8,8 @@ defmodule Systems.Citizen.Pool.Form do
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Budget,
-    Pool
-  }
+  alias Systems.Budget
+  alias Systems.Pool
 
   @default_values %{"director" => "citizen", "target" => 0}
 
@@ -38,6 +36,7 @@ defmodule Systems.Citizen.Pool.Form do
       )
       |> update_currencies()
       |> update_selected_currency()
+      |> update_options()
       |> compose_child(:currency_selector)
       |> init_buttons()
     }
@@ -77,16 +76,15 @@ defmodule Systems.Citizen.Pool.Form do
       module: DropdownSelector,
       params: %{
         options: options,
-        selected_option_index: selected_option_index
+        selected_option_index: selected_option_index,
+        background: :light,
+        debounce: 0
       }
     }
   end
 
   defp update_currencies(socket) do
-    currencies =
-      Budget.Public.list_bank_accounts(currency: Budget.CurrencyModel.preload_graph(:full))
-      |> Enum.map(& &1.currency)
-
+    currencies = Budget.Public.list_currencies_by_type(:legal)
     socket |> assign(currencies: currencies)
   end
 
@@ -95,7 +93,7 @@ defmodule Systems.Citizen.Pool.Form do
       Enum.map(currencies, fn currency ->
         %{
           id: currency.id,
-          value: Budget.CurrencyModel.title(currency, locale)
+          label: Budget.CurrencyModel.title(currency, locale)
         }
       end)
 
@@ -133,14 +131,6 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   @impl true
-  def handle_event("change", %{"model" => attrs}, socket) do
-    {
-      :noreply,
-      socket |> change(attrs)
-    }
-  end
-
-  @impl true
   def handle_event("submit", %{"model" => attrs}, socket) do
     attrs = Map.merge(@default_values, attrs)
 
@@ -152,7 +142,7 @@ defmodule Systems.Citizen.Pool.Form do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "pool_cancelled")}
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
   @impl true
@@ -168,22 +158,6 @@ defmodule Systems.Citizen.Pool.Form do
   @impl true
   def handle_event("dropdown_toggle", _payload, socket) do
     {:noreply, socket |> assign(currency_error: nil)}
-  end
-
-  defp change(%{assigns: %{pool: pool, validate_changeset?: validate_changeset?}} = socket, attrs) do
-    socket
-    |> apply_change(
-      pool
-      |> Pool.Model.change(attrs)
-      |> Pool.Model.validate(validate_changeset?)
-    )
-  end
-
-  defp apply_change(socket, changeset) do
-    case Ecto.Changeset.apply_action(changeset, :change) do
-      {:ok, _pool} -> socket |> assign(changeset: changeset)
-      {:error, changeset} -> socket |> assign(changeset: changeset)
-    end
   end
 
   defp handle_submit(%{assigns: %{pool: %{currency: %{id: _id}} = pool}} = socket, attrs) do
@@ -212,9 +186,9 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   defp apply_submit(socket, changeset) do
-    case EctoHelper.upsert(changeset) do
+    case EctoHelper.upsert_and_dispatch(changeset, :pool) do
       {:ok, _pool} ->
-        socket |> send_event(:parent, "pool_saved")
+        socket |> send_event(:parent, "saved")
 
       {:error, changeset} ->
         socket |> assign(changeset: changeset)
@@ -236,13 +210,14 @@ defmodule Systems.Citizen.Pool.Form do
           label_text={dgettext("link-citizen", "pool.icon.label")}
         />
 
-        <%= if @currency_selector do %>
-          <Text.form_field_label id={:currency_label}>
-            <%= dgettext("link-citizen", "pool.currency.label") %>
-          </Text.form_field_label>
-          <.spacing value="XXS" />
-          <.child name={:currency_selector} fabric={@fabric} />
-        <% end %>
+        <.child name={:currency_selector} fabric={@fabric}>
+          <:header>
+            <Text.form_field_label id={:currency_label}>
+              <%= dgettext("link-citizen", "pool.currency.label") %>
+            </Text.form_field_label>
+            <.spacing value="XXS" />
+          </:header>
+        </.child>
 
         <.spacing value="M" />
         <div class="flex flex-row gap-4">

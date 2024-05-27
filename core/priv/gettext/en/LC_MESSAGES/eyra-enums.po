@@ -195,30 +195,6 @@ msgid "submission_status.submitted"
 msgstr "Submitted"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.closed"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.completed"
-msgstr "Finished"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.retracted"
-msgstr "Withdrawn"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.released"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.scheduled"
-msgstr "Scheduled"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.submitted"
-msgstr "Submitted"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_filters.active"
 msgstr "Active"
 
@@ -445,3 +421,19 @@ msgstr "Onsite experiment"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.questionnaire"
 msgstr "Questionnaire"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.concept"
+msgstr "Finished"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.idle"
+msgstr "Closed"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.offline"
+msgstr "Closed"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.online"
+msgstr "Closed"

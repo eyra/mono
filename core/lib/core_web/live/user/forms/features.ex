@@ -92,13 +92,13 @@ defmodule CoreWeb.User.Forms.Features do
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: active_item_id, selector_id: selector_id},
+        %{active_item_id: active_item_id, source: %{name: field}},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, %{selector_id => active_item_id})
+      |> save(entity, :auto_save, %{field => active_item_id})
     }
   end
 

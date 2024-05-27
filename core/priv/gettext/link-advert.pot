@@ -55,14 +55,6 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.assignment"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.assignment.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.funding"
 msgstr ""
 
@@ -79,21 +71,21 @@ msgid "tabbar.item.monitor.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.promotion"
+msgid "tabbar.item.pool"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.promotion.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submission"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submission.forward"
+msgid "tabbar.item.pool.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "no.previous.adverts.available"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
 msgstr ""

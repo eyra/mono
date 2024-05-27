@@ -48,11 +48,12 @@ defmodule Systems.Advert.Builders.Highlight do
     %{title: status_title, text: status_text}
   end
 
-  def view_model(%Assignment.Model{info: info}, :language) do
+  def view_model(%Assignment.Model{} = assignment, :language) do
     language_title = dgettext("eyra-alliance", "language.highlight.title")
 
     language_text =
-      Assignment.InfoModel.languages(info)
+      assignment
+      |> Assignment.Model.language()
       |> language_text()
 
     %{title: language_title, text: language_text}

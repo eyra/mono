@@ -93,6 +93,10 @@ defmodule Core.Factories do
     })
   end
 
+  def build(:role_assignment) do
+    %Authorization.RoleAssignment{}
+  end
+
   def build(:auth_node) do
     %Authorization.Node{}
   end
@@ -215,10 +219,6 @@ defmodule Core.Factories do
     build(:text_bundle, %{})
   end
 
-  def build(:role_assignment) do
-    %Authorization.RoleAssignment{}
-  end
-
   def build(:promotion) do
     build(:promotion, %{})
   end
@@ -293,6 +293,15 @@ defmodule Core.Factories do
 
   def build(:consent_signature) do
     build(:consent_signature, %{})
+  end
+
+  def build(:role_assignment, %{} = attributes) do
+    %Authorization.RoleAssignment{}
+    |> struct!(attributes)
+  end
+
+  def build(:owner, %{user: user}) do
+    build(:role_assignment, %{role: :owner, principal_id: GreenLight.Principal.id(user)})
   end
 
   def build(:auth_node, %{} = attributes) do

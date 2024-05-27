@@ -567,17 +567,17 @@ defmodule Systems.Assignment.Public do
   @doc """
   How many new members can be added to the assignment?
   """
-  def open_spot_count(%{crew: _crew} = assignment) do
-    type = assignment_type(assignment)
-    open_spot_count(assignment, type)
-  end
+  def open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}) do
+    subject_count =
+      if subject_count do
+        subject_count
+      else
+        0
+      end
 
-  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :many_optional) do
-    all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
-    max(0, subject_count - all_non_expired_tasks)
+    all_non_expired_members = Crew.Public.count_members(crew)
+    max(0, subject_count - all_non_expired_members)
   end
-
-  defp assignment_type(%{workflow: %{type: type}}), do: type
 
   def mark_expired_debug(%{info: %{duration: duration}, crew: crew} = _assignment, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)

@@ -19,7 +19,7 @@ defmodule CoreWeb.UI.Popup do
     ~H"""
       <%= if @popup do %>
         <.popup>
-          <div class="mx-6 sm:mx-10 w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg">
+          <div class="mx-6 sm:mx-10 w-full max-w-popup sm:max-w-popup-sm md:max-w-popup-md lg:max-w-popup-lg p-8 bg-white shadow-floating rounded">
             <.live_component module={@popup.module} {@popup.props} />
           </div>
         </.popup>

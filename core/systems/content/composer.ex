@@ -107,8 +107,7 @@ defmodule Systems.Content.Composer do
       end
 
       def update_actions(socket) do
-        socket
-        |> assign(actions: create_actions(socket))
+        assign(socket, actions: create_actions(socket))
       end
 
       @impl true

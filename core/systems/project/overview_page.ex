@@ -67,12 +67,6 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
-    popup = %{module: module, props: Map.put(params, :id, id)}
-    {:noreply, socket |> assign(popup: popup)}
-  end
-
-  @impl true
   def handle_event(
         "card_clicked",
         %{"item" => card_id},
@@ -159,7 +153,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("add_user", %{user: user, content_id: project_id}, socket) do
+  def handle_event("add_user", %{user: user}, %{assigns: %{active_project: project_id}} = socket) do
     project_id
     |> Project.Public.get!()
     |> Project.Public.add_owner!(user)
@@ -168,7 +162,11 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("remove_user", %{user: user, content_id: project_id}, socket) do
+  def handle_event(
+        "remove_user",
+        %{user: user},
+        %{assigns: %{active_project: project_id}} = socket
+      ) do
     project_id
     |> Project.Public.get!()
     |> Project.Public.remove_owner!(user)
@@ -184,24 +182,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("eyra-project", "overview.title")} menus={@menus}>
-
-      <%= if @popup do %>
-        <.popup>
-          <div class="w-popup-md">
-            <.live_component id={:project_overview_popup} module={@popup.module} {@popup.props} />
-          </div>
-        </.popup>
-      <% end %>
-
-      <%= if @dialog do %>
-        <.popup>
-          <div class="flex-wrap">
-            <.plain_dialog {@dialog} />
-          </div>
-        </.popup>
-      <% end %>
-
+    <.live_workspace title={@vm.title} menus={@menus} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>
@@ -244,7 +225,7 @@ defmodule Systems.Project.OverviewPage do
           />
         <% end %>
       </Area.content>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

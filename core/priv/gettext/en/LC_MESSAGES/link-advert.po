@@ -32,11 +32,11 @@ msgstr "Note: Rejected participants cannot participate in your campaign again."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
-msgstr "If you would like to exclude participants that you recruited in previous campaigns, select one or more campaigns below."
+msgstr "If you would like to exclude participants that you recruited with previous advertisement, select one or more advertisement below."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.select.label"
-msgstr "Campaigns"
+msgstr "Advertisements"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.title"
@@ -52,15 +52,7 @@ msgstr "Criteria"
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.assignment"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.assignment.forward"
-msgstr ""
+msgstr "Advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.funding"
@@ -72,28 +64,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
-msgstr ""
+msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor.forward"
-msgstr ""
+msgstr "Go to Monitor"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.promotion"
-msgstr ""
+msgid "tabbar.item.pool"
+msgstr "Criteria"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.promotion.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submission"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.submission.forward"
-msgstr ""
+msgid "tabbar.item.pool.forward"
+msgstr "Go to Criteria"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "no.previous.adverts.available"
-msgstr "No previous campaigns available yet"
+msgstr "No previous advertisements available yet"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr "Go to Settings"

@@ -54,6 +54,7 @@ defmodule Systems.Advert.Switch do
              %Advert.Model{
                id: id,
                promotion_id: promotion_id,
+               promotion: promotion,
                assignment_id: assignment_id
              } = advert,
            from_pid: from_pid
@@ -62,7 +63,7 @@ defmodule Systems.Advert.Switch do
     if event == :created do
       Advert.Public.assign_coordinators(advert)
     else
-      update(Promotion.LandingPage, promotion_id, advert, from_pid)
+      update(Promotion.LandingPage, promotion_id, promotion, from_pid)
       update(Assignment.LandingPage, assignment_id, advert, from_pid)
       update(Advert.ContentPage, id, advert, from_pid)
     end
@@ -70,7 +71,7 @@ defmodule Systems.Advert.Switch do
 
   defp handle({_, _}, _), do: nil
 
-  def update(page, id, %Advert.Model{} = advert, from_pid) do
-    Signal.Public.dispatch!({:page, page}, %{id: id, model: advert, from_pid: from_pid})
+  def update(page, id, model, from_pid) do
+    Signal.Public.dispatch!({:page, page}, %{id: id, model: model, from_pid: from_pid})
   end
 end

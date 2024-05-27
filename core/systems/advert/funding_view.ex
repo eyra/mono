@@ -5,19 +5,17 @@ defmodule Systems.Advert.FundingView do
 
   alias Frameworks.Pixel.Square
 
-  alias Systems.{
-    Budget,
-    Bookkeeping,
-    Pool,
-    Assignment
-  }
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Pool
+  alias Systems.Assignment
 
   @minimal_reward_per_minute 10
 
   # Handle update from parent
   @impl true
   def update(
-        %{assignment: assignment, submission: submission},
+        %{assignment: assignment, submission: submission, budget: budget},
         %{assigns: %{id: _id}} = socket
       ) do
     {
@@ -25,7 +23,8 @@ defmodule Systems.Advert.FundingView do
       socket
       |> assign(
         assignment: assignment,
-        submission: submission
+        submission: submission,
+        budget: budget
       )
       |> update_state()
       |> update_shortage()
@@ -279,21 +278,6 @@ defmodule Systems.Advert.FundingView do
   defp guard_number_nil(nil), do: 0
   defp guard_number_nil(number) when is_number(number), do: number
   defp guard_number_nil(number) when is_binary(number), do: String.to_integer(number)
-
-  # data(budgets, :map)
-  # data(selected_budget, :map)
-  # data(budget_items, :list)
-  # data(open_spot_count, :integer)
-  # data(shortage_label, :string)
-  # data(reward_label, :string)
-  # data(reward_description, :string)
-  # data(fund_description, :string)
-  # data(changeset, :any, default: nil)
-
-  attr(:assignment, :map, required: true)
-  attr(:submission, :map, required: true)
-  attr(:user, :map, required: true)
-  attr(:locale, :string, required: true)
 
   @impl true
   def render(assigns) do

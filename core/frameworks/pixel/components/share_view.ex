@@ -89,7 +89,6 @@ defmodule Frameworks.Pixel.ShareView do
   def render(assigns) do
     ~H"""
     <div class="">
-      <Frameworks.Pixel.Panel.flat>
       <div class="flex flex-row">
         <div class="flex-grow">
           <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
@@ -139,7 +138,6 @@ defmodule Frameworks.Pixel.ShareView do
           <% end %>
         </div>
       </div>
-      </Frameworks.Pixel.Panel.flat>
     </div>
     """
   end

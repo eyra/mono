@@ -2,6 +2,8 @@ defmodule Systems.Budget.Public do
   import Ecto.Query, warn: false
   import Ecto.Changeset
 
+  import Systems.Budget.Queries
+
   require Logger
 
   alias Ecto.Multi
@@ -60,7 +62,15 @@ defmodule Systems.Budget.Public do
   end
 
   def list_currencies(preload \\ []) do
-    Repo.all(Budget.CurrencyModel) |> Repo.preload(preload)
+    currency_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_currencies_by_type(type, preload \\ []) do
+    currency_query(type)
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def list_bank_accounts(preload \\ []) do

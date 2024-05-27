@@ -87,7 +87,11 @@ defmodule Systems.Crew.RejectView do
   end
 
   @impl true
-  def handle_event("active_item_id", %{active_item_id: category, selector_id: :category}, socket) do
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: category, source: %{name: :category}},
+        socket
+      ) do
     categories = Crew.RejectCategories.labels(category)
 
     {
@@ -118,7 +122,7 @@ defmodule Systems.Crew.RejectView do
   def render(assigns) do
     ~H"""
     <div class="p-8 bg-white shadow-floating rounded">
-      <div class="flex flex-col gap-4 gap-8">
+      <div class="flex flex-col gap-8">
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
           <%= @title %>
         </div>

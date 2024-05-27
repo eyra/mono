@@ -47,7 +47,7 @@ defmodule Systems.Advert.Assembly do
     project_node =
       %{auth_node: project_auth_node} =
       assignment
-      |> Project.Public.get_item_by_assignment()
+      |> Project.Public.get_item_by()
       |> Project.Public.get_node_by_item!([:auth_node])
 
     profile = user |> Accounts.get_profile()

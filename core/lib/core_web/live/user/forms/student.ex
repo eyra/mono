@@ -145,14 +145,14 @@ defmodule CoreWeb.User.Forms.Student do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: active_item_ids, selector_id: selector_id},
+        %{active_item_ids: active_item_ids, source: %{name: field}},
         %{assigns: %{entity: entity}} = socket
       ) do
     active_item_ids =
       active_item_ids
       |> Enum.map(&String.to_atom(&1))
 
-    {:noreply, socket |> save(entity, :auto_save, %{selector_id => active_item_ids})}
+    {:noreply, socket |> save(entity, :auto_save, %{field => active_item_ids})}
   end
 
   attr(:user, :map, required: true)

@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, :live_view
+  use CoreWeb, {:live_view, :extended}
   use CoreWeb.Layouts.Stripped.Composer
   use CoreWeb.UI.Responsive.Viewport
 

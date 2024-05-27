@@ -66,7 +66,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: active_item_id, selector_id: :metric_selector},
+        %{active_item_id: active_item_id, source: %{name: :metric_selector}},
         socket
       ) do
     {

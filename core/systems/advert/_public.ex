@@ -512,6 +512,12 @@ defmodule Systems.Advert.Public do
     end
   end
 
+  # FIXME: take care of funding
+  defp validate_funded(%{assignment: %{budget: nil}}) do
+    Logger.error("FIXME: take care of funding")
+    :ok
+  end
+
   defp validate_funded(%{
          assignment: %{budget: %{currency: %{type: :legal}} = budget},
          submission: %{reward_value: reward_value}

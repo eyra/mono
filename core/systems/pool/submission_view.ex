@@ -144,7 +144,7 @@ defmodule Systems.Pool.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: [], selector_id: :schedule_start_toggle},
+        %{active_item_ids: [], source: %{name: :schedule_start_toggle}},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
@@ -157,7 +157,7 @@ defmodule Systems.Pool.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: [_], selector_id: :schedule_start_toggle},
+        %{active_item_ids: [_], source: %{name: :schedule_start_toggle}},
         %{assigns: %{entity: entity}} = socket
       ) do
     schedule_start = format_user_input_date(now())
@@ -178,7 +178,7 @@ defmodule Systems.Pool.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: [], selector_id: :schedule_end_toggle},
+        %{active_item_ids: [], source: %{name: :schedule_end_toggle}},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
@@ -191,7 +191,7 @@ defmodule Systems.Pool.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: [_], selector_id: :schedule_end_toggle},
+        %{active_item_ids: [_], source: %{name: :schedule_end_toggle}},
         %{assigns: %{entity: entity}} = socket
       ) do
     base_date =

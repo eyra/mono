@@ -9,15 +9,6 @@ defmodule CoreWeb.LiveUri do
 
       import Phoenix.LiveView
 
-      def handle_params(
-            _unsigned_params,
-            _uri,
-            %{assigns: %{authorization_failed: true}} = socket
-          ) do
-        # skip handling params if authorization already has already failed to prevent errors
-        {:noreply, socket}
-      end
-
       def handle_params(unsigned_params, uri, socket) do
         parsed_uri = URI.parse(uri)
         uri_origin = "#{parsed_uri.scheme}://#{parsed_uri.authority}"

@@ -15,10 +15,6 @@ msgid "no.results.found.message"
 msgstr "Geen afbeeldingen gevonden"
 
 #, elixir-autogen, elixir-format
-msgid "search.image.button"
-msgstr "Zoek"
-
-#, elixir-autogen, elixir-format
 msgid "search.image.title"
 msgstr "Zoek een afbeelding"
 

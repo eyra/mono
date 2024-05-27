@@ -1,9 +1,7 @@
 defmodule Systems.Project.AssemblyTest do
   use Core.DataCase
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   test "create_item/3 create benchmark item" do
     %{root: %{id: root_id} = root} = Factories.insert!(:project, %{name: "Project"})

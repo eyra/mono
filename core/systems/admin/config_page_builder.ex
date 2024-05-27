@@ -1,11 +1,23 @@
 defmodule Systems.Admin.ConfigPageBuilder do
   import CoreWeb.Gettext
 
+  alias Systems.Admin
+  alias Systems.Budget
+  alias Systems.Citizen
+  alias Systems.Pool
+
   def view_model(%{id: :singleton}, assigns) do
     %{
-      tabs: create_tabs(false, assigns),
+      tabbar_id: "admin_config",
+      title: dgettext("eyra-admin", "config.title"),
+      active_menu_item: :admin,
       show_errors: false
     }
+    |> put_tabs(assigns)
+  end
+
+  defp put_tabs(vm, assigns) do
+    Map.put(vm, :tabs, create_tabs(false, assigns))
   end
 
   defp create_tabs(show_errors, assigns) do
@@ -20,15 +32,24 @@ defmodule Systems.Admin.ConfigPageBuilder do
   defp create_tab(
          :system,
          show_errors,
-         %{fabric: fabric, locale: locale, current_user: user}
+         %{fabric: fabric, locale: locale, current_user: user} = assigns
        ) do
     ready? = false
 
     child =
-      Fabric.prepare_child(fabric, :system, Systems.Admin.SystemView, %{
-        locale: locale,
-        user: user
-      })
+      Fabric.prepare_child(
+        fabric,
+        :system,
+        Admin.SystemView,
+        %{
+          locale: locale,
+          user: user
+        }
+        |> put_bank_accounts()
+        |> put_bank_account_items(assigns)
+        |> put_citizen_pools()
+        |> put_citizen_pool_items(assigns)
+      )
 
     %{
       id: :system,
@@ -48,7 +69,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     ready? = false
 
     child =
-      Fabric.prepare_child(fabric, :org, Systems.Admin.OrgView, %{
+      Fabric.prepare_child(fabric, :org, Admin.OrgView, %{
         locale: locale
       })
 
@@ -70,17 +91,69 @@ defmodule Systems.Admin.ConfigPageBuilder do
     ready? = false
 
     child =
-      Fabric.prepare_child(fabric, :org, Systems.Admin.ActionsView, %{
+      Fabric.prepare_child(fabric, :org, Admin.ActionsView, %{
         tickets: []
       })
 
     %{
-      id: :org,
+      id: :actions,
       ready: ready?,
       show_errors: show_errors,
       title: dgettext("eyra-admin", "actions.title"),
       type: :fullpage,
       child: child
+    }
+  end
+
+  defp put_bank_accounts(vm) do
+    Map.put(
+      vm,
+      :bank_accounts,
+      Budget.Public.list_bank_accounts(Budget.BankAccountModel.preload_graph(:full))
+    )
+  end
+
+  defp put_bank_account_items(%{bank_accounts: bank_accounts} = vm, %{locale: locale}) do
+    Map.put(vm, :bank_account_items, Enum.map(bank_accounts, &to_view_model(&1, locale)))
+  end
+
+  defp put_citizen_pools(vm) do
+    Map.put(
+      vm,
+      :citizen_pools,
+      Citizen.Public.list_pools(currency: Budget.CurrencyModel.preload_graph(:full))
+    )
+  end
+
+  defp put_citizen_pool_items(%{citizen_pools: citizen_pools} = vm, %{locale: locale}) do
+    Map.put(vm, :citizen_pool_items, Enum.map(citizen_pools, &to_view_model(&1, locale)))
+  end
+
+  defp to_view_model(
+         %Budget.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
+         locale
+       ) do
+    subtitle = Budget.CurrencyModel.title(currency, locale)
+
+    %{
+      icon: icon,
+      title: name,
+      subtitle: subtitle,
+      action: %{type: :send, event: "edit_bank_account", item: id}
+    }
+  end
+
+  defp to_view_model(
+         %Pool.Model{id: id, name: name, icon: icon, currency: currency},
+         locale
+       ) do
+    subtitle = Budget.CurrencyModel.title(currency, locale)
+
+    %{
+      icon: icon,
+      title: name,
+      subtitle: subtitle,
+      action: %{type: :send, event: "edit_citizen_pool", item: id}
     }
   end
 end

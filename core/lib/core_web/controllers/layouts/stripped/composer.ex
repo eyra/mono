@@ -35,8 +35,6 @@ defmodule CoreWeb.Layouts.Stripped.Composer do
   defmacro __using__(_) do
     quote do
       @before_compile CoreWeb.Layouts.Stripped.Composer
-      use CoreWeb.LiveUri
-      use Systems.Observatory.Public
       use CoreWeb.UI.PlainDialog
 
       import CoreWeb.Layouts.Stripped.Composer

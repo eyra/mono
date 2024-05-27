@@ -5,9 +5,7 @@ defmodule Systems.Project.CreateItemPopup do
 
   alias Frameworks.Pixel.Selector
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   # Initial Update
   @impl true
@@ -52,10 +50,10 @@ defmodule Systems.Project.CreateItemPopup do
     |> assign(
       buttons: [
         %{
-          action: %{type: :send, event: "proceed", target: myself},
+          action: %{type: :send, event: "create_item", target: myself},
           face: %{
             type: :primary,
-            label: dgettext("eyra-project", "create.proceed.button")
+            label: dgettext("eyra-project", "create_item_popup.create.button")
           }
         },
         %{
@@ -68,37 +66,33 @@ defmodule Systems.Project.CreateItemPopup do
 
   @impl true
   def handle_event(
-        "proceed",
+        "create_item",
         _,
         %{assigns: %{selected_template: selected_template}} = socket
       ) do
     create_item(socket, selected_template)
 
-    {:noreply, socket |> finish()}
+    {:noreply, socket |> send_event(:parent, "saved")}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> finish()}
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: active_item_id, selector_id: :template_selector},
+        %{active_item_id: active_item_id, source: %{name: :template_selector}},
         %{assigns: %{template_labels: template_labels}} = socket
       ) do
     %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
 
     {
-      :ok,
+      :noreply,
       socket
       |> assign(selected_template: selected_template)
     }
-  end
-
-  defp finish(socket) do
-    socket |> send_event(:parent, "finish")
   end
 
   defp create_item(%{assigns: %{node: node}}, template) do

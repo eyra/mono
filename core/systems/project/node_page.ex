@@ -82,6 +82,16 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
+  def handle_event("saved", %{source: %{name: popup}}, socket) do
+    {:noreply, socket |> hide_popup(popup)}
+  end
+
+  @impl true
+  def handle_event("cancelled", %{source: %{name: popup}}, socket) do
+    {:noreply, socket |> hide_popup(popup)}
+  end
+
+  @impl true
   def handle_view_model_updated(socket), do: socket
 
   @impl true
@@ -91,7 +101,7 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <div>
-      <.live_workspace title={@title} menus={@menus} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@vm.title} menus={@menus} popup={@popup} dialog={@dialog}>
         <Area.content>
           <Margin.y id={:page_top} />
           <%= if Enum.count(@vm.node_cards) > 0 do %>

@@ -9,6 +9,7 @@ defmodule Frameworks.Signal.Public do
     "Core.Mailer.SignalHandlers",
     "Core.WebPush.SignalHandlers",
     "Core.APNS.SignalHandlers",
+    "Systems.Admin.Switch",
     "Systems.Observatory.Switch",
     "Systems.Project.Switch",
     "Systems.Assignment.Switch",

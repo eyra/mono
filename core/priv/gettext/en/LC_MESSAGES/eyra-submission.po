@@ -31,30 +31,6 @@ msgid "waiting.for.coordinator.message"
 msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
 
 #, elixir-autogen, elixir-format
-msgid "submit.error.text"
-msgstr "Some required fields in your campaign are not filled in."
-
-#, elixir-autogen, elixir-format
-msgid "submit.error.title"
-msgstr "Complete your campaign"
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.text"
-msgstr "Thank you for your submission. The pool administrator will review your campaign and schedule it for publication in the marketplace."
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.title"
-msgstr "Campaign submitted"
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.text"
-msgstr "Your campaign is no longer visible for the pool administrator and in the marketplace of the participants."
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.title"
-msgstr "Campaign offline"
-
-#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Reward"
 

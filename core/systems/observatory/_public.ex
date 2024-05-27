@@ -148,7 +148,7 @@ defmodule Systems.Observatory.Public do
           params,
           session,
           socket
-          |> assign(model: model)
+          |> assign(model: model, session: session)
           |> observe_view_model()
         )
       end

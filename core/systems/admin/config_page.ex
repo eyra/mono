@@ -7,32 +7,36 @@ defmodule Systems.Admin.ConfigPage do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
-    {
-      :ok,
-      socket
-      |> assign(title: dgettext("eyra-admin", "config.title"))
-    }
+  def mount(params, _session, socket) do
+    initial_tab = Map.get(params, "tab")
+    {:ok, socket |> assign(initial_tab: initial_tab)}
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
+  def handle_view_model_updated(socket) do
+    socket
+  end
 
   @impl true
   def handle_uri(socket), do: socket
+
+  @impl true
+  def handle_event("change", _payload, socket) do
+    {:noreply, socket}
+  end
 
   @impl true
   def render(assigns) do
     ~H"""
     <.tabbar_page
       title={@vm.title}
+      tabs={@vm.tabs}
+      tabbar_id={@vm.tabbar_id}
+      show_errors={@vm.show_errors}
+      initial_tab={@initial_tab}
       menus={@menus}
       popup={@popup}
       dialog={@dialog}
-      tabs={@vm.tabs}
-      tabbar_id={@tabbar_id}
-      initial_tab={@initial_tab}
-      show_errors={@vm.show_errors}
     />
     """
   end

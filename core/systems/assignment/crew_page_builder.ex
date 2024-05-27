@@ -87,8 +87,12 @@ defmodule Systems.Assignment.CrewPageBuilder do
            page_refs: page_refs,
            crew: crew
          } = assignment,
-         %{fabric: fabric, current_user: user, panel_info: panel_info, timezone: timezone} =
-           assigns,
+         %{
+           fabric: fabric,
+           current_user: user,
+           timezone: timezone,
+           session: %{"panel_info" => panel_info}
+         } = assigns,
          tester?
        ) do
     work_items = work_items(assignment, assigns)

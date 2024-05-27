@@ -78,13 +78,12 @@ defmodule Frameworks.Pixel.Selector do
   end
 
   defp send_to_parent(
-         %{assigns: %{type: type, current_items: current_items, id: selector_id}} = socket,
+         %{assigns: %{type: type, current_items: current_items}} = socket,
          active_item_ids
        ) do
     if multiselect?(type) do
       socket
       |> send_event(:parent, "active_item_ids", %{
-        selector_id: selector_id,
         active_item_ids: active_item_ids,
         current_items: current_items
       })
@@ -93,7 +92,6 @@ defmodule Frameworks.Pixel.Selector do
 
       socket
       |> send_event(:parent, "active_item_id", %{
-        selector_id: selector_id,
         active_item_id: active_item_id,
         current_items: current_items
       })

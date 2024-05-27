@@ -113,7 +113,7 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: panel_type, selector_id: :panel_type_selector},
+        %{active_item_id: panel_type, source: %{name: :panel_type_selector}},
         socket
       ) do
     {

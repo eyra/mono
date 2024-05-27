@@ -397,6 +397,7 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:placeholder, :string, default: "")
   attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
@@ -438,6 +439,7 @@ defmodule Frameworks.Pixel.Form do
       <textarea
         id={@field_id}
         name={@field_name}
+        placeholder={@placeholder}
         class={[@input_static_class, @input_dynamic_class]}
         __eyra_field_id={@field_id}
         __eyra_field_has_errors={@has_errors}
@@ -656,21 +658,6 @@ defmodule Frameworks.Pixel.Form do
         </div>
       </div>
     </div>
-    """
-  end
-
-  attr(:form, :any, required: true)
-  attr(:field, :atom)
-  attr(:target, :any, default: "")
-  slot(:inner_block, required: true)
-
-  def inputs(assigns) do
-    ~H"""
-      <.inputs_for :let={nested_form} field={@form[@field]}>
-        <div>
-          <%= render_slot(@inner_block, %{form: nested_form}) %>
-        </div>
-      </.inputs_for>
     """
   end
 

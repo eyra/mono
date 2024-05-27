@@ -19,10 +19,6 @@ msgid "preview.button"
 msgstr "Preview"
 
 #, elixir-autogen, elixir-format
-msgid "submit.button"
-msgstr "Submit"
-
-#, elixir-autogen, elixir-format
 msgid "retract.button"
 msgstr "Unpublish"
 
@@ -33,7 +29,3 @@ msgstr "Publish"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
 msgstr "Finish up"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "delete.confirm.advert"
-msgstr "campaign"

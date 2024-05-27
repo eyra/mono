@@ -3,16 +3,16 @@ defmodule Systems.Promotion.LandingPage do
   The public promotion screen.
   """
   use Systems.Content.Composer, :live_website
+  use CoreWeb.UI.Responsive.Viewport
 
-  import Systems.Advert.BannerView
+  import Systems.Promotion.BannerView
+
+  alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
 
-  alias Core.ImageHelpers
-  alias Core.Accounts
-
   import CoreWeb.Devices
-  import CoreWeb.Languages
+  import CoreWeb.Language
 
   alias Systems.Promotion
 
@@ -23,7 +23,7 @@ defmodule Systems.Promotion.LandingPage do
 
   @impl true
   def mount(
-        %{"preview" => preview, "back" => back},
+        _params,
         _session,
         %{assigns: %{current_user: user}} = socket
       ) do
@@ -31,53 +31,34 @@ defmodule Systems.Promotion.LandingPage do
       :ok,
       socket
       |> assign(
-        preview: preview == "true",
         user: user,
-        back_path: back,
-        dialog: nil,
         image_info: nil
       )
       |> update_image_info()
     }
   end
 
-  def mount(params, session, %{assigns: %{current_user: user}} = socket) do
-    preview = Map.get(params, "preview", "false")
-
-    back =
-      params
-      |> Map.get("back", Accounts.start_page_path(user))
-
-    mount(
-      params
-      |> Map.put("preview", preview)
-      |> Map.put("back", back),
-      session,
-      socket
-    )
-  end
-
   @impl true
   def handle_view_model_updated(socket) do
-    socket
-    |> update_image_info()
-    |> update_menus()
+    update_image_info(socket)
   end
 
   @impl true
   def handle_uri(socket), do: socket
 
-  defp update_image_info(%{assigns: %{viewport: %{"width" => 0}}} = socket), do: socket
+  @impl true
+  def handle_resize(socket) do
+    update_image_info(socket)
+  end
 
   defp update_image_info(
          %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket
        ) do
-    image_width = viewport_width
-    image_height = image_width * 0.75
-    image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
+    assign(socket, image_info: ImageHelpers.get_image_info(image_id, viewport_width, 720))
+  end
 
-    socket
-    |> assign(image_info: image_info)
+  defp update_image_info(%{assigns: %{vm: %{image_id: image_id}}} = socket) do
+    assign(socket, image_info: ImageHelpers.get_image_info(image_id, 1376, 720))
   end
 
   @impl true
@@ -128,18 +109,17 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def render(assigns) do
     ~H"""
+    <div id={:promotion_landing_page} phx-hook="ViewportResize">
     <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} popup={@popup} dialog={@dialog}>
       <:hero>
-        <Hero.image title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
-          <:call_to_action>
-            <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" />
-          </:call_to_action>
-        </Hero.image>
-        <Hero.banner
-          title={@vm.organisation.label}
-          subtitle={@vm.byline}
-          icon_url={CoreWeb.Endpoint.static_path("/images/#{@vm.organisation.id}.svg")}
-        />
+        <div class="h-[360px] bg-grey5">
+          <Hero.image title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
+            <:call_to_action>
+              <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" />
+            </:call_to_action>
+          </Hero.image>
+        </div>
+        <Hero.banner icon_url={@vm.icon_url} />
       </:hero>
 
       <Area.content>
@@ -171,25 +151,22 @@ defmodule Systems.Promotion.LandingPage do
           title={@vm.banner_title}
           subtitle={@vm.banner_subtitle}
           url={@vm.banner_url}
+          logo_url={@vm.logo_url}
         />
         <.spacing value="L" />
         <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
           <.devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
-          <.languages
-            label={dgettext("eyra-promotion", "languages.available.label")}
-            languages={@vm.languages}
+          <.language
+            label={dgettext("eyra-promotion", "language.available.label")}
+            language={@vm.language}
           />
         </div>
         <.spacing value="XL" />
 
         <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" />
-        <.spacing value="M" />
-
-        <div class="flex">
-          <Button.back label={dgettext("eyra-promotion", "back.button.label")} path={@back_path} />
-        </div>
       </Area.content>
     </.live_website>
+    </div>
     """
   end
 end

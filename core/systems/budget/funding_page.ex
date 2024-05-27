@@ -226,7 +226,7 @@ defmodule Systems.Budget.FundingPage do
   end
 
   @impl true
-  def handle_event("deposit_saved", %{source: %{name: name}}, socket) do
+  def handle_event("deposit_saved", %{source: %{name: popup}}, socket) do
     {
       :noreply,
       socket
@@ -234,12 +234,12 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
-      |> hide_popup(name)
+      |> hide_popup(popup)
     }
   end
 
   @impl true
-  def handle_event("budget_saved", %{source: %{name: name, module: Systems.Budget.Form}}, socket) do
+  def handle_event("budget_saved", %{source: %{name: popup, module: Systems.Budget.Form}}, socket) do
     {
       :noreply,
       socket
@@ -247,22 +247,22 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
-      |> hide_popup(name)
+      |> hide_popup(popup)
     }
   end
 
   @impl true
-  def handle_event("budget_cancelled", %{source: %{name: name}}, socket) do
+  def handle_event("budget_cancelled", %{source: %{name: popup}}, socket) do
     {
       :noreply,
       socket
-      |> hide_popup(name)
+      |> hide_popup(popup)
     }
   end
 
   @impl true
-  def handle_event("deposit_cancelled", %{source: %{name: name}}, socket) do
-    {:noreply, socket |> hide_popup(name)}
+  def handle_event("deposit_cancelled", %{source: %{name: popup}}, socket) do
+    {:noreply, socket |> hide_popup(popup)}
   end
 
   @impl true

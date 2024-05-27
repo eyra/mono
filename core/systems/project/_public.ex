@@ -49,17 +49,23 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
-  def get_item_by_assignment(assignment, preload \\ [])
+  def get_item_by(assignment, preload \\ [])
 
-  def get_item_by_assignment(%Assignment.Model{id: assignment_id}, preload) do
-    get_item_by_assignment(assignment_id, preload)
+  def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
+    get_item_by_special(:assignment, assignment_id, preload)
   end
 
-  def get_item_by_assignment(assignment_id, preload) do
-    from(item in Project.ItemModel,
-      where: item.assignment_id == ^assignment_id,
-      preload: ^preload
-    )
+  def get_item_by(%Advert.Model{id: advert_id}, preload) do
+    get_item_by_special(:advert, advert_id, preload)
+  end
+
+  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}, preload) do
+    get_item_by_special(:leaderboard, advert_id, preload)
+  end
+
+  defp get_item_by_special(special_name, special_id, preload) do
+    item_query_by_special(special_name, special_id)
+    |> Repo.preload(preload)
     |> Repo.one()
   end
 

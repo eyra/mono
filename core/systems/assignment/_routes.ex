@@ -7,6 +7,7 @@ defmodule Systems.Assignment.Routes do
         live("/assignment/:id/landing", LandingPage)
         live("/assignment/:id/content", ContentPage)
         get("/assignment/:id/invite", Controller, :invite)
+        get("/assignment/:id/apply", Controller, :apply)
         get("/assignment/callback/:item", Controller, :callback)
       end
 

@@ -364,7 +364,7 @@ msgstr "Enables participants to submit their method to the challenge with a GitH
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "Participants first need to create an account. After this, the url below can be used to invite participants. When participants click on this link they will be asked to sign in. After sign in, they are forwarded to your challenge."
+msgstr "Participants first need to create an account. After this, the url below can be used to invite participants. When participants click on this link they will be asked to sign in. After sign in, they are forwarded to your assignment."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
@@ -380,7 +380,7 @@ msgstr "Prepares participants for a visit to a lab."
 
 #, elixir-autogen, elixir-format
 msgid "advert.body"
-msgstr "Recruit participants on Panl using an advertisment."
+msgstr "Recruit participants on Panl using an advertisement."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert.create.button"

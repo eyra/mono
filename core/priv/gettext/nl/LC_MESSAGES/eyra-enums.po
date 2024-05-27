@@ -195,30 +195,6 @@ msgid "submission_status.submitted"
 msgstr "Ingediend"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.closed"
-msgstr "Gesloten"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.completed"
-msgstr "Afgerond"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.retracted"
-msgstr "Ingetrokken"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.released"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.scheduled"
-msgstr "Ingepland"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "advert_status.submitted"
-msgstr "Ingediend"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_filters.active"
 msgstr "Actief"
 
@@ -445,3 +421,19 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.questionnaire"
 msgstr "Online studie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.concept"
+msgstr "Afgerond"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.idle"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.offline"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.online"
+msgstr "Gesloten"

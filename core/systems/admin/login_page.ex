@@ -11,7 +11,7 @@ defmodule Systems.Admin.LoginPage do
     {
       :ok,
       socket
-      |> assign(:users, list_users())
+      |> assign(users: list_users(), active_menu_item: :admin)
       |> update_menus()
     }
   end

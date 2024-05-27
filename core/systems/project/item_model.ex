@@ -43,7 +43,8 @@ defmodule Systems.Project.ItemModel do
     do:
       preload_graph([
         :assignment,
-        :leaderboard
+        :leaderboard,
+        :advert
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
@@ -51,6 +52,9 @@ defmodule Systems.Project.ItemModel do
 
   def preload_graph(:leaderboard),
     do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
+
+  def preload_graph(:advert),
+    do: [advert: Advert.Model.preload_graph(:down)]
 
   def special(%{assignment: %{id: _id} = special}), do: special
 
@@ -76,6 +80,7 @@ defmodule Systems.Project.ItemModel do
 
   def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
   def tag(%{leaderboard: %{id: _} = leaderboard}), do: Graphite.LeaderboardModel.tag(leaderboard)
+  def tag(%{advert: %{id: _} = advert}), do: Advert.Model.tag(advert)
 
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
@@ -170,6 +175,44 @@ defmodule Systems.Project.ItemModel do
       }
     end
 
+    defp vm(
+           %{
+             id: id,
+             name: name,
+             advert: %{id: advert_id, assignment: assignment, status: status} = advert
+           },
+           {Project.NodePage, :item_card},
+           _user,
+           _timezone
+         ) do
+      image_info = ImageHelpers.get_image_info(assignment.info.image_id, 400, 200)
+      logo_url = assignment.info.logo_url
+
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
+      delete = %{
+        action: %{type: :send, event: "delete", item: id},
+        face: %{type: :icon, icon: :delete}
+      }
+
+      %{
+        type: :secondary,
+        id: id,
+        path: ~p"/advert/#{advert_id}/content",
+        image_info: image_info,
+        icon_url: logo_url,
+        label: get_label(status),
+        title: name,
+        tags: get_card_tags(advert),
+        info: get_advert_info(advert),
+        left_actions: [edit],
+        right_actions: [delete]
+      }
+    end
+
     defp get_label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
 
@@ -188,11 +231,16 @@ defmodule Systems.Project.ItemModel do
 
     defp get_card_tags(%Graphite.LeaderboardModel{}), do: ["Leaderboard"]
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
+    defp get_card_tags(%Advert.Model{}), do: ["Advertisement"]
     defp get_card_tags(_), do: []
 
     defp get_assignment_info(%Assignment.Model{info: info}) do
       subject_count = Map.get(info, :subject_count) || 0
       [dngettext("eyra-project", "1 participant", "* participants", subject_count)]
+    end
+
+    defp get_advert_info(%Advert.Model{submission: %{pool: %{name: pool_name}}}) do
+      [pool_name]
     end
 
     defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do

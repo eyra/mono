@@ -81,6 +81,7 @@ defmodule Systems.Workflow.BuilderView do
     %{
       module: Workflow.ItemCell,
       params: %{
+        item: item,
         type: title,
         user: user,
         timezone: timezone,

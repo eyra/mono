@@ -15,30 +15,6 @@ msgid "advert.subject.title"
 msgstr "Contributions"
 
 #, elixir-autogen, elixir-format
-msgid "share.dialog.content"
-msgstr "campaign"
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.group"
-msgstr "researchers"
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.pool.label"
-msgstr "Pool"
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.proceed.button"
-msgstr "Proceed"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert.create.title"
-msgstr "New campaign"
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.template.label"
-msgstr "Study type"
-
-#, elixir-autogen, elixir-format
 msgid "funding.title"
 msgstr "Funding"
 
@@ -89,3 +65,51 @@ msgstr "Poor"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "funding.status.rich.label"
 msgstr "Rich"
+
+#, elixir-autogen, elixir-format
+msgid "advert.default.name"
+msgstr "Advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr "Advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr "Finish up"
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr "Preview"
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr "Take offline"
+
+#, elixir-autogen, elixir-format
+msgid "applied.participants"
+msgstr "# Participants applied"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "visited.participants"
+msgstr "# Participants visited"
+
+#, elixir-autogen, elixir-format
+msgid "bounce.rate"
+msgstr "% Bounce rate"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.apply.button"
+msgstr "Participate"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Settings"

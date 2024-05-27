@@ -73,7 +73,7 @@ defmodule Systems.Advert.ListView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{active_item_ids: active_filters, selector_id: :advert_filters},
+        %{active_item_ids: active_filters, source: %{name: :advert_filters}},
         socket
       ) do
     {

@@ -12,7 +12,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   @impl true
   def update(
-        %{active_item_ids: active_item_ids, selector_id: :ethical_approval},
+        %{active_item_ids: active_item_ids, source: %{name: :ethical_approval}},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
@@ -73,12 +73,10 @@ defmodule Systems.Assignment.EthicalForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Assignment.InfoModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
-
-    send(self(), %{id: id, ready?: changeset.valid?})
 
     socket
     |> assign(changeset: changeset)

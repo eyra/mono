@@ -1,9 +1,7 @@
 defmodule Systems.Pool.Switch do
   use Frameworks.Signal.Handler
 
-  alias Systems.{
-    Pool
-  }
+  alias Systems.Pool
 
   @impl true
   def intercept(

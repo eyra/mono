@@ -45,7 +45,7 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, advert_button: advert_button)
   end
 
-  def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id}, _]}}} = socket) do
+  def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id} | _]}}} = socket) do
     advert_button = %{
       action: %{type: :redirect, to: ~p"/advert/#{advert_id}/content"},
       face: %{
@@ -79,7 +79,7 @@ defmodule Systems.Assignment.ParticipantsView do
         _payload,
         %{assigns: %{assignment: assignment, user: user}} = socket
       ) do
-    if pool = Pool.Public.get_by_name("panl") do
+    if pool = Pool.Public.get_by_name("Panl") do
       Advert.Assembly.create(assignment, user, pool)
     else
       Logger.error("Panl pool not found")

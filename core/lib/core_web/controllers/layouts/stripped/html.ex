@@ -4,6 +4,7 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   """
   use CoreWeb, :html
 
+  import Phoenix.Component
   import CoreWeb.UI.Footer
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Hero

@@ -25,8 +25,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
         %{id: id} = assignment,
         assigns
       ) do
+    show_errors = false
+
     template = Assignment.Private.get_template(assignment)
-    show_errors = show_errors(assignment, assigns)
     tabs = create_tabs(assignment, template, show_errors, assigns)
     action_map = action_map(assignment, assigns)
     actions = actions(assignment, action_map)
@@ -37,14 +38,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       tabs: tabs,
       actions: actions,
       show_errors: show_errors,
-      active_menu_item: :admin
+      active_menu_item: :projects
     }
-  end
-
-  defp show_errors(_, _) do
-    # concept? = status == :concept
-    # publish_clicked or not concept?
-    false
   end
 
   defp action_map(assignment, %{current_user: %{id: user_id}}) do
@@ -168,9 +163,18 @@ defmodule Systems.Assignment.ContentPageBuilder do
     socket |> Phoenix.Component.assign(model: assignment)
   end
 
-  defp create_tabs(assignment, template, show_errors, assigns) do
+  defp create_tabs(
+         assignment,
+         template,
+         show_errors,
+         %{uri_origin: _, viewport: _, breakpoint: _} = assigns
+       ) do
     get_tab_keys(Assignment.Template.content_flags(template))
     |> Enum.map(&create_tab(&1, assignment, template, show_errors, assigns))
+  end
+
+  defp create_tabs(_assignment, _template, _show_errors, _assigns) do
+    []
   end
 
   defp get_tab_keys(%{} = config) do
@@ -216,6 +220,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          template,
          show_errors,
          %{
+           fabric: fabric,
            current_user: user,
            uri_origin: uri_origin,
            timezone: timezone
@@ -223,15 +228,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
        ) do
     ready? = false
 
-    %{
-      id: :workflow_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-workflow", "tabbar.item.workflow"),
-      forward_title: dgettext("eyra-workflow", "tabbar.item.workflow.forward"),
-      type: :fullpage,
-      live_component: Workflow.BuilderView,
-      props: %{
+    child =
+      Fabric.prepare_child(fabric, :system, Workflow.BuilderView, %{
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
@@ -244,7 +242,16 @@ defmodule Systems.Assignment.ContentPageBuilder do
           },
           library: Assignment.Template.workflow(template).library
         }
-      }
+      })
+
+    %{
+      id: :workflow_form,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-workflow", "tabbar.item.workflow"),
+      forward_title: dgettext("eyra-workflow", "tabbar.item.workflow.forward"),
+      type: :fullpage,
+      child: child
     }
   end
 
@@ -253,8 +260,15 @@ defmodule Systems.Assignment.ContentPageBuilder do
          assignment,
          template,
          show_errors,
-         %{current_user: user}
+         %{fabric: fabric, current_user: user}
        ) do
+    child =
+      Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
+        assignment: assignment,
+        template: template,
+        user: user
+      })
+
     %{
       id: :participants,
       ready: false,
@@ -262,12 +276,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: dgettext("eyra-assignment", "tabbar.item.participants"),
       forward_title: dgettext("eyra-assignment", "tabbar.item.participants.forward"),
       type: :fullpage,
-      live_component: Assignment.ParticipantsView,
-      props: %{
-        assignment: assignment,
-        template: template,
-        user: user
-      }
+      child: child
     }
   end
 

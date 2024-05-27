@@ -31,30 +31,6 @@ msgid "waiting.for.coordinator.message"
 msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
 
 #, elixir-autogen, elixir-format
-msgid "submit.error.text"
-msgstr "Sommige verplichte velden in je campagne zijn niet ingevuld."
-
-#, elixir-autogen, elixir-format
-msgid "submit.error.title"
-msgstr "Maak je campagne compleet"
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.text"
-msgstr "Bedankt voor het indienen. De poolbeheerder zal je campagne bekijken en deze inplannen voor publicatie in de marktplaats."
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.title"
-msgstr "Campagne ingediend"
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.text"
-msgstr "Jouw campagne is niet meer zichtbaar voor de poolbeheerder en in de marktplaats van de deelnemers."
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.title"
-msgstr "Campagne offline"
-
-#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Beloning"
 

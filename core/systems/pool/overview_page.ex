@@ -67,11 +67,11 @@ defmodule Systems.Pool.OverviewPage do
   end
 
   @impl true
-  def handle_event("finish", %{source: %{name: name}}, socket) do
+  def handle_event("finish", %{source: %{name: popup}}, socket) do
     {
       :noreply,
       socket
-      |> hide_popup(name)
+      |> hide_popup(popup)
     }
   end
 

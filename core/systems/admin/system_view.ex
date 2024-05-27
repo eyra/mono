@@ -4,23 +4,35 @@ defmodule Systems.Admin.SystemView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
 
-  alias Systems.Pool
   alias Systems.Budget
   alias Systems.Citizen
 
   # Initial update
   @impl true
-  def update(%{id: id, user: user, locale: locale}, socket) do
+  def update(
+        %{
+          id: id,
+          user: user,
+          locale: locale,
+          bank_accounts: bank_accounts,
+          bank_account_items: bank_account_items,
+          citizen_pools: citizen_pools,
+          citizen_pool_items: citizen_pool_items
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         user: user,
-        locale: locale
+        locale: locale,
+        bank_accounts: bank_accounts,
+        bank_account_items: bank_account_items,
+        citizen_pools: citizen_pools,
+        citizen_pool_items: citizen_pool_items
       )
-      |> update_bank_accounts()
-      |> update_citizen_pools()
     }
   end
 
@@ -45,60 +57,6 @@ defmodule Systems.Admin.SystemView do
         user: user,
         locale: locale
       }
-    }
-  end
-
-  defp update_bank_accounts(%{assigns: %{locale: locale, myself: target, user: _user}} = socket) do
-    bank_accounts = Budget.Public.list_bank_accounts(Budget.BankAccountModel.preload_graph(:full))
-
-    bank_account_items = Enum.map(bank_accounts, &to_view_model(&1, target, locale))
-
-    socket
-    |> assign(
-      bank_accounts: bank_accounts,
-      bank_account_items: bank_account_items
-    )
-  end
-
-  defp update_citizen_pools(%{assigns: %{locale: locale, myself: target, user: _user}} = socket) do
-    citizen_pools = Citizen.Public.list_pools(currency: Budget.CurrencyModel.preload_graph(:full))
-
-    citizen_pool_items = Enum.map(citizen_pools, &to_view_model(&1, target, locale))
-
-    socket
-    |> assign(
-      citizen_pools: citizen_pools,
-      citizen_pool_items: citizen_pool_items
-    )
-  end
-
-  defp to_view_model(
-         %Budget.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
-         target,
-         locale
-       ) do
-    subtitle = Budget.CurrencyModel.title(currency, locale)
-
-    %{
-      icon: icon,
-      title: name,
-      subtitle: subtitle,
-      action: %{type: :send, event: "edit_bank_account", item: id, target: target}
-    }
-  end
-
-  defp to_view_model(
-         %Pool.Model{id: id, name: name, icon: icon, currency: currency},
-         target,
-         locale
-       ) do
-    subtitle = Budget.CurrencyModel.title(currency, locale)
-
-    %{
-      icon: icon,
-      title: name,
-      subtitle: subtitle,
-      action: %{type: :send, event: "edit_citizen_pool", item: id, target: target}
     }
   end
 
@@ -158,8 +116,15 @@ defmodule Systems.Admin.SystemView do
     }
   end
 
-  attr(:user, :list, required: true)
-  attr(:locale, :list, required: true)
+  @impl true
+  def handle_event("saved", %{source: %{name: popup}}, socket) do
+    {:noreply, socket |> hide_popup(popup)}
+  end
+
+  @impl true
+  def handle_event("cancelled", %{source: %{name: popup}}, socket) do
+    {:noreply, socket |> hide_popup(popup)}
+  end
 
   @impl true
   def render(assigns) do

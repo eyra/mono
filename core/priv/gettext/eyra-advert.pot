@@ -15,30 +15,6 @@ msgid "advert.subject.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "share.dialog.content"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.group"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.pool.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.proceed.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert.create.template.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "funding.title"
 msgstr ""
 
@@ -88,4 +64,52 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "funding.status.rich.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "applied.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "visited.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bounce.rate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "promotion.apply.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
 msgstr ""

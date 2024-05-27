@@ -5,12 +5,16 @@ defmodule Systems.Advert.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
+  import CoreWeb.Gettext
   import Ecto.Changeset
+
+  alias Systems.Advert
   alias Systems.Promotion
   alias Systems.Assignment
   alias Systems.Pool
 
   schema "adverts" do
+    field(:status, Ecto.Enum, values: Advert.Status.values(), default: :concept)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:submission, Pool.SubmissionModel)
@@ -19,7 +23,7 @@ defmodule Systems.Advert.Model do
     timestamps()
   end
 
-  @fields ~w()a
+  @fields ~w(status)a
   @required_fields @fields
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
@@ -41,4 +45,8 @@ defmodule Systems.Advert.Model do
   def preload_graph(:promotion), do: [promotion: Promotion.Model.preload_graph(:down)]
   def preload_graph(:submission), do: [submission: Pool.SubmissionModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
+
+  def tag(_) do
+    dgettext("eyra-advert", "project.item.tag")
+  end
 end

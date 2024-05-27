@@ -56,7 +56,7 @@ defmodule Systems.Student.Pool.SubmissionForm do
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: active_item_id, selector_id: :pools},
+        %{active_item_id: active_item_id, source: %{name: :pools}},
         %{assigns: %{pool_labels: pool_labels, submission: submission}} = socket
       ) do
     pool_id =

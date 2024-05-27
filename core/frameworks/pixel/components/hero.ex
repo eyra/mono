@@ -4,7 +4,6 @@ defmodule Frameworks.Pixel.Hero do
   """
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Image
   alias Frameworks.Pixel.Text
 
@@ -33,8 +32,6 @@ defmodule Frameworks.Pixel.Hero do
     """
   end
 
-  attr(:title, :string, required: true)
-  attr(:subtitle, :string, required: true)
   attr(:icon_url, :string, required: true)
   attr(:illustration, :string, default: "/images/illustration2.svg")
   attr(:bg_color, :string, default: "bg-grey1")
@@ -45,15 +42,8 @@ defmodule Frameworks.Pixel.Hero do
       <div class="flex h-full items-center">
         <div class={"flex-wrap ml-6 sm:ml-14 #{@bg_color} bg-opacity-50 z-20 rounded-lg"}>
           <div class="flex items-center">
-            <div class="">
-              <Icon.hero url={@icon_url} />
-            </div>
-            <div class="ml-6 mr-4 sm:ml-8">
-              <Text.title4 color="text-white">
-                <div><%= @title %></div>
-                <div class="mb-1" />
-                <div><%= @subtitle %></div>
-              </Text.title4>
+            <div class="h-20">
+              <img class="h-20" src={@icon_url} alt="icon">
             </div>
           </div>
         </div>
@@ -81,7 +71,7 @@ defmodule Frameworks.Pixel.Hero do
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md h-full">
-            <div class="flex flex-col gap-2 h-full">
+            <div class="flex flex-col gap-8 h-full">
               <div class="flex-grow" />
               <div class="flex flex-row gap-12">
                 <%= if @logo_url do %>
@@ -93,11 +83,13 @@ defmodule Frameworks.Pixel.Hero do
                   />
                 </div>
                 <% end %>
-                <div class="flex flex-col gap-2">
-                  <div class="flex-grow" />
-                  <Text.title2 margin="" color="text-white"><%= @title %></Text.title2>
-                  <Text.title6 margin="" color="text-white"><%= @subtitle %></Text.title6>
-                  <div class="flex-grow" />
+                <div class="flex flex-col gap-5">
+                  <%= if @title do %>
+                    <Text.title1 margin="" color="text-white"><%= @title %></Text.title1>
+                  <% end %>
+                  <%= if @subtitle do %>
+                    <Text.title5 align="text-left" color="text-white"><%= @subtitle %></Text.title5>
+                  <% end %>
                 </div>
               </div>
               <div>

@@ -164,7 +164,7 @@ defmodule Systems.Student.Overview do
   @impl true
   def handle_event(
         "active_theme_ids",
-        %{active_theme_ids: active_filters, selector_id: :student_filters},
+        %{active_theme_ids: active_filters, source: %{name: :student_filters}},
         socket
       ) do
     {

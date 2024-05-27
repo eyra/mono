@@ -26,6 +26,20 @@ defmodule Frameworks.Utility.EctoHelper do
     Repo.insert(changeset)
   end
 
+  def upsert_and_dispatch(%{data: %{id: id}} = changeset, key) when not is_nil(id) do
+    Multi.new()
+    |> Repo.multi_update(key, changeset)
+    |> Signal.Public.multi_dispatch({key, :updated}, %{changeset: changeset})
+    |> Repo.transaction()
+  end
+
+  def upsert_and_dispatch(changeset, key) do
+    Multi.new()
+    |> Multi.insert(key, changeset)
+    |> Signal.Public.multi_dispatch({key, :inserted}, %{changeset: changeset})
+    |> Repo.transaction()
+  end
+
   def update_and_dispatch(%Changeset{} = changeset, key) do
     Multi.new()
     |> update_and_dispatch(changeset, key)

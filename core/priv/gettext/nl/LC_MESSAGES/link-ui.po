@@ -19,10 +19,6 @@ msgid "preview.button"
 msgstr "Voorbeeld"
 
 #, elixir-autogen, elixir-format
-msgid "submit.button"
-msgstr "Indienen"
-
-#, elixir-autogen, elixir-format
 msgid "retract.button"
 msgstr "Haal offline"
 
@@ -33,7 +29,3 @@ msgstr "Publiceren"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.button"
 msgstr "Afronden"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "delete.confirm.advert"
-msgstr "campagne"

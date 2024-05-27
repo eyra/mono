@@ -62,7 +62,7 @@ defmodule CoreWeb.User.Forms.Debug do
   @impl true
   def handle_event(
         "active_item_id",
-        %{active_item_id: active_item_id, selector_id: :role_selector},
+        %{active_item_id: active_item_id, source: %{name: :role_selector}},
         %{assigns: %{entity: entity}} = socket
       ) do
     attrs =
