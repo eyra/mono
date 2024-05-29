@@ -40,15 +40,8 @@ defmodule Systems.Advert.Switch do
 
   # HANDLE
 
-  defp handle({:user_profile, :updated}, %{user: user, user_changeset: user_changeset}) do
-    if Map.has_key?(user_changeset.changes, :coordinator) do
-      new_value = user_changeset.changes.coordinator
-      Advert.Public.update_coordinator_role(user, new_value)
-    end
-  end
-
   defp handle(
-         {:advert, event},
+         {:advert, _},
          %{
            advert:
              %Advert.Model{
@@ -60,13 +53,9 @@ defmodule Systems.Advert.Switch do
            from_pid: from_pid
          }
        ) do
-    if event == :created do
-      Advert.Public.assign_coordinators(advert)
-    else
-      update(Promotion.LandingPage, promotion_id, promotion, from_pid)
-      update(Assignment.LandingPage, assignment_id, advert, from_pid)
-      update(Advert.ContentPage, id, advert, from_pid)
-    end
+    update(Promotion.LandingPage, promotion_id, promotion, from_pid)
+    update(Assignment.LandingPage, assignment_id, advert, from_pid)
+    update(Advert.ContentPage, id, advert, from_pid)
   end
 
   defp handle({_, _}, _), do: nil

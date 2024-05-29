@@ -3,7 +3,7 @@ defmodule Systems.Pool.ParticipantPageBuilder do
 
   import CoreWeb.Gettext
 
-  alias Core.Accounts
+  alias Systems.Account
   alias Systems.Budget
   alias Systems.Advert
 
@@ -37,7 +37,7 @@ defmodule Systems.Pool.ParticipantPageBuilder do
            } = features
        }) do
     subtitle =
-      [email | Accounts.Features.get_student_classes(features)]
+      [email | Account.FeaturesModel.get_student_classes(features)]
       |> Enum.join(" ▪︎ ")
 
     action = %{type: :http_get, to: "mailto:#{email}"}

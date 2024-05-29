@@ -5,7 +5,7 @@ defmodule Frameworks.Signal.Public do
 
   # FIXME: move this registration outside of framework
   @signal_handlers [
-    "Core.Accounts.SignalHandlers",
+    "Systems.Account.Switch",
     "Core.Mailer.SignalHandlers",
     "Core.WebPush.SignalHandlers",
     "Core.APNS.SignalHandlers",

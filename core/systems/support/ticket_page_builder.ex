@@ -48,9 +48,7 @@ defmodule Systems.Support.TicketPageBuilder do
          title: title,
          user: %{
            email: email,
-           researcher: researcher,
-           student: student,
-           coordinator: coordinator,
+           creator: creator,
            profile: %{
              fullname: fullname,
              photo_url: photo_url
@@ -61,11 +59,10 @@ defmodule Systems.Support.TicketPageBuilder do
          }
        }) do
     role =
-      cond do
-        coordinator -> dgettext("eyra-admin", "role.coordinator")
-        researcher -> dgettext("eyra-admin", "role.researcher")
-        student -> dgettext("eyra-admin", "role.student")
-        true -> nil
+      if creator do
+        dgettext("eyra-admin", "role.creator")
+      else
+        nil
       end
 
     action = %{type: :http_get, to: "mailto:#{email}?subject=Re: [##{id}] #{title}"}

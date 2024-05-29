@@ -42,7 +42,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def compose(:share_view, %{active_project: project_id, current_user: user}) do
     researchers =
-      Core.Accounts.list_researchers([:profile])
+      Systems.Account.Public.list_creators([:profile])
       # filter current user
       |> Enum.filter(&(&1.id != user.id))
 

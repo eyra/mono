@@ -1,7 +1,7 @@
 defmodule Core.WebPush.PushSubscription do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   schema "web_push_subscriptions" do
     belongs_to(:user, User)

@@ -4,7 +4,7 @@ defmodule Systems.Account.UserProfileModel do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   schema "user_profiles" do
     field(:fullname, :string)

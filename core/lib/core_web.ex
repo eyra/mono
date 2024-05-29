@@ -42,7 +42,6 @@ defmodule CoreWeb do
       alias CoreWeb.Loaders
 
       import Phoenix.LiveView.Controller
-      alias CoreWeb.Router.Helpers, as: Routes
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -83,8 +82,6 @@ defmodule CoreWeb do
       # Import convenience functions from controllers
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
-
-      alias CoreWeb.Router.Helpers, as: Routes
     end
   end
 

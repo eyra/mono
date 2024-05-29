@@ -1,16 +1,14 @@
 defmodule Systems.Email.Form do
   use CoreWeb, :live_component
 
-  alias Core.Accounts
   alias CoreWeb.UI.Timestamp
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button
   use Bamboo.Phoenix, component: Systems.Email.EmailHTML
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Account
+  alias Systems.Email
 
   # Prevents overwrite of current state
   @impl true
@@ -25,7 +23,7 @@ defmodule Systems.Email.Form do
     user_emails = users |> Enum.map(& &1.email)
     to = Enum.reverse([from_email | Enum.reverse(user_emails)])
 
-    %{fullname: fullname} = Accounts.get_profile(from_user)
+    %{fullname: fullname} = Account.Public.get_profile(from_user)
     timestamp = Timestamp.humanize_en(Timestamp.apply_timezone(Timestamp.naive_now()))
     byline = "#{fullname} | #{timestamp}"
 

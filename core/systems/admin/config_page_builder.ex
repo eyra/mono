@@ -26,7 +26,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp get_tab_keys() do
-    [:system, :org, :actions]
+    [:system, :account, :org, :actions]
   end
 
   defp create_tab(
@@ -56,6 +56,36 @@ defmodule Systems.Admin.ConfigPageBuilder do
       ready: ready?,
       show_errors: show_errors,
       title: dgettext("eyra-admin", "system.title"),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
+         :account,
+         show_errors,
+         %{fabric: fabric, current_user: user}
+       ) do
+    ready? = false
+
+    creators = Systems.Account.Public.list_creators()
+
+    child =
+      Fabric.prepare_child(
+        fabric,
+        :account,
+        Admin.AccountView,
+        %{
+          user: user,
+          creators: creators
+        }
+      )
+
+    %{
+      id: :account,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-admin", "account.title"),
       type: :fullpage,
       child: child
     }

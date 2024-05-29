@@ -5,7 +5,7 @@ defmodule Systems.Admin.LoginPage do
 
   import Ecto.Query
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   def mount(_params, _session, socket) do
     {

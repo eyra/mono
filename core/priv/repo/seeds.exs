@@ -86,18 +86,18 @@ _admin =
     password: password
   })
 
-Systems.NextAction.Public.create_next_action(member, Core.Accounts.NextActions.CompleteProfile)
+Systems.NextAction.Public.create_next_action(member, Systems.Account.NextActions.CompleteProfile)
 
-researcher =
+creator =
   Core.Factories.insert!(:member, %{
-    researcher: true,
+    creator: true,
     email: "researcher@eyra.co",
     password: password
   })
 
 Systems.NextAction.Public.create_next_action(
-  researcher,
-  Core.Accounts.NextActions.CompleteProfile
+  creator,
+  Systems.Account.NextActions.CompleteProfile
 )
 
 # for advert_data <- adverts do

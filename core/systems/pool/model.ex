@@ -6,7 +6,7 @@ defmodule Systems.Pool.Model do
 
   import Frameworks.Utility.EctoHelper
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Ecto.Changeset
 
   alias Systems.{

@@ -6,12 +6,11 @@ defmodule Systems.Admin.ImportRewardsPage do
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Selector
 
-  alias Systems.{
-    Advert,
-    Admin,
-    Student,
-    Org
-  }
+  alias Systems.Account
+  alias Systems.Advert
+  alias Systems.Admin
+  alias Systems.Student
+  alias Systems.Org
 
   @impl true
   def process_file(
@@ -135,7 +134,7 @@ defmodule Systems.Admin.ImportRewardsPage do
       IO.puts("User found by student_id! #{user.id}")
       line |> validate(user, socket)
     else
-      if user = Core.Accounts.get_user_by_email(email) do
+      if user = Account.Public.get_user_by_email(email) do
         IO.puts("User found by email! #{user.id}")
         line |> validate(user, socket)
       else
@@ -175,7 +174,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   end
 
   defp transaction_exists?(user, session_key) do
-    Advert.Public.import_student_reward_exists?(user.id, session_key)
+    Advert.Public.import_participant_reward_exists?(user.id, session_key)
   end
 
   defp process(%{assigns: %{local_file: local_file}} = socket) do
@@ -234,7 +233,7 @@ defmodule Systems.Admin.ImportRewardsPage do
          %{:user_id => user_id, "credits" => credits} = _line
        ) do
     credits = String.to_integer(credits)
-    Advert.Public.import_student_reward(user_id, credits, session_key, currency)
+    Advert.Public.import_participant_reward(user_id, credits, session_key, currency)
 
     socket
   end

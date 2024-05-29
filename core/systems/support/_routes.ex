@@ -1,11 +1,11 @@
 defmodule Systems.Support.Routes do
   defmacro routes() do
     quote do
-      scope "/support", Systems.Support do
+      scope "/", Systems.Support do
         pipe_through([:browser])
-        live("/ticket", OverviewPage)
-        live("/ticket/:id", TicketPage)
-        live("/helpdesk", HelpdeskPage)
+        live("/support/ticket", OverviewPage)
+        live("/support/ticket/:id", TicketPage)
+        live("/support/helpdesk", HelpdeskPage)
       end
     end
   end

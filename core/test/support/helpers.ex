@@ -32,7 +32,7 @@ defmodule Core.AuthTestHelpers do
   alias Core.Factories
 
   def login(user, %{conn: conn}) do
-    token = Core.Accounts.generate_user_session_token(user)
+    token = Systems.Account.Public.generate_user_session_token(user)
 
     conn =
       conn
@@ -50,19 +50,15 @@ defmodule Core.AuthTestHelpers do
     {:ok, Keyword.put(ctx, :password, password)}
   end
 
-  def login_as_researcher(ctx) do
-    Factories.insert!(:researcher) |> login(ctx)
-  end
-
-  def login_as_coordinator(ctx) do
-    Factories.insert!(:coordinator) |> login(ctx)
+  def login_as_creator(ctx) do
+    Factories.insert!(:creator) |> login(ctx)
   end
 
   def login_as_admin(ctx) do
     email = "admin1@example.org"
 
     user =
-      if user = Core.Accounts.get_user_by_email(email) do
+      if user = Systems.Account.Public.get_user_by_email(email) do
         user
       else
         Factories.insert!(:admin, %{email: email})

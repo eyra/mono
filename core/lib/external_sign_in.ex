@@ -1,5 +1,5 @@
 defmodule ExternalSignIn do
-  alias Core.Accounts
+  alias Systems.Account
   alias Core.Repo
   import Ecto.Query, warn: false
 
@@ -12,7 +12,7 @@ defmodule ExternalSignIn do
       end
 
     conn
-    |> CoreWeb.UserAuth.log_in_user_without_redirect(user)
+    |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
     |> Plug.Conn.assign(:current_user, user)
   end
 
@@ -25,7 +25,7 @@ defmodule ExternalSignIn do
         select: ex.user_id
       )
 
-    from(u in Accounts.User, where: u.id in subquery(external_user_query))
+    from(u in Account.User, where: u.id in subquery(external_user_query))
     |> Repo.one()
   end
 
@@ -37,10 +37,9 @@ defmodule ExternalSignIn do
     name = "#{organisation}_#{external_id}"
 
     user =
-      Accounts.User.sso_changeset(%Accounts.User{}, %{
+      Account.User.sso_changeset(%Account.User{}, %{
         email: "external+#{name}@eyra.co",
-        researcher: false,
-        student: false,
+        creator: false,
         displayname: name,
         profile: %{
           fullname: name

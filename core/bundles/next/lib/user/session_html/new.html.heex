@@ -36,12 +36,12 @@
                   </div>
 
                   <%= if feature_enabled?(:member_google_sign_in) do %>
-                    <Form.google_signin />
+                    <UserForm.google_signin />
                     <div class="mb-6"></div>
                   <% end %>
 
                   <%= if feature_enabled?(:sign_in_with_apple) do %>
-                    <Form.apple_signin conn={@conn} />
+                    <UserForm.apple_signin conn={@conn} />
                     <div class="mb-6"></div>
                   <% end %>
 
@@ -49,7 +49,7 @@
                     <%= if feature_enabled?(:sign_in_with_apple) or feature_enabled?(:member_google_sign_in) do %>
                       <div class="mb-7 bg-grey4 h-px"></div>
                     <% end %>
-                    <Form.password_signin />
+                    <UserForm.password_signin />
                   <% end %>
                 </div>
               </div>

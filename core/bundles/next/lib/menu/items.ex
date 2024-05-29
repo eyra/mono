@@ -1,7 +1,7 @@
 defmodule Next.Menu.Items do
+  use CoreWeb, :verified_routes
   @behaviour CoreWeb.Menu.ItemsProvider
 
-  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
 
   @impl true

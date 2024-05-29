@@ -7,7 +7,7 @@ defmodule Core.Authorization do
   """
   use Frameworks.GreenLight.Public,
     repo: Core.Repo,
-    roles: [:visitor, :member, :student, :researcher, :owner, :participant, :coordinator, :admin],
+    roles: [:visitor, :member, :creator, :owner, :participant, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
@@ -25,8 +25,8 @@ defmodule Core.Authorization do
 
   # Models
   grant_access(Systems.Advert.Model, [:visitor, :member])
-  grant_access(Systems.Questionnaire.ToolModel, [:owner, :coordinator, :participant])
-  grant_access(Systems.Lab.ToolModel, [:owner, :coordinator, :participant])
+  grant_access(Systems.Questionnaire.ToolModel, [:owner, :participant])
+  grant_access(Systems.Lab.ToolModel, [:owner, :participant])
 
   # Pages
   grant_access(Systems.Console.Page, [:member])
@@ -34,13 +34,13 @@ defmodule Core.Authorization do
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.ConfigPage, [:admin])
   grant_access(Systems.Admin.ImportRewardsPage, [:admin])
-  grant_access(Systems.Budget.FundingPage, [:admin, :researcher])
+  grant_access(Systems.Budget.FundingPage, [:admin, :creator])
   grant_access(Systems.Support.OverviewPage, [:admin])
   grant_access(Systems.Support.TicketPage, [:admin])
   grant_access(Systems.Support.HelpdeskPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.NextAction.OverviewPage, [:member])
-  grant_access(Systems.Advert.OverviewPage, [:researcher])
+  grant_access(Systems.Advert.OverviewPage, [:creator])
   grant_access(Systems.Advert.ContentPage, [:owner])
   grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
   grant_access(Systems.Assignment.ContentPage, [:owner])
@@ -48,27 +48,27 @@ defmodule Core.Authorization do
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member])
-  grant_access(Systems.Pool.OverviewPage, [:researcher])
-  grant_access(Systems.Pool.DetailPage, [:researcher])
+  grant_access(Systems.Pool.OverviewPage, [:creator])
+  grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
-  grant_access(Systems.Pool.SubmissionPage, [:researcher])
-  grant_access(Systems.Pool.ParticipantPage, [:researcher])
+  grant_access(Systems.Pool.SubmissionPage, [:creator])
+  grant_access(Systems.Pool.ParticipantPage, [:creator])
   grant_access(Systems.Test.Page, [:visitor, :member])
-  grant_access(Systems.Project.OverviewPage, [:admin, :researcher])
-  grant_access(Systems.Project.NodePage, [:researcher, :owner])
+  grant_access(Systems.Project.OverviewPage, [:admin, :creator])
+  grant_access(Systems.Project.NodePage, [:creator, :owner])
   grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
   grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
-  grant_access(CoreWeb.User.Signin, [:visitor])
-  grant_access(CoreWeb.User.Signup, [:visitor])
-  grant_access(CoreWeb.User.ResetPassword, [:visitor])
-  grant_access(CoreWeb.User.ResetPasswordToken, [:visitor])
-  grant_access(CoreWeb.User.AwaitConfirmation, [:visitor])
-  grant_access(CoreWeb.User.ConfirmToken, [:visitor])
+  grant_access(Systems.Account.UserSignin, [:visitor])
+  grant_access(Systems.Account.Signup, [:visitor])
+  grant_access(Systems.Account.ResetPassword, [:visitor])
+  grant_access(Systems.Account.ResetPasswordToken, [:visitor])
+  grant_access(Systems.Account.AwaitConfirmation, [:visitor])
+  grant_access(Systems.Account.ConfirmToken, [:visitor])
   grant_access(Systems.Account.UserProfilePage, [:member])
-  grant_access(CoreWeb.User.Settings, [:member])
-  grant_access(CoreWeb.User.SecuritySettings, [:member])
+  grant_access(Systems.Account.UserSettings, [:member])
+  grant_access(Systems.Account.UserSecuritySettings, [:member])
   grant_access(CoreWeb.FakeQualtrics, [:member])
 
   grant_actions(CoreWeb.FakeAllianceController, %{
@@ -236,7 +236,7 @@ defmodule Core.Authorization do
   def users_with_role(node_id, role, preload) when is_number(node_id) do
     principal_ids = Core.Authorization.query_principal_ids(node_id: node_id, role: role)
 
-    Ecto.Query.from(u in Core.Accounts.User,
+    Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
       preload: ^preload
     )
@@ -246,7 +246,7 @@ defmodule Core.Authorization do
   def users_with_role(entity, role, preload) do
     principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
 
-    Ecto.Query.from(u in Core.Accounts.User,
+    Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
       preload: ^preload
     )

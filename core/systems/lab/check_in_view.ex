@@ -3,15 +3,13 @@ defmodule Systems.Lab.CheckInView do
   import CoreWeb.Gettext
   require Logger
 
-  alias Core.Accounts
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept.Directable
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Account
+  alias Systems.Lab
 
   import Lab.CheckInItem
 
@@ -50,7 +48,7 @@ defmodule Systems.Lab.CheckInView do
     # user =
     #   user_id
     #   |> String.to_integer()
-    #   |> Accounts.get_user!()
+    #   |> Account.Public.get_user!()
 
     raise "FIXME: Apply member and activate task"
     # {:noreply, socket |> assign(query: nil, message: nil)}
@@ -98,7 +96,7 @@ defmodule Systems.Lab.CheckInView do
 
   defp search(query, tool) when is_binary(query) do
     items =
-      Core.Accounts.search(query)
+      Account.Public.search(query)
       |> Enum.map(&to_view_model(&1, tool))
 
     message =
@@ -169,7 +167,7 @@ defmodule Systems.Lab.CheckInView do
   defp to_view_model(nil, _tool), do: nil
   defp to_view_model({nil, nil}, _tool), do: nil
 
-  defp to_view_model(%Core.Accounts.User{id: user_id, email: email} = user, tool) do
+  defp to_view_model(%Systems.Account.User{id: user_id, email: email} = user, tool) do
     reservation = reservation(user, tool)
     time_slot = time_slot(reservation)
 
@@ -236,11 +234,11 @@ defmodule Systems.Lab.CheckInView do
 
   defp reservation(user_id, tool) when is_integer(user_id) do
     user_id
-    |> Accounts.get_user!()
+    |> Account.Public.get_user!()
     |> reservation(tool)
   end
 
-  defp reservation(%Accounts.User{} = user, tool) do
+  defp reservation(%Account.User{} = user, tool) do
     Lab.Public.reservation_for_user(tool, user)
   end
 

@@ -10,13 +10,14 @@ defmodule CoreWeb.Menu.Builder do
   @callback include_map(user) :: map()
 
   alias Systems.Admin
+  alias Systems.Account
 
   def include_map(user) do
     %{
       admin: Admin.Public.admin?(user),
       support: Admin.Public.admin?(user),
       debug: Admin.Public.admin?(user),
-      profile: Core.Accounts.internal?(user),
+      profile: Account.Public.internal?(user),
       signout: not is_nil(user),
       signin: is_nil(user)
     }

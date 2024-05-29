@@ -3,8 +3,8 @@ defmodule Next.User.Signin do
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
 
-  alias Core.Accounts.User
-  alias CoreWeb.User.Form
+  alias Systems.Account.User
+  alias Systems.Account.UserForm
 
   def mount(params, _session, socket) do
     require_feature(:password_sign_in)
@@ -43,7 +43,7 @@ defmodule Next.User.Signin do
         <Area.form>
           <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
           <div>
-            <Form.password_signin for={@form} />
+            <UserForm.password_signin for={@form} />
           </div>
           <.spacing value="M" />
         </Area.form>

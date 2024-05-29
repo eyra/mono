@@ -2,41 +2,35 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Core.Accounts.{User, Features}
 
-  alias Core.{
-    Authorization,
-    WebPush,
-    Repo
-  }
+  alias Core.Authorization
+  alias Core.WebPush
+  alias Core.Repo
 
-  alias Frameworks.{
-    GreenLight
-  }
+  alias Frameworks.GreenLight
 
-  alias Systems.{
-    Account,
-    Notification,
-    Advert,
-    Promotion,
-    Assignment,
-    Workflow,
-    Crew,
-    Support,
-    Alliance,
-    Feldspar,
-    Document,
-    Lab,
-    Graphite,
-    Pool,
-    Budget,
-    Bookkeeping,
-    Content,
-    Org,
-    Project,
-    Consent,
-    Monitor
-  }
+  alias Systems.Account
+  alias Systems.Account.User
+  alias Systems.Notification
+  alias Systems.Advert
+  alias Systems.Promotion
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Support
+  alias Systems.Alliance
+  alias Systems.Feldspar
+  alias Systems.Document
+  alias Systems.Lab
+  alias Systems.Graphite
+  alias Systems.Pool
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Content
+  alias Systems.Org
+  alias Systems.Project
+  alias Systems.Consent
+  alias Systems.Monitor
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -50,28 +44,20 @@ defmodule Core.Factories do
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       },
-      features: %Features{
+      features: %Account.FeaturesModel{
         gender: :man
       }
     }
   end
 
-  def build(:researcher) do
+  def build(:creator) do
     :member
-    |> build(%{researcher: true})
+    |> build(%{creator: true})
     |> struct!(%{
       profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       }
-    })
-  end
-
-  def build(:coordinator) do
-    :member
-    |> build(%{
-      researcher: true,
-      coordinator: true
     })
   end
 
@@ -79,17 +65,6 @@ defmodule Core.Factories do
     :member
     |> build(%{
       email: "admin1@example.org"
-    })
-  end
-
-  def build(:student) do
-    :member
-    |> build(%{student: true})
-    |> struct!(%{
-      profile: %Account.UserProfileModel{
-        fullname: Faker.Person.name(),
-        photo_url: Faker.Avatar.image_url()
-      }
     })
   end
 

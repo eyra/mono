@@ -3,7 +3,7 @@ defmodule Core.SurfConext.User do
   import Ecto.Changeset
 
   schema "surfconext_users" do
-    belongs_to(:user, Core.Accounts.User)
+    belongs_to(:user, Systems.Account.User)
     field(:email, :string)
     field(:sub, :string)
     field(:family_name, :string)

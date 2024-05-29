@@ -8,9 +8,9 @@ defmodule Systems.Pool.StudentFiltersTest do
 
   describe "include?/2" do
     test "include with 3 supported filters" do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
-      student3 = Factories.insert!(:member, %{student: true})
+      student1 = Factories.insert!(:member, %{creator: false})
+      student2 = Factories.insert!(:member, %{creator: false})
+      student3 = Factories.insert!(:member, %{creator: false})
 
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 
@@ -39,9 +39,9 @@ defmodule Systems.Pool.StudentFiltersTest do
     end
 
     test "include with 1 unsupported filter" do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
-      student3 = Factories.insert!(:member, %{student: true})
+      student1 = Factories.insert!(:member, %{creator: false})
+      student2 = Factories.insert!(:member, %{creator: false})
+      student3 = Factories.insert!(:member, %{creator: false})
 
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 
@@ -63,9 +63,9 @@ defmodule Systems.Pool.StudentFiltersTest do
     end
 
     test "include with 1 unsupported and 1 supported filter" do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
-      student3 = Factories.insert!(:member, %{student: true})
+      student1 = Factories.insert!(:member, %{creator: false})
+      student2 = Factories.insert!(:member, %{creator: false})
+      student3 = Factories.insert!(:member, %{creator: false})
 
       currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 

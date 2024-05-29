@@ -5,7 +5,7 @@ defmodule Systems.Pool.ParticipantModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   alias Systems.{
     Pool

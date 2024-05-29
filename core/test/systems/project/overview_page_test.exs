@@ -6,7 +6,7 @@ defmodule Systems.Project.OverviewPageTest do
   alias Core.Repo
 
   describe "login page" do
-    setup [:login_as_researcher]
+    setup [:login_as_creator]
 
     test "render empty", %{conn: conn} do
       {:ok, _view, html} = live(conn, ~p"/project")

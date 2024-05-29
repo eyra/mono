@@ -1,7 +1,7 @@
 defmodule Systems.Pool.ResearcherItemBuilder do
   import CoreWeb.Gettext
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   def view_model(
         %{
@@ -15,7 +15,7 @@ defmodule Systems.Pool.ResearcherItemBuilder do
           title: title
         }
       ) do
-    role = dgettext("eyra-admin", "role.researcher")
+    role = dgettext("eyra-admin", "role.creator")
     action = %{type: :http_get, to: "mailto:#{email}?subject=Re: #{title}"}
 
     %{

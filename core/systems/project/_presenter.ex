@@ -9,7 +9,7 @@ defmodule Systems.Project.Presenter do
   end
 
   @impl true
-  def view_model(Project.OverviewPage, %Core.Accounts.User{} = user, assigns) do
+  def view_model(Project.OverviewPage, %Systems.Account.User{} = user, assigns) do
     Project.OverviewPageBuilder.view_model(user, assigns)
   end
 end

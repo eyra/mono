@@ -5,13 +5,14 @@ defmodule Systems.Advert.Public do
   import Ecto.Query, warn: false
   require Logger
   alias Core.Repo
-  alias Core.Accounts
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
 
   alias Frameworks.GreenLight.Principal
   alias Frameworks.Signal
   alias Frameworks.Concept.Directable
+
+  alias Systems.Account
 
   alias Systems.{
     Advert,
@@ -403,30 +404,6 @@ defmodule Systems.Advert.Public do
       Assignment.Public.ready?(assignment)
   end
 
-  def assign_coordinators(advert) do
-    from(u in User, where: u.coordinator == true)
-    |> Repo.all()
-    |> Enum.each(fn user ->
-      Authorization.assign_role(user, advert, :coordinator)
-    end)
-  end
-
-  def update_coordinator_role(user, value) do
-    from(c in Advert.Model)
-    |> Repo.all()
-    |> Enum.each(fn advert ->
-      update_coordinator_role(advert, user, value)
-    end)
-  end
-
-  defp update_coordinator_role(advert, user, value) do
-    if value do
-      Authorization.assign_role(user, advert, :coordinator)
-    else
-      Authorization.remove_role!(user, advert, :coordinator)
-    end
-  end
-
   def handle_exclusion(%Assignment.Model{} = assignment, items) when is_list(items) do
     items |> Enum.each(&handle_exclusion(assignment, &1))
     Signal.Public.dispatch!({:assignment, :updated}, %{assignment: assignment})
@@ -487,7 +464,7 @@ defmodule Systems.Advert.Public do
   end
 
   defp validate_eligitable(%{submission: %{criteria: criteria}}, user) do
-    user_features = Accounts.get_features(user)
+    user_features = Account.Public.get_features(user)
 
     if Pool.CriteriaModel.eligitable?(criteria, user_features) do
       :ok
@@ -578,31 +555,6 @@ defmodule Systems.Advert.Public do
     |> Repo.one!()
   end
 
-  @doc """
-    Synchronizes accepted student tasks with bookkeeping.
-  """
-  def sync_student_credits() do
-    from(assignment in Assignment.Model,
-      inner_join: task in Crew.TaskModel,
-      on: task.crew_id == assignment.crew_id,
-      inner_join: node in Authorization.Node,
-      on: node.id == task.auth_node_id,
-      inner_join: role in Authorization.RoleAssignment,
-      on: role.node_id == node.id,
-      inner_join: user in User,
-      on: user.id == role.principal_id,
-      inner_join: budget in Budget.Model,
-      on: budget.id == assignment.budget_id,
-      where: role.role == :owner,
-      where: task.status == :accepted,
-      where: user.student == true,
-      preload: [budget: [:fund, :reserve]],
-      select: %{assignment: assignment, user: user}
-    )
-    |> Repo.all()
-    |> Enum.each(&payout_participant(&1.assignment, &1.user))
-  end
-
   def user_has_currency?(%User{} = user, currency) do
     query_user_pools_by_currency(user, currency)
     |> Repo.exists?()
@@ -626,18 +578,19 @@ defmodule Systems.Advert.Public do
     )
   end
 
-  def import_student_reward(student_id, amount, session_key, currency) when is_binary(currency) do
-    idempotence_key = import_idempotence_key(session_key, student_id)
-    student = Core.Accounts.get_user!(student_id)
+  def import_participant_reward(participant_id, amount, session_key, currency)
+      when is_binary(currency) do
+    idempotence_key = import_idempotence_key(session_key, participant_id)
+    participant = Systems.Account.Public.get_user!(participant_id)
 
-    if user_has_currency?(student, currency) do
+    if user_has_currency?(participant, currency) do
       from = ["fund", currency]
-      to = ["wallet", currency, student_id]
+      to = ["wallet", currency, participant_id]
 
       journal_message =
-        "Student #{student_id} earned #{amount} by import during session '#{session_key}'"
+        "Participant #{participant_id} earned #{amount} by import during session '#{session_key}'"
 
-      import_student_reward(from, to, amount, idempotence_key, journal_message)
+      import_participant_reward(from, to, amount, idempotence_key, journal_message)
     else
       Logger.warn(
         "Import reward failed, user has no access to currency #{currency}: amount=#{amount} idempotence_key=#{idempotence_key}"
@@ -645,7 +598,7 @@ defmodule Systems.Advert.Public do
     end
   end
 
-  defp import_student_reward(from, to, amount, idempotence_key, journal_message) do
+  defp import_participant_reward(from, to, amount, idempotence_key, journal_message) do
     lines = [
       %{account: from, debit: amount},
       %{account: to, credit: amount}
@@ -668,8 +621,8 @@ defmodule Systems.Advert.Public do
     end
   end
 
-  def import_student_reward_exists?(student_id, session_key) do
-    idempotence_key = import_idempotence_key(session_key, student_id)
+  def import_participant_reward_exists?(participant_id, session_key) do
+    idempotence_key = import_idempotence_key(session_key, participant_id)
     Bookkeeping.Public.exists?(idempotence_key)
   end
 

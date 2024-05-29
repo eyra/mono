@@ -10,7 +10,7 @@ defmodule Systems.Student.PublicTest do
   }
 
   test "handle_features_updated/3 succeeded" do
-    student = Factories.insert!(:member, %{student: true})
+    student = Factories.insert!(:member, %{creator: false})
 
     last_year = "course_year1_2000"
     current_year = "course_year1_2001"
@@ -78,7 +78,7 @@ defmodule Systems.Student.PublicTest do
   end
 
   test "handle_features_updated/3 skipped: target already met" do
-    student = Factories.insert!(:member, %{student: true})
+    student = Factories.insert!(:member, %{creator: false})
 
     last_year = "course_year1_2000"
     current_year = "course_year1_2001"

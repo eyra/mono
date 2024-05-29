@@ -62,7 +62,7 @@ defmodule Systems.Advert.Factories do
   end
 
   def create_task(identifier, crew, status, expired, minutes_ago) when is_boolean(expired) do
-    user = Core.Factories.insert!(:member, %{student: true})
+    user = Core.Factories.insert!(:member, %{creator: false})
     create_task(identifier, user, crew, status, expired, minutes_ago)
   end
 

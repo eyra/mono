@@ -9,10 +9,10 @@ defmodule Systems.Advert.ListView do
   import Frameworks.Pixel.Empty
   import Frameworks.Pixel.Content
 
-  alias Core.Accounts
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Systems.Advert
+  alias Systems.Account
 
   @impl true
   def update(
@@ -49,7 +49,7 @@ defmodule Systems.Advert.ListView do
   end
 
   defp clear_review_submission_next_action do
-    for user <- Accounts.list_pool_admins() do
+    for user <- Account.Public.list_pool_admins() do
       NextAction.Public.clear_next_action(user, Pool.ReviewSubmission)
     end
   end

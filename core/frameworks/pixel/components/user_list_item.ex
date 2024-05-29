@@ -22,7 +22,7 @@ defmodule Frameworks.Pixel.UserListItem do
         />
       </div>
       <div class="flex-grow font-label text-label text-grey1 mt-2px">
-        <%= Core.Accounts.User.label(@user) %>
+        <%= Systems.Account.User.label(@user) %>
       </div>
       <div class="flex-wrap flex-shrink-0">
         <Button.dynamic {@action_button} />

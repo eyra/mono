@@ -4,7 +4,7 @@ defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
   alias Plug.Conn
   alias Core.Authorization.Plug.ControllerAuthorization
   alias Core.Authorization.PermissionMap
-  alias Core.Accounts
+  alias Systems.Account
 
   defmodule TestStruct do
     defstruct id: ""
@@ -20,7 +20,7 @@ defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
   }
 
   def admin_fixture(attrs \\ %{}) do
-    {:ok, user} = attrs |> Enum.into(@admin) |> Accounts.create()
+    {:ok, user} = attrs |> Enum.into(@admin) |> Account.Public.create()
     user
   end
 

@@ -29,7 +29,7 @@ defmodule Systems.Advert.ModelTest do
 
     test "list_owned_adverts/1 returns only studies that are owned by the user" do
       _not_owned = Factories.insert!(:advert)
-      researcher = Factories.insert!(:researcher)
+      researcher = Factories.insert!(:creator)
       submission = Factories.insert!(:pool_submission)
       owned = Factories.insert!(:advert, %{submission: submission})
       :ok = Authorization.assign_role(researcher, owned, :owner)
@@ -45,7 +45,7 @@ defmodule Systems.Advert.ModelTest do
       submission = Factories.insert!(:pool_submission)
       promotion = Factories.insert!(:promotion)
       assignment = Factories.insert!(:assignment)
-      researcher = Factories.insert!(:researcher)
+      researcher = Factories.insert!(:creator)
       auth_node = Factories.insert!(:auth_node)
 
       assert {:ok, %Advert.Model{}} =
@@ -66,8 +66,8 @@ defmodule Systems.Advert.ModelTest do
     end
 
     test "add_owner!/2 grants a user ownership over a advert" do
-      researcher_1 = Factories.insert!(:researcher)
-      researcher_2 = Factories.insert!(:researcher)
+      researcher_1 = Factories.insert!(:creator)
+      researcher_2 = Factories.insert!(:creator)
       submission = Factories.insert!(:pool_submission)
       advert = Factories.insert!(:advert, %{submission: submission})
       :ok = Authorization.assign_role(researcher_1, advert, :owner)
@@ -81,8 +81,8 @@ defmodule Systems.Advert.ModelTest do
     end
 
     test "assign_owners/2 adds or removes a users ownership of a advert" do
-      researcher_1 = Factories.insert!(:researcher)
-      researcher_2 = Factories.insert!(:researcher)
+      researcher_1 = Factories.insert!(:creator)
+      researcher_2 = Factories.insert!(:creator)
       submission = Factories.insert!(:pool_submission)
       advert = Factories.insert!(:advert, %{submission: submission})
       :ok = Authorization.assign_role(researcher_1, advert, :owner)
@@ -99,8 +99,8 @@ defmodule Systems.Advert.ModelTest do
     end
 
     test "list_owners/1 returns all users with ownership permission on the advert" do
-      researcher_1 = Factories.insert!(:researcher)
-      researcher_2 = Factories.insert!(:researcher)
+      researcher_1 = Factories.insert!(:creator)
+      researcher_2 = Factories.insert!(:creator)
       advert = Factories.insert!(:advert)
       :ok = Authorization.assign_role(researcher_1, advert, :owner)
       assert Advert.Public.list_owners(advert) |> Enum.map(& &1.id) == [researcher_1.id]

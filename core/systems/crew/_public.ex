@@ -9,7 +9,7 @@ defmodule Systems.Crew.Public do
   alias Ecto.Multi
   alias Core.Repo
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Signal

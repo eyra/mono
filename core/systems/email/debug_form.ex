@@ -13,15 +13,12 @@ defmodule Systems.Email.DebugForm do
 
   import Ecto.Changeset
 
-  alias Core.Accounts
-
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Account
+  alias Systems.Email
 
   # Handle update from parent after auto-save, prevents overwrite of current state
   @impl true
@@ -51,7 +48,7 @@ defmodule Systems.Email.DebugForm do
     changeset =
       case changeset(mail_data) do
         %{valid?: true, changes: %{to: to, subject: subject, message: message}} ->
-          to_user = Accounts.get_user_by_email(to)
+          to_user = Account.Public.get_user_by_email(to)
 
           send_mail(subject, message, from_user, to_user)
           changeset(%{})

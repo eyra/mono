@@ -1,5 +1,5 @@
 defmodule Systems.Monitor.Public do
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Systems.Monitor.Queries
   alias Frameworks.Utility.Module
 

@@ -7,18 +7,14 @@ defmodule Systems.Pool.Public do
   alias Frameworks.Signal
   alias Frameworks.Concept.Directable
 
-  alias Core.{
-    Repo,
-    Accounts,
-    Authorization
-  }
+  alias Core.Repo
+  alias Core.Authorization
 
-  alias Systems.{
-    Pool,
-    Bookkeeping,
-    NextAction,
-    Org
-  }
+  alias Systems.Account
+  alias Systems.Pool
+  alias Systems.Bookkeeping
+  alias Systems.NextAction
+  alias Systems.Org
 
   def list(preload \\ []) do
     Repo.all(Pool.Model) |> Repo.preload(preload)
@@ -48,7 +44,7 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
-  def list_by_user(%Accounts.User{id: user_id}, preload \\ []) do
+  def list_by_user(%Account.User{id: user_id}, preload \\ []) do
     from(pool in Pool.Model,
       inner_join: participant in Pool.ParticipantModel,
       on: participant.pool_id == pool.id,
@@ -175,7 +171,7 @@ defmodule Systems.Pool.Public do
   defp map_string(term) when is_atom(term), do: Atom.to_string(term)
   defp map_string(term) when is_binary(term), do: term
 
-  def get_participant!(%Pool.Model{} = pool, %Accounts.User{} = user, preload \\ []) do
+  def get_participant!(%Pool.Model{} = pool, %Account.User{} = user, preload \\ []) do
     from(participant in Pool.ParticipantModel,
       where: participant.pool_id == ^pool.id,
       where: participant.user_id == ^user.id,
@@ -184,7 +180,7 @@ defmodule Systems.Pool.Public do
     |> Repo.one!()
   end
 
-  def participant?(%Pool.Model{} = pool, %Accounts.User{} = user) do
+  def participant?(%Pool.Model{} = pool, %Account.User{} = user) do
     from(participant in Pool.ParticipantModel,
       where: participant.pool_id == ^pool.id,
       where: participant.user_id == ^user.id
@@ -200,7 +196,7 @@ defmodule Systems.Pool.Public do
     Authorization.remove_role!(user, pool, :owner)
   end
 
-  def link!(%Pool.Model{} = pool, %Accounts.User{} = user) do
+  def link!(%Pool.Model{} = pool, %Account.User{} = user) do
     %Pool.ParticipantModel{}
     |> Pool.ParticipantModel.changeset(pool, user)
     |> Repo.insert!(
@@ -209,7 +205,7 @@ defmodule Systems.Pool.Public do
     )
   end
 
-  def unlink!(%Pool.Model{} = pool, %Accounts.User{} = user) do
+  def unlink!(%Pool.Model{} = pool, %Account.User{} = user) do
     from(p in Pool.ParticipantModel,
       where: p.pool_id == ^pool.id,
       where: p.user_id == ^user.id
@@ -314,7 +310,7 @@ defmodule Systems.Pool.Public do
   end
 
   def select(%Pool.SubmissionModel{criteria: submission_criteria}, user) do
-    user_features = Accounts.get_features(user)
+    user_features = Account.Public.get_features(user)
     Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
   end
 
@@ -339,7 +335,7 @@ defmodule Systems.Pool.Public do
   end
 
   defp query_count_users(include, exclude) do
-    from(user in Accounts.User,
+    from(user in Account.User,
       join: features in assoc(user, :features),
       select: count(user.id),
       where: user.id in ^include,
@@ -383,7 +379,7 @@ defmodule Systems.Pool.Public do
          %Ecto.Changeset{} = changeset
        ) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
-      for user <- Accounts.list_pool_admins() do
+      for user <- Account.Public.list_pool_admins() do
         NextAction.Public.create_next_action(user, Pool.ReviewSubmission,
           key: "#{pool_id}",
           params: %{id: pool_id}

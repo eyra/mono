@@ -8,10 +8,11 @@ defmodule Systems.Budget.Public do
 
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Accounts
   alias Core.Authorization
 
   alias Frameworks.Utility.Identifier
+
+  alias Systems.Account
 
   alias Systems.{
     Budget,
@@ -28,7 +29,7 @@ defmodule Systems.Budget.Public do
     Repo.all(Budget.Model) |> Repo.preload(preload)
   end
 
-  def list_owned(%Accounts.User{} = user, preload \\ []) do
+  def list_owned(%Account.User{} = user, preload \\ []) do
     node_ids =
       Authorization.query_node_ids(
         role: :owner,
@@ -43,7 +44,7 @@ defmodule Systems.Budget.Public do
   end
 
   def list_owned_by_currency(
-        %Accounts.User{} = user,
+        %Account.User{} = user,
         %Budget.CurrencyModel{id: currency_id},
         preload \\ []
       ) do
@@ -77,7 +78,7 @@ defmodule Systems.Budget.Public do
     Repo.all(Budget.BankAccountModel) |> Repo.preload(preload)
   end
 
-  def list_wallets(%Accounts.User{id: user_id}) do
+  def list_wallets(%Account.User{id: user_id}) do
     Bookkeeping.Public.list_accounts(["wallet", "#{user_id}"])
   end
 
@@ -87,7 +88,7 @@ defmodule Systems.Budget.Public do
     Bookkeeping.Public.list_accounts(["wallet", "#{name}"])
   end
 
-  def list_rewards(%Accounts.User{id: user_id}, preload \\ []) do
+  def list_rewards(%Account.User{id: user_id}, preload \\ []) do
     from(reward in Budget.RewardModel,
       where: reward.user_id == ^user_id,
       preload: ^preload
@@ -138,7 +139,7 @@ defmodule Systems.Budget.Public do
     |> Repo.one()
   end
 
-  def get_reward(%Budget.Model{id: budget_id}, %Accounts.User{id: user_id}, preload \\ []) do
+  def get_reward(%Budget.Model{id: budget_id}, %Account.User{id: user_id}, preload \\ []) do
     from(reward in Budget.RewardModel,
       where: reward.user_id == ^user_id,
       where: reward.budget_id == ^budget_id,
@@ -148,12 +149,12 @@ defmodule Systems.Budget.Public do
     |> Repo.one()
   end
 
-  def get_wallet_identifier(%Core.Accounts.User{} = user, %Budget.CurrencyModel{
+  def get_wallet_identifier(%Systems.Account.User{} = user, %Budget.CurrencyModel{
         name: currency_name
       }),
       do: get_wallet_identifier(user, currency_name)
 
-  def get_wallet_identifier(%Core.Accounts.User{id: user_id}, currency_name)
+  def get_wallet_identifier(%Systems.Account.User{id: user_id}, currency_name)
       when is_binary(currency_name) do
     {:wallet, currency_name, user_id}
   end
@@ -168,7 +169,7 @@ defmodule Systems.Budget.Public do
     |> Repo.insert!()
   end
 
-  def create_budget(%Budget.CurrencyModel{} = currency, name, icon, %Accounts.User{} = owner) do
+  def create_budget(%Budget.CurrencyModel{} = currency, name, icon, %Account.User{} = owner) do
     Budget.Model.create(currency, name, icon, owner)
     |> Repo.insert!()
   end
@@ -316,7 +317,7 @@ defmodule Systems.Budget.Public do
        when multiplier > 1 do
     user =
       String.to_integer(user_id)
-      |> Core.Accounts.get_user!()
+      |> Systems.Account.Public.get_user!()
 
     reward_amount = balance_credit * (multiplier - 1)
     idempotence_key = "multiplier=#{multiplier},currency=#{currency_name},user=#{user_id}"
@@ -329,7 +330,7 @@ defmodule Systems.Budget.Public do
          multi,
          %Budget.Model{} = budget,
          amount,
-         %Accounts.User{} = user,
+         %Account.User{} = user,
          idempotence_key
        )
        when is_integer(amount) do
@@ -345,7 +346,7 @@ defmodule Systems.Budget.Public do
   defp insert_reward(
          %Budget.Model{} = budget,
          amount,
-         %Accounts.User{} = user,
+         %Account.User{} = user,
          idempotence_key
        )
        when is_integer(amount) do
@@ -679,7 +680,7 @@ defmodule Systems.Budget.Public do
       on: b.id == r.budget_id,
       inner_join: c in Budget.CurrencyModel,
       on: c.id == b.currency_id,
-      inner_join: u in Accounts.User,
+      inner_join: u in Account.User,
       on: u.id == r.user_id,
       where: c.name == ^currency_name and not is_nil(r.deposit_id) and is_nil(r.payment_id),
       select: sum(r.amount)

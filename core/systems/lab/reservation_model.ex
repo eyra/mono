@@ -3,7 +3,7 @@ defmodule Systems.Lab.ReservationModel do
   import Ecto.Changeset
 
   alias Systems.Lab.TimeSlotModel
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   @primary_key false
   schema "lab_reservations" do

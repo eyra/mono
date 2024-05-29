@@ -8,7 +8,7 @@ defmodule Systems.Advert.ContentPageTest do
   alias Systems.Advert
 
   describe "show content page for advert with monitor tab" do
-    setup [:login_as_researcher]
+    setup [:login_as_creator]
 
     test "Default", %{conn: %{assigns: %{current_user: researcher}} = conn} do
       %{id: id} = Advert.Factories.create_advert(researcher, :accepted, 1)

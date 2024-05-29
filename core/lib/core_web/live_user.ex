@@ -1,11 +1,13 @@
 defmodule CoreWeb.LiveUser do
+  alias Systems.Account
+
   @moduledoc """
   Automatically setup the current user in LiveViews.
   """
   def current_user(%{assigns: %{current_user: current_user}}), do: current_user
 
   def current_user(%{"user_token" => user_token}) do
-    Core.Accounts.get_user_by_session_token(user_token)
+    Account.Public.get_user_by_session_token(user_token)
   end
 
   def current_user(_), do: nil

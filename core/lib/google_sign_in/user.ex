@@ -3,7 +3,7 @@ defmodule GoogleSignIn.User do
   import Ecto.Changeset
 
   schema "google_sign_in_users" do
-    belongs_to(:user, Core.Accounts.User)
+    belongs_to(:user, Systems.Account.User)
     field(:sub, :string)
     field(:name, :string)
     field(:email, :string)

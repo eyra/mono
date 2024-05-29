@@ -35,9 +35,9 @@ defmodule Systems.Advert.AssemblyTest do
   describe "advert assembly" do
     alias Systems.Advert
 
-    setup [:login_as_researcher]
+    setup [:login_as_creator]
 
-    test "create advert", %{user: researcher, mock: mock, pool: pool} do
+    test "create advert", %{user: creator, mock: mock, pool: pool} do
       mock
       |> expect(:get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
@@ -69,7 +69,7 @@ defmodule Systems.Advert.AssemblyTest do
         |> Core.Repo.insert!()
 
       {:ok, %{project_item: %{advert: %{auth_node_id: advert_auth_node_id} = advert}}} =
-        Advert.Assembly.create(assignment, researcher, pool)
+        Advert.Assembly.create(assignment, creator, pool)
 
       assert %Systems.Advert.Model{
                auth_node: %Core.Authorization.Node{
@@ -97,11 +97,11 @@ defmodule Systems.Advert.AssemblyTest do
                }
              } = advert
 
-      assert banner_photo_url == researcher.profile.photo_url
-      assert banner_title == researcher.displayname
+      assert banner_photo_url == creator.profile.photo_url
+      assert banner_title == creator.displayname
     end
 
-    # test "delete", %{user: researcher, mock: mock, pool: pool} do
+    # test "delete", %{user: creator, mock: mock, pool: pool} do
     #   mock
     #   |> expect(:get, fn _, "/photos/random", "query=abstract" ->
     #     {:ok,
@@ -120,7 +120,7 @@ defmodule Systems.Advert.AssemblyTest do
     #   |> Project.Factories.build_project()
     #   |> Core.Repo.insert!()
 
-    #   {:ok, %{project_item: %{advert: %{id: id}}}} = Advert.Assembly.create(assignment, researcher, pool)
+    #   {:ok, %{project_item: %{advert: %{id: id}}}} = Advert.Assembly.create(assignment, creator, pool)
     #   advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
 
     #   Advert.Assembly.delete(advert)
@@ -132,7 +132,7 @@ defmodule Systems.Advert.AssemblyTest do
     #   assert Repo.get(Systems.Assignment.Model, advert.assignment_id) != nil
     # end
 
-    # test "copy", %{user: researcher, mock: mock, pool: pool} do
+    # test "copy", %{user: creator, mock: mock, pool: pool} do
     #   mock
     #   |> expect(:get, fn _, "/photos/random", "query=abstract" ->
     #     {:ok,
@@ -147,7 +147,7 @@ defmodule Systems.Advert.AssemblyTest do
     #     Assignment.Factories.create_assignment(31, 1)
     #     |> Core.Repo.preload(Assignment.Model.preload_graph(:down))
 
-    #   %{id: id} = Advert.Assembly.create(assignment, researcher, pool)
+    #   %{id: id} = Advert.Assembly.create(assignment, creator, pool)
 
     #   %{
     #     id: id,

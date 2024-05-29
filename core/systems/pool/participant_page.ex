@@ -4,13 +4,13 @@ defmodule Systems.Pool.ParticipantPage do
   import CoreWeb.UI.Member
   import Frameworks.Pixel.Content
 
-  alias Core.Accounts
   alias Frameworks.Pixel.Text
   alias Systems.Budget
+  alias Systems.Account
 
   @impl true
   def get_model(%{"id" => user_id}, _session, _socket) do
-    Accounts.get_user!(user_id, [:features, :profile])
+    Account.Public.get_user!(user_id, [:features, :profile])
   end
 
   @impl true

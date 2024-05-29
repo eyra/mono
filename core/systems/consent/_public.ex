@@ -93,7 +93,7 @@ defmodule Systems.Consent.Public do
     get_signature(context, user) != nil
   end
 
-  def get_signature(%Consent.AgreementModel{id: agreement_id}, %Core.Accounts.User{id: user_id}) do
+  def get_signature(%Consent.AgreementModel{id: agreement_id}, %Systems.Account.User{id: user_id}) do
     from(s in Consent.SignatureModel,
       join: r in Consent.RevisionModel,
       on: r.id == s.revision_id,
@@ -105,7 +105,7 @@ defmodule Systems.Consent.Public do
     |> List.first()
   end
 
-  def get_signature(%Consent.RevisionModel{id: revision_id}, %Core.Accounts.User{id: user_id}) do
+  def get_signature(%Consent.RevisionModel{id: revision_id}, %Systems.Account.User{id: user_id}) do
     from(s in Consent.SignatureModel,
       where: s.user_id == ^user_id,
       where: s.revision_id == ^revision_id

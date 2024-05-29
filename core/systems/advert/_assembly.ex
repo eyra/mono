@@ -1,7 +1,6 @@
 defmodule Systems.Advert.Assembly do
   import CoreWeb.Gettext
 
-  alias Core.Accounts
   alias Core.Authorization
   alias Core.Repo
   alias Ecto.Multi
@@ -13,6 +12,7 @@ defmodule Systems.Advert.Assembly do
   alias Systems.Promotion
   alias Systems.Pool
   alias Systems.Project
+  alias Systems.Account
 
   def delete(%Advert.Model{} = advert) do
     Multi.new()
@@ -50,7 +50,7 @@ defmodule Systems.Advert.Assembly do
       |> Project.Public.get_item_by()
       |> Project.Public.get_node_by_item!([:auth_node])
 
-    profile = user |> Accounts.get_profile()
+    profile = user |> Account.Public.get_profile()
 
     promotion_attrs = create_promotion_attrs(image_id, title, user, profile)
 

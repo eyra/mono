@@ -3,7 +3,7 @@ defmodule SignInWithApple.User do
   import Ecto.Changeset
 
   schema "sign_in_with_apple_users" do
-    belongs_to(:user, Core.Accounts.User)
+    belongs_to(:user, Systems.Account.User)
     field(:email, :string)
     field(:is_private_email, :boolean)
     field(:sub, :string)

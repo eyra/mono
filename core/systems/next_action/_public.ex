@@ -5,7 +5,7 @@ defmodule Systems.NextAction.Public do
 
   import Ecto.Query, warn: false
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Frameworks.Signal
 
   alias Systems.NextAction

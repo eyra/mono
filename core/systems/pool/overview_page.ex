@@ -1,6 +1,6 @@
 defmodule Systems.Pool.OverviewPage do
   @moduledoc """
-   The student overview screen.
+   The pool overview screen.
   """
   use Systems.Content.Composer, :live_workspace
 
@@ -33,7 +33,7 @@ defmodule Systems.Pool.OverviewPage do
 
   @impl true
   def compose(:share_view, %{active_pool: pool}) do
-    researchers = Core.Accounts.list_researchers([:profile])
+    researchers = Systems.Account.Public.list_creators([:profile])
     owners = Core.Authorization.users_with_role(pool, :owner, [:profile])
 
     %{

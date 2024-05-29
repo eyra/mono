@@ -1,7 +1,7 @@
 defmodule Core.APNS.DeviceToken do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   schema "apns_device_tokens" do
     field(:device_token, :string)

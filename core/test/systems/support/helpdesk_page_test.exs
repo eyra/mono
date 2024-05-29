@@ -8,7 +8,7 @@ defmodule Systems.Support.HelpdeskPageTest do
 
   describe "create support ticket" do
     test "a member can submit a new ticket", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Support.HelpdeskPage))
+      {:ok, view, _html} = live(conn, ~p"/support/helpdesk")
 
       view
       |> element("form")

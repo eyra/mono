@@ -136,21 +136,23 @@ defmodule Systems.Advert.PublicTest do
       assert %{expired: true} = Crew.Public.get_task!(task.id)
     end
 
-    test "payout_participant/2 One transaction of one student", %{budget: budget, user: user} do
-      student = Factories.insert!(:member, %{student: true})
+    test "payout_participant/2 One transaction of one participant", %{budget: budget, user: user} do
+      participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      Advert.Factories.create_task(["task1"], student, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, student, budget)
+      Advert.Factories.create_task(["task1"], participant, crew, :accepted, false, 31)
+      Budget.Factories.create_reward(assignment, participant, budget)
 
-      Advert.Public.payout_participant(assignment, student)
+      Advert.Public.payout_participant(assignment, participant)
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
+             ) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
@@ -158,11 +160,11 @@ defmodule Systems.Advert.PublicTest do
       assert %{credit: 10_000, debit: 5002} = Bookkeeping.Public.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 Two transactions of one student", %{budget: budget, user: user} do
-      student = Factories.insert!(:member, %{student: true})
+    test "payout_participant/2 Two transactions of one participant", %{budget: budget, user: user} do
+      participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
@@ -170,19 +172,21 @@ defmodule Systems.Advert.PublicTest do
       %{assignment: %{crew: crew2} = assignment2} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      Advert.Factories.create_task(["task1"], student, crew1, :accepted, false, 31)
-      Advert.Factories.create_task(["task2"], student, crew2, :accepted, false, 31)
+      Advert.Factories.create_task(["task1"], participant, crew1, :accepted, false, 31)
+      Advert.Factories.create_task(["task2"], participant, crew2, :accepted, false, 31)
 
-      Budget.Factories.create_reward(assignment1, student, budget)
-      Budget.Factories.create_reward(assignment2, student, budget)
+      Budget.Factories.create_reward(assignment1, participant, budget)
+      Budget.Factories.create_reward(assignment2, participant, budget)
 
-      Advert.Public.payout_participant(assignment1, student)
-      Advert.Public.payout_participant(assignment2, student)
+      Advert.Public.payout_participant(assignment1, participant)
+      Advert.Public.payout_participant(assignment2, participant)
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
+             ) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 2
@@ -190,12 +194,15 @@ defmodule Systems.Advert.PublicTest do
       assert %{credit: 10_000, debit: 5004} = Bookkeeping.Public.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 Two transactions of two students", %{budget: budget, user: user} do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
+    test "payout_participant/2 Two transactions of two participants", %{
+      budget: budget,
+      user: user
+    } do
+      participant1 = Factories.insert!(:member, %{creator: false})
+      participant2 = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
@@ -203,28 +210,32 @@ defmodule Systems.Advert.PublicTest do
       %{assignment: %{crew: crew2} = assignment2} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      Advert.Factories.create_task(["task1"], student1, crew1, :accepted, false, 31)
-      Advert.Factories.create_task(["task2"], student1, crew2, :accepted, false, 31)
-      Advert.Factories.create_task(["task3"], student2, crew1, :accepted, false, 31)
-      Advert.Factories.create_task(["task4"], student2, crew2, :accepted, false, 31)
+      Advert.Factories.create_task(["task1"], participant1, crew1, :accepted, false, 31)
+      Advert.Factories.create_task(["task2"], participant1, crew2, :accepted, false, 31)
+      Advert.Factories.create_task(["task3"], participant2, crew1, :accepted, false, 31)
+      Advert.Factories.create_task(["task4"], participant2, crew2, :accepted, false, 31)
 
-      Budget.Factories.create_reward(assignment1, student1, budget)
-      Budget.Factories.create_reward(assignment2, student1, budget)
-      Budget.Factories.create_reward(assignment1, student2, budget)
-      Budget.Factories.create_reward(assignment2, student2, budget)
+      Budget.Factories.create_reward(assignment1, participant1, budget)
+      Budget.Factories.create_reward(assignment2, participant1, budget)
+      Budget.Factories.create_reward(assignment1, participant2, budget)
+      Budget.Factories.create_reward(assignment2, participant2, budget)
 
-      Advert.Public.payout_participant(assignment1, student1)
-      Advert.Public.payout_participant(assignment2, student1)
-      Advert.Public.payout_participant(assignment1, student2)
-      Advert.Public.payout_participant(assignment2, student2)
+      Advert.Public.payout_participant(assignment1, participant1)
+      Advert.Public.payout_participant(assignment2, participant1)
+      Advert.Public.payout_participant(assignment1, participant2)
+      Advert.Public.payout_participant(assignment2, participant2)
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student1.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})
+             ) ==
                2
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student2.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})
+             ) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 4
@@ -232,31 +243,33 @@ defmodule Systems.Advert.PublicTest do
       assert %{credit: 10_000, debit: 5008} = Bookkeeping.Public.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student1.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant1.id})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student2.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant2.id})
     end
 
-    test "payout_participant/2 One transaction of one student (via signals)", %{
+    test "payout_participant/2 One transaction of one participant (via signals)", %{
       budget: budget,
       user: user
     } do
-      student = Factories.insert!(:member, %{student: true})
+      participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      task = Advert.Factories.create_task(["task1"], student, crew, :pending, false, 31)
-      Budget.Factories.create_reward(assignment, student, budget)
+      task = Advert.Factories.create_task(["task1"], participant, crew, :pending, false, 31)
+      Budget.Factories.create_reward(assignment, participant, budget)
 
-      # accept task should send signal to advert to reward student
+      # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task)
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
+             ) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
@@ -264,35 +277,37 @@ defmodule Systems.Advert.PublicTest do
       assert %{credit: 10_000, debit: 5002} = Bookkeeping.Public.balance({:fund, "test"})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 One transaction of one student failed: task already accepted (via signals)",
+    test "payout_participant/2 One transaction of one participant failed: task already accepted (via signals)",
          %{budget: budget, user: user} do
-      student = Factories.insert!(:member, %{student: true})
+      participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      task = Advert.Factories.create_task(["task1"], student, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, student, budget)
+      task = Advert.Factories.create_task(["task1"], participant, crew, :accepted, false, 31)
+      Budget.Factories.create_reward(assignment, participant, budget)
 
-      # accept task should send signal to advert to reward student
+      # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task)
 
       Bookkeeping.Public.list_accounts(["wallet"])
 
       assert Enum.empty?(Bookkeeping.Public.list_accounts(["wallet"]))
 
-      assert Enum.empty?(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id}))
+      assert Enum.empty?(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
+             )
     end
 
-    test "payout_participant/2 Multiple transactions of two students (via signals)", %{
+    test "payout_participant/2 Multiple transactions of two participants (via signals)", %{
       budget: budget,
       user: user
     } do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
+      participant1 = Factories.insert!(:member, %{creator: false})
+      participant2 = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
@@ -300,17 +315,17 @@ defmodule Systems.Advert.PublicTest do
       %{assignment: %{crew: crew2} = assignment2} =
         Advert.Factories.create_advert(user, :accepted, 1, budget)
 
-      task1 = Advert.Factories.create_task(["task1"], student1, crew1, :pending, false, 31)
-      task2 = Advert.Factories.create_task(["task2"], student1, crew2, :pending, false, 31)
-      task3 = Advert.Factories.create_task(["task3"], student2, crew1, :pending, false, 31)
-      _task4 = Advert.Factories.create_task(["task4"], student2, crew2, :pending, false, 31)
+      task1 = Advert.Factories.create_task(["task1"], participant1, crew1, :pending, false, 31)
+      task2 = Advert.Factories.create_task(["task2"], participant1, crew2, :pending, false, 31)
+      task3 = Advert.Factories.create_task(["task3"], participant2, crew1, :pending, false, 31)
+      _task4 = Advert.Factories.create_task(["task4"], participant2, crew2, :pending, false, 31)
 
-      Budget.Factories.create_reward(assignment1, student1, budget)
-      Budget.Factories.create_reward(assignment2, student1, budget)
-      Budget.Factories.create_reward(assignment1, student2, budget)
-      Budget.Factories.create_reward(assignment2, student2, budget)
+      Budget.Factories.create_reward(assignment1, participant1, budget)
+      Budget.Factories.create_reward(assignment2, participant1, budget)
+      Budget.Factories.create_reward(assignment1, participant2, budget)
+      Budget.Factories.create_reward(assignment2, participant2, budget)
 
-      # accept task should send signal to advert to reward student
+      # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task1)
       Crew.Public.accept_task(task2)
       Crew.Public.accept_task(task3)
@@ -318,10 +333,14 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student1.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})
+             ) ==
                2
 
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student2.id})) ==
+      assert Enum.count(
+               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})
+             ) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 3
@@ -329,106 +348,10 @@ defmodule Systems.Advert.PublicTest do
       assert %{credit: 10_000, debit: 5006} = Bookkeeping.Public.balance({:fund, "test"})
 
       assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student1.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant1.id})
 
       assert %{credit: 2, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student2.id})
-    end
-
-    test "sync_student_credits/0 One transaction of one student", %{budget: budget, user: user} do
-      student = Factories.insert!(:member, %{student: true})
-
-      %{assignment: %{crew: crew} = assignment} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
-
-      Advert.Factories.create_task(["task1"], student, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, student, budget)
-
-      Advert.Public.sync_student_credits()
-
-      assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id})) ==
-               1
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
-
-      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Public.balance({:fund, "test"})
-
-      assert %{credit: 2, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student.id})
-    end
-
-    test "sync_student_credits/0 One transaction of one student (sync twice -> no error)", %{
-      budget: budget,
-      user: user
-    } do
-      student = Factories.insert!(:member, %{student: true})
-
-      %{assignment: %{crew: crew} = assignment} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
-
-      Advert.Factories.create_task(["task1"], student, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, student, budget)
-
-      Advert.Public.sync_student_credits()
-      Advert.Public.sync_student_credits()
-
-      assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
-      assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student.id})) ==
-               1
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
-
-      assert %{credit: 10_000, debit: 5002} = Bookkeeping.Public.balance({:fund, "test"})
-
-      assert %{credit: 2, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student.id})
-    end
-
-    test "sync_student_credits/0 Two transactions of two students", %{budget: budget, user: user} do
-      student1 = Factories.insert!(:member, %{student: true})
-      student2 = Factories.insert!(:member, %{student: true})
-
-      %{assignment: %{crew: crew1} = assignment1} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
-
-      %{assignment: %{crew: crew2} = assignment2} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
-
-      Advert.Factories.create_task(["task1"], student1, crew1, :accepted, false, 31)
-      Advert.Factories.create_task(["task2"], student1, crew2, :accepted, false, 31)
-      Advert.Factories.create_task(["task3"], student2, crew1, :accepted, false, 31)
-      Advert.Factories.create_task(["task4"], student2, crew2, :accepted, false, 31)
-
-      Budget.Factories.create_reward(assignment1, student1, budget)
-      Budget.Factories.create_reward(assignment2, student1, budget)
-      Budget.Factories.create_reward(assignment1, student2, budget)
-      Budget.Factories.create_reward(assignment2, student2, budget)
-
-      Advert.Public.sync_student_credits()
-
-      assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
-      assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student1.id})) ==
-               2
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", student2.id})) ==
-               2
-
-      assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 4
-
-      assert %{credit: 10_000, debit: 5008} = Bookkeeping.Public.balance({:fund, "test"})
-
-      assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student1.id})
-
-      assert %{credit: 4, debit: 0} =
-               Bookkeeping.Public.balance({:wallet, "fake_currency", student2.id})
+               Bookkeeping.Public.balance({:wallet, "fake_currency", participant2.id})
     end
 
     defp yesterday() do

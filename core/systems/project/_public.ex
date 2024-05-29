@@ -4,7 +4,7 @@ defmodule Systems.Project.Public do
   import Systems.Project.Queries
 
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
 
   alias Systems.Assignment

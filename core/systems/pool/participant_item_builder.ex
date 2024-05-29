@@ -1,6 +1,6 @@
 defmodule Systems.Pool.ParticipantItemBuilder do
+  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
-  alias CoreWeb.Router.Helpers, as: Routes
 
   def view_model(
         %{
@@ -13,7 +13,7 @@ defmodule Systems.Pool.ParticipantItemBuilder do
           },
           features: features
         },
-        socket
+        _socket
       ) do
     subtitle = email
 
@@ -27,7 +27,7 @@ defmodule Systems.Pool.ParticipantItemBuilder do
       |> CoreWeb.UI.Timestamp.humanize()
 
     %{
-      path: Routes.live_path(socket, Systems.Pool.ParticipantPage, user_id),
+      path: ~p"/pool/participant/#{user_id}",
       title: fullname,
       subtitle: subtitle,
       quick_summary: quick_summery,

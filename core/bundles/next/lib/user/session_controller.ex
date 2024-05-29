@@ -2,6 +2,8 @@ defmodule Next.User.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 
+  alias Systems.Account
+
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   defp setup_sign_in_with_apple(conn, otp_app) do
@@ -29,8 +31,8 @@ defmodule Next.User.SessionController do
   def create(conn, %{"email" => email, "password" => password} = user_params) do
     require_feature(:password_sign_in)
 
-    if user = Core.Accounts.get_user_by_email_and_password(email, password) do
-      CoreWeb.UserAuth.log_in_user(conn, user, false, user_params)
+    if user = Account.Public.get_user_by_email_and_password(email, password) do
+      Account.UserAuth.log_in_user(conn, user, false, user_params)
     else
       message = dgettext("eyra-user", "Invalid email or password")
 
@@ -47,6 +49,6 @@ defmodule Next.User.SessionController do
   def delete(conn, _params) do
     conn
     |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
-    |> CoreWeb.UserAuth.log_out_user()
+    |> Account.UserAuth.log_out_user()
   end
 end

@@ -6,7 +6,7 @@ defmodule Core.APNS do
   import Ecto.Query, warn: false
   require Logger
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   alias Core.APNS.DeviceToken
 

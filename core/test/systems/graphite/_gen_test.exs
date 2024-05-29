@@ -44,20 +44,20 @@ defmodule Systems.Graphite.GenTest do
                |> Repo.preload(auth_node: [:role_assignments])
 
       assert [
-               %Core.Accounts.User{
+               %Systems.Account.User{
                  id: ^principal_1_id,
                  displayname: "aap-1"
                },
-               %Core.Accounts.User{
+               %Systems.Account.User{
                  id: ^principal_2_id,
                  displayname: "aap-2"
                }
-             ] = from(Core.Accounts.User) |> Repo.all()
+             ] = from(Systems.Account.User) |> Repo.all()
 
       assert [
-               %Core.Accounts.Features{},
-               %Core.Accounts.Features{}
-             ] = from(Core.Accounts.Features) |> Repo.all()
+               %Systems.Account.FeaturesModel{},
+               %Systems.Account.FeaturesModel{}
+             ] = from(Systems.Account.FeaturesModel) |> Repo.all()
 
       assert [
                %Systems.Account.UserProfileModel{},
@@ -74,8 +74,8 @@ defmodule Systems.Graphite.GenTest do
 
       assert [] = from(Graphite.ScoreModel) |> Repo.all()
       assert [] = from(Graphite.SubmissionModel) |> Repo.all()
-      assert [] = from(Core.Accounts.User) |> Repo.all()
-      assert [] = from(Core.Accounts.Features) |> Repo.all()
+      assert [] = from(Systems.Account.User) |> Repo.all()
+      assert [] = from(Systems.Account.FeaturesModel) |> Repo.all()
       assert [] = from(Systems.Account.UserProfileModel) |> Repo.all()
     end
   end

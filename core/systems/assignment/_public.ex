@@ -10,7 +10,7 @@ defmodule Systems.Assignment.Public do
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
   alias Frameworks.Signal

@@ -4,7 +4,7 @@ defmodule Systems.Support.HelpdeskForm do
   import Frameworks.Pixel.Form
   alias Systems.Support
   alias Core.Enums
-  alias Core.Accounts
+  alias Systems.Account
   alias Frameworks.Pixel.Selector
 
   @impl true
@@ -49,7 +49,7 @@ defmodule Systems.Support.HelpdeskForm do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-support", "ticket_created.info.flash"))
-         |> push_redirect(to: Accounts.start_page_path(user))}
+         |> push_redirect(to: Account.Public.start_page_path(user))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

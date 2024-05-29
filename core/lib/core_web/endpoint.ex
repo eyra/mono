@@ -12,7 +12,7 @@ defmodule CoreWeb.Endpoint do
     signing_salt: "3oh1/4M5"
   ]
 
-  socket("/socket", CoreWeb.UserSocket,
+  socket("/socket", Systems.Account.UserSocket,
     websocket: true,
     longpoll: false
   )

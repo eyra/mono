@@ -1,7 +1,6 @@
 defmodule Systems.Admin.OrgView do
   use CoreWeb, :live_component
 
-  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid
@@ -162,8 +161,7 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("handle_item_click", %{"item" => org_id}, socket) do
-    path = Routes.live_path(socket, Systems.Org.ContentPage, org_id)
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_redirect(socket, to: ~p"/org/node/#{org_id}")}
   end
 
   @impl true
@@ -181,7 +179,7 @@ defmodule Systems.Admin.OrgView do
     {
       :noreply,
       socket
-      |> push_redirect(to: Routes.live_path(socket, Org.ContentPage, org_id))
+      |> push_redirect(to: ~p"/org/node/#{org_id}")
     }
   end
 

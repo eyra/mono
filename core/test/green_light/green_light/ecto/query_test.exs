@@ -1,7 +1,7 @@
 defmodule Core.Authorization.DBTest do
   # use Core.DataCase
 
-  # alias Core.Accounts.User
+  # alias Systems.Account.User
   # alias Core.Authorization.TestEntity
   # alias Core.Authorization.DB
 

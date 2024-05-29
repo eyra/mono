@@ -39,7 +39,7 @@ msgid "role.coordinator"
 msgstr "Pool beheerder"
 
 #, elixir-autogen, elixir-format
-msgid "role.researcher"
+msgid "role.creator"
 msgstr "Onderzoeker"
 
 #, elixir-autogen, elixir-format

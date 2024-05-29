@@ -122,7 +122,7 @@ defmodule Frameworks.Utility.QueryTest do
       %{id: user_id} = Factories.insert!(:member)
 
       query =
-        Ecto.Query.from(u in Core.Accounts.User, as: :user)
+        Ecto.Query.from(u in Systems.Account.User, as: :user)
         |> Query.build(:user, profile: [title == nil])
 
       assert %{
@@ -133,7 +133,7 @@ defmodule Frameworks.Utility.QueryTest do
                ]
              } = query |> Map.from_struct()
 
-      assert %Core.Accounts.User{
+      assert %Systems.Account.User{
                id: ^user_id
              } = Core.Repo.one(query)
     end
@@ -143,7 +143,7 @@ defmodule Frameworks.Utility.QueryTest do
     Factories.insert!(:member)
 
     query =
-      Ecto.Query.from(u in Core.Accounts.User, as: :user)
+      Ecto.Query.from(u in Systems.Account.User, as: :user)
       |> Query.build(:user, [id == nil])
 
     assert %{
