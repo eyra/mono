@@ -90,7 +90,7 @@ defmodule Systems.Pool.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("eyra-pool", "overview.title")} menus={@menus} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={dgettext("eyra-pool", "overview.title")} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <div class="flex flex-col gap-20">

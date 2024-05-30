@@ -437,3 +437,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "advert_status.online"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.creator"
+msgstr ""

@@ -101,7 +101,7 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <div>
-      <.live_workspace title={@vm.title} menus={@menus} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
         <Area.content>
           <Margin.y id={:page_top} />
           <%= if Enum.count(@vm.node_cards) > 0 do %>

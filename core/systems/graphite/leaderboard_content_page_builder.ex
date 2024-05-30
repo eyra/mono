@@ -1,11 +1,11 @@
 defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
 
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Content
+  alias Systems.Graphite
 
   def view_model(%Graphite.LeaderboardModel{id: id, title: title} = leaderboard, assigns) do
     action_map = action_map(leaderboard, assigns)
@@ -203,23 +203,8 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp handle_publish(socket) do
-    socket |> set_status(:online)
-  end
-
-  defp handle_retract(socket) do
-    socket |> set_status(:offline)
-  end
-
-  defp handle_close(socket) do
-    socket |> set_status(:idle)
-  end
-
-  defp handle_open(socket) do
-    socket |> set_status(:concept)
-  end
-
-  defp set_status(%{assigns: %{model: leaderboard}} = socket, status) do
+  @impl true
+  def set_status(%{assigns: %{model: leaderboard}} = socket, status) do
     changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{status: status})
     {:ok, leaderboard} = Core.Persister.save(leaderboard, changeset)
     socket |> Phoenix.Component.assign(leaderboard: leaderboard)

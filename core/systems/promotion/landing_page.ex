@@ -114,7 +114,7 @@ defmodule Systems.Promotion.LandingPage do
   def render(assigns) do
     ~H"""
     <div id={:promotion_landing_page} phx-hook="ViewportResize">
-    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} popup={@popup} dialog={@dialog}>
+    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <:hero>
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>

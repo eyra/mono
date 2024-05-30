@@ -12,6 +12,7 @@ defmodule Systems.Content.Composer do
       use CoreWeb.LiveDefaults
 
       use CoreWeb.UI.Popup
+      use Frameworks.Pixel.ModalView
 
       import CoreWeb.Gettext
       import Systems.Content.Html
@@ -25,7 +26,7 @@ defmodule Systems.Content.Composer do
       @impl true
       def mount(params, session, socket) do
         {:ok, socket} = super(params, session, socket)
-        {:ok, socket |> assign(popup: nil, dialog: nil)}
+        {:ok, socket |> assign(popup: nil, dialog: nil, modal: nil)}
       end
     end
   end
@@ -39,6 +40,7 @@ defmodule Systems.Content.Composer do
       use CoreWeb.LiveDefaults
 
       use CoreWeb.UI.Popup
+      use Frameworks.Pixel.ModalView
 
       import CoreWeb.Gettext
       import Systems.Content.Html
@@ -62,7 +64,7 @@ defmodule Systems.Content.Composer do
       @impl true
       def mount(params, session, socket) do
         {:ok, socket} = super(params, session, socket)
-        {:ok, socket |> assign(popup: nil, dialog: nil)}
+        {:ok, socket |> assign(popup: nil, dialog: nil, modal: nil)}
       end
     end
   end

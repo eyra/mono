@@ -39,7 +39,7 @@ defmodule Systems.NextAction.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <%= if Enum.empty?(@vm.next_actions) do %>
         <div class="h-full">
           <div class="flex flex-col items-center w-full h-full">

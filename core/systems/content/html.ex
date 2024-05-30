@@ -6,11 +6,13 @@ defmodule Systems.Content.Html do
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
 
   import CoreWeb.UI.Popup
+  alias Frameworks.Pixel.ModalView
   import CoreWeb.UI.PlainDialog
 
   alias Frameworks.Pixel.Tabbar
   alias Frameworks.Pixel.Navigation
 
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
 
@@ -19,12 +21,14 @@ defmodule Systems.Content.Html do
     <div>
       <.popup_block popup={@popup} />
       <.plain_dialog_block dialog={@dialog} />
+      <ModalView.dynamic modal={@modal} />
     </div>
     """
   end
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
 
@@ -38,7 +42,7 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <.live_block popup={@popup} dialog={@dialog}/>
+      <.live_block modal={@modal} popup={@popup} dialog={@dialog}/>
 
       <%= render_slot(@inner_block) %>
     </.workspace>
@@ -48,6 +52,7 @@ defmodule Systems.Content.Html do
   attr(:user, :map, required: true)
   attr(:user_agent, :map, required: true)
   attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
 
@@ -61,7 +66,7 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <.live_block popup={@popup} dialog={@dialog}/>
+      <.live_block modal={@modal} popup={@popup} dialog={@dialog}/>
 
       <%= render_slot(@inner_block) %>
     </.website>
@@ -70,6 +75,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
 
@@ -78,7 +84,7 @@ defmodule Systems.Content.Html do
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <.live_block popup={@popup} dialog={@dialog}/>
+      <.live_block modal={@modal} popup={@popup} dialog={@dialog}/>
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
@@ -86,6 +92,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
   attr(:tabs, :list, required: true)
@@ -95,7 +102,7 @@ defmodule Systems.Content.Html do
 
   def tabbar_page(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
         <Navigation.action_bar>
           <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
         </Navigation.action_bar>
@@ -109,6 +116,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
   attr(:tabs, :list, required: true)
@@ -122,7 +130,7 @@ defmodule Systems.Content.Html do
   def management_page(assigns) do
     ~H"""
       <div id={:content_management_page} phx-hook="ViewportResize">
-        <.live_workspace title={@title} menus={@menus} popup={@popup} dialog={@dialog}>
+        <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
           <:top_bar>
             <Navigation.action_bar right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />

@@ -437,3 +437,11 @@ msgstr "Closed"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert_status.online"
 msgstr "Closed"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr "Verified"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.creator"
+msgstr "Creator"

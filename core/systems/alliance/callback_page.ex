@@ -65,7 +65,7 @@ defmodule Systems.Alliance.CallbackPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.hero_title} menus={@menus} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.hero_title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <Text.title1><%= @vm.title %></Text.title1>

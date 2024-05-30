@@ -25,7 +25,7 @@ defmodule Systems.Console.Page do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("eyra-ui", "dashboard.title")} menus={@menus} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={dgettext("eyra-ui", "dashboard.title")} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if @vm.next_best_action do %>

@@ -302,6 +302,10 @@ defmodule Fabric do
 
   # BASICS
 
+  def add_child(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket, child) do
+    Phoenix.Component.assign(socket, fabric: add_child(fabric, child))
+  end
+
   def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
     %Fabric.Model{fabric | children: [child]}
   end

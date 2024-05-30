@@ -41,6 +41,18 @@ defmodule Systems.Account.Public do
     |> get_display_label()
   end
 
+  def list_users(preload \\ []) do
+    user_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_internal_users(preload \\ []) do
+    user_query(internal?: true)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def list_creators(preload \\ []) do
     user_query(creator?: true)
     |> Repo.all()

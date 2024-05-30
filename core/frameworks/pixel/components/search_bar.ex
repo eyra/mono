@@ -69,7 +69,7 @@ defmodule Frameworks.Pixel.SearchBar do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_form"} for={%{}} phx-submit="submit" phx-change="change">
+      <.form id={"#{@id}_form"} for={%{}} phx-submit="submit" phx-change="change" phx-target={@myself}>
         <div class="flex flex-row">
           <input
             class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px"

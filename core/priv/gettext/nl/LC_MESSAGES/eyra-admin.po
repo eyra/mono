@@ -35,16 +35,8 @@ msgid "ticket.title"
 msgstr "Melding"
 
 #, elixir-autogen, elixir-format
-msgid "role.coordinator"
-msgstr "Pool beheerder"
-
-#, elixir-autogen, elixir-format
 msgid "role.creator"
 msgstr "Onderzoeker"
-
-#, elixir-autogen, elixir-format
-msgid "role.student"
-msgstr "Student"
 
 #, elixir-autogen, elixir-format
 msgid "reopen.ticket.button"
@@ -89,3 +81,11 @@ msgstr "Nieuwe pool"
 #, elixir-autogen, elixir-format
 msgid "system.citizen.pools.title"
 msgstr "Burgerpools"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "account.title"
+msgstr "Acties"
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""

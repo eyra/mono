@@ -16,22 +16,6 @@ defmodule Systems.Admin.OrgView do
 
   import Org.ItemView
 
-  # Handle Search Bar Update
-  @impl true
-  def update(%{search_bar: :org_search_bar, query_string: query_string, query: query}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        query: query,
-        query_string: query_string
-      )
-      |> prepare_organisations()
-      |> compose_child(:org_filters)
-    }
-  end
-
-  # Initial update
   @impl true
   def update(%{id: id, locale: locale}, socket) do
     filter_labels = Org.Types.labels([])
@@ -194,6 +178,21 @@ defmodule Systems.Admin.OrgView do
       socket
       |> assign(active_filters: active_filters)
       |> prepare_organisations()
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "search_query",
+        %{query: query, query_string: query_string, source: %{name: :org_search_bar}},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(query: query, query_string: query_string)
+      |> prepare_organisations()
+      |> compose_child(:org_filters)
     }
   end
 

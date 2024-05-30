@@ -437,3 +437,11 @@ msgstr "Gesloten"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert_status.online"
 msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.creator"
+msgstr ""

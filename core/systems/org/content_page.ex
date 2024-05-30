@@ -38,6 +38,7 @@ defmodule Systems.Org.ContentPage do
       <.management_page
         title={@vm.title}
         menus={@menus}
+        modal={@modal}
         popup={@popup}
         dialog={@dialog}
         tabs={@vm.tabs}

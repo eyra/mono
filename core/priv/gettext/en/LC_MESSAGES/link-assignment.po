@@ -9,19 +9,3 @@
 msgid ""
 msgstr ""
 "Language: en\n"
-
-#, elixir-autogen, elixir-format
-msgid "closed.dialog.text"
-msgstr "Unfortunately, this assignment is currently closed for participation."
-
-#, elixir-autogen, elixir-format
-msgid "closed.dialog.title"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "excluded.dialog.text"
-msgstr "The researcher excluded you based on your participation in a previous study."
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "excluded.dialog.title"
-msgstr "Unfortunately you cannot participate"

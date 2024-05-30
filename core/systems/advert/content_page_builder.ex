@@ -1,7 +1,10 @@
 defmodule Systems.Advert.ContentPageBuilder do
   use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
+
   import CoreWeb.Gettext
 
+  alias Systems.Content
   alias Systems.Advert
   alias Systems.Pool
   alias Systems.Monitor
@@ -238,23 +241,8 @@ defmodule Systems.Advert.ContentPageBuilder do
   defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
     do: [publish: publish, preview: preview]
 
-  defp handle_publish(socket) do
-    socket |> set_status(:online)
-  end
-
-  defp handle_retract(socket) do
-    socket |> set_status(:offline)
-  end
-
-  defp handle_close(socket) do
-    socket |> set_status(:idle)
-  end
-
-  defp handle_open(socket) do
-    socket |> set_status(:concept)
-  end
-
-  defp set_status(%{assigns: %{model: advert}} = socket, status) do
+  @impl true
+  def set_status(%{assigns: %{model: advert}} = socket, status) do
     {:ok, advert} = Advert.Public.update(advert, %{status: status})
     socket |> Phoenix.Component.assign(model: advert)
   end

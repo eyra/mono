@@ -5,6 +5,7 @@ defmodule Systems.Content.Public do
   alias Ecto.Multi
 
   alias Frameworks.Signal
+
   alias Systems.Content
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle

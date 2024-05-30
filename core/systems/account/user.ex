@@ -22,7 +22,6 @@ defmodule Systems.Account.User do
     field(:verified_at, :naive_datetime)
     field(:displayname, :string)
     field(:visited_pages, {:array, :string})
-    # Simplified role system, will be based on different rules later
     field(:creator, :boolean)
 
     has_one(:profile, Systems.Account.UserProfileModel)
@@ -152,7 +151,7 @@ defmodule Systems.Account.User do
   """
   def sso_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :displayname, :creator])
+    |> cast(attrs, [:email, :displayname, :creator, :verified_at])
     |> cast_assoc(:profile)
     |> put_change(:hashed_password, "no-password-set")
   end

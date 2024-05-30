@@ -117,14 +117,6 @@ defmodule Systems.Lab.CheckInView do
     {items |> Enum.take(@max_search_results), message}
   end
 
-  # data(changeset, :map)
-  # data(items, :list, default: [])
-  # data(message, :string, default: "")
-  # data(query, :string)
-
-  attr(:tool, :map, required: true)
-  attr(:parent, :any, required: true)
-
   @impl true
   def render(assigns) do
     ~H"""

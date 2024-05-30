@@ -9,19 +9,3 @@
 ## effect: edit them in PO (.po) files instead.
 msgid ""
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "closed.dialog.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "closed.dialog.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "excluded.dialog.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "excluded.dialog.title"
-msgstr ""
