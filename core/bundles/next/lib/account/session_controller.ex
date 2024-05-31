@@ -1,4 +1,4 @@
-defmodule Next.User.SessionController do
+defmodule Next.Account.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 

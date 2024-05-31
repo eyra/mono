@@ -3,7 +3,7 @@ defmodule CoreWeb.Live.User.Routes do
     quote do
       scope "/", Systems.Account do
         pipe_through([:browser, :redirect_if_user_is_authenticated])
-        live("/user/signup", Signup)
+        live("/user/signup/:user_type", SignupPage)
         live("/user/confirm/:token", ConfirmToken)
         live("/user/confirm", ConfirmToken)
         live("/user/await-confirmation", AwaitConfirmation)

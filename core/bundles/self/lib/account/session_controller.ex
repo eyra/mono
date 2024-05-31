@@ -1,8 +1,7 @@
-defmodule Self.User.SessionController do
+defmodule Self.Account.SessionController do
   use CoreWeb, :controller
   import CoreWeb.Gettext
 
-  alias CoreWeb.Meta
   alias Systems.Account
 
   plug(:setup_sign_in_with_apple, :core when action != :delete)
@@ -43,22 +42,13 @@ defmodule Self.User.SessionController do
     end
   end
 
-  defp render_new(%{request_path: request_path} = conn) do
-    logo = CoreWeb.Endpoint.static_path("/images/icons/#{Meta.bundle(conn)}_wide.svg")
-    title = Meta.bundle_title()
-
-    conn
-    |> init_tabs()
-    |> render(:new, bundle_logo: logo, bundle_title: title, request_path: request_path)
+  defp render_new(conn) do
+    redirect(conn, to: ~p"/user/signin")
   end
 
   def delete(conn, _params) do
     conn
     |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
     |> Account.UserAuth.log_out_user()
-  end
-
-  defp init_tabs(conn) do
-    assign(conn, :tabs, [])
   end
 end

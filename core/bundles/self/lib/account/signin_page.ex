@@ -1,4 +1,4 @@
-defmodule Next.User.Signin do
+defmodule Self.Account.SigninPage do
   use CoreWeb, :live_view
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
@@ -12,7 +12,7 @@ defmodule Next.User.Signin do
     {
       :ok,
       socket
-      |> assign(email: Map.get(params, "email"), active_menu_item: :profile)
+      |> assign(email: Map.get(params, "email"))
       |> update_form()
       |> update_menus()
     }
@@ -43,7 +43,7 @@ defmodule Next.User.Signin do
         <Area.form>
           <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
           <div>
-            <UserForm.password_signin for={@form} />
+            <UserForm.password_signin for={@form} user_type={:participant} />
           </div>
           <.spacing value="M" />
         </Area.form>

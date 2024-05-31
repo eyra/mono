@@ -8,14 +8,14 @@ defmodule Self.Bundle do
       quote do
         scope "/", Self do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
-          live("/user/signin", User.Signin)
-          get("/user/session", User.SessionController, :new)
-          post("/user/session", User.SessionController, :create)
+          live("/user/signin", Account.SigninPage)
+          get("/user/session", Account.SessionController, :new)
+          post("/user/session", Account.SessionController, :create)
         end
 
         scope "/", Self do
           pipe_through([:browser])
-          delete("/user/session", User.SessionController, :delete)
+          delete("/user/session", Account.SessionController, :delete)
         end
 
         scope "/", Systems do
@@ -29,7 +29,7 @@ defmodule Self.Bundle do
   def grants do
     if include?() do
       quote do
-        grant_access(Self.User.Signin, [:visitor, :member])
+        grant_access(Self.Account.SigninPage, [:visitor, :member])
       end
     end
   end

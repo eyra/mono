@@ -169,6 +169,7 @@ defmodule CoreWeb do
       import Core.FeatureFlags
       import Core.Authorization, only: [can?: 4]
 
+      import CoreWeb.Gettext
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder
 

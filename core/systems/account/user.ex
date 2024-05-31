@@ -71,6 +71,8 @@ defmodule Systems.Account.User do
       String.match?(email, email_format())
   end
 
+  def valid_email?(nil), do: false
+
   def validate_email(changeset) do
     changeset
     |> validate_required([:email])

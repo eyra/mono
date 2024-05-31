@@ -1,6 +1,7 @@
 defmodule Systems.Account.UserForm do
   use CoreWeb, :html
 
+  import CoreWeb.Gettext
   import Frameworks.Pixel.Form
 
   attr(:changeset, :map, required: true)
@@ -17,6 +18,7 @@ defmodule Systems.Account.UserForm do
     """
   end
 
+  attr(:user_type, :atom, required: true)
   attr(:for, :any, default: %{})
 
   def password_signin(assigns) do
@@ -28,15 +30,11 @@ defmodule Systems.Account.UserForm do
       <.spacing value="S" />
       <Button.submit_wide label={dgettext("eyra-account", "signin.button")} bg_color="bg-grey1" />
       <.spacing value="S" />
-      <%!--
-      <.checkbox form={form} field={:remember_me} label_text={dgettext("link-survey", "rememberme.label")} />
-      <.spacing value="XS" />
-      --%>
 
       <div class="flex flex-row" >
         <.spacing value="M" />
         <Button.dynamic
-          action={%{type: :redirect, to: ~p"/user/signup"}}
+          action={%{type: :redirect, to: ~p"/user/signup/#{@user_type}"}}
           face={%{type: :link, text: dgettext("eyra-user", "register.link")}}
         />
         <div class="ml-2"></div>|<div class="ml-2"></div>
@@ -83,6 +81,27 @@ defmodule Systems.Account.UserForm do
         </div>
       </div>
     </a>
+    """
+  end
+
+  def surfconext_signin(assigns) do
+    ~H"""
+      <a href="/surfconext">
+        <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
+          <div class="flex w-full justify-center items-center">
+            <div>
+              <img class="mr-3 -mt-1" src={~p"/images/surfconext.svg"} alt="">
+            </div>
+            <div class="h-11 focus:outline-none">
+              <div class="flex flex-col justify-center h-full items-center rounded">
+                <div class="text-white text-button font-button">
+                  <%= dgettext("eyra-account", "login.surf.button") %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
     """
   end
 end

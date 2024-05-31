@@ -61,7 +61,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
 
   grant_access(Systems.Account.UserSignin, [:visitor])
-  grant_access(Systems.Account.Signup, [:visitor])
+  grant_access(Systems.Account.SignupPage, [:visitor])
   grant_access(Systems.Account.ResetPassword, [:visitor])
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.AwaitConfirmation, [:visitor])

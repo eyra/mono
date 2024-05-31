@@ -1,12 +1,19 @@
 defmodule Systems.Account.AwaitConfirmation do
   use CoreWeb, :live_view
   import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   alias Frameworks.Pixel.Text
 
   def mount(_params, _session, socket) do
     require_feature(:password_sign_in)
-    {:ok, socket}
+
+    {
+      :ok,
+      socket
+      |> assign(active_menu_item: :profile)
+      |> update_menus()
+    }
   end
 
   # data(changeset, :any)

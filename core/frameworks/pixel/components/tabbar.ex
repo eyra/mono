@@ -13,6 +13,10 @@ defmodule Frameworks.Pixel.Tabbar do
   defp gap(:segmented), do: "gap-0"
 
   defp shape(%{size: :wide, type: :segmented}), do: "rounded-full overflow-hidden h-10 bg-grey5"
+
+  defp shape(%{size: :full, type: :segmented}),
+    do: "rounded-full overflow-hidden h-10 w-full bg-grey5"
+
   defp shape(%{size: :narrow}), do: "w-full"
   defp shape(_), do: ""
 
@@ -25,6 +29,9 @@ defmodule Frameworks.Pixel.Tabbar do
   def container(assigns) do
     ~H"""
     <div id={@id} data-initial-tab={@initial_tab} phx-hook="Tabbar" class={"#{shape(assigns)}"}>
+      <%= if @size == :full do %>
+        <.container_full type={@type} tabs={@tabs} />
+      <% end %>
       <%= if @size == :wide do %>
         <.container_wide type={@type} tabs={@tabs} />
       <% end %>
@@ -46,6 +53,23 @@ defmodule Frameworks.Pixel.Tabbar do
           <.item tabbar="wide" opts="" {get_tab(@type, tab, index)} />
         </div>
       <% end %>
+    </div>
+    """
+  end
+
+  attr(:type, :atom, default: :seperated)
+  attr(:tabs, :any, required: true)
+
+  def container_full(assigns) do
+    ~H"""
+    <div id="container_full" class={"flex flex-row items-center h-full w-full #{gap(@type)}"}>
+      <div class="flex flex-row h-full w-full">
+        <%= for {tab, index} <- Enum.with_index(@tabs) do %>
+          <div class="flex-1 h-full">
+            <.item tabbar="full" opts="" {get_tab(@type, tab, index)} />
+          </div>
+        <% end %>
+      </div>
     </div>
     """
   end
@@ -93,11 +117,14 @@ defmodule Frameworks.Pixel.Tabbar do
   end
 
   attr(:tabs, :list, required: true)
+  attr(:include_top_margin, :boolean, default: true)
 
   def content(assigns) do
     ~H"""
     <div>
-      <div class="h-navbar-height" />
+      <%= if @include_top_margin do %>
+        <div class="h-navbar-height" />
+      <% end %>
       <%= for tab <- @tabs do %>
         <.tab id={tab.id}>
           <%= if Map.has_key?(tab, :live_component) do %>
@@ -194,8 +221,11 @@ defmodule Frameworks.Pixel.Tabbar do
 
   def idle_shape("wide", :segmented, false, true), do: "h-full px-4 bg-warning"
   def idle_shape("wide", :segmented, _, _), do: "h-full px-4 bg-grey5"
+  def idle_shape("full", :segmented, false, true), do: "h-full bg-warning"
+  def idle_shape("full", :segmented, _, _), do: "h-full bg-grey5"
   def idle_shape(_, _, _, _), do: "rounded-full"
 
+  def active_shape("full", :segmented), do: "h-full bg-primary"
   def active_shape(_, :segmented), do: "h-full px-4 bg-primary"
   def active_shape(_, _), do: "rounded-full"
 
@@ -237,9 +267,9 @@ defmodule Frameworks.Pixel.Tabbar do
       <% end %>
 
       <%= if @title do %>
-        <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center w-full">
           <div
-            class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
+            class={"title text-label font-label #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
             idle-class={idle_title(@ready, @show_errors)}
             active-class={active_title(@type)}
           >

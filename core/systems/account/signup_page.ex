@@ -1,4 +1,4 @@
-defmodule Systems.Account.Signup do
+defmodule Systems.Account.SignupPage do
   @moduledoc """
   The home screen.
   """
@@ -10,23 +10,26 @@ defmodule Systems.Account.Signup do
   alias Systems.Account.UserForm
   alias Systems.Account.User
 
-  def mount(_params, _session, socket) do
+  def mount(%{"user_type" => user_type}, _session, socket) do
     require_feature(:password_sign_in)
+    creator? = user_type == "creator"
     changeset = Account.Public.change_user_registration(%User{})
 
-    {:ok,
-     socket
-     |> assign(changeset: changeset, active_menu_item: nil)
-     |> update_menus()}
+    {
+      :ok,
+      socket
+      |> assign(
+        creator?: creator?,
+        changeset: changeset,
+        active_menu_item: nil
+      )
+      |> update_menus()
+    }
   end
 
   @impl true
-  def handle_event("signup", %{"user" => user_params}, socket) do
-    # See:
-    # Apply temp: https://github.com/eyra/mono/issues/558
-    # Revert: https://github.com/eyra/mono/issues/563
-
-    user_params = Map.put(user_params, "researcher", true)
+  def handle_event("signup", %{"user" => user_params}, %{assigns: %{creator?: creator?}} = socket) do
+    user_params = Map.put(user_params, "creator", creator?)
 
     case Account.Public.register_user(user_params) do
       {:error, %Ecto.Changeset{} = changeset} ->

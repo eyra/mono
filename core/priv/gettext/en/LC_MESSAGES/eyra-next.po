@@ -1,0 +1,24 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "creator.signin.title"
+msgstr "Creator"
+
+#, elixir-autogen, elixir-format
+msgid "participant.signin.title"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "surfconext.signin.body"
+msgstr "You can use your institution credentials to sign in on Next, through <span class=\"text-primary underline\"><a href=\"https://www.surf.nl/en/services/surfconext\" target=\"_blank\">SURFconext</a></span>. Your personal data is used to ensure proper functioning of the platform. More info? Check out our <span class=\"text-primary underline\"><a href=\"https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752\" target=\"_blank\">privacy statement</a></span>."

@@ -36,7 +36,8 @@ defmodule Systems.Admin.AccountView do
         form: form,
         active_filters: active_filters,
         query: query,
-        query_string: query_string
+        query_string: query_string,
+        user_count: 0
       )
       |> update_users()
       |> compose_child(:filter_selector)
@@ -137,7 +138,7 @@ defmodule Systems.Admin.AccountView do
   defp user_action_button(%Account.User{creator: false} = user, target) do
     %{
       action: %{type: :send, event: "make_creator", item: user.id, target: target},
-      face: %{type: :icon, label: "Creator", icon: :add}
+      face: %{type: :label, label: "Make creator", icon: :add}
     }
   end
 
@@ -210,7 +211,7 @@ defmodule Systems.Admin.AccountView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-admin", "account.title") %></Text.title2>
+        <Text.title2><%= dgettext("eyra-admin", "account.title") %> <span class="text-primary"><%= Enum.count(@users) %></span></Text.title2>
         <div class="flex flex-row gap-3 items-center">
           <div class="font-label text-label">Filter:</div>
             <.child name={:filter_selector} fabric={@fabric} />
