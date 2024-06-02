@@ -5,6 +5,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   alias Phoenix.LiveView
 
   alias Systems.Advert
+  alias Systems.Pool
   alias Systems.Promotion
   alias Systems.Assignment
 
@@ -71,10 +72,16 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   def handle_apply(
         %{
           assigns: %{
-            vm: %{call_to_action: %{advert: %{promotion: promotion, assignment: %{id: id}}}}
+            current_user: user,
+            vm: %{
+              call_to_action: %{
+                advert: %{assignment: %{id: id}, promotion: promotion, submission: %{pool: pool}}
+              }
+            }
           }
         } = socket
       ) do
+    Pool.Public.add_participant!(pool, user)
     Promotion.Private.log_performance_event(promotion, :clicks)
     LiveView.push_redirect(socket, to: ~p"/assignment/#{id}/apply")
   end

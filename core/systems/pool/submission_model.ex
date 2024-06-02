@@ -32,7 +32,7 @@ defmodule Systems.Pool.SubmissionModel do
   def preload_graph(:down), do: preload_graph([:criteria, :pool_minimal])
 
   def preload_graph(:pool_minimal),
-    do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node, :participants])]
+    do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node])]
 
   def preload_graph(:criteria), do: [criteria: []]
 

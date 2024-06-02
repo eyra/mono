@@ -14,6 +14,7 @@ defmodule Next.Bundle do
         scope "/", Next do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", Account.SigninPage)
+          live("/user/signin/:user_type", Account.SigninPage)
           get("/user/session", Account.SessionController, :new)
           post("/user/session", Account.SessionController, :create)
         end

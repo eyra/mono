@@ -6,11 +6,8 @@ defmodule Systems.Student.Pool.OverviewPlugin do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid
 
-  alias Systems.{
-    Pool
-  }
+  alias Systems.Pool
 
-  # Initial update
   @impl true
   def update(%{id: id, user: user}, socket) do
     {
@@ -28,7 +25,7 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     pools =
       Pool.Public.list_by_director(
         "student",
-        Pool.Model.preload_graph([:org, :participants, :submission, :auth_node])
+        Pool.Model.preload_graph([:org, :submission, :auth_node])
       )
       |> Enum.filter(&owner?(&1, user))
 
@@ -120,7 +117,9 @@ defmodule Systems.Student.Pool.OverviewPlugin do
     }
   end
 
-  defp description(%{participants: participants}) do
+  defp description(%Pool.Model{} = pool) do
+    participants = Pool.Public.list_participants(pool)
+
     [
       "#{dgettext("link-studentpool", "participants.label")}: #{Enum.count(participants)}"
     ]

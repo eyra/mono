@@ -10,7 +10,8 @@ defmodule Next.Account.SigninPage do
 
   @impl true
   def mount(params, _session, socket) do
-    initial_tab = Map.get(params, "tab")
+    user_type = Map.get(params, "user_type", "participant")
+    initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
 
     {
@@ -18,6 +19,7 @@ defmodule Next.Account.SigninPage do
       socket
       |> assign(
         email: Map.get(params, "email"),
+        user_type: user_type,
         initial_tab: initial_tab,
         tabbar_id: tabbar_id,
         show_errors: true

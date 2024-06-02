@@ -1,6 +1,7 @@
 defmodule Systems.Pool.Public do
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
+  import Systems.Pool.Queries
 
   alias Ecto.Multi
   alias Ecto.Changeset
@@ -83,18 +84,6 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
-  def list_by_currency(%{id: currency_id}) do
-    list_by_currency(currency_id)
-  end
-
-  def list_by_currency(currency_id, preload \\ []) do
-    from(pool in Pool.Model,
-      where: pool.currency_id == ^currency_id,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
   def list_by_director(director, preload \\ []) do
     from(pool in Pool.Model,
       where: pool.director == ^director,
@@ -126,6 +115,10 @@ defmodule Systems.Pool.Public do
     )
     |> Repo.all()
     |> Enum.map(&Directable.director/1)
+  end
+
+  def list_participants(%Pool.Model{} = pool) do
+    Authorization.users_with_role(pool, :participant)
   end
 
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
@@ -171,20 +164,8 @@ defmodule Systems.Pool.Public do
   defp map_string(term) when is_atom(term), do: Atom.to_string(term)
   defp map_string(term) when is_binary(term), do: term
 
-  def get_participant!(%Pool.Model{} = pool, %Account.User{} = user, preload \\ []) do
-    from(participant in Pool.ParticipantModel,
-      where: participant.pool_id == ^pool.id,
-      where: participant.user_id == ^user.id,
-      preload: ^preload
-    )
-    |> Repo.one!()
-  end
-
   def participant?(%Pool.Model{} = pool, %Account.User{} = user) do
-    from(participant in Pool.ParticipantModel,
-      where: participant.pool_id == ^pool.id,
-      where: participant.user_id == ^user.id
-    )
+    pool_query(pool, user, :participant)
     |> Repo.exists?()
   end
 
@@ -196,21 +177,14 @@ defmodule Systems.Pool.Public do
     Authorization.remove_role!(user, pool, :owner)
   end
 
-  def link!(%Pool.Model{} = pool, %Account.User{} = user) do
-    %Pool.ParticipantModel{}
-    |> Pool.ParticipantModel.changeset(pool, user)
-    |> Repo.insert!(
-      on_conflict: :nothing,
-      conflict_target: [:pool_id, :user_id]
-    )
+  def add_participant!(pool, user) do
+    if not Authorization.user_has_role?(user, pool, :participant) do
+      :ok = Authorization.assign_role(user, pool, :participant)
+    end
   end
 
-  def unlink!(%Pool.Model{} = pool, %Account.User{} = user) do
-    from(p in Pool.ParticipantModel,
-      where: p.pool_id == ^pool.id,
-      where: p.user_id == ^user.id
-    )
-    |> Repo.delete_all()
+  def remove_participant(pool, user) do
+    Authorization.remove_role!(user, pool, :participant)
   end
 
   def get_submission!(term, preload \\ [:criteria])
@@ -459,6 +433,6 @@ defmodule Systems.Pool.Public do
 
   defp update_pools(_, _, _), do: nil
 
-  defp update_pool(pool, user, :add), do: link!(pool, user)
-  defp update_pool(pool, user, :delete), do: unlink!(pool, user)
+  defp update_pool(pool, user, :add), do: add_participant!(pool, user)
+  defp update_pool(pool, user, :delete), do: remove_participant(pool, user)
 end

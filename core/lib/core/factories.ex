@@ -563,7 +563,21 @@ defmodule Core.Factories do
   end
 
   def build(:pool, %{} = attributes) do
-    %Pool.Model{}
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
+
+    {org_node, attributes} =
+      Map.pop(
+        attributes,
+        :org_node,
+        build(:org_node, %{type: :university, identifier: random_identifier(:org)})
+      )
+
+    %Pool.Model{
+      auth_node: auth_node,
+      currency: currency,
+      org: org_node
+    }
     |> struct!(attributes)
   end
 

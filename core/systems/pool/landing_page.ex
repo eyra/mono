@@ -42,12 +42,12 @@ defmodule Systems.Pool.LandingPage do
   end
 
   defp register(%{assigns: %{vm: %{pool: pool}, current_user: user}} = socket) do
-    Pool.Public.link!(pool, user)
+    Pool.Public.add_participant!(pool, user)
     socket
   end
 
   defp unregister(%{assigns: %{vm: %{pool: pool}, current_user: user}} = socket) do
-    Pool.Public.unlink!(pool, user)
+    Pool.Public.remove_participant(pool, user)
     socket
   end
 

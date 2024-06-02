@@ -32,11 +32,6 @@ defmodule Systems.Pool.Model do
 
     has_many(:submissions, Pool.SubmissionModel, foreign_key: :pool_id)
 
-    many_to_many(:participants, User,
-      join_through: Pool.ParticipantModel,
-      join_keys: [pool_id: :id, user_id: :id]
-    )
-
     timestamps()
   end
 
@@ -86,14 +81,12 @@ defmodule Systems.Pool.Model do
       preload_graph([
         :currency,
         :org,
-        :participants,
         :submissions,
         :auth_node
       ])
 
   def preload_graph(:currency), do: [currency: Budget.CurrencyModel.preload_graph(:full)]
   def preload_graph(:org), do: [org: Org.NodeModel.preload_graph(:full)]
-  def preload_graph(:participants), do: [participants: [:profile, :features]]
   def preload_graph(:submission), do: [submission: [:criteria]]
   def preload_graph(:auth_node), do: [auth_node: []]
 

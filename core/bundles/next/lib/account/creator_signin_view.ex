@@ -6,11 +6,11 @@ defmodule Next.Account.CreatorSigninView do
   alias Systems.Account.User
 
   @impl true
-  def update(%{email: email}, socket) do
+  def update(%{blocks: blocks, email: email}, socket) do
     {
       :ok,
       socket
-      |> assign(email: email)
+      |> assign(blocks: blocks, email: email)
       |> update_password_form()
     }
   end
@@ -30,13 +30,21 @@ defmodule Next.Account.CreatorSigninView do
   def render(assigns) do
     ~H"""
       <div>
-        <Text.body_small><%= raw(dgettext("eyra-next", "surfconext.signin.body")) %></Text.body_small>
-        <.spacing value="XS" />
-        <.surfconext_signin />
-        <.spacing value="S" />
-        <.line />
-        <.spacing value="M" />
-        <.password_signin for={@password_form} user_type={:creator}/>
+      <%= for block <- @blocks do %>
+          <%= if block == :surfconext do %>
+            <Text.body_small><%= raw(dgettext("eyra-next", "surfconext.signin.body")) %></Text.body_small>
+            <.spacing value="XS" />
+            <.surfconext_signin />
+          <% end %>
+          <%= if block == :password do %>
+            <.password_signin for={@password_form} user_type={:creator}/>
+          <% end %>
+          <%= if block == :seperator do %>
+            <.spacing value="S" />
+            <.line />
+            <.spacing value="M" />
+          <% end %>
+        <% end %>
       </div>
     """
   end

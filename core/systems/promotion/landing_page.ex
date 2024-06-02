@@ -106,6 +106,10 @@ defmodule Systems.Promotion.LandingPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
+  end
+
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"

@@ -9,7 +9,7 @@ config :core,
 
 config :core, Systems.Account.UserAuth,
   researcher_signed_in_page: "/project",
-  participant_signed_in_page: "/project"
+  participant_signed_in_page: "/console"
 
 config :core, :meta,
   bundle_title: "Self",

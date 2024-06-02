@@ -6,11 +6,9 @@ defmodule Systems.Advert.SubmissionView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept.Directable
 
-  alias Systems.{
-    Advert,
-    Assignment,
-    Pool
-  }
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Pool
 
   @enums_mapping %{
     genders: Genders,
@@ -130,7 +128,7 @@ defmodule Systems.Advert.SubmissionView do
   defp update_ui(
          %{
            assigns: %{
-             submission: %{pool: %{name: pool_name, participants: participants} = pool},
+             submission: %{pool: %{name: pool_name} = pool},
              excluded_user_ids: excluded_user_ids
            }
          } = socket,
@@ -141,7 +139,11 @@ defmodule Systems.Advert.SubmissionView do
       |> Enum.map(&get_inclusion_labels(&1, criteria))
       |> Map.new()
 
-    included_user_ids = Enum.map(participants, & &1.id)
+    included_user_ids =
+      pool
+      |> Pool.Public.list_participants()
+      |> Enum.map(& &1.id)
+
     pool_size = Enum.count(included_user_ids)
     pool_title = Pool.Model.title(pool_name)
 

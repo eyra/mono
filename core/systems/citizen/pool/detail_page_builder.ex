@@ -1,11 +1,9 @@
 defmodule Systems.Citizen.Pool.DetailPageBuilder do
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Citizen,
-    Pool,
-    Advert
-  }
+  alias Systems.Citizen
+  alias Systems.Pool
+  alias Systems.Advert
 
   def view_model(pool, assigns) do
     %{
@@ -14,11 +12,9 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
     }
   end
 
-  defp create_tabs(
-         %{initial_tab: initial_tab},
-         %{participants: participants} = pool
-       ) do
+  defp create_tabs(%{initial_tab: initial_tab}, pool) do
     adverts = load_adverts(pool)
+    participants = Pool.Public.list_participants(pool)
 
     [
       %{

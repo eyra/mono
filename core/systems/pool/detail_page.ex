@@ -17,7 +17,7 @@ defmodule Systems.Pool.DetailPage do
   def get_model(%{"id" => id}, _session, _socket) do
     Pool.Public.get!(
       String.to_integer(id),
-      Pool.Model.preload_graph([:org, :currency, :participants])
+      Pool.Model.preload_graph([:org, :currency, :auth_node])
     )
   end
 

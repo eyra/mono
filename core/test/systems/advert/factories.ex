@@ -17,7 +17,7 @@ defmodule Systems.Advert.Factories do
         schedule_start \\ nil,
         schedule_end \\ nil
       ) do
-    promotion = Factories.insert!(:promotion)
+    promotion = Factories.insert!(:promotion, %{director: :advert})
 
     pool = Factories.insert!(:pool, %{name: "test_pool", director: :citizen})
 

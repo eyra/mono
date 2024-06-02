@@ -3,13 +3,11 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
 
   import CoreWeb.UI.Responsive.Breakpoint
 
-  alias Systems.{
-    Pool,
-    Advert,
-    Budget,
-    Bookkeeping,
-    Student
-  }
+  alias Systems.Pool
+  alias Systems.Advert
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Student
 
   def view_model(pool, assigns) do
     %{
@@ -18,11 +16,9 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     }
   end
 
-  defp create_tabs(
-         %{initial_tab: initial_tab} = assigns,
-         %{participants: participants} = pool
-       ) do
+  defp create_tabs(%{initial_tab: initial_tab} = assigns, pool) do
     adverts = load_adverts(pool)
+    participants = Pool.Public.list_participants(pool)
     dashboard = load_dashboard(assigns, pool)
 
     [
@@ -63,11 +59,14 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
   defp scale({:unknown, _}), do: 5
   defp scale(breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
 
-  defp load_dashboard(%{breakpoint: breakpoint}, %{
-         target: target,
-         currency: currency,
-         participants: participants
-       }) do
+  defp load_dashboard(
+         %{breakpoint: breakpoint},
+         %Pool.Model{
+           target: target,
+           currency: currency
+         } = pool
+       ) do
+    participants = Pool.Public.list_participants(pool)
     scale = scale(breakpoint)
 
     wallets = Budget.Public.list_wallets(currency)
