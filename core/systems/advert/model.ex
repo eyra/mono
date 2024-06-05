@@ -46,6 +46,8 @@ defmodule Systems.Advert.Model do
   def preload_graph(:submission), do: [submission: Pool.SubmissionModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
+  def auth_tree(%Advert.Model{auth_node: auth_node}), do: auth_node
+
   def tag(_) do
     dgettext("eyra-advert", "project.item.tag")
   end

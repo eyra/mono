@@ -74,6 +74,14 @@ defmodule Systems.Project.ItemModel do
     Graphite.LeaderboardModel.auth_tree(leaderboard)
   end
 
+  def auth_tree(%Project.ItemModel{advert: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :advert))
+  end
+
+  def auth_tree(%Project.ItemModel{advert: advert}) when not is_nil(advert) do
+    Advert.Model.auth_tree(advert)
+  end
+
   def auth_tree(items) when is_list(items) do
     Enum.map(items, &auth_tree/1)
   end

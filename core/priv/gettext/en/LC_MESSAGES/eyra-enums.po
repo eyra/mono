@@ -408,7 +408,7 @@ msgstr "Public"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "project_item_templates.questionnaire"
-msgstr "Panl Questionnaire"
+msgstr "Panl questionnaire"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.general_instruction"

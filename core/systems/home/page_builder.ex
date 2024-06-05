@@ -56,7 +56,7 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp put_locale(%{creator: false}, true) do
+  defp put_locale(%Account.User{creator: false}, true) do
     CoreWeb.LiveLocale.put_locale("nl")
   end
 

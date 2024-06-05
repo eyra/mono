@@ -46,7 +46,7 @@ defmodule Frameworks.Pixel.Navigation do
   attr(:right_bar_buttons, :list, default: [])
   attr(:more_buttons, :list, default: [])
   attr(:size, :atom, default: :wide)
-  attr(:hide_seperator, :boolean, default: false)
+  attr(:hide_seperator, :boolean, default: true)
   slot(:inner_block, required: true)
 
   def action_bar(%{size: size, right_bar_buttons: right_bar_buttons} = assigns) do
