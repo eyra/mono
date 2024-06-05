@@ -7,6 +7,7 @@ defmodule Systems.Advert.SubmissionView do
   alias Frameworks.Concept.Directable
 
   alias Systems.Advert
+  alias Systems.Project
   alias Systems.Assignment
   alias Systems.Pool
 
@@ -94,7 +95,10 @@ defmodule Systems.Advert.SubmissionView do
       |> Enum.map(& &1.id)
 
     advert_labels =
-      Advert.Public.list_owned_adverts(user, preload: [:promotion, :assignment])
+      Project.Public.list_owned_projects(user, preload: Project.Model.preload_graph(:down))
+      |> Enum.flat_map(& &1.root.items)
+      |> Enum.reject(&(&1.advert == nil))
+      |> Enum.map(& &1.advert)
       |> Enum.filter(&(&1.id != advert_id))
       |> Enum.map(&to_label(&1, excluded_assignment_ids))
 

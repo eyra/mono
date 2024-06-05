@@ -19,10 +19,6 @@ msgid "persister.saved.flash"
 msgstr "Saved"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.console"
-msgstr "My console"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "My profile"
 
@@ -41,10 +37,6 @@ msgstr "Menu"
 #, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
-
-#, elixir-autogen, elixir-format
-msgid "dashboard.title"
-msgstr "My console"
 
 #, elixir-autogen, elixir-format
 msgid "todo.title"
@@ -97,10 +89,6 @@ msgstr "yesterday at %{time}"
 #, elixir-autogen, elixir-format
 msgid "authentication.required.message"
 msgstr "Please sign in first"
-
-#, elixir-autogen, elixir-format
-msgid "start.page.console"
-msgstr "Go to console"
 
 #, elixir-autogen, elixir-format
 msgid "duplicate.button"
@@ -205,3 +193,11 @@ msgstr "tomorrow at %{time}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.nextweek"
 msgstr "next %{weekday} at %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.desktop"
+msgstr "Desktop"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.workspace"
+msgstr "My workspace"

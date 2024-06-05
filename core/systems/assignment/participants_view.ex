@@ -79,7 +79,7 @@ defmodule Systems.Assignment.ParticipantsView do
         _payload,
         %{assigns: %{assignment: assignment, user: user}} = socket
       ) do
-    if pool = Pool.Public.get_by_name("Panl") do
+    if pool = Pool.Public.get_panl() do
       Advert.Assembly.create(assignment, user, pool)
     else
       Logger.error("Panl pool not found")

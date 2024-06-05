@@ -14,8 +14,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   alias Core.ImageHelpers
 
-  def view_model(%Advert.Model{} = advert, page, %{current_user: user}) do
-    vm(advert, page, user)
+  def view_model(%Advert.Model{} = advert, page, assigns) do
+    vm(advert, page, assigns)
   end
 
   defp vm(
@@ -37,7 +37,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
                }
              } = assignment
          },
-         {Next.Console, :card},
+         {Next.Desktop, :card},
          %{uri_path: uri_path}
        ) do
     duration = if duration === nil, do: 0, else: duration
@@ -94,13 +94,13 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
            submission: submission,
            promotion: %{
              title: title,
-             image_id: image_id,
              themes: themes,
              marks: marks
            },
            assignment:
              %{
                info: %{
+                 image_id: image_id,
                  duration: duration,
                  language: language
                }
@@ -126,7 +126,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
     info1_elements =
       if language != nil do
-        language_label = language |> String.upcase(:ascii)
+        language_label = "#{language}" |> String.upcase(:ascii)
         info1_elements ++ ["#{language_label}"]
       else
         info1_elements
@@ -199,33 +199,48 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          %{
            id: id,
            promotion: %{
+             id: promotion_id,
              title: title,
-             image_id: image_id
+             themes: themes
            },
-           assignment: assignment
+           assignment: %{
+             info: %{
+               image_id: image_id,
+               logo_url: logo_url,
+               duration: duration
+             }
+           },
+           submission: submission
          },
-         {Next.Marketplace, _},
-         %{current_user: user}
+         {:marketplace, :card},
+         _assigns
        ) do
-    status = Assignment.Public.status(assignment, user)
-    tag = tag(status)
-    subtitle = subtitle(status, user, assignment)
+    duration = if duration, do: duration, else: 0
 
-    timestamp = Assignment.Public.timestamp(assignment, user)
-    quick_summary = get_quick_summary(timestamp)
+    image_info = ImageHelpers.get_image_info(image_id, 377, 212)
+    tags = get_card_tags(themes)
 
-    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info}
+    duration_label = dgettext("eyra-promotion", "duration.title")
+    reward_label = dgettext("eyra-submission", "reward.title")
+    reward_value_label = reward_value_label(submission)
+
+    info1_elements = [
+      "#{duration_label}: #{duration} min.",
+      "#{reward_label}: #{reward_value_label}"
+    ]
+
+    info1 = Enum.join(info1_elements, " | ")
 
     %{
+      type: :primary,
       id: id,
-      path: ~p"/assignment/#{assignment.id}/landing",
+      path: ~p"/promotion/#{promotion_id}",
       title: title,
-      subtitle: subtitle,
-      tag: tag,
-      level: :critical,
-      image: image,
-      quick_summary: quick_summary
+      tags: tags,
+      image_info: image_info,
+      icon_url: logo_url,
+      info: [info1],
+      quick_summary: ""
     }
   end
 
@@ -246,7 +261,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
                }
              } = assignment
          },
-         {Next.Console.Page, :content},
+         {Next.Desktop.StartPage, :content},
          _assigns
        ) do
     tag = Pool.Public.get_tag(submission)
@@ -317,7 +332,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp vm(
          %{assignment: assignment} = advert,
-         {Next.Console.Page, :contribution},
+         {Next.Desktop.StartPage, :contribution},
          user
        ) do
     path = ~p"/assignment/#{assignment.id}/landing"
@@ -543,7 +558,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   def get_card_tags(themes) do
     themes
-    |> Enum.map(&Core.Enums.Themes.translate(&1))
+    |> Enum.map(&Advert.Themes.translate(&1))
   end
 
   def get_card_icon_url(marks) do

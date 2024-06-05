@@ -19,10 +19,6 @@ msgid "persister.saved.flash"
 msgstr "Opgeslagen"
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.console"
-msgstr "Mijn console"
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "Mijn profiel"
 
@@ -41,10 +37,6 @@ msgstr "Menu"
 #, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
-
-#, elixir-autogen, elixir-format
-msgid "dashboard.title"
-msgstr "Mijn console"
 
 #, elixir-autogen, elixir-format
 msgid "todo.title"
@@ -97,10 +89,6 @@ msgstr "gisteren om %{time}"
 #, elixir-autogen, elixir-format
 msgid "authentication.required.message"
 msgstr "Log in om deze pagina te bekijken"
-
-#, elixir-autogen, elixir-format
-msgid "start.page.console"
-msgstr "Ga naar console"
 
 #, elixir-autogen, elixir-format
 msgid "duplicate.button"
@@ -205,3 +193,11 @@ msgstr "morgen om %{time}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.nextweek"
 msgstr "aanstaande %{weekday} om %{time}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.desktop"
+msgstr "To-do"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.workspace"
+msgstr "My workspace"

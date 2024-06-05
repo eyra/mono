@@ -36,6 +36,12 @@ defmodule Systems.Crew.Public do
     |> Repo.one() > 0
   end
 
+  def user_finished?(crew, user_ref) do
+    list_tasks_for_user(crew, user_ref)
+    |> Enum.map(& &1.id)
+    |> tasks_finished?()
+  end
+
   # Tasks
   def get_task(_crew, nil), do: nil
 

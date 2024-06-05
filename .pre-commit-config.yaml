@@ -6,7 +6,6 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: check-added-large-files
-        exclude: "core/priv/static/landing_page/img/uu.svg"
       - id: check-merge-conflict
       - id: no-commit-to-branch
         args: [-b, master]

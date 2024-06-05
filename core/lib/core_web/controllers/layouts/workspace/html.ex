@@ -43,7 +43,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
                     <div class="flex flex-col h-full w-full">
                       <%= if @title do %>
                         <div class="flex-none">
-                          <Hero.small title={@title} />
+                          <Hero.illustration2 title={@title} />
                         </div>
                       <% end %>
                       <%= if @top_bar do %>

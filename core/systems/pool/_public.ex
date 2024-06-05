@@ -45,14 +45,10 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
-  def list_by_user(%Account.User{id: user_id}, preload \\ []) do
-    from(pool in Pool.Model,
-      inner_join: participant in Pool.ParticipantModel,
-      on: participant.pool_id == pool.id,
-      where: participant.user_id == ^user_id,
-      preload: ^preload
-    )
+  def list_by_participant(%Account.User{} = user, preload \\ []) do
+    pool_query(user, :participant)
     |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def list_by_orgs(orgs, preload \\ [])
@@ -144,6 +140,10 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
+  def get_panl(preload \\ []) do
+    get_by_name("Panl", preload)
+  end
+
   def get_by_submission!(submission, preload \\ [])
 
   def get_by_submission!(%{id: submission_id}, preload) do
@@ -165,16 +165,8 @@ defmodule Systems.Pool.Public do
   defp map_string(term) when is_binary(term), do: term
 
   def participant?(%Pool.Model{} = pool, %Account.User{} = user) do
-    pool_query(pool, user, :participant)
+    pool_query(pool, user, [:participant, :tester])
     |> Repo.exists?()
-  end
-
-  def add_owner!(pool, user) do
-    :ok = Authorization.assign_role(user, pool, :owner)
-  end
-
-  def remove_owner!(pool, user) do
-    Authorization.remove_role!(user, pool, :owner)
   end
 
   def add_participant!(pool, user) do

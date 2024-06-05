@@ -14,7 +14,7 @@ defmodule Self.Layouts.Workspace.MenuBuilder do
 
   @primary [
     default: [
-      :console,
+      :desktop,
       :projects,
       :admin,
       :support,
@@ -33,12 +33,11 @@ defmodule Self.Layouts.Workspace.MenuBuilder do
   ]
 
   use CoreWeb.Menu.Builder, home: :self
-  alias Core.Authorization
 
   @impl true
   def include_map(user),
     do: %{
-      console: Authorization.can_access?(user, Self.Console.Page),
+      desktop: Systems.Admin.Public.admin?(user) or user.creator,
       projects: Systems.Admin.Public.admin?(user) or user.creator
     }
 end

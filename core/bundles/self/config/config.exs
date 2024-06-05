@@ -8,8 +8,8 @@ config :core,
   stripped_menu_builder: Self.Layouts.Stripped.MenuBuilder
 
 config :core, Systems.Account.UserAuth,
-  researcher_signed_in_page: "/project",
-  participant_signed_in_page: "/console"
+  creator_signed_in_page: "/project",
+  member_signed_in_page: "/console"
 
 config :core, :meta,
   bundle_title: "Self",

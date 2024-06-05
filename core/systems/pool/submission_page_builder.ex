@@ -10,7 +10,7 @@ defmodule Systems.Pool.SubmissionPageBuilder do
     %{
       actions: create_actions(submission, assigns),
       submission: submission,
-      active_menu_item: :console,
+      active_menu_item: :home,
       form:
         %{
           # FIXME

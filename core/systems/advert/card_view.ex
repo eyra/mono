@@ -12,6 +12,7 @@ defmodule Systems.Advert.CardView do
   import Frameworks.Pixel.ClickableCard
 
   attr(:card, :map, required: true)
+  attr(:target, :any, required: true)
 
   def dynamic(%{card: card} = assigns) do
     assigns =
@@ -27,26 +28,32 @@ defmodule Systems.Advert.CardView do
     <div class="h-full">
       <.function_component
         function={@function}
-        props={%{card: @card}}
+        props={%{
+          card: @card,
+          target: @target
+        }}
       />
     </div>
     """
   end
 
   attr(:card, :any, required: true)
+  attr(:target, :any, required: true)
 
   def primary(assigns) do
     ~H"""
-    <.basic {@card} />
+    <.basic {@card} target={@target} />
     """
   end
 
   attr(:card, :any, required: true)
+  attr(:target, :any, required: true)
 
   def secondary(assigns) do
     ~H"""
     <.basic
       {@card}
+      target={@target}
       bg_color="grey5"
       text_color="text-grey1"
       label_type="primary"
@@ -58,7 +65,7 @@ defmodule Systems.Advert.CardView do
   end
 
   attr(:id, :any, required: true)
-  attr(:icon_url, :string, required: true)
+  attr(:icon_url, :string, default: nil)
   attr(:image_info, :map, required: true)
   attr(:title, :string, required: true)
   attr(:tags, :list, default: nil)
@@ -68,11 +75,13 @@ defmodule Systems.Advert.CardView do
   attr(:bg_color, :string, default: "grey1")
   attr(:text_color, :string, default: "text-white")
   attr(:label_type, :string, default: "tertiary")
-  attr(:tag_type, :string, default: "grey2")
+  attr(:tag_type, :string, default: "primary")
   attr(:info1_color, :string, default: "text-tertiary")
   attr(:info2_color, :string, default: "text-white")
   attr(:left_actions, :list, default: nil)
   attr(:right_actions, :list, default: nil)
+
+  attr(:target, :any, required: true)
 
   def basic(assigns) do
     ~H"""
@@ -82,6 +91,7 @@ defmodule Systems.Advert.CardView do
         id={@id}
         left_actions={@left_actions}
         right_actions={@right_actions}
+        target={@target}
       >
         <:top>
           <div class="relative">
@@ -129,10 +139,10 @@ defmodule Systems.Advert.CardView do
               <Text.sub_head color={@info1_color}>
                 <%= @info |> List.first() %>
               </Text.sub_head>
-              <.spacing value="M" />
             <% end %>
 
             <%= if Enum.count(@info) > 1 do %>
+              <.spacing value="M" />
               <Text.sub_head color={@info2_color}>
                 <%= @info |> Enum.at(1) %>
               </Text.sub_head>

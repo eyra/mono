@@ -34,7 +34,7 @@ defmodule CoreWeb.Layouts.Stripped.Html do
               <%= render_slot(@header) %>
               <%= if @title do %>
                 <div class="flex-none">
-                  <Hero.small title={@title} />
+                  <Hero.illustration2 title={@title} />
                 </div>
               <% end %>
               <div class="flex-1 bg-white">

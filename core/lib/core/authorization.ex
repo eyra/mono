@@ -29,7 +29,8 @@ defmodule Core.Authorization do
   grant_access(Systems.Lab.ToolModel, [:owner, :participant])
 
   # Pages
-  grant_access(Systems.Console.Page, [:member])
+  grant_access(Systems.Home.Page, [:visitor, :member, :creator])
+  grant_access(Systems.Desktop.Page, [:creator])
   grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.ConfigPage, [:admin])
@@ -48,7 +49,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Promotion.LandingPage, [:visitor, :member])
-  grant_access(Systems.Pool.OverviewPage, [:creator])
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.SubmissionPage, [:creator])

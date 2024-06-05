@@ -18,8 +18,7 @@ defmodule CoreWeb do
   """
 
   def static_paths,
-    do:
-      ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw privacy-statement.pdf landing_page)
+    do: ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
 
   def utility do
     quote do

@@ -91,6 +91,10 @@ defmodule Systems.Project.Public do
 
   def list_items(_, selector \\ nil, preload \\ [])
 
+  def list_items(%Project.Model{root: node}, selector, preload) do
+    list_items(node, selector, preload)
+  end
+
   def list_items(node, nil, preload) do
     item_query(node)
     |> Repo.all()
@@ -99,6 +103,12 @@ defmodule Systems.Project.Public do
 
   def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, :advert, preload) do
+    item_query_by_advert(node)
     |> Repo.all()
     |> Repo.preload(preload)
   end

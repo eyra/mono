@@ -14,14 +14,14 @@ defmodule Systems.Pool.ParticipantPageBuilder do
 
     contributions =
       user
-      |> Advert.Public.list_subject_adverts(preload: Advert.Model.preload_graph(:down))
+      |> Advert.Public.list_by_participant(preload: Advert.Model.preload_graph(:down))
       |> Enum.map(&ViewModelBuilder.view_model(&1, {__MODULE__, :contribution}, assigns))
 
     %{
       member: to_member(user),
       wallets: wallets,
       contributions: contributions,
-      active_menu_item: :console
+      active_menu_item: :home
     }
   end
 

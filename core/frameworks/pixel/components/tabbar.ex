@@ -248,22 +248,18 @@ defmodule Frameworks.Pixel.Tabbar do
       id={"tabbar-#{@tabbar}-#{@id}"}
       data-tab-id={@id}
       phx-hook="TabbarItem"
-      class={"tabbar-item flex flex-row items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
+      class={"tabbar-item flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
       idle-class={idle_shape(@tabbar, @type, @ready, @show_errors)}
       active-class={active_shape(@tabbar, @type)}
     >
       <%= if @index do %>
         <div
-          class={"icon w-6 h-6 font-caption text-caption rounded-full flex items-center #{idle_icon(@ready, @show_errors)}"}
+          class={"flex-shrink-0 icon w-6 h-6 font-caption text-caption rounded-full flex items-center #{idle_icon(@ready, @show_errors)}"}
           idle-class={idle_icon(@ready, @show_errors)}
           active-class={active_icon(@type)}
         >
           <span class={"text-center w-full mt-1px #{center_correction_for_number(icon_text(@index, @ready, @show_errors, @count))}"}><%= icon_text(@index, @ready, @show_errors, @count) %></span>
         </div>
-      <% end %>
-
-      <%= if @title && @index do %>
-        <div class="ml-3" />
       <% end %>
 
       <%= if @title do %>

@@ -128,7 +128,7 @@ defmodule Systems.Project.NodePage do
             <Margin.y id={:title2_bottom} />
             <Grid.dynamic>
               <%= for card <- @vm.node_cards do %>
-                <Project.CardView.dynamic card={card} />
+                <Project.CardView.dynamic card={card}/>
               <% end %>
             </Grid.dynamic>
             <.spacing value="L" />

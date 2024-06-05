@@ -10,7 +10,7 @@ defmodule Next.Layouts.Website.MenuBuilder do
     mobile_navbar: [:title]
   ]
 
-  @primary [:console]
+  @primary [:workspace]
 
   @secondary [
     desktop_navbar: [:signin, :profile],
@@ -19,11 +19,16 @@ defmodule Next.Layouts.Website.MenuBuilder do
   ]
 
   use CoreWeb.Menu.Builder, home: :next
-  alias Core.Authorization
 
   @impl true
+
+  def include_map(nil),
+    do: %{
+      workspace: false
+    }
+
   def include_map(user),
     do: %{
-      console: Authorization.can_access?(user, Next.Console.Page)
+      workspace: Systems.Admin.Public.admin?(user) or user.creator
     }
 end

@@ -17,11 +17,6 @@ defmodule Self.Bundle do
           pipe_through([:browser])
           delete("/user/session", Account.SessionController, :delete)
         end
-
-        scope "/", Systems do
-          pipe_through([:browser, :require_authenticated_user])
-          live("/", Console.Page)
-        end
       end
     end
   end

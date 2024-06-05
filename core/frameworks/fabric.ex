@@ -41,6 +41,17 @@ defmodule Fabric do
         end
       end
 
+      def add_child(
+            %Phoenix.LiveView.Socket{assigns: assigns} = socket,
+            child_name,
+            %{} = child_map
+          ) do
+        %Phoenix.LiveView.Socket{
+          socket
+          | assigns: Fabric.compose_child(assigns, child_name, child_map)
+        }
+      end
+
       def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
         %Phoenix.LiveView.Socket{socket | assigns: compose_child(assigns, child_name)}
       end

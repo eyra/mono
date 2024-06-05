@@ -9,26 +9,17 @@ defmodule Frameworks.Pixel.Hero do
 
   import Frameworks.Pixel.ImagePreview
 
-  attr(:title, :string, required: true)
-  attr(:illustration, :any, default: "illustration.svg")
-  attr(:text_color, :string, default: "text-white")
-  attr(:bg_color, :string, default: "bg-primary")
+  attr(:type, :atom, required: true)
+  attr(:params, :map, required: true)
 
-  def small(assigns) do
+  def dynamic(assigns) do
     ~H"""
-    <div
-      class={"flex h-header2 items-center sm:h-header2-sm lg:h-header2-lg #{@text_color} #{@bg_color} overflow-hidden"}
-      data-native-title={@title}
-    >
-      <div class="flex-grow flex-shrink-0">
-        <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
-          <%= @title %>
-        </p>
-      </div>
-      <div class="flex-none h-header2 sm:h-header2-sm lg:h-header2-lg w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={~p"/images/#{@illustration}"} alt="">
-      </div>
-    </div>
+    <%= if @type === :illustration1 do %>
+      <.illustration1 {@params} />
+    <% end %>
+    <%= if @type === :illustration2 do %>
+      <.illustration2 {@params} />
+    <% end %>
     """
   end
 
@@ -140,27 +131,51 @@ defmodule Frameworks.Pixel.Hero do
   end
 
   attr(:title, :string, required: true)
-  attr(:subtitle, :string, required: true)
+  attr(:subtitle, :string, default: nil)
   attr(:illustration, :any, default: "illustration.svg")
-  attr(:size, :string, default: "large")
   attr(:text_color, :string, default: "text-white")
   attr(:bg_color, :string, default: "bg-primary")
 
-  def large(assigns) do
+  def illustration1(assigns) do
     ~H"""
     <div
-      class={"flex h-header1 items-center sm:h-header1-sm lg:h-header1-lg mb-9 lg:mb-16 #{@text_color} #{@bg_color}"}
+      class={"flex h-hero1 items-center sm:h-hero1-sm lg:h-hero1-lg #{@text_color} #{@bg_color}"}
       data-native-title={@title}
     >
       <div class="flex-grow flex-shrink-0">
         <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
           <%= @title %>
-          <br>
-          <%= @subtitle %>
+          <%= if @subtitle do %>
+            <br>
+            <%= @subtitle %>
+          <% end %>
         </p>
       </div>
-      <div class="flex-none w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
+      <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
         <img src={ ~p"/images/#{@illustration}"} alt="">
+      </div>
+    </div>
+    """
+  end
+
+  attr(:title, :string, required: true)
+  attr(:illustration, :any, default: "illustration.svg")
+  attr(:text_color, :string, default: "text-white")
+  attr(:bg_color, :string, default: "bg-primary")
+
+  def illustration2(assigns) do
+    ~H"""
+    <div
+      class={"flex h-hero2 items-center sm:h-hero2-sm lg:h-hero2-lg #{@text_color} #{@bg_color} overflow-hidden"}
+      data-native-title={@title}
+    >
+      <div class="flex-grow flex-shrink-0">
+        <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
+          <%= @title %>
+        </p>
+      </div>
+      <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
+        <img src={~p"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """

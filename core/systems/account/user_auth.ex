@@ -170,13 +170,13 @@ defmodule Systems.Account.UserAuth do
   defp onboarding_path(_), do: nil
 
   defp signed_in_path(%{creator: false}),
-    do: path(:participant_signed_in_page)
+    do: path(:member_signed_in_page)
 
   defp signed_in_path(%{creator: true}),
     do: path(:creator_signed_in_page)
 
   defp signed_in_path(_user),
-    do: path(:participant_signed_in_page)
+    do: path(:member_signed_in_page)
 
   defp path(key), do: auth_config(key)
 

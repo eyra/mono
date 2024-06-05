@@ -40,10 +40,9 @@ defmodule Systems.Account.UserSessionControllerTest do
       assert get_session(conn, :user_token)
       assert redirected_to(conn) =~ "/"
 
-      # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ "Eyra"
+      assert response =~ "My homepage"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do

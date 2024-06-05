@@ -12,9 +12,14 @@ defmodule Fabric.LiveViewMock do
     }
   end
 
-  defp add_child(socket, child_id, text) do
-    child = prepare_child(socket, child_id, Fabric.LiveComponentMock, %{text: text})
-    socket |> show_child(child)
+  def add_child(socket, child_id, text) when is_binary(text) do
+    socket
+    |> add_child(child_id, %{
+      module: Fabric.LiveComponentMock,
+      params: %{
+        text: text
+      }
+    })
   end
 
   @impl true

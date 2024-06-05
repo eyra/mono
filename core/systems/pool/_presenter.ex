@@ -10,7 +10,6 @@ defmodule Systems.Pool.Presenter do
 
   def builder(Pool.DetailPage), do: Pool.DetailPageBuilder
   def builder(Pool.LandingPage), do: Pool.LandingPageBuilder
-  def builder(Pool.OverviewPage), do: Pool.OverviewPageBuilder
   def builder(Pool.ParticipantPage), do: Pool.ParticipantPageBuilder
   def builder(Pool.SubmissionPage), do: Pool.SubmissionPageBuilder
 end

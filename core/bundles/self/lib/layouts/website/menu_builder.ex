@@ -10,7 +10,7 @@ defmodule Self.Layouts.Website.MenuBuilder do
     mobile_navbar: [:title]
   ]
 
-  @primary [:console]
+  @primary [:desktop]
 
   @secondary [
     desktop_navbar: [:signin, :profile],

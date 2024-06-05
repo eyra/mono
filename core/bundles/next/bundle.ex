@@ -7,11 +7,6 @@ defmodule Next.Bundle do
     if include?() do
       quote do
         scope "/", Next do
-          pipe_through([:browser])
-          get("/", Home.LandingPageController, :show)
-        end
-
-        scope "/", Next do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", Account.SigninPage)
           live("/user/signin/:user_type", Account.SigninPage)
@@ -22,11 +17,6 @@ defmodule Next.Bundle do
         scope "/", Next do
           pipe_through([:browser])
           delete("/user/session", Account.SessionController, :delete)
-        end
-
-        scope "/", Systems do
-          pipe_through([:browser, :require_authenticated_user])
-          live("/next", Console.Page)
         end
       end
     end

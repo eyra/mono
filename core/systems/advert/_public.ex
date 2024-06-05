@@ -3,6 +3,8 @@ defmodule Systems.Advert.Public do
   The Studies context.
   """
   import Ecto.Query, warn: false
+  import Systems.Advert.Queries
+
   require Logger
   alias Core.Repo
   alias Systems.Account.User
@@ -14,16 +16,14 @@ defmodule Systems.Advert.Public do
 
   alias Systems.Account
 
-  alias Systems.{
-    Advert,
-    Promotion,
-    Assignment,
-    Alliance,
-    Crew,
-    Budget,
-    Bookkeeping,
-    Pool
-  }
+  alias Systems.Advert
+  alias Systems.Promotion
+  alias Systems.Assignment
+  alias Systems.Alliance
+  alias Systems.Crew
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Pool
 
   def get!(id, preload \\ []) do
     from(c in Advert.Model,
@@ -155,47 +155,22 @@ defmodule Systems.Advert.Public do
   end
 
   @doc """
-  Returns the list of studies that are owned by the user.
+  Returns the list of adverts where the user has the specified role
   """
-  def list_owned_adverts(user, opts \\ []) do
+  def list_by_participant(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    node_ids =
-      Authorization.query_node_ids(
-        role: :owner,
-        principal: user
-      )
-
-    from(c in Advert.Model,
-      inner_join: ps in Pool.SubmissionModel,
-      on: ps.id == c.submission_id,
-      where: c.auth_node_id in subquery(node_ids),
-      order_by: [desc: ps.completed_at, desc: ps.updated_at],
-      preload: ^preload,
-      select: c
-    )
+    advert_query(user, :participant)
     |> Repo.all()
+    |> Repo.preload(preload)
   end
 
-  @doc """
-  Returns the list of studies where the user is a subject.
-  """
-  def list_subject_adverts(user, opts \\ []) do
+  def list_by_status(status, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    from(c in Advert.Model,
-      join: m in Crew.MemberModel,
-      on: m.user_id == ^user.id,
-      join: t in Crew.TaskModel,
-      on: t.member_id == m.id,
-      join: a in Assignment.Model,
-      on: a.crew_id == m.crew_id,
-      where: c.assignment_id == a.id and m.expired == false,
-      preload: ^preload,
-      order_by: [desc: t.updated_at],
-      select: c
-    )
+    advert_query(status)
     |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def list_excluded_user_ids(advert_ids) when is_list(advert_ids) do
@@ -272,14 +247,6 @@ defmodule Systems.Advert.Public do
   end
 
   def open_spot_count(_advert), do: 0
-
-  def add_owner!(advert, user) do
-    :ok = Authorization.assign_role(user, advert, :owner)
-  end
-
-  def remove_owner!(advert, user) do
-    Authorization.remove_role!(user, advert, :owner)
-  end
 
   def get_changeset(attrs \\ %{}) do
     %Advert.Model{}
@@ -444,7 +411,8 @@ defmodule Systems.Advert.Public do
   end
 
   def validate_open(%Advert.Model{} = advert, user) do
-    with :ok <- validate_exclusion(advert, user),
+    with :ok <- validate_member(advert, user),
+         :ok <- validate_exclusion(advert, user),
          :ok <- validate_eligitable(advert, user),
          :ok <- validate_open_spots(advert),
          :ok <- validate_released(advert),
@@ -452,6 +420,24 @@ defmodule Systems.Advert.Public do
       :ok
     else
       error -> error
+    end
+  end
+
+  def validate_open(%Advert.Model{} = advert) do
+    with :ok <- validate_open_spots(advert),
+         :ok <- validate_released(advert),
+         :ok <- validate_funded(advert) do
+      :ok
+    else
+      error -> error
+    end
+  end
+
+  defp validate_member(%{assignment: assignment}, user) do
+    if Assignment.Public.member?(assignment, user) do
+      {:error, :already_member}
+    else
+      :ok
     end
   end
 

@@ -36,6 +36,17 @@ defmodule Systems.Pool.Queries do
     )
   end
 
+  def pool_query(%Account.User{id: user_id}, roles) when is_list(roles) do
+    build(pool_query(), :pool,
+      auth_node: [
+        role_assignments: [
+          role in ^roles,
+          principal_id == ^user_id
+        ]
+      ]
+    )
+  end
+
   def pool_query(%Budget.CurrencyModel{id: currency_id}, %Account.User{} = user, role) do
     build(pool_query(user, role), :pool, [
       currency_id == ^currency_id

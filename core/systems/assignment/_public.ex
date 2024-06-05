@@ -3,6 +3,7 @@ defmodule Systems.Assignment.Public do
   The assignment context.
   """
   import Ecto.Query, warn: false
+  import Systems.Assignment.Queries
 
   require Logger
 
@@ -15,15 +16,14 @@ defmodule Systems.Assignment.Public do
   alias Frameworks.Concept
   alias Frameworks.Signal
 
-  alias Systems.{
-    Assignment,
-    Content,
-    Consent,
-    Budget,
-    Workflow,
-    Crew,
-    Storage
-  }
+  alias Systems.Assignment
+  alias Systems.Account
+  alias Systems.Content
+  alias Systems.Consent
+  alias Systems.Budget
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Storage
 
   @min_expiration_timeout 30
 
@@ -49,6 +49,12 @@ defmodule Systems.Assignment.Public do
   def list_by_crew(crew_id, preload) when is_number(crew_id) do
     from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload)
     |> Repo.all()
+  end
+
+  def list_by_participant(%Account.User{} = user, preload \\ []) do
+    assignment_query(user, :participant)
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def get_by(association, preload \\ [])
@@ -328,10 +334,6 @@ defmodule Systems.Assignment.Public do
     if not Crew.Public.member?(crew, user) do
       {:ok, _} = Crew.Public.apply_member_with_role(crew, user, :participant)
     end
-  end
-
-  def add_owner!(assignment, user) do
-    :ok = Core.Authorization.assign_role(user, assignment, :owner)
   end
 
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)

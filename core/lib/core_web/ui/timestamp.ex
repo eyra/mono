@@ -75,6 +75,13 @@ defmodule CoreWeb.UI.Timestamp do
     date |> Timex.shift(days: days)
   end
 
+  def max(d1, nil), do: d1
+  def max(nil, d2), do: d2
+
+  def max(d1, d2) do
+    if after?(d1, d2), do: d1, else: d2
+  end
+
   def future?(date) when is_binary(date) do
     after?(parse_user_input_date(date), now())
   end

@@ -4,7 +4,6 @@ defmodule Next.StartPages do
   def pages(),
     do: %{
       home: %{id: :home, path: "/", domain: "eyra-ui"},
-      console: %{id: :console, path: "/console", domain: "eyra-ui"},
       projects: %{id: :projects, path: "/project", domain: "eyra-ui"}
     }
 
@@ -12,7 +11,7 @@ defmodule Next.StartPages do
   def values(),
     do: %{
       creator: pages().projects,
-      member: pages().console
+      member: pages().home
     }
 
   defmacro __using__(_opts) do
