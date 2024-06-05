@@ -96,7 +96,8 @@ defmodule Systems.Project.CreateItemPopup do
   end
 
   defp create_item(%{assigns: %{node: node}}, template) do
-    name = Project.ItemTemplates.translate(template)
+    default_name = Project.ItemTemplates.translate(template)
+    name = Project.Public.new_item_name(node, default_name)
     Project.Assembly.create_item(template, name, node)
   end
 
