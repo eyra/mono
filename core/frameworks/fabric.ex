@@ -326,7 +326,7 @@ defmodule Fabric do
       if index = Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
         List.replace_at(children, index, child)
       else
-        List.wrap(child) ++ List.wrap(children)
+        List.wrap(children) ++ List.wrap(child)
       end
 
     %Fabric.Model{fabric | children: children}
