@@ -123,6 +123,11 @@ defmodule Systems.Account.User do
     |> validate_required([:visited_pages])
   end
 
+  def admin_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:creator, :verified_at])
+  end
+
   @doc """
   A user changeset for changing the email.
 

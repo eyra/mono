@@ -158,7 +158,7 @@ defmodule Systems.Admin.AccountView do
 
   defp save(socket, user_id_string, attrs) do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
-    changeset = Account.User.sso_changeset(user, attrs)
+    changeset = Account.User.admin_changeset(user, attrs)
     {:ok, _} = Core.Persister.save(user, changeset)
     socket |> update_users()
   end
