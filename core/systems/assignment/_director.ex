@@ -27,8 +27,7 @@ defmodule Systems.Assignment.Director do
   def authorization_context(tool, user) do
     {member, _} = search_subject(tool, user)
 
-    tool_ref = Workflow.Public.get_tool_ref_by_tool(tool)
-    item = Workflow.Public.get_item_by_tool_ref(tool_ref)
+    item = Workflow.Public.get_item_by_tool(tool)
     assignment = Assignment.Public.get_by_tool(tool)
 
     task =
