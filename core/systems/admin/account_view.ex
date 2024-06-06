@@ -1,6 +1,8 @@
 defmodule Systems.Admin.AccountView do
   use CoreWeb, :live_component
 
+  require Logger
+
   alias Core.ImageHelpers
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.SearchBar
@@ -94,6 +96,7 @@ defmodule Systems.Admin.AccountView do
   end
 
   defp include?(user, [term | rest]) do
+    Logger.notice("include?(#{user.email},#{term}")
     include?(user, term) and include?(user, rest)
   end
 
