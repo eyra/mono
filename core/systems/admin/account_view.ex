@@ -96,7 +96,6 @@ defmodule Systems.Admin.AccountView do
   end
 
   defp include?(user, [term | rest]) do
-    Logger.notice("include?(#{user.email},#{term}")
     include?(user, term) and include?(user, rest)
   end
 
@@ -108,6 +107,7 @@ defmodule Systems.Admin.AccountView do
   end
 
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
+  defp include?(%Account.User{creator: nil}, :creator), do: false
   defp include?(%Account.User{creator: creator}, :creator), do: creator
 
   defp include?(%Account.UserProfileModel{}, ""), do: true
