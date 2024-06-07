@@ -66,7 +66,7 @@ defmodule CoreWeb.UI.PlainDialog do
     ~H"""
       <%= if @dialog do %>
         <.popup>
-          <div class="flex-wrap">
+          <div class="flex-wrap mx-6 sm:mx-10 p-8 bg-white shadow-floating rounded">
             <.plain_dialog {@dialog} />
           </div>
         </.popup>
