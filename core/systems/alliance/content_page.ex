@@ -39,16 +39,16 @@ defmodule Systems.Alliance.ContentPage do
     ~H"""
       <.management_page
         title={@vm.title}
+        tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
         menus={@menus}
         modal={@modal}
         popup={@popup}
         dialog={@dialog}
-        tabs={@vm.tabs}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
-        show_errors={@show_errors}
-        actions={@vm.actions}
+        actions={@actions}
       />
     """
   end

@@ -8,10 +8,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
         %{
           id: id,
           leaderboard: leaderboard,
-          submissions: submissions,
-          uri_origin: uri_origin,
-          viewport: viewport,
-          breakpoint: breakpoint
+          submissions: submissions
         },
         socket
       ) do
@@ -21,10 +18,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
       |> assign(
         id: id,
         leaderboard: leaderboard,
-        submissions: submissions,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        submissions: submissions
       )
       |> prepare_download_button()
     }

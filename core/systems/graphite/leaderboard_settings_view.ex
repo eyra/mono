@@ -9,10 +9,7 @@ defmodule Systems.Graphite.LeaderboardSettingsView do
   def update(
         %{
           id: id,
-          entity: leaderboard,
-          uri_origin: uri_origin,
-          viewport: viewport,
-          breakpoint: breakpoint
+          entity: leaderboard
         },
         socket
       ) do
@@ -21,10 +18,7 @@ defmodule Systems.Graphite.LeaderboardSettingsView do
       socket
       |> assign(
         id: id,
-        entity: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        entity: leaderboard
       )
       |> compose_child(:settings)
     }
@@ -49,12 +43,7 @@ defmodule Systems.Graphite.LeaderboardSettingsView do
     ~H"""
     <div>
       <Area.content>
-        <.child name={:settings} fabric={@fabric} >
-          <:header>
-          </:header>
-          <:footer>
-          </:footer>
-        </.child>
+        <.child name={:settings} fabric={@fabric} />
       </Area.content>
     </div>
     """

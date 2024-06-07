@@ -9,10 +9,7 @@ defmodule Systems.Graphite.LeaderboardScoresView do
   def update(
         %{
           id: id,
-          entity: leaderboard,
-          uri_origin: uri_origin,
-          viewport: viewport,
-          breakpoint: breakpoint
+          entity: leaderboard
         },
         socket
       ) do
@@ -21,10 +18,7 @@ defmodule Systems.Graphite.LeaderboardScoresView do
       socket
       |> assign(
         id: id,
-        leaderboard: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        leaderboard: leaderboard
       )
       |> compose_child(:upload)
     }
@@ -32,18 +26,12 @@ defmodule Systems.Graphite.LeaderboardScoresView do
 
   @impl true
   def compose(:upload, %{
-        leaderboard: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        leaderboard: leaderboard
       }) do
     %{
       module: Graphite.LeaderboardScoresForm,
       params: %{
         leaderboard: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint,
         page_key: :upload,
         opt_in?: false,
         on_text: "upload view on text",

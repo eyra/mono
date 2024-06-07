@@ -12,10 +12,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
   def update(
         %{
           id: id,
-          leaderboard: leaderboard,
-          uri_origin: uri_origin,
-          viewport: viewport,
-          breakpoint: breakpoint
+          leaderboard: leaderboard
         },
         socket
       ) do
@@ -28,9 +25,6 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
         id: id,
         headers: headers,
         leaderboard: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint,
         placeholder: dgettext("eyra-graphite", "label.upload_file"),
         select_button: dgettext("eyra-graphite", "label.select"),
         replace_button: dgettext("eyra-graphite", "label.replace_file"),

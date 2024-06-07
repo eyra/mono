@@ -49,8 +49,8 @@ defmodule Systems.Assignment.ContentPage do
     ~H"""
       <.management_page
         title={@vm.title}
-        show_errors={@vm.show_errors}
         tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
         actions={@actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

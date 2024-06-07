@@ -12,6 +12,13 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
 
     tabs = create_tabs(leaderboard, false, assigns)
 
+    title =
+      if title do
+        title
+      else
+        ""
+      end
+
     %{
       id: id,
       title: title,
@@ -133,16 +140,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     [:settings, :submissions, :scores]
   end
 
-  defp create_tab(:settings, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:settings, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :settings_form, Graphite.LeaderboardSettingsView, %{
-        entity: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        entity: leaderboard
       })
 
     %{
@@ -156,17 +157,11 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:submissions, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:submissions, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardSubmissionsView, %{
         entity: leaderboard,
-        submissions: Graphite.Public.list_submissions(leaderboard),
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        submissions: Graphite.Public.list_submissions(leaderboard)
       })
 
     %{
@@ -180,16 +175,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:scores, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:scores, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :scores_form, Graphite.LeaderboardScoresView, %{
-        entity: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        entity: leaderboard
       })
 
     %{
