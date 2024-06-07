@@ -70,7 +70,7 @@ defmodule Systems.Account.UserProfileForm do
   @impl true
   def handle_event(
         "save",
-        %{"user_profile_edit" => attrs},
+        %{"user_profile_edit_model" => attrs},
         %{assigns: %{entity: entity}} = socket
       ) do
     {
