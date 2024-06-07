@@ -111,6 +111,7 @@ defmodule Systems.Admin.AccountView do
   defp include?(%Account.User{creator: creator}, :creator), do: creator
 
   defp include?(%Account.UserProfileModel{}, ""), do: true
+  defp include?(%Account.UserProfileModel{fullname: nil}, _), do: false
 
   defp include?(%Account.UserProfileModel{fullname: fullname}, word) when is_binary(word) do
     String.contains?(fullname |> String.downcase(), word)
