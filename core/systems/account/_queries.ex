@@ -28,6 +28,12 @@ defmodule Systems.Account.Queries do
     from(User, as: :user)
   end
 
+  def user_query(user_id) when is_integer(user_id) do
+    build(user_query(), :user, [
+      id == ^user_id
+    ])
+  end
+
   def user_query(creator?: creator?) do
     build(user_query(), :user, [
       creator == ^creator?

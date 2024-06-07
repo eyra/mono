@@ -4,6 +4,8 @@ defmodule Systems.Content.PageBuilder do
   alias Phoenix.LiveView.Socket
   alias Frameworks.Pixel.NotificationView
 
+  alias Systems.Account
+
   @callback set_status(socket :: Socket.t(), status :: atom()) :: Socket.t()
 
   def handle_request_verification(%{assigns: %{fabric: fabric}} = socket) do
@@ -23,15 +25,13 @@ defmodule Systems.Content.PageBuilder do
       @behaviour Systems.Content.PageBuilder
       alias Systems.Content
 
-      def handle_publish(
-            %{assigns: %{current_user: %{creator: true, verified_at: verified_at}}} = socket
-          )
-          when not is_nil(verified_at) do
-        socket |> set_status(:online)
-      end
-
-      def handle_publish(socket) do
-        Content.PageBuilder.handle_request_verification(socket)
+      def handle_publish(%{assigns: %{current_user: %{id: user_id}}} = socket) do
+        # reload user for latest config
+        if Content.Private.can_user_publish?(Account.Public.get!(user_id)) do
+          socket |> set_status(:online)
+        else
+          Content.PageBuilder.handle_request_verification(socket)
+        end
       end
 
       def handle_retract(socket) do

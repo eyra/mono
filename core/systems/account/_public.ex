@@ -16,6 +16,12 @@ defmodule Systems.Account.Public do
     |> Repo.insert!()
   end
 
+  def get!(id, preload \\ []) do
+    user_query(id)
+    |> Repo.one!()
+    |> Repo.preload(preload)
+  end
+
   def get_profile(%User{id: user_id}) do
     get_profile(user_id)
   end
