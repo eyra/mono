@@ -1,5 +1,7 @@
 defmodule Systems.Instruction.Public do
   import Ecto.Query, warn: false
+  import Systems.Instruction.Queries
+
   alias Core.Repo
   alias Ecto.Multi
 
@@ -7,9 +9,16 @@ defmodule Systems.Instruction.Public do
   alias Systems.Instruction
   alias Systems.Content
 
+  @spec get_tool!(any()) :: any()
   def get_tool!(id, preload \\ []) do
     from(tool in Instruction.ToolModel, preload: ^preload)
     |> Repo.get!(id)
+  end
+
+  def get_tool_by(%Content.PageModel{} = content_page, preload \\ []) do
+    tool_query(content_page)
+    |> Repo.one()
+    |> Repo.preload(preload)
   end
 
   def get_asset_by(%Content.RepositoryModel{id: id}, preload \\ []) do

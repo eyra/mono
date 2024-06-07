@@ -64,14 +64,6 @@ defmodule Systems.Content.PageForm do
     ~H"""
       <div>
         <.form id={"#{@id}_agreement_form"} :let={form} for={@form} phx-change="save" phx-target={@myself} >
-          <%!-- <%= if @visible do %>
-            <.text_input form={form} field={:title} label_text={dgettext("eyra-content", "page_form.title.label")} visible={@visible} />
-            <Text.form_field_label id={:template_label}>
-              <%= dgettext("eyra-content", "page_form.body.label") %>
-            </Text.form_field_label>
-            <.spacing value="XXS" />
-          <% end %> --%>
-          <!-- always render wyiwyg te prevent scrollbar reset in LiveView -->
           <.wysiwyg_area form={form} field={:body} visible={@visible}/>
         </.form>
       </div>

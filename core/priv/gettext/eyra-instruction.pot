@@ -62,3 +62,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "general_form.file.label"
+msgstr ""

@@ -9,24 +9,6 @@ defmodule Systems.Workflow.BuilderView do
   alias Systems.Workflow
 
   @impl true
-  def update(%{action: "delete", item: item}, socket) do
-    Workflow.Public.delete(item)
-    {:ok, socket}
-  end
-
-  @impl true
-  def update(%{action: "up", item: %{position: position} = item}, socket) do
-    {:ok, _} = Workflow.Public.update_position(item, position - 1)
-    {:ok, socket}
-  end
-
-  @impl true
-  def update(%{action: "down", item: %{position: position} = item}, socket) do
-    {:ok, _} = Workflow.Public.update_position(item, position + 1)
-    {:ok, socket}
-  end
-
-  @impl true
   def update(
         %{
           id: id,
@@ -52,6 +34,7 @@ defmodule Systems.Workflow.BuilderView do
         uri_origin: uri_origin,
         ordering_enabled?: ordering_enabled?
       )
+      |> reset_children()
       |> order_items()
       |> compose_item_cells()
     }
@@ -110,6 +93,24 @@ defmodule Systems.Workflow.BuilderView do
       :noreply,
       socket
     }
+  end
+
+  @impl true
+  def handle_event("delete", %{item: item}, socket) do
+    Workflow.Public.delete(item)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("up", %{item: %{position: position} = item}, socket) do
+    {:ok, _} = Workflow.Public.update_position(item, position - 1)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("down", %{item: %{position: position} = item}, socket) do
+    {:ok, _} = Workflow.Public.update_position(item, position + 1)
+    {:noreply, socket}
   end
 
   defp order_items(%{assigns: %{workflow: workflow}} = socket) do

@@ -48,6 +48,7 @@ defmodule Systems.Instruction.ToolModel do
     def ready?(tool), do: Instruction.ToolModel.ready?(tool)
     def form(_, :fork_instruction), do: Instruction.ForkForm
     def form(_, :download_instruction), do: Instruction.DownloadForm
+    def form(_, :general_instruction), do: Instruction.GeneralForm
 
     def launcher(tool),
       do: %{

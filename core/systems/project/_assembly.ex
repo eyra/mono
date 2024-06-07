@@ -122,6 +122,14 @@ defmodule Systems.Project.Assembly do
     update_path(multi, root, [id])
   end
 
+  @spec update_path(
+          Ecto.Multi.t(),
+          %{
+            :__struct__ => Systems.Project.ItemModel | Systems.Project.NodeModel,
+            optional(atom()) => any()
+          },
+          any()
+        ) :: any()
   def update_path(
         multi,
         %Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node,

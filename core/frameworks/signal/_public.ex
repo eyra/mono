@@ -35,7 +35,7 @@ defmodule Frameworks.Signal.Public do
     results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
 
     if not Enum.member?(results, :ok) do
-      Logger.error(
+      Logger.warn(
         "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
       )
     end
