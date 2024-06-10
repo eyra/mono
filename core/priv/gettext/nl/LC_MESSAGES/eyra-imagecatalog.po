@@ -29,3 +29,7 @@ msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "1 afbeelding"
 msgstr[1] "%{begin}-%{end} van %{count} afbeeldingen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "search.image.button"
+msgstr "Zoek"

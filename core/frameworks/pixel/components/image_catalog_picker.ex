@@ -222,7 +222,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
               type="search"
             />
             <.spacing value="XS" direction="l" />
-            .submit label={"#{dgettext("eyra-imagecatalog", "search.image.button")}"} target={@myself} />
+            <Button.submit label={"#{dgettext("eyra-imagecatalog", "search.image.button")}"} target={@myself} />
           </div>
         </.form>
 

@@ -29,3 +29,7 @@ msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "1 image"
 msgstr[1] "%{begin}-%{end} of %{count} images"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "search.image.button"
+msgstr "Search"
