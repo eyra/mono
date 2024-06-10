@@ -1,6 +1,7 @@
 defmodule Frameworks.Pixel.SearchBar do
   @moduledoc false
   use CoreWeb, :live_component
+
   @impl true
   def update(
         %{

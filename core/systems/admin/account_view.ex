@@ -99,25 +99,22 @@ defmodule Systems.Admin.AccountView do
     include?(user, term) and include?(user, rest)
   end
 
-  defp include?(%Account.User{}, ""), do: true
+  defp include?(_, ""), do: true
 
   defp include?(%Account.User{email: email, profile: profile}, word) when is_binary(word) do
     word = String.downcase(word)
-    String.contains?(email |> String.downcase(), word) and include?(profile, word)
+    String.contains?(email |> String.downcase(), word) or include?(profile, word)
   end
 
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
-  defp include?(%Account.User{creator: nil}, :creator), do: false
-  defp include?(%Account.User{creator: creator}, :creator), do: creator
+  defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
 
-  defp include?(%Account.UserProfileModel{}, ""), do: true
-  defp include?(%Account.UserProfileModel{fullname: nil}, _), do: false
-
-  defp include?(%Account.UserProfileModel{fullname: fullname}, word) when is_binary(word) do
+  defp include?(%Account.UserProfileModel{fullname: fullname}, word)
+       when not is_nil(fullname) and is_binary(word) do
     String.contains?(fullname |> String.downcase(), word)
   end
 
-  defp include?(nil, _), do: true
+  defp include?(_, _), do: false
 
   defp map_to_item(%Account.User{} = user, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
@@ -206,6 +203,8 @@ defmodule Systems.Admin.AccountView do
       socket
       |> assign(active_filters: active_filters)
       |> update_users()
+      |> update_child(:search_bar)
+      |> update_child(:filter_selector)
     }
   end
 
