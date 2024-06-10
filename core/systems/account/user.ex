@@ -13,7 +13,7 @@ defmodule Systems.Account.User do
   def email_max_length, do: 160
   def email_format, do: ~r/^[^\s]+@[^\s]+$/
 
-  @derive {Inspect, except: [:password]}
+  @derive {Inspect, except: [:password, :hashed_password]}
   schema "users" do
     field(:email, :string)
     field(:password, :string, virtual: true)
