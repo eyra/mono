@@ -75,7 +75,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
       Fabric.prepare_child(fabric, :onboarding_view_consent, Assignment.OnboardingConsentView, %{
         revision: revision,
-        user: user
+        user: user,
+        create_signature?: not tester?
       })
     end
   end
