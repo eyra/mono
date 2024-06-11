@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6FC2D380.js"></script>
+    <script src="dist/sidebar_items-B9F6EF61.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -129,6 +129,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#add_child/3" translate="no">add_child(socket, child_name, child_map)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#compose/2" translate="no">compose(id, assigns)</a>
 
       </div>
@@ -155,7 +163,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#handle_info/2" translate="no">handle_info(params, socket)</a>
 
       </div>
 
@@ -172,22 +180,6 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#update_child/2" translate="no">update_child(context, child_name)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#update_defaults/3" translate="no">update_defaults(socket, props, defaults)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#update_target/2" translate="no">update_target(pid, message)</a>
 
       </div>
 
@@ -215,6 +207,28 @@ core
 Functions
     </h1>
     <div class="functions-list">
+<section class="detail" id="add_child/3">
+
+  <div class="detail-header">
+    <a href="#add_child/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">add_child(socket, child_name, child_map)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="compose/2">
 
   <div class="detail-header">
@@ -224,7 +238,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">compose(id, assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -246,7 +260,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">compose_child(socket, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -268,7 +282,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -281,14 +295,14 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="current_user/1">
+<section class="detail" id="handle_info/2">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#handle_info/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">handle_info(params, socket)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -312,7 +326,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">reset_fabric(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L3" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -333,50 +347,6 @@ Functions
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update_child(context, child_name)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L3" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="update_defaults/3">
-
-  <div class="detail-header">
-    <a href="#update_defaults/3" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">update_defaults(socket, props, defaults)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="update_target/2">
-
-  <div class="detail-header">
-    <a href="#update_target/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">update_target(pid, message)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/content/page_view.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>

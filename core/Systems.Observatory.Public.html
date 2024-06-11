@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6FC2D380.js"></script>
+    <script src="dist/sidebar_items-B9F6EF61.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body data-type="modules" class="page-behaviour">
     <script>
 
       try {
@@ -107,7 +107,7 @@ core
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Observatory.Public</span> 
+  <span translate="no">Systems.Observatory.Public</span> <small>behaviour</small>
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -122,6 +122,28 @@ core
       </a>
       Summary
     </h1>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:get_model/3" translate="no">get_model(map, map, t)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_view_model_updated/1" translate="no">handle_view_model_updated(t)</a>
+
+      </div>
+
+    </div>
+
+</div>
 <div class="summary-functions summary">
   <h2>
     <a href="#functions">Functions</a>
@@ -172,6 +194,75 @@ core
   </section>
 
 
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Callbacks
+    </h1>
+    <div class="callbacks-list">
+<section class="detail" id="c:get_model/3">
+
+  <div class="detail-header">
+    <a href="#c:get_model/3" class="detail-link" title="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this callback</span>
+    </a>
+    <h1 class="signature" translate="no">get_model(map, map, t)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L4" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_model(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()) :: <a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:handle_view_model_updated/1">
+
+  <div class="detail-header">
+    <a href="#c:handle_view_model_updated/1" class="detail-link" title="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this callback</span>
+    </a>
+    <h1 class="signature" translate="no">handle_view_model_updated(t)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L5" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_view_model_updated(<a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()) :: <a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
   <section id="functions" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
@@ -190,7 +281,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">dispatch(signal, key, data)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L11" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -212,7 +303,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">local_dispatch(signal, key, data)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L16" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L19" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -236,7 +327,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">observe(socket, subscriptions \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L30" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L33" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -260,7 +351,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">subscribe(signal, key \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L4" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L7" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -282,7 +373,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">update_view_model(socket, page, model, presenter)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L40" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/observatory/_public.ex#L43" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

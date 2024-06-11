@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6FC2D380.js"></script>
+    <script src="dist/sidebar_items-B9F6EF61.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -137,41 +137,33 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon_url</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/illustration2.svg&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-grey1&quot;</code>.</li></ul></div>
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">icon_url</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/illustration2.svg&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-grey1&quot;</code>.</li></ul></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#dynamic/1" translate="no">dynamic(assigns)</a>
 
       </div>
 
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">params</code> (<code class="inline">:map</code>) (required)</li></ul></div>
+
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#image/1" translate="no">image(assigns)</a>
+        <a href="#illustration1/1" translate="no">illustration1(assigns)</a>
 
       </div>
 
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">logo_url</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul><h2>Slots</h2><ul><li><code class="inline">call_to_action</code></li></ul></div>
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">illustration</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">&quot;illustration.svg&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#large/1" translate="no">large(assigns)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">&quot;illustration.svg&quot;</code>.</li><li><code class="inline">size</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;large&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#small/1" translate="no">small(assigns)</a>
+        <a href="#illustration2/1" translate="no">illustration2(assigns)</a>
 
       </div>
 
@@ -181,9 +173,21 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#version/0" translate="no">version()</a>
+        <a href="#image_banner/1" translate="no">image_banner(assigns)</a>
 
       </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">logo_url</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#image_large/1" translate="no">image_large(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul><h2>Slots</h2><ul><li><code class="inline">call_to_action</code></li></ul></div>
 
     </div>
 
@@ -210,7 +214,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">banner(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L41" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L30" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -226,19 +230,19 @@ Functions
   </a>
   Attributes
 </h2>
-<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon_url</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/illustration2.svg&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-grey1&quot;</code>.</li></ul>
+<ul><li><code class="inline">icon_url</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;/images/illustration2.svg&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-grey1&quot;</code>.</li></ul>
   </section>
 </section>
-<section class="detail" id="current_user/1">
+<section class="detail" id="dynamic/1">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#dynamic/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">dynamic(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L15" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -248,53 +252,25 @@ Functions
 
   <section class="docstring">
 
-
-  </section>
-</section>
-<section class="detail" id="image/1">
-
-  <div class="detail-header">
-    <a href="#image/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">image(assigns)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L74" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<h2 id="image/1-attributes" class="section-heading">
-  <a href="#image/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+<h2 id="dynamic/1-attributes" class="section-heading">
+  <a href="#dynamic/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">attributes</p>
   </a>
   Attributes
 </h2>
-<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">logo_url</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul><h2 id="image/1-slots" class="section-heading">
-  <a href="#image/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">slots</p>
-  </a>
-  Slots
-</h2>
-<ul><li><code class="inline">call_to_action</code></li></ul>
+<ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">params</code> (<code class="inline">:map</code>) (required)</li></ul>
   </section>
 </section>
-<section class="detail" id="large/1">
+<section class="detail" id="illustration1/1">
 
   <div class="detail-header">
-    <a href="#large/1" class="detail-link" title="Link to this function">
+    <a href="#illustration1/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">large(assigns)</h1>
+    <h1 class="signature" translate="no">illustration1(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L121" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L139" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -304,25 +280,25 @@ Functions
 
   <section class="docstring">
 
-<h2 id="large/1-attributes" class="section-heading">
-  <a href="#large/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+<h2 id="illustration1/1-attributes" class="section-heading">
+  <a href="#illustration1/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">attributes</p>
   </a>
   Attributes
 </h2>
-<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">&quot;illustration.svg&quot;</code>.</li><li><code class="inline">size</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;large&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul>
+<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">illustration</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">&quot;illustration.svg&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul>
   </section>
 </section>
-<section class="detail" id="small/1">
+<section class="detail" id="illustration2/1">
 
   <div class="detail-header">
-    <a href="#small/1" class="detail-link" title="Link to this function">
+    <a href="#illustration2/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">small(assigns)</h1>
+    <h1 class="signature" translate="no">illustration2(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L17" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -332,8 +308,8 @@ Functions
 
   <section class="docstring">
 
-<h2 id="small/1-attributes" class="section-heading">
-  <a href="#small/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+<h2 id="illustration2/1-attributes" class="section-heading">
+  <a href="#illustration2/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
   <p class="sr-only">attributes</p>
   </a>
   Attributes
@@ -341,16 +317,16 @@ Functions
 <ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">illustration</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">&quot;illustration.svg&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li></ul>
   </section>
 </section>
-<section class="detail" id="version/0">
+<section class="detail" id="image_banner/1">
 
   <div class="detail-header">
-    <a href="#version/0" class="detail-link" title="Link to this function">
+    <a href="#image_banner/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">version()</h1>
+    <h1 class="signature" translate="no">image_banner(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L55" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -360,7 +336,47 @@ Functions
 
   <section class="docstring">
 
+<h2 id="image_banner/1-attributes" class="section-heading">
+  <a href="#image_banner/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">logo_url</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="image_large/1">
 
+  <div class="detail-header">
+    <a href="#image_large/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">image_large(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/hero.ex#L100" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="image_large/1-attributes" class="section-heading">
+  <a href="#image_large/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">subtitle</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">image_info</code> (<code class="inline">:any</code>) (required)</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul><h2 id="image_large/1-slots" class="section-heading">
+  <a href="#image_large/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">slots</p>
+  </a>
+  Slots
+</h2>
+<ul><li><code class="inline">call_to_action</code></li></ul>
   </section>
 </section>
 

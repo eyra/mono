@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6FC2D380.js"></script>
+    <script src="dist/sidebar_items-B9F6EF61.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -149,7 +149,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#event/1" translate="no">event(struct)</a>
+        <a href="#event/1" translate="no">event(arg1)</a>
 
       </div>
 
@@ -157,7 +157,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#event/2" translate="no">event(model, topic)</a>
+        <a href="#log/2" translate="no">log(tuple, opts \\ [])</a>
 
       </div>
 
@@ -165,23 +165,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#event/3" translate="no">event(model, topic, user_ref)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#log/2" translate="no">log(event, opts \\ [])</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#log/4" translate="no">log(model, topic, user_ref, opts \\ [])</a>
+        <a href="#multi_log/3" translate="no">multi_log(multi, tuple, opts \\ [])</a>
 
       </div>
 
@@ -230,7 +214,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">clear(event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L33" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L48" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -252,7 +236,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">count(event_template)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L35" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L50" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -272,53 +256,9 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">event(struct)</h1>
+    <h1 class="signature" translate="no">event(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L19" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="event/2">
-
-  <div class="detail-header">
-    <a href="#event/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">event(model, topic)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L24" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="event/3">
-
-  <div class="detail-header">
-    <a href="#event/3" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">event(model, topic, user_ref)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L28" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L34" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -340,7 +280,7 @@ Functions
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">log(event, opts \\ [])</h1>
+    <h1 class="signature" translate="no">log(tuple, opts \\ [])</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -355,18 +295,18 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="log/4">
+<section class="detail" id="multi_log/3">
 
-    <span id="log/3"></span>
+    <span id="multi_log/2"></span>
 
   <div class="detail-header">
-    <a href="#log/4" class="detail-link" title="Link to this function">
+    <a href="#multi_log/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">log(model, topic, user_ref, opts \\ [])</h1>
+    <h1 class="signature" translate="no">multi_log(multi, tuple, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L14" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L22" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -388,7 +328,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">sum(event_template)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L36" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L51" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -410,7 +350,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">unique(event_template)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L37" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/monitor/_public.ex#L52" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

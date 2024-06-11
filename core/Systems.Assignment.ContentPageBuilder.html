@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-6FC2D380.js"></script>
+    <script src="dist/sidebar_items-B9F6EF61.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -115,7 +115,8 @@ core
 
   <section id="moduledoc">
 <p>  Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
-  This builder module supports several specials with each a specific View Model.</p>
+  This builder module supports several specials with each a specific View Model.
+  For a full overview of the template feature see <a href="Systems.Assignment.Template.html"><code class="inline">Systems.Assignment.Template</code></a>.</p>
   </section>
 
 
@@ -134,11 +135,43 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#handle_close/1" translate="no">handle_close(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#handle_open/1" translate="no">handle_open(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#handle_publish/1" translate="no">handle_publish(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#handle_retract/1" translate="no">handle_retract(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#view_model/2" translate="no">view_model(assignment, assigns)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>  Returns a view model based on the template table below</p></div>
+        <div class="summary-synopsis"><p>  Returns a view model based on the templates defined in</p></div>
 
     </div>
 
@@ -156,16 +189,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="view_model/2">
+<section class="detail" id="handle_close/1">
 
   <div class="detail-header">
-    <a href="#view_model/2" class="detail-link" title="Link to this function">
+    <a href="#handle_close/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">view_model(assignment, assigns)</h1>
+    <h1 class="signature" translate="no">handle_close(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L35" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -175,20 +208,95 @@ Functions
 
   <section class="docstring">
 
-<p>  Returns a view model based on the template table below:</p><pre><code class="makeup elixir" translate="no"><span class="o">|</span><span class="w"> </span><span class="nc">Option</span><span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="nc">Benchmark</span><span class="w"> </span><span class="nc">Challenge</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nc">Data</span><span class="w"> </span><span class="nc">Donation</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="ss">:--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">:--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="ss">--</span><span class="p">:</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="ss">:--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="ss">-</span><span class="p">:</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">General</span><span class="w"> </span><span class="n">settings</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="w">                   </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Branding</span><span class="w"> </span><span class="n">settings</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Information</span><span class="w"> </span><span class="n">page</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Privacy</span><span class="w"> </span><span class="n">page</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Consent</span><span class="w"> </span><span class="n">form</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Helpdesk</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="n">form</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Panel</span><span class="w"> </span><span class="n">settings</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="w">                   </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Storage</span><span class="w"> </span><span class="n">settings</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="w">                   </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Invite</span><span class="w"> </span><span class="n">participants</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="w">            </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Worklow</span><span class="w"> </span><span class="n">initial</span><span class="w"> </span><span class="n">items</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w">               </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w">         </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Workflow</span><span class="w"> </span><span class="nc">Library</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="nc">No</span><span class="w">                   </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span><span class="w">
-</span><span class="o">|</span><span class="w"> </span><span class="nc">Monitor</span><span class="w">               </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="nc">Yes</span><span class="w">           </span><span class="o">|</span></code></pre>
+
+  </section>
+</section>
+<section class="detail" id="handle_open/1">
+
+  <div class="detail-header">
+    <a href="#handle_open/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">handle_open(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="handle_publish/1">
+
+  <div class="detail-header">
+    <a href="#handle_publish/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">handle_publish(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="handle_retract/1">
+
+  <div class="detail-header">
+    <a href="#handle_retract/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">handle_retract(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="view_model/2">
+
+  <div class="detail-header">
+    <a href="#view_model/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">view_model(assignment, assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/assignment/content_page_builder.ex#L26" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>  Returns a view model based on the templates defined in:</p><ul><li>Benchmark Challenge: <a href="Systems.Assignment.TemplateBenchmarkChallenge.html"><code class="inline">Systems.Assignment.TemplateBenchmarkChallenge</code></a></li><li>Data Donation: <a href="Systems.Assignment.TemplateDataDonation.html"><code class="inline">Systems.Assignment.TemplateDataDonation</code></a></li><li>Questionnaire: <a href="Systems.Assignment.TemplateQuestionnaire.html"><code class="inline">Systems.Assignment.TemplateQuestionnaire</code></a></li></ul>
   </section>
 </section>
 
