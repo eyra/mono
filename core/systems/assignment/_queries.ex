@@ -6,6 +6,7 @@ defmodule Systems.Assignment.Queries do
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Assignment
+  alias Systems.Account
   alias Systems.Project
 
   def assignment_query() do
@@ -18,6 +19,19 @@ defmodule Systems.Assignment.Queries do
     ])
   end
 
+  def assignment_query(%Account.User{id: user_id}, :participant) do
+    build(assignment_query(), :assignment,
+      crew: [
+        auth_node: [
+          role_assignments: [
+            role in [:participant, :tester],
+            principal_id == ^user_id
+          ]
+        ]
+      ]
+    )
+  end
+
   def assignment_query(%Project.NodeModel{id: project_node_id}, special) do
     build(assignment_query(special), :assignment,
       project_item: [
@@ -28,8 +42,8 @@ defmodule Systems.Assignment.Queries do
     )
   end
 
-  def assignment_ids(selector, special) do
-    assignment_query(selector, special)
+  def assignment_ids(selector, term) do
+    assignment_query(selector, term)
     |> select([assignment: a], a.id)
     |> distinct(true)
   end

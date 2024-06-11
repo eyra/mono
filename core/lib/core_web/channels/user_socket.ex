@@ -1,4 +1,4 @@
-defmodule CoreWeb.UserSocket do
+defmodule Systems.Account.UserSocket do
   use Phoenix.Socket
 
   ## Channels

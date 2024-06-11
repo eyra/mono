@@ -5,6 +5,25 @@ defmodule Systems.Instruction.Switch do
 
   @impl true
   def intercept(
+        {:content_page, _} = signal,
+        %{content_page: content_page} = message
+      ) do
+    if tool =
+         Instruction.Public.get_tool_by(
+           content_page,
+           Instruction.ToolModel.preload_graph(:down)
+         ) do
+      dispatch!(
+        {:instruction_tool, signal},
+        Map.merge(message, %{instruction_tool: tool})
+      )
+    end
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
         {:content_repository, _} = signal,
         %{content_repository: content_repository} = message
       ) do

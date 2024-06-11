@@ -12,6 +12,21 @@ defmodule Systems.Assignment.Switch do
   alias Systems.NextAction
 
   @impl true
+  def intercept(
+        {:project_item, :inserted} = signal,
+        %{project_item: %{advert: %{assignment_id: assignment_id}}} = message
+      ) do
+    assignment = Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
+
+    handle(
+      {:assignment, signal},
+      Map.merge(message, %{assignment: assignment})
+    )
+
+    :ok
+  end
+
+  @impl true
   def intercept({:workflow, _} = signal, %{workflow: workflow} = message) do
     if assignment = Assignment.Public.get_by(workflow, Assignment.Model.preload_graph(:down)) do
       dispatch!(

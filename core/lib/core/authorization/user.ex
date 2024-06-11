@@ -4,13 +4,12 @@ defimpl Frameworks.GreenLight.Principal, for: Atom do
   def roles(user) when is_nil(user), do: MapSet.new([:visitor])
 end
 
-defimpl Frameworks.GreenLight.Principal, for: Core.Accounts.User do
+defimpl Frameworks.GreenLight.Principal, for: Systems.Account.User do
   def id(user), do: user.id
 
   def roles(user) do
     MapSet.new([:member])
-    |> add_role_when(:researcher, user.researcher)
-    |> add_role_when(:student, user.student)
+    |> add_role_when(:creator, user.creator)
     |> add_role_when(:admin, Systems.Admin.Public.admin?(user))
   end
 

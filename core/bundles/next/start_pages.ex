@@ -4,16 +4,14 @@ defmodule Next.StartPages do
   def pages(),
     do: %{
       home: %{id: :home, path: "/", domain: "eyra-ui"},
-      console: %{id: :home, path: "/console", domain: "eyra-ui"}
+      projects: %{id: :projects, path: "/project", domain: "eyra-ui"}
     }
 
   @impl true
   def values(),
     do: %{
-      researcher: pages().console,
-      student: pages().console,
-      coordinator: pages().console,
-      member: pages().console
+      creator: pages().projects,
+      member: pages().home
     }
 
   defmacro __using__(_opts) do

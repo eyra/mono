@@ -178,14 +178,6 @@ msgstr ""
 msgid "ticket_status.open"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "templates.lab"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "templates.online"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.accepted"
 msgstr ""
@@ -200,30 +192,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.submitted"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.closed"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.completed"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.retracted"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.released"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.scheduled"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.submitted"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -419,10 +387,6 @@ msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "project_item_templates.leaderboard"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_status.concept"
 msgstr ""
 
@@ -440,4 +404,44 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.public"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.general_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.onsite_experiment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert_status.concept"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert_status.idle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert_status.offline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert_status.online"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.creator"
 msgstr ""

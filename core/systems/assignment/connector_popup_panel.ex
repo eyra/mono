@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.ConnectorPopupPanel do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   import CoreWeb.UI.Dialog
   alias Frameworks.Pixel.Annotation
@@ -10,21 +9,6 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
   alias Systems.{
     Assignment
   }
-
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_id: panel_type, selector_id: :panel_type_selector},
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(selected_type: panel_type)
-      |> update_type_selector()
-      |> update_annotation()
-    }
-  end
 
   @impl true
   def update(%{id: id, entity: entity}, socket) do
@@ -39,8 +23,26 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
       |> update_text()
       |> update_buttons()
       |> update_selected_type()
-      |> update_type_selector()
+      |> compose_child(:panel_type_selector)
       |> update_annotation()
+    }
+  end
+
+  @impl true
+  def compose(:panel_type_selector, %{selected_type: selected_type}) do
+    items =
+      Assignment.ExternalPanelIds.labels(
+        selected_type,
+        Assignment.Private.allowed_external_panel_ids()
+      )
+
+    %{
+      module: Selector,
+      params: %{
+        grid_options: "flex flex-row gap-8",
+        items: items,
+        type: :radio
+      }
     }
   end
 
@@ -71,25 +73,6 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
 
   defp update_selected_type(%{assigns: %{entity: %{external_panel: external_panel}}} = socket) do
     assign(socket, selected_type: external_panel)
-  end
-
-  defp update_type_selector(%{assigns: %{id: id, selected_type: selected_type}} = socket) do
-    items =
-      Assignment.ExternalPanelIds.labels(
-        selected_type,
-        Assignment.Private.allowed_external_panel_ids()
-      )
-
-    type_selector = %{
-      module: Selector,
-      id: :panel_type_selector,
-      grid_options: "flex flex-row gap-8",
-      items: items,
-      type: :radio,
-      parent: %{id: id, type: __MODULE__}
-    }
-
-    assign(socket, type_selector: type_selector)
   end
 
   defp update_annotation(%{assigns: %{selected_type: nil}} = socket) do
@@ -127,6 +110,20 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
     }
   end
 
+  @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: panel_type, source: %{name: :panel_type_selector}},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(selected_type: panel_type)
+      |> update_annotation()
+    }
+  end
+
   defp connect(%{assigns: %{selected_type: nil}} = socket) do
     socket
   end
@@ -148,7 +145,7 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
         <Text.form_field_label id={:type}><%= dgettext("eyra-assignment", "panel_form.type.label") %></Text.form_field_label>
         <.spacing value="XS" />
         <div class="w-full">
-          <.live_component {@type_selector} />
+          <.child name={:type_selector} fabric={@fabric} />
         </div>
         <%= if @annotation do %>
           <.spacing value="M" />

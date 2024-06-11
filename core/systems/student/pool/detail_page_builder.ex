@@ -3,13 +3,11 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
 
   import CoreWeb.UI.Responsive.Breakpoint
 
-  alias Systems.{
-    Pool,
-    Campaign,
-    Budget,
-    Bookkeeping,
-    Student
-  }
+  alias Systems.Pool
+  alias Systems.Advert
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Student
 
   def view_model(pool, assigns) do
     %{
@@ -18,11 +16,9 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     }
   end
 
-  defp create_tabs(
-         %{initial_tab: initial_tab} = assigns,
-         %{participants: participants} = pool
-       ) do
-    campaigns = load_campaigns(pool)
+  defp create_tabs(%{initial_tab: initial_tab} = assigns, pool) do
+    adverts = load_adverts(pool)
+    participants = Pool.Public.list_participants(pool)
     dashboard = load_dashboard(assigns, pool)
 
     [
@@ -35,12 +31,12 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         active: initial_tab === :students
       },
       %{
-        id: :campaigns,
-        title: dgettext("link-studentpool", "tabbar.item.campaigns"),
-        live_component: Pool.CampaignsView,
-        props: %{campaigns: campaigns},
+        id: :adverts,
+        title: dgettext("link-studentpool", "tabbar.item.adverts"),
+        live_component: Advert.ListView,
+        props: %{adverts: adverts},
         type: :fullpage,
-        active: initial_tab === :campaigns
+        active: initial_tab === :adverts
       },
       %{
         id: :dashboard,
@@ -53,22 +49,24 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     ]
   end
 
-  defp load_campaigns(pool) do
-    preload = Campaign.Model.preload_graph(:down)
+  defp load_adverts(pool) do
+    preload = Advert.Model.preload_graph(:down)
 
-    Campaign.Public.list_submitted(pool, preload: preload)
-    |> Enum.map(&Campaign.Model.flatten(&1))
-    |> Enum.map(&Pool.Builders.CampaignItem.view_model(&1))
+    Advert.Public.list_submitted(pool, preload: preload)
+    |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
   end
 
   defp scale({:unknown, _}), do: 5
   defp scale(breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
 
-  defp load_dashboard(%{breakpoint: breakpoint}, %{
-         target: target,
-         currency: currency,
-         participants: participants
-       }) do
+  defp load_dashboard(
+         %{breakpoint: breakpoint},
+         %Pool.Model{
+           target: target,
+           currency: currency
+         } = pool
+       ) do
+    participants = Pool.Public.list_participants(pool)
     scale = scale(breakpoint)
 
     wallets = Budget.Public.list_wallets(currency)

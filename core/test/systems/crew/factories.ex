@@ -1,8 +1,8 @@
 defmodule Systems.Crew.Factories do
   alias CoreWeb.UI.Timestamp
 
-  def create_member(crew, user) do
-    Core.Factories.insert!(:crew_member, %{crew: crew, user: user})
+  def create_member(crew, user, attrs \\ %{}) do
+    Core.Factories.insert!(:crew_member, Map.merge(%{crew: crew, user: user}, attrs))
   end
 
   def create_task(crew, member, [_ | _] = identifier, opts \\ []) do

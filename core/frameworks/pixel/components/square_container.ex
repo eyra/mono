@@ -1,7 +1,9 @@
 defmodule Frameworks.Pixel.Square do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Icon
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   slot(:inner_block, required: true)
 

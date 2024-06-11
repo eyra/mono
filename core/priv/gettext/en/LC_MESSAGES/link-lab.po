@@ -77,10 +77,6 @@ msgid "timeslot.selector.label"
 msgstr "Select a time slot"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "timeslot.submit.button"
-msgstr "Reserve a seat"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "apply.cta.title"
 msgstr "Participate"
 
@@ -95,10 +91,6 @@ msgstr "Proceed"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "reservation.title"
 msgstr "Booked lab session"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "submit.warning.no.selection"
-msgstr "Please select a time slot first"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "update.warning.time.slot.no.longer.available"

@@ -1,29 +1,11 @@
 defmodule Systems.Project.CreateItemPopup do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   import CoreWeb.UI.Dialog
 
   alias Frameworks.Pixel.Selector
 
-  alias Systems.{
-    Project
-  }
-
-  # Handle Tool Type Selector Update
-  @impl true
-  def update(
-        %{active_item_id: active_item_id, selector_id: :template_selector},
-        %{assigns: %{template_labels: template_labels}} = socket
-      ) do
-    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
-
-    {
-      :ok,
-      socket
-      |> assign(selected_template: selected_template)
-    }
-  end
+  alias Systems.Project
 
   # Initial Update
   @impl true
@@ -35,7 +17,20 @@ defmodule Systems.Project.CreateItemPopup do
       socket
       |> assign(id: id, node: node, title: title)
       |> init_templates()
+      |> compose_child(:template_selector)
       |> init_buttons()
+    }
+  end
+
+  @impl true
+  def compose(:template_selector, %{template_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :radio,
+        optional?: false
+      }
     }
   end
 
@@ -55,10 +50,10 @@ defmodule Systems.Project.CreateItemPopup do
     |> assign(
       buttons: [
         %{
-          action: %{type: :send, event: "proceed", target: myself},
+          action: %{type: :send, event: "create_item", target: myself},
           face: %{
             type: :primary,
-            label: dgettext("eyra-project", "create.proceed.button")
+            label: dgettext("eyra-project", "create_item_popup.create.button")
           }
         },
         %{
@@ -71,26 +66,38 @@ defmodule Systems.Project.CreateItemPopup do
 
   @impl true
   def handle_event(
-        "proceed",
+        "create_item",
         _,
         %{assigns: %{selected_template: selected_template}} = socket
       ) do
     create_item(socket, selected_template)
 
-    {:noreply, socket |> finish()}
+    {:noreply, socket |> send_event(:parent, "saved")}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> finish()}
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
-  defp finish(socket) do
-    socket |> send_event(:parent, "finish")
+  @impl true
+  def handle_event(
+        "active_item_id",
+        %{active_item_id: active_item_id, source: %{name: :template_selector}},
+        %{assigns: %{template_labels: template_labels}} = socket
+      ) do
+    %{id: selected_template} = Enum.find(template_labels, &(&1.id == active_item_id))
+
+    {
+      :noreply,
+      socket
+      |> assign(selected_template: selected_template)
+    }
   end
 
   defp create_item(%{assigns: %{node: node}}, template) do
-    name = Project.ItemTemplates.translate(template)
+    default_name = Project.ItemTemplates.translate(template)
+    name = Project.Public.new_item_name(node, default_name)
     Project.Assembly.create_item(template, name, node)
   end
 
@@ -99,14 +106,7 @@ defmodule Systems.Project.CreateItemPopup do
     ~H"""
     <div>
       <.dialog {%{title: @title, buttons: @buttons}}>
-        <.live_component
-          module={Selector}
-          id={:template_selector}
-          items={@template_labels}
-          type={:radio}
-          optional?={false}
-          parent={%{type: __MODULE__, id: @id}}
-        />
+        <.child name={:template_selector} fabric={@fabric} />
       </.dialog>
     </div>
     """

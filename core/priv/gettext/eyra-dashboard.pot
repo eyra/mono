@@ -11,9 +11,5 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "default.study.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "recent-items.title"
 msgstr ""

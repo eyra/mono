@@ -2,6 +2,7 @@ defmodule Systems.Assignment.Factories do
   alias Core.Factories
 
   alias Systems.Alliance
+  alias Systems.Budget
 
   def create_info(duration, subject_count) do
     Factories.insert!(
@@ -40,7 +41,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, workflow, auth_node, budget, director) do
+  def create_assignment(info, workflow, auth_node, %Budget.Model{} = budget) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
@@ -48,12 +49,11 @@ defmodule Systems.Assignment.Factories do
       workflow: workflow,
       crew: crew,
       auth_node: auth_node,
-      budget: budget,
-      director: director
+      budget: budget
     })
   end
 
-  def create_assignment(info, workflow, auth_node, status) do
+  def create_assignment(info, workflow, auth_node, status) when is_atom(status) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
@@ -77,5 +77,9 @@ defmodule Systems.Assignment.Factories do
     _workflow_item = create_workflow_item(workflow, tool_ref)
 
     create_assignment(info, workflow, assignment_auth_node, status)
+  end
+
+  def build_assignment() do
+    Factories.insert!(:assignment, %{})
   end
 end

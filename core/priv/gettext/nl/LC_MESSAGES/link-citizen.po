@@ -15,10 +15,6 @@ msgid "overview.plugin.title"
 msgstr "Burgerpools"
 
 #, elixir-autogen, elixir-format
-msgid "campaigns.label"
-msgstr "Campagnes"
-
-#, elixir-autogen, elixir-format
 msgid "participants.label"
 msgstr "Burgers"
 
@@ -59,10 +55,6 @@ msgid "search.placeholder"
 msgstr "Zoeken"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.campaigns"
-msgstr "Campagnes"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.citizens"
 msgstr "Burgers"
 
@@ -81,3 +73,7 @@ msgstr "Herstel"
 #, elixir-autogen, elixir-format
 msgid "overview.share.button"
 msgstr "Deel"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.adverts"
+msgstr "Burgers"

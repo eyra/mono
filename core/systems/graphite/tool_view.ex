@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.ToolView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   import Frameworks.Pixel.Line
 

@@ -36,7 +36,6 @@ defmodule Frameworks.Pixel.DropdownSelector do
         %{
           id: id,
           options: options,
-          parent: parent,
           selected_option_index: selected_option_index,
           background: background,
           debounce: debounce
@@ -49,7 +48,6 @@ defmodule Frameworks.Pixel.DropdownSelector do
       |> assign(
         id: id,
         options: options,
-        parent: parent,
         selected_option_index: selected_option_index,
         selected_option: nil,
         background: background,
@@ -96,8 +94,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
            assigns: %{
              options: options,
              selected_option: %{id: selected_option_id},
-             selected_option_index: nil,
-             parent: parent
+             selected_option_index: nil
            }
          } = socket
        ) do
@@ -105,9 +102,11 @@ defmodule Frameworks.Pixel.DropdownSelector do
 
     case selected_option_index do
       nil ->
-        update_target(parent, %{selector: :reset})
         warning = dgettext("link-lab", "update.warning.time.slot.no.longer.available")
-        socket |> assign(selected_option_index: nil, selected_option: nil, warning: warning)
+
+        socket
+        |> send_event(:parent, "dropdown_reset")
+        |> assign(selected_option_index: nil, selected_option: nil, warning: warning)
 
       index ->
         socket |> assign(selected_option_index: index, warning: nil)
@@ -133,10 +132,8 @@ defmodule Frameworks.Pixel.DropdownSelector do
   def handle_event(
         "toggle_options",
         _,
-        %{assigns: %{show_options?: show_options?, parent: parent}} = socket
+        %{assigns: %{show_options?: show_options?}} = socket
       ) do
-    update_target(parent, %{selector: :toggle, show_options?: !show_options?})
-
     {
       :noreply,
       socket
@@ -144,6 +141,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
         show_options?: !show_options?,
         warning: nil
       )
+      |> send_event(:parent, "dropdown_toggle", %{show_options?: !show_options?})
     }
   end
 
@@ -151,15 +149,13 @@ defmodule Frameworks.Pixel.DropdownSelector do
   def handle_event(
         "option_click",
         %{"item" => selected_item},
-        %{assigns: %{options: options, parent: parent}} = socket
+        %{assigns: %{options: options}} = socket
       ) do
     selected_option_index = String.to_integer(selected_item)
 
     selected_option =
       options
       |> Enum.at(selected_option_index)
-
-    update_target(parent, %{selector: :selected, option: selected_option})
 
     {
       :noreply,
@@ -170,21 +166,12 @@ defmodule Frameworks.Pixel.DropdownSelector do
         show_options?: false
       )
       |> update_selector_text()
+      |> send_event(:parent, "dropdown_selected", %{option: selected_option})
     }
   end
 
   defp icon(%{show_options?: false}), do: :dropdown
   defp icon(_), do: :dropup
-
-  # data(selector_text, :string)
-  # data(show_options?, :boolean)
-  # data(warning, :string)
-
-  attr(:options, :list, required: true)
-  attr(:parent, :any, required: true)
-  attr(:selected_option_index, :integer)
-  attr(:background, :atom, default: :light)
-  attr(:debounce, :string, default: "0")
 
   @impl true
   def render(assigns) do

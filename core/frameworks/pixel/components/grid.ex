@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Grid do
   @moduledoc false
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   slot(:inner_block, required: true)
 

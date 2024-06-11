@@ -1,45 +1,55 @@
 defmodule Systems.Alliance.ContentPage do
-  use CoreWeb, :live_view
-  use Systems.Content.Page
+  use Systems.Content.Composer, :management_page
 
-  alias Systems.{
-    Alliance
-  }
+  alias Systems.Alliance
 
   @impl true
-  def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Alliance.Public.get_tool!(id)
+  def get_authorization_context(params, session, socket) do
+    get_model(params, session, socket)
   end
 
   @impl true
-  def mount(%{"id" => id} = params, session, socket) do
+  def get_model(%{"id" => id}, _session, _socket) do
+    Alliance.Public.get_tool!(String.to_integer(id))
+  end
+
+  @impl true
+  def mount(%{"id" => id} = params, _session, socket) do
     initial_tab = Map.get(params, "tab")
-    model = Alliance.Public.get_tool!(String.to_integer(id))
     tabbar_id = "alliance_content/#{id}"
 
     {
       :ok,
-      socket |> initialize(session, id, model, tabbar_id, initial_tab)
+      socket
+      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
     }
   end
 
   @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_resize(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
+
+  @impl true
   def render(assigns) do
     ~H"""
-    <.content_page
-      title={@vm.title}
-      menus={@menus}
-      tabs={@vm.tabs}
-      actions={@actions}
-      more_actions={@more_actions}
-      initial_tab={@initial_tab}
-      tabbar_id={@tabbar_id}
-      tabbar_size={@tabbar_size}
-      breakpoint={@breakpoint}
-      popup={@popup}
-      dialog={@dialog}
-      show_errors={@show_errors}
-     />
+      <.management_page
+        title={@vm.title}
+        tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
+        menus={@menus}
+        modal={@modal}
+        popup={@popup}
+        dialog={@dialog}
+        tabbar_id={@tabbar_id}
+        initial_tab={@initial_tab}
+        tabbar_size={@tabbar_size}
+        actions={@actions}
+      />
     """
   end
 end

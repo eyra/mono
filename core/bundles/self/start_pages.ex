@@ -9,9 +9,7 @@ defmodule Self.StartPages do
   @impl true
   def values(),
     do: %{
-      researcher: pages().projects,
-      student: pages().projects,
-      coordinator: pages().projects,
+      creator: pages().projects,
       member: pages().projects
     }
 

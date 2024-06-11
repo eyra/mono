@@ -5,6 +5,18 @@ defmodule Core.FeatureFlags do
     end
   end
 
+  defmacro features_enabled?(feature_ids) when is_list(feature_ids) do
+    unless __CALLER__.function do
+      throw("Feature checking must be used from inside a function to allow i18n.")
+    end
+
+    quote bind_quoted: [feature_ids: feature_ids] do
+      Enum.reduce(feature_ids, true, fn feature_id, acc ->
+        acc and Core.FeatureFlags.conf_enabled?(feature_id)
+      end)
+    end
+  end
+
   defmacro feature_enabled?(feature_id) when is_atom(feature_id) do
     unless __CALLER__.function do
       throw("Feature checking must be used from inside a function to allow i18n.")

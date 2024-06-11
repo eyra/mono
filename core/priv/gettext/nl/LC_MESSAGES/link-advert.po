@@ -1,0 +1,91 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+
+#, elixir-autogen, elixir-format
+msgid "reject.button"
+msgstr "Bijdrage afkeuren"
+
+#, elixir-autogen, elixir-format
+msgid "reject.message.label"
+msgstr "Bericht aan de deelnemer (in het Engels)"
+
+#, elixir-autogen, elixir-format
+msgid "reject.text"
+msgstr "Geef aan waarom je deze bijdrage afkeurt:"
+
+#, elixir-autogen, elixir-format
+msgid "reject.title"
+msgstr "Bijdrage afkeuren"
+
+#, elixir-autogen, elixir-format
+msgid "reject.note"
+msgstr "Let op: Afgewezen deelnemers kunnen niet opnieuw meedoen aan deze campagne."
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "exclusion.description"
+msgstr "Wil je deelnemers die je in voorgaande campagnes geworven hebt excluderen? Selecteer dan één of meerdere campagnes hieronder."
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "exclusion.select.label"
+msgstr "Campagnes"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "exclusion.title"
+msgstr "Exclusie"
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission.criteria.status"
+msgstr "Op basis van de geselecteerde criteria, kunnen %{sample} van de %{total} mensen in de pool meedoen aan jouw studie."
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission.criteria.title"
+msgstr "Criteria"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.funding.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.pool"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.pool.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "no.previous.adverts.available"
+msgstr "Nog geen voorgaande campagnes beschikbaar"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings.forward"
+msgstr ""

@@ -5,7 +5,7 @@ defmodule Frameworks.Concept.PoolDirector do
   @type error :: map
   @type currency :: binary
   @type url_resolver :: (atom, list -> binary)
-  @type plugin :: %{module: atom, props: map}
+  @type plugin :: %{module: atom, params: map}
 
   @callback overview_plugin(user) :: plugin | nil
   @callback submission_plugin(user) :: plugin | nil

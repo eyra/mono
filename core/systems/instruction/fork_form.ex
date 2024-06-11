@@ -1,6 +1,5 @@
 defmodule Systems.Instruction.ForkForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import CoreWeb.Gettext
 

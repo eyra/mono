@@ -3,10 +3,6 @@ defmodule Systems.Lab.PublicPageTest do
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
-  alias Systems.{
-    Lab
-  }
-
   @expected_message_after_reservation "You have made a reservation"
   setup do
     {:ok,
@@ -25,13 +21,13 @@ defmodule Systems.Lab.PublicPageTest do
     setup [:login_as_member]
 
     test "show all available time slots", %{conn: conn, lab: lab} do
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Lab.PublicPage, lab.id))
+      {:ok, _view, html} = live(conn, ~p"/lab/#{lab.id}")
       [slot | _] = lab.time_slots
       assert html =~ slot.location
     end
 
     test "apply for a time slot creates a reservation", %{conn: conn, lab: lab} do
-      {:ok, view, html} = live(conn, Routes.live_path(conn, Lab.PublicPage, lab.id))
+      {:ok, view, html} = live(conn, ~p"/lab/#{lab.id}")
       # The users starts without a reservation
       refute html =~ @expected_message_after_reservation
 
@@ -44,12 +40,12 @@ defmodule Systems.Lab.PublicPageTest do
       assert html =~ @expected_message_after_reservation
 
       # The message stays when the page is loaded freshly
-      {:ok, _view, html} = live(conn, Routes.live_path(conn, Lab.PublicPage, lab.id))
+      {:ok, _view, html} = live(conn, ~p"/lab/#{lab.id}")
       assert html =~ @expected_message_after_reservation
     end
 
     test "cancel a reservation removes the reservation info", %{conn: conn, lab: lab} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Lab.PublicPage, lab.id))
+      {:ok, view, _html} = live(conn, ~p"/lab/#{lab.id}")
 
       view
       |> element("button", "Apply")

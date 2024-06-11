@@ -11,10 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "back.button.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "banner.subtitle.label"
 msgstr ""
 
@@ -39,7 +35,7 @@ msgid "choose.other.banner.photo.file"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "description.label"
+msgid "background.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -47,7 +43,7 @@ msgid "description.public.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "description.title"
+msgid "background.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -67,15 +63,7 @@ msgid "expectations.public.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "expectations.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "image.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "image.title"
+msgid "expectations.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -103,14 +91,6 @@ msgid "title.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "form.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "preview.inform.text"
 msgstr ""
 
@@ -119,5 +99,9 @@ msgid "preview.inform.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "languages.available.label"
+msgid "language.available.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "copy.title"
 msgstr ""

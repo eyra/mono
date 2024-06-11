@@ -9,3 +9,11 @@
 msgid ""
 msgstr ""
 "Language: en\n"
+
+#, elixir-autogen, elixir-format
+msgid "request.verification.body"
+msgstr "Only verified members can publish content. Please contact us at <a href=\"mailto:verify@eyra.co\">hello@eyra.co</a> so we can help you become a verified member."
+
+#, elixir-autogen, elixir-format
+msgid "request.verification.title"
+msgstr "Request verification"

@@ -1,6 +1,7 @@
 defmodule Systems.Graphite.Gen do
   alias Core.Factories
   alias Systems.Graphite
+  alias Systems.Account
 
   require Logger
 
@@ -82,9 +83,9 @@ defmodule Systems.Graphite.Gen do
 
     submissions_to_delete = Graphite.Queries.submissions_by_prefix(:description, prefix)
     scores_to_delete = Graphite.Queries.scores_by_submissions(submissions_to_delete)
-    users_to_delete = Core.Accounts.Queries.users_by_prefix(:displayname, prefix)
-    features_to_delete = Core.Accounts.Queries.features_by_users(users_to_delete)
-    profiles_to_delete = Core.Accounts.Queries.profiles_by_users(users_to_delete)
+    users_to_delete = Account.Queries.users_by_prefix(:displayname, prefix)
+    features_to_delete = Account.Queries.features_by_users(users_to_delete)
+    profiles_to_delete = Account.Queries.profiles_by_users(users_to_delete)
 
     {:ok, result} =
       Ecto.Multi.new()

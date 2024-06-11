@@ -19,10 +19,6 @@ msgid "persister.saved.flash"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "menu.item.console"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr ""
 
@@ -40,10 +36,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.todo"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "dashboard.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -83,14 +75,6 @@ msgid "ok.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "feature.unavailable.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "feature.unavailable.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr ""
 
@@ -104,10 +88,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "authentication.required.message"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "start.page.console"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -212,4 +192,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.nextweek"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.desktop"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.workspace"
 msgstr ""

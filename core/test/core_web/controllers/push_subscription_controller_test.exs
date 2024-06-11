@@ -20,8 +20,7 @@ defmodule CoreWeb.PushSubscriptionControllerTest do
     setup [:login_as_member]
 
     test "register a subscription", %{conn: conn, user: user} do
-      conn =
-        post(conn, Routes.push_subscription_path(conn, :register), subscription: @valid_attrs)
+      conn = post(conn, ~p"/web-push/register", subscription: @valid_attrs)
 
       assert json_response(conn, 200) == %{}
       assert Core.Repo.get_by(PushSubscription, user_id: user.id) != nil
@@ -32,8 +31,7 @@ defmodule CoreWeb.PushSubscriptionControllerTest do
     setup [:login_as_member]
 
     test "return the public key", %{conn: conn} do
-      conn = get(conn, Routes.push_subscription_path(conn, :vapid_public_key))
-
+      conn = get(conn, ~p"/web-push/vapid-public-key")
       assert is_binary(response(conn, 200))
     end
   end

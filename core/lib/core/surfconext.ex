@@ -1,5 +1,5 @@
 defmodule Core.SurfConext do
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Repo
   alias Frameworks.Signal
   import Ecto.Query, warn: false
@@ -39,8 +39,6 @@ defmodule Core.SurfConext do
   end
 
   def register_user(attrs) do
-    affiliation = attrs |> Map.get("eduperson_affiliation", []) |> MapSet.new()
-
     fullname =
       ~w(given_name family_name)
       |> Enum.map(&Map.get(attrs, &1, ""))
@@ -56,9 +54,8 @@ defmodule Core.SurfConext do
       profile: %{
         fullname: fullname
       },
-      researcher: MapSet.member?(affiliation, "employee"),
-      student:
-        MapSet.member?(affiliation, "student") || String.ends_with?(email, "@student.vu.nl")
+      creator: true,
+      verified_at: NaiveDateTime.utc_now()
     }
 
     user = User.sso_changeset(%User{}, sso_info)

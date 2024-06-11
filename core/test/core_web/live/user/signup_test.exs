@@ -1,13 +1,13 @@
-defmodule CoreWeb.Live.User.Signup.Test do
+defmodule CoreWeb.Live.User.SignupPage.Test do
   use CoreWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  alias CoreWeb.User.Signup
+
   alias Core.Factories
 
   describe "as a visitor" do
     test "signup with low-quality password fails", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, Signup))
+      {:ok, view, _html} = live(conn, ~p"/user/signup/participant")
 
       html =
         view
@@ -18,7 +18,7 @@ defmodule CoreWeb.Live.User.Signup.Test do
     end
 
     test "signup redirects to confirmation view", %{conn: conn} do
-      {:ok, view, _html} = live(conn, Routes.live_path(conn, CoreWeb.User.Signup))
+      {:ok, view, _html} = live(conn, ~p"/user/signup/creator")
 
       view
       |> element("form")

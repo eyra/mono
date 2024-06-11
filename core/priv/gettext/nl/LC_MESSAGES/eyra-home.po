@@ -9,3 +9,23 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
+
+#, elixir-autogen, elixir-format
+msgid "member.title"
+msgstr "Mijn startpagina"
+
+#, elixir-autogen, elixir-format
+msgid "visitor.title"
+msgstr "Welkom bezoeker"
+
+#, elixir-autogen, elixir-format
+msgid "participated.title"
+msgstr "Participaties"
+
+#, elixir-autogen, elixir-format
+msgid "available.member.title"
+msgstr "Beschikbare studies"
+
+#, elixir-autogen, elixir-format
+msgid "available.visitor.title"
+msgstr "Voorbeeld studies"

@@ -4,7 +4,7 @@ defmodule CoreWeb.Routes do
       require CoreWeb.Live.Routes
 
       require CoreWeb.Cldr
-      import CoreWeb.UserAuth
+      import Systems.Account.UserAuth
       import CoreWeb.Meta
       alias Systems.Assignment
 

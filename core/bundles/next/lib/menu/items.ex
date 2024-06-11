@@ -1,13 +1,21 @@
 defmodule Next.Menu.Items do
+  use CoreWeb, :verified_routes
   @behaviour CoreWeb.Menu.ItemsProvider
 
-  use CoreWeb, :verified_routes
   import CoreWeb.Gettext
 
   @impl true
   def values() do
     %{
       next: %{action: %{type: :http_get, to: ~p"/"}, title: "Next"},
+      desktop: %{
+        action: %{type: :redirect, to: ~p"/desktop"},
+        title: dgettext("eyra-ui", "menu.item.desktop")
+      },
+      workspace: %{
+        action: %{type: :redirect, to: ~p"/desktop"},
+        title: dgettext("eyra-ui", "menu.item.workspace")
+      },
       admin: %{
         action: %{type: :redirect, to: ~p"/admin/config"},
         title: dgettext("eyra-ui", "menu.item.admin")
@@ -19,10 +27,6 @@ defmodule Next.Menu.Items do
       support: %{
         action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
-      },
-      console: %{
-        action: %{type: :redirect, to: ~p"/console"},
-        title: dgettext("eyra-ui", "menu.item.console")
       },
       todo: %{
         action: %{type: :redirect, to: ~p"/todo"},

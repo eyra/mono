@@ -5,15 +5,10 @@ defmodule Systems.Promotion.Public do
 
   import Ecto.Query, warn: false
 
-  alias Ecto.Multi
-  alias Ecto.Changeset
   alias Core.Repo
-  alias Frameworks.Signal
 
-  alias Systems.{
-    Promotion,
-    Pool
-  }
+  alias Systems.Promotion
+  alias Systems.Pool
 
   def list do
     Repo.all(Promotion.Model)
@@ -29,29 +24,10 @@ defmodule Systems.Promotion.Public do
 
   def get(id), do: Repo.get(Promotion, id)
 
-  def create(attrs, auth_node) do
+  def prepare(attrs, auth_node) do
     %Promotion.Model{}
     |> Promotion.Model.changeset(:insert, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
-    |> Repo.insert()
-  end
-
-  def update(%Promotion.Model{} = _promotion, %Changeset{} = changeset) do
-    result =
-      Multi.new()
-      |> Repo.multi_update(:promotion, changeset)
-      |> Repo.transaction()
-
-    with {:ok, %{promotion: promotion}} <- result do
-      Signal.Public.dispatch!({:promotion, :updated}, promotion)
-    end
-
-    result
-  end
-
-  def update(%Promotion.Model{} = promotion, attrs) do
-    changeset = Promotion.Model.changeset(promotion, :update, attrs)
-    __MODULE__.update(promotion, changeset)
   end
 
   def delete(%Promotion.Model{} = promotion) do
@@ -87,8 +63,8 @@ defmodule Systems.Promotion.Public do
 end
 
 defimpl Core.Persister, for: Systems.Promotion.Model do
-  def save(promotion, changeset) do
-    case Systems.Promotion.Public.update(promotion, changeset) do
+  def save(_promotion, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :promotion) do
       {:ok, %{promotion: promotion}} -> {:ok, promotion}
       _ -> {:error, changeset}
     end

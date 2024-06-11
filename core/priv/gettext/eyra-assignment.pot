@@ -11,26 +11,6 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "cancel.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "cancel.confirm.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "contact.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr ""
 
@@ -388,4 +368,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.general_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.onsite_experiment.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.title"
 msgstr ""

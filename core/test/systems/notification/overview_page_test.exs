@@ -4,12 +4,12 @@ defmodule Systems.Notification.OverviewPageTest do
   import Phoenix.LiveViewTest
   alias Systems.Notification.Public
 
-  setup [:login_as_member]
+  setup [:login_as_creator]
 
   test "show notifications", %{conn: conn, user: user} do
     title = Faker.Lorem.sentence()
     Public.notify(user, %{title: title})
-    {:ok, _view, html} = live(conn, Routes.live_path(conn, Systems.Notification.OverviewPage))
+    {:ok, _view, html} = live(conn, ~p"/notifications")
     assert html =~ title
   end
 end

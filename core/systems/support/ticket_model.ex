@@ -2,7 +2,7 @@ defmodule Systems.Support.TicketModel do
   use Ecto.Schema
   import Ecto.Changeset
   require Core.Enums.TicketTypes
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   import CoreWeb.Gettext
 

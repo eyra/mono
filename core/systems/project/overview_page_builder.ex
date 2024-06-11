@@ -1,9 +1,9 @@
 defmodule Systems.Project.OverviewPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
 
-  alias Systems.{
-    Project
-  }
+  import CoreWeb.Gettext
+
+  alias Systems.Project
 
   def view_model(
         user,
@@ -13,8 +13,10 @@ defmodule Systems.Project.OverviewPageBuilder do
     cards = cards(projects, assigns)
 
     %{
+      title: dgettext("eyra-project", "overview.title"),
       projects: projects,
-      cards: cards
+      cards: cards,
+      active_menu_item: :projects
     }
   end
 

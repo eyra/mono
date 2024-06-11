@@ -20,7 +20,7 @@ defmodule Systems.Citizen.Director do
   def overview_plugin(user) do
     %{
       module: Citizen.Pool.OverviewPlugin,
-      props: %{id: :citizen_pools, user: user}
+      params: %{id: :citizen_pools, user: user}
     }
   end
 
@@ -35,7 +35,7 @@ defmodule Systems.Citizen.Director do
   @impl true
   def resolve_budget(pool_id, user_id) do
     # return first budget as default or create a new one as a starter
-    user = Core.Accounts.get_user!(user_id)
+    user = Systems.Account.Public.get_user!(user_id)
     %{currency: currency} = Pool.Public.get!(pool_id, [:currency])
 
     case Budget.Public.list_owned_by_currency(user, currency, Budget.Model.preload_graph(:full)) do

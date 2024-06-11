@@ -15,10 +15,6 @@ msgid "no.results.found.message"
 msgstr "No images found"
 
 #, elixir-autogen, elixir-format
-msgid "search.image.button"
-msgstr "Search"
-
-#, elixir-autogen, elixir-format
 msgid "search.image.title"
 msgstr "Search and select an image"
 
@@ -33,3 +29,7 @@ msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "1 image"
 msgstr[1] "%{begin}-%{end} of %{count} images"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "search.image.button"
+msgstr "Search"

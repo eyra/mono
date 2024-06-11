@@ -1,13 +1,13 @@
 defmodule Frameworks.Pixel.SearchBar do
   @moduledoc false
   use CoreWeb, :live_component
+
   @impl true
   def update(
         %{
           id: id,
           query_string: query_string,
           placeholder: placeholder,
-          parent: parent,
           debounce: debounce
         },
         socket
@@ -19,7 +19,6 @@ defmodule Frameworks.Pixel.SearchBar do
         id: id,
         query_string: query_string,
         placeholder: placeholder,
-        parent: parent,
         debounce: debounce
       )
     }
@@ -51,30 +50,27 @@ defmodule Frameworks.Pixel.SearchBar do
     }
   end
 
-  defp send_to_parent(%{assigns: %{id: id, parent: parent}} = socket, "") do
-    update_target(parent, %{search_bar: id, query_string: "", query: nil})
+  defp send_to_parent(socket, "") do
     socket
+    |> send_event(:parent, "search_query", %{
+      query_string: "",
+      query: nil
+    })
   end
 
-  defp send_to_parent(%{assigns: %{id: id, parent: parent}} = socket, query_string) do
-    update_target(parent, %{
-      search_bar: id,
+  defp send_to_parent(socket, query_string) do
+    socket
+    |> send_event(:parent, "search_query", %{
       query_string: query_string,
       query: String.split(query_string, " ")
     })
-
-    socket
   end
 
-  attr(:query_string, :any, default: nil)
-  attr(:placeholder, :string, default: "")
-  attr(:parent, :any, required: true)
-  attr(:debounce, :string, default: "1000")
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_form"} for={%{}} phx-submit="submit" phx-change="change">
+      <.form id={"#{@id}_form"} for={%{}} phx-submit="submit" phx-change="change" phx-target={@myself}>
         <div class="flex flex-row">
           <input
             class="text-grey1 text-bodymedium font-body pl-3 pr-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-48px"

@@ -1,5 +1,5 @@
 defmodule CoreWeb.UI.Dialog do
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
   alias Frameworks.Pixel.Button
 
@@ -10,7 +10,7 @@ defmodule CoreWeb.UI.Dialog do
 
   def dialog(assigns) do
     ~H"""
-    <div class="h-full p-8 bg-white shadow-2xl min-w-dialog-width sm:min-w-dialog-width-sm rounded">
+    <div class="h-full">
       <div class="flex flex-col gap-4 sm:gap-8">
         <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
           <%= @title %>

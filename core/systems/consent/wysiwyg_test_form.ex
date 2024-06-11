@@ -1,6 +1,5 @@
 defmodule Systems.Consent.WysiwygTestForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   @impl true
   def update(%{x: x}, socket) do

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Button.Face do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Icon
 

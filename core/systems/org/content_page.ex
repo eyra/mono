@@ -1,18 +1,16 @@
 defmodule Systems.Org.ContentPage do
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :admin
-  use CoreWeb.UI.Responsive.Viewport
+  use Systems.Content.Composer, :management_page
 
-  alias CoreWeb.UI.Tabbar
-  alias CoreWeb.UI.Navigation
-
-  alias Systems.{
-    Org
-  }
+  alias Systems.Org
 
   @impl true
-  def mount(%{"id" => id}, _, socket) do
-    node = Org.Public.get_node!(id, Org.NodeModel.preload_graph(:full))
+  def get_model(%{"id" => id}, _session, _socket) do
+    Org.Public.get_node!(id, Org.NodeModel.preload_graph(:full))
+  end
+
+  @impl true
+  def mount(%{"id" => id} = params, _, socket) do
+    initial_tab = Map.get(params, "tab")
     tabbar_id = "org_content/#{id}"
 
     {
@@ -20,77 +18,36 @@ defmodule Systems.Org.ContentPage do
       socket
       |> assign(
         tabbar_id: tabbar_id,
-        node: node,
-        locale: LiveLocale.get_locale()
+        initial_tab: initial_tab
       )
-      |> assign_breakpoint()
-      |> create_tabs()
-      |> update_tabbar()
-      |> update_menus()
     }
   end
 
   @impl true
-  def handle_resize(socket) do
-    socket
-    |> update_tabbar()
-    |> update_menus()
-  end
+  def handle_view_model_updated(socket), do: socket
 
   @impl true
-  def handle_info({:handle_auto_save_done, _}, socket) do
-    socket |> update_menus()
-    {:noreply, socket}
-  end
+  def handle_resize(socket), do: socket
 
-  defp update_tabbar(%{assigns: %{breakpoint: breakpoint}} = socket) do
-    tabbar_size = tabbar_size(breakpoint)
-
-    socket
-    |> assign(tabbar_size: tabbar_size)
-  end
-
-  defp create_tabs(%{assigns: %{node: node, locale: locale}} = socket) do
-    tabs = [
-      %{
-        id: :node,
-        ready: true,
-        title: dgettext("eyra-org", "node.title"),
-        type: :fullpage,
-        live_component: Systems.Org.NodeContentView,
-        props: %{
-          locale: locale,
-          node: node
-        }
-      },
-      %{
-        id: :users,
-        ready: true,
-        title: dgettext("eyra-org", "user.title"),
-        type: :fullpage,
-        live_component: Systems.Org.UserView,
-        props: %{
-          locale: locale
-        }
-      }
-    ]
-
-    socket
-    |> assign(tabs: tabs)
-  end
-
-  defp tabbar_size({:unknown, _}), do: :unknown
-  defp tabbar_size(bp), do: value(bp, :narrow, sm: %{30 => :wide})
+  @impl true
+  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("eyra-org", "org.content.title")} menus={@menus}>
-      <Navigation.action_bar>
-        <Tabbar.container id={@tabbar_id} tabs={@tabs} size={@tabbar_size} />
-      </Navigation.action_bar>
-      <Tabbar.content tabs={@tabs} />
-    </.workspace>
+      <.management_page
+        title={@vm.title}
+        tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
+        actions={@actions}
+        tabbar_id={@tabbar_id}
+        initial_tab={@initial_tab}
+        tabbar_size={@tabbar_size}
+        menus={@menus}
+        modal={@modal}
+        popup={@popup}
+        dialog={@dialog}
+      />
     """
   end
 end

@@ -5,7 +5,6 @@ defmodule Systems.Assignment.Centerdata.FakeApiController do
         conn,
         params
       ) do
-    path = Routes.live_path(conn, Systems.Assignment.Centerdata.FakeApiPage, params: params)
-    redirect(conn, to: path)
+    redirect(conn, to: ~p"/assignment/centerdata/fakeapi/page?#{params}")
   end
 end

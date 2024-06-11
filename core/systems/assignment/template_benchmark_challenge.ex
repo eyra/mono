@@ -10,10 +10,7 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
     def title(t), do: Assignment.Templates.translate(t.id)
 
     def content_flags(_t) do
-      Map.merge(Assignment.ContentFlags.new(), %{
-        panel: false,
-        storage: false
-      })
+      Assignment.ContentFlags.new(opt_out: [:panel, :storage, :advert_in_pool])
     end
 
     def workflow(_t),

@@ -1,5 +1,5 @@
 defmodule GoogleSignIn do
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Repo
   alias Frameworks.Signal
   import Ecto.Query, warn: false
@@ -26,8 +26,7 @@ defmodule GoogleSignIn do
     # Revert: https://github.com/eyra/mono/issues/563
 
     sso_info = %{
-      researcher: true,
-      student: false,
+      creator: true,
       email: Map.get(attrs, "email"),
       displayname: display_name,
       profile: %{

@@ -1,9 +1,10 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
   import CoreWeb.Gettext
 
-  alias Core.Accounts
   alias Core.Authorization
   alias Phoenix.LiveView
+
+  alias Systems.Account
 
   alias Systems.{
     Assignment,
@@ -41,13 +42,13 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
 
   defp forward_call_to_action(user) do
     %{
-      label: Accounts.start_page_title(user),
+      label: Account.Public.start_page_title(user),
       target: %{type: :event, value: "forward"},
       handle: &handle_forward/1
     }
   end
 
   def handle_forward(%{assigns: %{current_user: user}} = socket) do
-    LiveView.push_redirect(socket, to: Accounts.start_page_path(user))
+    LiveView.push_redirect(socket, to: Account.Public.start_page_path(user))
   end
 end

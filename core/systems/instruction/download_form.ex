@@ -1,10 +1,9 @@
 defmodule Systems.Instruction.DownloadForm do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
   use CoreWeb.FileUploader, accept: ~w(.zip)
 
   import CoreWeb.Gettext
-  import Pixel.Components.FileSelector
+  import Frameworks.Pixel.Components.FileSelector
 
   alias Systems.Instruction
   alias Systems.Content

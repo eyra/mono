@@ -3,15 +3,13 @@ defmodule Systems.Lab.CheckInView do
   import CoreWeb.Gettext
   require Logger
 
-  alias Core.Accounts
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept.Directable
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Account
+  alias Systems.Lab
 
   import Lab.CheckInItem
 
@@ -44,16 +42,16 @@ defmodule Systems.Lab.CheckInView do
   @impl true
   def handle_event(
         "accept",
-        %{"item" => user_id},
-        %{assigns: %{tool: tool, parent: _parent}} = socket
+        %{"item" => _user_id},
+        %{assigns: %{tool: _tool, parent: _parent}} = _socket
       ) do
-    user =
-      user_id
-      |> String.to_integer()
-      |> Accounts.get_user!()
+    # user =
+    #   user_id
+    #   |> String.to_integer()
+    #   |> Account.Public.get_user!()
 
-    Directable.director(tool).apply_member_and_activate_task(tool, user)
-    {:noreply, socket |> assign(query: nil, message: nil)}
+    raise "FIXME: Apply member and activate task"
+    # {:noreply, socket |> assign(query: nil, message: nil)}
   end
 
   @impl true
@@ -98,7 +96,7 @@ defmodule Systems.Lab.CheckInView do
 
   defp search(query, tool) when is_binary(query) do
     items =
-      Core.Accounts.search(query)
+      Account.Public.search(query)
       |> Enum.map(&to_view_model(&1, tool))
 
     message =
@@ -118,14 +116,6 @@ defmodule Systems.Lab.CheckInView do
 
     {items |> Enum.take(@max_search_results), message}
   end
-
-  # data(changeset, :map)
-  # data(items, :list, default: [])
-  # data(message, :string, default: "")
-  # data(query, :string)
-
-  attr(:tool, :map, required: true)
-  attr(:parent, :any, required: true)
 
   @impl true
   def render(assigns) do
@@ -169,7 +159,7 @@ defmodule Systems.Lab.CheckInView do
   defp to_view_model(nil, _tool), do: nil
   defp to_view_model({nil, nil}, _tool), do: nil
 
-  defp to_view_model(%Core.Accounts.User{id: user_id, email: email} = user, tool) do
+  defp to_view_model(%Systems.Account.User{id: user_id, email: email} = user, tool) do
     reservation = reservation(user, tool)
     time_slot = time_slot(reservation)
 
@@ -236,11 +226,11 @@ defmodule Systems.Lab.CheckInView do
 
   defp reservation(user_id, tool) when is_integer(user_id) do
     user_id
-    |> Accounts.get_user!()
+    |> Account.Public.get_user!()
     |> reservation(tool)
   end
 
-  defp reservation(%Accounts.User{} = user, tool) do
+  defp reservation(%Account.User{} = user, tool) do
     Lab.Public.reservation_for_user(tool, user)
   end
 

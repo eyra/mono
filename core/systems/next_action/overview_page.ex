@@ -2,26 +2,31 @@ defmodule Systems.NextAction.OverviewPage do
   @moduledoc """
    The todo screen.
   """
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :todo
-  use Systems.Observatory.Public
+  use Systems.Content.Composer, :live_workspace
 
-  import CoreWeb.Layouts.Workspace.Component
+  alias Systems.NextAction
 
-  alias Systems.{
-    NextAction
-  }
+  @impl true
+  def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
+    user
+  end
 
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+  @impl true
+  def mount(_params, _session, socket) do
     {
       :ok,
       socket
-      |> assign(model: user)
-      |> observe_view_model()
-      |> update_menus()
       |> refresh_next_actions()
     }
   end
+
+  @impl true
+  def handle_view_model_updated(socket) do
+    refresh_next_actions(socket)
+  end
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   def refresh_next_actions(%{assigns: %{current_user: user}} = socket) do
     assign(
@@ -31,18 +36,10 @@ defmodule Systems.NextAction.OverviewPage do
     )
   end
 
-  def handle_view_model_updated(socket) do
-    refresh_next_actions(socket)
-  end
-
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus}>
+    <.live_workspace title={dgettext("eyra-ui", "todo.title")} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <%= if Enum.empty?(@vm.next_actions) do %>
         <div class="h-full">
           <div class="flex flex-col items-center w-full h-full">
@@ -63,7 +60,7 @@ defmodule Systems.NextAction.OverviewPage do
           </div>
         </Area.content>
       <% end %>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

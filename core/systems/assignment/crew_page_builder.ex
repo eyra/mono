@@ -75,7 +75,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
       Fabric.prepare_child(fabric, :onboarding_view_consent, Assignment.OnboardingConsentView, %{
         revision: revision,
-        user: user
+        user: user,
+        create_signature?: not tester?
       })
     end
   end
@@ -87,10 +88,15 @@ defmodule Systems.Assignment.CrewPageBuilder do
            page_refs: page_refs,
            crew: crew
          } = assignment,
-         %{fabric: fabric, current_user: user, panel_info: panel_info, timezone: timezone} =
-           assigns,
+         %{
+           fabric: fabric,
+           current_user: user,
+           timezone: timezone,
+           session: session
+         } = assigns,
          tester?
        ) do
+    panel_info = Map.get(session, "panel_info")
     work_items = work_items(assignment, assigns)
     context_menu_items = context_menu_items(assignment, assigns)
 

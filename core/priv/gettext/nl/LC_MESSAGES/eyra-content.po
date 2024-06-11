@@ -9,3 +9,11 @@
 msgid ""
 msgstr ""
 "Language: nl\n"
+
+#, elixir-autogen, elixir-format
+msgid "request.verification.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "request.verification.title"
+msgstr ""

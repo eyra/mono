@@ -51,3 +51,4 @@ logfile
 /mix_home/
 /core/config/dev.secret.exs
 /core/docker.env
+/core/playground.exs

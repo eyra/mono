@@ -2,9 +2,8 @@ defmodule Systems.Support.OverviewTab do
   use CoreWeb, :live_component
 
   alias Core.ImageHelpers
-  import CoreWeb.UI.Content
+  import Frameworks.Pixel.Content
   alias CoreWeb.UI.Area
-  alias CoreWeb.Router.Helpers, as: Routes
 
   alias Systems.Support
 
@@ -24,7 +23,6 @@ defmodule Systems.Support.OverviewTab do
 
   defp to_view_model(
          %Support.TicketModel{
-           id: id,
            updated_at: updated_at,
            title: title,
            user: %{
@@ -35,7 +33,7 @@ defmodule Systems.Support.OverviewTab do
              features: features
            }
          } = ticket,
-         socket
+         _socket
        ) do
     gender = gender(features)
 
@@ -50,7 +48,7 @@ defmodule Systems.Support.OverviewTab do
     }
 
     %{
-      path: Routes.live_path(socket, Support.TicketPage, id),
+      path: ~p"/support/ticket/#{ticket.id}",
       title: title,
       subtitle: subtitle,
       quick_summary: quick_summery,

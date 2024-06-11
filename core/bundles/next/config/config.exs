@@ -7,13 +7,14 @@ config :core,
   website_menu_builder: Next.Layouts.Website.MenuBuilder,
   stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder
 
-config :core, CoreWeb.UserAuth,
-  researcher_signed_in_page: "/project",
-  participant_signed_in_page: "/project"
+config :core, Systems.Account.UserAuth,
+  creator_signed_in_page: "/project",
+  member_signed_in_page: "/"
 
 config :core, :features,
   sign_in_with_apple: false,
-  member_google_sign_in: false,
+  surfconext_sign_in: true,
+  member_google_sign_in: true,
   password_sign_in: true,
   notification_mails: false,
   debug_expire_force: false,

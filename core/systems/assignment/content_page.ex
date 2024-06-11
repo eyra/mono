@@ -1,28 +1,28 @@
 defmodule Systems.Assignment.ContentPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-  use Systems.Content.Page
+  use Systems.Content.Composer, :management_page
 
-  alias Systems.{
-    Assignment,
-    Crew
-  }
+  alias Systems.Assignment
+  alias Systems.Crew
 
   @impl true
-  def get_authorization_context(%{"id" => id}, _session, _socket) do
-    Assignment.Public.get!(String.to_integer(id))
+  def get_authorization_context(params, session, socket) do
+    get_model(params, session, socket)
   end
 
   @impl true
-  def mount(%{"id" => id} = params, session, socket) do
+  def get_model(%{"id" => id}, _session, _socket) do
+    Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
+  end
+
+  @impl true
+  def mount(%{"id" => id} = params, _session, socket) do
     initial_tab = Map.get(params, "tab")
-    model = Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
     tabbar_id = "assignment_content/#{id}"
 
     {
       :ok,
       socket
-      |> initialize(session, id, model, tabbar_id, initial_tab)
+      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
       |> ensure_tester_role()
     }
   end
@@ -36,22 +36,30 @@ defmodule Systems.Assignment.ContentPage do
   end
 
   @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_resize(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: update_view_model(socket)
+
+  @impl true
   def render(assigns) do
     ~H"""
-    <.content_page
-      title={@vm.title}
-      show_errors={@vm.show_errors}
-      tabs={@vm.tabs}
-      menus={@menus}
-      actions={@actions}
-      more_actions={@more_actions}
-      initial_tab={@initial_tab}
-      tabbar_id={@tabbar_id}
-      tabbar_size={@tabbar_size}
-      breakpoint={@breakpoint}
-      popup={@popup}
-      dialog={@dialog}
-     />
+      <.management_page
+        title={@vm.title}
+        tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
+        actions={@actions}
+        tabbar_id={@tabbar_id}
+        initial_tab={@initial_tab}
+        tabbar_size={@tabbar_size}
+        menus={@menus}
+        modal={@modal}
+        popup={@popup}
+        dialog={@dialog}
+      />
     """
   end
 end

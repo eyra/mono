@@ -26,7 +26,7 @@ defmodule Systems.Graphite.Assembly do
       ) do
     project_node =
       challenge
-      |> Project.Public.get_item_by_assignment()
+      |> Project.Public.get_item_by()
       |> Project.Public.get_node_by_item!([:auth_node])
 
     leaderboard_name = get_leaderboard_name(name, project_node)

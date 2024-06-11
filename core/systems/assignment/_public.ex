@@ -3,6 +3,7 @@ defmodule Systems.Assignment.Public do
   The assignment context.
   """
   import Ecto.Query, warn: false
+  import Systems.Assignment.Queries
 
   require Logger
 
@@ -10,20 +11,19 @@ defmodule Systems.Assignment.Public do
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
   alias Core.Authorization
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
   alias Frameworks.Signal
 
-  alias Systems.{
-    Assignment,
-    Content,
-    Consent,
-    Budget,
-    Workflow,
-    Crew,
-    Storage
-  }
+  alias Systems.Assignment
+  alias Systems.Account
+  alias Systems.Content
+  alias Systems.Consent
+  alias Systems.Budget
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Storage
 
   @min_expiration_timeout 30
 
@@ -49,6 +49,12 @@ defmodule Systems.Assignment.Public do
   def list_by_crew(crew_id, preload) when is_number(crew_id) do
     from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload)
     |> Repo.all()
+  end
+
+  def list_by_participant(%Account.User{} = user, preload \\ []) do
+    assignment_query(user, :participant)
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def get_by(association, preload \\ [])
@@ -330,10 +336,6 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def add_owner!(assignment, user) do
-    :ok = Core.Authorization.assign_role(user, assignment, :owner)
-  end
-
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
   def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)
@@ -504,19 +506,19 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def apply_member_and_activate_task(
-        %Assignment.Model{crew: crew} = assignment,
-        %User{} = user,
-        [_ | _] = identifier,
-        reward_amount
-      )
-      when is_integer(reward_amount) do
-    if not Crew.Public.member?(crew, user) do
-      apply_member(assignment, user, identifier, reward_amount)
-    end
+  # def apply_member_and_activate_task(
+  #       %Assignment.Model{crew: crew} = assignment,
+  #       %User{} = user,
+  #       identifier,
+  #       reward_amount
+  #     )
+  #     when is_integer(reward_amount) do
+  #   if not Crew.Public.member?(crew, user) do
+  #     apply_member(assignment, user, identifier, reward_amount)
+  #   end
 
-    activate_task(crew, identifier)
-  end
+  #   activate_task(crew, identifier)
+  # end
 
   def activate_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
     do: activate_task(crew, identifier)
@@ -567,17 +569,17 @@ defmodule Systems.Assignment.Public do
   @doc """
   How many new members can be added to the assignment?
   """
-  def open_spot_count(%{crew: _crew} = assignment) do
-    type = assignment_type(assignment)
-    open_spot_count(assignment, type)
-  end
+  def open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}) do
+    subject_count =
+      if subject_count do
+        subject_count
+      else
+        0
+      end
 
-  defp open_spot_count(%{crew: crew, info: %{subject_count: subject_count}}, :many_optional) do
-    all_non_expired_tasks = Crew.Public.count_tasks(crew, Crew.TaskStatus.values())
-    max(0, subject_count - all_non_expired_tasks)
+    all_non_expired_members = Crew.Public.count_members(crew)
+    max(0, subject_count - all_non_expired_members)
   end
-
-  defp assignment_type(%{workflow: %{type: type}}), do: type
 
   def mark_expired_debug(%{info: %{duration: duration}, crew: crew} = _assignment, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)

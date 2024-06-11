@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Icon do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:type, :atom, required: true)
   attr(:src, :any, required: true)

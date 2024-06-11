@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Block do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   slot(:inner_block, required: true)
 

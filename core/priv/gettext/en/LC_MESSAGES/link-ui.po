@@ -11,20 +11,12 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "delete.confirm.campaign"
-msgstr "campaign"
-
-#, elixir-autogen, elixir-format
 msgid "delete.button"
 msgstr "Delete"
 
 #, elixir-autogen, elixir-format
 msgid "preview.button"
 msgstr "Preview"
-
-#, elixir-autogen, elixir-format
-msgid "submit.button"
-msgstr "Submit"
 
 #, elixir-autogen, elixir-format
 msgid "retract.button"

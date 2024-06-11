@@ -15,10 +15,6 @@ msgid "no.results.found.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "search.image.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "search.image.title"
 msgstr ""
 
@@ -33,3 +29,7 @@ msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "search.image.button"
+msgstr ""

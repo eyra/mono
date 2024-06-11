@@ -8,40 +8,14 @@ defmodule Systems.Citizen.Pool.Form do
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Budget,
-    Pool
-  }
+  alias Systems.Budget
+  alias Systems.Pool
 
   @default_values %{"director" => "citizen", "target" => 0}
 
-  # Selector toggle
-  @impl true
-  def update(%{selector: :toggle}, socket) do
-    {
-      :ok,
-      socket |> assign(currency_error: nil)
-    }
-  end
-
-  # Selector selected
-  @impl true
-  def update(
-        %{selector: :selected, option: %{id: id}},
-        %{assigns: %{currencies: currencies}} = socket
-      ) do
-    selected_currency = currencies |> Enum.find(&(&1.id == id))
-
-    {
-      :ok,
-      socket
-      |> assign(selected_currency: selected_currency)
-    }
-  end
-
   # Initial update create
   @impl true
-  def update(%{id: id, pool: nil, user: user, locale: locale, target: target}, socket) do
+  def update(%{id: id, pool: nil, user: user, locale: locale}, socket) do
     title = dgettext("link-citizen", "pool.create.title")
 
     pool = %Pool.Model{}
@@ -53,7 +27,6 @@ defmodule Systems.Citizen.Pool.Form do
       |> assign(
         id: id,
         title: title,
-        target: target,
         pool: nil,
         user: user,
         locale: locale,
@@ -62,14 +35,16 @@ defmodule Systems.Citizen.Pool.Form do
         validate_changeset?: false
       )
       |> update_currencies()
+      |> update_selected_currency()
+      |> update_options()
+      |> compose_child(:currency_selector)
       |> init_buttons()
-      |> init_currency_selector()
     }
   end
 
   # Initial update edit
   @impl true
-  def update(%{id: id, pool: pool, user: user, locale: locale, target: target}, socket) do
+  def update(%{id: id, pool: pool, user: user, locale: locale}, socket) do
     title = dgettext("link-citizen", "pool.edit.title")
     changeset = Pool.Model.prepare(pool)
 
@@ -79,7 +54,6 @@ defmodule Systems.Citizen.Pool.Form do
       |> assign(
         id: id,
         title: title,
-        target: target,
         user: user,
         locale: locale,
         pool: pool,
@@ -87,34 +61,57 @@ defmodule Systems.Citizen.Pool.Form do
         validate_changeset?: true
       )
       |> update_currencies()
+      |> update_selected_currency()
+      |> update_options()
+      |> compose_child(:currency_selector)
       |> init_buttons()
-      |> init_currency_selector()
+    }
+  end
+
+  @impl true
+  def compose(:currency_selector, %{options: options, selected_currency: selected_currency}) do
+    selected_option_index = Enum.find_index(options, &(&1.id == selected_currency.id))
+
+    %{
+      module: DropdownSelector,
+      params: %{
+        options: options,
+        selected_option_index: selected_option_index,
+        background: :light,
+        debounce: 0
+      }
     }
   end
 
   defp update_currencies(socket) do
-    currencies =
-      Budget.Public.list_bank_accounts(currency: Budget.CurrencyModel.preload_graph(:full))
-      |> Enum.map(& &1.currency)
-
+    currencies = Budget.Public.list_currencies_by_type(:legal)
     socket |> assign(currencies: currencies)
   end
 
-  defp init_currency_selector(%{assigns: %{pool: %{currency: %{id: _id}}}} = socket) do
-    socket |> assign(currency_selector: nil, selected_currency: nil)
+  defp update_options(%{assigns: %{currencies: currencies, locale: locale}} = socket) do
+    options =
+      Enum.map(currencies, fn currency ->
+        %{
+          id: currency.id,
+          label: Budget.CurrencyModel.title(currency, locale)
+        }
+      end)
+
+    socket |> assign(options: options)
   end
 
-  defp init_currency_selector(%{assigns: %{currencies: [currency]}} = socket) do
-    socket |> assign(currency_selector: nil, selected_currency: currency)
-  end
-
-  defp init_currency_selector(
-         %{assigns: %{id: id, locale: locale, currencies: currencies}} = socket
+  defp update_selected_currency(
+         %{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket
        ) do
-    {currency_selector, selected_currency} =
-      Budget.CurrencySelector.init(currencies, locale, %{type: __MODULE__, id: id})
+    socket |> assign(selected_currency: currency)
+  end
 
-    socket |> assign(currency_selector: currency_selector, selected_currency: selected_currency)
+  defp update_selected_currency(%{assigns: %{currencies: [currency | _]}} = socket) do
+    socket |> assign(selected_currency: currency)
+  end
+
+  defp update_selected_currency(socket) do
+    socket |> assign(selected_currency: nil)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
@@ -134,14 +131,6 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   @impl true
-  def handle_event("change", %{"model" => attrs}, socket) do
-    {
-      :noreply,
-      socket |> change(attrs)
-    }
-  end
-
-  @impl true
   def handle_event("submit", %{"model" => attrs}, socket) do
     attrs = Map.merge(@default_values, attrs)
 
@@ -152,25 +141,23 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: "cancel"})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
-  defp change(%{assigns: %{pool: pool, validate_changeset?: validate_changeset?}} = socket, attrs) do
-    socket
-    |> apply_change(
-      pool
-      |> Pool.Model.change(attrs)
-      |> Pool.Model.validate(validate_changeset?)
-    )
+  @impl true
+  def handle_event(
+        "dropdown_selected",
+        %{option: %{id: id}},
+        %{assigns: %{currencies: currencies}} = socket
+      ) do
+    selected_currency = currencies |> Enum.find(&(&1.id == id))
+    {:noreply, socket |> assign(selected_currency: selected_currency)}
   end
 
-  defp apply_change(socket, changeset) do
-    case Ecto.Changeset.apply_action(changeset, :change) do
-      {:ok, _pool} -> socket |> assign(changeset: changeset)
-      {:error, changeset} -> socket |> assign(changeset: changeset)
-    end
+  @impl true
+  def handle_event("dropdown_toggle", _payload, socket) do
+    {:noreply, socket |> assign(currency_error: nil)}
   end
 
   defp handle_submit(%{assigns: %{pool: %{currency: %{id: _id}} = pool}} = socket, attrs) do
@@ -198,31 +185,15 @@ defmodule Systems.Citizen.Pool.Form do
     )
   end
 
-  defp apply_submit(%{assigns: %{target: target}} = socket, changeset) do
-    case EctoHelper.upsert(changeset) do
+  defp apply_submit(socket, changeset) do
+    case EctoHelper.upsert_and_dispatch(changeset, :pool) do
       {:ok, _pool} ->
-        update_target(target, %{module: __MODULE__, action: "saved"})
-        socket
+        socket |> send_event(:parent, "saved")
 
       {:error, changeset} ->
         socket |> assign(changeset: changeset)
     end
   end
-
-  # data(title, :string)
-  # data(buttons, :list)
-
-  # data(changeset, :map)
-  # data(validate_changeset?, :boolean)
-
-  # data(currencies, :list)
-  # data(currency_selector, :map)
-  # data(selected_currency, :map)
-
-  attr(:pool, :any)
-  attr(:user, :any)
-  attr(:locale, :any)
-  attr(:target, :any)
 
   @impl true
   def render(assigns) do
@@ -239,13 +210,14 @@ defmodule Systems.Citizen.Pool.Form do
           label_text={dgettext("link-citizen", "pool.icon.label")}
         />
 
-        <%= if @currency_selector do %>
-          <Text.form_field_label id={:currency_label}>
-            <%= dgettext("link-citizen", "pool.currency.label") %>
-          </Text.form_field_label>
-          <.spacing value="XXS" />
-          <.live_component module={DropdownSelector} {@currency_selector} />
-        <% end %>
+        <.child name={:currency_selector} fabric={@fabric}>
+          <:header>
+            <Text.form_field_label id={:currency_label}>
+              <%= dgettext("link-citizen", "pool.currency.label") %>
+            </Text.form_field_label>
+            <.spacing value="XXS" />
+          </:header>
+        </.child>
 
         <.spacing value="M" />
         <div class="flex flex-row gap-4">

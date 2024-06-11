@@ -1,6 +1,5 @@
 defmodule Systems.Project.ItemForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import CoreWeb.UI.Dialog
 
@@ -38,10 +37,6 @@ defmodule Systems.Project.ItemForm do
     assign(socket, buttons: form_dialog_buttons(myself))
   end
 
-  def handle_view_model_updated(socket) do
-    socket
-  end
-
   # Handle Events
 
   @impl true
@@ -61,7 +56,7 @@ defmodule Systems.Project.ItemForm do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> finish()}
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
   # Submit
@@ -69,17 +64,13 @@ defmodule Systems.Project.ItemForm do
   defp submit_form(%{assigns: %{item: item, changeset: changeset}} = socket) do
     case Core.Persister.save(item, changeset) do
       {:ok, _} ->
-        socket |> finish()
+        socket |> send_event(:parent, "saved")
 
       {:error, changeset} ->
         socket
         |> assign(show_errors: true)
         |> assign(changeset: changeset)
     end
-  end
-
-  defp finish(socket) do
-    socket |> send_event(:parent, "finish")
   end
 
   @impl true

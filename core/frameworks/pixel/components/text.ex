@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Text do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:color, :string, default: "text-grey1")
   attr(:align, :string, default: "text-left")

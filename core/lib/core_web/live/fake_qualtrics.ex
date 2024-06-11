@@ -15,9 +15,6 @@ defmodule CoreWeb.FakeQualtrics do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def render(assigns) do
     ~H"""
     <div class="w-full h-full">

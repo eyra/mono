@@ -16,7 +16,7 @@ defmodule Systems.Assignment.InfoModel do
     field(:image_id, :string)
     field(:logo_url, :string)
 
-    field(:subject_count, :integer)
+    field(:subject_count, :integer, default: 0)
     field(:duration, :string)
 
     field(:language, Ecto.Enum,
@@ -63,9 +63,6 @@ defmodule Systems.Assignment.InfoModel do
     info
     |> cast(params, @fields)
   end
-
-  def languages(%{language: language}) when not is_nil(language), do: [language]
-  def languages(_), do: []
 
   def devices(%{devices: devices}) when not is_nil(devices), do: devices
   def devices(_), do: []

@@ -85,7 +85,7 @@ defmodule Systems.Budget.Factories do
   def create_wallet(user, currency, balance_credit \\ 0, balance_debit \\ 0)
 
   def create_wallet(
-        %Core.Accounts.User{id: user_id},
+        %Systems.Account.User{id: user_id},
         %Budget.CurrencyModel{} = currency,
         balance_credit,
         balance_debit

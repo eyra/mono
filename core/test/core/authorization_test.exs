@@ -2,7 +2,7 @@ defmodule Core.AuthorizationTest do
   alias Core.Authorization
   alias Core.Factories
   use Core.DataCase
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Frameworks.GreenLight.Principal
 
   test "principal returns `visitor` for nil users" do
@@ -18,8 +18,8 @@ defmodule Core.AuthorizationTest do
   end
 
   test "principal returns `member` and `researcher` for users marked as such" do
-    researcher = Factories.insert!(:researcher)
-    assert Principal.roles(researcher) == MapSet.new([:member, :researcher])
+    researcher = Factories.insert!(:creator)
+    assert Principal.roles(researcher) == MapSet.new([:member, :creator])
   end
 
   test "can create authorization node" do
@@ -28,7 +28,7 @@ defmodule Core.AuthorizationTest do
 
   test "can create authorization child node" do
     {:ok, parent} = Authorization.create_node()
-    {:ok, child} = Authorization.create_node(parent)
+    child = Authorization.create_node(parent)
     assert child != parent
   end
 
@@ -50,7 +50,7 @@ defmodule Core.AuthorizationTest do
   end
 
   test "can get user for role" do
-    %{id: id, email: email} = user = Factories.insert!(:researcher)
+    %{id: id, email: email} = user = Factories.insert!(:creator)
     {:ok, node} = Authorization.create_node()
     :ok = Authorization.assign_role(user, node, :owner)
 
@@ -58,7 +58,7 @@ defmodule Core.AuthorizationTest do
   end
 
   test "can't get user for role" do
-    user = Factories.insert!(:researcher)
+    user = Factories.insert!(:creator)
     {:ok, node} = Authorization.create_node()
     :ok = Authorization.assign_role(user, node, :owner)
 

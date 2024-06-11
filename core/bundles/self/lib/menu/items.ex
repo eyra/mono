@@ -7,7 +7,7 @@ defmodule Self.Menu.Items do
   @impl true
   def values() do
     %{
-      self: %{action: %{type: :http_get, to: ~p"/project"}, title: "Self"},
+      self: %{action: %{type: :http_get, to: ~p"/"}, title: "Self"},
       admin: %{
         action: %{type: :redirect, to: ~p"/admin/config"},
         title: dgettext("eyra-ui", "menu.item.admin")
@@ -20,9 +20,9 @@ defmodule Self.Menu.Items do
         action: %{type: :redirect, to: ~p"/support/ticket"},
         title: dgettext("eyra-ui", "menu.item.support")
       },
-      console: %{
-        action: %{type: :redirect, to: ~p"/console"},
-        title: dgettext("eyra-ui", "menu.item.console")
+      desktop: %{
+        action: %{type: :redirect, to: ~p"/desktop"},
+        title: dgettext("eyra-ui", "menu.item.desktop")
       },
       todo: %{
         action: %{type: :redirect, to: ~p"/todo"},

@@ -6,7 +6,7 @@ defmodule ExternalSignIn.User do
   @required_fields @fields
 
   schema "external_users" do
-    belongs_to(:user, Core.Accounts.User)
+    belongs_to(:user, Systems.Account.User)
     field(:external_id, :string)
     field(:organisation, :string)
 

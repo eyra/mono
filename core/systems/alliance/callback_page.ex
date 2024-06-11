@@ -2,9 +2,7 @@ defmodule Systems.Alliance.CallbackPage do
   @moduledoc """
   The redirect page to complete a task
   """
-  use CoreWeb, :live_view
-  use CoreWeb.Layouts.Workspace.Component, :alliance
-  use Systems.Observatory.Public
+  use Systems.Content.Composer, :live_workspace
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
@@ -22,18 +20,25 @@ defmodule Systems.Alliance.CallbackPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
-    model = Alliance.Public.get_tool!(id)
+  def get_model(%{"id" => id}, _session, _socket) do
+    Alliance.Public.get_tool!(id)
+  end
 
+  @impl true
+  def mount(_params, _session, socket) do
     {
       :ok,
       socket
-      |> assign(model: model)
-      |> observe_view_model()
+      |> assign(active_menu_item: nil)
       |> activate_participant_task()
-      |> update_menus()
     }
   end
+
+  @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   defp activate_participant_task(
          %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
@@ -43,8 +48,6 @@ defmodule Systems.Alliance.CallbackPage do
   end
 
   defp activate_participant_task(socket), do: socket
-
-  def handle_view_model_updated(socket), do: socket
 
   @impl true
   def handle_event(
@@ -62,7 +65,7 @@ defmodule Systems.Alliance.CallbackPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={@vm.hero_title} menus={@menus}>
+    <.live_workspace title={@vm.hero_title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <Text.title1><%= @vm.title %></Text.title1>
@@ -96,7 +99,7 @@ defmodule Systems.Alliance.CallbackPage do
         <.spacing value="L" />
         <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action" />
       </Area.content>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

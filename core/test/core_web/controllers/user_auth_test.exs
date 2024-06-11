@@ -1,8 +1,8 @@
-defmodule CoreWeb.UserAuthTest do
+defmodule Systems.Account.UserAuthTest do
   use CoreWeb.ConnCase, async: true
 
-  alias Core.Accounts
-  alias CoreWeb.UserAuth
+  alias Systems.Account.UserAuth
+  alias Systems.Account
 
   @remember_me_cookie "_core_web_user_remember_me"
 
@@ -12,18 +12,11 @@ defmodule CoreWeb.UserAuthTest do
       |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    conf = Application.get_env(:core, CoreWeb.UserAuth, [])
+    conf = Application.get_env(:core, Systems.Account.UserAuth, [])
 
     on_exit(fn ->
-      Application.put_env(:core, CoreWeb.UserAuth, conf)
+      Application.put_env(:core, Systems.Account.UserAuth, conf)
     end)
-
-    test_conf = [
-      # fake onboarding path
-      participant_onboarding_page: "/user/profile"
-    ]
-
-    Application.put_env(:core, CoreWeb.UserAuth, test_conf)
 
     %{user: Core.Factories.insert!(:member), conn: conn}
   end
@@ -33,8 +26,8 @@ defmodule CoreWeb.UserAuthTest do
       conn = UserAuth.log_in_user(conn, user, false)
       assert token = get_session(conn, :user_token)
       assert get_session(conn, :live_socket_id) == "users_sessions:#{Base.url_encode64(token)}"
-      assert redirected_to(conn) == "/console"
-      assert Accounts.get_user_by_session_token(token)
+      assert redirected_to(conn) == "/"
+      assert Account.Public.get_user_by_session_token(token)
     end
 
     test "clears everything previously stored in the session", %{conn: conn, user: user} do
@@ -62,27 +55,18 @@ defmodule CoreWeb.UserAuthTest do
       assert max_age == 5_184_000
     end
 
-    test "student first time redirects to onboarding path", %{conn: conn, user: user} do
+    test "creator first time redirects to project", %{conn: conn, user: user} do
       first_time? = true
-      user = user |> Map.put(:student, first_time?)
+      user = user |> Map.put(:creator, first_time?)
       conn = conn |> UserAuth.log_in_user(user, true, %{})
 
-      # fake onboarding path
-      assert redirected_to(conn) == "/user/profile"
-    end
-
-    test "researcher first time redirects to console", %{conn: conn, user: user} do
-      first_time? = true
-      user = user |> Map.put(:researcher, first_time?)
-      conn = conn |> UserAuth.log_in_user(user, true, %{})
-
-      assert redirected_to(conn) == "/console"
+      assert redirected_to(conn) == "/project"
     end
   end
 
   describe "logout_user/1" do
     test "erases session and cookies", %{conn: conn, user: user} do
-      user_token = Accounts.generate_user_session_token(user)
+      user_token = Account.Public.generate_user_session_token(user)
 
       conn =
         conn
@@ -95,7 +79,7 @@ defmodule CoreWeb.UserAuthTest do
       refute conn.cookies[@remember_me_cookie]
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
       assert redirected_to(conn) == "/user/signin"
-      refute Accounts.get_user_by_session_token(user_token)
+      refute Account.Public.get_user_by_session_token(user_token)
     end
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
@@ -122,7 +106,7 @@ defmodule CoreWeb.UserAuthTest do
 
   describe "fetch_current_user/2" do
     test "authenticates user from session", %{conn: conn, user: user} do
-      user_token = Accounts.generate_user_session_token(user)
+      user_token = Account.Public.generate_user_session_token(user)
       conn = conn |> put_session(:user_token, user_token) |> UserAuth.fetch_current_user([])
       assert conn.assigns.current_user.id == user.id
     end
@@ -144,7 +128,7 @@ defmodule CoreWeb.UserAuthTest do
     end
 
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
-      _ = Accounts.generate_user_session_token(user)
+      _ = Account.Public.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
       refute conn.assigns.current_user
@@ -155,7 +139,7 @@ defmodule CoreWeb.UserAuthTest do
     test "redirects if user is authenticated", %{conn: conn, user: user} do
       conn = conn |> assign(:current_user, user) |> UserAuth.redirect_if_user_is_authenticated([])
       assert conn.halted
-      assert redirected_to(conn) == "/console"
+      assert redirected_to(conn) == "/"
     end
 
     test "does not redirect if user is not authenticated", %{conn: conn} do

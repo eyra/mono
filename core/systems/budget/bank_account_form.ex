@@ -27,7 +27,7 @@ defmodule Systems.Budget.BankAccountForm do
 
   # Initial edit update
   @impl true
-  def update(%{id: id, bank_account: nil, user: user, locale: locale, target: target}, socket) do
+  def update(%{id: id, bank_account: nil, user: user}, socket) do
     title = dgettext("eyra-budget", "bank.account.create.title")
     bank_account = %Model{}
     changeset = Model.prepare(bank_account)
@@ -38,9 +38,7 @@ defmodule Systems.Budget.BankAccountForm do
       |> assign(
         id: id,
         title: title,
-        target: target,
         user: user,
-        locale: locale,
         bank_account: bank_account,
         changeset: changeset,
         validate_changeset?: false
@@ -52,7 +50,7 @@ defmodule Systems.Budget.BankAccountForm do
   # Initial edit update
   @impl true
   def update(
-        %{id: id, bank_account: bank_account, user: user, locale: locale, target: target},
+        %{id: id, bank_account: bank_account, user: user},
         socket
       ) do
     title = dgettext("eyra-budget", "bank.account.edit.title")
@@ -64,9 +62,7 @@ defmodule Systems.Budget.BankAccountForm do
       |> assign(
         id: id,
         title: title,
-        target: target,
         user: user,
-        locale: locale,
         bank_account: bank_account,
         changeset: changeset,
         validate_changeset?: true
@@ -80,7 +76,7 @@ defmodule Systems.Budget.BankAccountForm do
     |> assign(
       buttons: [
         %{
-          action: %{type: :submit},
+          action: %{type: :submit, target: myself},
           face: %{type: :primary, label: dgettext("eyra-budget", "bank.account.submit.button")}
         },
         %{
@@ -105,9 +101,8 @@ defmodule Systems.Budget.BankAccountForm do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: "cancel"})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
   defp change(
@@ -140,36 +135,25 @@ defmodule Systems.Budget.BankAccountForm do
     )
   end
 
-  defp apply_submit(%{assigns: %{target: target}} = socket, changeset) do
-    case EctoHelper.upsert(changeset) do
+  defp apply_submit(socket, changeset) do
+    case EctoHelper.upsert_and_dispatch(changeset, :bank_account) do
       {:ok, _bank_account} ->
-        update_target(target, %{module: __MODULE__, action: "saved"})
-        socket
+        socket |> send_event(:parent, "saved")
 
       {:error, changeset} ->
         socket |> assign(changeset: changeset)
     end
   end
 
-  # data(title, :string)
-  # data(buttons, :list)
-
-  # data(changeset, :any)
-  # data(validate_changeset?, :boolean)
-
-  # data(type_options, :list)
-  # data(type_selected, :atom)
-
-  attr(:bank_account, :any)
-  attr(:user, :any)
-  attr(:locale, :any)
-  attr(:target, :any)
-
   @impl true
   def render(assigns) do
     ~H"""
-    <.form id="bank_account_form" :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself} >
+    <div>
+      <Area.content class="mb-4">
+      <Margin.y id={:page_top} />
       <Text.title3><%= dgettext("eyra-budget", "bank.account.content.title") %></Text.title3>
+      <.form id="bank_account_form" :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself} >
+
       <.text_input form={form}
         field={:name}
         debounce="0"
@@ -184,16 +168,16 @@ defmodule Systems.Budget.BankAccountForm do
       <.spacing value="XS" />
 
       <Text.title3><%= dgettext("eyra-budget", "currency.title") %></Text.title3>
-      <.inputs form={form} :let={subform} field={:currency}>
-        <.text_input form={subform}
+      <.inputs_for :let={currency_form} field={form[:currency]}>
+        <.text_input form={currency_form}
           field={:name}
           debounce="0"
           label_text={dgettext("eyra-budget", "currency.name.label")}
         />
         <Text.title6><%= dgettext("eyra-budget", "currency.label.title") %></Text.title6>
         <.spacing value="XS" />
-        <.text_bundle_input form={form} field={:label_bundle} target={@myself} />
-      </.inputs>
+        <.text_bundle_input form={currency_form} field={:label_bundle} />
+      </.inputs_for>
 
       <.spacing value="M" />
       <div class="flex flex-row gap-4">
@@ -202,6 +186,8 @@ defmodule Systems.Budget.BankAccountForm do
         <% end %>
       </div>
     </.form>
+      </Area.content>
+    </div>
     """
   end
 end

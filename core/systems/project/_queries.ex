@@ -25,7 +25,18 @@ defmodule Systems.Project.Queries do
     )
   end
 
+  def item_query_by_advert(%Project.NodeModel{} = node) do
+    build(item_query(node), :item, advert_id != nil)
+  end
+
   def item_query_by_leaderboard(%Project.NodeModel{} = node) do
     build(item_query(node), :item, leaderboard_id != nil)
+  end
+
+  def item_query_by_special(special_name, special_id) do
+    special_id_field = "#{special_name}_id" |> String.to_existing_atom()
+
+    item_query()
+    |> where([item: i], field(i, ^special_id_field) == ^special_id)
   end
 end

@@ -42,15 +42,6 @@ defmodule Systems.Project.ItemConfigForm do
 
     socket
     |> save(changeset)
-    |> update_tabbar()
-  end
-
-  # Tabbar update
-  def update_tabbar(%{assigns: %{id: id, changeset: changeset}} = socket) do
-    send(self(), %{id: id, ready?: changeset.valid?})
-
-    socket
-    |> assign(changeset: changeset)
   end
 
   @impl true

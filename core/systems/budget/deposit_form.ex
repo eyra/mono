@@ -51,9 +51,8 @@ defmodule Systems.Budget.DepositForm do
   end
 
   @impl true
-  def handle_event("cancel", _, %{assigns: %{target: target}} = socket) do
-    update_target(target, %{module: __MODULE__, action: "cancel"})
-    {:noreply, socket}
+  def handle_event("cancel", _, socket) do
+    {:noreply, socket |> send_event(:parent, "deposit_cancelled")}
   end
 
   @impl true
@@ -73,10 +72,10 @@ defmodule Systems.Budget.DepositForm do
     end
   end
 
-  defp make_deposit(%{assigns: %{budget: budget, target: target}} = socket, deposit) do
+  defp make_deposit(%{assigns: %{budget: budget}} = socket, deposit) do
     case Budget.Public.make_test_deposit(budget, deposit) do
       {:ok, _} ->
-        update_target(target, %{module: __MODULE__, action: "saved"})
+        socket |> send_event(:parent, "deposit_saved")
         socket
 
       {:error, error} ->

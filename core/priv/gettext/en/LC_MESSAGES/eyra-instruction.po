@@ -62,3 +62,7 @@ msgstr "Select file"
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
 msgstr "You can use the participant data uploaded by the challenge organizers to test and tune your method. <br><br>Click on the following link to download the data: <a href=\"%{url}\" download>%{name}</a>."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "general_form.file.label"
+msgstr "Instructions"

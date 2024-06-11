@@ -15,10 +15,6 @@ msgid "config.url.label"
 msgstr "Questionnaire link"
 
 #, elixir-autogen, elixir-format
-msgid "by.author.label"
-msgstr "By"
-
-#, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
 msgstr "Reward"
 
@@ -43,48 +39,8 @@ msgid "pending.label"
 msgstr "Pending"
 
 #, elixir-autogen, elixir-format
-msgid "status.title"
-msgstr "Participations"
-
-#, elixir-autogen, elixir-format
-msgid "vacant.label"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Campaign"
-
-#, elixir-autogen, elixir-format
-msgid "title"
-msgstr "Recruitment"
-
-#, elixir-autogen, elixir-format
-msgid "add.first.button"
-msgstr "Start your first campaign"
-
-#, elixir-autogen, elixir-format
-msgid "add.new.button"
-msgstr "Start new campaign"
-
-#, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr "Here you can set-up and follow the status of your campaigns. A campaign is an organized course of action to achieve a goal, in this case to recruit participants. It consists of publishing a promotion in the marketplace, linking your study details, determining your sample and reviewing the results."
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr "Recruit participants for your study"
-
-#, elixir-autogen, elixir-format
-msgid "monitor.empty.description"
-msgstr "Submit your campaign and wait for the pool administrator to publish your campaign. Check out the preview to see what your campaign will look like for participants. Once your campaign is online, you can use this dashboard to manage your participants."
-
-#, elixir-autogen, elixir-format
-msgid "monitor.empty.title"
-msgstr "Campaign submitted?"
-
-#, elixir-autogen, elixir-format
-msgid "campaign.overview.title"
-msgstr "Campaigns"
 
 #, elixir-autogen, elixir-format
 msgid "ethical.label"
@@ -147,22 +103,6 @@ msgid "ethical.review.link"
 msgstr "ethical checklist"
 
 #, elixir-autogen, elixir-format
-msgid "task.hero.title"
-msgstr "Study"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.subtitle"
-msgstr "You have contributed to this study"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.text"
-msgstr "Your contribution will be reviewed by the author of this study and either accepted or rejected."
-
-#, elixir-autogen, elixir-format
-msgid "task.pending.subtitle"
-msgstr "Instructions"
-
-#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr "Closed for participation"
 
@@ -177,26 +117,6 @@ msgstr "Open for participation"
 #, elixir-autogen, elixir-format
 msgid "language.highlight.title"
 msgstr "Language"
-
-#, elixir-autogen, elixir-format
-msgid "add.new.button.short"
-msgstr "New"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.subtitle"
-msgstr "Your contribution has been approved ✅"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.text"
-msgstr "The author of this study reviewed and approved your contribution. Your reward has been awarded. Thank you for participating, your contribution is highly appreciated."
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.subtitle"
-msgstr "Unfortunately, your contribution is rejected"
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.text"
-msgstr "The author of this study reviewed your contribution and wrote the following message: \"%{reason}\""
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"

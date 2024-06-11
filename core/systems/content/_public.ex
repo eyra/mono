@@ -5,6 +5,7 @@ defmodule Systems.Content.Public do
   alias Ecto.Multi
 
   alias Frameworks.Signal
+
   alias Systems.Content
   alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
@@ -95,8 +96,8 @@ end
 
 defimpl Core.Persister, for: Systems.Content.PageModel do
   def save(_page, changeset) do
-    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :consent_page) do
-      {:ok, %{consent_page: consent_page}} -> {:ok, consent_page}
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :content_page) do
+      {:ok, %{content_page: content_page}} -> {:ok, content_page}
       _ -> {:error, changeset}
     end
   end

@@ -7,7 +7,7 @@ defmodule Systems.Crew.Queries do
 
   alias Systems.Crew
   alias CoreWeb.UI.Timestamp
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
 
   # MEMBERS

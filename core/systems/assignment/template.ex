@@ -19,38 +19,34 @@ defmodule Systems.Assignment.ContentFlags do
           helpdesk: boolean(),
           panel: boolean(),
           storage: boolean(),
-          participants: boolean(),
+          invite_participants: boolean(),
+          advert_in_pool: boolean(),
           workflow: boolean(),
           monitor: boolean()
         }
 
-  defstruct [
+  @keys [
     :general,
     :branding,
     :information,
     :privacy,
     :consent,
     :helpdesk,
-    :panel,
     :storage,
-    :participants,
+    :panel,
+    :advert_in_pool,
+    :invite_participants,
     :workflow,
     :monitor
   ]
 
-  def new() do
-    %__MODULE__{
-      general: true,
-      branding: true,
-      information: true,
-      privacy: true,
-      consent: true,
-      helpdesk: true,
-      panel: true,
-      storage: true,
-      participants: true,
-      workflow: true,
-      monitor: true
-    }
+  defstruct @keys
+
+  def new(opts \\ []) do
+    opt_out_keys = Keyword.get(opts, :opt_out, [])
+
+    @keys
+    |> Enum.map(fn key -> {key, not Enum.member?(opt_out_keys, key)} end)
+    |> Enum.into(%{})
   end
 end

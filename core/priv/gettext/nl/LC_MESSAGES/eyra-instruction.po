@@ -62,3 +62,7 @@ msgstr "Selecteer bestand"
 #, elixir-autogen, elixir-format
 msgid "download_page.body"
 msgstr "Gebruik de training data die beschikbaar is gesteld door de challenge organizers om je methode te testen en te tunen. <br><br>Klik op de volgende link om de data te downloaden: <a href=\"%{url}\" download>%{name}</a>."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "general_form.file.label"
+msgstr "Data voor participanten"

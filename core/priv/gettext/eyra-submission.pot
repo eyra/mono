@@ -31,30 +31,6 @@ msgid "waiting.for.coordinator.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "submit.error.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submit.error.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submit.success.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "retract.success.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr ""
 

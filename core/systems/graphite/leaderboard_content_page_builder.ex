@@ -1,23 +1,33 @@
 defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
 
   import CoreWeb.Gettext
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Content
+  alias Systems.Graphite
 
   def view_model(%Graphite.LeaderboardModel{id: id, title: title} = leaderboard, assigns) do
     action_map = action_map(leaderboard, assigns)
 
     tabs = create_tabs(leaderboard, false, assigns)
 
+    title =
+      if title do
+        title
+      else
+        ""
+      end
+
     %{
       id: id,
       title: title,
       tabs: tabs,
       actions: actions(leaderboard, action_map),
-      show_errors: false
+      show_errors: false,
+      initial_tab: "settings_form",
+      tabbar_id: "leaderboard_content/#{id}",
+      active_menu_item: :projects
     }
   end
 
@@ -130,16 +140,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     [:settings, :submissions, :scores]
   end
 
-  defp create_tab(:settings, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:settings, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :settings_form, Graphite.LeaderboardSettingsView, %{
-        entity: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        entity: leaderboard
       })
 
     %{
@@ -153,17 +157,11 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:submissions, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:submissions, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :submissions_form, Graphite.LeaderboardSubmissionsView, %{
         entity: leaderboard,
-        submissions: Graphite.Public.list_submissions(leaderboard),
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        submissions: Graphite.Public.list_submissions(leaderboard)
       })
 
     %{
@@ -177,16 +175,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp create_tab(:scores, leaderboard, show_errors, assigns) do
-    %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-      assigns
-
+  defp create_tab(:scores, leaderboard, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :scores_form, Graphite.LeaderboardScoresView, %{
-        entity: leaderboard,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        entity: leaderboard
       })
 
     %{
@@ -200,23 +192,8 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
     }
   end
 
-  defp handle_publish(socket) do
-    socket |> set_status(:online)
-  end
-
-  defp handle_retract(socket) do
-    socket |> set_status(:offline)
-  end
-
-  defp handle_close(socket) do
-    socket |> set_status(:idle)
-  end
-
-  defp handle_open(socket) do
-    socket |> set_status(:concept)
-  end
-
-  defp set_status(%{assigns: %{model: leaderboard}} = socket, status) do
+  @impl true
+  def set_status(%{assigns: %{model: leaderboard}} = socket, status) do
     changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{status: status})
     {:ok, leaderboard} = Core.Persister.save(leaderboard, changeset)
     socket |> Phoenix.Component.assign(leaderboard: leaderboard)

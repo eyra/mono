@@ -73,7 +73,7 @@ msgstr "Failed"
 
 #, elixir-autogen, elixir-format
 msgid "close.button"
-msgstr "Close"
+msgstr "Finish up"
 
 #, elixir-autogen, elixir-format
 msgid "open.button"
@@ -156,15 +156,11 @@ msgid "tabbar.item.scores"
 msgstr "Results"
 
 #, elixir-autogen, elixir-format
-msgid "title.benchmark_leaderboard"
-msgstr "Benchmark Leaderboard"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings.title"
 msgstr "Settings"
 
 #, elixir-autogen, elixir-format
-msgid "tag.leaderboard"
+msgid "leaderboard.project.item.tag"
 msgstr "Leaderboard"
 
 #, elixir-autogen, elixir-format
@@ -182,10 +178,6 @@ msgstr "Select csv file with results"
 #, elixir-autogen, elixir-format
 msgid "settings.label.metrics"
 msgstr "Metric titles"
-
-#, elixir-autogen, elixir-format
-msgid "settings.label.subtitle"
-msgstr "Subtitle"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.label.title"

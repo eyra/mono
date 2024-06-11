@@ -1,24 +1,21 @@
 defmodule Systems.Pool.Public do
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
+  import Systems.Pool.Queries
 
   alias Ecto.Multi
   alias Ecto.Changeset
   alias Frameworks.Signal
   alias Frameworks.Concept.Directable
 
-  alias Core.{
-    Repo,
-    Accounts,
-    Authorization
-  }
+  alias Core.Repo
+  alias Core.Authorization
 
-  alias Systems.{
-    Pool,
-    Bookkeeping,
-    NextAction,
-    Org
-  }
+  alias Systems.Account
+  alias Systems.Pool
+  alias Systems.Bookkeeping
+  alias Systems.NextAction
+  alias Systems.Org
 
   def list(preload \\ []) do
     Repo.all(Pool.Model) |> Repo.preload(preload)
@@ -48,14 +45,10 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
-  def list_by_user(%Accounts.User{id: user_id}, preload \\ []) do
-    from(pool in Pool.Model,
-      inner_join: participant in Pool.ParticipantModel,
-      on: participant.pool_id == pool.id,
-      where: participant.user_id == ^user_id,
-      preload: ^preload
-    )
+  def list_by_participant(%Account.User{} = user, preload \\ []) do
+    pool_query(user, :participant)
     |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   def list_by_orgs(orgs, preload \\ [])
@@ -82,18 +75,6 @@ defmodule Systems.Pool.Public do
       inner_join: o in Org.NodeModel,
       on: o.id == p.org_id,
       where: o.identifier == ^org_identifier,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
-  def list_by_currency(%{id: currency_id}) do
-    list_by_currency(currency_id)
-  end
-
-  def list_by_currency(currency_id, preload \\ []) do
-    from(pool in Pool.Model,
-      where: pool.currency_id == ^currency_id,
       preload: ^preload
     )
     |> Repo.all()
@@ -132,6 +113,10 @@ defmodule Systems.Pool.Public do
     |> Enum.map(&Directable.director/1)
   end
 
+  def list_participants(%Pool.Model{} = pool) do
+    Authorization.users_with_role(pool, :participant)
+  end
+
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
   def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 
@@ -155,6 +140,10 @@ defmodule Systems.Pool.Public do
     |> Repo.all()
   end
 
+  def get_panl(preload \\ []) do
+    get_by_name("Panl", preload)
+  end
+
   def get_by_submission!(submission, preload \\ [])
 
   def get_by_submission!(%{id: submission_id}, preload) do
@@ -175,46 +164,19 @@ defmodule Systems.Pool.Public do
   defp map_string(term) when is_atom(term), do: Atom.to_string(term)
   defp map_string(term) when is_binary(term), do: term
 
-  def get_participant!(%Pool.Model{} = pool, %Accounts.User{} = user, preload \\ []) do
-    from(participant in Pool.ParticipantModel,
-      where: participant.pool_id == ^pool.id,
-      where: participant.user_id == ^user.id,
-      preload: ^preload
-    )
-    |> Repo.one!()
-  end
-
-  def participant?(%Pool.Model{} = pool, %Accounts.User{} = user) do
-    from(participant in Pool.ParticipantModel,
-      where: participant.pool_id == ^pool.id,
-      where: participant.user_id == ^user.id
-    )
+  def participant?(%Pool.Model{} = pool, %Account.User{} = user) do
+    pool_query(pool, user, [:participant, :tester])
     |> Repo.exists?()
   end
 
-  def add_owner!(pool, user) do
-    :ok = Authorization.assign_role(user, pool, :owner)
+  def add_participant!(pool, user) do
+    if not Authorization.user_has_role?(user, pool, :participant) do
+      :ok = Authorization.assign_role(user, pool, :participant)
+    end
   end
 
-  def remove_owner!(pool, user) do
-    Authorization.remove_role!(user, pool, :owner)
-  end
-
-  def link!(%Pool.Model{} = pool, %Accounts.User{} = user) do
-    %Pool.ParticipantModel{}
-    |> Pool.ParticipantModel.changeset(pool, user)
-    |> Repo.insert!(
-      on_conflict: :nothing,
-      conflict_target: [:pool_id, :user_id]
-    )
-  end
-
-  def unlink!(%Pool.Model{} = pool, %Accounts.User{} = user) do
-    from(p in Pool.ParticipantModel,
-      where: p.pool_id == ^pool.id,
-      where: p.user_id == ^user.id
-    )
-    |> Repo.delete_all()
+  def remove_participant(pool, user) do
+    Authorization.remove_role!(user, pool, :participant)
   end
 
   def get_submission!(term, preload \\ [:criteria])
@@ -246,26 +208,15 @@ defmodule Systems.Pool.Public do
     |> Repo.update!()
   end
 
-  def create_submission(%{} = attrs, pool) do
-    submission_changeset =
-      %Pool.SubmissionModel{}
-      |> Pool.SubmissionModel.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:pool, pool)
-
-    criteria_changeset =
+  def prepare_submission(%{} = attrs, pool) do
+    criteria =
       %Pool.CriteriaModel{}
-      |> Pool.CriteriaModel.changeset(%{
-        study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_1_h, :vu_sbe_iba_1, :vu_sbe_iba_1_h]
-      })
-      |> Ecto.Changeset.put_assoc(:submission, submission_changeset)
+      |> Pool.CriteriaModel.changeset(%{})
 
-    criteria = Repo.insert!(criteria_changeset)
-
-    {:ok, criteria.submission}
-  end
-
-  def copy(submissions) when is_list(submissions) do
-    Enum.map(submissions, &copy(&1))
+    %Pool.SubmissionModel{}
+    |> Pool.SubmissionModel.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:pool, pool)
+    |> Ecto.Changeset.put_assoc(:criteria, criteria)
   end
 
   def copy(%Pool.SubmissionModel{pool: pool, criteria: criteria} = submission) do
@@ -325,7 +276,7 @@ defmodule Systems.Pool.Public do
   end
 
   def select(%Pool.SubmissionModel{criteria: submission_criteria}, user) do
-    user_features = Accounts.get_features(user)
+    user_features = Account.Public.get_features(user)
     Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
   end
 
@@ -350,7 +301,7 @@ defmodule Systems.Pool.Public do
   end
 
   defp query_count_users(include, exclude) do
-    from(user in Accounts.User,
+    from(user in Account.User,
       join: features in assoc(user, :features),
       select: count(user.id),
       where: user.id in ^include,
@@ -394,7 +345,7 @@ defmodule Systems.Pool.Public do
          %Ecto.Changeset{} = changeset
        ) do
     if Ecto.Changeset.get_change(changeset, :status) === :submitted do
-      for user <- Accounts.list_pool_admins() do
+      for user <- Account.Public.list_pool_admins() do
         NextAction.Public.create_next_action(user, Pool.ReviewSubmission,
           key: "#{pool_id}",
           params: %{id: pool_id}
@@ -474,6 +425,6 @@ defmodule Systems.Pool.Public do
 
   defp update_pools(_, _, _), do: nil
 
-  defp update_pool(pool, user, :add), do: link!(pool, user)
-  defp update_pool(pool, user, :delete), do: unlink!(pool, user)
+  defp update_pool(pool, user, :add), do: add_participant!(pool, user)
+  defp update_pool(pool, user, :delete), do: remove_participant(pool, user)
 end

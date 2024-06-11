@@ -1,6 +1,9 @@
 defmodule Systems.Observatory.Public do
   alias CoreWeb.Endpoint
 
+  @callback get_model(map(), map(), Socket.t()) :: Socket.t()
+  @callback handle_view_model_updated(Socket.t()) :: Socket.t()
+
   def subscribe(signal, key \\ []) do
     Endpoint.subscribe(topic_key(signal, key))
   end
@@ -44,6 +47,10 @@ defmodule Systems.Observatory.Public do
     |> Phoenix.Component.assign(vm: vm)
   end
 
+  defp get_view_model(_socket, page, _model, nil) do
+    raise "No presenter available for #{page}"
+  end
+
   defp get_view_model(
          %{assigns: assigns} = _socket,
          page,
@@ -55,12 +62,14 @@ defmodule Systems.Observatory.Public do
 
   defmacro __using__(_opts \\ []) do
     quote do
+      @behaviour Systems.Observatory.Public
+      @before_compile Systems.Observatory.Public
+      @presenter Frameworks.Concept.System.presenter(__MODULE__)
+
       import CoreWeb.Gettext
       alias Systems.Observatory.Public
 
       require Logger
-
-      @presenter Frameworks.Concept.System.presenter(__MODULE__)
 
       def handle_info(%{auto_save: status}, socket) do
         {
@@ -88,6 +97,10 @@ defmodule Systems.Observatory.Public do
         handle_info(%{topic: topic, payload: {signal, %{model: model, from_pid: nil}}}, socket)
       end
 
+      def observe_view_model(%{assigns: %{authorization_failed: true}} = socket) do
+        socket
+      end
+
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         socket
         |> Public.observe([{__MODULE__, [id]}])
@@ -105,13 +118,6 @@ defmodule Systems.Observatory.Public do
         |> Public.update_view_model(__MODULE__, model, @presenter)
       end
 
-      def handle_view_model_updated(socket) do
-        Logger.warn("handle_view_model_updated/1 not implemented")
-        socket
-      end
-
-      defoverridable handle_view_model_updated: 1
-
       def put_info_flash(socket, from_pid) do
         if from_pid == self() do
           socket |> put_saved_info_flash()
@@ -126,6 +132,31 @@ defmodule Systems.Observatory.Public do
 
       def put_saved_info_flash(socket) do
         socket |> Frameworks.Pixel.Flash.put_info("Saved")
+      end
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      defoverridable mount: 3
+
+      @impl true
+      def mount(params, session, socket) do
+        model = get_model(params, session, socket)
+
+        super(
+          params,
+          session,
+          socket
+          |> assign(model: model, session: session)
+          |> observe_view_model()
+        )
+      end
+
+      defoverridable handle_view_model_updated: 1
+
+      def handle_view_model_updated(socket) do
+        super(socket)
       end
     end
   end

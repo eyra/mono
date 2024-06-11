@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.SidePanel do
   @moduledoc false
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:id, :atom, required: true)
   attr(:parent, :atom, required: true)

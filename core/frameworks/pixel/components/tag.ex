@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Tag do
   @moduledoc """
   A colored button with white text
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   attr(:text, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")

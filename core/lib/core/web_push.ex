@@ -7,7 +7,7 @@ defmodule Core.WebPush do
   import Ecto.Query, warn: false
   import Ecto.Changeset
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.WebPush.PushSubscription
 
   defmodule Keys do

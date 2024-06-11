@@ -15,10 +15,6 @@ msgid "config.url.label"
 msgstr "Vragenlijst link"
 
 #, elixir-autogen, elixir-format
-msgid "by.author.label"
-msgstr "Door"
-
-#, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
 msgstr "Beloning"
 
@@ -43,48 +39,8 @@ msgid "pending.label"
 msgstr "Bezig"
 
 #, elixir-autogen, elixir-format
-msgid "status.title"
-msgstr "Deelnames"
-
-#, elixir-autogen, elixir-format
-msgid "vacant.label"
-msgstr "Vrij"
-
-#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Campagne"
-
-#, elixir-autogen, elixir-format
-msgid "title"
-msgstr "Werving"
-
-#, elixir-autogen, elixir-format
-msgid "add.first.button"
-msgstr "Start je eerste campagne"
-
-#, elixir-autogen, elixir-format
-msgid "add.new.button"
-msgstr "Start nieuwe campagne"
-
-#, elixir-autogen, elixir-format
-msgid "empty.description"
-msgstr "Hier kun je campagnes opzetten en hun status volgen. Een campagne is een georganiseerde werkwijze om een doel te behalen, in dit geval het werven van deelnemers. Het bestaat uit het opzetten van een advertentie voor in de marktplaats, het koppelen van jouw studie details, het bepalen van jouw sample, en het reviewen van de resultaten."
-
-#, elixir-autogen, elixir-format
-msgid "empty.title"
-msgstr "Werf deelnemers voor jouw studie"
-
-#, elixir-autogen, elixir-format
-msgid "monitor.empty.description"
-msgstr "Dien je campagne in en wacht tot de poolbeheerder je campagne heeft gepubliceerd. Bekijk het voorbeeld om te zien hoe je campagne er uit komt te zien voor de deelnemers. Zodra je campagne online staat, kun je dit dashboard gebruiken om je deelnemers te beheren."
-
-#, elixir-autogen, elixir-format
-msgid "monitor.empty.title"
-msgstr "Campagne ingediend?"
-
-#, elixir-autogen, elixir-format
-msgid "campaign.overview.title"
-msgstr "Campagnes"
 
 #, elixir-autogen, elixir-format
 msgid "ethical.label"
@@ -147,22 +103,6 @@ msgid "ethical.review.link"
 msgstr "ethische checklist"
 
 #, elixir-autogen, elixir-format
-msgid "task.hero.title"
-msgstr "Studie"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.subtitle"
-msgstr "Je hebt bijgedragen aan deze studie"
-
-#, elixir-autogen, elixir-format
-msgid "task.completed.text"
-msgstr "Jouw bijdrage wordt door de auteur van deze studie beoordeeld. Afhankelijk van de beoordeling, wordt jouw bijdrage goedgekeurd of afgekeurd."
-
-#, elixir-autogen, elixir-format
-msgid "task.pending.subtitle"
-msgstr "Instructies"
-
-#, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
 msgstr "Gesloten voor deelname"
 
@@ -177,26 +117,6 @@ msgstr "Open voor deelname"
 #, elixir-autogen, elixir-format
 msgid "language.highlight.title"
 msgstr "Taal"
-
-#, elixir-autogen, elixir-format
-msgid "add.new.button.short"
-msgstr "Start"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.subtitle"
-msgstr "Jouw bijdrage is goedgekeurd ✅"
-
-#, elixir-autogen, elixir-format
-msgid "task.accepted.text"
-msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en goedgekeurd. Je ontvangt de beloning voor deze studie. Bedankt voor jouw deelname, jouw bijdrage aan deze studie wordt erg gewaardeerd."
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.subtitle"
-msgstr "Helaas, jouw bijdrage is afgekeurd"
-
-#, elixir-autogen, elixir-format
-msgid "task.rejected.text"
-msgstr "De auteur van deze studie heeft jouw bijdrage beoordeeld en wil je het volgende laten weten: \"%{reason}\""
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"

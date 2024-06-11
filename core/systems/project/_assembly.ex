@@ -104,6 +104,14 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
+  defp prepare_item(:questionnaire, name) do
+    {:ok, assignment} =
+      Assignment.Assembly.prepare(:questionnaire, :project, nil)
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
+  end
+
   # PROJECT PATH
   def update_path(multi, %{project: project}), do: update_path(multi, project)
 
@@ -114,6 +122,14 @@ defmodule Systems.Project.Assembly do
     update_path(multi, root, [id])
   end
 
+  @spec update_path(
+          Ecto.Multi.t(),
+          %{
+            :__struct__ => Systems.Project.ItemModel | Systems.Project.NodeModel,
+            optional(atom()) => any()
+          },
+          any()
+        ) :: any()
   def update_path(
         multi,
         %Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node,

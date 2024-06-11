@@ -1,7 +1,7 @@
 defmodule Systems.NextAction.Model do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   @primary_key false
 

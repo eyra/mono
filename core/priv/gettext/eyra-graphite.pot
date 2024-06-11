@@ -156,15 +156,11 @@ msgid "tabbar.item.scores"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "title.benchmark_leaderboard"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tag.leaderboard"
+msgid "leaderboard.project.item.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -181,10 +177,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.label.metrics"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "settings.label.subtitle"
 msgstr ""
 
 #, elixir-autogen, elixir-format

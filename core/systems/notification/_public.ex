@@ -41,7 +41,7 @@ defmodule Systems.Notification.Public do
     end)
   end
 
-  def notify(%Core.Accounts.User{} = user, notification_data) do
+  def notify(%Systems.Account.User{} = user, notification_data) do
     user
     |> get_or_create_box()
     |> notify(notification_data)

@@ -2,40 +2,35 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-  alias Core.Accounts.{User, Profile, Features}
 
-  alias Core.{
-    Authorization,
-    WebPush,
-    Repo
-  }
+  alias Core.Authorization
+  alias Core.WebPush
+  alias Core.Repo
 
-  alias Frameworks.{
-    GreenLight
-  }
+  alias Frameworks.GreenLight
 
-  alias Systems.{
-    Notification,
-    Campaign,
-    Promotion,
-    Assignment,
-    Workflow,
-    Crew,
-    Support,
-    Alliance,
-    Feldspar,
-    Document,
-    Lab,
-    Graphite,
-    Pool,
-    Budget,
-    Bookkeeping,
-    Content,
-    Org,
-    Project,
-    Consent,
-    Monitor
-  }
+  alias Systems.Account
+  alias Systems.Account.User
+  alias Systems.Notification
+  alias Systems.Advert
+  alias Systems.Promotion
+  alias Systems.Assignment
+  alias Systems.Workflow
+  alias Systems.Crew
+  alias Systems.Support
+  alias Systems.Alliance
+  alias Systems.Feldspar
+  alias Systems.Document
+  alias Systems.Lab
+  alias Systems.Graphite
+  alias Systems.Pool
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Content
+  alias Systems.Org
+  alias Systems.Project
+  alias Systems.Consent
+  alias Systems.Monitor
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -45,32 +40,24 @@ defmodule Core.Factories do
       hashed_password: Bcrypt.hash_pwd_salt(valid_user_password()),
       displayname: Faker.Person.first_name(),
       confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      profile: %Profile{
+      profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       },
-      features: %Features{
+      features: %Account.FeaturesModel{
         gender: :man
       }
     }
   end
 
-  def build(:researcher) do
+  def build(:creator) do
     :member
-    |> build(%{researcher: true})
+    |> build(%{creator: true})
     |> struct!(%{
-      profile: %Profile{
+      profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
         photo_url: Faker.Avatar.image_url()
       }
-    })
-  end
-
-  def build(:coordinator) do
-    :member
-    |> build(%{
-      researcher: true,
-      coordinator: true
     })
   end
 
@@ -81,15 +68,8 @@ defmodule Core.Factories do
     })
   end
 
-  def build(:student) do
-    :member
-    |> build(%{student: true})
-    |> struct!(%{
-      profile: %Profile{
-        fullname: Faker.Person.name(),
-        photo_url: Faker.Avatar.image_url()
-      }
-    })
+  def build(:role_assignment) do
+    %Authorization.RoleAssignment{}
   end
 
   def build(:auth_node) do
@@ -118,8 +98,8 @@ defmodule Core.Factories do
     }
   end
 
-  def build(:campaign) do
-    build(:campaign, %{})
+  def build(:advert) do
+    build(:advert, %{})
   end
 
   def build(:crew) do
@@ -139,13 +119,6 @@ defmodule Core.Factories do
       title: Faker.Lorem.sentence(),
       description: Faker.Lorem.paragraph(),
       user: build(:member)
-    }
-  end
-
-  def build(:author) do
-    %Campaign.AuthorModel{
-      fullname: Faker.Person.name(),
-      displayname: Faker.Person.first_name()
     }
   end
 
@@ -221,10 +194,6 @@ defmodule Core.Factories do
     build(:text_bundle, %{})
   end
 
-  def build(:role_assignment) do
-    %Authorization.RoleAssignment{}
-  end
-
   def build(:promotion) do
     build(:promotion, %{})
   end
@@ -237,8 +206,8 @@ defmodule Core.Factories do
     %Pool.CriteriaModel{}
   end
 
-  def build(:submission) do
-    build(:submission, %{})
+  def build(:pool_submission) do
+    build(:pool_submission, %{})
   end
 
   def build(:graphite_submission) do
@@ -301,6 +270,15 @@ defmodule Core.Factories do
     build(:consent_signature, %{})
   end
 
+  def build(:role_assignment, %{} = attributes) do
+    %Authorization.RoleAssignment{}
+    |> struct!(attributes)
+  end
+
+  def build(:owner, %{user: user}) do
+    build(:role_assignment, %{role: :owner, principal_id: GreenLight.Principal.id(user)})
+  end
+
   def build(:auth_node, %{} = attributes) do
     %Authorization.Node{}
     |> struct!(attributes)
@@ -357,30 +335,15 @@ defmodule Core.Factories do
     )
   end
 
-  def build(:author, %{} = attributes) do
-    {researcher, attributes} = Map.pop(attributes, :researcher)
-    {campaign, _attributes} = Map.pop(attributes, :campaign)
-
-    build(:author)
-    |> struct!(%{
-      user: researcher,
-      campaign: campaign
-    })
-  end
-
-  def build(:campaign, %{} = attributes) do
-    {campaign_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-
-    {authors, attributes} = Map.pop(attributes, :authors, many_relationship(:authors, attributes))
-
-    {submissions, attributes} =
-      Map.pop(attributes, :submissions, many_relationship(:submissions, attributes))
+  def build(:advert, %{} = attributes) do
+    {advert_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {submission, attributes} = Map.pop(attributes, :submission, build(:pool_submission))
 
     {promotion, attributes} =
       case Map.pop(attributes, :promotion, nil) do
         {nil, attributes} ->
           {
-            build(:promotion, %{auth_node: build(:auth_node, %{parent: campaign_auth_node})}),
+            build(:promotion, %{auth_node: build(:auth_node, %{parent: advert_auth_node})}),
             attributes
           }
 
@@ -393,11 +356,10 @@ defmodule Core.Factories do
         {nil, attributes} ->
           {
             build(:assignment, %{
-              director: :campaign,
               auth_node:
                 build(
                   :auth_node,
-                  %{parent: campaign_auth_node}
+                  %{parent: advert_auth_node}
                 )
             }),
             attributes
@@ -407,12 +369,11 @@ defmodule Core.Factories do
           {assignment, attributes}
       end
 
-    %Campaign.Model{
-      auth_node: campaign_auth_node,
-      authors: authors,
+    %Advert.Model{
+      auth_node: advert_auth_node,
       promotion: promotion,
-      promotable_assignment: assignment,
-      submissions: submissions
+      assignment: assignment,
+      submission: submission
     }
     |> struct!(attributes)
   end
@@ -579,7 +540,7 @@ defmodule Core.Factories do
     )
   end
 
-  def build(:submission, %{} = attributes) do
+  def build(:pool_submission, %{} = attributes) do
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
     {pool, attributes} = Map.pop(attributes, :pool, build(:pool))
 
@@ -602,7 +563,21 @@ defmodule Core.Factories do
   end
 
   def build(:pool, %{} = attributes) do
-    %Pool.Model{}
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+    {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
+
+    {org_node, attributes} =
+      Map.pop(
+        attributes,
+        :org_node,
+        build(:org_node, %{type: :university, identifier: random_identifier(:org)})
+      )
+
+    %Pool.Model{
+      auth_node: auth_node,
+      currency: currency,
+      org: org_node
+    }
     |> struct!(attributes)
   end
 

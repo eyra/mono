@@ -178,14 +178,6 @@ msgstr "Closed"
 msgid "ticket_status.open"
 msgstr "Open"
 
-#, elixir-autogen, elixir-format
-msgid "templates.lab"
-msgstr "Lab study"
-
-#, elixir-autogen, elixir-format
-msgid "templates.online"
-msgstr "Online study"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.accepted"
 msgstr "Published"
@@ -200,30 +192,6 @@ msgstr "Concept"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.submitted"
-msgstr "Submitted"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.closed"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.completed"
-msgstr "Finished"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.retracted"
-msgstr "Withdrawn"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.released"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.scheduled"
-msgstr "Scheduled"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.submitted"
 msgstr "Submitted"
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -418,10 +386,6 @@ msgstr "Download data"
 msgid "assignment_workflow_item_types.fork_instruction"
 msgstr "Prepare method"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "project_item_templates.leaderboard"
-msgstr "Benchmark Leaderboard"
-
 #, elixir-autogen, elixir-format
 msgid "leaderboard_status.concept"
 msgstr "Concept"
@@ -441,3 +405,43 @@ msgstr "Private"
 #, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.public"
 msgstr "Public"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.questionnaire"
+msgstr "Panl questionnaire"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.general_instruction"
+msgstr "Participant instructions"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.onsite_experiment"
+msgstr "Onsite experiment"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.questionnaire"
+msgstr "Questionnaire"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.concept"
+msgstr "Finished"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.idle"
+msgstr "Closed"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.offline"
+msgstr "Closed"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.online"
+msgstr "Closed"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr "Verified"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.creator"
+msgstr "Creator"

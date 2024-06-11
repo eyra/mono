@@ -1,7 +1,6 @@
 defmodule Systems.Admin.OrgView do
   use CoreWeb, :live_component
 
-  alias CoreWeb.Router.Helpers, as: Routes
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid
@@ -17,32 +16,6 @@ defmodule Systems.Admin.OrgView do
 
   import Org.ItemView
 
-  # Handle Selector Update
-  @impl true
-  def update(%{active_item_ids: active_filters, selector_id: :org_filters}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(active_filters: active_filters)
-      |> prepare_organisations()
-    }
-  end
-
-  # Handle Search Bar Update
-  @impl true
-  def update(%{search_bar: :org_search_bar, query_string: query_string, query: query}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        query: query,
-        query_string: query_string
-      )
-      |> prepare_organisations()
-    }
-  end
-
-  # Initial update
   @impl true
   def update(%{id: id, locale: locale}, socket) do
     filter_labels = Org.Types.labels([])
@@ -62,6 +35,31 @@ defmodule Systems.Admin.OrgView do
         query_string: ""
       )
       |> prepare_organisations()
+      |> compose_child(:org_filters)
+      |> compose_child(:org_search_bar)
+    }
+  end
+
+  @impl true
+  def compose(:org_filters, %{filter_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
+    }
+  end
+
+  @impl true
+  def compose(:org_search_bar, %{query_string: query_string}) do
+    %{
+      module: SearchBar,
+      params: %{
+        query_string: query_string,
+        placeholder: dgettext("eyra-org", "search.placeholder"),
+        debounce: "200"
+      }
     }
   end
 
@@ -147,8 +145,7 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("handle_item_click", %{"item" => org_id}, socket) do
-    path = Routes.live_path(socket, Systems.Org.ContentPage, org_id)
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_redirect(socket, to: ~p"/org/node/#{org_id}")}
   end
 
   @impl true
@@ -166,7 +163,36 @@ defmodule Systems.Admin.OrgView do
     {
       :noreply,
       socket
-      |> push_redirect(to: Routes.live_path(socket, Org.ContentPage, org_id))
+      |> push_redirect(to: ~p"/org/node/#{org_id}")
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "active_item_ids",
+        %{active_item_ids: active_filters, source: %{name: :org_filters}},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(active_filters: active_filters)
+      |> prepare_organisations()
+    }
+  end
+
+  @impl true
+  def handle_event(
+        "search_query",
+        %{query: query, query_string: query_string, source: %{name: :org_search_bar}},
+        socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> assign(query: query, query_string: query_string)
+      |> prepare_organisations()
+      |> compose_child(:org_filters)
     }
   end
 
@@ -178,18 +204,10 @@ defmodule Systems.Admin.OrgView do
       <Margin.y id={:page_top} />
       <div class="flex flex-row gap-3 items-center">
         <div class="font-label text-label">Filter:</div>
-        <.live_component
-          module={Selector} id={:org_filters} type={:label} items={@filter_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:org_filters} fabric={@fabric} />
         <div class="flex-grow" />
         <div class="flex-shrink-0">
-          <.live_component
-            module={SearchBar}
-            id={:org_search_bar}
-            query_string={@query_string}
-            placeholder={dgettext("eyra-org", "search.placeholder")}
-            debounce="200"
-            parent={%{type: __MODULE__, id: @id}}
-          />
+          <.child name={:org_search_bar} fabric={@fabric} />
         </div>
       </div>
       <.spacing value="L" />

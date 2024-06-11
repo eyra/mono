@@ -99,14 +99,6 @@ msgstr "Offline"
 msgid "label.online"
 msgstr "Online"
 
-#, elixir-autogen, elixir-format
-msgid "create.proceed.button"
-msgstr "Create"
-
-#, elixir-autogen, elixir-format
-msgid "create.title"
-msgstr "Select template"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.button"
 msgstr "Retract"
@@ -186,3 +178,7 @@ msgid "1 submission"
 msgid_plural "* submissions"
 msgstr[0] "1 submission"
 msgstr[1] "%{count} submissions"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create_item_popup.create.button"
+msgstr "Create"

@@ -1,10 +1,12 @@
 defmodule Systems.Assignment.ContentPageBuilder do
   use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
 
   import CoreWeb.Gettext
 
   alias Frameworks.Utility.List
 
+  alias Systems.Content
   alias Systems.Assignment
   alias Systems.Workflow
   alias Systems.Monitor
@@ -12,32 +14,22 @@ defmodule Systems.Assignment.ContentPageBuilder do
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
     This builder module supports several specials with each a specific View Model.
+    For a full overview of the template feature see `Systems.Assignment.Template`.
   """
 
   @doc """
-    Returns a view model based on the template table below:
-
-      | Option                | Benchmark Challenge  | Data Donation |
-      | :-------------------- | :------------------: | :-----------: |
-      | General settings      | No                   | Yes           |
-      | Branding settings     | Yes                  | Yes           |
-      | Information page      | Yes                  | Yes           |
-      | Privacy page          | Yes                  | Yes           |
-      | Consent form          | Yes                  | Yes           |
-      | Helpdesk page form    | Yes                  | Yes           |
-      | Panel settings        | No                   | Yes           |
-      | Storage settings      | No                   | Yes           |
-      | Invite participants   | Yes                  | No            |
-      | Worklow initial items | Yes, 3               | No, 0         |
-      | Workflow Library      | No                   | Yes           |
-      | Monitor               | Yes                  | Yes           |
+    Returns a view model based on the templates defined in:
+    * Benchmark Challenge: `Systems.Assignment.TemplateBenchmarkChallenge`
+    * Data Donation: `Systems.Assignment.TemplateDataDonation`
+    * Questionnaire: `Systems.Assignment.TemplateQuestionnaire`
   """
   def view_model(
         %{id: id} = assignment,
         assigns
       ) do
+    show_errors = false
+
     template = Assignment.Private.get_template(assignment)
-    show_errors = show_errors(assignment, assigns)
     tabs = create_tabs(assignment, template, show_errors, assigns)
     action_map = action_map(assignment, assigns)
     actions = actions(assignment, action_map)
@@ -47,14 +39,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: Assignment.Template.title(template),
       tabs: tabs,
       actions: actions,
-      show_errors: show_errors
+      show_errors: show_errors,
+      active_menu_item: :projects
     }
-  end
-
-  defp show_errors(_, _) do
-    # concept? = status == :concept
-    # publish_clicked or not concept?
-    false
   end
 
   defp action_map(assignment, %{current_user: %{id: user_id}}) do
@@ -157,37 +144,31 @@ defmodule Systems.Assignment.ContentPageBuilder do
   defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
     do: [publish: publish, preview: preview]
 
-  defp handle_publish(socket) do
-    socket |> set_status(:online)
-  end
-
-  defp handle_retract(socket) do
-    socket |> set_status(:offline)
-  end
-
-  defp handle_close(socket) do
-    socket |> set_status(:idle)
-  end
-
-  defp handle_open(socket) do
-    socket |> set_status(:concept)
-  end
-
-  defp set_status(%{assigns: %{model: assignment}} = socket, status) do
+  @impl true
+  def set_status(%{assigns: %{model: assignment}} = socket, status) do
     {:ok, assignment} = Assignment.Public.update(assignment, %{status: status})
     socket |> Phoenix.Component.assign(model: assignment)
   end
 
-  defp create_tabs(assignment, template, show_errors, assigns) do
+  defp create_tabs(
+         assignment,
+         template,
+         show_errors,
+         %{uri_origin: _, viewport: _, breakpoint: _} = assigns
+       ) do
     get_tab_keys(Assignment.Template.content_flags(template))
     |> Enum.map(&create_tab(&1, assignment, template, show_errors, assigns))
   end
 
-  defp get_tab_keys(%{workflow: workflow, monitor: monitor, participants: participants} = _config) do
+  defp create_tabs(_assignment, _template, _show_errors, _assigns) do
+    []
+  end
+
+  defp get_tab_keys(%{} = config) do
     [:settings]
-    |> List.append_if(workflow, :workflow)
-    |> List.append_if(participants, :participants)
-    |> List.append_if(monitor, :monitor)
+    |> List.append_if(:workflow, config[:workflow])
+    |> List.append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
+    |> List.append_if(:monitor, config[:monitor])
   end
 
   defp create_tab(
@@ -226,6 +207,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          template,
          show_errors,
          %{
+           fabric: fabric,
            current_user: user,
            uri_origin: uri_origin,
            timezone: timezone
@@ -233,15 +215,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
        ) do
     ready? = false
 
-    %{
-      id: :workflow_form,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-workflow", "tabbar.item.workflow"),
-      forward_title: dgettext("eyra-workflow", "tabbar.item.workflow.forward"),
-      type: :fullpage,
-      live_component: Workflow.BuilderView,
-      props: %{
+    child =
+      Fabric.prepare_child(fabric, :system, Workflow.BuilderView, %{
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
@@ -254,17 +229,33 @@ defmodule Systems.Assignment.ContentPageBuilder do
           },
           library: Assignment.Template.workflow(template).library
         }
-      }
+      })
+
+    %{
+      id: :workflow_form,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-workflow", "tabbar.item.workflow"),
+      forward_title: dgettext("eyra-workflow", "tabbar.item.workflow.forward"),
+      type: :fullpage,
+      child: child
     }
   end
 
   defp create_tab(
          :participants,
          assignment,
-         _template,
+         template,
          show_errors,
-         _assigns
+         %{fabric: fabric, current_user: user}
        ) do
+    child =
+      Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
+        assignment: assignment,
+        template: template,
+        user: user
+      })
+
     %{
       id: :participants,
       ready: false,
@@ -272,10 +263,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: dgettext("eyra-assignment", "tabbar.item.participants"),
       forward_title: dgettext("eyra-assignment", "tabbar.item.participants.forward"),
       type: :fullpage,
-      live_component: Assignment.ParticipantsView,
-      props: %{
-        assignment: assignment
-      }
+      child: child
     }
   end
 
@@ -312,7 +300,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:started, assignment) do
     metric =
-      Monitor.Public.event(assignment, :started)
+      Monitor.Public.event({assignment, :started})
       |> Monitor.Public.unique()
 
     %{
@@ -324,7 +312,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:finished, assignment) do
     metric =
-      Monitor.Public.event(assignment, :finished)
+      Monitor.Public.event({assignment, :finished})
       |> Monitor.Public.unique()
 
     %{
@@ -336,7 +324,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:declined, assignment) do
     metric =
-      Monitor.Public.event(assignment, :declined)
+      Monitor.Public.event({assignment, :declined})
       |> Monitor.Public.unique()
 
     color =
@@ -362,8 +350,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
          %Workflow.ItemModel{title: title, group: group} = item,
          %{info: %{subject_count: subject_count}} = assignment
        ) do
-    started = Monitor.Public.unique(Monitor.Public.event(item, :started))
-    finished = Monitor.Public.unique(Monitor.Public.event(item, :finished))
+    started = Monitor.Public.unique(Monitor.Public.event({item, :started}))
+    finished = Monitor.Public.unique(Monitor.Public.event({item, :finished}))
 
     subject_count =
       if subject_count do
@@ -373,8 +361,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       end
 
     current_amount =
-      Monitor.Public.unique(Monitor.Public.event(assignment, :started)) -
-        Monitor.Public.unique(Monitor.Public.event(assignment, :declined))
+      Monitor.Public.unique(Monitor.Public.event({assignment, :started})) -
+        Monitor.Public.unique(Monitor.Public.event({assignment, :declined}))
 
     expected_amount = max(subject_count, current_amount)
 

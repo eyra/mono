@@ -6,10 +6,6 @@ defmodule Systems.Workflow.ItemViews do
 
   import CoreWeb.UI.StepIndicator
 
-  alias Systems.{
-    Workflow
-  }
-
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
   attr(:items, :list, required: true)
@@ -92,44 +88,6 @@ defmodule Systems.Workflow.ItemViews do
           </div>
         </Align.vertical_center>
       </div>
-    </div>
-    """
-  end
-
-  defp relative_position(0, _count), do: :top
-  defp relative_position(position, count) when position == count - 1, do: :bottom
-  defp relative_position(_position, _count), do: :middle
-
-  attr(:items, :list, required: true)
-  attr(:types, :list, required: true)
-  attr(:user, :map, required: true)
-  attr(:timezone, :string, required: true)
-  attr(:uri_origin, :string, required: true)
-  attr(:ordering_enabled?, :boolean, default: false)
-  attr(:parent, :map, required: true)
-
-  def list(assigns) do
-    ~H"""
-    <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
-      <%= if @ordering_enabled? do %>
-        <Align.horizontal_center>
-          <Text.hint><%= dgettext("eyra-workflow", "item.list.hint") %></Text.hint>
-        </Align.horizontal_center>
-      <% end %>
-      <%= for {item, index} <- Enum.with_index(@items) do %>
-        <.live_component
-          id={"item-cell-#{item.id}"}
-          module={Workflow.ItemCell}
-          type={Enum.at(@types, index)}
-          item={item}
-          user={@user}
-          timezone={@timezone}
-          uri_origin={@uri_origin}
-          parent={@parent}
-          relative_position={relative_position(item.position, Enum.count(@items))}
-          ordering_enabled?={@ordering_enabled?}
-        />
-      <% end %>
     </div>
     """
   end

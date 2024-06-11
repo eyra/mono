@@ -1,6 +1,5 @@
 defmodule Systems.Project.Form do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import CoreWeb.UI.Dialog
 

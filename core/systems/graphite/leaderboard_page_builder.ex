@@ -4,7 +4,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   import CoreWeb.Gettext
 
   alias CoreWeb.UI.Timestamp
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Systems.Graphite
 
   def view_model(

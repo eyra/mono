@@ -1,7 +1,7 @@
 defmodule Systems.Feldspar.AppPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-  use CoreWeb.Layouts.Stripped.Component, :projects
+  use CoreWeb, :live_view
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   require Logger
 
@@ -15,13 +15,14 @@ defmodule Systems.Feldspar.AppPage do
     {
       :ok,
       socket
-      |> update_menus()
       |> assign(
         app_id: app_id,
         app_url: app_url,
-        error: nil
+        error: nil,
+        active_menu_item: nil
       )
       |> compose_child(:app_view)
+      |> update_menus()
     }
   end
 
@@ -32,7 +33,7 @@ defmodule Systems.Feldspar.AppPage do
       params: %{
         key: "app_#{app_id}",
         url: app_url,
-        locale: LiveLocale.get_locale()
+        locale: CoreWeb.LiveLocale.get_locale()
       }
     }
   end

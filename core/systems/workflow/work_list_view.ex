@@ -1,6 +1,5 @@
 defmodule Systems.Workflow.WorkListView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   import Systems.Workflow.ItemViews, only: [work_item: 1]
 

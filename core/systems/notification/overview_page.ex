@@ -6,9 +6,6 @@ defmodule Systems.Notification.OverviewPage do
     {:ok, socket |> assign(:notifications, Notification.Public.list(user))}
   end
 
-  @impl true
-  def handle_uri(socket), do: socket
-
   # data(notifications, :any)
   @impl true
   def render(assigns) do

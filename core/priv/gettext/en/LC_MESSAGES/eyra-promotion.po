@@ -11,10 +11,6 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "back.button.label"
-msgstr "Back"
-
-#, elixir-autogen, elixir-format
 msgid "banner.subtitle.label"
 msgstr "Description"
 
@@ -39,7 +35,7 @@ msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-autogen, elixir-format
-msgid "description.label"
+msgid "background.label"
 msgstr "Provide some background information about this study"
 
 #, elixir-autogen, elixir-format
@@ -47,7 +43,7 @@ msgid "description.public.label"
 msgstr "About this study"
 
 #, elixir-autogen, elixir-format
-msgid "description.title"
+msgid "background.placeholder"
 msgstr "Why are you performing this study?"
 
 #, elixir-autogen, elixir-format
@@ -67,16 +63,8 @@ msgid "expectations.public.label"
 msgstr "What to expect?"
 
 #, elixir-autogen, elixir-format
-msgid "expectations.title"
+msgid "expectations.placeholder"
 msgstr "What do participants have to do?"
-
-#, elixir-autogen, elixir-format
-msgid "image.label"
-msgstr "This image is used as a cover image for your promotion page and your marketplace tile."
-
-#, elixir-autogen, elixir-format
-msgid "image.title"
-msgstr "Cover image"
 
 #, elixir-autogen, elixir-format
 msgid "open.spots.label"
@@ -103,14 +91,6 @@ msgid "title.label"
 msgstr "Title"
 
 #, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr "Promotion"
-
-#, elixir-autogen, elixir-format
-msgid "form.description"
-msgstr "Promotions will be published in the marketplace to recruit participants. Preview the promotion page to view what participants will see when they click your marketplace tile."
-
-#, elixir-autogen, elixir-format
 msgid "preview.inform.text"
 msgstr "This feature does not work in preview mode."
 
@@ -119,5 +99,9 @@ msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-autogen, elixir-format
-msgid "languages.available.label"
-msgstr "Language:"
+msgid "language.available.label"
+msgstr "Language"
+
+#, elixir-autogen, elixir-format
+msgid "copy.title"
+msgstr "Give further information"

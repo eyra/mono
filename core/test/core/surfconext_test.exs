@@ -1,7 +1,6 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
   import Frameworks.Signal.TestHelper
-  import Systems.NextAction.TestHelper
 
   alias Core.Factories
 
@@ -90,7 +89,7 @@ defmodule Core.SurfConext.Test do
       assert %{user: ^user} = message
     end
 
-    test "assign the researcher role when the user is an employee" do
+    test "assign the creator role when the user is an employee" do
       sso_info = %{
         "sub" => Faker.UUID.v4(),
         "email" => Faker.Internet.email(),
@@ -104,27 +103,10 @@ defmodule Core.SurfConext.Test do
 
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
-      assert surf_user.user.researcher
+      assert surf_user.user.creator
     end
 
-    test "assign the student role when the user is an student" do
-      sso_info = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "preferred_username" => Faker.Person.name(),
-        "eduperson_affiliation" => ["student"],
-        "schac_home_organization" => "eduid.nl",
-        "schac_personal_unique_code" => [
-          "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:2765287"
-        ]
-      }
-
-      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
-
-      assert surf_user.user.student
-    end
-
-    test "assign both student and employee role when the user is an employee but has a student email" do
+    test "assign creator role when the user is an employee but has a student email" do
       sso_info = %{
         "sub" => Faker.UUID.v4(),
         "email" => "some-person@student.vu.nl",
@@ -138,26 +120,7 @@ defmodule Core.SurfConext.Test do
 
       {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
 
-      assert surf_user.user.researcher
-      # Assigned via the email pattern
-      assert surf_user.user.student
-    end
-
-    test "creates next action when the registered user is a student" do
-      sso_info = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "preferred_username" => Faker.Person.name(),
-        "eduperson_affiliation" => ["student"],
-        "schac_home_organization" => "eduid.nl",
-        "schac_personal_unique_code" => [
-          "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:2765287"
-        ]
-      }
-
-      {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
-
-      assert_next_action(user, "/user/profile?tab=settings")
+      assert surf_user.user.creator
     end
   end
 
@@ -188,8 +151,8 @@ defmodule Core.SurfConext.Test do
       }
 
       surf_user2 = Core.SurfConext.update_user(surf_user1.user, sso_info2)
-      core_user2 = Core.Accounts.get_user!(surf_user2.user_id)
-      profile2 = Core.Accounts.get_profile(core_user2)
+      core_user2 = Systems.Account.Public.get_user!(surf_user2.user_id)
+      profile2 = Systems.Account.Public.get_profile(core_user2)
 
       assert surf_user2.schac_personal_unique_code == sso_info2["schac_personal_unique_code"]
 

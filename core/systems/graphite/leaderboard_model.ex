@@ -55,8 +55,8 @@ defmodule Systems.Graphite.LeaderboardModel do
     |> validate_required(@required_fields)
   end
 
-  def tag(%Graphite.LeaderboardModel{} = _leaderboard) do
-    dgettext("eyra-graphite", "tag.leaderboard")
+  def tag(_) do
+    dgettext("eyra-graphite", "leaderboard.project.item.tag")
   end
 
   def preload_graph(:down),

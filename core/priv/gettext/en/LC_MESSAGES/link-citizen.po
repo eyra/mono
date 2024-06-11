@@ -15,10 +15,6 @@ msgid "overview.plugin.title"
 msgstr "Citizen pools"
 
 #, elixir-autogen, elixir-format
-msgid "campaigns.label"
-msgstr "Campaigns"
-
-#, elixir-autogen, elixir-format
 msgid "participants.label"
 msgstr "Citizens"
 
@@ -59,10 +55,6 @@ msgid "search.placeholder"
 msgstr "Search"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.campaigns"
-msgstr "Campaigns"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.citizens"
 msgstr "Citizens"
 
@@ -81,3 +73,7 @@ msgstr "Restore"
 #, elixir-autogen, elixir-format
 msgid "overview.share.button"
 msgstr "Share"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.adverts"
+msgstr "Citizens"

@@ -5,9 +5,7 @@ defmodule CoreWeb.StartPageProvider do
   defp start_pages, do: Application.fetch_env!(:core, :start_pages)
 
   def pages(), do: start_pages().values()
-  def page(%{researcher: true}), do: pages()[:researcher]
-  def page(%{student: true}), do: pages()[:student]
-  def page(%{coordinator: true}), do: pages()[:coordinator]
+  def page(%{creator: true}), do: pages()[:creator]
   def page(_), do: pages()[:member]
 
   defmacro __using__(_opts) do

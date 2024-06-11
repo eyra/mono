@@ -5,9 +5,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
 
   alias Frameworks.Pixel.Grid
 
-  alias Systems.{
-    Pool
-  }
+  alias Systems.Pool
 
   # Initial update
   @impl true
@@ -27,7 +25,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     pools =
       Pool.Public.list_by_director(
         "citizen",
-        Pool.Model.preload_graph([:org, :participants, :submissions])
+        Pool.Model.preload_graph([:org, :submissions, :auth_node])
       )
       |> Enum.filter(&owner?(&1, user))
 
@@ -118,23 +116,13 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     }
   end
 
-  defp description(%{participants: participants, submissions: submissions}) do
-    submissions = remove_concept_submissions(submissions)
+  defp description(%Pool.Model{} = pool) do
+    participants = Pool.Public.list_participants(pool)
 
     [
-      "#{dgettext("link-citizen", "participants.label")}: #{Enum.count(participants)}",
-      "#{dgettext("link-citizen", "campaigns.label")}: #{Enum.count(submissions)}"
+      "#{dgettext("link-citizen", "participants.label")}: #{Enum.count(participants)}"
     ]
-    |> Enum.join("  |  ")
   end
-
-  defp remove_concept_submissions(submissions) do
-    submissions
-    |> Enum.filter(&Pool.SubmissionModel.submitted?(&1))
-  end
-
-  # data(pools, :list)
-  # data(pool_items, :list)
 
   attr(:user, :map, required: true)
 

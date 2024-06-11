@@ -2,7 +2,7 @@ defmodule Systems.Org.UserAssociation do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   use Systems.Org.{
     Internals

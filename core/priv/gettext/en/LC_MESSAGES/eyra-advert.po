@@ -1,0 +1,115 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+#, elixir-autogen, elixir-format
+msgid "advert.subject.title"
+msgstr "Contributions"
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr "Funding"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.title"
+msgstr "Determine reward"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.label"
+msgstr "Reward %{amount}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr "You need %{amount} for %{count} participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.title"
+msgstr "Select a fund"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.warning"
+msgstr "With the selected fund you can afford %{count} participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.reward.description"
+msgstr "Consider a minimum of %{amount} for an assignment that takes %{duration} minutes."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.error"
+msgstr "With the selected fund you can't afford any participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.fund.description.success"
+msgstr "With the selected fund you can afford all participants."
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr "Required funding: %{funding}"
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr "Broke"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.poor.label"
+msgstr "Poor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.status.rich.label"
+msgstr "Rich"
+
+#, elixir-autogen, elixir-format
+msgid "advert.default.name"
+msgstr "Advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr "Advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr "Finish up"
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr "Preview"
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr "Take offline"
+
+#, elixir-autogen, elixir-format
+msgid "clicks.metric.label"
+msgstr "# Clicks"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "views.metric.label"
+msgstr "# Views"
+
+#, elixir-autogen, elixir-format
+msgid "clickthrough.rate"
+msgstr "% Clickthrough rate"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.apply.button"
+msgstr "Participate"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Settings"

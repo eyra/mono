@@ -4,12 +4,13 @@ defmodule Systems.Project.Public do
   import Systems.Project.Queries
 
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
 
   alias Systems.Assignment
   alias Systems.Workflow
   alias Systems.Graphite
+  alias Systems.Advert
   alias Systems.Project
 
   def get!(id, preload \\ []) do
@@ -48,17 +49,23 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
-  def get_item_by_assignment(assignment, preload \\ [])
+  def get_item_by(assignment, preload \\ [])
 
-  def get_item_by_assignment(%Assignment.Model{id: assignment_id}, preload) do
-    get_item_by_assignment(assignment_id, preload)
+  def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
+    get_item_by_special(:assignment, assignment_id, preload)
   end
 
-  def get_item_by_assignment(assignment_id, preload) do
-    from(item in Project.ItemModel,
-      where: item.assignment_id == ^assignment_id,
-      preload: ^preload
-    )
+  def get_item_by(%Advert.Model{id: advert_id}, preload) do
+    get_item_by_special(:advert, advert_id, preload)
+  end
+
+  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}, preload) do
+    get_item_by_special(:leaderboard, advert_id, preload)
+  end
+
+  defp get_item_by_special(special_name, special_id, preload) do
+    item_query_by_special(special_name, special_id)
+    |> Repo.preload(preload)
     |> Repo.one()
   end
 
@@ -84,6 +91,10 @@ defmodule Systems.Project.Public do
 
   def list_items(_, selector \\ nil, preload \\ [])
 
+  def list_items(%Project.Model{root: node}, selector, preload) do
+    list_items(node, selector, preload)
+  end
+
   def list_items(node, nil, preload) do
     item_query(node)
     |> Repo.all()
@@ -92,6 +103,12 @@ defmodule Systems.Project.Public do
 
   def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, :advert, preload) do
+    item_query_by_advert(node)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -206,6 +223,10 @@ defmodule Systems.Project.Public do
 
   def prepare_item(attrs, %Graphite.LeaderboardModel{} = leaderboard) do
     prepare_item(attrs, :leaderboard, leaderboard)
+  end
+
+  def prepare_item(attrs, %Ecto.Changeset{data: %Advert.Model{}} = changeset) do
+    prepare_item(attrs, :advert, changeset)
   end
 
   def prepare_item(attrs, %Ecto.Changeset{data: %Graphite.LeaderboardModel{}} = changeset) do

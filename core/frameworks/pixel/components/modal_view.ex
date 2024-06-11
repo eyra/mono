@@ -1,10 +1,26 @@
 defmodule Frameworks.Pixel.ModalView do
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
+
+  defmacro __using__(_) do
+    quote do
+      @impl true
+      def handle_event("show_modal", modal, socket) do
+        {:noreply, socket |> assign(modal: modal)}
+      end
+
+      @impl true
+      def handle_event("hide_modal", _, socket) do
+        {:noreply, socket |> assign(modal: nil)}
+      end
+    end
+  end
 
   attr(:modal, :map, default: nil)
 
+  @spec dynamic(map()) :: Phoenix.LiveView.Rendered.t()
   def dynamic(assigns) do
     ~H"""
     <div class={"#{if @modal do "block" else "hidden" end}"}>
@@ -95,18 +111,13 @@ defmodule Frameworks.Pixel.ModalView do
     <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
       <div class="flex flex-row items-center justify-center w-full h-full">
         <div class="w-[700px] px-4 sm:px-10">
-          <div class="flex flex-col h-full w-full bg-white pt-8 pb-8 rounded shadow-floating">
-            <%!-- HEADER --%>
-            <div class="shrink-0 px-8">
-              <div class="flex flex-row">
-                <div class="flex-grow">
-                  <.title live_component={@live_component} centered?={true}/>
-                </div>
+          <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
+            <%!-- Floating close button --%>
+            <div class="absolute z-30 top-9 right-6">
                 <.close_button />
-              </div>
             </div>
             <%!-- BODY --%>
-            <div class="h-full overflow-y-scroll px-8 pb-4">
+            <div class="h-full w-full overflow-y-scroll">
               <.body live_component={@live_component} />
             </div>
           </div>

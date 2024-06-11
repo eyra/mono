@@ -3,7 +3,7 @@ defmodule Systems.Student.Public do
 
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   alias Frameworks.Utility.Identifier
 

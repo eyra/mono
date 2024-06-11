@@ -1,5 +1,5 @@
 defmodule SignInWithApple do
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Repo
   alias Frameworks.Signal
   import Ecto.Query, warn: false

@@ -10,7 +10,6 @@ defmodule Systems.Workflow.ItemCell do
           id: id,
           type: type,
           item: item,
-          parent: parent,
           relative_position: relative_position,
           user: user,
           uri_origin: uri_origin,
@@ -26,7 +25,6 @@ defmodule Systems.Workflow.ItemCell do
         id: id,
         type: type,
         item: item,
-        parent: parent,
         relative_position: relative_position,
         user: user,
         uri_origin: uri_origin,
@@ -35,16 +33,40 @@ defmodule Systems.Workflow.ItemCell do
       )
       |> update_item_view()
       |> update_item_form()
-      |> update_tool_form()
+      |> compose_child(:tool_form)
       |> update_ready()
       |> update_buttons()
     }
   end
 
   @impl true
-  def handle_event(action, _params, %{assigns: %{parent: parent, item: item}} = socket) do
-    update_target(parent, %{module: __MODULE__, action: action, item: item})
-    {:noreply, socket}
+  def compose(:tool_form, %{
+        item: %{id: item_id, tool_ref: tool_ref, title: title},
+        user: user,
+        uri_origin: uri_origin,
+        timezone: timezone
+      }) do
+    tool = Workflow.ToolRefModel.flatten(tool_ref)
+    tool_form_module = Workflow.ToolRefModel.form(tool_ref)
+
+    callback_path = ~p"/assignment/callback/#{item_id}"
+    callback_url = uri_origin <> callback_path
+
+    %{
+      module: tool_form_module,
+      params: %{
+        entity: tool,
+        title: title,
+        timezone: timezone,
+        callback_url: callback_url,
+        user: user
+      }
+    }
+  end
+
+  @impl true
+  def handle_event(action, _params, %{assigns: %{item: item}} = socket) do
+    {:noreply, socket |> send_event(:parent, action, %{item: item})}
   end
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
@@ -72,36 +94,6 @@ defmodule Systems.Workflow.ItemCell do
     }
 
     socket |> assign(item_form: item_form)
-  end
-
-  defp update_tool_form(
-         %{
-           assigns: %{
-             id: id,
-             item: %{id: item_id, tool_ref: tool_ref, title: title},
-             user: user,
-             uri_origin: uri_origin,
-             timezone: timezone
-           }
-         } = socket
-       ) do
-    tool = Workflow.ToolRefModel.flatten(tool_ref)
-    tool_form_module = Workflow.ToolRefModel.form(tool_ref)
-
-    callback_path = ~p"/assignment/callback/#{item_id}"
-    callback_url = uri_origin <> callback_path
-
-    tool_form = %{
-      id: "#{id}_tool_form",
-      module: tool_form_module,
-      entity: tool,
-      title: title,
-      timezone: timezone,
-      callback_url: callback_url,
-      user: user
-    }
-
-    socket |> assign(tool_form: tool_form)
   end
 
   defp update_ready(%{assigns: %{item: item}} = socket) do
@@ -178,10 +170,11 @@ defmodule Systems.Workflow.ItemCell do
       </div>
       <div class="cell-expanded-view">
         <.live_component {@item_form} />
-        <%= if @tool_form do %>
-          <.live_component {@tool_form} />
-          <.spacing value="XS" />
-        <% end %>
+          <.child name={:tool_form} fabric={@fabric} >
+            <:footer>
+              <.spacing value="XS" />
+            </:footer>
+         </.child>
         <div class="cell-collapse-button">
           <Button.dynamic {@collapse_button}/>
         </div>

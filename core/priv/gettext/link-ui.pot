@@ -11,19 +11,11 @@ msgid ""
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "delete.confirm.campaign"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "delete.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format

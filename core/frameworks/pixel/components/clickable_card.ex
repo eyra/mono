@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.ClickableCard do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
-  use CoreWeb, :html
+  use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
 
@@ -20,6 +20,7 @@ defmodule Frameworks.Pixel.ClickableCard do
   slot(:inner_block, required: true)
   slot(:top, default: nil)
   slot(:title, required: true)
+  attr(:target, :any, default: "")
 
   def clickable_card(assigns) do
     ~H"""
@@ -31,6 +32,7 @@ defmodule Frameworks.Pixel.ClickableCard do
         <div class="flex-grow">
           <div
             class="flex flex-col cursor-pointer"
+            phx-target={@target}
             phx-click="card_clicked"
             phx-value-item={@id}
           >

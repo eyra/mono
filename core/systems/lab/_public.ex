@@ -13,7 +13,7 @@ defmodule Systems.Lab.Public do
     Lab
   }
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   def get_tool!(id, preload \\ []) do
     from(lab_tool in Lab.ToolModel,

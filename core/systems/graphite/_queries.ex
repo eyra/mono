@@ -5,7 +5,7 @@ defmodule Systems.Graphite.Queries do
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Systems.Graphite
   alias Systems.Assignment
 

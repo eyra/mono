@@ -1,30 +1,37 @@
 defmodule Systems.Assignment.OnboardingConsentView do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   alias Systems.{
     Consent
   }
 
   @impl true
-  def update(%{id: id, revision: revision, user: user}, socket) do
+  def update(
+        %{id: id, revision: revision, user: user, create_signature?: create_signature?},
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         id: id,
         revision: revision,
-        user: user
+        user: user,
+        create_signature?: create_signature?
       )
       |> update_clickwrap_view()
     }
   end
 
-  defp update_clickwrap_view(%{assigns: %{revision: revision, user: user}} = socket) do
+  defp update_clickwrap_view(
+         %{assigns: %{revision: revision, user: user, create_signature?: create_signature?}} =
+           socket
+       ) do
     child =
       prepare_child(socket, :clickwrap_view, Consent.ClickWrapView, %{
         revision: revision,
-        user: user
+        user: user,
+        create_signature?: create_signature?
       })
 
     show_child(socket, child)

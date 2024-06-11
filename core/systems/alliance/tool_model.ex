@@ -6,13 +6,13 @@ defmodule Systems.Alliance.ToolModel do
   use Frameworks.Utility.Model
   use Frameworks.Utility.Schema
 
-  import NimbleParsec
   import Ecto.Changeset
   import CoreWeb.Gettext
 
   require Core.Enums.Devices
 
   alias Systems.Workflow
+  alias Systems.Alliance.VariableParser
 
   schema "alliance_tools" do
     field(:url, :string)
@@ -101,27 +101,6 @@ defmodule Systems.Alliance.ToolModel do
     changeset.valid?()
   end
 
-  variable =
-    string("{")
-    |> ignore()
-    |> utf8_string(
-      [?a..?z, ?A..?Z],
-      min: 1
-    )
-    |> tag(:variable)
-    |> concat(
-      string("}")
-      |> ignore()
-    )
-    |> label("variable (ex. {participantId}")
-
-  non_variable =
-    repeat(ascii_char([{:not, 0x007B}, {:not, 0x007D}]))
-    |> tag(:plain)
-    |> label("plain")
-
-  defparsec(:variable_parser, choice([variable, non_variable]) |> eos())
-
   def validate_url(%Ecto.Changeset{} = changeset, field, _options \\ []) do
     validate_change(changeset, field, fn _, url ->
       URI.parse(url).query |> validate_query_string(field)
@@ -132,7 +111,7 @@ defmodule Systems.Alliance.ToolModel do
 
   def validate_query_string(query, field) do
     Enum.flat_map(URI.query_decoder(query), fn {name, value} ->
-      case variable_parser(value) do
+      case VariableParser.parse(value) do
         {:ok, _, _, _, _, _} ->
           []
 
@@ -148,7 +127,7 @@ defmodule Systems.Alliance.ToolModel do
       query
       |> URI.query_decoder()
       |> Enum.map(fn {name, value} ->
-        with {:ok, parsed, _, _, _, _} <- variable_parser(value),
+        with {:ok, parsed, _, _, _, _} <- VariableParser.parse(value),
              {:ok, [variable]} <- Keyword.fetch(parsed, :variable),
              {:ok, replacement} <-
                Map.fetch(replacements, variable) do

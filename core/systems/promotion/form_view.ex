@@ -13,7 +13,6 @@ defmodule Systems.Promotion.FormView do
   alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Selector
-  alias Frameworks.Pixel.Image
 
   @impl true
   def process_file(
@@ -37,24 +36,6 @@ defmodule Systems.Promotion.FormView do
     }
   end
 
-  # Handle Selector Update
-  @impl true
-  def update(
-        %{active_item_ids: active_theme_ids, selector_id: :themes},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    active_theme_ids =
-      active_theme_ids
-      |> Enum.map(&Atom.to_string(&1))
-
-    {
-      :ok,
-      socket
-      |> save(entity, %{:themes => active_theme_ids})
-    }
-  end
-
-  # Initial update
   @impl true
   def update(
         %{
@@ -77,7 +58,19 @@ defmodule Systems.Promotion.FormView do
       |> update_image_info()
       |> update_image_picker_button()
       |> update_theme_labels()
+      |> compose_child(:themes)
       |> validate_for_publish()
+    }
+  end
+
+  @impl true
+  def compose(:themes, %{theme_labels: items}) do
+    %{
+      module: Selector,
+      params: %{
+        items: items,
+        type: :label
+      }
     }
   end
 
@@ -123,18 +116,23 @@ defmodule Systems.Promotion.FormView do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Promotion.Model.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
-
-    send(self(), %{id: id, ready?: changeset.valid?})
 
     socket
     |> assign(changeset: changeset, form: to_form(changeset))
   end
 
-  # Handle Events
+  defp initial_image_query(%{assigns: %{entity: entity}}) do
+    case entity.themes do
+      nil -> ""
+      themes -> themes |> Enum.join(" ")
+    end
+  end
+
+  # Events
 
   @impl true
   def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
@@ -150,49 +148,39 @@ defmodule Systems.Promotion.FormView do
     {:noreply, socket}
   end
 
-  defp initial_image_query(%{assigns: %{entity: entity}}) do
-    case entity.themes do
-      nil -> ""
-      themes -> themes |> Enum.join(" ")
-    end
+  @impl true
+  def handle_event(
+        "active_item_ids",
+        %{active_item_ids: themes, source: %{name: :themes}},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    {
+      :noreply,
+      socket
+      |> save(entity, %{:themes => Enum.map(themes, &Atom.to_string(&1))})
+    }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-        <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-promotion", "form.title") %></Text.title2>
-        <Text.body_large><%= dgettext("eyra-promotion", "form.description") %></Text.body_large>
-        <.spacing value="M" />
         <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
           <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
           <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
-          <.spacing value="XL" />
+          <.spacing value="L" />
           <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
           <Text.body><%= dgettext("eyra-promotion", "themes.label") %></Text.body>
           <.spacing value="XS" />
-          <.live_component
-            module={Selector} id={:themes} type={:label} items={@theme_labels} parent={%{type: __MODULE__, id: @id}} />
+          <.child name={:themes} fabric={@fabric} />
           <.spacing value="XL" />
 
-          <Text.title3><%= dgettext("eyra-promotion", "image.title") %></Text.title3>
-          <Text.body><%= dgettext("eyra-promotion", "image.label") %></Text.body>
+          <Text.title3><%= dgettext("eyra-promotion", "copy.title") %></Text.title3>
+          <.text_area form={form} field={:expectations} placeholder={dgettext("eyra-promotion", "expectations.placeholder")} label_text={dgettext("eyra-promotion", "expectations.label")} />
           <.spacing value="XS" />
-          <div class="flex flex-row gap-4">
-            <Image.preview image_url={@image_info.url} placeholder="" />
-            <Button.dynamic {@image_picker_button} />
-          </div>
-          <.spacing value="XL" />
 
-          <Text.title3><%= dgettext("eyra-promotion", "expectations.title") %></Text.title3>
-          <.text_area form={form} field={:expectations} label_text={dgettext("eyra-promotion", "expectations.label")} />
-          <.spacing value="L" />
-
-          <Text.title3><%= dgettext("eyra-promotion", "description.title") %></Text.title3>
-          <.text_area form={form} field={:description} label_text={dgettext("eyra-promotion", "description.label")} />
+          <.text_area form={form} field={:description} placeholder={dgettext("eyra-promotion", "background.placeholder")} label_text={dgettext("eyra-promotion", "background.label")} />
           <.spacing value="L" />
 
           <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
@@ -213,7 +201,6 @@ defmodule Systems.Promotion.FormView do
           />
           <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
         </.form>
-      </Area.content>
     </div>
     """
   end

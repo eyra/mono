@@ -32,6 +32,18 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
+  def apply(conn, %{"id" => id}) do
+    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
+      if offline?(assignment) do
+        service_unavailable(conn)
+      else
+        start_participant(conn, assignment)
+      end
+    else
+      service_unavailable(conn)
+    end
+  end
+
   defp offline?(%{status: status}) do
     status != :online
   end

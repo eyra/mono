@@ -15,24 +15,12 @@ msgid "tabbar.item.students"
 msgstr "Studenten"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.campaigns"
-msgstr "Campagnes"
-
-#, elixir-autogen, elixir-format
 msgid "students.empty.description"
 msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich hebben aangemeld."
 
 #, elixir-autogen, elixir-format
 msgid "students.empty.title"
 msgstr "Hier vind je straks alle geregistreerde studenten."
-
-#, elixir-autogen, elixir-format
-msgid "campaigns.empty.description"
-msgstr "Hier vind je straks de campagnes die onderzoekers in jouw pool beschikbaar willen stellen, om deelnemers te werven voor hun studie. Vervolgens kun je deze campagnes beschikbaar stellen in de marktplaats van de deelnemers die daarvoor in aanmerking komen."
-
-#, elixir-autogen, elixir-format
-msgid "campaigns.empty.title"
-msgstr "Campagnes in jouw pool"
 
 #, elixir-autogen, elixir-format
 msgid "spots.available"
@@ -83,17 +71,25 @@ msgid "submission.selector.title"
 msgstr "Pool"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "campaigns.label"
-msgstr "Campagnes"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "participants.label"
 msgstr "Studenten"
-
-#, elixir-autogen, elixir-format
-msgid "excluded.campaigns.title"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "overview.plugin.title"
 msgstr "Studentenpools"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "adverts.empty.description"
+msgstr "Op dit moment zijn er nog geen studenten geregistreerd. Je wordt op de hoogte gesteld zodra er studenten zijn die zich hebben aangemeld."
+
+#, elixir-autogen, elixir-format
+msgid "adverts.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "excluded.adverts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.adverts"
+msgstr "Studenten"

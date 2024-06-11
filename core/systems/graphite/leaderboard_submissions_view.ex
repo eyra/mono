@@ -1,6 +1,5 @@
 defmodule Systems.Graphite.LeaderboardSubmissionsView do
-  use CoreWeb, :live_component_fabric
-  use Fabric.LiveComponent
+  use CoreWeb, :live_component
 
   alias Systems.Graphite
 
@@ -9,9 +8,6 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
         %{
           id: id,
           entity: leaderboard,
-          uri_origin: uri_origin,
-          viewport: viewport,
-          breakpoint: breakpoint,
           submissions: submissions
         },
         socket
@@ -22,10 +18,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
       |> assign(
         id: id,
         leaderboard: leaderboard,
-        submissions: submissions,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        submissions: submissions
       )
       |> compose_child(:download)
     }
@@ -34,19 +27,13 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
   @impl true
   def compose(:download, %{
         leaderboard: leaderboard,
-        submissions: submissions,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint
+        submissions: submissions
       }) do
     %{
       module: Graphite.LeaderboardSubmissionsForm,
       params: %{
         leaderboard: leaderboard,
         submissions: submissions,
-        uri_origin: uri_origin,
-        viewport: viewport,
-        breakpoint: breakpoint,
         page_key: :upload,
         opt_in?: false,
         on_text: "download view on text",

@@ -1,14 +1,15 @@
 defmodule Frameworks.Signal.Public do
   require Logger
 
-  import Frameworks.Utililty.PrettyPrint
+  import Frameworks.Utility.PrettyPrint
 
   # FIXME: move this registration outside of framework
   @signal_handlers [
-    "Core.Accounts.SignalHandlers",
+    "Systems.Account.Switch",
     "Core.Mailer.SignalHandlers",
     "Core.WebPush.SignalHandlers",
     "Core.APNS.SignalHandlers",
+    "Systems.Admin.Switch",
     "Systems.Observatory.Switch",
     "Systems.Project.Switch",
     "Systems.Assignment.Switch",
@@ -16,7 +17,7 @@ defmodule Frameworks.Signal.Public do
     "Systems.Workflow.Switch",
     "Systems.Pool.Switch",
     "Systems.Student.Switch",
-    "Systems.Campaign.Switch",
+    "Systems.Advert.Switch",
     "Systems.NextAction.Switch",
     "Systems.Crew.Switch",
     "Systems.Instruction.Switch",
@@ -34,7 +35,7 @@ defmodule Frameworks.Signal.Public do
     results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
 
     if not Enum.member?(results, :ok) do
-      Logger.error(
+      Logger.warn(
         "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
       )
     end

@@ -20,9 +20,10 @@ defmodule Fabric.LiveView do
 
   def helpers() do
     quote do
-      use Fabric
+      # Function handle_event/3 only terminates with explicit exception.
+      @dialyzer {:nowarn_function, handle_event: 3}
 
-      @before_compile Fabric.LiveView
+      use Fabric
 
       @impl true
       def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
@@ -35,22 +36,6 @@ defmodule Fabric.LiveView do
       end
 
       defoverridable handle_event: 3
-    end
-  end
-
-  defmacro __before_compile__(_env) do
-    quote do
-      defoverridable mount: 3
-
-      @doc """
-      Automatically assigns Fabric to the socket on mount
-      """
-      def mount(params, session, socket) do
-        self = %Fabric.LiveView.RefModel{pid: self()}
-        fabric = %Fabric.Model{parent: nil, self: self, children: nil}
-        socket = Phoenix.Component.assign(socket, :fabric, fabric)
-        super(params, session, socket)
-      end
     end
   end
 end

@@ -63,7 +63,7 @@ defmodule Frameworks.GreenLight.Loaders do
 
   It can thus be used like this:
 
-    defloader(:study, &Link.Studies.get_study!/1)
+    defloader(:study, &Next.Assignment.get!/1)
 
   """
   defmacro defloader(key, callback) do
@@ -104,8 +104,8 @@ defmodule Frameworks.GreenLight.Loaders do
   # detected) is available for the user associated with the `conn`. An example of
   # it's usage:
 
-  #       <%= if can?(@conn, :show, study) do %>
-  #       <span><%= button "Show", method: :get, to: Routes.study_path(@conn, :show, study) %></span>
+  #       <%= if can?(@conn, :show, assignment) do %>
+  #         <span><%= button "Show", method: :get, to: url(conn, ~p"/assignment/\#{assignment.id}" </span>
   #       <% end %>
   # """
 

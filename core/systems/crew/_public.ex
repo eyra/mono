@@ -9,7 +9,7 @@ defmodule Systems.Crew.Public do
   alias Ecto.Multi
   alias Core.Repo
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
   alias Core.Authorization
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Signal
@@ -34,6 +34,12 @@ defmodule Systems.Crew.Public do
   def active?(crew) do
     from(t in Crew.TaskModel, where: t.crew_id == ^crew.id, select: count(t.id))
     |> Repo.one() > 0
+  end
+
+  def user_finished?(crew, user_ref) do
+    list_tasks_for_user(crew, user_ref)
+    |> Enum.map(& &1.id)
+    |> tasks_finished?()
   end
 
   # Tasks
@@ -480,7 +486,7 @@ defmodule Systems.Crew.Public do
     # participants are not redirected to complete the task. This can be caused by
     #   1. bug in third party platform (not redirecting)
     #   2. no end of survey configurated (not redirecting)
-    #   3. end of survey pointing to wrong url (redirecting, but to the wrong campaign)
+    #   3. end of survey pointing to wrong url (redirecting, but to the wrong advert)
 
     tasks = tasks_soft_expired_query()
     users = users_by_task_query(tasks)

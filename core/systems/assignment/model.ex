@@ -13,6 +13,8 @@ defmodule Systems.Assignment.Model do
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Storage
+  alias Systems.Advert
+  alias Systems.Project
 
   schema "assignments" do
     field(:special, Ecto.Atom)
@@ -30,6 +32,7 @@ defmodule Systems.Assignment.Model do
 
     has_one(:project_item, Project.ItemModel, foreign_key: :assignment_id)
     has_many(:page_refs, Assignment.PageRefModel, foreign_key: :assignment_id)
+    has_many(:adverts, Advert.Model, foreign_key: :assignment_id)
 
     many_to_many(
       :excluded,
@@ -39,8 +42,6 @@ defmodule Systems.Assignment.Model do
       on_replace: :delete
     )
 
-    field(:director, Ecto.Enum, values: [:campaign])
-
     timestamps()
   end
 
@@ -48,10 +49,6 @@ defmodule Systems.Assignment.Model do
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
-  end
-
-  defimpl Frameworks.Concept.Directable do
-    def director(%{director: director}), do: Frameworks.Concept.System.director(director)
   end
 
   def auth_tree(%Assignment.Model{auth_node: auth_node}), do: auth_node
@@ -65,25 +62,7 @@ defmodule Systems.Assignment.Model do
 
   def changeset(assignment, attrs) do
     assignment
-    |> cast(attrs, [:director])
     |> cast(attrs, @fields)
-  end
-
-  def flatten(assignment) do
-    assignment
-    |> Map.take([
-      :id,
-      :consent_agreement,
-      :info,
-      :page_refs,
-      :storage_endpoint,
-      :workflow,
-      :crew,
-      :budget,
-      :excluded,
-      :director
-    ])
-    |> Map.put(:tool, tool(assignment))
   end
 
   def language(%Assignment.Model{info: info}), do: language(info)
@@ -114,6 +93,7 @@ defmodule Systems.Assignment.Model do
       :excluded,
       info: [],
       page_refs: [:page],
+      adverts: [],
       privacy_doc: [],
       consent_agreement: [:revisions],
       storage_endpoint: Storage.EndpointModel.preload_graph(:down),

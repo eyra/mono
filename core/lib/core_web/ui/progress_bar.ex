@@ -3,7 +3,7 @@ defmodule CoreWeb.UI.ProgressBar do
     Progress bar capable of stacking multiple bars.
     The bars will be sorted on size and will be stacked from large to small.
   """
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
   defp hide(0, _), do: true
   defp hide(nil, _), do: true

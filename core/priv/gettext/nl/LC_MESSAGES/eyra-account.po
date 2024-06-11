@@ -95,26 +95,6 @@ msgid "login.surf.button"
 msgstr "Inloggen met SURFconext"
 
 #, elixir-autogen, elixir-format
-msgid "login.title"
-msgstr "Log in"
-
-#, elixir-autogen, elixir-format
-msgid "login.surf.message.part1"
-msgstr "Om in te loggen op Next kun je gebruik maken van je organisatie account. Dit werkt via "
-
-#, elixir-autogen, elixir-format
-msgid "login.surf.message.part2"
-msgstr "Jouw persoonsgegevens worden gebruikt voor het goed functioneren van het platform. Meer weten? Lees de "
-
-#, elixir-autogen, elixir-format
-msgid "login.surf.message.part3"
-msgstr "privacy verklaring"
-
-#, elixir-autogen, elixir-format
-msgid "login.surf.message.surfconext.href"
-msgstr "https://wiki.surfnet.nl/display/conextsupport/Inloggen+via+SURFconext"
-
-#, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
 msgstr "Code"
 

@@ -70,12 +70,10 @@ defmodule Systems.Alliance.ToolForm do
 
   # Validate
 
-  def validate_for_publish(%{assigns: %{id: id, entity: entity}} = socket) do
+  def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Alliance.ToolModel.operational_changeset(entity, %{})
       |> Map.put(:action, :validate_for_publish)
-
-    send(self(), %{id: id, ready?: changeset.valid?})
 
     socket
     |> assign(changeset: changeset)

@@ -25,7 +25,7 @@ defmodule Systems.Student.Filters do
 
   def include?(student, filter, %Pool.Model{} = pool), do: state(student, pool) == filter
 
-  defp state(%Core.Accounts.User{} = student, pool) do
+  defp state(%Systems.Account.User{} = student, pool) do
     Budget.Public.list_wallets(student)
     |> Enum.filter(&Pool.Public.wallet_related?(pool, &1))
     |> state(pool)

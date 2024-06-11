@@ -1,16 +1,17 @@
 defmodule Systems.Admin.LoginPage do
   use CoreWeb, :live_view
-  use CoreWeb.Layouts.Stripped.Component, :admin_login
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Layouts.Stripped.Composer
 
   import Ecto.Query
   alias Core.Repo
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   def mount(_params, _session, socket) do
     {
       :ok,
       socket
-      |> assign(:users, list_users())
+      |> assign(users: list_users(), active_menu_item: :admin)
       |> update_menus()
     }
   end

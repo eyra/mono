@@ -178,14 +178,6 @@ msgstr "Gesloten"
 msgid "ticket_status.open"
 msgstr "Open"
 
-#, elixir-autogen, elixir-format
-msgid "templates.lab"
-msgstr "Lab studie"
-
-#, elixir-autogen, elixir-format
-msgid "templates.online"
-msgstr "Online studie"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.accepted"
 msgstr "Gepubliseerd"
@@ -200,30 +192,6 @@ msgstr "Concept"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "submission_status.submitted"
-msgstr "Ingediend"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.closed"
-msgstr "Gesloten"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.completed"
-msgstr "Afgerond"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.retracted"
-msgstr "Ingetrokken"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.released"
-msgstr "Open"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.scheduled"
-msgstr "Ingepland"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "pool_campaign_status.submitted"
 msgstr "Ingediend"
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -418,10 +386,6 @@ msgstr ""
 msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "project_item_templates.leaderboard"
-msgstr "Benchmark Leaderboard"
-
 #, elixir-autogen, elixir-format
 msgid "leaderboard_status.concept"
 msgstr ""
@@ -440,4 +404,44 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.public"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "project_item_templates.questionnaire"
+msgstr "Data Donatie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.general_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.onsite_experiment"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "templates.questionnaire"
+msgstr "Online studie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.concept"
+msgstr "Afgerond"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.idle"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.offline"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "advert_status.online"
+msgstr "Gesloten"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.creator"
 msgstr ""

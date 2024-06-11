@@ -10,7 +10,7 @@ defmodule Systems.Consent.SignatureModel do
 
   schema "consent_signatures" do
     belongs_to(:revision, Consent.RevisionModel)
-    belongs_to(:user, Core.Accounts.User)
+    belongs_to(:user, Systems.Account.User)
     timestamps()
   end
 

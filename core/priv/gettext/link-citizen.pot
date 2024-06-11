@@ -15,10 +15,6 @@ msgid "overview.plugin.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "campaigns.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "participants.label"
 msgstr ""
 
@@ -59,10 +55,6 @@ msgid "search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.campaigns"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.citizens"
 msgstr ""
 
@@ -80,4 +72,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "overview.share.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.adverts"
 msgstr ""

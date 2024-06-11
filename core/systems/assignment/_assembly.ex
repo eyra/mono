@@ -35,6 +35,12 @@ defmodule Systems.Assignment.Assembly do
     )
   end
 
+  defp prepare_workflow(:questionnaire = special, %Authorization.Node{} = auth_node) do
+    template = Assignment.Private.get_template(special)
+    initial_items = prepare_initial_items(template, auth_node)
+    prepare_workflow(special, template, initial_items, auth_node)
+  end
+
   defp prepare_workflow(:data_donation = special, %Authorization.Node{} = auth_node) do
     template = Assignment.Private.get_template(special)
     initial_items = prepare_initial_items(template, auth_node)
@@ -47,28 +53,10 @@ defmodule Systems.Assignment.Assembly do
     prepare_workflow(special, template, initial_items, auth_node)
   end
 
-  defp prepare_workflow(:online = special, %Authorization.Node{} = auth_node) do
-    tool_auth_node = Authorization.create_node!(auth_node)
-    tool = Workflow.Public.prepare_tool(:alliance_tool, %{director: :assignment}, tool_auth_node)
-    prepare_workflow(special, tool, :one, auth_node)
-  end
-
-  defp prepare_workflow(:lab = special, %Authorization.Node{} = auth_node) do
-    tool_auth_node = Authorization.create_node!(auth_node)
-    tool = Workflow.Public.prepare_tool(:lab_tool, %{director: :assignment}, tool_auth_node)
-    prepare_workflow(special, tool, :one, auth_node)
-  end
-
   defp prepare_workflow(special, template, initial_items, %Authorization.Node{} = auth_node)
        when is_list(initial_items) do
     type = Assignment.Template.workflow(template).type
     Assignment.Public.prepare_workflow(special, initial_items, type, auth_node)
-  end
-
-  defp prepare_workflow(special, tool, type, auth_node) do
-    tool_ref = Assignment.Public.prepare_tool_ref(special, tool)
-    item = Assignment.Public.prepare_workflow_item(tool_ref)
-    Assignment.Public.prepare_workflow(special, [item], type, auth_node)
   end
 
   defp prepare_initial_items(template, auth_node) do

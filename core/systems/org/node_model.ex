@@ -3,7 +3,7 @@ defmodule Systems.Org.NodeModel do
   import Ecto.Changeset
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   use Systems.{
     Org.Internals

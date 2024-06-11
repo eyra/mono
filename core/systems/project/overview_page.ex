@@ -1,12 +1,7 @@
 defmodule Systems.Project.OverviewPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-  use CoreWeb.Layouts.Workspace.Component, :projects
-  use CoreWeb.UI.PlainDialog
-  use Systems.Observatory.Public
+  use Systems.Content.Composer, :live_workspace
 
-  import CoreWeb.Layouts.Workspace.Component
-  alias CoreWeb.UI.SelectorDialog
+  import Frameworks.Pixel.Empty
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Grid
@@ -14,33 +9,23 @@ defmodule Systems.Project.OverviewPage do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.ShareView
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        model: user,
-        dialog: nil,
-        popup: nil,
-        selector_dialog: nil
-      )
-      |> observe_view_model()
-      |> update_menus()
-    }
+  def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
+    user
   end
 
-  def handle_view_model_updated(socket) do
-    socket |> update_menus()
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, socket}
   end
 
-  def handle_auto_save_done(socket) do
-    socket |> update_menus()
-  end
+  @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   @impl true
   def compose(:project_form, %{active_project: project_id, vm: %{projects: projects}}) do
@@ -57,7 +42,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def compose(:share_view, %{active_project: project_id, current_user: user}) do
     researchers =
-      Core.Accounts.list_researchers([:profile])
+      Systems.Account.Public.list_creators([:profile])
       # filter current user
       |> Enum.filter(&(&1.id != user.id))
 
@@ -79,12 +64,6 @@ defmodule Systems.Project.OverviewPage do
         shared_users: owners
       }
     }
-  end
-
-  @impl true
-  def handle_event("show_popup", %{ref: %{id: id, module: module}, params: params}, socket) do
-    popup = %{module: module, props: Map.put(params, :id, id)}
-    {:noreply, socket |> assign(popup: popup)}
   end
 
   @impl true
@@ -174,7 +153,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("add_user", %{user: user, content_id: project_id}, socket) do
+  def handle_event("add_user", %{user: user}, %{assigns: %{active_project: project_id}} = socket) do
     project_id
     |> Project.Public.get!()
     |> Project.Public.add_owner!(user)
@@ -183,7 +162,11 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("remove_user", %{user: user, content_id: project_id}, socket) do
+  def handle_event(
+        "remove_user",
+        %{user: user},
+        %{assigns: %{active_project: project_id}} = socket
+      ) do
     project_id
     |> Project.Public.get!()
     |> Project.Public.remove_owner!(user)
@@ -197,59 +180,9 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_info(%{auto_save: _status}, socket) do
-    {
-      :noreply,
-      socket
-    }
-  end
-
-  @impl true
-  def handle_info({:handle_auto_save_done, :project_overview_popup}, socket) do
-    {
-      :noreply,
-      socket
-    }
-  end
-
-  @impl true
-  def handle_info(%{selector: :cancel}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(selector_dialog: nil)
-    }
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={dgettext("eyra-project", "overview.title")} menus={@menus}>
-
-      <%= if @popup do %>
-        <.popup>
-          <div class="w-popup-md">
-            <.live_component id={:project_overview_popup} module={@popup.module} {@popup.props} />
-          </div>
-        </.popup>
-      <% end %>
-
-      <%= if @dialog do %>
-        <.popup>
-          <div class="flex-wrap">
-            <.plain_dialog {@dialog} />
-          </div>
-        </.popup>
-      <% end %>
-
-      <%= if @selector_dialog do %>
-        <div class="fixed z-40 left-0 top-0 w-full h-full bg-black bg-opacity-20">
-          <div class="flex flex-row items-center justify-center w-full h-full">
-            <.live_component module={SelectorDialog} id={:selector_dialog} {@selector_dialog} />
-          </div>
-        </div>
-      <% end %>
-
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>
@@ -276,7 +209,7 @@ defmodule Systems.Project.OverviewPage do
           <Margin.y id={:title2_bottom} />
           <Grid.dynamic>
             <%= for card <- @vm.cards do %>
-              <Project.CardView.dynamic card={card} />
+              <Project.CardView.dynamic card={card}/>
             <% end %>
           </Grid.dynamic>
           <.spacing value="L" />
@@ -292,7 +225,7 @@ defmodule Systems.Project.OverviewPage do
           />
         <% end %>
       </Area.content>
-    </.workspace>
+    </.live_workspace>
     """
   end
 end

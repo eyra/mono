@@ -1,6 +1,6 @@
 defmodule Fabric do
   @type assigns :: map()
-  @type composition_id :: atom()
+  @type composition_id :: atom() | binary()
   @type composition :: child() | element()
   @type child :: %{module: module(), params: map()}
   @type element :: map() | binary() | number()
@@ -23,16 +23,17 @@ defmodule Fabric do
       end
 
       def compose_element(%Phoenix.LiveView.Socket{assigns: assigns} = socket, element_id)
-          when is_atom(element_id) do
+          when is_atom(element_id) or is_binary(element_id) do
         %Phoenix.LiveView.Socket{socket | assigns: compose_element(assigns, element_id)}
       end
 
-      def compose_element(%{} = assigns, element_id) when is_atom(element_id) do
+      def compose_element(%{} = assigns, element_id)
+          when is_atom(element_id) or is_binary(element_id) do
         element = compose(element_id, assigns)
         Phoenix.Component.assign(assigns, element_id, element)
       end
 
-      def update_child(context, child_name) when is_atom(child_name) do
+      def update_child(context, child_name) when is_atom(child_name) or is_binary(child_name) do
         if exists?(context, child_name) do
           compose_child(context, child_name)
         else
@@ -40,20 +41,24 @@ defmodule Fabric do
         end
       end
 
-      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name)
-          when is_atom(child_name) do
+      def add_child(
+            %Phoenix.LiveView.Socket{assigns: assigns} = socket,
+            child_name,
+            %{} = child_map
+          ) do
+        %Phoenix.LiveView.Socket{
+          socket
+          | assigns: Fabric.compose_child(assigns, child_name, child_map)
+        }
+      end
+
+      def compose_child(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
         %Phoenix.LiveView.Socket{socket | assigns: compose_child(assigns, child_name)}
       end
 
-      def compose_child(%{fabric: fabric} = assigns, child_name) when is_atom(child_name) do
-        fabric =
-          if child = prepare_child(fabric, child_name, compose(child_name, assigns)) do
-            add_child(fabric, child)
-          else
-            remove_child(fabric, child_name)
-          end
-
-        Phoenix.Component.assign(assigns, fabric: fabric)
+      def compose_child(%{fabric: _} = assigns, child_name)
+          when is_atom(child_name) or is_binary(child_name) do
+        Fabric.compose_child(assigns, child_name, compose(child_name, assigns))
       end
 
       def compose(_id, _assigns) do
@@ -63,6 +68,15 @@ defmodule Fabric do
 
       defoverridable compose: 2
     end
+  end
+
+  def compose_child(%{fabric: fabric} = assigns, child_name, %{} = child_map) do
+    child = prepare_child(fabric, child_name, child_map)
+    Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
+  end
+
+  def compose_child(%{fabric: fabric} = assigns, child_name, nil) do
+    Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
   # Child id
@@ -83,8 +97,6 @@ defmodule Fabric do
     prepare_child(context, child_name, module, params)
   end
 
-  def prepare_child(_context, _child_id, _), do: nil
-
   def prepare_child(
         %Phoenix.LiveView.Socket{assigns: assigns},
         child_name,
@@ -103,6 +115,7 @@ defmodule Fabric do
     child_ref = %Fabric.LiveComponent.RefModel{id: child_id, name: child_name, module: module}
     child_fabric = %Fabric.Model{parent: self, self: child_ref, children: nil}
     params = Map.put(params, :fabric, child_fabric)
+
     %Fabric.LiveComponent.Model{ref: child_ref, params: params}
   end
 
@@ -195,7 +208,8 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
-  def show_modal(context, child_name, modal_style) when is_atom(child_name) do
+  def show_modal(context, child_name, modal_style)
+      when is_atom(child_name) or is_binary(child_name) do
     child = get_child(context, child_name)
     show_modal(context, child, modal_style)
   end
@@ -227,9 +241,12 @@ defmodule Fabric do
   # POPUP
 
   # deprecated "Use show_modal/3 instead"
-  def show_popup(context, child_name) when is_atom(child_name) do
-    child = get_child(context, child_name)
-    show_popup(context, child)
+  def show_popup(context, child_name) when is_atom(child_name) or is_binary(child_name) do
+    if child = get_child(context, child_name) do
+      show_popup(context, child)
+    else
+      raise "Unable to show popup with unknown child '#{child_name}'"
+    end
   end
 
   # deprecated "Use show_modal/3 instead"
@@ -296,6 +313,10 @@ defmodule Fabric do
 
   # BASICS
 
+  def add_child(%Phoenix.LiveView.Socket{assigns: %{fabric: fabric}} = socket, child) do
+    Phoenix.Component.assign(socket, fabric: add_child(fabric, child))
+  end
+
   def add_child(%Fabric.Model{children: nil} = fabric, %Fabric.LiveComponent.Model{} = child) do
     %Fabric.Model{fabric | children: [child]}
   end
@@ -305,7 +326,7 @@ defmodule Fabric do
       if index = Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
         List.replace_at(children, index, child)
       else
-        List.wrap(child) ++ List.wrap(children)
+        List.wrap(children) ++ List.wrap(child)
       end
 
     %Fabric.Model{fabric | children: children}

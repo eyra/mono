@@ -80,6 +80,8 @@ defmodule Systems.Budget.BankAccountModel do
     |> Changeset.put_assoc(:currency, Budget.CurrencyModel.validate(currency_changeset))
   end
 
+  defp validate_currency(changeset), do: changeset
+
   def submit(%Changeset{data: %{account: %{id: _id}}} = changeset) do
     changeset
   end

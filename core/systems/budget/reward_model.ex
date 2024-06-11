@@ -5,7 +5,7 @@ defmodule Systems.Budget.RewardModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Core.Accounts
+  alias Systems.Account
 
   alias Systems.{
     Budget,
@@ -17,7 +17,7 @@ defmodule Systems.Budget.RewardModel do
     field(:amount, :integer)
     field(:attempt, :integer)
     belongs_to(:budget, Budget.Model)
-    belongs_to(:user, Accounts.User)
+    belongs_to(:user, Account.User)
 
     belongs_to(:deposit, Bookkeeping.EntryModel)
     belongs_to(:payment, Bookkeeping.EntryModel)

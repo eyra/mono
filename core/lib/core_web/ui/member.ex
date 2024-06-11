@@ -2,7 +2,7 @@ defmodule CoreWeb.UI.Member do
   @moduledoc """
     Label with a pill formed background.
   """
-  use CoreWeb, :html
+  use CoreWeb, :ui
 
   alias Core.ImageHelpers
 

@@ -29,8 +29,6 @@ defmodule CoreWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint CoreWeb.Endpoint
-
-      alias CoreWeb.Router.Helpers, as: Routes
       import Core.AuthTestHelpers
 
       use CoreWeb, :verified_routes

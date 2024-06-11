@@ -4,7 +4,12 @@ defmodule Systems.Pool.Presenter do
   alias Systems.Pool
 
   @impl true
-  def view_model(page, %Pool.Model{director: director} = pool, assigns) do
-    Frameworks.Concept.System.presenter(director).view_model(page, pool, assigns)
+  def view_model(page, %Pool.Model{} = pool, assigns) do
+    builder(page).view_model(pool, assigns)
   end
+
+  def builder(Pool.DetailPage), do: Pool.DetailPageBuilder
+  def builder(Pool.LandingPage), do: Pool.LandingPageBuilder
+  def builder(Pool.ParticipantPage), do: Pool.ParticipantPageBuilder
+  def builder(Pool.SubmissionPage), do: Pool.SubmissionPageBuilder
 end

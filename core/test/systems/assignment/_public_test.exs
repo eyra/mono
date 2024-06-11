@@ -10,50 +10,30 @@ defmodule Systems.Assignment.PublicTest do
 
     alias Core.Factories
 
-    test "has_open_spots?/1 true, with 1 expired pending task" do
+    test "has_open_spots?/1 true, with 1 expired member" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-
-      _task = Crew.Factories.create_task(crew, member, ["task1"], expired: true)
+      Crew.Factories.create_member(crew, user, %{expired: true})
 
       assert Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "has_open_spots?/1 true, with 1 expired pending task and 1 completed task" do
+    test "has_open_spots?/1 true, with 1 expired member and 1 normal member" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 2)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
 
-      _task = Crew.Factories.create_task(crew, member, ["task1"], status: :completed)
-      _task = Crew.Factories.create_task(crew, member, ["task2"], expired: true)
+      Crew.Factories.create_member(crew, user1, %{expired: true})
+      Crew.Factories.create_member(crew, user2)
 
       assert Assignment.Public.has_open_spots?(assignment)
     end
 
-    test "has_open_spots?/1 true, with 0 tasks" do
+    test "has_open_spots?/1 true, with 0 members" do
       assignment = Assignment.Factories.create_assignment(31, 1)
 
       assert Assignment.Public.has_open_spots?(assignment)
-    end
-
-    test "has_open_spots?/1 false, with 1 pending task left" do
-      %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-      _task = Crew.Factories.create_task(crew, member, ["task1"])
-
-      assert not Assignment.Public.has_open_spots?(assignment)
-    end
-
-    test "has_open_spots?/1 false, with completed tasks" do
-      %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-      _task = Crew.Factories.create_task(crew, member, ["task1"], status: :completed)
-
-      assert not Assignment.Public.has_open_spots?(assignment)
     end
 
     test "mark_expired_debug?/1 force=false, marked 1 expired task" do
@@ -294,25 +274,19 @@ defmodule Systems.Assignment.PublicTest do
       assert Assignment.Public.rewarded_amount(assignment, user) == 0
     end
 
-    test "open_spot_count/3 with 1 expired spot" do
-      %{crew: crew} = assignment = Assignment.Factories.create_assignment(10, 3)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
+    test "open_spot_count/3 with 1 expired member" do
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment(10, 1)
 
-      _task1 = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
-      _task2 = Crew.Factories.create_task(crew, member, ["task2"], expired: true)
-      _task3 = Crew.Factories.create_task(crew, member, ["task3"], status: :completed)
+      user = Factories.insert!(:member)
+      Crew.Factories.create_member(crew, user, %{expired: true})
 
       assert Assignment.Public.open_spot_count(assignment) == 1
     end
 
     test "open_spot_count/3 with 1 expired and one open spot" do
-      %{crew: crew} = assignment = Assignment.Factories.create_assignment(10, 4)
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment(10, 2)
       user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-      _task1 = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
-      _task2 = Crew.Factories.create_task(crew, member, ["task2"], expired: true)
-      _task3 = Crew.Factories.create_task(crew, member, ["task3"], status: :completed)
+      Crew.Factories.create_member(crew, user, %{expired: true})
 
       assert Assignment.Public.open_spot_count(assignment) == 2
     end

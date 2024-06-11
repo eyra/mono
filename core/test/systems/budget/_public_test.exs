@@ -16,12 +16,12 @@ defmodule Systems.Budget.PublicTest do
 
   test "create_reward/4", %{budget: %{fund: fund, reserve: reserve} = budget} do
     amount = 3500
-    %{id: student_id} = student = Factories.insert!(:member, %{student: true})
-    reward_idempotence_key = "user:#{student.id},budget:#{budget.id},assignment:1"
+    %{id: participant_id} = participant = Factories.insert!(:member, %{creator: false})
+    reward_idempotence_key = "user:#{participant.id},budget:#{budget.id},assignment:1"
     deposit_idempotence_key = "#{reward_idempotence_key},type=deposit,attempt=0"
 
     {:ok, %{reward: %{id: reward_id}}} =
-      Budget.Public.create_reward(budget, amount, student, reward_idempotence_key)
+      Budget.Public.create_reward(budget, amount, participant, reward_idempotence_key)
 
     reward =
       Budget.Public.get_reward!(reward_id, [
@@ -39,7 +39,7 @@ defmodule Systems.Budget.PublicTest do
     assert %{
              amount: ^amount,
              user: %{
-               id: ^student_id
+               id: ^participant_id
              },
              budget: %{
                fund: %{
@@ -60,14 +60,14 @@ defmodule Systems.Budget.PublicTest do
   end
 
   test "rollback_deposit/4 fails without deposit", %{budget: budget} do
-    student = Factories.insert!(:member, %{student: true})
+    participant = Factories.insert!(:member, %{creator: false})
 
     reward =
       Factories.insert!(:reward, %{
         idempotence_key: "1",
         amount: 3500,
         attempt: 0,
-        user: student,
+        user: participant,
         budget: budget
       })
 
@@ -82,7 +82,7 @@ defmodule Systems.Budget.PublicTest do
 
     idempotence_key = "idempotence_key_1"
 
-    student = Factories.insert!(:member, %{student: true})
+    participant = Factories.insert!(:member, %{creator: false})
 
     deposit =
       Factories.insert!(:book_entry, %{
@@ -100,7 +100,7 @@ defmodule Systems.Budget.PublicTest do
         idempotence_key: "1",
         amount: amount,
         attempt: 0,
-        user: student,
+        user: participant,
         budget: budget,
         deposit: deposit
       })
@@ -166,7 +166,7 @@ defmodule Systems.Budget.PublicTest do
     deposit_idempotence_key = "idempotence_key_deposit"
     payment_idempotence_key = "idempotence_key_payment"
 
-    student = Factories.insert!(:member, %{student: true})
+    participant = Factories.insert!(:member, %{creator: false})
 
     deposit =
       Bookkeeping.Factories.create_entry(
@@ -191,7 +191,7 @@ defmodule Systems.Budget.PublicTest do
         idempotence_key: "1",
         amount: amount,
         attempt: 0,
-        user: student,
+        user: participant,
         budget: budget,
         deposit: deposit,
         payment: payment
@@ -217,14 +217,14 @@ defmodule Systems.Budget.PublicTest do
         "test_payout_reward"
       )
 
-    %{id: student_id} = student = Factories.insert!(:member, %{student: true})
+    %{id: participant_id} = participant = Factories.insert!(:member, %{creator: false})
 
     reward =
       Factories.insert!(:reward, %{
         idempotence_key: reward_idempotence_key,
         amount: amount,
         attempt: 0,
-        user: student,
+        user: participant,
         budget: budget,
         deposit: deposit
       })
@@ -238,7 +238,7 @@ defmodule Systems.Budget.PublicTest do
     reserve_balance_credit = reserve.balance_credit
     reserve_balance_debit = reserve.balance_debit + amount
 
-    wallet_id = ["wallet", "fake_currency", "#{student_id}"]
+    wallet_id = ["wallet", "fake_currency", "#{participant_id}"]
 
     assert %{
              lines: [
@@ -280,7 +280,7 @@ defmodule Systems.Budget.PublicTest do
   } do
     amount = 3500
 
-    student = Factories.insert!(:member, %{student: true})
+    participant = Factories.insert!(:member, %{creator: false})
 
     reward_idempotence_key = "1"
     payment_idempotence_key = Budget.RewardModel.payment_idempotence_key(reward_idempotence_key)
@@ -289,7 +289,7 @@ defmodule Systems.Budget.PublicTest do
       idempotence_key: reward_idempotence_key,
       amount: amount,
       attempt: 0,
-      user: student,
+      user: participant,
       budget: budget
     })
 
@@ -315,8 +315,8 @@ defmodule Systems.Budget.PublicTest do
     deposit_idempotence_key = "1,type=deposit,attempt=0"
     payment_idempotence_key = "1,type=payment"
 
-    student = Factories.insert!(:member, %{student: true})
-    wallet = Budget.Factories.create_wallet(student, currency)
+    participant = Factories.insert!(:member, %{creator: false})
+    wallet = Budget.Factories.create_wallet(participant, currency)
 
     deposit =
       Bookkeeping.Factories.create_entry(
@@ -340,7 +340,7 @@ defmodule Systems.Budget.PublicTest do
       idempotence_key: reward_idempotence_key,
       amount: amount,
       attempt: 0,
-      user: student,
+      user: participant,
       budget: budget,
       deposit: deposit,
       payment: payment
@@ -449,27 +449,27 @@ defmodule Systems.Budget.PublicTest do
 
     expected_wallet_credit = amount * multiplier
 
-    student1 = Factories.insert!(:member, %{student: true})
-    student2 = Factories.insert!(:member, %{student: true})
+    participant1 = Factories.insert!(:member, %{creator: false})
+    participant2 = Factories.insert!(:member, %{creator: false})
 
     Factories.insert!(:reward, %{
-      idempotence_key: "student=1",
+      idempotence_key: "participant=1",
       amount: amount,
       attempt: 0,
-      user: student1,
+      user: participant1,
       budget: budget
     })
 
     Factories.insert!(:reward, %{
-      idempotence_key: "student=2",
+      idempotence_key: "participant=2",
       amount: amount,
       attempt: 0,
-      user: student2,
+      user: participant2,
       budget: budget
     })
 
-    Budget.Public.payout_reward("student=1")
-    Budget.Public.payout_reward("student=2")
+    Budget.Public.payout_reward("participant=1")
+    Budget.Public.payout_reward("participant=2")
 
     assert %{debit: ^reserve_debit} = Bookkeeping.Public.balance(reserve)
     assert %{debit: ^fund_debit} = Bookkeeping.Public.balance(fund)

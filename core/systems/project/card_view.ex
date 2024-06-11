@@ -44,6 +44,7 @@ defmodule Systems.Project.CardView do
     ~H"""
     <.basic
       {@card}
+
       bg_color="grey5"
       text_color="text-grey1"
       label_type="primary"

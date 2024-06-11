@@ -5,6 +5,9 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
+  alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
   alias Systems.Assignment
@@ -20,6 +23,9 @@ defmodule Systems.Assignment.Private do
   def get_template(:benchmark_challenge),
     do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
 
+  def get_template(:questionnaire),
+    do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
+
   def log_performance_event(
         %Assignment.Model{} = assignment,
         %Crew.TaskModel{} = crew_task,
@@ -28,18 +34,25 @@ defmodule Systems.Assignment.Private do
     with {:ok, workflow_item} <- get_workflow_item(crew_task),
          {:ok, user_ref} <- get_crew_member(crew_task),
          false <- Assignment.Public.tester?(assignment, user_ref) do
-      Monitor.Public.log(workflow_item, topic, user_ref)
+      log_performance_event(assignment, {workflow_item, topic, user_ref})
     end
   end
 
   def log_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
     if not Assignment.Public.tester?(assignment, user_ref) do
-      Monitor.Public.log(assignment, topic, user_ref)
+      log_performance_event(assignment, {assignment, topic, user_ref})
     end
   end
 
+  def log_performance_event(%Assignment.Model{} = assignment, event) do
+    Multi.new()
+    |> Monitor.Public.multi_log(event)
+    |> Signal.Public.multi_dispatch({:assignment, :monitor_event}, %{assignment: assignment})
+    |> Repo.transaction()
+  end
+
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
-    Monitor.Public.event(assignment, topic, user_ref)
+    Monitor.Public.event({assignment, topic, user_ref})
     |> Monitor.Public.clear()
   end
 
@@ -150,9 +163,11 @@ defmodule Systems.Assignment.Private do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
-  # Deprecated
-  def task_identifier(_tool, _user) do
-    raise RuntimeError,
-          "`Systems.Assignment.Private.task_identifier/2` is deprecated; call `task_identifier/3` instead."
+  def task_identifier(
+        %{special: :questionnaire},
+        %Workflow.ItemModel{id: item_id},
+        %Crew.MemberModel{id: member_id}
+      ) do
+    ["item=#{item_id}", "member=#{member_id}"]
   end
 end

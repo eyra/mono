@@ -1,11 +1,7 @@
 defmodule Systems.Graphite.LeaderboardContentPage do
-  use CoreWeb, :live_view_fabric
-  use Fabric.LiveView, CoreWeb.Layouts
-  use Systems.Content.Page
+  use Systems.Content.Composer, :management_page
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -13,30 +9,50 @@ defmodule Systems.Graphite.LeaderboardContentPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, session, socket) do
-    leaderboard =
-      Graphite.Public.get_leaderboard!(id, Graphite.LeaderboardModel.preload_graph(:down))
-
-    {:ok,
-     socket |> initialize(session, id, leaderboard, "leaderboard_content/#{id}", "settings_form")}
+  def get_model(%{"id" => id}, _session, _socket) do
+    Graphite.Public.get_leaderboard!(
+      String.to_integer(id),
+      Graphite.LeaderboardModel.preload_graph(:down)
+    )
   end
+
+  @impl true
+  def mount(%{"id" => id} = params, _session, socket) do
+    initial_tab = Map.get(params, "tab")
+    tabbar_id = "leaderboard_content/#{id}"
+
+    {
+      :ok,
+      socket
+      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
+    }
+  end
+
+  @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_resize(socket), do: socket
+
+  @impl true
+  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.content_page
-      actions={@actions}
-      title={dgettext("eyra-graphite", "title.benchmark_leaderboard")}
-      show_errors={@vm.show_errors}
-      tabs={@vm.tabs}
-      menus={@menus}
-      initial_tab={@initial_tab}
-      tabbar_id={@tabbar_id}
-      tabbar_size={@tabbar_size}
-      breakpoint={@breakpoint}
-      popup={@popup}
-      dialog={@dialog}
-    />
+      <.management_page
+        title={@vm.title}
+        tabs={@vm.tabs}
+        show_errors={@vm.show_errors}
+        actions={@actions}
+        tabbar_id={@tabbar_id}
+        initial_tab={@initial_tab}
+        tabbar_size={@tabbar_size}
+        menus={@menus}
+        modal={@modal}
+        popup={@popup}
+        dialog={@dialog}
+      />
     """
   end
 end

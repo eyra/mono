@@ -7,7 +7,6 @@ defmodule Systems.Lab.ToolForm do
     Lab
   }
 
-  # Handle initial update
   @impl true
   def update(
         %{id: id, entity_id: entity_id, validate?: validate?},
@@ -34,26 +33,21 @@ defmodule Systems.Lab.ToolForm do
   end
 
   @impl true
-  def update(
-        %{day_view: :submit, og_day_model: og_day_model, day_model: day_model},
-        %{assigns: %{entity: entity}} = socket
-      ) do
-    Lab.Public.submit_day_model(entity, og_day_model, day_model)
-    send(self(), {:hide_popup})
-
-    {
-      :ok,
-      socket
-      |> update_entity()
-      |> update_day_list_items()
-      |> update_byline()
+  def compose(:day_view, %{day_model: day_model}) do
+    %{
+      module: Systems.Lab.DayView,
+      params: %{
+        day_model: day_model
+      }
     }
   end
 
-  @impl true
-  def update(%{day_view: :hide}, socket) do
-    send(self(), {:hide_popup})
-    {:ok, socket}
+  defp get_day(day_list_items, index) when is_binary(index) do
+    get_day(day_list_items, index |> String.to_integer())
+  end
+
+  defp get_day(day_list_items, index) do
+    day_list_items |> Enum.at(index)
   end
 
   defp update_entity(%{assigns: %{entity_id: entity_id}} = socket) do
@@ -97,12 +91,39 @@ defmodule Systems.Lab.ToolForm do
   end
 
   @impl true
+  def handle_event("day_view_hide", _payload, socket) do
+    {:noreply, socket |> hide_popup(:day_view)}
+  end
+
+  @impl true
+  def handle_event(
+        "day_view_submit",
+        %{og_day_model: og_day_model, day_model: day_model},
+        %{assigns: %{entity: entity}} = socket
+      ) do
+    Lab.Public.submit_day_model(entity, og_day_model, day_model)
+
+    {
+      :noreply,
+      socket
+      |> update_entity()
+      |> update_day_list_items()
+      |> update_byline()
+      |> hide_popup(:day_view)
+    }
+  end
+
+  @impl true
   def handle_event("add_day", _params, %{assigns: %{entity: entity}} = socket) do
     day_model = Lab.Public.new_day_model(entity)
-    props = popup_props(day_model, socket)
 
-    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
-    {:noreply, socket}
+    {
+      :noreply,
+      socket
+      |> assign(day_model: day_model)
+      |> compose_child(:day_view)
+      |> show_popup(:day_view)
+    }
   end
 
   @impl true
@@ -115,10 +136,13 @@ defmodule Systems.Lab.ToolForm do
     day = get_day(socket, index)
     day_model = Lab.Public.edit_day_model(entity, day)
 
-    props = popup_props(day_model, socket)
-
-    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
-    {:noreply, socket}
+    {
+      :noreply,
+      socket
+      |> assign(day_model: day_model)
+      |> compose_child(:day_view)
+      |> show_popup(:day_view)
+    }
   end
 
   @impl true
@@ -126,10 +150,13 @@ defmodule Systems.Lab.ToolForm do
     day = get_day(socket, index)
     day_model = Lab.Public.duplicate_day_model(entity, day)
 
-    props = popup_props(day_model, socket)
-
-    send(self(), {:show_popup, %{module: Systems.Lab.DayView, props: props}})
-    {:noreply, socket}
+    {
+      :noreply,
+      socket
+      |> assign(day_model: day_model)
+      |> compose_child(:day_view)
+      |> show_popup(:day_view)
+    }
   end
 
   @impl true
@@ -144,22 +171,6 @@ defmodule Systems.Lab.ToolForm do
       |> update_day_list_items()
       |> update_byline()
     }
-  end
-
-  defp popup_props(day_model, %{assigns: %{id: id}}) do
-    %{
-      id: :day_popup,
-      target: %{type: __MODULE__, id: id},
-      day_model: day_model
-    }
-  end
-
-  defp get_day(socket, index) when is_binary(index) do
-    get_day(socket, index |> String.to_integer())
-  end
-
-  defp get_day(%{assigns: %{day_list_items: day_list_items}}, index) do
-    day_list_items |> Enum.at(index)
   end
 
   @impl true

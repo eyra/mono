@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.GeneralForm do
-  use CoreWeb.LiveForm, :fabric
-  use Fabric.LiveComponent
+  use CoreWeb.LiveForm
 
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text

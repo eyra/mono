@@ -5,7 +5,7 @@ defmodule Systems.Crew.MemberModel do
   use Ecto.Schema
   import Ecto.Changeset
   alias Systems.Crew
-  alias Core.Accounts.User
+  alias Systems.Account.User
 
   schema "crew_members" do
     field(:public_id, :integer)
