@@ -416,7 +416,7 @@ msgstr "Participant instructions"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.onsite_experiment"
-msgstr "Onsite experiment"
+msgstr "On-site data collection"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.questionnaire"
