@@ -132,7 +132,7 @@ Required environment variables:
 | STATIC_PATH | Path to folder where uploaded files can be stored | "/tmp" |
 | UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "hcejpnHRuFWL-fKXLYqhGBt1Dz0_tTjeNifgD01VkGE" |
 | UNSPLASH_APP_NAME | Application name registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "Self" |
-| STORAGE_SERVICES | Comma seperated list of storage services | "builtin yoda aws azure" |
+| STORAGE_SERVICES | Comma seperated list of storage services | "yoda, aws, azure" |
 
 Optional environment variables:
 

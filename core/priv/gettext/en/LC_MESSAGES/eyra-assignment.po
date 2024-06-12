@@ -184,11 +184,11 @@ msgstr "Change logo"
 
 #, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr "Organization logo"
+msgstr "Logo"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
-msgstr "Use the fields below to customize the header of your participant workflow. Add the name and logo of the organisation that is responsible for the workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
+msgstr "Use the fields below to customize the header of your participant workflow. Curious to see what this will look like for participants? Click 'Preview' at the top right to check it out."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
@@ -212,7 +212,7 @@ msgstr "Show"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
-msgstr "Add an about page to onboard and inform your participants. Were your participants already informed in some other way? Choose 'Skip'."
+msgstr "Add an about page to onboard and inform your participants or choose 'Skip'."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
@@ -224,7 +224,7 @@ msgstr "About"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
-msgstr "This page will be shown when participants click the 'i' at the right bottom and choose 'Need help?'. Check out 'Preview' to see what this will look like. Use the text field below to inform participants about how to get support when needed. Choose 'Skip' if you are not planning to provide support."
+msgstr "Use the text field below to inform participants about how to get support when needed. This page will be shown when participants click the 'i' at the right bottom. Check out 'Preview' to see what this will look like. Choose 'Skip' if you are not planning to provide support."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
@@ -364,23 +364,23 @@ msgstr "Enables participants to submit their method to the challenge with a GitH
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "Participants first need to create an account. After this, the url below can be used to invite participants. When participants click on this link they will be asked to sign in. After sign in, they are forwarded to your assignment."
+msgstr "The url below can be used to invite people to test your study. Participants need to sign in or create an account to participate. After sign in, they are forwarded to your study."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
-msgstr "Invite participants"
+msgstr "Study link"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.general_instruction.description"
-msgstr "Enables you to instruct the participants on (specific parts of) the assignment."
+msgstr "Provide instructions for participants."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.onsite_experiment.description"
-msgstr "Prepares participants for a visit to a lab."
+msgstr "Enables participants to book a time slot for your on-site study."
 
 #, elixir-autogen, elixir-format
 msgid "advert.body"
-msgstr "Recruit participants on Panl using an advertisement."
+msgstr "This advertisement will be used to advertise your study to Panl participants and allows them to participate in your study."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert.create.button"
@@ -388,8 +388,8 @@ msgstr "Create advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "advert.goto.button"
-msgstr "Go to Advertisement"
+msgstr "Go to advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "advert.title"
-msgstr "Advertise in pool"
+msgstr "Panl advertisement"

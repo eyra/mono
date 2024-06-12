@@ -1,6 +1,6 @@
 # Eyra Mono
 
-Primary collection of Eyra projects
+Codebase used by the Next platform, which is also available for self hosting (see [bundles](https://github.com/eyra/mono#bundles)).
 
 ## Projects
 
@@ -27,7 +27,7 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 
 * Next
 
-Primary bundle with all features available. Next is configured and maintained by Eyra and hosted on: https://eyra.co
+Primary bundle with all features available. Next is configured and hosted by Eyra.
 
 * Self
 

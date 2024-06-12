@@ -12,20 +12,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Mijn startpagina"
+msgstr "Mijn omgeving"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Welkom bezoeker"
+msgstr "Welkom"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Participaties"
+msgstr "Bijdragen"
 
 #, elixir-autogen, elixir-format
 msgid "available.member.title"
-msgstr "Beschikbare studies"
+msgstr "Panl studies"
 
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
-msgstr "Voorbeeld studies"
+msgstr "Panl studies"
