@@ -41,7 +41,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
             }
           ]
         },
-        initial_items: [:questionnaire]
+        initial_items: []
       }
   end
 end
