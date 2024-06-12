@@ -3,15 +3,17 @@ defmodule Systems.Assignment.OnboardingView do
 
   alias Systems.Assignment
   alias Systems.Content
+  alias Systems.Account
 
   @impl true
-  def update(%{page_ref: page_ref, title: title}, socket) do
+  def update(%{user: user, page_ref: page_ref, title: title}, socket) do
     {
       :ok,
       socket
       |> assign(
         page_ref: page_ref,
-        title: title
+        title: title,
+        user: user
       )
       |> compose_child(:content_page)
       |> compose_element(:continue_button)
@@ -42,7 +44,13 @@ defmodule Systems.Assignment.OnboardingView do
   end
 
   @impl true
-  def handle_event("continue", _payload, socket) do
+  def handle_event(
+        "continue",
+        _payload,
+        %{assigns: %{user: user, page_ref: %{key: key, assignment_id: assignment_id}}} = socket
+      ) do
+    Account.Public.mark_as_visited(user, {key, assignment_id})
+
     {
       :noreply,
       socket |> send_event(:parent, "continue")

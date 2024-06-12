@@ -33,6 +33,7 @@ defmodule Systems.Assignment.CrewWorkView do
       ) do
     tool_started = Map.get(socket.assigns, :tool_started, false)
     tool_initialized = Map.get(socket.assigns, :tool_initialized, false)
+    first_time? = not Map.has_key?(socket.assigns, :work_items)
 
     {
       :ok,
@@ -60,6 +61,7 @@ defmodule Systems.Assignment.CrewWorkView do
       |> compose_child(:context_menu)
       |> update_tool_ref_view()
       |> update_child(:finished_view)
+      |> handle_finished_state(first_time?)
     }
   end
 
@@ -449,7 +451,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   defp handle_complete_task(%{assigns: %{selected_item: {_, task}}} = socket) do
-    {:ok, %{crew_task: updated_task}} = Crew.Public.activate_task(task)
+    {:ok, %{crew_task: updated_task}} = Crew.Public.complete_task(task)
 
     socket
     |> update_task(updated_task)
@@ -503,13 +505,17 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: selected_item_id)
   end
 
-  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
-    # Dont show finished view when embedded in external panel UI
+  defp handle_finished_state(socket, false) do
+    # Dont show finished view after first load
     socket
   end
 
-  defp handle_finished_state(%{assigns: %{tasks_finished: true}} = socket) do
-    # Dont show finished view when task are already finished
+  defp handle_finished_state(socket, true) do
+    handle_finished_state(socket)
+  end
+
+  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
+    # Dont show finished view when embedded in external panel UI
     socket
   end
 

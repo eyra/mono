@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "creator.signin.title"
-msgstr "Maker"
+msgstr "Onderzoeker"
 
 #, elixir-autogen, elixir-format
 msgid "participant.signin.title"
@@ -21,4 +21,4 @@ msgstr "Deelnemer"
 
 #, elixir-autogen, elixir-format
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Gebruik je organisatie login om in te loggen via Surfconext, deze optie is niet voor alle organisaties beschikbaar."

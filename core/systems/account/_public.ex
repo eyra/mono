@@ -508,20 +508,20 @@ defmodule Systems.Account.Public do
   end
 
   # Visited Pages
-  def mark_as_visited(user, page) when is_atom(page),
-    do: mark_as_visited(user, Atom.to_string(page))
 
-  def mark_as_visited(%User{visited_pages: nil} = user, page) do
+  def mark_as_visited(%User{visited_pages: nil} = user, page) when is_binary(page) do
     update_visited(user, [page])
   end
 
-  def mark_as_visited(%User{visited_pages: visited_pages} = user, page) do
+  def mark_as_visited(%User{visited_pages: visited_pages} = user, page) when is_binary(page) do
     if visited?(user, page) do
       Signal.Public.dispatch(:visited_pages_updated, %{user: user, visited_pages: visited_pages})
     else
       update_visited(user, visited_pages ++ [page])
     end
   end
+
+  def mark_as_visited(user, page), do: mark_as_visited(user, page_key(page))
 
   defp update_visited(user, visited_pages) do
     changeset = user |> User.visited_changeset(%{visited_pages: visited_pages})
@@ -534,12 +534,16 @@ defmodule Systems.Account.Public do
     |> Repo.transaction()
   end
 
-  def visited?(user, page) when is_atom(page), do: visited?(user, Atom.to_string(page))
-  def visited?(%User{visited_pages: nil}, _page), do: false
+  def visited?(%User{visited_pages: nil}, _page_key), do: false
 
-  def visited?(%User{visited_pages: visited_pages}, page) do
-    Enum.member?(visited_pages, page)
+  def visited?(%User{visited_pages: visited_pages}, page_key) when is_binary(page_key) do
+    Enum.member?(visited_pages, page_key)
   end
+
+  def visited?(user, page), do: visited?(user, page_key(page))
+
+  defp page_key(page) when is_atom(page), do: Atom.to_string(page)
+  defp page_key({page, id}) when is_atom(page) and is_integer(id), do: "#{page}_#{id}"
 end
 
 defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do

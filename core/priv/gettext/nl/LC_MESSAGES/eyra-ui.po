@@ -20,7 +20,7 @@ msgstr "Opgeslagen"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr "Mijn profiel"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signin"
@@ -72,7 +72,7 @@ msgstr "Verwijderen"
 
 #, elixir-autogen, elixir-format
 msgid "ok.button"
-msgstr "OK"
+msgstr "Ok"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.support"
@@ -132,11 +132,11 @@ msgstr "Projecten"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
-msgstr "Ga naar console"
+msgstr "Ga naar bureaublad"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
-msgstr "Ga naar console"
+msgstr "Ga naar bureaublad"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "collapse.button"
@@ -200,4 +200,4 @@ msgstr "To-do"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
-msgstr "My workspace"
+msgstr "Mijn werkplek"

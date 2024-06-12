@@ -658,7 +658,7 @@ defmodule Systems.Crew.PublicTest do
         })
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
-      assert %{status: :completed} = Crew.Public.activate_task!(task)
+      assert %{status: :completed} = Crew.Public.complete_task!(task)
       assert Crew.Public.count_tasks(crew, [:completed]) == 1
     end
 
@@ -681,7 +681,7 @@ defmodule Systems.Crew.PublicTest do
 
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
       {:ok, %{crew_task: task}} = Crew.Public.accept_task(task)
-      assert %{status: :accepted} = Crew.Public.activate_task!(task)
+      assert %{status: :accepted} = Crew.Public.complete_task!(task)
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
     end
 
@@ -710,7 +710,7 @@ defmodule Systems.Crew.PublicTest do
           message: "rejection message"
         })
 
-      assert %{status: :rejected} = Crew.Public.activate_task!(task)
+      assert %{status: :rejected} = Crew.Public.complete_task!(task)
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
     end
 

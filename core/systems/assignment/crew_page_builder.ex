@@ -5,7 +5,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Assignment,
     Crew,
     Workflow,
-    Consent
+    Consent,
+    Account
   }
 
   def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
@@ -48,16 +49,20 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp current_flow(%{fabric: %{children: children}}), do: children
 
   defp intro_view(
-         %{page_refs: page_refs},
-         %{fabric: fabric}
+         %{id: assignment_id, page_refs: page_refs},
+         %{current_user: user, fabric: fabric}
        ) do
-    if intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information)) do
+    visited? = Account.Public.visited?(user, {:assignment_information, assignment_id})
+    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
+
+    if is_nil(intro_page_ref) or visited? do
+      nil
+    else
       Fabric.prepare_child(fabric, :onboarding_view_intro, Assignment.OnboardingView, %{
         page_ref: intro_page_ref,
-        title: dgettext("eyra-assignment", "onboarding.intro.title")
+        title: dgettext("eyra-assignment", "onboarding.intro.title"),
+        user: user
       })
-    else
-      nil
     end
   end
 

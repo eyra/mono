@@ -20,7 +20,7 @@ msgstr "Saved"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr "My profile"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signin"
@@ -72,7 +72,7 @@ msgstr "Delete"
 
 #, elixir-autogen, elixir-format
 msgid "ok.button"
-msgstr "OK"
+msgstr "Ok"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.support"
@@ -132,11 +132,11 @@ msgstr "Projects"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
-msgstr "Go to console"
+msgstr "Go to desktop"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
-msgstr "Go to console"
+msgstr "Go to desktop"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "collapse.button"
