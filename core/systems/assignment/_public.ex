@@ -506,7 +506,7 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  # def apply_member_and_activate_task(
+  # def apply_member_and_complete_task(
   #       %Assignment.Model{crew: crew} = assignment,
   #       %User{} = user,
   #       identifier,
@@ -517,15 +517,15 @@ defmodule Systems.Assignment.Public do
   #     apply_member(assignment, user, identifier, reward_amount)
   #   end
 
-  #   activate_task(crew, identifier)
+  #   complete_task(crew, identifier)
   # end
 
-  def activate_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
-    do: activate_task(crew, identifier)
+  def complete_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
+    do: complete_task(crew, identifier)
 
-  def activate_task(%Crew.Model{} = crew, [_ | _] = identifier) do
+  def complete_task(%Crew.Model{} = crew, [_ | _] = identifier) do
     Crew.Public.get_task(crew, identifier)
-    |> Crew.Public.activate_task!()
+    |> Crew.Public.complete_task!()
   end
 
   @doc """

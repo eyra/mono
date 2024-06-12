@@ -14,7 +14,7 @@ defmodule Systems.Assignment.Controller do
     Crew.Public.get_member(crew, user)
     |> then(&Assignment.Private.task_identifier(assignment, item, &1))
     |> then(&Crew.Public.get_task(crew, &1))
-    |> Crew.Public.activate_task!()
+    |> Crew.Public.complete_task!()
 
     conn
     |> redirect(to: ~p"/assignment/#{id}")

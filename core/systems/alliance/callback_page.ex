@@ -43,7 +43,7 @@ defmodule Systems.Alliance.CallbackPage do
   defp activate_participant_task(
          %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
        ) do
-    Assignment.Public.activate_task(model, user)
+    Assignment.Public.complete_task(model, user)
     socket
   end
 

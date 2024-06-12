@@ -154,7 +154,7 @@ defmodule Systems.Crew.Public do
     update_task(task, %{started_at: Timestamp.naive_now()}, :locked)
   end
 
-  def activate_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do
+  def complete_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do
     timestamp = Timestamp.naive_now()
 
     case status do
@@ -180,8 +180,8 @@ defmodule Systems.Crew.Public do
     end
   end
 
-  def activate_task!(%Crew.TaskModel{} = task) do
-    case Crew.Public.activate_task(task) do
+  def complete_task!(%Crew.TaskModel{} = task) do
+    case Crew.Public.complete_task(task) do
       {:ok, %{crew_task: task}} -> task
       _ -> nil
     end

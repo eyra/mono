@@ -5,12 +5,12 @@ defmodule Systems.Assignment.Director do
   alias Systems.Workflow
 
   # @impl true
-  # def apply_member_and_activate_task(tool, user) do
+  # def apply_member_and_complete_task(tool, user) do
   #   identifier = Assignment.Private.task_identifier(tool, user)
 
   #   assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down))
   #   reward_value = Directable.director(assignment).reward_value(assignment)
-  #   Assignment.Public.apply_member_and_activate_task(assignment, user, identifier, reward_value)
+  #   Assignment.Public.apply_member_and_complete_task(assignment, user, identifier, reward_value)
   # end
 
   @impl true
