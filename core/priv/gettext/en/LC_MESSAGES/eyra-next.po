@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "creator.signin.title"
-msgstr "Creator"
+msgstr "Researcher"
 
 #, elixir-autogen, elixir-format
 msgid "participant.signin.title"
