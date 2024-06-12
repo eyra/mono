@@ -68,11 +68,11 @@ msgstr "Rich"
 
 #, elixir-autogen, elixir-format
 msgid "advert.default.name"
-msgstr "Advertisement"
+msgstr "Panl advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "project.item.tag"
-msgstr "Advertisement"
+msgstr "Panl advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "close.button"
