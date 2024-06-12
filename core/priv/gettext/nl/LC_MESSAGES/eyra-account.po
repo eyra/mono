@@ -28,7 +28,7 @@ msgstr "Wachtwoord"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "Mijn profiel"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
