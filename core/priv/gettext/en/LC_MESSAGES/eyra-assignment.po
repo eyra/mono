@@ -372,11 +372,11 @@ msgstr "Study link"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.general_instruction.description"
-msgstr "Enables you to instruct the participants on (specific parts of) the assignment."
+msgstr "Provide instructions for participants."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.onsite_experiment.description"
-msgstr "Prepares participants for a visit to a lab."
+msgstr "Enables participants to book a time slot for your on-site study."
 
 #, elixir-autogen, elixir-format
 msgid "advert.body"
