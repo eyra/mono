@@ -16,7 +16,7 @@ msgstr "My homepage"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Welcome visitor"
+msgstr "Welcome"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -28,4 +28,4 @@ msgstr "Available studies"
 
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
-msgstr "Example studies"
+msgstr "Panl studies"
