@@ -1,0 +1,80 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "endpoint_form.type.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.access_key_id.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.region_code.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.s3_bucket_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.secret_access_key.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.container.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.sas_token.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.password.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.user.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builtin.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.annotation"
+msgstr ""

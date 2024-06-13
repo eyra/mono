@@ -1,0 +1,40 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "default.consent.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.consent.validation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "locked.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "out_of_sync.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signature.view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.accept.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "click_wrap.decline.button"
+msgstr ""
