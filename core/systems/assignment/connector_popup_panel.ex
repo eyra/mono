@@ -145,7 +145,7 @@ defmodule Systems.Assignment.ConnectorPopupPanel do
         <Text.form_field_label id={:type}><%= dgettext("eyra-assignment", "panel_form.type.label") %></Text.form_field_label>
         <.spacing value="XS" />
         <div class="w-full">
-          <.child name={:type_selector} fabric={@fabric} />
+          <.child name={:panel_type_selector} fabric={@fabric} />
         </div>
         <%= if @annotation do %>
           <.spacing value="M" />
