@@ -393,3 +393,19 @@ msgstr "Go to advertisement"
 #, elixir-autogen, elixir-format
 msgid "advert.title"
 msgstr "Panl advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.consent.title"
+msgstr "Consent"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.information.title"
+msgstr "About"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.support.title"
+msgstr "Support"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "context.menu.privacy.title"
+msgstr "Privacy"

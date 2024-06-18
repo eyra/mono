@@ -393,3 +393,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "advert.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.consent.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.information.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.support.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.privacy.title"
+msgstr ""
