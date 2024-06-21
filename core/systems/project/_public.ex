@@ -1,17 +1,18 @@
 defmodule Systems.Project.Public do
-  import Ecto.Query, warn: false
   import CoreWeb.Gettext
+  import Ecto.Query, warn: false
   import Systems.Project.Queries
 
+  alias Core.Authorization
   alias Core.Repo
   alias Systems.Account.User
-  alias Core.Authorization
 
-  alias Systems.Assignment
-  alias Systems.Workflow
-  alias Systems.Graphite
   alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Graphite
   alias Systems.Project
+  alias Systems.Storage
+  alias Systems.Workflow
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,
@@ -63,6 +64,10 @@ defmodule Systems.Project.Public do
     get_item_by_special(:leaderboard, advert_id, preload)
   end
 
+  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}, preload) do
+    get_item_by_special(:storage_endpoint, storage_endpoint_id, preload)
+  end
+
   defp get_item_by_special(special_name, special_id, preload) do
     item_query_by_special(special_name, special_id)
     |> Repo.preload(preload)
@@ -101,6 +106,12 @@ defmodule Systems.Project.Public do
     |> Repo.preload(preload)
   end
 
+  def list_items(node, :assignment, preload) do
+    item_query_by_assignment(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
     |> Repo.all()
@@ -115,6 +126,12 @@ defmodule Systems.Project.Public do
 
   def list_items(node, :leaderboard, preload) do
     item_query_by_leaderboard(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, :storage_endpoint, preload) do
+    item_query_by_storage_endpoint(node)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -223,6 +240,10 @@ defmodule Systems.Project.Public do
 
   def prepare_item(attrs, %Graphite.LeaderboardModel{} = leaderboard) do
     prepare_item(attrs, :leaderboard, leaderboard)
+  end
+
+  def prepare_item(attrs, %Ecto.Changeset{data: %Storage.EndpointModel{}} = changeset) do
+    prepare_item(attrs, :storage_endpoint, changeset)
   end
 
   def prepare_item(attrs, %Ecto.Changeset{data: %Advert.Model{}} = changeset) do

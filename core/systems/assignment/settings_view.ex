@@ -9,6 +9,8 @@ defmodule Systems.Assignment.SettingsView do
           id: id,
           entity: assignment,
           template: template,
+          project_node: project_node,
+          storage_endpoint: storage_endpoint,
           uri_origin: uri_origin,
           viewport: viewport,
           breakpoint: breakpoint
@@ -23,6 +25,8 @@ defmodule Systems.Assignment.SettingsView do
       |> assign(
         id: id,
         entity: assignment,
+        project_node: project_node,
+        storage_endpoint: storage_endpoint,
         content_flags: content_flags,
         uri_origin: uri_origin,
         viewport: viewport,
@@ -150,14 +154,12 @@ defmodule Systems.Assignment.SettingsView do
   def compose(:storage, %{content_flags: %{storage: false}}), do: nil
 
   @impl true
-  def compose(:storage, %{entity: assignment, uri_origin: uri_origin}) do
+  def compose(:storage, %{storage_endpoint: storage_endpoint, project_node: project_node}) do
     %{
-      module: Assignment.ConnectorView,
+      module: Assignment.StorageView,
       params: %{
-        assignment: assignment,
-        connection: assignment.storage_endpoint,
-        type: :storage,
-        uri_origin: uri_origin
+        storage_endpoint: storage_endpoint,
+        project_node: project_node
       }
     }
   end
@@ -245,8 +247,8 @@ defmodule Systems.Assignment.SettingsView do
 
         <.child name={:storage} fabric={@fabric}>
           <:header>
-            <Text.title3><%= dgettext("eyra-assignment", "settings.data_storage.title") %></Text.title3>
-            <Text.body><%= dgettext("eyra-assignment", "settings.data_storage.body") %></Text.body>
+            <Text.title3><%= dgettext("eyra-assignment", "settings.storage.title") %></Text.title3>
+            <Text.body><%= dgettext("eyra-assignment", "settings.storage.body") %></Text.body>
             <.spacing value="M" />
           </:header>
           <:footer>

@@ -20,7 +20,6 @@ defmodule Systems.Project.AssemblyTest do
                special: :benchmark_challenge,
                status: :concept,
                external_panel: nil,
-               storage_endpoint_id: nil,
                workflow: %Systems.Workflow.Model{
                  type: :many_mandatory,
                  items: [

@@ -11,6 +11,7 @@
 
 ## \#2 unreleased
 
+* Added: Storage project item
 * Added: Support for German language in assignments
 
 

@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.Switch do
+  alias Systems.Project
   use Frameworks.Signal.Handler
   require Logger
 
@@ -22,6 +23,25 @@ defmodule Systems.Assignment.Switch do
       {:assignment, signal},
       Map.merge(message, %{assignment: assignment})
     )
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
+        {:project_item, :inserted} = signal,
+        %{project_item: %{storage: _storage} = project_item} = message
+      ) do
+    project_item
+    |> Project.Public.get_node_by_item!()
+    |> Project.Public.list_items(:assignment, Project.ItemModel.preload_graph(:down))
+    |> Enum.map(& &1.assignment)
+    |> Enum.each(fn assignment ->
+      handle(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end)
 
     :ok
   end

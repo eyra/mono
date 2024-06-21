@@ -78,3 +78,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "yoda.annotation"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "goto.storage.body"
+msgstr ""

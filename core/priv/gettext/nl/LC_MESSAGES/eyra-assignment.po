@@ -67,7 +67,7 @@ msgid "settings.title"
 msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format
-msgid "settings.data_storage.title"
+msgid "settings.storage.title"
 msgstr "Data opslag"
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -99,7 +99,7 @@ msgid "connector.storage.title"
 msgstr "Data opslag instellen"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.data_storage.body"
+msgid "settings.storage.body"
 msgstr "Stel het soort opslag in dat je wilt gebruiken voor het opslaan van de data die door jouw deelnemers wordt gedoneerd."
 
 #, elixir-autogen, elixir-format
@@ -409,3 +409,11 @@ msgstr "Help"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"
 msgstr "Privacy"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "storage.create.button"
+msgstr "Offline halen"
+
+#, elixir-autogen, elixir-format
+msgid "storage.goto.button"
+msgstr ""

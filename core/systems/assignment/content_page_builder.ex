@@ -4,12 +4,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
-  alias Frameworks.Utility.List
+  import Frameworks.Utility.List
 
-  alias Systems.Content
   alias Systems.Assignment
-  alias Systems.Workflow
+  alias Systems.Content
   alias Systems.Monitor
+  alias Systems.Project
+  alias Systems.Workflow
 
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
@@ -166,9 +167,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp get_tab_keys(%{} = config) do
     [:settings]
-    |> List.append_if(:workflow, config[:workflow])
-    |> List.append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
-    |> List.append_if(:monitor, config[:monitor])
+    |> append_if(:workflow, config[:workflow])
+    |> append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
+    |> append_if(:monitor, config[:monitor])
   end
 
   defp create_tab(
@@ -181,9 +182,28 @@ defmodule Systems.Assignment.ContentPageBuilder do
        ) do
     ready? = false
 
+    project_node =
+      assignment
+      |> Project.Public.get_item_by()
+      |> Project.Public.get_node_by_item!()
+
+    project_item =
+      project_node
+      |> Project.Public.list_items(:storage_endpoint, Project.ItemModel.preload_graph(:down))
+      |> List.first()
+
+    storage_endpoint =
+      if project_item do
+        Map.get(project_item, :storage_endpoint)
+      else
+        nil
+      end
+
     child =
       Fabric.prepare_child(fabric, :settings_form, Assignment.SettingsView, %{
         entity: assignment,
+        project_node: project_node,
+        storage_endpoint: storage_endpoint,
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,

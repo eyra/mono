@@ -67,7 +67,7 @@ msgid "settings.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.data_storage.title"
+msgid "settings.storage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -99,7 +99,7 @@ msgid "connector.storage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.data_storage.body"
+msgid "settings.storage.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -408,4 +408,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.goto.button"
 msgstr ""

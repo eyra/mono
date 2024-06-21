@@ -78,3 +78,15 @@ msgstr "<div>More information: <a href=\"https://www.centerdata.nl\">https://www
 #, elixir-autogen, elixir-format
 msgid "yoda.annotation"
 msgstr "<div>Use Yoda, a research data management service developed at Utrecht University. <br> More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr "Storage"
+
+#, elixir-autogen, elixir-format
+msgid "create.storage.body"
+msgstr "Select the storage brand you want to use and click on the create button. A new storage card will be created in your project."
+
+#, elixir-autogen, elixir-format
+msgid "goto.storage.body"
+msgstr "Manage the connected storage by following the link below."

@@ -1,10 +1,41 @@
 defmodule Systems.Storage.Public do
   require Logger
 
-  alias Systems.{
-    Rate,
-    Storage
-  }
+  alias Core.Repo
+  alias Systems.Rate
+  alias Systems.Storage
+
+  def get_endpoint!(id, preload \\ []) do
+    Repo.get!(Storage.EndpointModel, id)
+    |> Repo.preload(preload)
+  end
+
+  def prepare_endpoint(special_type, attrs) do
+    special_changeset = prepare_endpoint_special(special_type, attrs)
+
+    %Storage.EndpointModel{}
+    |> Storage.EndpointModel.reset_special(special_type, special_changeset)
+  end
+
+  defp prepare_endpoint_special(:builtin, attrs) do
+    %Storage.BuiltIn.EndpointModel{}
+    |> Storage.BuiltIn.EndpointModel.changeset(attrs)
+  end
+
+  defp prepare_endpoint_special(:yoda, attrs) do
+    %Storage.Yoda.EndpointModel{}
+    |> Storage.Yoda.EndpointModel.changeset(attrs)
+  end
+
+  defp prepare_endpoint_special(:aws, attrs) do
+    %Storage.AWS.EndpointModel{}
+    |> Storage.AWS.EndpointModel.changeset(attrs)
+  end
+
+  defp prepare_endpoint_special(:azure, attrs) do
+    %Storage.Azure.EndpointModel{}
+    |> Storage.Azure.EndpointModel.changeset(attrs)
+  end
 
   def store(
         %{key: key, backend: backend, endpoint: endpoint},
@@ -32,6 +63,10 @@ defmodule Systems.Storage.Public do
       |> Storage.Delivery.new()
       |> Oban.insert()
     end
+  end
+
+  def file_count(%Storage.EndpointModel{}) do
+    0
   end
 end
 

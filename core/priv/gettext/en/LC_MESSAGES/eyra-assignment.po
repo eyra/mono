@@ -67,7 +67,7 @@ msgid "settings.title"
 msgstr "Settings"
 
 #, elixir-autogen, elixir-format
-msgid "settings.data_storage.title"
+msgid "settings.storage.title"
 msgstr "Data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -99,8 +99,8 @@ msgid "connector.storage.title"
 msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.data_storage.body"
-msgstr "Connect the storage that you would like to use to store the data that will be donated by participants."
+msgid "settings.storage.body"
+msgstr "Connect the storage that you will use for the data donated by participants."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
@@ -409,3 +409,11 @@ msgstr "Support"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"
 msgstr "Privacy"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "storage.create.button"
+msgstr "Create storage"
+
+#, elixir-autogen, elixir-format
+msgid "storage.goto.button"
+msgstr "Go to storage"
