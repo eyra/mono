@@ -1,7 +1,5 @@
 defmodule Systems.Storage.Private do
-  alias Systems.{
-    Storage
-  }
+  alias Systems.Storage
 
   @centerdata_callback_url "https://quest.centerdata.nl/eyra/dd.php"
 
@@ -18,22 +16,44 @@ defmodule Systems.Storage.Private do
   def build_special(:aws), do: %Storage.AWS.EndpointModel{}
   def build_special(:azure), do: %Storage.Azure.EndpointModel{}
 
-  def backend_info(%Storage.BuiltIn.EndpointModel{}), do: {:builtin, Storage.BuiltIn.Backend}
-  def backend_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
-  def backend_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
-  def backend_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
+  def special_info(%Storage.EndpointModel{} = endpoint) do
+    endpoint
+    |> Storage.EndpointModel.special()
+    |> special_info()
+  end
 
-  def storage_info(%{storage_endpoint: %{} = storage_endpoint, external_panel: external_panel}) do
+  def special_info(%Storage.BuiltIn.EndpointModel{}), do: {:builtin, Storage.BuiltIn.Backend}
+  def special_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
+  def special_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
+  def special_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
+
+  @spec storage_info(any()) ::
+          nil
+          | %{
+              backend:
+                Systems.Storage.AWS.Backend
+                | Systems.Storage.Azure.Backend
+                | Systems.Storage.BuiltIn.Backend
+                | Systems.Storage.Centerdata.Backend
+                | Systems.Storage.Yoda.Backend,
+              endpoint: %{
+                :__struct__ =>
+                  Systems.Storage.AWS.EndpointModel
+                  | Systems.Storage.Azure.EndpointModel
+                  | Systems.Storage.BuiltIn.EndpointModel
+                  | Systems.Storage.Centerdata.EndpointModel
+                  | Systems.Storage.Yoda.EndpointModel,
+                optional(any()) => any()
+              },
+              key: :aws | :azure | :builtin | :centerdata | :yoda
+            }
+  def storage_info(storage_endpoint, %{external_panel: external_panel}) do
     if endpoint = Storage.EndpointModel.special(storage_endpoint) do
-      {key, backend} = backend_info(endpoint)
+      {key, backend} = special_info(endpoint)
       %{key: key, backend: backend, endpoint: endpoint}
     else
       storage_info(external_panel)
     end
-  end
-
-  def storage_info(%{external_panel: external_panel}) do
-    storage_info(external_panel)
   end
 
   def storage_info(:liss) do

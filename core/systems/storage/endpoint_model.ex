@@ -48,7 +48,7 @@ defmodule Systems.Storage.EndpointModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: @special_fields
+  def preload_graph(:down), do: @special_fields ++ [:auth_node]
 
   def auth_tree(%{auth_node: auth_node}), do: auth_node
 
@@ -56,7 +56,7 @@ defmodule Systems.Storage.EndpointModel do
     dgettext("eyra-storage", "project.item.tag")
   end
 
-  def reset_special(endpoint, special_field, special) when is_atom(special_field) do
+  def change_special(endpoint, special_field, special) when is_atom(special_field) do
     specials =
       Enum.map(
         @special_fields,
@@ -120,6 +120,10 @@ defmodule Systems.Storage.EndpointModel do
   def asset_image_src(special, type), do: Assets.image_src("#{special}", type)
 
   defp map_to_field_id(field), do: String.to_existing_atom("#{field}_id")
+
+  defimpl Frameworks.GreenLight.AuthorizationNode do
+    def id(endpoint), do: endpoint.auth_node_id
+  end
 
   defimpl Frameworks.Concept.ContentModel do
     alias Systems.Storage

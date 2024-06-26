@@ -1,4 +1,4 @@
-defmodule Systems.Storage.ContentPage do
+defmodule Systems.Storage.EndpointContentPage do
   use Systems.Content.Composer, :management_page
 
   alias Systems.Storage

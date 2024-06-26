@@ -11,6 +11,12 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     File.write!(file_path, data)
   end
 
+  @impl true
+  def list_files(folder) do
+    folder_path = get_full_path(folder)
+    File.ls!(folder_path)
+  end
+
   defp get_full_path(folder) do
     Path.join(get_root_path(), folder)
   end

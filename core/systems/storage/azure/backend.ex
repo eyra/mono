@@ -5,18 +5,17 @@ defmodule Systems.Storage.Azure.Backend do
 
   def store(
         endpoint,
-        panel_info,
         data,
         meta_data
       ) do
-    path = path(panel_info, meta_data)
+    filename = filename(meta_data)
 
     headers = [
       {"Content-Type", "text/plain"},
       {"x-ms-blob-type", "BlockBlob"}
     ]
 
-    case url(endpoint, path) do
+    case url(endpoint, filename) do
       {:ok, url} ->
         HTTPoison.put(url, data, headers)
         |> case do
@@ -36,12 +35,15 @@ defmodule Systems.Storage.Azure.Backend do
     end
   end
 
-  defp path(%{"participant" => participant}, %{"key" => key, "timestamp" => _}) do
-    "#{participant}/#{key}.json"
+  def list_files(_endpoint) do
+    Logger.error("Not yet implemented: files/4")
+    {:error, :not_implemented}
   end
 
-  defp path(%{"participant" => participant}, %{"key" => key}) do
-    "#{key}/#{participant}.json"
+  defp filename(%{"identifier" => identifier}) do
+    identifier
+    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
+    |> then(&"#{&1}.json")
   end
 
   defp url(

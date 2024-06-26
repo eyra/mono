@@ -22,67 +22,69 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
 
   describe "store/4" do
     test "unknown folder" do
-      assert {:error, :endpoint_key_missing} = Backend.store(%{}, %{}, "data", %{})
+      assert {:error, :endpoint_key_missing} = Backend.store(%{}, "data", %{})
     end
 
     test "unknown participant" do
-      expect(MockSpecial, :store, fn _, identifier, data ->
-        assert ["participant=?", _unix_timestamp] = identifier
+      expect(MockSpecial, :store, fn folder, filename, data ->
+        assert "assignment=1" = folder
+        assert ".json" = filename
         assert "data" = data
         :ok
       end)
 
-      assert :ok = Backend.store(%{"key" => "assignment=1"}, %{}, "data", %{})
+      assert :ok = Backend.store(%{"key" => "assignment=1"}, "data", %{"identifier" => []})
     end
 
     test "folder + participant" do
-      expect(MockSpecial, :store, fn folder, identifier, _data ->
+      expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert ["participant=1", _unix_timestamp] = identifier
+        assert "participant=1.json" = filename
         :ok
       end)
 
-      assert :ok = Backend.store(%{"key" => "assignment=1"}, %{"participant" => 1}, "data", %{})
+      assert :ok =
+               Backend.store(%{"key" => "assignment=1"}, "data", %{
+                 "identifier" => [[:participant, 1]]
+               })
     end
 
     test "folder + participant + meta key" do
-      expect(MockSpecial, :store, fn folder, identifier, _data ->
+      expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert ["participant=1", "session=1"] = identifier
+        assert "participant=1_session=1.json" = filename
         :ok
       end)
 
       assert :ok =
-               Backend.store(%{"key" => "assignment=1"}, %{"participant" => 1}, "data", %{
-                 "key" => "session=1"
+               Backend.store(%{"key" => "assignment=1"}, "data", %{
+                 "identifier" => [[:participant, 1], [:session, 1]]
                })
     end
 
-    test "folder + participant + meta key + group" do
-      expect(MockSpecial, :store, fn folder, identifier, _data ->
+    test "folder + participant + meta key + source" do
+      expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert ["participant=1", "source=apple", "session=1"] = identifier
+        assert "participant=1_session=1_source=apple.json" = filename
         :ok
       end)
 
       assert :ok =
-               Backend.store(%{"key" => "assignment=1"}, %{"participant" => 1}, "data", %{
-                 "key" => "session=1",
-                 "group" => "apple"
+               Backend.store(%{"key" => "assignment=1"}, "data", %{
+                 "identifier" => [[:participant, 1], [:session, 1], [:source, "apple"]]
                })
     end
 
-    test "folder + participant + meta key + group=nil" do
-      expect(MockSpecial, :store, fn folder, identifier, _data ->
+    test "folder + participant + meta key + source=nil" do
+      expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert ["participant=1", "session=1"] = identifier
+        assert "participant=1_session=1_source=.json" = filename
         :ok
       end)
 
       assert :ok =
-               Backend.store(%{"key" => "assignment=1"}, %{"participant" => 1}, "data", %{
-                 "key" => "session=1",
-                 "group" => nil
+               Backend.store(%{"key" => "assignment=1"}, "data", %{
+                 "identifier" => [[:participant, 1], [:session, 1], [:source, nil]]
                })
     end
   end

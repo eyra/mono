@@ -169,6 +169,42 @@ defmodule CoreWeb.UI.Timestamp do
     Timex.format!(datetime, "%Y-%m-%d", :strftime)
   end
 
+  def stamp(%DateTime{} = datetime) do
+    weekday = Timex.format!(datetime, "%A", :strftime)
+    month = Timex.format!(datetime, "%B", :strftime)
+    day_of_month = Timex.format!(datetime, "%e", :strftime)
+    time = Timex.format!(datetime, "%H:%M", :strftime)
+
+    dgettext("eyra-ui", "timestamp.datetime",
+      weekday: weekday,
+      day_of_month: day_of_month,
+      month: month,
+      time: time
+    )
+  end
+
+  @spec humanize_time(
+          {{integer(), pos_integer(), pos_integer()},
+           {non_neg_integer(), non_neg_integer(), non_neg_integer()}
+           | {non_neg_integer(), non_neg_integer(), non_neg_integer(),
+              non_neg_integer() | {non_neg_integer(), non_neg_integer()}}}
+          | {integer(), pos_integer(), pos_integer()}
+          | %{
+              :__struct__ => Date | DateTime | NaiveDateTime | Time,
+              :calendar => atom(),
+              optional(:day) => pos_integer(),
+              optional(:hour) => non_neg_integer(),
+              optional(:microsecond) => {non_neg_integer(), non_neg_integer()},
+              optional(:minute) => non_neg_integer(),
+              optional(:month) => pos_integer(),
+              optional(:second) => non_neg_integer(),
+              optional(:std_offset) => integer(),
+              optional(:time_zone) => binary(),
+              optional(:utc_offset) => integer(),
+              optional(:year) => integer(),
+              optional(:zone_abbr) => binary()
+            }
+        ) :: binary()
   def humanize_time(timestamp) do
     Timex.format!(timestamp, "%H:%M", :strftime)
   end

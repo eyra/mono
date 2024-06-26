@@ -90,3 +90,39 @@ msgstr "Select the storage brand you want to use and click on the create button.
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
 msgstr "Manage the connected storage by following the link below."
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data"
+msgstr "Data"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data.forward"
+msgstr "Go to Data"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr "Go to Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor.forward"
+msgstr "Go to Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "table.date.label"
+msgstr "Date"
+
+#, elixir-autogen, elixir-format
+msgid "table.file.label"
+msgstr "File"
+
+#, elixir-autogen, elixir-format
+msgid "table.size.label"
+msgstr "Size"

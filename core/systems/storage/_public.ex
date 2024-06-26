@@ -1,6 +1,8 @@
 defmodule Systems.Storage.Public do
   require Logger
 
+  alias Ecto.Changeset
+  alias Core.Authorization
   alias Core.Repo
   alias Systems.Rate
   alias Systems.Storage
@@ -14,7 +16,8 @@ defmodule Systems.Storage.Public do
     special_changeset = prepare_endpoint_special(special_type, attrs)
 
     %Storage.EndpointModel{}
-    |> Storage.EndpointModel.reset_special(special_type, special_changeset)
+    |> Storage.EndpointModel.change_special(special_type, special_changeset)
+    |> Changeset.put_assoc(:auth_node, Authorization.prepare_node())
   end
 
   defp prepare_endpoint_special(:builtin, attrs) do
@@ -39,9 +42,8 @@ defmodule Systems.Storage.Public do
 
   def store(
         %{key: key, backend: backend, endpoint: endpoint},
-        %{embedded?: embedded?} = panel_info,
         data,
-        %{remote_ip: remote_ip} = meta_data
+        %{remote_ip: remote_ip, panel_info: %{embedded?: embedded?}} = meta_data
       ) do
     packet_size = String.length(data)
 
@@ -51,12 +53,11 @@ defmodule Systems.Storage.Public do
     if embedded? do
       # submit data in current process
       Logger.warn("[Storage.Public] deliver directly")
-      Storage.Delivery.deliver(backend, endpoint, panel_info, data, meta_data)
+      Storage.Delivery.deliver(backend, endpoint, data, meta_data)
     else
       %{
         backend: backend,
         endpoint: endpoint,
-        panel_info: panel_info,
         data: data,
         meta_data: meta_data
       }
@@ -65,8 +66,14 @@ defmodule Systems.Storage.Public do
     end
   end
 
-  def file_count(%Storage.EndpointModel{}) do
-    0
+  def list_files(endpoint) do
+    special = Storage.EndpointModel.special(endpoint)
+    {_, backend} = Storage.Private.special_info(special)
+    apply(backend, :list_files, [special])
+  end
+
+  def file_count(endpoint) do
+    list_files(endpoint) |> Enum.count()
   end
 end
 

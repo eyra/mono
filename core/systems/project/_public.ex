@@ -50,6 +50,31 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
+  def get_storage_endpoint_by(%Assignment.Model{} = assignment) do
+    assignment
+    |> Project.Public.get_item_by()
+    |> get_storage_endpoint_by()
+  end
+
+  def get_storage_endpoint_by(%Project.ItemModel{} = project_item) do
+    project_item
+    |> Project.Public.get_node_by_item!([:auth_node])
+    |> get_storage_endpoint_by()
+  end
+
+  def get_storage_endpoint_by(%Project.NodeModel{} = project_node) do
+    storage_endpoint_item =
+      project_node
+      |> Project.Public.list_items(:storage_endpoint, Project.ItemModel.preload_graph(:down))
+      |> List.first()
+
+    if storage_endpoint_item do
+      Map.get(storage_endpoint_item, :storage_endpoint)
+    else
+      nil
+    end
+  end
+
   def get_item_by(assignment, preload \\ [])
 
   def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
