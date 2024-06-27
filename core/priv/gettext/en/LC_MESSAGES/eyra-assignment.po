@@ -232,7 +232,7 @@ msgstr "Helpdesk page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Need help?"
+msgstr "Questions?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
