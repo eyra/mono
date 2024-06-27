@@ -253,11 +253,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme. Sie können jetzt Ihren Browser schließen oder dieses Popup schließen, um die Seite erneut zu besuchen."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Fertig"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
