@@ -252,7 +252,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Bedankt voor je deelname. Je bent klaar en kunt de browser afsluiten."
+msgstr "U bent klaar. Bedankt voor uw deelname. U kunt de browser afsluiten of deze popup afsluiten om terug te gaan naar de pagina."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
