@@ -252,11 +252,11 @@ msgstr "No consent"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "We are grateful for your contribution. You finished all tasks on the list. You can close your browser to quite or close this popup to revisit the task list."
+msgstr "You have finished. Thank you for your participation. You can now close your browser or close this popup to revisit the page."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Thank you for your participation"
+msgstr "Done"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
