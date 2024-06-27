@@ -397,19 +397,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Informationen"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "Fragen?"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "storage.create.button"
