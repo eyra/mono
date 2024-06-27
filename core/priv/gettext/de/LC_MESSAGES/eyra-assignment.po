@@ -245,11 +245,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie die Teilnahme überdenken möchten, schließen Sie dieses Popup, um fortzufahren."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr ""
+msgstr "Keine zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
