@@ -17,7 +17,7 @@ msgstr "<div>Fügen Sie die Geschäftsbedingungen hinzu, denen die Teilnehmer zu
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr ""
+msgstr "Stimmen Sie den oben genannten Geschäftsbedingungen zu?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
@@ -25,16 +25,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
-msgstr ""
+msgstr "Der Zustimmungstext wurde geändert. Bitte aktualisieren Sie die Seite, um fortzufahren."
 
 #, elixir-autogen, elixir-format
 msgid "signature.view.title"
-msgstr ""
+msgstr "Zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
-msgstr ""
+msgstr "Ja, ich stimme zu"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
-msgstr ""
+msgstr "Nein"
