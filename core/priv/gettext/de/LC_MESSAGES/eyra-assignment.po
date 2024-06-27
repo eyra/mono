@@ -57,11 +57,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Weiter"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title"
