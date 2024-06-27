@@ -197,11 +197,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Aufgaben"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Information"
 
 #, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
@@ -221,7 +221,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr "Informationen"
+msgstr "Information"
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
