@@ -396,7 +396,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr "Consent"
+msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
@@ -404,7 +404,7 @@ msgstr "Informatie"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr "Help"
+msgstr "Vragen?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"
