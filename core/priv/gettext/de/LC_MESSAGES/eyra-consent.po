@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr ""
+msgstr "<div>Fügen Sie die Geschäftsbedingungen hinzu, denen die Teilnehmer zustimmen müssen.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
