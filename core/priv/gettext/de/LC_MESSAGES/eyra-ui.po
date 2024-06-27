@@ -149,11 +149,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #, elixir-autogen, elixir-format
 msgid "terms.link"
-msgstr ""
+msgstr "AGB"
 
 #, elixir-autogen, elixir-format
 msgid "edit.button"
