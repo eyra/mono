@@ -248,7 +248,7 @@ msgstr "You declined to participate. You can close the browser. If you wish to r
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
-msgstr "No consent"
+msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
