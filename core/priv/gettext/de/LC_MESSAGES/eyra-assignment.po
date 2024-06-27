@@ -221,7 +221,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Informationen"
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
@@ -233,7 +233,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "Fragen?"
 
 #, elixir-autogen, elixir-format
 msgid "support_form.off.label"
