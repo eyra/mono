@@ -13,31 +13,31 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "error.flash"
-msgstr ""
+msgstr "Etwas ist schief gelaufen"
 
 #, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
-msgstr ""
+msgstr "Gespeichert"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr ""
+msgstr "Konto"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signin"
-msgstr ""
+msgstr "Anmelden"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr ""
+msgstr "Abmelden"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.menu"
-msgstr ""
+msgstr "To-do"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.todo"
-msgstr ""
+msgstr "To-do"
 
 #, elixir-autogen, elixir-format
 msgid "todo.title"
@@ -77,7 +77,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.support"
-msgstr ""
+msgstr "Fragen?"
 
 #, elixir-autogen, elixir-format
 msgid "timestamp.today"
