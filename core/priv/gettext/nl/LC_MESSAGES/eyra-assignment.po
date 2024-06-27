@@ -256,7 +256,7 @@ msgstr "Bedankt voor je deelname. Je bent klaar en kunt de browser afsluiten."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Bedankt"
+msgstr "Klaar"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
