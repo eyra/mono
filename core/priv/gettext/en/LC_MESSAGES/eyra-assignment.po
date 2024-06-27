@@ -404,7 +404,7 @@ msgstr "About"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr "Support"
+msgstr "Questions?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"
