@@ -252,11 +252,11 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Bedankt voor je deelname. Je bent klaar en kunt de browser afsluiten."
+msgstr "U bent klaar. Bedankt voor uw deelname. U kunt de browser afsluiten of deze popup afsluiten om terug te gaan naar de pagina."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Bedankt"
+msgstr "Klaar"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -396,7 +396,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr "Consent"
+msgstr "Toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
@@ -404,7 +404,7 @@ msgstr "Informatie"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr "Help"
+msgstr "Vragen?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"

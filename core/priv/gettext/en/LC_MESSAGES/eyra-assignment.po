@@ -232,7 +232,7 @@ msgstr "Helpdesk page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Need help?"
+msgstr "Questions?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
@@ -248,15 +248,15 @@ msgstr "You declined to participate. You can close the browser. If you wish to r
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
-msgstr "No consent"
+msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "We are grateful for your contribution. You finished all tasks on the list. You can close your browser to quite or close this popup to revisit the task list."
+msgstr "You have finished. Thank you for your participation. You can now close your browser or close this popup to revisit the page."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Thank you for your participation"
+msgstr "Done"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -404,7 +404,7 @@ msgstr "About"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr "Support"
+msgstr "Questions?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "context.menu.privacy.title"

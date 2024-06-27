@@ -57,11 +57,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Weiter"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "settings.title"
@@ -197,11 +197,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Aufgaben"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Information"
 
 #, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
@@ -221,7 +221,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Information"
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
@@ -233,7 +233,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "Fragen?"
 
 #, elixir-autogen, elixir-format
 msgid "support_form.off.label"
@@ -245,19 +245,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie die Teilnahme überdenken möchten, schließen Sie dieses Popup, um fortzufahren."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr ""
+msgstr "Keine zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme. Sie können jetzt Ihren Browser schließen oder dieses Popup schließen, um die Seite erneut zu besuchen."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Fertig"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -285,7 +285,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -397,19 +397,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Informationen"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "Fragen?"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "storage.create.button"
