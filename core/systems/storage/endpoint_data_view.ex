@@ -21,9 +21,11 @@ defmodule Systems.Storage.EndpointDataView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-storage", "tabbar.item.data") %></Text.title2>
-        <.spacing value="L" />
-        <Html.files_table files={@files} />
+        <Text.title2><%= dgettext("eyra-storage", "tabbar.item.data") %> <span class="text-primary"><%= Enum.count(@files) %></span></Text.title2>
+        <%= if not Enum.empty?(@files) do %>
+          <.spacing value="L" />
+          <Html.files_table files={@files} />
+        <% end %>
       </Area.content>
     </div>
     """

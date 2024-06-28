@@ -93,11 +93,11 @@ msgstr "Manage the connected storage by following the link below."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
-msgstr "Data"
+msgstr "Files"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data.forward"
-msgstr "Go to Data"
+msgstr "Go to Files"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"

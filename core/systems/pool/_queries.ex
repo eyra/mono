@@ -53,7 +53,8 @@ defmodule Systems.Pool.Queries do
     ])
   end
 
-  def pool_query(%Pool.Model{id: pool_id}, %Account.User{} = user, role) do
+  def pool_query(%Pool.Model{id: pool_id}, %Account.User{} = user, role)
+      when is_atom(role) or is_list(role) do
     build(pool_query(user, role), :pool, [
       id == ^pool_id
     ])

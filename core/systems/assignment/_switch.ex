@@ -30,7 +30,7 @@ defmodule Systems.Assignment.Switch do
   @impl true
   def intercept(
         {:project_item, :inserted} = signal,
-        %{project_item: %{storage: _storage} = project_item} = message
+        %{project_item: %{storage_endpoint: _} = project_item} = message
       ) do
     project_item
     |> Project.Public.get_node_by_item!()
