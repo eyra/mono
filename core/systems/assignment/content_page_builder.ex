@@ -32,7 +32,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     template = Assignment.Private.get_template(assignment)
     tabs = create_tabs(assignment, template, show_errors, assigns)
-    action_map = action_map(assignment, assigns)
+    action_map = action_map(assignment)
     actions = actions(assignment, action_map)
 
     %{
@@ -45,8 +45,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp action_map(assignment, %{current_user: %{id: user_id}}) do
-    preview_url = Assignment.Private.get_preview_url(assignment, user_id)
+  defp action_map(assignment) do
+    preview_url = Assignment.Private.get_preview_url(assignment)
 
     preview_action = %{type: :http_get, to: preview_url, target: "_blank"}
     publish_action = %{type: :send, event: "action_click", item: :publish}

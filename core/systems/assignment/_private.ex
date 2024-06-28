@@ -68,16 +68,16 @@ defmodule Systems.Assignment.Private do
     end
   end
 
-  def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}, participant) do
+  def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}) do
     case external_panel do
       :liss ->
-        ~p"/assignment/#{id}/liss?respondent=#{participant}&quest=quest&varname1=varname1&token=token&page=page"
+        ~p"/assignment/#{id}/liss?respondent=preview&quest=quest&varname1=varname1&token=token&page=page"
 
       :ioresearch ->
-        ~p"/assignment/#{id}/ioresearch?participant=#{participant}"
+        ~p"/assignment/#{id}/ioresearch?participant=preview"
 
       _ ->
-        ~p"/assignment/#{id}/participate?participant=#{participant}"
+        ~p"/assignment/#{id}/participate?participant=preview"
     end
   end
 
