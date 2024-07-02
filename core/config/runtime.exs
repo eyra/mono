@@ -113,13 +113,6 @@ if config_env() == :prod do
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
-  config :web_push_encryption, :vapid_details,
-    subject: "mailto:admin@#{app_mail_domain}",
-    public_key: System.get_env("WEB_PUSH_PUBLIC_KEY"),
-    private_key: System.get_env("WEB_PUSH_PRIVATE_KEY")
-
-  config :logger, level: System.get_env("LOG_LEVEL", "info") |> String.to_existing_atom()
-
   if sentry_dsn = System.get_env("SENTRY_DSN") do
     config :sentry,
       dsn: sentry_dsn,

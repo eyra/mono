@@ -1,4 +1,6 @@
 defmodule Systems.Project.Public do
+  @behaviour Frameworks.Concept.Context.Handler
+
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Project.Queries
@@ -14,6 +16,17 @@ defmodule Systems.Project.Public do
   alias Systems.Storage
   alias Systems.Workflow
 
+  @impl true
+  def name(%Systems.Storage.EndpointModel{} = model) do
+    case get_by_item_special(model) do
+      %{name: name} -> {:ok, name}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  @impl true
+  def name(_), do: {:error, :not_supported}
+
   def get!(id, preload \\ []) do
     from(project in Project.Model,
       where: project.id == ^id,
@@ -28,6 +41,13 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.one()
+  end
+
+  def get_by_item_special(special) do
+    special
+    |> get_item_by()
+    |> get_node_by_item!()
+    |> get_by_root()
   end
 
   def get_node!(id, preload \\ []) do

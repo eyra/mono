@@ -126,3 +126,7 @@ msgstr "File"
 #, elixir-autogen, elixir-format
 msgid "table.size.label"
 msgstr "Size"
+
+#, elixir-autogen, elixir-format
+msgid "export.files.button"
+msgstr "Export all files"

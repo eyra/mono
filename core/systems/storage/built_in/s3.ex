@@ -24,6 +24,14 @@ defmodule Systems.Storage.BuiltIn.S3 do
 
     contents
     |> Enum.map(fn %{key: key, size: size, last_modified: last_modified} ->
+      {:ok, url} =
+        :s3
+        |> ExAws.Config.new([])
+        |> S3.presigned_url(:get, bucket, key, expires_in: 3600)
+
+      %{key: key, size: size, last_modified: last_modified, url: url}
+    end)
+    |> Enum.map(fn %{key: key, size: size, last_modified: last_modified, url: url} ->
       path = String.replace_prefix(key, prefix, "")
 
       timestamp =
@@ -32,7 +40,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
           _ -> nil
         end
 
-      %{path: path, size: size, timestamp: timestamp}
+      %{path: path, size: String.to_integer(size), timestamp: timestamp, url: url}
     end)
   end
 

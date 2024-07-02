@@ -40,6 +40,8 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
+config :core, :naming, handlers: [Systems.Project.Public]
+
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 config :core,
@@ -69,7 +71,8 @@ config :core, :rate,
   quotas: [
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
+    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
+    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]
@@ -123,11 +126,6 @@ config :core, :ssl,
   emails: ["admin@localhost"]
 
 config :core, :ssl_proxied, {:ok, "true"} == System.fetch_env("SSL_PROXIED")
-
-config :web_push_encryption, :vapid_details,
-  subject: "mailto:administrator@example.com",
-  public_key: "use `mix web_push.gen.keypair`",
-  private_key: ""
 
 config :core, :version, System.get_env("VERSION", "dev")
 

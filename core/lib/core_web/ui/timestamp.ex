@@ -169,6 +169,10 @@ defmodule CoreWeb.UI.Timestamp do
     Timex.format!(datetime, "%Y-%m-%d", :strftime)
   end
 
+  def format_date_short!(datetime) do
+    Timex.format!(datetime, "%Y%m%d", :strftime)
+  end
+
   def stamp(%DateTime{} = datetime) do
     weekday = Timex.format!(datetime, "%A", :strftime)
     month = Timex.format!(datetime, "%B", :strftime)
