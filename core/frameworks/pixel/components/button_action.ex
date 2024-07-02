@@ -159,4 +159,15 @@ defmodule Frameworks.Pixel.Button.Action do
   slot(:inner_block, required: true)
 
   def http_new(assigns), do: http(assign(assigns, :method, "new"))
+
+  attr(:to, :string, required: true)
+  slot(:inner_block, required: true)
+
+  def http_download(assigns) do
+    ~H"""
+    <a href={@to} download>
+      <%= render_slot(@inner_block) %>
+    </a>
+    """
+  end
 end

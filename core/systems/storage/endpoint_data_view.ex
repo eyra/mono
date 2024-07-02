@@ -19,9 +19,8 @@ defmodule Systems.Storage.EndpointDataView do
   def update_export_button(%{assigns: %{endpoint: %{id: id}}} = socket) do
     export_button = %{
       action: %{
-        type: :http_get,
-        to: ~p"/storage/#{id}/export",
-        target: "_blank"
+        type: :http_download,
+        to: ~p"/storage/#{id}/export"
       },
       face: %{
         type: :label,

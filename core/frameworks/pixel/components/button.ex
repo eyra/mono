@@ -38,20 +38,7 @@ defmodule Frameworks.Pixel.Button do
   end
 
   defp action_function(type) do
-    case type do
-      :fake -> &Action.fake/1
-      :toggle -> &Action.toggle/1
-      :click -> &Action.click/1
-      :redirect -> &Action.redirect/1
-      :send -> &Action.send/1
-      :submit -> &Action.submit/1
-      :sidepanel -> &Action.sidepanel/1
-      :http -> &Action.http/1
-      :http_get -> &Action.http_get/1
-      :http_post -> &Action.http_post/1
-      :http_delete -> &Action.http_delete/1
-      :http_new -> &Action.http_new/1
-    end
+    fn attrs -> apply(Action, type, [attrs]) end
   end
 
   attr(:type, :atom, required: true)
