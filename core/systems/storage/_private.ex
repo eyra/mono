@@ -48,18 +48,18 @@ defmodule Systems.Storage.Private do
               key: :aws | :azure | :builtin | :centerdata | :yoda
             }
   def storage_info(storage_endpoint, %{external_panel: external_panel}) do
-    if endpoint = Storage.EndpointModel.special(storage_endpoint) do
-      {key, backend} = special_info(endpoint)
-      %{key: key, backend: backend, endpoint: endpoint}
+    if special = Storage.EndpointModel.special(storage_endpoint) do
+      {key, backend} = special_info(special)
+      %{key: key, special: special, backend: backend}
     else
       storage_info(external_panel)
     end
   end
 
   def storage_info(:liss) do
-    endpoint = %Storage.Centerdata.EndpointModel{url: @centerdata_callback_url}
+    special = %Storage.Centerdata.EndpointModel{url: @centerdata_callback_url}
     backend = Storage.Centerdata.Backend
-    %{key: :centerdata, endpoint: endpoint, backend: backend}
+    %{key: :centerdata, special: special, backend: backend}
   end
 
   def storage_info(_), do: nil

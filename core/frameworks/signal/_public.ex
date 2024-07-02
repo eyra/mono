@@ -5,23 +5,24 @@ defmodule Frameworks.Signal.Public do
 
   # FIXME: move this registration outside of framework
   @signal_handlers [
-    "Systems.Account.Switch",
+    "Core.APNS.SignalHandlers",
     "Core.Mailer.SignalHandlers",
     "Core.WebPush.SignalHandlers",
-    "Core.APNS.SignalHandlers",
+    "Systems.Account.Switch",
     "Systems.Admin.Switch",
-    "Systems.Observatory.Switch",
-    "Systems.Project.Switch",
+    "Systems.Advert.Switch",
     "Systems.Assignment.Switch",
     "Systems.Consent.Switch",
-    "Systems.Workflow.Switch",
-    "Systems.Pool.Switch",
-    "Systems.Student.Switch",
-    "Systems.Advert.Switch",
-    "Systems.NextAction.Switch",
     "Systems.Crew.Switch",
+    "Systems.Graphite.Switch",
     "Systems.Instruction.Switch",
-    "Systems.Graphite.Switch"
+    "Systems.NextAction.Switch",
+    "Systems.Observatory.Switch",
+    "Systems.Pool.Switch",
+    "Systems.Project.Switch",
+    "Systems.Storage.Switch",
+    "Systems.Student.Switch",
+    "Systems.Workflow.Switch"
   ]
 
   def dispatch(signal, message) do

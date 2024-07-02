@@ -83,19 +83,6 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept({:storage_endpoint, _} = signal, %{storage_endpoint: storage_endpoint} = message) do
-    if assignment =
-         Assignment.Public.get_by(storage_endpoint, Assignment.Model.preload_graph(:down)) do
-      handle(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
-      )
-    end
-
-    :ok
-  end
-
-  @impl true
   def intercept({:assignment_page_ref, _} = signal, %{assignment_page_ref: page_ref} = message) do
     assignment = Assignment.Public.get_by(page_ref, Assignment.Model.preload_graph(:down))
 

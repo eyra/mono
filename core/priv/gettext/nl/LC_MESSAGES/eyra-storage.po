@@ -130,3 +130,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "write_count.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "write_volume.kb.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "write_volume.mb.metric.label"
+msgstr ""

@@ -7,7 +7,7 @@ defmodule Systems.Storage.BuiltIn.EndpointModel do
   @fields ~w(key)a
   @required_fields @fields
 
-  @derive {Jason.Encoder, only: @fields}
+  @derive {Jason.Encoder, only: [:id, :key]}
   schema "storage_endpoints_builtin" do
     field(:key, :string)
     timestamps()

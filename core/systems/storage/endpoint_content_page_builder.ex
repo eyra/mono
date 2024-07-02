@@ -4,6 +4,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
   alias CoreWeb.UI.Timestamp
   alias Systems.Storage
+  alias Systems.Monitor
 
   def view_model(
         %{id: id} = endpoint,
@@ -112,7 +113,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
     child =
       Fabric.prepare_child(fabric, :monitor_view, Storage.EndpointMonitorView, %{
-        endpoint: endpoint
+        number_widgets: number_widgets(endpoint)
       })
 
     %{
@@ -123,6 +124,48 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
       forward_title: dgettext("eyra-storage", "tabbar.item.monitor.forward"),
       type: :fullpage,
       child: child
+    }
+  end
+
+  defp number_widgets(endpoint) do
+    [:write_count, :write_volume]
+    |> Enum.map(&number_widget(&1, endpoint))
+  end
+
+  defp number_widget(:write_volume, special) do
+    sum =
+      Monitor.Public.event({special, :write})
+      |> Monitor.Public.sum()
+
+    {label, metric} =
+      if sum >= 1024 * 1024 do
+        {
+          dgettext("eyra-storage", "write_volume.mb.metric.label"),
+          Integer.floor_div(sum, 1024 * 1024)
+        }
+      else
+        {
+          dgettext("eyra-storage", "write_volume.kb.metric.label"),
+          Integer.floor_div(sum, 1024)
+        }
+      end
+
+    %{
+      label: label,
+      metric: metric,
+      color: :primary
+    }
+  end
+
+  defp number_widget(:write_count, endpoint) do
+    metric =
+      Monitor.Public.event({endpoint, :write})
+      |> Monitor.Public.count()
+
+    %{
+      label: dgettext("eyra-storage", "write_count.metric.label"),
+      metric: metric,
+      color: :primary
     }
   end
 end

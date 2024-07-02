@@ -130,3 +130,15 @@ msgstr "Size"
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
 msgstr "Export all files"
+
+#, elixir-autogen, elixir-format
+msgid "write_count.metric.label"
+msgstr "Store requests"
+
+#, elixir-autogen, elixir-format
+msgid "write_volume.kb.metric.label"
+msgstr "Kilobytes transferred"
+
+#, elixir-autogen, elixir-format
+msgid "write_volume.mb.metric.label"
+msgstr "Megabytes transferred"

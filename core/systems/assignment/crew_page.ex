@@ -197,7 +197,7 @@ defmodule Systems.Assignment.CrewPage do
 
     with storage_endpoint <- Project.Public.get_storage_endpoint_by(assignment),
          storage_info <- Storage.Private.storage_info(storage_endpoint, assignment) do
-      Storage.Public.store(storage_info, data, meta_data)
+      Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
       socket
     else
       _ ->

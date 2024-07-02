@@ -1,13 +1,21 @@
 defmodule Systems.Storage.Public do
   require Logger
 
+  alias Ecto.Multi
   alias Ecto.Changeset
   alias Core.Authorization
   alias Core.Repo
+  alias Frameworks.Signal
   alias Systems.Rate
   alias Systems.Storage
+  alias Systems.Monitor
 
   def get_endpoint!(id, preload \\ []) do
+    Repo.get!(Storage.EndpointModel, id)
+    |> Repo.preload(preload)
+  end
+
+  def get_endpoint_by!(id, preload \\ []) do
     Repo.get!(Storage.EndpointModel, id)
     |> Repo.preload(preload)
   end
@@ -41,23 +49,31 @@ defmodule Systems.Storage.Public do
   end
 
   def store(
-        %{key: key, backend: backend, endpoint: endpoint},
+        %Storage.EndpointModel{} = endpoint,
+        %{key: key, backend: backend, special: special},
         data,
         %{remote_ip: remote_ip, panel_info: %{embedded?: embedded?}} = meta_data
       ) do
-    packet_size = String.length(data)
+    packet_size = byte_size(data)
 
     # raises error when request is denied
     Rate.Public.request_permission(key, remote_ip, packet_size)
 
+    Multi.new()
+    |> Monitor.Public.multi_log({endpoint, :write}, value: packet_size)
+    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :write}}, %{
+      storage_endpoint: endpoint
+    })
+    |> Repo.transaction()
+
     if embedded? do
       # submit data in current process
       Logger.warn("[Storage.Public] deliver directly")
-      Storage.Delivery.deliver(backend, endpoint, data, meta_data)
+      Storage.Delivery.deliver(backend, special, data, meta_data)
     else
       %{
         backend: backend,
-        endpoint: endpoint,
+        endpoint: special,
         data: data,
         meta_data: meta_data
       }
