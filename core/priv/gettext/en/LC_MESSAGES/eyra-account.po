@@ -92,7 +92,7 @@ msgstr "Sign in with Google"
 
 #, elixir-autogen, elixir-format
 msgid "login.surf.button"
-msgstr "Sign in through SURFconext"
+msgstr "Sign in with SURFconext"
 
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"

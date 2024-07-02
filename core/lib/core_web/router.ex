@@ -29,12 +29,6 @@ defmodule CoreWeb.Router do
     get("/uploads/:filename", UploadedFileController, :get)
   end
 
-  scope "/", CoreWeb do
-    pipe_through([:api, :require_authenticated_user])
-    get("/web-push/vapid-public-key", PushSubscriptionController, :vapid_public_key)
-    post("/web-push/register", PushSubscriptionController, :register)
-  end
-
   if Mix.env() == :dev do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end

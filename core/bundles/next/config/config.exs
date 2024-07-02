@@ -21,5 +21,5 @@ config :core, :features,
   leaderboard: false
 
 config :core, :meta,
-  bundle_title: "Eyra",
+  bundle_title: "Next",
   bundle: :next

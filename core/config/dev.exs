@@ -61,6 +61,7 @@ config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
+    [service: :storage_export, limit: 10, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
     [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
   ]

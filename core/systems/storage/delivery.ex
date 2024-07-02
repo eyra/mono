@@ -25,11 +25,11 @@ defmodule Systems.Storage.Delivery do
     end
   end
 
-  def deliver(backend, endpoint, panel_info, data, meta_data) do
+  def deliver(backend, endpoint, data, meta_data) do
     Logger.notice("[Storage.Delivery] deliver", ansi_color: :light_magenta)
 
     try do
-      backend.store(endpoint, panel_info, data, meta_data)
+      backend.store(endpoint, data, meta_data)
     rescue
       e ->
         Logger.error(Exception.format(:error, e, __STACKTRACE__))
@@ -41,11 +41,10 @@ defmodule Systems.Storage.Delivery do
         %{
           "backend" => backend,
           "endpoint" => endpoint,
-          "panel_info" => panel_info,
           "data" => data,
           "meta_data" => meta_data
         } = _job
       ) do
-    deliver(String.to_existing_atom(backend), endpoint, panel_info, data, meta_data)
+    deliver(String.to_existing_atom(backend), endpoint, data, meta_data)
   end
 end

@@ -5,13 +5,13 @@ defmodule Systems.Assignment.CrewPage do
 
   require Logger
 
-  alias CoreWeb.UI.Timestamp
   alias Core.ImageHelpers
-  alias Frameworks.Signal
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.ModalView
+  alias Frameworks.Signal
 
   alias Systems.Assignment
+  alias Systems.Project
   alias Systems.Storage
 
   @impl true
@@ -130,7 +130,7 @@ defmodule Systems.Assignment.CrewPage do
           socket
       ) do
     Assignment.Public.decline_member(model, user)
-    socket = store(socket, nil, "onboarding", "{\"status\":\"consent declined\"}")
+    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
 
     socket =
       if embedded? do
@@ -146,8 +146,8 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("store", %{key: key, group: group, data: data}, socket) do
-    {:noreply, socket |> store(key, group, data)}
+  def handle_event("store", %{task: task, key: key, group: group, data: data}, socket) do
+    {:noreply, socket |> store(task, key, group, data)}
   end
 
   @impl true
@@ -176,24 +176,34 @@ defmodule Systems.Assignment.CrewPage do
             remote_ip: remote_ip
           }
         } = socket,
+        task,
         key,
         group,
         data
       ) do
+    participant = Map.get(panel_info, :participant, "")
+
     meta_data = %{
       remote_ip: remote_ip,
-      timestamp: Timestamp.now() |> DateTime.to_unix(),
-      key: key,
-      group: group
+      panel_info: panel_info,
+      identifier: [
+        [:assignment, assignment.id],
+        [:task, task],
+        [:participant, participant],
+        [:source, group],
+        [:key, key]
+      ]
     }
 
-    if storage_info = Storage.Private.storage_info(assignment) do
-      Storage.Public.store(storage_info, panel_info, data, meta_data)
+    with storage_endpoint <- Project.Public.get_storage_endpoint_by(assignment),
+         storage_info <- Storage.Private.storage_info(storage_endpoint, assignment) do
+      Storage.Public.store(storage_info, data, meta_data)
       socket
     else
-      message = "Please setup connection to a data storage"
-      Logger.error(message)
-      socket |> put_flash(:error, message)
+      _ ->
+        message = "Please setup connection to a data storage"
+        Logger.error(message)
+        socket |> put_flash(:error, message)
     end
   end
 

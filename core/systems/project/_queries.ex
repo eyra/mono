@@ -17,6 +17,10 @@ defmodule Systems.Project.Queries do
     ])
   end
 
+  def item_query_by_assignment(%Project.NodeModel{} = node) do
+    build(item_query(node), :item, assignment_id != nil)
+  end
+
   def item_query_by_assignment(%Project.NodeModel{} = node, template) when is_atom(template) do
     build(item_query(node), :item,
       assignment: [
@@ -31,6 +35,10 @@ defmodule Systems.Project.Queries do
 
   def item_query_by_leaderboard(%Project.NodeModel{} = node) do
     build(item_query(node), :item, leaderboard_id != nil)
+  end
+
+  def item_query_by_storage_endpoint(%Project.NodeModel{} = node) do
+    build(item_query(node), :item, storage_endpoint_id != nil)
   end
 
   def item_query_by_special(special_name, special_id) do

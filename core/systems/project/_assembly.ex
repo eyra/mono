@@ -1,14 +1,15 @@
 defmodule Systems.Project.Assembly do
-  alias Core.Repo
-  alias Ecto.Multi
-  alias Ecto.Changeset
   import Ecto.Query, warn: false
-  alias Frameworks.Utility.EctoHelper
-  alias Frameworks.Signal
-  alias Core.Authorization
 
-  alias Systems.Project
+  alias Core.Authorization
+  alias Core.Repo
+  alias Ecto.Changeset
+  alias Ecto.Multi
+  alias Frameworks.Signal
+  alias Frameworks.Utility.EctoHelper
+
   alias Systems.Assignment
+  alias Systems.Project
 
   def delete(%Project.Model{auth_node: %{id: node_id}}) do
     from(ra in Authorization.RoleAssignment,
@@ -51,18 +52,18 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
-  def create_item(template, name, %Project.NodeModel{} = node)
+  def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
       when is_binary(name) do
     Multi.new()
     |> Multi.insert(
       :project_item,
-      prepare_item(template, name)
+      prepare_item(template_or_changeset, name)
       |> Changeset.put_assoc(:node, node)
     )
     |> EctoHelper.run(:project_node, &load_node!/1)
     |> EctoHelper.run(:auth, &update_auth/2)
     |> EctoHelper.run(:path, &update_path/2)
-    |> Signal.Public.multi_dispatch({:project_node, :create_and_dispatch})
+    |> Signal.Public.multi_dispatch({:project_item, :inserted})
     |> Repo.transaction()
   end
 
@@ -110,6 +111,10 @@ defmodule Systems.Project.Assembly do
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
+  end
+
+  defp prepare_item(%Ecto.Changeset{} = changeset, name) do
+    Project.Public.prepare_item(%{name: name, project_path: []}, changeset)
   end
 
   # PROJECT PATH

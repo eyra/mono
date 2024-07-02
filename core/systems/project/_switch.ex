@@ -6,7 +6,8 @@ defmodule Systems.Project.Switch do
 
   @impl true
   def intercept({:project_item, _} = signal, %{project_item: project_item} = message) do
-    project_node = Project.Public.get_node_by_item!(project_item)
+    project_node =
+      Project.Public.get_node_by_item!(project_item, Project.NodeModel.preload_graph(:down))
 
     dispatch!(
       {:project_node, signal},

@@ -11,25 +11,26 @@ defmodule Systems.Storage.Yoda.Backend do
           "password" => password,
           "url" => yoda_url
         } = _endpoint,
-        %{
-          "participant" => participant
-        } = _panel_info,
         data,
         %{
-          "key" => key
+          identifier: identifier
         } = _meta_data
       ) do
-    folder = "participant-#{participant}"
-    folder_url = url([yoda_url, folder])
-
-    file = "#{key}.json"
-    file_url = url([yoda_url, folder, file])
-
-    with {:ok, false} <- Yoda.Client.has_resource?(username, password, folder_url) do
-      {:ok, _} = Yoda.Client.create_folder(username, password, folder_url)
-    end
+    filename = filename(identifier)
+    file_url = url([yoda_url, filename])
 
     {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
+  end
+
+  def list_files(_endpoint) do
+    Logger.error("Not yet implemented: files/4")
+    {:error, :not_implemented}
+  end
+
+  defp filename(%{"identifier" => identifier}) do
+    identifier
+    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
+    |> then(&"#{&1}.json")
   end
 
   defp url(components) do

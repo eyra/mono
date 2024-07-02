@@ -45,20 +45,13 @@ defmodule Frameworks.Pixel.Navigation do
 
   attr(:right_bar_buttons, :list, default: [])
   attr(:more_buttons, :list, default: [])
-  attr(:size, :atom, default: :wide)
   attr(:hide_seperator, :boolean, default: true)
   slot(:inner_block, required: true)
 
-  def action_bar(%{size: size, right_bar_buttons: right_bar_buttons} = assigns) do
+  def action_bar(%{right_bar_buttons: right_bar_buttons} = assigns) do
     assigns =
       assign(assigns, %{
-        has_right_bar_buttons: not Enum.empty?(right_bar_buttons),
-        centralize:
-          if size == :wide do
-            Enum.empty?(right_bar_buttons)
-          else
-            false
-          end
+        has_right_bar_buttons: not Enum.empty?(right_bar_buttons)
       })
 
     ~H"""
@@ -70,16 +63,9 @@ defmodule Frameworks.Pixel.Navigation do
         <Area.content>
           <div class="overflow-scroll scrollbar-hidden w-full">
             <div class="flex flex-row items-center w-full h-navbar-height">
-              <%= if @centralize do %>
-                <div class="flex-grow" />
-                <div class="flex-wrap">
-                  <%= render_slot(@inner_block) %> <!-- tabbar -->
-                </div>
-              <% else %>
-                <div class="flex-grow">
-                  <%= render_slot(@inner_block) %> <!-- tabbar -->
-                </div>
-              <% end %>
+              <div class="flex-grow">
+                <%= render_slot(@inner_block) %> <!-- tabbar -->
+              </div>
               <%= if @has_right_bar_buttons do %>
                 <%= if not @hide_seperator do %>
                   <div class="flex-wrap px-4">
@@ -93,9 +79,6 @@ defmodule Frameworks.Pixel.Navigation do
                     <% end %>
                   </div>
                 </div>
-              <% end %>
-              <%= if @centralize do %>
-                <div class="flex-grow" />
               <% end %>
             </div>
           </div>

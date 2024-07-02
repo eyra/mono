@@ -86,8 +86,12 @@ defmodule Systems.Document.PDFNavView do
             <Button.dynamic {@close_button} />
           </div>
         </div>
-        <div class="flex flex-col w-full h-full pt-[72px] sm:pt-[48px] pb-sidepadding">
-          <.child name={:pdf_view} fabric={@fabric} />
+        <div class="flex flex-row">
+          <div class="flex-grow"/>
+          <div class="flex flex-col w-full max-w-[1200px] h-full pt-[72px] sm:pt-[48px] pb-sidepadding">
+            <.child name={:pdf_view} fabric={@fabric} />
+          </div>
+          <div class="flex-grow"/>
         </div>
       </div>
     """

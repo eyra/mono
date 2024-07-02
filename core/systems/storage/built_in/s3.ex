@@ -3,8 +3,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
   alias ExAws.S3
 
   @impl true
-  def store(folder, identifier, data) do
-    filename = Enum.join(identifier, "_") <> ".json"
+  def store(folder, filename, data) do
     filepath = Path.join(folder, filename)
     object_key = object_key(filepath)
     content_type = content_type(object_key)
@@ -12,6 +11,37 @@ defmodule Systems.Storage.BuiltIn.S3 do
 
     S3.put_object(bucket, object_key, data, content_type: content_type)
     |> backend().request!()
+  end
+
+  @impl true
+  def list_files(folder) do
+    bucket = Access.fetch!(settings(), :bucket)
+    prefix = object_key(folder) <> "/"
+
+    %{body: %{contents: contents}} =
+      S3.list_objects(bucket, prefix: prefix)
+      |> backend().request!()
+
+    contents
+    |> Enum.map(fn %{key: key, size: size, last_modified: last_modified} ->
+      {:ok, url} =
+        :s3
+        |> ExAws.Config.new([])
+        |> S3.presigned_url(:get, bucket, key, expires_in: 3600)
+
+      %{key: key, size: size, last_modified: last_modified, url: url}
+    end)
+    |> Enum.map(fn %{key: key, size: size, last_modified: last_modified, url: url} ->
+      path = String.replace_prefix(key, prefix, "")
+
+      timestamp =
+        case Timex.parse(last_modified, "{ISO:Extended:Z}") do
+          {:ok, result} -> result
+          _ -> nil
+        end
+
+      %{path: path, size: String.to_integer(size), timestamp: timestamp, url: url}
+    end)
   end
 
   defp object_key(filepath) do

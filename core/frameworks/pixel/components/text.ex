@@ -158,22 +158,24 @@ defmodule Frameworks.Pixel.Text do
   end
 
   attr(:color, :string, default: "text-grey1")
+  attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
   def table_head(assigns) do
     ~H"""
-    <div class={"text-tablehead font-tablehead"}>
+    <div class={"text-tablehead font-tablehead #{@align}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
 
   attr(:color, :string, default: "text-grey1")
+  attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
   def table_row(assigns) do
     ~H"""
-    <div class={"text-tablerow font-tablerow"}>
+    <div class={"text-tablerow font-tablerow #{@align}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """

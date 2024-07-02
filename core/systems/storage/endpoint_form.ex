@@ -103,7 +103,7 @@ defmodule Systems.Storage.EndpointForm do
            }
          } = socket
        ) do
-    changeset = Storage.EndpointModel.reset_special(endpoint, special_type, special_changeset)
+    changeset = Storage.EndpointModel.change_special(endpoint, special_type, special_changeset)
 
     socket
     |> send_event(:parent, "update", %{changeset: changeset})

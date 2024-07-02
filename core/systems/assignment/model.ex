@@ -12,7 +12,6 @@ defmodule Systems.Assignment.Model do
   alias Systems.Budget
   alias Systems.Content
   alias Systems.Consent
-  alias Systems.Storage
   alias Systems.Advert
   alias Systems.Project
 
@@ -24,7 +23,6 @@ defmodule Systems.Assignment.Model do
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:privacy_doc, Content.FileModel, on_replace: :nilify)
     belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
-    belongs_to(:storage_endpoint, Storage.EndpointModel, on_replace: :delete)
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:budget, Budget.Model, on_replace: :update)
@@ -96,7 +94,6 @@ defmodule Systems.Assignment.Model do
       adverts: [],
       privacy_doc: [],
       consent_agreement: [:revisions],
-      storage_endpoint: Storage.EndpointModel.preload_graph(:down),
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),
       budget: [:currency, :fund, :reserve],

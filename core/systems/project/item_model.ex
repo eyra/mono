@@ -9,6 +9,7 @@ defmodule Systems.Project.ItemModel do
   alias Core.ImageHelpers
 
   alias Systems.Project
+  alias Systems.Storage
   alias Systems.Assignment
   alias Systems.Advert
   alias Systems.Graphite
@@ -17,6 +18,7 @@ defmodule Systems.Project.ItemModel do
     field(:name, :string)
     field(:project_path, {:array, :integer})
     belongs_to(:node, Project.NodeModel)
+    belongs_to(:storage_endpoint, Storage.EndpointModel)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:advert, Advert.Model)
     belongs_to(:leaderboard, Graphite.LeaderboardModel)
@@ -44,7 +46,8 @@ defmodule Systems.Project.ItemModel do
       preload_graph([
         :assignment,
         :leaderboard,
-        :advert
+        :advert,
+        :storage_endpoint
       ])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
@@ -55,6 +58,9 @@ defmodule Systems.Project.ItemModel do
 
   def preload_graph(:advert),
     do: [advert: Advert.Model.preload_graph(:down)]
+
+  def preload_graph(:storage_endpoint),
+    do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
   def special(%{assignment: %{id: _id} = special}), do: special
 
@@ -82,6 +88,15 @@ defmodule Systems.Project.ItemModel do
     Advert.Model.auth_tree(advert)
   end
 
+  def auth_tree(%Project.ItemModel{storage_endpoint: %Ecto.Association.NotLoaded{}} = item) do
+    auth_tree(Repo.preload(item, :storage_endpoint))
+  end
+
+  def auth_tree(%Project.ItemModel{storage_endpoint: storage_endpoint})
+      when not is_nil(storage_endpoint) do
+    Storage.EndpointModel.auth_tree(storage_endpoint)
+  end
+
   def auth_tree(items) when is_list(items) do
     Enum.map(items, &auth_tree/1)
   end
@@ -89,6 +104,9 @@ defmodule Systems.Project.ItemModel do
   def tag(%{assignment: %{id: _} = assignment}), do: Assignment.Model.tag(assignment)
   def tag(%{leaderboard: %{id: _} = leaderboard}), do: Graphite.LeaderboardModel.tag(leaderboard)
   def tag(%{advert: %{id: _} = advert}), do: Advert.Model.tag(advert)
+
+  def tag(%{storage_endpoint: %{id: _} = storage_endpoint}),
+    do: Storage.EndpointModel.tag(storage_endpoint)
 
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
@@ -221,6 +239,54 @@ defmodule Systems.Project.ItemModel do
       }
     end
 
+    defp vm(
+           %{
+             id: id,
+             name: name,
+             storage_endpoint: %{id: storage_endpoint_id} = storage_endpoint
+           },
+           {Project.NodePage, :item_card},
+           _user,
+           _timezone
+         ) do
+      image_id =
+        "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1622986819498-60765a6e52c0%3Fixid%3DM3w1MzYyOTF8MHwxfHNlYXJjaHwzOXx8Zm9sZGVyc3xlbnwwfHx8fDE3MTg3OTEyOTB8MA%26ixlib%3Drb-4.0.3&username=_sycthe_&name=Tanay+Shah&blur_hash=LCH%5En%5DActRkV%2AH%25yM%7BsD%5BBNMkYkU"
+
+      image_info = ImageHelpers.get_image_info(image_id, 400, 200)
+
+      edit = %{
+        action: %{type: :send, event: "edit", item: id},
+        face: %{type: :label, label: "Edit", wrap: true}
+      }
+
+      delete = %{
+        action: %{type: :send, event: "delete", item: id},
+        face: %{type: :icon, icon: :delete}
+      }
+
+      icon_url = Storage.EndpointModel.asset_image_src(storage_endpoint, :icon)
+
+      %{
+        type: :secundary,
+        id: id,
+        path: ~p"/storage/#{storage_endpoint_id}/content",
+        image_info: image_info,
+        icon_url: icon_url,
+        label: get_label(:connected),
+        title: name,
+        tags: get_card_tags(storage_endpoint),
+        info: get_storage_endpoint_info(storage_endpoint),
+        left_actions: [edit],
+        right_actions: [delete]
+      }
+    end
+
+    defp get_label(:connected),
+      do: %{type: :success, text: dgettext("eyra-project", "label.connected")}
+
+    defp get_label(:disconnected),
+      do: %{type: :delete, text: dgettext("eyra-project", "label.disconnected")}
+
     defp get_label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
 
@@ -240,6 +306,7 @@ defmodule Systems.Project.ItemModel do
     defp get_card_tags(%Graphite.LeaderboardModel{}), do: ["Leaderboard"]
     defp get_card_tags(%Graphite.ToolModel{}), do: ["Challenge"]
     defp get_card_tags(%Advert.Model{}), do: ["Advertisement"]
+    defp get_card_tags(%Storage.EndpointModel{}), do: ["Storage"]
     defp get_card_tags(_), do: []
 
     defp get_assignment_info(%Assignment.Model{info: info}) do
@@ -249,6 +316,11 @@ defmodule Systems.Project.ItemModel do
 
     defp get_advert_info(%Advert.Model{submission: %{pool: %{name: pool_name}}}) do
       [pool_name]
+    end
+
+    defp get_storage_endpoint_info(%Storage.EndpointModel{} = storage_endpoint) do
+      file_count = Storage.Public.file_count(storage_endpoint)
+      [dngettext("eyra-project", "1 file", "* files", file_count)]
     end
 
     defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do
