@@ -49,7 +49,7 @@ defmodule Systems.Storage.Public do
   end
 
   def store(
-        %Storage.EndpointModel{} = endpoint,
+        %Storage.EndpointModel{id: endpoint_id} = endpoint,
         %{key: key, backend: backend, special: special},
         data,
         %{remote_ip: remote_ip, panel_info: %{embedded?: embedded?}} = meta_data
@@ -72,8 +72,9 @@ defmodule Systems.Storage.Public do
       Storage.Delivery.deliver(backend, special, data, meta_data)
     else
       %{
+        endpoint_id: endpoint_id,
         backend: backend,
-        endpoint: special,
+        special: special,
         data: data,
         meta_data: meta_data
       }
@@ -83,9 +84,18 @@ defmodule Systems.Storage.Public do
   end
 
   def list_files(endpoint) do
+    apply_on_special_backend(endpoint, :list_files)
+  end
+
+  def delete_files(endpoint) do
+    apply_on_special_backend(endpoint, :delete_files)
+    Signal.Public.dispatch({:storage_endpoint, :delete_files}, %{storage_endpoint: endpoint})
+  end
+
+  defp apply_on_special_backend(endpoint, function_name) when is_atom(function_name) do
     special = Storage.EndpointModel.special(endpoint)
     {_, backend} = Storage.Private.special_info(special)
-    apply(backend, :list_files, [special])
+    apply(backend, function_name, [special])
   end
 
   def file_count(endpoint) do

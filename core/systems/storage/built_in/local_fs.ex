@@ -17,6 +17,13 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     File.ls!(folder_path)
   end
 
+  @impl true
+  def delete_files(folder) do
+    folder_path = get_full_path(folder)
+    File.rm_rf!(folder_path)
+    :ok
+  end
+
   defp get_full_path(folder) do
     Path.join(get_root_path(), folder)
   end

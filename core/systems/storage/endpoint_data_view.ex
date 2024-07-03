@@ -1,22 +1,30 @@
 defmodule Systems.Storage.EndpointDataView do
   use CoreWeb, :live_component
 
-  alias Systems.Storage.Html
+  alias Systems.Storage
 
   @impl true
-  def update(%{endpoint: endpoint, files: files}, %{assigns: %{}} = socket) do
+  def update(
+        %{endpoint: endpoint, files: files, context_name: context_name},
+        %{assigns: %{}} = socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         endpoint: endpoint,
-        files: files
+        files: files,
+        context_name: context_name
       )
-      |> update_export_button()
+      |> update_buttons()
     }
   end
 
-  def update_export_button(%{assigns: %{endpoint: %{id: id}}} = socket) do
+  defp update_buttons(%{assigns: %{files: []}} = socket) do
+    assign(socket, buttons: [])
+  end
+
+  defp update_buttons(%{assigns: %{endpoint: %{id: id}}} = socket) do
     export_button = %{
       action: %{
         type: :http_download,
@@ -29,7 +37,55 @@ defmodule Systems.Storage.EndpointDataView do
       }
     }
 
-    assign(socket, export_button: export_button)
+    empty_button = %{
+      action: %{
+        type: :send,
+        event: "empty"
+      },
+      face: %{
+        type: :label,
+        label: dgettext("eyra-storage", "empty.files.button"),
+        icon: :delete,
+        color: :red
+      }
+    }
+
+    assign(socket, buttons: [export_button, empty_button])
+  end
+
+  @impl true
+  def handle_event("empty", _payload, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:empty_confirmation)
+      |> show_modal(:empty_confirmation, :notification)
+    }
+  end
+
+  @impl true
+  def handle_event("empty_confirmation", _payload, socket) do
+    {
+      :noreply,
+      socket
+      |> empty_storage()
+      |> hide_modal(:empty_confirmation)
+    }
+  end
+
+  @impl true
+  def compose(:empty_confirmation, %{context_name: context_name}) do
+    %{
+      module: Storage.EmptyConfirmationView,
+      params: %{
+        context_name: context_name
+      }
+    }
+  end
+
+  defp empty_storage(%{assigns: %{endpoint: endpoint}} = socket) do
+    Storage.Public.delete_files(endpoint)
+    socket
   end
 
   @impl true
@@ -41,13 +97,11 @@ defmodule Systems.Storage.EndpointDataView do
         <div class="flex flex-row items-center">
           <Text.title2 margin=""><%= dgettext("eyra-storage", "tabbar.item.data") %> <span class="text-primary"><%= Enum.count(@files) %></span></Text.title2>
           <div class="flex-grow" />
-          <div>
-            <Button.dynamic {@export_button} />
-          </div>
+          <Button.dynamic_bar buttons={@buttons}/>
         </div>
         <%= if not Enum.empty?(@files) do %>
           <.spacing value="L" />
-          <Html.files_table files={@files} />
+          <Storage.Html.files_table files={@files} />
         <% end %>
       </Area.content>
     </div>

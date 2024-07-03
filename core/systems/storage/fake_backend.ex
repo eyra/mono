@@ -9,4 +9,8 @@ defmodule Systems.Storage.FakeBackend do
   def list_files(_endpoint) do
     {:ok, []}
   end
+
+  def delete_files(_endpoint) do
+    :ok
+  end
 end

@@ -44,6 +44,29 @@ defmodule Systems.Storage.BuiltIn.S3 do
     end)
   end
 
+  @impl true
+  def delete_files(folder) do
+    bucket = Access.fetch!(settings(), :bucket)
+    prefix = object_key(folder) <> "/"
+
+    stream =
+      S3.list_objects(bucket, prefix: prefix)
+      |> backend().stream!()
+      |> Stream.map(& &1.key)
+
+    result =
+      S3.delete_all_objects(bucket, stream)
+      |> backend().request!()
+
+    errors = Enum.reject(result, &{&1.status_code != 200})
+
+    if Enum.empty?(errors) do
+      :ok
+    else
+      {:error, :some_files_not_deleted}
+    end
+  end
+
   defp object_key(filepath) do
     if prefix = Access.get(settings(), :prefix, nil) do
       Path.join(prefix, filepath)

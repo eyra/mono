@@ -43,7 +43,12 @@ defmodule Systems.Storage.Centerdata.Backend do
   end
 
   def list_files(_endpoint) do
-    Logger.error("Not yet implemented: files/4")
+    Logger.error("Not yet implemented: list_files/1")
+    {:error, :not_implemented}
+  end
+
+  def delete_files(_endpoint) do
+    Logger.error("Not yet implemented: delete_files/1")
     {:error, :not_implemented}
   end
 end

@@ -11,6 +11,7 @@ defmodule Systems.Storage.Delivery do
     unique: [period: 30]
 
   require Logger
+  alias Frameworks.Signal
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
@@ -21,6 +22,7 @@ defmodule Systems.Storage.Delivery do
 
       _ ->
         Logger.notice("[Storage.Delivery] delivery succeeded", ansi_color: :light_magenta)
+        Signal.Public.dispatch({:storage_delivery, :delivered}, %{storage_delivery: args})
         :ok
     end
   end
@@ -40,11 +42,11 @@ defmodule Systems.Storage.Delivery do
   def deliver(
         %{
           "backend" => backend,
-          "endpoint" => endpoint,
+          "special" => special,
           "data" => data,
           "meta_data" => meta_data
         } = _job
       ) do
-    deliver(String.to_existing_atom(backend), endpoint, data, meta_data)
+    deliver(String.to_existing_atom(backend), special, data, meta_data)
   end
 end

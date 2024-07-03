@@ -6,4 +6,5 @@ defmodule Systems.Storage.Backend do
             ) :: any()
 
   @callback list_files(endpoint :: map()) :: {:ok, list()} | {:error, atom()}
+  @callback delete_files(endpoint :: map()) :: :ok | {:error, atom()}
 end

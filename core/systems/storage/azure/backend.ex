@@ -3,6 +3,7 @@ defmodule Systems.Storage.Azure.Backend do
 
   require Logger
 
+  @impl true
   def store(
         endpoint,
         data,
@@ -35,8 +36,15 @@ defmodule Systems.Storage.Azure.Backend do
     end
   end
 
+  @impl true
   def list_files(_endpoint) do
-    Logger.error("Not yet implemented: files/4")
+    Logger.error("Not yet implemented: list_files/1")
+    {:error, :not_implemented}
+  end
+
+  @impl true
+  def delete_files(_endpoint) do
+    Logger.error("Not yet implemented: delete_files/1")
     {:error, :not_implemented}
   end
 

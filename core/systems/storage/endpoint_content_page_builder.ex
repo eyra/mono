@@ -2,6 +2,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   import CoreWeb.Gettext
   import Frameworks.Utility.List
 
+  alias Frameworks.Concept.Context
   alias CoreWeb.UI.Timestamp
   alias Systems.Storage
   alias Systems.Monitor
@@ -77,6 +78,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = false
+    context_name = Context.name(endpoint, "Current")
 
     files =
       endpoint
@@ -89,6 +91,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
         endpoint: endpoint,
         files: files,
+        context_name: context_name,
         timezone: timezone
       })
 

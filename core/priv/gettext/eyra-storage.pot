@@ -142,3 +142,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "write_volume.mb.metric.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty.files.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.button"
+msgstr ""
