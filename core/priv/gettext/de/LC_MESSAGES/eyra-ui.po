@@ -169,7 +169,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "close.button"
-msgstr ""
+msgstr "Schließen"
 
 #, elixir-autogen, elixir-format
 msgid "done.button"
