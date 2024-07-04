@@ -160,7 +160,7 @@ defmodule Systems.Assignment.Switch do
 
   def intercept({:lab_tool, :reservation_created}, %{tool: tool, user: user}) do
     if Assignment.Public.get_by_tool(tool) do
-      Assignment.Public.lock_task(tool, user)
+      Assignment.Public.start_task(tool, user)
     end
 
     :ok
@@ -176,7 +176,7 @@ defmodule Systems.Assignment.Switch do
       delete_crew_tasks(message)
     end
 
-    with {:crew_task, :locked} <- event do
+    with {:crew_task, :started} <- event do
       %{crew_task: crew_task} = message
       Assignment.Private.log_performance_event(assignment, crew_task, :started)
     end

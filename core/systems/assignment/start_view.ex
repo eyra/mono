@@ -57,7 +57,7 @@ defmodule Systems.Assignment.StartView do
       |> URI.append_query(URI.encode_query(participant: participant))
       |> URI.to_string()
 
-    %{type: :http_get, to: participant_url, target: "_blank"}
+    %{type: :http_get, to: participant_url, target: "_blank", event: "start"}
   end
 
   defp start_action(_, _, _) do

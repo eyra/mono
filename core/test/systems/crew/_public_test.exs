@@ -252,7 +252,7 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: member, crew_task: task}} =
         Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
 
-      Crew.Public.lock_task(task)
+      Crew.Public.start_task(task)
 
       assert Crew.Public.mark_expired()
 

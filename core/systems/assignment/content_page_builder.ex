@@ -385,12 +385,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
         Monitor.Public.unique(Monitor.Public.event({assignment, :declined}))
 
     expected_amount = max(subject_count, current_amount)
+    pending_amount = max(0, started - finished)
 
     %{
       label: "#{title} #{group}",
       target_amount: expected_amount,
       done_amount: finished,
-      pending_amount: started - finished,
+      pending_amount: pending_amount,
       done_label: dgettext("eyra-crew", "progress.finished.label"),
       pending_label: dgettext("eyra-crew", "progress.started.label"),
       target_label: dgettext("eyra-crew", "progress.remaining.label")

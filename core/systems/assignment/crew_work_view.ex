@@ -203,18 +203,16 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def compose(:tool_ref_view, %{launcher: _}), do: nil
+  def compose(:tool_ref_view, %{launcher: _}) do
+    nil
+  end
 
   @impl true
   def compose(
         :tool_ref_view,
-        %{selected_item: {%{tool_ref: tool_ref}, _task}} = assigns
+        %{selected_item: selected_item} = assigns
       ) do
-    launcher =
-      tool_ref
-      |> Workflow.ToolRefModel.tool()
-      |> Concept.ToolModel.launcher()
-
+    launcher = launcher(selected_item)
     compose(:tool_ref_view, Map.put(assigns, :launcher, launcher))
   end
 
@@ -341,13 +339,13 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
-  def handle_event("start", _, %{assigns: %{selected_item: {_, task}}} = socket) do
+  def handle_event("start", _, %{assigns: %{selected_item: selected_item}} = socket) do
     {
       :noreply,
       socket
       |> assign(tool_started: true)
       |> update_child(:tool_ref_view)
-      |> lock_task(task)
+      |> start_task(selected_item)
     }
   end
 
@@ -550,12 +548,23 @@ defmodule Systems.Assignment.CrewWorkView do
   defp task_status(%{status: status}), do: status
   defp task_status(_), do: :pending
 
-  defp lock_task(socket, task) do
-    Crew.Public.lock_task(task)
+  defp start_task(socket, {_, task}) do
+    start_task(socket, task)
+  end
+
+  defp start_task(socket, task) do
+    Crew.Public.start_task(task)
     socket
   end
 
+  defp launcher({%{tool_ref: tool_ref}, _}) do
+    tool_ref
+    |> Workflow.ToolRefModel.tool()
+    |> Concept.ToolModel.launcher()
+  end
+
   @impl true
+  @spec render(any()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~H"""
       <div class="w-full h-full flex flex-row">

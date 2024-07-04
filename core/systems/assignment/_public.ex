@@ -504,11 +504,11 @@ defmodule Systems.Assignment.Public do
     Crew.Public.get_task(crew, identifier)
   end
 
-  def lock_task(tool, identifier) do
+  def start_task(tool, identifier) do
     if task = get_task(tool, identifier) do
-      Crew.Public.lock_task(task)
+      Crew.Public.start_task(task)
     else
-      Logger.warn("Can not lock task")
+      Logger.warn("Can not start task")
     end
   end
 

@@ -132,11 +132,12 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:to, :string, required: true)
   attr(:target, :string, default: "_self")
+  attr(:event, :string, default: "")
   slot(:inner_block, required: true)
 
   def http_get(assigns) do
     ~H"""
-    <a href={@to} target={@target}>
+    <a href={@to} target={@target} phx-click={@event}>
       <%= render_slot(@inner_block) %>
     </a>
     """
