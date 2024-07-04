@@ -37,6 +37,12 @@ defmodule Systems.Assignment.Public do
     |> Repo.get(id)
   end
 
+  def get_by_content_page(%Content.PageModel{} = page, preload \\ []) do
+    assignment_query(page)
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
     |> Repo.get!(id)

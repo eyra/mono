@@ -7,6 +7,7 @@ defmodule Systems.Assignment.Queries do
 
   alias Systems.Assignment
   alias Systems.Account
+  alias Systems.Content
   alias Systems.Project
 
   def assignment_query() do
@@ -17,6 +18,16 @@ defmodule Systems.Assignment.Queries do
     build(assignment_query(), :assignment, [
       special == ^special
     ])
+  end
+
+  def assignment_query(%Content.PageModel{id: page_id}) do
+    build(assignment_query(), :assignment,
+      page_refs: [
+        page: [
+          id == ^page_id
+        ]
+      ]
+    )
   end
 
   def assignment_query(%Account.User{id: user_id}, :participant) do

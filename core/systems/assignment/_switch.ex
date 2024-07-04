@@ -14,6 +14,25 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
+        {:content_page, _} = signal,
+        %{content_page: content_page} = message
+      ) do
+    if assignment =
+         Assignment.Public.get_by_content_page(
+           content_page,
+           Assignment.Model.preload_graph(:down)
+         ) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
         {:project_item, :inserted} = signal,
         %{project_item: %{advert: %{assignment_id: assignment_id}}} = message
       ) do
