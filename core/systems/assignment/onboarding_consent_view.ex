@@ -7,7 +7,7 @@ defmodule Systems.Assignment.OnboardingConsentView do
 
   @impl true
   def update(
-        %{id: id, revision: revision, user: user, create_signature?: create_signature?},
+        %{id: id, revision: revision, user: user},
         socket
       ) do
     {
@@ -16,22 +16,17 @@ defmodule Systems.Assignment.OnboardingConsentView do
       |> assign(
         id: id,
         revision: revision,
-        user: user,
-        create_signature?: create_signature?
+        user: user
       )
       |> update_clickwrap_view()
     }
   end
 
-  defp update_clickwrap_view(
-         %{assigns: %{revision: revision, user: user, create_signature?: create_signature?}} =
-           socket
-       ) do
+  defp update_clickwrap_view(%{assigns: %{revision: revision, user: user}} = socket) do
     child =
       prepare_child(socket, :clickwrap_view, Consent.ClickWrapView, %{
         revision: revision,
-        user: user,
-        create_signature?: create_signature?
+        user: user
       })
 
     show_child(socket, child)

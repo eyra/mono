@@ -73,16 +73,28 @@ defmodule Systems.Assignment.CrewPageBuilder do
          %{current_user: user, fabric: fabric},
          tester?
        ) do
-    if Consent.Public.has_signature(consent_agreement, user) and not tester? do
-      nil
-    else
-      revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+    signature = Consent.Public.get_signature(consent_agreement, user)
 
-      Fabric.prepare_child(fabric, :onboarding_view_consent, Assignment.OnboardingConsentView, %{
-        revision: revision,
-        user: user,
-        create_signature?: not tester?
-      })
+    case {revision, signature, tester?} do
+      {_, signature, false} when not is_nil(signature) ->
+        # normal flow: no consent view with signature
+        nil
+
+      {%{id: id}, %{revision_id: revision_id}, true} when id == revision_id ->
+        # preview flow: no consent view with signature on the latest version
+        nil
+
+      _ ->
+        Fabric.prepare_child(
+          fabric,
+          :onboarding_view_consent,
+          Assignment.OnboardingConsentView,
+          %{
+            revision: revision,
+            user: user
+          }
+        )
     end
   end
 
