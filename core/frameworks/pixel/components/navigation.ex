@@ -43,10 +43,22 @@ defmodule Frameworks.Pixel.Navigation do
     """
   end
 
-  attr(:right_bar_buttons, :list, default: [])
-  attr(:more_buttons, :list, default: [])
-  attr(:hide_seperator, :boolean, default: true)
   slot(:inner_block, required: true)
+
+  def tabbar(assigns) do
+    ~H"""
+    <div>
+      <Area.content>
+        <div class="flex flex-row items-center justify-center w-full h-navbar-height">
+          <div class="flex-wrap">
+            <%= render_slot(@inner_block) %>
+          </div>
+        </div>
+      </Area.content>
+      <.line />
+    </div>
+    """
+  end
 
   def action_bar(%{right_bar_buttons: right_bar_buttons} = assigns) do
     assigns =

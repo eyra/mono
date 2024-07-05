@@ -53,9 +53,7 @@ defmodule Systems.Support.TicketPageBuilder do
              fullname: fullname,
              photo_url: photo_url
            },
-           features: %{
-             gender: gender
-           }
+           features: features
          }
        }) do
     role =
@@ -71,7 +69,7 @@ defmodule Systems.Support.TicketPageBuilder do
       title: fullname,
       subtitle: role,
       photo_url: photo_url,
-      gender: gender,
+      gender: gender(features),
       button_large: %{
         action: action,
         face: %{
@@ -87,4 +85,7 @@ defmodule Systems.Support.TicketPageBuilder do
       }
     }
   end
+
+  defp gender(%{gender: gender}), do: gender
+  defp gender(_), do: nil
 end
