@@ -97,7 +97,7 @@ defmodule Systems.Assignment.StorageView do
           }
         } = socket
       ) do
-    name = Storage.ServiceIds.translate(special_type)
+    name = dgettext("eyra-storage", "default.name")
 
     changeset =
       Storage.Public.prepare_endpoint(special_type, %{key: "project_node=#{project_node_id}"})

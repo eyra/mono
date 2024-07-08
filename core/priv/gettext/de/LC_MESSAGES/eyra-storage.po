@@ -160,9 +160,9 @@ msgid "empty_confirmation_view.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "empty_confirmation_view.warning"
+msgid "empty_confirmation_view.button"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "empty_confirmation_view.button"
+#, elixir-autogen, elixir-format
+msgid "default.name"
 msgstr ""

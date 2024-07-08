@@ -160,9 +160,9 @@ msgid "empty_confirmation_view.placeholder"
 msgstr "Type in the name of the project to confirm"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "empty_confirmation_view.warning"
-msgstr "<div>Unexpected bad things will happen if you don't read this"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.button"
 msgstr "I understand the consequences, delete all files"
+
+#, elixir-autogen, elixir-format
+msgid "default.name"
+msgstr "Data"
