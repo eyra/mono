@@ -129,7 +129,7 @@ msgstr "Size"
 
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
-msgstr "Export all files"
+msgstr "Export all"
 
 #, elixir-autogen, elixir-format
 msgid "write_count.metric.label"
@@ -145,23 +145,23 @@ msgstr "Megabytes transferred"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty.files.button"
-msgstr "Empty storage"
+msgstr "Remove all"
 
 #, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.title"
-msgstr "Are you absolutely sure?"
+msgstr "Remove all files?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.body"
-msgstr "This action cannot be undone. This will permanantly delete all files stored in the <span class=\"text-primary\">%{name}</span> project. Please make sure you have exported all the files before proceeding."
+msgstr "Please note that this action will permanently delete all files stored for the <span class=\"text-primary\">%{name}</span> project. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.placeholder"
-msgstr "Type in the name of the project to confirm"
+msgstr "Type the name of the project to confirm"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.button"
-msgstr "I understand the consequences, delete all files"
+msgstr "Yes, remove all files"
 
 #, elixir-autogen, elixir-format
 msgid "default.name"
