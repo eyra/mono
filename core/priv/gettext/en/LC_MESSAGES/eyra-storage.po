@@ -85,11 +85,11 @@ msgstr "Storage"
 
 #, elixir-autogen, elixir-format
 msgid "create.storage.body"
-msgstr "Select the storage brand you want to use and click on the create button. A new storage card will be created in your project."
+msgstr "Choose where you want to store the data. Use 'Next' to view the data on the Next platform and export it to a device of your choice. Once you have connected a storage type, a data card will be added to your project."
 
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
-msgstr "Manage the connected storage by following the link below."
+msgstr "Connected! Visit the data storage card to manage your data."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
@@ -121,7 +121,7 @@ msgstr "Date"
 
 #, elixir-autogen, elixir-format
 msgid "table.file.label"
-msgstr "File"
+msgstr "Name"
 
 #, elixir-autogen, elixir-format
 msgid "table.size.label"
@@ -129,7 +129,7 @@ msgstr "Size"
 
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
-msgstr "Export all files"
+msgstr "Export all"
 
 #, elixir-autogen, elixir-format
 msgid "write_count.metric.label"
@@ -145,23 +145,23 @@ msgstr "Megabytes transferred"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty.files.button"
-msgstr "Empty storage"
+msgstr "Remove all"
 
 #, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.title"
-msgstr "Are you absolutely sure?"
+msgstr "Remove all files?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.body"
-msgstr "This action cannot be undone. This will permanantly delete all files stored in the <span class=\"text-primary\">%{name}</span> project. Please make sure you have exported all the files before proceeding."
+msgstr "Please note that this action will permanently delete all files stored for the <span class=\"text-primary\">%{name}</span> project. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.placeholder"
-msgstr "Type in the name of the project to confirm"
+msgstr "Type the name of the project to confirm"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.button"
-msgstr "I understand the consequences, delete all files"
+msgstr "Yes, remove all files"
 
 #, elixir-autogen, elixir-format
 msgid "default.name"
