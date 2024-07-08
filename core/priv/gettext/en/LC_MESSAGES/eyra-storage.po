@@ -89,7 +89,7 @@ msgstr "Choose where you want to store the data. Use 'Next' to view the data on 
 
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
-msgstr "Manage the connected storage by following the link below."
+msgstr "Connected! Visit the data storage card to manage your data."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
