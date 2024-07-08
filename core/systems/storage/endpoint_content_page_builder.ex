@@ -3,7 +3,6 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   import Frameworks.Utility.List
 
   alias Frameworks.Concept.Context
-  alias CoreWeb.UI.Timestamp
   alias Systems.Storage
   alias Systems.Monitor
 
@@ -80,17 +79,9 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     ready? = false
     context_name = Context.name(endpoint, "Current")
 
-    files =
-      endpoint
-      |> Storage.Public.list_files()
-      |> Enum.map(fn %{timestamp: timestamp} = file ->
-        %{file | timestamp: Timestamp.convert(timestamp, timezone)}
-      end)
-
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
         endpoint: endpoint,
-        files: files,
         context_name: context_name,
         timezone: timezone
       })

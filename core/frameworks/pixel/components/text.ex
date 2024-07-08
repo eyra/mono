@@ -64,7 +64,7 @@ defmodule Frameworks.Pixel.Text do
     """
   end
 
-  attr(:color, :string, default: "text-grey3")
+  attr(:color, :string, default: "text-grey2")
   attr(:text_alignment, :string, default: "text-center")
   attr(:padding, :string, default: "pl-4 pr-4")
   attr(:margin, :string, default: "mb-6")

@@ -166,3 +166,27 @@ msgstr "Yes, remove all files"
 #, elixir-autogen, elixir-format
 msgid "default.name"
 msgstr "Data"
+
+#, elixir-autogen, elixir-format
+msgid "files.description"
+msgstr "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvellous light."
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "files.recent.label"
+msgstr "Most recent %{recent} out of %{total} files"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.search.label"
+msgstr "Found %{result} out of %{total} files"
+
+#, elixir-autogen, elixir-format
+msgid "files.preview.title"
+msgstr "Preview"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.empty.description"
+msgstr "The storage is empty"

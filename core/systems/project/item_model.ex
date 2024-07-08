@@ -13,6 +13,7 @@ defmodule Systems.Project.ItemModel do
   alias Systems.Assignment
   alias Systems.Advert
   alias Systems.Graphite
+  alias Systems.Monitor
 
   schema "project_items" do
     field(:name, :string)
@@ -319,8 +320,11 @@ defmodule Systems.Project.ItemModel do
     end
 
     defp get_storage_endpoint_info(%Storage.EndpointModel{} = storage_endpoint) do
-      file_count = Storage.Public.file_count(storage_endpoint)
-      [dngettext("eyra-project", "1 file", "* files", file_count)]
+      write_count =
+        Monitor.Public.event({storage_endpoint, :write})
+        |> Monitor.Public.count()
+
+      [dngettext("eyra-project", "1 write request", "* write requests", write_count)]
     end
 
     defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do

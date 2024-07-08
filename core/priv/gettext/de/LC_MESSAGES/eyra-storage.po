@@ -166,3 +166,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "default.name"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.recent.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.search.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.preview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.empty.description"
+msgstr ""

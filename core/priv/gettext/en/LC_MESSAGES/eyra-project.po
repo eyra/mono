@@ -183,12 +183,6 @@ msgstr[1] "%{count} submissions"
 msgid "create_item_popup.create.button"
 msgstr "Create"
 
-#, elixir-autogen, elixir-format
-msgid "1 file"
-msgid_plural "* files"
-msgstr[0] "1 file"
-msgstr[1] "%{count} files"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "label.connected"
 msgstr "Connected"
@@ -196,3 +190,9 @@ msgstr "Connected"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "label.disconnected"
 msgstr "Disconnected"
+
+#, elixir-autogen, elixir-format
+msgid "1 write request"
+msgid_plural "* write requests"
+msgstr[0] "1 store request"
+msgstr[1] "%{count} store requests"

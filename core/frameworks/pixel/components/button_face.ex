@@ -153,7 +153,7 @@ defmodule Frameworks.Pixel.Button.Face do
       </div>
       <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
           <div class="w-6 h-6 animate-spin">
-            <img src={~p"/images/icons/loading@3x.png"} alt={"Loading"}>
+            <img src={~p"/images/icons/loading_white@3x.png"} alt={"Loading"}>
           </div>
         </div>
     </div>
