@@ -121,7 +121,7 @@ msgstr "Date"
 
 #, elixir-autogen, elixir-format
 msgid "table.file.label"
-msgstr "File"
+msgstr "Name"
 
 #, elixir-autogen, elixir-format
 msgid "table.size.label"
