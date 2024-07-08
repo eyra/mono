@@ -85,7 +85,7 @@ msgstr "Storage"
 
 #, elixir-autogen, elixir-format
 msgid "create.storage.body"
-msgstr "Select the storage brand you want to use and click on the create button. A new storage card will be created in your project."
+msgstr "Choose where you want to store the data. Use 'Next' to view the data on the Next platform and export it to a device of your choice. Once you have connected a storage type, a data card will be added to your project."
 
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
