@@ -412,8 +412,8 @@ msgstr "Privacy"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "storage.create.button"
-msgstr "Create storage"
+msgstr "Connect storage"
 
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
-msgstr "Go to storage"
+msgstr "Go to data storage"
