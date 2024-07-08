@@ -66,6 +66,11 @@ config :core, Oban,
      ]}
   ]
 
+config :packmatic, Packmatic.Source.URL,
+  hackney: [
+    pool: :default
+  ]
+
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
   quotas: [
@@ -116,7 +121,12 @@ config :core, CoreWeb.Endpoint,
   ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
-  http: [port: 4000]
+  http: [
+    port: 4000,
+    protocol_options: [
+      idle_timeout: :infinity
+    ]
+  ]
 
 config :core, :ssl,
   client: :native,

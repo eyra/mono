@@ -14,6 +14,7 @@ defmodule Systems.Storage.EndpointDataView do
       |> assign(
         endpoint: endpoint,
         files: files,
+        show: 100,
         context_name: context_name
       )
       |> update_buttons()
@@ -101,7 +102,7 @@ defmodule Systems.Storage.EndpointDataView do
         </div>
         <%= if not Enum.empty?(@files) do %>
           <.spacing value="L" />
-          <Storage.Html.files_table files={@files} />
+          <Storage.Html.files_table files={@files |> Enum.take(@show)} />
         <% end %>
       </Area.content>
     </div>
