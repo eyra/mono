@@ -416,4 +416,4 @@ msgstr "Connect storage"
 
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
-msgstr "Manage data storage"
+msgstr "Go to data storage"
