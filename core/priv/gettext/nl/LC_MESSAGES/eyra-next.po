@@ -21,4 +21,4 @@ msgstr "Deelnemer"
 
 #, elixir-autogen, elixir-format
 msgid "surfconext.signin.body"
-msgstr "Gebruik je organisatie login om in te loggen via Surfconext, deze optie is niet voor alle organisaties beschikbaar."
+msgstr "Heeft jouw organisatie toestemming gegeven om in te loggen via SURFconext? Klik dan op de onderstaande knop. Zo niet, gebruik dan jouw e-mailadres en wachtwoord."
