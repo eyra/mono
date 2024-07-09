@@ -3,10 +3,17 @@ defmodule CoreWeb.UI.Timestamp do
     Helper functions for displaying timestamps
   """
   use Timex
+  require Logger
   import CoreWeb.Gettext
 
   def convert(datetime, timezone \\ "Etc/UTC") do
-    Timex.Timezone.convert(datetime, timezone)
+    case Timex.Timezone.convert(datetime, timezone) do
+      {:error, error} ->
+        Logger.error("Error when converting date-time: timezone=#{timezone} error=#{error}")
+
+      result ->
+        result
+    end
   end
 
   def to_date(%{year: year, month: month, day: day}) do
