@@ -133,7 +133,7 @@ msgstr "Export all"
 
 #, elixir-autogen, elixir-format
 msgid "write_count.metric.label"
-msgstr "Store requests"
+msgstr "Files"
 
 #, elixir-autogen, elixir-format
 msgid "write_volume.kb.metric.label"
@@ -184,8 +184,8 @@ msgid "files.search.label"
 msgstr "Found %{result} out of %{total} files"
 
 #, elixir-autogen, elixir-format
-msgid "files.preview.title"
-msgstr "Preview"
+msgid "files.finder.title"
+msgstr "Finder"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"

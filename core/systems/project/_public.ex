@@ -17,7 +17,7 @@ defmodule Systems.Project.Public do
   alias Systems.Workflow
 
   @impl true
-  def name(%Systems.Storage.EndpointModel{} = model) do
+  def name(:parent, %Systems.Storage.EndpointModel{} = model) do
     case get_by_item_special(model) do
       %{name: name} -> {:ok, name}
       _ -> {:error, :not_found}
@@ -25,7 +25,15 @@ defmodule Systems.Project.Public do
   end
 
   @impl true
-  def name(_), do: {:error, :not_supported}
+  def name(:self, %Systems.Storage.EndpointModel{} = model) do
+    case get_item_by(model) do
+      %{name: name} -> {:ok, name}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  @impl true
+  def name(_, _), do: {:error, :not_supported}
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,

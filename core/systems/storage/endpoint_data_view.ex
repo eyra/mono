@@ -166,7 +166,7 @@ defmodule Systems.Storage.EndpointDataView do
             <Text.body_large><%= dgettext("eyra-storage", "files.description") %></Text.body_large>
             <.spacing value="M" />
             <div class="flex flex-row items-center">
-              <Text.title3><%= dgettext("eyra-storage", "files.preview.title") %></Text.title3>
+              <Text.title3><%= dgettext("eyra-storage", "files.finder.title") %></Text.title3>
               <div class="flex-grow" />
               <%= if is_nil(@query_string) or @query_string == "" do %>
                 <Text.caption><%= dgettext("eyra-storage", "files.recent.label", recent: @visible_count, total: @total_count) %></Text.caption>

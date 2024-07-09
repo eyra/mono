@@ -184,7 +184,7 @@ msgid "files.search.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "files.preview.title"
+msgid "files.finder.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy

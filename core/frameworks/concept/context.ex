@@ -1,12 +1,13 @@
 defmodule Frameworks.Concept.Context do
   defmodule Handler do
+    @type scope :: :self | :parent
     @type model :: struct()
-    @callback name(model) :: {:ok, binary()} | {:error, atom()}
+    @callback name(scope, model) :: {:ok, binary()} | {:error, atom()}
   end
 
-  def name(model, default) when is_struct(model) and is_binary(default) do
+  def name(scope, model, default) when is_struct(model) and is_binary(default) do
     Enum.reduce(handlers(), default, fn handler, acc ->
-      case handler.name(model) do
+      case handler.name(scope, model) do
         {:ok, name} -> name
         {:error, _} -> acc
       end

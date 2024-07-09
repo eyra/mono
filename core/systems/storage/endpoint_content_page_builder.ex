@@ -12,20 +12,16 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
       ) do
     show_errors = false
     tabs = create_tabs(endpoint, show_errors, assigns)
+    title = Context.name(:self, endpoint, "Data")
 
     %{
       id: id,
-      title: get_title(endpoint),
+      title: title,
       tabs: tabs,
       actions: [],
       show_errors: show_errors,
       active_menu_item: :projects
     }
-  end
-
-  defp get_title(endpoint) do
-    special = Storage.EndpointModel.special_field(endpoint)
-    Storage.ServiceIds.translate(special)
   end
 
   defp get_tab_keys(endpoint) do
@@ -77,7 +73,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = false
-    context_name = Context.name(endpoint, "Current")
+    context_name = Context.name(:parent, endpoint, "Current")
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
