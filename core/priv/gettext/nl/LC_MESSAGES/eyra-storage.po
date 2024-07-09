@@ -132,15 +132,15 @@ msgid "export.files.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "write_count.metric.label"
+msgid "files.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "write_volume.kb.metric.label"
+msgid "bytes.kb.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "write_volume.mb.metric.label"
+msgid "bytes.mb.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -189,4 +189,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bytes.metric.label"
 msgstr ""

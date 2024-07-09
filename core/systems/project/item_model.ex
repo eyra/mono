@@ -321,7 +321,7 @@ defmodule Systems.Project.ItemModel do
 
     defp get_storage_endpoint_info(%Storage.EndpointModel{} = storage_endpoint) do
       write_count =
-        Monitor.Public.event({storage_endpoint, :write})
+        Monitor.Public.event({storage_endpoint, :bytes})
         |> Monitor.Public.count()
 
       [dngettext("eyra-project", "1 write request", "* write requests", write_count)]

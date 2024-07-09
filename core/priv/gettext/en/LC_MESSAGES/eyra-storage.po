@@ -132,16 +132,16 @@ msgid "export.files.button"
 msgstr "Export all"
 
 #, elixir-autogen, elixir-format
-msgid "write_count.metric.label"
+msgid "files.metric.label"
 msgstr "Files"
 
 #, elixir-autogen, elixir-format
-msgid "write_volume.kb.metric.label"
-msgstr "Kilobytes transferred"
+msgid "bytes.kb.metric.label"
+msgstr "Kilobytes"
 
 #, elixir-autogen, elixir-format
-msgid "write_volume.mb.metric.label"
-msgstr "Megabytes transferred"
+msgid "bytes.mb.metric.label"
+msgstr "Megabytes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty.files.button"
@@ -190,3 +190,7 @@ msgstr "Finder"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"
 msgstr "The storage is empty"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bytes.metric.label"
+msgstr "Bytes"

@@ -13,9 +13,12 @@ defmodule Systems.Monitor.Queries do
   end
 
   def upsert_event(%Multi{} = multi, [_ | _] = identifier, value) do
+    uuid = Ecto.UUID.generate()
+    name = "metric_#{uuid}"
+
     Multi.insert(
       multi,
-      :metric,
+      name,
       %Monitor.EventModel{
         identifier: identifier,
         value: value

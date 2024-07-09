@@ -118,26 +118,34 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   end
 
   defp number_widgets(endpoint) do
-    [:write_count, :write_volume]
+    [:files, :bytes]
     |> Enum.map(&number_widget(&1, endpoint))
   end
 
-  defp number_widget(:write_volume, special) do
+  defp number_widget(:bytes, special) do
     sum =
-      Monitor.Public.event({special, :write})
+      Monitor.Public.event({special, :bytes})
       |> Monitor.Public.sum()
 
     {label, metric} =
-      if sum >= 1024 * 1024 do
-        {
-          dgettext("eyra-storage", "write_volume.mb.metric.label"),
-          Integer.floor_div(sum, 1024 * 1024)
-        }
-      else
-        {
-          dgettext("eyra-storage", "write_volume.kb.metric.label"),
-          Integer.floor_div(sum, 1024)
-        }
+      cond do
+        sum >= 1024 * 1024 ->
+          {
+            dgettext("eyra-storage", "bytes.mb.metric.label"),
+            Integer.floor_div(sum, 1024 * 1024)
+          }
+
+        sum >= 1024 ->
+          {
+            dgettext("eyra-storage", "bytes.kb.metric.label"),
+            Integer.floor_div(sum, 1024)
+          }
+
+        true ->
+          {
+            dgettext("eyra-storage", "bytes.metric.label"),
+            sum
+          }
       end
 
     %{
@@ -147,13 +155,13 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     }
   end
 
-  defp number_widget(:write_count, endpoint) do
+  defp number_widget(:files, endpoint) do
     metric =
-      Monitor.Public.event({endpoint, :write})
-      |> Monitor.Public.count()
+      Monitor.Public.event({endpoint, :files})
+      |> Monitor.Public.sum()
 
     %{
-      label: dgettext("eyra-storage", "write_count.metric.label"),
+      label: dgettext("eyra-storage", "files.metric.label"),
       metric: metric,
       color: :primary
     }

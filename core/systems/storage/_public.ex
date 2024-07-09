@@ -60,8 +60,9 @@ defmodule Systems.Storage.Public do
     Rate.Public.request_permission(key, remote_ip, packet_size)
 
     Multi.new()
-    |> Monitor.Public.multi_log({endpoint, :write}, value: packet_size)
-    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :write}}, %{
+    |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
+    |> Monitor.Public.multi_log({endpoint, :files})
+    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}}, %{
       storage_endpoint: endpoint
     })
     |> Repo.transaction()
@@ -89,7 +90,14 @@ defmodule Systems.Storage.Public do
 
   def delete_files(endpoint) do
     apply_on_special_backend(endpoint, :delete_files)
-    Signal.Public.dispatch({:storage_endpoint, :delete_files}, %{storage_endpoint: endpoint})
+
+    Multi.new()
+    |> Monitor.Public.multi_reset({endpoint, :bytes})
+    |> Monitor.Public.multi_reset({endpoint, :files})
+    |> Signal.Public.multi_dispatch({:storage_endpoint, :delete_files}, %{
+      storage_endpoint: endpoint
+    })
+    |> Repo.transaction()
   end
 
   defp apply_on_special_backend(endpoint, function_name) when is_atom(function_name) do
