@@ -153,11 +153,11 @@ msgstr "Remove all files?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.body"
-msgstr "Please note that this action will permanently delete all files stored for the <span class=\"text-primary\">%{name}</span> project. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
+msgstr "Please note that this action will permanently delete all files stored for the following project: <span class=\"text-primary\">%{name}</span>. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.placeholder"
-msgstr "Type the name of the project to confirm"
+msgstr "Enter the project name to confirm"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty_confirmation_view.button"
@@ -169,7 +169,7 @@ msgstr "Data"
 
 #, elixir-autogen, elixir-format
 msgid "files.description"
-msgstr "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvellous light."
+msgstr "The most recently stored files are listed below. Use the finder to search for specific files. You can export all files that are stored and remove all files from the storage once you are done. Please note that exporting a large number of files can take several minutes."
 
 #, elixir-autogen, elixir-format
 msgid "search.placeholder"
@@ -189,7 +189,7 @@ msgstr "Finder"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"
-msgstr "The storage is empty"
+msgstr "No files stored yet. Once files are stored you will be able to search through the files by using the finder, export all files to your device of choice and remove all files from the storage."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "bytes.metric.label"
