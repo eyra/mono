@@ -10,6 +10,7 @@ defmodule CoreWeb.UI.Timestamp do
     case Timex.Timezone.convert(datetime, timezone) do
       {:error, error} ->
         Logger.error("Error when converting date-time: timezone=#{timezone} error=#{error}")
+        datetime
 
       result ->
         result
