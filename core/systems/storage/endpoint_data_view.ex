@@ -126,6 +126,11 @@ defmodule Systems.Storage.EndpointDataView do
   end
 
   @impl true
+  def handle_event("update_files", _payload, socket) do
+    {:noreply, socket |> send_event(:files_view, "start_loading")}
+  end
+
+  @impl true
   def handle_event("search_query", %{query: query, query_string: query_string}, socket) do
     {
       :noreply,
