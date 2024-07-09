@@ -21,4 +21,4 @@ msgstr "Participant"
 
 #, elixir-autogen, elixir-format
 msgid "surfconext.signin.body"
-msgstr "You can use your institution credentials to sign in on Next, through <span class=\"text-primary underline\"><a href=\"https://www.surf.nl/en/services/surfconext\" target=\"_blank\">SURFconext</a></span>. Your personal data is used to ensure proper functioning of the platform. More info? Check out our <span class=\"text-primary underline\"><a href=\"https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752\" target=\"_blank\">privacy statement</a></span>."
+msgstr "If your institution allows access to the Next platform through SURFconext use the button below to sign in. Otherwise use your email address and password."
