@@ -364,11 +364,11 @@ msgstr "Enables participants to submit their method to the challenge with a GitH
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "The url below can be used to invite people to test your study. Participants need to sign in or create an account to participate. After sign in, they are forwarded to your study."
+msgstr "Use the url below to invite participants. Participants need to sign in or create an account to participate."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
-msgstr "Study link"
+msgstr "Participant invite link"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.general_instruction.description"
