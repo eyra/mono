@@ -41,6 +41,10 @@ if config_env() == :prod do
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
+  # RATE LIMITER
+
+  config :core, :rate, quotas: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
+
   # MAILGUN
 
   if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
