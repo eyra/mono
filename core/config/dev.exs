@@ -61,7 +61,7 @@ config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
-    [service: :storage_export, limit: 10, unit: :call, window: :minute, scope: :local]
+    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
   ]
 
 config :core, Core.ImageCatalog.Unsplash,
