@@ -44,16 +44,19 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:general, %{content_flags: %{general: false}}), do: nil
-
-  @impl true
-  def compose(:general, %{entity: %{info: info}, viewport: viewport, breakpoint: breakpoint}) do
+  def compose(:general, %{
+        entity: %{info: info},
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }) do
     %{
       module: Assignment.GeneralForm,
       params: %{
         entity: info,
         viewport: viewport,
-        breakpoint: breakpoint
+        breakpoint: breakpoint,
+        content_flags: content_flags
       }
     }
   end
