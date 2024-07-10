@@ -89,14 +89,18 @@ defmodule Systems.Storage.Public do
   end
 
   def delete_files(endpoint) do
-    apply_on_special_backend(endpoint, :delete_files)
-
     Multi.new()
     |> Monitor.Public.multi_reset({endpoint, :bytes})
     |> Monitor.Public.multi_reset({endpoint, :files})
     |> Signal.Public.multi_dispatch({:storage_endpoint, :delete_files}, %{
       storage_endpoint: endpoint
     })
+    |> Multi.run(:delete_files, fn _, _ ->
+      case apply_on_special_backend(endpoint, :delete_files) do
+        :ok -> {:ok, true}
+        {:error, error} -> {:error, error}
+      end
+    end)
     |> Repo.transaction()
   end
 

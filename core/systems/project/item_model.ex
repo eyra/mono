@@ -320,11 +320,11 @@ defmodule Systems.Project.ItemModel do
     end
 
     defp get_storage_endpoint_info(%Storage.EndpointModel{} = storage_endpoint) do
-      write_count =
-        Monitor.Public.event({storage_endpoint, :bytes})
-        |> Monitor.Public.count()
+      file_count =
+        Monitor.Public.event({storage_endpoint, :files})
+        |> Monitor.Public.sum()
 
-      [dngettext("eyra-project", "1 write request", "* write requests", write_count)]
+      [dngettext("eyra-project", "1 file", "* files", file_count)]
     end
 
     defp get_leaderboard_info(%Graphite.LeaderboardModel{id: _id, tool: tool}, timezone) do
