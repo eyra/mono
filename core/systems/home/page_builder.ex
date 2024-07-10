@@ -1,5 +1,6 @@
 defmodule Systems.Home.PageBuilder do
   use CoreWeb, :verified_routes
+  use Core.FeatureFlags
 
   import CoreWeb.Gettext
   import Frameworks.Utility.List
@@ -56,7 +57,7 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp put_locale(%Account.User{creator: false}, true) do
+  defp put_locale(%Systems.Account.User{creator: false}, true) do
     CoreWeb.LiveLocale.put_locale("nl")
   end
 
@@ -65,8 +66,9 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action, :available]
-    |> append_if(:participated, Keyword.get(opts, :panl?, false))
+    [:next_best_action]
+    |> append_if(:available, feature_enabled?(:panl))
+    |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
   end
 
   defp block_keys(_singleton, _opts) do

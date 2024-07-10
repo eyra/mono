@@ -1,4 +1,6 @@
 defmodule Systems.Pool.Public do
+  use Core.FeatureFlags
+
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Pool.Queries

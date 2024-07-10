@@ -93,7 +93,9 @@ config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
-config :core, :features, leaderboard: true
+config :core, :features,
+  panl: false,
+  surfconext_sign_in: false
 
 try do
   import_config "dev.secret.exs"
