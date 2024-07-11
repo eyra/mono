@@ -311,10 +311,6 @@ msgid "declined.participants"
 msgstr "Toestemming geweigerd"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.general.title"
-msgstr "General"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
 msgstr ""
 
@@ -416,4 +412,8 @@ msgstr "Offline halen"
 
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.not_available.warning"
 msgstr ""

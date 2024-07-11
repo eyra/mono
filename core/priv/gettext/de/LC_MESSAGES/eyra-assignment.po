@@ -312,10 +312,6 @@ msgid "declined.participants"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.general.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "settings.language.label"
 msgstr ""
 
@@ -418,3 +414,7 @@ msgstr "Create storage"
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
 msgstr "Go to storage"
+
+#, elixir-autogen, elixir-format
+msgid "storage.not_available.warning"
+msgstr ""

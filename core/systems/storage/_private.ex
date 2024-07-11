@@ -28,7 +28,7 @@ defmodule Systems.Storage.Private do
   def special_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
 
   @spec storage_info(any()) ::
-          nil
+          {:error, {:storage_info, :not_available}}
           | %{
               backend:
                 Systems.Storage.AWS.Backend
@@ -50,7 +50,7 @@ defmodule Systems.Storage.Private do
   def storage_info(storage_endpoint, %{external_panel: external_panel}) do
     if special = Storage.EndpointModel.special(storage_endpoint) do
       {key, backend} = special_info(special)
-      %{key: key, special: special, backend: backend}
+      {:ok, %{key: key, special: special, backend: backend}}
     else
       storage_info(external_panel)
     end
@@ -59,8 +59,8 @@ defmodule Systems.Storage.Private do
   def storage_info(:liss) do
     special = %Storage.Centerdata.EndpointModel{url: @centerdata_callback_url}
     backend = Storage.Centerdata.Backend
-    %{key: :centerdata, special: special, backend: backend}
+    {:ok, %{key: :centerdata, special: special, backend: backend}}
   end
 
-  def storage_info(_), do: nil
+  def storage_info(_), do: {:error, {:storage_info, :not_available}}
 end

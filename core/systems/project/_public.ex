@@ -97,9 +97,9 @@ defmodule Systems.Project.Public do
       |> List.first()
 
     if storage_endpoint_item do
-      Map.get(storage_endpoint_item, :storage_endpoint)
+      {:ok, Map.get(storage_endpoint_item, :storage_endpoint)}
     else
-      nil
+      {:error, {:storage_endpoint, :not_available}}
     end
   end
 

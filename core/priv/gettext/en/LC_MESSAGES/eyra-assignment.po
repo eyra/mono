@@ -311,10 +311,6 @@ msgid "declined.participants"
 msgstr "Declined consent"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.general.title"
-msgstr "General"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
 msgstr "Language setting for participants"
 
@@ -417,3 +413,7 @@ msgstr "Connect storage"
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
 msgstr "Go to data storage"
+
+#, elixir-autogen, elixir-format
+msgid "storage.not_available.warning"
+msgstr "Please setup connection to a data storage"
