@@ -30,4 +30,26 @@ defmodule Systems.Storage.Html do
       <.table layout={@layout} head_cells={@head_cells} rows={@rows} border={false} />
     """
   end
+
+  attr(:connected?, :boolean, required: true)
+
+  def account_status(%{connected?: connected?} = assigns) do
+    {label, icon} =
+      if connected? do
+        {dgettext("eyra-storage", "account.status.valid"), "ready.svg"}
+      else
+        {dgettext("eyra-storage", "account.status.invalid"), "warning.svg"}
+      end
+
+    assigns = assign(assigns, label: label, icon: icon)
+
+    ~H"""
+    <div class="flex flex-row items-center gap-2">
+      <div class="w-6 h-6">
+        <img src={~p"/images/icons/#{@icon}"} alt={@label}>
+      </div>
+      <Text.caption color="text-grey2" padding=""><%= @label %></Text.caption>
+    </div>
+    """
+  end
 end

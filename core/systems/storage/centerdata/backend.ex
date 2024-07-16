@@ -51,4 +51,9 @@ defmodule Systems.Storage.Centerdata.Backend do
     Logger.error("Not yet implemented: delete_files/1")
     {:error, :not_implemented}
   end
+
+  def connected?(_endpoint) do
+    # Always connected, no account settings in endpoint model
+    true
+  end
 end

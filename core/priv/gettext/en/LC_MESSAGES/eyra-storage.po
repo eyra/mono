@@ -101,7 +101,7 @@ msgstr "Go to Files"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
-msgstr "Settings"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings.forward"
@@ -194,3 +194,19 @@ msgstr "No files stored yet. Once files are stored you will be able to search th
 #, elixir-autogen, elixir-format, fuzzy
 msgid "bytes.metric.label"
 msgstr "Bytes"
+
+#, elixir-autogen, elixir-format
+msgid "account.status.invalid"
+msgstr "Invalid credentials"
+
+#, elixir-autogen, elixir-format
+msgid "account.status.testing"
+msgstr "Testing credentials"
+
+#, elixir-autogen, elixir-format
+msgid "account.status.valid"
+msgstr "Valid credentials"
+
+#, elixir-autogen, elixir-format
+msgid "account.submit.button"
+msgstr "Save and test"

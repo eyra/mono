@@ -73,6 +73,20 @@ defmodule Fabric do
       end
 
       defoverridable compose: 2
+
+      def async(%Phoenix.LiveView.Socket{assigns: assigns} = socket, name, closure) do
+        async(assigns, name, closure)
+      end
+
+      def async(%{fabric: fabric}, name, closure) do
+        async(fabric, name, closure)
+      end
+
+      def async(%Fabric.Model{self: self}, name, closure) when is_function(closure, 0) do
+        Task.async(fn ->
+          %{async: %{source: self, event: name, result: closure.()}}
+        end)
+      end
     end
   end
 

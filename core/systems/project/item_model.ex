@@ -273,7 +273,7 @@ defmodule Systems.Project.ItemModel do
         path: ~p"/storage/#{storage_endpoint_id}/content",
         image_info: image_info,
         icon_url: icon_url,
-        label: get_label(:connected),
+        label: get_label(Storage.Public.status(storage_endpoint)),
         title: name,
         tags: get_card_tags(storage_endpoint),
         info: get_storage_endpoint_info(storage_endpoint),
@@ -281,12 +281,6 @@ defmodule Systems.Project.ItemModel do
         right_actions: [delete]
       }
     end
-
-    defp get_label(:connected),
-      do: %{type: :success, text: dgettext("eyra-project", "label.connected")}
-
-    defp get_label(:disconnected),
-      do: %{type: :delete, text: dgettext("eyra-project", "label.disconnected")}
 
     defp get_label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}

@@ -19,6 +19,7 @@ const HIDDEN = "hidden";
 export const LiveContent = {
   mounted() {
     console.log("LiveContent mounted", this.el);
+    console.log("DATA_SHOW_ERRORS", this.el.getAttribute(DATA_SHOW_ERRORS));
     this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
     this.activeField = undefined;
 
@@ -45,6 +46,8 @@ export const LiveContent = {
     this.applyActiveField();
   },
   updated() {
+    console.log("LiveContent Updated", this.el);
+    console.log("DATA_SHOW_ERRORS", this.el.getAttribute(DATA_SHOW_ERRORS));
     this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
     this.applyErrors();
     this.applyActiveField();
@@ -63,8 +66,13 @@ export const LiveContent = {
 
     console.log("fieldErrors", fieldErrors);
 
+    console.log("this.showErrors", this.showErrors);
+
     if (this.showErrors) {
-      fieldErrors.forEach((fieldError) => fieldError.classList.remove(HIDDEN));
+      fieldErrors.forEach((fieldError) => {
+        fieldError.classList.remove(HIDDEN);
+        console.log("fieldError.classList", fieldError.classList);
+      });
     } else {
       fieldErrors.forEach((fieldError) => fieldError.classList.add(HIDDEN));
     }

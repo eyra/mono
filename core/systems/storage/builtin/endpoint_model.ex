@@ -32,6 +32,10 @@ defmodule Systems.Storage.BuiltIn.EndpointModel do
     changeset.valid?()
   end
 
+  def connected?(_endpoint) do
+    {:ok, true}
+  end
+
   def preload_graph(:down), do: []
 
   defimpl Frameworks.Concept.ContentModel do

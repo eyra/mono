@@ -137,7 +137,7 @@ defmodule Systems.Content.Html do
             </Navigation.action_bar>
           </:top_bar>
 
-          <div id="assignment" phx-hook="LiveContent" data-show-errors={@show_errors}>
+          <div id="content_management_tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbar.content tabs={@tabs} />
           </div>
           <Tabbar.footer tabs={@tabs} />

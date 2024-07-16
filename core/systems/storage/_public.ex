@@ -104,6 +104,39 @@ defmodule Systems.Storage.Public do
     |> Repo.transaction()
   end
 
+  def connected?(special) do
+    {_, backend} = Storage.Private.special_info(special)
+    connected? = apply(backend, :connected?, [special])
+
+    if connected? do
+      Monitor.Public.log({special, :connected})
+    else
+      Monitor.Public.reset({special, :connected})
+    end
+
+    connected?
+  end
+
+  def status(%Storage.EndpointModel{} = endpoint) do
+    status(Storage.EndpointModel.special(endpoint))
+  end
+
+  def status(%Storage.BuiltIn.EndpointModel{}), do: :online
+  def status(%Storage.Centerdata.EndpointModel{}), do: :online
+
+  def status(special) do
+    sum =
+      {special, :connected}
+      |> Monitor.Public.event()
+      |> Monitor.Public.sum()
+
+    if sum <= 0 do
+      :concept
+    else
+      :online
+    end
+  end
+
   defp apply_on_special_backend(endpoint, function_name) when is_atom(function_name) do
     special = Storage.EndpointModel.special(endpoint)
     {_, backend} = Storage.Private.special_info(special)
@@ -119,6 +152,15 @@ defimpl Core.Persister, for: Systems.Storage.EndpointModel do
   def save(_endpoint, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :storage_endpoint) do
       {:ok, %{storage_endpoint: storage_endpoint}} -> {:ok, storage_endpoint}
+      _ -> {:error, changeset}
+    end
+  end
+end
+
+defimpl Core.Persister, for: Systems.Storage.Yoda.EndpointModel do
+  def save(_endpoint, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :yoda_endpoint) do
+      {:ok, %{yoda_endpoint: yoda_endpoint}} -> {:ok, yoda_endpoint}
       _ -> {:error, changeset}
     end
   end

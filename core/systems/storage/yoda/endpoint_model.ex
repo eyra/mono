@@ -3,11 +3,13 @@ defmodule Systems.Storage.Yoda.EndpointModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+  alias Systems.Storage.Yoda
 
   @fields ~w(url user password)a
   @required_fields @fields
 
   @derive {Jason.Encoder, only: @fields}
+  @derive {Inspect, except: [:password]}
   schema "storage_endpoints_yoda" do
     field(:url, :string)
     field(:user, :string)

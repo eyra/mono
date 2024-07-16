@@ -183,14 +183,6 @@ msgstr[1] ""
 msgid "create_item_popup.create.button"
 msgstr "Maak aan"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "label.connected"
-msgstr "Concept"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "label.disconnected"
-msgstr "Concept"
-
 #, elixir-autogen, elixir-format
 msgid "1 file"
 msgid_plural "* files"

@@ -10,7 +10,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
         %{id: id} = endpoint,
         assigns
       ) do
-    show_errors = false
+    show_errors = true
     tabs = create_tabs(endpoint, show_errors, assigns)
     title = Context.name(:self, endpoint, "Data")
 
@@ -48,7 +48,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          show_errors,
          %{fabric: fabric} = _assigns
        ) do
-    ready? = false
+    ready? = true
 
     child =
       Fabric.prepare_child(fabric, :settings_view, Storage.EndpointSettingsView, %{
@@ -72,7 +72,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          show_errors,
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
-    ready? = false
+    ready? = true
     context_name = Context.name(:parent, endpoint, "Current")
 
     child =
@@ -99,7 +99,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          show_errors,
          %{fabric: fabric} = _assigns
        ) do
-    ready? = false
+    ready? = true
 
     child =
       Fabric.prepare_child(fabric, :monitor_view, Storage.EndpointMonitorView, %{

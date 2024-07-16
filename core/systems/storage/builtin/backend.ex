@@ -26,6 +26,12 @@ defmodule Systems.Storage.BuiltIn.Backend do
     special().delete_files(folder)
   end
 
+  @impl true
+  def connected?(_endpoint) do
+    # Always connected, no account settings in endpoint model
+    true
+  end
+
   defp filename(%{"identifier" => identifier}) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}=#{value}" end)

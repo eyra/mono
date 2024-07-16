@@ -15,6 +15,10 @@ defmodule Systems.Storage.Yoda.Client do
     http_request(:mkcol, folder_url, "", headers)
   end
 
+  def connected?(username, password, folder_url) do
+    has_resource?(username, password, folder_url)
+  end
+
   def has_resource?(username, password, resource_url) do
     headers = headers(username, password)
 

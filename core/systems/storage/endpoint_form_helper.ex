@@ -2,61 +2,100 @@ defmodule Systems.Storage.EndpointForm.Helper do
   defmacro __using__(model) do
     quote do
       use CoreWeb.LiveForm
+      require Logger
+
+      alias Systems.Storage
 
       alias unquote(model), as: Model
 
       # Handle initial update
       @impl true
       def update(
-            %{id: id, model: model},
+            %{id: id, entity: entity},
             socket
           ) do
+        changeset = Model.changeset(entity, %{})
+        show_status = Map.get(socket.assigns, :show_status, false)
+        loading = Map.get(socket.assigns, :loading, false)
+        connected? = Map.get(socket.assigns, :connected?, false)
+
         {
           :ok,
           socket
           |> assign(
             id: id,
-            model: model,
-            attrs: %{},
-            show_errors: false
+            entity: entity,
+            changeset: changeset,
+            show_status: show_status,
+            loading: loading,
+            connected?: connected?
           )
-          |> update_changeset()
+          |> update_submit_button()
         }
       end
 
+      defp update_submit_button(%{assigns: %{loading: loading}} = socket) do
+        submit_button = %{
+          face: %{
+            type: :primary,
+            label: dgettext("eyra-storage", "account.submit.button"),
+            loading: loading
+          },
+          action: %{type: :submit}
+        }
+
+        assign(socket, submit_button: submit_button)
+      end
+
       @impl true
-      def handle_event("save", %{"endpoint_model" => attrs}, socket) do
+      def handle_event("change", _payload, socket) do
+        {:noreply, socket |> assign(show_status: false)}
+      end
+
+      @impl true
+      def handle_event(
+            "save",
+            %{"endpoint_model" => attrs},
+            %{assigns: %{entity: entity}} = socket
+          ) do
+        changeset = Model.changeset(entity, attrs)
+
         {
           :noreply,
           socket
-          |> assign(attrs: attrs)
-          |> update_changeset()
+          |> auto_save(changeset)
+          |> validate()
+          |> test_connection()
         }
       end
 
       @impl true
-      def handle_event("show_errors", _payload, %{assigns: %{changeset: changeset}} = socket) do
+      def handle_event("connected?", connected?, socket) do
         {
           :noreply,
-          socket |> assign(show_errors: true)
+          socket
+          |> assign(connected?: connected?, loading: false, show_status: true)
+          |> update_submit_button()
         }
       end
 
-      defp update_changeset(%{assigns: %{id: id, model: model, attrs: attrs}} = socket) do
+      defp validate(%{assigns: %{entity: entity}} = socket) do
         changeset =
-          Model.changeset(model, attrs)
+          entity
+          |> Model.changeset(%{})
           |> Model.validate()
 
-        changeset =
-          if model.id do
-            Map.put(changeset, :action, :update)
-          else
-            Map.put(changeset, :action, :insert)
-          end
+        assign(socket, changeset: %Ecto.Changeset{changeset | action: :update})
+      end
+
+      defp test_connection(%{assigns: %{changeset: changeset, entity: entity}} = socket) do
+        async(socket, "connected?", fn ->
+          Storage.Public.connected?(entity)
+        end)
 
         socket
-        |> assign(:changeset, changeset)
-        |> send_event(:parent, "update", %{changeset: changeset})
+        |> assign(loading: changeset.valid?, show_status: false)
+        |> update_submit_button()
       end
     end
   end

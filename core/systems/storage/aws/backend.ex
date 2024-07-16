@@ -27,6 +27,12 @@ defmodule Systems.Storage.AWS.Backend do
     {:error, :not_implemented}
   end
 
+  @impl true
+  def connected?(_endpoint) do
+    # FIXME
+    false
+  end
+
   defp filename(%{"identifier" => identifier}) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)

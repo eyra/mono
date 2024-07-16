@@ -194,3 +194,19 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "bytes.metric.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.testing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.valid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.submit.button"
+msgstr ""

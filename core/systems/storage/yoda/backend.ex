@@ -32,6 +32,34 @@ defmodule Systems.Storage.Yoda.Backend do
     {:error, :not_implemented}
   end
 
+  def connected?(%{user: user, password: _, url: _}) when user == nil or user == "", do: false
+
+  def connected?(%{user: _, password: password, url: _}) when password == nil or password == "",
+    do: false
+
+  def connected?(%{user: _, password: _, url: url}) when url == nil or url == "", do: false
+
+  def connected?(%{user: user, password: password, url: url}) do
+    cond do
+      is_nil(user) or user == "" ->
+        false
+
+      is_nil(password) or password == "" ->
+        false
+
+      is_nil(url) or url == "" ->
+        false
+
+      true ->
+        case Yoda.Client.connected?(user, password, url) do
+          {:ok, connected?} -> connected?
+          {:error, _} -> false
+        end
+    end
+  end
+
+  def connected?(_), do: false
+
   defp filename(%{"identifier" => identifier}) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
