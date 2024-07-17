@@ -121,6 +121,10 @@ defmodule CoreWeb.UI.Timestamp do
     DateTime.compare(date1, date2) == :gt
   end
 
+  def after?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
+    NaiveDateTime.compare(date1, date2) == :gt
+  end
+
   def before?(date1, date2) when is_binary(date1) and is_binary(date2) do
     before?(
       parse_user_input_date(date1),
@@ -134,6 +138,10 @@ defmodule CoreWeb.UI.Timestamp do
 
   def before?(%DateTime{} = date1, %DateTime{} = date2) do
     DateTime.compare(date1, date2) == :lt
+  end
+
+  def before?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
+    NaiveDateTime.compare(date1, date2) == :lt
   end
 
   def parse_user_input_date(input, timezone \\ "Etc/UTC")
