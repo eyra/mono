@@ -13,7 +13,7 @@
 
 * Changed: Format of the filenames in Storages. Also no folders used anymore. This has impact on Data Donation studies.
 * Changed: Assignment does not have a Storage association anymore. Projects can have one Storage that is shared between all the project items.
-* Added: Storage project item
+* Added: Storage project item (BuiltIn and Yoda)
 * Added: Support for German language in assignments
 
 ## \#1 2024-06-12
