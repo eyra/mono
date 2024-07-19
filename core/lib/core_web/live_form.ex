@@ -19,6 +19,11 @@ defmodule CoreWeb.LiveForm do
         socket
       end
 
+      def flash_error(socket, message) do
+        Frameworks.Pixel.Flash.push_error(message)
+        socket
+      end
+
       def flash_persister_error(socket) do
         socket
         |> flash_persister_error(dgettext("eyra-ui", "persister.error.flash"))

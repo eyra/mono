@@ -7,6 +7,8 @@ defmodule Systems.Project.Public do
 
   alias Core.Authorization
   alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Systems.Account.User
 
   alias Systems.Advert
@@ -332,11 +334,31 @@ defmodule Systems.Project.Public do
   end
 
   def add_owner!(%Project.Model{} = project, user) do
-    :ok = Authorization.assign_role(user, project, :owner)
+    Multi.new()
+    |> Ecto.Multi.put(:project, project)
+    |> Ecto.Multi.put(:user, user)
+    |> Multi.run(:add, fn _, %{user: user, project: project} ->
+      case Authorization.assign_role(user, project, :owner) do
+        :ok -> {:ok, :added}
+        error -> {:error, error}
+      end
+    end)
+    |> Signal.Public.multi_dispatch({:project, :add_owner})
+    |> Repo.transaction()
   end
 
   def remove_owner!(%Project.Model{} = project, user) do
-    Authorization.remove_role!(user, project, :owner)
+    Multi.new()
+    |> Ecto.Multi.put(:project, project)
+    |> Ecto.Multi.put(:user, user)
+    |> Multi.run(:remove, fn _, %{user: user, project: project} ->
+      case Authorization.remove_role!(user, project, :owner) do
+        {count, _} when count > 0 -> {:ok, :removed}
+        error -> {:error, error}
+      end
+    end)
+    |> Signal.Public.multi_dispatch({:project, :remove_owner})
+    |> Repo.transaction()
   end
 
   def list_owners(%Project.Model{} = project, preload \\ []) do

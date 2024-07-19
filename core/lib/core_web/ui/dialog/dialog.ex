@@ -3,7 +3,7 @@ defmodule CoreWeb.UI.Dialog do
 
   alias Frameworks.Pixel.Button
 
-  attr(:title, :string, required: true)
+  attr(:title, :string, default: nil)
   attr(:text, :string, default: nil)
   attr(:buttons, :list, default: [])
   slot(:inner_block)
@@ -12,9 +12,11 @@ defmodule CoreWeb.UI.Dialog do
     ~H"""
     <div class="h-full">
       <div class="flex flex-col gap-4 sm:gap-8">
-        <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
-          <%= @title %>
-        </div>
+        <%= if @title do %>
+          <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+            <%= @title %>
+          </div>
+        <% end %>
         <%= if @text do %>
           <div class="text-bodymedium font-body sm:text-bodylarge">
             <%= @text %>

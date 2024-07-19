@@ -200,10 +200,6 @@ msgid "account.status.invalid"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "account.status.testing"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "account.status.valid"
 msgstr ""
 

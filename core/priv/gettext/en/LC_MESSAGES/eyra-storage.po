@@ -200,10 +200,6 @@ msgid "account.status.invalid"
 msgstr "Invalid credentials"
 
 #, elixir-autogen, elixir-format
-msgid "account.status.testing"
-msgstr "Testing credentials"
-
-#, elixir-autogen, elixir-format
 msgid "account.status.valid"
 msgstr "Valid credentials"
 

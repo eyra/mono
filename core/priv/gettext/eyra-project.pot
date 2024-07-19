@@ -40,14 +40,6 @@ msgid "overview.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "share.dialog.content"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.group"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "config.title"
 msgstr ""
 
@@ -109,10 +101,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "create.item.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.form.name.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -188,3 +176,7 @@ msgid "1 file"
 msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "people.page.title"
+msgstr ""

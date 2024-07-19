@@ -139,8 +139,8 @@ defmodule Systems.Project.ItemModel do
       path = ~p"/assignment/#{assignment_id}/content"
 
       edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
+        action: %{type: :send, event: "rename", item: id},
+        face: %{type: :label, label: "Rename", wrap: true}
       }
 
       delete = %{
@@ -178,8 +178,8 @@ defmodule Systems.Project.ItemModel do
       logo_url = assignment.info.logo_url
 
       edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
+        action: %{type: :send, event: "rename", item: id},
+        face: %{type: :label, label: "Rename", wrap: true}
       }
 
       delete = %{
@@ -216,8 +216,8 @@ defmodule Systems.Project.ItemModel do
       logo_url = assignment.info.logo_url
 
       edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
+        action: %{type: :send, event: "rename", item: id},
+        face: %{type: :label, label: "Rename", wrap: true}
       }
 
       delete = %{
@@ -256,8 +256,8 @@ defmodule Systems.Project.ItemModel do
       image_info = ImageHelpers.get_image_info(image_id, 400, 200)
 
       edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
+        action: %{type: :send, event: "rename", item: id},
+        face: %{type: :label, label: "Rename", wrap: true}
       }
 
       delete = %{

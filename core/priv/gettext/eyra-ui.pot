@@ -98,10 +98,6 @@ msgstr ""
 msgid "share.button"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "share.dialog.text"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr ""
@@ -120,10 +116,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
