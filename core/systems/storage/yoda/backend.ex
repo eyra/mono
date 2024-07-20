@@ -12,11 +12,9 @@ defmodule Systems.Storage.Yoda.Backend do
           "url" => yoda_url
         } = _endpoint,
         data,
-        %{
-          identifier: identifier
-        } = _meta_data
+        meta_data
       ) do
-    filename = filename(identifier)
+    filename = filename(meta_data)
     file_url = url([yoda_url, filename])
 
     {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
