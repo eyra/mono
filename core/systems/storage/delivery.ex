@@ -34,8 +34,20 @@ defmodule Systems.Storage.Delivery do
       backend.store(endpoint, data, meta_data)
     rescue
       e ->
-        Logger.error(Exception.format(:error, e, __STACKTRACE__))
+        Logger.error(mask_sensitive_data(Exception.format(:error, e, __STACKTRACE__)))
         reraise e, __STACKTRACE__
+    end
+  end
+
+  defp mask_sensitive_data(string) do
+    [:password, :user, :secret_access_key, :sas_token]
+    |> Enum.reduce(string, fn key, acc -> mask(key, acc) end)
+  end
+
+  defp mask(key, string) do
+    case Regex.run(~r"\"#{key}\" => \"([^\"]*)\"", string) do
+      [_, value] -> String.replace(string, value, "************")
+      _ -> string
     end
   end
 

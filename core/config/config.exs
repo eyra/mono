@@ -8,7 +8,9 @@
 import Config
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :phoenix,
+  json_library: Jason,
+  filter_parameters: ["password", "secret"]
 
 config :esbuild,
   version: "0.17.11",

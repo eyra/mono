@@ -9,7 +9,7 @@ defmodule Systems.Storage.Yoda.EndpointModel do
   @required_fields @fields
 
   @derive {Jason.Encoder, only: @fields}
-  @derive {Inspect, except: [:password]}
+  @derive {Inspect, except: [:user, :password]}
   schema "storage_endpoints_yoda" do
     field(:url, :string)
     field(:user, :string)
