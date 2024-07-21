@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-57D01F22.js"></script>
+    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -116,12 +116,12 @@ core
   <section id="moduledoc">
 <p>Functions to implement the spellout rule-based-number-format rules of CLDR.</p><p>As CLDR notes, the data is incomplete or non-existent for many languages.  It
 is considered complete for English however.</p><p>The standard public API for RBNF is via the <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.html#to_string/2"><code class="inline">Cldr.Number.to_string/2</code></a> function.</p><p>The functions on this module are defined at compile time based upon the RBNF rules
-defined in the Unicode CLDR data repository.  Available rules are identified by:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">rule_sets</span><span class="p" data-group-id="6640135217-1">(</span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="6640135217-1">)</span><span class="w">
-</span><span class="p" data-group-id="6640135217-2">[</span><span class="ss">:spellout_ordinal_verbose</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_ordinal</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_numbering_year</span><span class="p">,</span><span class="w">
+defined in the Unicode CLDR data repository.  Available rules are identified by:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">rule_sets</span><span class="p" data-group-id="8870371970-1">(</span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="8870371970-1">)</span><span class="w">
+</span><span class="p" data-group-id="8870371970-2">[</span><span class="ss">:spellout_ordinal_verbose</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_ordinal</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_numbering_year</span><span class="p">,</span><span class="w">
   </span><span class="ss">:spellout_numbering_verbose</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_numbering</span><span class="p">,</span><span class="w"> </span><span class="ss">:spellout_cardinal_verbose</span><span class="p">,</span><span class="w">
-  </span><span class="ss">:spellout_cardinal</span><span class="p" data-group-id="6640135217-2">]</span></code></pre><p>A rule can then be invoked on an available rule_set. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">spellout_ordinal</span><span class="p" data-group-id="0168073003-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="0168073003-1">)</span><span class="w">
-</span><span class="s">&quot;one hundred twenty-third&quot;</span></code></pre><p>This call is equivalent to the call through the public API of:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="7299549096-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:spellout</span><span class="p" data-group-id="7299549096-1">)</span><span class="w">
-</span><span class="p" data-group-id="7299549096-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;one hundred twenty-three&quot;</span><span class="p" data-group-id="7299549096-2">}</span></code></pre>
+  </span><span class="ss">:spellout_cardinal</span><span class="p" data-group-id="8870371970-2">]</span></code></pre><p>A rule can then be invoked on an available rule_set. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">spellout_ordinal</span><span class="p" data-group-id="4372156073-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="4372156073-1">)</span><span class="w">
+</span><span class="s">&quot;one hundred twenty-third&quot;</span></code></pre><p>This call is equivalent to the call through the public API of:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="2136343635-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:spellout</span><span class="p" data-group-id="2136343635-1">)</span><span class="w">
+</span><span class="p" data-group-id="2136343635-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;one hundred twenty-three&quot;</span><span class="p" data-group-id="2136343635-2">}</span></code></pre>
   </section>
 
 
@@ -228,6 +228,62 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#spellout_cardinal_feminine/2" translate="no">spellout_cardinal_feminine(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_m/2" translate="no">spellout_cardinal_m(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_masculine/2" translate="no">spellout_cardinal_masculine(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_n/2" translate="no">spellout_cardinal_n(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_neuter/2" translate="no">spellout_cardinal_neuter(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_r/2" translate="no">spellout_cardinal_r(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_cardinal_s/2" translate="no">spellout_cardinal_s(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#spellout_cardinal_verbose/2" translate="no">spellout_cardinal_verbose(number, locale)</a>
 
       </div>
@@ -268,7 +324,55 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#spellout_ordinal_m/2" translate="no">spellout_ordinal_m(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_n/2" translate="no">spellout_ordinal_n(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_r/2" translate="no">spellout_ordinal_r(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_s/2" translate="no">spellout_ordinal_s(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#spellout_ordinal_verbose/2" translate="no">spellout_ordinal_verbose(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ste2/2" translate="no">ste2(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ste/2" translate="no">ste(number, language_tag)</a>
 
       </div>
 
@@ -546,6 +650,160 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="spellout_cardinal_feminine/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_feminine/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_feminine(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_m/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_m/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_m(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_masculine/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_masculine/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_masculine(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_n/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_n/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_n(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_neuter/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_neuter/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_neuter(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_r/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_r/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_r(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_cardinal_s/2">
+
+  <div class="detail-header">
+    <a href="#spellout_cardinal_s/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_cardinal_s(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="spellout_cardinal_verbose/2">
 
   <div class="detail-header">
@@ -656,6 +914,94 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="spellout_ordinal_m/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_m/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_m(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_n/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_n/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_n(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_r/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_r/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_r(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_s/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_s/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_s(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="spellout_ordinal_verbose/2">
 
   <div class="detail-header">
@@ -664,6 +1010,50 @@ Functions
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">spellout_ordinal_verbose(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ste2/2">
+
+  <div class="detail-header">
+    <a href="#ste2/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">ste2(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ste/2">
+
+  <div class="detail-header">
+    <a href="#ste/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">ste(number, language_tag)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>

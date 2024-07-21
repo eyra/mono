@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.PushSubscriptionController — core v0.1.0</title>
+    <title>Frameworks.Utility.ConfigHelpers — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-57D01F22.js"></script>
+    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/controllers/push_subscription_controller.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/config_helpers.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">CoreWeb.PushSubscriptionController</span> 
+  <span translate="no">Frameworks.Utility.ConfigHelpers</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -129,7 +129,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#register/2" translate="no">register(conn, arg2)</a>
+        <a href="#from_json_string/1" translate="no">from_json_string(string)</a>
 
       </div>
 
@@ -137,7 +137,23 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#vapid_public_key/2" translate="no">vapid_public_key(conn, _)</a>
+        <a href="#get/4" translate="no">get(type, keywords, key, valid_values \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get!/4" translate="no">get!(type, keywords, key, valid_values \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#value/3" translate="no">value(type, string, valid_atoms)</a>
 
       </div>
 
@@ -157,16 +173,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="register/2">
+<section class="detail" id="from_json_string/1">
 
   <div class="detail-header">
-    <a href="#register/2" class="detail-link" title="Link to this function">
+    <a href="#from_json_string/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">register(conn, arg2)</h1>
+    <h1 class="signature" translate="no">from_json_string(string)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/controllers/push_subscription_controller.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/config_helpers.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -179,16 +195,64 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="vapid_public_key/2">
+<section class="detail" id="get/4">
+
+    <span id="get/3"></span>
 
   <div class="detail-header">
-    <a href="#vapid_public_key/2" class="detail-link" title="Link to this function">
+    <a href="#get/4" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">vapid_public_key(conn, _)</h1>
+    <h1 class="signature" translate="no">get(type, keywords, key, valid_values \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/controllers/push_subscription_controller.ex#L17" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/config_helpers.ex#L13" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get!/4">
+
+    <span id="get!/3"></span>
+
+  <div class="detail-header">
+    <a href="#get!/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get!(type, keywords, key, valid_values \\ [])</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/config_helpers.ex#L6" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="value/3">
+
+  <div class="detail-header">
+    <a href="#value/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">value(type, string, valid_atoms)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/config_helpers.ex#L40" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-57D01F22.js"></script>
+    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,7 +102,7 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/storage/built_in/special.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/storage/builtin/special.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -129,6 +129,22 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#c:delete_files/1" translate="no">delete_files(folder)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_files/1" translate="no">list_files(folder)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#c:store/3" translate="no">store(folder, identifier, data)</a>
 
       </div>
@@ -149,6 +165,62 @@ core
 Callbacks
     </h1>
     <div class="callbacks-list">
+<section class="detail" id="c:delete_files/1">
+
+  <div class="detail-header">
+    <a href="#c:delete_files/1" class="detail-link" title="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this callback</span>
+    </a>
+    <h1 class="signature" translate="no">delete_files(folder)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/builtin/special.ex#L9" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> delete_files(folder :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: :ok | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:list_files/1">
+
+  <div class="detail-header">
+    <a href="#c:list_files/1" class="detail-link" title="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this callback</span>
+    </a>
+    <h1 class="signature" translate="no">list_files(folder)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/builtin/special.ex#L8" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_files(folder :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
 <section class="detail" id="c:store/3">
 
   <div class="detail-header">
@@ -158,7 +230,7 @@ Callbacks
     </a>
     <h1 class="signature" translate="no">store(folder, identifier, data)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/built_in/special.ex#L6" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/builtin/special.ex#L6" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -172,7 +244,7 @@ Callbacks
 
           <pre translate="no"><span class="attribute">@callback</span> store(
   folder :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
-  identifier :: [<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()],
+  identifier :: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()],
   data :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()
 ) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
 

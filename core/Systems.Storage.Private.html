@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-57D01F22.js"></script>
+    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -137,14 +137,6 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#backend_info/1" translate="no">backend_info(endpoint_model)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
         <a href="#build_special/1" translate="no">build_special(atom)</a>
 
       </div>
@@ -153,7 +145,23 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#special_info/1" translate="no">special_info(endpoint)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#storage_info/1" translate="no">storage_info(arg1)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#storage_info/2" translate="no">storage_info(storage_endpoint, map)</a>
 
       </div>
 
@@ -182,29 +190,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">allowed_service_ids()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L8" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="backend_info/1">
-
-  <div class="detail-header">
-    <a href="#backend_info/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">backend_info(endpoint_model)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L21" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L6" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -226,7 +212,29 @@ Functions
     </a>
     <h1 class="signature" translate="no">build_special(atom)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L16" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L14" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="special_info/1">
+
+  <div class="detail-header">
+    <a href="#special_info/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">special_info(endpoint)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L19" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -248,7 +256,54 @@ Functions
     </a>
     <h1 class="signature" translate="no">storage_info(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L26" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L59" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> storage_info(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) ::
+  {:error, {:storage_info, :not_available}}
+  | %{
+      backend:
+        Systems.Storage.AWS.Backend
+        | Systems.Storage.Azure.Backend
+        | Systems.Storage.BuiltIn.Backend
+        | Systems.Storage.Centerdata.Backend
+        | Systems.Storage.Yoda.Backend,
+      endpoint: %{
+        :__struct__ =&gt;
+          Systems.Storage.AWS.EndpointModel
+          | Systems.Storage.Azure.EndpointModel
+          | Systems.Storage.BuiltIn.EndpointModel
+          | Systems.Storage.Centerdata.EndpointModel
+          | Systems.Storage.Yoda.EndpointModel,
+        optional(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) =&gt; <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()
+      },
+      key: :aws | :azure | :builtin | :centerdata | :yoda
+    }</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="storage_info/2">
+
+  <div class="detail-header">
+    <a href="#storage_info/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">storage_info(storage_endpoint, map)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/storage/_private.ex#L50" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
