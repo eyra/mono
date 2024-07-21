@@ -42,6 +42,9 @@ defmodule Frameworks.Pixel.ModalView do
     <%= if @style == :sheet do %>
       <.sheet live_component={@live_component} />
     <% end %>
+    <%= if @style == :dialog do %>
+      <.dialog live_component={@live_component} />
+    <% end %>
     <%= if @style == :notification do %>
       <.notification live_component={@live_component} />
     <% end %>
@@ -106,6 +109,29 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :string, required: true)
 
+  def dialog(assigns) do
+    ~H"""
+    <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
+      <div class="flex flex-row items-center justify-center w-full h-full">
+        <div class="w-[700px] px-4 sm:px-10">
+          <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
+            <%!-- Floating close button --%>
+            <div class="absolute z-30 top-6 right-9">
+                <.close_button />
+            </div>
+            <%!-- BODY --%>
+            <div class="h-full w-full overflow-y-scroll">
+              <.body live_component={@live_component} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:live_component, :string, required: true)
+
   def notification(assigns) do
     ~H"""
     <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
@@ -113,7 +139,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class="w-[700px] px-4 sm:px-10">
           <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
             <%!-- Floating close button --%>
-            <div class="absolute z-30 top-9 right-6">
+            <div class="absolute z-30 top-9 right-9">
                 <.close_button />
             </div>
             <%!-- BODY --%>
@@ -154,7 +180,7 @@ defmodule Frameworks.Pixel.ModalView do
   def body(assigns) do
     ~H"""
       <.live_component
-        id={:modal_view_content}
+        id={@live_component.ref.id}
         module={@live_component.ref.module}
         {@live_component.params}
       />

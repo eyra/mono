@@ -96,11 +96,7 @@ msgstr "Duplicate"
 
 #, elixir-autogen, elixir-format
 msgid "share.button"
-msgstr "Share"
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.text"
-msgstr "Share your %{content} with one or more %{group} from the list below."
+msgstr "People"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
@@ -121,10 +117,6 @@ msgstr "Send notification"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.admin"
 msgstr "Admin"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "share.dialog.title"
-msgstr "Shared with"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"

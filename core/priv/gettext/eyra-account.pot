@@ -129,3 +129,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.no_match.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.add.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.alread_added.message"
+msgstr ""

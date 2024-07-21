@@ -13,13 +13,14 @@ config :core, Systems.Account.UserAuth,
 
 config :core, :features,
   sign_in_with_apple: false,
-  surfconext_sign_in: true,
+  surfconext_sign_in: false,
   member_google_sign_in: true,
   password_sign_in: true,
   notification_mails: false,
   debug_expire_force: false,
-  leaderboard: false
+  leaderboard: true,
+  panl: false
 
 config :core, :meta,
-  bundle_title: "Eyra",
+  bundle_title: "Next",
   bundle: :next

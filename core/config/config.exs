@@ -8,7 +8,9 @@
 import Config
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
+config :phoenix,
+  json_library: Jason,
+  filter_parameters: ["password", "secret"]
 
 config :esbuild,
   version: "0.17.11",
@@ -40,6 +42,8 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
+config :core, :naming, handlers: [Systems.Project.Public]
+
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 config :core,
@@ -48,7 +52,7 @@ config :core,
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en nl)
+config :core, CoreWeb.Gettext, locales: ~w(en de nl)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
@@ -64,12 +68,18 @@ config :core, Oban,
      ]}
   ]
 
+config :packmatic, Packmatic.Source.URL,
+  hackney: [
+    pool: :default
+  ]
+
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
   quotas: [
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
+    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
+    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]
@@ -113,7 +123,12 @@ config :core, CoreWeb.Endpoint,
   ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
-  http: [port: 4000]
+  http: [
+    port: 4000,
+    protocol_options: [
+      idle_timeout: :infinity
+    ]
+  ]
 
 config :core, :ssl,
   client: :native,
@@ -123,11 +138,6 @@ config :core, :ssl,
   emails: ["admin@localhost"]
 
 config :core, :ssl_proxied, {:ok, "true"} == System.fetch_env("SSL_PROXIED")
-
-config :web_push_encryption, :vapid_details,
-  subject: "mailto:administrator@example.com",
-  public_key: "use `mix web_push.gen.keypair`",
-  private_key: ""
 
 config :core, :version, System.get_env("VERSION", "dev")
 

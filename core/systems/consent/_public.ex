@@ -102,7 +102,7 @@ defmodule Systems.Consent.Public do
       preload: [:revision]
     )
     |> Repo.all()
-    |> List.first()
+    |> List.last()
   end
 
   def get_signature(%Consent.RevisionModel{id: revision_id}, %Systems.Account.User{id: user_id}) do
@@ -111,7 +111,7 @@ defmodule Systems.Consent.Public do
       where: s.revision_id == ^revision_id
     )
     |> Repo.all()
-    |> List.first()
+    |> List.last()
   end
 
   def list_agreements(preload \\ []) do

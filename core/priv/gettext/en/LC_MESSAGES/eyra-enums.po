@@ -340,7 +340,7 @@ msgstr "Netflix"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "storage_service_ids.builtin"
-msgstr "Internal"
+msgstr "Next"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.en"
@@ -445,3 +445,7 @@ msgstr "Verified"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "admin_user_filters.creator"
 msgstr "Creator"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.de"
+msgstr "German"

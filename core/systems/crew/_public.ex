@@ -150,8 +150,8 @@ defmodule Systems.Crew.Public do
     update_task(task, %{started_at: nil}, :canceled)
   end
 
-  def lock_task(%Crew.TaskModel{} = task) do
-    update_task(task, %{started_at: Timestamp.naive_now()}, :locked)
+  def start_task(%Crew.TaskModel{} = task) do
+    update_task(task, %{started_at: Timestamp.naive_now()}, :started)
   end
 
   def complete_task(%Crew.TaskModel{status: status, started_at: started_at} = task) do

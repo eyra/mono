@@ -7,8 +7,8 @@ defmodule Systems.Project.OverviewPage do
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.ShareView
 
+  alias Systems.Account
   alias Systems.Project
 
   @impl true
@@ -22,7 +22,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
+  def handle_view_model_updated(socket), do: socket |> update_child(:people_page)
 
   @impl true
   def handle_uri(socket), do: socket
@@ -40,28 +40,26 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def compose(:share_view, %{active_project: project_id, current_user: user}) do
-    researchers =
-      Systems.Account.Public.list_creators([:profile])
-      # filter current user
-      |> Enum.filter(&(&1.id != user.id))
-
+  def compose(:people_page, %{active_project: project_id}) do
     owners =
       project_id
       |> String.to_integer()
       |> Project.Public.get!()
       |> Project.Public.list_owners([:profile])
-      # filter current user
-      |> Enum.filter(&(&1.id != user.id))
+
+    owner_ids = Enum.map(owners, & &1.id)
+
+    creators =
+      Account.Public.list_creators([:profile])
+      # filter existing owners
+      |> Enum.reject(&Enum.member?(owner_ids, &1.id))
 
     %{
-      module: ShareView,
+      module: Account.PeopleView,
       params: %{
-        content_id: project_id,
-        content_name: dgettext("eyra-project", "share.dialog.content"),
-        group_name: dgettext("eyra-project", "share.dialog.group"),
-        users: researchers,
-        shared_users: owners
+        title: dgettext("eyra-project", "people.page.title"),
+        people: owners,
+        users: creators
       }
     }
   end
@@ -79,7 +77,7 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event(
-        "edit",
+        "rename",
         %{"item" => project_id},
         socket
       ) do
@@ -88,7 +86,7 @@ defmodule Systems.Project.OverviewPage do
       socket
       |> assign(active_project: project_id)
       |> compose_child(:project_form)
-      |> show_popup(:project_form)
+      |> show_modal(:project_form, :dialog)
     }
   end
 
@@ -129,13 +127,13 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("share", %{"item" => project_id}, socket) do
+  def handle_event("setup_people", %{"item" => project_id}, socket) do
     {
       :noreply,
       socket
       |> assign(active_project: project_id)
-      |> compose_child(:share_view)
-      |> show_popup(:share_view)
+      |> compose_child(:people_page)
+      |> show_modal(:people_page, :page)
     }
   end
 
@@ -154,11 +152,15 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event("add_user", %{user: user}, %{assigns: %{active_project: project_id}} = socket) do
-    project_id
-    |> Project.Public.get!()
-    |> Project.Public.add_owner!(user)
+    case project_id
+         |> Project.Public.get!()
+         |> Project.Public.add_owner!(user) do
+      {:ok, _} ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      {:error, name, error, _} ->
+        raise "Failed to add owner to project: #{name} => #{inspect(error)}"
+    end
   end
 
   @impl true
@@ -167,16 +169,20 @@ defmodule Systems.Project.OverviewPage do
         %{user: user},
         %{assigns: %{active_project: project_id}} = socket
       ) do
-    project_id
-    |> Project.Public.get!()
-    |> Project.Public.remove_owner!(user)
+    case project_id
+         |> Project.Public.get!()
+         |> Project.Public.remove_owner!(user) do
+      {:ok, _} ->
+        {:noreply, socket}
 
-    {:noreply, socket}
+      {:error, name, error, _} ->
+        raise "Failed to remove owner from project: #{name} => #{inspect(error)}"
+    end
   end
 
   @impl true
-  def handle_event("finish", _, socket) do
-    {:noreply, socket |> assign(popup: nil)}
+  def handle_event("finish", %{source: %{name: modal_view}}, socket) do
+    {:noreply, socket |> hide_modal(modal_view)}
   end
 
   @impl true

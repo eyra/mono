@@ -48,5 +48,5 @@ defmodule Core.APNS do
     Logger.error("Unexpected push error: #{inspect(response)}")
   end
 
-  defp backend, do: Application.get_env(:core, :apns_backend, Pigeon.APNS)
+  defp backend, do: Application.get_env(:core, :apns_backend)
 end

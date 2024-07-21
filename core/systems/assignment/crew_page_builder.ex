@@ -73,16 +73,28 @@ defmodule Systems.Assignment.CrewPageBuilder do
          %{current_user: user, fabric: fabric},
          tester?
        ) do
-    if Consent.Public.has_signature(consent_agreement, user) and not tester? do
-      nil
-    else
-      revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+    signature = Consent.Public.get_signature(consent_agreement, user)
 
-      Fabric.prepare_child(fabric, :onboarding_view_consent, Assignment.OnboardingConsentView, %{
-        revision: revision,
-        user: user,
-        create_signature?: not tester?
-      })
+    case {revision, signature, tester?} do
+      {_, signature, false} when not is_nil(signature) ->
+        # normal flow: no consent view with signature
+        nil
+
+      {%{id: id}, %{revision_id: revision_id}, true} when id == revision_id ->
+        # preview flow: no consent view with signature on the latest version
+        nil
+
+      _ ->
+        Fabric.prepare_child(
+          fabric,
+          :onboarding_view_consent,
+          Assignment.OnboardingConsentView,
+          %{
+            revision: revision,
+            user: user
+          }
+        )
     end
   end
 
@@ -131,7 +143,11 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp context_menu_item(:privacy = key, %{privacy_doc: privacy_doc}) do
     if privacy_doc do
-      %{id: key, label: "Privacy", url: privacy_doc.ref}
+      %{
+        id: key,
+        label: dgettext("eyra-assignment", "context.menu.privacy.title"),
+        url: privacy_doc.ref
+      }
     else
       nil
     end
@@ -139,7 +155,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do
     if consent_agreement do
-      %{id: key, label: "Consent"}
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.consent.title")}
     else
       nil
     end
@@ -147,7 +163,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
     if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "onboarding.intro.title")}
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
     else
       nil
     end
@@ -155,7 +171,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
     if Enum.find(page_refs, &(&1.key == key)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "support.page.title")}
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
     else
       nil
     end

@@ -33,8 +33,17 @@ defmodule Frameworks.Utility.Module do
     end
   end
 
+  def to_model(["Elixir", "Systems", system, special, item]) do
+    if String.contains?(item, "Model") do
+      to_model([system, special, String.replace(item, "Model", "")])
+    else
+      raise ArgumentError, "Module is not a model"
+    end
+  end
+
   def to_model([system, ""]), do: to_model(system)
   def to_model([system, item]), do: to_model("#{system}_#{item}")
+  def to_model([system, special, item]), do: to_model("#{system}_#{special}_#{item}")
   def to_model(model) when is_binary(model), do: String.downcase(model)
 
   defp split(module) when is_atom(module) do

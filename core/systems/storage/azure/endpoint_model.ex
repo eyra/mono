@@ -8,6 +8,7 @@ defmodule Systems.Storage.Azure.EndpointModel do
   @required_fields @fields
 
   @derive {Jason.Encoder, only: @fields}
+  @derive {Inspect, except: [:sas_token]}
   schema "storage_endpoints_azure" do
     field(:account_name, :string)
     field(:container, :string)
@@ -32,6 +33,10 @@ defmodule Systems.Storage.Azure.EndpointModel do
       |> validate()
 
     changeset.valid?()
+  end
+
+  def connected?(_endpoint) do
+    {:ok, false}
   end
 
   def preload_graph(:down), do: []

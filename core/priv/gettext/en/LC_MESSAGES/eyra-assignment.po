@@ -67,7 +67,7 @@ msgid "settings.title"
 msgstr "Settings"
 
 #, elixir-autogen, elixir-format
-msgid "settings.data_storage.title"
+msgid "settings.storage.title"
 msgstr "Data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -99,8 +99,8 @@ msgid "connector.storage.title"
 msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.data_storage.body"
-msgstr "Connect the storage that you would like to use to store the data that will be donated by participants."
+msgid "settings.storage.body"
+msgstr "Connect the storage that you will use for the data donated by participants."
 
 #, elixir-autogen, elixir-format
 msgid "settings.panel.body"
@@ -232,7 +232,7 @@ msgstr "Helpdesk page"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support.page.title"
-msgstr "Need help?"
+msgstr "Questions?"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
@@ -248,15 +248,15 @@ msgstr "You declined to participate. You can close the browser. If you wish to r
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "declined_view.title"
-msgstr "No consent"
+msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "We are grateful for your contribution. You finished all tasks on the list. You can close your browser to quite or close this popup to revisit the task list."
+msgstr "You have finished. Thank you for your participation. You can now close your browser or close this popup to revisit the page."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Thank you for your participation"
+msgstr "Done"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -311,10 +311,6 @@ msgid "declined.participants"
 msgstr "Declined consent"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.general.title"
-msgstr "General"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
 msgstr "Language setting for participants"
 
@@ -364,11 +360,11 @@ msgstr "Enables participants to submit their method to the challenge with a GitH
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "The url below can be used to invite people to test your study. Participants need to sign in or create an account to participate. After sign in, they are forwarded to your study."
+msgstr "Use the url below to invite participants. Participants need to sign in or create an account to participate."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
-msgstr "Study link"
+msgstr "Participant invite link"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.general_instruction.description"
@@ -393,3 +389,31 @@ msgstr "Go to advertisement"
 #, elixir-autogen, elixir-format
 msgid "advert.title"
 msgstr "Panl advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.consent.title"
+msgstr "Consent"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.information.title"
+msgstr "About"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.support.title"
+msgstr "Questions?"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "context.menu.privacy.title"
+msgstr "Privacy"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "storage.create.button"
+msgstr "Connect storage"
+
+#, elixir-autogen, elixir-format
+msgid "storage.goto.button"
+msgstr "Go to data storage"
+
+#, elixir-autogen, elixir-format
+msgid "storage.not_available.warning"
+msgstr "Please setup connection to a data storage"

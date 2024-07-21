@@ -92,7 +92,7 @@ msgstr "Sign in with Google"
 
 #, elixir-autogen, elixir-format
 msgid "login.surf.button"
-msgstr "Sign in through SURFconext"
+msgstr "Sign in with SURFconext"
 
 #, elixir-autogen, elixir-format
 msgid "ehtical.code.label"
@@ -129,3 +129,19 @@ msgstr "Account activation"
 #, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr "Activate"
+
+#, elixir-autogen, elixir-format
+msgid "people.search.no_match.message"
+msgstr "No one found with this email address."
+
+#, elixir-autogen, elixir-format
+msgid "people.search.placeholder"
+msgstr "Find by email address"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "people.add.title"
+msgstr "Who do you want to add?"
+
+#, elixir-autogen, elixir-format
+msgid "people.search.alread_added.message"
+msgstr "Already added"

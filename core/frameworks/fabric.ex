@@ -7,6 +7,12 @@ defmodule Fabric do
 
   @callback compose(id :: composition_id(), a :: assigns()) :: composition() | nil
 
+  # although colons and periods are formaly supported, they seem cause errors when calling 'querySelectorAll' on 'Document': '#item_cell_44::system::-PID-0-24547-1-_item_form_group' is not a valid selector.
+  # Example: dom.js:39 Uncaught DOMException: Failed to execute 'querySelectorAll' on 'Document': '#item_cell_44::workflow::page_item_form_group' is not a valid selector.
+  @html_id_invalid ~r"[^A-Za-z0-9_-]"
+  @html_id_seperator "__"
+  @html_id_replacement "-"
+
   require Logger
 
   defmacro __using__(_opts) do
@@ -67,6 +73,20 @@ defmodule Fabric do
       end
 
       defoverridable compose: 2
+
+      def async(%Phoenix.LiveView.Socket{assigns: assigns} = socket, name, closure) do
+        async(assigns, name, closure)
+      end
+
+      def async(%{fabric: fabric}, name, closure) do
+        async(fabric, name, closure)
+      end
+
+      def async(%Fabric.Model{self: self}, name, closure) when is_function(closure, 0) do
+        Task.async(fn ->
+          %{async: %{source: self, event: name, result: closure.()}}
+        end)
+      end
     end
   end
 
@@ -83,13 +103,20 @@ defmodule Fabric do
 
   def child_id(%Fabric.Model{self: self}, child_name), do: child_id(self, child_name)
 
-  def child_id(%{pid: pid}, child_name) do
-    pid_string = inspect(pid)
-    child_id(pid_string, child_name)
+  def child_id(%{pid: _pid}, child_name) do
+    child_id("page", child_name)
   end
 
   def child_id(%{id: id}, child_name), do: child_id(id, child_name)
-  def child_id(context, child_name), do: "#{child_name}->#{context}"
+
+  def child_id(context, child_name) when is_atom(child_name),
+    do: child_id(context, child_name |> Atom.to_string())
+
+  def child_id(context, child_name) when is_binary(child_name) do
+    [child_name, context]
+    |> Enum.join(@html_id_seperator)
+    |> String.replace(@html_id_invalid, @html_id_replacement)
+  end
 
   # Prepare
 

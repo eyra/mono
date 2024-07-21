@@ -3,10 +3,18 @@ defmodule CoreWeb.UI.Timestamp do
     Helper functions for displaying timestamps
   """
   use Timex
+  require Logger
   import CoreWeb.Gettext
 
   def convert(datetime, timezone \\ "Etc/UTC") do
-    Timex.Timezone.convert(datetime, timezone)
+    case Timex.Timezone.convert(datetime, timezone) do
+      {:error, error} ->
+        Logger.error("Error when converting date-time: timezone=#{timezone} error=#{error}")
+        datetime
+
+      result ->
+        result
+    end
   end
 
   def to_date(%{year: year, month: month, day: day}) do
@@ -113,6 +121,10 @@ defmodule CoreWeb.UI.Timestamp do
     DateTime.compare(date1, date2) == :gt
   end
 
+  def after?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
+    NaiveDateTime.compare(date1, date2) == :gt
+  end
+
   def before?(date1, date2) when is_binary(date1) and is_binary(date2) do
     before?(
       parse_user_input_date(date1),
@@ -126,6 +138,10 @@ defmodule CoreWeb.UI.Timestamp do
 
   def before?(%DateTime{} = date1, %DateTime{} = date2) do
     DateTime.compare(date1, date2) == :lt
+  end
+
+  def before?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
+    NaiveDateTime.compare(date1, date2) == :lt
   end
 
   def parse_user_input_date(input, timezone \\ "Etc/UTC")
@@ -169,6 +185,46 @@ defmodule CoreWeb.UI.Timestamp do
     Timex.format!(datetime, "%Y-%m-%d", :strftime)
   end
 
+  def format_date_short!(datetime) do
+    Timex.format!(datetime, "%Y%m%d", :strftime)
+  end
+
+  def stamp(%DateTime{} = datetime) do
+    weekday = Timex.format!(datetime, "%A", :strftime)
+    month = Timex.format!(datetime, "%B", :strftime)
+    day_of_month = Timex.format!(datetime, "%e", :strftime)
+    time = Timex.format!(datetime, "%H:%M", :strftime)
+
+    dgettext("eyra-ui", "timestamp.datetime",
+      weekday: weekday,
+      day_of_month: day_of_month,
+      month: month,
+      time: time
+    )
+  end
+
+  @spec humanize_time(
+          {{integer(), pos_integer(), pos_integer()},
+           {non_neg_integer(), non_neg_integer(), non_neg_integer()}
+           | {non_neg_integer(), non_neg_integer(), non_neg_integer(),
+              non_neg_integer() | {non_neg_integer(), non_neg_integer()}}}
+          | {integer(), pos_integer(), pos_integer()}
+          | %{
+              :__struct__ => Date | DateTime | NaiveDateTime | Time,
+              :calendar => atom(),
+              optional(:day) => pos_integer(),
+              optional(:hour) => non_neg_integer(),
+              optional(:microsecond) => {non_neg_integer(), non_neg_integer()},
+              optional(:minute) => non_neg_integer(),
+              optional(:month) => pos_integer(),
+              optional(:second) => non_neg_integer(),
+              optional(:std_offset) => integer(),
+              optional(:time_zone) => binary(),
+              optional(:utc_offset) => integer(),
+              optional(:year) => integer(),
+              optional(:zone_abbr) => binary()
+            }
+        ) :: binary()
   def humanize_time(timestamp) do
     Timex.format!(timestamp, "%H:%M", :strftime)
   end

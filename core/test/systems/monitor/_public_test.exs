@@ -51,6 +51,27 @@ defmodule Systems.Monitor.PublicTest do
                }
              ] = from(Monitor.EventModel) |> Repo.all()
     end
+
+    test "reset/1 multiple logs" do
+      Monitor.Public.log(["storage=1", "topic=bytes"], value: 10)
+      Monitor.Public.log(["storage=1", "topic=bytes"], value: 200)
+      Monitor.Public.log(["storage=1", "topic=bytes"], value: 3456)
+
+      Monitor.Public.reset(["storage=1", "topic=bytes"])
+
+      assert Monitor.Public.count(["storage=1", "topic=bytes"]) == 4
+      assert Monitor.Public.sum(["storage=1", "topic=bytes"]) == 0
+
+      assert [
+               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 10},
+               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 200},
+               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 3456},
+               %Systems.Monitor.EventModel{
+                 identifier: ["storage=1", "topic=bytes", "action=reset"],
+                 value: -3666
+               }
+             ] = from(Monitor.EventModel) |> Repo.all()
+    end
   end
 
   describe "Monitor metrics" do

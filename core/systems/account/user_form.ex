@@ -87,14 +87,14 @@ defmodule Systems.Account.UserForm do
   def surfconext_signin(assigns) do
     ~H"""
       <a href="/surfconext">
-        <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
+        <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
           <div class="flex w-full justify-center items-center">
             <div>
-              <img class="mr-3 -mt-1" src={~p"/images/surfconext.svg"} alt="">
+              <img class="mr-3 h-6" src={~p"/images/surfconext.svg"} alt="">
             </div>
             <div class="h-11 focus:outline-none">
               <div class="flex flex-col justify-center h-full items-center rounded">
-                <div class="text-white text-button font-button">
+                <div class="text-black text-button font-button">
                   <%= dgettext("eyra-account", "login.surf.button") %>
                 </div>
               </div>

@@ -64,14 +64,14 @@ defmodule Systems.Project.Model do
          ) do
       path = ~p"/project/node/#{root_node_id}"
 
-      share = %{
-        action: %{type: :send, event: "share", item: id},
-        face: %{type: :label, label: "Share", wrap: true}
+      people = %{
+        action: %{type: :send, event: "setup_people", item: id},
+        face: %{type: :label, label: "People", wrap: true}
       }
 
-      edit = %{
-        action: %{type: :send, event: "edit", item: id},
-        face: %{type: :label, label: "Edit", wrap: true}
+      rename = %{
+        action: %{type: :send, event: "rename", item: id},
+        face: %{type: :label, label: "Rename", wrap: true}
       }
 
       delete = %{
@@ -95,7 +95,7 @@ defmodule Systems.Project.Model do
         title: name,
         tags: tags,
         info: info,
-        left_actions: [edit, share],
+        left_actions: [rename, people],
         right_actions: [delete]
       }
     end

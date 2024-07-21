@@ -9,7 +9,7 @@ defmodule Systems.Rate.Server do
   # PUBLIC API
 
   def request_permission(service, client_id, byte_count)
-      when is_atom(service) and is_binary(client_id) and is_number(byte_count) do
+      when is_binary(service) and is_binary(client_id) and is_number(byte_count) do
     GenServer.call(__MODULE__, {:request_permission, {service, client_id, byte_count}})
   end
 
@@ -26,6 +26,8 @@ defmodule Systems.Rate.Server do
     quotas =
       Keyword.get(args, :quotas, [])
       |> Enum.map(&Quota.init(&1))
+
+    Logger.notice("[Rate] quotas: #{inspect(quotas)}")
 
     {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
   end

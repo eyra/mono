@@ -5,17 +5,18 @@ defmodule Systems.Storage.Centerdata.Backend do
 
   def store(
         %{url: url} = _endpoint,
-        %{
-          query_string: %{
-            "quest" => quest,
-            "varname1" => varname1,
-            "respondent" => respondent,
-            "token" => token,
-            "page" => page
-          }
-        } = _panel_info,
         data,
-        _meta_data
+        %{
+          panel_info: %{
+            query_string: %{
+              "quest" => quest,
+              "varname1" => varname1,
+              "respondent" => respondent,
+              "token" => token,
+              "page" => page
+            }
+          }
+        }
       ) do
     Logger.warn("Centerdata store: respondent=#{respondent}")
 
@@ -39,5 +40,20 @@ defmodule Systems.Storage.Centerdata.Backend do
     }
 
     send(self(), %{storage_event: %{panel: :centerdata, form: form}})
+  end
+
+  def list_files(_endpoint) do
+    Logger.error("Not yet implemented: list_files/1")
+    {:error, :not_implemented}
+  end
+
+  def delete_files(_endpoint) do
+    Logger.error("Not yet implemented: delete_files/1")
+    {:error, :not_implemented}
+  end
+
+  def connected?(_endpoint) do
+    # Always connected, no account settings in endpoint model
+    true
   end
 end

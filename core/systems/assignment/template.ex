@@ -11,7 +11,8 @@ end
 
 defmodule Systems.Assignment.ContentFlags do
   @type t :: %__MODULE__{
-          general: boolean(),
+          expected: boolean(),
+          language: boolean(),
           branding: boolean(),
           information: boolean(),
           privacy: boolean(),
@@ -26,7 +27,8 @@ defmodule Systems.Assignment.ContentFlags do
         }
 
   @keys [
-    :general,
+    :expected,
+    :language,
     :branding,
     :information,
     :privacy,

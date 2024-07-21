@@ -33,6 +33,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, required: true)
+  attr(:color, :string, default: nil)
   attr(:text_color, :string, default: "text-grey1")
   attr(:height, :string, default: "h-10")
 
@@ -41,7 +42,7 @@ defmodule Frameworks.Pixel.Button.Face do
     <div class="pt-0 pb-1px active:pt-1px active:pb-0 font-button text-button rounded bg-opacity-0">
       <div class="flex justify-left items-center w-full">
         <div>
-          <img class="mr-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          <img class="mr-2 -mt-2px" src={~p"/images/icons/#{icon_name(assigns)}"} alt={@label}>
         </div>
         <div class={"#{@height}"}>
           <div class="flex flex-col justify-center h-full items-center">
@@ -152,7 +153,7 @@ defmodule Frameworks.Pixel.Button.Face do
       </div>
       <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
           <div class="w-6 h-6 animate-spin">
-            <img src={~p"/images/icons/loading@3x.png"} alt={"Loading"}>
+            <img src={~p"/images/icons/loading_white@3x.png"} alt={"Loading"}>
           </div>
         </div>
     </div>

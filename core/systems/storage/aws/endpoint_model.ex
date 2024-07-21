@@ -8,6 +8,7 @@ defmodule Systems.Storage.AWS.EndpointModel do
   @required_fields @fields
 
   @derive {Jason.Encoder, only: @fields}
+  @derive {Inspect, except: [:secret_access_key]}
   schema "storage_endpoints_aws" do
     field(:access_key_id, :string)
     field(:secret_access_key, :string)
@@ -33,6 +34,10 @@ defmodule Systems.Storage.AWS.EndpointModel do
       |> validate()
 
     changeset.valid?()
+  end
+
+  def connected?(_endpoint) do
+    {:ok, false}
   end
 
   def preload_graph(:down), do: []

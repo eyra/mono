@@ -445,3 +445,7 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "admin_user_filters.creator"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.de"
+msgstr ""

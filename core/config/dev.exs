@@ -61,8 +61,7 @@ config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
-    [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
-    [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
+    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
   ]
 
 config :core, Core.ImageCatalog.Unsplash,
@@ -93,8 +92,6 @@ config :core,
 config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
-
-config :core, :features, leaderboard: true
 
 try do
   import_config "dev.secret.exs"

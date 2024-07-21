@@ -36,7 +36,7 @@ defmodule Systems.Project.NodePage do
   # Events
 
   @impl true
-  def handle_event("edit", %{"item" => item_id}, socket) do
+  def handle_event("rename", %{"item" => item_id}, socket) do
     item = Project.Public.get_item!(String.to_integer(item_id))
 
     {
@@ -44,7 +44,7 @@ defmodule Systems.Project.NodePage do
       socket
       |> assign(focussed_item: item)
       |> compose_child(:project_item_form)
-      |> show_popup(:project_item_form)
+      |> show_modal(:project_item_form, :dialog)
     }
   end
 
@@ -82,13 +82,8 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def handle_event("saved", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_popup(popup)}
-  end
-
-  @impl true
-  def handle_event("cancelled", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_popup(popup)}
+  def handle_event("saved", %{source: %{name: modal_view}}, socket) do
+    {:noreply, socket |> hide_modal(modal_view)}
   end
 
   @impl true

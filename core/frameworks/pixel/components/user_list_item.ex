@@ -12,11 +12,11 @@ defmodule Frameworks.Pixel.UserListItem do
   attr(:email, :string, required: true)
   attr(:info, :string, default: nil)
 
-  attr(:action_button, :map, required: true)
+  attr(:action_button, :map, default: nil)
 
   def small(assigns) do
     ~H"""
-    <tr>
+    <tr class="h-12">
       <td class="w-[44px]">
         <img
           src={@photo_url}
@@ -30,15 +30,19 @@ defmodule Frameworks.Pixel.UserListItem do
       <td>
         <Text.body_small><%= @email %></Text.body_small>
       </td>
-      <td>
-        <Text.body_small color="text-grey2"><%= @info %></Text.body_small>
-      </td>
-      <td>
-        <div class="flex flex-row">
-          <div class="flex-grow" />
-          <Button.dynamic {@action_button} />
-        </div>
-      </td>
+      <%= if @info do %>
+        <td>
+          <Text.body_small color="text-grey2"><%= @info %></Text.body_small>
+        </td>
+      <% end %>
+      <%= if @action_button do %>
+        <td>
+          <div class="flex flex-row">
+            <div class="flex-grow" />
+            <Button.dynamic {@action_button} />
+          </div>
+        </td>
+      <% end %>
     </tr>
     """
   end

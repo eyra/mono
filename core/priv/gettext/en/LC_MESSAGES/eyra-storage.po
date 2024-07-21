@@ -78,3 +78,131 @@ msgstr "<div>More information: <a href=\"https://www.centerdata.nl\">https://www
 #, elixir-autogen, elixir-format
 msgid "yoda.annotation"
 msgstr "<div>Use Yoda, a research data management service developed at Utrecht University. <br> More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr "Storage"
+
+#, elixir-autogen, elixir-format
+msgid "create.storage.body"
+msgstr "Choose where you want to store the data. Use 'Next' to view the data on the Next platform and export it to a device of your choice. Once you have connected a storage type, a data card will be added to your project."
+
+#, elixir-autogen, elixir-format
+msgid "goto.storage.body"
+msgstr "Connected! Visit the data storage card to manage your data."
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data"
+msgstr "Files"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data.forward"
+msgstr "Go to Files"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr "Account"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr "Go to Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor.forward"
+msgstr "Go to Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "table.date.label"
+msgstr "Date"
+
+#, elixir-autogen, elixir-format
+msgid "table.file.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "table.size.label"
+msgstr "Size"
+
+#, elixir-autogen, elixir-format
+msgid "export.files.button"
+msgstr "Export all"
+
+#, elixir-autogen, elixir-format
+msgid "files.metric.label"
+msgstr "Files"
+
+#, elixir-autogen, elixir-format
+msgid "bytes.kb.metric.label"
+msgstr "Kilobytes"
+
+#, elixir-autogen, elixir-format
+msgid "bytes.mb.metric.label"
+msgstr "Megabytes"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty.files.button"
+msgstr "Remove all"
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.title"
+msgstr "Remove all files?"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.body"
+msgstr "Please note that this action will permanently delete all files stored for the following project: <span class=\"text-primary\">%{name}</span>. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.placeholder"
+msgstr "Enter the project name to confirm"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.button"
+msgstr "Yes, remove all files"
+
+#, elixir-autogen, elixir-format
+msgid "default.name"
+msgstr "Data"
+
+#, elixir-autogen, elixir-format
+msgid "files.description"
+msgstr "The most recently stored files are listed below. Use the finder to search for specific files. You can export all files that are stored and remove all files from the storage once you are done. Please note that exporting a large number of files can take several minutes."
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "files.recent.label"
+msgstr "Most recent %{recent} out of %{total} files"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.search.label"
+msgstr "Found %{result} out of %{total} files"
+
+#, elixir-autogen, elixir-format
+msgid "files.finder.title"
+msgstr "Finder"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.empty.description"
+msgstr "No files stored yet. Once files are stored you will be able to search through the files by using the finder, export all files to your device of choice and remove all files from the storage."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bytes.metric.label"
+msgstr "Bytes"
+
+#, elixir-autogen, elixir-format
+msgid "account.status.invalid"
+msgstr "Invalid credentials"
+
+#, elixir-autogen, elixir-format
+msgid "account.status.valid"
+msgstr "Valid credentials"
+
+#, elixir-autogen, elixir-format
+msgid "account.submit.button"
+msgstr "Save and test"

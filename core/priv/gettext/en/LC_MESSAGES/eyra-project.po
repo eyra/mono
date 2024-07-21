@@ -40,14 +40,6 @@ msgid "overview.title"
 msgstr "Projects"
 
 #, elixir-autogen, elixir-format
-msgid "share.dialog.content"
-msgstr "project"
-
-#, elixir-autogen, elixir-format
-msgid "share.dialog.group"
-msgstr "researchers"
-
-#, elixir-autogen, elixir-format
 msgid "config.title"
 msgstr "Settings"
 
@@ -69,7 +61,7 @@ msgstr "Items"
 
 #, elixir-autogen, elixir-format
 msgid "form.title"
-msgstr "Project settings"
+msgstr "Rename"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "node.nodes.title"
@@ -111,13 +103,9 @@ msgstr ""
 msgid "create.item.title"
 msgstr "Select type"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.form.name.label"
-msgstr "Name"
-
 #, elixir-autogen, elixir-format
 msgid "item.form.title"
-msgstr "Settings"
+msgstr "Rename"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
@@ -182,3 +170,13 @@ msgstr[1] "%{count} submissions"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create_item_popup.create.button"
 msgstr "Create"
+
+#, elixir-autogen, elixir-format
+msgid "1 file"
+msgid_plural "* files"
+msgstr[0] "1 file"
+msgstr[1] "%{count} files"
+
+#, elixir-autogen, elixir-format
+msgid "people.page.title"
+msgstr "People working on this project"

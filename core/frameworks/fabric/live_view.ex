@@ -26,16 +26,39 @@ defmodule Fabric.LiveView do
       use Fabric
 
       @impl true
-      def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
-        handle_event(name, payload, socket)
-      end
-
-      @impl true
       def handle_event(_name, _payload, _socket) do
         raise "handle_event/3 not implemented"
       end
 
       defoverridable handle_event: 3
+
+      @impl true
+      def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
+        handle_event(name, payload, socket)
+      end
+
+      @impl true
+      def handle_info({ref, %{async: async}}, socket) do
+        Process.demonitor(ref, [:flush])
+        handle_async(socket, async)
+      end
+
+      defp handle_async(socket, %{
+             source: %Fabric.LiveComponent.RefModel{} = live_component,
+             event: name,
+             result: result
+           }) do
+        Fabric.send_event(live_component, %{name: name, payload: result})
+        {:noreply, socket}
+      end
+
+      defp handle_async(socket, %{
+             source: %Fabric.LiveView.RefModel{},
+             event: name,
+             result: result
+           }) do
+        handle_event(name, result, socket)
+      end
     end
   end
 end

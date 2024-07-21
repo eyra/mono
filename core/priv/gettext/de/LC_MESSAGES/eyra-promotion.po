@@ -1,0 +1,108 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "banner.subtitle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "banner.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "banner.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.banner.photo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.banner.photo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "background.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "description.public.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "background.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "devices.available.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expectations.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expectations.public.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "expectations.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.spots.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.different.image.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "subtitle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.inform.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.inform.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "language.available.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "copy.title"
+msgstr ""

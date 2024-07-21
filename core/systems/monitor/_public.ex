@@ -1,4 +1,6 @@
 defmodule Systems.Monitor.Public do
+  alias Ecto.Multi
+  alias Core.Repo
   alias Systems.Account.User
   alias Systems.Monitor.Queries
   alias Frameworks.Utility.Module
@@ -43,6 +45,37 @@ defmodule Systems.Monitor.Public do
   def event({model, topic, user_ref}) do
     user_id = User.user_id(user_ref)
     event({model, topic}) ++ ["user=#{user_id}"]
+  end
+
+  def reset(event_template) when is_tuple(event_template) do
+    event_template
+    |> event()
+    |> reset()
+  end
+
+  def reset(event_template) when is_list(event_template) do
+    Multi.new()
+    |> multi_reset(event_template)
+    |> Repo.transaction()
+  end
+
+  def multi_reset(%Multi{} = multi, event_template) when is_tuple(event_template) do
+    multi_reset(multi, event_template |> event())
+  end
+
+  def multi_reset(%Multi{} = multi, event_template) when is_list(event_template) do
+    uuid = Ecto.UUID.generate()
+
+    sum_name = "sum_#{uuid}"
+    event_name = "event_#{uuid}"
+
+    multi
+    |> Multi.run(sum_name, fn _, _ ->
+      {:ok, sum(event_template)}
+    end)
+    |> Multi.run(event_name, fn _, %{^sum_name => sum} ->
+      log(event_template ++ ["action=reset"], value: -sum)
+    end)
   end
 
   defdelegate clear(event), to: Queries

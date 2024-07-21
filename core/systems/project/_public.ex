@@ -1,17 +1,41 @@
 defmodule Systems.Project.Public do
-  import Ecto.Query, warn: false
+  @behaviour Frameworks.Concept.Context.Handler
+
   import CoreWeb.Gettext
+  import Ecto.Query, warn: false
   import Systems.Project.Queries
 
-  alias Core.Repo
-  alias Systems.Account.User
   alias Core.Authorization
+  alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
+  alias Systems.Account.User
 
-  alias Systems.Assignment
-  alias Systems.Workflow
-  alias Systems.Graphite
   alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Graphite
   alias Systems.Project
+  alias Systems.Storage
+  alias Systems.Workflow
+
+  @impl true
+  def name(:parent, %Systems.Storage.EndpointModel{} = model) do
+    case get_by_item_special(model) do
+      %{name: name} -> {:ok, name}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  @impl true
+  def name(:self, %Systems.Storage.EndpointModel{} = model) do
+    case get_item_by(model) do
+      %{name: name} -> {:ok, name}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  @impl true
+  def name(_, _), do: {:error, :not_supported}
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,
@@ -27,6 +51,13 @@ defmodule Systems.Project.Public do
       preload: ^preload
     )
     |> Repo.one()
+  end
+
+  def get_by_item_special(special) do
+    special
+    |> get_item_by()
+    |> get_node_by_item!()
+    |> get_by_root()
   end
 
   def get_node!(id, preload \\ []) do
@@ -49,6 +80,31 @@ defmodule Systems.Project.Public do
     |> Repo.one!()
   end
 
+  def get_storage_endpoint_by(%Assignment.Model{} = assignment) do
+    assignment
+    |> Project.Public.get_item_by()
+    |> get_storage_endpoint_by()
+  end
+
+  def get_storage_endpoint_by(%Project.ItemModel{} = project_item) do
+    project_item
+    |> Project.Public.get_node_by_item!([:auth_node])
+    |> get_storage_endpoint_by()
+  end
+
+  def get_storage_endpoint_by(%Project.NodeModel{} = project_node) do
+    storage_endpoint_item =
+      project_node
+      |> Project.Public.list_items(:storage_endpoint, Project.ItemModel.preload_graph(:down))
+      |> List.first()
+
+    if storage_endpoint_item do
+      {:ok, Map.get(storage_endpoint_item, :storage_endpoint)}
+    else
+      {:error, {:storage_endpoint, :not_available}}
+    end
+  end
+
   def get_item_by(assignment, preload \\ [])
 
   def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
@@ -61,6 +117,10 @@ defmodule Systems.Project.Public do
 
   def get_item_by(%Graphite.LeaderboardModel{id: advert_id}, preload) do
     get_item_by_special(:leaderboard, advert_id, preload)
+  end
+
+  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}, preload) do
+    get_item_by_special(:storage_endpoint, storage_endpoint_id, preload)
   end
 
   defp get_item_by_special(special_name, special_id, preload) do
@@ -101,6 +161,12 @@ defmodule Systems.Project.Public do
     |> Repo.preload(preload)
   end
 
+  def list_items(node, :assignment, preload) do
+    item_query_by_assignment(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def list_items(node, {:assignment, template}, preload) do
     item_query_by_assignment(node, template)
     |> Repo.all()
@@ -115,6 +181,12 @@ defmodule Systems.Project.Public do
 
   def list_items(node, :leaderboard, preload) do
     item_query_by_leaderboard(node)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_items(node, :storage_endpoint, preload) do
+    item_query_by_storage_endpoint(node)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -225,6 +297,10 @@ defmodule Systems.Project.Public do
     prepare_item(attrs, :leaderboard, leaderboard)
   end
 
+  def prepare_item(attrs, %Ecto.Changeset{data: %Storage.EndpointModel{}} = changeset) do
+    prepare_item(attrs, :storage_endpoint, changeset)
+  end
+
   def prepare_item(attrs, %Ecto.Changeset{data: %Advert.Model{}} = changeset) do
     prepare_item(attrs, :advert, changeset)
   end
@@ -258,11 +334,31 @@ defmodule Systems.Project.Public do
   end
 
   def add_owner!(%Project.Model{} = project, user) do
-    :ok = Authorization.assign_role(user, project, :owner)
+    Multi.new()
+    |> Ecto.Multi.put(:project, project)
+    |> Ecto.Multi.put(:user, user)
+    |> Multi.run(:add, fn _, %{user: user, project: project} ->
+      case Authorization.assign_role(user, project, :owner) do
+        :ok -> {:ok, :added}
+        error -> {:error, error}
+      end
+    end)
+    |> Signal.Public.multi_dispatch({:project, :add_owner})
+    |> Repo.transaction()
   end
 
   def remove_owner!(%Project.Model{} = project, user) do
-    Authorization.remove_role!(user, project, :owner)
+    Multi.new()
+    |> Ecto.Multi.put(:project, project)
+    |> Ecto.Multi.put(:user, user)
+    |> Multi.run(:remove, fn _, %{user: user, project: project} ->
+      case Authorization.remove_role!(user, project, :owner) do
+        {count, _} when count > 0 -> {:ok, :removed}
+        error -> {:error, error}
+      end
+    end)
+    |> Signal.Public.multi_dispatch({:project, :remove_owner})
+    |> Repo.transaction()
   end
 
   def list_owners(%Project.Model{} = project, preload \\ []) do

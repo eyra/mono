@@ -12,8 +12,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "request.verification.body"
-msgstr "Only verified members can publish content. Please contact us at <a href=\"mailto:verify@eyra.co\">hello@eyra.co</a> so we can help you become a verified member."
+msgstr "Thank you for your interest. Publishing on the Next platform is subject to payment. Reach out to the Eyra support team for further information: <a href=\"mailto:support@eyra.co\">support@eyra.co</a>."
 
 #, elixir-autogen, elixir-format
 msgid "request.verification.title"
-msgstr "Request verification"
+msgstr "Interested in publishing?"

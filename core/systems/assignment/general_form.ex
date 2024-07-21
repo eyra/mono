@@ -2,13 +2,18 @@ defmodule Systems.Assignment.GeneralForm do
   use CoreWeb.LiveForm
 
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Text
 
   alias Systems.Assignment
 
   @impl true
   def update(
-        %{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint},
+        %{
+          id: id,
+          entity: entity,
+          viewport: viewport,
+          breakpoint: breakpoint,
+          content_flags: content_flags
+        },
         socket
       ) do
     changeset = Assignment.InfoModel.changeset(entity, :create, %{})
@@ -21,7 +26,8 @@ defmodule Systems.Assignment.GeneralForm do
         entity: entity,
         changeset: changeset,
         viewport: viewport,
-        breakpoint: breakpoint
+        breakpoint: breakpoint,
+        content_flags: content_flags
       )
       |> update_language_items()
     }
@@ -78,9 +84,12 @@ defmodule Systems.Assignment.GeneralForm do
     ~H"""
     <div>
         <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-          <Text.title3><%= dgettext("eyra-assignment", "settings.general.title") %></Text.title3>
-          <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-          <.radio_group form={form} field={:language} label_text={dgettext("eyra-assignment", "settings.language.label")} items={@language_items}/>
+          <%= if Map.get(@content_flags, :expected, false) do %>
+            <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
+          <% end %>
+          <%= if Map.get(@content_flags, :language, false) do %>
+            <.radio_group form={form} field={:language} label_text={dgettext("eyra-assignment", "settings.language.label")} items={@language_items}/>
+          <% end %>
         </.form>
     </div>
     """

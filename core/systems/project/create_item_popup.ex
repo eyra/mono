@@ -39,11 +39,14 @@ defmodule Systems.Project.CreateItemPopup do
 
     filter =
       Systems.Project.ItemTemplates.values()
-      |> Enum.reject(&(&1 == :leaderboard))
+      |> Enum.filter(&include?/1)
 
     template_labels = Project.ItemTemplates.labels(selected_template, filter)
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
+
+  defp include?(:questionnaire), do: feature_enabled?(:panl)
+  defp include?(_), do: true
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
     socket

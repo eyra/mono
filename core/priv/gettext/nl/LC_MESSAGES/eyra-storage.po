@@ -78,3 +78,131 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "yoda.annotation"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project.item.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "goto.storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.date.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.file.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.size.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.files.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bytes.kb.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bytes.mb.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty.files.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "empty_confirmation_view.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.recent.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.search.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.finder.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "files.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "bytes.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.valid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.submit.button"
+msgstr ""

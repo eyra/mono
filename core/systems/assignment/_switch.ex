@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.Switch do
+  alias Systems.Project
   use Frameworks.Signal.Handler
   require Logger
 
@@ -13,6 +14,25 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
+        {:content_page, _} = signal,
+        %{content_page: content_page} = message
+      ) do
+    if assignment =
+         Assignment.Public.get_by_content_page(
+           content_page,
+           Assignment.Model.preload_graph(:down)
+         ) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
         {:project_item, :inserted} = signal,
         %{project_item: %{advert: %{assignment_id: assignment_id}}} = message
       ) do
@@ -22,6 +42,25 @@ defmodule Systems.Assignment.Switch do
       {:assignment, signal},
       Map.merge(message, %{assignment: assignment})
     )
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
+        {:project_item, :inserted} = signal,
+        %{project_item: %{storage_endpoint: _} = project_item} = message
+      ) do
+    project_item
+    |> Project.Public.get_node_by_item!()
+    |> Project.Public.list_items(:assignment, Project.ItemModel.preload_graph(:down))
+    |> Enum.map(& &1.assignment)
+    |> Enum.each(fn assignment ->
+      handle(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end)
 
     :ok
   end
@@ -54,19 +93,6 @@ defmodule Systems.Assignment.Switch do
   def intercept({:assignment_info, _} = signal, %{assignment_info: info} = message) do
     if assignment = Assignment.Public.get_by(info, Assignment.Model.preload_graph(:down)) do
       dispatch!(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
-      )
-    end
-
-    :ok
-  end
-
-  @impl true
-  def intercept({:storage_endpoint, _} = signal, %{storage_endpoint: storage_endpoint} = message) do
-    if assignment =
-         Assignment.Public.get_by(storage_endpoint, Assignment.Model.preload_graph(:down)) do
-      handle(
         {:assignment, signal},
         Map.merge(message, %{assignment: assignment})
       )
@@ -134,7 +160,7 @@ defmodule Systems.Assignment.Switch do
 
   def intercept({:lab_tool, :reservation_created}, %{tool: tool, user: user}) do
     if Assignment.Public.get_by_tool(tool) do
-      Assignment.Public.lock_task(tool, user)
+      Assignment.Public.start_task(tool, user)
     end
 
     :ok
@@ -150,7 +176,7 @@ defmodule Systems.Assignment.Switch do
       delete_crew_tasks(message)
     end
 
-    with {:crew_task, :locked} <- event do
+    with {:crew_task, :started} <- event do
       %{crew_task: crew_task} = message
       Assignment.Private.log_performance_event(assignment, crew_task, :started)
     end

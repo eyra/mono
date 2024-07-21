@@ -37,6 +37,12 @@ defmodule Systems.Assignment.Public do
     |> Repo.get(id)
   end
 
+  def get_by_content_page(%Content.PageModel{} = page, preload \\ []) do
+    assignment_query(page)
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
     |> Repo.get!(id)
@@ -498,11 +504,11 @@ defmodule Systems.Assignment.Public do
     Crew.Public.get_task(crew, identifier)
   end
 
-  def lock_task(tool, identifier) do
+  def start_task(tool, identifier) do
     if task = get_task(tool, identifier) do
-      Crew.Public.lock_task(task)
+      Crew.Public.start_task(task)
     else
-      Logger.warn("Can not lock task")
+      Logger.warn("Can not start task")
     end
   end
 

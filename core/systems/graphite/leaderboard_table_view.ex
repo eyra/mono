@@ -86,7 +86,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
       </Align.horizontal_center>
       <.spacing value="M" />
       <%= if @active_metric do %>
-        <.table scores={@scores} />
+        <.html scores={@scores} />
       <% end %>
     </div>
     """

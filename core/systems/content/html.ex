@@ -103,12 +103,12 @@ defmodule Systems.Content.Html do
   def tabbar_page(assigns) do
     ~H"""
       <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
-        <Navigation.action_bar>
+        <Navigation.tabbar>
           <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
-        </Navigation.action_bar>
+        </Navigation.tabbar>
 
         <div id="tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-          <Tabbar.content tabs={@tabs} />
+          <Tabbar.content tabs={@tabs} include_top_margin={false} />
         </div>
       </.live_workspace>
     """
@@ -137,7 +137,7 @@ defmodule Systems.Content.Html do
             </Navigation.action_bar>
           </:top_bar>
 
-          <div id="assignment" phx-hook="LiveContent" data-show-errors={@show_errors}>
+          <div id="content_management_tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbar.content tabs={@tabs} />
           </div>
           <Tabbar.footer tabs={@tabs} />

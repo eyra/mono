@@ -1,11 +1,7 @@
 defmodule Systems.Project.ItemForm do
   use CoreWeb.LiveForm
 
-  import CoreWeb.UI.Dialog
-
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   # Handle initial update
   @impl true
@@ -34,7 +30,12 @@ defmodule Systems.Project.ItemForm do
   end
 
   defp update_buttons(%{assigns: %{myself: myself}} = socket) do
-    assign(socket, buttons: form_dialog_buttons(myself))
+    submit = %{
+      action: %{type: :send, target: myself, event: "submit"},
+      face: %{type: :primary, label: dgettext("eyra-ui", "submit.button")}
+    }
+
+    assign(socket, buttons: [submit])
   end
 
   # Handle Events
@@ -77,13 +78,20 @@ defmodule Systems.Project.ItemForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.dialog {%{title: @title, buttons: @buttons}}>
-        <div id={"#{@id}_project_item_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
-          <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-change="change" phx-target={@myself} >
-            <.text_input form={form} field={:name} label_text={dgettext("eyra-project", "item.form.name.label")} debounce="0" />
-          </.form>
-        </div>
-      </.dialog>
+      <div class="text-title5 font-title5 sm:text-title3 sm:font-title3">
+        <%= dgettext("eyra-project", "item.form.title") %>
+      </div>
+      <.spacing value="S" />
+      <div id={"#{@id}_project_item_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
+        <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-change="change" phx-target={@myself} >
+          <.text_input form={form} field={:name} debounce="0" />
+        </.form>
+      </div>
+      <div class="flex flex-row gap-4">
+        <%= for button <- @buttons do %>
+          <Button.dynamic {button} />
+        <% end %>
+      </div>
     </div>
     """
   end
