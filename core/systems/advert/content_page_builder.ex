@@ -4,6 +4,8 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
+  alias Frameworks.Concept.Context
+
   alias Systems.Content
   alias Systems.Advert
   alias Systems.Pool
@@ -21,6 +23,7 @@ defmodule Systems.Advert.ContentPageBuilder do
     show_errors = submitted?
 
     tabs = create_tabs(advert, show_errors, assigns)
+    breadcrumbs = create_breadcrumbs(advert)
     action_map = action_map(advert, assigns)
     actions = actions(advert, action_map)
 
@@ -30,11 +33,16 @@ defmodule Systems.Advert.ContentPageBuilder do
       submission: submission,
       promotion: promotion,
       tabs: tabs,
+      breadcrumbs: breadcrumbs,
       actions: actions,
       submitted?: submitted?,
       show_errors: show_errors,
       active_menu_item: :projects
     }
+  end
+
+  defp create_breadcrumbs(advert) do
+    Context.breadcrumbs(advert)
   end
 
   defp create_tabs(advert, show_errors, assigns) do

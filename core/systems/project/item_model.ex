@@ -28,6 +28,9 @@ defmodule Systems.Project.ItemModel do
 
   @required_fields ~w(name project_path)a
   @fields @required_fields
+  @special_fields ~w(storage_endpoint assignment advert leaderboard)a
+
+  use Frameworks.Concept.Special, @special_fields
 
   @doc false
   def changeset(project_item, attrs) do
@@ -62,8 +65,6 @@ defmodule Systems.Project.ItemModel do
 
   def preload_graph(:storage_endpoint),
     do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
-
-  def special(%{assignment: %{id: _id} = special}), do: special
 
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))

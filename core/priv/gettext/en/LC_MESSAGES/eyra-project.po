@@ -180,3 +180,7 @@ msgstr[1] "%{count} files"
 #, elixir-autogen, elixir-format
 msgid "people.page.title"
 msgstr "People working on this project"
+
+#, elixir-autogen, elixir-format
+msgid "first.breadcrumb.label"
+msgstr "Projects"

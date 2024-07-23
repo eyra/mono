@@ -24,6 +24,7 @@ defmodule Systems.Storage.Public do
     special_changeset = prepare_endpoint_special(special_type, attrs)
 
     %Storage.EndpointModel{}
+    |> Storage.EndpointModel.changeset(%{})
     |> Storage.EndpointModel.change_special(special_type, special_changeset)
     |> Changeset.put_assoc(:auth_node, Authorization.prepare_node())
   end

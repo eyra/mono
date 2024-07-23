@@ -180,3 +180,7 @@ msgstr[1] ""
 #, elixir-autogen, elixir-format
 msgid "people.page.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "first.breadcrumb.label"
+msgstr ""

@@ -126,13 +126,14 @@ defmodule Systems.Content.Html do
   attr(:show_errors, :string, required: true)
   attr(:actions, :list, required: true)
   attr(:more_actions, :list, default: [])
+  attr(:breadcrumbs, :list, required: true)
 
   def management_page(assigns) do
     ~H"""
       <div id={:content_management_page} phx-hook="ViewportResize">
         <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
           <:top_bar>
-            <Navigation.action_bar right_bar_buttons={@actions} more_buttons={@more_actions}>
+            <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
             </Navigation.action_bar>
           </:top_bar>

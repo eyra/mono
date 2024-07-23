@@ -11,17 +11,23 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
         assigns
       ) do
     show_errors = true
+    breadcrumbs = create_breadcrumbs(endpoint)
     tabs = create_tabs(endpoint, show_errors, assigns)
-    title = Context.name(:self, endpoint, "Data")
+    title = Context.name(endpoint, :self, "Data")
 
     %{
       id: id,
       title: title,
+      breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: [],
       show_errors: show_errors,
       active_menu_item: :projects
     }
+  end
+
+  defp create_breadcrumbs(endpoint) do
+    Context.breadcrumbs(endpoint)
   end
 
   defp get_tab_keys(endpoint) do
@@ -73,7 +79,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = true
-    context_name = Context.name(:parent, endpoint, "Current")
+    context_name = Context.name(endpoint, :parent, "Current")
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{

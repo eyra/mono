@@ -39,6 +39,7 @@ defmodule Systems.Feldspar.ContentPage do
     ~H"""
       <.management_page
         title={@vm.title}
+        breadcrumbs={@vm.breadcrumbs}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
         actions={@actions}

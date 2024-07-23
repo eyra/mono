@@ -1,4 +1,5 @@
 defmodule Systems.Project.Public do
+  use CoreWeb, :verified_routes
   @behaviour Frameworks.Concept.Context.Handler
 
   import CoreWeb.Gettext
@@ -36,6 +37,42 @@ defmodule Systems.Project.Public do
 
   @impl true
   def name(_, _), do: {:error, :not_supported}
+
+  @impl true
+  def breadcrumbs(%Project.NodeModel{} = node) do
+    project = get_by_root(node)
+
+    {
+      :ok,
+      [
+        first_breadcrumb(),
+        %{label: project.name, path: "/project/node/#{node.id}"}
+      ]
+    }
+  end
+
+  @impl true
+  def breadcrumbs(%{id: id} = model) do
+    if item = get_item_by(model) do
+      special_field = Project.ItemModel.special_field(item)
+      node = get_node_by_item!(item)
+      {:ok, node_breadcrumbs} = breadcrumbs(node)
+
+      {
+        :ok,
+        node_breadcrumbs ++
+          [
+            %{label: item.name, path: "/#{special_field}/#{id}/content"}
+          ]
+      }
+    else
+      {:error, :unknown}
+    end
+  end
+
+  defp first_breadcrumb() do
+    %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~p"/project"}
+  end
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,

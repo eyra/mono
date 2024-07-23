@@ -14,7 +14,7 @@ defmodule Systems.Storage.Controller do
            Storage.EndpointModel.preload_graph(:down)
          ) do
       special = Storage.EndpointModel.special(endpoint)
-      context_name = Context.name(:parent, endpoint, "export")
+      context_name = Context.name(endpoint, :parent, "export")
 
       export(conn, special, context_name)
     else

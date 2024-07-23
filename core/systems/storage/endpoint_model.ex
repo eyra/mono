@@ -30,6 +30,8 @@ defmodule Systems.Storage.EndpointModel do
   @required_fields @fields
   @special_fields ~w(builtin yoda centerdata aws azure)a
 
+  use Frameworks.Concept.Special, @special_fields
+
   @spec changeset(
           {map(), map()}
           | %{
@@ -56,54 +58,6 @@ defmodule Systems.Storage.EndpointModel do
     dgettext("eyra-storage", "project.item.tag")
   end
 
-  def change_special(endpoint, special_field, special) when is_atom(special_field) do
-    specials =
-      Enum.map(
-        @special_fields,
-        &{&1,
-         if &1 == special_field do
-           special
-         else
-           nil
-         end}
-      )
-
-    changeset(endpoint, %{})
-    |> then(
-      &Enum.reduce(specials, &1, fn {field, value}, changeset ->
-        put_assoc(changeset, field, value)
-      end)
-    )
-  end
-
-  def special(endpoint) do
-    if field = special_field(endpoint) do
-      Map.get(endpoint, field)
-    else
-      nil
-    end
-  end
-
-  def special_field_id(endpoint) do
-    if field = special_field(endpoint) do
-      map_to_field_id(field)
-    else
-      nil
-    end
-  end
-
-  def special_field(endpoint) do
-    Enum.reduce(@special_fields, nil, fn field, acc ->
-      field_id = map_to_field_id(field)
-
-      if Map.get(endpoint, field_id) != nil do
-        field
-      else
-        acc
-      end
-    end)
-  end
-
   def ready?(endpoint) do
     if special = special(endpoint) do
       Concept.ContentModel.ready?(special)
@@ -118,8 +72,6 @@ defmodule Systems.Storage.EndpointModel do
 
   def asset_image_src(:builtin, type), do: Assets.image_src("next", type)
   def asset_image_src(special, type), do: Assets.image_src("#{special}", type)
-
-  defp map_to_field_id(field), do: String.to_existing_atom("#{field}_id")
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(endpoint), do: endpoint.auth_node_id
