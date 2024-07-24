@@ -74,7 +74,7 @@ defmodule Systems.Storage.EndpointDataView do
     export_button = %{
       action: %{
         type: :http_download,
-        to: ~p"/storage/#{id}/export"
+        to: ~p"/storage/endpoint/#{id}/export"
       },
       face: %{
         type: :label,

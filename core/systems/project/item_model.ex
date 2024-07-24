@@ -271,7 +271,7 @@ defmodule Systems.Project.ItemModel do
       %{
         type: :secundary,
         id: id,
-        path: ~p"/storage/#{storage_endpoint_id}/content",
+        path: ~p"/storage/endpoint/#{storage_endpoint_id}/content",
         image_info: image_info,
         icon_url: icon_url,
         label: get_label(Storage.Public.status(storage_endpoint)),

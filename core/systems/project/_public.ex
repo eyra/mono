@@ -54,7 +54,11 @@ defmodule Systems.Project.Public do
   @impl true
   def breadcrumbs(%{id: id} = model) do
     if item = get_item_by(model) do
-      special_field = Project.ItemModel.special_field(item)
+      special_path =
+        Project.ItemModel.special_field(item)
+        |> Atom.to_string()
+        |> String.replace("_", "/")
+
       node = get_node_by_item!(item)
       {:ok, node_breadcrumbs} = breadcrumbs(node)
 
@@ -62,7 +66,7 @@ defmodule Systems.Project.Public do
         :ok,
         node_breadcrumbs ++
           [
-            %{label: item.name, path: "/#{special_field}/#{id}/content"}
+            %{label: item.name, path: "/#{special_path}/#{id}/content"}
           ]
       }
     else
