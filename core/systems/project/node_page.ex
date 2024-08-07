@@ -28,9 +28,9 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def compose(:create_item_popup, %{vm: %{node: node}}) do
+  def compose(:create_item_view, %{vm: %{node: node}}) do
     %{
-      module: Project.CreateItemPopup,
+      module: Project.CreateItemView,
       params: %{node: node}
     }
   end
@@ -67,8 +67,8 @@ defmodule Systems.Project.NodePage do
     {
       :noreply,
       socket
-      |> compose_child(:create_item_popup)
-      |> show_popup(:create_item_popup)
+      |> compose_child(:create_item_view)
+      |> show_modal(:create_item_view, :dialog)
     }
   end
 
