@@ -4,7 +4,7 @@ defmodule Systems.Storage.EmptyConfirmationView do
   import Frameworks.Pixel.Form
 
   @impl true
-  def update(%{context_name: context_name}, socket) do
+  def update(%{molecule_name: molecule_name}, socket) do
     loading = Map.get(socket.assigns, :loading, false)
     submit_enabled = Map.get(socket.assigns, :submit_enabled, false)
     confirm_name = Map.get(socket.assigns, :confirm_name, "")
@@ -13,7 +13,7 @@ defmodule Systems.Storage.EmptyConfirmationView do
       :ok,
       socket
       |> assign(
-        context_name: context_name,
+        molecule_name: molecule_name,
         confirm_name: confirm_name,
         loading: loading,
         submit_enabled: submit_enabled
@@ -47,9 +47,9 @@ defmodule Systems.Storage.EmptyConfirmationView do
   def handle_event(
         "change",
         %{"confirm_name" => confirm_name},
-        %{assigns: %{context_name: context_name}} = socket
+        %{assigns: %{molecule_name: molecule_name}} = socket
       ) do
-    submit_enabled = confirm_name == context_name
+    submit_enabled = confirm_name == molecule_name
     {:noreply, socket |> assign(confirm_name: confirm_name, submit_enabled: submit_enabled)}
   end
 
@@ -76,7 +76,7 @@ defmodule Systems.Storage.EmptyConfirmationView do
       <.form id={@id} for={@form} phx-change="change" phx-submit="submit" phx-target={@myself}>
         <div class="flex flex-col gap-8">
           <Text.title4><%= dgettext("eyra-storage", "empty_confirmation_view.title") %></Text.title4>
-          <Text.body_large><%= raw(dgettext("eyra-storage", "empty_confirmation_view.body", name: @context_name)) %></Text.body_large>
+          <Text.body_large><%= raw(dgettext("eyra-storage", "empty_confirmation_view.body", name: @molecule_name)) %></Text.body_large>
           <div class="flex flex-col gap-4">
             <.text_input form={@form} field={:confirm_name} debounce="0" placeholder={dgettext("eyra-storage", "empty_confirmation_view.placeholder")} reserve_error_space={false} />
             <.wrap>

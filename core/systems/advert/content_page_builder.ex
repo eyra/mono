@@ -4,7 +4,7 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept
 
   alias Systems.Content
   alias Systems.Advert
@@ -42,7 +42,10 @@ defmodule Systems.Advert.ContentPageBuilder do
   end
 
   defp create_breadcrumbs(advert) do
-    Context.breadcrumbs(advert)
+    case Concept.Molecule.hierarchy(advert) do
+      {:ok, hierarchy} -> hierarchy
+      {:error, _} -> nil
+    end
   end
 
   defp create_tabs(advert, show_errors, assigns) do

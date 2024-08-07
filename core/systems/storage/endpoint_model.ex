@@ -1,16 +1,21 @@
 defmodule Systems.Storage.EndpointModel do
+  @fields ~w()a
+  @required_fields @fields
+  @special_fields ~w(builtin yoda centerdata aws azure)a
+
   use Ecto.Schema
-  alias Frameworks.Utility.Assets
+
   use Frameworks.Utility.Schema
+  use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
   import CoreWeb.Gettext
 
   alias Frameworks.Concept
+  alias Frameworks.Utility.Assets
 
-  alias Systems.{
-    Storage
-  }
+  alias Systems.Storage
+  alias Systems.Monitor
 
   require Storage.ServiceIds
 
@@ -25,12 +30,6 @@ defmodule Systems.Storage.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w()a
-  @required_fields @fields
-  @special_fields ~w(builtin yoda centerdata aws azure)a
-
-  use Frameworks.Concept.Special, @special_fields
 
   @spec changeset(
           {map(), map()}
@@ -53,10 +52,6 @@ defmodule Systems.Storage.EndpointModel do
   def preload_graph(:down), do: @special_fields ++ [:auth_node]
 
   def auth_tree(%{auth_node: auth_node}), do: auth_node
-
-  def tag(_) do
-    dgettext("eyra-storage", "project.item.tag")
-  end
 
   def ready?(endpoint) do
     if special = special(endpoint) do
@@ -81,5 +76,40 @@ defmodule Systems.Storage.EndpointModel do
     alias Systems.Storage
     def form(_), do: Storage.EndpointForm
     def ready?(endpoint), do: Storage.EndpointModel.ready?(endpoint)
+  end
+
+  defimpl Frameworks.Concept.Atom do
+    alias Frameworks.Concept
+
+    def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
+    def tag(_), do: dgettext("eyra-storage", "atom.tag")
+
+    def info(storage_endpoint, _timezone) do
+      file_count =
+        Monitor.Public.event({storage_endpoint, :files})
+        |> Monitor.Public.sum()
+
+      [dngettext("eyra-storage", "1 file", "* files", file_count)]
+    end
+
+    def status(%Storage.EndpointModel{} = endpoint) do
+      status(Storage.EndpointModel.special(endpoint))
+    end
+
+    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Atom.Status{value: :online}
+    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Atom.Status{value: :online}
+
+    def status(special) do
+      sum =
+        {special, :connected}
+        |> Monitor.Public.event()
+        |> Monitor.Public.sum()
+
+      if sum <= 0 do
+        %Concept.Atom.Status{value: :concept}
+      else
+        %Concept.Atom.Status{value: :online}
+      end
+    end
   end
 end

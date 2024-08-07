@@ -42,7 +42,7 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
-config :core, :naming, handlers: [Systems.Project.Public]
+config :core, :molecule, factory: Systems.Project.Public
 
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 

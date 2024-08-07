@@ -11,6 +11,10 @@ defmodule Frameworks.Pixel.Breadcrumbs do
     }
   end
 
+  defp update_blocks(%{assigns: %{elements: nil}} = socket) do
+    assign(socket, blocks: [])
+  end
+
   defp update_blocks(%{assigns: %{elements: elements}} = socket) do
     count = Enum.count(elements)
 

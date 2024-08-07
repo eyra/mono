@@ -2,7 +2,7 @@ defmodule Systems.Storage.Controller do
   alias CoreWeb.UI.Timestamp
   use CoreWeb, :controller
 
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept.Molecule
 
   alias Systems.Storage
   alias Systems.Rate
@@ -14,9 +14,9 @@ defmodule Systems.Storage.Controller do
            Storage.EndpointModel.preload_graph(:down)
          ) do
       special = Storage.EndpointModel.special(endpoint)
-      context_name = Context.name(endpoint, :parent, "export")
+      molecule_name = Molecule.name(endpoint, :parent, "export")
 
-      export(conn, special, context_name)
+      export(conn, special, molecule_name)
     else
       service_unavailable(conn)
     end
@@ -25,12 +25,12 @@ defmodule Systems.Storage.Controller do
   def export(
         %{remote_ip: remote_ip} = conn,
         %Storage.BuiltIn.EndpointModel{} = builtin,
-        context_name
+        molecule_name
       ) do
     date = Timestamp.now() |> Timestamp.format_date_short!()
 
     export_name =
-      [date, context_name]
+      [date, molecule_name]
       |> Enum.join(" ")
       |> Slug.slugify(separator: ?_)
 

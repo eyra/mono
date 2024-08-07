@@ -6,6 +6,9 @@ defmodule Systems.Assignment.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+  import CoreWeb.Gettext
+
+  alias Frameworks.Concept
 
   alias Systems.Assignment
   alias Systems.Workflow
@@ -17,7 +20,7 @@ defmodule Systems.Assignment.Model do
 
   schema "assignments" do
     field(:special, Ecto.Atom)
-    field(:status, Ecto.Enum, values: Assignment.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Concept.Atom.Status.values(), default: :concept)
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
     belongs_to(:info, Assignment.InfoModel)
@@ -47,6 +50,18 @@ defmodule Systems.Assignment.Model do
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
+  end
+
+  defimpl Frameworks.Concept.Atom do
+    def resource_id(%{id: id}), do: "assignment/#{id}"
+    def tag(_), do: dgettext("eyra-assignment", "atom.tag")
+
+    def info(%{info: info}, _timezone) do
+      subject_count = Map.get(info, :subject_count) || 0
+      [dngettext("eyra-assignment", "1 participant", "* participants", subject_count)]
+    end
+
+    def status(%{status: status}), do: %Concept.Atom.Status{value: status}
   end
 
   def auth_tree(%Assignment.Model{auth_node: auth_node}), do: auth_node
@@ -81,10 +96,6 @@ defmodule Systems.Assignment.Model do
   end
 
   def tool(_), do: nil
-
-  def tag(%{special: special}) do
-    Assignment.Templates.translate(special)
-  end
 
   def preload_graph(:down) do
     [

@@ -1,17 +1,14 @@
 defmodule Systems.Advert.ListView do
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Pool,
-    NextAction
-  }
-
   import Frameworks.Pixel.Empty
   import Frameworks.Pixel.Content
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-  alias Systems.Advert
+
+  alias Systems.Pool
+  alias Systems.NextAction
   alias Systems.Account
 
   @impl true
@@ -21,7 +18,7 @@ defmodule Systems.Advert.ListView do
       ) do
     clear_review_submission_next_action()
 
-    filter_labels = Advert.Status.labels([])
+    filter_labels = []
 
     {
       :ok,

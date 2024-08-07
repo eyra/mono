@@ -5,7 +5,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   import CoreWeb.Gettext
 
   import Frameworks.Utility.List
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
@@ -48,7 +48,10 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_breadcrumbs(assignment) do
-    Context.breadcrumbs(assignment)
+    case Concept.Molecule.hierarchy(assignment) do
+      {:ok, hierarchy} -> hierarchy
+      {:error, _} -> nil
+    end
   end
 
   defp action_map(assignment) do

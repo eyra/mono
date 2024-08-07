@@ -23,15 +23,15 @@ defmodule Systems.Graphite.LeaderboardModel do
   import CoreWeb.Gettext
   import Ecto.Changeset
 
-  alias Systems.{
-    Graphite,
-    Project
-  }
+  alias CoreWeb.UI.Timestamp
+  alias Frameworks.Concept
+  alias Systems.Graphite
+  alias Systems.Project
 
   schema "graphite_leaderboards" do
     field(:title, :string)
     field(:subtitle, :string)
-    field(:status, Ecto.Enum, values: Graphite.LeaderboardStatus.values())
+    field(:status, Ecto.Enum, values: Concept.Atom.Status.values())
     field(:metrics, {:array, :string})
     field(:visibility, Ecto.Enum, values: Graphite.LeaderboardVisibility.values())
     field(:open_date, :naive_datetime)
@@ -55,10 +55,6 @@ defmodule Systems.Graphite.LeaderboardModel do
     |> validate_required(@required_fields)
   end
 
-  def tag(_) do
-    dgettext("eyra-graphite", "leaderboard.project.item.tag")
-  end
-
   def preload_graph(:down),
     do:
       preload_graph([
@@ -77,6 +73,41 @@ defmodule Systems.Graphite.LeaderboardModel do
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(leaderboard), do: leaderboard.auth_node_id
+  end
+
+  defimpl Frameworks.Concept.Atom do
+    def resource_id(%{id: id}), do: "graphite/leaderboard/#{id}"
+    def tag(_), do: dgettext("eyra-graphite", "leaderboard.atom.tag")
+
+    def info(%{id: _id, tool: tool}, timezone) do
+      deadline_str = format_datetime(tool.deadline, timezone)
+      nr_submissions = Graphite.Public.get_submission_count(tool)
+
+      submission_info =
+        dngettext("eyra-graphite", "1 submission", "* submissions", nr_submissions)
+
+      deadline_info =
+        dgettext("eyra-graphite", "leaderboard.deadline.info", deadline: deadline_str)
+
+      [
+        [submission_info, deadline_info]
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.join("  |  ")
+      ]
+    end
+
+    def status(%{status: status}), do: %Concept.Atom.Status{value: status}
+
+    defp format_datetime(nil, _timezone),
+      do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
+
+    defp format_datetime(_, nil), do: ""
+
+    defp format_datetime(datetime, timezone) do
+      datetime
+      |> Timestamp.convert(timezone)
+      |> Timestamp.format!()
+    end
   end
 
   def online?(%Graphite.LeaderboardModel{status: status}) do

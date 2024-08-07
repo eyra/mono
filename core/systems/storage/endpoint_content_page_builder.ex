@@ -2,7 +2,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   import CoreWeb.Gettext
   import Frameworks.Utility.List
 
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept
   alias Systems.Storage
   alias Systems.Monitor
 
@@ -13,7 +13,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     show_errors = true
     breadcrumbs = create_breadcrumbs(endpoint)
     tabs = create_tabs(endpoint, show_errors, assigns)
-    title = Context.name(endpoint, :self, "Data")
+    title = Concept.Molecule.name(endpoint, :self, "Data")
 
     %{
       id: id,
@@ -27,7 +27,10 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   end
 
   defp create_breadcrumbs(endpoint) do
-    Context.breadcrumbs(endpoint)
+    case Concept.Molecule.hierarchy(endpoint) do
+      {:ok, hierarchy} -> hierarchy
+      {:error, _} -> nil
+    end
   end
 
   defp get_tab_keys(endpoint) do
@@ -79,12 +82,12 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = true
-    context_name = Context.name(endpoint, :parent, "Current")
+    molecule_name = Concept.Molecule.name(endpoint, :parent, "Current")
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
         endpoint: endpoint,
-        context_name: context_name,
+        molecule_name: molecule_name,
         timezone: timezone
       })
 

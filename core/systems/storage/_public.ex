@@ -118,26 +118,6 @@ defmodule Systems.Storage.Public do
     connected?
   end
 
-  def status(%Storage.EndpointModel{} = endpoint) do
-    status(Storage.EndpointModel.special(endpoint))
-  end
-
-  def status(%Storage.BuiltIn.EndpointModel{}), do: :online
-  def status(%Storage.Centerdata.EndpointModel{}), do: :online
-
-  def status(special) do
-    sum =
-      {special, :connected}
-      |> Monitor.Public.event()
-      |> Monitor.Public.sum()
-
-    if sum <= 0 do
-      :concept
-    else
-      :online
-    end
-  end
-
   defp apply_on_special_backend(endpoint, function_name) when is_atom(function_name) do
     special = Storage.EndpointModel.special(endpoint)
     {_, backend} = Storage.Private.special_info(special)

@@ -418,3 +418,13 @@ msgstr "Go to storage"
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "atom.tag"
+msgstr ""
