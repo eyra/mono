@@ -31,7 +31,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   schema "graphite_leaderboards" do
     field(:title, :string)
     field(:subtitle, :string)
-    field(:status, Ecto.Enum, values: Concept.Atom.Status.values())
+    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values())
     field(:metrics, {:array, :string})
     field(:visibility, Ecto.Enum, values: Graphite.LeaderboardVisibility.values())
     field(:open_date, :naive_datetime)
@@ -75,7 +75,7 @@ defmodule Systems.Graphite.LeaderboardModel do
     def id(leaderboard), do: leaderboard.auth_node_id
   end
 
-  defimpl Frameworks.Concept.Atom do
+  defimpl Frameworks.Concept.Leaf do
     def resource_id(%{id: id}), do: "graphite/leaderboard/#{id}"
     def tag(_), do: dgettext("eyra-graphite", "leaderboard.atom.tag")
 
@@ -96,7 +96,7 @@ defmodule Systems.Graphite.LeaderboardModel do
       ]
     end
 
-    def status(%{status: status}), do: %Concept.Atom.Status{value: status}
+    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
 
     defp format_datetime(nil, _timezone),
       do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")

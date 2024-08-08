@@ -13,7 +13,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     show_errors = true
     breadcrumbs = create_breadcrumbs(endpoint)
     tabs = create_tabs(endpoint, show_errors, assigns)
-    title = Concept.Molecule.name(endpoint, :self, "Data")
+    title = Concept.Branch.name(endpoint, :self, "Data")
 
     %{
       id: id,
@@ -27,7 +27,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   end
 
   defp create_breadcrumbs(endpoint) do
-    case Concept.Molecule.hierarchy(endpoint) do
+    case Concept.Branch.hierarchy(endpoint) do
       {:ok, hierarchy} -> hierarchy
       {:error, _} -> nil
     end
@@ -82,12 +82,12 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          %{fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = true
-    molecule_name = Concept.Molecule.name(endpoint, :parent, "Current")
+    branch_name = Concept.Branch.name(endpoint, :parent, "Current")
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
         endpoint: endpoint,
-        molecule_name: molecule_name,
+        branch_name: branch_name,
         timezone: timezone
       })
 

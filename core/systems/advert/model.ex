@@ -16,7 +16,7 @@ defmodule Systems.Advert.Model do
   alias Systems.Pool
 
   schema "adverts" do
-    field(:status, Ecto.Enum, values: Concept.Atom.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:submission, Pool.SubmissionModel)
@@ -32,7 +32,7 @@ defmodule Systems.Advert.Model do
     def id(advert), do: advert.auth_node_id
   end
 
-  defimpl Frameworks.Concept.Atom do
+  defimpl Frameworks.Concept.Leaf do
     def tag(_), do: dgettext("eyra-advert", "atom.tag")
     def resource_id(%{id: id}), do: "advert/#{id}"
 
@@ -40,7 +40,7 @@ defmodule Systems.Advert.Model do
       [pool_name]
     end
 
-    def status(%{status: status}), do: %Concept.Atom.Status{value: status}
+    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
   end
 
   @doc false

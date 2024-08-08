@@ -20,7 +20,7 @@ defmodule Systems.Assignment.Model do
 
   schema "assignments" do
     field(:special, Ecto.Atom)
-    field(:status, Ecto.Enum, values: Concept.Atom.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
     belongs_to(:info, Assignment.InfoModel)
@@ -52,7 +52,7 @@ defmodule Systems.Assignment.Model do
     def id(assignment), do: assignment.auth_node_id
   end
 
-  defimpl Frameworks.Concept.Atom do
+  defimpl Frameworks.Concept.Leaf do
     def resource_id(%{id: id}), do: "assignment/#{id}"
     def tag(_), do: dgettext("eyra-assignment", "atom.tag")
 
@@ -61,7 +61,7 @@ defmodule Systems.Assignment.Model do
       [dngettext("eyra-assignment", "1 participant", "* participants", subject_count)]
     end
 
-    def status(%{status: status}), do: %Concept.Atom.Status{value: status}
+    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
   end
 
   def auth_tree(%Assignment.Model{auth_node: auth_node}), do: auth_node

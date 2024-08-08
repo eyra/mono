@@ -78,7 +78,7 @@ defmodule Systems.Storage.EndpointModel do
     def ready?(endpoint), do: Storage.EndpointModel.ready?(endpoint)
   end
 
-  defimpl Frameworks.Concept.Atom do
+  defimpl Frameworks.Concept.Leaf do
     alias Frameworks.Concept
 
     def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
@@ -96,8 +96,8 @@ defmodule Systems.Storage.EndpointModel do
       status(Storage.EndpointModel.special(endpoint))
     end
 
-    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Atom.Status{value: :online}
-    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Atom.Status{value: :online}
+    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
+    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
 
     def status(special) do
       sum =
@@ -106,9 +106,9 @@ defmodule Systems.Storage.EndpointModel do
         |> Monitor.Public.sum()
 
       if sum <= 0 do
-        %Concept.Atom.Status{value: :concept}
+        %Concept.Leaf.Status{value: :concept}
       else
-        %Concept.Atom.Status{value: :online}
+        %Concept.Leaf.Status{value: :online}
       end
     end
   end

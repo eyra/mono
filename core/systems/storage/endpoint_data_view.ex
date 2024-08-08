@@ -6,7 +6,7 @@ defmodule Systems.Storage.EndpointDataView do
 
   @impl true
   def update(
-        %{endpoint: endpoint, molecule_name: molecule_name, timezone: timezone},
+        %{endpoint: endpoint, branch_name: branch_name, timezone: timezone},
         %{assigns: %{}} = socket
       ) do
     total_count = Map.get(socket.assigns, :total_count, nil)
@@ -19,7 +19,7 @@ defmodule Systems.Storage.EndpointDataView do
       socket
       |> assign(
         endpoint: endpoint,
-        molecule_name: molecule_name,
+        branch_name: branch_name,
         timezone: timezone,
         total_count: total_count,
         visible_count: visible_count,
@@ -45,11 +45,11 @@ defmodule Systems.Storage.EndpointDataView do
     }
   end
 
-  def compose(:empty_confirmation, %{molecule_name: molecule_name}) do
+  def compose(:empty_confirmation, %{branch_name: branch_name}) do
     %{
       module: Storage.EmptyConfirmationView,
       params: %{
-        molecule_name: molecule_name
+        branch_name: branch_name
       }
     }
   end

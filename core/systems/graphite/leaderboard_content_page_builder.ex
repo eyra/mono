@@ -15,7 +15,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
 
     %{
       id: id,
-      title: Concept.Atom.tag(leaderboard),
+      title: Concept.Leaf.tag(leaderboard),
       breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: actions(leaderboard, action_map),
@@ -27,7 +27,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   end
 
   defp create_breadcrumbs(leaderboard) do
-    case Concept.Molecule.hierarchy(leaderboard) do
+    case Concept.Branch.hierarchy(leaderboard) do
       {:ok, hierarchy} -> hierarchy
       {:error, _} -> nil
     end

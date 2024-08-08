@@ -1,6 +1,6 @@
 defmodule Systems.Project.Public do
   use CoreWeb, :verified_routes
-  @behaviour Frameworks.Concept.Molecule.Factory
+  @behaviour Frameworks.Concept.Branch.Factory
 
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
@@ -50,7 +50,7 @@ defmodule Systems.Project.Public do
   end
 
   def breadcrumbs(%Project.ItemModel{name: name} = item) do
-    special_path = "/#{Concept.Atom.resource_id(item)}/content"
+    special_path = "/#{Concept.Leaf.resource_id(item)}/content"
     special_breadcrumb = %{label: name, path: special_path}
 
     {:ok, node_breadcrumbs} =

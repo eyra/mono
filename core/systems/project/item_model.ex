@@ -101,11 +101,11 @@ defmodule Systems.Project.ItemModel do
     Enum.map(items, &auth_tree/1)
   end
 
-  defimpl Frameworks.Concept.Atom do
-    def tag(item), do: Project.ItemModel.special(item) |> Concept.Atom.tag()
-    def resource_id(item), do: Project.ItemModel.special(item) |> Concept.Atom.resource_id()
-    def info(item, timezone), do: Project.ItemModel.special(item) |> Concept.Atom.info(timezone)
-    def status(item), do: Project.ItemModel.special(item) |> Concept.Atom.status()
+  defimpl Frameworks.Concept.Leaf do
+    def tag(item), do: Project.ItemModel.special(item) |> Concept.Leaf.tag()
+    def resource_id(item), do: Project.ItemModel.special(item) |> Concept.Leaf.resource_id()
+    def info(item, timezone), do: Project.ItemModel.special(item) |> Concept.Leaf.info(timezone)
+    def status(item), do: Project.ItemModel.special(item) |> Concept.Leaf.status()
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
@@ -120,12 +120,12 @@ defmodule Systems.Project.ItemModel do
         type: :secondary,
         id: id,
         title: name,
-        path: "/#{Concept.Atom.resource_id(item)}/content",
+        path: "/#{Concept.Leaf.resource_id(item)}/content",
         image_info: image_info(item),
         icon_url: logo_url(item),
-        label: label(Concept.Atom.status(item)),
-        tags: [Concept.Atom.tag(item)],
-        info: Concept.Atom.info(item, timezone),
+        label: label(Concept.Leaf.status(item)),
+        tags: [Concept.Leaf.tag(item)],
+        info: Concept.Leaf.info(item, timezone),
         left_actions: left_actions(item),
         right_actions: right_actions(item)
       }
@@ -196,7 +196,7 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
-    defp label(%Frameworks.Concept.Atom.Status{value: status}),
+    defp label(%Frameworks.Concept.Leaf.Status{value: status}),
       do: label(status)
 
     defp label(:concept),

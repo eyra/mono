@@ -1,4 +1,4 @@
-defprotocol Frameworks.Concept.Atom do
+defprotocol Frameworks.Concept.Leaf do
   @spec resource_id(t) :: binary()
   def resource_id(_t)
 
@@ -8,11 +8,11 @@ defprotocol Frameworks.Concept.Atom do
   @spec info(t, timezone :: binary()) :: list(binary())
   def info(_t, _timezone)
 
-  @spec status(t) :: Frameworks.Concept.Atom.Status.t()
+  @spec status(t) :: Frameworks.Concept.Leaf.Status.t()
   def status(_t)
 end
 
-defmodule Frameworks.Concept.Atom.Status do
+defmodule Frameworks.Concept.Leaf.Status do
   @type t :: %__MODULE__{value: :concept | :online | :offline | :idle}
   defstruct [:value]
 

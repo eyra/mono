@@ -48,7 +48,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_breadcrumbs(assignment) do
-    case Concept.Molecule.hierarchy(assignment) do
+    case Concept.Branch.hierarchy(assignment) do
       {:ok, hierarchy} -> hierarchy
       {:error, _} -> nil
     end

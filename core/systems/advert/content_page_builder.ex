@@ -42,7 +42,7 @@ defmodule Systems.Advert.ContentPageBuilder do
   end
 
   defp create_breadcrumbs(advert) do
-    case Concept.Molecule.hierarchy(advert) do
+    case Concept.Branch.hierarchy(advert) do
       {:ok, hierarchy} -> hierarchy
       {:error, _} -> nil
     end
