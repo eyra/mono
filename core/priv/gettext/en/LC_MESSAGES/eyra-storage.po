@@ -80,7 +80,7 @@ msgid "yoda.annotation"
 msgstr "<div>Use Yoda, a research data management service developed at Utrecht University. <br> More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"
 
 #, elixir-autogen, elixir-format
-msgid "project.item.tag"
+msgid "atom.tag"
 msgstr "Storage"
 
 #, elixir-autogen, elixir-format
@@ -206,3 +206,9 @@ msgstr "Valid credentials"
 #, elixir-autogen, elixir-format
 msgid "account.submit.button"
 msgstr "Save and test"
+
+#, elixir-autogen, elixir-format
+msgid "1 file"
+msgid_plural "* files"
+msgstr[0] "1 file"
+msgstr[1] "%{count} files"

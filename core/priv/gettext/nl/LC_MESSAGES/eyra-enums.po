@@ -387,18 +387,6 @@ msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard_status.concept"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.offline"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.private"
 msgstr ""
 
@@ -421,22 +409,6 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "templates.questionnaire"
 msgstr "Online studie"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.concept"
-msgstr "Afgerond"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.idle"
-msgstr "Gesloten"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.offline"
-msgstr "Gesloten"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.online"
-msgstr "Gesloten"
 
 #, elixir-autogen, elixir-format
 msgid "admin_user_filters.verified"

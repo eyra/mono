@@ -11,6 +11,15 @@ defmodule Systems.Project.Assembly do
   alias Systems.Assignment
   alias Systems.Project
 
+  def template(%Project.ItemModel{} = item) do
+    item
+    |> Project.ItemModel.special()
+    |> template()
+  end
+
+  def template(%Assignment.Model{special: template}), do: template
+  def template(_), do: nil
+
   def delete(%Project.Model{auth_node: %{id: node_id}}) do
     from(ra in Authorization.RoleAssignment,
       where: ra.node_id == ^node_id
@@ -41,17 +50,6 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
-  def create(name, user, template) do
-    items = prepare_items(template)
-    project = prepare_project(name, items, user)
-
-    Multi.new()
-    |> Multi.insert(:project, project)
-    |> EctoHelper.run(:auth, &update_auth/2)
-    |> EctoHelper.run(:path, &update_path/2)
-    |> Repo.transaction()
-  end
-
   def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
       when is_binary(name) do
     Multi.new()
@@ -77,16 +75,6 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_project(name, items, user) when is_list(items) do
     Project.Public.prepare(%{name: name}, items, user)
-  end
-
-  defp prepare_items(:data_donation) do
-    [prepare_item(:data_donation, "Data Donation Assignment")]
-  end
-
-  defp prepare_items(:benchmark) do
-    [
-      prepare_item(:benchmark_challenge, "Benchmark Challenge")
-    ]
   end
 
   defp prepare_item(:benchmark_challenge, name) do

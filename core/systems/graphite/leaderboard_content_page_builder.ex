@@ -3,25 +3,20 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   use Systems.Content.PageBuilder
 
   import CoreWeb.Gettext
-
+  alias Frameworks.Concept
   alias Systems.Content
   alias Systems.Graphite
 
-  def view_model(%Graphite.LeaderboardModel{id: id, title: title} = leaderboard, assigns) do
+  def view_model(%Graphite.LeaderboardModel{id: id} = leaderboard, assigns) do
     action_map = action_map(leaderboard, assigns)
 
+    breadcrumbs = create_breadcrumbs(leaderboard)
     tabs = create_tabs(leaderboard, false, assigns)
-
-    title =
-      if title do
-        title
-      else
-        ""
-      end
 
     %{
       id: id,
-      title: title,
+      title: Concept.Leaf.tag(leaderboard),
+      breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: actions(leaderboard, action_map),
       show_errors: false,
@@ -29,6 +24,13 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       tabbar_id: "leaderboard_content/#{id}",
       active_menu_item: :projects
     }
+  end
+
+  defp create_breadcrumbs(leaderboard) do
+    case Concept.Branch.hierarchy(leaderboard) do
+      {:ok, hierarchy} -> hierarchy
+      {:error, _} -> nil
+    end
   end
 
   defp actions(%{status: :concept}, %{preview: preview, publish: publish}) do

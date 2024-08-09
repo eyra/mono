@@ -152,31 +152,13 @@ msgid "leaderboard.unspecified.deadline.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "leaderboard.deadline.info"
-msgstr "Deadline: %{deadline} | %{nr_submissions} submissies"
-
-#, elixir-autogen, elixir-format
-msgid "1 participant"
-msgid_plural "* participants"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "1 submission"
-msgid_plural "* submissions"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "create_item_popup.create.button"
 msgstr "Maak aan"
 
 #, elixir-autogen, elixir-format
-msgid "1 file"
-msgid_plural "* files"
-msgstr[0] ""
-msgstr[1] ""
+msgid "people.page.title"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "people.page.title"
+msgid "first.breadcrumb.label"
 msgstr ""

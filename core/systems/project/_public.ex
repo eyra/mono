@@ -1,5 +1,6 @@
 defmodule Systems.Project.Public do
-  @behaviour Frameworks.Concept.Context.Handler
+  use CoreWeb, :verified_routes
+  @behaviour Frameworks.Concept.Branch.Factory
 
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
@@ -8,9 +9,11 @@ defmodule Systems.Project.Public do
   alias Core.Authorization
   alias Core.Repo
   alias Ecto.Multi
-  alias Frameworks.Signal
-  alias Systems.Account.User
 
+  alias Frameworks.Signal
+  alias Frameworks.Concept
+
+  alias Systems.Account.User
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Graphite
@@ -36,6 +39,38 @@ defmodule Systems.Project.Public do
 
   @impl true
   def name(_, _), do: {:error, :not_supported}
+
+  @impl true
+  def hierarchy(atom) do
+    if item = get_item_by(atom) do
+      breadcrumbs(item)
+    else
+      {:error, :unknown}
+    end
+  end
+
+  def breadcrumbs(%Project.ItemModel{name: name} = item) do
+    special_path = "/#{Concept.Leaf.resource_id(item)}/content"
+    special_breadcrumb = %{label: name, path: special_path}
+
+    {:ok, node_breadcrumbs} =
+      item
+      |> get_node_by_item!()
+      |> breadcrumbs()
+
+    {:ok, node_breadcrumbs ++ [special_breadcrumb]}
+  end
+
+  def breadcrumbs(%Project.NodeModel{} = node) do
+    project = get_by_root(node)
+    project_breadcrumb = %{label: project.name, path: "/project/node/#{node.id}"}
+
+    {:ok, [projects_breadcrumb(), project_breadcrumb]}
+  end
+
+  defp projects_breadcrumb() do
+    %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~p"/project"}
+  end
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,
@@ -105,30 +140,29 @@ defmodule Systems.Project.Public do
     end
   end
 
-  def get_item_by(assignment, preload \\ [])
-
-  def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
-    get_item_by_special(:assignment, assignment_id, preload)
+  def get_item_by(%Assignment.Model{id: assignment_id}) do
+    get_item_by_special(:assignment, assignment_id)
   end
 
-  def get_item_by(%Advert.Model{id: advert_id}, preload) do
-    get_item_by_special(:advert, advert_id, preload)
+  def get_item_by(%Advert.Model{id: advert_id}) do
+    get_item_by_special(:advert, advert_id)
   end
 
-  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}, preload) do
-    get_item_by_special(:leaderboard, advert_id, preload)
+  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}) do
+    get_item_by_special(:leaderboard, advert_id)
   end
 
-  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}, preload) do
-    get_item_by_special(:storage_endpoint, storage_endpoint_id, preload)
+  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}) do
+    get_item_by_special(:storage_endpoint, storage_endpoint_id)
   end
 
-  defp get_item_by_special(special_name, special_id, preload) do
+  defp get_item_by_special(special_name, special_id) do
     item_query_by_special(special_name, special_id)
-    |> Repo.preload(preload)
     |> Repo.one()
+    |> Repo.preload(Project.ItemModel.preload_graph(:down))
   end
 
+  @spec list_owned_projects(any()) :: any()
   @doc """
   Returns the list of projects that are owned by the user.
   """

@@ -3,10 +3,7 @@ defmodule Systems.Project.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   schema "projects" do
     field(:name, :string)
@@ -83,7 +80,7 @@ defmodule Systems.Project.Model do
 
       tags =
         items
-        |> Enum.map(&Project.ItemModel.tag/1)
+        |> Enum.map(&tag/1)
         |> Enum.filter(&(&1 != nil))
         |> Enum.uniq()
 
@@ -98,6 +95,14 @@ defmodule Systems.Project.Model do
         left_actions: [rename, people],
         right_actions: [delete]
       }
+    end
+
+    defp tag(item) do
+      if template = Project.Assembly.template(item) do
+        Project.ItemTemplates.translate(template)
+      else
+        nil
+      end
     end
 
     defp info([_item]), do: "1 item"

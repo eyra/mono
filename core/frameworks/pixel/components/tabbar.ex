@@ -123,6 +123,7 @@ defmodule Frameworks.Pixel.Tabbar do
     ~H"""
     <div>
       <%= if @include_top_margin do %>
+        <div class="hidden md:block h-navbar-height" />
         <div class="h-navbar-height" />
       <% end %>
       <%= for tab <- @tabs do %>
@@ -265,7 +266,7 @@ defmodule Frameworks.Pixel.Tabbar do
       <%= if @title do %>
         <div class="flex flex-col items-center justify-center w-full">
           <div
-            class={"title text-label font-label #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
+            class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
             idle-class={idle_title(@ready, @show_errors)}
             active-class={active_title(@type)}
           >

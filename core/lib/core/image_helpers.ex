@@ -14,6 +14,7 @@ defmodule Core.ImageHelpers do
     catalog().info(image_id, width: width, height: height).url
   end
 
+  @spec get_image_info(any(), any()) :: any()
   def get_image_info(image_id, width \\ 800, height \\ 600)
 
   def get_image_info(nil, width, height) do

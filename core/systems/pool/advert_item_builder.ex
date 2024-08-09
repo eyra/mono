@@ -6,11 +6,8 @@ defmodule Systems.Pool.AdvertItemBuilder do
 
   alias Core.ImageHelpers
 
-  alias Systems.{
-    Pool,
-    Advert,
-    Assignment
-  }
+  alias Systems.Pool
+  alias Systems.Assignment
 
   def view_model(%{
         submission: %{id: submission_id, updated_at: updated_at} = submission,
@@ -66,7 +63,7 @@ defmodule Systems.Pool.AdvertItemBuilder do
 
   defp tag(submission) do
     status = advert_status(submission)
-    text = Advert.Status.translate(status)
+    text = "<Advert.Status>"
 
     type =
       case status do

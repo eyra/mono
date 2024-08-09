@@ -50,7 +50,7 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
       {:ok, domain: domain}
     end
 
-    test "redirects to SurfConext login page" do
+    test "redirects to Google login page" do
       conn =
         conn(:get, "/google")
         |> init_test_session(%{})
@@ -118,22 +118,26 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       given_name = Faker.Person.first_name()
       family_name = Faker.Person.last_name()
 
-      GoogleSignIn.register_user(%{
-        "sub" => GoogleSignIn.FakeGoogle.sub(),
-        "name" => "#{given_name} #{family_name}",
-        "email" => email,
-        "email_verified" => true,
-        "given_name" => given_name,
-        "family_name" => family_name,
-        "picture" => Faker.Internet.url(),
-        "locale" => "en"
-      })
+      GoogleSignIn.register_user(
+        %{
+          "sub" => GoogleSignIn.FakeGoogle.sub(),
+          "name" => "#{given_name} #{family_name}",
+          "email" => email,
+          "email_verified" => true,
+          "given_name" => given_name,
+          "family_name" => family_name,
+          "picture" => Faker.Internet.url(),
+          "locale" => "en"
+        },
+        true
+      )
 
       user =
         conn(:get, "/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(:test)
 
+      assert user.creator == true
       assert user.email == email
     end
 

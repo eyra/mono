@@ -24,6 +24,7 @@ defmodule Systems.Storage.Public do
     special_changeset = prepare_endpoint_special(special_type, attrs)
 
     %Storage.EndpointModel{}
+    |> Storage.EndpointModel.changeset(%{})
     |> Storage.EndpointModel.change_special(special_type, special_changeset)
     |> Changeset.put_assoc(:auth_node, Authorization.prepare_node())
   end
@@ -115,26 +116,6 @@ defmodule Systems.Storage.Public do
     end
 
     connected?
-  end
-
-  def status(%Storage.EndpointModel{} = endpoint) do
-    status(Storage.EndpointModel.special(endpoint))
-  end
-
-  def status(%Storage.BuiltIn.EndpointModel{}), do: :online
-  def status(%Storage.Centerdata.EndpointModel{}), do: :online
-
-  def status(special) do
-    sum =
-      {special, :connected}
-      |> Monitor.Public.event()
-      |> Monitor.Public.sum()
-
-    if sum <= 0 do
-      :concept
-    else
-      :online
-    end
   end
 
   defp apply_on_special_backend(endpoint, function_name) when is_atom(function_name) do

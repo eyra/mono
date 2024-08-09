@@ -71,7 +71,7 @@ msgid "advert.default.name"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "project.item.tag"
+msgid "atom.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format

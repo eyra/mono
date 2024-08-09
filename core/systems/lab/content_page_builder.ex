@@ -13,6 +13,7 @@ defmodule Systems.Lab.ContentPageBuilder do
       id: id,
       title: dgettext("link-lab", "content.title"),
       active_menu_item: :projects,
+      breadcrumbs: [],
       tabs: [],
       actions: [],
       show_errors: false

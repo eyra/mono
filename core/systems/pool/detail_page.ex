@@ -121,7 +121,7 @@ defmodule Systems.Pool.DetailPage do
       <% end %>
 
       <div id={:pool_detail} phx-hook="ViewportResize">
-        <Navigation.action_bar>
+        <Navigation.action_bar breadcrumbs={[]}>
           <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>
         <Tabbar.content tabs={@vm.tabs} />

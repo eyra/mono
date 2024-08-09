@@ -41,6 +41,7 @@ defmodule Systems.Alliance.ContentPage do
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
+        breadcrumbs={@vm.breadcrumbs}
         menus={@menus}
         modal={@modal}
         popup={@popup}

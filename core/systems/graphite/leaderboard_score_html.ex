@@ -24,8 +24,9 @@ defmodule Systems.Graphite.LeaderboardScoreHTML do
 
     rows =
       scores
-      |> Enum.map(fn %{team: team, description: description, url: url, value: value} ->
-        [team, description, url, value]
+      |> Enum.with_index()
+      |> Enum.map(fn {%{team: team, description: description, url: url, value: value}, index} ->
+        [index + 1, team, description, url, value]
       end)
 
     assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)

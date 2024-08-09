@@ -30,12 +30,13 @@ defmodule GoogleSignIn.Test do
         "locale" => "en"
       }
 
-      {:ok, google_user} = GoogleSignIn.register_user(sso_info)
+      {:ok, google_user} = GoogleSignIn.register_user(sso_info, false)
 
       for key <- Map.keys(sso_info) do
         assert Map.get(google_user, String.to_atom(key)) == Map.get(sso_info, key)
       end
 
+      assert google_user.user.creator == false
       assert google_user.user.email == Map.get(sso_info, "email")
       assert google_user.user.displayname == "#{given_name}"
       assert google_user.user.profile.fullname == "#{given_name} #{family_name}"

@@ -41,6 +41,7 @@ defmodule Systems.Document.ContentPage do
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
+        breadcrumbs={@vm.breadcrumbs}
         actions={@actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

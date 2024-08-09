@@ -1,16 +1,21 @@
 defmodule Systems.Storage.EndpointModel do
+  @fields ~w()a
+  @required_fields @fields
+  @special_fields ~w(builtin yoda centerdata aws azure)a
+
   use Ecto.Schema
-  alias Frameworks.Utility.Assets
+
   use Frameworks.Utility.Schema
+  use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
   import CoreWeb.Gettext
 
   alias Frameworks.Concept
+  alias Frameworks.Utility.Assets
 
-  alias Systems.{
-    Storage
-  }
+  alias Systems.Storage
+  alias Systems.Monitor
 
   require Storage.ServiceIds
 
@@ -25,10 +30,6 @@ defmodule Systems.Storage.EndpointModel do
 
     timestamps()
   end
-
-  @fields ~w()a
-  @required_fields @fields
-  @special_fields ~w(builtin yoda centerdata aws azure)a
 
   @spec changeset(
           {map(), map()}
@@ -52,58 +53,6 @@ defmodule Systems.Storage.EndpointModel do
 
   def auth_tree(%{auth_node: auth_node}), do: auth_node
 
-  def tag(_) do
-    dgettext("eyra-storage", "project.item.tag")
-  end
-
-  def change_special(endpoint, special_field, special) when is_atom(special_field) do
-    specials =
-      Enum.map(
-        @special_fields,
-        &{&1,
-         if &1 == special_field do
-           special
-         else
-           nil
-         end}
-      )
-
-    changeset(endpoint, %{})
-    |> then(
-      &Enum.reduce(specials, &1, fn {field, value}, changeset ->
-        put_assoc(changeset, field, value)
-      end)
-    )
-  end
-
-  def special(endpoint) do
-    if field = special_field(endpoint) do
-      Map.get(endpoint, field)
-    else
-      nil
-    end
-  end
-
-  def special_field_id(endpoint) do
-    if field = special_field(endpoint) do
-      map_to_field_id(field)
-    else
-      nil
-    end
-  end
-
-  def special_field(endpoint) do
-    Enum.reduce(@special_fields, nil, fn field, acc ->
-      field_id = map_to_field_id(field)
-
-      if Map.get(endpoint, field_id) != nil do
-        field
-      else
-        acc
-      end
-    end)
-  end
-
   def ready?(endpoint) do
     if special = special(endpoint) do
       Concept.ContentModel.ready?(special)
@@ -119,8 +68,6 @@ defmodule Systems.Storage.EndpointModel do
   def asset_image_src(:builtin, type), do: Assets.image_src("next", type)
   def asset_image_src(special, type), do: Assets.image_src("#{special}", type)
 
-  defp map_to_field_id(field), do: String.to_existing_atom("#{field}_id")
-
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(endpoint), do: endpoint.auth_node_id
   end
@@ -129,5 +76,40 @@ defmodule Systems.Storage.EndpointModel do
     alias Systems.Storage
     def form(_), do: Storage.EndpointForm
     def ready?(endpoint), do: Storage.EndpointModel.ready?(endpoint)
+  end
+
+  defimpl Frameworks.Concept.Leaf do
+    alias Frameworks.Concept
+
+    def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
+    def tag(_), do: dgettext("eyra-storage", "atom.tag")
+
+    def info(storage_endpoint, _timezone) do
+      file_count =
+        Monitor.Public.event({storage_endpoint, :files})
+        |> Monitor.Public.sum()
+
+      [dngettext("eyra-storage", "1 file", "* files", file_count)]
+    end
+
+    def status(%Storage.EndpointModel{} = endpoint) do
+      status(Storage.EndpointModel.special(endpoint))
+    end
+
+    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
+    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
+
+    def status(special) do
+      sum =
+        {special, :connected}
+        |> Monitor.Public.event()
+        |> Monitor.Public.sum()
+
+      if sum <= 0 do
+        %Concept.Leaf.Status{value: :concept}
+      else
+        %Concept.Leaf.Status{value: :online}
+      end
+    end
   end
 end

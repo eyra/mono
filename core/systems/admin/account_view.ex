@@ -130,7 +130,7 @@ defmodule Systems.Admin.AccountView do
     }
   end
 
-  defp user_info(%Account.User{verified_at: nil}), do: nil
+  defp user_info(%Account.User{verified_at: nil}), do: ""
 
   defp user_info(%Account.User{verified_at: verified_at}) do
     "Verified #{Timestamp.humanize(verified_at)}"
@@ -139,21 +139,21 @@ defmodule Systems.Admin.AccountView do
   defp user_action_button(%Account.User{creator: false} = user, target) do
     %{
       action: %{type: :send, event: "make_creator", item: user.id, target: target},
-      face: %{type: :label, label: "Make creator", icon: :add}
+      face: %{type: :plain, label: "Make creator", icon: :add}
     }
   end
 
   defp user_action_button(%Account.User{verified_at: nil} = user, target) do
     %{
       action: %{type: :send, event: "verify_creator", item: user.id, target: target},
-      face: %{type: :label, label: "Verify", icon: :verify}
+      face: %{type: :plain, label: "Verify", icon: :verify}
     }
   end
 
   defp user_action_button(user, target) do
     %{
       action: %{type: :send, event: "unverify_creator", item: user.id, target: target},
-      face: %{type: :label, label: "Unverify", icon: :unverify}
+      face: %{type: :plain, label: "Unverify", icon: :unverify}
     }
   end
 

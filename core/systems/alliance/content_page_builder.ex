@@ -14,6 +14,7 @@ defmodule Systems.Alliance.ContentPageBuilder do
       title: dgettext("eyra-alliance", "content.title"),
       active_menu_item: :projects,
       tabs: [],
+      breadcrumbs: [],
       actions: [],
       show_errors: false
     }
