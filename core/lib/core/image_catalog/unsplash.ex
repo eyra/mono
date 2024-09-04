@@ -30,7 +30,7 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
     :hackney.request(:get, url, headers, "", []) |> parse_response()
   end
 
-  defp parse_response({:ok, 200, _, client_ref}) do
+  defp parse_response({:ok, _, _, client_ref}) do
     with {:ok, body} <- :hackney.body(client_ref) do
       Jason.decode(body)
     end
