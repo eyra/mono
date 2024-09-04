@@ -5,7 +5,7 @@ let resizeHandler;
 export const Viewport = {
   mounted() {
     // Direct push of current window size to properly update view
-    this.pushResizeEvent();
+    this.pushChangeEvent();
 
     window.addEventListener("resize", (event) => {
       this.pushChangeEvent();
