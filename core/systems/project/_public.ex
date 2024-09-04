@@ -1,6 +1,5 @@
 defmodule Systems.Project.Public do
   use CoreWeb, :verified_routes
-  @behaviour Frameworks.Concept.Branch.Factory
 
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
@@ -11,7 +10,6 @@ defmodule Systems.Project.Public do
   alias Ecto.Multi
 
   alias Frameworks.Signal
-  alias Frameworks.Concept
 
   alias Systems.Account.User
   alias Systems.Advert
@@ -20,57 +18,6 @@ defmodule Systems.Project.Public do
   alias Systems.Project
   alias Systems.Storage
   alias Systems.Workflow
-
-  @impl true
-  def name(:parent, %Systems.Storage.EndpointModel{} = model) do
-    case get_by_item_special(model) do
-      %{name: name} -> {:ok, name}
-      _ -> {:error, :not_found}
-    end
-  end
-
-  @impl true
-  def name(:self, %Systems.Storage.EndpointModel{} = model) do
-    case get_item_by(model) do
-      %{name: name} -> {:ok, name}
-      _ -> {:error, :not_found}
-    end
-  end
-
-  @impl true
-  def name(_, _), do: {:error, :not_supported}
-
-  @impl true
-  def hierarchy(atom) do
-    if item = get_item_by(atom) do
-      breadcrumbs(item)
-    else
-      {:error, :unknown}
-    end
-  end
-
-  def breadcrumbs(%Project.ItemModel{name: name} = item) do
-    special_path = "/#{Concept.Leaf.resource_id(item)}/content"
-    special_breadcrumb = %{label: name, path: special_path}
-
-    {:ok, node_breadcrumbs} =
-      item
-      |> get_node_by_item!()
-      |> breadcrumbs()
-
-    {:ok, node_breadcrumbs ++ [special_breadcrumb]}
-  end
-
-  def breadcrumbs(%Project.NodeModel{} = node) do
-    project = get_by_root(node)
-    project_breadcrumb = %{label: project.name, path: "/project/node/#{node.id}"}
-
-    {:ok, [projects_breadcrumb(), project_breadcrumb]}
-  end
-
-  defp projects_breadcrumb() do
-    %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~p"/project"}
-  end
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,

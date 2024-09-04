@@ -2,19 +2,19 @@ defmodule Systems.Storage.Controller do
   alias CoreWeb.UI.Timestamp
   use CoreWeb, :controller
 
-  alias Frameworks.Concept.Branch
+  alias Frameworks.Concept
 
   alias Systems.Storage
   alias Systems.Rate
 
-  def export(conn, %{"id" => id}) do
+  def export(%{assigns: %{branch: branch}} = conn, %{"id" => id}) do
     if endpoint =
          Storage.Public.get_endpoint!(
            String.to_integer(id),
            Storage.EndpointModel.preload_graph(:down)
          ) do
       special = Storage.EndpointModel.special(endpoint)
-      branch_name = Branch.name(endpoint, :parent, "export")
+      branch_name = Concept.Branch.name(branch, :parent)
 
       export(conn, special, branch_name)
     else

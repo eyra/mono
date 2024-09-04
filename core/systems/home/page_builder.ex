@@ -16,7 +16,7 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Pool
   alias Systems.Crew
 
-  def view_model(%Account.User{} = user, assigns) do
+  def view_model(_, %{current_user: user} = assigns) do
     panl? = panl_participant?(user)
     put_locale(user, panl?)
 
@@ -58,11 +58,11 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp put_locale(%Systems.Account.User{creator: false}, true) do
-    CoreWeb.LiveLocale.put_locale("nl")
+    CoreWeb.Live.Hook.Locale.put_locale("nl")
   end
 
   defp put_locale(_, _) do
-    CoreWeb.LiveLocale.put_locale("en")
+    CoreWeb.Live.Hook.Locale.put_locale("en")
   end
 
   defp block_keys(%Account.User{}, opts) do

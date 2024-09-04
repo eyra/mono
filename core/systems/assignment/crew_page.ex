@@ -1,7 +1,9 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, {:live_view, :extended}
+  use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
-  use CoreWeb.UI.Responsive.Viewport
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   require Logger
 
@@ -30,7 +32,7 @@ defmodule Systems.Assignment.CrewPage do
     String.to_integer(id)
     |> Assignment.Public.get!([:info])
     |> Assignment.Model.language()
-    |> CoreWeb.LiveLocale.put_locale()
+    |> CoreWeb.Live.Hook.Locale.put_locale()
 
     {
       :ok,
@@ -41,7 +43,6 @@ defmodule Systems.Assignment.CrewPage do
         modal: nil,
         panel_form: nil
       )
-      |> update_timezone(session)
       |> update_panel_info(session)
       |> update_image_info()
       |> signal_started()
@@ -50,21 +51,16 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_view_model_updated(socket) do
     socket
     |> update_flow()
     |> update_image_info()
-    |> update_menus()
   end
 
   @impl true
   def handle_resize(socket) do
     socket
     |> update_image_info()
-    |> update_menus()
   end
 
   def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
@@ -235,7 +231,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         <% end %>
 
-        <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="ViewportResize">
+        <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="Viewport">
           <.flow fabric={@fabric} />
         </div>
       </.stripped>

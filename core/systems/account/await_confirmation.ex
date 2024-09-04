@@ -1,10 +1,19 @@
 defmodule Systems.Account.AwaitConfirmation do
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Menus
 
   alias Frameworks.Pixel.Text
 
+  @impl true
   def mount(_params, _session, socket) do
     require_feature(:password_sign_in)
 
@@ -14,6 +23,11 @@ defmodule Systems.Account.AwaitConfirmation do
       |> assign(active_menu_item: :profile)
       |> update_menus()
     }
+  end
+
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
   end
 
   # data(changeset, :any)

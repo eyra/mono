@@ -8,6 +8,11 @@ defmodule Systems.Project.NodePage do
   alias Systems.Project
 
   @impl true
+  def get_authorization_context(params, session, socket) do
+    get_model(params, session, socket)
+  end
+
+  @impl true
   def get_model(%{"id" => id}, _session, _socket) do
     Project.Public.get_node!(String.to_integer(id), Project.NodeModel.preload_graph(:down))
   end
@@ -87,12 +92,6 @@ defmodule Systems.Project.NodePage do
   def handle_event("saved", %{source: %{name: modal_view}}, socket) do
     {:noreply, socket |> hide_modal(modal_view)}
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do

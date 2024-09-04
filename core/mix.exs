@@ -10,6 +10,7 @@ defmodule Core.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
       deps: deps(),
       # The main page in the docs
@@ -119,6 +120,8 @@ defmodule Core.MixProject do
       {:file_system, "~> 0.2", only: [:dev, :test]},
       {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
+      {:promox, "~> 0.1.0", only: :test},
+      {:mock, "~> 0.3.0", only: :test},
       {:progress_bar, "~> 2.0.1", only: [:dev, :test]},
       {:phoenix_live_reload, "~> 1.3", only: :dev},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},

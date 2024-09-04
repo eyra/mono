@@ -18,12 +18,6 @@ defmodule Systems.Pool.LandingPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_event("register", _, socket) do
     {
       :noreply,

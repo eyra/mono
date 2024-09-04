@@ -24,7 +24,7 @@ defmodule CoreWeb.Routes do
         )
 
         plug(RemoteIp)
-        plug(CoreWeb.Plug.LiveRemoteIp)
+        plug(CoreWeb.Plug.RemoteIp)
 
         plug(:fetch_live_flash)
         plug(:fetch_meta_info)
@@ -69,6 +69,11 @@ defmodule CoreWeb.Routes do
 
       require Systems.Routes
       Systems.Routes.routes()
+
+      scope "/", CoreWeb do
+        pipe_through(:browser_unprotected)
+        get("/access_denied", ErrorController, :access_denied)
+      end
 
       scope "/", CoreWeb do
         pipe_through(:api)

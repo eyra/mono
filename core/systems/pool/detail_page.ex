@@ -3,7 +3,6 @@ defmodule Systems.Pool.DetailPage do
    The pool details screen.
   """
   use Systems.Content.Composer, :live_workspace
-  use CoreWeb.UI.Responsive.Viewport
 
   alias Frameworks.Pixel.Tabbar
   alias Frameworks.Pixel.Navigation
@@ -38,12 +37,6 @@ defmodule Systems.Pool.DetailPage do
       )
     }
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def handle_event("close_email_dialog", _, socket) do
@@ -94,12 +87,6 @@ defmodule Systems.Pool.DetailPage do
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_resize(socket) do
-    socket
-    |> update_menus()
-  end
-
   defp close_email_dialog(socket) do
     socket
     |> assign(email_dialog: nil)
@@ -120,7 +107,7 @@ defmodule Systems.Pool.DetailPage do
         </div>
       <% end %>
 
-      <div id={:pool_detail} phx-hook="ViewportResize">
+      <div id={:pool_detail} phx-hook="Viewport">
         <Navigation.action_bar breadcrumbs={[]}>
           <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>

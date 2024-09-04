@@ -34,12 +34,6 @@ defmodule Systems.Alliance.CallbackPage do
     }
   end
 
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
   defp activate_participant_task(
          %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
        ) do

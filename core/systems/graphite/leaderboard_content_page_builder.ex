@@ -7,10 +7,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   alias Systems.Content
   alias Systems.Graphite
 
-  def view_model(%Graphite.LeaderboardModel{id: id} = leaderboard, assigns) do
+  def view_model(%Graphite.LeaderboardModel{id: id} = leaderboard, %{branch: branch} = assigns) do
     action_map = action_map(leaderboard, assigns)
 
-    breadcrumbs = create_breadcrumbs(leaderboard)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(leaderboard, false, assigns)
 
     %{
@@ -24,13 +24,6 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       tabbar_id: "leaderboard_content/#{id}",
       active_menu_item: :projects
     }
-  end
-
-  defp create_breadcrumbs(leaderboard) do
-    case Concept.Branch.hierarchy(leaderboard) do
-      {:ok, hierarchy} -> hierarchy
-      {:error, _} -> nil
-    end
   end
 
   defp actions(%{status: :concept}, %{preview: preview, publish: publish}) do

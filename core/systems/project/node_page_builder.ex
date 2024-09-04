@@ -2,7 +2,7 @@ defmodule Systems.Project.NodePageBuilder do
   use Core.FeatureFlags
 
   alias Frameworks.Utility.ViewModelBuilder
-
+  alias Frameworks.Concept
   alias Systems.Project
 
   def view_model(
@@ -11,7 +11,8 @@ defmodule Systems.Project.NodePageBuilder do
         } = node,
         assigns
       ) do
-    {:ok, breadcrumbs} = Project.Public.breadcrumbs(node)
+    branch = %Project.Branch{node_id: node.id}
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     item_cards = to_item_cards(node, assigns)
     node_cards = to_node_cards(node, assigns)
 

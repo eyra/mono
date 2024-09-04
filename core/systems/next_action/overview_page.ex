@@ -20,13 +20,9 @@ defmodule Systems.NextAction.OverviewPage do
     }
   end
 
-  @impl true
   def handle_view_model_updated(socket) do
     refresh_next_actions(socket)
   end
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   def refresh_next_actions(%{assigns: %{current_user: user}} = socket) do
     assign(

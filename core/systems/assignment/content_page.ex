@@ -36,13 +36,9 @@ defmodule Systems.Assignment.ContentPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_resize(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: update_view_model(socket)
+  def handle_uri(socket) do
+    update_view_model(socket)
+  end
 
   @impl true
   def render(assigns) do

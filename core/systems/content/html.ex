@@ -130,7 +130,7 @@ defmodule Systems.Content.Html do
 
   def management_page(assigns) do
     ~H"""
-      <div id={:content_management_page} phx-hook="ViewportResize">
+      <div id={:content_management_page} phx-hook="Viewport">
         <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>

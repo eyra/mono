@@ -4,9 +4,10 @@ defmodule CoreWeb.Menu.Builder do
   @type active_item :: atom()
   @type menu :: map()
   @type user :: map() | nil
+  @type uri :: binary() | nil
   @type item :: atom()
 
-  @callback build_menu(socket, type, active_item) :: menu
+  @callback build_menu(type, active_item, user, uri) :: menu
   @callback include_map(user) :: map()
 
   alias Systems.Admin
@@ -29,22 +30,20 @@ defmodule CoreWeb.Menu.Builder do
       import CoreWeb.Menu.Helpers
 
       @impl true
-      def build_menu(assigns, menu_id, active_item) do
-        builder = &build_item(assigns, menu_id, &1, active_item, @item_flags)
+      def build_menu(menu_id, active_item, user, uri) do
+        builder = &build_item(menu_id, &1, active_item, @item_flags, user, uri)
 
         primary = select_items(menu_id, @primary)
         secondary = select_items(menu_id, @secondary)
 
         %{
-          home: build_home(assigns, menu_id, unquote(home), @home_flags),
-          primary: build(assigns, primary, builder),
-          secondary: build(assigns, secondary, builder)
+          home: build_home(menu_id, unquote(home), @home_flags, uri),
+          primary: build(primary, builder, user),
+          secondary: build(secondary, builder, user)
         }
       end
 
-      defp build(assigns, items, builder) do
-        user = Map.get(assigns, :current_user)
-
+      defp build(items, builder, user) do
         include_map =
           Map.merge(
             unquote(__MODULE__).include_map(user),

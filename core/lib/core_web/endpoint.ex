@@ -1,5 +1,6 @@
 defmodule CoreWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :core
+
   require Systems.Content.Plug
   require Systems.Feldspar.Plug
 

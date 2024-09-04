@@ -28,17 +28,19 @@ defmodule Frameworks.Pixel.Tabbar do
 
   def container(assigns) do
     ~H"""
-    <div id={@id} data-initial-tab={@initial_tab} phx-hook="Tabbar" class={"#{shape(assigns)}"}>
-      <%= if @size == :full do %>
-        <.container_full type={@type} tabs={@tabs} />
-      <% end %>
-      <%= if @size == :wide do %>
-        <.container_wide type={@type} tabs={@tabs} />
-      <% end %>
-      <%= if @size == :narrow do %>
-        <.container_narrow tabs={@tabs} />
-      <% end %>
-    </div>
+     <%= if Enum.count(@tabs) > 0  do %>
+      <div id={@id} data-initial-tab={@initial_tab} phx-hook="Tabbar" class={"#{shape(assigns)}"}>
+        <%= if @size == :full do %>
+          <.container_full type={@type} tabs={@tabs} />
+        <% end %>
+        <%= if @size == :wide do %>
+          <.container_wide type={@type} tabs={@tabs} />
+        <% end %>
+        <%= if @size == :narrow do %>
+          <.container_narrow tabs={@tabs} />
+        <% end %>
+      </div>
+    <% end %>
     """
   end
 

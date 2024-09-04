@@ -17,13 +17,13 @@ defmodule Systems.Advert.ContentPageBuilder do
           submission: submission,
           promotion: promotion
         } = advert,
-        assigns
+        %{branch: branch} = assigns
       ) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     show_errors = submitted?
 
     tabs = create_tabs(advert, show_errors, assigns)
-    breadcrumbs = create_breadcrumbs(advert)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     action_map = action_map(advert, assigns)
     actions = actions(advert, action_map)
 
@@ -39,13 +39,6 @@ defmodule Systems.Advert.ContentPageBuilder do
       show_errors: show_errors,
       active_menu_item: :projects
     }
-  end
-
-  defp create_breadcrumbs(advert) do
-    case Concept.Branch.hierarchy(advert) do
-      {:ok, hierarchy} -> hierarchy
-      {:error, _} -> nil
-    end
   end
 
   defp create_tabs(advert, show_errors, assigns) do

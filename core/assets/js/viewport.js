@@ -2,19 +2,24 @@ import _ from "lodash";
 
 let resizeHandler;
 
-export const ViewportResize = {
+export const Viewport = {
   mounted() {
     // Direct push of current window size to properly update view
     this.pushResizeEvent();
 
     window.addEventListener("resize", (event) => {
-      this.pushResizeEvent();
+      this.pushChangeEvent();
     });
   },
 
-  pushResizeEvent() {
-    console.log("pushResizeEvent");
-    this.pushEvent("viewport_resize", {
+  updated() {
+    console.log("[Viewport] updated");
+    this.pushChangeEvent();
+  },
+
+  pushChangeEvent() {
+    console.log("[Viewport] push update event");
+    this.pushEvent("viewport_changed", {
       width: window.innerWidth,
       height: window.innerHeight,
     });

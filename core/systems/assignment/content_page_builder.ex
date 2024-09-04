@@ -26,12 +26,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
   """
   def view_model(
         %{id: id} = assignment,
-        assigns
+        %{branch: branch} = assigns
       ) do
     show_errors = false
 
     template = Assignment.Private.get_template(assignment)
-    breadcrumbs = create_breadcrumbs(assignment)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(assignment, template, show_errors, assigns)
     action_map = action_map(assignment)
     actions = actions(assignment, action_map)
@@ -45,13 +45,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
       show_errors: show_errors,
       active_menu_item: :projects
     }
-  end
-
-  defp create_breadcrumbs(assignment) do
-    case Concept.Branch.hierarchy(assignment) do
-      {:ok, hierarchy} -> hierarchy
-      {:error, _} -> nil
-    end
   end
 
   defp action_map(assignment) do

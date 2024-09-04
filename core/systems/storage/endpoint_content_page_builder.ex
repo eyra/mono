@@ -8,12 +8,12 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
   def view_model(
         %{id: id} = endpoint,
-        assigns
+        %{branch: branch} = assigns
       ) do
     show_errors = true
-    breadcrumbs = create_breadcrumbs(endpoint)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(endpoint, show_errors, assigns)
-    title = Concept.Branch.name(endpoint, :self, "Data")
+    title = Concept.Branch.name(branch, :self)
 
     %{
       id: id,
@@ -24,13 +24,6 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
       show_errors: show_errors,
       active_menu_item: :projects
     }
-  end
-
-  defp create_breadcrumbs(endpoint) do
-    case Concept.Branch.hierarchy(endpoint) do
-      {:ok, hierarchy} -> hierarchy
-      {:error, _} -> nil
-    end
   end
 
   defp get_tab_keys(endpoint) do
@@ -79,10 +72,10 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          :data,
          endpoint,
          show_errors,
-         %{fabric: fabric, timezone: timezone} = _assigns
+         %{branch: branch, fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = true
-    branch_name = Concept.Branch.name(endpoint, :parent, "Current")
+    branch_name = Concept.Branch.name(branch, :parent)
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
