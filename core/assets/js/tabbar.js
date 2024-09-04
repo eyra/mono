@@ -2,6 +2,7 @@ let tabbarId = "";
 
 export const Tabbar = {
   mounted() {
+    console.log("[Tabbar] mounted");
     tabbarId = this.el.id;
 
     var initialTabId = this.el.dataset.initialTab
@@ -21,6 +22,7 @@ export const Tabbar = {
   },
 
   updated() {
+    console.log("[Tabbar] updated");
     var savedTabId = this.loadActiveTab();
     this.show(savedTabId, false);
   },
@@ -39,22 +41,36 @@ export const Tabbar = {
   },
 
   saveActiveTab(tabId) {
-    console.info("saveActiveTab ", tabId);
+    console.info("[Tabbar] saveActiveTab ", tabId);
     window.localStorage.setItem(this.getActiveTabKey(), tabId);
   },
 
+  getTabs() {
+    return document.querySelectorAll('[id^="tab_"]');
+  },
+
   getFirstTab() {
-    var firstTab = document.querySelectorAll('[id^="tab_"]')[0];
-    return firstTab.id;
+    var tabs = this.getTabs();
+    console.log("tabs", tabs);
+    if (tabs == undefined) {
+      return undefined;
+    } else {
+      return tabs[0].id;
+    }
   },
 
   show(nextTabId, scrollToTop) {
+    console.log("[Tabbar] nextTabId", nextTabId);
+    if (nextTabId == undefined) {
+      return;
+    }
+
     this.saveActiveTab(nextTabId);
     var tabs = Array.from(document.querySelectorAll('[id^="tab_"]'));
 
     // Skip unknown tab
     if (!tabs.some((tab) => tab.id === nextTabId)) {
-      console.warn("Skip unknown tab", nextTabId);
+      console.warn("[Tabbar] Skip unknown tab", nextTabId);
       return;
     }
 

@@ -12,9 +12,25 @@ defmodule CoreWeb.Live.Hook.Viewport do
     {
       :cont,
       socket
+      |> set_initial_viewport()
       |> assign_breakpoint()
       |> handle_viewport_changed(live_view_module)
     }
+  end
+
+  defp set_initial_viewport(socket) do
+    case {connected?(socket), get_connect_params(socket)} do
+      {true, %{"viewport" => viewport}} ->
+        breakpoint = breakpoint(viewport)
+
+        assign(socket,
+          viewport: viewport,
+          breakpoint: breakpoint
+        )
+
+      _ ->
+        socket
+    end
   end
 
   defp handle_viewport_changed(socket, live_view_module) do
@@ -28,14 +44,20 @@ defmodule CoreWeb.Live.Hook.Viewport do
   end
 
   defp update_viewport(socket, live_view_module, new_viewport) do
-    new_breakpoint = breakpoint(new_viewport)
+    old_viewport = Map.get(socket.assigns, :viewport, nil)
 
-    send(self(), :viewport_updated)
+    if new_viewport != old_viewport do
+      new_breakpoint = breakpoint(new_viewport)
 
-    socket
-    |> assign(viewport: new_viewport)
-    |> assign(breakpoint: new_breakpoint)
-    |> optional_apply(live_view_module, :update_view_model)
-    |> optional_apply(live_view_module, :handle_resize)
+      send(self(), :viewport_updated)
+
+      socket
+      |> assign(viewport: new_viewport)
+      |> assign(breakpoint: new_breakpoint)
+      |> optional_apply(live_view_module, :update_view_model)
+      |> optional_apply(live_view_module, :handle_resize)
+    else
+      socket
+    end
   end
 end

@@ -36,6 +36,7 @@ window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind == "initial") {
     TimeZone.sendToServer();
+    Viewport.sendToServer();
   }
 });
 
