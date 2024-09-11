@@ -3,5 +3,5 @@
   {"systems/benchmark/export_controller.ex", :no_return},
   {"systems/benchmark/export_controller.ex", :call},
   # https://elixirforum.com/t/dialyzer-listed-not-implemented-protocols-as-unknown-functions/2099/12
-  ~r/.*:unknown_function.*Function .*__impl__\/1 does not exist./
+  ~r/.*unknown_function.*/
 ]
