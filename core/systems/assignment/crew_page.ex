@@ -51,6 +51,14 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def compose(:declined_view, _) do
+    %{
+      module: Assignment.DeclinedView,
+      params: %{}
+    }
+  end
+
+  @impl true
   def handle_view_model_updated(socket) do
     socket
     |> update_flow()
@@ -132,10 +140,9 @@ defmodule Systems.Assignment.CrewPage do
       if embedded? do
         socket
       else
-        title = dgettext("eyra-assignment", "declined_view.title")
-        child = prepare_child(socket, :declined_view, Assignment.DeclinedView, %{title: title})
-        modal = %{live_component: child, style: :notification}
-        assign(socket, modal: modal)
+        socket
+        |> compose_child(:declined_view)
+        |> show_modal(:declined_view, :notification)
       end
 
     {:noreply, socket}
@@ -158,6 +165,8 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event(name, event, socket) do
+    Logger.warn("forwarding to flow: name=#{name}, event=#{inspect(event)}")
+
     {
       :noreply,
       socket |> send_event(:flow, name, event)
