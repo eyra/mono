@@ -107,6 +107,7 @@ defmodule Core.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:timex, "~> 3.7"},
       {:typed_struct, "~> 0.2.1"},
+      {:tzdata, "~>  1.1.2"},
       # i18n
       {:ex_cldr, "~> 2.25"},
       {:ex_cldr_numbers, "~> 2.23"},
