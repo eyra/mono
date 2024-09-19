@@ -220,6 +220,8 @@ defmodule Core.Authorization do
     can?(principal, permission)
   end
 
+  def can_access?(nil, _entity, _module), do: false
+
   def can_access?(_principal, nil, _module), do: false
 
   def can_access?(principal, entity, module) when is_atom(module) do

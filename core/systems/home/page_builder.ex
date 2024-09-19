@@ -16,6 +16,20 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Pool
   alias Systems.Crew
 
+  def view_model(_, %{current_user: nil}) do
+    %{
+      hero: %{
+        type: :illustration2,
+        params: %{
+          title: dgettext("eyra-home", "member.title")
+        }
+      },
+      active_menu_item: :home,
+      next_best_action: nil,
+      blocks: []
+    }
+  end
+
   def view_model(_, %{current_user: user} = assigns) do
     panl? = panl_participant?(user)
     put_locale(user, panl?)

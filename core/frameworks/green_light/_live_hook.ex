@@ -27,7 +27,7 @@ defmodule Frameworks.GreenLight.LiveHook do
           live_view_module
         )
 
-      Logger.notice("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
+      user && Logger.notice("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
       can_access?
     else
       auth_module().can_access?(user, live_view_module)
