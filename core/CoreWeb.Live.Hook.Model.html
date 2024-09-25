@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.LiveUser — core v0.1.0</title>
+    <title>CoreWeb.Live.Hook.Model — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,19 +102,19 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_user.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/model.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">CoreWeb.LiveUser</span> 
+  <span translate="no">CoreWeb.Live.Hook.Model</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>Automatically setup the current user in LiveViews.</p>
+<p>A Live Hook that injects the LiveView data model</p>
   </section>
 
 
@@ -133,7 +133,15 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#current_user/1" translate="no">current_user(arg1)</a>
+        <a href="#optional_apply/3" translate="no">optional_apply(socket, live_view_module, function)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#optional_apply/4" translate="no">optional_apply(socket, live_view_module, function, args)</a>
 
       </div>
 
@@ -153,16 +161,38 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="current_user/1">
+<section class="detail" id="optional_apply/3">
 
   <div class="detail-header">
-    <a href="#current_user/1" class="detail-link" title="Link to this function">
+    <a href="#optional_apply/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">current_user(arg1)</h1>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_user.ex#L7" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/model.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="optional_apply/4">
+
+  <div class="detail-header">
+    <a href="#optional_apply/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function, args)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/model.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

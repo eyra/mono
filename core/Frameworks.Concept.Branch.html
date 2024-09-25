@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.LiveUri — core v0.1.0</title>
+    <title>Frameworks.Concept.Branch — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-behaviour">
+  <body data-type="modules" class="page-protocol">
     <script>
 
       try {
@@ -102,20 +102,16 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_uri.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/branch.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">CoreWeb.LiveUri</span> <small>behaviour</small>
+  <span translate="no">Frameworks.Concept.Branch</span> <small>protocol</small>
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
-
-  <section id="moduledoc">
-<p>A LiveView helper that automatically sets the current locale from a session variable.</p>
-  </section>
 
 
   <section id="summary" class="details-list">
@@ -126,14 +122,44 @@ core
       </a>
       Summary
     </h1>
-<div class="summary-callbacks summary">
+<div class="summary-types summary">
   <h2>
-    <a href="#callbacks">Callbacks</a>
+    <a href="#types">Types</a>
   </h2>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:handle_uri/1" translate="no">handle_uri(t)</a>
+        <a href="#t:scope/0" translate="no">scope()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#hierarchy/1" translate="no">hierarchy(term)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#name/2" translate="no">name(term, arg2)</a>
 
       </div>
 
@@ -144,25 +170,25 @@ core
   </section>
 
 
-  <section id="callbacks" class="details-list">
+  <section id="types" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#callbacks">
+      <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
         <span class="sr-only">Link to this section</span>
       </a>
-Callbacks
+Types
     </h1>
-    <div class="callbacks-list">
-<section class="detail" id="c:handle_uri/1">
+    <div class="types-list">
+<section class="detail" id="t:scope/0">
 
   <div class="detail-header">
-    <a href="#c:handle_uri/1" class="detail-link" title="Link to this callback">
+    <a href="#t:scope/0" class="detail-link" title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
+      <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">handle_uri(t)</h1>
+    <h1 class="signature" translate="no">scope()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_uri.ex#L4" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/branch.ex#L4" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -174,7 +200,104 @@ Callbacks
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> handle_uri(<a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()) :: <a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> scope() :: :self | :parent</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">t()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/branch.ex#L1" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="hierarchy/1">
+
+  <div class="detail-header">
+    <a href="#hierarchy/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">hierarchy(term)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/branch.ex#L10" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> hierarchy(<a href="#t:t/0">t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="name/2">
+
+  <div class="detail-header">
+    <a href="#name/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">name(term, arg2)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/branch.ex#L7" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> name(<a href="#t:t/0">t</a>(), <a href="#t:scope/0">scope</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
 
       </div>
 

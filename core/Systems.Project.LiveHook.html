@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Frameworks.GreenLight.Live — core v0.1.0</title>
+    <title>Systems.Project.LiveHook — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-behaviour">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -102,19 +102,19 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/frameworks/green_light/live.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/systems/project/_live_hook.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Frameworks.GreenLight.Live</span> <small>behaviour</small>
+  <span translate="no">Systems.Project.LiveHook</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>The Live module enables automatic authorization checks for LiveViews.</p>
+<p>A Live Hook that injects the correct Branch (Project.NodeModel) for each Leaf</p>
   </section>
 
 
@@ -126,14 +126,22 @@ core
       </a>
       Summary
     </h1>
-<div class="summary-callbacks summary">
+<div class="summary-functions summary">
   <h2>
-    <a href="#callbacks">Callbacks</a>
+    <a href="#functions">Functions</a>
   </h2>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:get_authorization_context/3" translate="no">get_authorization_context(arg1, session, socket)</a>
+        <a href="#optional_apply/3" translate="no">optional_apply(socket, live_view_module, function)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#optional_apply/4" translate="no">optional_apply(socket, live_view_module, function, args)</a>
 
       </div>
 
@@ -144,45 +152,55 @@ core
   </section>
 
 
-  <section id="callbacks" class="details-list">
+  <section id="functions" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#callbacks">
+      <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
         <span class="sr-only">Link to this section</span>
       </a>
-Callbacks
+Functions
     </h1>
-    <div class="callbacks-list">
-<section class="detail" id="c:get_authorization_context/3">
+    <div class="functions-list">
+<section class="detail" id="optional_apply/3">
 
   <div class="detail-header">
-    <a href="#c:get_authorization_context/3" class="detail-link" title="Link to this callback">
+    <a href="#optional_apply/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
+      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_authorization_context(arg1, session, socket)</h1>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/green_light/live.ex#L11" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_live_hook.ex#L3" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(optional)</span>
-
   </div>
 
   <section class="docstring">
 
-      <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> get_authorization_context(
-  <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#t:unsigned_params/0">Phoenix.LiveView.unsigned_params</a>() | :not_mounted_at_router,
-  session :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  socket :: <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Socket.html#t:t/0">Phoenix.Socket.t</a>()
-) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()</pre>
+  </section>
+</section>
+<section class="detail" id="optional_apply/4">
 
-      </div>
+  <div class="detail-header">
+    <a href="#optional_apply/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function, args)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/_live_hook.ex#L3" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
 
 
   </section>

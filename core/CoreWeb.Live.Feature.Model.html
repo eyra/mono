@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.LiveTimezone — core v0.1.0</title>
+    <title>CoreWeb.Live.Feature.Model — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body data-type="modules" class="page-behaviour">
     <script>
 
       try {
@@ -102,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_timezone.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/feature/model.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">CoreWeb.LiveTimezone</span> 
+  <span translate="no">CoreWeb.Live.Feature.Model</span> <small>behaviour</small>
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -122,14 +122,14 @@ core
       </a>
       Summary
     </h1>
-<div class="summary-functions summary">
+<div class="summary-callbacks summary">
   <h2>
-    <a href="#functions">Functions</a>
+    <a href="#callbacks">Callbacks</a>
   </h2>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update_timezone/2" translate="no">update_timezone(socket, session)</a>
+        <a href="#c:get_model/3" translate="no">get_model(map, map, t)</a>
 
       </div>
 
@@ -140,25 +140,25 @@ core
   </section>
 
 
-  <section id="functions" class="details-list">
+  <section id="callbacks" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
+      <a class="hover-link" href="#callbacks">
         <i class="ri-link-m" aria-hidden="true"></i>
         <span class="sr-only">Link to this section</span>
       </a>
-Functions
+Callbacks
     </h1>
-    <div class="functions-list">
-<section class="detail" id="update_timezone/2">
+    <div class="callbacks-list">
+<section class="detail" id="c:get_model/3">
 
   <div class="detail-header">
-    <a href="#update_timezone/2" class="detail-link" title="Link to this function">
+    <a href="#c:get_model/3" class="detail-link" title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
+      <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">update_timezone(socket, session)</h1>
+    <h1 class="signature" translate="no">get_model(map, map, t)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_timezone.ex#L4" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/feature/model.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -167,6 +167,12 @@ Functions
   </div>
 
   <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_model(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/socket/0.3.13/Socket.html#t:t/0">Socket.t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>() | nil</pre>
+
+      </div>
 
 
   </section>

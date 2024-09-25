@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Frameworks.Concept.Context — core v0.1.0</title>
+    <title>Frameworks.GreenLight.LiveFeature — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -21,7 +21,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body data-type="modules" class="page-behaviour">
     <script>
 
       try {
@@ -102,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/context.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/green_light/_live_feature.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Frameworks.Concept.Context</span> 
+  <span translate="no">Frameworks.GreenLight.LiveFeature</span> <small>behaviour</small>
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -122,14 +122,14 @@ core
       </a>
       Summary
     </h1>
-<div class="summary-functions summary">
+<div class="summary-callbacks summary">
   <h2>
-    <a href="#functions">Functions</a>
+    <a href="#callbacks">Callbacks</a>
   </h2>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#name/3" translate="no">name(scope, model, default)</a>
+        <a href="#c:get_authorization_context/3" translate="no">get_authorization_context(arg1, session, socket)</a>
 
       </div>
 
@@ -140,33 +140,45 @@ core
   </section>
 
 
-  <section id="functions" class="details-list">
+  <section id="callbacks" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
+      <a class="hover-link" href="#callbacks">
         <i class="ri-link-m" aria-hidden="true"></i>
         <span class="sr-only">Link to this section</span>
       </a>
-Functions
+Callbacks
     </h1>
-    <div class="functions-list">
-<section class="detail" id="name/3">
+    <div class="callbacks-list">
+<section class="detail" id="c:get_authorization_context/3">
 
   <div class="detail-header">
-    <a href="#name/3" class="detail-link" title="Link to this function">
+    <a href="#c:get_authorization_context/3" class="detail-link" title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
+      <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">name(scope, model, default)</h1>
+    <h1 class="signature" translate="no">get_authorization_context(arg1, session, socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/context.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/green_light/_live_feature.ex#L6" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
+      <span class="note">(optional)</span>
+
   </div>
 
   <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_authorization_context(
+  <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#t:unsigned_params/0">Phoenix.LiveView.unsigned_params</a>() | :not_mounted_at_router,
+  session :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  socket :: <a href="https://hexdocs.pm/phoenix/1.7.2/Phoenix.Socket.html#t:t/0">Phoenix.Socket.t</a>()
+) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()</pre>
+
+      </div>
 
 
   </section>

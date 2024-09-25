@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Advert.Status — core v0.1.0</title>
+    <title>Frameworks.Concept.Special — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,12 +102,12 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/special.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Advert.Status</span> 
+  <span translate="no">Frameworks.Concept.Special</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
@@ -129,7 +129,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#contains/1" translate="no">contains(atom)</a>
+        <a href="#change/4" translate="no">change(changeset, special_field, special, special_fields)</a>
 
       </div>
 
@@ -137,7 +137,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#labels/2" translate="no">labels(active_values \\ [], filter \\ nil)</a>
+        <a href="#field/2" translate="no">field(model, special_fields)</a>
 
       </div>
 
@@ -145,7 +145,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#schema_values/1" translate="no">schema_values(opts \\ [])</a>
+        <a href="#field_id/2" translate="no">field_id(model, special_fields)</a>
 
       </div>
 
@@ -153,15 +153,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#translate/1" translate="no">translate(value)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#values/1" translate="no">values(filter \\ nil)</a>
+        <a href="#field_value/2" translate="no">field_value(model, special_fields)</a>
 
       </div>
 
@@ -181,16 +173,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="contains/1">
+<section class="detail" id="change/4">
 
   <div class="detail-header">
-    <a href="#contains/1" class="detail-link" title="Link to this function">
+    <a href="#change/4" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">contains(atom)</h1>
+    <h1 class="signature" translate="no">change(changeset, special_field, special, special_fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/special.ex#L32" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -203,20 +195,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="labels/2">
-
-    <span id="labels/0"></span>
-
-    <span id="labels/1"></span>
+<section class="detail" id="field/2">
 
   <div class="detail-header">
-    <a href="#labels/2" class="detail-link" title="Link to this function">
+    <a href="#field/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">labels(active_values \\ [], filter \\ nil)</h1>
+    <h1 class="signature" translate="no">field(model, special_fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/special.ex#L20" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -229,42 +217,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="schema_values/1">
-
-    <span id="schema_values/0"></span>
+<section class="detail" id="field_id/2">
 
   <div class="detail-header">
-    <a href="#schema_values/1" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">schema_values(opts \\ [])</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="translate/1">
-
-  <div class="detail-header">
-    <a href="#translate/1" class="detail-link" title="Link to this function">
+    <a href="#field_id/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">translate(value)</h1>
+    <h1 class="signature" translate="no">field_id(model, special_fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/special.ex#L12" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -277,18 +239,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="values/1">
-
-    <span id="values/0"></span>
+<section class="detail" id="field_value/2">
 
   <div class="detail-header">
-    <a href="#values/1" class="detail-link" title="Link to this function">
+    <a href="#field_value/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">values(filter \\ nil)</h1>
+    <h1 class="signature" translate="no">field_value(model, special_fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/status.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/concept/special.ex#L4" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

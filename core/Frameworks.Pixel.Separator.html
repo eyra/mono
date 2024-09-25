@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Graphite.LeaderboardStatus — core v0.1.0</title>
+    <title>Frameworks.Pixel.Separator — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,20 +102,16 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/separator.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">Systems.Graphite.LeaderboardStatus</span> 
+  <span translate="no">Frameworks.Pixel.Separator</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
-
-  <section id="moduledoc">
-<p>  Leaderboard status values.</p>
-  </section>
 
 
   <section id="summary" class="details-list">
@@ -133,7 +129,17 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#contains/1" translate="no">contains(atom)</a>
+        <a href="#dynamic/1" translate="no">dynamic(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#forward/1" translate="no">forward(assigns)</a>
 
       </div>
 
@@ -141,7 +147,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#labels/2" translate="no">labels(active_values \\ [], filter \\ nil)</a>
+        <a href="#handle_info/2" translate="no">handle_info(params, socket)</a>
 
       </div>
 
@@ -149,23 +155,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#schema_values/1" translate="no">schema_values(opts \\ [])</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#translate/1" translate="no">translate(value)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#values/1" translate="no">values(filter \\ nil)</a>
+        <a href="#version/0" translate="no">version()</a>
 
       </div>
 
@@ -185,16 +175,44 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="contains/1">
+<section class="detail" id="dynamic/1">
 
   <div class="detail-header">
-    <a href="#contains/1" class="detail-link" title="Link to this function">
+    <a href="#dynamic/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">contains(atom)</h1>
+    <h1 class="signature" translate="no">dynamic(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/separator.ex#L6" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="dynamic/1-attributes" class="section-heading">
+  <a href="#dynamic/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">attributes</p>
+  </a>
+  Attributes
+</h2>
+<ul><li><code class="inline">type</code> (<code class="inline">:atom</code>) (required)</li></ul>
+  </section>
+</section>
+<section class="detail" id="forward/1">
+
+  <div class="detail-header">
+    <a href="#forward/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">forward(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/separator.ex#L14" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -207,20 +225,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="labels/2">
-
-    <span id="labels/0"></span>
-
-    <span id="labels/1"></span>
+<section class="detail" id="handle_info/2">
 
   <div class="detail-header">
-    <a href="#labels/2" class="detail-link" title="Link to this function">
+    <a href="#handle_info/2" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">labels(active_values \\ [], filter \\ nil)</h1>
+    <h1 class="signature" translate="no">handle_info(params, socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/separator.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -233,66 +247,16 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="schema_values/1">
-
-    <span id="schema_values/0"></span>
+<section class="detail" id="version/0">
 
   <div class="detail-header">
-    <a href="#schema_values/1" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">schema_values(opts \\ [])</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L5" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="translate/1">
-
-  <div class="detail-header">
-    <a href="#translate/1" class="detail-link" title="Link to this function">
+    <a href="#version/0" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">translate(value)</h1>
+    <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L5" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="values/1">
-
-    <span id="values/0"></span>
-
-  <div class="detail-header">
-    <a href="#values/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">values(filter \\ nil)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/graphite/leaderboard_status.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/separator.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

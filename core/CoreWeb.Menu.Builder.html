@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -169,6 +169,14 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#t:uri/0" translate="no">uri()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#t:user/0" translate="no">user()</a>
 
       </div>
@@ -183,7 +191,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:build_menu/3" translate="no">build_menu(socket, type, active_item)</a>
+        <a href="#c:build_menu/4" translate="no">build_menu(type, active_item, user, uri)</a>
 
       </div>
 
@@ -262,7 +270,7 @@ Types
     </a>
     <h1 class="signature" translate="no">item()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L7" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L8" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -365,6 +373,34 @@ Types
 
   </section>
 </section>
+<section class="detail" id="t:uri/0">
+
+  <div class="detail-header">
+    <a href="#t:uri/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">uri()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L7" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> uri() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | nil</pre>
+
+      </div>
+
+
+  </section>
+</section>
 <section class="detail" id="t:user/0">
 
   <div class="detail-header">
@@ -406,16 +442,16 @@ Types
 Callbacks
     </h1>
     <div class="callbacks-list">
-<section class="detail" id="c:build_menu/3">
+<section class="detail" id="c:build_menu/4">
 
   <div class="detail-header">
-    <a href="#c:build_menu/3" class="detail-link" title="Link to this callback">
+    <a href="#c:build_menu/4" class="detail-link" title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
-    <h1 class="signature" translate="no">build_menu(socket, type, active_item)</h1>
+    <h1 class="signature" translate="no">build_menu(type, active_item, user, uri)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L9" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L10" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -427,7 +463,7 @@ Callbacks
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> build_menu(<a href="#t:socket/0">socket</a>(), <a href="#t:type/0">type</a>(), <a href="#t:active_item/0">active_item</a>()) :: <a href="#t:menu/0">menu</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> build_menu(<a href="#t:type/0">type</a>(), <a href="#t:active_item/0">active_item</a>(), <a href="#t:user/0">user</a>(), <a href="#t:uri/0">uri</a>()) :: <a href="#t:menu/0">menu</a>()</pre>
 
       </div>
 
@@ -443,7 +479,7 @@ Callbacks
     </a>
     <h1 class="signature" translate="no">include_map(user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L10" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L11" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -484,7 +520,7 @@ Functions
     </a>
     <h1 class="signature" translate="no">include_map(user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L15" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/menu/builder.ex#L16" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

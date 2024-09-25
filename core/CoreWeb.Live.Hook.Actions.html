@@ -7,13 +7,13 @@
     <meta name="generator" content="ExDoc v0.29.3">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.Plug.LiveRemoteIp — core v0.1.0</title>
+    <title>CoreWeb.Live.Hook.Actions — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -102,20 +102,16 @@ core
 </button>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_remote_ip.ex#L1" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L1" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
 
-  <span translate="no">CoreWeb.Plug.LiveRemoteIp</span> 
+  <span translate="no">CoreWeb.Live.Hook.Actions</span> 
   <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
 </h1>
 
-
-  <section id="moduledoc">
-<p>A Plug that sets a session variable to the current remote ip.</p>
-  </section>
 
 
   <section id="summary" class="details-list">
@@ -133,7 +129,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#call/2" translate="no">call(conn, opts)</a>
+        <a href="#handle_action_click/3" translate="no">handle_action_click(socket, live_view_module, action_id)</a>
 
       </div>
 
@@ -141,7 +137,31 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#init/1" translate="no">init(options)</a>
+        <a href="#optional_apply/3" translate="no">optional_apply(socket, live_view_module, function)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#optional_apply/4" translate="no">optional_apply(socket, live_view_module, function, args)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_actions/2" translate="no">update_actions(socket, live_view_module)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_view_model/2" translate="no">update_view_model(socket, live_view_module)</a>
 
       </div>
 
@@ -161,16 +181,16 @@ core
 Functions
     </h1>
     <div class="functions-list">
-<section class="detail" id="call/2">
+<section class="detail" id="handle_action_click/3">
 
   <div class="detail-header">
-    <a href="#call/2" class="detail-link" title="Link to this function">
+    <a href="#handle_action_click/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">call(conn, opts)</h1>
+    <h1 class="signature" translate="no">handle_action_click(socket, live_view_module, action_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_remote_ip.ex#L9" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L53" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -183,16 +203,82 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="init/1">
+<section class="detail" id="optional_apply/3">
 
   <div class="detail-header">
-    <a href="#init/1" class="detail-link" title="Link to this function">
+    <a href="#optional_apply/3" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">init(options)</h1>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live_remote_ip.ex#L5" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="optional_apply/4">
+
+  <div class="detail-header">
+    <a href="#optional_apply/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">optional_apply(socket, live_view_module, function, args)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_actions/2">
+
+  <div class="detail-header">
+    <a href="#update_actions/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_actions(socket, live_view_module)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L74" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_view_model/2">
+
+  <div class="detail-header">
+    <a href="#update_view_model/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_view_model(socket, live_view_module)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/live/hook/actions.ex#L68" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-8DB9FA0E.js"></script>
+    <script src="dist/sidebar_items-E0306A04.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -145,30 +145,6 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#build_menu/2" translate="no">build_menu(assigns, type)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#build_menus/1" translate="no">build_menus(socket)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#builder/0" translate="no">builder()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
         <a href="#compose_child/2" translate="no">compose_child(socket, child_name)</a>
 
       </div>
@@ -185,29 +161,11 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#handle_params/3" translate="no">handle_params(unsigned_params, uri, socket)</a>
+        <a href="#handle_resize/1" translate="no">handle_resize(socket)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#c:handle_params/3"><code class="inline">Phoenix.LiveView.handle_params/3</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#mount/3" translate="no">mount(params, session, socket)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Automatically assigns Fabric to the socket on mount</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#observe_event/1" translate="no">observe_event(socket)</a>
-
-      </div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="CoreWeb.Live.Feature.Viewport.html#c:handle_resize/1"><code class="inline">CoreWeb.Live.Feature.Viewport.handle_resize/1</code></a>.</p></div>
 
     </div>
 
@@ -253,6 +211,22 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#tabbar_size/1" translate="no">tabbar_size(bp)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_actions/1" translate="no">update_actions(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#update_child/2" translate="no">update_child(context, child_name)</a>
 
       </div>
@@ -262,6 +236,22 @@ core
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#update_menus/1" translate="no">update_menus(socket)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_menus/4" translate="no">update_menus(socket, menu_builder, menus, active_menu_item)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_tabbar_size/1" translate="no">update_tabbar_size(socket)</a>
 
       </div>
 
@@ -341,72 +331,6 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="build_menu/2">
-
-  <div class="detail-header">
-    <a href="#build_menu/2" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">build_menu(assigns, type)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="build_menus/1">
-
-  <div class="detail-header">
-    <a href="#build_menus/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">build_menus(socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="builder/0">
-
-  <div class="detail-header">
-    <a href="#builder/0" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">builder()</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
 <section class="detail" id="compose_child/2">
 
   <div class="detail-header">
@@ -451,14 +375,14 @@ Functions
 
   </section>
 </section>
-<section class="detail" id="handle_params/3">
+<section class="detail" id="handle_resize/1">
 
   <div class="detail-header">
-    <a href="#handle_params/3" class="detail-link" title="Link to this function">
+    <a href="#handle_resize/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">handle_params(unsigned_params, uri, socket)</h1>
+    <h1 class="signature" translate="no">handle_resize(socket)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -470,51 +394,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/0.20.1/Phoenix.LiveView.html#c:handle_params/3"><code class="inline">Phoenix.LiveView.handle_params/3</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="mount/3">
-
-  <div class="detail-header">
-    <a href="#mount/3" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">mount(params, session, socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Automatically assigns Fabric to the socket on mount</p>
-  </section>
-</section>
-<section class="detail" id="observe_event/1">
-
-  <div class="detail-header">
-    <a href="#observe_event/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">observe_event(socket)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
+<p>Callback implementation for <a href="CoreWeb.Live.Feature.Viewport.html#c:handle_resize/1"><code class="inline">CoreWeb.Live.Feature.Viewport.handle_resize/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="observe_view_model/1">
@@ -627,6 +507,50 @@ Functions
 
   </section>
 </section>
+<section class="detail" id="tabbar_size/1">
+
+  <div class="detail-header">
+    <a href="#tabbar_size/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">tabbar_size(bp)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_actions/1">
+
+  <div class="detail-header">
+    <a href="#update_actions/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_actions(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="update_child/2">
 
   <div class="detail-header">
@@ -657,6 +581,50 @@ Functions
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update_menus(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_menus/4">
+
+  <div class="detail-header">
+    <a href="#update_menus/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_menus(socket, menu_builder, menus, active_menu_item)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_tabbar_size/1">
+
+  <div class="detail-header">
+    <a href="#update_tabbar_size/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_tabbar_size(socket)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/project/node_page.ex#L2" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
