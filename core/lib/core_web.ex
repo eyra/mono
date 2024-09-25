@@ -42,6 +42,8 @@ defmodule CoreWeb do
 
       import Phoenix.LiveView.Controller
 
+      plug(Systems.Project.BranchPlug)
+
       # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
@@ -95,11 +97,7 @@ defmodule CoreWeb do
     end
   end
 
-  def live_view() do
-    live_view(:base)
-  end
-
-  def live_view(mount_plug_type) do
+  def live_view do
     quote do
       use Fabric.LiveView, CoreWeb.Layouts
 
@@ -112,33 +110,20 @@ defmodule CoreWeb do
 
       unquote(component_helpers())
       unquote(verified_routes())
-
-      unquote do
-        if mount_plug_type == :extended do
-          live_mount_plugs_extended()
-        else
-          live_mount_plugs()
-        end
-      end
+      unquote(live_features())
     end
   end
 
-  def live_mount_plugs do
+  def live_features do
     quote do
-      use CoreWeb.LiveLocale
-      use CoreWeb.LiveTimezone
-      use CoreWeb.LiveRemoteIp
-      use Frameworks.Fabric.LiveViewMountPlug
-      use Frameworks.GreenLight.Live, Core.Authorization
-      use CoreWeb.LiveUser
-    end
-  end
-
-  def live_mount_plugs_extended do
-    quote do
-      use Systems.Observatory.Public
-      use CoreWeb.LiveUri
-      unquote(live_mount_plugs())
+      use Frameworks.GreenLight.LiveFeature
+      use Systems.Observatory.LiveFeature
+      use CoreWeb.Live.Feature.Viewport
+      use CoreWeb.Live.Feature.Uri
+      use CoreWeb.Live.Feature.Model
+      use CoreWeb.Live.Feature.Menus
+      use CoreWeb.Live.Feature.Tabbar
+      use CoreWeb.Live.Feature.Actions
     end
   end
 

@@ -14,24 +14,19 @@ defmodule GoogleSignIn.PlugUtils do
 end
 
 defmodule GoogleSignIn.AuthorizePlug do
-  @moduledoc """
-  This controller manages the OpenID Connect flow with SurfConext.
-
-  See this site for more info: https://sp.google_sign_in.nl/
-  """
   import Plug.Conn
   import GoogleSignIn.PlugUtils
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
-  def call(conn, otp_app) do
+  def call(%{params: conn_params} = conn, otp_app) do
     config = config(otp_app)
 
     {:ok, %{url: url, session_params: session_params}} =
       google_module(config).authorize_url(config)
 
     conn
-    |> put_session(:google_sign_in, session_params)
+    |> put_session(:google_sign_in, Map.merge(conn_params, session_params))
     |> set_return_to()
     |> Phoenix.Controller.redirect(external: url)
   end
@@ -42,7 +37,7 @@ defmodule GoogleSignIn.AuthorizePlug do
   end
 end
 
-defmodule(GoogleSignIn.CallbackPlug) do
+defmodule GoogleSignIn.CallbackPlug do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
   use Core.FeatureFlags
@@ -51,6 +46,7 @@ defmodule(GoogleSignIn.CallbackPlug) do
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
+    creator? = Map.get(session_params || %{}, "creator", nil) == "true"
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
@@ -64,14 +60,14 @@ defmodule(GoogleSignIn.CallbackPlug) do
       if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
         {user, false}
       else
-        {register_user(google_user), true}
+        {register_user(google_user, creator?), true}
       end
 
     log_in_user(config, conn, user, first_time?)
   end
 
-  defp register_user(info) do
-    {:ok, google_sign_in_user} = GoogleSignIn.register_user(info)
+  defp register_user(info, creator?) do
+    {:ok, google_sign_in_user} = GoogleSignIn.register_user(info, creator?)
     google_sign_in_user.user
   end
 

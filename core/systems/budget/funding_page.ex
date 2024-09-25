@@ -33,12 +33,6 @@ defmodule Systems.Budget.FundingPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def compose(:create_budget_form, %{user: user, locale: locale}) do
     %{
       module: Systems.Budget.Form,

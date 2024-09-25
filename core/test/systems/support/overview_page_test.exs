@@ -7,9 +7,7 @@ defmodule Systems.Support.OverviewPageTest do
     setup [:login_as_member]
 
     test "deny access to non-admin", %{conn: conn} do
-      assert_error_sent(403, fn ->
-        live(conn, ~p"/support/ticket")
-      end)
+      assert {:error, {:redirect, %{to: "/access_denied"}}} = live(conn, ~p"/support/ticket")
     end
   end
 

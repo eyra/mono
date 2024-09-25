@@ -4,9 +4,7 @@ defmodule Systems.Observatory.ViewModelObserveTest do
   import Phoenix.LiveViewTest
   import Core.AuthTestHelpers
 
-  alias Systems.{
-    Test
-  }
+  alias Systems.Test
 
   describe "View model roundtrip" do
     setup [:login_as_member]
@@ -16,6 +14,7 @@ defmodule Systems.Observatory.ViewModelObserveTest do
 
       assert html =~ "John Doe"
       assert html =~ "Age: 56 - Works at: The Basement"
+      assert html =~ "view_model_updated: 0"
     end
 
     test "View model update", %{conn: conn} do
@@ -24,7 +23,10 @@ defmodule Systems.Observatory.ViewModelObserveTest do
       model = Test.Public.get(1)
       Test.Public.update(model, %{age: 57})
 
-      assert render(view) =~ "Age: 57 - Works at: The Basement"
+      html = render(view)
+
+      assert html =~ "Age: 57 - Works at: The Basement"
+      assert html =~ "view_model_updated: 1"
     end
   end
 end

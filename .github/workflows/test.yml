@@ -31,7 +31,7 @@ jobs:
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: "25.0.4"
+          otp-version: "25.3.2.7"
           elixir-version: "1.14.0"
 
       - name: Setup the Elixir project

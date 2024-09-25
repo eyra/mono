@@ -42,11 +42,10 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
-config :core, :naming, handlers: [Systems.Project.Public]
-
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 config :core,
+  greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy
 

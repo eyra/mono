@@ -63,9 +63,11 @@ defmodule Systems.Account.UserForm do
     """
   end
 
+  attr(:creator?, :boolean, required: true)
+
   def google_signin(assigns) do
     ~H"""
-      <a href="/google-sign-in">
+      <a href={"/google-sign-in?creator=#{@creator?}"}>
       <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
         <div class="flex w-full justify-center items-center">
           <div>

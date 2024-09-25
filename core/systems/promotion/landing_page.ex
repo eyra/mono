@@ -3,7 +3,9 @@ defmodule Systems.Promotion.LandingPage do
   The public promotion screen.
   """
   use Systems.Content.Composer, :live_website
-  use CoreWeb.UI.Responsive.Viewport
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   import Systems.Promotion.BannerView
 
@@ -42,13 +44,9 @@ defmodule Systems.Promotion.LandingPage do
     }
   end
 
-  @impl true
   def handle_view_model_updated(socket) do
     update_image_info(socket)
   end
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def handle_resize(socket) do
@@ -117,7 +115,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={:promotion_landing_page} phx-hook="ViewportResize">
+    <div id={:promotion_landing_page} phx-hook="Viewport">
     <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
       <:hero>
         <div class="h-[360px] bg-grey5">

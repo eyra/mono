@@ -160,7 +160,7 @@ msgid "tabbar.item.settings.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.project.item.tag"
+msgid "leaderboard.atom.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -262,3 +262,13 @@ msgstr "Zichtbaarheid"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "highlight.visibility.public.text"
 msgstr "Open"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 submission"
+msgid_plural "* submissions"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "leaderboard.deadline.info"
+msgstr ""

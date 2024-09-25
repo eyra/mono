@@ -1,4 +1,4 @@
-defmodule Systems.Project.CreateItemPopup do
+defmodule Systems.Project.CreateItemView do
   use CoreWeb, :live_component
 
   import CoreWeb.UI.Dialog
@@ -58,10 +58,6 @@ defmodule Systems.Project.CreateItemPopup do
             type: :primary,
             label: dgettext("eyra-project", "create_item_popup.create.button")
           }
-        },
-        %{
-          action: %{type: :send, event: "cancel", target: myself},
-          face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
         }
       ]
     )
@@ -76,11 +72,6 @@ defmodule Systems.Project.CreateItemPopup do
     create_item(socket, selected_template)
 
     {:noreply, socket |> send_event(:parent, "saved")}
-  end
-
-  @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
   end
 
   @impl true

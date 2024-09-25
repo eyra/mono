@@ -2,6 +2,7 @@ defmodule CoreWeb.ErrorHTML do
   use CoreWeb, :html
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Menus
 
   defp body("403.html", status), do: dgettext("eyra-error", "403.body", status: status)
   defp body("404.html", status), do: dgettext("eyra-error", "404.body", status: status)
@@ -19,7 +20,7 @@ defmodule CoreWeb.ErrorHTML do
 
   def render(template, assigns) do
     status = status(template)
-    menus = build_menus(Map.put(assigns, :active_menu_item, nil))
+    menus = build_menus(stripped_menus_config(), nil, nil)
 
     assigns =
       Map.merge(assigns, %{

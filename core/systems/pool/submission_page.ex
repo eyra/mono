@@ -26,12 +26,6 @@ defmodule Systems.Pool.SubmissionPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_event("publish", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     socket =
       if ready_for_publish?(submission) do

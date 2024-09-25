@@ -2,8 +2,15 @@ defmodule Systems.Project.NodePage do
   use Systems.Content.Composer, :live_workspace
 
   import Frameworks.Pixel.Empty
+  import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Grid
+  alias Frameworks.Pixel.Breadcrumbs
   alias Systems.Project
+
+  @impl true
+  def get_authorization_context(params, session, socket) do
+    get_model(params, session, socket)
+  end
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -26,9 +33,9 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def compose(:create_item_popup, %{vm: %{node: node}}) do
+  def compose(:create_item_view, %{vm: %{node: node}}) do
     %{
-      module: Project.CreateItemPopup,
+      module: Project.CreateItemView,
       params: %{node: node}
     }
   end
@@ -65,8 +72,8 @@ defmodule Systems.Project.NodePage do
     {
       :noreply,
       socket
-      |> compose_child(:create_item_popup)
-      |> show_popup(:create_item_popup)
+      |> compose_child(:create_item_view)
+      |> show_modal(:create_item_view, :dialog)
     }
   end
 
@@ -87,16 +94,20 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def render(assigns) do
     ~H"""
     <div>
       <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+        <:top_bar>
+          <div class="hidden md:block">
+            <Area.content>
+              <div class="flex flex-row items-center h-navbar-height">
+                <.live_component id="path" module={Breadcrumbs} elements={@vm.breadcrumbs}/>
+              </div>
+            </Area.content>
+            <.line />
+          </div>
+        </:top_bar>
         <Area.content>
           <Margin.y id={:page_top} />
           <%= if Enum.count(@vm.node_cards) > 0 do %>

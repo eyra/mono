@@ -58,7 +58,21 @@ defmodule Systems.Assignment.Controller do
   defp start_participant(conn, %{id: id} = assignment) do
     conn
     |> authorize_user(assignment)
+    |> add_panel_info(assignment)
     |> redirect(to: ~p"/assignment/#{id}")
+  end
+
+  defp add_panel_info(%{assigns: %{current_user: user}} = conn, assignment) do
+    {:ok, participant} = Assignment.Public.participant_id(assignment, user)
+
+    panel_info = %{
+      panel: :next,
+      embedded?: false,
+      participant: participant,
+      query_string: []
+    }
+
+    conn |> put_session(:panel_info, panel_info)
   end
 
   defp authorize_user(%{assigns: %{current_user: user}} = conn, %Assignment.Model{} = assignment) do

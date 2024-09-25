@@ -13,6 +13,7 @@ defmodule Systems.Document.ContentPageBuilder do
       id: id,
       title: dgettext("eyra-document", "content.title"),
       active_menu_item: :projects,
+      breadcrumbs: [],
       tabs: [],
       actions: [],
       show_errors: false

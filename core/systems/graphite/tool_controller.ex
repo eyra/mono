@@ -2,7 +2,7 @@ defmodule Systems.Graphite.ToolController do
   use CoreWeb, :controller
 
   def ensure_spot(%{assigns: %{current_user: _user}} = conn, %{"id" => _id}) do
-    # TODO: PreRef
+    # FIXME: PreRef
 
     # id = String.to_integer(id)
 

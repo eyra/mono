@@ -1,3 +1,7 @@
+require Promox
+
+Promox.defmock(for: Frameworks.Concept.Branch)
+
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 

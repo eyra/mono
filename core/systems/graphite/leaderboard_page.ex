@@ -1,7 +1,9 @@
 defmodule Systems.Graphite.LeaderboardPage do
-  use CoreWeb, {:live_view, :extended}
+  use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
-  use CoreWeb.UI.Responsive.Viewport
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Card
@@ -38,13 +40,9 @@ defmodule Systems.Graphite.LeaderboardPage do
   end
 
   @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def handle_resize(socket) do
     socket
     |> update_image_info()
-    |> update_menus()
   end
 
   @impl true
@@ -87,7 +85,7 @@ defmodule Systems.Graphite.LeaderboardPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <div id={:leaderboard_page} class="w-full h-full" phx-hook="ViewportResize">
+      <div id={:leaderboard_page} class="w-full h-full" phx-hook="Viewport">
         <.stripped menus={@menus}>
           <:header>
             <div class="h-[180px] bg-grey5">

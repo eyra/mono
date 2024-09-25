@@ -2,21 +2,23 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   import CoreWeb.Gettext
   import Frameworks.Utility.List
 
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept
   alias Systems.Storage
   alias Systems.Monitor
 
   def view_model(
         %{id: id} = endpoint,
-        assigns
+        %{branch: branch} = assigns
       ) do
     show_errors = true
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(endpoint, show_errors, assigns)
-    title = Context.name(:self, endpoint, "Data")
+    title = Concept.Branch.name(branch, :self)
 
     %{
       id: id,
       title: title,
+      breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: [],
       show_errors: show_errors,
@@ -70,15 +72,15 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
          :data,
          endpoint,
          show_errors,
-         %{fabric: fabric, timezone: timezone} = _assigns
+         %{branch: branch, fabric: fabric, timezone: timezone} = _assigns
        ) do
     ready? = true
-    context_name = Context.name(:parent, endpoint, "Current")
+    branch_name = Concept.Branch.name(branch, :parent)
 
     child =
       Fabric.prepare_child(fabric, :data_view, Storage.EndpointDataView, %{
         endpoint: endpoint,
-        context_name: context_name,
+        branch_name: branch_name,
         timezone: timezone
       })
 

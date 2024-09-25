@@ -1,4 +1,15 @@
 defmodule Frameworks.Utility.Module do
+  def optional_apply(module, function, params, default \\ nil)
+      when is_atom(module) and is_atom(function) and is_list(params) do
+    if function_exported?(module, function, Enum.count(params)) do
+      "#{module}.#{function}/#{Enum.count(params)} called"
+      apply(module, function, params)
+    else
+      "#{module}.#{function}/#{Enum.count(params)} skipped"
+      default
+    end
+  end
+
   def get(nil, _name), do: nil
 
   def get(system, name) when is_atom(system),

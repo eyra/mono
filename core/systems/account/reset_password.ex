@@ -3,9 +3,14 @@ defmodule Systems.Account.ResetPassword do
   The home screen.
   """
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
-
+  import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
   alias Systems.Account
@@ -13,6 +18,7 @@ defmodule Systems.Account.ResetPassword do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
+  @impl true
   def mount(_params, _session, socket) do
     {
       :ok,
@@ -20,6 +26,11 @@ defmodule Systems.Account.ResetPassword do
       |> assign(changeset: User.valid_email_changeset(), active_menu_item: nil)
       |> update_menus()
     }
+  end
+
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
   end
 
   @impl true

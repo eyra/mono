@@ -1,7 +1,15 @@
 defmodule Systems.Feldspar.AppPage do
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Menus
 
   require Logger
 
@@ -26,6 +34,11 @@ defmodule Systems.Feldspar.AppPage do
     }
   end
 
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
+  end
+
   @impl true
   def compose(:app_view, %{app_id: app_id, app_url: app_url}) do
     %{
@@ -33,7 +46,7 @@ defmodule Systems.Feldspar.AppPage do
       params: %{
         key: "app_#{app_id}",
         url: app_url,
-        locale: CoreWeb.LiveLocale.get_locale()
+        locale: CoreWeb.Live.Hook.Locale.get_locale()
       }
     }
   end
