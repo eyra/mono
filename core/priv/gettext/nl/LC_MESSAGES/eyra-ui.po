@@ -193,3 +193,7 @@ msgstr "To-do"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "Mijn werkplek"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.button"
+msgstr "Klaar"

@@ -417,3 +417,11 @@ msgstr "Go to data storage"
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr "Please setup connection to a data storage"
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr "If you confirm, your current text will be deleted."
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
+msgstr "Are you sure?"

@@ -193,3 +193,7 @@ msgstr "Desktop"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "My workspace"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.button"
+msgstr "Confirm"

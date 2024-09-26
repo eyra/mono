@@ -65,6 +65,18 @@ defmodule Systems.Assignment.ContentPageForm do
   end
 
   @impl true
+  def compose(:confirmation_modal, %{page_ref: page_ref}) do
+    %{
+      module: Systems.Assignment.ConfirmationModal,
+      params: %{
+        assigns: %{
+          page_ref: page_ref
+        }
+      }
+    }
+  end
+
+  @impl true
   def compose(:content_page_form, %{page_ref: nil}) do
     %{
       module: Content.PageForm,
@@ -99,16 +111,34 @@ defmodule Systems.Assignment.ContentPageForm do
   end
 
   @impl true
-  def handle_event("update", %{status: :off}, %{assigns: %{page_ref: page_ref}} = socket) do
-    {:ok, _} = Assignment.Public.delete_page_ref(page_ref)
-
+  def handle_event("update", %{status: :off}, socket) do
     {
       :noreply,
-      socket |> assign(page_ref: page_ref)
+      socket
+      |> compose_child(:confirmation_modal)
+      |> show_modal(:confirmation_modal, :dialog)
     }
   end
 
   @impl true
+  def handle_event("cancelled", %{source: %{name: :confirmation_modal}}, socket) do
+    {:noreply,
+     socket
+     |> hide_modal(:confirmation_modal)}
+  end
+
+  @impl true
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :confirmation_modal}},
+        %{assigns: %{page_ref: page_ref}} = socket
+      ) do
+    {:ok, _} = Assignment.Public.delete_page_ref(page_ref)
+    {:noreply, socket |> hide_modal(:confirmation_modal)}
+  end
+
+  @impl true
+  @spec render(any()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~H"""
       <div>
