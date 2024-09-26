@@ -420,7 +420,7 @@ msgstr "Please setup connection to a data storage"
 
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.body"
-msgstr "If you confirm, your current text will be deleted."
+msgstr "Are you sure you would like to skip this page? Your text will be deleted."
 
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.title"
