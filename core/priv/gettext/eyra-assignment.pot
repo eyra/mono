@@ -417,11 +417,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "confirmation_modal.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "confirmation_modal.title"
-msgstr ""

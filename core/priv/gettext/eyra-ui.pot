@@ -197,3 +197,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
+msgstr ""

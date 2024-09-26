@@ -37,11 +37,11 @@ defmodule Frameworks.Pixel.ConfirmationModal do
     ~H"""
       <div>
         <Text.title2>
-          <%= dgettext("eyra-assignment", "confirmation_modal.title") %>
+          <%= dgettext("eyra-ui", "confirmation_modal.title") %>
         </Text.title2>
         <.spacing value="M" />
         <Text.body_large>
-          <%= dgettext("eyra-assignment", "confirmation_modal.body") %>
+          <%= dgettext("eyra-ui", "confirmation_modal.body") %>
         </Text.body_large>
         <.spacing value="M" />
 
