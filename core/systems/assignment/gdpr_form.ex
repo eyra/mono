@@ -56,6 +56,18 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
+  def compose(:confirmation_modal, %{entity: %{consent_agreement: consent_agreement}}) do
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          consent_agreement: consent_agreement
+        }
+      }
+    }
+  end
+
+  @impl true
   def handle_event(
         "update",
         %{status: :on},
@@ -71,13 +83,30 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event("update", %{status: :off}, %{assigns: %{entity: assignment}} = socket) do
-    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, nil)
-
+  def handle_event("update", %{status: :off}, socket) do
     {
       :noreply,
       socket
+      |> compose_child(:confirmation_modal)
+      |> show_modal(:confirmation_modal, :dialog)
     }
+  end
+
+  @impl true
+  def handle_event("cancelled", %{source: %{name: :confirmation_modal}}, socket) do
+    {:noreply,
+     socket
+     |> hide_modal(:confirmation_modal)}
+  end
+
+  @impl true
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :confirmation_modal}},
+        %{assigns: %{entity: assignment}} = socket
+      ) do
+    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, nil)
+    {:noreply, socket |> hide_modal(:confirmation_modal)}
   end
 
   @impl true

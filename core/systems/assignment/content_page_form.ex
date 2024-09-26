@@ -67,7 +67,7 @@ defmodule Systems.Assignment.ContentPageForm do
   @impl true
   def compose(:confirmation_modal, %{page_ref: page_ref}) do
     %{
-      module: Systems.Assignment.ConfirmationModal,
+      module: Pixel.ConfirmationModal,
       params: %{
         assigns: %{
           page_ref: page_ref

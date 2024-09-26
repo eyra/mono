@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.ConfirmationModal do
+defmodule Frameworks.Pixel.ConfirmationModal do
   use CoreWeb, :live_component
 
   @impl true
