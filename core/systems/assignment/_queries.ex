@@ -62,7 +62,7 @@ defmodule Systems.Assignment.Queries do
   end
 
   def participant_query() do
-    from(Crew.MemberModel, as: :member)
+    from(Crew.MemberModel, as: :member, order_by: [asc: :public_id])
   end
 
   def participant_query(%Assignment.Model{crew: %{id: id, auth_node_id: auth_node_id}}) do

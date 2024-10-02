@@ -83,6 +83,11 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  def get_by_workflow_item_id(workflow_item_id, preload \\ []) do
+    %{workflow_id: workflow_id} = Workflow.Public.get_item!(String.to_integer(workflow_item_id))
+    Assignment.Public.get_by(:workflow_id, workflow_id, preload)
+  end
+
   def get_by_tool_ref(workflow, preload \\ [])
 
   def get_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)

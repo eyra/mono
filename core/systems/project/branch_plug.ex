@@ -15,6 +15,10 @@ defmodule Systems.Project.BranchPlug do
   end
 
   defp branch(["/", "storage", "endpoint", id | _]), do: branch(Storage.Public.get_endpoint!(id))
+
+  defp branch(["/", "assignment", "callback", workflow_item_id | _]),
+    do: branch(Assignment.Public.get_by_workflow_item_id(workflow_item_id))
+
   defp branch(["/", "assignment", id | _]), do: branch(Assignment.Public.get(id))
 
   defp branch(%{} = leaf) do

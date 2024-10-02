@@ -18,7 +18,7 @@ defmodule Systems.Assignment.Controller do
   @progress_yes dgettext("eyra-assignment", "progress.yes")
   @progress_no dgettext("eyra-assignment", "progress.no")
 
-  def callback(%{assigns: %{current_user: user}} = conn, %{"item" => item_id}) do
+  def callback(%{assigns: %{current_user: user}} = conn, %{"workflow_item_id" => item_id}) do
     %{workflow_id: workflow_id} = item = Workflow.Public.get_item!(String.to_integer(item_id))
 
     %{id: id, crew: crew} =

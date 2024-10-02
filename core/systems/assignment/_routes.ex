@@ -9,7 +9,7 @@ defmodule Systems.Assignment.Routes do
         get("/assignment/:id/invite", Controller, :invite)
         get("/assignment/:id/apply", Controller, :apply)
         get("/assignment/:id/export", Controller, :export)
-        get("/assignment/callback/:item", Controller, :callback)
+        get("/assignment/callback/:workflow_item_id", Controller, :callback)
       end
 
       scope "/assignment", Systems.Assignment.Centerdata do
