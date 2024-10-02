@@ -427,3 +427,31 @@ msgstr[1] "%{count} participants"
 #, elixir-autogen, elixir-format
 msgid "atom.tag"
 msgstr "Assignment"
+
+#, elixir-autogen, elixir-format
+msgid "export.progress.button"
+msgstr "Progress report"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.description"
+msgstr "Here comes a description"
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.consent"
+msgstr "Consent"
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.participant"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "progress.no"
+msgstr "no"
+
+#, elixir-autogen, elixir-format
+msgid "progress.not.applicable"
+msgstr "n/a"
+
+#, elixir-autogen, elixir-format
+msgid "progress.yes"
+msgstr "yes"

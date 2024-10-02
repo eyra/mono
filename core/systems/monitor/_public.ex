@@ -83,4 +83,8 @@ defmodule Systems.Monitor.Public do
   defdelegate count(event_template), to: Queries
   defdelegate sum(event_template), to: Queries
   defdelegate unique(event_template), to: Queries
+
+  def exists?(event) do
+    count(event) > 0
+  end
 end

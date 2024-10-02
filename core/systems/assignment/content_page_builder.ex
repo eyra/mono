@@ -300,6 +300,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     child =
       Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
+        assignment: assignment,
         number_widgets: number_widgets(assignment),
         progress_widgets: progress_widgets(assignment)
       })
