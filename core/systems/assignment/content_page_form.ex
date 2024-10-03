@@ -112,12 +112,18 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def handle_event("update", %{status: :off}, socket) do
-    {
-      :noreply,
-      socket
-      |> compose_child(:confirmation_modal)
-      |> show_modal(:confirmation_modal, :dialog)
-    }
+    # If the page_ref is nil, there is nothing to delete
+    if socket.assigns.page_ref.page.body != nil do
+      {
+        :noreply,
+        socket
+        |> compose_child(:confirmation_modal)
+        |> show_modal(:confirmation_modal, :dialog)
+      }
+    else
+      {:ok, _} = Assignment.Public.delete_page_ref(socket.assigns.page_ref)
+      {:noreply, socket}
+    end
   end
 
   @impl true
