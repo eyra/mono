@@ -5,7 +5,7 @@ const pdfjs = require("../node_modules/pdfjs-dist");
 const worker = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.min.js`;
 
 function renderPages(hook) {
-  hook.renderPagesIfNeed();
+  hook.renderPagesIfNeeded();
 }
 
 export const PDFViewer = {
@@ -17,24 +17,32 @@ export const PDFViewer = {
       this.pdf = pdf;
       console.log("[PDFViewer] Document loaded, push event 'tool_initialized'");
       this.pushEvent("tool_initialized");
-      this.renderPagesIfNeed();
+      this.renderPagesIfNeeded();
       var throttledRenderPages = _.throttle(_.partial(renderPages, this), 10, {
         trailing: true,
       });
-      window.addEventListener("resize", throttledRenderPages);
+
+      window.addEventListener("resize", (event) => {
+        console.log("[PDFViewer] Resize event");
+        throttledRenderPages();
+      });
     });
   },
   updated() {
     console.log("[PDFViewer] Updated: state", this.el.dataset.state);
-    this.renderPagesIfNeed();
+    this.renderPagesIfNeeded();
   },
   loadDocument() {
     pdfjs.GlobalWorkerOptions.workerSrc = worker;
     const loadingTask = pdfjs.getDocument({ url: this.src });
     return loadingTask.promise;
   },
-  renderPagesIfNeed() {
-    if (this.el.dataset.state == "visible") {
+  renderPagesIfNeeded() {
+    console.log(
+      "[PDFViewer] Render pages if need: state",
+      this.el.dataset.state
+    );
+    if (this.el.dataset.state == "render" || this.container != undefined) {
       this.renderPages();
     }
   },
@@ -45,7 +53,7 @@ export const PDFViewer = {
     this.renderPage(width, 1);
   },
   renderPage(width, pageNum) {
-    console.log("[PDFViewer] Render page", pageNum);
+    console.log("[PDFViewer] Render page", pageNum, width);
     this.pdf.getPage(pageNum).then(
       async (page) => {
         var canvas = this.createCanvas();

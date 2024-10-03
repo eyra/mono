@@ -88,7 +88,9 @@ defmodule Systems.Assignment.CrewWorkView do
         socket
 
       _ ->
-        compose_child(socket, :tool_ref_view)
+        socket
+        |> compose_child(:tool_ref_view)
+        |> prepare_modal_tool_ref_view_if_needed()
     end
   end
 
@@ -289,6 +291,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(tool_initialized: true)
+      |> show_tool_ref_view_if_needed()
     }
   end
 
@@ -301,8 +304,10 @@ defmodule Systems.Assignment.CrewWorkView do
         tool_started: false,
         tool_initialized: false
       )
+      |> hide_modal(:tool_ref_view)
       |> compose_child(:start_view)
       |> compose_child(:tool_ref_view)
+      |> prepare_modal_tool_ref_view_if_needed()
     }
   end
 
@@ -335,6 +340,7 @@ defmodule Systems.Assignment.CrewWorkView do
       |> compose_child(:start_view)
       |> update_child(:work_list_view)
       |> compose_child(:tool_ref_view)
+      |> prepare_modal_tool_ref_view_if_needed()
     }
   end
 
@@ -344,7 +350,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(tool_started: true)
-      |> update_child(:tool_ref_view)
+      |> show_tool_ref_view_if_needed()
       |> start_task(selected_item)
     }
   end
@@ -363,7 +369,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:privacy_page)
-      |> show_modal(:privacy_page, :page)
+      |> show_modal(:privacy_page, :full)
     }
   end
 
@@ -373,7 +379,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:consent_page)
-      |> show_modal(:consent_page, :page)
+      |> show_modal(:consent_page, :full)
     }
   end
 
@@ -383,7 +389,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:intro_page)
-      |> show_modal(:intro_page, :page)
+      |> show_modal(:intro_page, :full)
     }
   end
 
@@ -393,7 +399,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:support_page)
-      |> show_modal(:support_page, :page)
+      |> show_modal(:support_page, :full)
     }
   end
 
@@ -403,6 +409,31 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   # Private
+
+  defp prepare_modal_tool_ref_view_if_needed(%{assigns: %{fabric: fabric}} = socket) do
+    if Fabric.exists?(fabric, :tool_ref_view) do
+      prepare_modal(socket, :tool_ref_view, :full)
+    else
+      socket
+    end
+  end
+
+  defp show_tool_ref_view_if_needed(
+         %{assigns: %{tool_started: tool_started, tool_initialized: tool_initialized}} = socket
+       ) do
+    if tool_started and tool_initialized do
+      socket
+      |> update_child(:tool_ref_view)
+      |> show_modal(:tool_ref_view, :full)
+      |> assign(
+        tool_started: false,
+        tool_initialized: false
+      )
+      |> update_child(:start_view)
+    else
+      socket
+    end
+  end
 
   defp handle_feldspar_event(
          socket,
@@ -441,6 +472,7 @@ defmodule Systems.Assignment.CrewWorkView do
        }) do
     socket
     |> assign(tool_initialized: true)
+    |> show_tool_ref_view_if_needed()
   end
 
   defp handle_feldspar_event(socket, %{"__type__" => type}) do
@@ -455,6 +487,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {:ok, %{crew_task: updated_task}} = Crew.Public.complete_task(task)
 
     socket
+    |> hide_modal(:tool_ref_view)
     |> update_task(updated_task)
     |> select_next_item()
     |> handle_finished_state()
@@ -568,33 +601,26 @@ defmodule Systems.Assignment.CrewWorkView do
   def render(assigns) do
     ~H"""
       <div class="w-full h-full flex flex-row">
-        <%= if exists?(@fabric, :tool_ref_view) do %>
-          <div class={"w-full h-full #{ if tool_visible?(assigns) do "block" else "hidden" end }"}>
-            <.child name={:tool_ref_view} fabric={@fabric} />
-          </div>
-        <% end %>
-        <%= if not tool_visible?(assigns) do %>
-          <%= if exists?(@fabric, :work_list_view) do %>
-            <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
-              <div class="px-6">
-                <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
-              </div>
-              <div>
-                <.line />
-              </div>
-              <div class="flex-grow">
-                <div class="px-6 h-full overflow-y-scroll">
-                  <.child name={:work_list_view} fabric={@fabric} />
-                </div>
+        <%= if exists?(@fabric, :work_list_view) do %>
+          <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
+            <div class="px-6">
+              <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
+            </div>
+            <div>
+              <.line />
+            </div>
+            <div class="flex-grow">
+              <div class="px-6 h-full overflow-y-scroll">
+                <.child name={:work_list_view} fabric={@fabric} />
               </div>
             </div>
-            <div class="border-l border-grey4">
-            </div>
-          <% end %>
-          <div class="h-full w-full">
-            <.child name={:start_view} fabric={@fabric} />
+          </div>
+          <div class="border-l border-grey4">
           </div>
         <% end %>
+        <div class="h-full w-full">
+          <.child name={:start_view} fabric={@fabric} />
+        </div>
 
         <%!-- floating button --%>
         <.child name={:context_menu} fabric={@fabric} />

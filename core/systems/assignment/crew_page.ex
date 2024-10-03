@@ -41,6 +41,7 @@ defmodule Systems.Assignment.CrewPage do
         id: id,
         image_info: nil,
         modal: nil,
+        modal_visible: false,
         panel_form: nil
       )
       |> update_panel_info(session)
@@ -154,13 +155,52 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("show_modal", modal, socket) do
+  def handle_event(
+        "prepare_modal",
+        %{live_component: %{id: modal_id}} = modal,
+        %{assigns: %{modal: %{id: current_modal_id}, modal_visible: modal_visible}} = socket
+      ) do
+    if modal_id == current_modal_id do
+      {:noreply, socket |> assign(modal: modal)}
+    else
+      Logger.warn(
+        "ignoring prepare modal #{modal_id}, current model: #{current_modal_id}, modal_visible: #{modal_visible}"
+      )
+
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("prepare_modal", modal, socket) do
     {:noreply, socket |> assign(modal: modal)}
   end
 
   @impl true
+  def handle_event(
+        "show_modal",
+        %{live_component: %{id: modal_id}} = modal,
+        %{assigns: %{modal: %{id: current_modal_id}, modal_visible: modal_visible}} = socket
+      ) do
+    if modal_id == current_modal_id do
+      {:noreply, socket |> assign(modal: modal, modal_visible: true)}
+    else
+      Logger.warn(
+        "ignoring show modal #{modal_id}, current model: #{current_modal_id}, modal_visible: #{modal_visible}"
+      )
+
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("show_modal", modal, socket) do
+    {:noreply, socket |> assign(modal: modal, modal_visible: true)}
+  end
+
+  @impl true
   def handle_event("hide_modal", _, socket) do
-    {:noreply, socket |> assign(modal: nil)}
+    {:noreply, socket |> assign(modal: nil, modal_visible: false)}
   end
 
   @impl true
@@ -229,7 +269,9 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic modal={@modal} />
+        <div class={"#{if @modal_visible do "block" else "hidden" end}"}>
+          <ModalView.dynamic modal={@modal} />
+        </div>
 
         <%!-- hidden auto submit form --%>
         <%= if @panel_form do %>

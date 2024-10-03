@@ -53,4 +53,4 @@ msgstr "Handleiding"
 
 #, elixir-autogen, elixir-format
 msgid "ready.button"
-msgstr "Het is gelukt"
+msgstr "Klaar"

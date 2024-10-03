@@ -18,7 +18,11 @@ export const Viewport = {
   },
 
   pushChangeEvent() {
-    console.log("[Viewport] push update event");
+    console.log(
+      "[Viewport] push update event",
+      window.innerWidth,
+      window.innerHeight
+    );
     this.pushEvent("viewport_changed", {
       width: window.innerWidth,
       height: window.innerHeight,

@@ -235,13 +235,41 @@ defmodule Fabric do
     Phoenix.Component.assign(assigns, fabric: remove_child(fabric, child_name))
   end
 
+  # MODAL
+
+  def prepare_modal(context, nil, _modal_style) do
+    Logger.error("Can not prepare modal with unknown child")
+    context
+  end
+
+  def prepare_modal(context, child_name, modal_style)
+      when is_atom(child_name) or is_binary(child_name) do
+    child = get_child(context, child_name)
+    prepare_modal(context, child, modal_style)
+  end
+
+  def prepare_modal(
+        %Phoenix.LiveView.Socket{assigns: assigns} = socket,
+        %Fabric.LiveComponent.Model{} = child,
+        modal_style
+      ) do
+    %Phoenix.LiveView.Socket{socket | assigns: prepare_modal(assigns, child, modal_style)}
+  end
+
+  def prepare_modal(
+        %{fabric: fabric} = assigns,
+        %Fabric.LiveComponent.Model{} = child,
+        modal_style
+      ) do
+    send_event(fabric, :root, "prepare_modal", %{live_component: child, style: modal_style})
+    Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
+  end
+
   def show_modal(context, child_name, modal_style)
       when is_atom(child_name) or is_binary(child_name) do
     child = get_child(context, child_name)
     show_modal(context, child, modal_style)
   end
-
-  # MODAL
 
   def show_modal(
         %Phoenix.LiveView.Socket{assigns: assigns} = socket,
