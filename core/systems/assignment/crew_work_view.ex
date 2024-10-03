@@ -519,8 +519,8 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
     |> hide_modal(:tool_ref_view)
     |> update_task(updated_task)
-    |> select_next_item()
     |> handle_finished_state()
+    |> select_next_item()
   end
 
   defp update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
@@ -551,7 +551,8 @@ defmodule Systems.Assignment.CrewWorkView do
     |> update_selected_item()
     |> compose_child(:work_list_view)
     |> compose_child(:start_view)
-    |> update_child(:tool_ref_view)
+    |> compose_child(:tool_ref_view)
+    |> prepare_modal_tool_ref_view_if_needed()
   end
 
   defp select_next_item_id(
@@ -579,7 +580,6 @@ defmodule Systems.Assignment.CrewWorkView do
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
       socket
-      |> hide_modal(:tool_ref_view)
       |> signal_tasks_finished()
       |> compose_child(:finished_view)
     else
