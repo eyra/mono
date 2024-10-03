@@ -214,6 +214,16 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def handle_event(
+        "close_modal",
+        _,
+        %{assigns: %{modal: %{live_component: %{ref: ref}}}} = socket
+      ) do
+    send_event(ref, "close")
+    {:noreply, socket |> assign(modal: nil, modal_visible: false)}
+  end
+
+  @impl true
   def handle_event(name, event, socket) do
     Logger.warn("forwarding to flow: name=#{name}, event=#{inspect(event)}")
 

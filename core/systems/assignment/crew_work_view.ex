@@ -73,19 +73,17 @@ defmodule Systems.Assignment.CrewWorkView do
   defp initialize(socket) do
     socket
     |> hide_child(:finished_view)
+    |> hide_modal(:tool_ref_view)
+    |> compose_child(:context_menu)
     |> update_selected_item_id()
     |> update_selected_item()
-    |> compose_child(:work_list_view)
-    |> compose_child(:start_view)
-    |> compose_child(:context_menu)
-    |> compose_tool_ref_view()
   end
 
   defp update(socket) do
     socket
+    |> update_child(:context_menu)
     |> update_child(:work_list_view)
     |> update_child(:start_view)
-    |> update_child(:context_menu)
     |> update_child(:tool_ref_view)
   end
 
@@ -145,7 +143,15 @@ defmodule Systems.Assignment.CrewWorkView do
        ) do
     selected_item = Enum.find(work_items, fn {%{id: id}, _} -> id == selected_item_id end)
 
-    socket |> assign(selected_item: selected_item)
+    socket
+    |> assign(
+      selected_item: selected_item,
+      tool_initialized: false,
+      tool_started: false
+    )
+    |> compose_child(:work_list_view)
+    |> compose_child(:start_view)
+    |> compose_tool_ref_view()
   end
 
   # Compose
@@ -336,8 +342,7 @@ defmodule Systems.Assignment.CrewWorkView do
       )
       |> hide_modal(:tool_ref_view)
       |> compose_child(:start_view)
-      |> compose_child(:tool_ref_view)
-      |> prepare_modal_tool_ref_view_if_needed()
+      |> compose_tool_ref_view()
     }
   end
 
@@ -347,6 +352,15 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> handle_complete_task()
+    }
+  end
+
+  @impl true
+  def handle_event("close_task", _, socket) do
+    {
+      :noreply,
+      socket
+      |> select_current_item()
     }
   end
 
@@ -361,16 +375,8 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> assign(
-        tool_initialized: false,
-        tool_started: false,
-        selected_item_id: item_id
-      )
+      |> assign(selected_item_id: item_id)
       |> update_selected_item()
-      |> compose_child(:start_view)
-      |> update_child(:work_list_view)
-      |> compose_child(:tool_ref_view)
-      |> prepare_modal_tool_ref_view_if_needed()
     }
   end
 
@@ -380,6 +386,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(tool_started: true)
+      |> compose_child(:start_view)
       |> show_tool_ref_view_if_needed()
       |> start_task(selected_item)
     }
@@ -444,6 +451,7 @@ defmodule Systems.Assignment.CrewWorkView do
     if Fabric.exists?(fabric, :tool_ref_view) do
       prepare_modal(socket, :tool_ref_view, :full)
     else
+      Logger.warn("No tool ref view found")
       socket
     end
   end
@@ -453,13 +461,9 @@ defmodule Systems.Assignment.CrewWorkView do
        ) do
     if tool_started and tool_initialized do
       socket
-      |> update_child(:tool_ref_view)
+      |> compose_child(:tool_ref_view)
       |> show_modal(:tool_ref_view, :full)
-      |> assign(
-        tool_started: false,
-        tool_initialized: false
-      )
-      |> update_child(:start_view)
+      |> compose_child(:start_view)
     else
       socket
     end
@@ -536,6 +540,15 @@ defmodule Systems.Assignment.CrewWorkView do
     assign(socket, work_items: work_items)
   end
 
+  defp select_current_item(%{assigns: %{work_items: work_items}} = socket)
+       when length(work_items) <= 1 do
+    socket
+  end
+
+  defp select_current_item(socket) do
+    socket |> update_selected_item()
+  end
+
   defp select_next_item(%{assigns: %{work_items: work_items}} = socket)
        when length(work_items) <= 1 do
     socket
@@ -543,16 +556,8 @@ defmodule Systems.Assignment.CrewWorkView do
 
   defp select_next_item(socket) do
     socket
-    |> assign(
-      tool_started: false,
-      tool_initialized: false
-    )
     |> select_next_item_id()
     |> update_selected_item()
-    |> compose_child(:work_list_view)
-    |> compose_child(:start_view)
-    |> compose_child(:tool_ref_view)
-    |> prepare_modal_tool_ref_view_if_needed()
   end
 
   defp select_next_item_id(

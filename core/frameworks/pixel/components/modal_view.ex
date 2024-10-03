@@ -15,6 +15,11 @@ defmodule Frameworks.Pixel.ModalView do
       def handle_event("hide_modal", _, socket) do
         {:noreply, socket |> assign(modal: nil)}
       end
+
+      @impl true
+      def handle_event("close_modal", _, socket) do
+        {:noreply, socket |> assign(modal: nil)}
+      end
     end
   end
 
@@ -197,7 +202,7 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
       <Button.dynamic {
         %{
-          action: %{type: :send, event: "hide_modal"},
+          action: %{type: :send, event: "close_modal"},
           face: %{type: :icon, icon: :close}
         }
       } />

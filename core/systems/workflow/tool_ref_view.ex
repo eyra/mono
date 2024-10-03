@@ -6,6 +6,10 @@ defmodule Systems.Workflow.ToolRefView do
   alias Frameworks.Concept
   alias Systems.Workflow
 
+  def update(%{fabric_event: "close"}, socket) do
+    {:ok, socket |> send_event(:parent, "close_task")}
+  end
+
   def update(
         %{
           id: id,
