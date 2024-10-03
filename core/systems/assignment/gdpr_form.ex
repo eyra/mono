@@ -57,13 +57,20 @@ defmodule Systems.Assignment.GdprForm do
 
   @impl true
   def compose(:confirmation_modal, %{entity: %{consent_agreement: consent_agreement}}) do
+    assigns = %{consent_agreement: consent_agreement}
+    signatures = Consent.Public.list_signatures(consent_agreement)
+
+    assigns =
+      if signatures != [] do
+        Map.put(assigns, :body, dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"))
+      else
+        assigns
+      end
+
     %{
       module: Pixel.ConfirmationModal,
       params: %{
-        assigns: %{
-          body: dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"),
-          consent_agreement: consent_agreement
-        }
+        assigns: assigns
       }
     }
   end
