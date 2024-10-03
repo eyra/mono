@@ -455,3 +455,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "progress.yes"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retry.button"
+msgstr ""

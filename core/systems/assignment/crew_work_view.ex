@@ -26,17 +26,18 @@ defmodule Systems.Assignment.CrewWorkView do
           crew: crew,
           user: user,
           timezone: timezone,
-          panel_info: panel_info,
+          panel_info: %{embedded?: embedded?} = panel_info,
           tester?: tester?
         },
         socket
       ) do
+    retry? = Map.get(socket.assigns, :retry?, false)
     tool_started = Map.get(socket.assigns, :tool_started, false)
     tool_initialized = Map.get(socket.assigns, :tool_initialized, false)
-    tasks_finished? = Map.get(socket.assigns, :tasks_finished?, tasks_finished?(work_items))
+    initial? = Map.get(socket.assigns, :work_items) == nil
+    tasks_finished? = tasks_finished?(work_items)
 
-    {
-      :ok,
+    socket =
       socket
       |> assign(
         work_items: work_items,
@@ -52,16 +53,40 @@ defmodule Systems.Assignment.CrewWorkView do
         panel_info: panel_info,
         tool_started: tool_started,
         tool_initialized: tool_initialized,
-        tasks_finished?: tasks_finished?
+        retry?: retry?
       )
-      |> update_selected_item_id()
-      |> update_selected_item()
-      |> compose_child(:work_list_view)
-      |> compose_child(:start_view)
-      |> compose_child(:context_menu)
-      |> update_tool_ref_view()
-      |> update_child(:finished_view)
-    }
+
+    socket =
+      if initial? do
+        if tasks_finished? and not embedded? do
+          socket |> compose_child(:finished_view)
+        else
+          socket |> initialize()
+        end
+      else
+        socket |> update()
+      end
+
+    {:ok, socket}
+  end
+
+  defp initialize(socket) do
+    socket
+    |> hide_child(:finished_view)
+    |> update_selected_item_id()
+    |> update_selected_item()
+    |> compose_child(:work_list_view)
+    |> compose_child(:start_view)
+    |> compose_child(:context_menu)
+    |> compose_tool_ref_view()
+  end
+
+  defp update(socket) do
+    socket
+    |> update_child(:work_list_view)
+    |> update_child(:start_view)
+    |> update_child(:context_menu)
+    |> update_child(:tool_ref_view)
   end
 
   defp tasks_finished?(work_items) do
@@ -77,7 +102,7 @@ defmodule Systems.Assignment.CrewWorkView do
     tool_started and tool_initialized
   end
 
-  defp update_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
+  defp compose_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
     case Fabric.get_child(socket, :tool_ref_view) do
       %{params: %{work_item: {%{id: id}, _}}} when id == selected_item_id ->
         socket
@@ -280,6 +305,16 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   # Events
+
+  def handle_event("retry", _, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(retry?: true)
+      |> hide_child(:finished_view)
+      |> initialize()
+    }
+  end
 
   def handle_event("tool_initialized", _, socket) do
     {
@@ -539,17 +574,14 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
   end
 
-  defp handle_finished_state(%{assigns: %{tasks_finished?: true}} = socket) do
-    socket
-  end
+  defp handle_finished_state(%{assigns: %{retry?: true}} = socket), do: socket
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
       socket
-      |> assign(tasks_finished?: true)
+      |> hide_modal(:tool_ref_view)
       |> signal_tasks_finished()
       |> compose_child(:finished_view)
-      |> show_modal(:finished_view, :sheet)
     else
       socket
     end
@@ -592,26 +624,31 @@ defmodule Systems.Assignment.CrewWorkView do
   def render(assigns) do
     ~H"""
       <div class="w-full h-full flex flex-row">
-        <%= if exists?(@fabric, :work_list_view) do %>
-          <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
-            <div class="px-6">
-              <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
-            </div>
-            <div>
-              <.line />
-            </div>
-            <div class="flex-grow">
-              <div class="px-6 h-full overflow-y-scroll">
-                <.child name={:work_list_view} fabric={@fabric} />
+        <%= if exists?(@fabric, :finished_view) do %>
+          <.child name={:finished_view} fabric={@fabric} />
+        <% else %>
+          <%= if exists?(@fabric, :work_list_view) do %>
+            <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
+              <div class="px-6">
+                <Text.title2 margin=""><%= dgettext("eyra-assignment", "work.list.title") %></Text.title2>
+              </div>
+              <div>
+                <.line />
+              </div>
+              <div class="flex-grow">
+                <div class="px-6 h-full overflow-y-scroll">
+                  <.child name={:work_list_view} fabric={@fabric} />
+                </div>
               </div>
             </div>
-          </div>
-          <div class="border-l border-grey4">
+            <div class="border-l border-grey4">
+            </div>
+          <% end %>
+
+          <div class="h-full w-full">
+            <.child name={:start_view} fabric={@fabric} />
           </div>
         <% end %>
-        <div class="h-full w-full">
-          <.child name={:start_view} fabric={@fabric} />
-        </div>
 
         <%!-- floating button --%>
         <.child name={:context_menu} fabric={@fabric} />

@@ -31,7 +31,7 @@ defmodule Systems.Assignment.CrewPageTest do
 
   describe "render an assignment crew page" do
     test "renders page", %{conn: conn, assignment: assignment, user: user} do
-      conn = put_session(conn, :panel_info, %{})
+      conn = put_session(conn, :panel_info, %{embedded?: false})
       Assignment.Public.add_participant!(assignment, user)
 
       {:ok, _view, html} = live(conn, ~p"/assignment/#{assignment.id}")

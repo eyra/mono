@@ -252,7 +252,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You have finished. Thank you for your participation. You can now close your browser or close this popup to revisit the page."
+msgstr "You have finished. Thank you for your participation."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -455,3 +455,7 @@ msgstr "n/a"
 #, elixir-autogen, elixir-format
 msgid "progress.yes"
 msgstr "yes"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "retry.button"
+msgstr "Back to the tasks"
