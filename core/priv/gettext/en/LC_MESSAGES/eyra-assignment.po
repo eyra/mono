@@ -458,4 +458,4 @@ msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Give it Another Try"
+msgstr "Give it another try"
