@@ -11,6 +11,7 @@
 
 ## \#2 unreleased
 
+* Added: Confirmation dialog when skipping content pages or consent pages in assignment configuration.
 * Added: Project breadcrumbs for easy navigation and hierarchy overview.
 * Changed: Format of the filenames in Storages. Also no folders used anymore. This has impact on Data Donation studies.
 * Changed: Assignment does not have a Storage association anymore. Projects can have one Storage that is shared between all the project items.
