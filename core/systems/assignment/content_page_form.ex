@@ -112,7 +112,6 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def handle_event("update", %{status: :off}, socket) do
-    # If the page_ref is nil, there is nothing to delete
     if socket.assigns.page_ref.page.body != nil do
       {
         :noreply,

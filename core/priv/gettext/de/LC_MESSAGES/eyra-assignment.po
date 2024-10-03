@@ -418,3 +418,7 @@ msgstr "Go to storage"
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.confirmation_modal.body"
+msgstr ""

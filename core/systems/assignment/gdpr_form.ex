@@ -61,6 +61,7 @@ defmodule Systems.Assignment.GdprForm do
       module: Pixel.ConfirmationModal,
       params: %{
         assigns: %{
+          body: dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"),
           consent_agreement: consent_agreement
         }
       }

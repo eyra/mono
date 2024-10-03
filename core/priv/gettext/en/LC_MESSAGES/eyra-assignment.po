@@ -417,3 +417,7 @@ msgstr "Go to data storage"
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr "Please setup connection to a data storage"
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.confirmation_modal.body"
+msgstr "By skipping the consent, not only will the text be deleted, but the underlying consent agreement and all associated signatures will also be removed."

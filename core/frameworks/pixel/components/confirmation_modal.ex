@@ -2,10 +2,17 @@ defmodule Frameworks.Pixel.ConfirmationModal do
   use CoreWeb, :live_component
 
   @impl true
-  def update(_params, socket) do
+  def update(%{assigns: assigns}, socket) do
     {
       :ok,
-      update_buttons(socket)
+      socket
+      |> assign_new(:title, fn ->
+        Map.get(assigns, :title, dgettext("eyra-ui", "confirmation_modal.title"))
+      end)
+      |> assign_new(:body, fn ->
+        Map.get(assigns, :body, dgettext("eyra-ui", "confirmation_modal.body"))
+      end)
+      |> update_buttons()
     }
   end
 
@@ -37,12 +44,15 @@ defmodule Frameworks.Pixel.ConfirmationModal do
     ~H"""
       <div>
         <Text.title2>
-          <%= dgettext("eyra-ui", "confirmation_modal.title") %>
+          <%= @title %>
         </Text.title2>
+
         <.spacing value="M" />
+
         <Text.body_large>
-          <%= dgettext("eyra-ui", "confirmation_modal.body") %>
+          <%= @body %>
         </Text.body_large>
+
         <.spacing value="M" />
 
         <div class="flex flex-row gap-4">
