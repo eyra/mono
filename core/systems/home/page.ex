@@ -5,16 +5,11 @@ defmodule Systems.Home.Page do
   alias Frameworks.Pixel.Hero
 
   @impl true
-  def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket)
-      when not is_nil(user) do
-    user
-  end
-
-  @impl true
   def get_model(_params, _session, _socket) do
     Systems.Observatory.SingletonModel.instance()
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     {
       :ok,
@@ -32,10 +27,10 @@ defmodule Systems.Home.Page do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
+  def handle_view_model_updated(socket) do
+    # FIXME: consider to move updates of childs to Fabric.LiveHook
+    socket |> update_child(:home_view)
+  end
 
   @impl true
   def render(assigns) do

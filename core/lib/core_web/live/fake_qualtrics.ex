@@ -6,6 +6,7 @@ defmodule CoreWeb.FakeQualtrics do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
+  @impl true
   def mount(%{"re" => redirect_url}, _session, socket) do
     socket =
       socket

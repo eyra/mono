@@ -12,6 +12,8 @@ defmodule CoreWeb.Routes do
         plug(:accepts, ["html"])
         plug(:fetch_session)
 
+        plug(Systems.Account.Plug)
+
         plug(Cldr.Plug.PutLocale,
           apps: [
             cldr: CoreWeb.Cldr,
@@ -24,7 +26,7 @@ defmodule CoreWeb.Routes do
         )
 
         plug(RemoteIp)
-        plug(CoreWeb.Plug.LiveRemoteIp)
+        plug(CoreWeb.Plug.RemoteIp)
 
         plug(:fetch_live_flash)
         plug(:fetch_meta_info)
@@ -71,10 +73,16 @@ defmodule CoreWeb.Routes do
       Systems.Routes.routes()
 
       scope "/", CoreWeb do
+        pipe_through(:browser_unprotected)
+        get("/access_denied", ErrorController, :access_denied)
+      end
+
+      scope "/", CoreWeb do
         pipe_through(:api)
 
         post("/api/apns-token", APNSDeviceTokenController, :create)
         post("/api/timezone", TimezoneController, :put_session)
+        post("/api/viewport", ViewportController, :put_session)
       end
     end
   end

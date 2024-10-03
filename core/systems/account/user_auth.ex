@@ -83,17 +83,23 @@ defmodule Systems.Account.UserAuth do
   It clears all session data for safety. See renew_session.
   """
   def log_out_user(conn) do
-    user_token = get_session(conn, :user_token)
-    user_token && Account.Public.delete_session_token(user_token)
-
     if live_socket_id = get_session(conn, :live_socket_id) do
       CoreWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn
+    |> forget_user()
     |> renew_session()
-    |> delete_resp_cookie(@remember_me_cookie)
     |> redirect(to: ~p"/user/signin")
+  end
+
+  @doc """
+    Removes user token and cookie
+  """
+  def forget_user(conn) do
+    user_token = get_session(conn, :user_token)
+    user_token && Account.Public.delete_session_token(user_token)
+    delete_resp_cookie(conn, @remember_me_cookie)
   end
 
   @doc """

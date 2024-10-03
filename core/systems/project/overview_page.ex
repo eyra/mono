@@ -21,11 +21,7 @@ defmodule Systems.Project.OverviewPage do
     {:ok, socket}
   end
 
-  @impl true
   def handle_view_model_updated(socket), do: socket |> update_child(:people_page)
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def compose(:project_form, %{active_project: project_id, vm: %{projects: projects}}) do

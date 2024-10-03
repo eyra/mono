@@ -342,6 +342,13 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  def participant_id(%Assignment.Model{crew: crew}, user) do
+    case Crew.Public.get_member_unsafe(crew, user) do
+      %{public_id: public_id} -> {:ok, public_id}
+      _ -> :error
+    end
+  end
+
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
   def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)

@@ -28,7 +28,6 @@ defmodule Systems.Storage.EndpointContentPage do
     }
   end
 
-  @impl true
   def handle_view_model_updated(%{assigns: %{vm: vm}} = socket) do
     if tab = Enum.find(vm.tabs, &(&1.id == :data_view)) do
       Fabric.send_event(tab.child.ref, %{name: "update_files", payload: %{}})
@@ -38,9 +37,6 @@ defmodule Systems.Storage.EndpointContentPage do
   end
 
   @impl true
-  def handle_resize(socket), do: socket
-
-  @impl true
   def handle_uri(socket), do: update_view_model(socket)
 
   @impl true
@@ -48,6 +44,7 @@ defmodule Systems.Storage.EndpointContentPage do
     ~H"""
       <.management_page
         title={@vm.title}
+        breadcrumbs={@vm.breadcrumbs}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
         actions={@actions}

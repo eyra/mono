@@ -6,6 +6,7 @@ defmodule Systems.Support.HelpdeskPage do
     user
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     {:ok, socket |> compose_child(:helpdesk_form)}
   end
@@ -17,12 +18,6 @@ defmodule Systems.Support.HelpdeskPage do
       params: %{user: user}
     }
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do

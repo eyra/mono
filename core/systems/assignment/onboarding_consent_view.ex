@@ -33,12 +33,12 @@ defmodule Systems.Assignment.OnboardingConsentView do
   end
 
   @impl true
-  def handle_event("accept", _payload, socket) do
+  def handle_event("accept", %{source: %{name: :clickwrap_view}}, socket) do
     {:noreply, socket |> send_event(:parent, "accept")}
   end
 
   @impl true
-  def handle_event("decline", _payload, socket) do
+  def handle_event("decline", %{source: %{name: :clickwrap_view}}, socket) do
     {:noreply, socket |> send_event(:parent, "decline")}
   end
 

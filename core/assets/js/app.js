@@ -18,7 +18,7 @@ import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
-import { ViewportResize } from "./viewport_resize";
+import { Viewport } from "./viewport";
 import { SidePanel } from "./side_panel";
 import { Toggle } from "./toggle";
 import { Cell } from "./cell";
@@ -36,6 +36,7 @@ window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind == "initial") {
     TimeZone.sendToServer();
+    Viewport.sendToServer();
   }
 });
 
@@ -108,7 +109,7 @@ let Hooks = {
   Tabbar,
   TabbarItem,
   TabbarFooterItem,
-  ViewportResize,
+  Viewport,
   Wysiwyg,
   AutoSubmit,
   Sticky,

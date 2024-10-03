@@ -4,7 +4,8 @@ defmodule Systems.Advert.Switch do
   alias Systems.{
     Advert,
     Promotion,
-    Assignment
+    Assignment,
+    Home
   }
 
   @impl true
@@ -56,6 +57,7 @@ defmodule Systems.Advert.Switch do
     update(Promotion.LandingPage, promotion_id, promotion, from_pid)
     update(Assignment.LandingPage, assignment_id, advert, from_pid)
     update(Advert.ContentPage, id, advert, from_pid)
+    update(Home.Page, :singleton, %{id: :singleton}, from_pid)
   end
 
   defp handle({_, _}, _), do: nil

@@ -10,24 +10,9 @@ defmodule CoreWeb.Menu.Helpers do
 
   require CoreWeb.Gettext
 
-  def home_item(menu_id, id, action, size) when is_atom(id) do
-    face = %{
-      type: :menu_home,
-      icon: id,
-      size: size
-    }
-
-    %{
-      id: id,
-      menu_id: menu_id,
-      action: action,
-      face: face
-    }
-  end
-
-  def build_home(assigns, menu_id, id, config) do
+  def build_home(menu_id, id, config, uri) do
     if Keyword.has_key?(config, menu_id) do
-      action = action(assigns, id)
+      action = action(id, uri)
       flags = select_flags(menu_id, id, config)
 
       size =
@@ -41,6 +26,21 @@ defmodule CoreWeb.Menu.Helpers do
     else
       nil
     end
+  end
+
+  defp home_item(menu_id, id, action, size) when is_atom(id) do
+    face = %{
+      type: :menu_home,
+      icon: id,
+      size: size
+    }
+
+    %{
+      id: id,
+      menu_id: menu_id,
+      action: action,
+      face: face
+    }
   end
 
   def menu_item(menu_id, id, active?, action, %{} = opts) when is_atom(id) do
@@ -60,22 +60,20 @@ defmodule CoreWeb.Menu.Helpers do
     }
   end
 
-  def menu_item(assigns, menu_id, id, active_item, flags) when is_list(flags) do
+  def menu_item(menu_id, id, active_item, flags, user, uri) when is_list(flags) do
     active? = id == active_item
-    action = action(assigns, id)
-    opts = opts(assigns, id, flags)
+    action = action(id, uri)
+    opts = opts(id, flags, user)
 
     menu_item(menu_id, id, active?, action, opts)
   end
 
-  def build_item(assigns, menu_id, id, active_item, config) do
+  def build_item(menu_id, id, active_item, config, user, uri) do
     flags = select_flags(menu_id, id, config)
-    menu_item(assigns, menu_id, id, active_item, flags)
+    menu_item(menu_id, id, active_item, flags, user, uri)
   end
 
-  defp opts(assigns, id, flags) when is_list(flags) do
-    user = Map.get(assigns, :current_user)
-
+  defp opts(id, flags, user) when is_list(flags) do
     icon =
       if Enum.member?(flags, :icon) do
         icon(id)
@@ -104,7 +102,9 @@ defmodule CoreWeb.Menu.Helpers do
     }
   end
 
-  def action(%{uri: uri} = assigns, :language) do
+  def action(:language, nil), do: action(:language, nil, "\\")
+
+  def action(:language, uri) do
     parsed_uri = URI.parse(uri)
 
     redirect_url =
@@ -113,14 +113,12 @@ defmodule CoreWeb.Menu.Helpers do
         query -> "#{parsed_uri.path}?#{query}"
       end
 
-    action(assigns, :language, redirect_url)
+    action(:language, uri, redirect_url)
   end
 
-  def action(assigns, :language), do: action(assigns, :language, "\\")
+  def action(id, _uri) when is_atom(id), do: ItemsProvider.action(id)
 
-  def action(_assigns, id) when is_atom(id), do: ItemsProvider.action(id)
-
-  def action(_assigns, :language, redirect_url) when is_binary(redirect_url) do
+  def action(:language, _uri, redirect_url) when is_binary(redirect_url) do
     [locale] = supported_languages()
 
     %{

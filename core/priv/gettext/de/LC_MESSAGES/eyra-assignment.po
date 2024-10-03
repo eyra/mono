@@ -419,6 +419,16 @@ msgstr "Go to storage"
 msgid "storage.not_available.warning"
 msgstr ""
 
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "atom.tag"
+msgstr ""
+
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
 msgstr ""

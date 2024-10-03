@@ -387,18 +387,6 @@ msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard_status.concept"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.offline"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.private"
 msgstr ""
 
@@ -420,22 +408,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "templates.questionnaire"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.concept"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.idle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.offline"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.online"
 msgstr ""
 
 #, elixir-autogen, elixir-format

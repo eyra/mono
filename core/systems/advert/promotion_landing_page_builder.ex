@@ -26,7 +26,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
       ) do
     assignment
     |> Assignment.Model.language()
-    |> CoreWeb.LiveLocale.put_locale()
+    |> CoreWeb.Live.Hook.Locale.put_locale()
 
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
     icon_url = "/images/#{pool_name |> String.downcase()}-wide-dark.svg"

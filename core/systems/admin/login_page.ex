@@ -1,12 +1,21 @@
 defmodule Systems.Admin.LoginPage do
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Menus
 
   import Ecto.Query
   alias Core.Repo
   alias Systems.Account.User
 
+  @impl true
   def mount(_params, _session, socket) do
     {
       :ok,
@@ -14,6 +23,11 @@ defmodule Systems.Admin.LoginPage do
       |> assign(users: list_users(), active_menu_item: :admin)
       |> update_menus()
     }
+  end
+
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
   end
 
   # FIXME: Move this to Accounts
@@ -34,7 +48,7 @@ defmodule Systems.Admin.LoginPage do
             Log in
           </div>
           <div class="mb-6" />
-          <a href="/google-sign-in">
+          <a href="/google-sign-in?creator=true">
             <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
               <div class="flex w-full justify-center items-center">
                 <div>

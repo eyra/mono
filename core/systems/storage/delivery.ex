@@ -28,7 +28,9 @@ defmodule Systems.Storage.Delivery do
   end
 
   def deliver(backend, endpoint, data, meta_data) do
-    Logger.notice("[Storage.Delivery] deliver", ansi_color: :light_magenta)
+    Logger.notice("[Storage.Delivery] deliver #{byte_size(data)} bytes",
+      ansi_color: :light_magenta
+    )
 
     try do
       backend.store(endpoint, data, meta_data)

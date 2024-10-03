@@ -2,7 +2,11 @@ defmodule Systems.Test.Page do
   @moduledoc """
   The page for testing the view model observations
   """
-  use Systems.Content.Composer, :live_workspace
+  use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
   alias Systems.Test
 
@@ -13,14 +17,19 @@ defmodule Systems.Test.Page do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(active_menu_item: nil)}
+    {
+      :ok,
+      socket
+      |> assign(
+        view_model_updated: 0,
+        active_menu_item: nil
+      )
+    }
   end
 
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
+  def handle_view_model_updated(%{assigns: %{view_model_updated: view_model_updated}} = socket) do
+    socket |> assign(view_model_updated: "#{view_model_updated + 1}")
+  end
 
   # data(model, :map)
   @impl true
@@ -28,6 +37,7 @@ defmodule Systems.Test.Page do
     ~H"""
     <div><%= @vm.title %></div>
     <div><%= @vm.subtitle %></div>
+    <div>view_model_updated: <%= @view_model_updated %></div>
     """
   end
 end

@@ -8,6 +8,7 @@ defmodule Frameworks.Pixel do
       alias Frameworks.Pixel.Button
       alias Frameworks.Pixel.Text
       alias Frameworks.Pixel.Icon
+      alias Frameworks.Pixel.Separator
     end
   end
 end

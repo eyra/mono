@@ -8,6 +8,7 @@ defmodule Systems.Desktop.Page do
     user
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     {
       :ok,
@@ -23,12 +24,6 @@ defmodule Systems.Desktop.Page do
       params: %{vm: vm}
     }
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def render(assigns) do

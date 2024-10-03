@@ -418,6 +418,16 @@ msgstr "Go to data storage"
 msgid "storage.not_available.warning"
 msgstr "Please setup connection to a data storage"
 
+#, elixir-autogen, elixir-format, fuzzy
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] "1 participant"
+msgstr[1] "%{count} participants"
+
+#, elixir-autogen, elixir-format
+msgid "atom.tag"
+msgstr "Assignment"
+
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
 msgstr "By skipping the consent, not only will the text be deleted, but the underlying consent agreement and all associated signatures will also be removed."

@@ -58,7 +58,7 @@ defmodule Systems.Advert.FundingView do
         changeset: changeset,
         selected_budget: budget,
         user: user,
-        locale: CoreWeb.LiveLocale.get_locale()
+        locale: CoreWeb.Live.Hook.Locale.get_locale()
       )
       |> update_state()
       |> update_reward()
