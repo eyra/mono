@@ -458,4 +458,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Terug naar de taken"
+msgstr "Probeer het nog een keer"
