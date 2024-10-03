@@ -157,8 +157,13 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def handle_event(
         "prepare_modal",
-        %{live_component: %{id: modal_id}} = modal,
-        %{assigns: %{modal: %{id: current_modal_id}, modal_visible: modal_visible}} = socket
+        %{live_component: %{ref: %{id: modal_id}}} = modal,
+        %{
+          assigns: %{
+            modal: %{live_component: %{ref: %{id: current_modal_id}}},
+            modal_visible: modal_visible
+          }
+        } = socket
       ) do
     if modal_id == current_modal_id do
       {:noreply, socket |> assign(modal: modal)}
@@ -179,8 +184,13 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def handle_event(
         "show_modal",
-        %{live_component: %{id: modal_id}} = modal,
-        %{assigns: %{modal: %{id: current_modal_id}, modal_visible: modal_visible}} = socket
+        %{live_component: %{ref: %{id: modal_id}}} = modal,
+        %{
+          assigns: %{
+            modal: %{live_component: %{ref: %{id: current_modal_id}}},
+            modal_visible: modal_visible
+          }
+        } = socket
       ) do
     if modal_id == current_modal_id do
       {:noreply, socket |> assign(modal: modal, modal_visible: true)}

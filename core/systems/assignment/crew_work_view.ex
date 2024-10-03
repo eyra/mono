@@ -33,7 +33,7 @@ defmodule Systems.Assignment.CrewWorkView do
       ) do
     tool_started = Map.get(socket.assigns, :tool_started, false)
     tool_initialized = Map.get(socket.assigns, :tool_initialized, false)
-    first_time? = not Map.has_key?(socket.assigns, :work_items)
+    tasks_finished? = Map.get(socket.assigns, :tasks_finished?, tasks_finished?(work_items))
 
     {
       :ok,
@@ -51,9 +51,9 @@ defmodule Systems.Assignment.CrewWorkView do
         tester?: tester?,
         panel_info: panel_info,
         tool_started: tool_started,
-        tool_initialized: tool_initialized
+        tool_initialized: tool_initialized,
+        tasks_finished?: tasks_finished?
       )
-      |> update_tasks_finished()
       |> update_selected_item_id()
       |> update_selected_item()
       |> compose_child(:work_list_view)
@@ -61,12 +61,7 @@ defmodule Systems.Assignment.CrewWorkView do
       |> compose_child(:context_menu)
       |> update_tool_ref_view()
       |> update_child(:finished_view)
-      |> handle_finished_state(first_time?)
     }
-  end
-
-  defp update_tasks_finished(%{assigns: %{work_items: work_items}} = socket) do
-    socket |> assign(tasks_finished: tasks_finished?(work_items))
   end
 
   defp tasks_finished?(work_items) do
@@ -539,23 +534,19 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: selected_item_id)
   end
 
-  defp handle_finished_state(socket, false) do
-    # Dont show finished view after first load
+  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
+    # Dont show finished view when embedded in external panel UI
     socket
   end
 
-  defp handle_finished_state(socket, true) do
-    handle_finished_state(socket)
-  end
-
-  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
-    # Dont show finished view when embedded in external panel UI
+  defp handle_finished_state(%{assigns: %{tasks_finished?: true}} = socket) do
     socket
   end
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
       socket
+      |> assign(tasks_finished?: true)
       |> signal_tasks_finished()
       |> compose_child(:finished_view)
       |> show_modal(:finished_view, :sheet)
