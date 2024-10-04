@@ -4,13 +4,13 @@ defmodule Systems.Assignment.FinishedView do
   import CoreWeb.Gettext
 
   @impl true
-  def update(_, socket) do
+  def update(%{title: title}, socket) do
     body = dgettext("eyra-assignment", "finished_view.body")
 
     {
       :ok,
       socket
-      |> assign(body: body)
+      |> assign(title: title, body: body)
       |> update_retry_button()
     }
   end
@@ -39,7 +39,7 @@ defmodule Systems.Assignment.FinishedView do
         <div class="flex-grow" />
         <div class="flex flex-col gap-8 items-center w-full h-full">
           <div class="flex-grow" />
-          <Text.title1 margin="">Done</Text.title1>
+          <Text.title1 margin=""><%= @title %></Text.title1>
           <Text.body_large><%= @body %></Text.body_large>
           <div class="flex flex-col items-center w-full pt-4">
             <div class="flex-none">
