@@ -59,7 +59,7 @@ defmodule Systems.Assignment.CrewWorkView do
     socket =
       if initial? do
         if tasks_finished? and not embedded? do
-          socket |> compose_child(:finished_view)
+          socket |> finish()
         else
           socket |> initialize()
         end
@@ -68,6 +68,12 @@ defmodule Systems.Assignment.CrewWorkView do
       end
 
     {:ok, socket}
+  end
+
+  defp finish(socket) do
+    socket
+    |> compose_child(:context_menu)
+    |> compose_child(:finished_view)
   end
 
   defp initialize(socket) do
@@ -365,6 +371,15 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   @impl true
+  def handle_event("close_page", _, socket) do
+    {
+      :noreply,
+      socket
+      |> select_current_item()
+    }
+  end
+
+  @impl true
   def handle_event(
         "work_item_selected",
         %{"item" => item_id},
@@ -406,7 +421,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:privacy_page)
-      |> show_modal(:privacy_page, :full)
+      |> show_modal(:privacy_page, :page)
     }
   end
 
@@ -416,7 +431,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:consent_page)
-      |> show_modal(:consent_page, :full)
+      |> show_modal(:consent_page, :page)
     }
   end
 
@@ -426,7 +441,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:intro_page)
-      |> show_modal(:intro_page, :full)
+      |> show_modal(:intro_page, :page)
     }
   end
 
@@ -436,7 +451,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> compose_child(:support_page)
-      |> show_modal(:support_page, :full)
+      |> show_modal(:support_page, :page)
     }
   end
 
@@ -451,7 +466,7 @@ defmodule Systems.Assignment.CrewWorkView do
     if Fabric.exists?(fabric, :tool_ref_view) do
       prepare_modal(socket, :tool_ref_view, :full)
     else
-      Logger.warn("No tool ref view found")
+      Logger.warn("No tool ref view found to prepare modal")
       socket
     end
   end
@@ -545,8 +560,14 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
   end
 
-  defp select_current_item(socket) do
+  defp select_current_item(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+       when not is_nil(selected_item_id) do
     socket |> update_selected_item()
+  end
+
+  defp select_current_item(socket) do
+    Logger.warn("No selected_item_id found to select")
+    socket
   end
 
   defp select_next_item(%{assigns: %{work_items: work_items}} = socket)

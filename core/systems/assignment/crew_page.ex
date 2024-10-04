@@ -155,52 +155,8 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event(
-        "prepare_modal",
-        %{live_component: %{ref: %{id: modal_id}}} = modal,
-        %{
-          assigns: %{
-            modal: %{live_component: %{ref: %{id: current_modal_id}}},
-            modal_visible: modal_visible
-          }
-        } = socket
-      ) do
-    if modal_id == current_modal_id do
-      {:noreply, socket |> assign(modal: modal)}
-    else
-      Logger.warn(
-        "ignoring prepare modal #{modal_id}, current model: #{current_modal_id}, modal_visible: #{modal_visible}"
-      )
-
-      {:noreply, socket}
-    end
-  end
-
-  @impl true
   def handle_event("prepare_modal", modal, socket) do
-    {:noreply, socket |> assign(modal: modal)}
-  end
-
-  @impl true
-  def handle_event(
-        "show_modal",
-        %{live_component: %{ref: %{id: modal_id}}} = modal,
-        %{
-          assigns: %{
-            modal: %{live_component: %{ref: %{id: current_modal_id}}},
-            modal_visible: modal_visible
-          }
-        } = socket
-      ) do
-    if modal_id == current_modal_id do
-      {:noreply, socket |> assign(modal: modal, modal_visible: true)}
-    else
-      Logger.warn(
-        "ignoring show modal #{modal_id}, current model: #{current_modal_id}, modal_visible: #{modal_visible}"
-      )
-
-      {:noreply, socket}
-    end
+    {:noreply, socket |> assign(modal: modal, modal_visible: false)}
   end
 
   @impl true
@@ -219,7 +175,7 @@ defmodule Systems.Assignment.CrewPage do
         _,
         %{assigns: %{modal: %{live_component: %{ref: ref}}}} = socket
       ) do
-    send_event(ref, "close")
+    send_event(ref, %{name: "close", payload: nil})
     {:noreply, socket |> assign(modal: nil, modal_visible: false)}
   end
 

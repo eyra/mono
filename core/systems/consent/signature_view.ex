@@ -17,9 +17,8 @@ defmodule Systems.Consent.SignatureView do
 
   # Events
 
-  @impl true
-  def handle_event("takeover_close", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "close")}
+  def handle_event("close", _, socket) do
+    {:noreply, socket |> send_event(:parent, "close_page")}
   end
 
   @impl true

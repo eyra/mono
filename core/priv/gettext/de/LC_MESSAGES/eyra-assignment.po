@@ -253,7 +253,7 @@ msgstr "Keine zustimmung"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme. Sie können jetzt Ihren Browser schließen oder dieses Popup schließen, um die Seite erneut zu besuchen."
+msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"

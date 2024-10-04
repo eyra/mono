@@ -6,10 +6,6 @@ defmodule Systems.Workflow.ToolRefView do
   alias Frameworks.Concept
   alias Systems.Workflow
 
-  def update(%{fabric_event: "close"}, socket) do
-    {:ok, socket |> send_event(:parent, "close_task")}
-  end
-
   def update(
         %{
           id: id,
@@ -70,6 +66,11 @@ defmodule Systems.Workflow.ToolRefView do
     tool_ref = Map.get(socket.assigns, :tool_ref)
     Logger.warning("No module launcher found for #{inspect(tool_ref)}")
     socket
+  end
+
+  @impl true
+  def handle_event("close", _, socket) do
+    {:noreply, socket |> send_event(:parent, "close_task")}
   end
 
   @impl true
