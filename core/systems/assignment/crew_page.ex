@@ -41,6 +41,7 @@ defmodule Systems.Assignment.CrewPage do
         id: id,
         image_info: nil,
         modal: nil,
+        modal_visible: false,
         panel_form: nil
       )
       |> update_panel_info(session)
@@ -154,13 +155,28 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def handle_event("prepare_modal", modal, socket) do
+    {:noreply, socket |> assign(modal: modal, modal_visible: false)}
+  end
+
+  @impl true
   def handle_event("show_modal", modal, socket) do
-    {:noreply, socket |> assign(modal: modal)}
+    {:noreply, socket |> assign(modal: modal, modal_visible: true)}
   end
 
   @impl true
   def handle_event("hide_modal", _, socket) do
-    {:noreply, socket |> assign(modal: nil)}
+    {:noreply, socket |> assign(modal: nil, modal_visible: false)}
+  end
+
+  @impl true
+  def handle_event(
+        "close_modal",
+        _,
+        %{assigns: %{modal: %{live_component: %{ref: ref}}}} = socket
+      ) do
+    send_event(ref, %{name: "close", payload: nil})
+    {:noreply, socket |> assign(modal: nil, modal_visible: false)}
   end
 
   @impl true
@@ -229,7 +245,9 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic modal={@modal} />
+        <div class={"#{if @modal_visible do "block" else "hidden" end}"}>
+          <ModalView.dynamic modal={@modal} />
+        </div>
 
         <%!-- hidden auto submit form --%>
         <%= if @panel_form do %>

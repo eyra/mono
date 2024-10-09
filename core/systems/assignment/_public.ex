@@ -83,6 +83,11 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  def get_by_workflow_item_id(workflow_item_id, preload \\ []) do
+    %{workflow_id: workflow_id} = Workflow.Public.get_item!(String.to_integer(workflow_item_id))
+    Assignment.Public.get_by(:workflow_id, workflow_id, preload)
+  end
+
   def get_by_tool_ref(workflow, preload \\ [])
 
   def get_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)
@@ -504,6 +509,32 @@ defmodule Systems.Assignment.Public do
 
   def cancel(id, user) do
     get!(id) |> cancel(user)
+  end
+
+  @doc """
+    Lists the participants of the assignment.
+    Returns a list of maps with the following keys:
+    * `user_id`
+    * `public_id`
+    * `external_id`
+    * `member_id`
+  """
+  def list_participants(%Assignment.Model{} = assignment) do
+    participant_query(assignment)
+    |> Repo.all()
+  end
+
+  def list_signatures(%Assignment.Model{consent_agreement_id: nil}) do
+    []
+  end
+
+  def list_signatures(%Assignment.Model{} = assignment) do
+    signature_query(assignment)
+    |> Repo.all()
+  end
+
+  def list_tasks(%Assignment.Model{workflow: workflow}) do
+    Workflow.Public.list_items(workflow)
   end
 
   def get_task(tool, identifier) do

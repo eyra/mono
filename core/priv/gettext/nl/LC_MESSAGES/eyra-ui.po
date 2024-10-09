@@ -159,10 +159,6 @@ msgid "submit.button"
 msgstr "Opslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "close.button"
-msgstr "Sluiten"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "done.button"
 msgstr "Klaar"
 

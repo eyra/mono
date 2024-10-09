@@ -252,7 +252,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "U bent klaar. Bedankt voor uw deelname. U kunt de browser afsluiten of deze popup afsluiten om terug te gaan naar de pagina."
+msgstr "U bent klaar. Bedankt voor uw deelname."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -427,3 +427,35 @@ msgstr[1] ""
 #, elixir-autogen, elixir-format
 msgid "atom.tag"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.progress.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.consent"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.participant"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.no"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.not.applicable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.yes"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "retry.button"
+msgstr "Probeer het nog een keer"

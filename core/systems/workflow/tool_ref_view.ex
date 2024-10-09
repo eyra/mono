@@ -69,6 +69,11 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   @impl true
+  def handle_event("close", _, socket) do
+    {:noreply, socket |> send_event(:parent, "close_task")}
+  end
+
+  @impl true
   def handle_event("complete_task", _payload, socket) do
     {:noreply, socket |> send_event(:parent, "complete_task")}
   end
