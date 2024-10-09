@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-E0306A04.js"></script>
+    <script src="dist/sidebar_items-78107A2F.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -410,9 +410,9 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
   Example
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">calendars_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="4749771836-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4749771836-2">[</span><span class="ss">:buddhist</span><span class="p">,</span><span class="w"> </span><span class="ss">:chinese</span><span class="p">,</span><span class="w"> </span><span class="ss">:coptic</span><span class="p">,</span><span class="w"> </span><span class="ss">:dangi</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic_amete_alem</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="0862351273-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0862351273-2">[</span><span class="ss">:buddhist</span><span class="p">,</span><span class="w"> </span><span class="ss">:chinese</span><span class="p">,</span><span class="w"> </span><span class="ss">:coptic</span><span class="p">,</span><span class="w"> </span><span class="ss">:dangi</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic</span><span class="p">,</span><span class="w"> </span><span class="ss">:ethiopic_amete_alem</span><span class="p">,</span><span class="w">
  </span><span class="ss">:generic</span><span class="p">,</span><span class="w"> </span><span class="ss">:gregorian</span><span class="p">,</span><span class="w"> </span><span class="ss">:hebrew</span><span class="p">,</span><span class="w"> </span><span class="ss">:indian</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_civil</span><span class="p">,</span><span class="w">
- </span><span class="ss">:islamic_rgsa</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_tbla</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_umalqura</span><span class="p">,</span><span class="w"> </span><span class="ss">:japanese</span><span class="p">,</span><span class="w"> </span><span class="ss">:persian</span><span class="p">,</span><span class="w"> </span><span class="ss">:roc</span><span class="p" data-group-id="4749771836-2">]</span><span class="p" data-group-id="4749771836-1">}</span></code></pre>
+ </span><span class="ss">:islamic_rgsa</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_tbla</span><span class="p">,</span><span class="w"> </span><span class="ss">:islamic_umalqura</span><span class="p">,</span><span class="w"> </span><span class="ss">:japanese</span><span class="p">,</span><span class="w"> </span><span class="ss">:persian</span><span class="p">,</span><span class="w"> </span><span class="ss">:roc</span><span class="p" data-group-id="0862351273-2">]</span><span class="p" data-group-id="0862351273-1">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="date_formats/2">
@@ -459,20 +459,20 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
   Examples:
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="7614374484-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7614374484-2">%</span><span class="nc" data-group-id="7614374484-2">Cldr.Date.Styles</span><span class="p" data-group-id="7614374484-2">{</span><span class="w">
+</span><span class="p" data-group-id="1993093529-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1993093529-2">%</span><span class="nc" data-group-id="1993093529-2">Cldr.Date.Styles</span><span class="p" data-group-id="1993093529-2">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EEEE, MMMM d, y&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d, y&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/yy&quot;</span><span class="w">
-</span><span class="p" data-group-id="7614374484-2">}</span><span class="p" data-group-id="7614374484-1">}</span><span class="w">
+</span><span class="p" data-group-id="1993093529-2">}</span><span class="p" data-group-id="1993093529-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
-</span><span class="p" data-group-id="7614374484-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7614374484-4">%</span><span class="nc" data-group-id="7614374484-4">Cldr.Date.Styles</span><span class="p" data-group-id="7614374484-4">{</span><span class="w">
+</span><span class="p" data-group-id="1993093529-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1993093529-4">%</span><span class="nc" data-group-id="1993093529-4">Cldr.Date.Styles</span><span class="p" data-group-id="1993093529-4">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EEEE, MMMM d, y G&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d, y G&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d, y G&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/y GGGGG&quot;</span><span class="w">
-</span><span class="p" data-group-id="7614374484-4">}</span><span class="p" data-group-id="7614374484-3">}</span></code></pre>
+</span><span class="p" data-group-id="1993093529-4">}</span><span class="p" data-group-id="1993093529-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="date_time_available_formats/2">
@@ -524,9 +524,9 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
   Examples:
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_available_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="0032987218-1">{</span><span class="w">
+</span><span class="p" data-group-id="2161224371-1">{</span><span class="w">
   </span><span class="ss">:ok</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="0032987218-2">%{</span><span class="w">
+  </span><span class="p" data-group-id="2161224371-2">%{</span><span class="w">
     </span><span class="ss">d</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;d&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">h</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h a&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">hm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="p">,</span><span class="w">
@@ -535,7 +535,7 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
     </span><span class="ss">hmv</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a v&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">ms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mm:ss&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">y</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w">
-    </span><span class="ss">yw</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0032987218-3">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p" data-group-id="0032987218-3">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">yw</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2161224371-3">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; w &#39;of&#39; Y&quot;</span><span class="p" data-group-id="2161224371-3">}</span><span class="p">,</span><span class="w">
     </span><span class="ss">Bh</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h B&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">Bhm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm B&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">Bhms</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss B&quot;</span><span class="p">,</span><span class="w">
@@ -561,7 +561,7 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
     </span><span class="ss">MEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, M/d&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">MMM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LLL&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">MMMEd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;E, MMM d&quot;</span><span class="p">,</span><span class="w">
-    </span><span class="ss">MMMMW</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0032987218-4">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p" data-group-id="0032987218-4">}</span><span class="p">,</span><span class="w">
+    </span><span class="ss">MMMMW</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2161224371-4">%{</span><span class="ss">one</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">other</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;week&#39; W &#39;of&#39; MMMM&quot;</span><span class="p" data-group-id="2161224371-4">}</span><span class="p">,</span><span class="w">
     </span><span class="ss">MMMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMMM d&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">MMMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MMM d&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">Md</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d&quot;</span><span class="p">,</span><span class="w">
@@ -574,8 +574,8 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
     </span><span class="ss">yMd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;M/d/y&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">yQQQ</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QQQ y&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">yQQQQ</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;QQQQ y&quot;</span><span class="w">
-  </span><span class="p" data-group-id="0032987218-2">}</span><span class="w">
-</span><span class="p" data-group-id="0032987218-1">}</span></code></pre>
+  </span><span class="p" data-group-id="2161224371-2">}</span><span class="w">
+</span><span class="p" data-group-id="2161224371-1">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="date_time_formats/2">
@@ -622,20 +622,20 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
   Examples:
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="4123993342-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4123993342-2">%</span><span class="nc" data-group-id="4123993342-2">Cldr.DateTime.Styles</span><span class="p" data-group-id="4123993342-2">{</span><span class="w">
+</span><span class="p" data-group-id="4271709890-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4271709890-2">%</span><span class="nc" data-group-id="4271709890-2">Cldr.DateTime.Styles</span><span class="p" data-group-id="4271709890-2">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="w">
-</span><span class="p" data-group-id="4123993342-2">}</span><span class="p" data-group-id="4123993342-1">}</span><span class="w">
+</span><span class="p" data-group-id="4271709890-2">}</span><span class="p" data-group-id="4271709890-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
-</span><span class="p" data-group-id="4123993342-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4123993342-4">%</span><span class="nc" data-group-id="4123993342-4">Cldr.DateTime.Styles</span><span class="p" data-group-id="4123993342-4">{</span><span class="w">
+</span><span class="p" data-group-id="4271709890-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4271709890-4">%</span><span class="nc" data-group-id="4271709890-4">Cldr.DateTime.Styles</span><span class="p" data-group-id="4271709890-4">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{1}, {0}&quot;</span><span class="w">
-</span><span class="p" data-group-id="4123993342-4">}</span><span class="p" data-group-id="4123993342-3">}</span></code></pre>
+</span><span class="p" data-group-id="4271709890-4">}</span><span class="p" data-group-id="4271709890-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="date_time_interval_fallback/2">
@@ -687,7 +687,7 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="date_
   Examples:
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">date_time_interval_fallback</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:gregorian</span><span class="w">
-</span><span class="p" data-group-id="5079905209-1">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; – &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="5079905209-1">]</span></code></pre>
+</span><span class="p" data-group-id="9946508737-1">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; – &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9946508737-1">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="date_time_interval_formats/2">
@@ -841,7 +841,7 @@ for a timezone offset for a given locale.</p><h2 id="gmt_format/1-arguments" cla
   Example
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_format</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="0486593295-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0486593295-2">[</span><span class="s">&quot;GMT&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0486593295-2">]</span><span class="p" data-group-id="0486593295-1">}</span></code></pre>
+</span><span class="p" data-group-id="4948901116-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4948901116-2">[</span><span class="s">&quot;GMT&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="4948901116-2">]</span><span class="p" data-group-id="4948901116-1">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="gmt_zero_format/1">
@@ -887,10 +887,10 @@ a given locale.</p><h2 id="gmt_zero_format/1-arguments" class="section-heading">
   Example
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_zero_format</span><span class="w"> </span><span class="ss">:en</span><span class="w">
-</span><span class="p" data-group-id="9186800098-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GMT&quot;</span><span class="p" data-group-id="9186800098-1">}</span><span class="w">
+</span><span class="p" data-group-id="6875802048-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;GMT&quot;</span><span class="p" data-group-id="6875802048-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">gmt_zero_format</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
-</span><span class="p" data-group-id="9186800098-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p" data-group-id="9186800098-2">}</span></code></pre>
+</span><span class="p" data-group-id="6875802048-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p" data-group-id="6875802048-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="hour_format/1">
@@ -935,7 +935,7 @@ for a timezone offset for a given locale.</p><h2 id="hour_format/1-arguments" cl
   Example
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">hour_format</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="0321447342-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0321447342-2">{</span><span class="s">&quot;+HH:mm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-HH:mm&quot;</span><span class="p" data-group-id="0321447342-2">}</span><span class="p" data-group-id="0321447342-1">}</span></code></pre>
+</span><span class="p" data-group-id="7705453073-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7705453073-2">{</span><span class="s">&quot;+HH:mm&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-HH:mm&quot;</span><span class="p" data-group-id="7705453073-2">}</span><span class="p" data-group-id="7705453073-1">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="language_has_noon_and_midnight?/1">
@@ -1034,20 +1034,20 @@ The default is <code class="inline">:gregorian</code></p></li></ul><h2 id="time_
   Examples:
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="5867305552-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5867305552-2">%</span><span class="nc" data-group-id="5867305552-2">Cldr.Time.Styles</span><span class="p" data-group-id="5867305552-2">{</span><span class="w">
+</span><span class="p" data-group-id="8216949163-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8216949163-2">%</span><span class="nc" data-group-id="8216949163-2">Cldr.Time.Styles</span><span class="p" data-group-id="8216949163-2">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a zzzz&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a z&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="w">
-</span><span class="p" data-group-id="5867305552-2">}</span><span class="p" data-group-id="5867305552-1">}</span><span class="w">
+</span><span class="p" data-group-id="8216949163-2">}</span><span class="p" data-group-id="8216949163-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.DateTime.Format</span><span class="o">.</span><span class="n">time_formats</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:buddhist</span><span class="w">
-</span><span class="p" data-group-id="5867305552-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5867305552-4">%</span><span class="nc" data-group-id="5867305552-4">Cldr.Time.Styles</span><span class="p" data-group-id="5867305552-4">{</span><span class="w">
+</span><span class="p" data-group-id="8216949163-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8216949163-4">%</span><span class="nc" data-group-id="8216949163-4">Cldr.Time.Styles</span><span class="p" data-group-id="8216949163-4">{</span><span class="w">
   </span><span class="ss">full</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a zzzz&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">long</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a z&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">medium</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm:ss a&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">short</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;h:mm a&quot;</span><span class="w">
-</span><span class="p" data-group-id="5867305552-4">}</span><span class="p" data-group-id="5867305552-3">}</span></code></pre>
+</span><span class="p" data-group-id="8216949163-4">}</span><span class="p" data-group-id="8216949163-3">}</span></code></pre>
   </section>
 </section>
 
