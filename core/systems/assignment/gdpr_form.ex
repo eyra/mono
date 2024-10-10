@@ -91,12 +91,18 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event("update", %{status: :off}, socket) do
+  def handle_event(
+        "update",
+        %{status: :off},
+        %{assigns: %{entity: assignment}} = socket
+      ) do
+    revision = Consent.Public.latest_revision(assignment.consent_agreement)
+    localized_default_text = dgettext("eyra-consent", "default.consent.text")
+
     {
       :noreply,
       socket
-      |> compose_child(:confirmation_modal)
-      |> show_modal(:confirmation_modal, :dialog)
+      |> handle_off_state(revision, revision.source == localized_default_text)
     }
   end
 
@@ -113,8 +119,19 @@ defmodule Systems.Assignment.GdprForm do
         %{source: %{name: :confirmation_modal}},
         %{assigns: %{entity: assignment}} = socket
       ) do
-    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, nil)
+    {:ok, _} = Assignment.Public.delete_consent_agreement(assignment)
     {:noreply, socket |> hide_modal(:confirmation_modal)}
+  end
+
+  defp handle_off_state(socket, %{source: source}, false) when not is_nil(source) do
+    socket
+    |> compose_child(:confirmation_modal)
+    |> show_modal(:confirmation_modal, :dialog)
+  end
+
+  defp handle_off_state(socket, _, _) do
+    {:ok, _} = Assignment.Public.delete_consent_agreement(socket.assigns.entity)
+    socket
   end
 
   @impl true
