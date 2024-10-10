@@ -10,6 +10,120 @@ defmodule Systems.Assignment.PublicTest do
 
     alias Core.Factories
 
+    test "list_participants?/1 with 1 expired member" do
+      user = %{id: user_id} = Factories.insert!(:member)
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: user})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          crew: crew,
+          special: :data_donation,
+          status: :online
+        })
+
+      %{id: member_id} = Crew.Factories.create_member(crew, user, %{expired: true})
+
+      assert [
+               %{user_id: ^user_id, member_id: ^member_id, public_id: 1, external_id: nil}
+             ] = Assignment.Public.list_participants(assignment)
+    end
+
+    test "list_participants?/1 with 1 active member" do
+      user = %{id: user_id} = Factories.insert!(:member)
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: user})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          crew: crew,
+          special: :data_donation,
+          status: :online
+        })
+
+      %{id: member_id} = Crew.Factories.create_member(crew, user)
+
+      assert [
+               %{user_id: ^user_id, member_id: ^member_id, public_id: 1, external_id: nil}
+             ] = Assignment.Public.list_participants(assignment)
+    end
+
+    test "list_participants?/1 with 1 expired member and 1 active member" do
+      user1 = %{id: user_1_id} = Factories.insert!(:member)
+      user2 = %{id: user_2_id} = Factories.insert!(:member)
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: user1}),
+            Factories.build(:participant, %{user: user2})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          crew: crew,
+          special: :data_donation,
+          status: :online
+        })
+
+      %{id: member_1_id} = Crew.Factories.create_member(crew, user1)
+      %{id: member_2_id} = Crew.Factories.create_member(crew, user2)
+
+      assert [
+               %{user_id: ^user_1_id, member_id: ^member_1_id, public_id: 1, external_id: nil},
+               %{user_id: ^user_2_id, member_id: ^member_2_id, public_id: 2, external_id: nil}
+             ] = Assignment.Public.list_participants(assignment)
+    end
+
+    test "list_participants?/1 with 1 external user" do
+      external_user =
+        %{external_id: external_id, user: %{id: user_id}} = Factories.insert!(:external_user)
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: external_user.user})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          crew: crew,
+          special: :data_donation,
+          status: :online
+        })
+
+      %{id: member_id} = Crew.Factories.create_member(crew, external_user.user)
+
+      assert [
+               %{
+                 user_id: ^user_id,
+                 member_id: ^member_id,
+                 public_id: 1,
+                 external_id: ^external_id
+               }
+             ] = Assignment.Public.list_participants(assignment)
+    end
+
     test "has_open_spots?/1 true, with 1 expired member" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 

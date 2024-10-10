@@ -26,17 +26,18 @@ defmodule Systems.Assignment.CrewWorkView do
           crew: crew,
           user: user,
           timezone: timezone,
-          panel_info: panel_info,
+          panel_info: %{embedded?: embedded?} = panel_info,
           tester?: tester?
         },
         socket
       ) do
+    retry? = Map.get(socket.assigns, :retry?, false)
     tool_started = Map.get(socket.assigns, :tool_started, false)
     tool_initialized = Map.get(socket.assigns, :tool_initialized, false)
-    first_time? = not Map.has_key?(socket.assigns, :work_items)
+    initial? = Map.get(socket.assigns, :work_items) == nil
+    tasks_finished? = tasks_finished?(work_items)
 
-    {
-      :ok,
+    socket =
       socket
       |> assign(
         work_items: work_items,
@@ -51,22 +52,45 @@ defmodule Systems.Assignment.CrewWorkView do
         tester?: tester?,
         panel_info: panel_info,
         tool_started: tool_started,
-        tool_initialized: tool_initialized
+        tool_initialized: tool_initialized,
+        retry?: retry?
       )
-      |> update_tasks_finished()
-      |> update_selected_item_id()
-      |> update_selected_item()
-      |> compose_child(:work_list_view)
-      |> compose_child(:start_view)
-      |> compose_child(:context_menu)
-      |> update_tool_ref_view()
-      |> update_child(:finished_view)
-      |> handle_finished_state(first_time?)
-    }
+
+    socket =
+      if initial? do
+        if tasks_finished? and not embedded? do
+          socket |> finish()
+        else
+          socket |> initialize()
+        end
+      else
+        socket |> update()
+      end
+
+    {:ok, socket}
   end
 
-  defp update_tasks_finished(%{assigns: %{work_items: work_items}} = socket) do
-    socket |> assign(tasks_finished: tasks_finished?(work_items))
+  defp finish(socket) do
+    socket
+    |> compose_child(:context_menu)
+    |> compose_child(:finished_view)
+  end
+
+  defp initialize(socket) do
+    socket
+    |> hide_child(:finished_view)
+    |> hide_modal(:tool_ref_view)
+    |> compose_child(:context_menu)
+    |> update_selected_item_id()
+    |> update_selected_item()
+  end
+
+  defp update(socket) do
+    socket
+    |> update_child(:context_menu)
+    |> update_child(:work_list_view)
+    |> update_child(:start_view)
+    |> update_child(:tool_ref_view)
   end
 
   defp tasks_finished?(work_items) do
@@ -82,13 +106,15 @@ defmodule Systems.Assignment.CrewWorkView do
     tool_started and tool_initialized
   end
 
-  defp update_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
+  defp compose_tool_ref_view(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
     case Fabric.get_child(socket, :tool_ref_view) do
       %{params: %{work_item: {%{id: id}, _}}} when id == selected_item_id ->
         socket
 
       _ ->
-        compose_child(socket, :tool_ref_view)
+        socket
+        |> compose_child(:tool_ref_view)
+        |> prepare_modal_tool_ref_view_if_needed()
     end
   end
 
@@ -123,7 +149,15 @@ defmodule Systems.Assignment.CrewWorkView do
        ) do
     selected_item = Enum.find(work_items, fn {%{id: id}, _} -> id == selected_item_id end)
 
-    socket |> assign(selected_item: selected_item)
+    socket
+    |> assign(
+      selected_item: selected_item,
+      tool_initialized: false,
+      tool_started: false
+    )
+    |> compose_child(:work_list_view)
+    |> compose_child(:start_view)
+    |> compose_tool_ref_view()
   end
 
   # Compose
@@ -284,11 +318,22 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Events
 
+  def handle_event("retry", _, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(retry?: true)
+      |> hide_child(:finished_view)
+      |> initialize()
+    }
+  end
+
   def handle_event("tool_initialized", _, socket) do
     {
       :noreply,
       socket
       |> assign(tool_initialized: true)
+      |> show_tool_ref_view_if_needed()
     }
   end
 
@@ -301,8 +346,9 @@ defmodule Systems.Assignment.CrewWorkView do
         tool_started: false,
         tool_initialized: false
       )
+      |> hide_modal(:tool_ref_view)
       |> compose_child(:start_view)
-      |> compose_child(:tool_ref_view)
+      |> compose_tool_ref_view()
     }
   end
 
@@ -312,6 +358,24 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> handle_complete_task()
+    }
+  end
+
+  @impl true
+  def handle_event("close_task", _, socket) do
+    {
+      :noreply,
+      socket
+      |> select_current_item()
+    }
+  end
+
+  @impl true
+  def handle_event("close_page", _, socket) do
+    {
+      :noreply,
+      socket
+      |> select_current_item()
     }
   end
 
@@ -326,15 +390,8 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> assign(
-        tool_initialized: false,
-        tool_started: false,
-        selected_item_id: item_id
-      )
+      |> assign(selected_item_id: item_id)
       |> update_selected_item()
-      |> compose_child(:start_view)
-      |> update_child(:work_list_view)
-      |> compose_child(:tool_ref_view)
     }
   end
 
@@ -344,7 +401,8 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(tool_started: true)
-      |> update_child(:tool_ref_view)
+      |> compose_child(:start_view)
+      |> show_tool_ref_view_if_needed()
       |> start_task(selected_item)
     }
   end
@@ -404,6 +462,28 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Private
 
+  defp prepare_modal_tool_ref_view_if_needed(%{assigns: %{fabric: fabric}} = socket) do
+    if Fabric.exists?(fabric, :tool_ref_view) do
+      prepare_modal(socket, :tool_ref_view, :full)
+    else
+      Logger.warn("No tool ref view found to prepare modal")
+      socket
+    end
+  end
+
+  defp show_tool_ref_view_if_needed(
+         %{assigns: %{tool_started: tool_started, tool_initialized: tool_initialized}} = socket
+       ) do
+    if tool_started and tool_initialized do
+      socket
+      |> compose_child(:tool_ref_view)
+      |> show_modal(:tool_ref_view, :full)
+      |> compose_child(:start_view)
+    else
+      socket
+    end
+  end
+
   defp handle_feldspar_event(
          socket,
          %{
@@ -441,6 +521,7 @@ defmodule Systems.Assignment.CrewWorkView do
        }) do
     socket
     |> assign(tool_initialized: true)
+    |> show_tool_ref_view_if_needed()
   end
 
   defp handle_feldspar_event(socket, %{"__type__" => type}) do
@@ -455,9 +536,10 @@ defmodule Systems.Assignment.CrewWorkView do
     {:ok, %{crew_task: updated_task}} = Crew.Public.complete_task(task)
 
     socket
+    |> hide_modal(:tool_ref_view)
     |> update_task(updated_task)
-    |> select_next_item()
     |> handle_finished_state()
+    |> select_next_item()
   end
 
   defp update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
@@ -473,6 +555,21 @@ defmodule Systems.Assignment.CrewWorkView do
     assign(socket, work_items: work_items)
   end
 
+  defp select_current_item(%{assigns: %{work_items: work_items}} = socket)
+       when length(work_items) <= 1 do
+    socket
+  end
+
+  defp select_current_item(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+       when not is_nil(selected_item_id) do
+    socket |> update_selected_item()
+  end
+
+  defp select_current_item(socket) do
+    Logger.warn("No selected_item_id found to select")
+    socket
+  end
+
   defp select_next_item(%{assigns: %{work_items: work_items}} = socket)
        when length(work_items) <= 1 do
     socket
@@ -480,15 +577,8 @@ defmodule Systems.Assignment.CrewWorkView do
 
   defp select_next_item(socket) do
     socket
-    |> assign(
-      tool_started: false,
-      tool_initialized: false
-    )
     |> select_next_item_id()
     |> update_selected_item()
-    |> compose_child(:work_list_view)
-    |> compose_child(:start_view)
-    |> update_child(:tool_ref_view)
   end
 
   defp select_next_item_id(
@@ -506,26 +596,18 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: selected_item_id)
   end
 
-  defp handle_finished_state(socket, false) do
-    # Dont show finished view after first load
-    socket
-  end
-
-  defp handle_finished_state(socket, true) do
-    handle_finished_state(socket)
-  end
-
   defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
     # Dont show finished view when embedded in external panel UI
     socket
   end
+
+  defp handle_finished_state(%{assigns: %{retry?: true}} = socket), do: socket
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
       socket
       |> signal_tasks_finished()
       |> compose_child(:finished_view)
-      |> show_modal(:finished_view, :sheet)
     else
       socket
     end
@@ -568,12 +650,9 @@ defmodule Systems.Assignment.CrewWorkView do
   def render(assigns) do
     ~H"""
       <div class="w-full h-full flex flex-row">
-        <%= if exists?(@fabric, :tool_ref_view) do %>
-          <div class={"w-full h-full #{ if tool_visible?(assigns) do "block" else "hidden" end }"}>
-            <.child name={:tool_ref_view} fabric={@fabric} />
-          </div>
-        <% end %>
-        <%= if not tool_visible?(assigns) do %>
+        <%= if exists?(@fabric, :finished_view) do %>
+          <.child name={:finished_view} fabric={@fabric} />
+        <% else %>
           <%= if exists?(@fabric, :work_list_view) do %>
             <div class="w-left-column flex-shrink-0 flex flex-col py-6 gap-6">
               <div class="px-6">
@@ -591,6 +670,7 @@ defmodule Systems.Assignment.CrewWorkView do
             <div class="border-l border-grey4">
             </div>
           <% end %>
+
           <div class="h-full w-full">
             <.child name={:start_view} fabric={@fabric} />
           </div>

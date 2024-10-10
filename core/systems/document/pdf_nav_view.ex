@@ -1,5 +1,6 @@
 defmodule Systems.Document.PDFNavView do
   use CoreWeb, :live_component
+  import Frameworks.Pixel.Line
 
   alias Systems.Document
 
@@ -12,7 +13,6 @@ defmodule Systems.Document.PDFNavView do
       socket
       |> assign(key: key, title: title, url: url, visible: visible)
       |> update_state()
-      |> compose_element(:close_button)
       |> compose_element(:ready_button)
       |> compose_child(:pdf_view)
     }
@@ -27,14 +27,6 @@ defmodule Systems.Document.PDFNavView do
       end
 
     assign(socket, state: state)
-  end
-
-  @impl true
-  def compose(:close_button, %{myself: myself}) do
-    %{
-      action: %{type: :send, event: "close", target: myself},
-      face: %{type: :primary, label: dgettext("eyra-ui", "close.button")}
-    }
   end
 
   @impl true
@@ -71,29 +63,29 @@ defmodule Systems.Document.PDFNavView do
   def render(assigns) do
     ~H"""
 
-      <div class="relative w-full h-full">
-        <div
-          id="pdf-viewer-navbar"
-          phx-hook="Sticky"
-          class="flex flex-row items-center justify-center h-[96px] px-8 w-full bg-white absolute lg:pl-sidepadding"
-          data-class-default="md:pr-0 absolute"
-          data-class-sticky="md:pr-[129px] fixed top-0"
-          data-state={@state}
-        >
-          <Text.title2 margin=""><%= @title %></Text.title2>
-          <div class="flex-grow"/>
-          <div>
-            <Button.dynamic {@close_button} />
+    <div class="flex flex-row w-full h-full justify-center" >
+      <div class="flex-grow"/>
+      <div class="w-full h-full max-w-[1200px] p-4 lg:p-8 ">
+        <div class="w-full">
+          <div
+            class="flex flex-row items-center w-full gap-4"
+            data-state={@state}
+          >
+            <Text.title2 margin=""><%= @title %></Text.title2>
+            <div class="flex-grow"/>
+            <div>
+              <Button.dynamic {@ready_button} />
+            </div>
           </div>
-        </div>
-        <div class="flex flex-row">
-          <div class="flex-grow"/>
-          <div class="flex flex-col w-full max-w-[1200px] h-full pt-[72px] sm:pt-[48px] pb-sidepadding">
+          <.spacing value="M" />
+          <.line />
+          <div class="flex flex-col w-full h-full">
             <.child name={:pdf_view} fabric={@fabric} />
           </div>
-          <div class="flex-grow"/>
         </div>
       </div>
+      <div class="flex-grow"/>
+    </div>
     """
   end
 end

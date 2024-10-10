@@ -421,3 +421,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.de"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.rejected"
+msgstr ""

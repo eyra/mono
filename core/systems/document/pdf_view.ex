@@ -16,9 +16,9 @@ defmodule Systems.Document.PDFView do
   defp update_state(%{assigns: %{visible: visible}} = socket) do
     state =
       if visible do
-        "visible"
+        "render"
       else
-        "hidden"
+        "idle"
       end
 
     assign(socket, state: state)

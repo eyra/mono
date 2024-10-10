@@ -61,6 +61,14 @@ defmodule Core.Factories do
     })
   end
 
+  def build(:external_user) do
+    %ExternalSignIn.User{
+      external_id: Faker.UUID.v4(),
+      organisation: Faker.Company.name(),
+      user: build(:member)
+    }
+  end
+
   def build(:admin) do
     :member
     |> build(%{
@@ -277,6 +285,10 @@ defmodule Core.Factories do
 
   def build(:owner, %{user: user}) do
     build(:role_assignment, %{role: :owner, principal_id: GreenLight.Principal.id(user)})
+  end
+
+  def build(:participant, %{user: user}) do
+    build(:role_assignment, %{role: :participant, principal_id: GreenLight.Principal.id(user)})
   end
 
   def build(:auth_node, %{} = attributes) do
@@ -524,6 +536,11 @@ defmodule Core.Factories do
     %Crew.TaskModel{
       crew: crew
     }
+    |> struct!(attributes)
+  end
+
+  def build(:external_user, %{} = attributes) do
+    build(:external_user)
     |> struct!(attributes)
   end
 

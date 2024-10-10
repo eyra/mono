@@ -252,7 +252,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You have finished. Thank you for your participation. You can now close your browser or close this popup to revisit the page."
+msgstr "You have finished. Thank you for your participation."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -431,3 +431,35 @@ msgstr "Assignment"
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
 msgstr "By skipping the consent, not only will the text be deleted, but the underlying consent agreement and all associated signatures will also be removed."
+
+#, elixir-autogen
+msgid "export.progress.button"
+msgstr "Progress report"
+
+#, elixir-autogen, elixir-format
+msgid "monitor.description"
+msgstr "This event monitor tracks user interaction events to gain insight into whether your published workflow is functioning as expected. It should not be used for per participant tracking. If you would like to know per participant progress, export the progress report in the top right corner."
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.consent"
+msgstr "Consent"
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.participant"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "progress.no"
+msgstr "no"
+
+#, elixir-autogen, elixir-format
+msgid "progress.not.applicable"
+msgstr "n/a"
+
+#, elixir-autogen, elixir-format
+msgid "progress.yes"
+msgstr "yes"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "retry.button"
+msgstr "Give it another try"

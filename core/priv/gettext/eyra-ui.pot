@@ -159,10 +159,6 @@ msgid "submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "done.button"
 msgstr ""
 

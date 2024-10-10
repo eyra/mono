@@ -8,7 +8,8 @@ defmodule Systems.Assignment.Routes do
         live("/assignment/:id/content", ContentPage)
         get("/assignment/:id/invite", Controller, :invite)
         get("/assignment/:id/apply", Controller, :apply)
-        get("/assignment/callback/:item", Controller, :callback)
+        get("/assignment/:id/export", Controller, :export)
+        get("/assignment/callback/:workflow_item_id", Controller, :callback)
       end
 
       scope "/assignment", Systems.Assignment.Centerdata do

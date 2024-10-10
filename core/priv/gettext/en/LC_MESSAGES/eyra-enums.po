@@ -421,3 +421,19 @@ msgstr "Creator"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.de"
 msgstr "German"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.accepted"
+msgstr "accepted"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.completed"
+msgstr "finished"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.pending"
+msgstr "started"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.rejected"
+msgstr "rejected"
