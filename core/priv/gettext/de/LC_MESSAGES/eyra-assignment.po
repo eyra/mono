@@ -430,6 +430,10 @@ msgid "atom.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "gdpr_form.confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen
 msgid "export.progress.button"
 msgstr ""
 
