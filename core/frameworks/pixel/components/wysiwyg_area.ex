@@ -9,17 +9,13 @@ defmodule Frameworks.Pixel.Components.WysiwygArea do
   import Frameworks.Pixel.FormHelpers
   import Frameworks.Pixel.ErrorHelpers, only: [translate_error: 1]
 
-  alias Frameworks.Pixel.TrixPostProcessor
-
   defmacro __using__(_opts) do
     quote do
       @impl true
-      def handle_event(
-            "save",
-            %{"body_input" => body},
-            socket
-          ) do
-        dbg("hitting save")
+      def handle_event("save", %{"body_input" => body}, %{assigns: %{entity: entity}} = socket) do
+        dbg(
+          "save event has been fired, will propagate to handle_body_update; received entity: #{inspect(entity)}"
+        )
 
         {
           :noreply,
@@ -33,8 +29,6 @@ defmodule Frameworks.Pixel.Components.WysiwygArea do
 
   defp active_input_color(%{background: :light}), do: "border-primary"
   defp active_input_color(_), do: "border-tertiary"
-  defp active_label_color(%{background: :light}), do: "text-primary"
-  defp active_label_color(_), do: "text-tertiary"
   defp field_tag(name), do: "field-#{name}"
 
   @impl true
@@ -60,13 +54,15 @@ defmodule Frameworks.Pixel.Components.WysiwygArea do
     input_dynamic_class = "border-grey3"
     active_color = active_input_color(params)
 
+    dbg("==================FIELD ID: #{inspect(field_id)}")
+    dbg("==================INPUT NAME: #{inspect(input_name(form, field))}")
+
     {:ok,
      socket
      |> assign(
        field_id: field_id,
        field_name: input_name(form, field),
-       field_value:
-         html_escape((input_value(form, field) || "") |> TrixPostProcessor.add_target_blank()),
+       field_value: html_escape(input_value(form, field) || ""),
        target: target(form),
        input_static_class: input_static_class,
        input_dynamic_class: input_dynamic_class,
