@@ -40,7 +40,7 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:live_component, :map, required: true)
 
   def container(%{style: style} = assigns) do
-    allowed_styles = [:page, :sheet, :dialog, :notification]
+    allowed_styles = [:full, :page, :sheet, :dialog, :notification]
 
     unless style in allowed_styles do
       raise ArgumentError,
