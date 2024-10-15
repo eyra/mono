@@ -1,6 +1,7 @@
 defmodule Systems.Consent.Public do
   import CoreWeb.Gettext
   import Ecto.Query
+  import Systems.Consent.Queries
 
   alias Ecto.Multi
   alias Core.Repo
@@ -185,6 +186,11 @@ defmodule Systems.Consent.Public do
     |> Multi.update(:consent_revision, changeset)
     |> Signal.Public.multi_dispatch({:consent_revision, :updated})
     |> Repo.transaction()
+  end
+
+  def list_signatures(%Consent.AgreementModel{} = consent_agreement) do
+    signature_query(consent_agreement)
+    |> Repo.all()
   end
 end
 

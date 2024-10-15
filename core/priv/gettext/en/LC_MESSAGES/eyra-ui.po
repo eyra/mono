@@ -189,3 +189,15 @@ msgstr "Desktop"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "My workspace"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.button"
+msgstr "Confirm"
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr "Are you sure you would like to skip this page? Your text will be deleted."
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
+msgstr "Are you sure?"

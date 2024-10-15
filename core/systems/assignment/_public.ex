@@ -259,6 +259,10 @@ defmodule Systems.Assignment.Public do
     assignment
   end
 
+  def delete_consent_agreement(assignment) do
+    update_consent_agreement(assignment, nil)
+  end
+
   def copy(
         %Assignment.Model{} = assignment,
         %Assignment.InfoModel{} = info,

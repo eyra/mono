@@ -39,7 +39,14 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:style, :atom, required: true)
   attr(:live_component, :map, required: true)
 
-  def container(assigns) do
+  def container(%{style: style} = assigns) do
+    allowed_styles = [:full, :page, :sheet, :dialog, :notification]
+
+    unless style in allowed_styles do
+      raise ArgumentError,
+            "Invalid style: #{style}. Allowed styles are: #{Enum.join(allowed_styles, ", ")}"
+    end
+
     ~H"""
     <%= if @style == :full do %>
       <.full live_component={@live_component} />
