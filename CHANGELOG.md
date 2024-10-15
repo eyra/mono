@@ -11,6 +11,7 @@
 
 ## \#3 unreleased
 
+* Added: Snapchat support for assignment tasks
 * Added: Confirmation dialog when skipping content pages or consent pages in assignment configuration.
 
 ## \#2 2024-10-04
