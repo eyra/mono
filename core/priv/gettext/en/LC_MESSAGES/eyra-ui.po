@@ -196,8 +196,8 @@ msgstr "Confirm"
 
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.body"
-msgstr "Are you sure you would like to skip this page? Your text will be deleted."
+msgstr "Please note that if you confirm, the page content will be deleted."
 
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.title"
-msgstr "Are you sure?"
+msgstr "Skip this page?"
