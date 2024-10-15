@@ -207,6 +207,7 @@ Frameworks.Pixel.Button.html
 Frameworks.Pixel.Card.html
 Frameworks.Pixel.ClickableCard.html
 Frameworks.Pixel.Components.FileSelector.html
+Frameworks.Pixel.ConfirmationModal.html
 Frameworks.Pixel.Content.html
 Frameworks.Pixel.Create.html
 Frameworks.Pixel.Dropdown.html
@@ -470,6 +471,7 @@ Systems.Citizen.Public.html
 Systems.Consent.AgreementModel.html
 Systems.Consent.ClickWrapView.html
 Systems.Consent.Public.html
+Systems.Consent.Queries.html
 Systems.Consent.RevisionForm.html
 Systems.Consent.RevisionModel.html
 Systems.Consent.SignatureModel.html
@@ -845,8 +847,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-2498CEDA.js
-dist/sidebar_items-78107A2F.js
+dist/search_items-B31BD56F.js
+dist/sidebar_items-1BB215D5.js
 index.html
 readme.html
 search.html
