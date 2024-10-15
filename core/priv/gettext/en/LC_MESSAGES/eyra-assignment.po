@@ -430,7 +430,7 @@ msgstr "Assignment"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "By skipping the consent, not only will the text be deleted, but the underlying consent agreement and all associated signatures will also be removed."
+msgstr "Please note that if you choose to confirm, the page content will be deleted, as well as the associated record of who gave their consent."
 
 #, elixir-autogen
 msgid "export.progress.button"
