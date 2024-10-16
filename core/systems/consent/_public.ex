@@ -1,14 +1,14 @@
 defmodule Systems.Consent.Public do
   import CoreWeb.Gettext
   import Ecto.Query
+  import Systems.Consent.Queries
 
   alias Ecto.Multi
   alias Core.Repo
   alias Frameworks.Signal
 
-  alias Systems.{
-    Consent
-  }
+  alias Systems.Account
+  alias Systems.Consent
 
   def create_agreement(auth_node) do
     prepare_agreement(auth_node)
@@ -89,11 +89,13 @@ defmodule Systems.Consent.Public do
     Repo.get!(Consent.RevisionModel, id) |> Repo.preload(preload)
   end
 
-  def has_signature(context, user) do
-    get_signature(context, user) != nil
+  def has_signature(context, user_ref) do
+    get_signature(context, user_ref) != nil
   end
 
-  def get_signature(%Consent.AgreementModel{id: agreement_id}, %Systems.Account.User{id: user_id}) do
+  def get_signature(%Consent.AgreementModel{id: agreement_id}, user_ref) do
+    user_id = Account.User.user_id(user_ref)
+
     from(s in Consent.SignatureModel,
       join: r in Consent.RevisionModel,
       on: r.id == s.revision_id,
@@ -105,7 +107,9 @@ defmodule Systems.Consent.Public do
     |> List.last()
   end
 
-  def get_signature(%Consent.RevisionModel{id: revision_id}, %Systems.Account.User{id: user_id}) do
+  def get_signature(%Consent.RevisionModel{id: revision_id}, user_ref) do
+    user_id = Account.User.user_id(user_ref)
+
     from(s in Consent.SignatureModel,
       where: s.user_id == ^user_id,
       where: s.revision_id == ^revision_id
@@ -182,6 +186,11 @@ defmodule Systems.Consent.Public do
     |> Multi.update(:consent_revision, changeset)
     |> Signal.Public.multi_dispatch({:consent_revision, :updated})
     |> Repo.transaction()
+  end
+
+  def list_signatures(%Consent.AgreementModel{} = consent_agreement) do
+    signature_query(consent_agreement)
+    |> Repo.all()
   end
 end
 

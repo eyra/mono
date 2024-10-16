@@ -8,13 +8,15 @@ defmodule Systems.Advert.Model do
   import CoreWeb.Gettext
   import Ecto.Changeset
 
+  alias Frameworks.Concept
+
   alias Systems.Advert
   alias Systems.Promotion
   alias Systems.Assignment
   alias Systems.Pool
 
   schema "adverts" do
-    field(:status, Ecto.Enum, values: Advert.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:submission, Pool.SubmissionModel)
@@ -28,6 +30,17 @@ defmodule Systems.Advert.Model do
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(advert), do: advert.auth_node_id
+  end
+
+  defimpl Frameworks.Concept.Leaf do
+    def tag(_), do: dgettext("eyra-advert", "atom.tag")
+    def resource_id(%{id: id}), do: "advert/#{id}"
+
+    def info(%{submission: %{pool: %{name: pool_name}}}, _timezone) do
+      [pool_name]
+    end
+
+    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
   end
 
   @doc false
@@ -47,8 +60,4 @@ defmodule Systems.Advert.Model do
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
   def auth_tree(%Advert.Model{auth_node: auth_node}), do: auth_node
-
-  def tag(_) do
-    dgettext("eyra-advert", "project.item.tag")
-  end
 end

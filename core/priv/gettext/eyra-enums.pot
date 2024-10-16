@@ -387,18 +387,6 @@ msgid "assignment_workflow_item_types.fork_instruction"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard_status.concept"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.offline"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.private"
 msgstr ""
 
@@ -423,22 +411,6 @@ msgid "templates.questionnaire"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "advert_status.concept"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.idle"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.offline"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "advert_status.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "admin_user_filters.verified"
 msgstr ""
 
@@ -448,4 +420,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.de"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.rejected"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.snapchat"
 msgstr ""

@@ -12,7 +12,7 @@ defmodule GoogleSignIn do
     |> Repo.one()
   end
 
-  def register_user(attrs) do
+  def register_user(attrs, creator?) do
     fullname =
       ~w(given_name family_name)
       |> Enum.map(&Map.get(attrs, &1, ""))
@@ -26,7 +26,7 @@ defmodule GoogleSignIn do
     # Revert: https://github.com/eyra/mono/issues/563
 
     sso_info = %{
-      creator: true,
+      creator: creator?,
       email: Map.get(attrs, "email"),
       displayname: display_name,
       profile: %{

@@ -80,7 +80,7 @@ msgid "yoda.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "project.item.tag"
+msgid "atom.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -206,3 +206,9 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "account.submit.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 file"
+msgid_plural "* files"
+msgstr[0] ""
+msgstr[1] ""

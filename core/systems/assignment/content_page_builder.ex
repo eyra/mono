@@ -5,7 +5,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   import CoreWeb.Gettext
 
   import Frameworks.Utility.List
-
+  alias Frameworks.Concept
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
@@ -26,11 +26,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
   """
   def view_model(
         %{id: id} = assignment,
-        assigns
+        %{branch: branch} = assigns
       ) do
     show_errors = false
 
     template = Assignment.Private.get_template(assignment)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(assignment, template, show_errors, assigns)
     action_map = action_map(assignment)
     actions = actions(assignment, action_map)
@@ -38,6 +39,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     %{
       id: id,
       title: Assignment.Template.title(template),
+      breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: actions,
       show_errors: show_errors,
@@ -298,6 +300,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
     child =
       Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
+        assignment: assignment,
         number_widgets: number_widgets(assignment),
         progress_widgets: progress_widgets(assignment)
       })

@@ -12,6 +12,7 @@ defmodule Systems.Support.TicketPage do
     Support.Public.get_ticket!(id)
   end
 
+  @impl true
   def mount(%{"id" => id}, _session, socket) do
     {
       :ok,
@@ -19,12 +20,6 @@ defmodule Systems.Support.TicketPage do
       |> assign(id: id)
     }
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def handle_event("close_ticket", _params, %{assigns: %{id: id}} = socket) do

@@ -17,7 +17,7 @@ prepare: test format compile credo
 
 .PHONY: dialyzer
 dialyzer: FORCE
-	cd core && mix dialyzer --force-check
+	cd core && mix dialyzer --force-check --format short
 
 .PHONY: test
 test: ${MIX_PROJECTS:%=test/%}

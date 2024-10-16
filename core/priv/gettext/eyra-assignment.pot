@@ -417,3 +417,49 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "atom.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen
+msgid "export.progress.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.consent"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.participant"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.no"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.not.applicable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.yes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retry.button"
+msgstr ""

@@ -159,10 +159,6 @@ msgid "submit.button"
 msgstr "Opslaan"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "close.button"
-msgstr "Sluiten"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "done.button"
 msgstr "Klaar"
 
@@ -193,3 +189,15 @@ msgstr "To-do"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "Mijn werkplek"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.button"
+msgstr "Klaar"
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
+msgstr ""

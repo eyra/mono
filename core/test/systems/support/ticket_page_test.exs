@@ -9,9 +9,8 @@ defmodule Systems.Support.TicketPageTest do
     test "deny access to non-admin", %{conn: conn} do
       ticket = Factories.insert!(:helpdesk_ticket)
 
-      assert_error_sent(403, fn ->
-        live(conn, ~p"/support/ticket/#{ticket.id}")
-      end)
+      assert {:error, {:redirect, %{to: "/access_denied"}}} =
+               live(conn, ~p"/support/ticket/#{ticket.id}")
     end
   end
 

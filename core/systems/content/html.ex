@@ -103,13 +103,15 @@ defmodule Systems.Content.Html do
   def tabbar_page(assigns) do
     ~H"""
       <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
-        <Navigation.tabbar>
-          <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
-        </Navigation.tabbar>
+        <%= if Enum.count(@tabs) > 0 do %>
+          <Navigation.tabbar>
+            <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+          </Navigation.tabbar>
 
-        <div id="tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-          <Tabbar.content tabs={@tabs} include_top_margin={false} />
-        </div>
+          <div id="tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbar.content tabs={@tabs} include_top_margin={false} />
+          </div>
+        <% end %>
       </.live_workspace>
     """
   end
@@ -126,13 +128,14 @@ defmodule Systems.Content.Html do
   attr(:show_errors, :string, required: true)
   attr(:actions, :list, required: true)
   attr(:more_actions, :list, default: [])
+  attr(:breadcrumbs, :list, required: true)
 
   def management_page(assigns) do
     ~H"""
-      <div id={:content_management_page} phx-hook="ViewportResize">
+      <div id={:content_management_page} phx-hook="Viewport">
         <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
           <:top_bar>
-            <Navigation.action_bar right_bar_buttons={@actions} more_buttons={@more_actions}>
+            <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
             </Navigation.action_bar>
           </:top_bar>

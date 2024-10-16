@@ -2,21 +2,21 @@ defmodule Systems.Storage.Controller do
   alias CoreWeb.UI.Timestamp
   use CoreWeb, :controller
 
-  alias Frameworks.Concept.Context
+  alias Frameworks.Concept
 
   alias Systems.Storage
   alias Systems.Rate
 
-  def export(conn, %{"id" => id}) do
+  def export(%{assigns: %{branch: branch}} = conn, %{"id" => id}) do
     if endpoint =
          Storage.Public.get_endpoint!(
            String.to_integer(id),
            Storage.EndpointModel.preload_graph(:down)
          ) do
       special = Storage.EndpointModel.special(endpoint)
-      context_name = Context.name(:parent, endpoint, "export")
+      branch_name = Concept.Branch.name(branch, :parent)
 
-      export(conn, special, context_name)
+      export(conn, special, branch_name)
     else
       service_unavailable(conn)
     end
@@ -25,12 +25,12 @@ defmodule Systems.Storage.Controller do
   def export(
         %{remote_ip: remote_ip} = conn,
         %Storage.BuiltIn.EndpointModel{} = builtin,
-        context_name
+        branch_name
       ) do
     date = Timestamp.now() |> Timestamp.format_date_short!()
 
     export_name =
-      [date, context_name]
+      [date, branch_name]
       |> Enum.join(" ")
       |> Slug.slugify(separator: ?_)
 

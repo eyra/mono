@@ -67,8 +67,12 @@ defmodule Frameworks.Pixel.Table do
 
   def cell(%{layout: layout, content: content} = assigns) do
     layout =
-      if layout.type == :href and not valid_url?(content) do
-        %{layout | type: :string}
+      if layout.type == :href do
+        if valid_url?(content) do
+          layout
+        else
+          %{layout | type: :string}
+        end
       else
         layout
       end
@@ -115,8 +119,10 @@ defmodule Frameworks.Pixel.Table do
     """
   end
 
-  defp valid_url?(string) do
+  defp valid_url?(string) when is_binary(string) do
     uri = URI.parse(string)
     uri.scheme != nil && uri.host =~ "."
   end
+
+  defp valid_url?(_), do: false
 end

@@ -5,6 +5,7 @@ defmodule Frameworks.Pixel.Navigation do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Menu
   alias Frameworks.Pixel.Align
+  alias Frameworks.Pixel.Breadcrumbs
 
   import Frameworks.Pixel.Line
 
@@ -60,6 +61,7 @@ defmodule Frameworks.Pixel.Navigation do
     """
   end
 
+  attr(:breadcrumbs, :list, required: true)
   attr(:right_bar_buttons, :list, default: [])
   attr(:more_buttons, :list, default: [])
   attr(:hide_seperator, :boolean, default: true)
@@ -76,7 +78,17 @@ defmodule Frameworks.Pixel.Navigation do
       <div id="action_menu" class="hidden z-50 absolute right-14px -mt-6 top-navbar-height">
         <.action_menu buttons={@more_buttons} />
       </div>
-      <div class="absolute top-0 left-0 w-full bg-red">
+      <div class="absolute top-0 left-0 w-full">
+        <div class="hidden md:block">
+          <div class="bg-white">
+            <Area.content>
+              <div class=" h-navbar-height">
+                <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
+              </div>
+            </Area.content>
+          </div>
+          <.line />
+        </div>
         <Area.content>
           <div class="overflow-scroll scrollbar-hidden w-full">
             <div class="flex flex-row items-center w-full h-navbar-height">
@@ -84,17 +96,9 @@ defmodule Frameworks.Pixel.Navigation do
                 <%= render_slot(@inner_block) %> <!-- tabbar -->
               </div>
               <%= if @has_right_bar_buttons do %>
-                <%= if not @hide_seperator do %>
-                  <div class="flex-wrap px-4">
-                    <img src={~p"/images/icons/bar_seperator.svg"} alt="">
-                  </div>
-                <% end %>
-                <div class="flex-wrap h-full">
-                  <div class="flex flex-row gap-6 h-full">
-                    <%= for button <- @right_bar_buttons do %>
-                      <Button.dynamic {button} />
-                    <% end %>
-                  </div>
+                <div class="flex-grow" />
+                <div>
+                  <Button.dynamic_bar buttons={@right_bar_buttons} />
                 </div>
               <% end %>
             </div>

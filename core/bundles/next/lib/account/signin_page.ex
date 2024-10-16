@@ -1,11 +1,19 @@
 defmodule Next.Account.SigninPage do
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Menus
+
   import Frameworks.Pixel.Line
 
   alias Frameworks.Pixel.Tabbar
-
   alias Next.Account.SigninPageBuilder
 
   @impl true
@@ -29,9 +37,14 @@ defmodule Next.Account.SigninPage do
     }
   end
 
-  defp update_view_model(socket) do
+  def update_view_model(socket) do
     vm = SigninPageBuilder.view_model(nil, socket.assigns)
     assign(socket, vm: vm)
+  end
+
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
   end
 
   @impl true

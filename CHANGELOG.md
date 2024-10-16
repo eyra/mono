@@ -9,8 +9,15 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#2 unreleased
+## \#3 unreleased
 
+* Added: Snapchat support for assignment tasks
+* Added: Confirmation dialog when skipping content pages or consent pages in assignment configuration.
+
+## \#2 2024-10-04
+
+* Added: Possibility to close assignment tasks before completion.
+* Added: Project breadcrumbs for easy navigation and hierarchy overview.
 * Changed: Format of the filenames in Storages. Also no folders used anymore. This has impact on Data Donation studies.
 * Changed: Assignment does not have a Storage association anymore. Projects can have one Storage that is shared between all the project items.
 * Added: Storage project item (BuiltIn and Yoda)

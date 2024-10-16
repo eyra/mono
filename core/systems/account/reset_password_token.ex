@@ -3,14 +3,22 @@ defmodule Systems.Account.ResetPasswordToken do
   The password reset token.
   """
   use CoreWeb, :live_view
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
+
   import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
-
+  import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
   alias Systems.Account
   alias Frameworks.Pixel.Button
 
+  @impl true
   def mount(%{"token" => token}, _session, socket) do
     if user = Account.Public.get_user_by_reset_password_token(token) do
       {
@@ -29,6 +37,11 @@ defmodule Systems.Account.ResetPasswordToken do
         |> redirect(to: ~p"/user/reset-password")
       }
     end
+  end
+
+  def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
+    menus = build_menus(stripped_menus_config(), user, uri)
+    assign(socket, menus: menus)
   end
 
   @impl true

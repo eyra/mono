@@ -38,6 +38,7 @@ defmodule Systems.Admin.ImportRewardsPage do
     Systems.Observatory.SingletonModel.instance()
   end
 
+  @impl true
   def mount(%{"back" => back}, _session, socket) do
     entity = %Admin.ImportRewardsModel{}
 
@@ -93,12 +94,6 @@ defmodule Systems.Admin.ImportRewardsPage do
       |> compose_child(:currency)
     }
   end
-
-  @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
 
   @impl true
   def compose(:currency, %{currency_labels: items}) do

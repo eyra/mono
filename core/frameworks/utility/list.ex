@@ -1,9 +1,11 @@
 defmodule Frameworks.Utility.List do
-  def append_if(list, element, true), do: append(list, element)
+  def append_if(list, term, true), do: append(list, term)
   def append_if(list, _element, _), do: list
   def append_if(list, nil), do: list
-  def append_if(list, element), do: append(list, element)
+  def append_if(list, term), do: append(list, term)
 
+  def append(list, list2) when is_list(list2), do: list ++ list2
+  def append(list, closure) when is_function(closure, 0), do: list ++ [closure.()]
   def append(list, element), do: list ++ [element]
 
   def insert_at_every(list, every, fun) do

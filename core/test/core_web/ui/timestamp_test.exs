@@ -110,6 +110,6 @@ defmodule CoreWeb.Ui.TimestampTest do
   end
 
   def apply_offset(hour, offset) do
-    Integer.mod(hour + offset, 23)
+    Integer.mod(hour + offset, 24)
   end
 end

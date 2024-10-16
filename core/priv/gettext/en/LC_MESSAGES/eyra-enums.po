@@ -387,18 +387,6 @@ msgid "assignment_workflow_item_types.fork_instruction"
 msgstr "Prepare method"
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard_status.concept"
-msgstr "Concept"
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.offline"
-msgstr "Offline"
-
-#, elixir-autogen, elixir-format
-msgid "leaderboard_status.online"
-msgstr "Online"
-
-#, elixir-autogen, elixir-format
 msgid "leaderboard_visibility.private"
 msgstr "Private"
 
@@ -422,22 +410,6 @@ msgstr "On-site study"
 msgid "templates.questionnaire"
 msgstr "Panl study"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.concept"
-msgstr "Finished"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.idle"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.offline"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "advert_status.online"
-msgstr "Closed"
-
 #, elixir-autogen, elixir-format
 msgid "admin_user_filters.verified"
 msgstr "Verified"
@@ -449,3 +421,23 @@ msgstr "Creator"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.de"
 msgstr "German"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.accepted"
+msgstr "accepted"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.completed"
+msgstr "finished"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.pending"
+msgstr "started"
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.rejected"
+msgstr "rejected"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.snapchat"
+msgstr "Snapchat"

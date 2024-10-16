@@ -36,13 +36,9 @@ defmodule Systems.Assignment.ContentPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_resize(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: update_view_model(socket)
+  def handle_uri(socket) do
+    update_view_model(socket)
+  end
 
   @impl true
   def render(assigns) do
@@ -51,6 +47,7 @@ defmodule Systems.Assignment.ContentPage do
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
+        breadcrumbs={@vm.breadcrumbs}
         actions={@actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

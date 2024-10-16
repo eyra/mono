@@ -26,21 +26,13 @@ defmodule Systems.Document.ContentPage do
   end
 
   @impl true
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_resize(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: socket
-
-  @impl true
   def render(assigns) do
     ~H"""
       <.management_page
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
+        breadcrumbs={@vm.breadcrumbs}
         actions={@actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

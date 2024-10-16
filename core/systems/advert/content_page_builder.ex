@@ -4,6 +4,8 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   import CoreWeb.Gettext
 
+  alias Frameworks.Concept
+
   alias Systems.Content
   alias Systems.Advert
   alias Systems.Pool
@@ -15,12 +17,13 @@ defmodule Systems.Advert.ContentPageBuilder do
           submission: submission,
           promotion: promotion
         } = advert,
-        assigns
+        %{branch: branch} = assigns
       ) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     show_errors = submitted?
 
     tabs = create_tabs(advert, show_errors, assigns)
+    breadcrumbs = Concept.Branch.hierarchy(branch)
     action_map = action_map(advert, assigns)
     actions = actions(advert, action_map)
 
@@ -30,6 +33,7 @@ defmodule Systems.Advert.ContentPageBuilder do
       submission: submission,
       promotion: promotion,
       tabs: tabs,
+      breadcrumbs: breadcrumbs,
       actions: actions,
       submitted?: submitted?,
       show_errors: show_errors,

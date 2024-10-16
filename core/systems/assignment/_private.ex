@@ -26,6 +26,11 @@ defmodule Systems.Assignment.Private do
   def get_template(:questionnaire),
     do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 
+  def declined_consent?(assignment, user_ref) do
+    Monitor.Public.event({assignment, :declined, user_ref})
+    |> Monitor.Public.exists?()
+  end
+
   def log_performance_event(
         %Assignment.Model{} = assignment,
         %Crew.TaskModel{} = crew_task,
@@ -148,9 +153,17 @@ defmodule Systems.Assignment.Private do
   end
 
   def task_identifier(
+        assignment,
+        workflow_item,
+        %Crew.MemberModel{id: member_id}
+      ) do
+    task_identifier(assignment, workflow_item, member_id)
+  end
+
+  def task_identifier(
         %{special: :data_donation},
         %Workflow.ItemModel{id: item_id},
-        %Crew.MemberModel{id: member_id}
+        member_id
       ) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
@@ -158,7 +171,7 @@ defmodule Systems.Assignment.Private do
   def task_identifier(
         %{special: :benchmark_challenge},
         %Workflow.ItemModel{id: item_id},
-        %Crew.MemberModel{id: member_id}
+        member_id
       ) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
@@ -166,7 +179,7 @@ defmodule Systems.Assignment.Private do
   def task_identifier(
         %{special: :questionnaire},
         %Workflow.ItemModel{id: item_id},
-        %Crew.MemberModel{id: member_id}
+        member_id
       ) do
     ["item=#{item_id}", "member=#{member_id}"]
   end

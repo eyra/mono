@@ -1,13 +1,15 @@
 defmodule Systems.Lab.PublicPage do
   @moduledoc """
-  The public promotion screen.
+  The public lab screen.
   """
   use CoreWeb, :live_view
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+
+  @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do
     tool = Lab.Public.get_tool!(id, [:time_slots])
 

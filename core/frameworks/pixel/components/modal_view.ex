@@ -15,6 +15,11 @@ defmodule Frameworks.Pixel.ModalView do
       def handle_event("hide_modal", _, socket) do
         {:noreply, socket |> assign(modal: nil)}
       end
+
+      @impl true
+      def handle_event("close_modal", _, socket) do
+        {:noreply, socket |> assign(modal: nil)}
+      end
     end
   end
 
@@ -34,8 +39,18 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:style, :atom, required: true)
   attr(:live_component, :map, required: true)
 
-  def container(assigns) do
+  def container(%{style: style} = assigns) do
+    allowed_styles = [:full, :page, :sheet, :dialog, :notification]
+
+    unless style in allowed_styles do
+      raise ArgumentError,
+            "Invalid style: #{style}. Allowed styles are: #{Enum.join(allowed_styles, ", ")}"
+    end
+
     ~H"""
+    <%= if @style == :full do %>
+      <.full live_component={@live_component} />
+    <% end %>
     <%= if @style == :page do %>
       <.page live_component={@live_component} />
     <% end %>
@@ -48,6 +63,32 @@ defmodule Frameworks.Pixel.ModalView do
     <%= if @style == :notification do %>
       <.notification live_component={@live_component} />
     <% end %>
+    """
+  end
+
+  attr(:live_component, :string, required: true)
+
+  def full(assigns) do
+    ~H"""
+    <div class={"fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30"}>
+      <div class="flex flex-row items-center justify-center w-full h-full">
+        <div class={"p-4 sm:p-12 lg:p-20 w-full h-full"}>
+          <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
+            <%!-- HEADER --%>
+            <div class="shrink-0 px-8">
+              <div class="flex flex-row">
+                <div class="flex-grow"/>
+                <.close_button />
+              </div>
+            </div>
+            <%!-- BODY --%>
+            <div class="h-full overflow-y-scroll px-4">
+              <.body live_component={@live_component} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     """
   end
 
@@ -168,7 +209,7 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
       <Button.dynamic {
         %{
-          action: %{type: :send, event: "hide_modal"},
+          action: %{type: :send, event: "close_modal"},
           face: %{type: :icon, icon: :close}
         }
       } />

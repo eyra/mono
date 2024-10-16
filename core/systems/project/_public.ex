@@ -1,5 +1,5 @@
 defmodule Systems.Project.Public do
-  @behaviour Frameworks.Concept.Context.Handler
+  use CoreWeb, :verified_routes
 
   import CoreWeb.Gettext
   import Ecto.Query, warn: false
@@ -8,34 +8,16 @@ defmodule Systems.Project.Public do
   alias Core.Authorization
   alias Core.Repo
   alias Ecto.Multi
-  alias Frameworks.Signal
-  alias Systems.Account.User
 
+  alias Frameworks.Signal
+
+  alias Systems.Account.User
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Graphite
   alias Systems.Project
   alias Systems.Storage
   alias Systems.Workflow
-
-  @impl true
-  def name(:parent, %Systems.Storage.EndpointModel{} = model) do
-    case get_by_item_special(model) do
-      %{name: name} -> {:ok, name}
-      _ -> {:error, :not_found}
-    end
-  end
-
-  @impl true
-  def name(:self, %Systems.Storage.EndpointModel{} = model) do
-    case get_item_by(model) do
-      %{name: name} -> {:ok, name}
-      _ -> {:error, :not_found}
-    end
-  end
-
-  @impl true
-  def name(_, _), do: {:error, :not_supported}
 
   def get!(id, preload \\ []) do
     from(project in Project.Model,
@@ -105,30 +87,29 @@ defmodule Systems.Project.Public do
     end
   end
 
-  def get_item_by(assignment, preload \\ [])
-
-  def get_item_by(%Assignment.Model{id: assignment_id}, preload) do
-    get_item_by_special(:assignment, assignment_id, preload)
+  def get_item_by(%Assignment.Model{id: assignment_id}) do
+    get_item_by_special(:assignment, assignment_id)
   end
 
-  def get_item_by(%Advert.Model{id: advert_id}, preload) do
-    get_item_by_special(:advert, advert_id, preload)
+  def get_item_by(%Advert.Model{id: advert_id}) do
+    get_item_by_special(:advert, advert_id)
   end
 
-  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}, preload) do
-    get_item_by_special(:leaderboard, advert_id, preload)
+  def get_item_by(%Graphite.LeaderboardModel{id: advert_id}) do
+    get_item_by_special(:leaderboard, advert_id)
   end
 
-  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}, preload) do
-    get_item_by_special(:storage_endpoint, storage_endpoint_id, preload)
+  def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}) do
+    get_item_by_special(:storage_endpoint, storage_endpoint_id)
   end
 
-  defp get_item_by_special(special_name, special_id, preload) do
+  defp get_item_by_special(special_name, special_id) do
     item_query_by_special(special_name, special_id)
-    |> Repo.preload(preload)
     |> Repo.one()
+    |> Repo.preload(Project.ItemModel.preload_graph(:down))
   end
 
+  @spec list_owned_projects(any()) :: any()
   @doc """
   Returns the list of projects that are owned by the user.
   """

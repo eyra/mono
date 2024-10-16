@@ -160,10 +160,6 @@ msgid "submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "close.button"
-msgstr "Schließen"
-
-#, elixir-autogen, elixir-format
 msgid "done.button"
 msgstr ""
 
@@ -193,4 +189,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.workspace"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
 msgstr ""
