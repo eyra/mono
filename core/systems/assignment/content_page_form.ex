@@ -83,6 +83,8 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def compose(:content_page_form, %{page_ref: %{page: page}}) do
+    dbg("Composing content_page_form with page: #{inspect(page)}")
+
     %{
       module: Content.PageForm,
       params: %{
