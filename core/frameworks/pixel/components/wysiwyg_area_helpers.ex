@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
 
   import Phoenix.Component, only: [assign: 3]
 
-  @callback handle_wysiwyg_update(Phoenix.LiveView.Socket.t) :: Phoenix.LiveView.Socket.t
+  @callback handle_wysiwyg_update(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
 
   defmacro __using__(_opts) do
     quote do
@@ -11,7 +11,6 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
 
       import Frameworks.Pixel.WysiwygAreaHelpers, only: [post_process: 1]
       import Frameworks.Pixel.Form, only: [wysiwyg_area: 1]
-
 
       @impl true
       def handle_event("save", %{"_target" => [input_name]} = params, socket) do
@@ -39,5 +38,4 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
   def post_process(content) do
     TrixPostProcessor.add_target_blank(content)
   end
-
 end

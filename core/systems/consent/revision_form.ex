@@ -84,6 +84,7 @@ defmodule Systems.Consent.RevisionForm do
   @impl true
   def handle_wysiwyg_update(%{assigns: %{source: source, entity: entity}} = socket) do
     dbg("called handle_body_update with: #{inspect(entity)} and body: #{inspect(source)}")
+
     socket
     |> save(entity, %{source: source})
   end
