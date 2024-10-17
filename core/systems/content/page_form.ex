@@ -1,21 +1,8 @@
 defmodule Systems.Content.PageForm do
   use CoreWeb.LiveForm
+  use Frameworks.Pixel.Components.WysiwygArea
 
   alias Systems.Content
-
-  @impl true
-  def update(%{id: id, entity: nil}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: nil,
-        visible: false,
-        form: nil
-      )
-    }
-  end
 
   @impl true
   def update(%{id: id, entity: %{body: body} = entity}, socket) do
@@ -27,20 +14,28 @@ defmodule Systems.Content.PageForm do
       |> assign(
         id: id,
         entity: entity,
-        visible: true,
         form: form
       )
+      |> compose_child(:wysiwyg_area)
     }
   end
 
   @impl true
-  def handle_event(
-        "save",
-        %{"body_input" => body},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def compose(:wysiwyg_area, assigns) do
+    %{
+      module: Frameworks.Pixel.Components.WysiwygArea,
+      params: %{
+        form: assigns.form,
+        field: :body,
+        visible: true
+      }
+    }
+  end
+
+  def handle_body_update(%{assigns: %{body: body, entity: entity}} = socket) do
+    dbg("hitting handle_body_update")
+
     {
-      :noreply,
       socket
       |> save(entity, %{body: body})
     }
@@ -64,7 +59,7 @@ defmodule Systems.Content.PageForm do
     ~H"""
       <div>
         <.form id={"#{@id}_agreement_form"} :let={form} for={@form} phx-change="save" phx-target={@myself} >
-          <.wysiwyg_area form={form} field={:body} visible={@visible}/>
+          <.child name={:wysiwyg_area} fabric={@fabric}/>
         </.form>
       </div>
     """
