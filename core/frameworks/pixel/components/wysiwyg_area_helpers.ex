@@ -18,12 +18,10 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
           params
           |> Map.get(input_name)
           |> post_process()
-          |> dbg()
 
         field_name =
           String.replace_suffix(input_name, "_input", "")
           |> String.to_existing_atom()
-          |> dbg()
 
         {
           :noreply,
