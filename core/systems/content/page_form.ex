@@ -8,9 +8,6 @@ defmodule Systems.Content.PageForm do
   def update(%{id: id, entity: %{body: body} = entity}, socket) do
     form_data = to_form(%{"body" => body})
 
-    dbg(form_data)
-    dbg("my id is: #{inspect(id)}")
-
     {
       :ok,
       socket
@@ -24,10 +21,6 @@ defmodule Systems.Content.PageForm do
 
   @impl true
   def handle_wysiwyg_update(%{assigns: %{body: body, entity: entity}} = socket) do
-    dbg("=========HANDLE BODY UPDATE")
-    dbg("body: #{inspect(body)}")
-    dbg("=----------------------=")
-
     socket
     |> save(entity, %{body: body})
   end
@@ -38,8 +31,6 @@ defmodule Systems.Content.PageForm do
   end
 
   def save(socket, entity, attrs) do
-    dbg("Saving entity: #{inspect(entity)} with attrs #{inspect(attrs)}")
-
     changeset = Content.PageModel.changeset(entity, attrs)
 
     socket
