@@ -1,6 +1,8 @@
 defmodule Systems.Consent.RevisionForm do
   use CoreWeb.LiveForm
 
+  alias Frameworks.Pixel.Components.WysiwygAreaComponent
+
   alias Systems.{
     Consent
   }
@@ -34,6 +36,18 @@ defmodule Systems.Consent.RevisionForm do
         visible: false,
         form: form
       )
+      |> compose_child(:wysiwyg_area)
+    }
+  end
+
+  def compose(:wysiwyg_area, socket) do
+    %{
+      module: WysiwygAreaComponent,
+      params: %{
+        form: socket.assigns.form,
+        field: :source,
+        visible: socket.assigns.visible
+      }
     }
   end
 
@@ -99,7 +113,7 @@ defmodule Systems.Consent.RevisionForm do
       <div>
         <.form id="agreement_form" :let={form} for={@form} phx-change="save" phx-target={@myself} >
           <!-- always render wyiwyg te prevent scrollbar reset in LiveView -->
-          <.wysiwyg_area form={form} field={:source} visible={@visible}/>
+
         </.form>
       </div>
     """
