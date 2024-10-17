@@ -78,12 +78,7 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def compose(:content_page_form, %{page_ref: nil}) do
-    %{
-      module: Content.PageForm,
-      params: %{
-        entity: nil
-      }
-    }
+    nil
   end
 
   @impl true
@@ -106,7 +101,9 @@ defmodule Systems.Assignment.ContentPageForm do
 
     {
       :noreply,
-      socket |> assign(page_ref: page_ref)
+      socket
+      |> assign(page_ref: page_ref)
+      |> update_child(:content_page_form)
     }
   end
 
