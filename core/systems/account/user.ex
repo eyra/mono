@@ -125,7 +125,7 @@ defmodule Systems.Account.User do
 
   def admin_changeset(user, attrs) do
     user
-    |> cast(attrs, [:creator, :verified_at])
+    |> cast(attrs, [:creator, :verified_at, :confirmed_at])
   end
 
   @doc """
