@@ -3,8 +3,7 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
   use CoreWeb, :verified_routes
 
   @impl true
-  def store(folder, identifier, data) do
-    filename = Enum.join(identifier, "_") <> ".json"
+  def store(folder, filename, data) do
     folder_path = get_full_path(folder)
     File.mkdir(folder_path)
     file_path = Path.join(folder_path, filename)
