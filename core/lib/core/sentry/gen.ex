@@ -23,7 +23,7 @@ defmodule Core.Sentry.Gen do
   """
 
   def test_event() do
-    :ok = Application.ensure_started(:sentry)
+    {:ok, _} = Application.ensure_all_started(:sentry)
 
     print_environment_info()
 
