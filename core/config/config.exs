@@ -162,11 +162,6 @@ config :core, BankingClient,
   certfile: "../banking_proxy/certs/client_certificate.pem",
   keyfile: "../banking_proxy/certs/client_key.pem"
 
-config :sentry,
-  included_environments: ~w(prod test),
-  environment_name: Mix.env(),
-  tags: %{app_version: System.get_env("VERSION", "dev")}
-
 module =
   case Code.ensure_compiled(Bundle) do
     {:module, module} ->

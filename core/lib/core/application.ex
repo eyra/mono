@@ -9,6 +9,8 @@ defmodule Core.Application do
   alias Systems.Rate
 
   def start(_type, _args) do
+    :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{})
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
