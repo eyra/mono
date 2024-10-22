@@ -23,6 +23,8 @@ defmodule Core.Sentry.Gen do
   """
 
   def test_event() do
+    :ok = Application.ensure_started(:sentry)
+
     print_environment_info()
 
     if Config.dsn() do
