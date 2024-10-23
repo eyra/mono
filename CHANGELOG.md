@@ -11,6 +11,7 @@
 
 ## \#3 unreleased
 
+* Added: Sentry support for crash management
 * Added: Snapchat support for assignment tasks
 * Added: Confirmation dialog when skipping content pages or consent pages in assignment configuration.
 
