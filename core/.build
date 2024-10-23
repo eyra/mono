@@ -39,6 +39,7 @@ Core.Marks.html
 Core.Persister.html
 Core.Release.html
 Core.Repo.html
+Core.Sentry.Gen.html
 Core.SurfConext.AuthorizePlug.html
 Core.SurfConext.CallbackController.html
 Core.SurfConext.PlugUtils.html
@@ -265,6 +266,7 @@ GoogleSignIn.User.html
 GoogleSignIn.html
 Mix.Tasks.Core.Graphite.Del.Submissions.html
 Mix.Tasks.Core.Graphite.Gen.Submissions.html
+Mix.Tasks.Core.Sentry.Gen.TestEvent.html
 Next.Account.CreatorSigninView.html
 Next.Account.ParticipantSigninView.html
 Next.Account.SessionController.html
@@ -847,8 +849,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-0785A7A3.js
-dist/sidebar_items-1BB215D5.js
+dist/search_items-823BC918.js
+dist/sidebar_items-8E78499E.js
 index.html
 readme.html
 search.html
