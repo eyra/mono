@@ -97,13 +97,14 @@ defmodule Systems.Assignment.ContentPageForm do
         %{status: :on},
         %{assigns: %{assignment: assignment, page_key: page_key}} = socket
       ) do
-    page_ref = Assignment.Public.create_page_ref(assignment, page_key)
+    {:ok, %{assignment_page_ref: page_ref}} =
+      Assignment.Public.create_page_ref(assignment, page_key)
 
     {
       :noreply,
       socket
       |> assign(page_ref: page_ref)
-      |> update_child(:content_page_form)
+      |> compose_child(:content_page_form)
     }
   end
 
