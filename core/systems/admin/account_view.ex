@@ -119,14 +119,18 @@ defmodule Systems.Admin.AccountView do
   defp map_to_item(%Account.User{} = user, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
     info = user_info(user)
-    action_button = user_action_button(user, target)
+    action_verify_button = user_action_verify_button(user, target)
+    action_activate_button = user_action_activate_button(user, target)
 
     %{
       photo_url: photo_url,
       name: user.displayname,
       email: user.email,
       info: info,
-      action_button: action_button
+      action_buttons: [
+        action_activate_button,
+        action_verify_button
+      ]
     }
   end
 
@@ -136,24 +140,38 @@ defmodule Systems.Admin.AccountView do
     "Verified #{Timestamp.humanize(verified_at)}"
   end
 
-  defp user_action_button(%Account.User{creator: false} = user, target) do
+  defp user_action_verify_button(%Account.User{creator: false} = user, target) do
     %{
       action: %{type: :send, event: "make_creator", item: user.id, target: target},
       face: %{type: :plain, label: "Make creator", icon: :add}
     }
   end
 
-  defp user_action_button(%Account.User{verified_at: nil} = user, target) do
+  defp user_action_verify_button(%Account.User{verified_at: nil} = user, target) do
     %{
       action: %{type: :send, event: "verify_creator", item: user.id, target: target},
       face: %{type: :plain, label: "Verify", icon: :verify}
     }
   end
 
-  defp user_action_button(user, target) do
+  defp user_action_verify_button(user, target) do
     %{
       action: %{type: :send, event: "unverify_creator", item: user.id, target: target},
       face: %{type: :plain, label: "Unverify", icon: :unverify}
+    }
+  end
+
+  defp user_action_activate_button(%Account.User{confirmed_at: nil} = user, target) do
+    %{
+      action: %{type: :send, event: "activate_user", item: user.id, target: target},
+      face: %{type: :plain, label: "Activate", icon: :verify}
+    }
+  end
+
+  defp user_action_activate_button(user, target) do
+    %{
+      action: %{type: :send, event: "deactivate_user", item: user.id, target: target},
+      face: %{type: :plain, label: "Deactivate", icon: :unverify}
     }
   end
 
@@ -173,13 +191,31 @@ defmodule Systems.Admin.AccountView do
 
   @impl true
   def handle_event("verify_creator", %{"item" => user_id_string}, socket) do
-    {:noreply,
-     socket |> save(user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})}
+    {
+      :noreply,
+      socket |> save(user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
+    }
   end
 
   @impl true
   def handle_event("unverify_creator", %{"item" => user_id_string}, socket) do
-    {:noreply, socket |> save(user_id_string, %{verified_at: nil})}
+    {
+      :noreply,
+      socket |> save(user_id_string, %{verified_at: nil})
+    }
+  end
+
+  @impl true
+  def handle_event("activate_user", %{"item" => user_id_string}, socket) do
+    {
+      :noreply,
+      socket |> save(user_id_string, %{creator: true, confirmed_at: NaiveDateTime.utc_now()})
+    }
+  end
+
+  @impl true
+  def handle_event("deactivate_user", %{"item" => user_id_string}, socket) do
+    {:noreply, socket |> save(user_id_string, %{confirmed_at: nil})}
   end
 
   @impl true
@@ -226,8 +262,8 @@ defmodule Systems.Admin.AccountView do
         <.spacing value="M" />
 
         <table class="w-full">
-          <%= for user <- @users do %>
-            <UserListItem.small {user} />
+          <%= for user_row <- @users do %>
+            <UserListItem.small {user_row} />
           <% end %>
         </table>
       </Area.content>
