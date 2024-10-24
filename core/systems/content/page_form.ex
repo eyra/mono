@@ -6,7 +6,7 @@ defmodule Systems.Content.PageForm do
 
   @impl true
   def update(%{id: id, entity: %{body: body} = entity}, socket) do
-    form_data = to_form(%{"body" => body})
+    original_form = to_form(%{"body" => body})
 
     {
       :ok,
@@ -14,7 +14,7 @@ defmodule Systems.Content.PageForm do
       |> assign(
         id: id,
         entity: entity,
-        form_data: form_data
+        original_form: original_form
       )
     }
   end
@@ -41,7 +41,7 @@ defmodule Systems.Content.PageForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id={"#{@id}_page_form"} :let={form} for={@form_data} phx-change="save" phx-target={@myself} >
+        <.form id={"#{@id}_page_form"} :let={form} for={@original_form } phx-change="save" phx-target={@myself} >
           <!-- always render wysiwyg te prevent scrollbar reset in LiveView -->
           <.wysiwyg_area form={form} field={:body} />
         </.form>
