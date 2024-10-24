@@ -9,7 +9,9 @@ defmodule Core.Application do
   alias Systems.Rate
 
   def start(_type, _args) do
-    :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{})
+    :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{
+      config: %{capture_log_messages: true, level: :error}
+    })
 
     topologies = [
       example: [
