@@ -73,14 +73,19 @@ defmodule Systems.Document.PDFNavView do
           >
             <Text.title2 margin=""><%= @title %></Text.title2>
             <div class="flex-grow"/>
-            <div>
-              <Button.dynamic {@ready_button} />
-            </div>
           </div>
           <.spacing value="M" />
           <.line />
           <div class="flex flex-col w-full h-full">
-            <.child name={:pdf_view} fabric={@fabric} />
+            <div>
+              <.child name={:pdf_view} fabric={@fabric} />
+            </div>
+            <.spacing value="M" />
+            <div class="flex flex-row-reverse w-full ">
+              <div class="w-1/6">
+                <Button.dynamic {@ready_button} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
