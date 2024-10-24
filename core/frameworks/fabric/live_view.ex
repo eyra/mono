@@ -7,6 +7,7 @@ defmodule Fabric.LiveView do
   defmacro __using__(layout) do
     quote do
       use Phoenix.LiveView, layout: {unquote(layout), :live}
+      on_mount(Sentry.LiveViewHook)
       unquote(helpers())
     end
   end
@@ -14,6 +15,7 @@ defmodule Fabric.LiveView do
   defmacro __using__() do
     quote do
       use Phoenix.LiveView
+      on_mount(Sentry.LiveViewHook)
       unquote(helpers())
     end
   end
