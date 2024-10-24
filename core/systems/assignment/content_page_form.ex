@@ -78,12 +78,7 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def compose(:content_page_form, %{page_ref: nil}) do
-    %{
-      module: Content.PageForm,
-      params: %{
-        entity: nil
-      }
-    }
+    nil
   end
 
   @impl true
@@ -102,11 +97,14 @@ defmodule Systems.Assignment.ContentPageForm do
         %{status: :on},
         %{assigns: %{assignment: assignment, page_key: page_key}} = socket
       ) do
-    page_ref = Assignment.Public.create_page_ref(assignment, page_key)
+    {:ok, %{assignment_page_ref: page_ref}} =
+      Assignment.Public.create_page_ref(assignment, page_key)
 
     {
       :noreply,
-      socket |> assign(page_ref: page_ref)
+      socket
+      |> assign(page_ref: page_ref)
+      |> compose_child(:content_page_form)
     }
   end
 
