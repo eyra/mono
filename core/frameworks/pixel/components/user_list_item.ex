@@ -38,9 +38,7 @@ defmodule Frameworks.Pixel.UserListItem do
         <td>
           <div class="flex flex-row">
             <div class="flex-grow" />
-            <%= for action_button <- @action_buttons do %>
-              <Button.dynamic {action_button} />
-            <% end %>
+            <Button.dynamic_bar buttons={@action_buttons} />
           </div>
         </td>
       <% end %>
