@@ -15,9 +15,8 @@ defmodule Systems.Assignment.TemplateDataDonation do
 
     def workflow(_t),
       do: %Workflow.Config{
-        type: :many_optional,
+        singleton?: false,
         library: %Workflow.LibraryModel{
-          render?: true,
           items: [
             %Workflow.LibraryItemModel{
               special: :donate,

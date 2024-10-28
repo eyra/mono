@@ -29,7 +29,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
         %{branch: branch} = assigns
       ) do
     show_errors = false
-
     template = Assignment.Private.get_template(assignment)
     breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(assignment, template, show_errors, assigns)
@@ -168,7 +167,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp get_tab_keys(%{} = config) do
-    [:settings]
+    []
+    |> append_if(:settings, config[:settings])
     |> append_if(:workflow, config[:workflow])
     |> append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
     |> append_if(:monitor, config[:monitor])
@@ -237,20 +237,18 @@ defmodule Systems.Assignment.ContentPageBuilder do
        ) do
     ready? = false
 
+    workflow_config = Assignment.Template.workflow(template)
+
     child =
       Fabric.prepare_child(fabric, :system, Workflow.BuilderView, %{
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
         workflow: workflow,
-        config: %{
-          director: :assignment,
-          list: %{
-            title: dgettext("eyra-workflow", "item.list.title"),
-            description: dgettext("eyra-workflow", "item.list.description")
-          },
-          library: Assignment.Template.workflow(template).library
-        }
+        title: dgettext("eyra-workflow", "item.list.title"),
+        description: dgettext("eyra-workflow", "item.list.description"),
+        director: :assignment,
+        config: workflow_config
       })
 
     %{

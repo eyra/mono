@@ -425,7 +425,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "atom.tag"
+msgid "leaf.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -462,4 +462,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retry.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.paper_screening.description"
 msgstr ""

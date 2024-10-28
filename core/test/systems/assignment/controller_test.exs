@@ -68,7 +68,7 @@ defmodule Systems.Assignment.ControllerTest do
     end
 
     test "progress_headers/1, 2 tasks + consent" do
-      workflow = Workflow.Factories.create_workflow(:many_optional)
+      workflow = Workflow.Factories.create_workflow()
 
       workflow_items =
         ["Task 1", "Task 2"]

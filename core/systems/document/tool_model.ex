@@ -7,10 +7,12 @@ defmodule Systems.Document.ToolModel do
 
   alias Systems.Workflow
 
+  @tool_directors Application.compile_env(:core, :tool_directors)
+
   schema "document_tools" do
     field(:name, :string)
     field(:ref, :string)
-    field(:director, Ecto.Enum, values: [:assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :document_tool_id)

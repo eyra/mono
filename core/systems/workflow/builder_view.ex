@@ -12,11 +12,14 @@ defmodule Systems.Workflow.BuilderView do
   def update(
         %{
           id: id,
+          title: title,
+          description: description,
           workflow: %{items: items} = workflow,
           config: config,
           user: user,
           timezone: timezone,
-          uri_origin: uri_origin
+          uri_origin: uri_origin,
+          director: director
         },
         socket
       ) do
@@ -27,17 +30,25 @@ defmodule Systems.Workflow.BuilderView do
       socket
       |> assign(
         id: id,
+        title: title,
+        description: description,
         workflow: workflow,
         config: config,
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        director: director
       )
+      |> update_render_library()
       |> reset_children()
       |> order_items()
       |> compose_item_cells()
     }
+  end
+
+  defp update_render_library(socket) do
+    assign(socket, render_library?: true)
   end
 
   defp compose_item_cells(%{assigns: %{ordered_items: ordered_items}} = socket) do
@@ -83,7 +94,7 @@ defmodule Systems.Workflow.BuilderView do
   def handle_event(
         "add",
         %{"item" => item_id},
-        %{assigns: %{workflow: %{id: id}, config: %{director: director}}} = socket
+        %{assigns: %{workflow: %{id: id}, director: director}} = socket
       ) do
     item = get_library_item(socket, item_id)
 
@@ -149,8 +160,8 @@ defmodule Systems.Workflow.BuilderView do
         <div class="flex-grow">
           <Area.content>
             <Margin.y id={:page_top} />
-            <Text.title2><%= @config.list.title %></Text.title2>
-            <Text.body><%= @config.list.description %></Text.body>
+            <Text.title2><%= @title %></Text.title2>
+            <Text.body><%= @description %></Text.body>
             <.spacing value="M" />
             <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
               <%= if @ordering_enabled? do %>
@@ -162,7 +173,7 @@ defmodule Systems.Workflow.BuilderView do
             </div>
           </Area.content>
         </div>
-        <%= if @config.library.render? do %>
+        <%= if @render_library? do %>
           <div class="flex-shrink-0 w-side-panel">
             <.side_panel id={:library} parent={:item_builder}>
               <Margin.y id={:page_top} />

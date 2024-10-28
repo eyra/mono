@@ -2,10 +2,13 @@ defmodule Systems.Workflow.ToolRefModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
+  require Logger
+
   import Ecto.Changeset
   import CoreWeb.Gettext
 
   alias Frameworks.Concept
+  alias Frameworks.Utility
 
   alias Systems.Workflow
   alias Systems.Document
@@ -14,16 +17,28 @@ defmodule Systems.Workflow.ToolRefModel do
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Onyx
+
+  @tools [
+    :alliance_tool,
+    :document_tool,
+    :feldspar_tool,
+    :graphite_tool,
+    :instruction_tool,
+    :lab_tool,
+    :onyx_tool
+  ]
 
   schema "tool_refs" do
     field(:special, Ecto.Atom)
 
     belongs_to(:alliance_tool, Alliance.ToolModel)
-    belongs_to(:lab_tool, Lab.ToolModel)
+    belongs_to(:document_tool, Document.ToolModel)
     belongs_to(:feldspar_tool, Feldspar.ToolModel)
     belongs_to(:graphite_tool, Graphite.ToolModel)
-    belongs_to(:document_tool, Document.ToolModel)
     belongs_to(:instruction_tool, Instruction.ToolModel)
+    belongs_to(:lab_tool, Lab.ToolModel)
+    belongs_to(:onyx_tool, Onyx.ToolModel)
 
     has_one(:workflow_item, Workflow.ItemModel, foreign_key: :tool_ref_id)
 
@@ -41,32 +56,34 @@ defmodule Systems.Workflow.ToolRefModel do
   end
 
   def preload_graph(:down),
-    do:
-      preload_graph([
-        :alliance_tool,
-        :document_tool,
-        :lab_tool,
-        :feldspar_tool,
-        :graphite_tool,
-        :instruction_tool
-      ])
+    do: preload_graph(@tools)
 
-  def preload_graph(:alliance_tool),
-    do: [alliance_tool: Alliance.ToolModel.preload_graph(:down)]
+  def preload_graph(tool_id_field) when is_atom(tool_id_field) do
+    if Enum.member?(@tools, tool_id_field) do
+      tool_model =
+        tool_id_field
+        |> get_tool_key()
+        |> get_tool_model()
 
-  def preload_graph(:document_tool),
-    do: [document_tool: Document.ToolModel.preload_graph(:down)]
+      [{tool_id_field, apply(tool_model, :preload_graph, [:down])}]
+    else
+      raise ArgumentError, "Unsupported tool_id_field: #{inspect(tool_id_field)}"
+    end
+  end
 
-  def preload_graph(:lab_tool), do: [lab_tool: Lab.ToolModel.preload_graph(:down)]
+  defp get_tool_key(tool_id_field) when is_atom(tool_id_field) do
+    get_tool_key(Atom.to_string(tool_id_field))
+  end
 
-  def preload_graph(:feldspar_tool),
-    do: [feldspar_tool: Feldspar.ToolModel.preload_graph(:down)]
+  defp get_tool_key(tool_id_field) when is_binary(tool_id_field) do
+    String.split(tool_id_field, "_") |> List.first()
+  end
 
-  def preload_graph(:graphite_tool),
-    do: [graphite_tool: Graphite.ToolModel.preload_graph(:down)]
-
-  def preload_graph(:instruction_tool),
-    do: [instruction_tool: Instruction.ToolModel.preload_graph(:down)]
+  defp get_tool_model(tool_key) do
+    # The tool_key is equal to the system name for now. Systems only have one tool model.
+    # If this changes, we need to update this function.
+    Utility.Module.get(tool_key, "ToolModel")
+  end
 
   def auth_tree(%Workflow.ToolRefModel{} = tool_ref) do
     Concept.ToolModel.auth_tree(tool(tool_ref))
@@ -85,12 +102,17 @@ defmodule Systems.Workflow.ToolRefModel do
   def tool_field(tool), do: String.to_existing_atom("#{Concept.ToolModel.key(tool)}_tool")
   def tool_id_field(tool), do: String.to_existing_atom("#{Concept.ToolModel.key(tool)}_tool_id")
 
-  def tool(%{alliance_tool: %{id: _id} = tool}), do: tool
-  def tool(%{feldspar_tool: %{id: _id} = tool}), do: tool
-  def tool(%{document_tool: %{id: _id} = tool}), do: tool
-  def tool(%{lab_tool: %{id: _id} = tool}), do: tool
-  def tool(%{graphite_tool: %{id: _id} = tool}), do: tool
-  def tool(%{instruction_tool: %{id: _id} = tool}), do: tool
+  def tool(tool_ref) do
+    @tools
+    |> Enum.reduce(nil, fn tool, acc ->
+      tool = Map.get(tool_ref, tool)
+
+      case tool do
+        %{id: _id} -> tool
+        _ -> acc
+      end
+    end)
+  end
 
   def tag(%Workflow.ToolRefModel{special: :questionnaire}),
     do: dgettext("eyra-project", "tool_ref.tag.questionnaire")

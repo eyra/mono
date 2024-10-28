@@ -47,7 +47,8 @@ config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
-  banking_backend: Systems.Banking.Dummy
+  banking_backend: Systems.Banking.Dummy,
+  tool_directors: [:assignment]
 
 config :gettext, default_locale: "en"
 

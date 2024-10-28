@@ -15,9 +15,8 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
 
     def workflow(_t),
       do: %Workflow.Config{
-        type: :many_mandatory,
+        singleton?: false,
         library: %Workflow.LibraryModel{
-          render?: true,
           items: [
             %Workflow.LibraryItemModel{
               special: :fork_instruction,

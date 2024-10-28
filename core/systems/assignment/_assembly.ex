@@ -38,25 +38,30 @@ defmodule Systems.Assignment.Assembly do
   defp prepare_workflow(:questionnaire = special, %Authorization.Node{} = auth_node) do
     template = Assignment.Private.get_template(special)
     initial_items = prepare_initial_items(template, auth_node)
-    prepare_workflow(special, template, initial_items, auth_node)
+    prepare_workflow(special, initial_items, auth_node)
   end
 
   defp prepare_workflow(:data_donation = special, %Authorization.Node{} = auth_node) do
     template = Assignment.Private.get_template(special)
     initial_items = prepare_initial_items(template, auth_node)
-    prepare_workflow(special, template, initial_items, auth_node)
+    prepare_workflow(special, initial_items, auth_node)
   end
 
   defp prepare_workflow(:benchmark_challenge = special, %Authorization.Node{} = auth_node) do
     template = Assignment.Private.get_template(special)
     initial_items = prepare_initial_items(template, auth_node)
-    prepare_workflow(special, template, initial_items, auth_node)
+    prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_workflow(special, template, initial_items, %Authorization.Node{} = auth_node)
+  defp prepare_workflow(:paper_screening = special, %Authorization.Node{} = auth_node) do
+    template = Assignment.Private.get_template(special)
+    initial_items = prepare_initial_items(template, auth_node)
+    prepare_workflow(special, initial_items, auth_node)
+  end
+
+  defp prepare_workflow(special, initial_items, %Authorization.Node{} = auth_node)
        when is_list(initial_items) do
-    type = Assignment.Template.workflow(template).type
-    Assignment.Public.prepare_workflow(special, initial_items, type, auth_node)
+    Assignment.Public.prepare_workflow(special, initial_items, auth_node)
   end
 
   defp prepare_initial_items(template, auth_node) do
