@@ -11,8 +11,7 @@ defmodule Frameworks.Pixel.UserListItem do
   attr(:name, :string, default: nil)
   attr(:email, :string, required: true)
   attr(:info, :string, default: nil)
-
-  attr(:action_button, :map, default: nil)
+  attr(:action_buttons, :map, default: nil)
 
   def small(assigns) do
     ~H"""
@@ -35,11 +34,11 @@ defmodule Frameworks.Pixel.UserListItem do
           <Text.body_small color="text-grey2"><%= @info %></Text.body_small>
         </td>
       <% end %>
-      <%= if @action_button do %>
+      <%= if @action_buttons do %>
         <td>
           <div class="flex flex-row">
             <div class="flex-grow" />
-            <Button.dynamic {@action_button} />
+            <Button.dynamic_bar buttons={@action_buttons} />
           </div>
         </td>
       <% end %>
