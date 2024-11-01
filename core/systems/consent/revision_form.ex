@@ -1,9 +1,8 @@
 defmodule Systems.Consent.RevisionForm do
   use CoreWeb.LiveForm
+  use Frameworks.Pixel.WysiwygAreaHelpers
 
-  alias Systems.{
-    Consent
-  }
+  alias Systems.Consent
 
   @impl true
   def update(%{id: id, entity: %{source: source} = entity}, socket) do
@@ -34,6 +33,7 @@ defmodule Systems.Consent.RevisionForm do
         visible: false,
         form: form
       )
+      |> compose_child(:wysiwyg_area)
     }
   end
 
@@ -81,6 +81,12 @@ defmodule Systems.Consent.RevisionForm do
     end
   end
 
+  @impl true
+  def handle_wysiwyg_update(%{assigns: %{source: source, entity: entity}} = socket) do
+    socket
+    |> save(entity, %{source: source})
+  end
+
   defp handle_save_errors(socket, %{errors: errors}) do
     handle_save_errors(socket, errors)
   end
@@ -98,7 +104,7 @@ defmodule Systems.Consent.RevisionForm do
     ~H"""
       <div>
         <.form id="agreement_form" :let={form} for={@form} phx-change="save" phx-target={@myself} >
-          <!-- always render wyiwyg te prevent scrollbar reset in LiveView -->
+          <!-- always render wysiwyg te prevent scrollbar reset in LiveView -->
           <.wysiwyg_area form={form} field={:source} visible={@visible}/>
         </.form>
       </div>
