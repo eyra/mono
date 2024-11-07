@@ -218,7 +218,6 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, default: "bg-primary")
   attr(:text_color, :string, default: "text-white")
 
-  # deprecated "Use button.dynamic instead"
   def primary_label(assigns) do
     Logger.warning("Deprecation notice: Use button.dynamic instead")
 
