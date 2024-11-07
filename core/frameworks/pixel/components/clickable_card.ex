@@ -27,6 +27,7 @@ defmodule Frameworks.Pixel.ClickableCard do
     <div
       x-data="{show_actions: false}"
       class={"h-full rounded-lg bg-#{@bg_color} #{@size}"}
+      id={"card-#{@id}"}
     >
       <div class="flex flex-col h-full">
         <div class="flex-grow">
@@ -68,13 +69,13 @@ defmodule Frameworks.Pixel.ClickableCard do
               />
             </div>
             <%= for button <- @left_actions do %>
-              <div x-show="show_actions" x-on:click="show_actions = false">
+              <div x-show="show_actions">
                 <Button.dynamic {button} />
               </div>
             <% end %>
             <div class="flex-grow" />
             <%= for button <- @right_actions do %>
-              <div x-show="show_actions" x-on:click="show_actions = false">
+              <div x-show="show_actions">
                 <Button.dynamic {button} />
               </div>
             <% end %>
