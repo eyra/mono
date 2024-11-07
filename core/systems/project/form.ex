@@ -90,7 +90,7 @@ defmodule Systems.Project.Form do
       <.spacing value="S" />
       <div id={"#{@id}_project_content"} phx-hook="LiveContent" data-show-errors={@show_errors}>
         <.form id={@id} :let={form} for={@changeset} phx-submit="submit" phx-change="change" phx-target={@myself} >
-          <.text_input form={form} field={:name} debounce="0" />
+          <.text_input form={form} field={:name} debounce="0" maxlength="255" />
         </.form>
       </div>
       <div class="flex flex-row gap-4">
