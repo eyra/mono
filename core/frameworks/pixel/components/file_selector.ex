@@ -50,7 +50,6 @@ defmodule Frameworks.Pixel.Components.FileSelector do
 
           <div>
             <%= if @upload_in_progress do %>
-              <%!-- <LoadingSpinner.primary show_loading_text?={true}/> --%>
               <%= if @uploads[:file].entries do %>
                 <LoadingSpinner.progress_spinner progress={Enum.at(@uploads[@file_key].entries, 0).progress} />
               <% end %>

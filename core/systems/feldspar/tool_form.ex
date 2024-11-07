@@ -37,8 +37,7 @@ defmodule Systems.Feldspar.ToolForm do
         placeholder: placeholder,
         select_button: select_button,
         replace_button: replace_button,
-        entity: entity,
-        is_loading: false
+        entity: entity
       )
       |> init_file_uploader(:file)
     }
@@ -49,7 +48,6 @@ defmodule Systems.Feldspar.ToolForm do
     {
       :noreply,
       socket
-      |> assign(is_loading: true)
       |> handle_upload_error()
     }
   end
@@ -78,7 +76,6 @@ defmodule Systems.Feldspar.ToolForm do
     changeset = Feldspar.ToolModel.changeset(entity, attrs)
 
     socket
-    |> assign(is_loading: false)
     |> save(changeset)
   end
 
