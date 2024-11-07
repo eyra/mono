@@ -68,13 +68,13 @@ defmodule Frameworks.Pixel.ClickableCard do
               />
             </div>
             <%= for button <- @left_actions do %>
-              <div x-show="show_actions">
+              <div x-show="show_actions" x-on:click="show_actions = false">
                 <Button.dynamic {button} />
               </div>
             <% end %>
             <div class="flex-grow" />
             <%= for button <- @right_actions do %>
-              <div x-show="show_actions">
+              <div x-show="show_actions" x-on:click="show_actions = false">
                 <Button.dynamic {button} />
               </div>
             <% end %>
