@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.UserListItem do
   attr(:name, :string, default: nil)
   attr(:email, :string, required: true)
   attr(:info, :string, default: nil)
-  attr(:action_buttons, :map, default: nil)
+  attr(:action_buttons, :list, default: nil)
 
   def small(assigns) do
     ~H"""
