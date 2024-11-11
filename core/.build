@@ -235,9 +235,11 @@ Frameworks.Pixel.Switch.html
 Frameworks.Pixel.Table.html
 Frameworks.Pixel.Tag.html
 Frameworks.Pixel.Text.html
+Frameworks.Pixel.TrixPostProcessor.html
 Frameworks.Pixel.UserListItem.html
 Frameworks.Pixel.ViewModel.html
 Frameworks.Pixel.Widget.html
+Frameworks.Pixel.WysiwygAreaHelpers.html
 Frameworks.Pixel.html
 Frameworks.Promotable.Director.html
 Frameworks.Signal.Handler.html
@@ -849,8 +851,8 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_items-823BC918.js
-dist/sidebar_items-8E78499E.js
+dist/search_items-51F18F4B.js
+dist/sidebar_items-C2554184.js
 index.html
 readme.html
 search.html
