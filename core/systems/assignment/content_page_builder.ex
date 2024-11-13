@@ -1,16 +1,17 @@
 defmodule Systems.Assignment.ContentPageBuilder do
   use CoreWeb, :verified_routes
+  require Logger
   use Systems.Content.PageBuilder
 
   import CoreWeb.Gettext
 
-  import Frameworks.Utility.List
   alias Frameworks.Concept
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
   alias Systems.Project
   alias Systems.Workflow
+  alias Systems.Onyx
 
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
@@ -20,6 +21,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   @doc """
     Returns a view model based on the templates defined in:
+    * Paper Screening: `Systems.Assignment.TemplatePaperScreening`
     * Benchmark Challenge: `Systems.Assignment.TemplateBenchmarkChallenge`
     * Data Donation: `Systems.Assignment.TemplateDataDonation`
     * Questionnaire: `Systems.Assignment.TemplateQuestionnaire`
@@ -158,26 +160,27 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{uri_origin: _, viewport: _, breakpoint: _} = assigns
        ) do
-    get_tab_keys(Assignment.Template.content_flags(template))
-    |> Enum.map(&create_tab(&1, assignment, template, show_errors, assigns))
+    workflow_config = Assignment.Template.workflow_config(template)
+
+    template
+    |> Assignment.Template.tabs()
+    |> Enum.map(fn {tab_key, tab_config} ->
+      create_tab(tab_key, assignment, tab_config, workflow_config, show_errors, assigns)
+    end)
+    |> Enum.reject(&is_nil/1)
   end
 
   defp create_tabs(_assignment, _template, _show_errors, _assigns) do
     []
   end
 
-  defp get_tab_keys(%{} = config) do
-    []
-    |> append_if(:settings, config[:settings])
-    |> append_if(:workflow, config[:workflow])
-    |> append_if(:participants, config[:invite_participants] or config[:advert_in_pool])
-    |> append_if(:monitor, config[:monitor])
-  end
+  defp create_tab(_, _, nil, _, _, _), do: nil
 
   defp create_tab(
          :settings,
          assignment,
-         template,
+         {title, content_flags},
+         _workflow_config,
          show_errors,
          %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
            _assigns
@@ -209,24 +212,30 @@ defmodule Systems.Assignment.ContentPageBuilder do
         uri_origin: uri_origin,
         viewport: viewport,
         breakpoint: breakpoint,
-        template: template
+        title: title,
+        content_flags: content_flags
       })
 
     %{
       id: :settings_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-project", "tabbar.item.settings"),
-      forward_title: dgettext("eyra-project", "tabbar.item.settings.forward"),
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
       child: child
     }
   end
 
+  defp create_tab(:workflow, _, _, %{singleton?: true}, _, _) do
+    raise "Workflow tab is not supported for singleton workflows. Please provide alternative tab(s) for manipulating the workflow. See :import and :criteria tabs for examples."
+  end
+
   defp create_tab(
          :workflow,
          %{workflow: workflow},
-         template,
+         {title, content_flags},
+         workflow_config,
          show_errors,
          %{
            fabric: fabric,
@@ -237,51 +246,115 @@ defmodule Systems.Assignment.ContentPageBuilder do
        ) do
     ready? = false
 
-    workflow_config = Assignment.Template.workflow(template)
-
     child =
       Fabric.prepare_child(fabric, :system, Workflow.BuilderView, %{
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
         workflow: workflow,
-        title: dgettext("eyra-workflow", "item.list.title"),
+        workflow_config: workflow_config,
+        title: title,
         description: dgettext("eyra-workflow", "item.list.description"),
         director: :assignment,
-        config: workflow_config
+        content_flags: content_flags
       })
 
     %{
       id: :workflow_form,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-workflow", "tabbar.item.workflow"),
-      forward_title: dgettext("eyra-workflow", "tabbar.item.workflow.forward"),
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
       child: child
     }
   end
 
   defp create_tab(
+         :import,
+         %{workflow: %{items: [%{tool_ref: %{onyx_tool: %{} = onyx_tool}}]}},
+         {title, content_flags},
+         _workflow_config,
+         show_errors,
+         %{fabric: fabric, current_user: user, timezone: timezone}
+       ) do
+    child =
+      Fabric.prepare_child(fabric, :system, Onyx.ImportView, %{
+        tool: onyx_tool,
+        timezone: timezone,
+        user: user,
+        title: title,
+        content_flags: content_flags
+      })
+
+    %{
+      id: :import,
+      ready: false,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(:import, _, _, _, _, _) do
+    raise "Import tab is only supported for singleton workflows with one Onyx tool"
+  end
+
+  defp create_tab(
+         :criteria,
+         %{workflow: %{items: [%{tool_ref: %{onyx_tool: %{} = onyx_tool}}]}},
+         {title, content_flags},
+         _workflow_config,
+         show_errors,
+         %{fabric: fabric, current_user: user}
+       ) do
+    child =
+      Fabric.prepare_child(fabric, :system, Onyx.CriteriaView, %{
+        tool: onyx_tool,
+        user: user,
+        title: title,
+        content_flags: content_flags
+      })
+
+    %{
+      id: :criteria,
+      ready: false,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(:criteria, _, _, _, _, _) do
+    raise "Criteria tab is only supported for singleton workflows with one Onyx tool"
+  end
+
+  defp create_tab(
          :participants,
          assignment,
-         template,
+         {title, content_flags},
+         _workflow_config,
          show_errors,
          %{fabric: fabric, current_user: user}
        ) do
     child =
       Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
         assignment: assignment,
-        template: template,
-        user: user
+        user: user,
+        title: title,
+        content_flags: content_flags
       })
 
     %{
       id: :participants,
       ready: false,
       show_errors: show_errors,
-      title: dgettext("eyra-assignment", "tabbar.item.participants"),
-      forward_title: dgettext("eyra-assignment", "tabbar.item.participants.forward"),
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
       child: child
     }
@@ -290,7 +363,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
   defp create_tab(
          :monitor,
          assignment,
-         _template,
+         {title, content_flags},
+         _workflow_config,
          show_errors,
          %{fabric: fabric} = _assigns
        ) do
@@ -300,15 +374,17 @@ defmodule Systems.Assignment.ContentPageBuilder do
       Fabric.prepare_child(fabric, :monitor, Assignment.MonitorView, %{
         assignment: assignment,
         number_widgets: number_widgets(assignment),
-        progress_widgets: progress_widgets(assignment)
+        progress_widgets: progress_widgets(assignment),
+        title: title,
+        content_flags: content_flags
       })
 
     %{
       id: :monitor,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-assignment", "tabbar.item.monitor"),
-      forward_title: dgettext("eyra-assignment", "tabbar.item.monitor.forward"),
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
       child: child
     }

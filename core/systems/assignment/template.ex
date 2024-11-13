@@ -1,34 +1,52 @@
 defprotocol Systems.Assignment.Template do
+  alias Systems.Assignment.Template
+
+  @type title :: binary()
+  @type tabs :: [
+          settings: {title(), Template.Flags.Settings.t()} | nil,
+          import: {title(), Template.Flags.Import.t()} | nil,
+          criteria: {title(), Template.Flags.Criteria.t()} | nil,
+          participants: {title(), Template.Flags.Participants.t()} | nil,
+          workflow: {title(), Template.Flags.Workflow.t()} | nil,
+          monitor: {binary(), Template.Flags.Monitor.t()} | nil
+        ]
+
   @spec title(t) :: binary()
   def title(t)
 
-  @spec content_flags(t) :: Systems.Assignment.ContentFlags.t()
-  def content_flags(t)
+  @spec tabs(t) :: tabs()
+  def tabs(t)
 
-  @spec workflow(t) :: Systems.Workflow.Config.t()
-  def workflow(t)
+  @spec workflow_config(t) :: Systems.Workflow.Config.t()
+  def workflow_config(t)
 end
 
-defmodule Systems.Assignment.ContentFlags do
-  @type t :: %__MODULE__{
-          settings: boolean(),
-          expected: boolean(),
-          language: boolean(),
-          branding: boolean(),
-          information: boolean(),
-          privacy: boolean(),
-          consent: boolean(),
-          helpdesk: boolean(),
-          panel: boolean(),
-          storage: boolean(),
-          invite_participants: boolean(),
-          advert_in_pool: boolean(),
-          workflow: boolean(),
-          monitor: boolean()
-        }
+defmodule Systems.Assignment.Template.Flags do
+  defmacro __using__(flags) do
+    quote do
+      @type t :: %__MODULE__{
+              unquote_splicing(
+                for flag <- flags do
+                  {flag, {:boolean, [], []}}
+                end
+              )
+            }
 
-  @keys [
-    :settings,
+      defstruct unquote(flags)
+
+      def new(opts \\ []) do
+        opt_out_flag = Keyword.get(opts, :opt_out, [])
+
+        unquote(flags)
+        |> Enum.map(fn flag -> {flag, not Enum.member?(opt_out_flag, flag)} end)
+        |> Enum.into(%{})
+      end
+    end
+  end
+end
+
+defmodule Systems.Assignment.Template.Flags.Settings do
+  use Systems.Assignment.Template.Flags, [
     :expected,
     :language,
     :branding,
@@ -37,20 +55,29 @@ defmodule Systems.Assignment.ContentFlags do
     :consent,
     :helpdesk,
     :storage,
-    :panel,
-    :advert_in_pool,
-    :invite_participants,
-    :workflow,
-    :monitor
+    :panel
   ]
+end
 
-  defstruct @keys
+defmodule Systems.Assignment.Template.Flags.Participants do
+  use Systems.Assignment.Template.Flags, [
+    :advert_in_pool,
+    :invite_participants
+  ]
+end
 
-  def new(opts \\ []) do
-    opt_out_keys = Keyword.get(opts, :opt_out, [])
+defmodule Systems.Assignment.Template.Flags.Import do
+  use Systems.Assignment.Template.Flags, []
+end
 
-    @keys
-    |> Enum.map(fn key -> {key, not Enum.member?(opt_out_keys, key)} end)
-    |> Enum.into(%{})
-  end
+defmodule Systems.Assignment.Template.Flags.Criteria do
+  use Systems.Assignment.Template.Flags, []
+end
+
+defmodule Systems.Assignment.Template.Flags.Workflow do
+  use Systems.Assignment.Template.Flags, [:library]
+end
+
+defmodule Systems.Assignment.Template.Flags.Monitor do
+  use Systems.Assignment.Template.Flags, [:consent]
 end

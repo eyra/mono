@@ -107,14 +107,6 @@ msgstr "Kies type"
 msgid "item.form.title"
 msgstr "Instellingen"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings"
-msgstr "Instellingen"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings.forward"
-msgstr "Ga naar Instellingen"
-
 #, elixir-autogen, elixir-format
 msgid "default.name"
 msgstr "Nieuw project"

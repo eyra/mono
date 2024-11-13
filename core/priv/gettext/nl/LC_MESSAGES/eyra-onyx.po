@@ -36,3 +36,35 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pending.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "papers_form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_form.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_history.file.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.timestamp.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.all_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.duplicate_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.new_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.title"
+msgstr ""

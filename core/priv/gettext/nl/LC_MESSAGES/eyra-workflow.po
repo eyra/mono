@@ -42,15 +42,3 @@ msgstr "Pas de volgorde aan met de pijltjes"
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Taak titel"
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.workflow.forward"
-msgstr "Takenlijst"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "item.list.title"
-msgstr "Pas de volgorde aan met de pijltjes"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.workflow"
-msgstr "Takenlijst"

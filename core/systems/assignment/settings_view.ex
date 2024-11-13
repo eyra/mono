@@ -8,17 +8,16 @@ defmodule Systems.Assignment.SettingsView do
         %{
           id: id,
           entity: assignment,
-          template: template,
           project_node: project_node,
           storage_endpoint: storage_endpoint,
           uri_origin: uri_origin,
           viewport: viewport,
-          breakpoint: breakpoint
+          breakpoint: breakpoint,
+          title: title,
+          content_flags: content_flags
         },
         socket
       ) do
-    content_flags = Assignment.Template.content_flags(template)
-
     {
       :ok,
       socket
@@ -27,10 +26,11 @@ defmodule Systems.Assignment.SettingsView do
         entity: assignment,
         project_node: project_node,
         storage_endpoint: storage_endpoint,
-        content_flags: content_flags,
         uri_origin: uri_origin,
         viewport: viewport,
-        breakpoint: breakpoint
+        breakpoint: breakpoint,
+        title: title,
+        content_flags: content_flags
       )
       |> compose_child(:general)
       |> compose_child(:branding)
@@ -178,7 +178,7 @@ defmodule Systems.Assignment.SettingsView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-assignment", "settings.title") %></Text.title2>
+        <Text.title2><%= @title %></Text.title2>
         <.spacing value="L" />
 
         <.child name={:general} fabric={@fabric} >

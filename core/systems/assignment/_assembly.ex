@@ -66,7 +66,7 @@ defmodule Systems.Assignment.Assembly do
 
   defp prepare_initial_items(template, auth_node) do
     %{initial_items: initial_items, library: %{items: library_items}} =
-      Assignment.Template.workflow(template)
+      Assignment.Template.workflow_config(template)
 
     Enum.map(initial_items, fn tool_special ->
       %{tool: tool_type} = Enum.find(library_items, &(&1.special == tool_special))

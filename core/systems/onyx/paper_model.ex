@@ -14,7 +14,6 @@ defmodule Systems.Onyx.PaperModel do
     field(:authors, {:array, :string})
     field(:keywords, {:array, :string})
 
-    belongs_to(:tool, Onyx.ToolModel)
     has_one(:ris, Onyx.RISModel, foreign_key: :paper_id)
 
     timestamps()

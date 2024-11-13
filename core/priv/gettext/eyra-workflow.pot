@@ -42,15 +42,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.workflow.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "item.list.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.workflow"
-msgstr ""

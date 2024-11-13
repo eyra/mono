@@ -7,6 +7,10 @@
 # General application configuration
 import Config
 
+config :mime, :types, %{
+  "application/x-research-info-systems" => ["ris"]
+}
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,

@@ -63,10 +63,6 @@ msgid "onboarding.consent.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "settings.storage.title"
 msgstr ""
 
@@ -291,14 +287,6 @@ msgid "tabbar.item.monitor"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "monitor.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "finished.participants"
 msgstr ""
 
@@ -319,15 +307,7 @@ msgid "settings.subject_count.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "participants.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.participants.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -466,4 +446,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.reviewers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.criteria"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.import"
 msgstr ""

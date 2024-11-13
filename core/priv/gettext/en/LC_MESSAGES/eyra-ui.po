@@ -201,3 +201,7 @@ msgstr "Please note that if you choose to confirm, the page content will be dele
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.title"
 msgstr "Skip this page?"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.forward"
+msgstr "Go to %{to}"

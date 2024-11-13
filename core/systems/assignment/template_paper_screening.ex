@@ -7,13 +7,34 @@ defmodule Systems.Assignment.TemplatePaperScreening do
   defstruct [:id]
 
   defimpl Assignment.Template do
+    alias Systems.Assignment.Template
+
     def title(t), do: Assignment.Templates.translate(t.id)
 
-    def content_flags(_t) do
-      Assignment.ContentFlags.new(opt_out: [:settings, :advert_in_pool])
+    def tabs(_t) do
+      [
+        settings: nil,
+        workflow: nil,
+        import: {
+          dgettext("eyra-assignment", "tabbar.item.import"),
+          Template.Flags.Import.new()
+        },
+        criteria: {
+          dgettext("eyra-assignment", "tabbar.item.criteria"),
+          Template.Flags.Criteria.new()
+        },
+        participants: {
+          dgettext("eyra-assignment", "tabbar.item.reviewers"),
+          Template.Flags.Participants.new(opt_out: [:advert_in_pool])
+        },
+        monitor: {
+          dgettext("eyra-assignment", "tabbar.item.monitor"),
+          Template.Flags.Monitor.new()
+        }
+      ]
     end
 
-    def workflow(_t),
+    def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: true,
         library: %Workflow.LibraryModel{

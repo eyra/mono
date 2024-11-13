@@ -11,17 +11,28 @@ defmodule Core.Repo.Migrations.AddOnyx do
     create table(:onyx_paper) do
       add(:year, :integer)
       add(:journal, :string)
-      add(:doi, :string)
+      add(:uid, :string)
       add(:title, :string)
       add(:abstract, :string)
       add(:authors, {:array, :string})
       add(:keywords, {:array, :string})
+      timestamps()
+    end
+
+    create table(:onyx_tool_file) do
       add(:tool_id, references(:onyx_tool, on_delete: :delete_all))
+      add(:file_id, references(:content_files, on_delete: :delete_all))
+      timestamps()
+    end
+
+    create table(:onyx_file_paper) do
+      add(:tool_file_id, references(:onyx_tool_file, on_delete: :delete_all))
+      add(:paper_id, references(:onyx_paper, on_delete: :delete_all))
       timestamps()
     end
 
     create table(:onyx_ris) do
-      add(:content, :string)
+      add(:raw, :string)
       add(:paper_id, references(:onyx_paper, on_delete: :delete_all))
       timestamps()
     end
@@ -97,8 +108,9 @@ defmodule Core.Repo.Migrations.AddOnyx do
     drop(table(:onyx_label))
     drop(table(:onyx_criterion))
     drop(table(:onyx_criterion_group))
-    drop(table(:onyx_criterion_class))
     drop(table(:onyx_ris))
+    drop(table(:onyx_file_paper))
+    drop(table(:onyx_tool_file))
     drop(table(:onyx_paper))
     drop(table(:onyx_tool))
   end

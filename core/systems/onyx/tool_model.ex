@@ -13,7 +13,7 @@ defmodule Systems.Onyx.ToolModel do
 
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    has_many(:papers, Onyx.PaperModel, foreign_key: :tool_id)
+    has_many(:associated_files, Onyx.ToolFileAssociation, foreign_key: :tool_id)
     has_many(:criterion_groups, Onyx.CriterionGroupModel, foreign_key: :tool_id)
 
     timestamps()
@@ -30,17 +30,19 @@ defmodule Systems.Onyx.ToolModel do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: preload_graph([:auth_node, :papers, :criterion_groups])
+  def preload_graph(:down), do: preload_graph([:auth_node, :associated_files, :criterion_groups])
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
-  def preload_graph(:papers), do: [papers: Onyx.PaperModel.preload_graph(:down)]
+
+  def preload_graph(:associated_files),
+    do: [associated_files: Onyx.ToolFileAssociation.preload_graph(:down)]
 
   def preload_graph(:criterion_groups),
     do: [criterion_groups: Onyx.CriterionGroupModel.preload_graph(:down)]
 
   def ready?(%{name: nil}), do: false
   def ready?(%{image_id: nil}), do: false
-  def ready?(%{papers: []}), do: false
+  def ready?(%{associated_papers: []}), do: false
   def ready?(%{criterion_groups: []}), do: false
   def ready?(_), do: true
 
@@ -77,8 +79,8 @@ defmodule Systems.Onyx.ToolModel do
     def resource_id(%{id: id}), do: "onyx/#{id}"
     def tag(_), do: dgettext("eyra-onyx", "leaf.tag")
 
-    def info(screening, _timezone) do
-      paper_count = screening |> Map.get(:screening_data) |> Map.get(:papers) |> length()
+    def info(%{associated_papers: associated_papers}, _timezone) do
+      paper_count = associated_papers |> length()
       [dngettext("eyra-onyx", "1 paper", "* papers", paper_count)]
     end
 

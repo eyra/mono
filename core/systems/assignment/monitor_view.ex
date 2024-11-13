@@ -8,7 +8,9 @@ defmodule Systems.Assignment.MonitorView do
         %{
           assignment: assignment,
           number_widgets: number_widgets,
-          progress_widgets: progress_widgets
+          progress_widgets: progress_widgets,
+          title: title,
+          content_flags: content_flags
         },
         socket
       ) do
@@ -18,7 +20,9 @@ defmodule Systems.Assignment.MonitorView do
       |> assign(
         assignment: assignment,
         number_widgets: number_widgets,
-        progress_widgets: progress_widgets
+        progress_widgets: progress_widgets,
+        title: title,
+        content_flags: content_flags
       )
       |> update_export_button()
     }
@@ -47,7 +51,7 @@ defmodule Systems.Assignment.MonitorView do
         <Area.content>
           <Margin.y id={:page_top} />
           <div class="flex flex-row items-top">
-            <Text.title2><%= dgettext("eyra-assignment", "monitor.title") %></Text.title2>
+            <Text.title2><%= @title %></Text.title2>
             <div class="flex-grow" />
             <Button.dynamic {@export_button} />
           </div>

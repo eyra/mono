@@ -15,11 +15,12 @@ defmodule Systems.Workflow.BuilderView do
           title: title,
           description: description,
           workflow: %{items: items} = workflow,
-          config: config,
+          workflow_config: workflow_config,
           user: user,
           timezone: timezone,
           uri_origin: uri_origin,
-          director: director
+          director: director,
+          content_flags: content_flags
         },
         socket
       ) do
@@ -33,12 +34,13 @@ defmodule Systems.Workflow.BuilderView do
         title: title,
         description: description,
         workflow: workflow,
-        config: config,
+        workflow_config: workflow_config,
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
         ordering_enabled?: ordering_enabled?,
-        director: director
+        director: director,
+        content_flags: content_flags
       )
       |> update_render_library()
       |> reset_children()
@@ -128,7 +130,9 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, ordered_items: Workflow.Model.ordered_items(workflow))
   end
 
-  defp get_title(%{tool_ref: %{special: special}}, %{config: %{library: %{items: library_items}}}) do
+  defp get_title(%{tool_ref: %{special: special}}, %{
+         workflow_config: %{library: %{items: library_items}}
+       }) do
     case Enum.find(library_items, &(&1.special == special)) do
       %{title: title} ->
         title
@@ -147,7 +151,7 @@ defmodule Systems.Workflow.BuilderView do
     get_library_item(socket, String.to_existing_atom(item_id))
   end
 
-  defp get_library_item(%{assigns: %{config: %{library: %{items: items}}}}, item_id)
+  defp get_library_item(%{assigns: %{workflow_config: %{library: %{items: items}}}}, item_id)
        when is_atom(item_id) do
     Enum.find(items, &(&1.special == item_id))
   end
@@ -180,7 +184,7 @@ defmodule Systems.Workflow.BuilderView do
               <.library
                 title={dgettext("eyra-workflow", "item.library.title")}
                 description={dgettext("eyra-workflow", "item.library.description")}
-                items={Enum.map(@config.library.items, &Map.from_struct/1)}
+                items={Enum.map(@workflow_config.library.items, &Map.from_struct/1)}
               />
             </.side_panel>
           </div>
