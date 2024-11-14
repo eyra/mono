@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Components.FileSelector do
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.LoadingSpinner
+  alias Frameworks.Pixel.Button
 
   attr(:id, :string, required: true)
   attr(:filename, :string, default: nil)
@@ -53,11 +54,8 @@ defmodule Frameworks.Pixel.Components.FileSelector do
                 <LoadingSpinner.progress_spinner progress={Enum.at(@uploads[@file_key].entries, 0).progress} />
               <% end %>
             <% else %>
-            <%!-- This button is hardcoded and not dynamic because this is a very specific use-case where we want a label that looks like a button --%>
             <label for={@uploads.file.ref}>
-              <div class="cursor-pointer pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 bg-tertiary text-grey1">
-                <%= @button_label %>
-              </div>
+              <Button.Face.primary label={@button_label} bg_color="bg-tertiary" text_color="text-grey1" />
             </label>
             <% end %>
           </div>
