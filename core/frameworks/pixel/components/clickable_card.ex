@@ -27,6 +27,7 @@ defmodule Frameworks.Pixel.ClickableCard do
     <div
       x-data="{show_actions: false}"
       class={"h-full rounded-lg bg-#{@bg_color} #{@size}"}
+      id={"card-#{@id}"}
     >
       <div class="flex flex-col h-full">
         <div class="flex-grow">
