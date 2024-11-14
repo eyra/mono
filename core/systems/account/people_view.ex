@@ -157,34 +157,38 @@ defmodule Systems.Account.PeopleView do
 
   defp map_to_item(type, %Account.User{} = user, target, count) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
-    action_button = user_action_button(type, user, target, count)
+    action_buttons = user_action_buttons(type, user, target, count)
 
     %{
       photo_url: photo_url,
       name: user.displayname,
       email: user.email,
-      action_button: action_button
+      action_buttons: action_buttons
     }
   end
 
   defp map_to_item(_, nil, _, _), do: nil
 
-  defp user_action_button(:people, _, _, count) when count <= 1 do
-    nil
+  defp user_action_buttons(:people, _, _, count) when count <= 1 do
+    []
   end
 
-  defp user_action_button(:people, %Account.User{} = user, target, _) do
-    %{
-      action: %{type: :send, event: "remove", item: user.id, target: target},
-      face: %{type: :icon, icon: :remove}
-    }
+  defp user_action_buttons(:people, %Account.User{} = user, target, _) do
+    [
+      %{
+        action: %{type: :send, event: "remove", item: user.id, target: target},
+        face: %{type: :icon, icon: :remove}
+      }
+    ]
   end
 
-  defp user_action_button(:search, %Account.User{} = user, target, _) do
-    %{
-      action: %{type: :send, event: "add", item: user.id, target: target},
-      face: %{type: :plain, label: "Add", icon: :add}
-    }
+  defp user_action_buttons(:search, %Account.User{} = user, target, _) do
+    [
+      %{
+        action: %{type: :send, event: "add", item: user.id, target: target},
+        face: %{type: :plain, label: "Add", icon: :add}
+      }
+    ]
   end
 
   @impl true
