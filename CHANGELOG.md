@@ -9,7 +9,24 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#3 unreleased
+## \#7 unreleased
+
+## \#6 2024-11-15
+
+* Added: Support for activating assignment embedded mode by url query param.
+* Changed: Prevent the tool modal view from closing during assignment when in embedded mode with a single task.
+
+## \#5 2024-11-11
+
+* Fixed: Add/Remove people working on a project.
+
+## \#4 2024-11-06
+
+* Added: Open links in new tab.
+* Added: Manually activate user account (Admin feature)  .
+* Changed: Improve closing of PDF reader.
+
+## \#3 2024-?-?
 
 * Added: Sentry support for crash management
 * Added: Snapchat support for assignment tasks
