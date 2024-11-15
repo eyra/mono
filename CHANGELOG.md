@@ -26,7 +26,7 @@
 * Added: Manually activate user account (Admin feature)  .
 * Changed: Improve closing of PDF reader.
 
-## \#3 2024-?-?
+## \#3 2024-10-24
 
 * Added: Sentry support for crash management
 * Added: Snapchat support for assignment tasks
