@@ -54,7 +54,7 @@ defmodule Systems.Assignment.ExternalPanelController do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
 
-  # FIXME: This is a temporary solution to allow embeds to work
+  # FIXME: This is a temporary solution to allow embeds to work https://github.com/eyra/mono/issues/997
   defp has_no_access?(_, %{"embed" => "true"}), do: false
 
   defp has_no_access?(%{external_panel: external_panel}, params) do

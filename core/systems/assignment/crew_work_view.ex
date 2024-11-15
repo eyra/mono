@@ -535,11 +535,17 @@ defmodule Systems.Assignment.CrewWorkView do
   defp handle_complete_task(%{assigns: %{selected_item: {_, task}}} = socket) do
     {:ok, %{crew_task: updated_task}} = Crew.Public.complete_task(task)
 
-    socket
-    |> hide_modal(:tool_ref_view)
-    |> update_task(updated_task)
-    |> handle_finished_state()
-    |> select_next_item()
+    if embedded?(socket) and singleton?(socket) do
+      # Keep tool_ref view open and prevent finished view from being shown
+      # FIXME: This is a temporary solution to allow embeds to work https://github.com/eyra/mono/issues/997
+      socket
+    else
+      socket
+      |> update_task(updated_task)
+      |> hide_modal(:tool_ref_view)
+      |> handle_finished_state()
+      |> select_next_item()
+    end
   end
 
   defp update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
@@ -596,11 +602,6 @@ defmodule Systems.Assignment.CrewWorkView do
     socket |> assign(selected_item_id: selected_item_id)
   end
 
-  defp handle_finished_state(%{assigns: %{panel_info: %{embedded?: true}}} = socket) do
-    # Dont show finished view when embedded in external panel UI
-    socket
-  end
-
   defp handle_finished_state(%{assigns: %{retry?: true}} = socket), do: socket
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
@@ -643,6 +644,14 @@ defmodule Systems.Assignment.CrewWorkView do
     tool_ref
     |> Workflow.ToolRefModel.tool()
     |> Concept.ToolModel.launcher()
+  end
+
+  defp embedded?(%{assigns: %{panel_info: %{embedded?: embedded?}}}) do
+    embedded?
+  end
+
+  defp singleton?(%{assigns: %{work_items: work_items}}) do
+    length(work_items) == 1
   end
 
   @impl true
