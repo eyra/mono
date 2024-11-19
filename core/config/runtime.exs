@@ -117,14 +117,6 @@ if config_env() == :prod do
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
-  if sentry_dsn = System.get_env("SENTRY_DSN") do
-    config :sentry,
-      dsn: sentry_dsn,
-      environment_name: app_domain,
-      enable_source_code_context: true,
-      root_source_code_paths: [File.cwd!()]
-  end
-
   config :core, :storage,
     services:
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
