@@ -11,6 +11,10 @@
 
 ## \#7 unreleased
 
+## \#6.1 2024-11-19
+
+* Fixed: Memory issues by   removing Sentry support
+
 ## \#6 2024-11-15
 
 * Added: Support for activating assignment embedded mode by url query param.
