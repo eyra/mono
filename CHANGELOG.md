@@ -13,7 +13,7 @@
 
 ## \#6.1 2024-11-19
 
-* Fixed: Memory issues by   removing Sentry support
+* Fixed: Memory issues by temporary removing Sentry support
 
 ## \#6 2024-11-15
 
