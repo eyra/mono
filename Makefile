@@ -59,4 +59,6 @@ deps:
 
 run:
 	docker compose exec app bash -c "source ~/.bashrc && mix run"
-	
+
+bash:
+	docker compose exec app bash
