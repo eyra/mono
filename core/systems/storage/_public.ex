@@ -70,7 +70,7 @@ defmodule Systems.Storage.Public do
 
     if embedded? do
       # submit data in current process
-      Logger.warn("[Storage.Public] deliver directly")
+      Logger.warning("[Storage.Public] deliver directly")
       Storage.Delivery.deliver(backend, special, data, meta_data)
     else
       %{
