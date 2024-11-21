@@ -77,10 +77,6 @@ config :core, Systems.Email.Mailer,
 
 config :core, :apns_backend, Core.APNS.LoggingBackend
 
-config :core,
-       :admins,
-       ["e.vanderveen@eyra.co", "m.j.kokernoot@eyra.co"]
-
 # #  For Minio (local S3)
 # config :ex_aws,
 #   scheme: "http://",

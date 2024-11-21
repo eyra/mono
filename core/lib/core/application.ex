@@ -6,10 +6,6 @@ defmodule Core.Application do
   use Application
 
   def start(_type, _args) do
-    :logger.add_handler(:sentry_handler, Sentry.LoggerHandler, %{
-      config: %{capture_log_messages: true, level: :error}
-    })
-
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,

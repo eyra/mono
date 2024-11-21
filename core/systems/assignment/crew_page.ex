@@ -181,8 +181,6 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event(name, event, socket) do
-    Logger.warn("forwarding to flow: name=#{name}, event=#{inspect(event)}")
-
     {
       :noreply,
       socket |> send_event(:flow, name, event)
