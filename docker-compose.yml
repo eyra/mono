@@ -1,77 +1,107 @@
-version: "3.7"
-x-app: &default-app
-  build:
-    dockerfile: Dockerfile.dev
-    context: .
+# version: "3.7"
+# x-app: &default-app
+#   build:
+#     dockerfile: Dockerfile
+#     context: ./core
 
-  volumes:
-    - "tmp:/workspace/tmp"
-    - "deps:/workspace/deps"
-    - "node_modules:/workspace/assets/node_modules"
-    - "build:/workspace/_build"
-    - "elixir-ls:/workspace/.elixir_ls"
-    - ".netrc:/root/.netrc"
-x-test-env: &test-env
-  GOOGLE_AUTH_CLIENT_ID: test
-  GOOGLE_AUTH_CLIENT_SECRET: test-secret
+#   volumes:
+#     - "tmp:/workspace/tmp"
+#     - "deps:/workspace/deps"
+#     - "node_modules:/workspace/assets/node_modules"
+#     - "build:/workspace/_build"
+#     - "elixir-ls:/workspace/.elixir_ls"
+#     - ".netrc:/root/.netrc"
+
+# x-test-env: &test-env
+#   GOOGLE_AUTH_CLIENT_ID: test
+#   GOOGLE_AUTH_CLIENT_SECRET: test-secret
+
+# services:
+#   link-app:
+#     <<: *default-app
+#     depends_on:
+#       - db
+#       - testdb
+#     ports:
+#       - 4000:4000
+#     environment:
+#       GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
+#       GOOGLE_AUTH_CLIENT_SECRET: VsQkTNpCB50wWdF1MHcslUYk
+
+#   db:
+#     build:
+#       dockerfile: testing.postgresql.Dockerfile
+#       context: .
+#     ports:
+#       - 5432:5432
+#     restart: always
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: link_dev
+#     volumes:
+#       - "./postgres-data:/var/lib/postgresql/data:delegated"
+
+#   ci:
+#     <<: *default-app
+#     environment:
+#       <<: *test-env
+#       MIX_ENV: test
+#     command: "mix ci"
+#     depends_on:
+#       - testdb
+#   docs:
+#     <<: *default-app
+#     environment:
+#       <<: *test-env
+#     command: "mix makedocs"
+
+#   testdb:
+#     build:
+#       dockerfile: testing.postgresql.Dockerfile
+#       context: .
+
+#     restart: always
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: link_test
+#     volumes:
+#       - "testdb:/var/lib/postgresql/data"
+
+# volumes:
+#   tmp:
+#   deps:
+#   node_modules:
+#   build:
+#   elixir-ls:
+#   testdb:
+
 
 services:
-  link-app:
-    <<: *default-app
-    depends_on:
-      - db
-      - testdb
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
     ports:
       - 4000:4000
-    environment:
-      GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
-      GOOGLE_AUTH_CLIENT_SECRET: VsQkTNpCB50wWdF1MHcslUYk
-
+    volumes:
+      - .:/app
+    networks:
+      - next
+  
   db:
-    build:
-      dockerfile: testing.postgresql.Dockerfile
-      context: .
+    image: postgres:12
     ports:
       - 5432:5432
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: link_dev
-    volumes:
-      - "./postgres-data:/var/lib/postgresql/data:delegated"
+      POSTGRES_DB: next_dev
+    networks:
+      - next
 
-  ci:
-    <<: *default-app
-    environment:
-      <<: *test-env
-      MIX_ENV: test
-    command: "mix ci"
-    depends_on:
-      - testdb
-  docs:
-    <<: *default-app
-    environment:
-      <<: *test-env
-    command: "mix makedocs"
-
-  testdb:
-    build:
-      dockerfile: testing.postgresql.Dockerfile
-      context: .
-
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: link_test
-    volumes:
-      - "testdb:/var/lib/postgresql/data"
-
-volumes:
-  tmp:
-  deps:
-  node_modules:
-  build:
-  elixir-ls:
-  testdb:
+networks:
+  next:
+    driver: bridge

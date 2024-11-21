@@ -68,7 +68,7 @@ defmodule Core.MixProject do
       {:sweet_xml, "~> 0.7", override: true},
       # Deps
       {:assent, "~> 0.2.3"},
-      {:bamboo_phoenix, git: "https://github.com/populimited/bamboo_phoenix.git", ref: "bf3e320"},
+      {:bamboo_phoenix, git: "https://github.com/populimited/bamboo_phoenix.git"},
       {:bamboo_ses, "~> 0.3.0"},
       {:bamboo, "~> 2.2"},
       {:bcrypt_elixir, "~> 2.0"},
