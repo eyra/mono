@@ -52,3 +52,11 @@ docs: ${MIX_PROJECTS:%=%/docs}
 	cp -R $*/doc/ doc/`basename $*`
 
 .PHONY: FORCE
+
+
+deps:
+	docker compose exec app cd /app/core && mix deps.get
+
+run:
+	docker compose exec app bash -c "source ~/.bashrc && mix run"
+	
