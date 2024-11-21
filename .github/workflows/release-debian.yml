@@ -11,13 +11,21 @@ on:
 jobs:
   tagged-release:
     runs-on: ubuntu-latest
-    container: debian:11
+    container: debian:12
     env:
       MIX_ENV: prod
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Add Debian 11 repository and install OpenSSL 1.1
+        run: |
+          echo "deb http://deb.debian.org/debian bullseye main" | tee -a /etc/apt/sources.list.d/bullseye.list
+          apt update
+          apt install -y libssl1.1
+          rm /etc/apt/sources.list.d/bullseye.list
+          apt update
 
       - name: Install Node.js
         run: |
