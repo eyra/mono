@@ -1,49 +1,70 @@
 defmodule Systems.Project.NodePageBuilder do
   use Core.FeatureFlags
 
-  alias Frameworks.Utility.ViewModelBuilder
+  import CoreWeb.Gettext
+
+  alias Systems.Project.NodePageGridView
   alias Frameworks.Concept
   alias Systems.Project
 
   def view_model(
-        %Project.NodeModel{
-          id: id
-        } = node,
-        assigns
+        %Project.NodeModel{id: id} = node,
+        %{
+          fabric: fabric
+        } = assigns
       ) do
     branch = %Project.Branch{node_id: node.id}
     breadcrumbs = Concept.Branch.hierarchy(branch)
-    item_cards = to_item_cards(node, assigns)
-    node_cards = to_node_cards(node, assigns)
+    assigns = Map.put(assigns, :node, node)
 
     %{
       id: id,
       title: node.name,
+      tabbar_id: :node_page,
+      show_errors: false,
+      initial_tab: :overview,
+      active_menu_item: :overview,
       breadcrumbs: breadcrumbs,
-      active_menu_item: :projects,
-      node_cards: node_cards,
-      item_cards: item_cards,
       node: node
+    }
+    |> put_tabs(assigns)
+  end
+
+  defp put_tabs(vm, assigns) do
+    Map.put(vm, :tabs, create_tabs(false, assigns))
+  end
+
+  defp create_tabs(show_errors, assigns) do
+    get_tab_keys()
+    |> Enum.map(&create_tab(&1, show_errors, assigns))
+  end
+
+  defp create_tab(
+         :overview,
+         show_errors,
+         %{fabric: fabric, node: node} = assigns
+       ) do
+    ready? = false
+
+    child =
+      Fabric.prepare_child(
+        fabric,
+        :overview,
+        NodePageGridView,
+        Project.NodePageGridViewBuilder.view_model(node, assigns)
+      )
+
+    %{
+      id: :overview,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-projects", "projects.title"),
+      type: :fullpage,
+      child: child
     }
   end
 
-  defp to_node_cards(%{children: children}, assigns) do
-    Enum.map(
-      children,
-      &ViewModelBuilder.view_model(&1, {Project.NodePage, :node_card}, assigns)
-    )
+  defp get_tab_keys() do
+    [:overview]
   end
-
-  defp to_item_cards(%{items: items}, assigns) do
-    items
-    |> Enum.filter(&item_feature_enabled?/1)
-    |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
-    |> Enum.map(&ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns))
-  end
-
-  defp item_feature_enabled?(%{leaderboard_id: leaderboard_id}) when not is_nil(leaderboard_id) do
-    feature_enabled?(:leaderboard)
-  end
-
-  defp item_feature_enabled?(_), do: true
 end
