@@ -83,6 +83,6 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
       ) do
     Pool.Public.add_participant!(pool, user)
     Promotion.Private.log_performance_event(promotion, :clicks)
-    LiveView.push_redirect(socket, to: ~p"/assignment/#{id}/apply")
+    LiveView.push_navigate(socket, to: ~p"/assignment/#{id}/apply")
   end
 end

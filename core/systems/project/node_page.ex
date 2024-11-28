@@ -85,7 +85,7 @@ defmodule Systems.Project.NodePage do
       ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(item_cards ++ node_cards, &(&1.id == card_id))
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true

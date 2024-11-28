@@ -8,7 +8,7 @@ defimpl Core.Persister, for: Any do
   require Logger
 
   def save(_any, changeset) do
-    Logger.warn("falling back to any persister")
+    Logger.warning("falling back to any persister")
     Core.Repo.update(changeset)
   end
 end
