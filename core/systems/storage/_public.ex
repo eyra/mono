@@ -53,7 +53,7 @@ defmodule Systems.Storage.Public do
         %Storage.EndpointModel{id: endpoint_id} = endpoint,
         %{key: key, backend: backend, special: special},
         data,
-        %{remote_ip: remote_ip, panel_info: %{embedded?: embedded?}} = meta_data
+        %{remote_ip: remote_ip} = meta_data
       ) do
     packet_size = byte_size(data)
 
@@ -68,21 +68,15 @@ defmodule Systems.Storage.Public do
     })
     |> Repo.transaction()
 
-    if embedded? do
-      # submit data in current process
-      Logger.warn("[Storage.Public] deliver directly")
-      Storage.Delivery.deliver(backend, special, data, meta_data)
-    else
-      %{
-        endpoint_id: endpoint_id,
-        backend: backend,
-        special: special,
-        data: data,
-        meta_data: meta_data
-      }
-      |> Storage.Delivery.new()
-      |> Oban.insert()
-    end
+    %{
+      endpoint_id: endpoint_id,
+      backend: backend,
+      special: special,
+      data: data,
+      meta_data: meta_data
+    }
+    |> Storage.Delivery.new()
+    |> Oban.insert()
   end
 
   def list_files(endpoint) do
