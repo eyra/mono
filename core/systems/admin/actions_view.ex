@@ -53,11 +53,24 @@ defmodule Systems.Admin.ActionsView do
       }
     }
 
+    crash_button = %{
+      action: %{
+        type: :send,
+        event: "crash"
+      },
+      face: %{
+        type: :primary,
+        bg_color: "bg-delete",
+        label: "Raise a test exception"
+      }
+    }
+
     socket
     |> assign(
       rollback_expired_deposits_button: rollback_expired_deposits_button,
       expire_button: expire_button,
-      expire_force_button: expire_force_button
+      expire_force_button: expire_force_button,
+      crash_button: crash_button
     )
   end
 
@@ -86,6 +99,12 @@ defmodule Systems.Admin.ActionsView do
   end
 
   @impl true
+  def handle_event("crash", _, socket) do
+    raise "Test exception"
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -106,6 +125,14 @@ defmodule Systems.Admin.ActionsView do
         <Button.dynamic {@expire_button} />
         <.spacing value="S" />
       </.wrap>
+      <.spacing value="XL" />
+      <Text.title3 margin="">Monitoring</Text.title3>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@crash_button} />
+        <.spacing value="S" />
+      </.wrap>
+
       <%= if feature_enabled?(:debug_expire_force) do %>
         <.wrap>
           <Button.dynamic {@expire_force_button} />

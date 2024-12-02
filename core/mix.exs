@@ -67,6 +67,7 @@ defmodule Core.MixProject do
       # Workaround for conflicting versions in ex_aws & ex_phone_number
       {:sweet_xml, "~> 0.7", override: true},
       # Deps
+      {:appsignal_phoenix, "~> 2.3.9"},
       {:assent, "~> 0.2.3"},
       {:bamboo_phoenix, git: "https://github.com/populimited/bamboo_phoenix.git", ref: "bf3e320"},
       {:bamboo_ses, "~> 0.3.0"},
@@ -100,7 +101,6 @@ defmodule Core.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:postgrex, ">= 0.15.13"},
       {:remote_ip, "~> 1.1"},
-      {:sentry, "~> 10.7"},
       {:slugify, "~> 1.3"},
       {:statistics, "~> 0.6.2"},
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
