@@ -14,7 +14,7 @@ defmodule Systems.Onyx.ImportView do
         timezone: timezone,
         title: title,
         content_flags: content_flags,
-        papers: []
+        paper_count: 0
       )
       |> compose_child(:import_form)
     }
@@ -32,6 +32,11 @@ defmodule Systems.Onyx.ImportView do
   end
 
   @impl true
+  def handle_event("update_paper_count", %{paper_count: paper_count}, socket) do
+    {:noreply, assign(socket, paper_count: paper_count)}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
       <div>
@@ -39,7 +44,7 @@ defmodule Systems.Onyx.ImportView do
           <Margin.y id={:page_top} />
           <Text.title2>
             <%= @title %>
-            <span class="text-primary"><%= Enum.count(@papers) %></span>
+            <span class="text-primary"><%= @paper_count %></span>
           </Text.title2>
           <.stack fabric={@fabric} />
         </Area.content>

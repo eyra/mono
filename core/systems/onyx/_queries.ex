@@ -8,16 +8,21 @@ defmodule Systems.Onyx.Queries do
 
   # TOOL
   def tool_query() do
-    from(Onyx.ToolModel, as: :tool)
+    from(t in Onyx.ToolModel, as: :tool)
   end
 
   # TOOL FILE ASSOCIATION
   def tool_file_query() do
-    from(Onyx.ToolFileAssociation, as: :tool_file)
+    from(tf in Onyx.ToolFileAssociation, as: :tool_file)
   end
 
-  def tool_file_query(%Onyx.ToolModel{id: tool_id}) do
+  def tool_file_query(%Onyx.ToolModel{id: tool_id}, exclude \\ [:archived]) do
     build(tool_file_query(), :tool_file, tool: [id == ^tool_id])
+    |> tool_file_exclude(exclude)
+  end
+
+  def tool_file_exclude(query, exclude) when is_list(exclude) do
+    where(query, [tool_file: tf], tf.status not in ^exclude)
   end
 
   # FILE PAPER ASSOCIATION

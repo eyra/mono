@@ -9,17 +9,20 @@ defmodule Core.Repo.Migrations.AddOnyx do
     end
 
     create table(:onyx_paper) do
-      add(:year, :integer)
-      add(:journal, :string)
-      add(:uid, :string)
-      add(:title, :string)
-      add(:abstract, :string)
+      add(:year, :string)
+      add(:date, :string)
+      add(:abbreviated_journal, :string)
+      add(:doi, :string)
+      add(:title, :text)
+      add(:subtitle, :text)
+      add(:abstract, :text)
       add(:authors, {:array, :string})
       add(:keywords, {:array, :string})
       timestamps()
     end
 
     create table(:onyx_tool_file) do
+      add(:status, :string, null: false)
       add(:tool_id, references(:onyx_tool, on_delete: :delete_all))
       add(:file_id, references(:content_files, on_delete: :delete_all))
       timestamps()
@@ -31,8 +34,14 @@ defmodule Core.Repo.Migrations.AddOnyx do
       timestamps()
     end
 
+    create table(:onyx_file_error) do
+      add(:tool_file_id, references(:onyx_tool_file, on_delete: :delete_all))
+      add(:error, :string)
+      timestamps()
+    end
+
     create table(:onyx_ris) do
-      add(:raw, :string)
+      add(:raw, :text)
       add(:paper_id, references(:onyx_paper, on_delete: :delete_all))
       timestamps()
     end
@@ -110,6 +119,7 @@ defmodule Core.Repo.Migrations.AddOnyx do
     drop(table(:onyx_criterion_group))
     drop(table(:onyx_ris))
     drop(table(:onyx_file_paper))
+    drop(table(:onyx_file_error))
     drop(table(:onyx_tool_file))
     drop(table(:onyx_paper))
     drop(table(:onyx_tool))

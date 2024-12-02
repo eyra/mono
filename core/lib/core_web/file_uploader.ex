@@ -4,7 +4,11 @@ defmodule CoreWeb.FileUploader do
 
   @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{3,4})?$"
 
-  @callback process_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
+  @callback process_file(socket :: Socket.t(), info :: any()) :: Socket.t()
+  @callback file_upload_start(socket :: Socket.t(), info :: any()) :: Socket.t()
+  @callback file_upload_progress(socket :: Socket.t(), info :: any()) :: Socket.t()
+
+  @optional_callbacks file_upload_start: 2, file_upload_progress: 2
 
   def get_upload_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do
@@ -40,13 +44,39 @@ defmodule CoreWeb.FileUploader do
         Keyword.fetch!(config, :max_file_size)
       end
 
-      def handle_progress(_key, entry, socket) do
-        if entry.done? do
-          upload_result = consume_file(socket, entry)
-          {:noreply, socket |> process_file(upload_result)}
-        else
-          {:noreply, socket}
-        end
+      def handle_progress(
+            _key,
+            %{uuid: upload_entry_id, progress: progress, client_name: client_name} = entry,
+            socket
+          ) do
+        socket =
+          if upload_entry_id != Map.get(socket.assigns, :upload_entry_id) do
+            if function_exported?(__MODULE__, :file_upload_start, 2) do
+              apply(__MODULE__, :file_upload_start, [socket, {client_name, progress}])
+            else
+              socket
+            end
+            |> assign(upload_entry_id: upload_entry_id)
+          else
+            socket
+          end
+
+        socket =
+          if function_exported?(__MODULE__, :file_upload_progress, 2) do
+            apply(__MODULE__, :file_upload_progress, [socket, {client_name, progress}])
+          else
+            socket
+          end
+
+        socket =
+          if entry.done? do
+            upload_result = consume_file(socket, entry)
+            socket |> process_file(upload_result)
+          else
+            socket
+          end
+
+        {:noreply, socket}
       end
 
       def consume_file(socket, entry) do

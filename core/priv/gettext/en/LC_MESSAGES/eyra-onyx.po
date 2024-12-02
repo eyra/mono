@@ -55,7 +55,7 @@ msgstr "Timestamp"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.all_count.label"
-msgstr "All"
+msgstr "Papers"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.duplicate_count.label"
@@ -68,3 +68,11 @@ msgstr "Unique"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.title"
 msgstr "Imports"
+
+#, elixir-autogen, elixir-format
+msgid "unsupported_type_of_reference"
+msgstr "Unsupported type of reference: %{type}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.errors.label"
+msgstr "Errors"

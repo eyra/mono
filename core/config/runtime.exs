@@ -117,10 +117,13 @@ if config_env() == :prod do
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
-  if sentry_dsn = System.get_env("SENTRY_DSN") do
-    config :sentry,
-      dsn: sentry_dsn,
-      environment_name: System.get_env("RELEASE_ENV") || "prod"
+  if push_api_key = System.get_env("APPSIGNAL_PUSH_API_KEY") do
+    config :appsignal, :config,
+      otp_app: :core,
+      name: "Next",
+      env: app_domain,
+      push_api_key: push_api_key,
+      active: true
   end
 
   config :core, :storage,

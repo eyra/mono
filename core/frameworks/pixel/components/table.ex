@@ -2,6 +2,8 @@ defmodule Frameworks.Pixel.Table do
   alias CoreWeb.UI.Timestamp
   use CoreWeb, :html
 
+  alias Frameworks.Pixel.Spinner
+
   attr(:layout, :list, required: true)
   attr(:head_cells, :list, required: true)
   attr(:rows, :list, required: true)
@@ -147,7 +149,13 @@ defmodule Frameworks.Pixel.Table do
     """
   end
 
-  def content(%{type: :button} = assigns) do
+  def content(%{type: :action, value: :spinner_static} = assigns) do
+    ~H"""
+      <Spinner.static />
+    """
+  end
+
+  def content(%{type: :action} = assigns) do
     ~H"""
       <Button.dynamic {@value} />
     """

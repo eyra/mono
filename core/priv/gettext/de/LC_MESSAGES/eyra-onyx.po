@@ -68,3 +68,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "unsupported_type_of_reference"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_history.errors.label"
+msgstr ""

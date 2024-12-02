@@ -1,6 +1,7 @@
 defmodule Systems.Storage.EndpointDataView do
   use CoreWeb, :live_component
 
+  alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.SearchBar
   alias Systems.Storage
 
@@ -160,9 +161,7 @@ defmodule Systems.Storage.EndpointDataView do
               <Button.dynamic_bar buttons={@buttons}/>
             <% end %>
           <% else %>
-            <div class="w-8 h-8 animate-spin">
-              <img src={~p"/images/icons/loading_primary@3x.png"} alt={"Loading"}>
-            </div>
+            <Spinner.static size="w-8 h-8" />
           <% end %>
         </div>
         <%= if @total_count do %>
