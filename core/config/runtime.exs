@@ -125,7 +125,7 @@ if config_env() == :prod do
       push_api_key: push_api_key,
       active: true
   end
-  
+
   config :core, :storage,
     services:
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
