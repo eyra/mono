@@ -11,7 +11,7 @@
 
 ## \#7 unreleased
 
-## \#6.2 unreleased
+## \#6.2 2024-11-28
 
 * Added: AppSignal support
 
