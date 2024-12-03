@@ -7,17 +7,34 @@ defmodule Systems.Assignment.TemplateDataDonation do
   defstruct [:id]
 
   defimpl Assignment.Template do
+    alias Systems.Assignment.Template
+
     def title(t), do: Assignment.Templates.translate(t.id)
 
-    def content_flags(_t) do
-      Assignment.ContentFlags.new(opt_out: [:invite_participants, :advert_in_pool])
+    def tabs(_t) do
+      [
+        settings: {
+          dgettext("eyra-assignment", "tabbar.item.settings"),
+          Template.Flags.Settings.new()
+        },
+        workflow: {
+          dgettext("eyra-assignment", "tabbar.item.workflow"),
+          Template.Flags.Workflow.new()
+        },
+        import: nil,
+        criteria: nil,
+        participants: nil,
+        monitor: {
+          dgettext("eyra-assignment", "tabbar.item.monitor"),
+          Template.Flags.Monitor.new()
+        }
+      ]
     end
 
-    def workflow(_t),
+    def workflow_config(_t),
       do: %Workflow.Config{
-        type: :many_optional,
+        singleton?: false,
         library: %Workflow.LibraryModel{
-          render?: true,
           items: [
             %Workflow.LibraryItemModel{
               special: :donate,

@@ -12,11 +12,15 @@ defmodule Systems.Workflow.BuilderView do
   def update(
         %{
           id: id,
+          title: title,
+          description: description,
           workflow: %{items: items} = workflow,
-          config: config,
+          workflow_config: workflow_config,
           user: user,
           timezone: timezone,
-          uri_origin: uri_origin
+          uri_origin: uri_origin,
+          director: director,
+          content_flags: content_flags
         },
         socket
       ) do
@@ -27,17 +31,26 @@ defmodule Systems.Workflow.BuilderView do
       socket
       |> assign(
         id: id,
+        title: title,
+        description: description,
         workflow: workflow,
-        config: config,
+        workflow_config: workflow_config,
         user: user,
         timezone: timezone,
         uri_origin: uri_origin,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        director: director,
+        content_flags: content_flags
       )
+      |> update_render_library()
       |> reset_children()
       |> order_items()
       |> compose_item_cells()
     }
+  end
+
+  defp update_render_library(socket) do
+    assign(socket, render_library?: true)
   end
 
   defp compose_item_cells(%{assigns: %{ordered_items: ordered_items}} = socket) do
@@ -83,7 +96,7 @@ defmodule Systems.Workflow.BuilderView do
   def handle_event(
         "add",
         %{"item" => item_id},
-        %{assigns: %{workflow: %{id: id}, config: %{director: director}}} = socket
+        %{assigns: %{workflow: %{id: id}, director: director}} = socket
       ) do
     item = get_library_item(socket, item_id)
 
@@ -117,7 +130,9 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, ordered_items: Workflow.Model.ordered_items(workflow))
   end
 
-  defp get_title(%{tool_ref: %{special: special}}, %{config: %{library: %{items: library_items}}}) do
+  defp get_title(%{tool_ref: %{special: special}}, %{
+         workflow_config: %{library: %{items: library_items}}
+       }) do
     case Enum.find(library_items, &(&1.special == special)) do
       %{title: title} ->
         title
@@ -136,7 +151,7 @@ defmodule Systems.Workflow.BuilderView do
     get_library_item(socket, String.to_existing_atom(item_id))
   end
 
-  defp get_library_item(%{assigns: %{config: %{library: %{items: items}}}}, item_id)
+  defp get_library_item(%{assigns: %{workflow_config: %{library: %{items: items}}}}, item_id)
        when is_atom(item_id) do
     Enum.find(items, &(&1.special == item_id))
   end
@@ -149,8 +164,8 @@ defmodule Systems.Workflow.BuilderView do
         <div class="flex-grow">
           <Area.content>
             <Margin.y id={:page_top} />
-            <Text.title2><%= @config.list.title %></Text.title2>
-            <Text.body><%= @config.list.description %></Text.body>
+            <Text.title2><%= @title %></Text.title2>
+            <Text.body><%= @description %></Text.body>
             <.spacing value="M" />
             <div class="bg-grey5 rounded-2xl p-6 flex flex-col gap-4">
               <%= if @ordering_enabled? do %>
@@ -162,14 +177,14 @@ defmodule Systems.Workflow.BuilderView do
             </div>
           </Area.content>
         </div>
-        <%= if @config.library.render? do %>
+        <%= if @render_library? do %>
           <div class="flex-shrink-0 w-side-panel">
             <.side_panel id={:library} parent={:item_builder}>
               <Margin.y id={:page_top} />
               <.library
                 title={dgettext("eyra-workflow", "item.library.title")}
                 description={dgettext("eyra-workflow", "item.library.description")}
-                items={Enum.map(@config.library.items, &Map.from_struct/1)}
+                items={Enum.map(@workflow_config.library.items, &Map.from_struct/1)}
               />
             </.side_panel>
           </div>

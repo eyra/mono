@@ -7,17 +7,37 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
   defstruct [:id]
 
   defimpl Assignment.Template do
+    alias Systems.Assignment.Template
+
     def title(t), do: Assignment.Templates.translate(t.id)
 
-    def content_flags(_t) do
-      Assignment.ContentFlags.new(opt_out: [:panel, :storage])
+    def tabs(_t) do
+      [
+        settings: {
+          dgettext("eyra-assignment", "tabbar.item.settings"),
+          Template.Flags.Settings.new(opt_out: [:panel, :storage])
+        },
+        workflow: {
+          dgettext("eyra-assignment", "tabbar.item.workflow"),
+          Template.Flags.Workflow.new()
+        },
+        import: nil,
+        criteria: nil,
+        participants: {
+          dgettext("eyra-assignment", "tabbar.item.participants"),
+          Template.Flags.Participants.new()
+        },
+        monitor: {
+          dgettext("eyra-assignment", "tabbar.item.monitor"),
+          Template.Flags.Monitor.new()
+        }
+      ]
     end
 
-    def workflow(_t),
+    def workflow_config(_t),
       do: %Workflow.Config{
-        type: :many_mandatory,
+        singleton?: false,
         library: %Workflow.LibraryModel{
-          render?: true,
           items: [
             %Workflow.LibraryItemModel{
               special: :general_instruction,

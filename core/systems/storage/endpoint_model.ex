@@ -82,7 +82,7 @@ defmodule Systems.Storage.EndpointModel do
     alias Frameworks.Concept
 
     def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
-    def tag(_), do: dgettext("eyra-storage", "atom.tag")
+    def tag(_), do: dgettext("eyra-storage", "leaf.tag")
 
     def info(storage_endpoint, _timezone) do
       file_count =
