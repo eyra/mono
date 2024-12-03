@@ -11,6 +11,8 @@
 
 ## \#7 unreleased
 
+* Added - Support for Onyx RIS upload (behind feature flag)
+
 ## \#6.1 2024-11-19
 
 * Fixed: Memory issues by temporary removing Sentry support

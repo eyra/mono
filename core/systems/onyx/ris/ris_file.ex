@@ -44,24 +44,24 @@ defmodule Systems.Onyx.RISFile do
   @end_of_reference_tag "ER"
 
   def process(tool_file_id) when is_integer(tool_file_id) do
-    Logger.info("Processing papers started")
+    Logger.info("[Onyx] Processing papers: started")
 
     Onyx.Public.get_tool_file!(tool_file_id, Onyx.ToolFileAssociation.preload_graph(:down))
     |> process()
   end
 
   def process(%{file: %{ref: nil}}) do
-    Logger.info("Processing papers failed, tool file reference is missing")
+    Logger.error("[Onyx] Processing papers: failed -> tool file reference is missing")
   end
 
   def process(%{file: %{ref: ref}} = tool_file) do
     with {:ok, _, _, client_ref} <- :hackney.request(:get, ref),
          {:ok, body} <- client_ref |> :hackney.body() do
       process(tool_file, body)
-      Logger.info("Processing papers ended")
+      Logger.info("[Onyx] Processing papers: ended")
     else
       error ->
-        Logger.error("Processing papers failed, error: #{inspect(error)}")
+        Logger.error("[Onyx] Processing papers: failed -> #{inspect(error)}")
     end
   end
 
@@ -75,25 +75,27 @@ defmodule Systems.Onyx.RISFile do
     end
 
     after_func = fn
-      [] -> {:cont, []}
-      _ -> raise Onyx.RISError, message: "Invalid RIS file, missing 'ER -' tag"
-    end
+      [] ->
+        {:cont, []}
 
-    Logger.info("Extracting papers started")
+      _ ->
+        raise Onyx.RISError,
+          message: "[Onyx] Processing papers: invalid RIS file, missing 'ER -' tag"
+    end
 
     body
     |> String.split(~r{(\r\n|\r|\n)})
     |> Enum.reject(&(&1 == ""))
     |> Enum.chunk_while([], chunk_fun, after_func)
     |> Enum.to_list()
-    |> tap(fn references -> Logger.info("Extracting #{Enum.count(references)} references") end)
+    |> tap(fn references ->
+      Logger.info("[Onyx] Processing papers: #{Enum.count(references)} references")
+    end)
     |> Enum.map(&parse_reference(&1))
     |> Enum.map(&prepare_reference(&1, tool_file))
     |> Enum.with_index()
     |> create_transaction(tool_file)
     |> Repo.transaction()
-
-    Logger.info("Extracting papers finished")
   end
 
   def prepare_reference({:ok, {paper, raw}}, tool_file) do
@@ -112,8 +114,12 @@ defmodule Systems.Onyx.RISFile do
     type_of_reference = extract_type_of_reference(lines)
 
     case validate_type_of_reference(type_of_reference) do
-      :ok -> {:ok, {parse_paper(lines), raw}}
-      {:error, error} -> {:error, {parse_error(lines, error), raw}}
+      :ok ->
+        {:ok, {parse_paper(lines), raw}}
+
+      {:error, error} ->
+        Logger.error("[Onyx] Extracting papers: error: #{inspect(error)}")
+        {:error, {parse_error(lines, error), raw}}
     end
   end
 
