@@ -6,7 +6,7 @@ defmodule Systems.Graphite.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Graphite
   alias Systems.Workflow
@@ -115,6 +115,8 @@ defmodule Systems.Graphite.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Graphite
     def key(_), do: :graphite
     def auth_tree(%{auth_node: auth_node}), do: auth_node

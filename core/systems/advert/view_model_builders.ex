@@ -1,6 +1,6 @@
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   use CoreWeb, :verified_routes
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   import Frameworks.Utility.Guards
 

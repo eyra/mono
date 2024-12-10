@@ -1,7 +1,7 @@
 defmodule Systems.Desktop.PageBuilder do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Systems.Project
   alias Systems.NextAction
 

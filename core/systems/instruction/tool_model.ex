@@ -3,7 +3,7 @@ defmodule Systems.Instruction.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Instruction
   alias Systems.Workflow
@@ -40,6 +40,8 @@ defmodule Systems.Instruction.ToolModel do
   def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Instruction
     def key(_), do: :instruction
     def auth_tree(%{auth_node: auth_node}), do: auth_node

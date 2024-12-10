@@ -2,11 +2,11 @@ defmodule Systems.Assignment.TemplateDataDonation do
   alias Systems.Assignment
   alias Systems.Workflow
 
-  import CoreWeb.Gettext
-
   defstruct [:id]
 
   defimpl Assignment.Template do
+    use Gettext, backend: CoreWeb.Gettext
+
     def title(t), do: Assignment.Templates.translate(t.id)
 
     def content_flags(_t) do

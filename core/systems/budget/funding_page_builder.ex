@@ -1,5 +1,5 @@
 defmodule Systems.Budget.FundingPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   def view_model(user, _assigns) do
     create_budget = %{

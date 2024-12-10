@@ -1,7 +1,7 @@
 defmodule Systems.Pool.AdvertItemBuilder do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.Guards
 
   alias Core.ImageHelpers

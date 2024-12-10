@@ -13,7 +13,7 @@ defmodule Systems.Content.Composer do
       use CoreWeb.UI.Popup
       use Frameworks.Pixel.ModalView
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       import Systems.Content.Html
     end
   end
@@ -28,7 +28,7 @@ defmodule Systems.Content.Composer do
       use CoreWeb.UI.Popup
       use Frameworks.Pixel.ModalView
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       import Systems.Content.Html
 
       @impl true

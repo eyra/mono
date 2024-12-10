@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Authorization
   alias Phoenix.LiveView

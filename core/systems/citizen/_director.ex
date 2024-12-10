@@ -8,7 +8,7 @@ defmodule Systems.Citizen.Director do
 
   alias CoreWeb.UI.Timestamp
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Pool,

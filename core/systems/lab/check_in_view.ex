@@ -1,6 +1,6 @@
 defmodule Systems.Lab.CheckInView do
   use CoreWeb, :live_component
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   require Logger
 
   import Frameworks.Pixel.Form

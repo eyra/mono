@@ -12,7 +12,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
   attr(:title, :string, default: nil)
   attr(:menus, :map)
   attr(:footer, :boolean, default: true)
-  slot(:top_bar, default: nil)
+  slot(:top_bar)
   slot(:inner_block, required: true)
 
   def workspace(assigns) do
@@ -46,7 +46,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
                           <Hero.illustration2 title={@title} />
                         </div>
                       <% end %>
-                      <%= if @top_bar do %>
+                      <%= if @top_bar != [] do %>
                         <div class="flex-none">
                           <%= render_slot(@top_bar) %>
                         </div>
