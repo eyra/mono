@@ -2,7 +2,7 @@ defmodule Systems.Instruction.DownloadForm do
   use CoreWeb, :live_component
   use CoreWeb.FileUploader, accept: ~w(.zip)
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Pixel.Components.FileSelector
 
   alias Systems.Instruction

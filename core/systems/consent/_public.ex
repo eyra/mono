@@ -1,5 +1,5 @@
 defmodule Systems.Consent.Public do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Query
   import Systems.Consent.Queries
 
@@ -195,7 +195,7 @@ defmodule Systems.Consent.Public do
 end
 
 defimpl Core.Persister, for: Systems.Consent.RevisionModel do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   def save(_revision, changeset) do
     case Systems.Consent.Public.update_revision(changeset) do

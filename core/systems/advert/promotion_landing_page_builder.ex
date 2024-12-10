@@ -1,6 +1,6 @@
 defmodule Systems.Advert.PromotionLandingPageBuilder do
   use CoreWeb, :verified_routes
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Phoenix.LiveView
 

@@ -4,7 +4,7 @@ defmodule CoreWeb.UI.Timestamp do
   """
   use Timex
   require Logger
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   def convert(datetime, timezone \\ "Etc/UTC") do
     case Timex.Timezone.convert(datetime, timezone) do

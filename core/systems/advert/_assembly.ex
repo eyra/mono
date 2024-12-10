@@ -1,5 +1,5 @@
 defmodule Systems.Advert.Assembly do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Authorization
   alias Core.Repo

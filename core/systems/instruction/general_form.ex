@@ -1,7 +1,7 @@
 defmodule Systems.Instruction.GeneralForm do
   use CoreWeb, :live_component
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Content
   alias Systems.Instruction

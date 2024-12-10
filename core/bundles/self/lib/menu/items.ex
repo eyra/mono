@@ -2,7 +2,7 @@ defmodule Self.Menu.Items do
   @behaviour CoreWeb.Menu.ItemsProvider
 
   use CoreWeb, :verified_routes
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   @impl true
   def values() do

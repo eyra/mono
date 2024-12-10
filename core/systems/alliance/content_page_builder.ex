@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.ContentPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Alliance
