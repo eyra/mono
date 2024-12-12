@@ -14,34 +14,10 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(_params, _session, socket) do
     {
       :ok,
       socket
-    }
-  end
-
-  # Childs
-  @impl true
-  def compose(:project_item_form, %{focussed_item: item}) do
-    %{
-      module: Project.ItemForm,
-      params: %{item: item}
-    }
-  end
-
-  @impl true
-  def compose(:create_item_view, %{vm: %{node: node}}) do
-    %{
-      module: Project.CreateItemView,
-      params: %{node: node}
-    }
-  end
-
-  def compose(:grid_view, %{} = assigns) do
-    %{
-      module: Systems.Project.NodePageGridView,
-      params: assigns
     }
   end
 
@@ -59,21 +35,6 @@ defmodule Systems.Project.NodePage do
         popup={@popup}
         dialog={@dialog}
       />
-    <%!-- <div> --%>
-      <%!-- <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
-        <:top_bar>
-          <div class="hidden md:block">
-            <Area.content>
-              <div class="flex flex-row items-center h-navbar-height">
-                <.live_component id="path" module={Breadcrumbs} elements={@vm.breadcrumbs}/>
-              </div>
-            </Area.content>
-            <.line />
-          </div>
-        </:top_bar>
-        <.child name={:grid_view} fabric={@fabric}  />
-      </.live_workspace> --%>
-    <%!-- </div> --%>
     """
   end
 end

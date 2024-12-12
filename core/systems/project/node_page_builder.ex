@@ -3,6 +3,8 @@ defmodule Systems.Project.NodePageBuilder do
 
   import CoreWeb.Gettext
 
+  alias Systems.Storage.EndpointFilesView
+  alias Systems.Storage.EndpointDataView
   alias Systems.Project.NodePageGridView
   alias Frameworks.Concept
   alias Systems.Project
@@ -10,7 +12,7 @@ defmodule Systems.Project.NodePageBuilder do
   def view_model(
         %Project.NodeModel{id: id} = node,
         %{
-          fabric: fabric
+          fabric: _fabric
         } = assigns
       ) do
     branch = %Project.Branch{node_id: node.id}
@@ -51,20 +53,90 @@ defmodule Systems.Project.NodePageBuilder do
         fabric,
         :overview,
         NodePageGridView,
-        Project.NodePageGridViewBuilder.view_model(node, assigns)
+        %{
+          node: node,
+          user: assigns.current_user,
+          timezone: assigns.timezone
+        }
       )
 
     %{
       id: :overview,
       ready: ready?,
       show_errors: show_errors,
-      title: dgettext("eyra-projects", "projects.title"),
+      title: dgettext("eyra-projects", "items.overview"),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
+         :data,
+         show_errors,
+         %{
+           branch: branch,
+           fabric: fabric,
+           timezone: timezone,
+           node: %{items: [%{name: "Data", storage_endpoint: storage_endpoint} | _rest]}
+         } = _assigns
+       ) do
+    ready? = true
+    # branch_name = Concept.Branch.name(branch, :parent)
+    # TODO
+    branch_name = "master"
+
+    child =
+      Fabric.prepare_child(fabric, :data_view, EndpointDataView, %{
+        endpoint: storage_endpoint,
+        branch_name: branch_name,
+        timezone: timezone
+      })
+
+    %{
+      id: :data_view,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-storage", "tabbar.item.data"),
+      forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
+         :data,
+         show_errors,
+         %{
+           branch: branch,
+           fabric: fabric,
+           timezone: timezone
+         } = assigns
+       ) do
+    ready? = true
+
+    branch_name = "master"
+
+    child =
+      Fabric.prepare_child(fabric, :data_view, EndpointFilesView, %{
+        branch_name: branch_name,
+        timezone: timezone
+      })
+
+    %{
+      id: :data_view,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-storage", "tabbar.item.data"),
+      forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
       type: :fullpage,
       child: child
     }
   end
 
   defp get_tab_keys() do
-    [:overview]
+    [
+      :overview,
+      :data
+    ]
   end
 end

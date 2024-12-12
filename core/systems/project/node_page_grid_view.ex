@@ -5,17 +5,67 @@ defmodule Systems.Project.NodePageGridView do
   alias Frameworks.Pixel.Grid
   alias Systems.Project
 
-  def update(
-        %{
-          node_cards: node_cards,
-          item_cards: item_cards
-        },
-        socket
-      ) do
+  alias Frameworks.Utility.ViewModelBuilder
+  alias Frameworks.Concept
+  alias Systems.Project
+
+  @impl true
+  def update(%{node: node, user: user, timezone: timezone}, socket) do
     {
       :ok,
       socket
-      |> assign(item_cards: item_cards, node_cards: node_cards)
+      |> assign(node: node, user: user, timezone: timezone)
+      |> view_model()
+    }
+  end
+
+  def view_model(%{assigns: %{node: %{id: id, name: name, items: node_items}} = assigns} = socket) do
+    socket
+    |> assign(%{
+      id: id,
+      title: name,
+      breadcrumbs: breadcrumbs(id),
+      active_menu_item: :projects,
+      item_cards: item_cards(node_items, assigns)
+    })
+  end
+
+  defp breadcrumbs(id) when is_integer(id) do
+    Concept.Branch.hierarchy(%Project.Branch{node_id: id})
+  end
+
+  defp item_cards(node_items, assigns) do
+    node_items
+    |> dbg()
+    # Reject the Data cards, as its content is shown on another tab
+    |> Enum.reject(&(&1.name == "Data"))
+    |> Enum.filter(&item_feature_enabled?/1)
+    |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
+    |> Enum.map(&ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns))
+  end
+
+  defp item_feature_enabled?(%{leaderboard_id: leaderboard_id}) when not is_nil(leaderboard_id) do
+    feature_enabled?(:leaderboard)
+  end
+
+  defp item_feature_enabled?(_), do: true
+
+  @impl true
+  def compose(
+        :create_item_view,
+        %{node: node}
+      ) do
+    %{
+      module: Project.CreateItemView,
+      params: %{node: node}
+    }
+  end
+
+  @impl true
+  def compose(:project_item_form, %{focussed_item: item}) do
+    %{
+      module: Project.ItemForm,
+      params: %{item: item}
     }
   end
 
@@ -40,8 +90,6 @@ defmodule Systems.Project.NodePageGridView do
     {
       :noreply,
       socket
-      # |> update_view_model()
-      # |> update_menus()
     }
   end
 
@@ -59,10 +107,10 @@ defmodule Systems.Project.NodePageGridView do
   def handle_event(
         "card_clicked",
         %{"item" => card_id},
-        %{assigns: %{item_cards: item_cards, node_cards: node_cards}} = socket
+        %{assigns: %{item_cards: item_cards}} = socket
       ) do
     card_id = String.to_integer(card_id)
-    %{path: path} = Enum.find(item_cards ++ node_cards, &(&1.id == card_id))
+    %{path: path} = Enum.find(item_cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}
   end
 
@@ -77,36 +125,6 @@ defmodule Systems.Project.NodePageGridView do
       <div>
       <Area.content>
           <Margin.y id={:page_top} />
-          <%= if Enum.count(@node_cards) > 0 do %>
-            <div class="flex flex-row items-center justify-center">
-              <div class="h-full">
-                <Text.title2 margin="">
-                  <%= dgettext("eyra-project", "node.nodes.title") %>
-                  <span class="text-primary"> <%= Enum.count(@node_cards) %></span>
-                </Text.title2>
-              </div>
-              <div class="flex-grow">
-              </div>
-              <div class="h-full pt-2px lg:pt-1">
-                <Button.Action.send event="create_item">
-                  <div class="sm:hidden">
-                    <Button.Face.plain_icon label={dgettext("eyra-project", "create.item.button.short")} icon={:forward} />
-                  </div>
-                  <div class="hidden sm:block">
-                    <Button.Face.plain_icon label={dgettext("eyra-project", "create.item.button")} icon={:forward} />
-                  </div>
-                </Button.Action.send>
-              </div>
-            </div>
-            <Margin.y id={:title2_bottom} />
-            <Grid.dynamic>
-              <%= for card <- @node_cards do %>
-                <Project.CardView.dynamic card={card}/>
-              <% end %>
-            </Grid.dynamic>
-            <.spacing value="L" />
-          <% end %>
-
           <%= if Enum.count(@item_cards) > 0 do %>
           <div class="flex flex-row items-center justify-center">
               <div class="h-full">
@@ -140,7 +158,7 @@ defmodule Systems.Project.NodePageGridView do
               <.empty
                 title={dgettext("eyra-project", "node.empty.title")}
                 body={dgettext("eyra-project", "node.empty.description")}
-                illustration="cards"
+                illustration="item_cards"
                 button={%{
                   action: %{type: :send, event: "create_item"},
                   face: %{type: :primary, label: dgettext("eyra-project", "add.first.item.button")}

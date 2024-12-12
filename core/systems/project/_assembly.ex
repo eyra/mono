@@ -1,5 +1,6 @@
 defmodule Systems.Project.Assembly do
   import Ecto.Query, warn: false
+  import CoreWeb.Gettext
 
   alias Core.Authorization
   alias Core.Repo
@@ -7,7 +8,7 @@ defmodule Systems.Project.Assembly do
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Frameworks.Utility.EctoHelper
-
+  alias Systems.Storage
   alias Systems.Assignment
   alias Systems.Project
 
@@ -41,13 +42,41 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
+  @spec create(any(), any(), :empty) :: any()
   def create(name, user, :empty) do
-    project = prepare_project(name, [], user)
+    project_changeset = prepare_project(name, [], user)
 
-    Multi.new()
-    |> Multi.insert(:project, project)
-    |> EctoHelper.run(:auth, &update_auth/2)
-    |> Repo.transaction()
+    transaction_result =
+      Multi.new()
+      |> Multi.insert(:project, project_changeset)
+      |> EctoHelper.run(:auth, &update_auth/2)
+      |> Repo.transaction()
+
+    project =
+      case transaction_result do
+        {:ok, %{project: project}} ->
+          project
+
+        {:error, failed_operation, failed_value, _changes} ->
+          IO.inspect(failed_value, label: "Transaction failed at #{failed_operation}")
+          nil
+      end
+
+    if project do
+      project = Repo.preload(project, :root)
+
+      changeset =
+        Storage.Public.prepare_endpoint(:builtin, %{key: "project_node=#{project.root.id}"})
+
+      if changeset.valid? do
+        create_item(changeset, dgettext("eyra-storage", "default.name"), project.root)
+      else
+        IO.inspect(changeset.errors, label: "Failed to prepare storage endpoint")
+        {:error, changeset}
+      end
+    else
+      {:error, "Project creation failed"}
+    end
   end
 
   def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
