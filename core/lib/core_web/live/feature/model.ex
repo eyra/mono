@@ -1,5 +1,5 @@
 defmodule CoreWeb.Live.Feature.Model do
-  @callback get_model(map(), map(), Socket.t()) :: map | struct | nil
+  @callback get_model(map(), map(), Phoenix.LiveView.Socket.t()) :: map | struct | nil
 
   defmacro __using__(_opts \\ nil) do
     quote do

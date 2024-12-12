@@ -4,7 +4,7 @@ defmodule Systems.Pool.SubmissionPage do
   """
   use Systems.Content.Composer, :live_workspace
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import CoreWeb.UI.Member
   import Frameworks.Pixel.Navigation, only: [button_bar: 1]
   import Frameworks.Pixel.Content

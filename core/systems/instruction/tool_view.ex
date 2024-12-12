@@ -1,7 +1,7 @@
 defmodule Systems.Instruction.ToolView do
   use CoreWeb, :live_component
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Content
 

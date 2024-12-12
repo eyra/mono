@@ -3,7 +3,7 @@ defmodule Core.Enums.Base do
 
   defmacro __using__({name, values}) do
     quote do
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
 
       def values(filter \\ nil)
 

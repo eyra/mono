@@ -1,7 +1,7 @@
 defmodule Systems.Pool.ParticipantPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
   alias Systems.Budget

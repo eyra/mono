@@ -20,7 +20,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias CoreWeb.UI.Timestamp
@@ -76,6 +76,8 @@ defmodule Systems.Graphite.LeaderboardModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     def resource_id(%{id: id}), do: "graphite/leaderboard/#{id}"
     def tag(_), do: dgettext("eyra-graphite", "leaderboard.atom.tag")
 

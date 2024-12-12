@@ -2,7 +2,7 @@ defmodule Systems.Home.PageBuilder do
   use CoreWeb, :verified_routes
   use Core.FeatureFlags
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.List
 
   alias CoreWeb.UI.Timestamp

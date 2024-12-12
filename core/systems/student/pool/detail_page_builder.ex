@@ -1,5 +1,5 @@
 defmodule Systems.Student.Pool.DetailPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   import CoreWeb.UI.Responsive.Breakpoint
 

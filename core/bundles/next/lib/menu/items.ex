@@ -2,7 +2,7 @@ defmodule Next.Menu.Items do
   use CoreWeb, :verified_routes
   @behaviour CoreWeb.Menu.ItemsProvider
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   @impl true
   def values() do

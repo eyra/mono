@@ -53,12 +53,17 @@ docs: ${MIX_PROJECTS:%=%/docs}
 
 .PHONY: FORCE
 
+dockermigrate:
+	$(MAKE) dockermix cmd="ecto.migrate"
 
-deps:
-	docker compose exec app cd /app/core && mix deps.get
+dockerdeps:
+	$(MAKE) dockermix cmd="deps.get"
 
-run:
-	docker compose exec app bash -c "source ~/.bashrc && mix run"
+dockerrun:
+	$(MAKE) dockermix cmd="run"
 
-bash:
-	docker compose exec app bash
+dockermix:
+	$(MAKE) dockerbash cmd="mix $(cmd)"
+
+dockerbash:
+	docker compose exec app bash -c "source ~/.bashrc && $(cmd)"

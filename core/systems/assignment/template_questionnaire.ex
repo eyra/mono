@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.TemplateQuestionnaire do
-  import CoreWeb.Gettext
-
   alias Systems.Assignment
   alias Systems.Workflow
 
   defstruct [:id]
 
   defimpl Assignment.Template do
+    use Gettext, backend: CoreWeb.Gettext
+
     def title(t), do: Assignment.Templates.translate(t.id)
 
     def content_flags(_t) do

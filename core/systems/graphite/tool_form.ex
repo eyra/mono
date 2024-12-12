@@ -1,7 +1,7 @@
 defmodule Systems.Graphite.ToolForm do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Pixel.Form
 
   alias Systems.Graphite
