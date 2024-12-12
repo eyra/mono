@@ -64,10 +64,6 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.nodes.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.new.item.button"
 msgstr ""
 
@@ -89,14 +85,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "label.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button.short"
 msgstr ""
 
 #, elixir-autogen, elixir-format
