@@ -1,12 +1,12 @@
 defmodule Systems.Content.PageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
-  alias Phoenix.LiveView.Socket
   alias Frameworks.Pixel.NotificationView
 
   alias Systems.Account
 
-  @callback set_status(socket :: Socket.t(), status :: atom()) :: Socket.t()
+  @callback set_status(socket :: Phoenix.LiveView.Socket.t(), status :: atom()) ::
+              Phoenix.LiveView.Socket.t()
 
   def handle_request_verification(%{assigns: %{fabric: fabric}} = socket) do
     child =

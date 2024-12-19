@@ -3,7 +3,7 @@ defmodule Systems.Workflow.ToolRefModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
 

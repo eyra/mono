@@ -3,7 +3,7 @@ defmodule Systems.Assignment.ParticipantsView do
 
   require Logger
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation

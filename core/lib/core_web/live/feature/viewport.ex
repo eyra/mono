@@ -1,5 +1,5 @@
 defmodule CoreWeb.Live.Feature.Viewport do
-  @callback handle_resize(socket :: Socket.t()) :: Socket.t()
+  @callback handle_resize(socket :: Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
 
   defmacro __using__(_) do
     quote do
