@@ -4,10 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Branch name"
+        description: "Branch to release from"
         required: true
-        default: "main"
-        type: string
+        default: "master"
       bundle:
         description: "Bundle ID (next, self)"
         required: true
@@ -36,11 +35,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker Image with cache
+      - name: Build Docker Image (dev target) with cache
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
+          target: dev
           tags: next-platform:latest
           push: false
           load: true
@@ -50,30 +50,19 @@ jobs:
       - name: Run build inside Docker
         run: |
           docker run --rm \
-            --user $(id -u):$(id -g) \
             -e MIX_ENV=$MIX_ENV \
             -e BUNDLE=${{ inputs.bundle }} \
             -e VERSION=$VERSION \
             -v ${{ github.workspace }}:/app \
             next-platform:latest \
-            bash -c "cd /app/core && mix deps.get && ./scripts/build-frontend && ./scripts/build-release"
+            bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
 
       - name: Archive release
+        run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
-        run: |
-          tar cfj "${VERSION}.tar.bz2" "${VERSION}"
 
       - name: Verify artifact
         run: ls -l core/*.tar.bz2
-
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     tag_name: ${{ env.VERSION }}
-      #     prerelease: false
-      #     fail_on_unmatched_files: true
-      #     files: |
-      #       core/${{ env.VERSION }}.tar.bz2
 
       - name: Upload release artifact
         uses: actions/upload-artifact@v3

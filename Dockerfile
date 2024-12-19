@@ -1,4 +1,7 @@
-FROM debian:12
+# ======================
+# Builder Stage
+# ======================
+FROM debian:12 AS builder
 
 WORKDIR /root
 
@@ -14,15 +17,10 @@ RUN apt-get update && apt-get install -y \
     libncurses-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
-    locale-gen
-
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV LC_ALL=en_US.UTF-8
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
-
 ENV PATH="/root/.asdf/bin:/root/.asdf/shims:${PATH}"
 
 RUN asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git && \
@@ -30,18 +28,18 @@ RUN asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git && \
     asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 
 COPY .tool-versions /root/.tool-versions
-
 RUN asdf install
-
 RUN asdf reshim
 
 RUN mix local.hex --force && mix local.rebar --force
-
 RUN chmod -R a+rX /root/.asdf
 
 COPY ./core /app/core
 WORKDIR /app/core
 
-RUN mix deps.get
 
+# ======================
+# Dev Stage
+# ======================
+FROM builder AS dev
 CMD ["tail", "-f", "/dev/null"]
