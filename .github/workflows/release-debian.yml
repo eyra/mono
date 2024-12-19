@@ -58,16 +58,8 @@ jobs:
             bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
 
       - name: Archive release
-        run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
+        run: tar cfj "${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
-
-      - name: Install 'tree' for debugging
-        run: sudo apt-get update && sudo apt-get install -y tree
-
-      - name: List complete file tree
-        run: |
-          echo "Current directory: $(pwd)"
-          tree -a
 
       - name: List files after archiving
         run: |
