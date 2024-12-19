@@ -50,6 +50,7 @@ jobs:
       - name: Run build inside Docker
         run: |
           docker run --rm \
+            --user $(id -u):$(id -g) \
             -e MIX_ENV=$MIX_ENV \
             -e BUNDLE=${{ inputs.bundle }} \
             -e VERSION=$VERSION \
