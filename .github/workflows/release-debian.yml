@@ -1,12 +1,17 @@
 name: Release
 
 on:
+  push:
+    branches:
+      - master
+      - feature/*
+
   workflow_dispatch:
     inputs:
       branch:
         description: "Branch to release from"
         required: true
-        default: "master"
+        default: "feature/debian-and-upgrades-melle"
       bundle:
         description: "Bundle ID (next, self)"
         required: true
