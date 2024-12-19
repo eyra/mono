@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.Create do
   """
   import Phoenix.Component
   import Phoenix.LiveView, only: [put_flash: 3, push_navigate: 2]
+  alias Phoenix.LiveView.Socket
 
   @callback create(socket :: Phoenix.LiveView.Socket.t(), changeset :: any()) :: any()
   @callback get_changeset() :: any()
