@@ -3,7 +3,6 @@ defmodule Systems.Project.NodePageBuilder do
 
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Storage.EndpointFilesView
   alias Systems.Storage.EndpointDataView
 
   alias Systems.Project.NodePageGridView
