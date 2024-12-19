@@ -58,20 +58,13 @@ jobs:
             bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
 
       - name: Archive release
-        run: tar cfj "${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
+        run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - name: List files after archiving
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -l
-          echo "Contents of core directory:"
-          ls -l core
-          echo "Contents of core/${{ env.VERSION }}:"
-          ls -l core/${{ env.VERSION }}
-
-      - name: Upload release artifact
-        uses: actions/upload-artifact@v3
+      - uses: softprops/action-gh-release@v2
         with:
-          name: release-artifact
-          path: ./core/${{ env.VERSION }}.tar.bz2
+          tag_name: "${{env.VERSION}}"
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            ${{env.VERSION}}.tar.bz2
