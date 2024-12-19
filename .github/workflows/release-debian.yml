@@ -32,9 +32,6 @@ jobs:
           echo "VERSION=$TAG" >> $GITHUB_ENV
         shell: bash
 
-      - name: echo github env vars
-        run: echo $GITHUB_ENV
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -64,10 +61,25 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - uses: softprops/action-gh-release@v2
+      - name: Install 'tree' for debugging
+        run: sudo apt-get update && sudo apt-get install -y tree
+
+      - name: List complete file tree
+        run: |
+          echo "Current directory: $(pwd)"
+          tree -a
+
+      - name: List files after archiving
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -l
+          echo "Contents of core directory:"
+          ls -l core
+          echo "Contents of core/${{ env.VERSION }}:"
+          ls -l core/${{ env.VERSION }}
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v3
         with:
-          tag_name: "${{env.VERSION}}"
-          prerelease: false
-          fail_on_unmatched_files: true
-          files: |
-            ${{env.VERSION}}.tar.bz2
+          name: release-artifact
+          path: ./core/${{ env.VERSION }}.tar.bz2
