@@ -57,6 +57,9 @@ jobs:
             next-platform:latest \
             bash -c "cd /app/core && mix deps.get && ./scripts/build-frontend && ./scripts/build-release"
 
+      - name: Ensure permissions are correct for tar
+        run: chmod -R a+r core/${{ env.VERSION }}
+
       - name: Archive release
         working-directory: core
         run: |
