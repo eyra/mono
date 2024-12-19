@@ -32,6 +32,9 @@ jobs:
           echo "VERSION=$TAG" >> $GITHUB_ENV
         shell: bash
 
+      - name: echo github env vars
+        run: echo $GITHUB_ENV
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -61,8 +64,10 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - name: Upload release artifact
-        uses: actions/upload-artifact@v3
+      - uses: softprops/action-gh-release@v2
         with:
-          name: release-artifact
-          path: core/${{ env.VERSION }}.tar.bz2
+          tag_name: "${{env.VERSION}}"
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            ${{env.VERSION}}.tar.bz2
