@@ -36,7 +36,6 @@ defmodule Systems.Project.NodePageGridView do
 
   defp item_cards(node_items, assigns) do
     node_items
-    |> dbg()
     # Reject the Data cards, as its content is shown on another tab
     |> Enum.reject(&(&1.name == "Data"))
     |> Enum.filter(&item_feature_enabled?/1)

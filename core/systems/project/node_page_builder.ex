@@ -1,7 +1,7 @@
 defmodule Systems.Project.NodePageBuilder do
   use Core.FeatureFlags
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Storage.EndpointFilesView
   alias Systems.Storage.EndpointDataView
@@ -74,50 +74,22 @@ defmodule Systems.Project.NodePageBuilder do
          :data,
          show_errors,
          %{
-           branch: branch,
+           branch: branch, #branch is hier null, tenminste zo lijkt het
            fabric: fabric,
            timezone: timezone,
            node: %{items: [%{name: "Data", storage_endpoint: storage_endpoint} | _rest]}
          } = _assigns
        ) do
     ready? = true
+    dbg(branch)
     # branch_name = Concept.Branch.name(branch, :parent)
-    # TODO
+    # TODO de branch is nil,moet even in de composer kijken waarom die niet gevonden kan worden
+
     branch_name = "master"
 
     child =
       Fabric.prepare_child(fabric, :data_view, EndpointDataView, %{
         endpoint: storage_endpoint,
-        branch_name: branch_name,
-        timezone: timezone
-      })
-
-    %{
-      id: :data_view,
-      ready: ready?,
-      show_errors: show_errors,
-      title: dgettext("eyra-storage", "tabbar.item.data"),
-      forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
-      type: :fullpage,
-      child: child
-    }
-  end
-
-  defp create_tab(
-         :data,
-         show_errors,
-         %{
-           branch: branch,
-           fabric: fabric,
-           timezone: timezone
-         } = assigns
-       ) do
-    ready? = true
-
-    branch_name = "master"
-
-    child =
-      Fabric.prepare_child(fabric, :data_view, EndpointFilesView, %{
         branch_name: branch_name,
         timezone: timezone
       })
