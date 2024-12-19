@@ -5,6 +5,7 @@ defmodule Systems.Project.NodePageBuilder do
 
   alias Systems.Storage.EndpointFilesView
   alias Systems.Storage.EndpointDataView
+
   alias Systems.Project.NodePageGridView
   alias Frameworks.Concept
   alias Systems.Project
@@ -74,7 +75,8 @@ defmodule Systems.Project.NodePageBuilder do
          :data,
          show_errors,
          %{
-           branch: branch, #branch is hier null, tenminste zo lijkt het
+           # branch is hier null, tenminste zo lijkt het
+           branch: branch,
            fabric: fabric,
            timezone: timezone,
            node: %{items: [%{name: "Data", storage_endpoint: storage_endpoint} | _rest]}

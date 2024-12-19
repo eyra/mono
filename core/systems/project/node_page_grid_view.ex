@@ -157,7 +157,7 @@ defmodule Systems.Project.NodePageGridView do
               <.empty
                 title={dgettext("eyra-project", "node.empty.title")}
                 body={dgettext("eyra-project", "node.empty.description")}
-                illustration="item_cards"
+                illustration="cards"
                 button={%{
                   action: %{type: :send, event: "create_item"},
                   face: %{type: :primary, label: dgettext("eyra-project", "add.first.item.button")}
