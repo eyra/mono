@@ -61,9 +61,6 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - name: Verify artifact
-        run: ls -l core/*.tar.bz2
-
       - name: Upload release artifact
         uses: actions/upload-artifact@v3
         with:
