@@ -9,7 +9,7 @@ defmodule Systems.Storage.EndpointModel do
   use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
   alias Frameworks.Utility.Assets
@@ -79,6 +79,8 @@ defmodule Systems.Storage.EndpointModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Frameworks.Concept
 
     def resource_id(%{id: id}), do: "storage/endpoint/#{id}"

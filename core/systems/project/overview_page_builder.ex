@@ -1,7 +1,7 @@
 defmodule Systems.Project.OverviewPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Project
 

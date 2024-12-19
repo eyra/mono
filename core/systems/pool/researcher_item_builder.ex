@@ -1,5 +1,5 @@
 defmodule Systems.Pool.ResearcherItemBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account.User
 

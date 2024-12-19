@@ -173,7 +173,7 @@ defmodule Frameworks.Pixel.Tabbar do
   end
 
   attr(:tabs, :any, required: true)
-  slot(:inner_block, default: nil)
+  slot(:inner_block)
 
   def footer(assigns) do
     ~H"""
@@ -197,7 +197,7 @@ defmodule Frameworks.Pixel.Tabbar do
         </Area.dynamic>
       <% end %>
     </Area.content>
-    <%= if @inner_block do render_slot(@inner_block) end %>
+    <%= render_slot(@inner_block) %>
     """
   end
 

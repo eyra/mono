@@ -26,7 +26,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2 \
     && echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc \
     && echo '. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc
 
-RUN echo "export PATH=\"$HOME/.asdf/bin:$HOME/.asdf/shims:$PATH\"" >> ~/.bashrc
+ENV PATH="/root/.asdf/bin:/root/.asdf/shims:${PATH}"
 
 RUN bash -c "source ~/.bashrc && \
     asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git && \

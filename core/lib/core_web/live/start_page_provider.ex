@@ -10,7 +10,7 @@ defmodule CoreWeb.StartPageProvider do
 
   defmacro __using__(_opts) do
     quote do
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
 
       def start_page_path(user) do
         case CoreWeb.StartPageProvider.page(user) do

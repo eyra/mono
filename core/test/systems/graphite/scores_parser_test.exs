@@ -94,9 +94,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "status" => "success",
                        "error_message" => "",
                        "accuracy" => 0.7772151898734178,
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0
                      }, [:missing_submission]}
                   ]}
              } = ScoresParser.from_lines(lines, leaderboard)
@@ -116,7 +116,7 @@ defmodule Systems.Graphite.ScoresParserTest do
       lines =
         [
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
-          "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,0.0,0"
+          "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,+0.0,0"
         ]
         |> CSV.decode(headers: true)
 
@@ -132,9 +132,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                       "status" => "success",
                       "error_message" => "",
                       "accuracy" => 0.7772151898734178,
-                      "f1_score" => 0.0,
-                      "precision" => 0.0,
-                      "recall" => 0.0,
+                      "f1_score" => +0.0,
+                      "precision" => +0.0,
+                      "recall" => +0.0,
                       "submission_record" => {
                         "git@github.com:org/repo.git",
                         "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -161,7 +161,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         [
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "",
-          "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,0.0,0",
+          "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,+0.0,0",
           ""
         ]
         |> CSV.decode(headers: true)
@@ -178,9 +178,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                       "status" => "success",
                       "error_message" => "",
                       "accuracy" => 0.7772151898734178,
-                      "f1_score" => 0.0,
-                      "precision" => 0.0,
-                      "recall" => 0.0,
+                      "f1_score" => +0.0,
+                      "precision" => +0.0,
+                      "recall" => +0.0,
                       "submission_record" => {
                         "git@github.com:org/repo.git",
                         "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -221,10 +221,10 @@ defmodule Systems.Graphite.ScoresParserTest do
                       "ref" => ^ref,
                       "status" => "success",
                       "error_message" => "",
-                      "accuracy" => 0.0,
-                      "f1_score" => 0.0,
-                      "precision" => 0.0,
-                      "recall" => 0.0,
+                      "accuracy" => +0.0,
+                      "f1_score" => +0.0,
+                      "precision" => +0.0,
+                      "recall" => +0.0,
                       "submission_record" => {
                         "git@github.com:org/repo.git",
                         "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -267,9 +267,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "status" => "success",
                        "error_message" => "",
                        "accuracy" => 0.7772151898734178,
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "submission_record" => {
                          "git@github.com:org/repo.git",
                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -312,9 +312,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "status" => "success",
                        "error_message" => "",
                        "accuracy" => 0.7772151898734178,
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "submission_record" => {
                          "git@github.com:org/repo.git",
                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -506,9 +506,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                      %{
                        "accuracy" => 0.7772151898734178,
                        "error_message" => "",
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
@@ -521,9 +521,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                      %{
                        "accuracy" => 0.7772151898734178,
                        "error_message" => "",
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
@@ -551,9 +551,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                      %{
                        "accuracy" => 0.7772151898734178,
                        "error_message" => "",
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
@@ -566,9 +566,9 @@ defmodule Systems.Graphite.ScoresParserTest do
                      %{
                        "accuracy" => 0.7772151898734178,
                        "error_message" => "",
-                       "f1_score" => 0.0,
-                       "precision" => 0.0,
-                       "recall" => 0.0,
+                       "f1_score" => +0.0,
+                       "precision" => +0.0,
+                       "recall" => +0.0,
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
@@ -658,6 +658,6 @@ defmodule Systems.Graphite.ScoresParserTest do
   end
 
   defp random_ref() do
-    for _ <- 1..40, into: "", do: <<Enum.random('0123456789abcdef')>>
+    for _ <- 1..40, into: "", do: <<Enum.random(~c"0123456789abcdef")>>
   end
 end

@@ -5,7 +5,7 @@ defmodule Systems.Advert.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Frameworks.Concept
@@ -33,6 +33,8 @@ defmodule Systems.Advert.Model do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     def tag(_), do: dgettext("eyra-advert", "atom.tag")
     def resource_id(%{id: id}), do: "advert/#{id}"
 

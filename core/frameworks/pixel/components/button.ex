@@ -96,7 +96,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, default: "bg-primary")
 
   def primary(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -118,7 +118,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:icon, :string, default: "/images/back.svg")
 
   def back(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@path}>
@@ -144,7 +144,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:label, :string, required: true)
 
   def delete(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <a
@@ -172,7 +172,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-white")
 
   def primary_alpine(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -191,7 +191,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, required: true)
 
   def primary_icon(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -219,7 +219,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-white")
 
   def primary_label(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <label for={@field}>
@@ -236,7 +236,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:target, :any, default: nil)
 
   def primary_live_view(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -254,7 +254,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, required: true)
 
   def primary_wide(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -277,7 +277,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-primary")
 
   def secondary_alpine(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -296,7 +296,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-primary")
 
   def secondary_label(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <label for={@field}>
@@ -314,7 +314,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:target, :any)
 
   def secondary_live_view(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -333,7 +333,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:target, :string, default: "")
 
   def submit(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -351,7 +351,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, default: "bg-primary")
 
   def submit_wide(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -369,7 +369,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:face, :map, required: true)
 
   def menu(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <div
