@@ -26,6 +26,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2 \
     && echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc \
     && echo '. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc
 
+RUN chmod -R a+rX /root/.asdf
 ENV PATH="/root/.asdf/bin:/root/.asdf/shims:${PATH}"
 
 RUN bash -c "source ~/.bashrc && \
