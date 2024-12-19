@@ -3,6 +3,11 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: "Branch name"
+        required: true
+        default: "main"
+        type: string
       bundle:
         description: "Bundle ID (next, self)"
         required: true
@@ -17,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
 
       - name: Set TAG and VERSION
         id: vars
