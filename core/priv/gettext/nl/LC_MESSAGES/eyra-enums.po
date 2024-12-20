@@ -473,3 +473,31 @@ msgstr "Data Donatie"
 #, elixir-autogen, elixir-format
 msgid "templates.paper_screening"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.comparison"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.context"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.intervention"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.outcome"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.phenomenon_of_interest"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.population"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "categories.setting"
+msgstr ""

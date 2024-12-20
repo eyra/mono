@@ -473,3 +473,31 @@ msgstr "Paper screening"
 #, elixir-autogen, elixir-format
 msgid "templates.paper_screening"
 msgstr "Paper screening"
+
+#, elixir-autogen, elixir-format
+msgid "categories.comparison"
+msgstr "The control group or alternative intervention. (PICO, SPICE)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.context"
+msgstr "The environment, setting, or situational focus. (PICo, SPICE)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.intervention"
+msgstr "The treatment, exposure, or action studied. (PICO, SPICE)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.outcome"
+msgstr "The measurable result of the intervention. (PICO, PICOS, SPICE)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.phenomenon_of_interest"
+msgstr " The qualitative research focus. (SPIDER, PICo)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.population"
+msgstr "The group, subjects or sample being studied. (PICO, PICo, SPIDER)"
+
+#, elixir-autogen, elixir-format
+msgid "categories.setting"
+msgstr "A specific geographic or organizational location. (SPICE)"
