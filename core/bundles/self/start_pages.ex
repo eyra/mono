@@ -15,7 +15,7 @@ defmodule Self.StartPages do
 
   defmacro __using__(_opts) do
     quote do
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
 
       unquote do
         for {id, %{domain: domain}} <- Self.StartPages.pages() do

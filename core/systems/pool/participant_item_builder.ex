@@ -1,6 +1,6 @@
 defmodule Systems.Pool.ParticipantItemBuilder do
   use CoreWeb, :verified_routes
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   def view_model(
         %{

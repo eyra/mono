@@ -1,5 +1,5 @@
 defmodule Systems.Admin.ConfigPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Admin
   alias Systems.Budget

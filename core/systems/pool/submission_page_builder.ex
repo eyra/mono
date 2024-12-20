@@ -1,7 +1,7 @@
 defmodule Systems.Pool.SubmissionPageBuilder do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   # FIXME: Pool should not have relation with Advert
   alias Systems.Advert

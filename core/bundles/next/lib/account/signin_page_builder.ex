@@ -1,5 +1,5 @@
 defmodule Next.Account.SigninPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.List
 
   import Core.FeatureFlags

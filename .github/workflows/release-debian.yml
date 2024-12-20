@@ -1,77 +1,75 @@
-name: Release - Debian
+name: Release
 
 on:
+  push:
+    branches:
+      - master
+      - feature/*
+
   workflow_dispatch:
     inputs:
+      branch:
+        description: "Branch to release from"
+        required: true
+        default: "feature/debian-and-upgrades-melle"
       bundle:
         description: "Bundle ID (next, self)"
         required: true
         default: "next"
 
 jobs:
-  tagged-release:
-    runs-on: ubuntu-latest
-    container: debian:12
+  build-release:
+    runs-on: ubuntu-20.04
     env:
       MIX_ENV: prod
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Add Debian 11 repository and install OpenSSL 1.1
-        run: |
-          echo "deb http://deb.debian.org/debian bullseye main" | tee -a /etc/apt/sources.list.d/bullseye.list
-          apt update
-          apt install -y libssl1.1
-          rm /etc/apt/sources.list.d/bullseye.list
-          apt update
-
-      - name: Install Node.js
-        run: |
-          apt-get update
-          apt-get install -y curl git build-essential
-          curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-          apt-get install -y nodejs
-
-      - name: Tag name
-        id: tag
-        run: echo "TAG=${{ github.event.inputs.bundle }}_$(date +%F)_${{ github.run_number }}" >> $GITHUB_ENV
-
-      - id: setup-elixir
-        uses: erlef/setup-elixir@v1
         with:
-            otp-version: "25.3.2.7"
-            elixir-version: "1.14.0"
+          ref: ${{ inputs.branch || github.ref }}
 
-      - name: Setup the Elixir project
+      - name: Set TAG and VERSION
+        id: vars
         run: |
-          mix deps.get
-        working-directory: core
+          TAG="${{ inputs.bundle || 'next' }}_$(date +%F)_${{ github.run_number }}"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "VERSION=$TAG" >> $GITHUB_ENV
+        shell: bash
 
-      - name: Build Frontend
-        run: |
-          ./scripts/build-frontend
-        working-directory: core
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build release
+      - name: Build Docker Image (dev target) with cache
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: dev
+          tags: next-platform:latest
+          push: false
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run build inside Docker
         run: |
-          ./scripts/build-release
-        working-directory: core
-        env:
-          BUNDLE: ${{ github.event.inputs.bundle }}
-          VERSION: ${{ env.TAG }}
+          docker run --rm \
+            -e MIX_ENV=$MIX_ENV \
+            -e BUNDLE=${{ inputs.bundle || 'next' }} \
+            -e VERSION=${{ env.VERSION }} \
+            -v ${{ github.workspace }}:/app \
+            next-platform:latest \
+            bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
 
       - name: Archive release
-        run: |
-          tar cfj "../${{ env.TAG }}.tar.bz2" "${{ env.TAG }}"
+        run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - name: Publish Release
-        uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ env.TAG }}"
+          tag_name: "${{env.VERSION}}"
           prerelease: false
           fail_on_unmatched_files: true
           files: |
-            ${{ env.TAG }}.tar.bz2
+            ${{env.VERSION}}.tar.bz2

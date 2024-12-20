@@ -1,5 +1,5 @@
 defmodule Systems.Org.ContentPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Org
 

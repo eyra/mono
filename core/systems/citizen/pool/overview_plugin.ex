@@ -1,7 +1,7 @@
 defmodule Systems.Citizen.Pool.OverviewPlugin do
   use CoreWeb, :live_component
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Grid
 

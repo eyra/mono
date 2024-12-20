@@ -1,5 +1,5 @@
 defmodule Systems.Citizen.Pool.DetailPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Citizen
   alias Systems.Pool

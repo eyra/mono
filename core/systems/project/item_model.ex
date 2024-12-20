@@ -8,7 +8,7 @@ defmodule Systems.Project.ItemModel do
   use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.ImageHelpers
   alias Frameworks.Concept
@@ -109,6 +109,8 @@ defmodule Systems.Project.ItemModel do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
+    use Gettext, backend: CoreWeb.Gettext
+
     use CoreWeb, :verified_routes
 
     def view_model(

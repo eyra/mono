@@ -2,7 +2,7 @@ defmodule Systems.Feldspar.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Systems.Workflow
@@ -42,6 +42,8 @@ defmodule Systems.Feldspar.ToolModel do
   def preload_graph(:down), do: preload_graph([])
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Feldspar
     def key(_), do: :feldspar
     def auth_tree(%{auth_node: auth_node}), do: auth_node
