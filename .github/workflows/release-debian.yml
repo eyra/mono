@@ -57,7 +57,7 @@ jobs:
           docker run --rm \
             -e MIX_ENV=$MIX_ENV \
             -e BUNDLE=${{ inputs.bundle || 'next' }} \
-            -e VERSION=$VERSION \
+            -e VERSION=${{ env.VERSION }} \
             -v ${{ github.workspace }}:/app \
             next-platform:latest \
             bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
