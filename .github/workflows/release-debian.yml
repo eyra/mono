@@ -32,7 +32,7 @@ jobs:
       - name: Set TAG and VERSION
         id: vars
         run: |
-          TAG="${{ inputs.bundle }}_$(date +%F)_${{ github.run_number }}"
+          TAG="${{ inputs.bundle || 'next' }}_$(date +%F)_${{ github.run_number }}"
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "VERSION=$TAG" >> $GITHUB_ENV
         shell: bash
