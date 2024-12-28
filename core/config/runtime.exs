@@ -101,7 +101,7 @@ if config_env() == :prod do
       url: database_url,
       ssl: [
         cacertfile: cacertfile,
-        verify: :verify_peer,
+        verify: verify_mode,
         server_name_indication: to_charlist(db_host)
       ]
   else
@@ -112,7 +112,7 @@ if config_env() == :prod do
       hostname: System.get_env("DB_HOST"),
       ssl: [
         cacertfile: cacertfile,
-        verify: :verify_peer,
+        verify: verify_mode,
         server_name_indication: to_charlist(db_host)
       ]
   end
