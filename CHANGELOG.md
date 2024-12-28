@@ -11,6 +11,10 @@
 
 ## \#7 unreleased
 
+## \#6.2 unreleased
+
+* Added: AppSignal support
+
 ## \#6.1 2024-11-19
 
 * Fixed: Memory issues by temporary removing Sentry support

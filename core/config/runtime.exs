@@ -141,6 +141,15 @@ if config_env() == :prod do
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
+  if push_api_key = System.get_env("APPSIGNAL_PUSH_API_KEY") do
+    config :appsignal, :config,
+      otp_app: :core,
+      name: "Next",
+      env: app_domain,
+      push_api_key: push_api_key,
+      active: true
+  end
+
   config :core, :storage,
     services:
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
