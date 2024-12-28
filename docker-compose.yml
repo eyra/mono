@@ -13,7 +13,7 @@ services:
       - .:/app
     networks:
       - next
-  
+
   db:
     container_name: db
     image: postgres:12
