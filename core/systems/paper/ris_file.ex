@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.RISFile do
+defmodule Systems.Paper.RISFile do
   @moduledoc """
     Module for extracting papers from a RIS file.
     See: https://en.wikipedia.org/wiki/RIS_(file_format)
@@ -9,7 +9,7 @@ defmodule Systems.Onyx.RISFile do
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-  alias Systems.Onyx
+  alias Systems.Paper
 
   @tag_regex Regex.compile!("([A-Z0-9]{2})  - (.*)")
 
@@ -43,29 +43,29 @@ defmodule Systems.Onyx.RISFile do
 
   @end_of_reference_tag "ER"
 
-  def process(tool_file_id) when is_integer(tool_file_id) do
-    Logger.info("[Onyx] Processing papers: started")
+  def process(reference_file_id) when is_integer(reference_file_id) do
+    Logger.info("[Paper] Processing papers: started")
 
-    Onyx.Public.get_tool_file!(tool_file_id, Onyx.ToolFileAssociation.preload_graph(:down))
+    Paper.Public.get_reference_file!(reference_file_id, Paper.ReferenceFileModel.preload_graph(:down))
     |> process()
   end
 
   def process(%{file: %{ref: nil}}) do
-    Logger.error("[Onyx] Processing papers: failed -> tool file reference is missing")
+    Logger.error("[Paper] Processing papers: failed -> source file is missing")
   end
 
-  def process(%{file: %{ref: ref}} = tool_file) do
+  def process(%{file: %{ref: ref}} = reference_file) do
     with {:ok, _, _, client_ref} <- :hackney.request(:get, ref),
          {:ok, body} <- client_ref |> :hackney.body() do
-      process(tool_file, body)
-      Logger.info("[Onyx] Processing papers: ended")
+      process(reference_file, body)
+      Logger.info("[Paper] Processing papers: ended")
     else
       error ->
-        Logger.error("[Onyx] Processing papers: failed -> #{inspect(error)}")
+        Logger.error("[Paper] Processing papers: failed -> #{inspect(error)}")
     end
   end
 
-  def process(tool_file, body) when is_binary(body) do
+  def process(reference_file, body) when is_binary(body) do
     chunk_fun = fn element, acc ->
       if String.starts_with?(element, @end_of_reference_tag) do
         {:cont, Enum.reverse([element | acc]), []}
@@ -79,8 +79,8 @@ defmodule Systems.Onyx.RISFile do
         {:cont, []}
 
       _ ->
-        raise Onyx.RISError,
-          message: "[Onyx] Processing papers: invalid RIS file, missing 'ER -' tag"
+        raise Paper.RISError,
+          message: "[Paper] Processing papers: invalid RIS file, missing 'ER -' tag"
     end
 
     body
@@ -89,23 +89,23 @@ defmodule Systems.Onyx.RISFile do
     |> Enum.chunk_while([], chunk_fun, after_func)
     |> Enum.to_list()
     |> tap(fn references ->
-      Logger.info("[Onyx] Processing papers: #{Enum.count(references)} references")
+      Logger.info("[Paper] Processing papers: #{Enum.count(references)} references")
     end)
     |> Enum.map(&parse_reference(&1))
-    |> Enum.map(&prepare_reference(&1, tool_file))
+    |> Enum.map(&prepare_reference(&1, reference_file))
     |> Enum.with_index()
-    |> create_transaction(tool_file)
+    |> create_transaction(reference_file)
     |> Repo.transaction()
   end
 
-  def prepare_reference({:ok, {paper, raw}}, tool_file) do
-    ris = Onyx.Public.prepare_ris(raw)
-    file_paper = Onyx.Public.prepare_file_paper(tool_file)
+  def prepare_reference({:ok, {paper, raw}}, reference_file) do
+    ris = Paper.Public.prepare_ris(raw)
+    file_paper = Paper.Public.prepare_file_paper(reference_file)
     %{paper: paper, ris: ris, file_paper: file_paper}
   end
 
-  def prepare_reference({:error, {error, _raw}}, tool_file) do
-    file_error = Onyx.Public.prepare_file_error(tool_file, error)
+  def prepare_reference({:error, {error, _raw}}, reference_file) do
+    file_error = Paper.Public.prepare_file_error(reference_file, error)
     %{file_error: file_error}
   end
 
@@ -118,7 +118,7 @@ defmodule Systems.Onyx.RISFile do
         {:ok, {parse_paper(lines), raw}}
 
       {:error, error} ->
-        Logger.error("[Onyx] Extracting papers: error: #{inspect(error)}")
+        Logger.error("[Paper] Extracting papers: error: #{inspect(error)}")
         {:error, {parse_error(lines, error), raw}}
     end
   end
@@ -126,7 +126,7 @@ defmodule Systems.Onyx.RISFile do
   # PARSING
 
   def parse_paper(lines) do
-    Onyx.Public.prepare_paper(
+    Paper.Public.prepare_paper(
       extract_year(lines),
       extract_date(lines),
       extract_abbreviated_journal(lines),
@@ -140,7 +140,7 @@ defmodule Systems.Onyx.RISFile do
   end
 
   def parse_error(_lines, error) do
-    Onyx.Public.prepare_error(error)
+    Paper.Public.prepare_error(error)
   end
 
   def validate_type_of_reference(type_of_reference) do
@@ -222,32 +222,32 @@ defmodule Systems.Onyx.RISFile do
   defp split(line) do
     case Regex.run(@tag_regex, line) do
       [_, tag, value] -> {tag, value}
-      _ -> raise Onyx.RISError, message: "Invalid RIS file, line: '#{line}'"
+      _ -> raise Paper.RISError, message: "Invalid RIS file, line: '#{line}'"
     end
   end
 
   # PERSISTENCE
 
-  def create_transaction(references_with_index, tool_file) do
+  def create_transaction(references_with_index, reference_file) do
     references_with_index
     |> Enum.reduce(Multi.new(), fn {reference, index}, multi ->
       persist_reference(reference, index, multi)
     end)
     |> Multi.update(
-      :onyx_tool_file,
-      tool_file |> Onyx.ToolFileAssociation.changeset(%{status: :processed})
+      :paper_reference_file,
+      reference_file |> Paper.ReferenceFileModel.changeset(%{status: :processed})
     )
-    |> Signal.Public.multi_dispatch({:onyx_tool_file, :updated})
+    |> Signal.Public.multi_dispatch({:paper_reference_file, :updated})
   end
 
   def persist_reference(%{paper: paper, ris: ris, file_paper: file_paper}, index, multi) do
     multi
     |> Multi.insert({:paper, index}, paper)
     |> Multi.insert({:ris, index}, fn %{{:paper, ^index} => paper} ->
-      Onyx.Public.finalize_ris(ris, paper)
+      Paper.Public.finalize_ris(ris, paper)
     end)
     |> Multi.insert({:file_paper, index}, fn %{{:paper, ^index} => paper} ->
-      Onyx.Public.finalize_file_paper(file_paper, paper)
+      Paper.Public.finalize_file_paper(file_paper, paper)
     end)
   end
 

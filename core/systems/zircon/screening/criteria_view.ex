@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.CriteriaView do
+defmodule Systems.Zircon.CriteriaView do
   use CoreWeb, :live_component
 
   @impl true

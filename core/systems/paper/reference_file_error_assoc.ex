@@ -1,13 +1,13 @@
-defmodule Systems.Onyx.FileErrorAssociation do
+defmodule Systems.Paper.ReferenceFileErrorAssoc do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Onyx
+  alias Systems.Paper
 
-  schema "onyx_file_error" do
+  schema "paper_reference_file_error" do
     field(:error, :string)
-    belongs_to(:tool_file, Onyx.ToolFileAssociation)
+    belongs_to(:reference_file, Paper.ReferenceFileModel)
     timestamps()
   end
 
@@ -23,6 +23,6 @@ defmodule Systems.Onyx.FileErrorAssociation do
   end
 
   def preload_graph(:down), do: preload_graph([])
-  def preload_graph(:up), do: preload_graph([:tool_file])
-  def preload_graph(:tool_file), do: [tool_file: Onyx.ToolFileAssociation.preload_graph(:up)]
+  def preload_graph(:up), do: preload_graph([:reference_file])
+  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:up)]
 end

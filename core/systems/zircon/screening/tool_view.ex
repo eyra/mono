@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.ToolView do
+defmodule Systems.Zircon.Screening.ToolView do
   use CoreWeb, :live_component
 
   def update(%{tool: tool}, socket) do

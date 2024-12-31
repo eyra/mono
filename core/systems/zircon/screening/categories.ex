@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.Categories do
+defmodule Systems.Zircon.Screening.Categories do
   @moduledoc """
   Defines the screening criteria categories used in the TIAB screening phase of the literature review.
 
@@ -55,7 +55,7 @@ defmodule Systems.Onyx.Categories do
   """
 
   use Core.Enums.Base,
-      {:categories,
+      {:zircon_screening_categories,
        [
          :population,
          :intervention,

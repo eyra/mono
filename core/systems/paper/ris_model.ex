@@ -1,13 +1,13 @@
-defmodule Systems.Onyx.RISModel do
+defmodule Systems.Paper.RISModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Onyx
+  alias Systems.Paper
 
-  schema "onyx_ris" do
+  schema "paper_ris" do
     field(:raw, :string)
-    belongs_to(:paper, Onyx.PaperModel)
+    belongs_to(:paper, Paper.Model)
 
     timestamps()
   end
@@ -25,5 +25,5 @@ defmodule Systems.Onyx.RISModel do
 
   def preload_graph(:down), do: []
   def preload_graph(:up), do: preload_graph([:paper])
-  def preload_graph(:paper), do: [paper: Onyx.PaperModel.preload_graph(:up)]
+  def preload_graph(:paper), do: [paper: Paper.Model.preload_graph(:up)]
 end

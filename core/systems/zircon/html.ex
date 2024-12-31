@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.HTML do
+defmodule Systems.Zircon.HTML do
   use CoreWeb, :html
 
   import Frameworks.Pixel.Table
@@ -7,12 +7,12 @@ defmodule Systems.Onyx.HTML do
 
   def import_history(%{items: items} = assigns) do
     head_cells = [
-      dgettext("eyra-onyx", "import_history.timestamp.label"),
-      dgettext("eyra-onyx", "import_history.file.label"),
-      dgettext("eyra-onyx", "import_history.errors.label"),
-      dgettext("eyra-onyx", "import_history.all_count.label"),
-      dgettext("eyra-onyx", "import_history.duplicate_count.label"),
-      dgettext("eyra-onyx", "import_history.new_count.label"),
+      dgettext("eyra-zircon", "import_history.timestamp.label"),
+      dgettext("eyra-zircon", "import_history.file.label"),
+      dgettext("eyra-zircon", "import_history.errors.label"),
+      dgettext("eyra-zircon", "import_history.all_count.label"),
+      dgettext("eyra-zircon", "import_history.duplicate_count.label"),
+      dgettext("eyra-zircon", "import_history.new_count.label"),
       ""
     ]
 

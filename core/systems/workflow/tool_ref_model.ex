@@ -17,7 +17,7 @@ defmodule Systems.Workflow.ToolRefModel do
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
-  alias Systems.Onyx
+  alias Systems.Zircon
 
   @tools [
     :alliance_tool,
@@ -26,7 +26,7 @@ defmodule Systems.Workflow.ToolRefModel do
     :graphite_tool,
     :instruction_tool,
     :lab_tool,
-    :onyx_tool
+    :zircon_screening_tool
   ]
 
   schema "tool_refs" do
@@ -38,7 +38,7 @@ defmodule Systems.Workflow.ToolRefModel do
     belongs_to(:graphite_tool, Graphite.ToolModel)
     belongs_to(:instruction_tool, Instruction.ToolModel)
     belongs_to(:lab_tool, Lab.ToolModel)
-    belongs_to(:onyx_tool, Onyx.ToolModel)
+    belongs_to(:zircon_screening_tool, Zircon.Screening.ToolModel)
 
     has_one(:workflow_item, Workflow.ItemModel, foreign_key: :tool_ref_id)
 

@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.ImportView do
+defmodule Systems.Zircon.Screening.ImportView do
   use CoreWeb, :live_component
 
   @impl true
@@ -23,7 +23,7 @@ defmodule Systems.Onyx.ImportView do
   @impl true
   def compose(:import_form, %{tool: tool, timezone: timezone}) do
     %{
-      module: Systems.Onyx.ImportForm,
+      module: Systems.Zircon.Screening.ImportForm,
       params: %{
         tool: tool,
         timezone: timezone

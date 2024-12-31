@@ -1,11 +1,11 @@
-defmodule Systems.Onyx.PaperModel do
+defmodule Systems.Paper.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Onyx
+  alias Systems.Zircon
 
-  schema "onyx_paper" do
+  schema "paper" do
     field(:year, :string)
     field(:date, :string)
     field(:abbreviated_journal, :string)
@@ -16,7 +16,7 @@ defmodule Systems.Onyx.PaperModel do
     field(:authors, {:array, :string})
     field(:keywords, {:array, :string})
 
-    has_one(:ris, Onyx.RISModel, foreign_key: :paper_id)
+    has_one(:ris, Paper.RISModel, foreign_key: :paper_id)
 
     timestamps()
   end
@@ -34,7 +34,7 @@ defmodule Systems.Onyx.PaperModel do
 
   def preload_graph(:down), do: preload_graph([:ris])
   def preload_graph(:up), do: preload_graph([:tool])
-  def preload_graph(:tool), do: [tool: Onyx.ToolModel.preload_graph(:up)]
+  def preload_graph(:tool), do: [tool: Zircon.Screening.ToolModel.preload_graph(:up)]
   def preload_graph(:ris), do: [ris: []]
 
   @doc """

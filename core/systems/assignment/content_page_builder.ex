@@ -11,7 +11,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   alias Systems.Monitor
   alias Systems.Project
   alias Systems.Workflow
-  alias Systems.Onyx
+  alias Systems.Zircon
 
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
@@ -272,15 +272,15 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :import,
-         %{workflow: %{items: [%{tool_ref: %{onyx_tool: %{} = onyx_tool}}]}},
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, content_flags},
          _workflow_config,
          show_errors,
          %{fabric: fabric, current_user: user, timezone: timezone}
        ) do
     child =
-      Fabric.prepare_child(fabric, :system, Onyx.ImportView, %{
-        tool: onyx_tool,
+      Fabric.prepare_child(fabric, :system, Zircon.Screening.ImportView, %{
+        tool: zircon_screening_tool,
         timezone: timezone,
         user: user,
         title: title,
@@ -299,20 +299,20 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(:import, _, _, _, _, _) do
-    raise "Import tab is only supported for singleton workflows with one Onyx tool"
+    raise "Import tab is only supported for singleton workflows with one Zircon tool"
   end
 
   defp create_tab(
          :criteria,
-         %{workflow: %{items: [%{tool_ref: %{onyx_tool: %{} = onyx_tool}}]}},
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, content_flags},
          _workflow_config,
          show_errors,
          %{fabric: fabric, current_user: user}
        ) do
     child =
-      Fabric.prepare_child(fabric, :system, Onyx.CriteriaView, %{
-        tool: onyx_tool,
+      Fabric.prepare_child(fabric, :system, Zircon.CriteriaView, %{
+        tool: zircon_screening_tool,
         user: user,
         title: title,
         content_flags: content_flags
@@ -330,7 +330,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(:criteria, _, _, _, _, _) do
-    raise "Criteria tab is only supported for singleton workflows with one Onyx tool"
+    raise "Criteria tab is only supported for singleton workflows with one Zircon tool"
   end
 
   defp create_tab(

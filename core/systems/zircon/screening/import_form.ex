@@ -1,38 +1,40 @@
-defmodule Systems.Onyx.ImportForm do
+defmodule Systems.Zircon.Screening.ImportForm do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.ris)
 
-  import Systems.Onyx.HTML, only: [import_history: 1]
+  import Systems.Zircon.HTML, only: [import_history: 1]
   alias CoreWeb.UI.Timestamp
-  alias Systems.Onyx
+
+  alias Systems.Paper
+  alias Systems.Zircon
 
   @impl true
   def file_upload_start(socket, {original_filename, _}) do
     socket
-    |> create_tool_file(original_filename)
-    |> update_tool_files()
+    |> create_reference_file(original_filename)
+    |> update_reference_files()
     |> update_history_items()
   end
 
   @impl true
   def process_file(socket, {_path, url, _original_filename}) do
     socket
-    |> update_tool_file(url)
-    |> start_processing_tool_file()
-    |> assign(tool_file: nil)
+    |> update_reference_file(url)
+    |> start_processing_reference_file()
+    |> assign(reference_file: nil)
   end
 
-  defp create_tool_file(%{assigns: %{tool: tool}} = socket, original_filename) do
-    socket |> assign(tool_file: Onyx.Public.insert_tool_file!(tool, original_filename, nil))
+  defp create_reference_file(%{assigns: %{tool: tool}} = socket, original_filename) do
+    socket |> assign(reference_file: Zircon.Public.insert_reference_file!(tool, original_filename, nil))
   end
 
-  defp update_tool_file(%{assigns: %{tool_file: tool_file}} = socket, url) do
-    tool_file = Onyx.Public.update_tool_file!(tool_file, url)
-    socket |> assign(tool_file: tool_file)
+  defp update_reference_file(%{assigns: %{reference_file: reference_file}} = socket, url) do
+    reference_file = Paper.Public.update_reference_file!(reference_file, url)
+    socket |> assign(reference_file: reference_file)
   end
 
-  defp start_processing_tool_file(%{assigns: %{tool_file: tool_file}} = socket) do
-    Onyx.Private.start_processing_ris_file(tool_file.id)
+  defp start_processing_reference_file(%{assigns: %{reference_file: reference_file}} = socket) do
+    Paper.Public.start_processing_ris_file(reference_file.id)
     socket
   end
 
@@ -48,15 +50,15 @@ defmodule Systems.Onyx.ImportForm do
       )
       |> init_file_uploader(:file)
       |> update_import_button()
-      |> update_tool_files()
+      |> update_reference_files()
       |> update_history_items()
     }
   end
 
-  defp update_history_items(%{assigns: %{tool_files: tool_files}} = socket) do
+  defp update_history_items(%{assigns: %{reference_files: reference_files}} = socket) do
     {history_items, paper_ids} =
-      Enum.reduce(tool_files, {[], MapSet.new([])}, fn tool_file, acc ->
-        history_item(socket, tool_file, acc)
+      Enum.reduce(reference_files, {[], MapSet.new([])}, fn reference_file, acc ->
+        history_item(socket, reference_file, acc)
       end)
 
     socket
@@ -66,7 +68,7 @@ defmodule Systems.Onyx.ImportForm do
 
   defp history_item(
          %{assigns: %{timezone: timezone}},
-         %Onyx.ToolFileAssociation{
+         %Paper.ReferenceFileModel{
            status: :uploaded,
            file: %{name: name, inserted_at: inserted_at}
          },
@@ -83,8 +85,8 @@ defmodule Systems.Onyx.ImportForm do
 
   defp history_item(
          %{assigns: %{timezone: timezone}},
-         %Onyx.ToolFileAssociation{
-           id: tool_file_id,
+         %Paper.ReferenceFileModel{
+           id: reference_file_id,
            file: %{name: name, inserted_at: inserted_at},
            associated_papers: associated_papers,
            associated_errors: associated_errors
@@ -92,7 +94,7 @@ defmodule Systems.Onyx.ImportForm do
          {history_items, paper_ids}
        ) do
     associated_paper_ids =
-      MapSet.new(Enum.to_list(Enum.map(associated_papers, &Onyx.PaperModel.citation(&1.paper))))
+      MapSet.new(Enum.to_list(Enum.map(associated_papers, &Paper.Model.citation(&1.paper))))
 
     new_paper_ids = MapSet.difference(associated_paper_ids, paper_ids)
 
@@ -107,7 +109,7 @@ defmodule Systems.Onyx.ImportForm do
       |> Timestamp.format!()
 
     archive_button = %{
-      action: %{type: :send, event: "archive_tool_file", item: tool_file_id},
+      action: %{type: :send, event: "archive_reference_file", item: reference_file_id},
       face: %{
         type: :icon,
         icon: :delete,
@@ -128,15 +130,15 @@ defmodule Systems.Onyx.ImportForm do
     {history_items ++ [history_item], MapSet.union(paper_ids, new_paper_ids)}
   end
 
-  def update_tool_files(%{assigns: %{tool: tool}} = socket) do
-    assign(socket, tool_files: Onyx.Public.list_tool_files(tool))
+  def update_reference_files(%{assigns: %{tool: tool}} = socket) do
+    assign(socket, reference_files: Zircon.Public.list_reference_files(tool))
   end
 
   def update_import_button(%{assigns: %{uploads: uploads}} = socket) do
     socket
     |> assign(
       import_button: %{
-        label: dgettext("eyra-onyx", "import_form.button"),
+        label: dgettext("eyra-zircon", "import_form.button"),
         field: uploads.file.ref
       }
     )
@@ -146,18 +148,18 @@ defmodule Systems.Onyx.ImportForm do
     {:noreply, socket}
   end
 
-  def handle_event("archive_tool_file", %{"item" => tool_file_id}, socket) do
-    Onyx.Public.archive_tool_file!(String.to_integer(tool_file_id))
+  def handle_event("archive_reference_file", %{"item" => reference_file_id}, socket) do
+    Paper.Public.archive_reference_file!(String.to_integer(reference_file_id))
 
     {
       :noreply,
       socket
-      |> update_tool_files()
+      |> update_reference_files()
       |> update_history_items()
     }
   end
 
-  def handle_event("process_tool_file", %{"item" => _tool_file_id}, socket) do
+  def handle_event("process_reference_file", %{"item" => _reference_file_id}, socket) do
     {:noreply, socket}
   end
 
@@ -166,7 +168,7 @@ defmodule Systems.Onyx.ImportForm do
     ~H"""
       <div class="w-full">
         <Text.body>
-          <%= dgettext("eyra-onyx", "papers_form.description") %>
+          <%= dgettext("eyra-zircon", "papers_form.description") %>
         </Text.body>
         <.spacing value="M" />
         <.form id={"#{@id}_file_selector_form"} for={%{}} phx-change="change" phx-target="" >
@@ -179,10 +181,10 @@ defmodule Systems.Onyx.ImportForm do
             </div>
           </div>
         </.form>
-        <%= if Enum.count(@tool_files) > 0 do %>
+        <%= if Enum.count(@reference_files) > 0 do %>
           <.spacing value="L" />
           <Text.title3>
-            <%= dgettext("eyra-onyx", "import_history.title") %>
+            <%= dgettext("eyra-zircon", "import_history.title") %>
           </Text.title3>
           <.import_history items={@history_items} />
         <% end %>

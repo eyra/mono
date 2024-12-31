@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.ToolForm do
+defmodule Systems.Zircon.Screening.ToolForm do
   use CoreWeb, :live_component
 
   @impl true

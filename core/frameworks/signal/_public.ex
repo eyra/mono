@@ -18,12 +18,12 @@ defmodule Frameworks.Signal.Public do
     "Systems.Instruction.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
-    "Systems.Onyx.Switch",
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
     "Systems.Student.Switch",
-    "Systems.Workflow.Switch"
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
   ]
 
   def dispatch(signal, message) do

@@ -1,20 +1,21 @@
-defmodule Systems.Onyx.ToolModel do
+defmodule Systems.Zircon.Screening.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import CoreWeb.Gettext
   import Ecto.Changeset
-  alias Systems.Onyx
+  alias Systems.Paper
+  alias Systems.Zircon.Screening
 
   @tool_directors Application.compile_env(:core, :tool_directors)
 
-  schema "onyx_tool" do
+  schema "zircon_screening_tool" do
     field(:director, Ecto.Enum, values: @tool_directors)
 
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    has_many(:associated_files, Onyx.ToolFileAssociation, foreign_key: :tool_id)
-    has_many(:criterion_groups, Onyx.CriterionGroupModel, foreign_key: :tool_id)
+    has_many(:associated_files, Screening.ToolReferenceFileAssoc, foreign_key: :tool_id)
+    has_many(:annotations, Screening.ToolAnnotationAssoc, foreign_key: :tool_id)
 
     timestamps()
   end
@@ -30,15 +31,15 @@ defmodule Systems.Onyx.ToolModel do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: preload_graph([:auth_node, :associated_files, :criterion_groups])
+  def preload_graph(:down), do: preload_graph([:auth_node, :associated_files])
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
   def preload_graph(:associated_files),
-    do: [associated_files: Onyx.ToolFileAssociation.preload_graph(:down)]
+    do: [associated_files: Paper.ReferenceFileModel.preload_graph(:down)]
 
-  def preload_graph(:criterion_groups),
-    do: [criterion_groups: Onyx.CriterionGroupModel.preload_graph(:down)]
+  def preload_graph(:annotations),
+    do: [annotations: Screening.ToolAnnotationAssoc.preload_graph(:down)]
 
   def ready?(%{name: nil}), do: false
   def ready?(%{image_id: nil}), do: false
@@ -47,17 +48,17 @@ defmodule Systems.Onyx.ToolModel do
   def ready?(_), do: true
 
   defimpl Frameworks.Concept.ToolModel do
-    alias Systems.Onyx
-    def key(_), do: :onyx
+    alias Systems.Zircon
+    def key(_), do: :zircon
     def auth_tree(%{auth_node: auth_node}), do: auth_node
-    def apply_label(_), do: dgettext("eyra-onyx", "apply.cta.title")
-    def open_label(_), do: dgettext("eyra-onyx", "open.cta.title")
-    def ready?(tool), do: Onyx.ToolModel.ready?(tool)
-    def form(_, _), do: Onyx.ToolForm
+    def apply_label(_), do: dgettext("eyra-zircon", "apply.cta.title")
+    def open_label(_), do: dgettext("eyra-zircon", "open.cta.title")
+    def ready?(tool), do: Zircon.Screening.ToolModel.ready?(tool)
+    def form(_, _), do: Zircon.Screening.ToolForm
 
     def launcher(tool),
       do: %{
-        module: Onyx.ToolView,
+        module: Zircon.Screening.ToolView,
         params: %{
           tool: tool
         }
@@ -65,8 +66,8 @@ defmodule Systems.Onyx.ToolModel do
 
     def task_labels(_) do
       %{
-        pending: dgettext("eyra-onyx", "pending.label"),
-        participated: dgettext("eyra-onyx", "participated.label")
+        pending: dgettext("eyra-zircon", "pending.label"),
+        participated: dgettext("eyra-zircon", "participated.label")
       }
     end
 
@@ -76,12 +77,12 @@ defmodule Systems.Onyx.ToolModel do
 
   defimpl Frameworks.Concept.Leaf do
     alias Frameworks.Concept
-    def resource_id(%{id: id}), do: "onyx/#{id}"
-    def tag(_), do: dgettext("eyra-onyx", "leaf.tag")
+    def resource_id(%{id: id}), do: "zircon/#{id}"
+    def tag(_), do: dgettext("eyra-zircon", "leaf.tag")
 
     def info(%{associated_papers: associated_papers}, _timezone) do
       paper_count = associated_papers |> length()
-      [dngettext("eyra-onyx", "1 paper", "* papers", paper_count)]
+      [dngettext("eyra-zircon", "1 paper", "* papers", paper_count)]
     end
 
     def status(_), do: %Concept.Leaf.Status{value: :private}
