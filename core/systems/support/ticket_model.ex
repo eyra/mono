@@ -4,7 +4,7 @@ defmodule Systems.Support.TicketModel do
   require Core.Enums.TicketTypes
   alias Systems.Account.User
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   schema "helpdesk_tickets" do
     belongs_to(:user, User)

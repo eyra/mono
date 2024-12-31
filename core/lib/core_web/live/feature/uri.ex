@@ -1,5 +1,5 @@
 defmodule CoreWeb.Live.Feature.Uri do
-  @callback handle_uri(Socket.t()) :: Socket.t()
+  @callback handle_uri(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
 
   defmacro __using__(_opts \\ nil) do
     quote do

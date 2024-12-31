@@ -5,7 +5,7 @@ defmodule Systems.Workflow.ToolRefModel do
   require Logger
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
   alias Frameworks.Utility

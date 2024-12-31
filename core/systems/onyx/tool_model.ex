@@ -1,8 +1,8 @@
 defmodule Systems.Onyx.ToolModel do
+  use Gettext, backend: CoreWeb.Gettext
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
   import Ecto.Changeset
   alias Systems.Onyx
 
@@ -47,6 +47,7 @@ defmodule Systems.Onyx.ToolModel do
   def ready?(_), do: true
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
     alias Systems.Onyx
     def key(_), do: :onyx
     def auth_tree(%{auth_node: auth_node}), do: auth_node
@@ -75,6 +76,7 @@ defmodule Systems.Onyx.ToolModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
     alias Frameworks.Concept
     def resource_id(%{id: id}), do: "onyx/#{id}"
     def tag(_), do: dgettext("eyra-onyx", "leaf.tag")

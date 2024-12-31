@@ -1,9 +1,10 @@
 defmodule Systems.Onyx.Public do
+  use Gettext, backend: CoreWeb.Gettext
+
   import Systems.Onyx.Queries
 
   require Ecto.Query
   import Ecto.Query, warn: false
-  import CoreWeb.Gettext
   import Ecto.Changeset, only: [put_assoc: 3]
 
   alias Core.Authorization

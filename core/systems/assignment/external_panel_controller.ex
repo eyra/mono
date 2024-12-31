@@ -11,7 +11,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   def create(conn, %{"id" => id, "entry" => _} = params) do
     assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
 
-    Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
+    Logger.warning("[ExternalPanelController] create: #{inspect(params)}")
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do

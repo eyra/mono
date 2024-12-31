@@ -10,7 +10,7 @@ defmodule Systems.Lab.DayView do
 
   alias Systems.Lab
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   @impl true
   def update(%{id: id, day_model: day_model}, socket) do

@@ -2,7 +2,7 @@ defmodule Systems.Graphite.SubmissionModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Systems.Graphite

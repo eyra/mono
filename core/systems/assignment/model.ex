@@ -6,7 +6,7 @@ defmodule Systems.Assignment.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
 
@@ -53,6 +53,8 @@ defmodule Systems.Assignment.Model do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     def resource_id(%{id: id}), do: "assignment/#{id}"
     def tag(_), do: dgettext("eyra-assignment", "leaf.tag")
 

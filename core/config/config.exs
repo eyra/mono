@@ -156,7 +156,7 @@ config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 config :core, :storage, services: ~w(builtin yoda)
 
 config :core, BankingClient,
-  host: 'localhost',
+  host: "localhost",
   port: 5555,
   cacertfile: "../banking_proxy/certs/ca_certificate.pem",
   certfile: "../banking_proxy/certs/client_certificate.pem",

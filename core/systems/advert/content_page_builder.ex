@@ -2,7 +2,7 @@ defmodule Systems.Advert.ContentPageBuilder do
   use CoreWeb, :verified_routes
   use Systems.Content.PageBuilder
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
 

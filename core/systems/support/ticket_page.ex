@@ -24,13 +24,13 @@ defmodule Systems.Support.TicketPage do
   @impl true
   def handle_event("close_ticket", _params, %{assigns: %{id: id}} = socket) do
     Support.Public.close_ticket_by_id(id)
-    {:noreply, push_redirect(socket, to: ~p"/support/ticket")}
+    {:noreply, push_navigate(socket, to: ~p"/support/ticket")}
   end
 
   @impl true
   def handle_event("reopen_ticket", _params, %{assigns: %{id: id}} = socket) do
     Support.Public.reopen_ticket_by_id(id)
-    {:noreply, push_redirect(socket, to: ~p"/support/ticket")}
+    {:noreply, push_navigate(socket, to: ~p"/support/ticket")}
   end
 
   @impl true

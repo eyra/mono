@@ -336,19 +336,19 @@ defmodule Fabric do
 
   def show_next(%Fabric.Model{children: nil} = fabric, _current_ref) do
     # Possible race condition with live updates from server
-    Logger.warn("Can not show next child, no childs in flow")
+    Logger.warning("Can not show next child, no childs in flow")
     fabric
   end
 
   def show_next(%Fabric.Model{children: []} = fabric, _current_ref) do
     # Possible race condition with live updates from server
-    Logger.warn("Can not show next child, no childs in flow")
+    Logger.warning("Can not show next child, no childs in flow")
     fabric
   end
 
   def show_next(%Fabric.Model{children: [_child]} = fabric, _current_ref) do
     # Possible race condition with live updates from server
-    Logger.warn("Can not show next child, only one child in flow")
+    Logger.warning("Can not show next child, only one child in flow")
     fabric
   end
 
@@ -357,7 +357,7 @@ defmodule Fabric do
       %Fabric.Model{fabric | children: tail}
     else
       # Possible race condition with live updates from server
-      Logger.warn("Can not show next child, current child is not the first child in flow")
+      Logger.warning("Can not show next child, current child is not the first child in flow")
       fabric
     end
   end

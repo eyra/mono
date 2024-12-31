@@ -3,10 +3,9 @@ defmodule Frameworks.Pixel.Create do
   Provides support for creating "new" views the Eyra way.
   """
   import Phoenix.Component
-  import Phoenix.LiveView, only: [put_flash: 3, push_redirect: 2]
-  alias Phoenix.LiveView.Socket
+  import Phoenix.LiveView, only: [put_flash: 3, push_navigate: 2]
 
-  @callback create(socket :: Socket.t(), changeset :: any()) :: any()
+  @callback create(socket :: Phoenix.LiveView.Socket.t(), changeset :: any()) :: any()
   @callback get_changeset() :: any()
   @callback get_changeset(attrs :: any()) :: any()
 
@@ -20,7 +19,7 @@ defmodule Frameworks.Pixel.Create do
   def create(module, socket, changeset) do
     case module.create(socket, changeset) do
       {:ok, redirect_path} ->
-        {:noreply, socket |> push_redirect(to: redirect_path, replace: true)}
+        {:noreply, socket |> push_navigate(to: redirect_path, replace: true)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         handle_validation_error(socket, changeset)

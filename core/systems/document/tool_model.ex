@@ -3,7 +3,7 @@ defmodule Systems.Document.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Workflow
 
@@ -44,6 +44,8 @@ defmodule Systems.Document.ToolModel do
   def preload_graph(:down), do: preload_graph([])
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Document
     def key(_), do: :document
     def auth_tree(%{auth_node: auth_node}), do: auth_node
