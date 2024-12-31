@@ -54,7 +54,9 @@ defmodule Core.WebPushTest do
       end
 
       subscription =
-        Repo.get_by(WebPush.PushSubscription, endpoint: "https://example.com/push/send/qwerty1234")
+        Repo.get_by(WebPush.PushSubscription,
+          endpoint: "https://example.com/push/send/qwerty1234"
+        )
 
       assert subscription.auth == "fghijk"
     end
