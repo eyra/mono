@@ -65,12 +65,14 @@ defmodule Core.MixProject do
   defp deps do
     [
       # Fix for build warningns
-      {:sweet_xml, "~> 0.7.4", github: "kbrw/sweet_xml", ref: "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6", override: true},
+      {:sweet_xml, "~> 0.7.4",
+       github: "kbrw/sweet_xml", ref: "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6", override: true},
       # Deps
       {:appsignal_phoenix, "~> 2.6"},
       {:assent, "~> 0.2.3"},
       # Fork supports Phoenix 1.7
-      {:bamboo_phoenix, github: "populimited/bamboo_phoenix", ref: "bf3e32082f3d81da78bff3ce359dd579fcf7b11f"},
+      {:bamboo_phoenix,
+       github: "populimited/bamboo_phoenix", ref: "bf3e32082f3d81da78bff3ce359dd579fcf7b11f"},
       {:bamboo_ses, "~> 0.4.5"},
       {:bamboo, "~> 2.3.0"},
       {:bcrypt_elixir, "~> 3.0"},
@@ -80,7 +82,7 @@ defmodule Core.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "~> 2.5.6"},
-       # Unreleased commit fixes build warnings in the original repo
+      # Unreleased commit fixes build warnings in the original repo
       {:faker, github: "elixirs/faker", ref: "c217c88f5c968146ea4c5fb0120df3dcf9175ab4"},
       # Fork fixes a bug in the original repo
       {:floki, github: "eyra/floki", override: true},
@@ -95,7 +97,8 @@ defmodule Core.MixProject do
       {:nimble_options, "~> 1.0.0"},
       {:oban, "~> 2.18.3"},
       # Fork fixes a dependency warning in the original repo
-      {:packmatic, "~> 1.2.0", github: "ftes/packmatic", ref: "aa146ee96bad26c9d1d5701b474a3fb161fcb68c"},
+      {:packmatic, "~> 1.2.0",
+       github: "ftes/packmatic", ref: "aa146ee96bad26c9d1d5701b474a3fb161fcb68c"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.3.1"},
       {:phoenix_inline_svg, "~> 1.4"},
@@ -110,7 +113,8 @@ defmodule Core.MixProject do
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:timex, "~> 3.7", github: "copia-wealth-studios/timex", ref: "67735ee23fdb1b163ef0e5c394c6969b6140ec80"},
+      {:timex, "~> 3.7",
+       github: "copia-wealth-studios/timex", ref: "67735ee23fdb1b163ef0e5c394c6969b6140ec80"},
       {:typed_struct, "~> 0.2.1"},
       {:tzdata, "~>  1.1.2"},
       # i18n
@@ -127,7 +131,10 @@ defmodule Core.MixProject do
       # Dev and test deps
       {:file_system, "~> 1.0.1", only: [:dev, :test]},
       # Fixed build warnings
-      {:bypass, "~> 2.1", github: "PSPDFKit-labs/bypass", ref: "3f4aac137fd1caf5a15953b43d8785966ab0e021", only: :test},
+      {:bypass, "~> 2.1",
+       github: "PSPDFKit-labs/bypass",
+       ref: "3f4aac137fd1caf5a15953b43d8785966ab0e021",
+       only: :test},
       {:mox, "~> 1.0", only: :test},
       {:promox, "~> 0.1.0", only: :test},
       {:mock, "~> 0.3.0", only: :test},
