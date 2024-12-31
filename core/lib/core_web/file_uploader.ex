@@ -4,7 +4,8 @@ defmodule CoreWeb.FileUploader do
 
   @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{3,4})?$"
 
-  @callback process_file(socket :: Socket.t(), uploaded_file :: any()) :: Socket.t()
+  @callback process_file(socket :: Phoenix.LiveView.Socket.t(), uploaded_file :: any()) ::
+              Phoenix.LiveView.Socket.t()
 
   def get_upload_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do

@@ -1,6 +1,6 @@
 defmodule Self.Account.SessionController do
   use CoreWeb, :controller
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
 

@@ -1,5 +1,5 @@
 defmodule Systems.Graphite.Assembly do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
   alias Ecto.Changeset

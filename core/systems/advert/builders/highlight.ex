@@ -1,5 +1,5 @@
 defmodule Systems.Advert.Builders.Highlight do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Assignment,

@@ -1,7 +1,7 @@
 defmodule Systems.Account.UserForm do
   use CoreWeb, :html
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Pixel.Form
 
   attr(:changeset, :map, required: true)

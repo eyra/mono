@@ -1,5 +1,6 @@
 defmodule CoreWeb.Menu.Helpers do
   use CoreWeb, :verified_routes
+  use Gettext, backend: CoreWeb.Gettext
 
   alias CoreWeb.Menu.ItemsProvider
 
@@ -7,8 +8,6 @@ defmodule CoreWeb.Menu.Helpers do
     Support,
     NextAction
   }
-
-  require CoreWeb.Gettext
 
   def build_home(menu_id, id, config, uri) do
     if Keyword.has_key?(config, menu_id) do
@@ -149,7 +148,7 @@ defmodule CoreWeb.Menu.Helpers do
     current_locale = Gettext.get_locale(CoreWeb.Gettext)
 
     [
-      %{id: "en", name: CoreWeb.Gettext.gettext("English")}
+      %{id: "en", name: gettext("English")}
     ]
     |> Enum.reject(fn %{id: locale} -> current_locale == locale end)
   end

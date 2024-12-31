@@ -1,7 +1,7 @@
 defmodule Systems.Graphite.LeaderboardPageBuilder do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias CoreWeb.UI.Timestamp
   alias Systems.Account.User

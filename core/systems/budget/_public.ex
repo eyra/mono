@@ -512,7 +512,10 @@ defmodule Systems.Budget.Public do
   end
 
   defp create_payment_transaction(%{amount: amount, payment: %{idempotence_key: idempotence_key}}) do
-    Logger.warning("Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}")
+    Logger.warning(
+      "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
+    )
+
     {:error, :payment_already_available}
   end
 

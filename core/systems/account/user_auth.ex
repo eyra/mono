@@ -3,7 +3,7 @@ defmodule Systems.Account.UserAuth do
 
   import Plug.Conn
   import Phoenix.Controller
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
 
