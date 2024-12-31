@@ -9,6 +9,8 @@ defmodule Core.Application do
   alias Systems.Rate
 
   def start(_type, _args) do
+    Appsignal.Logger.Handler.add("core")
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,

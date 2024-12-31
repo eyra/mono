@@ -11,11 +11,12 @@
 
 ## \#7 unreleased
 
-* Changed: Bumped erlang to 27.1.2
-* Changed: Bumped elixir to 1.17.0
+* Changed: Bump erlang to 27.1.2
+* Changed: Bump elixir to 1.17.0
 * Fixed: Support for running the app locally in Docker
 * Changed: Github release workflow uses Docker
 * Changed: Using Debian on production
+* Added: Support for sending logging to AppSignal
 
 ## \#6.2 2024-11-28
 
