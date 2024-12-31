@@ -8,14 +8,13 @@ defmodule Systems.Workflow.Model do
   alias Systems.Assignment
 
   schema "workflows" do
-    field(:type, Ecto.Enum, values: [:one, :many_optional, :many_mandatory])
     has_many(:items, Workflow.ItemModel, foreign_key: :workflow_id)
     has_one(:assignment, Assignment.Model, foreign_key: :workflow_id)
     belongs_to(:auth_node, Core.Authorization.Node)
     timestamps()
   end
 
-  @fields ~w(type)a
+  @fields ~w()a
   @required_fields @fields
 
   def changeset(model, params \\ %{}) do

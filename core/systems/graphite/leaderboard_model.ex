@@ -79,7 +79,7 @@ defmodule Systems.Graphite.LeaderboardModel do
     use Gettext, backend: CoreWeb.Gettext
 
     def resource_id(%{id: id}), do: "graphite/leaderboard/#{id}"
-    def tag(_), do: dgettext("eyra-graphite", "leaderboard.atom.tag")
+    def tag(_), do: dgettext("eyra-graphite", "leaderboard.leaf.tag")
 
     def info(%{id: _id, tool: tool}, timezone) do
       deadline_str = format_datetime(tool.deadline, timezone)

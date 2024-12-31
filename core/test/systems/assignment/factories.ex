@@ -30,8 +30,8 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_workflow(type \\ :many_optional) do
-    Factories.insert!(:workflow, %{type: type})
+  def create_workflow() do
+    Factories.insert!(:workflow, %{})
   end
 
   def create_workflow_item(workflow, tool_ref) do

@@ -13,6 +13,7 @@ defmodule Systems.Assignment.WorkflowItemSpecials do
          :download_manual,
          :fork_instruction,
          :download_instruction,
-         :general_instruction
+         :general_instruction,
+         :paper_screening
        ]}
 end

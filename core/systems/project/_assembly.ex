@@ -101,6 +101,14 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
+  defp prepare_item(:paper_screening, name) do
+    {:ok, assignment} =
+      Assignment.Assembly.prepare(:paper_screening, :project, nil)
+      |> Changeset.apply_action(:prepare)
+
+    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
+  end
+
   defp prepare_item(%Ecto.Changeset{} = changeset, name) do
     Project.Public.prepare_item(%{name: name, project_path: []}, changeset)
   end

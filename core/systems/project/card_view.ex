@@ -108,7 +108,7 @@ defmodule Systems.Project.CardView do
         </:top>
 
         <:title>
-          <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 #{@text_color}"}>
+          <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 truncate #{@text_color}"}>
             <%= @title %>
           </div>
         </:title>

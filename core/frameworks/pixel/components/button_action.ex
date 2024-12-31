@@ -42,18 +42,25 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:event, :string, required: true)
   attr(:item, :string, default: "")
   attr(:target, :string, default: "")
+  attr(:enabled?, :boolean, default: true)
   slot(:inner_block, required: true)
 
   def send(assigns) do
     ~H"""
-    <div
-      phx-target={@target}
-      phx-click={@event}
-      phx-value-item={@item}
-      class="cursor-pointer focus:outline-none"
-    >
-      <%= render_slot(@inner_block) %>
-    </div>
+    <%= if @enabled? do %>
+      <div
+        phx-click={@event}
+        phx-value-item={@item}
+        phx-target={@target}
+        class="cursor-pointer focus:outline-none"
+      >
+        <%= render_slot(@inner_block) %>
+      </div>
+    <% else %>
+      <div class="opacity-30">
+        <%= render_slot(@inner_block) %>
+      </div>
+    <% end %>
     """
   end
 

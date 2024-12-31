@@ -35,7 +35,7 @@ defmodule Systems.Advert.Model do
   defimpl Frameworks.Concept.Leaf do
     use Gettext, backend: CoreWeb.Gettext
 
-    def tag(_), do: dgettext("eyra-advert", "atom.tag")
+    def tag(_), do: dgettext("eyra-advert", "leaf.tag")
     def resource_id(%{id: id}), do: "advert/#{id}"
 
     def info(%{submission: %{pool: %{name: pool_name}}}, _timezone) do

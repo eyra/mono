@@ -6,18 +6,37 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
+    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
-    def content_flags(_t) do
-      Assignment.ContentFlags.new(opt_out: [:language, :panel, :storage, :advert_in_pool])
+    def tabs(_t) do
+      [
+        settings: {
+          dgettext("eyra-assignment", "tabbar.item.settings"),
+          Assignment.Template.Flags.Settings.new(opt_out: [:language, :panel, :storage])
+        },
+        workflow: {
+          dgettext("eyra-assignment", "tabbar.item.workflow"),
+          Assignment.Template.Flags.Workflow.new()
+        },
+        import: nil,
+        criteria: nil,
+        participants: {
+          dgettext("eyra-assignment", "tabbar.item.participants"),
+          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool])
+        },
+        monitor: {
+          dgettext("eyra-assignment", "tabbar.item.monitor"),
+          Assignment.Template.Flags.Monitor.new()
+        }
+      ]
     end
 
-    def workflow(_t),
+    def workflow_config(_t),
       do: %Workflow.Config{
-        type: :many_mandatory,
+        singleton?: false,
         library: %Workflow.LibraryModel{
-          render?: true,
           items: [
             %Workflow.LibraryItemModel{
               special: :fork_instruction,

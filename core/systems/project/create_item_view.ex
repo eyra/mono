@@ -46,6 +46,7 @@ defmodule Systems.Project.CreateItemView do
   end
 
   defp include?(:questionnaire), do: feature_enabled?(:panl)
+  defp include?(:paper_screening), do: feature_enabled?(:onyx)
   defp include?(_), do: true
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do

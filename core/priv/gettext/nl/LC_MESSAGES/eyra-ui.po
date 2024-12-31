@@ -201,3 +201,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "confirmation_modal.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.forward"
+msgstr ""

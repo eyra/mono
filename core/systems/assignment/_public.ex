@@ -160,16 +160,16 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, [_ | _] = items, type, auth_node) do
+  def prepare_workflow(special, [_ | _] = items, auth_node) do
     %Workflow.Model{}
-    |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Workflow.Model.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Ecto.Changeset.put_assoc(:items, items)
   end
 
-  def prepare_workflow(special, _, type, auth_node) do
+  def prepare_workflow(special, _, auth_node) do
     %Workflow.Model{}
-    |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Workflow.Model.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 

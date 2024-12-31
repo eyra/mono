@@ -235,7 +235,7 @@ defmodule Core.Factories do
   end
 
   def build(:workflow) do
-    build(:workflow, %{type: :many_optional})
+    build(:workflow, %{})
   end
 
   def build(:workflow_item) do

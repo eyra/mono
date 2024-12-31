@@ -21,7 +21,6 @@ defmodule Systems.Project.AssemblyTest do
                status: :concept,
                external_panel: nil,
                workflow: %Systems.Workflow.Model{
-                 type: :many_mandatory,
                  items: [
                    %Systems.Workflow.ItemModel{},
                    %Systems.Workflow.ItemModel{},
@@ -48,7 +47,6 @@ defmodule Systems.Project.AssemblyTest do
              assignment: %Systems.Assignment.Model{
                info: %Systems.Assignment.InfoModel{},
                workflow: %Systems.Workflow.Model{
-                 type: :many_optional,
                  items: []
                },
                crew: %Systems.Crew.Model{

@@ -62,10 +62,6 @@ msgstr "Verder"
 msgid "onboarding.consent.title"
 msgstr "Toestemming"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.title"
-msgstr "Instellingen"
-
 #, elixir-autogen, elixir-format
 msgid "settings.storage.title"
 msgstr "Data opslag"
@@ -291,14 +287,6 @@ msgid "tabbar.item.monitor"
 msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr "Ga naar Monitor"
-
-#, elixir-autogen, elixir-format
-msgid "monitor.title"
-msgstr "Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "finished.participants"
 msgstr "Afgerond"
 
@@ -319,16 +307,8 @@ msgid "settings.subject_count.label"
 msgstr "Verwachtte aantal deelnemers"
 
 #, elixir-autogen, elixir-format
-msgid "participants.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
 msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.participants.forward"
-msgstr "Ga naar Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.donate.description"
@@ -425,7 +405,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "atom.tag"
+msgid "leaf.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -463,3 +443,27 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
 msgstr "Probeer het nog een keer"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.paper_screening.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.reviewers"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.workflow"
+msgstr "Monitor"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.criteria"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.import"
+msgstr ""
