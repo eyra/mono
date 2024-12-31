@@ -55,9 +55,6 @@ jobs:
           message: "Formatted code"
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dialyzer
-        run: make dialyzer
-
       - name: Compile
         run: make compile
 
@@ -67,5 +64,5 @@ jobs:
       - name: Credo
         run: make credo
 
-      - name: Format
-        run: make format
+      - name: Dialyzer
+        run: make dialyzer

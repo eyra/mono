@@ -1,0 +1,58 @@
+name: Release (deprecated)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle:
+        description: "Bundle ID (next, self)"
+        required: true
+        default: "next"
+jobs:
+  tagged-release:
+    runs-on: ubuntu-20.04
+    env:
+      MIX_ENV: prod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.19'
+
+      - name: Tag name
+        id: tag
+        run: echo ::set-output "name=TAG::${{github.event.inputs.bundle}}_$(date +%F)_${{github.run_number}}"
+
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1
+        with:
+          otp-version: "25.3.2.7"
+          elixir-version: "1.14.0"
+
+      - name: Setup the Elixir project
+        run: mix deps.get
+        working-directory: core
+
+      - name: Build Frontend
+        run: ./scripts/build-frontend
+        working-directory: core
+
+      - name: Build release
+        run: ./scripts/build-release
+        working-directory: core
+        env:
+          BUNDLE: ${{github.event.inputs.bundle}}
+          VERSION: ${{steps.tag.outputs.tag}}
+
+      - name: Archive release
+        run: tar cfj "../${{steps.tag.outputs.tag}}.tar.bz2" "${{steps.tag.outputs.tag}}"
+        working-directory: core
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{steps.tag.outputs.tag}}"
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            ${{steps.tag.outputs.tag}}.tar.bz2
