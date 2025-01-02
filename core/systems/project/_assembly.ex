@@ -2,6 +2,7 @@ defmodule Systems.Project.Assembly do
   import Ecto.Query, warn: false
   use Gettext, backend: CoreWeb.Gettext
 
+  require Logger
   alias Core.Authorization
   alias Core.Repo
   alias Ecto.Changeset
@@ -58,7 +59,7 @@ defmodule Systems.Project.Assembly do
           project
 
         {:error, failed_operation, failed_value, _changes} ->
-          IO.inspect(failed_value, label: "Transaction failed at #{failed_operation}")
+          Logger.warning("Transaction failed at #{failed_operation}")
           nil
       end
 
@@ -71,7 +72,7 @@ defmodule Systems.Project.Assembly do
       if changeset.valid? do
         create_item(changeset, dgettext("eyra-storage", "default.name"), project.root)
       else
-        IO.inspect(changeset.errors, label: "Failed to prepare storage endpoint")
+        Logger.warning("Failed to prepare storage endpoint")
         {:error, changeset}
       end
     else
