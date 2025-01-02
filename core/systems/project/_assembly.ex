@@ -58,7 +58,7 @@ defmodule Systems.Project.Assembly do
         {:ok, %{project: project}} ->
           project
 
-        {:error, failed_operation, failed_value, _changes} ->
+        {:error, failed_operation, _failed_value, _changes} ->
           Logger.warning("Transaction failed at #{failed_operation}")
           nil
       end
