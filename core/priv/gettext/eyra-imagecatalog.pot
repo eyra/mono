@@ -18,13 +18,13 @@ msgstr ""
 msgid "search.image.title"
 msgstr ""
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "images.found.message"
 msgid_plural "images.found.message.%{count}"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] ""

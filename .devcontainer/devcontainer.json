@@ -29,6 +29,8 @@
 		"vscode": {
 			"extensions": [
 				"jakebecker.elixir-ls",
+				"mhutchie.git-graph",
+				"cweijan.vscode-database-client2"
 			],
 		},
 	},

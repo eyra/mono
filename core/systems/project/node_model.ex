@@ -64,7 +64,7 @@ defmodule Systems.Project.NodeModel do
   defimpl Frameworks.Utility.ViewModelBuilder do
     use CoreWeb, :verified_routes
 
-    def view_model(%Project.NodeModel{} = node, page, %{current_user: user}) do
+    def view_model(%Project.NodeModel{} = node, page, %{user: user}) do
       vm(node, page, user)
     end
 

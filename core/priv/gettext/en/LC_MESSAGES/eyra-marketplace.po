@@ -42,7 +42,7 @@ msgstr "Awaiting your contribution"
 msgid "assignment.status.rejected.subtitle"
 msgstr "No credits awarded"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "Awarded 1 credit"
 msgid_plural "Awarded %{count} credits"
 msgstr[0] ""

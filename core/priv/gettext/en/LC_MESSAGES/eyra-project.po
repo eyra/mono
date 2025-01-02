@@ -64,10 +64,6 @@ msgid "form.title"
 msgstr "Rename"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "node.nodes.title"
-msgstr "Groups"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button"
 msgstr "Add item"
 
@@ -90,14 +86,6 @@ msgstr "Offline"
 #, elixir-autogen, elixir-format
 msgid "label.online"
 msgstr "Online"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "create.item.button"
-msgstr "Retract"
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button.short"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
