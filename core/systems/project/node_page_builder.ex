@@ -15,8 +15,6 @@ defmodule Systems.Project.NodePageBuilder do
           fabric: _fabric
         } = assigns
       ) do
-    branch = %Project.Branch{node_id: node.id}
-    breadcrumbs = Concept.Branch.hierarchy(branch)
     assigns = Map.put(assigns, :node, node)
 
     %{
@@ -24,10 +22,7 @@ defmodule Systems.Project.NodePageBuilder do
       title: node.name,
       tabbar_id: :node_page,
       show_errors: false,
-      initial_tab: :overview,
-      active_menu_item: :overview,
-      breadcrumbs: breadcrumbs,
-      node: node
+      initial_tab: :overview
     }
     |> put_tabs(assigns)
   end
