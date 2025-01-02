@@ -74,19 +74,14 @@ defmodule Systems.Project.NodePageBuilder do
          :data,
          show_errors,
          %{
-           # branch is hier null, tenminste zo lijkt het
-           branch: branch,
            fabric: fabric,
            timezone: timezone,
-           node: %{items: [%{name: "Data", storage_endpoint: storage_endpoint} | _rest]}
+           node: %{items: [%{name: "Data", storage_endpoint: storage_endpoint} | _rest]} = node
          } = _assigns
        ) do
     ready? = true
-    dbg(branch)
-    # branch_name = Concept.Branch.name(branch, :parent)
-    # TODO de branch is nil,moet even in de composer kijken waarom die niet gevonden kan worden
-
-    branch_name = "master"
+    branch = %Project.Branch{node_id: node.id}
+    branch_name = Concept.Branch.name(branch, :parent)
 
     child =
       Fabric.prepare_child(fabric, :data_view, EndpointDataView, %{

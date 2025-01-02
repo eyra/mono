@@ -30,7 +30,7 @@
 			"extensions": [
 				"jakebecker.elixir-ls",
 				"mhutchie.git-graph",
-				"cweijan.dbclient-jdbc"
+				"cweijan.vscode-database-client2"
 			],
 		},
 	},
