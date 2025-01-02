@@ -23,6 +23,9 @@ defmodule Systems.Assignment.Private do
   def get_template(:benchmark_challenge),
     do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
 
+  def get_template(:paper_screening),
+    do: %Assignment.TemplatePaperScreening{id: :paper_screening}
+
   def get_template(:questionnaire),
     do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 

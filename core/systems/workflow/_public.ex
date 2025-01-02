@@ -14,6 +14,7 @@ defmodule Systems.Workflow.Public do
   alias Systems.Lab
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Onyx
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
@@ -139,6 +140,9 @@ defmodule Systems.Workflow.Public do
     |> Workflow.ToolRefModel.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
+
+  def prepare_tool(:onyx_tool, %{} = attrs, auth_node),
+    do: Onyx.Public.prepare_tool(attrs, auth_node)
 
   def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
     do: Alliance.Public.prepare_tool(attrs, auth_node)

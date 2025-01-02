@@ -160,7 +160,7 @@ msgid "tabbar.item.settings.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.atom.tag"
+msgid "leaderboard.leaf.tag"
 msgstr ""
 
 #, elixir-autogen, elixir-format

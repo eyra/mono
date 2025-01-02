@@ -14,9 +14,11 @@ defmodule Systems.Alliance.ToolModel do
   alias Systems.Workflow
   alias Systems.Alliance.VariableParser
 
+  @tool_directors Application.compile_env(:core, :tool_directors)
+
   schema "alliance_tools" do
     field(:url, :string)
-    field(:director, Ecto.Enum, values: [:assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :alliance_tool_id)

@@ -8,7 +8,10 @@ defmodule Systems.Content.TextBundleModel do
   }
 
   schema "text_bundles" do
-    has_many(:items, Content.TextItemModel, foreign_key: :bundle_id, on_replace: :delete_if_exists)
+    has_many(:items, Content.TextItemModel,
+      foreign_key: :bundle_id,
+      on_replace: :delete_if_exists
+    )
 
     timestamps()
   end

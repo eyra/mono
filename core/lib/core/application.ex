@@ -5,7 +5,12 @@ defmodule Core.Application do
 
   use Application
 
+  alias Systems.Banking
+  alias Systems.Rate
+
   def start(_type, _args) do
+    Appsignal.Logger.Handler.add("core")
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -19,9 +24,9 @@ defmodule Core.Application do
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
       {Oban, oban_config()},
-      {Systems.Banking.Supervisor, [{:euro, "account-number"}]},
+      {Banking.Supervisor, [{:euro, "account-number"}]},
       CoreWeb.Endpoint,
-      {Systems.Rate.Server, rate_config()}
+      {Rate.Server, rate_config()}
     ]
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]

@@ -3,10 +3,10 @@ defmodule Systems.Workflow.Config do
   @type item :: atom()
 
   @type t :: %__MODULE__{
-          type: atom(),
+          singleton?: boolean(),
           library: library(),
           initial_items: list(item())
         }
 
-  defstruct [:type, :library, :initial_items]
+  defstruct [:singleton?, :library, :initial_items]
 end

@@ -83,17 +83,41 @@ if config_env() == :prod do
     config :core, :azure_storage_backend, sas_token: sas_token
   end
 
+  # DATABASE
+  cacertfile = System.get_env("DB_CA_PATH")
+
+  verify_mode =
+    case System.get_env("DB_TLS_VERIFY") do
+      "verify_peer" -> :verify_peer
+      "verify_none" -> :verify_none
+      _ -> :verify_peer
+    end
+
   database_url = System.get_env("DB_URL")
+  db_host = System.fetch_env!("DB_HOST")
 
   if database_url do
-    config :core, Core.Repo, url: database_url
+    config :core, Core.Repo,
+      url: database_url,
+      ssl: [
+        cacertfile: cacertfile,
+        verify: verify_mode,
+        server_name_indication: to_charlist(db_host)
+      ]
   else
     config :core, Core.Repo,
       username: System.get_env("DB_USER"),
       password: System.get_env("DB_PASS"),
       database: System.get_env("DB_NAME"),
-      hostname: System.get_env("DB_HOST")
+      hostname: System.get_env("DB_HOST"),
+      ssl: [
+        cacertfile: cacertfile,
+        verify: verify_mode,
+        server_name_indication: to_charlist(db_host)
+      ]
   end
+
+  # END DATABASE
 
   config :core, GoogleSignIn,
     redirect_uri: "#{base_url}/google-sign-in/auth",
@@ -116,6 +140,15 @@ if config_env() == :prod do
   config :core, Core.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
+
+  if push_api_key = System.get_env("APPSIGNAL_PUSH_API_KEY") do
+    config :appsignal, :config,
+      otp_app: :core,
+      name: "Next",
+      env: app_domain,
+      push_api_key: push_api_key,
+      active: true
+  end
 
   config :core, :storage,
     services:

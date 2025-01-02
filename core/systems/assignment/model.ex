@@ -56,7 +56,7 @@ defmodule Systems.Assignment.Model do
     use Gettext, backend: CoreWeb.Gettext
 
     def resource_id(%{id: id}), do: "assignment/#{id}"
-    def tag(_), do: dgettext("eyra-assignment", "atom.tag")
+    def tag(_), do: dgettext("eyra-assignment", "leaf.tag")
 
     def info(%{info: info}, _timezone) do
       subject_count = Map.get(info, :subject_count) || 0

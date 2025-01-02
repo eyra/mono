@@ -71,7 +71,7 @@ msgid "advert.default.name"
 msgstr "Panl advertisement"
 
 #, elixir-autogen, elixir-format
-msgid "atom.tag"
+msgid "leaf.tag"
 msgstr "Panl advertisement"
 
 #, elixir-autogen, elixir-format

@@ -7,10 +7,12 @@ defmodule Systems.Feldspar.ToolModel do
 
   alias Systems.Workflow
 
+  @tool_directors Application.compile_env(:core, :tool_directors)
+
   schema "feldspar_tools" do
     field(:archive_name, :string)
     field(:archive_ref, :string)
-    field(:director, Ecto.Enum, values: [:project, :assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :feldspar_tool_id)

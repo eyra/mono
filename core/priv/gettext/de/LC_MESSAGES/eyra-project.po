@@ -96,14 +96,6 @@ msgid "item.form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.settings"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.settings.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "default.name"
 msgstr ""
 

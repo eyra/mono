@@ -95,14 +95,6 @@ msgstr "Select type"
 msgid "item.form.title"
 msgstr "Rename"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings"
-msgstr "Settings"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.settings.forward"
-msgstr "Go to Settings"
-
 #, elixir-autogen, elixir-format
 msgid "default.name"
 msgstr "New project"
