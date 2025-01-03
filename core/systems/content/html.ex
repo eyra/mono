@@ -9,7 +9,7 @@ defmodule Systems.Content.Html do
   alias Frameworks.Pixel.ModalView
   import CoreWeb.UI.PlainDialog
 
-  alias Frameworks.Pixel.Tabbar
+  alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Navigation
 
   attr(:modal, :map, required: true)
@@ -105,11 +105,11 @@ defmodule Systems.Content.Html do
       <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
         <%= if Enum.count(@tabs) > 0 do %>
           <Navigation.tabbar>
-            <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+            <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
           </Navigation.tabbar>
 
-          <div id="tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbar.content tabs={@tabs} include_top_margin={false} />
+          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbed.content tabs={@tabs} include_top_margin={false} />
           </div>
         <% end %>
       </.live_workspace>
@@ -136,14 +136,14 @@ defmodule Systems.Content.Html do
         <.live_workspace title={@title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
-              <Tabbar.container id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
+              <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
             </Navigation.action_bar>
           </:top_bar>
 
-          <div id="content_management_tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbar.content tabs={@tabs} />
+          <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbed.content tabs={@tabs} />
           </div>
-          <Tabbar.footer tabs={@tabs} />
+          <Tabbed.footer tabs={@tabs} />
         </.live_workspace>
       </div>
     """
