@@ -230,6 +230,9 @@ defmodule Frameworks.Pixel.Tabbed do
   def active_shape(_, :segmented), do: "h-full px-4 bg-primary"
   def active_shape(_, _), do: "rounded-full"
 
+  def title_shape("dropdown", _), do: ""
+  def title_shape(_, _), do: "w-full items-center"
+
   def title_inset(:segmented), do: "mt-0"
   def title_inset(_), do: "mt-1px"
 
@@ -264,7 +267,7 @@ defmodule Frameworks.Pixel.Tabbed do
       <% end %>
 
       <%= if @title do %>
-        <div class="flex flex-col justify-center w-full">
+        <div class={"flex flex-col justify-center #{title_shape(@tabbar, @type)}"}>
           <div
             class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
             idle-class={idle_title(@ready, @show_errors)}
