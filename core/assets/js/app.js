@@ -124,6 +124,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
         window.Alpine.clone(from.__x, to);
       } else {
         LiveContent.onBeforeElUpdated(from, to);
+        TabBar.onBeforeElUpdated(from, to);
       }
     },
   },

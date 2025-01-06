@@ -1,23 +1,38 @@
-let tabbarId = "";
+import { MainContent } from "./main_content";
 
+/**
+ * TabBar component
+ *
+ * The TabBar component is responsible for managing the state of tabs and tab panels. It saves the
+ * active tab in local storage to restore the active tab when the page is reloaded.
+ *
+ * TabBar contains multiple tabs and and TabContent contains multiple tab panels.
+ * TabContent notifies TabBar when its content has been updated.
+ *
+ * Tabs are clickable elements that can be used to switch between different views.
+ * Tab panels are hidden by default and are shown when the corresponding tab is clicked.
+ *
+ */
 export const TabBar = {
   mounted() {
     console.log("[TabBar] mounted");
-    tabbarId = this.el.id;
+    this.tabbarId = this.el.id;
 
-    var savedTabId = this.loadActiveTab();
+    this.show(this.getActiveTabId(), true);
 
-    if (this.exists(savedTabId)) {
-      this.show(savedTabId, true);
-    } else {
-      var firstTabId = this.getFirstTab();
-      var initialTabId = this.el.dataset.initialTab ?? undefined;
+    // Tab notifies TabBar when it has been clicked.
+    window.addEventListener("tab-clicked", (event) => {
+      console.log("[TabBar] tab-clicked", event.target.dataset.tabId);
+      this.show(event.target.dataset.tabId, false);
+    });
 
-      console.log("[TabBar] initialTabId", initialTabId);
+    // TabFooterItem notifies TabBar when it has been clicked.
+    window.addEventListener("tab-footer-item-clicked", (event) => {
+      console.log("[TabBar] tab-footer-item-clicked", event);
+      this.show(event.target.dataset.targetTabId, true);
+    });
 
-      this.show(initialTabId ?? firstTabId, true);
-    }
-
+    // TabContent notifies TabBar when its content has been updated.
     window.addEventListener("tab-content-updated", (event) => {
       console.log("[TabBar] tab-content-updated");
       this.updated();
@@ -26,15 +41,42 @@ export const TabBar = {
 
   updated() {
     console.log("[TabBar] updated");
-    var savedTabId = this.loadActiveTab();
+    var savedTabId = this.loadActiveTabId();
     this.show(savedTabId, false);
   },
 
-  getActiveTabKey() {
-    return "tabbar://" + tabbarId + "/active_tab";
+  onBeforeElUpdated(from, to) {
+    // Each tab has a corresponding tab panel. Tab panels are hidden by default.
+    // The hidden state of tab panels is controlled client side by the TabBar component.
+    // Restore active tab panel by syncing the hidden state.
+
+    if (from.classList.contains("tab-panel")) {
+      if (!from.classList.contains("hidden")) {
+        console.log("[TabBar] restore active tab", from, to);
+        to.classList.remove("hidden");
+      }
+    }
   },
 
-  loadActiveTab() {
+  getActiveTabId() {
+    var savedTabId = this.loadActiveTabId();
+    if (this.exists(savedTabId)) {
+      return savedTabId;
+    } else {
+      var firstTabId = this.getFirstTabId();
+      var initialTabId = this.el.dataset.initialTab ?? undefined;
+      return initialTabId ?? firstTabId;
+    }
+  },
+
+  getActiveTabKey() {
+    active_tab_key = "tabbar://" + this.tabbarId + "/active_tab";
+    console.info("[TabBar] getActiveTabKey ", active_tab_key);
+
+    return active_tab_key;
+  },
+
+  loadActiveTabId() {
     const tabKey = this.getActiveTabKey();
     const activeTab = window.localStorage.getItem(tabKey);
     if (typeof activeTab === "string") {
@@ -43,12 +85,12 @@ export const TabBar = {
     return undefined;
   },
 
-  saveActiveTab(tabId) {
-    console.info("[TabBar] saveActiveTab ", tabId);
+  saveActiveTabId(tabId) {
+    console.info("[TabBar] saveActiveTabId ", tabId);
     window.localStorage.setItem(this.getActiveTabKey(), tabId);
   },
 
-  getFirstTab() {
+  getFirstTabId() {
     var tabs = Array.from(document.getElementsByClassName("tab"));
     if (tabs == undefined) {
       return undefined;
@@ -62,13 +104,15 @@ export const TabBar = {
     return tabs.some((tab) => tab.dataset.tabId === tabId);
   },
 
+  /**
+   * Show tab with given tab id.
+   * It is safe to call this method with an unknown tab id (from another tab bar).
+   */
   show(nextTabId, scrollToTop) {
     console.log("[TabBar] nextTabId", nextTabId);
     if (nextTabId == undefined) {
       return;
     }
-
-    this.saveActiveTab(nextTabId);
 
     var tabs = Array.from(document.getElementsByClassName("tab"));
     var tab_panels = Array.from(document.getElementsByClassName("tab-panel"));
@@ -81,6 +125,8 @@ export const TabBar = {
       console.warn("[TabBar] Skip unknown tab", nextTabId);
       return;
     }
+
+    this.saveActiveTabId(nextTabId);
 
     // Activate active tab
     tabs.forEach((tab) => {
@@ -100,30 +146,47 @@ export const TabBar = {
     });
 
     if (scrollToTop) {
-      window.scrollTo(0, 0);
+      console.log("[TabBar] scrollToTop");
+      MainContent.scrollToTop(this.el);
     }
   },
 };
 
+/**
+ * Tab component
+ *
+ * Tabs are clickable elements that can be used to switch between different views.
+ */
 export const Tab = {
   mounted() {
     this.el.addEventListener("click", (event) => {
-      TabBar.show(this.el.dataset.tabId, true);
+      this.el.dispatchEvent(new Event("tab-clicked", { bubbles: true }));
     });
-  },
-  updated() {
-    console.log("[Tab] updated");
   },
 };
 
+/**
+ * TabFooterItem component
+ *
+ * TabFooterItem is a clickable element that can be used to switch to next tab.
+ * It has a corresponding tab panel that is shown when the TabFooterItem is clicked.
+ * The tab id is stored in the data-target-tab-id attribute.
+ */
 export const TabFooterItem = {
   mounted() {
     this.el.addEventListener("click", (event) => {
-      TabBar.show(this.el.dataset.targetTabId, true);
+      this.el.dispatchEvent(
+        new Event("tab-footer-item-clicked", { bubbles: true })
+      );
     });
   },
 };
 
+/**
+ * TabContent component
+ *
+ * TabContent notifies TabBar when its content has been updated.
+ */
 export const TabContent = {
   mounted() {
     console.log("[TabContent] mounted");

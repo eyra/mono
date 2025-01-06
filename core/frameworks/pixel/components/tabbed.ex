@@ -110,7 +110,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def content(assigns) do
     ~H"""
-    <div id="tabbar_content" phx-hook="TabContent">
+    <div id="tab_content" phx-hook="TabContent">
       <%= if @include_top_margin do %>
         <div class="hidden md:block h-navbar-height" />
         <div class="h-navbar-height" />
