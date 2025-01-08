@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Pool.Public — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Systems.Pool.Public — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Systems.Pool.Public</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Systems.Pool.Public</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#add_participant!/2" translate="no">add_participant!(pool, user)</a>
+        <a href="#add_participant!/2" data-no-tooltip translate="no">add_participant!(pool, user)</a>
 
       </div>
 
@@ -137,7 +160,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy/1" translate="no">copy(submission)</a>
+        <a href="#copy/1" data-no-tooltip translate="no">copy(submission)</a>
 
       </div>
 
@@ -145,7 +168,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#count_eligitable_users/3" translate="no">count_eligitable_users(criteria_model, include, exclude)</a>
+        <a href="#count_eligitable_users/3" data-no-tooltip translate="no">count_eligitable_users(criteria_model, include, exclude)</a>
 
       </div>
 
@@ -153,7 +176,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create!/5" translate="no">create!(name, target, currency, org, director)</a>
+        <a href="#create!/5" data-no-tooltip translate="no">create!(name, target, currency, org, director)</a>
 
       </div>
 
@@ -161,7 +184,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get/2" translate="no">get(id, preload \\ [])</a>
+        <a href="#get/2" data-no-tooltip translate="no">get(id, preload \\ [])</a>
 
       </div>
 
@@ -169,7 +192,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get!/2" translate="no">get!(id, preload \\ [])</a>
+        <a href="#get!/2" data-no-tooltip translate="no">get!(id, preload \\ [])</a>
 
       </div>
 
@@ -177,7 +200,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_name/2" translate="no">get_by_name(name, preload \\ [])</a>
+        <a href="#get_by_name/2" data-no-tooltip translate="no">get_by_name(name, preload \\ [])</a>
 
       </div>
 
@@ -185,7 +208,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_names/2" translate="no">get_by_names(names, preload \\ [])</a>
+        <a href="#get_by_names/2" data-no-tooltip translate="no">get_by_names(names, preload \\ [])</a>
 
       </div>
 
@@ -193,7 +216,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_submission!/2" translate="no">get_by_submission!(submission, preload \\ [])</a>
+        <a href="#get_by_submission!/2" data-no-tooltip translate="no">get_by_submission!(submission, preload \\ [])</a>
 
       </div>
 
@@ -201,7 +224,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_or_create_budget/1" translate="no">get_or_create_budget(pool)</a>
+        <a href="#get_or_create_budget/1" data-no-tooltip translate="no">get_or_create_budget(pool)</a>
 
       </div>
 
@@ -209,7 +232,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_panl/1" translate="no">get_panl(preload \\ [])</a>
+        <a href="#get_panl/1" data-no-tooltip translate="no">get_panl(preload \\ [])</a>
 
       </div>
 
@@ -217,7 +240,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_submission!/2" translate="no">get_submission!(term, preload \\ [:criteria])</a>
+        <a href="#get_submission!/2" data-no-tooltip translate="no">get_submission!(term, preload \\ [:criteria])</a>
 
       </div>
 
@@ -225,7 +248,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_tag/1" translate="no">get_tag(submission)</a>
+        <a href="#get_tag/1" data-no-tooltip translate="no">get_tag(submission)</a>
 
       </div>
 
@@ -233,7 +256,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list/1" translate="no">list(preload \\ [])</a>
+        <a href="#list/1" data-no-tooltip translate="no">list(preload \\ [])</a>
 
       </div>
 
@@ -241,7 +264,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_active/1" translate="no">list_active(preload \\ [])</a>
+        <a href="#list_active/1" data-no-tooltip translate="no">list_active(preload \\ [])</a>
 
       </div>
 
@@ -249,7 +272,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_director/2" translate="no">list_by_director(director, preload \\ [])</a>
+        <a href="#list_by_director/2" data-no-tooltip translate="no">list_by_director(director, preload \\ [])</a>
 
       </div>
 
@@ -257,7 +280,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_org/2" translate="no">list_by_org(org_identifier, preload \\ [])</a>
+        <a href="#list_by_org/2" data-no-tooltip translate="no">list_by_org(org_identifier, preload \\ [])</a>
 
       </div>
 
@@ -265,7 +288,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_orgs/2" translate="no">list_by_orgs(orgs, preload \\ [])</a>
+        <a href="#list_by_orgs/2" data-no-tooltip translate="no">list_by_orgs(orgs, preload \\ [])</a>
 
       </div>
 
@@ -273,7 +296,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_participant/2" translate="no">list_by_participant(user, preload \\ [])</a>
+        <a href="#list_by_participant/2" data-no-tooltip translate="no">list_by_participant(user, preload \\ [])</a>
 
       </div>
 
@@ -281,7 +304,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_directors/0" translate="no">list_directors()</a>
+        <a href="#list_directors/0" data-no-tooltip translate="no">list_directors()</a>
 
       </div>
 
@@ -289,7 +312,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_owned/2" translate="no">list_owned(user, preload \\ [])</a>
+        <a href="#list_owned/2" data-no-tooltip translate="no">list_owned(user, preload \\ [])</a>
 
       </div>
 
@@ -297,7 +320,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_participants/1" translate="no">list_participants(pool)</a>
+        <a href="#list_participants/1" data-no-tooltip translate="no">list_participants(pool)</a>
 
       </div>
 
@@ -305,7 +328,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_submissions/0" translate="no">list_submissions()</a>
+        <a href="#list_submissions/0" data-no-tooltip translate="no">list_submissions()</a>
 
       </div>
 
@@ -313,7 +336,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_submissions/2" translate="no">list_submissions(status, preload \\ [:criteria])</a>
+        <a href="#list_submissions/2" data-no-tooltip translate="no">list_submissions(status, preload \\ [:criteria])</a>
 
       </div>
 
@@ -321,7 +344,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#participant?/2" translate="no">participant?(pool, user)</a>
+        <a href="#participant?/2" data-no-tooltip translate="no">participant?(pool, user)</a>
 
       </div>
 
@@ -329,7 +352,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_submission/2" translate="no">prepare_submission(attrs, pool)</a>
+        <a href="#prepare_submission/2" data-no-tooltip translate="no">prepare_submission(attrs, pool)</a>
 
       </div>
 
@@ -337,7 +360,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#published_status/1" translate="no">published_status(submission)</a>
+        <a href="#published_status/1" data-no-tooltip translate="no">published_status(submission)</a>
 
       </div>
 
@@ -345,7 +368,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#remove_participant/2" translate="no">remove_participant(pool, user)</a>
+        <a href="#remove_participant/2" data-no-tooltip translate="no">remove_participant(pool, user)</a>
 
       </div>
 
@@ -353,7 +376,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#select/2" translate="no">select(submissions, user)</a>
+        <a href="#select/2" data-no-tooltip translate="no">select(submissions, user)</a>
 
       </div>
 
@@ -361,7 +384,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#submit/1" translate="no">submit(submission_model)</a>
+        <a href="#submit/1" data-no-tooltip translate="no">submit(submission_model)</a>
 
       </div>
 
@@ -369,7 +392,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#target_achieved?/2" translate="no">target_achieved?(arg1, arg2)</a>
+        <a href="#target_achieved?/2" data-no-tooltip translate="no">target_achieved?(arg1, arg2)</a>
 
       </div>
 
@@ -377,7 +400,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update/2" translate="no">update(submission, changeset)</a>
+        <a href="#update/2" data-no-tooltip translate="no">update(submission, changeset)</a>
 
       </div>
 
@@ -385,7 +408,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update!/2" translate="no">update!(pool, attrs)</a>
+        <a href="#update!/2" data-no-tooltip translate="no">update!(pool, attrs)</a>
 
       </div>
 
@@ -393,7 +416,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update_pool_participations/3" translate="no">update_pool_participations(user, added_to_pools, deleted_from_pools)</a>
+        <a href="#update_pool_participations/3" data-no-tooltip translate="no">update_pool_participations(user, added_to_pools, deleted_from_pools)</a>
 
       </div>
 
@@ -401,7 +424,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wallet_related?/2" translate="no">wallet_related?(arg1, arg2)</a>
+        <a href="#wallet_related?/2" data-no-tooltip translate="no">wallet_related?(arg1, arg2)</a>
 
       </div>
 
@@ -416,23 +439,20 @@ core
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="add_participant!/2">
 
   <div class="detail-header">
-    <a href="#add_participant!/2" class="detail-link" title="Link to this function">
+    <a href="#add_participant!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">add_participant!(pool, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L174" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L174" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -446,15 +466,13 @@ Functions
 <section class="detail" id="copy/1">
 
   <div class="detail-header">
-    <a href="#copy/1" class="detail-link" title="Link to this function">
+    <a href="#copy/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy(submission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L224" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L224" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -468,15 +486,13 @@ Functions
 <section class="detail" id="count_eligitable_users/3">
 
   <div class="detail-header">
-    <a href="#count_eligitable_users/3" class="detail-link" title="Link to this function">
+    <a href="#count_eligitable_users/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">count_eligitable_users(criteria_model, include, exclude)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L285" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L285" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -490,15 +506,13 @@ Functions
 <section class="detail" id="create!/5">
 
   <div class="detail-header">
-    <a href="#create!/5" class="detail-link" title="Link to this function">
+    <a href="#create!/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create!(name, target, currency, org, director)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L199" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L199" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -514,15 +528,13 @@ Functions
     <span id="get/1"></span>
 
   <div class="detail-header">
-    <a href="#get/2" class="detail-link" title="Link to this function">
+    <a href="#get/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L123" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L123" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -538,15 +550,13 @@ Functions
     <span id="get!/1"></span>
 
   <div class="detail-header">
-    <a href="#get!/2" class="detail-link" title="Link to this function">
+    <a href="#get!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L122" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L122" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -562,15 +572,13 @@ Functions
     <span id="get_by_name/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_name/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_name/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_name(name, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L125" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -586,15 +594,13 @@ Functions
     <span id="get_by_names/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_names/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_names/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_names(names, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L135" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L135" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -610,15 +616,13 @@ Functions
     <span id="get_by_submission!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_submission!/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_submission!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_submission!(submission, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L149" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L149" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -632,15 +636,13 @@ Functions
 <section class="detail" id="get_or_create_budget/1">
 
   <div class="detail-header">
-    <a href="#get_or_create_budget/1" class="detail-link" title="Link to this function">
+    <a href="#get_or_create_budget/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_or_create_budget(pool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L191" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L191" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -656,15 +658,13 @@ Functions
     <span id="get_panl/0"></span>
 
   <div class="detail-header">
-    <a href="#get_panl/1" class="detail-link" title="Link to this function">
+    <a href="#get_panl/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_panl(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L145" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L145" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -680,15 +680,13 @@ Functions
     <span id="get_submission!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_submission!/2" class="detail-link" title="Link to this function">
+    <a href="#get_submission!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_submission!(term, preload \\ [:criteria])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L184" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L184" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -702,15 +700,13 @@ Functions
 <section class="detail" id="get_tag/1">
 
   <div class="detail-header">
-    <a href="#get_tag/1" class="detail-link" title="Link to this function">
+    <a href="#get_tag/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_tag(submission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L361" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L361" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -726,15 +722,13 @@ Functions
     <span id="list/0"></span>
 
   <div class="detail-header">
-    <a href="#list/1" class="detail-link" title="Link to this function">
+    <a href="#list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L22" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L22" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -750,15 +744,13 @@ Functions
     <span id="list_active/0"></span>
 
   <div class="detail-header">
-    <a href="#list_active/1" class="detail-link" title="Link to this function">
+    <a href="#list_active/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_active(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L26" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L26" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -774,15 +766,13 @@ Functions
     <span id="list_by_director/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_director/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_director/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_director(director, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L85" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -798,15 +788,13 @@ Functions
     <span id="list_by_org/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_org/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_org/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_org(org_identifier, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L75" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -822,15 +810,13 @@ Functions
     <span id="list_by_orgs/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_orgs/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_orgs/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_orgs(orgs, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L56" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L56" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -846,15 +832,13 @@ Functions
     <span id="list_by_participant/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_participant/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_participant/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_participant(user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L50" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L50" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -868,15 +852,13 @@ Functions
 <section class="detail" id="list_directors/0">
 
   <div class="detail-header">
-    <a href="#list_directors/0" class="detail-link" title="Link to this function">
+    <a href="#list_directors/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_directors()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L109" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L109" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -892,15 +874,13 @@ Functions
     <span id="list_owned/1"></span>
 
   <div class="detail-header">
-    <a href="#list_owned/2" class="detail-link" title="Link to this function">
+    <a href="#list_owned/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_owned(user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L35" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L35" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -914,15 +894,13 @@ Functions
 <section class="detail" id="list_participants/1">
 
   <div class="detail-header">
-    <a href="#list_participants/1" class="detail-link" title="Link to this function">
+    <a href="#list_participants/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_participants(pool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L118" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L118" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -936,15 +914,13 @@ Functions
 <section class="detail" id="list_submissions/0">
 
   <div class="detail-header">
-    <a href="#list_submissions/0" class="detail-link" title="Link to this function">
+    <a href="#list_submissions/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_submissions()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L93" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L93" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -960,15 +936,13 @@ Functions
     <span id="list_submissions/1"></span>
 
   <div class="detail-header">
-    <a href="#list_submissions/2" class="detail-link" title="Link to this function">
+    <a href="#list_submissions/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_submissions(status, preload \\ [:criteria])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L97" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L97" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -982,15 +956,13 @@ Functions
 <section class="detail" id="participant?/2">
 
   <div class="detail-header">
-    <a href="#participant?/2" class="detail-link" title="Link to this function">
+    <a href="#participant?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">participant?(pool, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L169" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L169" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1004,15 +976,13 @@ Functions
 <section class="detail" id="prepare_submission/2">
 
   <div class="detail-header">
-    <a href="#prepare_submission/2" class="detail-link" title="Link to this function">
+    <a href="#prepare_submission/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_submission(attrs, pool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L213" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L213" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1026,15 +996,13 @@ Functions
 <section class="detail" id="published_status/1">
 
   <div class="detail-header">
-    <a href="#published_status/1" class="detail-link" title="Link to this function">
+    <a href="#published_status/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">published_status(submission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L396" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L396" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1048,15 +1016,13 @@ Functions
 <section class="detail" id="remove_participant/2">
 
   <div class="detail-header">
-    <a href="#remove_participant/2" class="detail-link" title="Link to this function">
+    <a href="#remove_participant/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">remove_participant(pool, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L180" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L180" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1070,15 +1036,13 @@ Functions
 <section class="detail" id="select/2">
 
   <div class="detail-header">
-    <a href="#select/2" class="detail-link" title="Link to this function">
+    <a href="#select/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">select(submissions, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L270" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L270" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1092,15 +1056,13 @@ Functions
 <section class="detail" id="submit/1">
 
   <div class="detail-header">
-    <a href="#submit/1" class="detail-link" title="Link to this function">
+    <a href="#submit/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">submit(submission_model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L105" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L105" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1114,15 +1076,13 @@ Functions
 <section class="detail" id="target_achieved?/2">
 
   <div class="detail-header">
-    <a href="#target_achieved?/2" class="detail-link" title="Link to this function">
+    <a href="#target_achieved?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">target_achieved?(arg1, arg2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L327" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L327" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1136,15 +1096,13 @@ Functions
 <section class="detail" id="update/2">
 
   <div class="detail-header">
-    <a href="#update/2" class="detail-link" title="Link to this function">
+    <a href="#update/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update(submission, changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L242" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L242" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1158,15 +1116,13 @@ Functions
 <section class="detail" id="update!/2">
 
   <div class="detail-header">
-    <a href="#update!/2" class="detail-link" title="Link to this function">
+    <a href="#update!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update!(pool, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L207" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L207" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1180,15 +1136,13 @@ Functions
 <section class="detail" id="update_pool_participations/3">
 
   <div class="detail-header">
-    <a href="#update_pool_participations/3" class="detail-link" title="Link to this function">
+    <a href="#update_pool_participations/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update_pool_participations(user, added_to_pools, deleted_from_pools)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L405" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L405" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1202,15 +1156,13 @@ Functions
 <section class="detail" id="wallet_related?/2">
 
   <div class="detail-header">
-    <a href="#wallet_related?/2" class="detail-link" title="Link to this function">
+    <a href="#wallet_related?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wallet_related?(arg1, arg2)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L336" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/pool/_public.ex#L336" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1225,34 +1177,33 @@ Functions
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

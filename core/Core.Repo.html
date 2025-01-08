@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Core.Repo — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Core.Repo — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Core.Repo</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Core.Repo</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,57 +152,57 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#aggregate/3" translate="no">aggregate(queryable, aggregate, opts \\ [])</a>
+        <a href="#aggregate/3" data-no-tooltip translate="no">aggregate(queryable, aggregate, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:aggregate/3"><code class="inline">Ecto.Repo.aggregate/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:aggregate/3"><code class="inline">Ecto.Repo.aggregate/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#aggregate/4" translate="no">aggregate(queryable, aggregate, field, opts)</a>
+        <a href="#aggregate/4" data-no-tooltip translate="no">aggregate(queryable, aggregate, field, opts)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:aggregate/4"><code class="inline">Ecto.Repo.aggregate/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:aggregate/4"><code class="inline">Ecto.Repo.aggregate/4</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#all/2" translate="no">all(queryable, opts \\ [])</a>
+        <a href="#all/2" data-no-tooltip translate="no">all(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:all/2"><code class="inline">Ecto.Repo.all/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:all/2"><code class="inline">Ecto.Repo.all/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#checked_out?/0" translate="no">checked_out?()</a>
+        <a href="#checked_out?/0" data-no-tooltip translate="no">checked_out?()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:checked_out?/0"><code class="inline">Ecto.Repo.checked_out?/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:checked_out?/0"><code class="inline">Ecto.Repo.checked_out?/0</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#checkout/2" translate="no">checkout(fun, opts \\ [])</a>
+        <a href="#checkout/2" data-no-tooltip translate="no">checkout(fun, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:checkout/2"><code class="inline">Ecto.Repo.checkout/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:checkout/2"><code class="inline">Ecto.Repo.checkout/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#child_spec/1" translate="no">child_spec(opts)</a>
+        <a href="#child_spec/1" data-no-tooltip translate="no">child_spec(opts)</a>
 
       </div>
 
@@ -187,57 +210,57 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#config/0" translate="no">config()</a>
+        <a href="#config/0" data-no-tooltip translate="no">config()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:config/0"><code class="inline">Ecto.Repo.config/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:config/0"><code class="inline">Ecto.Repo.config/0</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#default_options/1" translate="no">default_options(operation)</a>
+        <a href="#default_options/1" data-no-tooltip translate="no">default_options(operation)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:default_options/1"><code class="inline">Ecto.Repo.default_options/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:default_options/1"><code class="inline">Ecto.Repo.default_options/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete/2" translate="no">delete(struct, opts \\ [])</a>
+        <a href="#delete/2" data-no-tooltip translate="no">delete(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete/2"><code class="inline">Ecto.Repo.delete/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete/2"><code class="inline">Ecto.Repo.delete/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete!/2" translate="no">delete!(struct, opts \\ [])</a>
+        <a href="#delete!/2" data-no-tooltip translate="no">delete!(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete!/2"><code class="inline">Ecto.Repo.delete!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete!/2"><code class="inline">Ecto.Repo.delete!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete_all/2" translate="no">delete_all(queryable, opts \\ [])</a>
+        <a href="#delete_all/2" data-no-tooltip translate="no">delete_all(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete_all/2"><code class="inline">Ecto.Repo.delete_all/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete_all/2"><code class="inline">Ecto.Repo.delete_all/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#disconnect_all/2" translate="no">disconnect_all(interval, opts \\ [])</a>
+        <a href="#disconnect_all/2" data-no-tooltip translate="no">disconnect_all(interval, opts \\ [])</a>
 
       </div>
 
@@ -248,17 +271,17 @@ pool to disconnect within the given interval.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#exists?/2" translate="no">exists?(queryable, opts \\ [])</a>
+        <a href="#exists?/2" data-no-tooltip translate="no">exists?(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:exists?/2"><code class="inline">Ecto.Repo.exists?/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:exists?/2"><code class="inline">Ecto.Repo.exists?/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#explain/3" translate="no">explain(operation, queryable, opts \\ [])</a>
+        <a href="#explain/3" data-no-tooltip translate="no">explain(operation, queryable, opts \\ [])</a>
 
       </div>
 
@@ -269,135 +292,127 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get/3" translate="no">get(queryable, id, opts \\ [])</a>
+        <a href="#get/3" data-no-tooltip translate="no">get(queryable, id, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get/3"><code class="inline">Ecto.Repo.get/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get/3"><code class="inline">Ecto.Repo.get/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get!/3" translate="no">get!(queryable, id, opts \\ [])</a>
+        <a href="#get!/3" data-no-tooltip translate="no">get!(queryable, id, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get!/3"><code class="inline">Ecto.Repo.get!/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get!/3"><code class="inline">Ecto.Repo.get!/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by/3" translate="no">get_by(queryable, clauses, opts \\ [])</a>
+        <a href="#get_by/3" data-no-tooltip translate="no">get_by(queryable, clauses, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_by/3"><code class="inline">Ecto.Repo.get_by/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_by/3"><code class="inline">Ecto.Repo.get_by/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by!/3" translate="no">get_by!(queryable, clauses, opts \\ [])</a>
+        <a href="#get_by!/3" data-no-tooltip translate="no">get_by!(queryable, clauses, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_by!/3"><code class="inline">Ecto.Repo.get_by!/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_by!/3"><code class="inline">Ecto.Repo.get_by!/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_dynamic_repo/0" translate="no">get_dynamic_repo()</a>
+        <a href="#get_dynamic_repo/0" data-no-tooltip translate="no">get_dynamic_repo()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_dynamic_repo/0"><code class="inline">Ecto.Repo.get_dynamic_repo/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_dynamic_repo/0"><code class="inline">Ecto.Repo.get_dynamic_repo/0</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#in_transaction?/0" translate="no">in_transaction?()</a>
+        <a href="#in_transaction?/0" data-no-tooltip translate="no">in_transaction?()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:in_transaction?/0"><code class="inline">Ecto.Repo.in_transaction?/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:in_transaction?/0"><code class="inline">Ecto.Repo.in_transaction?/0</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert/2" translate="no">insert(struct, opts \\ [])</a>
+        <a href="#insert/2" data-no-tooltip translate="no">insert(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert/2"><code class="inline">Ecto.Repo.insert/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert/2"><code class="inline">Ecto.Repo.insert/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert!/2" translate="no">insert!(struct, opts \\ [])</a>
+        <a href="#insert!/2" data-no-tooltip translate="no">insert!(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert!/2"><code class="inline">Ecto.Repo.insert!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert!/2"><code class="inline">Ecto.Repo.insert!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert_all/3" translate="no">insert_all(schema_or_source, entries, opts \\ [])</a>
+        <a href="#insert_all/3" data-no-tooltip translate="no">insert_all(schema_or_source, entries, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_all/3"><code class="inline">Ecto.Repo.insert_all/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_all/3"><code class="inline">Ecto.Repo.insert_all/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert_or_update/2" translate="no">insert_or_update(changeset, opts \\ [])</a>
+        <a href="#insert_or_update/2" data-no-tooltip translate="no">insert_or_update(changeset, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_or_update/2"><code class="inline">Ecto.Repo.insert_or_update/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_or_update/2"><code class="inline">Ecto.Repo.insert_or_update/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert_or_update!/2" translate="no">insert_or_update!(changeset, opts \\ [])</a>
+        <a href="#insert_or_update!/2" data-no-tooltip translate="no">insert_or_update!(changeset, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_or_update!/2"><code class="inline">Ecto.Repo.insert_or_update!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_or_update!/2"><code class="inline">Ecto.Repo.insert_or_update!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#load/2" translate="no">load(schema_or_types, data)</a>
+        <a href="#load/2" data-no-tooltip translate="no">load(schema_or_types, data)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:load/2"><code class="inline">Ecto.Repo.load/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:load/2"><code class="inline">Ecto.Repo.load/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#multi_update/3" translate="no">multi_update(multi, name, changeset)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#multi_update_guard/3" translate="no">multi_update_guard(multi, name, model)</a>
+        <a href="#multi_update/3" data-no-tooltip translate="no">multi_update(multi, name, changeset)</a>
 
       </div>
 
@@ -405,67 +420,65 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#one/2" translate="no">one(queryable, opts \\ [])</a>
+        <a href="#multi_update_guard/3" data-no-tooltip translate="no">multi_update_guard(multi, name, model)</a>
 
       </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:one/2"><code class="inline">Ecto.Repo.one/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#one!/2" translate="no">one!(queryable, opts \\ [])</a>
+        <a href="#one/2" data-no-tooltip translate="no">one(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:one!/2"><code class="inline">Ecto.Repo.one!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:one/2"><code class="inline">Ecto.Repo.one/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#preload/3" translate="no">preload(struct_or_structs_or_nil, preloads, opts \\ [])</a>
+        <a href="#one!/2" data-no-tooltip translate="no">one!(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:preload/3"><code class="inline">Ecto.Repo.preload/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:one!/2"><code class="inline">Ecto.Repo.one!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_query/3" translate="no">prepare_query(operation, query, opts)</a>
+        <a href="#preload/3" data-no-tooltip translate="no">preload(struct_or_structs_or_nil, preloads, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:prepare_query/3"><code class="inline">Ecto.Repo.prepare_query/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:preload/3"><code class="inline">Ecto.Repo.preload/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#put_dynamic_repo/1" translate="no">put_dynamic_repo(dynamic)</a>
+        <a href="#prepare_query/3" data-no-tooltip translate="no">prepare_query(operation, query, opts)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:put_dynamic_repo/1"><code class="inline">Ecto.Repo.put_dynamic_repo/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:prepare_query/3"><code class="inline">Ecto.Repo.prepare_query/3</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query/3" translate="no">query(sql, params \\ [], opts \\ [])</a>
+        <a href="#put_dynamic_repo/1" data-no-tooltip translate="no">put_dynamic_repo(dynamic)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>A convenience function for SQL-based repositories that executes the given query.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:put_dynamic_repo/1"><code class="inline">Ecto.Repo.put_dynamic_repo/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query!/3" translate="no">query!(sql, params \\ [], opts \\ [])</a>
+        <a href="#query/3" data-no-tooltip translate="no">query(sql, params \\ [], opts \\ [])</a>
 
       </div>
 
@@ -475,7 +488,17 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_many/3" translate="no">query_many(sql, params \\ [], opts \\ [])</a>
+        <a href="#query!/3" data-no-tooltip translate="no">query!(sql, params \\ [], opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A convenience function for SQL-based repositories that executes the given query.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#query_many/3" data-no-tooltip translate="no">query_many(sql, params \\ [], opts \\ [])</a>
 
       </div>
 
@@ -485,7 +508,7 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_many!/3" translate="no">query_many!(sql, params \\ [], opts \\ [])</a>
+        <a href="#query_many!/3" data-no-tooltip translate="no">query_many!(sql, params \\ [], opts \\ [])</a>
 
       </div>
 
@@ -495,67 +518,67 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reload/2" translate="no">reload(queryable, opts \\ [])</a>
+        <a href="#reload/2" data-no-tooltip translate="no">reload(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:reload/2"><code class="inline">Ecto.Repo.reload/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:reload/2"><code class="inline">Ecto.Repo.reload/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reload!/2" translate="no">reload!(queryable, opts \\ [])</a>
+        <a href="#reload!/2" data-no-tooltip translate="no">reload!(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:reload!/2"><code class="inline">Ecto.Repo.reload!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:reload!/2"><code class="inline">Ecto.Repo.reload!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rollback/1" translate="no">rollback(value)</a>
+        <a href="#rollback/1" data-no-tooltip translate="no">rollback(value)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:rollback/1"><code class="inline">Ecto.Repo.rollback/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:rollback/1"><code class="inline">Ecto.Repo.rollback/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_link/1" translate="no">start_link(opts \\ [])</a>
+        <a href="#start_link/1" data-no-tooltip translate="no">start_link(opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:start_link/1"><code class="inline">Ecto.Repo.start_link/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:start_link/1"><code class="inline">Ecto.Repo.start_link/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#stop/1" translate="no">stop(timeout \\ 5000)</a>
+        <a href="#stop/1" data-no-tooltip translate="no">stop(timeout \\ 5000)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:stop/1"><code class="inline">Ecto.Repo.stop/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:stop/1"><code class="inline">Ecto.Repo.stop/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#stream/2" translate="no">stream(queryable, opts \\ [])</a>
+        <a href="#stream/2" data-no-tooltip translate="no">stream(queryable, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:stream/2"><code class="inline">Ecto.Repo.stream/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:stream/2"><code class="inline">Ecto.Repo.stream/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#to_sql/2" translate="no">to_sql(operation, queryable)</a>
+        <a href="#to_sql/2" data-no-tooltip translate="no">to_sql(operation, queryable)</a>
 
       </div>
 
@@ -565,41 +588,41 @@ depending on the adapter to obtain statistics for the given query.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#transaction/2" translate="no">transaction(fun_or_multi, opts \\ [])</a>
+        <a href="#transaction/2" data-no-tooltip translate="no">transaction(fun_or_multi, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:transaction/2"><code class="inline">Ecto.Repo.transaction/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:transaction/2"><code class="inline">Ecto.Repo.transaction/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update/2" translate="no">update(struct, opts \\ [])</a>
+        <a href="#update/2" data-no-tooltip translate="no">update(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update/2"><code class="inline">Ecto.Repo.update/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update/2"><code class="inline">Ecto.Repo.update/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update!/2" translate="no">update!(struct, opts \\ [])</a>
+        <a href="#update!/2" data-no-tooltip translate="no">update!(struct, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update!/2"><code class="inline">Ecto.Repo.update!/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update!/2"><code class="inline">Ecto.Repo.update!/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update_all/3" translate="no">update_all(queryable, updates, opts \\ [])</a>
+        <a href="#update_all/3" data-no-tooltip translate="no">update_all(queryable, updates, opts \\ [])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update_all/3"><code class="inline">Ecto.Repo.update_all/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update_all/3"><code class="inline">Ecto.Repo.update_all/3</code></a>.</p></div>
 
     </div>
 
@@ -612,9 +635,8 @@ depending on the adapter to obtain statistics for the given query.</p></div>
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="aggregate/3">
@@ -622,15 +644,13 @@ Functions
     <span id="aggregate/2"></span>
 
   <div class="detail-header">
-    <a href="#aggregate/3" class="detail-link" title="Link to this function">
+    <a href="#aggregate/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">aggregate(queryable, aggregate, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -638,21 +658,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:aggregate/3"><code class="inline">Ecto.Repo.aggregate/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:aggregate/3"><code class="inline">Ecto.Repo.aggregate/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="aggregate/4">
 
   <div class="detail-header">
-    <a href="#aggregate/4" class="detail-link" title="Link to this function">
+    <a href="#aggregate/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">aggregate(queryable, aggregate, field, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -660,7 +678,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:aggregate/4"><code class="inline">Ecto.Repo.aggregate/4</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:aggregate/4"><code class="inline">Ecto.Repo.aggregate/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="all/2">
@@ -668,15 +686,13 @@ Functions
     <span id="all/1"></span>
 
   <div class="detail-header">
-    <a href="#all/2" class="detail-link" title="Link to this function">
+    <a href="#all/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">all(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -684,21 +700,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:all/2"><code class="inline">Ecto.Repo.all/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:all/2"><code class="inline">Ecto.Repo.all/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="checked_out?/0">
 
   <div class="detail-header">
-    <a href="#checked_out?/0" class="detail-link" title="Link to this function">
+    <a href="#checked_out?/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">checked_out?()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -706,7 +720,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:checked_out?/0"><code class="inline">Ecto.Repo.checked_out?/0</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:checked_out?/0"><code class="inline">Ecto.Repo.checked_out?/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="checkout/2">
@@ -714,15 +728,13 @@ Functions
     <span id="checkout/1"></span>
 
   <div class="detail-header">
-    <a href="#checkout/2" class="detail-link" title="Link to this function">
+    <a href="#checkout/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">checkout(fun, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -730,21 +742,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:checkout/2"><code class="inline">Ecto.Repo.checkout/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:checkout/2"><code class="inline">Ecto.Repo.checkout/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="child_spec/1">
 
   <div class="detail-header">
-    <a href="#child_spec/1" class="detail-link" title="Link to this function">
+    <a href="#child_spec/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">child_spec(opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -758,15 +768,13 @@ Functions
 <section class="detail" id="config/0">
 
   <div class="detail-header">
-    <a href="#config/0" class="detail-link" title="Link to this function">
+    <a href="#config/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">config()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -774,21 +782,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:config/0"><code class="inline">Ecto.Repo.config/0</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:config/0"><code class="inline">Ecto.Repo.config/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="default_options/1">
 
   <div class="detail-header">
-    <a href="#default_options/1" class="detail-link" title="Link to this function">
+    <a href="#default_options/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">default_options(operation)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -796,7 +802,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:default_options/1"><code class="inline">Ecto.Repo.default_options/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:default_options/1"><code class="inline">Ecto.Repo.default_options/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="delete/2">
@@ -804,15 +810,13 @@ Functions
     <span id="delete/1"></span>
 
   <div class="detail-header">
-    <a href="#delete/2" class="detail-link" title="Link to this function">
+    <a href="#delete/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -820,7 +824,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete/2"><code class="inline">Ecto.Repo.delete/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete/2"><code class="inline">Ecto.Repo.delete/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="delete!/2">
@@ -828,15 +832,13 @@ Functions
     <span id="delete!/1"></span>
 
   <div class="detail-header">
-    <a href="#delete!/2" class="detail-link" title="Link to this function">
+    <a href="#delete!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete!(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -844,7 +846,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete!/2"><code class="inline">Ecto.Repo.delete!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete!/2"><code class="inline">Ecto.Repo.delete!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="delete_all/2">
@@ -852,15 +854,13 @@ Functions
     <span id="delete_all/1"></span>
 
   <div class="detail-header">
-    <a href="#delete_all/2" class="detail-link" title="Link to this function">
+    <a href="#delete_all/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete_all(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -868,7 +868,7 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:delete_all/2"><code class="inline">Ecto.Repo.delete_all/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:delete_all/2"><code class="inline">Ecto.Repo.delete_all/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="disconnect_all/2">
@@ -876,15 +876,13 @@ Functions
     <span id="disconnect_all/1"></span>
 
   <div class="detail-header">
-    <a href="#disconnect_all/2" class="detail-link" title="Link to this function">
+    <a href="#disconnect_all/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">disconnect_all(interval, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -893,7 +891,7 @@ Functions
   <section class="docstring">
 
 <p>A convenience function for SQL-based repositories that forces all connections in the
-pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#disconnect_all/3"><code class="inline">Ecto.Adapters.SQL.disconnect_all/3</code></a> for more information.</p>
+pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#disconnect_all/3"><code class="inline">Ecto.Adapters.SQL.disconnect_all/3</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="exists?/2">
@@ -901,15 +899,13 @@ pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs
     <span id="exists?/1"></span>
 
   <div class="detail-header">
-    <a href="#exists?/2" class="detail-link" title="Link to this function">
+    <a href="#exists?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">exists?(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -917,7 +913,7 @@ pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:exists?/2"><code class="inline">Ecto.Repo.exists?/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:exists?/2"><code class="inline">Ecto.Repo.exists?/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="explain/3">
@@ -925,15 +921,13 @@ pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs
     <span id="explain/2"></span>
 
   <div class="detail-header">
-    <a href="#explain/3" class="detail-link" title="Link to this function">
+    <a href="#explain/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">explain(operation, queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -942,7 +936,7 @@ pool to disconnect within the given interval.</p><p>See <a href="https://hexdocs
   <section class="docstring">
 
 <p>A convenience function for SQL-based repositories that executes an EXPLAIN statement or similar
-depending on the adapter to obtain statistics for the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#explain/4"><code class="inline">Ecto.Adapters.SQL.explain/4</code></a> for more information.</p>
+depending on the adapter to obtain statistics for the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#explain/4"><code class="inline">Ecto.Adapters.SQL.explain/4</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="get/3">
@@ -950,15 +944,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="get/2"></span>
 
   <div class="detail-header">
-    <a href="#get/3" class="detail-link" title="Link to this function">
+    <a href="#get/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get(queryable, id, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -966,7 +958,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get/3"><code class="inline">Ecto.Repo.get/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get/3"><code class="inline">Ecto.Repo.get/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get!/3">
@@ -974,15 +966,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="get!/2"></span>
 
   <div class="detail-header">
-    <a href="#get!/3" class="detail-link" title="Link to this function">
+    <a href="#get!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get!(queryable, id, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -990,7 +980,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get!/3"><code class="inline">Ecto.Repo.get!/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get!/3"><code class="inline">Ecto.Repo.get!/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get_by/3">
@@ -998,15 +988,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="get_by/2"></span>
 
   <div class="detail-header">
-    <a href="#get_by/3" class="detail-link" title="Link to this function">
+    <a href="#get_by/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by(queryable, clauses, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1014,7 +1002,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_by/3"><code class="inline">Ecto.Repo.get_by/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_by/3"><code class="inline">Ecto.Repo.get_by/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get_by!/3">
@@ -1022,15 +1010,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="get_by!/2"></span>
 
   <div class="detail-header">
-    <a href="#get_by!/3" class="detail-link" title="Link to this function">
+    <a href="#get_by!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by!(queryable, clauses, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1038,21 +1024,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_by!/3"><code class="inline">Ecto.Repo.get_by!/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_by!/3"><code class="inline">Ecto.Repo.get_by!/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get_dynamic_repo/0">
 
   <div class="detail-header">
-    <a href="#get_dynamic_repo/0" class="detail-link" title="Link to this function">
+    <a href="#get_dynamic_repo/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_dynamic_repo()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1060,21 +1044,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:get_dynamic_repo/0"><code class="inline">Ecto.Repo.get_dynamic_repo/0</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:get_dynamic_repo/0"><code class="inline">Ecto.Repo.get_dynamic_repo/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="in_transaction?/0">
 
   <div class="detail-header">
-    <a href="#in_transaction?/0" class="detail-link" title="Link to this function">
+    <a href="#in_transaction?/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">in_transaction?()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1082,7 +1064,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:in_transaction?/0"><code class="inline">Ecto.Repo.in_transaction?/0</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:in_transaction?/0"><code class="inline">Ecto.Repo.in_transaction?/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="insert/2">
@@ -1090,15 +1072,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="insert/1"></span>
 
   <div class="detail-header">
-    <a href="#insert/2" class="detail-link" title="Link to this function">
+    <a href="#insert/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">insert(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1106,7 +1086,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert/2"><code class="inline">Ecto.Repo.insert/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert/2"><code class="inline">Ecto.Repo.insert/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="insert!/2">
@@ -1114,15 +1094,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="insert!/1"></span>
 
   <div class="detail-header">
-    <a href="#insert!/2" class="detail-link" title="Link to this function">
+    <a href="#insert!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">insert!(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1130,7 +1108,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert!/2"><code class="inline">Ecto.Repo.insert!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert!/2"><code class="inline">Ecto.Repo.insert!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="insert_all/3">
@@ -1138,15 +1116,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="insert_all/2"></span>
 
   <div class="detail-header">
-    <a href="#insert_all/3" class="detail-link" title="Link to this function">
+    <a href="#insert_all/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">insert_all(schema_or_source, entries, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1154,7 +1130,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_all/3"><code class="inline">Ecto.Repo.insert_all/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_all/3"><code class="inline">Ecto.Repo.insert_all/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="insert_or_update/2">
@@ -1162,15 +1138,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="insert_or_update/1"></span>
 
   <div class="detail-header">
-    <a href="#insert_or_update/2" class="detail-link" title="Link to this function">
+    <a href="#insert_or_update/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">insert_or_update(changeset, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1178,7 +1152,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_or_update/2"><code class="inline">Ecto.Repo.insert_or_update/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_or_update/2"><code class="inline">Ecto.Repo.insert_or_update/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="insert_or_update!/2">
@@ -1186,15 +1160,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="insert_or_update!/1"></span>
 
   <div class="detail-header">
-    <a href="#insert_or_update!/2" class="detail-link" title="Link to this function">
+    <a href="#insert_or_update!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">insert_or_update!(changeset, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1202,21 +1174,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:insert_or_update!/2"><code class="inline">Ecto.Repo.insert_or_update!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:insert_or_update!/2"><code class="inline">Ecto.Repo.insert_or_update!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="load/2">
 
   <div class="detail-header">
-    <a href="#load/2" class="detail-link" title="Link to this function">
+    <a href="#load/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">load(schema_or_types, data)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1224,21 +1194,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:load/2"><code class="inline">Ecto.Repo.load/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:load/2"><code class="inline">Ecto.Repo.load/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="multi_update/3">
 
   <div class="detail-header">
-    <a href="#multi_update/3" class="detail-link" title="Link to this function">
+    <a href="#multi_update/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">multi_update(multi, name, changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L12" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L12" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1252,15 +1220,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 <section class="detail" id="multi_update_guard/3">
 
   <div class="detail-header">
-    <a href="#multi_update_guard/3" class="detail-link" title="Link to this function">
+    <a href="#multi_update_guard/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">multi_update_guard(multi, name, model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L18" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L18" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1276,15 +1242,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="one/1"></span>
 
   <div class="detail-header">
-    <a href="#one/2" class="detail-link" title="Link to this function">
+    <a href="#one/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">one(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1292,7 +1256,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:one/2"><code class="inline">Ecto.Repo.one/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:one/2"><code class="inline">Ecto.Repo.one/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="one!/2">
@@ -1300,15 +1264,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="one!/1"></span>
 
   <div class="detail-header">
-    <a href="#one!/2" class="detail-link" title="Link to this function">
+    <a href="#one!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">one!(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1316,7 +1278,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:one!/2"><code class="inline">Ecto.Repo.one!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:one!/2"><code class="inline">Ecto.Repo.one!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="preload/3">
@@ -1324,15 +1286,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="preload/2"></span>
 
   <div class="detail-header">
-    <a href="#preload/3" class="detail-link" title="Link to this function">
+    <a href="#preload/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">preload(struct_or_structs_or_nil, preloads, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1340,21 +1300,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:preload/3"><code class="inline">Ecto.Repo.preload/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:preload/3"><code class="inline">Ecto.Repo.preload/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="prepare_query/3">
 
   <div class="detail-header">
-    <a href="#prepare_query/3" class="detail-link" title="Link to this function">
+    <a href="#prepare_query/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_query(operation, query, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1362,21 +1320,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:prepare_query/3"><code class="inline">Ecto.Repo.prepare_query/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:prepare_query/3"><code class="inline">Ecto.Repo.prepare_query/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="put_dynamic_repo/1">
 
   <div class="detail-header">
-    <a href="#put_dynamic_repo/1" class="detail-link" title="Link to this function">
+    <a href="#put_dynamic_repo/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">put_dynamic_repo(dynamic)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1384,7 +1340,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:put_dynamic_repo/1"><code class="inline">Ecto.Repo.put_dynamic_repo/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:put_dynamic_repo/1"><code class="inline">Ecto.Repo.put_dynamic_repo/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="query/3">
@@ -1394,15 +1350,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="query/2"></span>
 
   <div class="detail-header">
-    <a href="#query/3" class="detail-link" title="Link to this function">
+    <a href="#query/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query(sql, params \\ [], opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1410,7 +1364,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>A convenience function for SQL-based repositories that executes the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#query/4"><code class="inline">Ecto.Adapters.SQL.query/4</code></a> for more information.</p>
+<p>A convenience function for SQL-based repositories that executes the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#query/4"><code class="inline">Ecto.Adapters.SQL.query/4</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="query!/3">
@@ -1420,15 +1374,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="query!/2"></span>
 
   <div class="detail-header">
-    <a href="#query!/3" class="detail-link" title="Link to this function">
+    <a href="#query!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query!(sql, params \\ [], opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1436,7 +1388,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>A convenience function for SQL-based repositories that executes the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#query!/4"><code class="inline">Ecto.Adapters.SQL.query!/4</code></a> for more information.</p>
+<p>A convenience function for SQL-based repositories that executes the given query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#query!/4"><code class="inline">Ecto.Adapters.SQL.query!/4</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="query_many/3">
@@ -1446,15 +1398,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="query_many/2"></span>
 
   <div class="detail-header">
-    <a href="#query_many/3" class="detail-link" title="Link to this function">
+    <a href="#query_many/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_many(sql, params \\ [], opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1462,7 +1412,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>A convenience function for SQL-based repositories that executes the given multi-result query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#query_many/4"><code class="inline">Ecto.Adapters.SQL.query_many/4</code></a> for more information.</p>
+<p>A convenience function for SQL-based repositories that executes the given multi-result query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#query_many/4"><code class="inline">Ecto.Adapters.SQL.query_many/4</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="query_many!/3">
@@ -1472,15 +1422,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="query_many!/2"></span>
 
   <div class="detail-header">
-    <a href="#query_many!/3" class="detail-link" title="Link to this function">
+    <a href="#query_many!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_many!(sql, params \\ [], opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1488,7 +1436,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>A convenience function for SQL-based repositories that executes the given multi-result query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#query_many!/4"><code class="inline">Ecto.Adapters.SQL.query_many!/4</code></a> for more information.</p>
+<p>A convenience function for SQL-based repositories that executes the given multi-result query.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#query_many!/4"><code class="inline">Ecto.Adapters.SQL.query_many!/4</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="reload/2">
@@ -1496,15 +1444,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="reload/1"></span>
 
   <div class="detail-header">
-    <a href="#reload/2" class="detail-link" title="Link to this function">
+    <a href="#reload/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reload(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1512,7 +1458,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:reload/2"><code class="inline">Ecto.Repo.reload/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:reload/2"><code class="inline">Ecto.Repo.reload/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="reload!/2">
@@ -1520,15 +1466,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="reload!/1"></span>
 
   <div class="detail-header">
-    <a href="#reload!/2" class="detail-link" title="Link to this function">
+    <a href="#reload!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reload!(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1536,21 +1480,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:reload!/2"><code class="inline">Ecto.Repo.reload!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:reload!/2"><code class="inline">Ecto.Repo.reload!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="rollback/1">
 
   <div class="detail-header">
-    <a href="#rollback/1" class="detail-link" title="Link to this function">
+    <a href="#rollback/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">rollback(value)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1564,7 +1506,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:rollback/1"><code class="inline">Ecto.Repo.rollback/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:rollback/1"><code class="inline">Ecto.Repo.rollback/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_link/1">
@@ -1572,15 +1514,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="start_link/0"></span>
 
   <div class="detail-header">
-    <a href="#start_link/1" class="detail-link" title="Link to this function">
+    <a href="#start_link/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_link(opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1588,7 +1528,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:start_link/1"><code class="inline">Ecto.Repo.start_link/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:start_link/1"><code class="inline">Ecto.Repo.start_link/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stop/1">
@@ -1596,15 +1536,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="stop/0"></span>
 
   <div class="detail-header">
-    <a href="#stop/1" class="detail-link" title="Link to this function">
+    <a href="#stop/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop(timeout \\ 5000)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1612,7 +1550,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:stop/1"><code class="inline">Ecto.Repo.stop/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:stop/1"><code class="inline">Ecto.Repo.stop/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stream/2">
@@ -1620,15 +1558,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="stream/1"></span>
 
   <div class="detail-header">
-    <a href="#stream/2" class="detail-link" title="Link to this function">
+    <a href="#stream/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stream(queryable, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1636,21 +1572,19 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:stream/2"><code class="inline">Ecto.Repo.stream/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:stream/2"><code class="inline">Ecto.Repo.stream/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="to_sql/2">
 
   <div class="detail-header">
-    <a href="#to_sql/2" class="detail-link" title="Link to this function">
+    <a href="#to_sql/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_sql(operation, queryable)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1658,7 +1592,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>A convenience function for SQL-based repositories that translates the given query to SQL.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.9.2/Ecto.Adapters.SQL.html#to_sql/3"><code class="inline">Ecto.Adapters.SQL.to_sql/3</code></a> for more information.</p>
+<p>A convenience function for SQL-based repositories that translates the given query to SQL.</p><p>See <a href="https://hexdocs.pm/ecto_sql/3.12.1/Ecto.Adapters.SQL.html#to_sql/3"><code class="inline">Ecto.Adapters.SQL.to_sql/3</code></a> for more information.</p>
   </section>
 </section>
 <section class="detail" id="transaction/2">
@@ -1666,15 +1600,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="transaction/1"></span>
 
   <div class="detail-header">
-    <a href="#transaction/2" class="detail-link" title="Link to this function">
+    <a href="#transaction/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">transaction(fun_or_multi, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1682,7 +1614,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:transaction/2"><code class="inline">Ecto.Repo.transaction/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:transaction/2"><code class="inline">Ecto.Repo.transaction/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update/2">
@@ -1690,15 +1622,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="update/1"></span>
 
   <div class="detail-header">
-    <a href="#update/2" class="detail-link" title="Link to this function">
+    <a href="#update/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1706,7 +1636,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update/2"><code class="inline">Ecto.Repo.update/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update/2"><code class="inline">Ecto.Repo.update/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update!/2">
@@ -1714,15 +1644,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="update!/1"></span>
 
   <div class="detail-header">
-    <a href="#update!/2" class="detail-link" title="Link to this function">
+    <a href="#update!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update!(struct, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1730,7 +1658,7 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update!/2"><code class="inline">Ecto.Repo.update!/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update!/2"><code class="inline">Ecto.Repo.update!/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update_all/3">
@@ -1738,15 +1666,13 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
     <span id="update_all/2"></span>
 
   <div class="detail-header">
-    <a href="#update_all/3" class="detail-link" title="Link to this function">
+    <a href="#update_all/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update_all(queryable, updates, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/repo.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1754,41 +1680,40 @@ depending on the adapter to obtain statistics for the given query.</p><p>See <a 
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.9.5/Ecto.Repo.html#c:update_all/3"><code class="inline">Ecto.Repo.update_all/3</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.12.5/Ecto.Repo.html#c:update_all/3"><code class="inline">Ecto.Repo.update_all/3</code></a>.</p>
   </section>
 </section>
 
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

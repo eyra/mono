@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.Gettext — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>CoreWeb.Gettext — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,107 +33,133 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">CoreWeb.Gettext</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">CoreWeb.Gettext</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
-  <section id="moduledoc">
+    <section id="moduledoc">
 <p>A module providing Internationalization with a gettext-based API.</p><p>By using <a href="https://hexdocs.pm/gettext">Gettext</a>,
-your module gains a set of macros for translations, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">import</span><span class="w"> </span><span class="nc">CoreWeb.Gettext</span><span class="w">
+your module gains a set of macros for translations, for example:</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">Gettext</span><span class="p">,</span><span class="w"> </span><span class="ss">backend</span><span class="p">:</span><span class="w"> </span><span class="nc">CoreWeb.Gettext</span><span class="w">
 
 </span><span class="c1"># Simple translation</span><span class="w">
-</span><span class="n">gettext</span><span class="p" data-group-id="0858334139-1">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p" data-group-id="0858334139-1">)</span><span class="w">
+</span><span class="n">gettext</span><span class="p" data-group-id="4451892410-1">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p" data-group-id="4451892410-1">)</span><span class="w">
 
 </span><span class="c1"># Plural translation</span><span class="w">
-</span><span class="n">ngettext</span><span class="p" data-group-id="0858334139-2">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p">,</span><span class="w">
+</span><span class="n">ngettext</span><span class="p" data-group-id="4451892410-2">(</span><span class="s">&quot;Here is the string to translate&quot;</span><span class="p">,</span><span class="w">
          </span><span class="s">&quot;Here are the strings to translate&quot;</span><span class="p">,</span><span class="w">
-         </span><span class="mi">3</span><span class="p" data-group-id="0858334139-2">)</span><span class="w">
+         </span><span class="mi">3</span><span class="p" data-group-id="4451892410-2">)</span><span class="w">
 
 </span><span class="c1"># Domain-based translation</span><span class="w">
-</span><span class="n">dgettext</span><span class="p" data-group-id="0858334139-3">(</span><span class="s">&quot;errors&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Here is the error message to translate&quot;</span><span class="p" data-group-id="0858334139-3">)</span></code></pre><p>See the <a href="https://hexdocs.pm/gettext">Gettext Docs</a> for detailed usage.</p>
-  </section>
+</span><span class="n">dgettext</span><span class="p" data-group-id="4451892410-3">(</span><span class="s">&quot;errors&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Here is the error message to translate&quot;</span><span class="p" data-group-id="4451892410-3">)</span></code></pre><p>See the <a href="https://hexdocs.pm/gettext">Gettext Docs</a> for detailed usage.</p>
+    </section>
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -145,209 +168,31 @@ your module gains a set of macros for translations, for example:</p><pre><code c
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#dgettext/3" translate="no">dgettext(domain, msgid, bindings \\ Macro.escape(%{}))</a>
+        <a href="#handle_missing_bindings/2" data-no-tooltip translate="no">handle_missing_bindings(exception, incomplete)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dgettext/3"><code class="inline">Gettext.Backend.dgettext/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_bindings/2"><code class="inline">Gettext.Backend.handle_missing_bindings/2</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#dgettext_noop/2" translate="no">dgettext_noop(domain, msgid)</a>
+        <a href="#handle_missing_plural_translation/7" data-no-tooltip translate="no">handle_missing_plural_translation(locale, domain, msgctxt, msgid, msgid_plural, n, bindings)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dgettext_noop/2"><code class="inline">Gettext.Backend.dgettext_noop/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_plural_translation/7"><code class="inline">Gettext.Backend.handle_missing_plural_translation/7</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#dngettext/5" translate="no">dngettext(domain, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</a>
+        <a href="#handle_missing_translation/5" data-no-tooltip translate="no">handle_missing_translation(locale, domain, msgctxt, msgid, bindings)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dngettext/5"><code class="inline">Gettext.Backend.dngettext/5</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#dngettext_noop/3" translate="no">dngettext_noop(domain, msgid, msgid_plural)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dngettext_noop/3"><code class="inline">Gettext.Backend.dngettext_noop/3</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#dpgettext/4" translate="no">dpgettext(domain, msgctxt, msgid, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dpgettext/4"><code class="inline">Gettext.Backend.dpgettext/4</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#dpgettext_noop/3" translate="no">dpgettext_noop(domain, msgctxt, msgid)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#dpngettext/6" translate="no">dpngettext(domain, msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dpngettext/6"><code class="inline">Gettext.Backend.dpngettext/6</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#dpngettext_noop/4" translate="no">dpngettext_noop(domain, msgctxt, msgid, msgid_plural)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#gettext/2" translate="no">gettext(msgid, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext/2"><code class="inline">Gettext.Backend.gettext/2</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#gettext_comment/1" translate="no">gettext_comment(comment)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext_comment/1"><code class="inline">Gettext.Backend.gettext_comment/1</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#gettext_noop/1" translate="no">gettext_noop(msgid)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext_noop/1"><code class="inline">Gettext.Backend.gettext_noop/1</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#handle_missing_bindings/2" translate="no">handle_missing_bindings(exception, incomplete)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_bindings/2"><code class="inline">Gettext.Backend.handle_missing_bindings/2</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#handle_missing_plural_translation/7" translate="no">handle_missing_plural_translation(locale, domain, msgctxt, msgid, msgid_plural, n, bindings)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_plural_translation/7"><code class="inline">Gettext.Backend.handle_missing_plural_translation/7</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#handle_missing_translation/5" translate="no">handle_missing_translation(locale, domain, msgctxt, msgid, bindings)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_translation/5"><code class="inline">Gettext.Backend.handle_missing_translation/5</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#lgettext/5" translate="no">lgettext(locale, domain, msgctxt \\ nil, msgid, bindings)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#lngettext/7" translate="no">lngettext(locale, domain, msgctxt \\ nil, msgid, msgid_plural, n, bindings)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#ngettext/4" translate="no">ngettext(msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:ngettext/4"><code class="inline">Gettext.Backend.ngettext/4</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#ngettext_noop/2" translate="no">ngettext_noop(msgid, msgid_plural)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:ngettext_noop/2"><code class="inline">Gettext.Backend.ngettext_noop/2</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pgettext/3" translate="no">pgettext(msgctxt, msgid, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:pgettext/3"><code class="inline">Gettext.Backend.pgettext/3</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pgettext_noop/2" translate="no">pgettext_noop(msgid, context)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pngettext/5" translate="no">pngettext(msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:pngettext/5"><code class="inline">Gettext.Backend.pngettext/5</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#pngettext_noop/3" translate="no">pngettext_noop(msgctxt, msgid, msgid_plural)</a>
-
-      </div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_translation/5"><code class="inline">Gettext.Backend.handle_missing_translation/5</code></a>.</p></div>
 
     </div>
 
@@ -360,297 +205,20 @@ your module gains a set of macros for translations, for example:</p><pre><code c
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="dgettext/3">
-
-    <span id="dgettext/2"></span>
-
-  <div class="detail-header">
-    <a href="#dgettext/3" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dgettext(domain, msgid, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dgettext/3"><code class="inline">Gettext.Backend.dgettext/3</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dgettext_noop/2">
-
-  <div class="detail-header">
-    <a href="#dgettext_noop/2" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dgettext_noop(domain, msgid)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dgettext_noop/2"><code class="inline">Gettext.Backend.dgettext_noop/2</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dngettext/5">
-
-    <span id="dngettext/4"></span>
-
-  <div class="detail-header">
-    <a href="#dngettext/5" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dngettext(domain, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dngettext/5"><code class="inline">Gettext.Backend.dngettext/5</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dngettext_noop/3">
-
-  <div class="detail-header">
-    <a href="#dngettext_noop/3" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dngettext_noop(domain, msgid, msgid_plural)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dngettext_noop/3"><code class="inline">Gettext.Backend.dngettext_noop/3</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dpgettext/4">
-
-    <span id="dpgettext/3"></span>
-
-  <div class="detail-header">
-    <a href="#dpgettext/4" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dpgettext(domain, msgctxt, msgid, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dpgettext/4"><code class="inline">Gettext.Backend.dpgettext/4</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dpgettext_noop/3">
-
-  <div class="detail-header">
-    <a href="#dpgettext_noop/3" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dpgettext_noop(domain, msgctxt, msgid)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="dpngettext/6">
-
-    <span id="dpngettext/5"></span>
-
-  <div class="detail-header">
-    <a href="#dpngettext/6" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dpngettext(domain, msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:dpngettext/6"><code class="inline">Gettext.Backend.dpngettext/6</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="dpngettext_noop/4">
-
-  <div class="detail-header">
-    <a href="#dpngettext_noop/4" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">dpngettext_noop(domain, msgctxt, msgid, msgid_plural)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="gettext/2">
-
-    <span id="gettext/1"></span>
-
-  <div class="detail-header">
-    <a href="#gettext/2" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">gettext(msgid, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext/2"><code class="inline">Gettext.Backend.gettext/2</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="gettext_comment/1">
-
-  <div class="detail-header">
-    <a href="#gettext_comment/1" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">gettext_comment(comment)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext_comment/1"><code class="inline">Gettext.Backend.gettext_comment/1</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="gettext_noop/1">
-
-  <div class="detail-header">
-    <a href="#gettext_noop/1" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">gettext_noop(msgid)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:gettext_noop/1"><code class="inline">Gettext.Backend.gettext_noop/1</code></a>.</p>
-  </section>
-</section>
 <section class="detail" id="handle_missing_bindings/2">
 
   <div class="detail-header">
-    <a href="#handle_missing_bindings/2" class="detail-link" title="Link to this function">
+    <a href="#handle_missing_bindings/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">handle_missing_bindings(exception, incomplete)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -658,21 +226,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_bindings/2"><code class="inline">Gettext.Backend.handle_missing_bindings/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_bindings/2"><code class="inline">Gettext.Backend.handle_missing_bindings/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="handle_missing_plural_translation/7">
 
   <div class="detail-header">
-    <a href="#handle_missing_plural_translation/7" class="detail-link" title="Link to this function">
+    <a href="#handle_missing_plural_translation/7" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">handle_missing_plural_translation(locale, domain, msgctxt, msgid, msgid_plural, n, bindings)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -680,21 +246,19 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_plural_translation/7"><code class="inline">Gettext.Backend.handle_missing_plural_translation/7</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_plural_translation/7"><code class="inline">Gettext.Backend.handle_missing_plural_translation/7</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="handle_missing_translation/5">
 
   <div class="detail-header">
-    <a href="#handle_missing_translation/5" class="detail-link" title="Link to this function">
+    <a href="#handle_missing_translation/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">handle_missing_translation(locale, domain, msgctxt, msgid, bindings)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L23" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -702,239 +266,40 @@ Functions
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:handle_missing_translation/5"><code class="inline">Gettext.Backend.handle_missing_translation/5</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="lgettext/5">
-
-    <span id="lgettext/4"></span>
-
-  <div class="detail-header">
-    <a href="#lgettext/5" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">lgettext(locale, domain, msgctxt \\ nil, msgid, bindings)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="lngettext/7">
-
-    <span id="lngettext/6"></span>
-
-  <div class="detail-header">
-    <a href="#lngettext/7" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">lngettext(locale, domain, msgctxt \\ nil, msgid, msgid_plural, n, bindings)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="ngettext/4">
-
-    <span id="ngettext/3"></span>
-
-  <div class="detail-header">
-    <a href="#ngettext/4" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">ngettext(msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:ngettext/4"><code class="inline">Gettext.Backend.ngettext/4</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="ngettext_noop/2">
-
-  <div class="detail-header">
-    <a href="#ngettext_noop/2" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">ngettext_noop(msgid, msgid_plural)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:ngettext_noop/2"><code class="inline">Gettext.Backend.ngettext_noop/2</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="pgettext/3">
-
-    <span id="pgettext/2"></span>
-
-  <div class="detail-header">
-    <a href="#pgettext/3" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">pgettext(msgctxt, msgid, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:pgettext/3"><code class="inline">Gettext.Backend.pgettext/3</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="pgettext_noop/2">
-
-  <div class="detail-header">
-    <a href="#pgettext_noop/2" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">pgettext_noop(msgid, context)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="pngettext/5">
-
-    <span id="pngettext/4"></span>
-
-  <div class="detail-header">
-    <a href="#pngettext/5" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">pngettext(msgctxt, msgid, msgid_plural, n, bindings \\ Macro.escape(%{}))</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.22.1/Gettext.Backend.html#c:pngettext/5"><code class="inline">Gettext.Backend.pngettext/5</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="pngettext_noop/3">
-
-  <div class="detail-header">
-    <a href="#pngettext_noop/3" class="detail-link" title="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature" translate="no">pngettext_noop(msgctxt, msgid, msgid_plural)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/gettext.ex#L1" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(macro)</span>
-
-  </div>
-
-  <section class="docstring">
-
-
+<p>Callback implementation for <a href="https://hexdocs.pm/gettext/0.26.2/Gettext.Backend.html#c:handle_missing_translation/5"><code class="inline">Gettext.Backend.handle_missing_translation/5</code></a>.</p>
   </section>
 </section>
 
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

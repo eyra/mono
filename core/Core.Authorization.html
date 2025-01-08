@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Core.Authorization — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Core.Authorization — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,96 +33,122 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Core.Authorization</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Core.Authorization</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
-  <section id="moduledoc">
+    <section id="moduledoc">
 <p>The authorization system for Core.</p><p>It makes use of the GreenLight framework to manage permissions and
 authorization.</p>
-  </section>
+    </section>
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -134,7 +157,7 @@ authorization.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#allowed?/2" translate="no">allowed?(roles, permission)</a>
+        <a href="#allowed?/2" data-no-tooltip translate="no">allowed?(roles, permission)</a>
 
       </div>
 
@@ -142,7 +165,7 @@ authorization.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#assign_role/3" translate="no">assign_role(result, principal, role)</a>
+        <a href="#assign_role/3" data-no-tooltip translate="no">assign_role(result, principal, role)</a>
 
       </div>
 
@@ -153,7 +176,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#build_role_assignment/3" translate="no">build_role_assignment(principal, entity, role)</a>
+        <a href="#build_role_assignment/3" data-no-tooltip translate="no">build_role_assignment(principal, entity, role)</a>
 
       </div>
 
@@ -161,7 +184,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#can?/2" translate="no">can?(principal, permission)</a>
+        <a href="#can?/2" data-no-tooltip translate="no">can?(principal, permission)</a>
 
       </div>
 
@@ -169,7 +192,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#can?/3" translate="no">can?(principal, entity, permission)</a>
+        <a href="#can?/3" data-no-tooltip translate="no">can?(principal, entity, permission)</a>
 
       </div>
 
@@ -177,7 +200,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#can?/4" translate="no">can?(principal, entity_or_entities, module, action)</a>
+        <a href="#can?/4" data-no-tooltip translate="no">can?(principal, entity_or_entities, module, action)</a>
 
       </div>
 
@@ -185,7 +208,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#can_access?/2" translate="no">can_access?(principal, module)</a>
+        <a href="#can_access?/2" data-no-tooltip translate="no">can_access?(principal, module)</a>
 
       </div>
 
@@ -193,7 +216,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#can_access?/3" translate="no">can_access?(principal, entity, module)</a>
+        <a href="#can_access?/3" data-no-tooltip translate="no">can_access?(principal, entity, module)</a>
 
       </div>
 
@@ -201,7 +224,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy/1" translate="no">copy(node)</a>
+        <a href="#copy/1" data-no-tooltip translate="no">copy(node)</a>
 
       </div>
 
@@ -209,7 +232,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy/2" translate="no">copy(node, new_parent)</a>
+        <a href="#copy/2" data-no-tooltip translate="no">copy(node, new_parent)</a>
 
       </div>
 
@@ -217,7 +240,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy_auth_node/1" translate="no">copy_auth_node(map)</a>
+        <a href="#copy_auth_node/1" data-no-tooltip translate="no">copy_auth_node(map)</a>
 
       </div>
 
@@ -225,7 +248,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy_auth_node/2" translate="no">copy_auth_node(arg1, new_parent)</a>
+        <a href="#copy_auth_node/2" data-no-tooltip translate="no">copy_auth_node(arg1, new_parent)</a>
 
       </div>
 
@@ -233,7 +256,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy_role/2" translate="no">copy_role(role, node)</a>
+        <a href="#copy_role/2" data-no-tooltip translate="no">copy_role(role, node)</a>
 
       </div>
 
@@ -241,7 +264,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_node/1" translate="no">create_node(parent \\ nil)</a>
+        <a href="#create_node/1" data-no-tooltip translate="no">create_node(parent \\ nil)</a>
 
       </div>
 
@@ -249,7 +272,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_node!/1" translate="no">create_node!(parent \\ nil)</a>
+        <a href="#create_node!/1" data-no-tooltip translate="no">create_node!(parent \\ nil)</a>
 
       </div>
 
@@ -257,7 +280,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#first_user_with_role/3" translate="no">first_user_with_role(entity, role, preload)</a>
+        <a href="#first_user_with_role/3" data-no-tooltip translate="no">first_user_with_role(entity, role, preload)</a>
 
       </div>
 
@@ -265,7 +288,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_node!/1" translate="no">get_node!(id)</a>
+        <a href="#get_node!/1" data-no-tooltip translate="no">get_node!(id)</a>
 
       </div>
 
@@ -273,7 +296,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_parent_nodes/1" translate="no">get_parent_nodes(node_id)</a>
+        <a href="#get_parent_nodes/1" data-no-tooltip translate="no">get_parent_nodes(node_id)</a>
 
       </div>
 
@@ -281,7 +304,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#link/1" translate="no">link(auth_tree)</a>
+        <a href="#link/1" data-no-tooltip translate="no">link(auth_tree)</a>
 
       </div>
 
@@ -289,7 +312,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#link/2" translate="no">link(multi, arg)</a>
+        <a href="#link/2" data-no-tooltip translate="no">link(multi, arg)</a>
 
       </div>
 
@@ -297,7 +320,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#link/3" translate="no">link(multi, parent, child)</a>
+        <a href="#link/3" data-no-tooltip translate="no">link(multi, parent, child)</a>
 
       </div>
 
@@ -305,7 +328,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_principals/1" translate="no">list_principals(entity)</a>
+        <a href="#list_principals/1" data-no-tooltip translate="no">list_principals(entity)</a>
 
       </div>
 
@@ -313,7 +336,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_roles/2" translate="no">list_roles(principal, entities)</a>
+        <a href="#list_roles/2" data-no-tooltip translate="no">list_roles(principal, entities)</a>
 
       </div>
 
@@ -321,7 +344,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#permission_map/0" translate="no">permission_map()</a>
+        <a href="#permission_map/0" data-no-tooltip translate="no">permission_map()</a>
 
       </div>
 
@@ -329,7 +352,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#possible_roles/0" translate="no">possible_roles()</a>
+        <a href="#possible_roles/0" data-no-tooltip translate="no">possible_roles()</a>
 
       </div>
 
@@ -337,7 +360,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_node/0" translate="no">prepare_node()</a>
+        <a href="#prepare_node/0" data-no-tooltip translate="no">prepare_node()</a>
 
       </div>
 
@@ -345,7 +368,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_node/1" translate="no">prepare_node(roles)</a>
+        <a href="#prepare_node/1" data-no-tooltip translate="no">prepare_node(roles)</a>
 
       </div>
 
@@ -353,7 +376,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_node/2" translate="no">prepare_node(principal, role)</a>
+        <a href="#prepare_node/2" data-no-tooltip translate="no">prepare_node(principal, role)</a>
 
       </div>
 
@@ -361,7 +384,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_role/2" translate="no">prepare_role(principal, role)</a>
+        <a href="#prepare_role/2" data-no-tooltip translate="no">prepare_role(principal, role)</a>
 
       </div>
 
@@ -369,7 +392,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_role/3" translate="no">prepare_role(node, principal, role)</a>
+        <a href="#prepare_role/3" data-no-tooltip translate="no">prepare_role(node, principal, role)</a>
 
       </div>
 
@@ -377,7 +400,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#print_roles/1" translate="no">print_roles(entity)</a>
+        <a href="#print_roles/1" data-no-tooltip translate="no">print_roles(entity)</a>
 
       </div>
 
@@ -385,7 +408,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_node_ids/1" translate="no">query_node_ids(opts \\ [])</a>
+        <a href="#query_node_ids/1" data-no-tooltip translate="no">query_node_ids(opts \\ [])</a>
 
       </div>
 
@@ -393,7 +416,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_principal_ids/1" translate="no">query_principal_ids(opts \\ [])</a>
+        <a href="#query_principal_ids/1" data-no-tooltip translate="no">query_principal_ids(opts \\ [])</a>
 
       </div>
 
@@ -401,7 +424,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_role_assignment/3" translate="no">query_role_assignment(principal, entity, role)</a>
+        <a href="#query_role_assignment/3" data-no-tooltip translate="no">query_role_assignment(principal, entity, role)</a>
 
       </div>
 
@@ -409,7 +432,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#remove_role!/3" translate="no">remove_role!(principal, entity, role)</a>
+        <a href="#remove_role!/3" data-no-tooltip translate="no">remove_role!(principal, entity, role)</a>
 
       </div>
 
@@ -417,7 +440,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#role_assignment_schema/0" translate="no">role_assignment_schema()</a>
+        <a href="#role_assignment_schema/0" data-no-tooltip translate="no">role_assignment_schema()</a>
 
       </div>
 
@@ -425,7 +448,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#roles_intersect?/3" translate="no">roles_intersect?(principal, entity, roles)</a>
+        <a href="#roles_intersect?/3" data-no-tooltip translate="no">roles_intersect?(principal, entity, roles)</a>
 
       </div>
 
@@ -433,7 +456,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#top_entity/1" translate="no">top_entity(entity)</a>
+        <a href="#top_entity/1" data-no-tooltip translate="no">top_entity(entity)</a>
 
       </div>
 
@@ -441,7 +464,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#user_has_role?/3" translate="no">user_has_role?(user_id, entity, role)</a>
+        <a href="#user_has_role?/3" data-no-tooltip translate="no">user_has_role?(user_id, entity, role)</a>
 
       </div>
 
@@ -449,7 +472,7 @@ this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#users_with_role/3" translate="no">users_with_role(node_id, role, preload \\ [])</a>
+        <a href="#users_with_role/3" data-no-tooltip translate="no">users_with_role(node_id, role, preload \\ [])</a>
 
       </div>
 
@@ -464,23 +487,20 @@ this function.</p></div>
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="allowed?/2">
 
   <div class="detail-header">
-    <a href="#allowed?/2" class="detail-link" title="Link to this function">
+    <a href="#allowed?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">allowed?(roles, permission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -494,15 +514,13 @@ Functions
 <section class="detail" id="assign_role/3">
 
   <div class="detail-header">
-    <a href="#assign_role/3" class="detail-link" title="Link to this function">
+    <a href="#assign_role/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">assign_role(result, principal, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -517,15 +535,13 @@ this function.</p>
 <section class="detail" id="build_role_assignment/3">
 
   <div class="detail-header">
-    <a href="#build_role_assignment/3" class="detail-link" title="Link to this function">
+    <a href="#build_role_assignment/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">build_role_assignment(principal, entity, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -539,15 +555,13 @@ this function.</p>
 <section class="detail" id="can?/2">
 
   <div class="detail-header">
-    <a href="#can?/2" class="detail-link" title="Link to this function">
+    <a href="#can?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">can?(principal, permission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -567,15 +581,13 @@ this function.</p>
 <section class="detail" id="can?/3">
 
   <div class="detail-header">
-    <a href="#can?/3" class="detail-link" title="Link to this function">
+    <a href="#can?/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">can?(principal, entity, permission)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L231" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -589,15 +601,13 @@ this function.</p>
 <section class="detail" id="can?/4">
 
   <div class="detail-header">
-    <a href="#can?/4" class="detail-link" title="Link to this function">
+    <a href="#can?/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">can?(principal, entity_or_entities, module, action)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -611,15 +621,13 @@ this function.</p>
 <section class="detail" id="can_access?/2">
 
   <div class="detail-header">
-    <a href="#can_access?/2" class="detail-link" title="Link to this function">
+    <a href="#can_access?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">can_access?(principal, module)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L218" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L218" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -633,15 +641,13 @@ this function.</p>
 <section class="detail" id="can_access?/3">
 
   <div class="detail-header">
-    <a href="#can_access?/3" class="detail-link" title="Link to this function">
+    <a href="#can_access?/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">can_access?(principal, entity, module)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L223" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L223" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -655,15 +661,13 @@ this function.</p>
 <section class="detail" id="copy/1">
 
   <div class="detail-header">
-    <a href="#copy/1" class="detail-link" title="Link to this function">
+    <a href="#copy/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy(node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L138" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L138" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -677,15 +681,13 @@ this function.</p>
 <section class="detail" id="copy/2">
 
   <div class="detail-header">
-    <a href="#copy/2" class="detail-link" title="Link to this function">
+    <a href="#copy/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy(node, new_parent)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L148" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L148" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -699,15 +701,13 @@ this function.</p>
 <section class="detail" id="copy_auth_node/1">
 
   <div class="detail-header">
-    <a href="#copy_auth_node/1" class="detail-link" title="Link to this function">
+    <a href="#copy_auth_node/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy_auth_node(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L169" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L169" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -721,15 +721,13 @@ this function.</p>
 <section class="detail" id="copy_auth_node/2">
 
   <div class="detail-header">
-    <a href="#copy_auth_node/2" class="detail-link" title="Link to this function">
+    <a href="#copy_auth_node/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy_auth_node(arg1, new_parent)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L161" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -743,15 +741,13 @@ this function.</p>
 <section class="detail" id="copy_role/2">
 
   <div class="detail-header">
-    <a href="#copy_role/2" class="detail-link" title="Link to this function">
+    <a href="#copy_role/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy_role(role, node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L173" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -767,15 +763,13 @@ this function.</p>
     <span id="create_node/0"></span>
 
   <div class="detail-header">
-    <a href="#create_node/1" class="detail-link" title="Link to this function">
+    <a href="#create_node/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_node(parent \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L124" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L124" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -791,15 +785,13 @@ this function.</p>
     <span id="create_node!/0"></span>
 
   <div class="detail-header">
-    <a href="#create_node!/1" class="detail-link" title="Link to this function">
+    <a href="#create_node!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_node!(parent \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L131" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L131" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -813,15 +805,13 @@ this function.</p>
 <section class="detail" id="first_user_with_role/3">
 
   <div class="detail-header">
-    <a href="#first_user_with_role/3" class="detail-link" title="Link to this function">
+    <a href="#first_user_with_role/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">first_user_with_role(entity, role, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L267" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L267" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -835,15 +825,13 @@ this function.</p>
 <section class="detail" id="get_node!/1">
 
   <div class="detail-header">
-    <a href="#get_node!/1" class="detail-link" title="Link to this function">
+    <a href="#get_node!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_node!(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L78" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L78" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -857,15 +845,13 @@ this function.</p>
 <section class="detail" id="get_parent_nodes/1">
 
   <div class="detail-header">
-    <a href="#get_parent_nodes/1" class="detail-link" title="Link to this function">
+    <a href="#get_parent_nodes/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_parent_nodes(node_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L196" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L196" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -879,15 +865,13 @@ this function.</p>
 <section class="detail" id="link/1">
 
   <div class="detail-header">
-    <a href="#link/1" class="detail-link" title="Link to this function">
+    <a href="#link/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">link(auth_tree)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L289" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L289" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -901,15 +885,13 @@ this function.</p>
 <section class="detail" id="link/2">
 
   <div class="detail-header">
-    <a href="#link/2" class="detail-link" title="Link to this function">
+    <a href="#link/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">link(multi, arg)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L295" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L295" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -923,15 +905,13 @@ this function.</p>
 <section class="detail" id="link/3">
 
   <div class="detail-header">
-    <a href="#link/3" class="detail-link" title="Link to this function">
+    <a href="#link/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">link(multi, parent, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L316" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L316" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -945,15 +925,13 @@ this function.</p>
 <section class="detail" id="list_principals/1">
 
   <div class="detail-header">
-    <a href="#list_principals/1" class="detail-link" title="Link to this function">
+    <a href="#list_principals/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_principals(entity)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -967,15 +945,13 @@ this function.</p>
 <section class="detail" id="list_roles/2">
 
   <div class="detail-header">
-    <a href="#list_roles/2" class="detail-link" title="Link to this function">
+    <a href="#list_roles/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_roles(principal, entities)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -989,15 +965,13 @@ this function.</p>
 <section class="detail" id="permission_map/0">
 
   <div class="detail-header">
-    <a href="#permission_map/0" class="detail-link" title="Link to this function">
+    <a href="#permission_map/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">permission_map()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1011,15 +985,13 @@ this function.</p>
 <section class="detail" id="possible_roles/0">
 
   <div class="detail-header">
-    <a href="#possible_roles/0" class="detail-link" title="Link to this function">
+    <a href="#possible_roles/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">possible_roles()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1033,15 +1005,13 @@ this function.</p>
 <section class="detail" id="prepare_node/0">
 
   <div class="detail-header">
-    <a href="#prepare_node/0" class="detail-link" title="Link to this function">
+    <a href="#prepare_node/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_node()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L80" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L80" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1055,15 +1025,13 @@ this function.</p>
 <section class="detail" id="prepare_node/1">
 
   <div class="detail-header">
-    <a href="#prepare_node/1" class="detail-link" title="Link to this function">
+    <a href="#prepare_node/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_node(roles)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L84" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L84" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1077,15 +1045,13 @@ this function.</p>
 <section class="detail" id="prepare_node/2">
 
   <div class="detail-header">
-    <a href="#prepare_node/2" class="detail-link" title="Link to this function">
+    <a href="#prepare_node/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_node(principal, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L100" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L100" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1099,15 +1065,13 @@ this function.</p>
 <section class="detail" id="prepare_role/2">
 
   <div class="detail-header">
-    <a href="#prepare_role/2" class="detail-link" title="Link to this function">
+    <a href="#prepare_role/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_role(principal, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L105" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L105" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1121,15 +1085,13 @@ this function.</p>
 <section class="detail" id="prepare_role/3">
 
   <div class="detail-header">
-    <a href="#prepare_role/3" class="detail-link" title="Link to this function">
+    <a href="#prepare_role/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">prepare_role(node, principal, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L114" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1143,15 +1105,13 @@ this function.</p>
 <section class="detail" id="print_roles/1">
 
   <div class="detail-header">
-    <a href="#print_roles/1" class="detail-link" title="Link to this function">
+    <a href="#print_roles/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">print_roles(entity)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L332" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L332" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1167,15 +1127,13 @@ this function.</p>
     <span id="query_node_ids/0"></span>
 
   <div class="detail-header">
-    <a href="#query_node_ids/1" class="detail-link" title="Link to this function">
+    <a href="#query_node_ids/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_node_ids(opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1191,15 +1149,13 @@ this function.</p>
     <span id="query_principal_ids/0"></span>
 
   <div class="detail-header">
-    <a href="#query_principal_ids/1" class="detail-link" title="Link to this function">
+    <a href="#query_principal_ids/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_principal_ids(opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1213,15 +1169,13 @@ this function.</p>
 <section class="detail" id="query_role_assignment/3">
 
   <div class="detail-header">
-    <a href="#query_role_assignment/3" class="detail-link" title="Link to this function">
+    <a href="#query_role_assignment/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_role_assignment(principal, entity, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1235,15 +1189,13 @@ this function.</p>
 <section class="detail" id="remove_role!/3">
 
   <div class="detail-header">
-    <a href="#remove_role!/3" class="detail-link" title="Link to this function">
+    <a href="#remove_role!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">remove_role!(principal, entity, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1257,15 +1209,13 @@ this function.</p>
 <section class="detail" id="role_assignment_schema/0">
 
   <div class="detail-header">
-    <a href="#role_assignment_schema/0" class="detail-link" title="Link to this function">
+    <a href="#role_assignment_schema/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">role_assignment_schema()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L8" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1279,15 +1229,13 @@ this function.</p>
 <section class="detail" id="roles_intersect?/3">
 
   <div class="detail-header">
-    <a href="#roles_intersect?/3" class="detail-link" title="Link to this function">
+    <a href="#roles_intersect?/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">roles_intersect?(principal, entity, roles)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L200" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L200" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1301,15 +1249,13 @@ this function.</p>
 <section class="detail" id="top_entity/1">
 
   <div class="detail-header">
-    <a href="#top_entity/1" class="detail-link" title="Link to this function">
+    <a href="#top_entity/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">top_entity(entity)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L283" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L283" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1323,15 +1269,13 @@ this function.</p>
 <section class="detail" id="user_has_role?/3">
 
   <div class="detail-header">
-    <a href="#user_has_role?/3" class="detail-link" title="Link to this function">
+    <a href="#user_has_role?/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">user_has_role?(user_id, entity, role)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L258" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L258" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1347,15 +1291,13 @@ this function.</p>
     <span id="users_with_role/2"></span>
 
   <div class="detail-header">
-    <a href="#users_with_role/3" class="detail-link" title="Link to this function">
+    <a href="#users_with_role/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">users_with_role(node_id, role, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L236" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core/authorization.ex#L236" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1370,34 +1312,33 @@ this function.</p>
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

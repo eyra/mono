@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Self hosting — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Self hosting — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="extras" class="page-extra">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,92 +33,118 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/../SELFHOSTING.md#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
+
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/../SELFHOSTING.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
 
 
-  <span>Self hosting</span>
-</h1>
+    <span>Self hosting</span>
+  </h1>
 
 <h2 id="development-instructions" class="section-heading">
-  <a href="#development-instructions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">development-instructions</p>
+  <a href="#development-instructions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Development instructions
+  <span class="text">Development instructions</span>
 </h2>
 <h3 id="setup" class="section-heading">
-  <a href="#setup" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">setup</p>
+  <a href="#setup" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Setup
+  <span class="text">Setup</span>
 </h3>
 <ol start="0"><li><p>Pre-requisite</p><ul><li>Install <a href="https://asdf-vm.com">asdf</a></li><li>Install <a href="https://www.postgresql.org">PostgreSQL Server</a></li><li>Fork and clone branch <code class="inline">master</code> of this Mono repo.</li><li>Register application on <a href="https://unsplash.com/">Unsplash</a> which is used as an Image Catalog.</li></ul></li><li><p>Create a PostgreSQL database and replace the configurated values in <code class="inline">core/config/dev.exs</code> with your own:</p><pre><code class="Elixir"> # Configure your database
  config :core, Core.Repo,
@@ -137,28 +160,28 @@ core
 </span></code></pre></li><li><p>Build Core (from core folder):</p><pre><code class="makeup sh" translate="no"><span class=""> $ BUNDLE=self mix compile
 </span></code></pre></li><li><p>Run Core locally (from core folder):</p><pre><code class="makeup sh" translate="no"><span class=""> $ BUNDLE=self mix phx.server
 </span></code></pre></li><li><p>Go to browser</p><p> The Core app is running at: <a href="http://localhost:4000">http://localhost:4000</a></p></li></ol><h2 id="customizing" class="section-heading">
-  <a href="#customizing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">customizing</p>
+  <a href="#customizing" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Customizing
+  <span class="text">Customizing</span>
 </h2>
 <h3 id="branding" class="section-heading">
-  <a href="#branding" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">branding</p>
+  <a href="#branding" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Branding
+  <span class="text">Branding</span>
 </h3>
 <ul><li>Replace <a href="core/assets/static/images/icons/self.svg">self.svg</a> and <a href="core/assets/static/images/icons/self_wide.svg">self_wide.svg</a> with your icons of choice.</li><li>Change <a href="core/lib/core_web/ui/footer.ex">footer.ex</a> to format the platform footer or remove it completely</li></ul><h3 id="menu-items" class="section-heading">
-  <a href="#menu-items" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">menu-items</p>
+  <a href="#menu-items" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Menu items
+  <span class="text">Menu items</span>
 </h3>
 <ul><li>In <a href="core/bundles/self/lib/menu/items.ex">items.ex</a> you will find all the menu items. Add custom items when required.</li></ul><p>Core supports the following page layouts:</p><ul><li>Stripped: minimalistic page without menu</li><li>Website: menu at the top</li><li>Workspace: menu on the left</li></ul><p>Change the menus here:</p><ul><li><a href="core/bundles/self/lib/layouts/stripped/menu_builder.ex">Stripped</a></li><li><a href="core/bundles/self/lib/layouts/website/menu_builder.ex">Website</a></li><li><a href="core/bundles/self/lib/layouts/workspace/menu_builder.ex">Workspace</a></li></ul><h3 id="rate-limiters" class="section-heading">
-  <a href="#rate-limiters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">rate-limiters</p>
+  <a href="#rate-limiters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Rate limiters
+  <span class="text">Rate limiters</span>
 </h3>
 <p>To prevent users from exhausting resources on external services, Core uses rate limiters. The local configuration of rate limiters can be found in <code class="inline">core/config/dev.exs</code>:</p><pre><code class="Elixir">config :core, :rate,
   prune_interval: 5 * 1000,
@@ -172,10 +195,10 @@ core
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
   ]</code></pre><h2 id="release-instructions" class="section-heading">
-  <a href="#release-instructions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">release-instructions</p>
+  <a href="#release-instructions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Release instructions
+  <span class="text">Release instructions</span>
 </h2>
 <ol><li>Create a Docker image</li></ol><pre><code class="makeup sh" translate="no"><span class="gp unselectable">$ </span><span class="">cd core
 </span><span class="gp unselectable">$ </span><span class="">docker build  --build-arg VERSION=1.0.0 --build-arg BUNDLE=self . -t self:latest
@@ -192,7 +215,9 @@ core
 | PUBLIC_S3_URL | Public accessable url of an S3 service | &quot;<a href="https://self-public.s3.eu-central-1.amazonaws.com%22">https://self-public.s3.eu-central-1.amazonaws.com&quot;</a> |
 | PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | &quot;self-prod&quot; |
 | DIST_HOSTS | Comma seperated list of hosts in the cluster, see: <a href="https://elixirschool.com/en/lessons/advanced/otp_distribution">OTP Distribution</a> | &quot;one, two&quot; |</p>
-<div class="bottom-actions">
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
 
       <a href="api-reference.html" class="bottom-actions-button" rel="prev">
@@ -218,34 +243,33 @@ Eyra Mono
 
   </div>
 </div>
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

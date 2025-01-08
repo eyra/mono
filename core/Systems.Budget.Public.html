@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Budget.Public — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Systems.Budget.Public — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Systems.Budget.Public</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Systems.Budget.Public</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_bank_account/5" translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</a>
+        <a href="#create_bank_account/5" data-no-tooltip translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</a>
 
       </div>
 
@@ -137,7 +160,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_budget/3" translate="no">create_budget(currency, name, icon)</a>
+        <a href="#create_budget/3" data-no-tooltip translate="no">create_budget(currency, name, icon)</a>
 
       </div>
 
@@ -145,7 +168,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_budget/4" translate="no">create_budget(currency, name, icon, owner)</a>
+        <a href="#create_budget/4" data-no-tooltip translate="no">create_budget(currency, name, icon, owner)</a>
 
       </div>
 
@@ -153,7 +176,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_currency_and_budget/5" translate="no">create_currency_and_budget(name, icon, type, decimal_scale, label)</a>
+        <a href="#create_currency_and_budget/5" data-no-tooltip translate="no">create_currency_and_budget(name, icon, type, decimal_scale, label)</a>
 
       </div>
 
@@ -161,7 +184,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_reward/4" translate="no">create_reward(budget, amount, user, idempotence_key)</a>
+        <a href="#create_reward/4" data-no-tooltip translate="no">create_reward(budget, amount, user, idempotence_key)</a>
 
       </div>
 
@@ -169,7 +192,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_reward/5" translate="no">create_reward(multi, budget, amount, user, idempotence_key)</a>
+        <a href="#create_reward/5" data-no-tooltip translate="no">create_reward(multi, budget, amount, user, idempotence_key)</a>
 
       </div>
 
@@ -177,7 +200,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get!/2" translate="no">get!(id, preload \\ [:fund, :reserve])</a>
+        <a href="#get!/2" data-no-tooltip translate="no">get!(id, preload \\ [:fund, :reserve])</a>
 
       </div>
 
@@ -185,7 +208,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_bank_account!/2" translate="no">get_bank_account!(id, preload \\ [])</a>
+        <a href="#get_bank_account!/2" data-no-tooltip translate="no">get_bank_account!(id, preload \\ [])</a>
 
       </div>
 
@@ -193,7 +216,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_currency!/2" translate="no">get_by_currency!(currency_model, preload \\ [])</a>
+        <a href="#get_by_currency!/2" data-no-tooltip translate="no">get_by_currency!(currency_model, preload \\ [])</a>
 
       </div>
 
@@ -201,7 +224,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_name/2" translate="no">get_by_name(name, preload \\ [])</a>
+        <a href="#get_by_name/2" data-no-tooltip translate="no">get_by_name(name, preload \\ [])</a>
 
       </div>
 
@@ -209,7 +232,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_currency!/2" translate="no">get_currency!(id, preload \\ [])</a>
+        <a href="#get_currency!/2" data-no-tooltip translate="no">get_currency!(id, preload \\ [])</a>
 
       </div>
 
@@ -217,7 +240,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_currency_by_name/2" translate="no">get_currency_by_name(name, preload \\ [])</a>
+        <a href="#get_currency_by_name/2" data-no-tooltip translate="no">get_currency_by_name(name, preload \\ [])</a>
 
       </div>
 
@@ -225,7 +248,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_reward/2" translate="no">get_reward(idempotence_key, preload)</a>
+        <a href="#get_reward/2" data-no-tooltip translate="no">get_reward(idempotence_key, preload)</a>
 
       </div>
 
@@ -233,7 +256,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_reward/3" translate="no">get_reward(model, user, preload \\ [])</a>
+        <a href="#get_reward/3" data-no-tooltip translate="no">get_reward(model, user, preload \\ [])</a>
 
       </div>
 
@@ -241,7 +264,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_reward!/2" translate="no">get_reward!(id, preload \\ [:budget, :deposit, :payment, :user])</a>
+        <a href="#get_reward!/2" data-no-tooltip translate="no">get_reward!(id, preload \\ [:budget, :deposit, :payment, :user])</a>
 
       </div>
 
@@ -249,7 +272,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_wallet_identifier/2" translate="no">get_wallet_identifier(user, currency_name)</a>
+        <a href="#get_wallet_identifier/2" data-no-tooltip translate="no">get_wallet_identifier(user, currency_name)</a>
 
       </div>
 
@@ -257,7 +280,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list/1" translate="no">list(preload \\ [])</a>
+        <a href="#list/1" data-no-tooltip translate="no">list(preload \\ [])</a>
 
       </div>
 
@@ -265,7 +288,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_bank_accounts/1" translate="no">list_bank_accounts(preload \\ [])</a>
+        <a href="#list_bank_accounts/1" data-no-tooltip translate="no">list_bank_accounts(preload \\ [])</a>
 
       </div>
 
@@ -273,7 +296,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_currencies/1" translate="no">list_currencies(preload \\ [])</a>
+        <a href="#list_currencies/1" data-no-tooltip translate="no">list_currencies(preload \\ [])</a>
 
       </div>
 
@@ -281,7 +304,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_currencies_by_type/2" translate="no">list_currencies_by_type(type, preload \\ [])</a>
+        <a href="#list_currencies_by_type/2" data-no-tooltip translate="no">list_currencies_by_type(type, preload \\ [])</a>
 
       </div>
 
@@ -289,7 +312,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_owned/2" translate="no">list_owned(user, preload \\ [])</a>
+        <a href="#list_owned/2" data-no-tooltip translate="no">list_owned(user, preload \\ [])</a>
 
       </div>
 
@@ -297,7 +320,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_owned_by_currency/3" translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</a>
+        <a href="#list_owned_by_currency/3" data-no-tooltip translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</a>
 
       </div>
 
@@ -305,7 +328,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_rewards/2" translate="no">list_rewards(user, preload \\ [])</a>
+        <a href="#list_rewards/2" data-no-tooltip translate="no">list_rewards(user, preload \\ [])</a>
 
       </div>
 
@@ -313,7 +336,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_wallets/1" translate="no">list_wallets(arg1)</a>
+        <a href="#list_wallets/1" data-no-tooltip translate="no">list_wallets(arg1)</a>
 
       </div>
 
@@ -321,7 +344,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#make_deposit/1" translate="no">make_deposit(multi)</a>
+        <a href="#make_deposit/1" data-no-tooltip translate="no">make_deposit(multi)</a>
 
       </div>
 
@@ -329,7 +352,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#make_test_deposit/2" translate="no">make_test_deposit(model, deposit_model)</a>
+        <a href="#make_test_deposit/2" data-no-tooltip translate="no">make_test_deposit(model, deposit_model)</a>
 
       </div>
 
@@ -337,7 +360,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#move_wallet_balance/4" translate="no">move_wallet_balance(from, to, idempotence_key, limit)</a>
+        <a href="#move_wallet_balance/4" data-no-tooltip translate="no">move_wallet_balance(from, to, idempotence_key, limit)</a>
 
       </div>
 
@@ -345,7 +368,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#move_wallet_balance/5" translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</a>
+        <a href="#move_wallet_balance/5" data-no-tooltip translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</a>
 
       </div>
 
@@ -353,7 +376,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#multiply_rewards/2" translate="no">multiply_rewards(currency_name, multiplier)</a>
+        <a href="#multiply_rewards/2" data-no-tooltip translate="no">multiply_rewards(currency_name, multiplier)</a>
 
       </div>
 
@@ -361,7 +384,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#payout_reward/1" translate="no">payout_reward(idempotence_key)</a>
+        <a href="#payout_reward/1" data-no-tooltip translate="no">payout_reward(idempotence_key)</a>
 
       </div>
 
@@ -369,7 +392,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#pending_rewards/1" translate="no">pending_rewards(currency)</a>
+        <a href="#pending_rewards/1" data-no-tooltip translate="no">pending_rewards(currency)</a>
 
       </div>
 
@@ -377,7 +400,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#pending_rewards/2" translate="no">pending_rewards(student, currency)</a>
+        <a href="#pending_rewards/2" data-no-tooltip translate="no">pending_rewards(student, currency)</a>
 
       </div>
 
@@ -385,7 +408,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#pending_rewards_query/1" translate="no">pending_rewards_query(currency_name)</a>
+        <a href="#pending_rewards_query/1" data-no-tooltip translate="no">pending_rewards_query(currency_name)</a>
 
       </div>
 
@@ -393,7 +416,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reward_has_outstanding_deposit?/1" translate="no">reward_has_outstanding_deposit?(idempotence_key)</a>
+        <a href="#reward_has_outstanding_deposit?/1" data-no-tooltip translate="no">reward_has_outstanding_deposit?(idempotence_key)</a>
 
       </div>
 
@@ -401,7 +424,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rewarded_amount/1" translate="no">rewarded_amount(idempotence_key)</a>
+        <a href="#rewarded_amount/1" data-no-tooltip translate="no">rewarded_amount(idempotence_key)</a>
 
       </div>
 
@@ -409,7 +432,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rollback_deposit/1" translate="no">rollback_deposit(idempotence_key)</a>
+        <a href="#rollback_deposit/1" data-no-tooltip translate="no">rollback_deposit(idempotence_key)</a>
 
       </div>
 
@@ -417,7 +440,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rollback_deposit/2" translate="no">rollback_deposit(multi, idempotence_key)</a>
+        <a href="#rollback_deposit/2" data-no-tooltip translate="no">rollback_deposit(multi, idempotence_key)</a>
 
       </div>
 
@@ -425,7 +448,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wallet_is_active?/1" translate="no">wallet_is_active?(wallet)</a>
+        <a href="#wallet_is_active?/1" data-no-tooltip translate="no">wallet_is_active?(wallet)</a>
 
       </div>
 
@@ -433,7 +456,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wallet_is_passive?/1" translate="no">wallet_is_passive?(map)</a>
+        <a href="#wallet_is_passive?/1" data-no-tooltip translate="no">wallet_is_passive?(map)</a>
 
       </div>
 
@@ -448,23 +471,20 @@ core
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="create_bank_account/5">
 
   <div class="detail-header">
-    <a href="#create_bank_account/5" class="detail-link" title="Link to this function">
+    <a href="#create_bank_account/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L162" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L162" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -478,15 +498,13 @@ Functions
 <section class="detail" id="create_budget/3">
 
   <div class="detail-header">
-    <a href="#create_budget/3" class="detail-link" title="Link to this function">
+    <a href="#create_budget/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_budget(currency, name, icon)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L167" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L167" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -500,15 +518,13 @@ Functions
 <section class="detail" id="create_budget/4">
 
   <div class="detail-header">
-    <a href="#create_budget/4" class="detail-link" title="Link to this function">
+    <a href="#create_budget/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_budget(currency, name, icon, owner)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L172" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L172" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -522,15 +538,13 @@ Functions
 <section class="detail" id="create_currency_and_budget/5">
 
   <div class="detail-header">
-    <a href="#create_currency_and_budget/5" class="detail-link" title="Link to this function">
+    <a href="#create_currency_and_budget/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_currency_and_budget(name, icon, type, decimal_scale, label)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L177" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L177" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -544,15 +558,13 @@ Functions
 <section class="detail" id="create_reward/4">
 
   <div class="detail-header">
-    <a href="#create_reward/4" class="detail-link" title="Link to this function">
+    <a href="#create_reward/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_reward(budget, amount, user, idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L243" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L243" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -566,15 +578,13 @@ Functions
 <section class="detail" id="create_reward/5">
 
   <div class="detail-header">
-    <a href="#create_reward/5" class="detail-link" title="Link to this function">
+    <a href="#create_reward/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create_reward(multi, budget, amount, user, idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L250" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -590,15 +600,13 @@ Functions
     <span id="get!/1"></span>
 
   <div class="detail-header">
-    <a href="#get!/2" class="detail-link" title="Link to this function">
+    <a href="#get!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get!(id, preload \\ [:fund, :reserve])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L99" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L99" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -614,15 +622,13 @@ Functions
     <span id="get_bank_account!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_bank_account!/2" class="detail-link" title="Link to this function">
+    <a href="#get_bank_account!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_bank_account!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L114" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -638,15 +644,13 @@ Functions
     <span id="get_by_currency!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_currency!/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_currency!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_currency!(currency_model, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L104" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L104" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -662,15 +666,13 @@ Functions
     <span id="get_by_name/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_name/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_name/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_name(name, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L109" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L109" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -686,15 +688,13 @@ Functions
     <span id="get_currency!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_currency!/2" class="detail-link" title="Link to this function">
+    <a href="#get_currency!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_currency!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L119" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L119" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -710,15 +710,13 @@ Functions
     <span id="get_currency_by_name/1"></span>
 
   <div class="detail-header">
-    <a href="#get_currency_by_name/2" class="detail-link" title="Link to this function">
+    <a href="#get_currency_by_name/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_currency_by_name(name, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L124" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L124" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -732,15 +730,13 @@ Functions
 <section class="detail" id="get_reward/2">
 
   <div class="detail-header">
-    <a href="#get_reward/2" class="detail-link" title="Link to this function">
+    <a href="#get_reward/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_reward(idempotence_key, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L134" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L134" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -754,15 +750,13 @@ Functions
 <section class="detail" id="get_reward/3">
 
   <div class="detail-header">
-    <a href="#get_reward/3" class="detail-link" title="Link to this function">
+    <a href="#get_reward/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_reward(model, user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L142" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L142" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -778,15 +772,13 @@ Functions
     <span id="get_reward!/1"></span>
 
   <div class="detail-header">
-    <a href="#get_reward!/2" class="detail-link" title="Link to this function">
+    <a href="#get_reward!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_reward!(id, preload \\ [:budget, :deposit, :payment, :user])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L129" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L129" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -800,15 +792,13 @@ Functions
 <section class="detail" id="get_wallet_identifier/2">
 
   <div class="detail-header">
-    <a href="#get_wallet_identifier/2" class="detail-link" title="Link to this function">
+    <a href="#get_wallet_identifier/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_wallet_identifier(user, currency_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L152" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -824,15 +814,13 @@ Functions
     <span id="list/0"></span>
 
   <div class="detail-header">
-    <a href="#list/1" class="detail-link" title="Link to this function">
+    <a href="#list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L28" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L28" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -848,15 +836,13 @@ Functions
     <span id="list_bank_accounts/0"></span>
 
   <div class="detail-header">
-    <a href="#list_bank_accounts/1" class="detail-link" title="Link to this function">
+    <a href="#list_bank_accounts/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_bank_accounts(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L77" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -872,15 +858,13 @@ Functions
     <span id="list_currencies/0"></span>
 
   <div class="detail-header">
-    <a href="#list_currencies/1" class="detail-link" title="Link to this function">
+    <a href="#list_currencies/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_currencies(preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L65" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L65" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -896,15 +880,13 @@ Functions
     <span id="list_currencies_by_type/1"></span>
 
   <div class="detail-header">
-    <a href="#list_currencies_by_type/2" class="detail-link" title="Link to this function">
+    <a href="#list_currencies_by_type/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_currencies_by_type(type, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L71" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L71" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -920,15 +902,13 @@ Functions
     <span id="list_owned/1"></span>
 
   <div class="detail-header">
-    <a href="#list_owned/2" class="detail-link" title="Link to this function">
+    <a href="#list_owned/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_owned(user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L32" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L32" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -944,15 +924,13 @@ Functions
     <span id="list_owned_by_currency/2"></span>
 
   <div class="detail-header">
-    <a href="#list_owned_by_currency/3" class="detail-link" title="Link to this function">
+    <a href="#list_owned_by_currency/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L46" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L46" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -968,15 +946,13 @@ Functions
     <span id="list_rewards/1"></span>
 
   <div class="detail-header">
-    <a href="#list_rewards/2" class="detail-link" title="Link to this function">
+    <a href="#list_rewards/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_rewards(user, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L91" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L91" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -990,15 +966,13 @@ Functions
 <section class="detail" id="list_wallets/1">
 
   <div class="detail-header">
-    <a href="#list_wallets/1" class="detail-link" title="Link to this function">
+    <a href="#list_wallets/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_wallets(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L81" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L81" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1012,15 +986,13 @@ Functions
 <section class="detail" id="make_deposit/1">
 
   <div class="detail-header">
-    <a href="#make_deposit/1" class="detail-link" title="Link to this function">
+    <a href="#make_deposit/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">make_deposit(multi)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L464" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L464" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1034,15 +1006,13 @@ Functions
 <section class="detail" id="make_test_deposit/2">
 
   <div class="detail-header">
-    <a href="#make_test_deposit/2" class="detail-link" title="Link to this function">
+    <a href="#make_test_deposit/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">make_test_deposit(model, deposit_model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L422" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L422" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1056,15 +1026,13 @@ Functions
 <section class="detail" id="move_wallet_balance/4">
 
   <div class="detail-header">
-    <a href="#move_wallet_balance/4" class="detail-link" title="Link to this function">
+    <a href="#move_wallet_balance/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">move_wallet_balance(from, to, idempotence_key, limit)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L182" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L182" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1078,15 +1046,13 @@ Functions
 <section class="detail" id="move_wallet_balance/5">
 
   <div class="detail-header">
-    <a href="#move_wallet_balance/5" class="detail-link" title="Link to this function">
+    <a href="#move_wallet_balance/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L211" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L211" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1100,15 +1066,13 @@ Functions
 <section class="detail" id="multiply_rewards/2">
 
   <div class="detail-header">
-    <a href="#multiply_rewards/2" class="detail-link" title="Link to this function">
+    <a href="#multiply_rewards/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">multiply_rewards(currency_name, multiplier)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L290" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L290" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1122,15 +1086,13 @@ Functions
 <section class="detail" id="payout_reward/1">
 
   <div class="detail-header">
-    <a href="#payout_reward/1" class="detail-link" title="Link to this function">
+    <a href="#payout_reward/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">payout_reward(idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L283" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L283" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1144,15 +1106,13 @@ Functions
 <section class="detail" id="pending_rewards/1">
 
   <div class="detail-header">
-    <a href="#pending_rewards/1" class="detail-link" title="Link to this function">
+    <a href="#pending_rewards/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">pending_rewards(currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L669" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L672" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1166,15 +1126,13 @@ Functions
 <section class="detail" id="pending_rewards/2">
 
   <div class="detail-header">
-    <a href="#pending_rewards/2" class="detail-link" title="Link to this function">
+    <a href="#pending_rewards/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">pending_rewards(student, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L661" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L664" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1188,15 +1146,13 @@ Functions
 <section class="detail" id="pending_rewards_query/1">
 
   <div class="detail-header">
-    <a href="#pending_rewards_query/1" class="detail-link" title="Link to this function">
+    <a href="#pending_rewards_query/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">pending_rewards_query(currency_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L675" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L678" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1210,15 +1166,13 @@ Functions
 <section class="detail" id="reward_has_outstanding_deposit?/1">
 
   <div class="detail-header">
-    <a href="#reward_has_outstanding_deposit?/1" class="detail-link" title="Link to this function">
+    <a href="#reward_has_outstanding_deposit?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reward_has_outstanding_deposit?(idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L371" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L371" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1232,15 +1186,13 @@ Functions
 <section class="detail" id="rewarded_amount/1">
 
   <div class="detail-header">
-    <a href="#rewarded_amount/1" class="detail-link" title="Link to this function">
+    <a href="#rewarded_amount/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">rewarded_amount(idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L690" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L693" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1254,15 +1206,13 @@ Functions
 <section class="detail" id="rollback_deposit/1">
 
   <div class="detail-header">
-    <a href="#rollback_deposit/1" class="detail-link" title="Link to this function">
+    <a href="#rollback_deposit/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">rollback_deposit(idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L380" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L380" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1276,15 +1226,13 @@ Functions
 <section class="detail" id="rollback_deposit/2">
 
   <div class="detail-header">
-    <a href="#rollback_deposit/2" class="detail-link" title="Link to this function">
+    <a href="#rollback_deposit/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">rollback_deposit(multi, idempotence_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L393" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1298,15 +1246,13 @@ Functions
 <section class="detail" id="wallet_is_active?/1">
 
   <div class="detail-header">
-    <a href="#wallet_is_active?/1" class="detail-link" title="Link to this function">
+    <a href="#wallet_is_active?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wallet_is_active?(wallet)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L239" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L239" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1320,15 +1266,13 @@ Functions
 <section class="detail" id="wallet_is_passive?/1">
 
   <div class="detail-header">
-    <a href="#wallet_is_passive?/1" class="detail-link" title="Link to this function">
+    <a href="#wallet_is_passive?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wallet_is_passive?(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/budget/_public.ex#L231" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1343,34 +1287,33 @@ Functions
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

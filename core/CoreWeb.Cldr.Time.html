@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.Cldr.Time — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>CoreWeb.Cldr.Time — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">CoreWeb.Cldr.Time</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">CoreWeb.Cldr.Time</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#to_string/2" translate="no">to_string(time, options \\ [])</a>
+        <a href="#to_string/2" data-no-tooltip translate="no">to_string(time, options \\ [])</a>
 
       </div>
 
@@ -140,12 +163,13 @@ as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr3
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#to_string!/2" translate="no">to_string!(time, options \\ [])</a>
+        <a href="#to_string!/2" data-no-tooltip translate="no">to_string!(time, options \\ [])</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Formats a time according to a format string
-as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr35-dates.html">TR35</a>.</p></div>
+as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr35-dates.html">TR35</a>
+or raises an exception.</p></div>
 
     </div>
 
@@ -158,9 +182,8 @@ as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr3
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="to_string/2">
@@ -168,15 +191,13 @@ Functions
     <span id="to_string/1"></span>
 
   <div class="detail-header">
-    <a href="#to_string/2" class="detail-link" title="Link to this function">
+    <a href="#to_string/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_string(time, options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -186,57 +207,59 @@ Functions
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="https://hexdocs.pm/ex_cldr_calendars/1.26.2/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
 <p>Formats a time according to a format string
 as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr35-dates.html">TR35</a></p><h2 id="to_string/2-returns" class="section-heading">
-  <a href="#to_string/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">returns</p>
+  <a href="#to_string/2-returns" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Returns
+  <span class="text">Returns</span>
 </h2>
 <ul><li><p><code class="inline">{:ok, formatted_time}</code> or</p></li><li><p><code class="inline">{:error, reason}</code>.</p></li></ul><h2 id="to_string/2-arguments" class="section-heading">
-  <a href="#to_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">arguments</p>
+  <a href="#to_string/2-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Arguments
+  <span class="text">Arguments</span>
 </h2>
-<ul><li><p><code class="inline">time</code> is a <code class="inline">%DateTime{}</code> or <code class="inline">%NaiveDateTime{}</code> struct or any map that contains the keys
-<code class="inline">hour</code>, <code class="inline">minute</code>, <code class="inline">second</code> and optionally <code class="inline">calendar</code> and <code class="inline">microsecond</code></p></li><li><p><code class="inline">options</code> is a keyword list of options for formatting.</p></li></ul><h2 id="to_string/2-options" class="section-heading">
-  <a href="#to_string/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">options</p>
-  </a>
-  Options
-</h2>
-<ul><li><p><code class="inline">format:</code> <code class="inline">:short</code> | <code class="inline">:medium</code> | <code class="inline">:long</code> | <code class="inline">:full</code> or a format string.
- The default is <code class="inline">:medium</code></p></li><li><p><code class="inline">locale:</code> any locale returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/1"><code class="inline">Cldr.known_locale_names/1</code></a>.  The default is <code class="inline">Cldr.get_locale()</code></p></li><li><p><code class="inline">number_system:</code> a number system into which the formatted date digits should
-be transliterated</p></li><li><p><code class="inline">era: :variant</code> will use a variant for the era is one is available in the locale.
-In the &quot;en&quot; locale, for example, <code class="inline">era: :variant</code> will return &quot;BCE&quot; instead of &quot;BC&quot;.</p></li><li><p><code class="inline">period: :variant</code> will use a variant for the time period and flexible time period if
-one is available in the locale.  For example, in the &quot;en&quot; locale <code class="inline">period: :variant</code> will
-return &quot;pm&quot; instead of &quot;PM&quot;</p></li></ul><h2 id="to_string/2-examples" class="section-heading">
-  <a href="#to_string/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
-  </a>
-  Examples
-</h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="w">
-</span><span class="p" data-group-id="2637206209-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;7:35:13 AM&quot;</span><span class="p" data-group-id="2637206209-1">}</span><span class="w">
+<ul><li><code class="inline">time</code> is a <a href="https://hexdocs.pm/elixir/Time.html#t:t/0"><code class="inline">Time.t/0</code></a> struct or any map that contains
+one or more of the keys <code class="inline">:hour</code>, <code class="inline">:minute</code>, <code class="inline">:second</code> and optionally <code class="inline">:microsecond</code>,
+<code class="inline">:time_zone</code>, <code class="inline">:zone_abbr</code>, <code class="inline">:utc_offset</code> and <code class="inline">:std_offset. *</code>options<code class="inline">is a keyword list of options for formatting. ## Options *</code>:format<code class="inline">is one of</code>:short<code class="inline">,</code>:medium<code class="inline">,</code>:long<code class="inline">,</code>:full<code class="inline">, or a format id or a format string. The default is</code>:medium<code class="inline">for full times (that is, times having</code>:hour<code class="inline">,</code>:minute<code class="inline">and</code>:second<code class="inline">fields). The default for partial times is to derive a candidate format from the time and find the best match from the formats returned by</code>Cldr.Time.available_formats/2<code class="inline">. See [here](README.md#date-time-and-datetime-localization-formats) for more information about specifying formats. *</code>:locale<code class="inline">any locale returned by</code>Cldr.known_locale_names/1<code class="inline">. The default is</code>Cldr.get_locale/0<code class="inline">. *</code>:number_system<code class="inline">a number system into which the formatted date digits should be transliterated. *</code>:prefer<code class="inline">is either</code>:unicode<code class="inline">(the default) or</code>:ascii<code class="inline">. A small number of formats have two variants - one using Unicode spaces (typically non-breaking space) and another using only ASCII whitespace. The</code>:ascii<code class="inline">format is primarily to support legacy use cases and is not recommended. See</code>Cldr.Time.available_formats/3<code class="inline">to see which formats have these variants. *</code>period: :variant<code class="inline">will use a variant for the time period and flexible time period if one is available in the locale. For example, in the</code>:en<code class="inline">locale</code>period: :variant` will
+return &quot;pm&quot; instead of &quot;PM&quot;.
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="w">
-</span><span class="p" data-group-id="2637206209-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;7:35 AM&quot;</span><span class="p" data-group-id="2637206209-2">}</span><span class="w">
+## Examples
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:medium</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
-</span><span class="p" data-group-id="2637206209-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;07:35:13&quot;</span><span class="p" data-group-id="2637206209-3">}</span><span class="w">
+  iex&gt; CoreWeb.Cldr.Time.to_string(~T[07:35:13.215217])
+  {:ok, &quot;7:35:13 AM&quot;}
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:medium</span><span class="w">
-</span><span class="p" data-group-id="2637206209-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;7:35:13 AM&quot;</span><span class="p" data-group-id="2637206209-4">}</span><span class="w">
+  iex&gt; CoreWeb.Cldr.Time.to_string(~T[07:35:13.215217], format: :short)
+  {:ok, &quot;7:35 AM&quot;}
 
-</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="2637206209-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">datetime</span><span class="p" data-group-id="2637206209-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">DateTime</span><span class="o">.</span><span class="n">from_naive</span><span class="p" data-group-id="2637206209-6">(</span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span><span class="p" data-group-id="2637206209-6">)</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="n">datetime</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:long</span><span class="w">
-</span><span class="p" data-group-id="2637206209-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;11:59:59 PM UTC&quot;</span><span class="p" data-group-id="2637206209-7">}</span></code></pre>
+  iex&gt; CoreWeb.Cldr.Time.to_string(~T[07:35:13.215217], format: :short, period: :variant)
+  {:ok, &quot;7:35 am&quot;}
+
+  iex&gt; CoreWeb.Cldr.Time.to_string(~T[07:35:13.215217], format: :medium, locale: :fr)
+  {:ok, &quot;07:35:13&quot;}
+
+  iex&gt; CoreWeb.Cldr.Time.to_string(~T[07:35:13.215217], format: :medium)
+  {:ok, &quot;7:35:13 AM&quot;}
+
+  iex&gt; {:ok, date_time} = DateTime.from_naive(~N[2000-01-01 23:59:59.0], &quot;Etc/UTC&quot;)
+  iex&gt; CoreWeb.Cldr.Time.to_string(date_time, format: :long)
+  {:ok, &quot;11:59:59 PM UTC&quot;}
+
+  # A partial time with a best match CLDR-defined format
+  iex&gt; CoreWeb.Cldr.Time.to_string(%{hour: 23, minute: 11})
+  {:ok, &quot;11:11 PM&quot;}
+
+  # Sometimes the available time fields can't be mapped to an available
+  # CLDR defined format.
+  iex&gt; CoreWeb.Cldr.Time.to_string(%{minute: 11})
+  {:error,
+   {Cldr.DateTime.UnresolvedFormat, &quot;No available format resolved for :m&quot;}}</li></ul>
   </section>
 </section>
 <section class="detail" id="to_string!/2">
@@ -244,15 +267,13 @@ return &quot;pm&quot; instead of &quot;PM&quot;</p></li></ul><h2 id="to_string/2
     <span id="to_string!/1"></span>
 
   <div class="detail-header">
-    <a href="#to_string!/2" class="detail-link" title="Link to this function">
+    <a href="#to_string!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_string!(time, options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -262,94 +283,82 @@ return &quot;pm&quot; instead of &quot;PM&quot;</p></li></ul><h2 id="to_string/2
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> to_string!(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">no_return</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> to_string!(<a href="https://hexdocs.pm/ex_cldr_calendars/1.26.2/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">no_return</a>()</pre>
 
       </div>
 
 <p>Formats a time according to a format string
-as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr35-dates.html">TR35</a>.</p><h2 id="to_string!/2-arguments" class="section-heading">
-  <a href="#to_string!/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">arguments</p>
+as defined in CLDR and described in <a href="http://unicode.org/reports/tr35/tr35-dates.html">TR35</a>
+or raises an exception.</p><h2 id="to_string!/2-arguments" class="section-heading">
+  <a href="#to_string!/2-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Arguments
+  <span class="text">Arguments</span>
 </h2>
-<ul><li><p><code class="inline">time</code> is a <code class="inline">%DateTime{}</code> or <code class="inline">%NaiveDateTime{}</code> struct or any map that contains the keys
-<code class="inline">hour</code>, <code class="inline">minute</code>, <code class="inline">second</code> and optionally <code class="inline">calendar</code> and <code class="inline">microsecond</code></p></li><li><p><code class="inline">options</code> is a keyword list of options for formatting.</p></li></ul><h2 id="to_string!/2-options" class="section-heading">
-  <a href="#to_string!/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">options</p>
-  </a>
-  Options
-</h2>
-<ul><li><p><code class="inline">format:</code> <code class="inline">:short</code> | <code class="inline">:medium</code> | <code class="inline">:long</code> | <code class="inline">:full</code> or a format string.
- The default is <code class="inline">:medium</code></p></li><li><p><code class="inline">locale</code> is any valid locale name returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
-or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct.  The default is <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a></p></li><li><p><code class="inline">number_system:</code> a number system into which the formatted date digits should
-be transliterated</p></li><li><p><code class="inline">era: :variant</code> will use a variant for the era is one is available in the locale.
-In the &quot;en&quot; locale, for example, <code class="inline">era: :variant</code> will return &quot;BCE&quot; instead of &quot;BC&quot;.</p></li><li><p><code class="inline">period: :variant</code> will use a variant for the time period and flexible time period if
-one is available in the locale.  For example, in the &quot;en&quot; locale <code class="inline">period: :variant</code> will
-return &quot;pm&quot; instead of &quot;PM&quot;</p></li></ul><h2 id="to_string!/2-returns" class="section-heading">
-  <a href="#to_string!/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">returns</p>
-  </a>
-  Returns
-</h2>
-<ul><li><p><code class="inline">formatted_time_string</code> or</p></li><li><p>raises an exception.</p></li></ul><h2 id="to_string!/2-examples" class="section-heading">
-  <a href="#to_string!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
-  </a>
-  Examples
-</h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string!</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="w">
-</span><span class="s">&quot;7:35:13 AM&quot;</span><span class="w">
+<ul><li><code class="inline">time</code> is a <a href="https://hexdocs.pm/elixir/Time.html#t:t/0"><code class="inline">Time.t/0</code></a> struct or any map that contains
+one or more of the keys <code class="inline">:hour</code>, <code class="inline">:minute</code>, <code class="inline">:second</code> and optionally <code class="inline">:microsecond</code>,
+<code class="inline">:time_zone</code>, <code class="inline">:zone_abbr</code>, <code class="inline">:utc_offset</code> and <code class="inline">:std_offset. *</code>options<code class="inline">is a keyword list of options for formatting. ## Options *</code>:format<code class="inline">is one of</code>:short<code class="inline">,</code>:medium<code class="inline">,</code>:long<code class="inline">,</code>:full<code class="inline">, or a format id or a format string. The default is</code>:medium<code class="inline">for full times (that is, times having</code>:hour<code class="inline">,</code>:minute<code class="inline">and</code>:second<code class="inline">fields). The default for partial times is to derive a candidate format from the time and find the best match from the formats returned by</code>Cldr.Time.available_formats/2<code class="inline">. See [here](README.md#date-time-and-datetime-localization-formats) for more information about specifying formats. *</code>:locale<code class="inline">any locale returned by</code>Cldr.known_locale_names/1<code class="inline">. The default is</code>Cldr.get_locale/0<code class="inline">. *</code>:number_system<code class="inline">a number system into which the formatted date digits should be transliterated. *</code>:prefer<code class="inline">is either</code>:unicode<code class="inline">(the default) or</code>:ascii<code class="inline">. A small number of formats have two variants - one using Unicode spaces (typically non-breaking space) and another using only ASCII whitespace. The</code>:ascii<code class="inline">format is primarily to support legacy use cases and is not recommended. See</code>Cldr.Time.available_formats/3<code class="inline">to see which formats have these variants. *</code>period: :variant<code class="inline">will use a variant for the time period and flexible time period if one is available in the locale. For example, in the</code>:en<code class="inline">locale</code>period: :variant<code class="inline">will return &quot;pm&quot; instead of &quot;PM&quot;. ## Returns *</code>formatted_time_string` or
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string!</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="w">
-</span><span class="s">&quot;7:35 AM&quot;</span><span class="w">
+* raises an exception.
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:short</span><span class="p">,</span><span class="w"> </span><span class="ss">period</span><span class="p">:</span><span class="w"> </span><span class="ss">:variant</span><span class="w">
-</span><span class="p" data-group-id="3672072258-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;7:35 AM&quot;</span><span class="p" data-group-id="3672072258-1">}</span><span class="w">
+## Examples
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string!</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:medium</span><span class="p">,</span><span class="w"> </span><span class="ss">locale</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fr&quot;</span><span class="w">
-</span><span class="s">&quot;07:35:13&quot;</span><span class="w">
+  iex&gt; CoreWeb.Cldr.Time.to_string!(~T[07:35:13.215217])
+  &quot;7:35:13 AM&quot;
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string!</span><span class="w"> </span><span class="ld">~T[07:35:13.215217]</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:medium</span><span class="w">
-</span><span class="s">&quot;7:35:13 AM&quot;</span><span class="w">
+  iex&gt; CoreWeb.Cldr.Time.to_string!(~T[07:35:13.215217], format: :short)
+  &quot;7:35 AM&quot;
 
-</span><span class="gp unselectable">iex&gt; </span><span class="p" data-group-id="3672072258-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">datetime</span><span class="p" data-group-id="3672072258-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">DateTime</span><span class="o">.</span><span class="n">from_naive</span><span class="p" data-group-id="3672072258-3">(</span><span class="ld">~N[2000-01-01 23:59:59.0]</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Etc/UTC&quot;</span><span class="p" data-group-id="3672072258-3">)</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Time</span><span class="o">.</span><span class="n">to_string!</span><span class="w"> </span><span class="n">datetime</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:long</span><span class="w">
-</span><span class="s">&quot;11:59:59 PM UTC&quot;</span></code></pre>
+  iex&gt; CoreWeb.Cldr.Time.to_string!(~T[07:35:13.215217], format: :short, period: :variant)
+  &quot;7:35 am&quot;
+
+  iex&gt; CoreWeb.Cldr.Time.to_string!(~T[07:35:13.215217], format: :medium, locale: :fr)
+  &quot;07:35:13&quot;
+
+  iex&gt; CoreWeb.Cldr.Time.to_string!(~T[07:35:13.215217], format: :medium)
+  &quot;7:35:13 AM&quot;
+
+  iex&gt; {:ok, datetime} = DateTime.from_naive(~N[2000-01-01 23:59:59.0], &quot;Etc/UTC&quot;)
+  iex&gt; CoreWeb.Cldr.Time.to_string! datetime, format: :long
+  &quot;11:59:59 PM UTC&quot;
+
+  # A partial time with a best match CLDR-defined format
+  iex&gt; CoreWeb.Cldr.Time.to_string!(%{hour: 23, minute: 11})
+  &quot;11:11 PM&quot;</li></ul>
   </section>
 </section>
 
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

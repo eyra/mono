@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Frameworks.Utility.HTTPClient — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Frameworks.Utility.HTTPClient — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Frameworks.Utility.HTTPClient</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Frameworks.Utility.HTTPClient</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-types summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:body/0" translate="no">body()</a>
+        <a href="#t:body/0" data-no-tooltip translate="no">body()</a>
 
       </div>
 
@@ -137,7 +160,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:headers/0" translate="no">headers()</a>
+        <a href="#t:headers/0" data-no-tooltip translate="no">headers()</a>
 
       </div>
 
@@ -145,7 +168,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:method/0" translate="no">method()</a>
+        <a href="#t:method/0" data-no-tooltip translate="no">method()</a>
 
       </div>
 
@@ -153,7 +176,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:options/0" translate="no">options()</a>
+        <a href="#t:options/0" data-no-tooltip translate="no">options()</a>
 
       </div>
 
@@ -161,7 +184,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:params/0" translate="no">params()</a>
+        <a href="#t:params/0" data-no-tooltip translate="no">params()</a>
 
       </div>
 
@@ -169,7 +192,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:request/0" translate="no">request()</a>
+        <a href="#t:request/0" data-no-tooltip translate="no">request()</a>
 
       </div>
 
@@ -177,7 +200,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:url/0" translate="no">url()</a>
+        <a href="#t:url/0" data-no-tooltip translate="no">url()</a>
 
       </div>
 
@@ -191,7 +214,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete/3" translate="no">delete(url, headers \\ [], options \\ [])</a>
+        <a href="#delete/3" data-no-tooltip translate="no">delete(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -201,7 +224,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete!/3" translate="no">delete!(url, headers \\ [], options \\ [])</a>
+        <a href="#delete!/3" data-no-tooltip translate="no">delete!(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -212,7 +235,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get/3" translate="no">get(url, headers \\ [], options \\ [])</a>
+        <a href="#get/3" data-no-tooltip translate="no">get(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -222,7 +245,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get!/3" translate="no">get!(url, headers \\ [], options \\ [])</a>
+        <a href="#get!/3" data-no-tooltip translate="no">get!(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -233,7 +256,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#head/3" translate="no">head(url, headers \\ [], options \\ [])</a>
+        <a href="#head/3" data-no-tooltip translate="no">head(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -243,7 +266,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#head!/3" translate="no">head!(url, headers \\ [], options \\ [])</a>
+        <a href="#head!/3" data-no-tooltip translate="no">head!(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -254,7 +277,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#options/3" translate="no">options(url, headers \\ [], options \\ [])</a>
+        <a href="#options/3" data-no-tooltip translate="no">options(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -264,7 +287,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#options!/3" translate="no">options!(url, headers \\ [], options \\ [])</a>
+        <a href="#options!/3" data-no-tooltip translate="no">options!(url, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -275,7 +298,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#patch/4" translate="no">patch(url, body, headers \\ [], options \\ [])</a>
+        <a href="#patch/4" data-no-tooltip translate="no">patch(url, body, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -285,7 +308,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#patch!/4" translate="no">patch!(url, body, headers \\ [], options \\ [])</a>
+        <a href="#patch!/4" data-no-tooltip translate="no">patch!(url, body, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -296,7 +319,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#post/4" translate="no">post(url, body, headers \\ [], options \\ [])</a>
+        <a href="#post/4" data-no-tooltip translate="no">post(url, body, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -306,7 +329,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#post!/4" translate="no">post!(url, body, headers \\ [], options \\ [])</a>
+        <a href="#post!/4" data-no-tooltip translate="no">post!(url, body, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -317,7 +340,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_headers/1" translate="no">process_headers(headers)</a>
+        <a href="#process_headers/1" data-no-tooltip translate="no">process_headers(headers)</a>
 
           <span class="deprecated" title="Use process_response_headers/1 instead">deprecated</span>
 
@@ -329,7 +352,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_request_headers/1" translate="no">process_request_headers(headers)</a>
+        <a href="#process_request_headers/1" data-no-tooltip translate="no">process_request_headers(headers)</a>
 
       </div>
 
@@ -339,7 +362,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_request_options/1" translate="no">process_request_options(options)</a>
+        <a href="#process_request_options/1" data-no-tooltip translate="no">process_request_options(options)</a>
 
       </div>
 
@@ -349,7 +372,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_request_params/1" translate="no">process_request_params(params)</a>
+        <a href="#process_request_params/1" data-no-tooltip translate="no">process_request_params(params)</a>
 
       </div>
 
@@ -359,7 +382,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_request_url/1" translate="no">process_request_url(url)</a>
+        <a href="#process_request_url/1" data-no-tooltip translate="no">process_request_url(url)</a>
 
       </div>
 
@@ -369,7 +392,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_response/1" translate="no">process_response(response)</a>
+        <a href="#process_response/1" data-no-tooltip translate="no">process_response(response)</a>
 
       </div>
 
@@ -379,7 +402,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_response_body/1" translate="no">process_response_body(body)</a>
+        <a href="#process_response_body/1" data-no-tooltip translate="no">process_response_body(body)</a>
 
       </div>
 
@@ -389,7 +412,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_response_chunk/1" translate="no">process_response_chunk(chunk)</a>
+        <a href="#process_response_chunk/1" data-no-tooltip translate="no">process_response_chunk(chunk)</a>
 
       </div>
 
@@ -399,7 +422,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_response_headers/1" translate="no">process_response_headers(headers)</a>
+        <a href="#process_response_headers/1" data-no-tooltip translate="no">process_response_headers(headers)</a>
 
       </div>
 
@@ -409,7 +432,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_response_status_code/1" translate="no">process_response_status_code(status_code)</a>
+        <a href="#process_response_status_code/1" data-no-tooltip translate="no">process_response_status_code(status_code)</a>
 
       </div>
 
@@ -419,7 +442,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_status_code/1" translate="no">process_status_code(status_code)</a>
+        <a href="#process_status_code/1" data-no-tooltip translate="no">process_status_code(status_code)</a>
 
           <span class="deprecated" title="Use process_response_status_code/1 instead">deprecated</span>
 
@@ -431,7 +454,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_url/1" translate="no">process_url(url)</a>
+        <a href="#process_url/1" data-no-tooltip translate="no">process_url(url)</a>
 
           <span class="deprecated" title="Use process_request_url/1 instead">deprecated</span>
 
@@ -443,7 +466,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#put/4" translate="no">put(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
+        <a href="#put/4" data-no-tooltip translate="no">put(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -453,7 +476,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#put!/4" translate="no">put!(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
+        <a href="#put!/4" data-no-tooltip translate="no">put!(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -464,7 +487,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#request/1" translate="no">request(request)</a>
+        <a href="#request/1" data-no-tooltip translate="no">request(request)</a>
 
       </div>
 
@@ -474,7 +497,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#request/5" translate="no">request(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
+        <a href="#request/5" data-no-tooltip translate="no">request(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -484,7 +507,7 @@ failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#request!/1" translate="no">request!(request)</a>
+        <a href="#request!/1" data-no-tooltip translate="no">request!(request)</a>
 
       </div>
 
@@ -495,7 +518,7 @@ exception in case of failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#request!/5" translate="no">request!(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
+        <a href="#request!/5" data-no-tooltip translate="no">request!(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</a>
 
       </div>
 
@@ -506,7 +529,7 @@ exception in case of failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start/0" translate="no">start()</a>
+        <a href="#start/0" data-no-tooltip translate="no">start()</a>
 
       </div>
 
@@ -516,7 +539,7 @@ exception in case of failure.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#stream_next/1" translate="no">stream_next(resp)</a>
+        <a href="#stream_next/1" data-no-tooltip translate="no">stream_next(resp)</a>
 
       </div>
 
@@ -533,23 +556,20 @@ exception in case of failure.</p></div>
     <h1 class="section-heading">
       <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Types
+      <span class="text">Types</span>
     </h1>
     <div class="types-list">
 <section class="detail" id="t:body/0">
 
   <div class="detail-header">
-    <a href="#t:body/0" class="detail-link" title="Link to this type">
+    <a href="#t:body/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">body()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -569,15 +589,13 @@ Types
 <section class="detail" id="t:headers/0">
 
   <div class="detail-header">
-    <a href="#t:headers/0" class="detail-link" title="Link to this type">
+    <a href="#t:headers/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">headers()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -597,15 +615,13 @@ Types
 <section class="detail" id="t:method/0">
 
   <div class="detail-header">
-    <a href="#t:method/0" class="detail-link" title="Link to this type">
+    <a href="#t:method/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">method()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -625,15 +641,13 @@ Types
 <section class="detail" id="t:options/0">
 
   <div class="detail-header">
-    <a href="#t:options/0" class="detail-link" title="Link to this type">
+    <a href="#t:options/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">options()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -653,15 +667,13 @@ Types
 <section class="detail" id="t:params/0">
 
   <div class="detail-header">
-    <a href="#t:params/0" class="detail-link" title="Link to this type">
+    <a href="#t:params/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">params()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -681,15 +693,13 @@ Types
 <section class="detail" id="t:request/0">
 
   <div class="detail-header">
-    <a href="#t:request/0" class="detail-link" title="Link to this type">
+    <a href="#t:request/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">request()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -709,15 +719,13 @@ Types
 <section class="detail" id="t:url/0">
 
   <div class="detail-header">
-    <a href="#t:url/0" class="detail-link" title="Link to this type">
+    <a href="#t:url/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">url()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -742,9 +750,8 @@ Types
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="delete/3">
@@ -754,15 +761,13 @@ Functions
     <span id="delete/2"></span>
 
   <div class="detail-header">
-    <a href="#delete/3" class="detail-link" title="Link to this function">
+    <a href="#delete/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -792,15 +797,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="delete!/2"></span>
 
   <div class="detail-header">
-    <a href="#delete!/3" class="detail-link" title="Link to this function">
+    <a href="#delete!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete!(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -828,15 +831,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="get/2"></span>
 
   <div class="detail-header">
-    <a href="#get/3" class="detail-link" title="Link to this function">
+    <a href="#get/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -863,15 +864,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="get!/2"></span>
 
   <div class="detail-header">
-    <a href="#get!/3" class="detail-link" title="Link to this function">
+    <a href="#get!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get!(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -897,15 +896,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="head/2"></span>
 
   <div class="detail-header">
-    <a href="#head/3" class="detail-link" title="Link to this function">
+    <a href="#head/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">head(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -932,15 +929,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="head!/2"></span>
 
   <div class="detail-header">
-    <a href="#head!/3" class="detail-link" title="Link to this function">
+    <a href="#head!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">head!(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -966,15 +961,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="options/2"></span>
 
   <div class="detail-header">
-    <a href="#options/3" class="detail-link" title="Link to this function">
+    <a href="#options/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">options(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1004,15 +997,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="options!/2"></span>
 
   <div class="detail-header">
-    <a href="#options!/3" class="detail-link" title="Link to this function">
+    <a href="#options!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">options!(url, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1040,15 +1031,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="patch/3"></span>
 
   <div class="detail-header">
-    <a href="#patch/4" class="detail-link" title="Link to this function">
+    <a href="#patch/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">patch(url, body, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1078,15 +1067,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="patch!/3"></span>
 
   <div class="detail-header">
-    <a href="#patch!/4" class="detail-link" title="Link to this function">
+    <a href="#patch!/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">patch!(url, body, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1114,15 +1101,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="post/3"></span>
 
   <div class="detail-header">
-    <a href="#post/4" class="detail-link" title="Link to this function">
+    <a href="#post/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">post(url, body, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1152,15 +1137,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="post!/3"></span>
 
   <div class="detail-header">
-    <a href="#post!/4" class="detail-link" title="Link to this function">
+    <a href="#post!/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">post!(url, body, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1184,15 +1167,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_headers/1">
 
   <div class="detail-header">
-    <a href="#process_headers/1" class="detail-link" title="Link to this function">
+    <a href="#process_headers/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_headers(headers)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1216,15 +1197,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_request_headers/1">
 
   <div class="detail-header">
-    <a href="#process_request_headers/1" class="detail-link" title="Link to this function">
+    <a href="#process_request_headers/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_request_headers(headers)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1244,15 +1223,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_request_options/1">
 
   <div class="detail-header">
-    <a href="#process_request_options/1" class="detail-link" title="Link to this function">
+    <a href="#process_request_options/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_request_options(options)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1272,15 +1249,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_request_params/1">
 
   <div class="detail-header">
-    <a href="#process_request_params/1" class="detail-link" title="Link to this function">
+    <a href="#process_request_params/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_request_params(params)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1300,15 +1275,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_request_url/1">
 
   <div class="detail-header">
-    <a href="#process_request_url/1" class="detail-link" title="Link to this function">
+    <a href="#process_request_url/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_request_url(url)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1328,15 +1301,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_response/1">
 
   <div class="detail-header">
-    <a href="#process_response/1" class="detail-link" title="Link to this function">
+    <a href="#process_response/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_response(response)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1356,15 +1327,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_response_body/1">
 
   <div class="detail-header">
-    <a href="#process_response_body/1" class="detail-link" title="Link to this function">
+    <a href="#process_response_body/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_response_body(body)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1384,15 +1353,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_response_chunk/1">
 
   <div class="detail-header">
-    <a href="#process_response_chunk/1" class="detail-link" title="Link to this function">
+    <a href="#process_response_chunk/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_response_chunk(chunk)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1412,15 +1379,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_response_headers/1">
 
   <div class="detail-header">
-    <a href="#process_response_headers/1" class="detail-link" title="Link to this function">
+    <a href="#process_response_headers/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_response_headers(headers)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1440,15 +1405,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_response_status_code/1">
 
   <div class="detail-header">
-    <a href="#process_response_status_code/1" class="detail-link" title="Link to this function">
+    <a href="#process_response_status_code/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_response_status_code(status_code)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1468,15 +1431,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_status_code/1">
 
   <div class="detail-header">
-    <a href="#process_status_code/1" class="detail-link" title="Link to this function">
+    <a href="#process_status_code/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_status_code(status_code)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1500,15 +1461,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="process_url/1">
 
   <div class="detail-header">
-    <a href="#process_url/1" class="detail-link" title="Link to this function">
+    <a href="#process_url/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">process_url(url)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1538,15 +1497,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
     <span id="put/3"></span>
 
   <div class="detail-header">
-    <a href="#put/4" class="detail-link" title="Link to this function">
+    <a href="#put/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">put(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1578,15 +1535,13 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
     <span id="put!/3"></span>
 
   <div class="detail-header">
-    <a href="#put!/4" class="detail-link" title="Link to this function">
+    <a href="#put!/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">put!(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1610,15 +1565,13 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 <section class="detail" id="request/1">
 
   <div class="detail-header">
-    <a href="#request/1" class="detail-link" title="Link to this function">
+    <a href="#request/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">request(request)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1639,10 +1592,10 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
 <p>Issues an HTTP request using an <a href="https://hexdocs.pm/httpoison/2.2.1/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.</p><p>This function returns <code class="inline">{:ok, response}</code>, <code class="inline">{:ok, async_response}</code>, or <code class="inline">{:ok, maybe_redirect}</code>
 if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/1-redirect-handling" class="section-heading">
-  <a href="#request/1-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">redirect-handling</p>
+  <a href="#request/1-redirect-handling" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Redirect handling
+  <span class="text">Redirect handling</span>
 </h2>
 <p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are automatically follow if
 the method is set to <code class="inline">:get</code> or <code class="inline">:head</code> and the response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or
@@ -1650,19 +1603,19 @@ the method is set to <code class="inline">:get</code> or <code class="inline">:h
 followed is <code class="inline">303</code>.</p><p>If any other method or <code class="inline">status_code</code> is returned, then this function returns a
 returns a <code class="inline">{:ok, %HTTPoison.MaybeRedirect{}}</code> containing the <code class="inline">redirect_url</code> for you to
 re-request with the method set to <code class="inline">:get</code>.</p><h2 id="request/1-examples" class="section-heading">
-  <a href="#request/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#request/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4415793935-1">%</span><span class="nc" data-group-id="4415793935-1">HTTPoison.Request</span><span class="p" data-group-id="4415793935-1">{</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8026808001-1">%</span><span class="nc" data-group-id="8026808001-1">HTTPoison.Request</span><span class="p" data-group-id="8026808001-1">{</span><span class="w">
   </span><span class="ss">method</span><span class="p">:</span><span class="w"> </span><span class="ss">:post</span><span class="p">,</span><span class="w">
   </span><span class="ss">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">headers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4415793935-2">[</span><span class="p" data-group-id="4415793935-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="4415793935-3">}</span><span class="p" data-group-id="4415793935-2">]</span><span class="w">
-</span><span class="p" data-group-id="4415793935-1">}</span><span class="w">
+  </span><span class="ss">headers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8026808001-2">[</span><span class="p" data-group-id="8026808001-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="8026808001-3">}</span><span class="p" data-group-id="8026808001-2">]</span><span class="w">
+</span><span class="p" data-group-id="8026808001-1">}</span><span class="w">
 
-</span><span class="n">request</span><span class="p" data-group-id="4415793935-4">(</span><span class="n">request</span><span class="p" data-group-id="4415793935-4">)</span></code></pre>
+</span><span class="n">request</span><span class="p" data-group-id="8026808001-4">(</span><span class="n">request</span><span class="p" data-group-id="8026808001-4">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="request/5">
@@ -1674,15 +1627,13 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
     <span id="request/4"></span>
 
   <div class="detail-header">
-    <a href="#request/5" class="detail-link" title="Link to this function">
+    <a href="#request/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">request(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1704,10 +1655,10 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
 <p>Issues an HTTP request with the given method to the given url.</p><p>This function is usually used indirectly by <a href="#get/3"><code class="inline">get/3</code></a>, <a href="#post/4"><code class="inline">post/4</code></a>, <a href="#put/4"><code class="inline">put/4</code></a>, etc</p><p>Args:</p><ul><li><code class="inline">method</code> - HTTP method as an atom (<code class="inline">:get</code>, <code class="inline">:head</code>, <code class="inline">:post</code>, <code class="inline">:put</code>,
 <code class="inline">:delete</code>, etc.)</li><li><code class="inline">url</code> - target url as a binary string or char list</li><li><code class="inline">body</code> - request body. See more below</li><li><code class="inline">headers</code> - HTTP headers as an orddict (e.g., <code class="inline">[{&quot;Accept&quot;, &quot;application/json&quot;}]</code>)</li><li><code class="inline">options</code> - Keyword list of options</li></ul><p>Body: see type <a href="https://hexdocs.pm/httpoison/2.2.1/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>Options: see type <a href="https://hexdocs.pm/httpoison/2.2.1/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>This function returns <code class="inline">{:ok, response}</code>, <code class="inline">{:ok, async_response}</code>, or <code class="inline">{:ok, maybe_redirect}</code>
 if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/5-redirect-handling" class="section-heading">
-  <a href="#request/5-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">redirect-handling</p>
+  <a href="#request/5-redirect-handling" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Redirect handling
+  <span class="text">Redirect handling</span>
 </h2>
 <p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are automatically follow if
 the method is set to <code class="inline">:get</code> or <code class="inline">:head</code> and the response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or
@@ -1715,26 +1666,24 @@ the method is set to <code class="inline">:get</code> or <code class="inline">:h
 followed is <code class="inline">303</code>.</p><p>If any other method or <code class="inline">status_code</code> is returned, then this function returns a
 returns a <code class="inline">{:ok, %HTTPoison.MaybeRedirect{}}</code> containing the <code class="inline">redirect_url</code> for you to
 re-request with the method set to <code class="inline">:get</code>.</p><h2 id="request/5-examples" class="section-heading">
-  <a href="#request/5-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#request/5-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="p" data-group-id="4068188980-1">(</span><span class="ss">:post</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4068188980-2">[</span><span class="p" data-group-id="4068188980-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="4068188980-3">}</span><span class="p" data-group-id="4068188980-2">]</span><span class="p" data-group-id="4068188980-1">)</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="p" data-group-id="6510714491-1">(</span><span class="ss">:post</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6510714491-2">[</span><span class="p" data-group-id="6510714491-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="6510714491-3">}</span><span class="p" data-group-id="6510714491-2">]</span><span class="p" data-group-id="6510714491-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="request!/1">
 
   <div class="detail-header">
-    <a href="#request!/1" class="detail-link" title="Link to this function">
+    <a href="#request!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">request!(request)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1766,15 +1715,13 @@ request fails.</p>
     <span id="request!/4"></span>
 
   <div class="detail-header">
-    <a href="#request!/5" class="detail-link" title="Link to this function">
+    <a href="#request!/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">request!(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1800,15 +1747,13 @@ request fails.</p>
 <section class="detail" id="start/0">
 
   <div class="detail-header">
-    <a href="#start/0" class="detail-link" title="Link to this function">
+    <a href="#start/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1822,15 +1767,13 @@ request fails.</p>
 <section class="detail" id="stream_next/1">
 
   <div class="detail-header">
-    <a href="#stream_next/1" class="detail-link" title="Link to this function">
+    <a href="#stream_next/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stream_next(resp)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1852,34 +1795,33 @@ request fails.</p>
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

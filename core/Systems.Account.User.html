@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Account.User — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Systems.Account.User — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,96 +33,122 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Systems.Account.User</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Systems.Account.User</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
-  <section id="moduledoc">
+    <section id="moduledoc">
 <p>The User module encapsulates the changesets for creating and updating users.</p><p>The logic for hashing passwords is also managed here. Bcrypt is used as
 adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-hashing-algorithms">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-hashing-algorithms</a></p>
-  </section>
+    </section>
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -134,7 +157,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#admin_changeset/2" translate="no">admin_changeset(user, attrs)</a>
+        <a href="#admin_changeset/2" data-no-tooltip translate="no">admin_changeset(user, attrs)</a>
 
       </div>
 
@@ -142,7 +165,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#confirm_changeset/1" translate="no">confirm_changeset(user)</a>
+        <a href="#confirm_changeset/1" data-no-tooltip translate="no">confirm_changeset(user)</a>
 
       </div>
 
@@ -152,7 +175,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#display_changeset/2" translate="no">display_changeset(user, attrs)</a>
+        <a href="#display_changeset/2" data-no-tooltip translate="no">display_changeset(user, attrs)</a>
 
       </div>
 
@@ -162,7 +185,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#email_changeset/2" translate="no">email_changeset(user, attrs)</a>
+        <a href="#email_changeset/2" data-no-tooltip translate="no">email_changeset(user, attrs)</a>
 
       </div>
 
@@ -172,7 +195,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#email_format/0" translate="no">email_format()</a>
+        <a href="#email_format/0" data-no-tooltip translate="no">email_format()</a>
 
       </div>
 
@@ -180,7 +203,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#email_max_length/0" translate="no">email_max_length()</a>
+        <a href="#email_max_length/0" data-no-tooltip translate="no">email_max_length()</a>
 
       </div>
 
@@ -188,7 +211,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_gender/1" translate="no">get_gender(map)</a>
+        <a href="#get_gender/1" data-no-tooltip translate="no">get_gender(map)</a>
 
       </div>
 
@@ -196,7 +219,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#label/1" translate="no">label(map)</a>
+        <a href="#label/1" data-no-tooltip translate="no">label(map)</a>
 
       </div>
 
@@ -204,7 +227,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#new_session_changeset/1" translate="no">new_session_changeset(credentials)</a>
+        <a href="#new_session_changeset/1" data-no-tooltip translate="no">new_session_changeset(credentials)</a>
 
       </div>
 
@@ -212,7 +235,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#password_changeset/3" translate="no">password_changeset(user, attrs, opts \\ [])</a>
+        <a href="#password_changeset/3" data-no-tooltip translate="no">password_changeset(user, attrs, opts \\ [])</a>
 
       </div>
 
@@ -222,7 +245,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#registration_changeset/3" translate="no">registration_changeset(user, attrs, opts \\ [])</a>
+        <a href="#registration_changeset/3" data-no-tooltip translate="no">registration_changeset(user, attrs, opts \\ [])</a>
 
       </div>
 
@@ -232,7 +255,7 @@ adviced by OWASP:</p><p><a href="https://cheatsheetseries.owasp.org/cheatsheets/
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#sso_changeset/2" translate="no">sso_changeset(user, attrs)</a>
+        <a href="#sso_changeset/2" data-no-tooltip translate="no">sso_changeset(user, attrs)</a>
 
       </div>
 
@@ -243,7 +266,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#user_id/1" translate="no">user_id(id)</a>
+        <a href="#user_id/1" data-no-tooltip translate="no">user_id(id)</a>
 
       </div>
 
@@ -251,7 +274,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#user_profile_changeset/2" translate="no">user_profile_changeset(user, attrs)</a>
+        <a href="#user_profile_changeset/2" data-no-tooltip translate="no">user_profile_changeset(user, attrs)</a>
 
       </div>
 
@@ -261,7 +284,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#valid_email?/1" translate="no">valid_email?(email)</a>
+        <a href="#valid_email?/1" data-no-tooltip translate="no">valid_email?(email)</a>
 
       </div>
 
@@ -269,7 +292,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#valid_email_changeset/1" translate="no">valid_email_changeset(email \\ nil)</a>
+        <a href="#valid_email_changeset/1" data-no-tooltip translate="no">valid_email_changeset(email \\ nil)</a>
 
       </div>
 
@@ -277,7 +300,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#valid_password?/2" translate="no">valid_password?(arg1, password)</a>
+        <a href="#valid_password?/2" data-no-tooltip translate="no">valid_password?(arg1, password)</a>
 
       </div>
 
@@ -287,7 +310,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#validate_current_password/2" translate="no">validate_current_password(changeset, password)</a>
+        <a href="#validate_current_password/2" data-no-tooltip translate="no">validate_current_password(changeset, password)</a>
 
       </div>
 
@@ -297,7 +320,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#validate_email/1" translate="no">validate_email(changeset)</a>
+        <a href="#validate_email/1" data-no-tooltip translate="no">validate_email(changeset)</a>
 
       </div>
 
@@ -305,7 +328,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#validate_password/2" translate="no">validate_password(changeset, opts)</a>
+        <a href="#validate_password/2" data-no-tooltip translate="no">validate_password(changeset, opts)</a>
 
       </div>
 
@@ -313,7 +336,7 @@ most data that it receives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#visited_changeset/2" translate="no">visited_changeset(user, attrs)</a>
+        <a href="#visited_changeset/2" data-no-tooltip translate="no">visited_changeset(user, attrs)</a>
 
       </div>
 
@@ -328,23 +351,20 @@ most data that it receives.</p></div>
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="admin_changeset/2">
 
   <div class="detail-header">
-    <a href="#admin_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#admin_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">admin_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L126" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L126" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -358,15 +378,13 @@ Functions
 <section class="detail" id="confirm_changeset/1">
 
   <div class="detail-header">
-    <a href="#confirm_changeset/1" class="detail-link" title="Link to this function">
+    <a href="#confirm_changeset/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">confirm_changeset(user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L188" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -380,15 +398,13 @@ Functions
 <section class="detail" id="display_changeset/2">
 
   <div class="detail-header">
-    <a href="#display_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#display_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">display_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L149" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L149" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -402,15 +418,13 @@ Functions
 <section class="detail" id="email_changeset/2">
 
   <div class="detail-header">
-    <a href="#email_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#email_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">email_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L136" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L136" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -424,15 +438,13 @@ Functions
 <section class="detail" id="email_format/0">
 
   <div class="detail-header">
-    <a href="#email_format/0" class="detail-link" title="Link to this function">
+    <a href="#email_format/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">email_format()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L14" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L14" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -446,15 +458,13 @@ Functions
 <section class="detail" id="email_max_length/0">
 
   <div class="detail-header">
-    <a href="#email_max_length/0" class="detail-link" title="Link to this function">
+    <a href="#email_max_length/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">email_max_length()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L13" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L13" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -468,15 +478,13 @@ Functions
 <section class="detail" id="get_gender/1">
 
   <div class="detail-header">
-    <a href="#get_gender/1" class="detail-link" title="Link to this function">
+    <a href="#get_gender/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_gender(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L225" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L225" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -490,15 +498,13 @@ Functions
 <section class="detail" id="label/1">
 
   <div class="detail-header">
-    <a href="#label/1" class="detail-link" title="Link to this function">
+    <a href="#label/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">label(map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L228" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L228" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -512,15 +518,13 @@ Functions
 <section class="detail" id="new_session_changeset/1">
 
   <div class="detail-header">
-    <a href="#new_session_changeset/1" class="detail-link" title="Link to this function">
+    <a href="#new_session_changeset/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">new_session_changeset(credentials)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L193" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -536,15 +540,13 @@ Functions
     <span id="password_changeset/2"></span>
 
   <div class="detail-header">
-    <a href="#password_changeset/3" class="detail-link" title="Link to this function">
+    <a href="#password_changeset/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">password_changeset(user, attrs, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L178" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -553,10 +555,10 @@ Functions
   <section class="docstring">
 
 <p>A user changeset for changing the password.</p><h2 id="password_changeset/3-options" class="section-heading">
-  <a href="#password_changeset/3-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">options</p>
+  <a href="#password_changeset/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Options
+  <span class="text">Options</span>
 </h2>
 <ul><li><code class="inline">:hash_password</code> - Hashes the password so it can be stored securely
 in the database and ensures the password field is cleared to prevent
@@ -571,15 +573,13 @@ Defaults to <code class="inline">true</code>.</li></ul>
     <span id="registration_changeset/2"></span>
 
   <div class="detail-header">
-    <a href="#registration_changeset/3" class="detail-link" title="Link to this function">
+    <a href="#registration_changeset/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">registration_changeset(user, attrs, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L50" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L50" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -591,10 +591,10 @@ Defaults to <code class="inline">true</code>.</li></ul>
 Otherwise databases may truncate the email without warnings, which
 could lead to unpredictable or insecure behaviour. Long passwords may
 also be very expensive to hash for certain algorithms.</p><h2 id="registration_changeset/3-options" class="section-heading">
-  <a href="#registration_changeset/3-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">options</p>
+  <a href="#registration_changeset/3-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Options
+  <span class="text">Options</span>
 </h2>
 <ul><li><code class="inline">:hash_password</code> - Hashes the password so it can be stored securely
 in the database and ensures the password field is cleared to prevent
@@ -607,15 +607,13 @@ Defaults to <code class="inline">true</code>.</li></ul>
 <section class="detail" id="sso_changeset/2">
 
   <div class="detail-header">
-    <a href="#sso_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#sso_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sso_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L159" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -630,15 +628,13 @@ most data that it receives.</p>
 <section class="detail" id="user_id/1">
 
   <div class="detail-header">
-    <a href="#user_id/1" class="detail-link" title="Link to this function">
+    <a href="#user_id/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">user_id(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L237" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L237" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -652,15 +648,13 @@ most data that it receives.</p>
 <section class="detail" id="user_profile_changeset/2">
 
   <div class="detail-header">
-    <a href="#user_profile_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#user_profile_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">user_profile_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L64" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L64" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -674,15 +668,13 @@ most data that it receives.</p>
 <section class="detail" id="valid_email?/1">
 
   <div class="detail-header">
-    <a href="#valid_email?/1" class="detail-link" title="Link to this function">
+    <a href="#valid_email?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">valid_email?(email)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L69" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L69" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -698,15 +690,13 @@ most data that it receives.</p>
     <span id="valid_email_changeset/0"></span>
 
   <div class="detail-header">
-    <a href="#valid_email_changeset/1" class="detail-link" title="Link to this function">
+    <a href="#valid_email_changeset/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">valid_email_changeset(email \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L112" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L112" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -720,15 +710,13 @@ most data that it receives.</p>
 <section class="detail" id="valid_password?/2">
 
   <div class="detail-header">
-    <a href="#valid_password?/2" class="detail-link" title="Link to this function">
+    <a href="#valid_password?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">valid_password?(arg1, password)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L204" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L204" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -737,21 +725,19 @@ most data that it receives.</p>
   <section class="docstring">
 
 <p>Verifies the password.</p><p>If there is no user or the user doesn't have a password, we call
-<a href="https://hexdocs.pm/bcrypt_elixir/2.3.1/Bcrypt.html#no_user_verify/0"><code class="inline">Bcrypt.no_user_verify/0</code></a> to avoid timing attacks.</p>
+<a href="https://hexdocs.pm/bcrypt_elixir/3.2.0/Bcrypt.html#no_user_verify/0"><code class="inline">Bcrypt.no_user_verify/0</code></a> to avoid timing attacks.</p>
   </section>
 </section>
 <section class="detail" id="validate_current_password/2">
 
   <div class="detail-header">
-    <a href="#validate_current_password/2" class="detail-link" title="Link to this function">
+    <a href="#validate_current_password/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">validate_current_password(changeset, password)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L217" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L217" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -765,15 +751,13 @@ most data that it receives.</p>
 <section class="detail" id="validate_email/1">
 
   <div class="detail-header">
-    <a href="#validate_email/1" class="detail-link" title="Link to this function">
+    <a href="#validate_email/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">validate_email(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L76" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L76" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -787,15 +771,13 @@ most data that it receives.</p>
 <section class="detail" id="validate_password/2">
 
   <div class="detail-header">
-    <a href="#validate_password/2" class="detail-link" title="Link to this function">
+    <a href="#validate_password/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">validate_password(changeset, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L85" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -809,15 +791,13 @@ most data that it receives.</p>
 <section class="detail" id="visited_changeset/2">
 
   <div class="detail-header">
-    <a href="#visited_changeset/2" class="detail-link" title="Link to this function">
+    <a href="#visited_changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">visited_changeset(user, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L120" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/account/user.ex#L120" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -832,34 +812,33 @@ most data that it receives.</p>
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

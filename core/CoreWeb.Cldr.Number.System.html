@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>CoreWeb.Cldr.Number.System — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>CoreWeb.Cldr.Number.System — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">CoreWeb.Cldr.Number.System</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">CoreWeb.Cldr.Number.System</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_system_for/2" translate="no">number_system_for(locale, system_name)</a>
+        <a href="#number_system_for/2" data-no-tooltip translate="no">number_system_for(locale, system_name)</a>
 
       </div>
 
@@ -139,7 +162,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_system_from_locale/1" translate="no">number_system_from_locale(locale)</a>
+        <a href="#number_system_from_locale/1" data-no-tooltip translate="no">number_system_from_locale(locale)</a>
 
       </div>
 
@@ -150,7 +173,7 @@ locale name.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_system_names_for/1" translate="no">number_system_names_for(locale)</a>
+        <a href="#number_system_names_for/1" data-no-tooltip translate="no">number_system_names_for(locale)</a>
 
       </div>
 
@@ -161,7 +184,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_system_names_for!/1" translate="no">number_system_names_for!(locale)</a>
+        <a href="#number_system_names_for!/1" data-no-tooltip translate="no">number_system_names_for!(locale)</a>
 
       </div>
 
@@ -169,7 +192,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_system_types_for/1" translate="no">number_system_types_for(locale)</a>
+        <a href="#number_system_types_for/1" data-no-tooltip translate="no">number_system_types_for(locale)</a>
 
       </div>
 
@@ -177,7 +200,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_systems_for/1" translate="no">number_systems_for(locale)</a>
+        <a href="#number_systems_for/1" data-no-tooltip translate="no">number_systems_for(locale)</a>
 
       </div>
 
@@ -188,7 +211,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_systems_for!/1" translate="no">number_systems_for!(locale)</a>
+        <a href="#number_systems_for!/1" data-no-tooltip translate="no">number_systems_for!(locale)</a>
 
       </div>
 
@@ -196,7 +219,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#number_systems_like/2" translate="no">number_systems_like(locale, number_system)</a>
+        <a href="#number_systems_like/2" data-no-tooltip translate="no">number_systems_like(locale, number_system)</a>
 
       </div>
 
@@ -204,7 +227,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#system_name_from/2" translate="no">system_name_from(system_name, locale)</a>
+        <a href="#system_name_from/2" data-no-tooltip translate="no">system_name_from(system_name, locale)</a>
 
       </div>
 
@@ -214,7 +237,7 @@ or <code class="inline">{:error, message}</code> if the locale is not known.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#to_system/2" translate="no">to_system(number, system)</a>
+        <a href="#to_system/2" data-no-tooltip translate="no">to_system(number, system)</a>
 
       </div>
 
@@ -225,7 +248,7 @@ a non-latin number system.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#to_system!/2" translate="no">to_system!(number, system_name)</a>
+        <a href="#to_system!/2" data-no-tooltip translate="no">to_system!(number, system_name)</a>
 
       </div>
 
@@ -244,23 +267,20 @@ string or raises on error.</p></div>
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="number_system_for/2">
 
   <div class="detail-header">
-    <a href="#number_system_for/2" class="detail-link" title="Link to this function">
+    <a href="#number_system_for/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_system_for(locale, system_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -271,56 +291,54 @@ Functions
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> number_system_for(
-  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
-  <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
+  <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
+  <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
 ) ::
   {:ok, [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()]} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
-<p>Returns the actual number system from a number system type.</p><ul><li><p><code class="inline">locale</code> is any valid locale name returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
-or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#new!/2"><code class="inline">Cldr.Locale.new!/2</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
-<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_number_systems/0"><code class="inline">Cldr.known_number_systems/0</code></a> or a number system type
-returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_number_system_types/0"><code class="inline">Cldr.known_number_system_types/0</code></a></p></li></ul><p>This function will decode a number system type into the actual
+<p>Returns the actual number system from a number system type.</p><ul><li><p><code class="inline">locale</code> is any valid locale name returned by <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
+or a <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#new!/2"><code class="inline">Cldr.Locale.new!/2</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
+<a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_number_systems/0"><code class="inline">Cldr.known_number_systems/0</code></a> or a number system type
+returned by <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_number_system_types/0"><code class="inline">Cldr.known_number_system_types/0</code></a></p></li></ul><p>This function will decode a number system type into the actual
 number system.  If the number system provided can't be decoded
 it is returned as is.</p><h2 id="number_system_for/2-examples" class="section-heading">
-  <a href="#number_system_for/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#number_system_for/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_for</span><span class="w"> </span><span class="s">&quot;th&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="w">
-</span><span class="p" data-group-id="0796549661-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0796549661-2">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="0796549661-2">}</span><span class="p" data-group-id="0796549661-1">}</span><span class="w">
+</span><span class="p" data-group-id="3357865127-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3357865127-2">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="3357865127-2">}</span><span class="p" data-group-id="3357865127-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:default</span><span class="w">
-</span><span class="p" data-group-id="0796549661-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0796549661-4">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="0796549661-4">}</span><span class="p" data-group-id="0796549661-3">}</span><span class="w">
+</span><span class="p" data-group-id="3357865127-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3357865127-4">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="3357865127-4">}</span><span class="p" data-group-id="3357865127-3">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_for</span><span class="w"> </span><span class="s">&quot;he&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:traditional</span><span class="w">
-</span><span class="p" data-group-id="0796549661-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0796549661-6">%{</span><span class="ss">rules</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hebrew&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:algorithmic</span><span class="p" data-group-id="0796549661-6">}</span><span class="p" data-group-id="0796549661-5">}</span><span class="w">
+</span><span class="p" data-group-id="3357865127-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3357865127-6">%{</span><span class="ss">rules</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hebrew&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:algorithmic</span><span class="p" data-group-id="3357865127-6">}</span><span class="p" data-group-id="3357865127-5">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:native</span><span class="w">
-</span><span class="p" data-group-id="0796549661-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0796549661-8">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="0796549661-8">}</span><span class="p" data-group-id="0796549661-7">}</span><span class="w">
+</span><span class="p" data-group-id="3357865127-7">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3357865127-8">%{</span><span class="ss">digits</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0123456789&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numeric</span><span class="p" data-group-id="3357865127-8">}</span><span class="p" data-group-id="3357865127-7">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:finance</span><span class="w">
-</span><span class="p" data-group-id="0796549661-9">{</span><span class="w">
+</span><span class="p" data-group-id="3357865127-9">{</span><span class="w">
   </span><span class="ss">:error</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="0796549661-10">{</span><span class="nc">Cldr.UnknownNumberSystemError</span><span class="p">,</span><span class="w">
-    </span><span class="s">&quot;The number system :finance is unknown for the locale named :en. Valid number systems are %{default: :latn, native: :latn}&quot;</span><span class="p" data-group-id="0796549661-10">}</span><span class="w">
-</span><span class="p" data-group-id="0796549661-9">}</span></code></pre>
+  </span><span class="p" data-group-id="3357865127-10">{</span><span class="nc">Cldr.UnknownNumberSystemError</span><span class="p">,</span><span class="w">
+    </span><span class="s">&quot;The number system :finance is unknown for the locale named :en. Valid number systems are %{default: :latn, native: :latn}&quot;</span><span class="p" data-group-id="3357865127-10">}</span><span class="w">
+</span><span class="p" data-group-id="3357865127-9">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="number_system_from_locale/1">
 
   <div class="detail-header">
-    <a href="#number_system_from_locale/1" class="detail-link" title="Link to this function">
+    <a href="#number_system_from_locale/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_system_from_locale(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -330,30 +348,30 @@ it is returned as is.</p><h2 id="number_system_for/2-examples" class="section-he
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> number_system_from_locale(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
-  <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> number_system_from_locale(<a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
+  <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>() | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
 <p>Returns the number system from a language tag or
 locale name.</p><h2 id="number_system_from_locale/1-arguments" class="section-heading">
-  <a href="#number_system_from_locale/1-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">arguments</p>
+  <a href="#number_system_from_locale/1-arguments" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Arguments
+  <span class="text">Arguments</span>
 </h2>
-<ul><li><code class="inline">locale</code> is any language tag returned be <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#new/2"><code class="inline">Cldr.Locale.new/2</code></a>
-or a locale name in the list returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_locale_names/1"><code class="inline">Cldr.known_locale_names/1</code></a></li></ul><h2 id="number_system_from_locale/1-returns" class="section-heading">
-  <a href="#number_system_from_locale/1-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">returns</p>
+<ul><li><code class="inline">locale</code> is any language tag returned be <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#new/2"><code class="inline">Cldr.Locale.new/2</code></a>
+or a locale name in the list returned by <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_locale_names/1"><code class="inline">Cldr.known_locale_names/1</code></a></li></ul><h2 id="number_system_from_locale/1-returns" class="section-heading">
+  <a href="#number_system_from_locale/1-returns" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Returns
+  <span class="text">Returns</span>
 </h2>
 <ul><li>A number system name as an atom</li></ul><h2 id="number_system_from_locale/1-examples" class="section-heading">
-  <a href="#number_system_from_locale/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#number_system_from_locale/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_from_locale</span><span class="w"> </span><span class="s">&quot;en-US-u-nu-thai&quot;</span><span class="w">
 </span><span class="ss">:thai</span><span class="w">
@@ -365,15 +383,13 @@ or a locale name in the list returned by <a href="https://hexdocs.pm/ex_cldr/2.3
 <section class="detail" id="number_system_names_for/1">
 
   <div class="detail-header">
-    <a href="#number_system_names_for/1" class="detail-link" title="Link to this function">
+    <a href="#number_system_names_for/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_system_names_for(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -383,38 +399,36 @@ or a locale name in the list returned by <a href="https://hexdocs.pm/ex_cldr/2.3
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> number_system_names_for(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> number_system_names_for(<a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
   {:ok, [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()]} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
 <p>Returns the number systems available for a locale
 or <code class="inline">{:error, message}</code> if the locale is not known.</p><ul><li><code class="inline">locale</code> is any valid locale name returned by <a href="CoreWeb.Cldr.html#known_locale_names/0"><code class="inline">CoreWeb.Cldr.known_locale_names/0</code></a>
-or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></li></ul><h2 id="number_system_names_for/1-examples" class="section-heading">
-  <a href="#number_system_names_for/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+or a <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></li></ul><h2 id="number_system_names_for/1-examples" class="section-heading">
+  <a href="#number_system_names_for/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_names_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="7128643376-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7128643376-2">[</span><span class="ss">:latn</span><span class="p" data-group-id="7128643376-2">]</span><span class="p" data-group-id="7128643376-1">}</span><span class="w">
+</span><span class="p" data-group-id="0685748949-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0685748949-2">[</span><span class="ss">:latn</span><span class="p" data-group-id="0685748949-2">]</span><span class="p" data-group-id="0685748949-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_system_names_for</span><span class="w"> </span><span class="s">&quot;zz&quot;</span><span class="w">
-</span><span class="p" data-group-id="7128643376-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7128643376-4">{</span><span class="nc">Cldr.InvalidLanguageError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The language </span><span class="se">\&quot;</span><span class="s">zz</span><span class="se">\&quot;</span><span class="s"> is invalid&quot;</span><span class="p" data-group-id="7128643376-4">}</span><span class="p" data-group-id="7128643376-3">}</span></code></pre>
+</span><span class="p" data-group-id="0685748949-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0685748949-4">{</span><span class="nc">Cldr.InvalidLanguageError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The language </span><span class="se">\&quot;</span><span class="s">zz</span><span class="se">\&quot;</span><span class="s"> is invalid&quot;</span><span class="p" data-group-id="0685748949-4">}</span><span class="p" data-group-id="0685748949-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="number_system_names_for!/1">
 
   <div class="detail-header">
-    <a href="#number_system_names_for!/1" class="detail-link" title="Link to this function">
+    <a href="#number_system_names_for!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_system_names_for!(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -428,15 +442,13 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
 <section class="detail" id="number_system_types_for/1">
 
   <div class="detail-header">
-    <a href="#number_system_types_for/1" class="detail-link" title="Link to this function">
+    <a href="#number_system_types_for/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_system_types_for(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -450,15 +462,13 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
 <section class="detail" id="number_systems_for/1">
 
   <div class="detail-header">
-    <a href="#number_systems_for/1" class="detail-link" title="Link to this function">
+    <a href="#number_systems_for/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_systems_for(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -468,41 +478,39 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> number_systems_for(<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> number_systems_for(<a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
   {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
 <p>Returns the number systems available for a locale
 or <code class="inline">{:error, message}</code> if the locale is not known.</p><ul><li><code class="inline">locale</code> is any valid locale name returned by <a href="CoreWeb.Cldr.html#known_locale_names/0"><code class="inline">CoreWeb.Cldr.known_locale_names/0</code></a>
-or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></li></ul><h2 id="number_systems_for/1-examples" class="section-heading">
-  <a href="#number_systems_for/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+or a <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></li></ul><h2 id="number_systems_for/1-examples" class="section-heading">
+  <a href="#number_systems_for/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_systems_for</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="w">
-</span><span class="p" data-group-id="9093892783-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9093892783-2">%{</span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p">,</span><span class="w"> </span><span class="ss">native</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="9093892783-2">}</span><span class="p" data-group-id="9093892783-1">}</span><span class="w">
+</span><span class="p" data-group-id="0284711296-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0284711296-2">%{</span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p">,</span><span class="w"> </span><span class="ss">native</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="0284711296-2">}</span><span class="p" data-group-id="0284711296-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_systems_for</span><span class="w"> </span><span class="s">&quot;th&quot;</span><span class="w">
-</span><span class="p" data-group-id="9093892783-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9093892783-4">%{</span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p">,</span><span class="w"> </span><span class="ss">native</span><span class="p">:</span><span class="w"> </span><span class="ss">:thai</span><span class="p" data-group-id="9093892783-4">}</span><span class="p" data-group-id="9093892783-3">}</span><span class="w">
+</span><span class="p" data-group-id="0284711296-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0284711296-4">%{</span><span class="ss">default</span><span class="p">:</span><span class="w"> </span><span class="ss">:latn</span><span class="p">,</span><span class="w"> </span><span class="ss">native</span><span class="p">:</span><span class="w"> </span><span class="ss">:thai</span><span class="p" data-group-id="0284711296-4">}</span><span class="p" data-group-id="0284711296-3">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">number_systems_for</span><span class="w"> </span><span class="s">&quot;zz&quot;</span><span class="w">
-</span><span class="p" data-group-id="9093892783-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9093892783-6">{</span><span class="nc">Cldr.InvalidLanguageError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The language </span><span class="se">\&quot;</span><span class="s">zz</span><span class="se">\&quot;</span><span class="s"> is invalid&quot;</span><span class="p" data-group-id="9093892783-6">}</span><span class="p" data-group-id="9093892783-5">}</span></code></pre>
+</span><span class="p" data-group-id="0284711296-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0284711296-6">{</span><span class="nc">Cldr.InvalidLanguageError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The language </span><span class="se">\&quot;</span><span class="s">zz</span><span class="se">\&quot;</span><span class="s"> is invalid&quot;</span><span class="p" data-group-id="0284711296-6">}</span><span class="p" data-group-id="0284711296-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="number_systems_for!/1">
 
   <div class="detail-header">
-    <a href="#number_systems_for!/1" class="detail-link" title="Link to this function">
+    <a href="#number_systems_for!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_systems_for!(locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -516,15 +524,13 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
 <section class="detail" id="number_systems_like/2">
 
   <div class="detail-header">
-    <a href="#number_systems_like/2" class="detail-link" title="Link to this function">
+    <a href="#number_systems_like/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">number_systems_like(locale, number_system)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -535,10 +541,10 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> number_systems_like(
-  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
-  <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
+  <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
+  <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
 ) ::
-  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()}</pre>
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
@@ -548,15 +554,13 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
 <section class="detail" id="system_name_from/2">
 
   <div class="detail-header">
-    <a href="#system_name_from/2" class="detail-link" title="Link to this function">
+    <a href="#system_name_from/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">system_name_from(system_name, locale)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -567,54 +571,53 @@ or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code cla
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> system_name_from(
-  <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>(),
-  <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>()
-) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
+  <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>(),
+  <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()
+) ::
+  {:ok, <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()} | {:error, {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
 <p>Returns a number system name for a given locale and number system reference.</p><ul><li><p><code class="inline">system_name</code> is any number system name returned by
 <a href="CoreWeb.Cldr.html#known_number_systems/0"><code class="inline">CoreWeb.Cldr.known_number_systems/0</code></a> or a number system type
 returned by <a href="CoreWeb.Cldr.html#known_number_system_types/0"><code class="inline">CoreWeb.Cldr.known_number_system_types/0</code></a></p></li><li><p><code class="inline">locale</code> is any valid locale name returned by <a href="CoreWeb.Cldr.html#known_locale_names/0"><code class="inline">CoreWeb.Cldr.known_locale_names/0</code></a>
-or a <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></p></li></ul><p>Number systems can be references in one of two ways:</p><ul><li><p>As a number system type such as :default, :native, :traditional and
+or a <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.LanguageTag.html"><code class="inline">Cldr.LanguageTag</code></a> struct returned by <a href="CoreWeb.Cldr.Locale.html#new!/1"><code class="inline">CoreWeb.Cldr.Locale.new!/1</code></a></p></li></ul><p>Number systems can be references in one of two ways:</p><ul><li><p>As a number system type such as :default, :native, :traditional and
 :finance. This allows references to a number system for a locale in a
 consistent fashion for a given use</p></li><li><p>WIth the number system name directly, such as :latn, :arab or any of the
 other 70 or so</p></li></ul><p>This function dereferences the supplied <code class="inline">system_name</code> and returns the
 actual system name.</p><h2 id="system_name_from/2-examples" class="section-heading">
-  <a href="#system_name_from/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#system_name_from/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="n">ex</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="3016107903-1">(</span><span class="ss">:default</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="3016107903-1">)</span><span class="w">
-</span><span class="p" data-group-id="3016107903-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="3016107903-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="n">ex</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="8465297665-1">(</span><span class="ss">:default</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="8465297665-1">)</span><span class="w">
+</span><span class="p" data-group-id="8465297665-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="8465297665-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="3016107903-3">(</span><span class="s">&quot;latn&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="3016107903-3">)</span><span class="w">
-</span><span class="p" data-group-id="3016107903-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="3016107903-4">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="8465297665-3">(</span><span class="s">&quot;latn&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="8465297665-3">)</span><span class="w">
+</span><span class="p" data-group-id="8465297665-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="8465297665-4">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="3016107903-5">(</span><span class="ss">:native</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="3016107903-5">)</span><span class="w">
-</span><span class="p" data-group-id="3016107903-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="3016107903-6">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="8465297665-5">(</span><span class="ss">:native</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="8465297665-5">)</span><span class="w">
+</span><span class="p" data-group-id="8465297665-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:latn</span><span class="p" data-group-id="8465297665-6">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="3016107903-7">(</span><span class="ss">:nope</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="3016107903-7">)</span><span class="w">
-</span><span class="p" data-group-id="3016107903-8">{</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">system_name_from</span><span class="p" data-group-id="8465297665-7">(</span><span class="ss">:nope</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="8465297665-7">)</span><span class="w">
+</span><span class="p" data-group-id="8465297665-8">{</span><span class="w">
   </span><span class="ss">:error</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="3016107903-9">{</span><span class="nc">Cldr.UnknownNumberSystemError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The number system :nope is unknown&quot;</span><span class="p" data-group-id="3016107903-9">}</span><span class="w">
-</span><span class="p" data-group-id="3016107903-8">}</span></code></pre><p>Note that return value is not guaranteed to be a valid
+  </span><span class="p" data-group-id="8465297665-9">{</span><span class="nc">Cldr.UnknownNumberSystemError</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The number system :nope is unknown&quot;</span><span class="p" data-group-id="8465297665-9">}</span><span class="w">
+</span><span class="p" data-group-id="8465297665-8">}</span></code></pre><p>Note that return value is not guaranteed to be a valid
 number system for the given locale as demonstrated in the third example.</p>
   </section>
 </section>
 <section class="detail" id="to_system/2">
 
   <div class="detail-header">
-    <a href="#to_system/2" class="detail-link" title="Link to this function">
+    <a href="#to_system/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_system(number, system)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -625,51 +628,49 @@ number system for the given locale as demonstrated in the third example.</p>
 <p>Converts a number into the representation of
 a non-latin number system.</p><p>This function converts numbers to a known
 number system only, it does not provide number
-formatting.</p><ul><li><p><code class="inline">number</code> is a <code class="inline">float</code>, <code class="inline">integer</code> or <a href="https://hexdocs.pm/decimal/2.1.1/Decimal.html"><code class="inline">Decimal</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
-<a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_number_systems/0"><code class="inline">Cldr.known_number_systems/0</code></a> or a number system type
-returned by <a href="https://hexdocs.pm/ex_cldr/2.36.0/Cldr.html#known_number_system_types/0"><code class="inline">Cldr.known_number_system_types/0</code></a></p></li></ul><p>There are two types of number systems in CLDR:</p><ul><li><p><code class="inline">:numeric</code> in which the number system defines
+formatting.</p><ul><li><p><code class="inline">number</code> is a <code class="inline">float</code>, <code class="inline">integer</code> or <a href="https://hexdocs.pm/decimal/2.3.0/Decimal.html"><code class="inline">Decimal</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
+<a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_number_systems/0"><code class="inline">Cldr.known_number_systems/0</code></a> or a number system type
+returned by <a href="https://hexdocs.pm/ex_cldr/2.40.2/Cldr.html#known_number_system_types/0"><code class="inline">Cldr.known_number_system_types/0</code></a></p></li></ul><p>There are two types of number systems in CLDR:</p><ul><li><p><code class="inline">:numeric</code> in which the number system defines
 a direct mapping between the latin digits <code class="inline">0..9</code>
 into a the number system equivalent.  In this case,
-<a href="#to_system/2"><code class="inline">to_system/2</code></a> invokes <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Number.Transliterate.html#transliterate_digits/3"><code class="inline">Cldr.Number.Transliterate.transliterate_digits/3</code></a>
+<a href="#to_system/2"><code class="inline">to_system/2</code></a> invokes <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.Transliterate.html#transliterate_digits/3"><code class="inline">Cldr.Number.Transliterate.transliterate_digits/3</code></a>
 for the given number.</p></li><li><p><code class="inline">:algorithmic</code> in which the number system
 does not have the same structure as the <code class="inline">:latn</code>
 number system and therefore the conversion is
 done algorithmically.  For CLDR the algorithm
-is implemented through <a href="https://hexdocs.pm/ex_cldr_numbers/2.30.1/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a> rulesets.
+is implemented through <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a> rulesets.
 These rulesets are considered by CLDR to be
 less rigorous than the <code class="inline">:numeric</code> number systems
 and caution and testing for a specific use case
 is recommended.</p></li></ul><h2 id="to_system/2-examples" class="section-heading">
-  <a href="#to_system/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#to_system/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">to_system</span><span class="w"> </span><span class="mi">123456</span><span class="p">,</span><span class="w"> </span><span class="ss">:hebr</span><span class="w">
-</span><span class="p" data-group-id="1069246158-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;קכ״ג׳תנ״ו&quot;</span><span class="p" data-group-id="1069246158-1">}</span><span class="w">
+</span><span class="p" data-group-id="8020224318-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;קכ״ג׳תנ״ו&quot;</span><span class="p" data-group-id="8020224318-1">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">to_system</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">:hans</span><span class="w">
-</span><span class="p" data-group-id="1069246158-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;一百二十三&quot;</span><span class="p" data-group-id="1069246158-2">}</span><span class="w">
+</span><span class="p" data-group-id="8020224318-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;一百二十三&quot;</span><span class="p" data-group-id="8020224318-2">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">to_system</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">:hant</span><span class="w">
-</span><span class="p" data-group-id="1069246158-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;一百二十三&quot;</span><span class="p" data-group-id="1069246158-3">}</span><span class="w">
+</span><span class="p" data-group-id="8020224318-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;一百二十三&quot;</span><span class="p" data-group-id="8020224318-3">}</span><span class="w">
 
 </span><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">to_system</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">:hansfin</span><span class="w">
-</span><span class="p" data-group-id="1069246158-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;壹佰贰拾叁&quot;</span><span class="p" data-group-id="1069246158-4">}</span></code></pre>
+</span><span class="p" data-group-id="8020224318-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;壹佰贰拾叁&quot;</span><span class="p" data-group-id="8020224318-4">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="to_system!/2">
 
   <div class="detail-header">
-    <a href="#to_system!/2" class="detail-link" title="Link to this function">
+    <a href="#to_system!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_system!(number, system_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -679,14 +680,14 @@ is recommended.</p></li></ul><h2 id="to_system/2-examples" class="section-headin
 
 <p>Converts a number into the representation of
 a non-latin number system. Returns a converted
-string or raises on error.</p><ul><li><p><code class="inline">number</code> is a <code class="inline">float</code>, <code class="inline">integer</code> or <a href="https://hexdocs.pm/decimal/2.1.1/Decimal.html"><code class="inline">Decimal</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
+string or raises on error.</p><ul><li><p><code class="inline">number</code> is a <code class="inline">float</code>, <code class="inline">integer</code> or <a href="https://hexdocs.pm/decimal/2.3.0/Decimal.html"><code class="inline">Decimal</code></a></p></li><li><p><code class="inline">system_name</code> is any number system name returned by
 <a href="CoreWeb.Cldr.html#known_number_systems/0"><code class="inline">CoreWeb.Cldr.known_number_systems/0</code></a> or a number system type
 returned by <a href="CoreWeb.Cldr.html#known_number_system_types/0"><code class="inline">CoreWeb.Cldr.known_number_system_types/0</code></a></p></li></ul><p>See <a href="#to_system/2"><code class="inline">CoreWeb.Cldr.Number.System.to_system/2</code></a> for further
 information.</p><h2 id="to_system!/2-examples" class="section-heading">
-  <a href="#to_system!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#to_system!/2-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
 <pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number.System</span><span class="o">.</span><span class="n">to_system!</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">:hans</span><span class="w">
 </span><span class="s">&quot;一百二十三&quot;</span><span class="w">
@@ -702,34 +703,33 @@ information.</p><h2 id="to_system!/2-examples" class="section-heading">
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

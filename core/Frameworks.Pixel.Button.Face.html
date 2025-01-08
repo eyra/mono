@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Frameworks.Pixel.Button.Face — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Frameworks.Pixel.Button.Face — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,91 +33,117 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Frameworks.Pixel.Button.Face</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Frameworks.Pixel.Button.Face</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -129,7 +152,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#icon/1" translate="no">icon(assigns)</a>
+        <a href="#icon/1" data-no-tooltip translate="no">icon(assigns)</a>
 
       </div>
 
@@ -139,7 +162,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#icon_name/1" translate="no">icon_name(arg)</a>
+        <a href="#icon_name/1" data-no-tooltip translate="no">icon_name(arg)</a>
 
       </div>
 
@@ -147,7 +170,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#label/1" translate="no">label(assigns)</a>
+        <a href="#label/1" data-no-tooltip translate="no">label(assigns)</a>
 
       </div>
 
@@ -157,7 +180,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#label_icon/1" translate="no">label_icon(assigns)</a>
+        <a href="#label_icon/1" data-no-tooltip translate="no">label_icon(assigns)</a>
 
       </div>
 
@@ -167,7 +190,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#link/1" translate="no">link(assigns)</a>
+        <a href="#link/1" data-no-tooltip translate="no">link(assigns)</a>
 
       </div>
 
@@ -177,7 +200,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#menu_home/1" translate="no">menu_home(assigns)</a>
+        <a href="#menu_home/1" data-no-tooltip translate="no">menu_home(assigns)</a>
 
       </div>
 
@@ -187,7 +210,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#menu_item/1" translate="no">menu_item(assigns)</a>
+        <a href="#menu_item/1" data-no-tooltip translate="no">menu_item(assigns)</a>
 
       </div>
 
@@ -197,7 +220,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#padding/1" translate="no">padding(_)</a>
+        <a href="#padding/1" data-no-tooltip translate="no">padding(_)</a>
 
       </div>
 
@@ -205,7 +228,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#plain/1" translate="no">plain(assigns)</a>
+        <a href="#plain/1" data-no-tooltip translate="no">plain(assigns)</a>
 
       </div>
 
@@ -215,7 +238,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#plain_icon/1" translate="no">plain_icon(assigns)</a>
+        <a href="#plain_icon/1" data-no-tooltip translate="no">plain_icon(assigns)</a>
 
       </div>
 
@@ -225,7 +248,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#primary/1" translate="no">primary(assigns)</a>
+        <a href="#primary/1" data-no-tooltip translate="no">primary(assigns)</a>
 
       </div>
 
@@ -235,7 +258,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#primary_icon/1" translate="no">primary_icon(assigns)</a>
+        <a href="#primary_icon/1" data-no-tooltip translate="no">primary_icon(assigns)</a>
 
       </div>
 
@@ -245,7 +268,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#secondary/1" translate="no">secondary(assigns)</a>
+        <a href="#secondary/1" data-no-tooltip translate="no">secondary(assigns)</a>
 
       </div>
 
@@ -262,23 +285,20 @@ core
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="icon/1">
 
   <div class="detail-header">
-    <a href="#icon/1" class="detail-link" title="Link to this function">
+    <a href="#icon/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">icon(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L26" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L27" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -287,10 +307,10 @@ Functions
   <section class="docstring">
 
 <h2 id="icon/1-attributes" class="section-heading">
-  <a href="#icon/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#icon/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">icon</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">alt</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;&quot;</code>.</li><li><code class="inline">size</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;h-6 w-6&quot;</code>.</li></ul>
   </section>
@@ -298,15 +318,13 @@ Functions
 <section class="detail" id="icon_name/1">
 
   <div class="detail-header">
-    <a href="#icon_name/1" class="detail-link" title="Link to this function">
+    <a href="#icon_name/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">icon_name(arg)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L17" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L18" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -320,15 +338,13 @@ Functions
 <section class="detail" id="label/1">
 
   <div class="detail-header">
-    <a href="#label/1" class="detail-link" title="Link to this function">
+    <a href="#label/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">label(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L67" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L68" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -337,10 +353,10 @@ Functions
   <section class="docstring">
 
 <h2 id="label/1-attributes" class="section-heading">
-  <a href="#label/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#label/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">wrap</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li><li><code class="inline">font</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;font-button text-button&quot;</code>.</li></ul>
   </section>
@@ -348,15 +364,13 @@ Functions
 <section class="detail" id="label_icon/1">
 
   <div class="detail-header">
-    <a href="#label_icon/1" class="detail-link" title="Link to this function">
+    <a href="#label_icon/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">label_icon(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L40" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L41" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -365,10 +379,10 @@ Functions
   <section class="docstring">
 
 <h2 id="label_icon/1-attributes" class="section-heading">
-  <a href="#label_icon/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#label_icon/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-grey1&quot;</code>.</li><li><code class="inline">height</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;h-10&quot;</code>.</li></ul>
   </section>
@@ -376,15 +390,13 @@ Functions
 <section class="detail" id="link/1">
 
   <div class="detail-header">
-    <a href="#link/1" class="detail-link" title="Link to this function">
+    <a href="#link/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">link(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L9" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L10" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -393,10 +405,10 @@ Functions
   <section class="docstring">
 
 <h2 id="link/1-attributes" class="section-heading">
-  <a href="#link/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#link/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">text</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">font</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-link font-link&quot;</code>.</li></ul>
   </section>
@@ -404,15 +416,13 @@ Functions
 <section class="detail" id="menu_home/1">
 
   <div class="detail-header">
-    <a href="#menu_home/1" class="detail-link" title="Link to this function">
+    <a href="#menu_home/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">menu_home(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L177" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -421,10 +431,10 @@ Functions
   <section class="docstring">
 
 <h2 id="menu_home/1-attributes" class="section-heading">
-  <a href="#menu_home/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#menu_home/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">icon</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">size</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:wide</code>.</li></ul>
   </section>
@@ -432,15 +442,13 @@ Functions
 <section class="detail" id="menu_item/1">
 
   <div class="detail-header">
-    <a href="#menu_item/1" class="detail-link" title="Link to this function">
+    <a href="#menu_item/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">menu_item(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L194" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -449,10 +457,10 @@ Functions
   <section class="docstring">
 
 <h2 id="menu_item/1-attributes" class="section-heading">
-  <a href="#menu_item/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#menu_item/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">title</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">active?</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">counter</code> (<code class="inline">:integer</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:map</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-grey1&quot;</code>.</li></ul>
   </section>
@@ -460,15 +468,13 @@ Functions
 <section class="detail" id="padding/1">
 
   <div class="detail-header">
-    <a href="#padding/1" class="detail-link" title="Link to this function">
+    <a href="#padding/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">padding(_)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L59" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L60" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -482,15 +488,13 @@ Functions
 <section class="detail" id="plain/1">
 
   <div class="detail-header">
-    <a href="#plain/1" class="detail-link" title="Link to this function">
+    <a href="#plain/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">plain(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L101" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L102" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -499,10 +503,10 @@ Functions
   <section class="docstring">
 
 <h2 id="plain/1-attributes" class="section-heading">
-  <a href="#plain/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#plain/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-grey1&quot;</code>.</li></ul>
   </section>
@@ -510,15 +514,13 @@ Functions
 <section class="detail" id="plain_icon/1">
 
   <div class="detail-header">
-    <a href="#plain_icon/1" class="detail-link" title="Link to this function">
+    <a href="#plain_icon/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">plain_icon(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L79" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L80" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -527,10 +529,10 @@ Functions
   <section class="docstring">
 
 <h2 id="plain_icon/1-attributes" class="section-heading">
-  <a href="#plain_icon/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#plain_icon/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:atom</code>) - Defaults to <code class="inline">:forward</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-grey1&quot;</code>.</li></ul>
   </section>
@@ -538,15 +540,13 @@ Functions
 <section class="detail" id="primary/1">
 
   <div class="detail-header">
-    <a href="#primary/1" class="detail-link" title="Link to this function">
+    <a href="#primary/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">primary(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L146" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L147" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -555,10 +555,10 @@ Functions
   <section class="docstring">
 
 <h2 id="primary/1-attributes" class="section-heading">
-  <a href="#primary/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#primary/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li><li><code class="inline">loading</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul>
   </section>
@@ -566,15 +566,13 @@ Functions
 <section class="detail" id="primary_icon/1">
 
   <div class="detail-header">
-    <a href="#primary_icon/1" class="detail-link" title="Link to this function">
+    <a href="#primary_icon/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">primary_icon(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L122" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L123" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -583,10 +581,10 @@ Functions
   <section class="docstring">
 
 <h2 id="primary_icon/1-attributes" class="section-heading">
-  <a href="#primary_icon/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#primary_icon/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">icon</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">bg_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-white&quot;</code>.</li></ul>
   </section>
@@ -594,15 +592,13 @@ Functions
 <section class="detail" id="secondary/1">
 
   <div class="detail-header">
-    <a href="#secondary/1" class="detail-link" title="Link to this function">
+    <a href="#secondary/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">secondary(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L167" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/button_face.ex#L166" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -611,10 +607,10 @@ Functions
   <section class="docstring">
 
 <h2 id="secondary/1-attributes" class="section-heading">
-  <a href="#secondary/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">attributes</p>
+  <a href="#secondary/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Attributes
+  <span class="text">Attributes</span>
 </h2>
 <ul><li><code class="inline">label</code> (<code class="inline">:string</code>) (required)</li><li><code class="inline">border_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;bg-primary&quot;</code>.</li><li><code class="inline">text_color</code> (<code class="inline">:string</code>) - Defaults to <code class="inline">&quot;text-primary&quot;</code>.</li></ul>
   </section>
@@ -623,34 +619,33 @@ Functions
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>

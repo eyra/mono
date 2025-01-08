@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.29.3">
+    <meta name="generator" content="ExDoc v0.36.1">
     <meta name="project" content="core v0.1.0">
 
-    <title>Systems.Advert.Public — core v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-MB5C7R66.css" />
 
+    <title>Systems.Advert.Public — core v0.1.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-XRYTXUVD.js"></script>
-    <script src="dist/sidebar_items-9BCFEBEF.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-EHGDP2LQ.js"></script>
-
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-HJ5ACJPS.js"></script>
 
   </head>
-  <body data-type="modules" class="page-module">
+  <body class="sidebar-closed">
     <script>
 
       try {
@@ -36,95 +33,121 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
-<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
 
-<section class="sidebar">
-  <form class="sidebar-search" action="search.html">
-    <button type="submit" class="search-button" aria-label="Submit Search">
-      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
-    </button>
-    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
-      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
-    </button>
-    <label class="search-label">
-      <p class="sr-only">Search</p>
-      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    </label>
-  </form>
-
-  <div class="autocomplete">
-    <div class="autocomplete-results">
-    </div>
-  </div>
+<nav id="sidebar" class="sidebar">
 
   <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
 
-      <a href="readme.html">
-        <img src="assets/logo.svg" alt="core" class="sidebar-projectImage">
-      </a>
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
 
-    <div class="sidebar-projectDetails">
-      <a href="readme.html" class="sidebar-projectName" translate="no">
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
 core
-      </a>
-      <strong class="sidebar-projectVersion" translate="no">
-        v0.1.0
-      </strong>
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
     </div>
-    <ul class="sidebar-listNav">
-      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
 
-        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
 
 
-        <li><a id="tasks-list-link" href="#full-list"><span translate="no">Mix</span> Tasks</a></li>
+        <li>
+          <button id="tasks-list-tab-button" role="tab" data-type="tasks" aria-controls="tasks-tab-panel" aria-selected="false" tabindex="-1">
+            <span translate="no">Mix</span> Tasks
+          </button>
+        </li>
 
     </ul>
   </div>
 
-  <div class="gradient"></div>
-  <ul id="full-list"></ul>
-</section>
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
 
-<section class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-
-<h1>
-<button class="icon-action display-settings">
-  <i class="ri-settings-3-line"></i>
-  <span class="sr-only">Settings</span>
-</button>
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
 
 
-    <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+    <div id="tasks-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="tasks-list-tab-button" hidden>
+      <ul id="tasks-full-list" class="full-list"></ul>
+    </div>
 
-  <span translate="no">Systems.Advert.Public</span> 
-  <small class="app-vsn" translate="no">(core v0.1.0)</small>
+</nav>
 
-</h1>
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+    <span translate="no">Systems.Advert.Public</span> 
+    <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+  </h1>
 
 
-  <section id="moduledoc">
+    <section id="moduledoc">
 <p>The Studies context.</p>
-  </section>
+    </section>
 
+</div>
 
   <section id="summary" class="details-list">
     <h1 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-      Summary
+      <span class="text">Summary</span>
     </h1>
 <div class="summary-functions summary">
   <h2>
@@ -133,7 +156,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#all/2" translate="no">all(ids, preload \\ [])</a>
+        <a href="#all/2" data-no-tooltip translate="no">all(ids, preload \\ [])</a>
 
       </div>
 
@@ -141,7 +164,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#assign_owners/2" translate="no">assign_owners(advert, users)</a>
+        <a href="#assign_owners/2" data-no-tooltip translate="no">assign_owners(advert, users)</a>
 
       </div>
 
@@ -149,7 +172,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#change/2" translate="no">change(advert, attrs \\ %{})</a>
+        <a href="#change/2" data-no-tooltip translate="no">change(advert, attrs \\ %{})</a>
 
       </div>
 
@@ -157,7 +180,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#completed?/1" translate="no">completed?(advert)</a>
+        <a href="#completed?/1" data-no-tooltip translate="no">completed?(advert)</a>
 
       </div>
 
@@ -165,7 +188,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#copy/5" translate="no">copy(advert, promotion, assignment, submission, auth_node)</a>
+        <a href="#copy/5" data-no-tooltip translate="no">copy(advert, promotion, assignment, submission, auth_node)</a>
 
       </div>
 
@@ -173,7 +196,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create/5" translate="no">create(promotion, assignment, submission, researcher, auth_node)</a>
+        <a href="#create/5" data-no-tooltip translate="no">create(promotion, assignment, submission, researcher, auth_node)</a>
 
       </div>
 
@@ -183,7 +206,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#delete/1" translate="no">delete(id)</a>
+        <a href="#delete/1" data-no-tooltip translate="no">delete(id)</a>
 
       </div>
 
@@ -191,7 +214,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get!/2" translate="no">get!(id, preload \\ [])</a>
+        <a href="#get!/2" data-no-tooltip translate="no">get!(id, preload \\ [])</a>
 
       </div>
 
@@ -199,7 +222,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_assignment/2" translate="no">get_by_assignment(assignment, preload \\ [])</a>
+        <a href="#get_by_assignment/2" data-no-tooltip translate="no">get_by_assignment(assignment, preload \\ [])</a>
 
       </div>
 
@@ -207,7 +230,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_promotion/2" translate="no">get_by_promotion(promotion, preload \\ [])</a>
+        <a href="#get_by_promotion/2" data-no-tooltip translate="no">get_by_promotion(promotion, preload \\ [])</a>
 
       </div>
 
@@ -215,7 +238,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_by_submission/2" translate="no">get_by_submission(submission, preload \\ [])</a>
+        <a href="#get_by_submission/2" data-no-tooltip translate="no">get_by_submission(submission, preload \\ [])</a>
 
       </div>
 
@@ -223,7 +246,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_changeset/1" translate="no">get_changeset(attrs \\ %{})</a>
+        <a href="#get_changeset/1" data-no-tooltip translate="no">get_changeset(attrs \\ %{})</a>
 
       </div>
 
@@ -231,7 +254,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_user_pools_by_currency/2" translate="no">get_user_pools_by_currency(user, currency)</a>
+        <a href="#get_user_pools_by_currency/2" data-no-tooltip translate="no">get_user_pools_by_currency(user, currency)</a>
 
       </div>
 
@@ -239,7 +262,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#handle_exclusion/2" translate="no">handle_exclusion(assignment, items)</a>
+        <a href="#handle_exclusion/2" data-no-tooltip translate="no">handle_exclusion(assignment, items)</a>
 
       </div>
 
@@ -247,7 +270,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#import_participant_reward/4" translate="no">import_participant_reward(participant_id, amount, session_key, currency)</a>
+        <a href="#import_participant_reward/4" data-no-tooltip translate="no">import_participant_reward(participant_id, amount, session_key, currency)</a>
 
       </div>
 
@@ -255,7 +278,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#import_participant_reward_exists?/2" translate="no">import_participant_reward_exists?(participant_id, session_key)</a>
+        <a href="#import_participant_reward_exists?/2" data-no-tooltip translate="no">import_participant_reward_exists?(participant_id, session_key)</a>
 
       </div>
 
@@ -263,7 +286,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list/1" translate="no">list(opts \\ [])</a>
+        <a href="#list/1" data-no-tooltip translate="no">list(opts \\ [])</a>
 
       </div>
 
@@ -271,7 +294,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_assignments/2" translate="no">list_by_assignments(assignment_ids, preload)</a>
+        <a href="#list_by_assignments/2" data-no-tooltip translate="no">list_by_assignments(assignment_ids, preload)</a>
 
       </div>
 
@@ -279,7 +302,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_budget/2" translate="no">list_by_budget(model, preload \\ [])</a>
+        <a href="#list_by_budget/2" data-no-tooltip translate="no">list_by_budget(model, preload \\ [])</a>
 
       </div>
 
@@ -287,7 +310,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_participant/2" translate="no">list_by_participant(user, opts \\ [])</a>
+        <a href="#list_by_participant/2" data-no-tooltip translate="no">list_by_participant(user, opts \\ [])</a>
 
       </div>
 
@@ -297,7 +320,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_pools_and_submission_status/3" translate="no">list_by_pools_and_submission_status(pools, submission_status, opts \\ [])</a>
+        <a href="#list_by_pools_and_submission_status/3" data-no-tooltip translate="no">list_by_pools_and_submission_status(pools, submission_status, opts \\ [])</a>
 
       </div>
 
@@ -305,7 +328,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_by_status/2" translate="no">list_by_status(status, opts \\ [])</a>
+        <a href="#list_by_status/2" data-no-tooltip translate="no">list_by_status(status, opts \\ [])</a>
 
       </div>
 
@@ -313,7 +336,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_excluded_adverts/2" translate="no">list_excluded_adverts(adverts, preload \\ [])</a>
+        <a href="#list_excluded_adverts/2" data-no-tooltip translate="no">list_excluded_adverts(adverts, preload \\ [])</a>
 
       </div>
 
@@ -321,7 +344,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_excluded_user_ids/1" translate="no">list_excluded_user_ids(advert_ids)</a>
+        <a href="#list_excluded_user_ids/1" data-no-tooltip translate="no">list_excluded_user_ids(advert_ids)</a>
 
       </div>
 
@@ -329,7 +352,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_owners/2" translate="no">list_owners(advert, preload \\ [])</a>
+        <a href="#list_owners/2" data-no-tooltip translate="no">list_owners(advert, preload \\ [])</a>
 
       </div>
 
@@ -337,7 +360,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_submitted/2" translate="no">list_submitted(pool, opts \\ [])</a>
+        <a href="#list_submitted/2" data-no-tooltip translate="no">list_submitted(pool, opts \\ [])</a>
 
       </div>
 
@@ -347,7 +370,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_tools/1" translate="no">list_tools(advert)</a>
+        <a href="#list_tools/1" data-no-tooltip translate="no">list_tools(advert)</a>
 
       </div>
 
@@ -355,7 +378,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_tools/2" translate="no">list_tools(advert, schema)</a>
+        <a href="#list_tools/2" data-no-tooltip translate="no">list_tools(advert, schema)</a>
 
       </div>
 
@@ -363,7 +386,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#mark_expired_debug/1" translate="no">mark_expired_debug(force \\ false)</a>
+        <a href="#mark_expired_debug/1" data-no-tooltip translate="no">mark_expired_debug(force \\ false)</a>
 
       </div>
 
@@ -374,7 +397,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#mark_expired_debug/2" translate="no">mark_expired_debug(map, force)</a>
+        <a href="#mark_expired_debug/2" data-no-tooltip translate="no">mark_expired_debug(map, force)</a>
 
       </div>
 
@@ -384,7 +407,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#open_spot_count/1" translate="no">open_spot_count(arg1)</a>
+        <a href="#open_spot_count/1" data-no-tooltip translate="no">open_spot_count(arg1)</a>
 
       </div>
 
@@ -392,7 +415,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#payout_participant/2" translate="no">payout_participant(assignment, user)</a>
+        <a href="#payout_participant/2" data-no-tooltip translate="no">payout_participant(assignment, user)</a>
 
       </div>
 
@@ -400,7 +423,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#query_user_pools_by_currency/2" translate="no">query_user_pools_by_currency(user, currency)</a>
+        <a href="#query_user_pools_by_currency/2" data-no-tooltip translate="no">query_user_pools_by_currency(user, currency)</a>
 
       </div>
 
@@ -408,7 +431,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#ready?/1" translate="no">ready?(id)</a>
+        <a href="#ready?/1" data-no-tooltip translate="no">ready?(id)</a>
 
       </div>
 
@@ -416,7 +439,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reward_amount/1" translate="no">reward_amount(model)</a>
+        <a href="#reward_amount/1" data-no-tooltip translate="no">reward_amount(model)</a>
 
       </div>
 
@@ -424,7 +447,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reward_value/1" translate="no">reward_value(assignment)</a>
+        <a href="#reward_value/1" data-no-tooltip translate="no">reward_value(assignment)</a>
 
       </div>
 
@@ -432,7 +455,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#rewarded_amount/2" translate="no">rewarded_amount(assignment, user)</a>
+        <a href="#rewarded_amount/2" data-no-tooltip translate="no">rewarded_amount(assignment, user)</a>
 
       </div>
 
@@ -440,7 +463,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#submission_updated/1" translate="no">submission_updated(arg1)</a>
+        <a href="#submission_updated/1" data-no-tooltip translate="no">submission_updated(arg1)</a>
 
       </div>
 
@@ -448,7 +471,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update/1" translate="no">update(changeset)</a>
+        <a href="#update/1" data-no-tooltip translate="no">update(changeset)</a>
 
       </div>
 
@@ -458,7 +481,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#update/2" translate="no">update(advert, attrs)</a>
+        <a href="#update/2" data-no-tooltip translate="no">update(advert, attrs)</a>
 
       </div>
 
@@ -466,7 +489,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#user_has_currency?/2" translate="no">user_has_currency?(user, currency)</a>
+        <a href="#user_has_currency?/2" data-no-tooltip translate="no">user_has_currency?(user, currency)</a>
 
       </div>
 
@@ -474,7 +497,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#validate_open/1" translate="no">validate_open(advert)</a>
+        <a href="#validate_open/1" data-no-tooltip translate="no">validate_open(advert)</a>
 
       </div>
 
@@ -482,7 +505,7 @@ core
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#validate_open/2" translate="no">validate_open(assignment, user)</a>
+        <a href="#validate_open/2" data-no-tooltip translate="no">validate_open(assignment, user)</a>
 
       </div>
 
@@ -497,9 +520,8 @@ core
     <h1 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
-        <span class="sr-only">Link to this section</span>
       </a>
-Functions
+      <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
 <section class="detail" id="all/2">
@@ -507,15 +529,13 @@ Functions
     <span id="all/1"></span>
 
   <div class="detail-header">
-    <a href="#all/2" class="detail-link" title="Link to this function">
+    <a href="#all/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">all(ids, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L36" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L36" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -529,15 +549,13 @@ Functions
 <section class="detail" id="assign_owners/2">
 
   <div class="detail-header">
-    <a href="#assign_owners/2" class="detail-link" title="Link to this function">
+    <a href="#assign_owners/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">assign_owners(advert, users)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L218" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L218" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -553,15 +571,13 @@ Functions
     <span id="change/1"></span>
 
   <div class="detail-header">
-    <a href="#change/2" class="detail-link" title="Link to this function">
+    <a href="#change/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">change(advert, attrs \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L316" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L316" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -575,15 +591,13 @@ Functions
 <section class="detail" id="completed?/1">
 
   <div class="detail-header">
-    <a href="#completed?/1" class="detail-link" title="Link to this function">
+    <a href="#completed?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">completed?(advert)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L350" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L350" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -597,15 +611,13 @@ Functions
 <section class="detail" id="copy/5">
 
   <div class="detail-header">
-    <a href="#copy/5" class="detail-link" title="Link to this function">
+    <a href="#copy/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">copy(advert, promotion, assignment, submission, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L320" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L320" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -619,15 +631,13 @@ Functions
 <section class="detail" id="create/5">
 
   <div class="detail-header">
-    <a href="#create/5" class="detail-link" title="Link to this function">
+    <a href="#create/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">create(promotion, assignment, submission, researcher, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L259" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L259" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -641,15 +651,13 @@ Functions
 <section class="detail" id="delete/1">
 
   <div class="detail-header">
-    <a href="#delete/1" class="detail-link" title="Link to this function">
+    <a href="#delete/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">delete(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L311" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L311" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -665,15 +673,13 @@ Functions
     <span id="get!/1"></span>
 
   <div class="detail-header">
-    <a href="#get!/2" class="detail-link" title="Link to this function">
+    <a href="#get!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L28" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L28" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -689,15 +695,13 @@ Functions
     <span id="get_by_assignment/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_assignment/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_assignment/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_assignment(assignment, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L72" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -713,15 +717,13 @@ Functions
     <span id="get_by_promotion/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_promotion/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_promotion/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_promotion(promotion, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L58" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L58" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -737,15 +739,13 @@ Functions
     <span id="get_by_submission/1"></span>
 
   <div class="detail-header">
-    <a href="#get_by_submission/2" class="detail-link" title="Link to this function">
+    <a href="#get_by_submission/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_by_submission(submission, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L44" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L44" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -761,15 +761,13 @@ Functions
     <span id="get_changeset/0"></span>
 
   <div class="detail-header">
-    <a href="#get_changeset/1" class="detail-link" title="Link to this function">
+    <a href="#get_changeset/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_changeset(attrs \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L251" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L251" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -783,15 +781,13 @@ Functions
 <section class="detail" id="get_user_pools_by_currency/2">
 
   <div class="detail-header">
-    <a href="#get_user_pools_by_currency/2" class="detail-link" title="Link to this function">
+    <a href="#get_user_pools_by_currency/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_user_pools_by_currency(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L549" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L549" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -805,15 +801,13 @@ Functions
 <section class="detail" id="handle_exclusion/2">
 
   <div class="detail-header">
-    <a href="#handle_exclusion/2" class="detail-link" title="Link to this function">
+    <a href="#handle_exclusion/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">handle_exclusion(assignment, items)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L374" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L374" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -827,15 +821,13 @@ Functions
 <section class="detail" id="import_participant_reward/4">
 
   <div class="detail-header">
-    <a href="#import_participant_reward/4" class="detail-link" title="Link to this function">
+    <a href="#import_participant_reward/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">import_participant_reward(participant_id, amount, session_key, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L567" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L567" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -849,15 +841,13 @@ Functions
 <section class="detail" id="import_participant_reward_exists?/2">
 
   <div class="detail-header">
-    <a href="#import_participant_reward_exists?/2" class="detail-link" title="Link to this function">
+    <a href="#import_participant_reward_exists?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">import_participant_reward_exists?(participant_id, session_key)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L610" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L610" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -873,15 +863,13 @@ Functions
     <span id="list/0"></span>
 
   <div class="detail-header">
-    <a href="#list/1" class="detail-link" title="Link to this function">
+    <a href="#list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list(opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L86" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L86" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -895,15 +883,13 @@ Functions
 <section class="detail" id="list_by_assignments/2">
 
   <div class="detail-header">
-    <a href="#list_by_assignments/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_assignments/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_assignments(assignment_ids, preload)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L97" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L97" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -919,15 +905,13 @@ Functions
     <span id="list_by_budget/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_budget/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_budget/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_budget(model, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L125" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -943,15 +927,13 @@ Functions
     <span id="list_by_participant/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_participant/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_participant/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_participant(user, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L160" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L160" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -967,15 +949,13 @@ Functions
     <span id="list_by_pools_and_submission_status/2"></span>
 
   <div class="detail-header">
-    <a href="#list_by_pools_and_submission_status/3" class="detail-link" title="Link to this function">
+    <a href="#list_by_pools_and_submission_status/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_pools_and_submission_status(pools, submission_status, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L105" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L105" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -991,15 +971,13 @@ Functions
     <span id="list_by_status/1"></span>
 
   <div class="detail-header">
-    <a href="#list_by_status/2" class="detail-link" title="Link to this function">
+    <a href="#list_by_status/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_by_status(status, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L168" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L168" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1015,15 +993,13 @@ Functions
     <span id="list_excluded_adverts/1"></span>
 
   <div class="detail-header">
-    <a href="#list_excluded_adverts/2" class="detail-link" title="Link to this function">
+    <a href="#list_excluded_adverts/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_excluded_adverts(adverts, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L190" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L190" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1037,15 +1013,13 @@ Functions
 <section class="detail" id="list_excluded_user_ids/1">
 
   <div class="detail-header">
-    <a href="#list_excluded_user_ids/1" class="detail-link" title="Link to this function">
+    <a href="#list_excluded_user_ids/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_excluded_user_ids(advert_ids)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L176" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L176" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1061,15 +1035,13 @@ Functions
     <span id="list_owners/1"></span>
 
   <div class="detail-header">
-    <a href="#list_owners/2" class="detail-link" title="Link to this function">
+    <a href="#list_owners/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_owners(advert, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L206" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L206" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1085,15 +1057,13 @@ Functions
     <span id="list_submitted/1"></span>
 
   <div class="detail-header">
-    <a href="#list_submitted/2" class="detail-link" title="Link to this function">
+    <a href="#list_submitted/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_submitted(pool, opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L140" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L140" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1107,15 +1077,13 @@ Functions
 <section class="detail" id="list_tools/1">
 
   <div class="detail-header">
-    <a href="#list_tools/1" class="detail-link" title="Link to this function">
+    <a href="#list_tools/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_tools(advert)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L340" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L340" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1129,15 +1097,13 @@ Functions
 <section class="detail" id="list_tools/2">
 
   <div class="detail-header">
-    <a href="#list_tools/2" class="detail-link" title="Link to this function">
+    <a href="#list_tools/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_tools(advert, schema)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L345" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L345" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1153,15 +1119,13 @@ Functions
     <span id="mark_expired_debug/0"></span>
 
   <div class="detail-header">
-    <a href="#mark_expired_debug/1" class="detail-link" title="Link to this function">
+    <a href="#mark_expired_debug/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(force \\ false)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L501" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L501" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1176,15 +1140,13 @@ Functions
 <section class="detail" id="mark_expired_debug/2">
 
   <div class="detail-header">
-    <a href="#mark_expired_debug/2" class="detail-link" title="Link to this function">
+    <a href="#mark_expired_debug/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(map, force)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L520" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1198,15 +1160,13 @@ Functions
 <section class="detail" id="open_spot_count/1">
 
   <div class="detail-header">
-    <a href="#open_spot_count/1" class="detail-link" title="Link to this function">
+    <a href="#open_spot_count/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">open_spot_count(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L245" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L245" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1220,15 +1180,13 @@ Functions
 <section class="detail" id="payout_participant/2">
 
   <div class="detail-header">
-    <a href="#payout_participant/2" class="detail-link" title="Link to this function">
+    <a href="#payout_participant/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">payout_participant(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L524" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L524" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1242,15 +1200,13 @@ Functions
 <section class="detail" id="query_user_pools_by_currency/2">
 
   <div class="detail-header">
-    <a href="#query_user_pools_by_currency/2" class="detail-link" title="Link to this function">
+    <a href="#query_user_pools_by_currency/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">query_user_pools_by_currency(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L554" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L554" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1264,15 +1220,13 @@ Functions
 <section class="detail" id="ready?/1">
 
   <div class="detail-header">
-    <a href="#ready?/1" class="detail-link" title="Link to this function">
+    <a href="#ready?/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ready?(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L359" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L359" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1286,15 +1240,13 @@ Functions
 <section class="detail" id="reward_amount/1">
 
   <div class="detail-header">
-    <a href="#reward_amount/1" class="detail-link" title="Link to this function">
+    <a href="#reward_amount/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reward_amount(model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L532" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L532" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1308,15 +1260,13 @@ Functions
 <section class="detail" id="reward_value/1">
 
   <div class="detail-header">
-    <a href="#reward_value/1" class="detail-link" title="Link to this function">
+    <a href="#reward_value/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reward_value(assignment)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L399" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L399" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1330,15 +1280,13 @@ Functions
 <section class="detail" id="rewarded_amount/2">
 
   <div class="detail-header">
-    <a href="#rewarded_amount/2" class="detail-link" title="Link to this function">
+    <a href="#rewarded_amount/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">rewarded_amount(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L528" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L528" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1352,15 +1300,13 @@ Functions
 <section class="detail" id="submission_updated/1">
 
   <div class="detail-header">
-    <a href="#submission_updated/1" class="detail-link" title="Link to this function">
+    <a href="#submission_updated/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">submission_updated(arg1)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L298" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L298" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1374,15 +1320,13 @@ Functions
 <section class="detail" id="update/1">
 
   <div class="detail-header">
-    <a href="#update/1" class="detail-link" title="Link to this function">
+    <a href="#update/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L287" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L287" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1391,30 +1335,28 @@ Functions
   <section class="docstring">
 
 <p>Updates a get_advert.</p><h2 id="update/1-examples" class="section-heading">
-  <a href="#update/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
-  <p class="sr-only">examples</p>
+  <a href="#update/1-examples" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  Examples
+  <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="2617545745-1">(</span><span class="n">get_advert</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2617545745-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="2617545745-2">}</span><span class="p" data-group-id="2617545745-1">)</span><span class="w">
-</span><span class="p" data-group-id="2617545745-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2617545745-4">%</span><span class="nc" data-group-id="2617545745-4">Advert.Model</span><span class="p" data-group-id="2617545745-4">{</span><span class="p" data-group-id="2617545745-4">}</span><span class="p" data-group-id="2617545745-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="4156680135-1">(</span><span class="n">get_advert</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4156680135-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="4156680135-2">}</span><span class="p" data-group-id="4156680135-1">)</span><span class="w">
+</span><span class="p" data-group-id="4156680135-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4156680135-4">%</span><span class="nc" data-group-id="4156680135-4">Advert.Model</span><span class="p" data-group-id="4156680135-4">{</span><span class="p" data-group-id="4156680135-4">}</span><span class="p" data-group-id="4156680135-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="2617545745-5">(</span><span class="n">get_advert</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2617545745-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="2617545745-6">}</span><span class="p" data-group-id="2617545745-5">)</span><span class="w">
-</span><span class="p" data-group-id="2617545745-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2617545745-8">%</span><span class="nc" data-group-id="2617545745-8">Ecto.Changeset</span><span class="p" data-group-id="2617545745-8">{</span><span class="p" data-group-id="2617545745-8">}</span><span class="p" data-group-id="2617545745-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update</span><span class="p" data-group-id="4156680135-5">(</span><span class="n">get_advert</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4156680135-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="4156680135-6">}</span><span class="p" data-group-id="4156680135-5">)</span><span class="w">
+</span><span class="p" data-group-id="4156680135-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4156680135-8">%</span><span class="nc" data-group-id="4156680135-8">Ecto.Changeset</span><span class="p" data-group-id="4156680135-8">{</span><span class="p" data-group-id="4156680135-8">}</span><span class="p" data-group-id="4156680135-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update/2">
 
   <div class="detail-header">
-    <a href="#update/2" class="detail-link" title="Link to this function">
+    <a href="#update/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">update(advert, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L292" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L292" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1428,15 +1370,13 @@ Functions
 <section class="detail" id="user_has_currency?/2">
 
   <div class="detail-header">
-    <a href="#user_has_currency?/2" class="detail-link" title="Link to this function">
+    <a href="#user_has_currency?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">user_has_currency?(user, currency)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L544" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L544" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1450,15 +1390,13 @@ Functions
 <section class="detail" id="validate_open/1">
 
   <div class="detail-header">
-    <a href="#validate_open/1" class="detail-link" title="Link to this function">
+    <a href="#validate_open/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">validate_open(advert)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L426" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L426" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1472,15 +1410,13 @@ Functions
 <section class="detail" id="validate_open/2">
 
   <div class="detail-header">
-    <a href="#validate_open/2" class="detail-link" title="Link to this function">
+    <a href="#validate_open/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">validate_open(assignment, user)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L407" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/advert/_public.ex#L407" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1495,34 +1431,33 @@ Functions
     </div>
   </section>
 
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="core.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.3) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
 
-            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
-        </p>
-      </footer>
-    </div>
+      </p>
+
+    </footer>
   </div>
-</section>
+</main>
 </div>
-
 
   </body>
 </html>
