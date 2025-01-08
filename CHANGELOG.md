@@ -9,7 +9,9 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#7 unreleased
+## \#7.1 unreleased
+
+## \#7 2025-01-07
 
 * Changed: Bump erlang to 27.1.2
 * Changed: Bump elixir to 1.17.0
