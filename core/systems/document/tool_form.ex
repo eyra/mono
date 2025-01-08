@@ -39,7 +39,7 @@ defmodule Systems.Document.ToolForm do
         replace_button: replace_button,
         entity: entity
       )
-      |> init_file_uploader(:pdf)
+      |> init_file_uploader(:file)
     }
   end
 
@@ -60,29 +60,15 @@ defmodule Systems.Document.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_document_tool_form"} for={%{}} phx-change="change" phx-target="" >
-        <Text.form_field_label id="document_ref_label"><%= @label %></Text.form_field_label>
-        <.spacing value="XXS" />
-        <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
-          <div class="flex flex-row items-center h-full">
-            <div class="flex-grow">
-              <%= if @entity.name do %>
-                <Text.body_large color="text-grey1"><%= @entity.name %></Text.body_large>
-              <% else %>
-                <Text.body_large color="text-grey2"><%= @placeholder %></Text.body_large>
-              <% end %>
-            </div>
-            <%= if @entity.name do %>
-              <Button.primary_label label={@replace_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.pdf.ref} />
-            <% else %>
-              <Button.primary_label label={@select_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.pdf.ref} />
-            <% end %>
-          </div>
-          <div class="hidden">
-            <.live_file_input upload={@uploads.pdf} />
-          </div>
-        </div>
-      </.form>
+      <Frameworks.Pixel.Components.FileSelector.file_selector
+        id={@id}
+        label={@label}
+        placeholder={@placeholder}
+        filename={@entity.name}
+        replace_button={@replace_button}
+        select_button={@select_button}
+        uploads={@uploads}
+      />
     </div>
     """
   end

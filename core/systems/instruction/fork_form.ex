@@ -1,7 +1,7 @@
 defmodule Systems.Instruction.ForkForm do
   use CoreWeb.LiveForm
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Instruction
   alias Systems.Content

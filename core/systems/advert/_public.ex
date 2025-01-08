@@ -578,7 +578,7 @@ defmodule Systems.Advert.Public do
 
       import_participant_reward(from, to, amount, idempotence_key, journal_message)
     else
-      Logger.warn(
+      Logger.warning(
         "Import reward failed, user has no access to currency #{currency}: amount=#{amount} idempotence_key=#{idempotence_key}"
       )
     end
@@ -597,12 +597,12 @@ defmodule Systems.Advert.Public do
     }
 
     if Bookkeeping.Public.exists?(idempotence_key) do
-      Logger.warn("Import reward skipped: amount=#{amount} idempotence_key=#{idempotence_key}")
+      Logger.warning("Import reward skipped: amount=#{amount} idempotence_key=#{idempotence_key}")
     else
       result = Bookkeeping.Public.enter(payment)
 
       with {:error, error} <- result do
-        Logger.warn("Import reward failed: idempotence_key=#{idempotence_key}, error=#{error}")
+        Logger.warning("Import reward failed: idempotence_key=#{idempotence_key}, error=#{error}")
       end
     end
   end

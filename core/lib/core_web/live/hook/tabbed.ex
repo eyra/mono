@@ -1,4 +1,4 @@
-defmodule CoreWeb.Live.Hook.Tabbar do
+defmodule CoreWeb.Live.Hook.Tabbed do
   use Frameworks.Concept.LiveHook
 
   @impl true

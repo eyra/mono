@@ -79,7 +79,7 @@ defmodule Systems.Graphite.ScoresParser do
   defp unpack({{:ok, line}, line_nr}), do: {line_nr, line, []}
 
   defp unpack({{:error, error}, line_nr}) do
-    Logger.warn("Unable to unpack csv line: #{error}")
+    Logger.warning("Unable to unpack csv line: #{error}")
     {line_nr, nil, [:parse_error]}
   end
 

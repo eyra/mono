@@ -39,7 +39,6 @@ defmodule Systems.Observatory.Public do
 
   def update_view_model(socket, page, model, presenter) do
     vm = get_view_model(socket, page, model, presenter)
-
     Phoenix.Component.assign(socket, vm: vm)
   end
 

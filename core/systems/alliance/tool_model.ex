@@ -7,16 +7,18 @@ defmodule Systems.Alliance.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   require Core.Enums.Devices
 
   alias Systems.Workflow
   alias Systems.Alliance.VariableParser
 
+  @tool_directors Application.compile_env(:core, :tool_directors)
+
   schema "alliance_tools" do
     field(:url, :string)
-    field(:director, Ecto.Enum, values: [:assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :alliance_tool_id)
@@ -163,6 +165,8 @@ defmodule Systems.Alliance.ToolModel do
   defp decode_query(query), do: URI.decode_query(query)
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Alliance
     def key(_), do: :alliance
     def auth_tree(%{auth_node: auth_node}), do: auth_node

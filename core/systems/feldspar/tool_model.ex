@@ -2,15 +2,17 @@ defmodule Systems.Feldspar.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Systems.Workflow
 
+  @tool_directors Application.compile_env(:core, :tool_directors)
+
   schema "feldspar_tools" do
     field(:archive_name, :string)
     field(:archive_ref, :string)
-    field(:director, Ecto.Enum, values: [:project, :assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :feldspar_tool_id)
@@ -42,6 +44,8 @@ defmodule Systems.Feldspar.ToolModel do
   def preload_graph(:down), do: preload_graph([])
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Feldspar
     def key(_), do: :feldspar
     def auth_tree(%{auth_node: auth_node}), do: auth_node

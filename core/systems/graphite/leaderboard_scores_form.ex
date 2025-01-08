@@ -23,6 +23,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
       socket
       |> assign(
         id: id,
+        label: dgettext("eyra-graphite", "scores.csv.headers.message"),
         headers: headers,
         leaderboard: leaderboard,
         placeholder: dgettext("eyra-graphite", "label.upload_file"),
@@ -32,7 +33,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
         csv_remote_file: nil,
         parsed_results: nil
       )
-      |> init_file_uploader(:csv)
+      |> init_file_uploader(:file)
       |> prepare_submissions()
       |> prepare_submit_button(dgettext("eyra-graphite", "scores.form.submit.button"))
     }
@@ -77,31 +78,18 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
-        <Text.body><%= dgettext("eyra-graphite", "scores.csv.headers.message") %></Text.body>
-        <.spacing value="XS" />
-        <Text.body_medium color="text-grey2">[ <%=  Enum.join(@headers, "  |  ") %> ]</Text.body_medium>
-        <.spacing value="M" />
-        <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
-          <div class="flex flex-row items-center h-full">
-            <div class="flex-grow">
-              <%= if @csv_remote_file do %>
-                <Text.body_large color="text-grey1"><%= @csv_remote_file %></Text.body_large>
-              <% else %>
-                <Text.body_large color="text-grey2"><%= @placeholder %></Text.body_large>
-              <% end %>
-            </div>
-            <%= if @csv_remote_file do %>
-              <Button.primary_label label={@replace_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.csv.ref} />
-            <% else %>
-              <Button.primary_label label={@select_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.csv.ref} />
-            <% end %>
-          </div>
-          <div class="hidden">
-            <.live_file_input upload={@uploads.csv} />
-          </div>
-        </div>
-      </.form>
+      <div>
+      <Frameworks.Pixel.Components.FileSelector.file_selector
+        id={@id}
+        label={@label}
+        placeholder={@placeholder}
+        filename={@csv_remote_file}
+        replace_button={@replace_button}
+        select_button={@select_button}
+        uploads={@uploads}
+      />
+    </div>
+
       <.spacing value="L" />
       <%= if @parsed_results do %>
         <Text.title3>Error <span class="text-primary"><%= length(elem(@parsed_results.error,0)) + length(elem(@parsed_results.error,1)) %></span></Text.title3>

@@ -18,7 +18,7 @@ defmodule Systems.Storage.Centerdata.Backend do
           }
         }
       ) do
-    Logger.warn("Centerdata store: respondent=#{respondent}")
+    Logger.warning("Centerdata store: respondent=#{respondent}")
 
     request = %{
       url: url,

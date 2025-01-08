@@ -1,5 +1,5 @@
 defmodule Systems.Storage.EndpointContentPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.List
 
   alias Frameworks.Concept

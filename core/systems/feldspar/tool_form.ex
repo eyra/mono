@@ -45,7 +45,11 @@ defmodule Systems.Feldspar.ToolForm do
 
   @impl true
   def handle_event("change", _params, socket) do
-    {:noreply, socket |> handle_upload_error()}
+    {
+      :noreply,
+      socket
+      |> handle_upload_error()
+    }
   end
 
   defp handle_upload_error(socket) do
@@ -79,29 +83,15 @@ defmodule Systems.Feldspar.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_feldspar_tool_form"} for={%{}} phx-change="change" phx-target="" >
-        <Text.form_field_label id={"#{@id}_archive_ref_label"} ><%= @label %></Text.form_field_label>
-        <.spacing value="XXS" />
-        <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
-          <div class="flex flex-row items-center h-full">
-            <div class="flex-grow">
-              <%= if @entity.archive_name do %>
-                <Text.body_large color="text-grey1"><%= @entity.archive_name %></Text.body_large>
-              <% else %>
-                <Text.body_large color="text-grey2"><%= @placeholder %></Text.body_large>
-              <% end %>
-            </div>
-            <%= if @entity.archive_name do %>
-              <Button.primary_label label={@replace_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.file.ref} />
-            <% else %>
-              <Button.primary_label label={@select_button} bg_color="bg-tertiary" text_color="text-grey1" field={@uploads.file.ref} />
-            <% end %>
-          </div>
-          <div class="hidden">
-            <.live_file_input upload={@uploads.file} />
-          </div>
-        </div>
-      </.form>
+      <Frameworks.Pixel.Components.FileSelector.file_selector
+        id={@id}
+        label={@label}
+        placeholder={@placeholder}
+        filename={@entity.archive_name}
+        replace_button={@replace_button}
+        select_button={@select_button}
+        uploads={@uploads}
+      />
     </div>
     """
   end

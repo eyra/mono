@@ -160,16 +160,16 @@ defmodule Systems.Assignment.Public do
     |> Assignment.InfoModel.changeset(:create, attrs)
   end
 
-  def prepare_workflow(special, [_ | _] = items, type, auth_node) do
+  def prepare_workflow(special, [_ | _] = items, auth_node) do
     %Workflow.Model{}
-    |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Workflow.Model.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Ecto.Changeset.put_assoc(:items, items)
   end
 
-  def prepare_workflow(special, _, type, auth_node) do
+  def prepare_workflow(special, _, auth_node) do
     %Workflow.Model{}
-    |> Workflow.Model.changeset(%{type: type, special: special})
+    |> Workflow.Model.changeset(%{special: special})
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
@@ -487,7 +487,7 @@ defmodule Systems.Assignment.Public do
       expire_at = expiration_timestamp(assignment)
       Crew.Public.reset_member!(member, expire_at, opts)
     else
-      Logger.warn("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
+      Logger.warning("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
   end
 
@@ -550,7 +550,7 @@ defmodule Systems.Assignment.Public do
     if task = get_task(tool, identifier) do
       Crew.Public.start_task(task)
     else
-      Logger.warn("Can not start task")
+      Logger.warning("Can not start task")
     end
   end
 

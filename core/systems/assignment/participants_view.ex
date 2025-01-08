@@ -3,32 +3,38 @@ defmodule Systems.Assignment.ParticipantsView do
 
   require Logger
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
-  alias Systems.Assignment
   alias Systems.Advert
   alias Systems.Pool
 
   @impl true
-  def update(%{id: id, assignment: assignment, template: template, user: user}, socket) do
-    content_flags = Assignment.Template.content_flags(template)
-
+  def update(
+        %{id: id, assignment: assignment, title: title, content_flags: content_flags, user: user},
+        socket
+      ) do
     {
       :ok,
       socket
-      |> assign(id: id, assignment: assignment, content_flags: content_flags, user: user)
-      |> update_title()
+      |> assign(
+        id: id,
+        assignment: assignment,
+        title: title,
+        content_flags: content_flags,
+        user: user
+      )
+      |> update_invite_title()
       |> update_advert_button()
       |> update_annotation()
       |> update_url()
     }
   end
 
-  defp update_title(socket) do
-    title = dgettext("eyra-assignment", "invite.panel.title")
-    assign(socket, title: title)
+  defp update_invite_title(socket) do
+    invite_title = dgettext("eyra-assignment", "invite.panel.title")
+    assign(socket, invite_title: invite_title)
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
@@ -95,7 +101,7 @@ defmodule Systems.Assignment.ParticipantsView do
       <div>
         <Area.content>
           <Margin.y id={:page_top} />
-          <Text.title2><%= dgettext("eyra-assignment", "participants.title") %></Text.title2>
+          <Text.title2><%= @title %></Text.title2>
           <.spacing value="L" />
           <div class="flex flex-col gap-8" %>
             <%= if @content_flags[:advert_in_pool] do %>
@@ -118,7 +124,7 @@ defmodule Systems.Assignment.ParticipantsView do
               <Panel.flat bg_color="bg-grey1">
                 <:title>
                   <div class="text-title3 font-title3 text-white">
-                    <%= @title %>
+                    <%= @invite_title %>
                   </div>
                 </:title>
                 <.spacing value="S" />

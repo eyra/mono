@@ -62,10 +62,6 @@ msgstr "Continue"
 msgid "onboarding.consent.title"
 msgstr "Consent"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.title"
-msgstr "Settings"
-
 #, elixir-autogen, elixir-format
 msgid "settings.storage.title"
 msgstr "Data storage"
@@ -291,14 +287,6 @@ msgid "tabbar.item.monitor"
 msgstr "Monitor"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr "Go to Monitor"
-
-#, elixir-autogen, elixir-format
-msgid "monitor.title"
-msgstr "Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "finished.participants"
 msgstr "Finished"
 
@@ -319,16 +307,8 @@ msgid "settings.subject_count.label"
 msgstr "Expected number of participants"
 
 #, elixir-autogen, elixir-format
-msgid "participants.title"
-msgstr "Participants"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
 msgstr "Participants"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.participants.forward"
-msgstr "Go to Participants"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.donate.description"
@@ -425,7 +405,7 @@ msgstr[0] "1 participant"
 msgstr[1] "%{count} participants"
 
 #, elixir-autogen, elixir-format
-msgid "atom.tag"
+msgid "leaf.tag"
 msgstr "Assignment"
 
 #, elixir-autogen, elixir-format
@@ -463,3 +443,27 @@ msgstr "yes"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
 msgstr "Give it another try"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.paper_screening.description"
+msgstr "Screening based on title and abstract"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.reviewers"
+msgstr "Reviewers"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.settings"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.workflow"
+msgstr "Workflow"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.criteria"
+msgstr "Criteria"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.import"
+msgstr "Papers"

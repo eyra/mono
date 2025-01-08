@@ -272,7 +272,7 @@ defmodule Systems.Budget.Public do
       if Budget.Model.amount_available(budget) >= amount do
         {:ok, true}
       else
-        Logger.warn("Budget has not enough funds to make reward reservation")
+        Logger.warning("Budget has not enough funds to make reward reservation")
         {:error, :no_funding}
       end
     end)
@@ -282,7 +282,7 @@ defmodule Systems.Budget.Public do
 
   def payout_reward(idempotence_key) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-      nil -> Logger.warn("No reward available to payout for #{idempotence_key}")
+      nil -> Logger.warning("No reward available to payout for #{idempotence_key}")
       reward -> make_payment(reward)
     end
   end
@@ -512,7 +512,10 @@ defmodule Systems.Budget.Public do
   end
 
   defp create_payment_transaction(%{amount: amount, payment: %{idempotence_key: idempotence_key}}) do
-    Logger.warn("Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}")
+    Logger.warning(
+      "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
+    )
+
     {:error, :payment_already_available}
   end
 
@@ -578,7 +581,7 @@ defmodule Systems.Budget.Public do
     }
 
     if Bookkeeping.Public.exists?(idempotence_key) do
-      Logger.warn(
+      Logger.warning(
         "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
       )
 
@@ -587,7 +590,7 @@ defmodule Systems.Budget.Public do
       result = Bookkeeping.Public.enter(payment)
 
       with {:error, error} <- result do
-        Logger.warn("Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}")
+        Logger.warning("Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}")
         {:error, error}
       end
     end

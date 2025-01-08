@@ -23,8 +23,8 @@ defmodule Systems.Workflow.Factories do
     })
   end
 
-  def create_workflow(type) do
-    Factories.insert!(:workflow, %{type: type})
+  def create_workflow() do
+    Factories.insert!(:workflow, %{})
   end
 
   def create_item(workflow, tool_ref, index) do

@@ -7,6 +7,10 @@
 # General application configuration
 import Config
 
+config :mime, :types, %{
+  "application/x-research-info-systems" => ["ris"]
+}
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,
@@ -47,7 +51,8 @@ config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
-  banking_backend: Systems.Banking.Dummy
+  banking_backend: Systems.Banking.Dummy,
+  tool_directors: [:assignment]
 
 config :gettext, default_locale: "en"
 
@@ -59,7 +64,13 @@ config :phoenix_inline_svg,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [default: 5, email_dispatchers: 1, email_delivery: 1, storage_delivery: 1],
+  queues: [
+    default: 5,
+    email_dispatchers: 1,
+    email_delivery: 1,
+    storage_delivery: 1,
+    ris_processor: 1
+  ],
   plugins: [
     {Oban.Plugins.Cron,
      crontab: [
@@ -145,7 +156,7 @@ config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 config :core, :storage, services: ~w(builtin yoda)
 
 config :core, BankingClient,
-  host: 'localhost',
+  host: "localhost",
   port: 5555,
   cacertfile: "../banking_proxy/certs/ca_certificate.pem",
   certfile: "../banking_proxy/certs/client_certificate.pem",

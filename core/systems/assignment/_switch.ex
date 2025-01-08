@@ -166,6 +166,15 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
+  def intercept({:onyx_tool, _} = signal, %{onyx_tool: tool} = message) do
+    if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+  end
+
   def intercept(signal, %{director: :assignment} = object) do
     handle(signal, object)
     :ok

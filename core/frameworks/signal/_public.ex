@@ -18,6 +18,7 @@ defmodule Frameworks.Signal.Public do
     "Systems.Instruction.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
+    "Systems.Onyx.Switch",
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
@@ -36,7 +37,7 @@ defmodule Frameworks.Signal.Public do
     results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
 
     if not Enum.member?(results, :ok) do
-      Logger.warn(
+      Logger.warning(
         "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
       )
     end

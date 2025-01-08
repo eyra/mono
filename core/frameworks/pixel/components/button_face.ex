@@ -1,6 +1,7 @@
 defmodule Frameworks.Pixel.Button.Face do
   use CoreWeb, :pixel
 
+  alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.Icon
 
   attr(:text, :string, required: true)
@@ -152,9 +153,7 @@ defmodule Frameworks.Pixel.Button.Face do
         </div>
       </div>
       <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
-          <div class="w-6 h-6 animate-spin">
-            <img src={~p"/images/icons/loading_white@3x.png"} alt={"Loading"}>
-          </div>
+          <Spinner.static color="white" />
         </div>
     </div>
     """

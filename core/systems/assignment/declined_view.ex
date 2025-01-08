@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.DeclinedView do
   use CoreWeb, :live_component
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   @impl true
   def update(_, socket) do

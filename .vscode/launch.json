@@ -8,8 +8,9 @@
             "type": "mix_task",
             "name": "Phoenix Server",
             "request": "launch",
-            "task": "phx.server",
-            "projectDir": "${workspaceRoot}"
+            "task": "run",
+            "projectDir": "${workspaceRoot}/core",
+            "exitAfterTaskReturns": false
         },
         {
             "type": "mix_task",

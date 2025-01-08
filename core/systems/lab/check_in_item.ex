@@ -1,7 +1,7 @@
 defmodule Systems.Lab.CheckInItem do
   use CoreWeb, :html
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias CoreWeb.UI.Timestamp
 
   alias Systems.{

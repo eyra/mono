@@ -19,7 +19,8 @@ config :core, :features,
   notification_mails: false,
   debug_expire_force: false,
   leaderboard: true,
-  panl: false
+  panl: false,
+  onyx: false
 
 config :core, :meta,
   bundle_title: "Next",

@@ -6,10 +6,12 @@ defmodule Systems.Lab.ToolModel do
   require Core.Enums.Themes
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Lab
   alias Systems.Workflow
+
+  @tool_directors Application.compile_env(:core, :tool_directors)
 
   schema "lab_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -22,7 +24,7 @@ defmodule Systems.Lab.ToolModel do
       on_delete: :delete_all
     )
 
-    field(:director, Ecto.Enum, values: [:assignment])
+    field(:director, Ecto.Enum, values: @tool_directors)
 
     timestamps()
   end
@@ -81,6 +83,8 @@ defmodule Systems.Lab.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Lab
     def key(_), do: :lab
     def auth_tree(%{auth_node: auth_node}), do: auth_node

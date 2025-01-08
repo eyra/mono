@@ -466,7 +466,7 @@ defmodule Systems.Assignment.CrewWorkView do
     if Fabric.exists?(fabric, :tool_ref_view) do
       prepare_modal(socket, :tool_ref_view, :full)
     else
-      Logger.warn("No tool ref view found to prepare modal")
+      Logger.warning("No tool ref view found to prepare modal")
       socket
     end
   end
@@ -572,7 +572,7 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   defp select_current_item(socket) do
-    Logger.warn("No selected_item_id found to select")
+    Logger.warning("No selected_item_id found to select")
     socket
   end
 

@@ -35,7 +35,7 @@ defmodule CoreWeb do
       unquote(utility())
 
       import Plug.Conn
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       import Core.FeatureFlags
 
       alias CoreWeb.Loaders
@@ -59,7 +59,7 @@ defmodule CoreWeb do
       import Phoenix.HTML.Link, only: [link: 2]
       import Phoenix.HTML.Tag, only: [csrf_meta_tag: 0]
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
 
       unquote(verified_routes())
       unquote(utility())
@@ -122,7 +122,7 @@ defmodule CoreWeb do
       use CoreWeb.Live.Feature.Uri
       use CoreWeb.Live.Feature.Model
       use CoreWeb.Live.Feature.Menus
-      use CoreWeb.Live.Feature.Tabbar
+      use CoreWeb.Live.Feature.Tabbed
       use CoreWeb.Live.Feature.Actions
     end
   end
@@ -144,7 +144,7 @@ defmodule CoreWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
     end
   end
 
@@ -153,7 +153,7 @@ defmodule CoreWeb do
       import Core.FeatureFlags
       import Core.Authorization, only: [can?: 4]
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder
 

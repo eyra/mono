@@ -59,7 +59,7 @@ defmodule Systems.Account.SignupPage do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
-         |> push_redirect(to: ~p"/user/await-confirmation")}
+         |> push_navigate(to: ~p"/user/await-confirmation")}
     end
   end
 
