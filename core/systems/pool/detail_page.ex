@@ -4,7 +4,7 @@ defmodule Systems.Pool.DetailPage do
   """
   use Systems.Content.Composer, :live_workspace
 
-  alias Frameworks.Pixel.Tabbar
+  alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Navigation
 
   alias Systems.{
@@ -109,9 +109,9 @@ defmodule Systems.Pool.DetailPage do
 
       <div id={:pool_detail} phx-hook="Viewport">
         <Navigation.action_bar breadcrumbs={[]}>
-          <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
+          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>
-        <Tabbar.content tabs={@vm.tabs} />
+        <Tabbed.content tabs={@vm.tabs} />
       </div>
     </.live_workspace>
     """

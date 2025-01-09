@@ -23,7 +23,7 @@ import { SidePanel } from "./side_panel";
 import { Toggle } from "./toggle";
 import { Cell } from "./cell";
 import { LiveContent, LiveField } from "./live_content";
-import { Tabbar, TabbarItem, TabbarFooterItem } from "./tabbar";
+import { Tab, TabBar, TabContent, TabFooterItem } from "./tabbed";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
@@ -106,9 +106,10 @@ let Hooks = {
   PDFViewer,
   SidePanel,
   Toggle,
-  Tabbar,
-  TabbarItem,
-  TabbarFooterItem,
+  Tab,
+  TabBar,
+  TabContent,
+  TabFooterItem,
   Viewport,
   Wysiwyg,
   AutoSubmit,
@@ -123,6 +124,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
         window.Alpine.clone(from.__x, to);
       } else {
         LiveContent.onBeforeElUpdated(from, to);
+        TabBar.onBeforeElUpdated(from, to);
       }
     },
   },

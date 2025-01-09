@@ -25,7 +25,7 @@ defmodule CoreWeb.Layouts.Workspace.Composer do
       on_mount({Systems.Project.LiveHook, __MODULE__})
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
-      on_mount({CoreWeb.Live.Hook.Tabbar, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Tabbed, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Actions, __MODULE__})
 
       use CoreWeb.UI.PlainDialog

@@ -1,4 +1,4 @@
-defmodule CoreWeb.Live.Feature.Tabbar do
+defmodule CoreWeb.Live.Feature.Tabbed do
   defmacro __using__(_opts \\ nil) do
     quote do
       alias CoreWeb.UI.Responsive.Breakpoint
