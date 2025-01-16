@@ -266,6 +266,10 @@ defmodule Systems.Project.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
+  def prepare_item(attrs, %Storage.EndpointModel{} = endpoint) do
+    prepare_item(attrs, :storage_endpoint, endpoint)
+  end
+
   def prepare_item(attrs, %Workflow.ToolRefModel{} = tool_ref) do
     prepare_item(attrs, :tool_ref, tool_ref)
   end

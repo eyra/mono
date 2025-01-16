@@ -21,30 +21,6 @@ defmodule Systems.Project.NodePage do
     }
   end
 
-  # Childs
-  @impl true
-  def compose(:project_item_form, %{focussed_item: item}) do
-    %{
-      module: Project.ItemForm,
-      params: %{item: item}
-    }
-  end
-
-  @impl true
-  def compose(:create_item_view, %{vm: %{node: node}}) do
-    %{
-      module: Project.CreateItemView,
-      params: %{node: node}
-    }
-  end
-
-  def compose(:grid_view, %{} = assigns) do
-    %{
-      module: Systems.Project.NodePageGridView,
-      params: assigns
-    }
-  end
-
   @impl true
   def render(assigns) do
     ~H"""

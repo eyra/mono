@@ -142,3 +142,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.title"
+msgstr ""

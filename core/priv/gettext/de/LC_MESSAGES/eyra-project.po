@@ -142,3 +142,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr "Erstellen Sie jetzt einen Speicher."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr "Leider konnten wir keinen Speicher für Sie erstellen."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr "Ihr Speicher wurde erstellt."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.description"
+msgstr "Ihr Projekt hat noch keinen Speicher."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.title"
+msgstr "Kein Speicher erstellt"

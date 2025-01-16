@@ -142,3 +142,23 @@ msgstr "People working on this project"
 #, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr "Projects"
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr "Create a storage now."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr "Unfortunately, we could not create a storage for you."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr "Your storage has been created."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.description"
+msgstr "Your project does not have a storage yet."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.title"
+msgstr "No storage created"

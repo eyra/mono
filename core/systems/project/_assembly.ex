@@ -47,37 +47,41 @@ defmodule Systems.Project.Assembly do
   def create(name, user, :empty) do
     project_changeset = prepare_project(name, [], user)
 
-    transaction_result =
-      Multi.new()
-      |> Multi.insert(:project, project_changeset)
-      |> EctoHelper.run(:auth, &update_auth/2)
-      |> Repo.transaction()
+    Multi.new()
+    |> Multi.insert(:project, project_changeset)
+    |> Multi.run(:storage_setup, fn _repo, %{project: new_project} ->
+      case attach_storage_to_project(new_project) do
+        {:ok, %{storage_endpoint: endpoint, storage_item: item}} ->
+          {:ok, %{endpoint: endpoint, item: item}}
 
-    project =
-      case transaction_result do
-        {:ok, %{project: project}} ->
-          project
-
-        {:error, failed_operation, _failed_value, _changes} ->
-          Logger.warning("Transaction failed at #{failed_operation}")
-          nil
+        {:error, _, reason, _} ->
+          {:error, reason}
       end
+    end)
+    |> EctoHelper.run(:auth, &update_auth/2)
+    |> Repo.transaction()
+  end
 
-    if project do
-      project = Repo.preload(project, :root)
+  def attach_storage_to_project(%Project.Model{} = project) do
+    Multi.new()
+    |> Multi.run(:project, fn _repo, _changes ->
+      {:ok, Repo.preload(project, :root)}
+    end)
+    |> Multi.insert(:storage_endpoint, fn %{project: project} ->
+      key = "project_node=#{project.root.id}"
 
-      changeset =
-        Storage.Public.prepare_endpoint(:builtin, %{key: "project_node=#{project.root.id}"})
-
-      if changeset.valid? do
-        create_item(changeset, dgettext("eyra-storage", "default.name"), project.root)
-      else
-        Logger.warning("Failed to prepare storage endpoint")
-        {:error, changeset}
-      end
-    else
-      {:error, "Project creation failed"}
-    end
+      Storage.Public.prepare_endpoint(:builtin, %{key: key})
+      |> Ecto.Changeset.unique_constraint(:key, name: :storage_endpoints_builtin_key_index)
+    end)
+    |> Multi.insert(:storage_item, fn %{project: project, storage_endpoint: endpoint} ->
+      Project.Public.prepare_item(
+        %{name: dgettext("eyra-storage", "default.name"), project_path: []},
+        endpoint
+      )
+      |> Ecto.Changeset.put_assoc(:node, project.root)
+    end)
+    |> EctoHelper.run(:auth, &update_auth/2)
+    |> Repo.transaction()
   end
 
   def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
