@@ -55,9 +55,9 @@ defmodule Systems.Project.NodePageEmptyDataView do
         <div class="flex flex-col justify-center items-center">
           <Margin.y id={:page_top} />
           <div class="flex flex-row items-center gap-3 mb-6">
-            <Text.title2 margin="">{dgettext("eyra-project", "node.data.empty.title")}</Text.title2>
+            <Text.title2>{dgettext("eyra-project", "node.data.empty.title")}</Text.title2>
           </div>
-          <Text.body_large class="mb-6">
+          <Text.body_large>
             {dgettext("eyra-project", "node.data.empty.description")}
           </Text.body_large>
           <div class="my-6">
