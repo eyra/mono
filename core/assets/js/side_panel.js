@@ -1,8 +1,9 @@
+import { MainContent } from "./main_content";
+
 const maxBottomMargin = 63;
 
 export const SidePanel = {
   mounted() {
-    this.mainContent = document.getElementById("main-content");
     this.parent = document.getElementById(this.el.dataset.parent);
     this.panel = this.el.getElementsByClassName("panel")[0];
     this.panel.style = `position: fixed; height: 0px; top: 0px`;
@@ -12,7 +13,7 @@ export const SidePanel = {
       this.updateFrame();
     }).observe(this.parent);
 
-    this.mainContent.addEventListener("scroll", (event) => {
+    MainContent.addScrollEventListener((event) => {
       this.updateFrame();
     });
 
@@ -28,10 +29,8 @@ export const SidePanel = {
     this.updateFrame();
   },
   updateFrame() {
-    const bottomDistance =
-      this.mainContent.scrollHeight -
-      this.mainContent.scrollTop -
-      window.innerHeight;
+    const bottomDistance = MainContent.bottomDistance();
+
     const bottomMargin =
       maxBottomMargin - Math.min(maxBottomMargin, bottomDistance);
     const topMargin = Math.max(0, this.parent.getBoundingClientRect().top);

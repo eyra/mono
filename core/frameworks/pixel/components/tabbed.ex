@@ -1,4 +1,4 @@
-defmodule Frameworks.Pixel.Tabbar do
+defmodule Frameworks.Pixel.Tabbed do
   @moduledoc false
   use CoreWeb, :pixel
 
@@ -26,17 +26,17 @@ defmodule Frameworks.Pixel.Tabbar do
   attr(:size, :atom, default: :wide)
   attr(:initial_tab, :any, default: nil)
 
-  def container(assigns) do
+  def bar(assigns) do
     ~H"""
-      <div id={@id} data-initial-tab={@initial_tab} phx-hook="Tabbar" class={"#{shape(assigns)}"}>
+      <div id={@id} data-initial-tab={@initial_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
         <%= if @size == :full do %>
-          <.container_full type={@type} tabs={@tabs} />
+          <.bar_full type={@type} tabs={@tabs} />
         <% end %>
         <%= if @size == :wide do %>
-          <.container_wide type={@type} tabs={@tabs} />
+          <.bar_wide type={@type} tabs={@tabs} />
         <% end %>
         <%= if @size == :narrow do %>
-          <.container_narrow tabs={@tabs} />
+          <.bar_narrow tabs={@tabs} />
         <% end %>
       </div>
     """
@@ -45,12 +45,12 @@ defmodule Frameworks.Pixel.Tabbar do
   attr(:type, :atom, default: :seperated)
   attr(:tabs, :any, required: true)
 
-  def container_wide(assigns) do
+  def bar_wide(assigns) do
     ~H"""
-    <div id="container_wide" class={"flex flex-row items-center h-full #{gap(@type)}"}>
+    <div id="tab_bar_wide" class={"flex flex-row items-center h-full #{gap(@type)}"}>
       <%= for {tab, index} <- Enum.with_index(@tabs) do %>
         <div class="flex-shrink-0 h-full">
-          <.item tabbar="wide" opts="" {get_tab(@type, tab, index)} />
+          <.tab tabbar="wide" opts="" {get_tab(@type, tab, index)} />
         </div>
       <% end %>
     </div>
@@ -60,13 +60,13 @@ defmodule Frameworks.Pixel.Tabbar do
   attr(:type, :atom, default: :seperated)
   attr(:tabs, :any, required: true)
 
-  def container_full(assigns) do
+  def bar_full(assigns) do
     ~H"""
-    <div id="container_full" class={"flex flex-row items-center h-full w-full #{gap(@type)}"}>
+    <div id="tab_bar_full" class={"flex flex-row items-center h-full w-full #{gap(@type)}"}>
       <div class="flex flex-row h-full w-full">
         <%= for {tab, index} <- Enum.with_index(@tabs) do %>
           <div class="flex-1 h-full">
-            <.item tabbar="full" opts="" {get_tab(@type, tab, index)} />
+            <.tab tabbar="full" opts="" {get_tab(@type, tab, index)} />
           </div>
         <% end %>
       </div>
@@ -76,42 +76,31 @@ defmodule Frameworks.Pixel.Tabbar do
 
   attr(:tabs, :any, required: true)
 
-  def container_narrow(assigns) do
+  def bar_narrow(assigns) do
     ~H"""
-    <div id="container_narrow">
-      <div id="tabbar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full hidden">
+    <div id="tab_bar_narrow">
+      <div id="tab_bar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full hidden">
         <.dropdown tabs={@tabs} />
       </div>
       <div
         id="tabbar_narrow"
         phx-hook="Toggle"
-        target="tabbar_dropdown"
+        target="tab_bar_dropdown"
         class="flex flex-row cursor-pointer items-center h-full w-full"
       >
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-0 pointer-events-none">
           <%= for {tab, index} <- Enum.with_index(@tabs) do %>
             <div class="flex-shrink-0">
-              <.item tabbar="narrow" opts="hide-when-idle" {Map.merge(tab, %{index: index})} />
+              <.tab tabbar="narrow" opts="hide-when-idle" {Map.merge(tab, %{index: index})} />
             </div>
           <% end %>
         </div>
-        <div class="flex-grow">
+        <div class="flex-grow pointer-events-none">
         </div>
-        <div>
+        <div class="pointer-events-none">
           <img src={~p"/images/icons/dropdown.svg"} alt="Show tabbar dropdown">
         </div>
       </div>
-    </div>
-    """
-  end
-
-  attr(:id, :string, required: true)
-  slot(:inner_block, required: true)
-
-  def tab(assigns) do
-    ~H"""
-    <div id={"tab_#{@id}"} class="hidden">
-      <%= render_slot(@inner_block) %>
     </div>
     """
   end
@@ -121,13 +110,13 @@ defmodule Frameworks.Pixel.Tabbar do
 
   def content(assigns) do
     ~H"""
-    <div>
+    <div id="tab_content" phx-hook="TabContent">
       <%= if @include_top_margin do %>
         <div class="hidden md:block h-navbar-height" />
         <div class="h-navbar-height" />
       <% end %>
       <%= for tab <- @tabs do %>
-        <.tab id={tab.id}>
+        <.panel tab_id={tab.id}>
           <%= if Map.has_key?(tab, :live_component) do %>
             <.live_component id={tab.id} module={tab.live_component} {tab.props} />
           <% end %>
@@ -137,8 +126,19 @@ defmodule Frameworks.Pixel.Tabbar do
           <%= if Map.has_key?(tab, :function_component) do %>
             <.function_component function={tab.function_component} props={tab.props} />
           <% end %>
-        </.tab>
+        </.panel>
       <% end %>
+    </div>
+    """
+  end
+
+  attr(:tab_id, :string, required: true)
+  slot(:inner_block, required: true)
+
+  def panel(assigns) do
+    ~H"""
+    <div id={"tab_panel_#{@tab_id}"} data-tab-id={@tab_id} class="tab-panel hidden">
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end
@@ -152,7 +152,7 @@ defmodule Frameworks.Pixel.Tabbar do
       <div class="flex flex-col items-left p-6 gap-6 w-full bg-white drop-shadow-2xl">
         <%= for {tab, index} <- Enum.with_index(@tabs) do %>
           <div class="flex-shrink-0">
-            <.item tabbar="dropdown" index={index} {tab} />
+            <.tab tabbar="dropdown" index={index} {tab} />
           </div>
         <% end %>
       </div>
@@ -183,11 +183,11 @@ defmodule Frameworks.Pixel.Tabbar do
         <Area.dynamic type={tab1.type} >
           <div class={"flex flex-row #{align(tab1)}"}>
             <div
-              id={"tabbar-footer-item-#{tab1.id}"}
-              phx-hook="TabbarFooterItem"
+              id={"tab-footer-item-#{tab1.id}"}
+              phx-hook="TabFooterItem"
               data-tab-id={tab1.id}
               data-target-tab-id={tab2.id}
-              class="tabbar-footer-item cursor-pointer hidden"
+              class="tab-footer-item cursor-pointer hidden"
             >
               <%= if index < Enum.count(@tabs) - 1 do %>
                 <Button.Face.plain_icon label={tab2.forward_title} icon={:forward} />
@@ -230,6 +230,9 @@ defmodule Frameworks.Pixel.Tabbar do
   def active_shape(_, :segmented), do: "h-full px-4 bg-primary"
   def active_shape(_, _), do: "rounded-full"
 
+  def title_shape("dropdown", _), do: ""
+  def title_shape(_, _), do: "w-full items-center"
+
   def title_inset(:segmented), do: "mt-0"
   def title_inset(_), do: "mt-1px"
 
@@ -243,13 +246,13 @@ defmodule Frameworks.Pixel.Tabbar do
   attr(:index, :integer, default: nil)
   attr(:opts, :string, default: "")
 
-  def item(assigns) do
+  def tab(assigns) do
     ~H"""
     <div
-      id={"tabbar-#{@tabbar}-#{@id}"}
+      id={"tab_#{@tabbar}_#{@id}"}
       data-tab-id={@id}
-      phx-hook="TabbarItem"
-      class={"tabbar-item flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
+      phx-hook="Tab"
+      class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
       idle-class={idle_shape(@tabbar, @type, @ready, @show_errors)}
       active-class={active_shape(@tabbar, @type)}
     >
@@ -264,7 +267,7 @@ defmodule Frameworks.Pixel.Tabbar do
       <% end %>
 
       <%= if @title do %>
-        <div class="flex flex-col items-center justify-center w-full">
+        <div class={"flex flex-col justify-center #{title_shape(@tabbar, @type)}"}>
           <div
             class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
             idle-class={idle_title(@ready, @show_errors)}

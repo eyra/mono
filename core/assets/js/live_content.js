@@ -18,8 +18,11 @@ const HIDDEN = "hidden";
 
 export const LiveContent = {
   mounted() {
-    console.log("LiveContent mounted", this.el);
-    console.log("DATA_SHOW_ERRORS", this.el.getAttribute(DATA_SHOW_ERRORS));
+    console.log("[LiveContent] mounted", this.el);
+    console.log(
+      "[LiveContent] DATA_SHOW_ERRORS",
+      this.el.getAttribute(DATA_SHOW_ERRORS)
+    );
     this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
     this.activeField = undefined;
 
@@ -46,8 +49,11 @@ export const LiveContent = {
     this.applyActiveField();
   },
   updated() {
-    console.log("LiveContent Updated", this.el);
-    console.log("DATA_SHOW_ERRORS", this.el.getAttribute(DATA_SHOW_ERRORS));
+    console.log("[LiveContent] updated", this.el);
+    console.log(
+      "[LiveContent] DATA_SHOW_ERRORS",
+      this.el.getAttribute(DATA_SHOW_ERRORS)
+    );
     this.showErrors = this.el.getAttribute(DATA_SHOW_ERRORS) != null;
     this.applyErrors();
     this.applyActiveField();
@@ -64,14 +70,14 @@ export const LiveContent = {
       this.el.querySelectorAll(`.${FIELD_ERROR_TYPE}`)
     );
 
-    console.log("fieldErrors", fieldErrors);
+    console.log("[LiveContent] fieldErrors", fieldErrors);
 
-    console.log("this.showErrors", this.showErrors);
+    console.log("[LiveContent] this.showErrors", this.showErrors);
 
     if (this.showErrors) {
       fieldErrors.forEach((fieldError) => {
         fieldError.classList.remove(HIDDEN);
-        console.log("fieldError.classList", fieldError.classList);
+        console.log("[LiveContent] fieldError.classList", fieldError.classList);
       });
     } else {
       fieldErrors.forEach((fieldError) => fieldError.classList.add(HIDDEN));
@@ -145,7 +151,7 @@ export const LiveContent = {
 
 export const LiveField = {
   mounted() {
-    console.log("LiveField mounted");
+    console.log("[LiveField] mounted");
     const input = this.el.getElementsByClassName(FIELD_INPUT_TYPE)[0];
 
     if (input) {
