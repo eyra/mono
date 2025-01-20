@@ -9,7 +9,10 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#7.1 unreleased
+## \#8 unreleased
+
+
+## \#7.1 2025-01-09
 
 * Fixed: Resolved an issue where Feldspar apps were not preloaded in certain edge cases, resulting in excessive user wait times.
 * Added: Support for multiple modal views, including background preloading for improved performance.
