@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="dist/sidebar_items-548ECA3B.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -190,6 +190,14 @@ Pages
 
     </div>
 
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:socket/0" data-no-tooltip translate="no">socket()</a>
+
+      </div>
+
+    </div>
+
 </div>
 <div class="summary-callbacks summary">
   <h2>
@@ -199,6 +207,14 @@ Pages
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#c:compose/2" data-no-tooltip translate="no">compose(id, a)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:handle_modal_closed/2" data-no-tooltip translate="no">handle_modal_closed(socket, any)</a>
 
       </div>
 
@@ -255,6 +271,17 @@ Pages
         <a href="#get_current_child/1" data-no-tooltip translate="no">get_current_child(model)</a>
 
       </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#handle_modal_closed/2" data-no-tooltip translate="no">handle_modal_closed(socket, ref)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  Sends a handle<em>modal<em>closed event to the live component. This event is handled by Fabric and is
+  delegated as an optional callback to the parent. See Fabric.__using</em></em>/1 for more information.</p></div>
 
     </div>
 
@@ -325,6 +352,14 @@ Pages
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#prepare_modal/3" data-no-tooltip translate="no">prepare_modal(context, child_name, modal_style)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#prepared_modal?/2" data-no-tooltip translate="no">prepared_modal?(context, child_name)</a>
 
       </div>
 
@@ -545,6 +580,32 @@ Pages
 
   </section>
 </section>
+<section class="detail" id="t:socket/0">
+
+  <div class="detail-header">
+    <a href="#t:socket/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">socket()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L7" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> socket() :: <a href="https://hexdocs.pm/phoenix_live_view/1.0.1/Phoenix.LiveView.Socket.html#t:t/0">Phoenix.LiveView.Socket.t</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
 
     </div>
   </section>
@@ -565,7 +626,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">compose(id, a)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L8" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L9" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -577,6 +638,34 @@ Pages
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@callback</span> compose(id :: <a href="#t:composition_id/0">composition_id</a>(), a :: <a href="#t:assigns/0">assigns</a>()) :: <a href="#t:composition/0">composition</a>() | nil</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:handle_modal_closed/2">
+
+  <div class="detail-header">
+    <a href="#c:handle_modal_closed/2" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">handle_modal_closed(socket, any)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L10" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+      <span class="note">(optional)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> handle_modal_closed(<a href="#t:socket/0">socket</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="#t:socket/0">socket</a>()</pre>
 
       </div>
 
@@ -603,7 +692,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">add_child(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L371" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L432" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -623,7 +712,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">child_id(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L132" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -643,7 +732,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">compose_child(assigns, child_name, child_map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L93" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L121" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -663,7 +752,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">exists?(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L187" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L215" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -683,7 +772,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_child(arg1, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L175" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L203" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -703,7 +792,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_current_child(model)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L365" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L426" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -715,6 +804,27 @@ Pages
 
   </section>
 </section>
+<section class="detail" id="handle_modal_closed/2">
+
+  <div class="detail-header">
+    <a href="#handle_modal_closed/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">handle_modal_closed(socket, ref)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L349" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>  Sends a handle<em>modal<em>closed event to the live component. This event is handled by Fabric and is
+  delegated as an optional callback to the parent. See Fabric.__using</em></em>/1 for more information.</p>
+  </section>
+</section>
 <section class="detail" id="hide_child/2">
 
   <div class="detail-header">
@@ -723,7 +833,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">hide_child(socket, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L230" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L258" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -743,7 +853,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">hide_modal(socket, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L287" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L331" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -763,7 +873,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">hide_popup(socket, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L322" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L383" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -783,7 +893,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">install_children(socket, children)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L151" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L179" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -803,7 +913,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">new_fabric()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L224" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -823,7 +933,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">new_fabric(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L219" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -843,7 +953,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">prepare_child(context, child_name, map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L123" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L151" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -863,7 +973,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">prepare_child(arg1, child_name, module, params)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L155" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -883,7 +993,27 @@ Pages
     </a>
     <h1 class="signature" translate="no">prepare_modal(context, child_name, modal_style)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L240" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L276" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepared_modal?/2">
+
+  <div class="detail-header">
+    <a href="#prepared_modal?/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">prepared_modal?(context, child_name)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L268" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -903,7 +1033,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">remove_child(fabric, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L390" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L451" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -923,7 +1053,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">replace_child(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L211" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L239" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -943,7 +1073,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reset_children(socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L165" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -963,7 +1093,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">send_event(pid, event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L444" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L505" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -985,7 +1115,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">send_event(socket, target, name, payload \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L401" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L462" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1005,7 +1135,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">show_child(socket, child)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L228" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1025,7 +1155,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">show_modal(context, child_name, modal_style)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L268" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L312" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1045,7 +1175,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">show_next(socket, current)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L333" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L394" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1065,7 +1195,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">show_popup(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L299" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/fabric.ex#L360" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

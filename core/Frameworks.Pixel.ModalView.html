@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-B341A79B.js"></script>
+    <script src="dist/sidebar_items-548ECA3B.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -152,6 +152,16 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#background/1" data-no-tooltip translate="no">background(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">show</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul><h2>Slots</h2><ul><li><code class="inline">inner_block</code> (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#body/1" data-no-tooltip translate="no">body(assigns)</a>
 
       </div>
@@ -166,15 +176,7 @@ Pages
 
       </div>
 
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#container/1" data-no-tooltip translate="no">container(assigns)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li></ul></div>
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li></ul></div>
 
     </div>
 
@@ -194,7 +196,7 @@ Pages
 
       </div>
 
-        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">modal</code> (<code class="inline">:map</code>) - Defaults to <code class="inline">nil</code>.</li></ul></div>
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">modals</code> (<code class="inline">:map</code>) - Defaults to <code class="inline">[]</code>.</li></ul></div>
 
     </div>
 
@@ -230,11 +232,31 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#panel/1" data-no-tooltip translate="no">panel(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">prepared</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">index</code> (<code class="inline">:integer</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#sheet/1" data-no-tooltip translate="no">sheet(assigns)</a>
 
       </div>
 
         <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">live_component</code> (<code class="inline">:string</code>) (required)</li></ul></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#style_selector/1" data-no-tooltip translate="no">style_selector(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><h2>Attributes</h2><ul><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li></ul></div>
 
     </div>
 
@@ -261,6 +283,38 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
+<section class="detail" id="background/1">
+
+  <div class="detail-header">
+    <a href="#background/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">background(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="background/1-attributes" class="section-heading">
+  <a href="#background/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Attributes</span>
+</h2>
+<ul><li><code class="inline">show</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li></ul><h2 id="background/1-slots" class="section-heading">
+  <a href="#background/1-slots" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Slots</span>
+</h2>
+<ul><li><code class="inline">inner_block</code> (required)</li></ul>
+  </section>
+</section>
 <section class="detail" id="body/1">
 
   <div class="detail-header">
@@ -269,7 +323,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">body(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L221" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L316" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -295,7 +349,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">close_button(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L208" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L303" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -304,33 +358,13 @@ Pages
 
   <section class="docstring">
 
-
-  </section>
-</section>
-<section class="detail" id="container/1">
-
-  <div class="detail-header">
-    <a href="#container/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">container(assigns)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L42" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<h2 id="container/1-attributes" class="section-heading">
-  <a href="#container/1-attributes" class="hover-link">
+<h2 id="close_button/1-attributes" class="section-heading">
+  <a href="#close_button/1-attributes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Attributes</span>
 </h2>
-<ul><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li></ul>
+<ul><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li></ul>
   </section>
 </section>
 <section class="detail" id="dialog/1">
@@ -341,7 +375,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">dialog(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L254" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -367,7 +401,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">dynamic(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L29" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L114" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -376,19 +410,13 @@ Pages
 
   <section class="docstring">
 
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@spec</span> dynamic(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/phoenix_live_view/1.0.1/Phoenix.LiveView.Rendered.html#t:t/0">Phoenix.LiveView.Rendered.t</a>()</pre>
-
-      </div>
-
 <h2 id="dynamic/1-attributes" class="section-heading">
   <a href="#dynamic/1-attributes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Attributes</span>
 </h2>
-<ul><li><code class="inline">modal</code> (<code class="inline">:map</code>) - Defaults to <code class="inline">nil</code>.</li></ul>
+<ul><li><code class="inline">modals</code> (<code class="inline">:map</code>) - Defaults to <code class="inline">[]</code>.</li></ul>
   </section>
 </section>
 <section class="detail" id="full/1">
@@ -399,7 +427,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">full(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L71" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L182" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -425,7 +453,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">notification(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L273" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -451,7 +479,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">page(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L97" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L206" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -469,6 +497,32 @@ Pages
 <ul><li><code class="inline">live_component</code> (<code class="inline">:string</code>) (required)</li></ul>
   </section>
 </section>
+<section class="detail" id="panel/1">
+
+  <div class="detail-header">
+    <a href="#panel/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">panel(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L140" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="panel/1-attributes" class="section-heading">
+  <a href="#panel/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Attributes</span>
+</h2>
+<ul><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">prepared</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">index</code> (<code class="inline">:integer</code>) (required)</li></ul>
+  </section>
+</section>
 <section class="detail" id="sheet/1">
 
   <div class="detail-header">
@@ -477,7 +531,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">sheet(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L230" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -495,6 +549,32 @@ Pages
 <ul><li><code class="inline">live_component</code> (<code class="inline">:string</code>) (required)</li></ul>
   </section>
 </section>
+<section class="detail" id="style_selector/1">
+
+  <div class="detail-header">
+    <a href="#style_selector/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">style_selector(assigns)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L160" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<h2 id="style_selector/1-attributes" class="section-heading">
+  <a href="#style_selector/1-attributes" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Attributes</span>
+</h2>
+<ul><li><code class="inline">live_component</code> (<code class="inline">:map</code>) (required)</li><li><code class="inline">style</code> (<code class="inline">:atom</code>) (required)</li></ul>
+  </section>
+</section>
 <section class="detail" id="title/1">
 
   <div class="detail-header">
@@ -503,7 +583,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">title(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L200" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/frameworks/pixel/components/modal_view.ex#L293" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
