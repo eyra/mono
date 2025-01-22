@@ -93,7 +93,7 @@ defmodule Systems.Workflow.ItemViews do
   end
 
   attr(:title, :string, default: nil)
-  slot(:inner_block, default: nil)
+  slot(:inner_block)
 
   def collapsed(assigns) do
     ~H"""

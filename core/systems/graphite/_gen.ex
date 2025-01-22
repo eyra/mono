@@ -46,7 +46,7 @@ defmodule Systems.Graphite.Gen do
   end
 
   defp gen_commit_url() do
-    s = for _ <- 1..40, into: "", do: <<Enum.random('0123456789abcdef')>>
+    s = for _ <- 1..40, into: "", do: <<Enum.random(~c"0123456789abcdef")>>
 
     "https://github.com/eyra/mono/commit/" <> s
   end

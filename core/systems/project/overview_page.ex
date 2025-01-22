@@ -68,7 +68,7 @@ defmodule Systems.Project.OverviewPage do
       ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true
@@ -184,7 +184,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>

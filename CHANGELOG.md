@@ -9,9 +9,27 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#7 unreleased
+## \#8 unreleased
 
-* Added - Support for Onyx RIS upload (behind feature flag)
+
+## \#7.1 2025-01-09
+
+* Fixed: Resolved an issue where Feldspar apps were not preloaded in certain edge cases, resulting in excessive user wait times.
+* Added: Support for multiple modal views, including background preloading for improved performance.
+
+## \#7 2025-01-07
+
+* Changed: Bump erlang to 27.1.2
+* Changed: Bump elixir to 1.17.0
+* Fixed: Support for running the app locally in Docker
+* Changed: Github release workflow uses Docker
+* Changed: Using Debian on production
+* Added: Support for sending logging to AppSignal
+
+## \#6.2 2024-11-28
+
+* Added: AppSignal support
+* Added: Support for Onyx RIS upload (behind feature flag)
 
 ## \#6.1 2024-11-19
 

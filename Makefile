@@ -52,3 +52,18 @@ docs: ${MIX_PROJECTS:%=%/docs}
 	cp -R $*/doc/ doc/`basename $*`
 
 .PHONY: FORCE
+
+dockermigrate:
+	$(MAKE) dockermix cmd="ecto.migrate"
+
+dockerdeps:
+	$(MAKE) dockermix cmd="deps.get"
+
+dockerrun:
+	$(MAKE) dockermix cmd="run"
+
+dockermix:
+	$(MAKE) dockerbash cmd="mix $(cmd)"
+
+dockerbash:
+	docker compose exec app bash -c "source ~/.bashrc && $(cmd)"

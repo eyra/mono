@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Authorization
   alias Phoenix.LiveView
@@ -49,6 +49,6 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
   end
 
   def handle_forward(%{assigns: %{current_user: user}} = socket) do
-    LiveView.push_redirect(socket, to: Account.Public.start_page_path(user))
+    LiveView.push_navigate(socket, to: Account.Public.start_page_path(user))
   end
 end

@@ -31,8 +31,8 @@ jobs:
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: "25.3.2.7"
-          elixir-version: "1.14.0"
+          otp-version: "27.1.2"
+          elixir-version: "1.17.0-otp-27"
 
       - name: Setup the Elixir project
         run: make deps
@@ -55,9 +55,6 @@ jobs:
           message: "Formatted code"
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dialyzer
-        run: make dialyzer
-
       - name: Compile
         run: make compile
 
@@ -67,5 +64,5 @@ jobs:
       - name: Credo
         run: make credo
 
-      - name: Format
-        run: make format
+      - name: Dialyzer
+        run: make dialyzer

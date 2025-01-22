@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.Private do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   require Logger
 

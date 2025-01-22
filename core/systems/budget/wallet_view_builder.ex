@@ -1,5 +1,5 @@
 defmodule Systems.Budget.WalletViewBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Pool,

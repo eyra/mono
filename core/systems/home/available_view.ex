@@ -20,7 +20,7 @@ defmodule Systems.Home.AvailableView do
       ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true

@@ -1,5 +1,5 @@
 defmodule Systems.Support.HelpdeskPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   def view_model(user, _assigns) do
     %{

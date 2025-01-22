@@ -2,6 +2,8 @@ defmodule CoreWeb.FileUploader do
   @moduledoc """
   """
 
+  alias Phoenix.LiveView.Socket
+
   @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{3,4})?$"
 
   @callback process_file(socket :: Socket.t(), info :: any()) :: Socket.t()

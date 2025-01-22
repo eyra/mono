@@ -25,13 +25,19 @@ defmodule Systems.Advert.ContentPageTest do
 
         {:ok, _view, html} = live(conn, ~p"/advert/#{id}/content")
 
-        assert html =~ "<div id=\"tab_settings\" class=\"hidden\">"
+        assert html =~
+                 "<div id=\"tab_panel_settings\" data-tab-id=\"settings\" class=\"tab-panel hidden\">"
+
         assert html =~ "Settings"
 
-        assert html =~ "<div id=\"tab_pool\" class=\"hidden\">"
+        assert html =~
+                 "<div id=\"tab_panel_pool\" data-tab-id=\"pool\" class=\"tab-panel hidden\">"
+
         assert html =~ "Criteria"
 
-        assert html =~ "<div id=\"tab_monitor\" class=\"hidden\">"
+        assert html =~
+                 "<div id=\"tab_panel_monitor\" data-tab-id=\"monitor\" class=\"tab-panel hidden\">"
+
         assert html =~ "Monitor"
       end
     end

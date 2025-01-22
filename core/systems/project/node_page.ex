@@ -85,7 +85,7 @@ defmodule Systems.Project.NodePage do
       ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(item_cards ++ node_cards, &(&1.id == card_id))
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true
@@ -97,7 +97,7 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <div>
-      <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
         <:top_bar>
           <div class="hidden md:block">
             <Area.content>

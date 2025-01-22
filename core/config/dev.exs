@@ -18,11 +18,25 @@ config :bcrypt_elixir, :log_rounds, 1
 config :logger, level: :debug
 
 # Configure your database
+cacertfile = System.get_env("DB_CA_PATH")
+
+verify_mode =
+  case System.get_env("DB_TLS_VERIFY") do
+    "verify_peer" -> :verify_peer
+    "verify_none" -> :verify_none
+    _ -> :verify_peer
+  end
+
 config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "next_dev",
-  hostname: "localhost",
+  hostname: "db",
+  ssl: [
+    cacertfile: cacertfile,
+    verify: :verify_peer,
+    server_name_indication: to_charlist("db")
+  ],
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

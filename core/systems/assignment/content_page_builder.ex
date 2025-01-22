@@ -3,7 +3,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   require Logger
   use Systems.Content.PageBuilder
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
   alias Systems.Assignment

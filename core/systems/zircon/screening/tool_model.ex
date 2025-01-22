@@ -1,8 +1,10 @@
-defmodule Systems.Zircon.Screening.ToolModel do
+
+  defmodule Systems.Zircon.Screening.ToolModel do
+  use Gettext, backend: CoreWeb.Gettext
+
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
   import Ecto.Changeset
   alias Systems.Paper
   alias Systems.Zircon.Screening
@@ -48,7 +50,9 @@ defmodule Systems.Zircon.Screening.ToolModel do
   def ready?(_), do: true
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
     alias Systems.Zircon
+
     def key(_), do: :zircon
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("eyra-zircon", "apply.cta.title")
@@ -76,6 +80,7 @@ defmodule Systems.Zircon.Screening.ToolModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
     alias Frameworks.Concept
     def resource_id(%{id: id}), do: "zircon/#{id}"
     def tag(_), do: dgettext("eyra-zircon", "leaf.tag")

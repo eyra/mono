@@ -6,7 +6,7 @@ defmodule Systems.Lab.ToolModel do
   require Core.Enums.Themes
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Lab
   alias Systems.Workflow
@@ -83,6 +83,8 @@ defmodule Systems.Lab.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Lab
     def key(_), do: :lab
     def auth_tree(%{auth_node: auth_node}), do: auth_node

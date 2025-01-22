@@ -49,7 +49,7 @@ defmodule Systems.Support.HelpdeskForm do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-support", "ticket_created.info.flash"))
-         |> push_redirect(to: Account.Public.start_page_path(user))}
+         |> push_navigate(to: Account.Public.start_page_path(user))}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

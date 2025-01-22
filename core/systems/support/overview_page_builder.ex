@@ -1,5 +1,5 @@
 defmodule Systems.Support.OverviewPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Systems.Support
 
   require Systems.Support.TicketStatus

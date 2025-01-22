@@ -2,12 +2,11 @@ defmodule Systems.Assignment.TemplateDataDonation do
   alias Systems.Assignment
   alias Systems.Workflow
 
-  import CoreWeb.Gettext
-
   defstruct [:id]
 
   defimpl Assignment.Template do
-    alias Systems.Assignment.Template
+    use Gettext, backend: CoreWeb.Gettext
+    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -15,18 +14,18 @@ defmodule Systems.Assignment.TemplateDataDonation do
       [
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
-          Template.Flags.Settings.new()
+          Assignment.Template.Flags.Settings.new()
         },
         workflow: {
           dgettext("eyra-assignment", "tabbar.item.workflow"),
-          Template.Flags.Workflow.new()
+          Assignment.Template.Flags.Workflow.new()
         },
         import: nil,
         criteria: nil,
         participants: nil,
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
-          Template.Flags.Monitor.new()
+          Assignment.Template.Flags.Monitor.new()
         }
       ]
     end

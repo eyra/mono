@@ -10,7 +10,7 @@ end
 
 defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
   use CoreWeb, :verified_routes
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.List
   alias Frameworks.Concept
   alias Systems.Project

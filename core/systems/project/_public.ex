@@ -1,7 +1,7 @@
 defmodule Systems.Project.Public do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Project.Queries
 

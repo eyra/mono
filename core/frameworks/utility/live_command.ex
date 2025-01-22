@@ -20,7 +20,7 @@ defmodule Frameworks.Utility.LiveCommand do
   end
 
   def execute(_, socket) do
-    Logger.warn("Can not execute live command. No live command found in argument.")
+    Logger.warning("Can not execute live command. No live command found in argument.")
     socket
   end
 

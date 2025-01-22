@@ -2,12 +2,11 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
   alias Systems.Assignment
   alias Systems.Workflow
 
-  import CoreWeb.Gettext
-
   defstruct [:id]
 
   defimpl Assignment.Template do
-    alias Systems.Assignment.Template
+    use Gettext, backend: CoreWeb.Gettext
+    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -15,21 +14,21 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
       [
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
-          Template.Flags.Settings.new(opt_out: [:language, :panel, :storage])
+          Assignment.Template.Flags.Settings.new(opt_out: [:language, :panel, :storage])
         },
         workflow: {
           dgettext("eyra-assignment", "tabbar.item.workflow"),
-          Template.Flags.Workflow.new()
+          Assignment.Template.Flags.Workflow.new()
         },
         import: nil,
         criteria: nil,
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Template.Flags.Participants.new(opt_out: [:advert_in_pool])
+          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
-          Template.Flags.Monitor.new()
+          Assignment.Template.Flags.Monitor.new()
         }
       ]
     end

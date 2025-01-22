@@ -1,5 +1,5 @@
 defmodule Systems.Support.TicketPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Systems.Support
 
   def view_model(ticket, _assigns) do

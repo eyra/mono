@@ -487,7 +487,7 @@ defmodule Systems.Assignment.Public do
       expire_at = expiration_timestamp(assignment)
       Crew.Public.reset_member!(member, expire_at, opts)
     else
-      Logger.warn("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
+      Logger.warning("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
   end
 
@@ -550,7 +550,7 @@ defmodule Systems.Assignment.Public do
     if task = get_task(tool, identifier) do
       Crew.Public.start_task(task)
     else
-      Logger.warn("Can not start task")
+      Logger.warning("Can not start task")
     end
   end
 
