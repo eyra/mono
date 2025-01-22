@@ -6,9 +6,7 @@ defmodule Systems.Paper.ReferenceFileModel do
   alias Systems.Content
   alias Systems.Paper
 
-
   schema "paper_reference_file" do
-
     @doc """
       The status of the file in terms of processing.
       - `uploaded`: The file has been uploaded but not yet processed.

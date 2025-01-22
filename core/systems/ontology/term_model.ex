@@ -3,7 +3,7 @@ defmodule Systems.Ontology.TermModel do
   import Ecto.Changeset
 
   schema "ontology_term" do
-    field :phrase, :string
+    field(:phrase, :string)
 
     timestamps()
   end

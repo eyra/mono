@@ -272,7 +272,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :import,
-         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
+         %{
+           workflow: %{
+             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
+           }
+         },
          {title, content_flags},
          _workflow_config,
          show_errors,
@@ -304,7 +308,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :criteria,
-         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
+         %{
+           workflow: %{
+             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
+           }
+         },
          {title, content_flags},
          _workflow_config,
          show_errors,

@@ -25,13 +25,11 @@ defmodule Systems.Paper.Public do
     |> Repo.update!()
   end
 
-    @doc """
+  @doc """
     Creates a ReferenceFile without saving.
   """
   def prepare_reference_file(original_filename, url) do
-    prepare_reference_file(
-      Content.Public.prepare_file(original_filename, url)
-    )
+    prepare_reference_file(Content.Public.prepare_file(original_filename, url))
   end
 
   def prepare_reference_file(file) do
@@ -53,7 +51,7 @@ defmodule Systems.Paper.Public do
     |> Oban.insert()
   end
 
-    # File Paper
+  # File Paper
 
   @doc """
     Creates a ReferenceFilePaperAssoc without saving.
@@ -72,7 +70,7 @@ defmodule Systems.Paper.Public do
     put_assoc(file_paper, :paper, paper)
   end
 
-    # File Error
+  # File Error
 
   @doc """
     Creates a ReferenceFileErrorAssoc without saving.
@@ -82,7 +80,8 @@ defmodule Systems.Paper.Public do
     |> Paper.ReferenceFileErrorAssoc.changeset(%{error: error})
     |> put_assoc(:reference_file, reference_file)
   end
-# Paper
+
+  # Paper
 
   @doc """
     Creates a PaperModel without saving.

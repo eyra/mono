@@ -25,7 +25,8 @@ defmodule Systems.Zircon.Screening.ImportForm do
   end
 
   defp create_reference_file(%{assigns: %{tool: tool}} = socket, original_filename) do
-    socket |> assign(reference_file: Zircon.Public.insert_reference_file!(tool, original_filename, nil))
+    socket
+    |> assign(reference_file: Zircon.Public.insert_reference_file!(tool, original_filename, nil))
   end
 
   defp update_reference_file(%{assigns: %{reference_file: reference_file}} = socket, url) do

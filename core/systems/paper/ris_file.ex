@@ -46,7 +46,10 @@ defmodule Systems.Paper.RISFile do
   def process(reference_file_id) when is_integer(reference_file_id) do
     Logger.info("[Paper] Processing papers: started")
 
-    Paper.Public.get_reference_file!(reference_file_id, Paper.ReferenceFileModel.preload_graph(:down))
+    Paper.Public.get_reference_file!(
+      reference_file_id,
+      Paper.ReferenceFileModel.preload_graph(:down)
+    )
     |> process()
   end
 

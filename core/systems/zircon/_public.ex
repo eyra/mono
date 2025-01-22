@@ -19,7 +19,10 @@ defmodule Systems.Zircon.Public do
     |> Repo.preload(preload)
   end
 
-  def get_screening_tool_by_reference_file!(%Paper.ReferenceFileModel{} = reference_file, preload \\ []) do
+  def get_screening_tool_by_reference_file!(
+        %Paper.ReferenceFileModel{} = reference_file,
+        preload \\ []
+      ) do
     screening_tool_query(reference_file)
     |> Repo.one!()
     |> Repo.preload(preload)
@@ -69,7 +72,9 @@ defmodule Systems.Zircon.Public do
   end
 
   def insert_reference_file!(tool, original_filename, url) do
-    %{reference_file: reference_file} = insert_screening_tool_reference_file(tool, original_filename, url)
+    %{reference_file: reference_file} =
+      insert_screening_tool_reference_file(tool, original_filename, url)
+
     reference_file
   end
 
@@ -83,5 +88,4 @@ defmodule Systems.Zircon.Public do
     list_screening_tool_reference_files(tool)
     |> Enum.map(& &1.reference_file)
   end
-
 end

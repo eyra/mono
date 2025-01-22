@@ -1,5 +1,4 @@
-
-  defmodule Systems.Zircon.Screening.ToolModel do
+defmodule Systems.Zircon.Screening.ToolModel do
   use Gettext, backend: CoreWeb.Gettext
 
   use Ecto.Schema
