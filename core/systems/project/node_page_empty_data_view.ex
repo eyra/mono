@@ -15,23 +15,20 @@ defmodule Systems.Project.NodePageEmptyDataView do
   def handle_event("trigger_create_storage", _value, %{assigns: %{node: node}} = socket) do
     project = Project.Public.get_by_root(node)
 
-    case Project.Assembly.attach_storage_to_project(project) do
-      {:ok, _changes} ->
-        {:ok,
-         put_flash(
-           socket,
-           :info,
-           dgettext("eyra-project", "node.data.empty.create-storage-success")
-         )}
+    {status, message} =
+      case Project.Assembly.attach_storage_to_project(project) do
+        {:ok, _changes} ->
+          {:info, dgettext("eyra-project", "node.data.empty.create-storage-success")}
 
-      {:error, _reason} ->
-        {:noreply,
-         put_flash(
-           socket,
-           :error,
-           dgettext("eyra-project", "node.data.empty.create-storage-failed")
-         )}
-    end
+        {:error, :storage_endpoint, %Ecto.Changeset{} = _changeset, _details} ->
+          {:error, dgettext("eyra-project", "node.data.empty.create-storage-failed")}
+      end
+
+    {
+      :noreply,
+      socket
+      |> send_event(:parent, :should_flash_message, %{status: status, message: message})
+    }
   end
 
   def compose_child(:create_storage_button) do

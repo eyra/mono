@@ -21,6 +21,14 @@ defmodule Systems.Project.NodePage do
     }
   end
 
+  def handle_event(:should_flash_message, %{status: status, message: message}, socket) do
+    {
+      :noreply,
+      socket
+      |> put_flash(status, message)
+    }
+  end
+
   @impl true
   def render(assigns) do
     ~H"""

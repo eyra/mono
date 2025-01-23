@@ -71,7 +71,6 @@ defmodule Systems.Project.Assembly do
       key = Project.Private.get_project_key(project)
 
       Storage.Public.prepare_endpoint(:builtin, %{key: key})
-      |> Ecto.Changeset.unique_constraint(:key, name: :storage_endpoints_builtin_key_index)
     end)
     |> Multi.insert(:storage_item, fn %{project: project, storage_endpoint: endpoint} ->
       Project.Public.prepare_item(
