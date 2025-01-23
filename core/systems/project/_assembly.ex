@@ -68,7 +68,7 @@ defmodule Systems.Project.Assembly do
       {:ok, Repo.preload(project, :root)}
     end)
     |> Multi.insert(:storage_endpoint, fn %{project: project} ->
-      key = "project_node=#{project.root.id}"
+      key = Project.Private.get_project_key(project)
 
       Storage.Public.prepare_endpoint(:builtin, %{key: key})
       |> Ecto.Changeset.unique_constraint(:key, name: :storage_endpoints_builtin_key_index)
@@ -80,7 +80,6 @@ defmodule Systems.Project.Assembly do
       )
       |> Ecto.Changeset.put_assoc(:node, project.root)
     end)
-    |> EctoHelper.run(:auth, &update_auth/2)
     |> Repo.transaction()
   end
 
