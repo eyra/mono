@@ -74,51 +74,6 @@ defmodule Systems.Account.PeopleView do
   end
 
   @impl true
-  def render(assigns) do
-    ~H"""
-    <div class="flex flex-col gap-10 h-full">
-      <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
-        <table class="w-full">
-          <%= for people_item <- @people_items do %>
-            <.live_component module={UserListItem} id={people_item.email} people_item={people_item} />
-          <% end %>
-        </table>
-      </div>
-
-      <div>
-        <Text.title5 align="text-left">
-          <%= dgettext("eyra-account", "people.add.title") %>
-        </Text.title5>
-        <.spacing value="XS" />
-        <.child name={:search_bar} fabric={@fabric} />
-
-        <%= if @user_item do %>
-          <.spacing value="S" />
-          <div class="py-3 px-6 border-2 border-grey4 rounded">
-            <table class="w-full">
-              <.live_component module={UserListItem} id={@user_item.email} user_item={@user_item} />
-            </table>
-          </div>
-        <% end %>
-
-        <%= if @message do %>
-          <.spacing value="S" />
-          <div class="py-3 px-6 border-2 border-grey4 rounded">
-            <div class="h-12 flex flex-col justify-center">
-              <Text.body_medium><%= @message %></Text.body_medium>
-            </div>
-          </div>
-        <% else %>
-          <.spacing value="XS" />
-        <% end %>
-      </div>
-
-      <div class="flex-grow" />
-    </div>
-    """
-  end
-
-  @impl true
   def compose(:search_bar, %{query_string: query_string}) do
     %{
       module: SearchBar,
@@ -129,10 +84,6 @@ defmodule Systems.Account.PeopleView do
       }
     }
   end
-
-  # ------------------------------------------------------------------
-  # Private Helpers
-  # ------------------------------------------------------------------
 
   defp assign_defaults(socket, users, people, title, current_user) do
     query_string = Map.get(socket.assigns, :query_string, "")
@@ -189,22 +140,15 @@ defmodule Systems.Account.PeopleView do
         flash_error(socket)
 
       user ->
-        cond do
-          user.id == me.id and not MapSet.member?(ids, user.id) ->
-            socket
-            |> assign(:confirm_removal_user_ids, MapSet.put(ids, user.id))
-            |> update_people_items()
-            |> update_search_message()
-
-          user.id == me.id and MapSet.member?(ids, user.id) ->
-            socket
-            |> finalize_remove_user(user)
-            |> send_event(:parent, "remove_user", %{user: user})
-
-          true ->
-            socket
-            |> finalize_remove_user(user)
-            |> send_event(:parent, "remove_user", %{user: user})
+        if user.id == me.id and not MapSet.member?(ids, user.id) do
+          socket
+          |> assign(:confirm_removal_user_ids, MapSet.put(ids, user.id))
+          |> update_people_items()
+          |> update_search_message()
+        else
+          socket
+          |> finalize_remove_user(user)
+          |> send_event(:parent, "remove_user", %{user: user})
         end
     end
   end
@@ -301,5 +245,50 @@ defmodule Systems.Account.PeopleView do
         face: %{type: :plain, label: "Add", icon: :add}
       }
     ]
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-10 h-full">
+      <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
+        <table class="w-full">
+          <%= for people_item <- @people_items do %>
+            <.live_component module={UserListItem} id={people_item.email} people_item={people_item} />
+          <% end %>
+        </table>
+      </div>
+
+      <div>
+        <Text.title5 align="text-left">
+          <%= dgettext("eyra-account", "people.add.title") %>
+        </Text.title5>
+        <.spacing value="XS" />
+        <.child name={:search_bar} fabric={@fabric} />
+
+        <%= if @user_item do %>
+          <.spacing value="S" />
+          <div class="py-3 px-6 border-2 border-grey4 rounded">
+            <table class="w-full">
+              <.live_component module={UserListItem} id={@user_item.email} user_item={@user_item} />
+            </table>
+          </div>
+        <% end %>
+
+        <%= if @message do %>
+          <.spacing value="S" />
+          <div class="py-3 px-6 border-2 border-grey4 rounded">
+            <div class="h-12 flex flex-col justify-center">
+              <Text.body_medium><%= @message %></Text.body_medium>
+            </div>
+          </div>
+        <% else %>
+          <.spacing value="XS" />
+        <% end %>
+      </div>
+
+      <div class="flex-grow" />
+    </div>
+    """
   end
 end
