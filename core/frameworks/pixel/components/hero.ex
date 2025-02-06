@@ -162,6 +162,7 @@ defmodule Frameworks.Pixel.Hero do
   attr(:illustration, :any, default: "illustration.svg")
   attr(:text_color, :string, default: "text-white")
   attr(:bg_color, :string, default: "bg-primary")
+  attr(:caption, :string, default: nil)
 
   def illustration2(assigns) do
     ~H"""
@@ -173,6 +174,13 @@ defmodule Frameworks.Pixel.Hero do
         <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
           <%= @title %>
         </p>
+
+        <%= if @caption do %>
+          <p class="text-title6 sm:text-title5 mt-2 mx-6 lg:ml-14">
+            <%= @caption %>
+          </p>
+        <% end %>
+
       </div>
       <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
         <img src={~p"/images/#{@illustration}"} alt="">

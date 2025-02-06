@@ -12,7 +12,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "My home"
+msgstr "Empowering Research"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
