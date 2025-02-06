@@ -31,40 +31,44 @@ defmodule Systems.Home.View do
   defp render_intro(assigns) do
     ~H"""
     <section class="py-12">
-      <div class=" flex flex-col md:flex-row items-center px-6 md:px-14">
+      <div class="flex flex-col md:flex-row justify-center items-center mt-12 md:gap-4 md:px-14">
         <!-- Left Content -->
-        <div class="w-full md:w-2/3 text-center md:text-left md:mr-12 bg-primary">
+        <div class="w-full md:w-2/4 text-center md:text-left md:mr-12">
           <h1 class="text-title2 font-bold text-grey1">
             Workplace for researchers
           </h1>
-          <p class="mt-4 text-bodymedium text-grey1">
+          <p class="mt-4 text-bodymedium text-grey1 px-4 md:px-0">
             The Next platform is an open-source web platform developed by Eyra
             that serves as an integration hub for sustainable software-as-a-service
             (SaaS) solutions, empowering research. These software services are co-created
             with researchers from various Dutch universities (e.g., UU, VU, RUG)
             and organizations such as ODISSEI.
           </p>
-          <div class="mt-8 w-1/6">
+          <div class="flex justify-center md:justify-start mt-8">
+            <div class="w-1/2 md:w-1/6 md:whitespace-nowrap">
             <Button.dynamic
               action={%{type: :redirect, to: "https://www.eyra.co/next-software-services"}}
               face={%{type: :primary, label: "Learn more"}}
             />
+            </div>
           </div>
         </div>
 
+        <%!-- Gap between content --%>
+        <div class="w-full md:w-1/4 py-6 md:py-0"></div>
+
         <!-- Right Card -->
-        <div class="w-full h-fit md:w-auto mt-8 md:mt-0 flex justify-center bg-black">
-          <div class="max-w-card bg-grey6 shadow rounded-lg overflow-hidden">
+        <div class="w-full md:w-1/4 text-center rounded-lg shadow-xl md:text-left">
             <img
               src={~p"/images/landing_page/yellow-abstract.webp"}
-              class="max-w-full"
+              class="w-full rounded-t object-cover"
               alt="Abstract image"
             />
             <div class="p-6">
               <p class="text-bodymedium font-semibold">
                 Sign in or explore the Next platform by creating a free account.
               </p>
-              <div class="mt-4 flex space-x-4">
+              <div class="mt-4 flex w-full justify-center md:justify-start gap-4">
                 <Button.dynamic
                   action={%{type: :click, code: "alert('Hello!')"}}
                   face={%{type: :primary, label: "Meld je aan"}}
@@ -73,7 +77,6 @@ defmodule Systems.Home.View do
                   action={%{type: :click, code: "alert('Hello!')"}}
                   face={%{type: :secondary, label: "inloggen"}}
                 />
-              </div>
             </div>
           </div>
         </div>
@@ -84,8 +87,7 @@ defmodule Systems.Home.View do
 
   defp render_steps(assigns) do
     ~H"""
-    <section class="bg-grey1 py-16">
-      <div class="px-6">
+    <section class="bg-grey1 py-16 px-6">
         <h2 class="text-title3 font-bold text-white md:text-left pl-8">
           Here's how to get started
         </h2>
@@ -106,7 +108,6 @@ defmodule Systems.Home.View do
                 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
                }) %>
         </div>
-      </div>
     </section>
     """
   end
@@ -133,22 +134,19 @@ defmodule Systems.Home.View do
 
   defp render_video(assigns) do
     ~H"""
-    <section class="bg-white pt-12 pb-16">
-      <div class="container mx-auto px-6">
+    <section class="h-full py-12 px-6">
         <h1 class="text-title2 font-bold text-grey1 text-center md:text-left">
           Wil je weten hoe het werkt?
         </h1>
-        <div class="mt-6">
-          <div class="aspect-w-16 aspect-h-9">
-            <iframe
-              class="min-w-full rounded-lg shadow"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Sneak preview"
-              allowfullscreen
-            ></iframe>
-          </div>
+        <div class="flex justify-center">
+        <iframe
+          class="h-[60vh] w-full rounded-lg mt-6 shadow"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          title="Sneak preview"
+          allowfullscreen
+        >
+        </iframe>
         </div>
-      </div>
     </section>
     """
   end
