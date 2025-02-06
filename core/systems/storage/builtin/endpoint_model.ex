@@ -14,7 +14,9 @@ defmodule Systems.Storage.BuiltIn.EndpointModel do
   end
 
   def changeset(endpoint, params) do
-    endpoint |> cast(params, @fields)
+    endpoint
+    |> cast(params, @fields)
+    |> Ecto.Changeset.unique_constraint(:key, name: :storage_endpoints_builtin_key_index)
   end
 
   def validate(changeset) do

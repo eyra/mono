@@ -42,13 +42,13 @@ msgstr "Confirm schedule"
 msgid "time.slot.item.available.label"
 msgstr "Not planned"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 reservation"
 msgid_plural "%{count} reservations"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 seat"
 msgid_plural "%{count} seats"
 msgstr[0] ""
@@ -58,7 +58,7 @@ msgstr[1] ""
 msgid "day.schedule.byline"
 msgstr "Day schedule: %{time_slots} with %{seats} in total."
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] ""

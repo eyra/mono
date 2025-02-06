@@ -42,13 +42,13 @@ msgstr "Bevestig planning"
 msgid "time.slot.item.available.label"
 msgstr "Niet ingepland"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 reservation"
 msgid_plural "%{count} reservations"
 msgstr[0] "1 reservering"
 msgstr[1] "%{count} reserveringen"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 seat"
 msgid_plural "%{count} seats"
 msgstr[0] "1 plaats"
@@ -58,7 +58,7 @@ msgstr[1] "%{count} plaatsen"
 msgid "day.schedule.byline"
 msgstr "Dagplanning: %{time_slots} met in totaal %{seats}."
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "1 time slot"
 msgid_plural "%{count} time slots"
 msgstr[0] "1 tijdslot"

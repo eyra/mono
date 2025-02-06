@@ -64,10 +64,6 @@ msgid "form.title"
 msgstr "Project instellingen"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "node.nodes.title"
-msgstr "Groepen"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "add.new.item.button"
 msgstr "Item toevoegen"
 
@@ -90,14 +86,6 @@ msgstr "Offline"
 #, elixir-autogen, elixir-format
 msgid "label.online"
 msgstr "Online"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "create.item.button"
-msgstr "Trek terug"
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button.short"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.item.title"
@@ -154,3 +142,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr "Maak nu een opslag aan."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr "Helaas konden we geen opslag voor je aanmaken."
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr "Je opslag is aangemaakt."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.description"
+msgstr "Je project heeft nog geen opslag."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "node.data.empty.title"
+msgstr "Geen opslag aangemaakt"

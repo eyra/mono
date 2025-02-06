@@ -64,10 +64,6 @@ msgid "form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.nodes.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "add.new.item.button"
 msgstr ""
 
@@ -89,14 +85,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "label.online"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "create.item.button.short"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -153,4 +141,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.title"
 msgstr ""
