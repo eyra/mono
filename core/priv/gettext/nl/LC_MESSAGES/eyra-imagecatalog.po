@@ -18,13 +18,13 @@ msgstr "Geen afbeeldingen gevonden"
 msgid "search.image.title"
 msgstr "Zoek een afbeelding"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "images.found.message"
 msgid_plural "images.found.message.%{count}"
 msgstr[0] "1 afbeelding:"
 msgstr[1] "%{count} afbeeldingen:"
 
-#, elixir-format
+#, elixir-format, elixir-autogen
 msgid "page.info.message"
 msgid_plural "page.info.message.%{count}"
 msgstr[0] "1 afbeelding"

@@ -16,7 +16,9 @@ services:
 
   db:
     container_name: db
-    image: postgres:12
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
     ports:
       - 5432:5432
     restart: always
@@ -24,8 +26,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: next_dev
-    volumes:
-      - ./postgres_ssl:/var/lib/postgresql/ssl
     command: >
       postgres  -c ssl=on
                 -c ssl_cert_file=/var/lib/postgresql/ssl/server.crt
