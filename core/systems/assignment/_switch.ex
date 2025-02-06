@@ -173,6 +173,8 @@ defmodule Systems.Assignment.Switch do
         Map.merge(message, %{assignment: assignment})
       )
     end
+
+    :ok
   end
 
   def intercept(signal, %{director: :assignment} = object) do

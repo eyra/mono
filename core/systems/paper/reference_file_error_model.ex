@@ -1,4 +1,4 @@
-defmodule Systems.Paper.ReferenceFileErrorAssoc do
+defmodule Systems.Paper.ReferenceFileErrorModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -24,5 +24,7 @@ defmodule Systems.Paper.ReferenceFileErrorAssoc do
 
   def preload_graph(:down), do: preload_graph([])
   def preload_graph(:up), do: preload_graph([:reference_file])
-  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:up)]
+
+  def preload_graph(:reference_file),
+    do: [reference_file: Paper.ReferenceFileModel.preload_graph(:up)]
 end

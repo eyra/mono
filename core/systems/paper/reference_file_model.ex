@@ -6,9 +6,7 @@ defmodule Systems.Paper.ReferenceFileModel do
   alias Systems.Content
   alias Systems.Paper
 
-
   schema "paper_reference_file" do
-
     @doc """
       The status of the file in terms of processing.
       - `uploaded`: The file has been uploaded but not yet processed.
@@ -22,8 +20,13 @@ defmodule Systems.Paper.ReferenceFileModel do
     )
 
     belongs_to(:file, Content.FileModel)
-    has_many(:associated_papers, Paper.ReferenceFilePaperAssoc, foreign_key: :reference_file_id)
-    has_many(:associated_errors, Paper.ReferenceFileErrorAssoc, foreign_key: :reference_file_id)
+
+    many_to_many(:papers, Paper.Model,
+      join_through: Paper.ReferenceFilePaperAssoc,
+      join_keys: [reference_file_id: :id, paper_id: :id]
+    )
+
+    has_many(:errors, Paper.ReferenceFileErrorModel, foreign_key: :reference_file_id)
     timestamps()
   end
 
@@ -39,13 +42,13 @@ defmodule Systems.Paper.ReferenceFileModel do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: preload_graph([:file, :associated_papers, :associated_errors])
+  def preload_graph(:down), do: preload_graph([:file, :papers, :errors])
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:file), do: [file: Content.FileModel.preload_graph(:down)]
 
-  def preload_graph(:associated_papers),
-    do: [associated_papers: Paper.ReferenceFilePaperAssoc.preload_graph(:down)]
+  def preload_graph(:papers),
+    do: [papers: Paper.Model.preload_graph(:down)]
 
-  def preload_graph(:associated_errors),
-    do: [associated_errors: Paper.ReferenceFileErrorAssoc.preload_graph(:down)]
+  def preload_graph(:errors),
+    do: [errors: Paper.ReferenceFileErrorModel.preload_graph(:down)]
 end

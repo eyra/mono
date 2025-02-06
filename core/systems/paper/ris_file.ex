@@ -46,7 +46,10 @@ defmodule Systems.Paper.RISFile do
   def process(reference_file_id) when is_integer(reference_file_id) do
     Logger.info("[Paper] Processing papers: started")
 
-    Paper.Public.get_reference_file!(reference_file_id, Paper.ReferenceFileModel.preload_graph(:down))
+    Paper.Public.get_reference_file!(
+      reference_file_id,
+      Paper.ReferenceFileModel.preload_graph(:down)
+    )
     |> process()
   end
 
@@ -228,7 +231,7 @@ defmodule Systems.Paper.RISFile do
 
   # PERSISTENCE
 
-  def create_transaction(references_with_index, reference_file) do
+  defp create_transaction(references_with_index, reference_file) do
     references_with_index
     |> Enum.reduce(Multi.new(), fn {reference, index}, multi ->
       persist_reference(reference, index, multi)
@@ -240,7 +243,7 @@ defmodule Systems.Paper.RISFile do
     |> Signal.Public.multi_dispatch({:paper_reference_file, :updated})
   end
 
-  def persist_reference(%{paper: paper, ris: ris, file_paper: file_paper}, index, multi) do
+  defp persist_reference(%{paper: paper, ris: ris, file_paper: file_paper}, index, multi) do
     multi
     |> Multi.insert({:paper, index}, paper)
     |> Multi.insert({:ris, index}, fn %{{:paper, ^index} => paper} ->
@@ -251,7 +254,7 @@ defmodule Systems.Paper.RISFile do
     end)
   end
 
-  def persist_reference(%{file_error: file_error}, index, multi) do
+  defp persist_reference(%{file_error: file_error}, index, multi) do
     Multi.insert(multi, {:file_error, index}, file_error)
   end
 end

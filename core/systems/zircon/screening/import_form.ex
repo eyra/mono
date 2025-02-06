@@ -25,16 +25,17 @@ defmodule Systems.Zircon.Screening.ImportForm do
   end
 
   defp create_reference_file(%{assigns: %{tool: tool}} = socket, original_filename) do
-    socket |> assign(reference_file: Zircon.Public.insert_reference_file!(tool, original_filename, nil))
+    socket
+    |> assign(reference_file: Zircon.Public.insert_reference_file!(tool, original_filename))
   end
 
   defp update_reference_file(%{assigns: %{reference_file: reference_file}} = socket, url) do
-    reference_file = Paper.Public.update_reference_file!(reference_file, url)
+    reference_file = Paper.Public.update!(reference_file, url)
     socket |> assign(reference_file: reference_file)
   end
 
   defp start_processing_reference_file(%{assigns: %{reference_file: reference_file}} = socket) do
-    Paper.Public.start_processing_ris_file(reference_file.id)
+    Paper.Public.start_processing_reference_file(reference_file.id)
     socket
   end
 
@@ -88,18 +89,18 @@ defmodule Systems.Zircon.Screening.ImportForm do
          %Paper.ReferenceFileModel{
            id: reference_file_id,
            file: %{name: name, inserted_at: inserted_at},
-           associated_papers: associated_papers,
-           associated_errors: associated_errors
+           papers: papers,
+           errors: errors
          },
          {history_items, paper_ids}
        ) do
     associated_paper_ids =
-      MapSet.new(Enum.to_list(Enum.map(associated_papers, &Paper.Model.citation(&1.paper))))
+      MapSet.new(Enum.to_list(Enum.map(papers, &Paper.Model.citation/1)))
 
     new_paper_ids = MapSet.difference(associated_paper_ids, paper_ids)
 
-    error_count = Enum.count(associated_errors)
-    all_count = Enum.count(associated_papers)
+    error_count = Enum.count(errors)
+    all_count = Enum.count(papers)
     new_count = Enum.count(new_paper_ids)
     duplicate_count = all_count - new_count
 
@@ -131,7 +132,8 @@ defmodule Systems.Zircon.Screening.ImportForm do
   end
 
   def update_reference_files(%{assigns: %{tool: tool}} = socket) do
-    assign(socket, reference_files: Zircon.Public.list_reference_files(tool))
+    reference_files = Zircon.Public.list_reference_files(tool)
+    assign(socket, reference_files: reference_files)
   end
 
   def update_import_button(%{assigns: %{uploads: uploads}} = socket) do

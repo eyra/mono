@@ -3,7 +3,7 @@ defmodule Systems.Paper.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Zircon
+  alias Systems.Paper
 
   schema "paper" do
     field(:year, :string)
@@ -33,8 +33,7 @@ defmodule Systems.Paper.Model do
   end
 
   def preload_graph(:down), do: preload_graph([:ris])
-  def preload_graph(:up), do: preload_graph([:tool])
-  def preload_graph(:tool), do: [tool: Zircon.Screening.ToolModel.preload_graph(:up)]
+  def preload_graph(:up), do: preload_graph([])
   def preload_graph(:ris), do: [ris: []]
 
   @doc """

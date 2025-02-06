@@ -8,7 +8,6 @@ defmodule Systems.Workflow.ToolRefModel do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
-  alias Frameworks.Utility
 
   alias Systems.Workflow
   alias Systems.Document
@@ -60,29 +59,25 @@ defmodule Systems.Workflow.ToolRefModel do
 
   def preload_graph(tool_id_field) when is_atom(tool_id_field) do
     if Enum.member?(@tools, tool_id_field) do
-      tool_model =
-        tool_id_field
-        |> get_tool_key()
-        |> get_tool_model()
-
-      [{tool_id_field, apply(tool_model, :preload_graph, [:down])}]
+      [
+        {
+          tool_id_field,
+          tool_id_field
+          |> tool_model()
+          |> preload_graph()
+        }
+      ]
     else
       raise ArgumentError, "Unsupported tool_id_field: #{inspect(tool_id_field)}"
     end
   end
 
-  defp get_tool_key(tool_id_field) when is_atom(tool_id_field) do
-    get_tool_key(Atom.to_string(tool_id_field))
+  def preload_graph(%Ecto.Association.BelongsTo{related: tool_model}) do
+    apply(tool_model, :preload_graph, [:down])
   end
 
-  defp get_tool_key(tool_id_field) when is_binary(tool_id_field) do
-    String.split(tool_id_field, "_") |> List.first()
-  end
-
-  defp get_tool_model(tool_key) do
-    # The tool_key is equal to the system name for now. Systems only have one tool model.
-    # If this changes, we need to update this function.
-    Utility.Module.get(tool_key, "ToolModel")
+  defp tool_model(tool_id_field) do
+    __MODULE__.__schema__(:association, tool_id_field)
   end
 
   def auth_tree(%Workflow.ToolRefModel{} = tool_ref) do

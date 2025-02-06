@@ -31,5 +31,4 @@ defmodule Systems.Zircon.Queries do
       reference_file: [status != :archived]
     )
   end
-
 end

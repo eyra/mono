@@ -7,7 +7,6 @@ defmodule Systems.Annotation.Model do
   alias Systems.Account
   alias Systems.Ontology
 
-
   schema "annotation" do
     field(:value, :string)
     belongs_to(:term, Ontology.TermModel)
@@ -30,11 +29,13 @@ defmodule Systems.Annotation.Model do
   end
 
   def preload_graph(:down), do: []
-  def preload_graph(:up), do: [
-    term: preload_graph(:term),
-    user: preload_graph(:user)
-  ]
+
+  def preload_graph(:up),
+    do: [
+      term: preload_graph(:term),
+      user: preload_graph(:user)
+    ]
 
   def preload_graph(:term), do: [term: Systems.Ontology.TermModel.preload_graph(:up)]
-  def preload_graph(:user), do: [user: Account.User.preload_graph(:up)]
+  def preload_graph(:user), do: [user: []]
 end

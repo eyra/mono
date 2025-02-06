@@ -1,6 +1,6 @@
 defmodule Systems.Zircon.Screening.Categories do
   @moduledoc """
-  Defines the screening criteria categories used in the TIAB screening phase of the literature review.
+  Defines the screening criteria categories used in the TIAB screening phase of the literature review process.
 
   ## Purpose
   This module specifies a focused subset of research elements (categories) derived from established frameworks

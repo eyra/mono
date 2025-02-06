@@ -2,7 +2,7 @@ defmodule Systems.Paper.Queries do
   import Ecto.Query
   require Frameworks.Utility.Query
 
-  #import Frameworks.Utility.Query, only: [build: 3]
+  # import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Paper
 
@@ -23,5 +23,4 @@ defmodule Systems.Paper.Queries do
   def reference_file_paper_query() do
     from(Paper.ReferenceFilePaperAssoc, as: :reference_file_paper)
   end
-
 end

@@ -1,8 +1,9 @@
 defmodule Systems.Paper.Public do
+  use Gettext, backend: CoreWeb.Gettext
+
   import Systems.Paper.Queries
   require Ecto.Query
   import Ecto.Query, warn: false
-  import CoreWeb.Gettext
   import Ecto.Changeset, only: [put_assoc: 3]
 
   alias Core.Repo
@@ -18,26 +19,24 @@ defmodule Systems.Paper.Public do
     |> Repo.preload(preload)
   end
 
-  def update_reference_file!(%Paper.ReferenceFileModel{file: file} = reference_file, ref) do
+  def update!(%Paper.ReferenceFileModel{file: file} = reference_file, ref) do
     reference_file
     |> Paper.ReferenceFileModel.changeset(%{})
     |> put_assoc(:file, file |> Content.FileModel.changeset(%{ref: ref}))
     |> Repo.update!()
   end
 
-    @doc """
+  @doc """
     Creates a ReferenceFile without saving.
   """
-  def prepare_reference_file(original_filename, url) do
-    prepare_reference_file(
-      Content.Public.prepare_file(original_filename, url)
-    )
+  def prepare_reference_file(original_filename) when is_binary(original_filename) do
+    prepare_reference_file(Content.Public.prepare_file(original_filename, nil))
   end
 
-  def prepare_reference_file(file) do
+  def prepare_reference_file(%{} = content_file) do
     %Paper.ReferenceFileModel{}
     |> Paper.ReferenceFileModel.changeset(%{})
-    |> put_assoc(:file, file)
+    |> put_assoc(:file, content_file)
   end
 
   def archive_reference_file!(reference_file_id) when is_integer(reference_file_id) do
@@ -47,13 +46,13 @@ defmodule Systems.Paper.Public do
     |> Repo.update!()
   end
 
-  def start_processing_ris_file(reference_file_id) when is_integer(reference_file_id) do
+  def start_processing_reference_file(reference_file_id) when is_integer(reference_file_id) do
     %{"reference_file_id" => reference_file_id}
     |> Paper.RISProcessorJob.new()
     |> Oban.insert()
   end
 
-    # File Paper
+  # File Paper
 
   @doc """
     Creates a ReferenceFilePaperAssoc without saving.
@@ -72,17 +71,18 @@ defmodule Systems.Paper.Public do
     put_assoc(file_paper, :paper, paper)
   end
 
-    # File Error
+  # File Error
 
   @doc """
-    Creates a ReferenceFileErrorAssoc without saving.
+    Creates a ReferenceFileErrorModel without saving.
   """
   def prepare_file_error(reference_file, error) do
-    %Paper.ReferenceFileErrorAssoc{}
-    |> Paper.ReferenceFileErrorAssoc.changeset(%{error: error})
+    %Paper.ReferenceFileErrorModel{}
+    |> Paper.ReferenceFileErrorModel.changeset(%{error: error})
     |> put_assoc(:reference_file, reference_file)
   end
-# Paper
+
+  # Paper
 
   @doc """
     Creates a PaperModel without saving.
