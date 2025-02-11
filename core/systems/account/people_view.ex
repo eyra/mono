@@ -6,9 +6,7 @@ defmodule Systems.Account.PeopleView do
   alias Systems.Account
 
   @impl true
-  def update(%{users: users, people: people, title: title, current_user: current_user}, %{assigns: %{myself: myself}} = socket) do
-    Logger.error("[#{__MODULE__}] myself: #{inspect(myself)}")
-
+  def update(%{users: users, people: people, title: title, current_user: current_user}, socket) do
     {:ok,
      socket
      |> assign_defaults(users, people, title, current_user)

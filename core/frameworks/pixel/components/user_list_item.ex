@@ -15,9 +15,7 @@ defmodule Frameworks.Pixel.UserListItem do
   def update(%{user_item: user_item} = assigns, socket),
     do: update_assigns_for_item(assigns, user_item, socket)
 
-  defp update_assigns_for_item(_, item, %{assigns: %{myself: myself}} = socket) do
-     Logger.error("[#{__MODULE__}] myself: #{inspect(myself)}")
-
+  defp update_assigns_for_item(_, item, socket) do
     socket =
       socket
       |> assign_new(:info, fn -> nil end)
