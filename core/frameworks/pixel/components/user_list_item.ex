@@ -31,6 +31,12 @@ defmodule Frameworks.Pixel.UserListItem do
   end
 
   @impl true
+  def handle_event(event, params, socket) do
+    Logger.error("[#{__MODULE__}] #{event} #{inspect(params)} not implemented")
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
