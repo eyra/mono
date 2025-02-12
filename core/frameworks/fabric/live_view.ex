@@ -33,6 +33,21 @@ defmodule Fabric.LiveView do
       defoverridable handle_event: 3
 
       @impl true
+      def handle_info(
+            %{fabric_event: %{name: handle_modal_closed, payload: %{source: %{name: name}}}},
+            socket
+          ) do
+        socket =
+          if function_exported?(__MODULE__, :handle_modal_closed, 2) do
+            apply(__MODULE__, :handle_modal_closed, [socket, name])
+          else
+            socket
+          end
+
+        {:noreply, socket}
+      end
+
+      @impl true
       def handle_info(%{fabric_event: %{name: name, payload: payload}}, socket) do
         handle_event(name, payload, socket)
       end

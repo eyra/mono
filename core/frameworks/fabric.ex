@@ -28,30 +28,6 @@ defmodule Fabric do
 
       require Logger
 
-      def update(
-            %{
-              fabric_event: %{name: :handle_modal_closed, payload: %{live_component: %{ref: ref}}}
-            },
-            %{assigns: %{fabric: fabric}} = socket
-          ) do
-        # Sent from Fabric.handle_modal_closed/2 indicating this live component has been closed as a modal view. Notify the parent.
-        {:ok, socket |> send_event(:parent, :handle_modal_closed)}
-      end
-
-      def update(
-            %{fabric_event: %{name: :handle_modal_closed, payload: %{source: %{name: name}}}},
-            %{assigns: %{fabric: fabric}} = socket
-          ) do
-        socket =
-          if function_exported?(__MODULE__, :handle_modal_closed, 2) do
-            apply(__MODULE__, :handle_modal_closed, [socket, name])
-          else
-            socket
-          end
-
-        {:ok, socket}
-      end
-
       def reset_fabric(%Phoenix.LiveView.Socket{} = socket) do
         reset_children(socket)
       end

@@ -121,11 +121,18 @@ defmodule Systems.Account.PeopleView do
     do: assign(socket, message: nil)
 
   defp update_people_items(
-         %{assigns: %{people: people, current_user: me, confirm_removal_user_ids: ids}} = socket
+         %{
+           assigns: %{
+             people: people,
+             current_user: me,
+             confirm_removal_user_ids: ids,
+             myself: target
+           }
+         } = socket
        ) do
     people_items =
       Enum.map(people, fn person ->
-        build_user_display_data(:people, person, me, Enum.count(people), ids)
+        build_user_display_data(:people, person, me, Enum.count(people), ids, target)
       end)
 
     assign(socket, people_items: people_items)
@@ -171,13 +178,15 @@ defmodule Systems.Account.PeopleView do
   defp find_user_by_email(users, email),
     do: Enum.find(users, &(&1.email == String.trim(email)))
 
-  defp update_user(%{assigns: %{query_string: qs, users: users, current_user: me}} = socket) do
+  defp update_user(
+         %{assigns: %{query_string: qs, users: users, current_user: me, myself: target}} = socket
+       ) do
     user = find_user_by_email(users, qs)
-    user_item = build_user_display_data(:search, user, me, 1)
+    user_item = build_user_display_data(:search, user, me, 1, target)
     assign(socket, user: user, user_item: user_item)
   end
 
-  defp build_user_display_data(_type, %Account.User{} = user, me, _count, ids) do
+  defp build_user_display_data(_type, %Account.User{} = user, me, _count, ids, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
     if user.id == me.id and MapSet.member?(ids, user.id) do
@@ -190,14 +199,14 @@ defmodule Systems.Account.PeopleView do
         confirm_row_text: dgettext("eyra-account", "people.confirm_remove.text"),
         confirm_row_action_buttons: [
           %{
-            action: %{type: :send, event: "remove", item: user.id, target: me.id},
+            action: %{type: :send, event: "remove", item: user.id, target: target},
             face: %{
               type: :primary,
               label: dgettext("eyra-account", "people.confirm_remove.label")
             }
           },
           %{
-            action: %{type: :send, event: "cancel_remove", item: user.id, target: me.id},
+            action: %{type: :send, event: "cancel_remove", item: user.id, target: target},
             face: %{type: :primary, label: dgettext("eyra-account", "people.cancel_remove.label")}
           }
         ]
@@ -207,46 +216,47 @@ defmodule Systems.Account.PeopleView do
         photo_url: photo_url,
         name: user.displayname,
         email: user.email,
-        action_buttons: user_action_buttons(:people, user, me, 999)
+        action_buttons: user_action_buttons(:people, user, me, 999, target)
       }
     end
   end
 
-  defp build_user_display_data(_, nil, _, _, _), do: nil
+  defp build_user_display_data(_, nil, _, _, _, _), do: nil
 
-  defp build_user_display_data(type, %Account.User{} = user, me, count) do
+  defp build_user_display_data(type, %Account.User{} = user, me, count, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
     %{
       photo_url: photo_url,
       name: user.displayname,
       email: user.email,
-      action_buttons: user_action_buttons(type, user, me, count)
+      action_buttons: user_action_buttons(type, user, me, count, target)
     }
   end
 
-  defp build_user_display_data(_, nil, _, _), do: nil
+  defp build_user_display_data(_, nil, _, _, _), do: nil
 
-  defp user_action_buttons(:people, _, _, count) when count <= 1, do: []
+  defp user_action_buttons(:people, _, _, count, _) when count <= 1, do: []
 
-  defp user_action_buttons(:people, %Account.User{} = user, %Account.User{} = me, _) do
+  defp user_action_buttons(:people, %Account.User{} = user, _, _, target) do
     [
       %{
-        action: %{type: :send, event: "remove", item: user.id, target: me.id},
+        action: %{type: :send, event: "remove", item: user.id, target: target},
         face: %{type: :icon, icon: :remove}
       }
     ]
   end
 
-  defp user_action_buttons(:search, %Account.User{} = user, %Account.User{} = me, _) do
+  defp user_action_buttons(:search, %Account.User{} = user, _, _, target) do
     [
       %{
-        action: %{type: :send, event: "add", item: user.id, target: me.id},
+        action: %{type: :send, event: "add", item: user.id, target: target},
         face: %{type: :plain, label: "Add", icon: :add}
       }
     ]
   end
 
+  nil
   @impl true
   def render(assigns) do
     ~H"""
