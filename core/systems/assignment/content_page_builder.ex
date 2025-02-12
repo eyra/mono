@@ -302,7 +302,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(:import, _, _, _, _, _) do
+  defp create_tab(:import,  %{workflow: workflow}, _, _, _, _) do
+    Logger.error("#{inspect(workflow)}")
     raise "Import tab is only supported for singleton workflows with one Zircon tool"
   end
 
