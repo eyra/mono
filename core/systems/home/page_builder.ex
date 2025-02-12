@@ -173,8 +173,10 @@ defmodule Systems.Home.PageBuilder do
         finished_at = most_recent_completed_at(tasks)
         get_quick_summary(finished_at)
       else
-        member = Crew.Public.get_member(crew, user)
-        get_quick_summary(member.inserted_at)
+        case Crew.Public.get_member(crew, user) do
+          %{inserted_at: timestamp} -> get_quick_summary(timestamp)
+          _ -> ""
+        end
       end
 
     %{
