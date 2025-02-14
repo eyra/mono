@@ -2,7 +2,7 @@ defmodule Systems.Bookkeeping.Public do
   @moduledoc """
   The bookkeeping system.
   """
-
+  use Core, :public
   alias Core.Repo
   alias Systems.Bookkeeping.{AccountModel, EntryModel, LineModel}
   import Ecto.Query

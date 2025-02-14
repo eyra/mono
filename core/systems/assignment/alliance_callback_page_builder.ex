@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Core.Authorization
+  use Core, :auth
   alias Phoenix.LiveView
 
   alias Systems.Account
@@ -32,7 +32,7 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
     if Assignment.Public.member?(assignment, user) do
       :participant
     else
-      if Authorization.user_has_role?(user, crew, :tester) do
+      if auth_module().user_has_role?(user, crew, :tester) do
         :tester
       else
         :expired

@@ -3,6 +3,7 @@ defmodule Frameworks.GreenLight.LiveHook do
     Live Hook that enables automatic authorization checks.
   """
   use Frameworks.Concept.LiveHook
+  use Core, :auth
   use CoreWeb, :verified_routes
   require Logger
 
@@ -23,7 +24,7 @@ defmodule Frameworks.GreenLight.LiveHook do
         auth_module().can_access?(
           user,
           live_view_module.get_authorization_context(params, session, socket)
-          |> Core.Authorization.print_roles(),
+          |> print_auth_roles(),
           live_view_module
         )
 
@@ -32,9 +33,5 @@ defmodule Frameworks.GreenLight.LiveHook do
     else
       auth_module().can_access?(user, live_view_module)
     end
-  end
-
-  defp auth_module() do
-    Application.get_env(:core, :greenlight_auth_module)
   end
 end

@@ -1,4 +1,5 @@
 defmodule Systems.Monitor.Public do
+  use Core, :public
   alias Ecto.Multi
   alias Core.Repo
   alias Systems.Account.User

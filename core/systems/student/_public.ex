@@ -1,4 +1,5 @@
 defmodule Systems.Student.Public do
+  use Core, :public
   require Logger
 
   alias Ecto.Multi

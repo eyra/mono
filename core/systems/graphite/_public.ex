@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   import Systems.Graphite.Queries
 
@@ -90,20 +91,20 @@ defmodule Systems.Graphite.Public do
     |> set_tool_status(status)
   end
 
-  def prepare_leaderboard(attrs, auth_node \\ Core.Authorization.prepare_node()) do
+  def prepare_leaderboard(attrs, auth_node \\ auth_module().prepare_node()) do
     %Graphite.LeaderboardModel{}
     |> Graphite.LeaderboardModel.changeset(attrs)
     |> Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_tool(%{} = attrs, auth_node \\ Core.Authorization.prepare_node()) do
+  def prepare_tool(%{} = attrs, auth_node \\ auth_module().prepare_node()) do
     %Graphite.ToolModel{}
     |> Graphite.ToolModel.changeset(attrs)
     |> Changeset.put_assoc(:auth_node, auth_node)
   end
 
   def prepare_submission(%{} = attrs, user, tool) do
-    auth_node = Core.Authorization.prepare_node(user, :owner)
+    auth_node = auth_module().prepare_node(user, :owner)
 
     %Graphite.SubmissionModel{}
     |> Graphite.SubmissionModel.change(attrs)

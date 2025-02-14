@@ -1,4 +1,6 @@
 defmodule Systems.Test.Public do
+  use Core, :public
+
   alias Systems.{
     Test
   }

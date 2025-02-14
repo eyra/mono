@@ -30,6 +30,7 @@ defmodule CoreWeb do
         opts \\ [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]
       ) do
     quote do
+      use Core, :auth
       use Phoenix.Controller, unquote(opts)
 
       unquote(utility())
@@ -42,9 +43,8 @@ defmodule CoreWeb do
 
       import Phoenix.LiveView.Controller
 
-      plug(Systems.Project.BranchPlug)
+      # plug(Systems.Project.BranchPlug)
 
-      # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
   end
@@ -103,7 +103,6 @@ defmodule CoreWeb do
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
-      import Core.Authorization, only: [can_access?: 2]
 
       unquote(pixel())
       use Frameworks.Pixel
@@ -136,11 +135,6 @@ defmodule CoreWeb do
     end
   end
 
-  def auth_helpers() do
-    quote do
-    end
-  end
-
   def channel do
     quote do
       use Phoenix.Channel
@@ -150,8 +144,8 @@ defmodule CoreWeb do
 
   defp component_helpers do
     quote do
+      use Core, :auth
       import Core.FeatureFlags
-      import Core.Authorization, only: [can?: 4]
 
       use Gettext, backend: CoreWeb.Gettext
       alias CoreWeb.Meta

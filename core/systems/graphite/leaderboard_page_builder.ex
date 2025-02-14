@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.LeaderboardPageBuilder do
+  use Core, :auth
   use CoreWeb, :verified_routes
 
   use Gettext, backend: CoreWeb.Gettext
@@ -22,7 +23,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
       )
 
     online? = Graphite.LeaderboardModel.online?(leaderboard)
-    owner? = Core.Authorization.roles_intersect?(user, leaderboard, [:owner])
+    owner? = auth_module().roles_intersect?(user, leaderboard, [:owner])
 
     %{info: info} = Graphite.Public.get_challenge(leaderboard, [:info])
 

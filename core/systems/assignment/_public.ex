@@ -2,6 +2,7 @@ defmodule Systems.Assignment.Public do
   @moduledoc """
   The assignment context.
   """
+  use Core, :public
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
 
@@ -10,7 +11,6 @@ defmodule Systems.Assignment.Public do
   alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
-  alias Core.Authorization
   alias Systems.Account.User
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
@@ -198,7 +198,7 @@ defmodule Systems.Assignment.Public do
 
   def prepare_page_ref(auth_node, key) when is_atom(key) do
     page_body = Assignment.Private.page_body_default(key)
-    page_auth_node = Authorization.prepare_node(auth_node)
+    page_auth_node = auth_module().prepare_node(auth_node)
     page = Content.Public.prepare_page(page_body, page_auth_node)
 
     %Assignment.PageRefModel{}
@@ -365,8 +365,8 @@ defmodule Systems.Assignment.Public do
   def assign_tester_role(tool, user) do
     %{crew: crew} = get_by_tool(tool, [:crew])
 
-    if not Core.Authorization.user_has_role?(user, crew, :tester) do
-      Core.Authorization.assign_role(user, crew, :tester)
+    if not auth_module().user_has_role?(user, crew, :tester) do
+      auth_module().assign_role(user, crew, :tester)
     end
   end
 
@@ -379,8 +379,8 @@ defmodule Systems.Assignment.Public do
 
   defp parent_owner(%{auth_node_id: _auth_node_id} = entity) do
     entity
-    |> Authorization.top_entity()
-    |> Authorization.first_user_with_role(:owner, [])
+    |> auth_module().top_entity()
+    |> auth_module().first_user_with_role(:owner, [])
   end
 
   def expiration_timestamp(%{info: info}) do
@@ -427,7 +427,7 @@ defmodule Systems.Assignment.Public do
 
   def tester?(%{crew: crew}, user_ref) do
     user_id = User.user_id(user_ref)
-    Core.Authorization.user_has_role?(user_id, crew, :tester)
+    auth_module().user_has_role?(user_id, crew, :tester)
   end
 
   def tester?(_, _), do: false
@@ -496,7 +496,7 @@ defmodule Systems.Assignment.Public do
         %Crew.TaskModel{} = task,
         rejection
       ) do
-    [user] = Authorization.users_with_role(assignment, :owner)
+    [user] = auth_module().users_with_role(assignment, :owner)
 
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)

@@ -1,4 +1,5 @@
 defmodule Systems.Banking.Public do
+  use Core, :public
   require Logger
 
   alias Systems.{

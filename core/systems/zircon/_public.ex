@@ -1,11 +1,11 @@
 defmodule Systems.Zircon.Public do
+  use Core, :public
   import Systems.Zircon.Queries
 
   require Ecto.Query
   import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
 
-  alias Core.Authorization
   alias Core.Repo
 
   alias Systems.Paper
@@ -31,7 +31,7 @@ defmodule Systems.Zircon.Public do
   @doc """
     Creates a screening tool without saving.
   """
-  def prepare_screening_tool(attrs, auth_node \\ Authorization.prepare_node()) do
+  def prepare_screening_tool(attrs, auth_node \\ auth_module().prepare_node()) do
     %Zircon.Screening.ToolModel{}
     |> Zircon.Screening.ToolModel.changeset(attrs)
     |> put_assoc(:auth_node, auth_node)

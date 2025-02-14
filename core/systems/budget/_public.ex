@@ -1,4 +1,5 @@
 defmodule Systems.Budget.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   import Ecto.Changeset
 
@@ -8,7 +9,6 @@ defmodule Systems.Budget.Public do
 
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Authorization
 
   alias Frameworks.Utility.Identifier
 
@@ -31,7 +31,7 @@ defmodule Systems.Budget.Public do
 
   def list_owned(%Account.User{} = user, preload \\ []) do
     node_ids =
-      Authorization.query_node_ids(
+      auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
@@ -49,7 +49,7 @@ defmodule Systems.Budget.Public do
         preload \\ []
       ) do
     node_ids =
-      Authorization.query_node_ids(
+      auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
