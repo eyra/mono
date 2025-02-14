@@ -34,7 +34,7 @@ defmodule Fabric.LiveView do
 
       @impl true
       def handle_info(
-            %{fabric_event: %{name: handle_modal_closed, payload: %{source: %{name: name}}}},
+            %{fabric_event: %{name: :handle_modal_closed, payload: %{source: %{name: name}}}},
             socket
           ) do
         socket =
