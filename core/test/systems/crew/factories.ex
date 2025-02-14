@@ -1,4 +1,5 @@
 defmodule Systems.Crew.Factories do
+  use Core, :auth
   alias CoreWeb.UI.Timestamp
 
   def create_member(crew, user, attrs \\ %{}) do
@@ -14,7 +15,7 @@ defmodule Systems.Crew.Factories do
     {updated_at, _opts} =
       Keyword.pop(opts, :expired_at, Timestamp.naive_from_now(minutes_ago * -1))
 
-    auth_node = Core.Authorization.Node.create([member.user.id], :owner)
+    auth_node = auth_module().prepare_node(member.user, :owner)
 
     Core.Factories.insert!(:crew_task, %{
       identifier: identifier,

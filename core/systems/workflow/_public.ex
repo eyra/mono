@@ -1,4 +1,5 @@
 defmodule Systems.Workflow.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   import Systems.Workflow.Queries
 

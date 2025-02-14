@@ -2,6 +2,7 @@ defmodule Systems.Pool.Model do
   @moduledoc """
   The pool schema.
   """
+  use Core, :auth
   use Frameworks.Utility.Schema
 
   import Frameworks.Utility.EctoHelper
@@ -70,10 +71,10 @@ defmodule Systems.Pool.Model do
 
   def submit(%Changeset{} = changeset), do: changeset
 
-  def submit(%Changeset{} = changeset, %User{id: used_id}, %Budget.CurrencyModel{} = currency) do
+  def submit(%Changeset{} = changeset, %User{} = user, %Budget.CurrencyModel{} = currency) do
     changeset
     |> Changeset.put_assoc(:currency, currency)
-    |> Changeset.put_assoc(:auth_node, Core.Authorization.Node.create(used_id, :owner))
+    |> Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
   end
 
   def preload_graph(:full),

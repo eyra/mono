@@ -3,7 +3,7 @@ defmodule Systems.Assignment.Switch do
   use Frameworks.Signal.Handler
   require Logger
 
-  alias Core.Authorization
+  use Core, :auth
 
   alias Frameworks.Signal
 
@@ -265,7 +265,7 @@ defmodule Systems.Assignment.Switch do
            changes: %{status: new_status}
          }
        }) do
-    users = Authorization.users_with_role(auth_node_id, :owner)
+    users = auth_module().users_with_role(auth_node_id, :owner)
 
     opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
 
@@ -289,7 +289,7 @@ defmodule Systems.Assignment.Switch do
          changeset: %{data: %{status: old_status}}
        }) do
     if old_status != :accepted do
-      participants = Core.Authorization.users_with_role(crew_task, :owner)
+      participants = auth_module().users_with_role(crew_task, :owner)
       Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
     end
   end

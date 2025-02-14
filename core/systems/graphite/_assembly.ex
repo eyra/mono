@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.Assembly do
+  use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
@@ -57,7 +58,7 @@ defmodule Systems.Graphite.Assembly do
          %{auth_node: tool_auth_node} = tool,
          name
        ) do
-    leaderboard_auth_node = Core.Authorization.prepare_node(tool_auth_node)
+    leaderboard_auth_node = auth_module().prepare_node(tool_auth_node)
 
     Project.Public.prepare_item(
       %{name: name, project_path: project_path ++ [project_node_id]},

@@ -1,4 +1,5 @@
 defmodule Systems.Consent.Public do
+  use Core, :public
   use Gettext, backend: CoreWeb.Gettext
   import Ecto.Query
   import Systems.Consent.Queries

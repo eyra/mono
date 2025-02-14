@@ -1,4 +1,6 @@
 defmodule Systems.Support.Public do
+  use Core, :public
+
   @moduledoc """
   The Support context.
   """

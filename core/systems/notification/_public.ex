@@ -7,8 +7,8 @@ defmodule Systems.Notification.Public do
   action (optional path to view)
 
   """
+  use Core, :public
   import Ecto.Query, warn: false
-  alias Core.Authorization
   alias Core.Repo
   alias Systems.Notification.{Box, Model, Log}
   alias Frameworks.Signal
@@ -49,7 +49,7 @@ defmodule Systems.Notification.Public do
 
   def notify_users_with_role(entity, role, notification_data) do
     entity
-    |> Core.Authorization.users_with_role(role)
+    |> auth_module().users_with_role(role)
     |> notify(notification_data)
   end
 
@@ -102,9 +102,9 @@ defmodule Systems.Notification.Public do
     {:ok, box} =
       %Box{}
       |> Box.changeset(%{})
-      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.prepare_node())
+      |> Ecto.Changeset.put_assoc(:auth_node, auth_module().prepare_node())
       |> Repo.insert()
-      |> Authorization.assign_role(user, :owner)
+      |> auth_module().assign_role(user, :owner)
 
     box
   end
@@ -120,7 +120,7 @@ defmodule Systems.Notification.Public do
   end
 
   defp auth_nodes_for_user(user) do
-    Authorization.query_node_ids(
+    auth_module().query_node_ids(
       role: :owner,
       principal: user
     )

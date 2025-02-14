@@ -1,4 +1,5 @@
 defmodule Frameworks.Signal.Public do
+  use Core, :public
   require Logger
 
   import Frameworks.Utility.PrettyPrint

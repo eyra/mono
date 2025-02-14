@@ -11,6 +11,7 @@ defmodule Frameworks.GreenLight.Public do
 
 
   """
+  use Core, :public
 
   @doc false
   defmacro __using__(config) do

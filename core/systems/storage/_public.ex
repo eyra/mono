@@ -1,9 +1,9 @@
 defmodule Systems.Storage.Public do
+  use Core, :public
   require Logger
 
   alias Ecto.Multi
   alias Ecto.Changeset
-  alias Core.Authorization
   alias Core.Repo
   alias Frameworks.Signal
   alias Systems.Rate
@@ -26,7 +26,7 @@ defmodule Systems.Storage.Public do
     %Storage.EndpointModel{}
     |> Storage.EndpointModel.changeset(%{})
     |> Storage.EndpointModel.change_special(special_type, special_changeset)
-    |> Changeset.put_assoc(:auth_node, Authorization.prepare_node())
+    |> Changeset.put_assoc(:auth_node, auth_module().prepare_node())
   end
 
   defp prepare_endpoint_special(:builtin, attrs) do

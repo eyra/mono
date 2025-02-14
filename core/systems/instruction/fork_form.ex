@@ -55,7 +55,7 @@ defmodule Systems.Instruction.ForkForm do
     page =
       Content.Public.prepare_page(
         dgettext("eyra-instruction", "fork_page.body", url: url),
-        Core.Authorization.prepare_node(auth_node)
+        auth_module().prepare_node(auth_node)
       )
 
     result = Instruction.Public.add_repository_and_page(tool, repository, page)

@@ -1,4 +1,5 @@
 defmodule Core.WebPush.SignalHandlers do
+  use Core, :auth
   use Frameworks.Signal.Handler
   alias Systems.Notification.Box
   alias Core.WebPush
@@ -13,6 +14,6 @@ defmodule Core.WebPush.SignalHandlers do
   end
 
   defp users(%Box{} = box) do
-    Core.Authorization.users_with_role(box, :owner)
+    auth_module().users_with_role(box, :owner)
   end
 end

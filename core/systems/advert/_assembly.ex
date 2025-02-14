@@ -1,7 +1,7 @@
 defmodule Systems.Advert.Assembly do
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Core.Authorization
+  use Core, :auth
   alias Core.Repo
   alias Ecto.Multi
   alias Ecto.Changeset
@@ -54,8 +54,8 @@ defmodule Systems.Advert.Assembly do
 
     promotion_attrs = create_promotion_attrs(image_id, title, user, profile)
 
-    advert_auth_node = Authorization.create_node!(project_auth_node)
-    promotion_auth_node = Authorization.create_node!(advert_auth_node)
+    advert_auth_node = auth_module().create_node!(project_auth_node)
+    promotion_auth_node = auth_module().create_node!(advert_auth_node)
 
     promotion = Promotion.Public.prepare(promotion_attrs, promotion_auth_node)
     submission = Pool.Public.prepare_submission(%{director: :advert, status: :idle}, pool)
@@ -147,9 +147,9 @@ defmodule Systems.Advert.Assembly do
             } = assignment
         } = advert
       ) do
-    advert_auth_node = Authorization.copy(advert_auth_node)
-    promotion_auth_node = Authorization.copy(promotion_auth_node, advert_auth_node)
-    assignment_auth_node = Authorization.copy(assignment_auth_node, advert_auth_node)
+    advert_auth_node = auth_module().copy(advert_auth_node)
+    promotion_auth_node = auth_module().copy(promotion_auth_node, advert_auth_node)
+    assignment_auth_node = auth_module().copy(assignment_auth_node, advert_auth_node)
 
     promotion = Promotion.Public.copy(promotion, promotion_auth_node)
     submission = Pool.Public.copy(submission)
