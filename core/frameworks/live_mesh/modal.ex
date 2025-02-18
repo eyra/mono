@@ -12,6 +12,7 @@ defmodule LiveMesh.Modal do
 
   defmodule Hook do
     use LiveMesh.Hook
+
     def on_mount(_live_view_module, _params, _session, socket) do
       {
         :cont,
@@ -25,8 +26,10 @@ defmodule LiveMesh.Modal do
       attach_hook(socket, :handle_modal_state, :handle_info, fn
         :modal_opened, socket ->
           {:cont, assign(socket, modal_open: true)}
+
         :modal_hidden, socket ->
           {:cont, assign(socket, modal_open: false)}
+
         _, socket ->
           {:cont, socket}
       end)

@@ -1,3 +1,2 @@
 defmodule LiveMesh do
-  
 end

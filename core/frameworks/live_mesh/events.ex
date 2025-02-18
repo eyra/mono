@@ -26,6 +26,7 @@ defmodule LiveMesh.Events do
       attach_hook(socket, :handle_bubbling, :handle_info, fn
         {:bubble_event, event, params}, socket ->
           {:cont, socket |> Self.bubble_event(event, params)}
+
         _, socket ->
           {:cont, socket}
       end)
@@ -42,5 +43,4 @@ defmodule LiveMesh.Events do
     send(socket.parent_pid, {:bubble_event, event, params})
     socket
   end
-
 end

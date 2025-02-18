@@ -1,12 +1,12 @@
 defmodule LiveMesh.Section do
   @moduledoc """
-  A `Section` is the primary organizational unit in LiveMesh.
+    A `Section` is the primary organizational unit in LiveMesh.
 
-  - Supports nesting other `Sections` and `Panels` by default.
-  - Does **not** support `Fragments` unless explicitly enabled via `use LiveMesh.Fragments`.
-  - Does **not** support `Modals` unless explicitly enabled via `use LiveMesh.Modals`.
-  - Handles event bubbling from `Panels` and `Fragments`.
-"""
+    - Supports nesting other `Sections` and `Panels` by default.
+    - Does **not** support `Fragments` unless explicitly enabled via `use LiveMesh.Fragments`.
+    - Does **not** support `Modals` unless explicitly enabled via `use LiveMesh.Modals`.
+    - Handles event bubbling from `Panels` and `Fragments`.
+  """
 
   use Phoenix.LiveView
 

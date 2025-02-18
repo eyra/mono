@@ -16,7 +16,6 @@ defmodule LiveMesh.Page do
       use Phoenix.LiveView
       use LiveMesh.Sections
       use LiveMesh.Modals
-
     end
   end
 end
