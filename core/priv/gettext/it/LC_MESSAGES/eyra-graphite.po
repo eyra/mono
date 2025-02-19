@@ -1,0 +1,274 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.description.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid.github.commit.url.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.github.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.method.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.position.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.score.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.team.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.form.update.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submit.failed.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "closed_for_submissions.error.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "no.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.published.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.closed.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.open.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "locked.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.form.metrics.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.scores"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.leaf.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.replace_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.select"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.upload_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.metrics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.label.visibility"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.submissions.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.submissions.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "anonymous.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.offline.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.csv.headers.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.scores.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.csv.success.valid.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "scores.form.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.list.header.number"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.submissions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.generated_on.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.private.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "highlight.visibility.public.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 submission"
+msgid_plural "* submissions"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.deadline.info"
+msgstr ""
