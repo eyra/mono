@@ -8,157 +8,201 @@
 ### to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: de\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "delete.confirm"
+msgid "error.flash"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.first.button"
+msgid "persister.saved.flash"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.button"
+msgid "menu.item.profile"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.button.short"
+msgid "menu.item.signin"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.empty.description"
+msgid "menu.item.signout"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.empty.title"
+msgid "menu.item.menu"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.title"
+msgid "menu.item.todo"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "config.title"
+msgid "todo.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.name.label"
+msgid "tabbar.item.features"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "monitor.title"
+msgid "tabbar.item.student"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.header.title"
+msgid "menu.item.helpdesk"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.items.title"
+msgid "cancel.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.title"
+msgid "delete.confirm.text"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.item.button"
+msgid "delete.confirm.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.item.button.short"
+msgid "delete.confirm.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.concept"
+msgid "ok.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.idle"
+msgid "menu.item.support"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.offline"
+msgid "timestamp.today"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.online"
+msgid "timestamp.yesterday"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "create.item.title"
+msgid "authentication.required.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.form.title"
+msgid "duplicate.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "default.name"
+msgid "share.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "menu.item.payments"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "persister.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "mailto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "notify.all"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "menu.item.admin"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.first.item.button"
+msgid "menu.item.projects"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.empty.description"
+msgid "start.page.projects"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.empty.title"
+msgid "start.page.home"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.graphite"
+msgid "collapse.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.default"
+msgid "expand.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.questionnaire"
+msgid "privacy.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.text"
+msgid "terms.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.unspecified.deadline.label"
+msgid "edit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "create_item_popup.create.button"
+msgid "copy.clipboard.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "people.page.title"
+msgid "submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "first.breadcrumb.label"
+msgid "done.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage"
-msgstr "Erstellen Sie jetzt einen Speicher."
+msgid "timestamp.date"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage-failed"
-msgstr "Leider konnten wir keinen Speicher für Sie erstellen."
+msgid "timestamp.datetime"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage-success"
-msgstr "Ihr Speicher wurde erstellt."
+msgid "timestamp.yesterweek"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "node.data.empty.description"
-msgstr "Ihr Projekt hat noch keinen Speicher."
+#, elixir-autogen, elixir-format
+msgid "timestamp.tomorrow"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "node.data.empty.title"
-msgstr "Kein Speicher erstellt"
+#, elixir-autogen, elixir-format
+msgid "timestamp.nextweek"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.desktop"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "menu.item.workspace"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirmation_modal.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.forward"
+msgstr ""

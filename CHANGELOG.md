@@ -11,6 +11,7 @@
 
 ## \#8 unreleased
 
+* Added: Support for Italian in assignments (participants)
 
 ## \#7.1 2025-01-09
 
