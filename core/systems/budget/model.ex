@@ -2,6 +2,7 @@ defmodule Systems.Budget.Model do
   @moduledoc """
   The budget type.
   """
+  use Core, :auth
   use Ecto.Schema
   import Frameworks.Utility.EctoHelper
 
@@ -39,11 +40,11 @@ defmodule Systems.Budget.Model do
       currency: currency,
       fund: Bookkeeping.AccountModel.create({:fund, name}),
       reserve: Bookkeeping.AccountModel.create({:reserve, name}),
-      auth_node: Core.Authorization.Node.create()
+      auth_node: auth_module().prepare_node()
     }
   end
 
-  def create(%Budget.CurrencyModel{} = currency, name, icon, %User{id: user_id}) do
+  def create(%Budget.CurrencyModel{} = currency, name, icon, %User{} = user) do
     uuid = Ecto.UUID.generate()
 
     %__MODULE__{
@@ -52,7 +53,7 @@ defmodule Systems.Budget.Model do
       currency: currency,
       fund: Bookkeeping.AccountModel.create({:fund, uuid}),
       reserve: Bookkeeping.AccountModel.create({:reserve, uuid}),
-      auth_node: Core.Authorization.Node.create(user_id, :owner)
+      auth_node: auth_module().prepare_node(user, :owner)
     }
   end
 
@@ -63,7 +64,7 @@ defmodule Systems.Budget.Model do
       fund: Bookkeeping.AccountModel.create({:fund, name}),
       reserve: Bookkeeping.AccountModel.create({:reserve, name}),
       currency: Budget.CurrencyModel.create(name, type, decimal_scale, label),
-      auth_node: Core.Authorization.Node.create()
+      auth_node: auth_module().prepare_node()
     }
   end
 
@@ -93,14 +94,14 @@ defmodule Systems.Budget.Model do
 
   def submit(
         %Ecto.Changeset{} = changeset,
-        %User{id: user_id},
+        %User{} = user,
         %Budget.CurrencyModel{} = currency
       ) do
     uuid = Ecto.UUID.generate()
 
     changeset
     |> Changeset.put_assoc(:currency, currency)
-    |> Changeset.put_assoc(:auth_node, Core.Authorization.Node.create(user_id, :owner))
+    |> Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
     |> Changeset.put_assoc(:fund, Bookkeeping.AccountModel.create({:fund, uuid}))
     |> Changeset.put_assoc(:reserve, Bookkeeping.AccountModel.create({:reserve, uuid}))
   end

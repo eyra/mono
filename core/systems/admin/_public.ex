@@ -1,4 +1,6 @@
 defmodule Systems.Admin.Public do
+  use Core, :public
+
   def compile(patterns) do
     combined =
       Enum.map_join(patterns, "|", fn pattern ->

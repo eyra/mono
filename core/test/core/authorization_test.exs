@@ -1,4 +1,4 @@
-defmodule Core.AuthorizationTest do
+defmodule AuthorizationTest do
   alias Core.Authorization
   alias Core.Factories
   use Core.DataCase
@@ -114,13 +114,13 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, child})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Core.Authorization.Node, child.id) |> Repo.preload(:parent)
+           } = Repo.get!(Authorization.Node, child.id) |> Repo.preload(:parent)
   end
 
   test "link/1 succeeds tuple with parent/childs" do
@@ -130,21 +130,21 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, [child1, child2]})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id1,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Core.Authorization.Node, child1.id) |> Repo.preload(:parent)
+           } = Repo.get!(Authorization.Node, child1.id) |> Repo.preload(:parent)
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id2,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Core.Authorization.Node, child2.id) |> Repo.preload(:parent)
+           } = Repo.get!(Authorization.Node, child2.id) |> Repo.preload(:parent)
   end
 
   test "link/1 succeeds tuple with parent/tuple-list" do
@@ -155,27 +155,27 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, {child_a, [child_a_a, child_a_b]}})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id_a_a,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^child_id_a,
-               parent: %Core.Authorization.Node{
+               parent: %Authorization.Node{
                  id: ^parent_id,
                  parent_id: nil
                }
              }
-           } = Repo.get!(Core.Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id_a_b,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^child_id_a,
-               parent: %Core.Authorization.Node{
+               parent: %Authorization.Node{
                  id: ^parent_id,
                  parent_id: nil
                }
              }
-           } = Repo.get!(Core.Authorization.Node, child_a_b.id) |> Repo.preload(parent: [:parent])
+           } = Repo.get!(Authorization.Node, child_a_b.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-list with nil value" do
@@ -185,16 +185,16 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, {child_a, [child_a_a, nil]}})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id_a_a,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^child_id_a,
-               parent: %Core.Authorization.Node{
+               parent: %Authorization.Node{
                  id: ^parent_id,
                  parent_id: nil
                }
              }
-           } = Repo.get!(Core.Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-item" do
@@ -204,16 +204,16 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, {child_a, child_a_a}})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id_a_a,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^child_id_a,
-               parent: %Core.Authorization.Node{
+               parent: %Authorization.Node{
                  id: ^parent_id,
                  parent_id: nil
                }
              }
-           } = Repo.get!(Core.Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-item with nil value" do
@@ -222,12 +222,12 @@ defmodule Core.AuthorizationTest do
 
     Authorization.link({parent, {child_a, nil}})
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^child_id_a,
-             parent: %Core.Authorization.Node{
+             parent: %Authorization.Node{
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Core.Authorization.Node, child_a.id) |> Repo.preload(parent: [:parent])
+           } = Repo.get!(Authorization.Node, child_a.id) |> Repo.preload(parent: [:parent])
   end
 end

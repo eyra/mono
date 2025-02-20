@@ -3,7 +3,7 @@ defmodule Systems.Project.Assembly do
   use Gettext, backend: CoreWeb.Gettext
 
   require Logger
-  alias Core.Authorization
+  use Core, :auth
   alias Core.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
@@ -22,11 +22,8 @@ defmodule Systems.Project.Assembly do
   def template(%Assignment.Model{special: template}), do: template
   def template(_), do: nil
 
-  def delete(%Project.Model{auth_node: %{id: node_id}}) do
-    from(ra in Authorization.RoleAssignment,
-      where: ra.node_id == ^node_id
-    )
-    |> Repo.delete_all()
+  def delete(%Project.Model{auth_node: auth_node}) do
+    auth_module().delete_role_assignments(auth_node)
   end
 
   def delete(%Project.ItemModel{id: id} = item) do
@@ -220,16 +217,16 @@ defmodule Systems.Project.Assembly do
 
   def update_auth(multi, %Project.Model{} = project) do
     auth_tree = Project.Model.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 
   def update_auth(multi, %Project.NodeModel{} = project) do
     auth_tree = Project.NodeModel.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 
   def update_auth(multi, %Project.ItemModel{} = project) do
     auth_tree = Project.ItemModel.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 end

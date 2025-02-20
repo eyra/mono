@@ -33,7 +33,7 @@ defmodule Systems.Instruction.GeneralForm do
   defp ensure_page(%{assigns: %{tool: %{pages: [_]}}} = socket), do: socket
 
   defp ensure_page(%{assigns: %{tool: %{auth_node: auth_node, pages: []} = tool}} = socket) do
-    content_page = Content.Public.prepare_page("", Core.Authorization.prepare_node(auth_node))
+    content_page = Content.Public.prepare_page("", auth_module().prepare_node(auth_node))
 
     page =
       %Instruction.PageModel{}

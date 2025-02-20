@@ -1,4 +1,5 @@
 defmodule Systems.Crew.Public do
+  use Core, :public
   require Logger
 
   require Ecto.Query
@@ -10,7 +11,6 @@ defmodule Systems.Crew.Public do
   alias Core.Repo
 
   alias Systems.Account.User
-  alias Core.Authorization
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Signal
   alias Systems.Crew
@@ -54,33 +54,32 @@ defmodule Systems.Crew.Public do
     Repo.get!(Crew.TaskModel, id) |> Repo.preload(preload)
   end
 
-  def create_task(crew, members, identifier, expire_at \\ nil)
+  def create_task(crew, users, identifier, expire_at \\ nil)
 
-  def create_task(crew, [_ | _] = members, [_ | _] = identifier, expire_at) do
+  def create_task(crew, [_ | _] = users, [_ | _] = identifier, expire_at) do
     attrs = %{identifier: identifier, status: :pending, expire_at: expire_at}
-    user_ids = Enum.map(members, & &1.user_id)
 
     %Crew.TaskModel{}
     |> Crew.TaskModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:auth_node, Authorization.Node.create(user_ids, :owner))
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_module().prepare_node(users, :owner))
     |> Repo.insert()
   end
 
-  def create_task(crew, member, [_ | _] = identifier, expire_at),
-    do: create_task(crew, [member], identifier, expire_at)
+  def create_task(crew, user, [_ | _] = identifier, expire_at),
+    do: create_task(crew, [user], identifier, expire_at)
 
-  def create_task!(crew, members, identifier, expire_at \\ nil)
+  def create_task!(crew, users, identifier, expire_at \\ nil)
 
-  def create_task!(crew, [_ | _] = members, [_ | _] = identifier, expire_at) do
-    case create_task(crew, members, identifier, expire_at) do
+  def create_task!(crew, [_ | _] = users, [_ | _] = identifier, expire_at) do
+    case create_task(crew, users, identifier, expire_at) do
       {:ok, task} -> task
       _ -> nil
     end
   end
 
-  def create_task!(crew, member, [_ | _] = identifier, expire_at) do
-    case create_task(crew, member, identifier, expire_at) do
+  def create_task!(crew, user, [_ | _] = identifier, expire_at) do
+    case create_task(crew, user, identifier, expire_at) do
       {:ok, task} -> task
       _ -> nil
     end
@@ -388,7 +387,7 @@ defmodule Systems.Crew.Public do
   end
 
   defp insert(multi, :role_assignment = name, crew, %User{} = user, role) do
-    Multi.insert(multi, name, Authorization.build_role_assignment(user, crew, role))
+    Multi.insert(multi, name, auth_module().build_role_assignment(user, crew, role))
   end
 
   defp insert(multi, :crew_task = name, crew, %User{} = user, attrs) do
@@ -398,7 +397,7 @@ defmodule Systems.Crew.Public do
       %Crew.TaskModel{}
       |> Crew.TaskModel.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:crew, crew)
-      |> Ecto.Changeset.put_assoc(:auth_node, Authorization.Node.create(user.id, :owner))
+      |> Ecto.Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
     )
   end
 

@@ -2,7 +2,8 @@ defmodule Systems.NextAction.Public do
   @moduledoc """
   The NextActions context.
   """
-
+  # This is a macro that imports the Core module and the public macro from the Core module.
+  use Core, :public
   import Ecto.Query, warn: false
   alias Core.Repo
   alias Systems.Account.User

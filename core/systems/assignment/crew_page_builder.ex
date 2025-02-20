@@ -180,26 +180,26 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
     if Assignment.Public.tester?(assignment, user) or status == :online do
       member = Crew.Public.get_member(crew, user)
-      work_items(assignment, member)
+      work_items(assignment, member, user)
     else
       []
     end
   end
 
-  defp work_items(%{workflow: workflow} = assignment, %{} = member) do
+  defp work_items(%{workflow: workflow} = assignment, %{} = member, %{} = user) do
     ordered_items = Workflow.Model.ordered_items(workflow)
-    Enum.map(ordered_items, &{&1, get_or_create_task(&1, assignment, member)})
+    Enum.map(ordered_items, &{&1, get_or_create_task(&1, assignment, member, user)})
   end
 
-  defp work_items(_assignment, nil), do: []
+  defp work_items(_assignment, nil, _), do: []
 
-  defp get_or_create_task(item, %{crew: crew} = assignment, member) do
+  defp get_or_create_task(item, %{crew: crew} = assignment, member, user) do
     identifier = Assignment.Private.task_identifier(assignment, item, member)
 
     if task = Crew.Public.get_task(crew, identifier) do
       task
     else
-      Crew.Public.create_task!(crew, [member], identifier)
+      Crew.Public.create_task!(crew, [user], identifier)
     end
   end
 end

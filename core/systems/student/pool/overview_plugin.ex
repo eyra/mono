@@ -43,7 +43,7 @@ defmodule Systems.Student.Pool.OverviewPlugin do
   end
 
   defp owner?(entity, user) do
-    Core.Authorization.user_has_role?(user, entity, :owner)
+    auth_module().user_has_role?(user, entity, :owner)
   end
 
   @impl true

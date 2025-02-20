@@ -78,7 +78,7 @@ defmodule Systems.Instruction.DownloadForm do
     page =
       Content.Public.prepare_page(
         get_body(name, ref),
-        Core.Authorization.prepare_node(auth_node)
+        auth_module().prepare_node(auth_node)
       )
 
     result = Instruction.Public.add_file_and_page(tool, file, page)

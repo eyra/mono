@@ -1,4 +1,5 @@
 defmodule Systems.Observatory.Public do
+  use Core, :public
   alias CoreWeb.Endpoint
 
   def subscribe(signal, key \\ []) do

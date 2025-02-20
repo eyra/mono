@@ -1,11 +1,11 @@
 defmodule Core.Authorization.Queries do
+  alias Core.Authorization
   require Ecto.Query
   require Frameworks.Utility.Query
 
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Core.Authorization
   alias Systems.Account
 
   def auth_node_query() do

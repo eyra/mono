@@ -7,7 +7,7 @@ defmodule Systems.Advert.Factories do
   }
 
   alias Core.Factories
-  alias Core.Authorization
+  use Core, :auth
 
   def create_advert(
         researcher,
@@ -56,7 +56,7 @@ defmodule Systems.Advert.Factories do
         auth_node: advert_auth_node
       })
 
-    :ok = Authorization.assign_role(researcher, advert, :owner)
+    :ok = auth_module().assign_role(researcher, advert, :owner)
 
     advert
   end

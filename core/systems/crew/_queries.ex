@@ -8,7 +8,6 @@ defmodule Systems.Crew.Queries do
   alias Systems.Crew
   alias CoreWeb.UI.Timestamp
   alias Systems.Account.User
-  alias Core.Authorization
 
   # MEMBERS
 
@@ -122,7 +121,7 @@ defmodule Systems.Crew.Queries do
     task_ids = select(tasks, [task: t], t.id)
 
     from(u in User, as: :user)
-    |> join(:inner, [user: u], tr in Authorization.RoleAssignment,
+    |> join(:inner, [user: u], tr in Core.Authorization.RoleAssignment,
       as: :task_role,
       on: tr.principal_id == u.id
     )
