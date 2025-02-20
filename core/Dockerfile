@@ -33,6 +33,8 @@ ARG VERSION
 ENV VERSION $VERSION
 ENV MIX_ENV prod
 
+RUN apt-get update && apt-get install -y inotify-tools
+
 EXPOSE 8000
 
 COPY --from=builder /workspace/$VERSION /opt/app
