@@ -443,23 +443,23 @@ msgid "platforms.snapchat"
 msgstr "Snapchat"
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.comparison"
+msgid "zircon_criterion_class.comparison"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.intervention"
+msgid "zircon_criterion_class.intervention"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.outcome"
+msgid "zircon_criterion_class.outcome"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.population"
+msgid "zircon_criterion_class.population"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.study_type"
+msgid "zircon_criterion_class.study_type"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -475,29 +475,29 @@ msgid "templates.paper_screening"
 msgstr "Paper screening"
 
 #, elixir-autogen, elixir-format
-msgid "categories.comparison"
+msgid "zircon_screening_categoriescomparison"
 msgstr "The control group or alternative intervention. (PICO, SPICE)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.context"
+msgid "zircon_screening_categoriescontext"
 msgstr "The environment, setting, or situational focus. (PICo, SPICE)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.intervention"
+msgid "zircon_screening_categoriesintervention"
 msgstr "The treatment, exposure, or action studied. (PICO, SPICE)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.outcome"
+msgid "zircon_screening_categoriesoutcome"
 msgstr "The measurable result of the intervention. (PICO, PICOS, SPICE)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.phenomenon_of_interest"
+msgid "zircon_screening_categoriesphenomenon_of_interest"
 msgstr " The qualitative research focus. (SPIDER, PICo)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.population"
+msgid "zircon_screening_categoriespopulation"
 msgstr "The group, subjects or sample being studied. (PICO, PICo, SPIDER)"
 
 #, elixir-autogen, elixir-format
-msgid "categories.setting"
+msgid "zircon_screening_categoriessetting"
 msgstr "A specific geographic or organizational location. (SPICE)"

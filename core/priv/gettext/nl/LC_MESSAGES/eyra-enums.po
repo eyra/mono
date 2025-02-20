@@ -443,23 +443,23 @@ msgid "platforms.snapchat"
 msgstr "Snapchat"
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.comparison"
+msgid "zircon_criterion_class.comparison"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.intervention"
+msgid "zircon_criterion_class.intervention"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.outcome"
+msgid "zircon_criterion_class.outcome"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.population"
+msgid "zircon_criterion_class.population"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.study_type"
+msgid "zircon_criterion_class.study_type"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -475,29 +475,29 @@ msgid "templates.paper_screening"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.comparison"
+msgid "zircon_screening_categoriescomparison"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.context"
+msgid "zircon_screening_categoriescontext"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.intervention"
+msgid "zircon_screening_categoriesintervention"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.outcome"
+msgid "zircon_screening_categoriesoutcome"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.phenomenon_of_interest"
+msgid "zircon_screening_categoriesphenomenon_of_interest"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.population"
+msgid "zircon_screening_categoriespopulation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "categories.setting"
+msgid "zircon_screening_categoriessetting"
 msgstr ""

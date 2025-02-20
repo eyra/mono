@@ -41,7 +41,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
           items: [
             %Workflow.LibraryItemModel{
               special: :paper_screening,
-              tool: :onyx_tool,
+              tool: :zircon_screening_tool,
               title: Assignment.WorkflowItemSpecials.translate(:paper_screening),
               description:
                 dgettext("eyra-assignment", "workflow_item.paper_screening.description")

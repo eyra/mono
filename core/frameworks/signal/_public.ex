@@ -18,12 +18,12 @@ defmodule Frameworks.Signal.Public do
     "Systems.Instruction.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
-    "Systems.Onyx.Switch",
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
     "Systems.Student.Switch",
-    "Systems.Workflow.Switch"
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
   ]
 
   def dispatch(signal, message) do
@@ -34,7 +34,7 @@ defmodule Frameworks.Signal.Public do
       ansi_color: :blue
     )
 
-    results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
+    results = Enum.map(signal_handlers(), &intercept(&1, signal, message))
 
     if not Enum.member?(results, :ok) do
       Logger.warning(
@@ -43,6 +43,10 @@ defmodule Frameworks.Signal.Public do
     end
 
     :ok
+  end
+
+  def intercept(handler, signal, message) do
+    handler.intercept(signal, message)
   end
 
   def dispatch!(signal, message) do
