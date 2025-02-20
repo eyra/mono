@@ -43,7 +43,7 @@ defmodule CoreWeb do
 
       import Phoenix.LiveView.Controller
 
-      # plug(Systems.Project.BranchPlug)
+      plug(Systems.Project.BranchPlug)
 
       unquote(verified_routes())
     end
