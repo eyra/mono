@@ -1,4 +1,5 @@
 defmodule Systems.Email.Public do
+  use Core, :public
   import Bamboo.Email
   import Bamboo.Phoenix
 

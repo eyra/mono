@@ -1,4 +1,5 @@
 defmodule Systems.Project.ModelTest do
+  alias Core.Authorization
   use Core.DataCase
 
   alias Systems.{
@@ -16,36 +17,36 @@ defmodule Systems.Project.ModelTest do
     auth_tree = Project.Model.auth_tree(project)
 
     assert {
-             %Core.Authorization.Node{id: project_id},
+             %Authorization.Node{id: project_id},
              {
-               %Core.Authorization.Node{id: node_id},
+               %Authorization.Node{id: node_id},
                [
-                 %Core.Authorization.Node{id: assignment_id}
+                 %Authorization.Node{id: assignment_id}
                ]
              }
            } = auth_tree
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^project_id,
              children: []
            } =
-             Repo.get!(Core.Authorization.Node, project_id) |> Repo.preload(children: [:children])
+             Repo.get!(Authorization.Node, project_id) |> Repo.preload(children: [:children])
 
-    Core.Authorization.link(auth_tree)
+    Authorization.link(auth_tree)
 
-    assert %Core.Authorization.Node{
+    assert %Authorization.Node{
              id: ^project_id,
              children: [
-               %Core.Authorization.Node{
+               %Authorization.Node{
                  id: ^node_id,
                  children: [
-                   %Core.Authorization.Node{
+                   %Authorization.Node{
                      id: ^assignment_id
                    }
                  ]
                }
              ]
            } =
-             Repo.get!(Core.Authorization.Node, project_id) |> Repo.preload(children: [:children])
+             Repo.get!(Authorization.Node, project_id) |> Repo.preload(children: [:children])
   end
 end

@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.Gen do
+  use Core, :auth
   alias Core.Factories
   alias Systems.Graphite
   alias Systems.Account
@@ -70,7 +71,7 @@ defmodule Systems.Graphite.Gen do
 
   defp create_auth_node(multi, name) do
     Ecto.Multi.insert(multi, {:auth_node, name}, fn %{{:user, ^name} => user} ->
-      Core.Authorization.prepare_node(user, :owner)
+      auth_module().prepare_node(user, :owner)
     end)
   end
 

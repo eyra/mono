@@ -1,4 +1,5 @@
 defmodule Systems.Lab.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   alias CoreWeb.UI.Timestamp
   alias Systems.Lab.VUDaySchedule, as: DaySchedule
@@ -23,7 +24,7 @@ defmodule Systems.Lab.Public do
     |> filter_double_time_slots()
   end
 
-  def prepare_tool(attrs, auth_node \\ Core.Authorization.prepare_node()) do
+  def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do
     %Lab.ToolModel{}
     |> Lab.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

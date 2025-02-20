@@ -2,7 +2,7 @@ defmodule Systems.Promotion.Public do
   @moduledoc """
 
   """
-
+  use Core, :public
   import Ecto.Query, warn: false
 
   alias Core.Repo

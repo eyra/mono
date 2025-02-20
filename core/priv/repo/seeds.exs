@@ -107,7 +107,7 @@ Systems.NextAction.Public.create_next_action(
 #   # CAMPAIGN
 #   advert = Core.Factories.insert!(:advert, advert_data)
 
-#   Core.Authorization.assign_role(
+#  auth_module().assign_role(
 #     researcher,
 #     advert,
 #     :owner

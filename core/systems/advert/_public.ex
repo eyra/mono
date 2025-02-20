@@ -1,4 +1,6 @@
 defmodule Systems.Advert.Public do
+  use Core, :public
+
   @moduledoc """
   The Studies context.
   """
@@ -8,7 +10,6 @@ defmodule Systems.Advert.Public do
   require Logger
   alias Core.Repo
   alias Systems.Account.User
-  alias Core.Authorization
 
   alias Frameworks.GreenLight.Principal
   alias Frameworks.Signal
@@ -206,7 +207,7 @@ defmodule Systems.Advert.Public do
   def list_owners(%Advert.Model{} = advert, preload \\ []) do
     owner_ids =
       advert
-      |> Authorization.list_principals()
+      |> auth_module().list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
 
@@ -217,7 +218,7 @@ defmodule Systems.Advert.Public do
 
   def assign_owners(advert, users) do
     existing_owner_ids =
-      Authorization.list_principals(advert.auth_node_id)
+      auth_module().list_principals(advert.auth_node_id)
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
       |> Enum.into(MapSet.new())
@@ -226,7 +227,7 @@ defmodule Systems.Advert.Public do
     |> Enum.filter(fn principal ->
       not MapSet.member?(existing_owner_ids, Principal.id(principal))
     end)
-    |> Enum.each(&Authorization.assign_role(&1, advert, :owner))
+    |> Enum.each(&auth_module().assign_role(&1, advert, :owner))
 
     new_owner_ids =
       users
@@ -235,7 +236,7 @@ defmodule Systems.Advert.Public do
 
     existing_owner_ids
     |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
-    |> Enum.each(&Authorization.remove_role!(%User{id: &1}, advert, :owner))
+    |> Enum.each(&auth_module().remove_role!(%User{id: &1}, advert, :owner))
 
     # AUTH: Does not modify entities, only auth. This needs checks to see if
     # the user is allowed to manage permissions? Could be implemented as part
@@ -265,7 +266,7 @@ defmodule Systems.Advert.Public do
            |> Ecto.Changeset.put_assoc(:submission, submission)
            |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
            |> Repo.insert() do
-      :ok = Authorization.assign_role(researcher, advert, :owner)
+      :ok = auth_module().assign_role(researcher, advert, :owner)
       Signal.Public.dispatch!({:advert, :created}, %{advert: advert})
       {:ok, advert}
     end

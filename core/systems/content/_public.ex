@@ -1,4 +1,5 @@
 defmodule Systems.Content.Public do
+  use Core, :public
   import Ecto.Query, warn: false
 
   alias Core.Repo

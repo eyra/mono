@@ -1,4 +1,5 @@
 defmodule Systems.Account.Public do
+  use Core, :public
   use CoreWeb.StartPageProvider
   require Logger
 

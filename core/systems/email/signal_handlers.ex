@@ -1,4 +1,5 @@
 defmodule Core.Mailer.SignalHandlers do
+  use Core, :auth
   use Frameworks.Signal.Handler
   use Bamboo.Phoenix, component: Systems.Email.EmailHTML
   import Core.FeatureFlags
@@ -21,7 +22,7 @@ defmodule Core.Mailer.SignalHandlers do
 
   defp base_emails(%Box{} = box) do
     box
-    |> Core.Authorization.users_with_role(:owner)
+    |> auth_module().users_with_role(:owner)
     |> Enum.map(&user_email(&1))
   end
 

@@ -1,11 +1,11 @@
 defmodule Systems.Project.Public do
+  use Core, :public
   use CoreWeb, :verified_routes
 
   use Gettext, backend: CoreWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Project.Queries
 
-  alias Core.Authorization
   alias Core.Repo
   alias Ecto.Multi
 
@@ -117,7 +117,7 @@ defmodule Systems.Project.Public do
     preload = Keyword.get(opts, :preload, [])
 
     node_ids =
-      Authorization.query_node_ids(
+      auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
@@ -240,13 +240,13 @@ defmodule Systems.Project.Public do
       prepare_node(%{name: "Project", project_path: []}, items)
       |> Ecto.Changeset.apply_action(:prepare)
 
-    prepare(attrs, root, Authorization.prepare_node(user, :owner))
+    prepare(attrs, root, auth_module().prepare_node(user, :owner))
   end
 
   def prepare(
         %{name: _name} = attrs,
         %Project.NodeModel{} = root,
-        %Authorization.Node{} = auth_node
+        %{} = auth_node
       ) do
     %Project.Model{}
     |> Project.Model.changeset(attrs)
@@ -257,7 +257,7 @@ defmodule Systems.Project.Public do
   def prepare_node(
         %{name: _, project_path: _} = attrs,
         items,
-        auth_node \\ Authorization.prepare_node()
+        auth_node \\ auth_module().prepare_node()
       )
       when is_list(items) do
     %Project.NodeModel{}
@@ -323,7 +323,7 @@ defmodule Systems.Project.Public do
     |> Ecto.Multi.put(:project, project)
     |> Ecto.Multi.put(:user, user)
     |> Multi.run(:add, fn _, %{user: user, project: project} ->
-      case Authorization.assign_role(user, project, :owner) do
+      case auth_module().assign_role(user, project, :owner) do
         :ok -> {:ok, :added}
         error -> {:error, error}
       end
@@ -337,7 +337,7 @@ defmodule Systems.Project.Public do
     |> Ecto.Multi.put(:project, project)
     |> Ecto.Multi.put(:user, user)
     |> Multi.run(:remove, fn _, %{user: user, project: project} ->
-      case Authorization.remove_role!(user, project, :owner) do
+      case auth_module().remove_role!(user, project, :owner) do
         {count, _} when count > 0 -> {:ok, :removed}
         error -> {:error, error}
       end
@@ -349,7 +349,7 @@ defmodule Systems.Project.Public do
   def list_owners(%Project.Model{} = project, preload \\ []) do
     owner_ids =
       project
-      |> Authorization.list_principals()
+      |> auth_module().list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
 
