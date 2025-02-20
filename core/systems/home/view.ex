@@ -31,8 +31,8 @@ defmodule Systems.Home.View do
   defp render_intro(assigns) do
     ~H"""
     <section class="py-12 bg-white">
-      <div class="flex flex-col gap-8 md:gap-0 md:flex-row justify-between mt-12 md:pl-14 ">
-        <div class="w-full md:w-3/4 l text-center md:text-left sm:pr-12">
+      <div class="flex flex-col gap-8 sm:gap-16 md:gap-0 md:flex-row justify-between mt-12 md:pl-14">
+        <div class="w-full md:w-3/4 l text-center md:text-left md:pr-12 xl:pr-0">
           <h1 class="text-title2 xl:text-title1 font-bold text-grey1">
             Workplace for researchers
           </h1>
@@ -63,7 +63,7 @@ defmodule Systems.Home.View do
                   <p class="sm:text-lg lg:text-xl 2xl:text-2xl lg:font-semibold">
                     Sign in or explore the Next platform by creating a free account.
                   </p>
-                  <div class="mt-4 flex flex-col 2xl:flex-row items-between gap-2 justify-between ">
+                  <div class="mt-4 flex flex-col 2xl:flex-row items-between gap-2 justify-between  text-center">
                     <Button.dynamic
                       action={%{type: :click, code: "alert('Hello!')"}}
                       face={%{type: :primary, label: "Meld je aan"}}
@@ -87,7 +87,7 @@ defmodule Systems.Home.View do
         <h2 class="text-title3 font-bold text-white md:text-left pl-8">
           Here's how to get started
         </h2>
-        <div class="mt-10 justify-around w-full flex flex-col md:flex-row gap-8 sm:gap-4 lg:gap-8 px-6">
+        <div class="mt-10 justify-around w-full flex flex-col md:flex-row gap-8 lg:gap-8 px-6">
           <%= render_step_card(%{
                 image: ~p"/images/landing_page/geel-abstract.svg",
                 title: "Step 1: Log in",
