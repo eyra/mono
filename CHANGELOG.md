@@ -12,6 +12,7 @@
 ## \#8 unreleased
 
 * Added: Support for Italian in assignments (participants)
+* Changed: Use of authorization module to speed up compile time
 
 ## \#7.1 2025-01-09
 
