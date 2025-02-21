@@ -11,6 +11,7 @@
 
 ## \#8 unreleased
 
+* Fixed: PDF not readable on mobile device
 
 ## \#7.1 2025-01-09
 
