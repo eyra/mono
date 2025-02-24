@@ -13,28 +13,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.consent.text"
-msgstr ""
+msgstr "<div>Aggiungi i termini e le condizioni a cui i partecipanti devono dare il consenso.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr ""
+msgstr "Accetti i termini e le condizioni sopra indicati?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
-msgstr ""
+msgstr "Nota che questa versione del testo di consenso è già stata firmata dai partecipanti. Aggiorna la pagina se desideri continuare a modificarlo."
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
-msgstr ""
+msgstr "Il testo di consenso è stato modificato. Aggiorna la pagina per continuare."
 
 #, elixir-autogen, elixir-format
 msgid "signature.view.title"
-msgstr ""
+msgstr "Consenso"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
-msgstr ""
+msgstr "Sì, accetto"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
-msgstr ""
+msgstr "No"

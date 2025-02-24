@@ -57,11 +57,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continua"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Consenso"
 
 #, elixir-autogen, elixir-format
 msgid "settings.storage.title"
@@ -193,11 +193,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Attività"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Informazioni"
 
 #, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
@@ -217,7 +217,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Informazioni"
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
@@ -229,7 +229,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "Domande?"
 
 #, elixir-autogen, elixir-format
 msgid "support_form.off.label"
@@ -241,19 +241,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Hai rifiutato di partecipare. Puoi chiudere il browser. Se desideri riconsiderare la partecipazione, chiudi questo popup per continuare."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr ""
+msgstr "Consenso rifiutato"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Hai finito. Grazie per la tua partecipazione."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Fatto"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -281,7 +281,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr ""
+msgstr "Privacy"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -373,19 +373,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Consenso"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Informazioni"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "Domande?"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Privacy"
 
 #, elixir-autogen, elixir-format
 msgid "storage.create.button"
