@@ -8,7 +8,7 @@
 ### to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: de\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
@@ -57,11 +57,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr "Weiter"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr "Einwilligung"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.storage.title"
@@ -193,11 +193,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr "Aufgaben"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr "Informationen"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
@@ -217,7 +217,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr "Informationen"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
@@ -229,7 +229,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr "Fragen?"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support_form.off.label"
@@ -241,19 +241,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie doch teilnehmen möchten, schließen Sie dieses Popup-Fenster, um fortzufahren."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr "Einwilligung verweigert"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr "Fertig"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -281,7 +281,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr "Datenschutzerklärung"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -373,33 +373,33 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr "Einwilligung"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr "Informationen"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr "Fragen?"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr "Datenschutzerklärung"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "storage.create.button"
-msgstr "Create storage"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "storage.goto.button"
-msgstr "Go to storage"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "1 participant"
 msgid_plural "* participants"
 msgstr[0] ""
@@ -441,11 +441,11 @@ msgstr ""
 msgid "progress.yes"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr "Versuche es noch einmal"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -453,18 +453,18 @@ msgstr ""
 msgid "tabbar.item.reviewers"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.criteria"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.import"
 msgstr ""

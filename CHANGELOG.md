@@ -12,6 +12,11 @@
 ## \#8 unreleased
 
 * Fixed: PDF not readable on mobile device
+* Added: Support for Italian in assignments (participants)
+* Changed: Use of authorization module to speed up compile time
+* Added: Ask for permission before removing yourself from a project
+* Added: Overview and Files tab in project. The Files tab replaces the data card.
+* Changed: Auto-connect Next storage
 
 ## \#7.1 2025-01-09
 

@@ -8,207 +8,207 @@
 ### to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: en\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
 msgid "endpoint_form.type.label"
-msgstr "Storage type"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "aws.access_key_id.label"
-msgstr "Access key id"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "aws.region_code.label"
-msgstr "Region code"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "aws.s3_bucket_name.label"
-msgstr "Bucket name"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "aws.secret_access_key.label"
-msgstr "Secret access key"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "azure.account_name.label"
-msgstr "Account name"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "azure.container.label"
-msgstr "Container"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "azure.sas_token.label"
-msgstr "SAS token"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "centerdata.url.label"
-msgstr "URL"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "yoda.password.label"
-msgstr "Password"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "yoda.url.label"
-msgstr "Folder url"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "yoda.user.label"
-msgstr "E-mail"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "aws.annotation"
-msgstr "<div>Use Amazon S3 storage. More information: <a href=\"https://aws.amazon.com/s3\">https://aws.amazon.com/s3</a></div>"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "azure.annotation"
-msgstr "<div>Use Microsoft Azure blob storage. More information: <a href=\"https://azure.microsoft.com/en-us/products/storage/blobs\">https://azure.microsoft.com/en-us/products/storage/blobs</a></div>"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "builtin.annotation"
-msgstr "<div>Use the internal data storage if you do not wish to connect to a third-party data storage service. <br> Once your data donation flow is published, a data tab will appear with instructions on how to download the donated data.</div>"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "centerdata.annotation"
-msgstr "<div>More information: <a href=\"https://www.centerdata.nl\">https://www.centerdata.nl</a></div>"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "yoda.annotation"
-msgstr "<div>Use Yoda, a research data management service developed at Utrecht University. <br> More information: <a href=\"https://www.uu.nl/en/research/yoda\">https://www.uu.nl/en/research/yoda</a></div>"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "leaf.tag"
-msgstr "Storage"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "create.storage.body"
-msgstr "Choose where you want to store the data. Use 'Next' to view the data on the Next platform and export it to a device of your choice. Once you have connected a storage type, a data card will be added to your project."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
-msgstr "Manage your data on the project files tab."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
-msgstr "Files"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data.forward"
-msgstr "Go to Files"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
-msgstr "Account"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.settings.forward"
-msgstr "Go to Settings"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
-msgstr "Monitor"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor.forward"
-msgstr "Go to Monitor"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "table.date.label"
-msgstr "Date"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "table.file.label"
-msgstr "Name"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "table.size.label"
-msgstr "Size"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
-msgstr "Export all"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "files.metric.label"
-msgstr "Files"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "bytes.kb.metric.label"
-msgstr "Kilobytes"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "bytes.mb.metric.label"
-msgstr "Megabytes"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "empty.files.button"
-msgstr "Remove all"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.title"
-msgstr "Remove all files?"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.body"
-msgstr "Please note that this action will permanently delete all files stored for the following project: <span class=\"text-primary\">%{name}</span>. Make sure that you exported all relevant files before proceeding. This action cannot be undone."
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.placeholder"
-msgstr "Enter the project name to confirm"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "empty_confirmation_view.button"
-msgstr "Yes, remove all files"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "default.name"
-msgstr "Data"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "files.description"
-msgstr "The most recently stored files are listed below. Use the finder to search for specific files. You can export all files that are stored and remove all files from the storage once you are done. Please note that exporting a large number of files can take several minutes."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "search.placeholder"
-msgstr "Search"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "files.recent.label"
-msgstr "Most recent %{recent} out of %{total} files"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "files.search.label"
-msgstr "Found %{result} out of %{total} files"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "files.finder.title"
-msgstr "Finder"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "files.empty.description"
-msgstr "No files stored yet. Once files are stored you will be able to search through the files by using the finder, export all files to your device of choice and remove all files from the storage."
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "bytes.metric.label"
-msgstr "Bytes"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "account.status.invalid"
-msgstr "Invalid credentials"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "account.status.valid"
-msgstr "Valid credentials"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "account.submit.button"
-msgstr "Save and test"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "1 file"
 msgid_plural "* files"
-msgstr[0] "1 file"
-msgstr[1] "%{count} files"
+msgstr[0] ""
+msgstr[1] ""

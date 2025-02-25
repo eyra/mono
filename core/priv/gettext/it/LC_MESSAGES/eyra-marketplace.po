@@ -8,33 +8,43 @@
 ### to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: de\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "default.consent.text"
-msgstr "<div>Fügen Sie die Bedingungen hinzu, denen die Teilnehmer einwilligen müssen.</div>"
-
-#, elixir-autogen, elixir-format
-msgid "click_wrap.consent.validation"
-msgstr "Stimmen Sie den oben genannten Bedingungen zu?"
-
-#, elixir-autogen, elixir-format
-msgid "locked.error.message"
+msgid "assignment.status.complete.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "out_of_sync.error.message"
-msgstr "Der Einwilligungstext wurde geändert. Bitte aktualisieren Sie die Seite, um fortzufahren."
+msgid "assignment.status.completed.label"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "signature.view.title"
-msgstr "Einwilligung"
+msgid "assignment.status.pending.label"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "click_wrap.accept.button"
-msgstr "Ja, ich stimme zu"
+msgid "assignment.status.accepted.label"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "click_wrap.decline.button"
-msgstr "Nein"
+msgid "assignment.status.rejected.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.completed.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.pending.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.rejected.subtitle"
+msgstr ""
+
+#, elixir-format, elixir-autogen
+msgid "Awarded 1 credit"
+msgid_plural "Awarded %{count} credits"
+msgstr[0] ""
+msgstr[1] ""

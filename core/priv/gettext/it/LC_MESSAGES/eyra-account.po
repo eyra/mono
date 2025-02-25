@@ -8,157 +8,153 @@
 ### to merge POT files into PO files.
 msgid ""
 msgstr ""
-"Language: de\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "delete.confirm"
+msgid "displayname.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.first.button"
+msgid "email.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.button"
+msgid "fullname.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.button.short"
+msgid "password.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.empty.description"
+msgid "profile.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.empty.title"
+msgid "signup.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.title"
+msgid "signup.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "config.title"
+msgid "await.confirmation.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.name.label"
+msgid "confirm.token.resend_button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "monitor.title"
+msgid "choose.profile.photo.file"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "overview.header.title"
+msgid "choose.other.profile.photo.file"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.items.title"
+msgid "professionaltitle.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.title"
+msgid "feature.study.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.item.button"
+msgid "features.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.new.item.button.short"
+msgid "features.dominanthand.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.concept"
+msgid "features.gender.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.idle"
+msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.offline"
+msgid "features.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "label.online"
+msgid "features.content.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "create.item.title"
+msgid "login.google.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "item.form.title"
+msgid "login.surf.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "default.name"
+msgid "ehtical.code.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "add.first.item.button"
+msgid "signin.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.empty.description"
+msgid "signin.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.empty.title"
+msgid "await.confirmation.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.graphite"
+msgid "activation.failed.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.default"
+msgid "activation.failed.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tool_ref.tag.questionnaire"
+msgid "activation.confirm.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "form.text"
+msgid "activation.confirm.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "leaderboard.unspecified.deadline.label"
+msgid "confirm.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "create_item_popup.create.button"
+msgid "people.search.no_match.message"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "people.page.title"
+msgid "people.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "first.breadcrumb.label"
+msgid "people.add.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage"
-msgstr "Erstellen Sie jetzt einen Speicher."
+msgid "people.search.alread_added.message"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage-failed"
-msgstr "Leider konnten wir keinen Speicher für Sie erstellen."
+msgid "people.cancel_remove.label"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "node.data.empty.create-storage-success"
-msgstr "Ihr Speicher wurde erstellt."
+msgid "people.confirm_remove.label"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "node.data.empty.description"
-msgstr "Ihr Projekt hat noch keinen Speicher."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "node.data.empty.title"
-msgstr "Kein Speicher erstellt"
+#, elixir-autogen, elixir-format
+msgid "people.confirm_remove.text"
+msgstr ""

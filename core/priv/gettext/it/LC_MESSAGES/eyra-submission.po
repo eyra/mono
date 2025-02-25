@@ -1,0 +1,128 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "status.idle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.submitted.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "incomplete.forms.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ready.for.submission.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "waiting.for.coordinator.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reward.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "byline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.admin.success.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.admin.success.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.error.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.error.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.success.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.success.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reward.value.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "schedule.end.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "schedule.start.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "schedule.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "schedule.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.accepted.closed.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.accepted.online.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.accepted.scheduled.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "accepted.closed.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "accepted.scheduled.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "complete.admin.success.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "complete.admin.success.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "status.completed.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "status.retracted.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission.completed.message"
+msgstr ""
