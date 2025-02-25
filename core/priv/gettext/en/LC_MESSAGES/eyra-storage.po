@@ -89,7 +89,7 @@ msgstr "Choose where you want to store the data. Use 'Next' to view the data on 
 
 #, elixir-autogen, elixir-format
 msgid "goto.storage.body"
-msgstr "Connected! Visit the data storage card to manage your data."
+msgstr "Manage your data on the project files tab."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
