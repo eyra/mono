@@ -11,6 +11,7 @@
 
 ## \#8 unreleased
 
+* Fixed: PDF not readable on mobile device
 * Added: Support for Italian in assignments (participants)
 * Changed: Use of authorization module to speed up compile time
 * Added: Ask for permission before removing yourself from a project
