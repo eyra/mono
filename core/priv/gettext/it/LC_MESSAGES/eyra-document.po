@@ -53,4 +53,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "ready.button"
-msgstr ""
+msgstr "Fatto"
