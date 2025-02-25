@@ -96,7 +96,6 @@ msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.storage.body"
-msgstr "Connect the storage that you will use for the data donated by participants."
 msgstr "The data donated by participants is stored on the Next platform."
 
 #, elixir-autogen, elixir-format
