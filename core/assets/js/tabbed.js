@@ -59,20 +59,22 @@ export const TabBar = {
   },
 
   getActiveTabId() {
+    var initialTabId = this.el.dataset.initialTab;
+    if (this.exists(initialTabId)) {
+      return initialTabId;
+    }
+
     var savedTabId = this.loadActiveTabId();
     if (this.exists(savedTabId)) {
       return savedTabId;
-    } else {
-      var firstTabId = this.getFirstTabId();
-      var initialTabId = this.el.dataset.initialTab ?? undefined;
-      return initialTabId ?? firstTabId;
     }
+
+    this.getFirstTabId();
   },
 
   getActiveTabKey() {
     active_tab_key = "tabbar://" + this.tabbarId + "/active_tab";
     console.info("[TabBar] getActiveTabKey ", active_tab_key);
-
     return active_tab_key;
   },
 

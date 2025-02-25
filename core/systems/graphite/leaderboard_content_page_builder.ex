@@ -20,7 +20,6 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       tabs: tabs,
       actions: actions(leaderboard, action_map),
       show_errors: false,
-      initial_tab: "settings_form",
       tabbar_id: "leaderboard_content/#{id}",
       active_menu_item: :projects
     }
