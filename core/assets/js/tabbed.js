@@ -65,11 +65,11 @@ export const TabBar = {
       return initialTabId;
     }
 
-    // var savedTabId = this.loadActiveTabId();
-    // if (this.exists(savedTabId)) {
-    //   console.info("[TabBar] getActiveTabId savedTabId=", savedTabId);
-    //   return savedTabId;
-    // }
+    var savedTabId = this.loadActiveTabId();
+    if (this.exists(savedTabId)) {
+      console.info("[TabBar] getActiveTabId savedTabId=", savedTabId);
+      return savedTabId;
+    }
 
     var firstTabId = this.getFirstTabId();
     console.info("[TabBar] getActiveTabId firstTabId=", firstTabId);
