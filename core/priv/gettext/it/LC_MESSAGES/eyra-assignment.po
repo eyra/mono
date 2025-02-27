@@ -443,7 +443,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr ""
+msgstr "Non hai finito? Torna indietro"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
