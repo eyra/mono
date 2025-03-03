@@ -16,12 +16,14 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Pool
   alias Systems.Crew
 
+  # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
       hero: %{
         type: :illustration2,
         params: %{
-          title: dgettext("eyra-home", "member.title")
+          title: dgettext("eyra-home", "member.title"),
+          caption: "Caption"
         }
       },
       active_menu_item: :home,
@@ -30,6 +32,7 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
+  # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
     panl? = panl_participant?(user)
     put_locale(user, panl?)
@@ -38,7 +41,8 @@ defmodule Systems.Home.PageBuilder do
       hero: %{
         type: :illustration2,
         params: %{
-          title: dgettext("eyra-home", "member.title")
+          title: dgettext("eyra-home", "member.title"),
+          caption: "Caption"
         }
       },
       active_menu_item: :home,
