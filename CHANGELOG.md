@@ -17,6 +17,7 @@
 * Added: Ask for permission before removing yourself from a project
 * Added: Overview and Files tab in project. The Files tab replaces the data card.
 * Changed: Auto-connect Next storage
+* Changed: Updated German copy data donation participant flow
 
 ## \#7.1 2025-01-09
 
