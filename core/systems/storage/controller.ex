@@ -1,6 +1,9 @@
 defmodule Systems.Storage.Controller do
   alias CoreWeb.UI.Timestamp
-  use CoreWeb, :controller
+
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Frameworks.Concept
 

@@ -7,6 +7,8 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+config :phoenix, :plug_init_mode, :runtime
+
 config :core,
   name: "Next [local]",
   base_url: "http://localhost:4000",

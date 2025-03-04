@@ -5,7 +5,7 @@ defmodule CoreWeb do
 
   This can be used in your application as:
 
-      use CoreWeb, :controller
+      use CoreWeb, {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
       use CoreWeb, :html
 
   The definitions below will be executed for every view,
@@ -26,9 +26,7 @@ defmodule CoreWeb do
     end
   end
 
-  def controller(
-        opts \\ [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]
-      ) do
+  def controller(opts) do
     quote do
       use Core, :auth
       use Phoenix.Controller, unquote(opts)

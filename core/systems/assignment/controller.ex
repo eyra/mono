@@ -1,6 +1,9 @@
 defmodule Systems.Assignment.Controller do
   alias Hex.Solver.Assignment
-  use CoreWeb, :controller
+
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, declined_consent?: 2]

@@ -1,5 +1,7 @@
 defmodule Systems.Assignment.Centerdata.FakeApiController do
-  use CoreWeb, :controller
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   def create(
         conn,
