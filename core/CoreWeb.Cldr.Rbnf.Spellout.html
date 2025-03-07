@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -139,9 +139,9 @@ Pages
     <section id="moduledoc">
 <p>Functions to implement the spellout rule-based-number-format rules of CLDR.</p><p>As CLDR notes, the data is incomplete or non-existent for many languages.  It
 is considered complete for English however.</p><p>The standard public API for RBNF is via the <a href="https://hexdocs.pm/ex_cldr_numbers/2.33.4/Cldr.Number.html#to_string/2"><code class="inline">Cldr.Number.to_string/2</code></a> function.</p><p>The functions on this module are defined at compile time based upon the RBNF rules
-defined in the Unicode CLDR data repository.  Available rules are identified by:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">rule_sets</span><span class="p" data-group-id="3582168541-1">(</span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="3582168541-1">)</span><span class="w">
-</span><span class="gp unselectable">...&gt; </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p" data-group-id="3582168541-2">(</span><span class="p" data-group-id="3582168541-2">)</span><span class="w">
-</span><span class="p" data-group-id="3582168541-3">[</span><span class="w">
+defined in the Unicode CLDR data repository.  Available rules are identified by:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">rule_sets</span><span class="p" data-group-id="0062920039-1">(</span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="0062920039-1">)</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">sort</span><span class="p" data-group-id="0062920039-2">(</span><span class="p" data-group-id="0062920039-2">)</span><span class="w">
+</span><span class="p" data-group-id="0062920039-3">[</span><span class="w">
   </span><span class="ss">:spellout_cardinal</span><span class="p">,</span><span class="w">
   </span><span class="ss">:spellout_cardinal_verbose</span><span class="p">,</span><span class="w">
   </span><span class="ss">:spellout_numbering</span><span class="p">,</span><span class="w">
@@ -149,9 +149,9 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
   </span><span class="ss">:spellout_numbering_year</span><span class="p">,</span><span class="w">
   </span><span class="ss">:spellout_ordinal</span><span class="p">,</span><span class="w">
   </span><span class="ss">:spellout_ordinal_verbose</span><span class="w">
-</span><span class="p" data-group-id="3582168541-3">]</span></code></pre><p>A rule can then be invoked on an available rule_set. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">spellout_ordinal</span><span class="p" data-group-id="2609140845-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="2609140845-1">)</span><span class="w">
-</span><span class="s">&quot;one hundred twenty-third&quot;</span></code></pre><p>This call is equivalent to the call through the public API of:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3953309899-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:spellout</span><span class="p" data-group-id="3953309899-1">)</span><span class="w">
-</span><span class="p" data-group-id="3953309899-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;one hundred twenty-three&quot;</span><span class="p" data-group-id="3953309899-2">}</span></code></pre>
+</span><span class="p" data-group-id="0062920039-3">]</span></code></pre><p>A rule can then be invoked on an available rule_set. For example:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Rbnf.Spellout</span><span class="o">.</span><span class="n">spellout_ordinal</span><span class="p" data-group-id="6436318153-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;en&quot;</span><span class="p" data-group-id="6436318153-1">)</span><span class="w">
+</span><span class="s">&quot;one hundred twenty-third&quot;</span></code></pre><p>This call is equivalent to the call through the public API of:</p><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">CoreWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_string</span><span class="p" data-group-id="3489881373-1">(</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="ss">format</span><span class="p">:</span><span class="w"> </span><span class="ss">:spellout</span><span class="p" data-group-id="3489881373-1">)</span><span class="w">
+</span><span class="p" data-group-id="3489881373-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;one hundred twenty-three&quot;</span><span class="p" data-group-id="3489881373-2">}</span></code></pre>
     </section>
 
 </div>
@@ -210,6 +210,118 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#fem_with_a/2" data-no-tooltip translate="no">fem_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fem_with_i/2" data-no-tooltip translate="no">fem_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fem_with_o/2" data-no-tooltip translate="no">fem_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#lenient_parse/2" data-no-tooltip translate="no">lenient_parse(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_no_final/2" data-no-tooltip translate="no">msc_no_final(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_a/2" data-no-tooltip translate="no">msc_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_a_nofinal/2" data-no-tooltip translate="no">msc_with_a_nofinal(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_i/2" data-no-tooltip translate="no">msc_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_i_nofinal/2" data-no-tooltip translate="no">msc_with_i_nofinal(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_o/2" data-no-tooltip translate="no">msc_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msc_with_o_nofinal/2" data-no-tooltip translate="no">msc_with_o_nofinal(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msco_with_a/2" data-no-tooltip translate="no">msco_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msco_with_i/2" data-no-tooltip translate="no">msco_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#msco_with_o/2" data-no-tooltip translate="no">msco_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#number_en/2" data-no-tooltip translate="no">number_en(number, language_tag)</a>
 
       </div>
@@ -219,6 +331,134 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#ord_ste/2" data-no-tooltip translate="no">ord_ste(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esima/2" data-no-tooltip translate="no">ordinal_esima(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esima_with_a/2" data-no-tooltip translate="no">ordinal_esima_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esima_with_i/2" data-no-tooltip translate="no">ordinal_esima_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esima_with_o/2" data-no-tooltip translate="no">ordinal_esima_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esime/2" data-no-tooltip translate="no">ordinal_esime(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esime_with_a/2" data-no-tooltip translate="no">ordinal_esime_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esime_with_i/2" data-no-tooltip translate="no">ordinal_esime_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esime_with_o/2" data-no-tooltip translate="no">ordinal_esime_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimi/2" data-no-tooltip translate="no">ordinal_esimi(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimi_with_a/2" data-no-tooltip translate="no">ordinal_esimi_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimi_with_i/2" data-no-tooltip translate="no">ordinal_esimi_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimi_with_o/2" data-no-tooltip translate="no">ordinal_esimi_with_o(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimo/2" data-no-tooltip translate="no">ordinal_esimo(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimo_with_a/2" data-no-tooltip translate="no">ordinal_esimo_with_a(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimo_with_i/2" data-no-tooltip translate="no">ordinal_esimo_with_i(number, language_tag)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#ordinal_esimo_with_o/2" data-no-tooltip translate="no">ordinal_esimo_with_o(number, language_tag)</a>
 
       </div>
 
@@ -354,7 +594,39 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#spellout_ordinal_feminine/2" data-no-tooltip translate="no">spellout_ordinal_feminine(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_feminine_plural/2" data-no-tooltip translate="no">spellout_ordinal_feminine_plural(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#spellout_ordinal_m/2" data-no-tooltip translate="no">spellout_ordinal_m(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_masculine/2" data-no-tooltip translate="no">spellout_ordinal_masculine(number, locale)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spellout_ordinal_masculine_plural/2" data-no-tooltip translate="no">spellout_ordinal_masculine_plural(number, locale)</a>
 
       </div>
 
@@ -537,6 +809,286 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
   </section>
 </section>
+<section class="detail" id="fem_with_a/2">
+
+  <div class="detail-header">
+    <a href="#fem_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">fem_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="fem_with_i/2">
+
+  <div class="detail-header">
+    <a href="#fem_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">fem_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="fem_with_o/2">
+
+  <div class="detail-header">
+    <a href="#fem_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">fem_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="lenient_parse/2">
+
+  <div class="detail-header">
+    <a href="#lenient_parse/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">lenient_parse(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_no_final/2">
+
+  <div class="detail-header">
+    <a href="#msc_no_final/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_no_final(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_a/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_a_nofinal/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_a_nofinal/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_a_nofinal(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_i/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_i_nofinal/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_i_nofinal/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_i_nofinal(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_o/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msc_with_o_nofinal/2">
+
+  <div class="detail-header">
+    <a href="#msc_with_o_nofinal/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msc_with_o_nofinal(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msco_with_a/2">
+
+  <div class="detail-header">
+    <a href="#msco_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msco_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msco_with_i/2">
+
+  <div class="detail-header">
+    <a href="#msco_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msco_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="msco_with_o/2">
+
+  <div class="detail-header">
+    <a href="#msco_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">msco_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="number_en/2">
 
   <div class="detail-header">
@@ -564,6 +1116,326 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
     <h1 class="signature" translate="no">ord_ste(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esima/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esima/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esima(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esima_with_a/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esima_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esima_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esima_with_i/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esima_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esima_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esima_with_o/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esima_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esima_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esime/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esime/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esime(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esime_with_a/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esime_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esime_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esime_with_i/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esime_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esime_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esime_with_o/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esime_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esime_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimi/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimi/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimi(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimi_with_a/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimi_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimi_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimi_with_i/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimi_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimi_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimi_with_o/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimi_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimi_with_o(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimo/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimo/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimo(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimo_with_a/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimo_with_a/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimo_with_a(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimo_with_i/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimo_with_i/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimo_with_i(number, language_tag)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="ordinal_esimo_with_o/2">
+
+  <div class="detail-header">
+    <a href="#ordinal_esimo_with_o/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">ordinal_esimo_with_o(number, language_tag)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -897,6 +1769,46 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
 
   </section>
 </section>
+<section class="detail" id="spellout_ordinal_feminine/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_feminine/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_feminine(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_feminine_plural/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_feminine_plural/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_feminine_plural(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="spellout_ordinal_m/2">
 
   <div class="detail-header">
@@ -904,6 +1816,46 @@ defined in the Unicode CLDR data repository.  Available rules are identified by:
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
     <h1 class="signature" translate="no">spellout_ordinal_m(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_masculine/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_masculine/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_masculine(number, locale)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="spellout_ordinal_masculine_plural/2">
+
+  <div class="detail-header">
+    <a href="#spellout_ordinal_masculine_plural/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">spellout_ordinal_masculine_plural(number, locale)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/lib/core_web/cldr.ex#L1" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>

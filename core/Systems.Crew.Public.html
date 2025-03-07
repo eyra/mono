@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -192,6 +192,14 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#auth_module/0" data-no-tooltip translate="no">auth_module()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#cancel/2" data-no-tooltip translate="no">cancel(crew, user_ref)</a>
 
       </div>
@@ -288,7 +296,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_task/4" data-no-tooltip translate="no">create_task(crew, members, identifier, expire_at \\ nil)</a>
+        <a href="#create_task/4" data-no-tooltip translate="no">create_task(crew, users, identifier, expire_at \\ nil)</a>
 
       </div>
 
@@ -296,7 +304,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_task!/4" data-no-tooltip translate="no">create_task!(crew, members, identifier, expire_at \\ nil)</a>
+        <a href="#create_task!/4" data-no-tooltip translate="no">create_task!(crew, users, identifier, expire_at \\ nil)</a>
 
       </div>
 
@@ -498,6 +506,14 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#print_auth_roles/1" data-no-tooltip translate="no">print_auth_roles(term)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#public_id/2" data-no-tooltip translate="no">public_id(crew, user_ref)</a>
 
       </div>
@@ -613,7 +629,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">accept_task(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L222" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L221" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -633,7 +649,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">accepted_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L133" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L132" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -675,7 +691,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">apply_member(crew, user, identifier, expire_at \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L321" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L320" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -699,7 +715,27 @@ Pages
     </a>
     <h1 class="signature" translate="no">apply_member_with_role(crew, user, role \\ :participant, expire_at \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L338" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L337" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="auth_module/0">
+
+  <div class="detail-header">
+    <a href="#auth_module/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">auth_module()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -719,7 +755,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">cancel(crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L263" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L262" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -739,7 +775,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">cancel(multi, crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L269" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L268" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -759,7 +795,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">cancel_task(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L149" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L148" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -779,7 +815,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">complete_task(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L157" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L156" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -799,7 +835,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">complete_task!(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L183" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L182" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -819,7 +855,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">completed_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L121" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L120" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -839,7 +875,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_members(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L278" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L277" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -859,7 +895,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_participants(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L285" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L284" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -879,7 +915,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_participants_finished(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L292" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L291" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -899,7 +935,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_participated_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L145" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L144" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -919,7 +955,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_pending_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L139" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L138" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -939,7 +975,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">count_tasks(crew, status_list)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L109" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -959,7 +995,7 @@ Pages
     <a href="#create_task/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_task(crew, members, identifier, expire_at \\ nil)</h1>
+    <h1 class="signature" translate="no">create_task(crew, users, identifier, expire_at \\ nil)</h1>
 
       <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
@@ -981,9 +1017,9 @@ Pages
     <a href="#create_task!/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_task!(crew, members, identifier, expire_at \\ nil)</h1>
+    <h1 class="signature" translate="no">create_task!(crew, users, identifier, expire_at \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L73" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1003,7 +1039,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">delete_task(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L254" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1023,7 +1059,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">expire_member(multi, member)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L355" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L354" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1043,7 +1079,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">expired_member?(crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L464" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L463" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1063,7 +1099,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">expired_pending_started_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L115" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1107,7 +1143,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_expired_member(crew, user_ref, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L405" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L404" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1129,7 +1165,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_member(crew, user_ref, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L308" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L307" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1151,7 +1187,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_member!(id, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L304" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L303" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1173,7 +1209,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">get_member_unsafe(crew, user_ref, preload \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L314" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L313" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1257,7 +1293,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">list_members(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L411" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L410" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1279,7 +1315,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">list_tasks(crew, order_by \\ {:desc, :id})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L89" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L88" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1301,7 +1337,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">list_tasks_by_template(crew, task_template, order_by \\ {:desc, :id})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L98" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L97" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1323,7 +1359,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L104" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1343,7 +1379,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">mark_expired()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L483" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L482" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1363,7 +1399,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">mark_expired_debug(crew, expiration_timeout, force)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L505" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L504" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1383,7 +1419,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">member(crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L454" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L453" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1403,7 +1439,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">member?(crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L459" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L458" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1425,7 +1461,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">multi_update(multi, atom, changeset, event \\ :updated)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L249" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L248" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1445,7 +1481,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">multi_update(multi, atom, task, attrs, event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L244" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L243" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1465,7 +1501,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">pending_tasks_query(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L501" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L500" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1499,6 +1535,26 @@ Pages
 
   </section>
 </section>
+<section class="detail" id="print_auth_roles/1">
+
+  <div class="detail-header">
+    <a href="#print_auth_roles/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">print_auth_roles(term)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="public_id/2">
 
   <div class="detail-header">
@@ -1507,7 +1563,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">public_id(crew, user_ref)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L299" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L298" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1527,7 +1583,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reject_task(task, rejection)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L210" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L209" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1547,7 +1603,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reject_task(multi, task, rejection)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L190" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L189" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1567,7 +1623,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">rejected_tasks(crew)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L126" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1587,7 +1643,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reset_member(member, expire_at, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L422" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L421" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1607,7 +1663,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reset_member(multi, member, expire_at, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L428" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L427" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1627,7 +1683,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">reset_member!(member, expire_at, opts)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L417" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L416" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1647,7 +1703,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">start_task(task)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L152" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1667,7 +1723,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">subject(crew, public_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L469" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L468" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1687,7 +1743,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">tasks_finished?(task_ids)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L373" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L372" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1707,7 +1763,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">update_task(task, attrs, event)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L238" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/crew/_public.ex#L237" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

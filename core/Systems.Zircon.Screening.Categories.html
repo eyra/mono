@@ -8,12 +8,12 @@
     <meta name="project" content="core v0.1.0">
 
 
-    <title>Systems.Onyx.CriterionClass — core v0.1.0</title>
+    <title>Systems.Zircon.Screening.Categories — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -125,16 +125,84 @@ Pages
 <div id="top-content">
   <h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L1" title="View Source" class="icon-action" rel="help">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-    <span translate="no">Systems.Onyx.CriterionClass</span> 
+    <span translate="no">Systems.Zircon.Screening.Categories</span> 
     <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
   </h1>
 
+
+    <section id="moduledoc">
+<p>Defines the screening criteria categories used in the TIAB screening phase of the literature review process.</p><h2 id="module-purpose" class="section-heading">
+  <a href="#module-purpose" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Purpose</span>
+</h2>
+<p>This module specifies a focused subset of research elements (categories) derived from established frameworks
+like PICO, PICo, SPIDER, and SPICE. These categories are used to guide the screening process by structuring
+the evaluation of titles and abstracts (TIAB). The categories provide a conceptual foundation for assessing
+paper relevance.</p><h2 id="module-current-scope" class="section-heading">
+  <a href="#module-current-scope" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Current Scope</span>
+</h2>
+<p>The categories in this module are scoped specifically to the TIAB screening phase of a literature review.
+They are not intended to represent the entirety of any framework but instead focus on elements most relevant
+for this phase of the research process.</p><table><thead><tr><th style="text-align: left;"><strong>Category</strong></th><th style="text-align: left;"><strong>Description</strong></th><th style="text-align: left;"><strong>Framework of Origin</strong></th></tr></thead><tbody><tr><td style="text-align: left;"><strong>Population</strong></td><td style="text-align: left;">The group, subjects, or sample being studied.</td><td style="text-align: left;">PICO, PICo, SPIDER</td></tr><tr><td style="text-align: left;"><strong>Intervention</strong></td><td style="text-align: left;">The treatment, exposure, or action studied.</td><td style="text-align: left;">PICO, SPICE</td></tr><tr><td style="text-align: left;"><strong>Comparison</strong></td><td style="text-align: left;">The control group or alternative intervention.</td><td style="text-align: left;">PICO, SPICE</td></tr><tr><td style="text-align: left;"><strong>Outcome</strong></td><td style="text-align: left;">The measurable result of the intervention.</td><td style="text-align: left;">PICO, PICOS, SPICE</td></tr><tr><td style="text-align: left;"><strong>Phenomenon of Interest</strong></td><td style="text-align: left;">The qualitative research focus.</td><td style="text-align: left;">SPIDER, PICo</td></tr><tr><td style="text-align: left;"><strong>Context</strong></td><td style="text-align: left;">The environment, setting, or situational focus.</td><td style="text-align: left;">PICo, SPICE</td></tr><tr><td style="text-align: left;"><strong>Setting</strong></td><td style="text-align: left;">A specific geographic or organizational location.</td><td style="text-align: left;">SPICE</td></tr></tbody></table><h2 id="module-future-integration" class="section-heading">
+  <a href="#module-future-integration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Future Integration</span>
+</h2>
+<h3 id="module-ontology-based-annotation-labels" class="section-heading">
+  <a href="#module-ontology-based-annotation-labels" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Ontology-Based Annotation Labels</span>
+</h3>
+<ul><li><p>These categories will eventually be replaced by <strong>Annotation Labels</strong> represented as <strong>Terms</strong> in the
+Onyx Ontology.</p></li><li><p>Each Term will have:</p><ul><li><strong>Multiple Definitions</strong>: Reflecting different interpretations across domains and study types.</li><li><strong>Context-Dependent Mapping</strong>: Definitions will adapt dynamically based on the researcher's context,
+such as the type of study they are conducting.</li></ul></li></ul><h3 id="module-mappings-in-onyx" class="section-heading">
+  <a href="#module-mappings-in-onyx" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Mappings in Onyx</span>
+</h3>
+<ul><li>Onyx will define mappings between:<ul><li><strong>Ontology Terms</strong>: Categories as Ontology Terms.</li><li><strong>Study Contexts</strong>: Study types provided by the researcher.</li><li>These mappings ensure precise and flexible use of terms across diverse scientific disciplines.</li></ul></li></ul><h2 id="module-note" class="section-heading">
+  <a href="#module-note" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Note</span>
+</h2>
+<p>The current implementation focuses on the immediate needs of the TIAB screening phase. However, the modular
+design ensures future adaptability as Onyx evolves to incorporate an ontology-driven framework for annotations.</p><h2 id="module-usage" class="section-heading">
+  <a href="#module-usage" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Usage</span>
+</h2>
+<h3 id="module-in-the-screening-process" class="section-heading">
+  <a href="#module-in-the-screening-process" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">In the Screening Process</span>
+</h3>
+<p>These categories are used to structure the evaluation criteria applied during the TIAB screening phase. They
+guide both manual reviews and AI-assisted tools to assess paper relevance against predefined criteria.</p><h3 id="module-transition-to-ontology" class="section-heading">
+  <a href="#module-transition-to-ontology" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Transition to Ontology</span>
+</h3>
+<p>As Onyx develops, these categories will form the conceptual basis for a broader, ontology-driven annotation
+framework, ensuring scalability and cross-domain applicability.</p>
+    </section>
 
 </div>
 
@@ -211,7 +279,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">contains(atom)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -235,7 +303,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">labels(active_values \\ [], filter \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -257,7 +325,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">schema_values(opts \\ [])</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -279,7 +347,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">translate(value)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -301,7 +369,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">values(filter \\ nil)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_class.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/categories.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

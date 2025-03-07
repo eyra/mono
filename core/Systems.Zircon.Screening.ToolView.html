@@ -8,12 +8,12 @@
     <meta name="project" content="core v0.1.0">
 
 
-    <title>Systems.Onyx.Public — core v0.1.0</title>
+    <title>Systems.Zircon.Screening.ToolView — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -125,12 +125,12 @@ Pages
 <div id="top-content">
   <h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-    <span translate="no">Systems.Onyx.Public</span> 
+    <span translate="no">Systems.Zircon.Screening.ToolView</span> 
     <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
   </h1>
@@ -152,7 +152,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#archive_tool_file!/1" data-no-tooltip translate="no">archive_tool_file!(tool_file_id)</a>
+        <a href="#add_child/3" data-no-tooltip translate="no">add_child(socket, child_name, child_map)</a>
 
       </div>
 
@@ -160,7 +160,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#finalize_file_paper/2" data-no-tooltip translate="no">finalize_file_paper(file_paper, paper)</a>
+        <a href="#async/3" data-no-tooltip translate="no">async(socket, name, closure)</a>
 
       </div>
 
@@ -168,7 +168,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#finalize_ris/2" data-no-tooltip translate="no">finalize_ris(ris, paper)</a>
+        <a href="#auth_module/0" data-no-tooltip translate="no">auth_module()</a>
 
       </div>
 
@@ -176,7 +176,17 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_tool!/2" data-no-tooltip translate="no">get_tool!(id, preload \\ [])</a>
+        <a href="#compose/2" data-no-tooltip translate="no">compose(id, assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Fabric.html#c:compose/2"><code class="inline">Fabric.compose/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compose_child/2" data-no-tooltip translate="no">compose_child(socket, child_name)</a>
 
       </div>
 
@@ -184,7 +194,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_tool_file!/2" data-no-tooltip translate="no">get_tool_file!(id, preload \\ [])</a>
+        <a href="#compose_element/2" data-no-tooltip translate="no">compose_element(socket, element_id)</a>
 
       </div>
 
@@ -192,7 +202,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#insert_tool_file!/3" data-no-tooltip translate="no">insert_tool_file!(tool, original_filename, url)</a>
+        <a href="#handle_info/2" data-no-tooltip translate="no">handle_info(params, socket)</a>
 
       </div>
 
@@ -200,7 +210,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_tool_files/2" data-no-tooltip translate="no">list_tool_files(tool, preload \\ Onyx.ToolFileAssociation.preload_graph(:down))</a>
+        <a href="#print_auth_roles/1" data-no-tooltip translate="no">print_auth_roles(term)</a>
 
       </div>
 
@@ -208,7 +218,17 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_error/1" data-no-tooltip translate="no">prepare_error(arg)</a>
+        <a href="#render/1" data-no-tooltip translate="no">render(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/1.0.1/Phoenix.LiveComponent.html#c:render/1"><code class="inline">Phoenix.LiveComponent.render/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset_fabric/1" data-no-tooltip translate="no">reset_fabric(socket)</a>
 
       </div>
 
@@ -216,37 +236,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_file_error/2" data-no-tooltip translate="no">prepare_file_error(tool_file, error)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Creates a FileErrorAssociation without saving.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#prepare_file_paper/1" data-no-tooltip translate="no">prepare_file_paper(tool_file)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Creates a FilePaperAssociation without saving.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#prepare_paper/9" data-no-tooltip translate="no">prepare_paper(year, date, abbreviated_journal, doi, title, subtitle, authors, abstract, keywords)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Creates a PaperModel without saving.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#prepare_ris/1" data-no-tooltip translate="no">prepare_ris(raw)</a>
+        <a href="#update_child/2" data-no-tooltip translate="no">update_child(context, child_name)</a>
 
       </div>
 
@@ -254,27 +244,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_tool/2" data-no-tooltip translate="no">prepare_tool(attrs, auth_node \\ Authorization.prepare_node())</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Creates a ToolModel without saving.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#prepare_tool_file/2" data-no-tooltip translate="no">prepare_tool_file(tool, file)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>  Creates a ToolFileAssociation without saving.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#update_tool_file!/2" data-no-tooltip translate="no">update_tool_file!(tool_file, ref)</a>
+        <a href="#version/0" data-no-tooltip translate="no">version()</a>
 
       </div>
 
@@ -293,15 +263,15 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="archive_tool_file!/1">
+<section class="detail" id="add_child/3">
 
   <div class="detail-header">
-    <a href="#archive_tool_file!/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#add_child/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">archive_tool_file!(tool_file_id)</h1>
+    <h1 class="signature" translate="no">add_child(socket, child_name, child_map)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L73" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -313,15 +283,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="finalize_file_paper/2">
+<section class="detail" id="async/3">
 
   <div class="detail-header">
-    <a href="#finalize_file_paper/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#async/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">finalize_file_paper(file_paper, paper)</h1>
+    <h1 class="signature" translate="no">async(socket, name, closure)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L91" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -333,15 +303,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="finalize_ris/2">
+<section class="detail" id="auth_module/0">
 
   <div class="detail-header">
-    <a href="#finalize_ris/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#auth_module/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">finalize_ris(ris, paper)</h1>
+    <h1 class="signature" translate="no">auth_module()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L154" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -353,17 +323,35 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="get_tool!/2">
-
-    <span id="get_tool!/1"></span>
+<section class="detail" id="compose/2">
 
   <div class="detail-header">
-    <a href="#get_tool!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#compose/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">get_tool!(id, preload \\ [])</h1>
+    <h1 class="signature" translate="no">compose(id, assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L18" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Fabric.html#c:compose/2"><code class="inline">Fabric.compose/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="compose_child/2">
+
+  <div class="detail-header">
+    <a href="#compose_child/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">compose_child(socket, child_name)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -375,17 +363,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="get_tool_file!/2">
-
-    <span id="get_tool_file!/1"></span>
+<section class="detail" id="compose_element/2">
 
   <div class="detail-header">
-    <a href="#get_tool_file!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#compose_element/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">get_tool_file!(id, preload \\ [])</h1>
+    <h1 class="signature" translate="no">compose_element(socket, element_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L35" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -397,15 +383,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="insert_tool_file!/3">
+<section class="detail" id="handle_info/2">
 
   <div class="detail-header">
-    <a href="#insert_tool_file!/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#handle_info/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">insert_tool_file!(tool, original_filename, url)</h1>
+    <h1 class="signature" translate="no">handle_info(params, socket)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L58" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -417,17 +403,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="list_tool_files/2">
-
-    <span id="list_tool_files/1"></span>
+<section class="detail" id="print_auth_roles/1">
 
   <div class="detail-header">
-    <a href="#list_tool_files/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#print_auth_roles/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_tool_files(tool, preload \\ Onyx.ToolFileAssociation.preload_graph(:down))</h1>
+    <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L66" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -439,15 +423,35 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="prepare_error/1">
+<section class="detail" id="render/1">
 
   <div class="detail-header">
-    <a href="#prepare_error/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#render/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">prepare_error(arg)</h1>
+    <h1 class="signature" translate="no">render(assigns)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L143" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L8" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="https://hexdocs.pm/phoenix_live_view/1.0.1/Phoenix.LiveComponent.html#c:render/1"><code class="inline">Phoenix.LiveComponent.render/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="reset_fabric/1">
+
+  <div class="detail-header">
+    <a href="#reset_fabric/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">reset_fabric(socket)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -459,75 +463,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="prepare_file_error/2">
+<section class="detail" id="update_child/2">
 
   <div class="detail-header">
-    <a href="#prepare_file_error/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#update_child/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">prepare_file_error(tool_file, error)</h1>
+    <h1 class="signature" translate="no">update_child(context, child_name)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L104" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Creates a FileErrorAssociation without saving.</p>
-  </section>
-</section>
-<section class="detail" id="prepare_file_paper/1">
-
-  <div class="detail-header">
-    <a href="#prepare_file_paper/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">prepare_file_paper(tool_file)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L85" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Creates a FilePaperAssociation without saving.</p>
-  </section>
-</section>
-<section class="detail" id="prepare_paper/9">
-
-  <div class="detail-header">
-    <a href="#prepare_paper/9" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">prepare_paper(year, date, abbreviated_journal, doi, title, subtitle, authors, abstract, keywords)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L116" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Creates a PaperModel without saving.</p>
-  </section>
-</section>
-<section class="detail" id="prepare_ris/1">
-
-  <div class="detail-header">
-    <a href="#prepare_ris/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">prepare_ris(raw)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L149" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -539,57 +483,15 @@ Pages
 
   </section>
 </section>
-<section class="detail" id="prepare_tool/2">
-
-    <span id="prepare_tool/1"></span>
+<section class="detail" id="version/0">
 
   <div class="detail-header">
-    <a href="#prepare_tool/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#version/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">prepare_tool(attrs, auth_node \\ Authorization.prepare_node())</h1>
+    <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L27" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Creates a ToolModel without saving.</p>
-  </section>
-</section>
-<section class="detail" id="prepare_tool_file/2">
-
-  <div class="detail-header">
-    <a href="#prepare_tool_file/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">prepare_tool_file(tool, file)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L51" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>  Creates a ToolFileAssociation without saving.</p>
-  </section>
-</section>
-<section class="detail" id="update_tool_file!/2">
-
-  <div class="detail-header">
-    <a href="#update_tool_file!/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">update_tool_file!(tool_file, ref)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/_public.ex#L41" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/zircon/screening/tool_view.ex#L2" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

@@ -8,12 +8,12 @@
     <meta name="project" content="core v0.1.0">
 
 
-    <title>Systems.Onyx.CriterionModel — core v0.1.0</title>
+    <title>Systems.Paper.ReferenceFileModel — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -125,12 +125,12 @@ Pages
 <div id="top-content">
   <h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_model.ex#L1" title="View Source" class="icon-action" rel="help">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/reference_file_model.ex#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-    <span translate="no">Systems.Onyx.CriterionModel</span> 
+    <span translate="no">Systems.Paper.ReferenceFileModel</span> 
     <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
   </h1>
@@ -152,7 +152,17 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#changeset/2" data-no-tooltip translate="no">changeset(criterion, attrs)</a>
+        <a href="#__struct__/0" data-no-tooltip translate="no">%Systems.Paper.ReferenceFileModel{}</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  The status of the file in terms of processing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#changeset/2" data-no-tooltip translate="no">changeset(reference_file, attrs)</a>
 
       </div>
 
@@ -189,15 +199,37 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
+<section class="detail" id="__struct__/0">
+
+  <div class="detail-header">
+    <a href="#__struct__/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">%Systems.Paper.ReferenceFileModel{}</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/reference_file_model.ex#L9" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+      <span class="note">(struct)</span>
+
+  </div>
+
+  <section class="docstring">
+
+<p>  The status of the file in terms of processing.</p><ul><li><code class="inline">uploaded</code>: The file has been uploaded but not yet processed.</li><li><code class="inline">processed</code>: The file has been successfully processed, and data has been extracted.</li><li><code class="inline">failed</code>: An error occurred during the processing of the file.</li><li><code class="inline">archived</code>: The file is no longer active but stored for reference.</li></ul>
+  </section>
+</section>
 <section class="detail" id="changeset/2">
 
   <div class="detail-header">
     <a href="#changeset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">changeset(criterion, attrs)</h1>
+    <h1 class="signature" translate="no">changeset(reference_file, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_model.ex#L20" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/reference_file_model.ex#L37" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -217,7 +249,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">preload_graph(fields)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_model.ex#L3" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/reference_file_model.ex#L3" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -237,7 +269,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">validate(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/criterion_model.ex#L24" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/reference_file_model.ex#L41" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

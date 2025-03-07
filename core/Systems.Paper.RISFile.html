@@ -8,12 +8,12 @@
     <meta name="project" content="core v0.1.0">
 
 
-    <title>Systems.Onyx.RISFile — core v0.1.0</title>
+    <title>Systems.Paper.RISFile — core v0.1.0</title>
     <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -125,12 +125,12 @@ Pages
 <div id="top-content">
   <h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L1" title="View Source" class="icon-action" rel="help">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-    <span translate="no">Systems.Onyx.RISFile</span> 
+    <span translate="no">Systems.Paper.RISFile</span> 
     <small class="app-vsn" translate="no">(core v0.1.0)</small>
 
   </h1>
@@ -154,14 +154,6 @@ Pages
   <h2>
     <a href="#functions">Functions</a>
   </h2>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#create_transaction/2" data-no-tooltip translate="no">create_transaction(references_with_index, tool_file)</a>
-
-      </div>
-
-    </div>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -272,7 +264,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#persist_reference/3" data-no-tooltip translate="no">persist_reference(map, index, multi)</a>
+        <a href="#prepare_reference/2" data-no-tooltip translate="no">prepare_reference(arg, reference_file)</a>
 
       </div>
 
@@ -280,7 +272,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_reference/2" data-no-tooltip translate="no">prepare_reference(arg, tool_file)</a>
+        <a href="#process/1" data-no-tooltip translate="no">process(reference_file_id)</a>
 
       </div>
 
@@ -288,15 +280,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process/1" data-no-tooltip translate="no">process(tool_file_id)</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#process/2" data-no-tooltip translate="no">process(tool_file, body)</a>
+        <a href="#process/2" data-no-tooltip translate="no">process(reference_file, body)</a>
 
       </div>
 
@@ -323,26 +307,6 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="create_transaction/2">
-
-  <div class="detail-header">
-    <a href="#create_transaction/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">create_transaction(references_with_index, tool_file)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L231" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
 <section class="detail" id="extract_abbreviated_journal/1">
 
   <div class="detail-header">
@@ -351,7 +315,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_abbreviated_journal(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L162" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L165" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -371,7 +335,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_abstract(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L164" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L167" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -391,7 +355,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_authors(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L173" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -411,7 +375,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_date(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L160" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L163" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -431,7 +395,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_doi(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L186" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L189" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -452,7 +416,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_keywords(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L188" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L191" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -472,7 +436,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_subtitle(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L168" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L171" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -492,7 +456,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_title(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L169" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -512,7 +476,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_type_of_reference(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L156" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L159" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -532,7 +496,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">extract_year(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L158" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L161" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -552,7 +516,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">parse_error(lines, error)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L142" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L145" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -572,7 +536,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">parse_paper(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L128" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L131" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -592,27 +556,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">parse_reference(lines)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L112" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-
-  </section>
-</section>
-<section class="detail" id="persist_reference/3">
-
-  <div class="detail-header">
-    <a href="#persist_reference/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">persist_reference(map, index, multi)</h1>
-
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L243" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L115" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -630,9 +574,9 @@ Pages
     <a href="#prepare_reference/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">prepare_reference(arg, tool_file)</h1>
+    <h1 class="signature" translate="no">prepare_reference(arg, reference_file)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L101" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L104" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -650,9 +594,9 @@ Pages
     <a href="#process/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">process(tool_file_id)</h1>
+    <h1 class="signature" translate="no">process(reference_file_id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L46" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -670,9 +614,9 @@ Pages
     <a href="#process/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">process(tool_file, body)</h1>
+    <h1 class="signature" translate="no">process(reference_file, body)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L68" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L71" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -692,7 +636,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">validate_type_of_reference(type_of_reference)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/onyx/ris/ris_file.ex#L146" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/paper/ris_file.ex#L149" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 

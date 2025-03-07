@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -165,7 +165,15 @@ See <a href="selfhosting.html">SELFHOSTING.md</a> for detailed instructions.</p>
   </a>
   <span class="text">Banking Proxy</span>
 </h2>
-<p>Project implementing a proxy server used in Banking (core/systems/banking). It allows for a limited and secure interaction with a banking account.</p>
+<p>Project implementing a proxy server used in Banking (core/systems/banking). It allows for a limited and secure interaction with a banking account.</p><h2 id="using-tls-between-app-and-database" class="section-heading">
+  <a href="#using-tls-between-app-and-database" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Using TLS between app and database</span>
+</h2>
+<p>TLS peer verification is possible between the elixir app and the postgres database. By default this is enabled. To disable it, set <code class="inline">DB_TLS_VERIFY=none</code> in the docker compose file.
+To make sure everything is set up correctly, you can generate the certs using the following commands:</p><pre><code class="makeup bash" translate="no"><span class="">./postgres_ssl/generate.sh
+</span></code></pre><p>This command will generate the certs in the <code class="inline">postgres_ssl</code> directory. The certs are generated using the <code class="inline">openssl</code> command. The custom docker file for the postgres image will copy the certs to the correct location in the image.</p>
 </div>
 
 <div class="bottom-actions" id="bottom-actions">

@@ -13,7 +13,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-548ECA3B.js"></script>
+    <script src="dist/sidebar_items-FA7A3854.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-HJ5ACJPS.js"></script>
 
@@ -164,6 +164,14 @@ on all screens.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#auth_module/0" data-no-tooltip translate="no">auth_module()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#change_tool/3" data-no-tooltip translate="no">change_tool(alliance_tool, type, attrs \\ %{})</a>
 
       </div>
@@ -220,11 +228,19 @@ on all screens.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#prepare_tool/2" data-no-tooltip translate="no">prepare_tool(attrs, auth_node \\ Authorization.prepare_node())</a>
+        <a href="#prepare_tool/2" data-no-tooltip translate="no">prepare_tool(attrs, auth_node \\ auth_module().prepare_node())</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Creates a alliance_tool.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#print_auth_roles/1" data-no-tooltip translate="no">print_auth_roles(term)</a>
+
+      </div>
 
     </div>
 
@@ -267,6 +283,26 @@ on all screens.</p>
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
+<section class="detail" id="auth_module/0">
+
+  <div class="detail-header">
+    <a href="#auth_module/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">auth_module()</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L31" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="change_tool/3">
 
     <span id="change_tool/2"></span>
@@ -277,7 +313,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">change_tool(alliance_tool, type, attrs \\ %{})</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L103" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L102" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -297,7 +333,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">copy(tool, auth_node)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L111" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -317,7 +353,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">delete_tool(alliance_tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L96" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L95" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -337,7 +373,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">get_tool(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L58" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L57" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -357,7 +393,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">get_tool!(id)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L57" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L56" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -377,7 +413,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">list_tools()</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L48" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L47" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -397,9 +433,9 @@ on all screens.</p>
     <a href="#prepare_tool/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">prepare_tool(attrs, auth_node \\ Authorization.prepare_node())</h1>
+    <h1 class="signature" translate="no">prepare_tool(attrs, auth_node \\ auth_module().prepare_node())</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L63" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L62" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -411,6 +447,26 @@ on all screens.</p>
 <p>Creates a alliance_tool.</p>
   </section>
 </section>
+<section class="detail" id="print_auth_roles/1">
+
+  <div class="detail-header">
+    <a href="#print_auth_roles/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">print_auth_roles(term)</h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L31" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
 <section class="detail" id="ready?/1">
 
   <div class="detail-header">
@@ -419,7 +475,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">ready?(alliance_tool)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L118" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L117" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -439,7 +495,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">update_tool(changeset)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L80" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L79" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -459,7 +515,7 @@ on all screens.</p>
     </a>
     <h1 class="signature" translate="no">update_tool(alliance_tool, type, attrs)</h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/eyra/mono/blob/main/systems/alliance/_public.ex#L71" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
