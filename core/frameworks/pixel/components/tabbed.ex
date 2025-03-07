@@ -30,18 +30,19 @@ defmodule Frameworks.Pixel.Tabbed do
     ~H"""
       <div id={@id} data-initial-tab={@initial_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
         <%= if @size == :full do %>
-          <.bar_full type={@type} tabs={@tabs} />
+          <.bar_full id={@id} type={@type} tabs={@tabs} />
         <% end %>
         <%= if @size == :wide do %>
-          <.bar_wide type={@type} tabs={@tabs} />
+          <.bar_wide id={@id} type={@type} tabs={@tabs} />
         <% end %>
         <%= if @size == :narrow do %>
-          <.bar_narrow tabs={@tabs} />
+          <.bar_narrow id={@id} tabs={@tabs} />
         <% end %>
       </div>
     """
   end
 
+  attr(:id, :any, required: true)
   attr(:type, :atom, default: :seperated)
   attr(:tabs, :any, required: true)
 
@@ -50,13 +51,14 @@ defmodule Frameworks.Pixel.Tabbed do
     <div id="tab_bar_wide" class={"flex flex-row items-center h-full #{gap(@type)}"}>
       <%= for {tab, index} <- Enum.with_index(@tabs) do %>
         <div class="flex-shrink-0 h-full">
-          <.tab tabbar="wide" opts="" {get_tab(@type, tab, index)} />
+          <.tab bar_id={@id} size="wide" opts="" {get_tab(@type, tab, index)} />
         </div>
       <% end %>
     </div>
     """
   end
 
+  attr(:id, :any, required: true)
   attr(:type, :atom, default: :seperated)
   attr(:tabs, :any, required: true)
 
@@ -66,7 +68,7 @@ defmodule Frameworks.Pixel.Tabbed do
       <div class="flex flex-row h-full w-full">
         <%= for {tab, index} <- Enum.with_index(@tabs) do %>
           <div class="flex-1 h-full">
-            <.tab tabbar="full" opts="" {get_tab(@type, tab, index)} />
+            <.tab bar_id={@id} size="full" opts="" {get_tab(@type, tab, index)} />
           </div>
         <% end %>
       </div>
@@ -74,13 +76,14 @@ defmodule Frameworks.Pixel.Tabbed do
     """
   end
 
+  attr(:id, :any, required: true)
   attr(:tabs, :any, required: true)
 
   def bar_narrow(assigns) do
     ~H"""
     <div id="tab_bar_narrow">
       <div id="tab_bar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full hidden">
-        <.dropdown tabs={@tabs} />
+        <.dropdown bar_id={@id} tabs={@tabs} />
       </div>
       <div
         id="tabbar_narrow"
@@ -91,7 +94,7 @@ defmodule Frameworks.Pixel.Tabbed do
         <div class="flex-shrink-0 pointer-events-none">
           <%= for {tab, index} <- Enum.with_index(@tabs) do %>
             <div class="flex-shrink-0">
-              <.tab tabbar="narrow" opts="hide-when-idle" {Map.merge(tab, %{index: index})} />
+              <.tab bar_id={@id} size="narrow" opts="hide-when-idle" {Map.merge(tab, %{index: index})} />
             </div>
           <% end %>
         </div>
@@ -143,6 +146,7 @@ defmodule Frameworks.Pixel.Tabbed do
     """
   end
 
+  attr(:bar_id, :any, required: true)
   attr(:tabs, :any, required: true)
 
   def dropdown(assigns) do
@@ -152,7 +156,7 @@ defmodule Frameworks.Pixel.Tabbed do
       <div class="flex flex-col items-left p-6 gap-6 w-full bg-white drop-shadow-2xl">
         <%= for {tab, index} <- Enum.with_index(@tabs) do %>
           <div class="flex-shrink-0">
-            <.tab tabbar="dropdown" index={index} {tab} />
+            <.tab bar_id={@bar_id} size="dropdown" index={index} {tab} />
           </div>
         <% end %>
       </div>
@@ -236,9 +240,10 @@ defmodule Frameworks.Pixel.Tabbed do
   def title_inset(:segmented), do: "mt-0"
   def title_inset(_), do: "mt-1px"
 
-  attr(:tabbar, :string, required: true)
-  attr(:type, :atom, default: :seperated)
   attr(:id, :string)
+  attr(:bar_id, :string, required: true)
+  attr(:size, :string, required: true)
+  attr(:type, :atom, default: :seperated)
   attr(:title, :string)
   attr(:ready, :boolean, default: true)
   attr(:show_errors, :boolean, default: false)
@@ -249,12 +254,13 @@ defmodule Frameworks.Pixel.Tabbed do
   def tab(assigns) do
     ~H"""
     <div
-      id={"tab_#{@tabbar}_#{@id}"}
+      id={"tab_#{@size}_#{@id}"}
       data-tab-id={@id}
+      data-bar-id={@bar_id}
       phx-hook="Tab"
-      class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@tabbar, @type, @ready, @show_errors)}"}
-      idle-class={idle_shape(@tabbar, @type, @ready, @show_errors)}
-      active-class={active_shape(@tabbar, @type)}
+      class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
+      idle-class={idle_shape(@size, @type, @ready, @show_errors)}
+      active-class={active_shape(@size, @type)}
     >
       <%= if @index do %>
         <div
@@ -267,7 +273,7 @@ defmodule Frameworks.Pixel.Tabbed do
       <% end %>
 
       <%= if @title do %>
-        <div class={"flex flex-col justify-center #{title_shape(@tabbar, @type)}"}>
+        <div class={"flex flex-col justify-center #{title_shape(@size, @type)}"}>
           <div
             class={"title text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}
             idle-class={idle_title(@ready, @show_errors)}

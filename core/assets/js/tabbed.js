@@ -16,14 +16,18 @@ import { MainContent } from "./main_content";
 export const TabBar = {
   mounted() {
     console.log("[TabBar] mounted");
-    this.tabbarId = this.el.id;
+    this.barId = this.el.id;
+    console.log("[TabBar] barId", this.barId);
 
     this.show(this.getActiveTabId(), true);
 
     // Tab notifies TabBar when it has been clicked.
     window.addEventListener("tab-clicked", (event) => {
-      console.log("[TabBar] tab-clicked", event.target.dataset.tabId);
-      this.show(event.target.dataset.tabId, false);
+      if (event.target.dataset.barId == this.barId) {
+        console.log("[TabBar] tab-clicked", event.target.dataset.barId);
+        console.log("[TabBar] tab-clicked", event.target.dataset.tabId);
+        this.show(event.target.dataset.tabId, false);
+      }
     });
 
     // TabFooterItem notifies TabBar when it has been clicked.
@@ -69,11 +73,17 @@ export const TabBar = {
       return savedTabId;
     }
 
-    this.getFirstTabId();
+    var firstTabId = this.getFirstTabId();
+    if (this.exists(firstTabId)) {
+      return firstTabId;
+    }
+
+    console.error("[TabBar] No active tab");
+    return undefined;
   },
 
   getActiveTabKey() {
-    active_tab_key = "tabbar://" + this.tabbarId + "/active_tab";
+    active_tab_key = "tabbar://" + this.barId + "/active_tab";
     console.info("[TabBar] getActiveTabKey ", active_tab_key);
     return active_tab_key;
   },

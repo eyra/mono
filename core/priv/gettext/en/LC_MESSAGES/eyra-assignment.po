@@ -442,7 +442,7 @@ msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Give it another try"
+msgstr "Not finished? Go back"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"

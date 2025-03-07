@@ -21,7 +21,6 @@ defmodule Systems.Project.NodePageBuilder do
     %{
       id: id,
       title: node.name,
-      tabbar_id: :node_page,
       show_errors: false
     }
     |> put_tabs(assigns)
