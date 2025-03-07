@@ -1,5 +1,8 @@
 defmodule CoreWeb.UploadedFileController do
-  use CoreWeb, :controller
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+
   import CoreWeb.FileUploader, only: [get_upload_path: 1]
 
   def get(conn, %{"filename" => name}) do

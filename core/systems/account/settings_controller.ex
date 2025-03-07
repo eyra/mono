@@ -1,5 +1,7 @@
 defmodule Systems.Account.SettingsController do
-  use CoreWeb, :controller
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Systems.Account
 

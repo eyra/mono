@@ -1,5 +1,7 @@
 defmodule Systems.Graphite.ToolController do
-  use CoreWeb, :controller
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   def ensure_spot(%{assigns: %{current_user: _user}} = conn, %{"id" => _id}) do
     # FIXME: PreRef
