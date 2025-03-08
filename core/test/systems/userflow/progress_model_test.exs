@@ -23,8 +23,9 @@ defmodule Systems.Userflow.ProgressModelTest do
 
   describe "mark_visited/1" do
     test "sets visited_at to current time", %{user: user, step: step} do
-      changeset = Factories.build_progress(user, step, %{visited_at: nil})
-      |> ProgressModel.mark_visited()
+      changeset =
+        Factories.build_progress(user, step, %{visited_at: nil})
+        |> ProgressModel.mark_visited()
 
       assert %DateTime{} = get_change(changeset, :visited_at)
     end

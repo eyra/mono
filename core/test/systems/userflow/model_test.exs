@@ -25,7 +25,10 @@ defmodule Systems.Userflow.ModelTest do
   describe "finished?/2" do
     setup do
       user = Core.Factories.insert!(%Systems.Account.User{email: "test@example.com"})
-      userflow = Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 2)
+
+      userflow =
+        Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 2)
+
       {:ok, %{userflow: userflow, user: user}}
     end
 
@@ -35,7 +38,9 @@ defmodule Systems.Userflow.ModelTest do
 
     test "returns false when not all steps are visited", %{userflow: userflow, user: user} do
       # Create a new userflow with only 1 of 2 steps visited
-      userflow = Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 1)
+      userflow =
+        Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 1)
+
       refute Model.finished?(userflow, user.id)
     end
   end
@@ -43,7 +48,10 @@ defmodule Systems.Userflow.ModelTest do
   describe "next_step/2" do
     setup do
       user = Core.Factories.insert!(%Systems.Account.User{email: "test@example.com"})
-      userflow = Factories.create_complete_userflow(%{}, steps: 3, with_progress: user, visited_steps: 1)
+
+      userflow =
+        Factories.create_complete_userflow(%{}, steps: 3, with_progress: user, visited_steps: 1)
+
       {:ok, %{userflow: userflow, user: user}}
     end
 
@@ -54,17 +62,21 @@ defmodule Systems.Userflow.ModelTest do
 
     test "returns nil when all steps visited", %{userflow: userflow, user: user} do
       # Create a new userflow with all steps visited
-      userflow = Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 2)
+      userflow =
+        Factories.create_complete_userflow(%{}, steps: 2, with_progress: user, visited_steps: 2)
+
       assert nil == Model.next_step(userflow, user.id)
     end
   end
 
   describe "steps_by_group/1" do
     setup do
-      userflow = Factories.create_complete_userflow(%{},
-        steps: 3,
-        groups: ["intro", "intro", "main"]
-      )
+      userflow =
+        Factories.create_complete_userflow(%{},
+          steps: 3,
+          groups: ["intro", "intro", "main"]
+        )
+
       {:ok, %{userflow: userflow}}
     end
 

@@ -68,11 +68,13 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "next_step/2" do
     setup %{user: user} do
-      userflow = Factories.create_complete_userflow(%{},
-        steps: 2,
-        with_progress: user,
-        visited_steps: 1
-      )
+      userflow =
+        Factories.create_complete_userflow(%{},
+          steps: 2,
+          with_progress: user,
+          visited_steps: 1
+        )
+
       {:ok, %{userflow: userflow, user: user}}
     end
 
@@ -84,11 +86,13 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "finished?/2" do
     setup %{user: user} do
-      userflow = Factories.create_complete_userflow(%{},
-        steps: 2,
-        with_progress: user,
-        visited_steps: 2
-      )
+      userflow =
+        Factories.create_complete_userflow(%{},
+          steps: 2,
+          with_progress: user,
+          visited_steps: 2
+        )
+
       {:ok, %{userflow: userflow, user: user}}
     end
 
@@ -98,21 +102,25 @@ defmodule Systems.Userflow.PublicTest do
 
     test "returns false when not all steps visited", %{userflow: userflow, user: user} do
       # Create a new userflow with only 1 of 2 steps visited
-      userflow = Factories.create_complete_userflow(%{},
-        steps: 2,
-        with_progress: user,
-        visited_steps: 1
-      )
+      userflow =
+        Factories.create_complete_userflow(%{},
+          steps: 2,
+          with_progress: user,
+          visited_steps: 1
+        )
+
       refute Public.finished?(userflow.identifier, user.id)
     end
   end
 
   describe "steps_by_group/1" do
     setup do
-      userflow = Factories.create_complete_userflow(%{},
-        steps: 3,
-        groups: ["intro", "intro", "main"]
-      )
+      userflow =
+        Factories.create_complete_userflow(%{},
+          steps: 3,
+          groups: ["intro", "intro", "main"]
+        )
+
       {:ok, %{userflow: userflow}}
     end
 

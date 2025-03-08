@@ -25,7 +25,7 @@ defmodule Systems.Userflow.Model do
     steps
     |> Enum.sort_by(& &1.order)
     |> Enum.all?(fn step ->
-      Enum.any?(step.progress, & &1.user_id == user_id)
+      Enum.any?(step.progress, &(&1.user_id == user_id))
     end)
   end
 
@@ -33,7 +33,7 @@ defmodule Systems.Userflow.Model do
     steps
     |> Enum.sort_by(& &1.order)
     |> Enum.find(fn step ->
-      not Enum.any?(step.progress, & &1.user_id == user_id)
+      not Enum.any?(step.progress, &(&1.user_id == user_id))
     end)
   end
 

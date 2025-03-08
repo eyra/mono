@@ -6,10 +6,11 @@ defmodule Systems.Userflow.Factories do
   alias Systems.Userflow.{Model, StepModel, ProgressModel}
 
   def build_userflow(attrs \\ %{}) do
-    attrs = Enum.into(attrs, %{
-      identifier: "test_flow_#{System.unique_integer()}",
-      title: "Test Flow"
-    })
+    attrs =
+      Enum.into(attrs, %{
+        identifier: "test_flow_#{System.unique_integer()}",
+        title: "Test Flow"
+      })
 
     %Model{}
     |> Model.changeset(attrs)
@@ -22,11 +23,12 @@ defmodule Systems.Userflow.Factories do
   end
 
   def build_step(userflow, attrs \\ %{}) do
-    attrs = Enum.into(attrs, %{
-      identifier: "step_#{System.unique_integer()}",
-      order: next_order(userflow),
-      group: "default"
-    })
+    attrs =
+      Enum.into(attrs, %{
+        identifier: "step_#{System.unique_integer()}",
+        order: next_order(userflow),
+        group: "default"
+      })
 
     %StepModel{}
     |> StepModel.changeset(attrs)
@@ -40,9 +42,10 @@ defmodule Systems.Userflow.Factories do
   end
 
   def build_progress(user, step, attrs \\ %{}) do
-    attrs = Enum.into(attrs, %{
-      visited_at: DateTime.utc_now()
-    })
+    attrs =
+      Enum.into(attrs, %{
+        visited_at: DateTime.utc_now()
+      })
 
     %ProgressModel{}
     |> ProgressModel.changeset(attrs)
