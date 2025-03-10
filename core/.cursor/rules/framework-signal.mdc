@@ -1,0 +1,41 @@
+---
+description: Signal Architecture Rules
+globs: frameworks/signal/*
+alwaysApply: false
+---
+# Signal
+
+Signal is a framework that enables loosely coupled communication between systems:
+
+## Core Principles
+- Child systems can only communicate with Parent systems through Signal
+- Direct function calls between systems are not allowed
+- Signal reduces compile-time dependencies between systems
+- Systems remain autonomous and independently deployable
+
+## Components
+- Signal Framework: Located in the frameworks folder, implements the communication bus
+- System Switch (`_switch.ex`): Each system can define a Switch to intercept and handle signals
+- Signal Handlers: Functions that process specific signal types
+- Signal Dispatchers: Functions that send signals to other systems
+
+## Communication Rules
+- Systems must use Signal for inter-system communication
+- Signals should be versioned and documented
+- Signal handlers must be idempotent
+- Systems should handle signal failures gracefully
+- Only dispatch signals when state changes occur
+
+## Implementation Guidelines
+- Use the `_switch.ex` feature to define signal handlers
+- Document all signals a system can send or receive
+- Handle signal versioning for backward compatibility
+- Implement proper error handling and logging
+- Test signal handlers in isolation
+
+## Benefits
+- Loose coupling between systems
+- Improved system maintainability
+- Reduced recompilation needs
+- Flexible system composition
+- Better testing isolation

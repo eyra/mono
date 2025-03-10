@@ -1,0 +1,136 @@
+# Unit Test Rules and Patterns
+
+## Testing Ecto Associations
+
+### Use Associations Over Foreign Keys
+
+When testing relationships between models, always use preloaded associations instead of checking foreign keys directly.
+
+```elixir
+# INCORRECT - checking foreign keys
+test "creates relationship", %{user: user} do
+  {:ok, progress} = create_progress(user)
+  assert progress.user_id == user.id
+  assert progress.step_id == step.id
+end
+
+# CORRECT - using preloaded associations
+test "creates relationship", %{user: user} do
+  {:ok, progress} = create_progress(user)
+  progress = Repo.preload(progress, [:user, :step])
+  assert progress.user.id == user.id
+  assert progress.step.id == step.id
+end
+```
+
+### Setting Up Associations in Tests
+
+When creating test data with associations:
+
+1. Use `put_assoc/3` instead of setting foreign keys:
+```elixir
+# INCORRECT - setting foreign keys
+attrs = %{
+  name: "test",
+  user_id: user.id
+}
+
+# CORRECT - using put_assoc
+%Model{}
+|> changeset(attrs)
+|> put_assoc(:user, user)
+|> Repo.insert!()
+```
+
+2. Keep basic attributes separate from associations:
+```elixir
+# INCORRECT - mixing attributes and associations
+attrs = %{
+  title: "Test",
+  visited_at: DateTime.utc_now(),
+  user_id: user.id,
+  step_id: step.id
+}
+
+# CORRECT - separate attributes and associations
+attrs = %{
+  title: "Test",
+  visited_at: DateTime.utc_now()
+}
+
+%Model{}
+|> changeset(attrs)
+|> put_assoc(:user, user)
+|> put_assoc(:step, step)
+```
+
+3. For factory functions, prefer association structs over IDs:
+```elixir
+# INCORRECT
+def build(:progress, attrs) do
+  %Progress{
+    user_id: attrs[:user_id],
+    step_id: attrs[:step_id]
+  }
+end
+
+# CORRECT
+def build(:progress, %{user: user, step: step} = attrs) do
+  %Progress{}
+  |> changeset(Map.drop(attrs, [:user, :step]))
+  |> put_assoc(:user, user)
+  |> put_assoc(:step, step)
+end
+```
+
+### Testing Association Constraints
+
+When testing uniqueness or other constraints:
+
+1. Create the initial record using associations
+2. Test the constraint using the same association pattern
+3. Use `assert_raise Ecto.ConstraintError` for database-level constraints
+
+```elixir
+test "enforces unique user and step", %{user: user, step: step} do
+  # Create first record
+  %Progress{}
+  |> changeset(attrs)
+  |> put_assoc(:user, user)
+  |> put_assoc(:step, step)
+  |> Repo.insert!()
+
+  # Test constraint
+  assert_raise Ecto.ConstraintError, fn ->
+    %Progress{}
+    |> changeset(attrs)
+    |> put_assoc(:user, user)
+    |> put_assoc(:step, step)
+    |> Repo.insert!()
+  end
+end
+```
+
+### Preloading in Tests
+
+1. Always preload associations before making assertions about them
+2. Preload the full chain when testing nested associations
+3. Use preload graphs when defined by the model
+
+```elixir
+# Single level preload
+record = Repo.preload(record, [:user, :step])
+
+# Nested preload
+progress = Repo.preload(progress, [:user, step: :userflow])
+
+# Using model's preload graph
+record = Repo.preload(record, Model.preload_graph(:down))
+```
+
+This rule:
+1. Makes tests more maintainable by following Ecto's design patterns
+2. Makes relationships between models explicit
+3. Ensures proper testing of associations rather than just foreign keys
+4. Helps catch association-related issues early
+5. Makes test intentions clearer by separating data setup from assertions

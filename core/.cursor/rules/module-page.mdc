@@ -1,0 +1,10 @@
+---
+description: Page module guidelines
+globs: *_page.ex
+alwaysApply: true
+---
+# Page module guidelines
+
+## Structure
+
+1. A Page is always a Phoenix LiveView

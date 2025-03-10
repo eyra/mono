@@ -1,0 +1,89 @@
+---
+description: Model module guidelines
+globs: *_model.ex
+alwaysApply: true
+---
+# Page module guidelines
+
+## Structure
+
+```elixir
+defmodule Systems.YourSystem.YourModel do
+  @moduledoc """
+  Template for an Ecto model with common patterns and best practices.
+  Replace YourModel with your actual model name.
+  """
+
+  # Include Ecto.Schema to define database schemas
+  use Ecto.Schema
+  # Import Ecto.Changeset for data validation and changes
+  import Ecto.Changeset
+
+  # Define the database table name (plural, snake_case)
+  schema "example_models" do
+    # Basic field definitions
+    # Format: field(:name, :type)
+    # Common types: :string, :integer, :float, :boolean, :map, :decimal, :date, :datetime, etc.
+    field(:name, :string)
+    field(:value, :integer)
+    field(:metadata, :map)
+
+    # Associations
+    # belongs_to - defines a 1:1 relationship where this model belongs to another
+    belongs_to(:parent, Template.ParentModel)
+    # has_many - defines a 1:many relationship where this model has multiple children
+    has_many(:children, Template.ChildModel, foreign_key: :parent_id)
+    # has_one - defines a 1:1 relationship where this model owns another
+    has_one(:detail, Template.DetailModel)
+    # many_to_many - defines a many-to-many relationship through a join table
+    many_to_many(:tags, Template.TagModel, join_through: Template.ModelTags)
+
+    # Automatically managed timestamp fields
+    timestamps()
+  end
+
+  # Define fields that can be set through the changeset. Associations are not considered `fields`. There `id` should not be in the fields list
+  @fields ~w(name value metadata)a
+  # Define which fields are required
+  @required_fields ~w(name value)a
+
+  @doc """
+  Creates a changeset for validating and casting model attributes.
+  No validation should be done while creating a changeset. Use `validate/1` to validate changesets.
+
+  ## Parameters
+    * model - The existing model struct or %__MODULE__{}
+    * attrs - The attributes to cast and validate
+
+  ## Returns
+    * Ecto.Changeset
+  """
+  def changeset(model, attrs \\ %{}) do
+    model
+    |> cast(attrs, @fields)
+  end
+
+  @doc """
+  Validates a changeset.
+  Use `changeset/2` to create changesets.
+  """
+  def validate(changeset) do
+    changeset
+    |> validate_required(@required_fields)
+    # Common validations
+    |> validate_length(:name, min: 2, max: 100)
+    |> validate_number(:value, greater_than: 0)
+    # Unique constraints (assumes index exists in database)
+    |> unique_constraint(:name)
+    # Foreign key constraints
+    |> foreign_key_constraint(:parent_id)
+  end
+
+  @doc """
+  Defines preload paths for associated data.
+  Use :down for loading child associations, :up for parent associations.
+  """
+  def preload_graph(:down), do: [:children, :detail, :tags]
+  def preload_graph(:up), do: [:parent]
+end
+```
