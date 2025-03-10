@@ -20,11 +20,12 @@ defmodule Systems.Userflow.ProgressModel do
     progress
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
-    |> unique_constraint([:user_id, :step_id])
   end
 
   def mark_visited(%__MODULE__{} = progress) do
-    changeset(progress, %{visited_at: DateTime.utc_now()})
+    changeset(progress, %{
+      visited_at: DateTime.utc_now() |> DateTime.truncate(:second)
+    })
   end
 
   def preload_graph(:down), do: []

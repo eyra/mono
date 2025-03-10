@@ -2,7 +2,7 @@
 # Run it with: mix run priv/repo/seeds/userflow_seeds.exs
 
 alias Core.Repo
-alias Systems.Userflow.{Model, StepModel, ProgressModel}
+alias Systems.Userflow
 alias Systems.Account.User
 
 # Example: Onboarding Flow

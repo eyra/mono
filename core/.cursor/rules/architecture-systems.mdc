@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: System Architecture Rules
+globs: systems/*
 alwaysApply: false
 ---
 # Systems
@@ -8,7 +8,7 @@ alwaysApply: false
 - A System is a folder in the in the systems folder containing code that implements application concept
 - A System is autonomous; containing modals, views, logic, routes, etc
 - A System can be used by other systems
-- Child systems communicate to a Parent using Signal
+- Child systems communicate to a Parent using Signal (see signal-architecture.mdc)
 
 ## System Features
 Features are opt-in capabilities that can be recognized by files at root level of the system starting with an underscore:
@@ -28,29 +28,3 @@ Files in a system can have different roles, indicated by their postfix:
     - Form: Components for data input and editing (e.g. `user_form.ex`)
     - View: Components for displaying data (e.g. `user_view.ex`)
     - Page: LiveView pages (e.g. `profile_page.ex`)
-
-# Signal
-
-Signal is a framework that enables loosely coupled communication between systems:
-
-- Purpose:
-    - Enables Child systems to communicate with Parent systems
-    - Prevents direct function calls between systems
-    - Reduces compile-time dependencies
-    - Allows systems to be more autonomous
-
-- Components:
-    - Switch (`_switch.ex`): Each system can define a Switch to intercept and handle signals
-    - Signal Framework: Located in the frameworks folder, implements the communication bus
-
-- Usage:
-    - Systems dispatch signals to communicate events or state changes
-    - Signals are intercepted by Switch modules in receiving systems
-    - Switches can transform signals into system-specific actions
-    - Enables event-driven communication between systems
-
-- Benefits:
-    - Decouples systems from each other
-    - Makes systems more maintainable and testable
-    - Reduces recompilation when child systems change
-    - Enables flexible system composition

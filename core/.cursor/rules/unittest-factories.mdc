@@ -1,0 +1,72 @@
+---
+description: System Factory Guidelines
+globs: test/systems/**/factories.ex
+alwaysApply: false
+---
+# System Factory Guidelines
+
+## Factory Organization
+
+1. Each system should have its own factory module in the test folder: `test/systems/[system]/factories.ex`.
+2. The use of `Core.Factories` is deprecated.
+3. When needed refactor specific system build functions out of `Core.Factories` into `test/systems/[system]/factories.ex`.
+
+## Factory Method Naming
+
+Factory methods should follow these naming conventions:
+
+1. Use `build/2` for creating structs without persisting:
+   ```elixir
+   def build(factory_name, attrs \\ %{})
+   ```
+
+2. Use `insert!/1` or `insert!/2` for creating and persisting records:
+   ```elixir
+   def insert!(factory_name), do: insert!(factory_name, %{})
+   def insert!(factory_name, attrs), do: build(factory_name, attrs) |> Repo.insert!()
+   ```
+
+3. Helper functions for complex scenarios should be descriptive and indicate persistence:
+   ```elixir
+   def insert_complete_model!(attrs \\ %{})
+   def build_model_with_associations(attrs \\ %{})
+   ```
+
+Example structure:
+```elixir
+defmodule Systems.YourSystem.Factories do
+  alias Core.Repo
+  alias Systems.YourSystem
+
+  def build(:model, attrs}) do
+    %YourSystem.Model{
+      identifier: "test-#{System.unique_integer([:positive])}",
+      # other default attributes
+    }
+    |> struct!(attrs)
+  end
+
+  def build(:sub_model, attrs}) do
+    %YourSystem.SubModel{
+      identifier: "test-#{System.unique_integer([:positive])}",
+      # other default attributes
+    }
+    |> struct!(attrs)
+  end
+
+  def insert!(factory_name), do: insert!(factory_name, %{})
+  def insert!(factory_name, attrs), do: build(factory_name, attrs) |> Repo.insert!()
+
+  def insert_complete_model!(attrs \\ %{}) do
+    model = insert!(:model, attrs)
+
+    sub_models =
+      1..3
+      |> Enum.map(fn order ->
+        insert!(:sub_model, %{model_id: model.id})
+      end)
+
+    %{model | sub_models: sub_models}
+  end
+end
+```

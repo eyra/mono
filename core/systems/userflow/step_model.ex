@@ -8,7 +8,7 @@ defmodule Systems.Userflow.StepModel do
     field(:group, :string)
 
     belongs_to(:userflow, Systems.Userflow.Model)
-    has_many(:progress, Systems.Userflow.ProgressModel)
+    has_many(:progress, Systems.Userflow.ProgressModel, foreign_key: :step_id)
 
     timestamps()
   end
@@ -20,8 +20,8 @@ defmodule Systems.Userflow.StepModel do
     step
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
-    |> unique_constraint([:identifier, :userflow_id])
-    |> unique_constraint([:order, :userflow_id])
+    |> unique_constraint([:identifier])
+    |> unique_constraint([:order])
   end
 
   def preload_graph(:down), do: [:progress]

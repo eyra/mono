@@ -1,104 +1,93 @@
 defmodule Systems.Userflow.Factories do
   @moduledoc """
-  Test factories for the Userflow system.
+  Factory functions for creating Userflow system test data.
   """
-  alias Core.Factories
-  alias Systems.Userflow.{Model, StepModel, ProgressModel}
 
-  def build_userflow(attrs \\ %{}) do
-    attrs =
-      Enum.into(attrs, %{
-        identifier: "test_flow_#{System.unique_integer()}",
-        title: "Test Flow"
-      })
+  alias Core.Repo
+  alias Systems.Userflow
 
-    %Model{}
-    |> Model.changeset(attrs)
+  def build(:userflow, attrs) do
+    %Userflow.Model{
+      identifier: "test-#{System.unique_integer([:positive])}",
+      title: "Test Userflow"
+    }
+    |> struct!(attrs)
   end
 
-  def create_userflow(attrs \\ %{}) do
-    attrs
-    |> build_userflow()
-    |> Factories.insert!()
+  def build(:step, attrs) do
+    %Userflow.StepModel{
+      identifier: "test-#{System.unique_integer([:positive])}",
+      order: 1,
+      group: "default"
+    }
+    |> struct!(attrs)
   end
 
-  def build_step(userflow, attrs \\ %{}) do
-    attrs =
-      Enum.into(attrs, %{
-        identifier: "step_#{System.unique_integer()}",
-        order: next_order(userflow),
-        group: "default"
-      })
-
-    %StepModel{}
-    |> StepModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:userflow, userflow)
+  def build(:progress, attrs) do
+    %Userflow.ProgressModel{
+      visited_at: DateTime.utc_now() |> DateTime.truncate(:second)
+    }
+    |> struct!(attrs)
   end
 
-  def create_step(userflow, attrs \\ %{}) do
-    attrs
-    |> build_step(userflow)
-    |> Factories.insert!()
-  end
-
-  def build_progress(user, step, attrs \\ %{}) do
-    attrs =
-      Enum.into(attrs, %{
-        visited_at: DateTime.utc_now()
-      })
-
-    %ProgressModel{}
-    |> ProgressModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
-    |> Ecto.Changeset.put_assoc(:step, step)
-  end
-
-  def create_progress(user, step, attrs \\ %{}) do
-    attrs
-    |> build_progress(user, step)
-    |> Factories.insert!()
-  end
+  def insert!(factory_name), do: insert!(factory_name, %{})
+  def insert!(factory_name, attrs), do: build(factory_name, attrs) |> Repo.insert!()
 
   @doc """
-  Creates a complete userflow with steps and optional progress.
-
-  Options:
-  - steps: number of steps to create (default: 3)
-  - groups: list of group names to distribute steps across (default: ["intro"])
-  - with_progress: user to create progress for (default: nil)
-  - visited_steps: number of steps to mark as visited (default: 0)
+  Creates a complete userflow with multiple steps and groups.
   """
-  def create_complete_userflow(attrs \\ %{}, opts \\ []) do
-    steps = Keyword.get(opts, :steps, 3)
-    groups = Keyword.get(opts, :groups, ["intro"])
-    user = Keyword.get(opts, :with_progress)
-    visited_steps = Keyword.get(opts, :visited_steps, 0)
-
-    userflow = create_userflow(attrs)
+  def insert_complete_userflow!(attrs \\ %{}) do
+    userflow = insert!(:userflow, attrs)
 
     steps =
-      1..steps
-      |> Enum.map(fn i ->
-        group = Enum.at(groups, rem(i - 1, length(groups)))
-        create_step(userflow, %{order: i, group: group})
+      1..3
+      |> Enum.map(fn order ->
+        insert!(:step, %{
+          userflow_id: userflow.id,
+          order: order,
+          group: "group-#{div(order - 1, 2) + 1}"
+        })
       end)
-
-    if user && visited_steps > 0 do
-      steps
-      |> Enum.take(visited_steps)
-      |> Enum.each(&create_progress(user, &1))
-    end
 
     %{userflow | steps: steps}
   end
 
-  # Private helpers
+  @doc """
+  Creates a step with associated progress records for multiple users.
+  """
+  def insert_step_with_progress!(user_ids, attrs \\ %{}) when is_list(user_ids) do
+    step = insert!(:step, attrs)
 
-  defp next_order(userflow) do
-    case userflow.steps do
-      nil -> 1
-      [] -> 1
-      steps -> Enum.max_by(steps, & &1.order).order + 1
-    end
+    progress =
+      user_ids
+      |> Enum.map(fn user_id ->
+        insert!(:progress, %{
+          step_id: step.id,
+          user_id: user_id
+        })
+      end)
+
+    %{step | progress: progress}
+  end
+
+  @doc """
+  Creates a userflow with all steps having progress for the given user.
+  """
+  def insert_userflow_with_progress!(user) do
+    userflow = insert_complete_userflow!()
+
+    steps =
+      userflow.steps
+      |> Enum.map(fn step ->
+        progress =
+          insert!(:progress, %{
+            step_id: step.id,
+            user_id: user.id
+          })
+
+        %{step | progress: [progress]}
+      end)
+
+    %{userflow | steps: steps}
   end
 end

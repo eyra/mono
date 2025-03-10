@@ -1,0 +1,10 @@
+---
+description: View module guidelines
+globs: *_view.ex
+alwaysApply: true
+---
+# View module guidelines
+
+## Structure
+
+1. A View is always a Phoenix LiveComponent
