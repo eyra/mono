@@ -9,7 +9,6 @@ defmodule Systems.Userflow.StepModelTest do
       fields = step.__struct__.__schema__(:fields)
 
       assert :id in fields
-      assert :identifier in fields
       assert :order in fields
       assert :group in fields
       assert :userflow_id in fields
@@ -26,9 +25,9 @@ defmodule Systems.Userflow.StepModelTest do
     end
   end
 
-  describe "changeset/2" do
+  describe "validate/1" do
     setup do
-      userflow = Userflow.Factories.insert!(:userflow)
+      userflow = Userflow.Factory.insert(:userflow)
       {:ok, userflow: userflow}
     end
 
@@ -42,45 +41,18 @@ defmodule Systems.Userflow.StepModelTest do
       changeset =
         Userflow.StepModel.changeset(%Userflow.StepModel{}, attrs)
         |> Ecto.Changeset.put_assoc(:userflow, userflow)
+        |> Userflow.StepModel.validate()
 
       assert changeset.valid?
     end
 
     test "invalid when missing required fields" do
-      changeset = Userflow.StepModel.changeset(%Userflow.StepModel{}, %{})
+      changeset =
+        Userflow.StepModel.changeset(%Userflow.StepModel{}, %{})
+        |> Userflow.StepModel.validate()
 
       refute changeset.valid?
-      assert "can't be blank" in errors_on(changeset).identifier
       assert "can't be blank" in errors_on(changeset).order
-      assert "can't be blank" in errors_on(changeset).group
-    end
-
-    test "enforces unique identifier per userflow", %{userflow: userflow} do
-      # Create first step
-      attrs1 = %{
-        identifier: "step-1",
-        order: 1,
-        group: "group-1"
-      }
-
-      %Userflow.StepModel{}
-      |> Userflow.StepModel.changeset(attrs1)
-      |> Ecto.Changeset.put_assoc(:userflow, userflow)
-      |> Repo.insert!()
-
-      assert_raise Ecto.ConstraintError, fn ->
-        # Try to create second step with same identifier in same userflow
-        attrs2 = %{
-          identifier: "step-1",
-          order: 2,
-          group: "group-1"
-        }
-
-        %Userflow.StepModel{}
-        |> Userflow.StepModel.changeset(attrs2)
-        |> Ecto.Changeset.put_assoc(:userflow, userflow)
-        |> Repo.insert!()
-      end
     end
 
     test "enforces unique order per userflow", %{userflow: userflow} do

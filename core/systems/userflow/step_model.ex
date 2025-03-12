@@ -2,8 +2,7 @@ defmodule Systems.Userflow.StepModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "userflow_steps" do
-    field(:identifier, :string)
+  schema "userflow_step" do
     field(:order, :integer)
     field(:group, :string)
 
@@ -13,15 +12,18 @@ defmodule Systems.Userflow.StepModel do
     timestamps()
   end
 
-  @fields ~w(identifier order group)a
-  @required_fields @fields
+  @fields ~w(order group)a
+  @required_fields ~w(order)a
 
   def changeset(step, attrs \\ %{}) do
     step
     |> cast(attrs, @fields)
+  end
+
+  def validate(changeset) do
+    changeset
     |> validate_required(@required_fields)
-    |> unique_constraint([:identifier])
-    |> unique_constraint([:order])
+    |> unique_constraint([:order, :userflow_id])
   end
 
   def preload_graph(:down), do: [:progress]

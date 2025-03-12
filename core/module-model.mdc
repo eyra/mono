@@ -1,8 +1,3 @@
----
-description: Model module guidelines
-globs: *_model.ex
-alwaysApply: true
----
 # Model Module Guidelines
 
 ## Basic Structure
@@ -192,4 +187,3 @@ defmodule Systems.Example.Model do
     Enum.all?(items, & &1.status == "completed")
   end
 end
-```
