@@ -17,11 +17,16 @@ defmodule Systems.Project.NodePageBuilder do
         } = assigns
       ) do
     assigns = Map.put(assigns, :node, node)
+    branch = %Project.Branch{node_id: node.id}
+    breadcrumbs = Concept.Branch.hierarchy(branch)
 
     %{
       id: id,
       title: node.name,
-      show_errors: false
+      show_errors: false,
+      tabbar_id: :node_page,
+      initial_tab: :overview,
+      breadcrumbs: breadcrumbs
     }
     |> put_tabs(assigns)
   end
