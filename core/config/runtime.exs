@@ -146,6 +146,7 @@ if config_env() == :prod do
       otp_app: :core,
       name: "Next",
       env: app_domain,
+      release: System.get_env("APPSIGNAL_REVISION"),
       push_api_key: push_api_key,
       active: true
   end
