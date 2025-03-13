@@ -4,7 +4,6 @@ defmodule Systems.Assignment.ExternalPanelController do
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Systems.Assignment
-
   require Logger
 
   @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
@@ -12,8 +11,6 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   def create(conn, %{"id" => id, "entry" => _} = params) do
     assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
-
-    Logger.warning("[ExternalPanelController] create: #{inspect(params)}")
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do
@@ -29,6 +26,17 @@ defmodule Systems.Assignment.ExternalPanelController do
         true -> start_participant(assignment, conn, params)
       end
     end
+  end
+
+  @doc """
+  Controller level callback for handling path parameter type validation errors.
+  """
+  def validation_error_callback(conn, _errors) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"400")
+    |> halt()
   end
 
   defp tester?(assignment, %{assigns: %{current_user: %{} = user}}) do
