@@ -103,7 +103,7 @@ defmodule Systems.Manual.Assembly do
   def create_next_chapter(%Multi{} = multi, %Manual.Model{userflow: manual_userflow} = manual) do
     chapter_title = dgettext("eyra-manual", "chapter.title.default")
     chapter_label = nil
-    page_title = dgettext("eyra-manual", "page.title.default")
+    page_title = dgettext("eyra-manual", "page.title.first")
 
     multi
     |> Multi.put(:manual_userflow, manual_userflow)
