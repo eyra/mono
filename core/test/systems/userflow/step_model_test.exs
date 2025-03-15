@@ -86,11 +86,11 @@ defmodule Systems.Userflow.StepModelTest do
 
   describe "preload_graph/1" do
     test ":down returns expected associations" do
-      assert [:progress] == Userflow.StepModel.preload_graph(:down)
+      assert [{:progress, [{:user, []}]}] == Userflow.StepModel.preload_graph(:down)
     end
 
     test ":up returns expected associations" do
-      assert [:userflow] == Userflow.StepModel.preload_graph(:up)
+      assert [{:userflow, []}] == Userflow.StepModel.preload_graph(:up)
     end
   end
 end

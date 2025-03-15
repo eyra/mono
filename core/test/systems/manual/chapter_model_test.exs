@@ -5,15 +5,11 @@ defmodule Systems.Manual.ChapterModelTest do
 
   describe "changeset/2" do
     test "with valid attributes" do
-      valid_attrs = %{
-        title: "Test Chapter",
-        description: "Test Description"
-      }
+      valid_attrs = %{title: "Test Chapter"}
 
       changeset = ChapterModel.changeset(%ChapterModel{}, valid_attrs)
       assert changeset.valid?
       assert get_change(changeset, :title) == "Test Chapter"
-      assert get_change(changeset, :description) == "Test Description"
     end
 
     test "with invalid attributes" do
@@ -42,11 +38,16 @@ defmodule Systems.Manual.ChapterModelTest do
 
   describe "preload_graph/1" do
     test "down includes userflow_step and userflow" do
-      assert ChapterModel.preload_graph(:down) == [:userflow_step, :userflow]
+      assert ChapterModel.preload_graph(:down) ==
+               [
+                 {:pages, [:userflow_step]},
+                 {:userflow, [steps: [progress: [user: []]]]},
+                 {:userflow_step, [progress: [user: []]]}
+               ]
     end
 
     test "up includes manual" do
-      assert ChapterModel.preload_graph(:up) == [:manual]
+      assert ChapterModel.preload_graph(:up) == [{:manual, []}]
     end
   end
 end

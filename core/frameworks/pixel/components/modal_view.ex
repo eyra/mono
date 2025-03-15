@@ -21,7 +21,7 @@ defmodule Frameworks.Pixel.ModalView do
 
       @impl true
       def handle_event("show_modal", modal, socket) do
-        Map.get(socket.assigns, :modals)
+        modals = Map.get(socket.assigns, :modals)
 
         {
           :noreply,
@@ -126,11 +126,13 @@ defmodule Frameworks.Pixel.ModalView do
 
   def background(assigns) do
     ~H"""
-    <div class={"modal-view fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30 #{if @show do "block" else "hidden" end}"}>
+    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full bg-black bg-opacity-30 #{if @show do "block" else "hidden" end}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
+
+  @allowed_styles [:full, :page, :sheet, :dialog, :notification]
 
   attr(:style, :atom, required: true)
   attr(:live_component, :map, required: true)
@@ -138,11 +140,9 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:index, :integer, required: true)
 
   def panel(%{style: style} = assigns) do
-    allowed_styles = [:full, :page, :sheet, :dialog, :notification]
-
-    unless style in allowed_styles do
+    unless style in @allowed_styles do
       raise ArgumentError,
-            "Invalid style: #{style}. Allowed styles are: #{Enum.join(allowed_styles, ", ")}"
+            "Invalid style: #{style}. Allowed styles are: #{Enum.join(@allowed_styles, ", ")}"
     end
 
     ~H"""
@@ -182,17 +182,19 @@ defmodule Frameworks.Pixel.ModalView do
   def full(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-      <div class={"modal-full p-4 sm:p-12 lg:p-20 w-full h-full"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
+      <div class={"modal-full p-4 lg:p-8 w-full h-full"}>
+        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8"}>
           <%!-- HEADER --%>
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
-              <div class="flex-grow"/>
+              <div class="flex-grow">
+                <.title3 live_component={@live_component} />
+              </div>
               <.close_button live_component={@live_component} />
             </div>
           </div>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4">
+          <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
             <.body live_component={@live_component} />
           </div>
         </div>
@@ -211,7 +213,7 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title live_component={@live_component} />
+                <.title2 live_component={@live_component} />
               </div>
               <.close_button live_component={@live_component} />
             </div>
@@ -235,7 +237,7 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title live_component={@live_component} centered?={true}/>
+                <.title2 live_component={@live_component} centered?={true}/>
               </div>
               <.close_button live_component={@live_component} />
             </div>
@@ -290,11 +292,21 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:live_component, :map, required: true)
   attr(:centered?, :boolean, default: false)
 
-  def title(assigns) do
+  def title2(assigns) do
     ~H"""
       <Text.title2 align={"#{if @centered? do "text-center" else "text-left" end}"}>
         <%= Map.get(@live_component.params, :title) %>
       </Text.title2>
+    """
+  end
+
+  attr(:live_component, :map, required: true)
+
+  def title3(assigns) do
+    ~H"""
+      <Text.title3>
+        <%= Map.get(@live_component.params, :title) %>
+      </Text.title3>
     """
   end
 

@@ -23,6 +23,8 @@ export const Wysiwyg = {
     this.html = this.el.dataset.html;
     this.visible = this.el.dataset.visible != undefined;
     this.locked = this.el.dataset.locked != undefined;
+    this.minHeight = this.el.dataset.minHeight;
+    this.maxHeight = this.el.dataset.maxHeight;
   },
   insertTextArea(html) {
     if (this.textarea != undefined) {
@@ -49,8 +51,8 @@ export const Wysiwyg = {
   insertEditor() {
     this.editor = document.createElement("trix-editor");
     this.editor.setAttribute("input", this.textarea.id);
-    this.editor.classList.add("min-h-wysiwyg-editor");
-    this.editor.classList.add("max-h-wysiwyg-editor");
+    this.editor.classList.add(this.minHeight);
+    this.editor.classList.add(this.maxHeight);
     this.editor.classList.add("overflow-y-scroll");
     this.editor.setAttribute("phx-debounce", "1000");
 

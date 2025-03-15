@@ -5,22 +5,10 @@ defmodule Systems.Manual.PublicTest do
   alias Systems.Manual.Factory
   alias Systems.Userflow
 
-  describe "create/2" do
-    test "creates a manual with a chapter userflow" do
-      title = "Test Manual"
-      attrs = %{description: "Test Description"}
-
-      assert {:ok, manual} = Public.create(title, attrs)
-      assert manual.title == title
-      assert manual.description == attrs.description
-      assert manual.userflow_id
-    end
-  end
-
   describe "get!/1" do
     test "gets a manual by id" do
       manual = Factory.create_manual()
-      fetched = Public.get!(manual.id)
+      fetched = Public.get_manual!(manual.id)
       assert fetched.id == manual.id
       # Preloaded
       assert fetched.userflow
@@ -28,7 +16,7 @@ defmodule Systems.Manual.PublicTest do
 
     test "raises for non-existent manual" do
       assert_raise Ecto.NoResultsError, fn ->
-        Public.get!(0)
+        Public.get_manual!(0)
       end
     end
   end
@@ -36,11 +24,9 @@ defmodule Systems.Manual.PublicTest do
   describe "add_chapter/4" do
     test "adds a chapter to a manual" do
       manual = Factory.create_manual(1, 0)
-      attrs = %{title: "Test Chapter", description: "Test Description"}
 
-      assert {:ok, %{chapter: chapter}} = Public.add_chapter(manual, "group_a", attrs)
-      assert chapter.title == attrs.title
-      assert chapter.description == attrs.description
+      assert {:ok, %{manual_chapter: chapter}} = Public.add_chapter(manual)
+      assert chapter.title == "New chapter"
       assert chapter.manual_id == manual.id
       assert chapter.userflow_id
     end
@@ -66,11 +52,8 @@ defmodule Systems.Manual.PublicTest do
     test "adds a step to a chapter" do
       %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
 
-      group = "test-group"
-      attrs = %{title: "Test Step"}
-
-      assert {:ok, %{page: page}} = Public.add_page(chapter, group, attrs)
-      assert page.title == attrs.title
+      assert {:ok, %{manual_page: page}} = Public.add_page(chapter)
+      assert page.title == "New page"
       assert page.userflow_step_id
     end
   end

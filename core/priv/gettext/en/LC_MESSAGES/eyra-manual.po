@@ -1,0 +1,104 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.label"
+msgstr "Chapter title"
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.manual.button"
+msgstr "Create manual"
+
+#, elixir-autogen, elixir-format
+msgid "manual.title.default"
+msgstr "Instruction manual"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "open.manual.button"
+msgstr "Edit manual"
+
+#, elixir-autogen, elixir-format
+msgid "manual.builder.description"
+msgstr "Create a manual with chapters and pages."
+
+#, elixir-autogen, elixir-format
+msgid "builder.chapter.list.title"
+msgstr "Chapters"
+
+#, elixir-autogen, elixir-format
+msgid "create.chapter.button"
+msgstr "Add chapter"
+
+#, elixir-autogen, elixir-format,
+msgid "chapter.title.default"
+msgstr "New chapter"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.group.label"
+msgstr "Label"
+
+#, elixir-autogen, elixir-format,
+msgid "create.page.button"
+msgstr "Add page"
+
+#, elixir-autogen, elixir-format,
+msgid "page.title.default"
+msgstr "New page"
+
+#, elixir-autogen, elixir-format,
+msgid "page.title.label"
+msgstr "Page title"
+
+#, elixir-autogen, elixir-format
+msgid "page.text.label"
+msgstr "Body text"
+
+#, elixir-autogen, elixir-format
+msgid "choose.image.file"
+msgstr "Upload image"
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.image.file"
+msgstr "Upload different image"
+
+#, elixir-autogen, elixir-format,
+msgid "builder.pages.list.title"
+msgstr "Pages"
+
+#, elixir-autogen, elixir-format,
+msgid "chapter.label.first"
+msgstr "Example"
+
+#, elixir-autogen, elixir-format,
+msgid "chapter.title.first"
+msgstr "First chapter"
+
+#, elixir-autogen, elixir-format
+msgid "page.title.first"
+msgstr "First page"

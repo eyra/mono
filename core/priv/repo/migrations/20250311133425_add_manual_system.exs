@@ -8,7 +8,7 @@ defmodule Core.Repo.Migrations.AddManualSystem do
 
     create table(:userflow_step) do
       add(:order, :integer, null: false)
-      add(:group, :string, null: false)
+      add(:group, :string)
       add(:userflow_id, references(:userflow, on_delete: :delete_all), null: false)
 
       timestamps()
@@ -37,7 +37,6 @@ defmodule Core.Repo.Migrations.AddManualSystem do
 
     create table(:manual_chapter) do
       add(:title, :string)
-      add(:description, :text)
       add(:manual_id, references(:manual, on_delete: :delete_all), null: false)
       add(:userflow_step_id, references(:userflow_step, on_delete: :delete_all), null: false)
       add(:userflow_id, references(:userflow, on_delete: :delete_all), null: false)
@@ -64,5 +63,37 @@ defmodule Core.Repo.Migrations.AddManualSystem do
 
     # Add unique indexes
     create(unique_index(:userflow_progress, [:user_id, :step_id]))
+
+    create table(:manual_tool) do
+      add(:director, :string)
+      add(:manual_id, references(:manual, on_delete: :delete_all))
+      add(:auth_node_id, references(:authorization_nodes, on_delete: :delete_all))
+
+      timestamps()
+    end
+
+    create(index(:manual_tool, [:manual_id]))
+    create(index(:manual_tool, [:auth_node_id]))
+
+    drop(constraint(:tool_refs, :must_have_at_least_one_tool))
+
+    alter table(:tool_refs) do
+      add(:manual_tool_id, references(:manual_tool, on_delete: :delete_all), null: true)
+    end
+
+    create(
+      constraint(:tool_refs, :must_have_at_least_one_tool,
+        check: """
+        alliance_tool_id != null or
+        feldspar_tool_id != null or
+        document_tool_id != null or
+        manual_tool_id != null or
+        lab_tool_id != null or
+        graphite_tool_id != null or
+        instruction_tool_id != null or
+        zircon_screening_tool_id != null
+        """
+      )
+    )
   end
 end

@@ -30,17 +30,16 @@ defmodule Systems.Manual.Queries do
       where: c.manual_id == ^manual_id and c.id == ^chapter_id,
       preload: ^Manual.ChapterModel.preload_graph(:down)
     )
-    |> Core.Repo.one!()
   end
 
-  def get_chapter_by_userflow_step!(userflow_step_id) do
+  def get_chapter_by_userflow_step(userflow_step_id) do
     from(s in Manual.ChapterModel,
       where: s.userflow_step_id == ^userflow_step_id,
       preload: ^Manual.ChapterModel.preload_graph(:down)
     )
   end
 
-  def get_page_by_userflow_step!(userflow_step_id) do
+  def get_page_by_userflow_step(userflow_step_id) do
     from(s in Manual.PageModel,
       where: s.userflow_step_id == ^userflow_step_id,
       preload: ^Manual.PageModel.preload_graph(:down)
@@ -53,6 +52,15 @@ defmodule Systems.Manual.Queries do
       where: us.userflow_id == ^chapter_id,
       order_by: us.order,
       preload: ^Manual.PageModel.preload_graph(:down)
+    )
+  end
+
+  def previous_page(%Manual.PageModel{userflow_step: userflow_step}) do
+    from(p in Manual.PageModel,
+      where: p.userflow_step_id == ^userflow_step.id,
+      where: p.order < ^userflow_step.order,
+      order_by: [desc: p.order],
+      limit: 1
     )
   end
 end

@@ -1,6 +1,10 @@
 defmodule Systems.Userflow.Model do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
+
   import Ecto.Changeset
+
+  alias Systems.Userflow
 
   schema "userflow" do
     has_many(:steps, Systems.Userflow.StepModel, foreign_key: :userflow_id)
@@ -47,6 +51,8 @@ defmodule Systems.Userflow.Model do
     |> Enum.group_by(& &1.group)
   end
 
-  def preload_graph(:down), do: [steps: [progress: []]]
+  def preload_graph(:down), do: preload_graph([:steps])
   def preload_graph(:up), do: []
+
+  def preload_graph(:steps), do: [steps: Userflow.StepModel.preload_graph(:down)]
 end

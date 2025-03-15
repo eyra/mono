@@ -13,8 +13,7 @@ defmodule Systems.Manual.Factory do
 
   def chapter_factory do
     %Manual.ChapterModel{
-      title: sequence(:title, &"Chapter title #{&1}"),
-      description: "Chapter description"
+      title: sequence(:title, &"Chapter title #{&1}")
     }
   end
 

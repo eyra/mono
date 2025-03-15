@@ -1,8 +1,11 @@
 defmodule Systems.Userflow.ProgressModel do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   alias Systems.Account.User
+  alias Systems.Userflow
 
   schema "userflow_progress" do
     belongs_to(:user, User)
@@ -24,6 +27,9 @@ defmodule Systems.Userflow.ProgressModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: [:user]
-  def preload_graph(:up), do: [:step]
+  def preload_graph(:down), do: preload_graph([:user])
+  def preload_graph(:up), do: preload_graph([:step])
+
+  def preload_graph(:user), do: [user: []]
+  def preload_graph(:step), do: [step: Userflow.StepModel.preload_graph(:up)]
 end

@@ -1,6 +1,10 @@
 defmodule Systems.Manual.Model do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
   import Ecto.Changeset
+
+  alias Systems.Manual
+  alias Systems.Userflow
 
   schema "manual" do
     field(:title, :string)
@@ -26,6 +30,9 @@ defmodule Systems.Manual.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: [:userflow]
+  def preload_graph(:down), do: preload_graph([:userflow, :chapters])
   def preload_graph(:up), do: []
+
+  def preload_graph(:userflow), do: [userflow: Userflow.Model.preload_graph(:down)]
+  def preload_graph(:chapters), do: [chapters: Manual.ChapterModel.preload_graph(:down)]
 end

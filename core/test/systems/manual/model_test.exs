@@ -68,7 +68,15 @@ defmodule Systems.Manual.ModelTest do
 
   describe "preload_graph/1" do
     test "down includes userflow" do
-      assert Model.preload_graph(:down) == [:userflow]
+      assert Model.preload_graph(:down) == [
+               {:chapters,
+                [
+                  pages: [:userflow_step],
+                  userflow: [steps: [progress: [user: []]]],
+                  userflow_step: [progress: [user: []]]
+                ]},
+               {:userflow, [steps: [progress: [user: []]]]}
+             ]
     end
 
     test "up is empty" do

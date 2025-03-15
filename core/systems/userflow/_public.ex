@@ -1,49 +1,35 @@
 defmodule Systems.Userflow.Public do
-  import Ecto.Changeset
+  import Systems.Userflow.Assembly, only: [prepare_step: 3, prepare_progress: 2]
 
   alias Core.Repo
   alias Ecto.Multi
+  alias Frameworks.Signal
   alias Systems.Userflow
   alias Systems.Account
+
+  def next_order(%Userflow.Model{} = userflow) do
+    last_order =
+      userflow
+      |> Repo.preload(:steps)
+      |> Map.get(:steps)
+      |> Enum.map(& &1.order)
+      |> Enum.max(fn -> 0 end)
+
+    last_order + 1
+  end
 
   @doc """
   Gets a userflow by its id.
   """
-  def get!(id) do
+  def get_userflow!(id) do
     Userflow.Queries.get_by_id(id)
     |> Repo.one!()
   end
 
   @doc """
-    Builds a new userflow.
-  """
-  def build do
-    %Userflow.Model{}
-    |> Userflow.Model.changeset()
-  end
-
-  @doc """
-  Creates a new userflow.
-  """
-  def create do
-    build()
-    |> Repo.insert()
-  end
-
-  @doc """
-  Builds a new step for a userflow.
-  """
-  def build_step(%Userflow.Model{} = userflow, group, order)
-      when is_integer(order) and is_binary(group) do
-    %Userflow.StepModel{}
-    |> Userflow.StepModel.changeset(%{order: order, group: group})
-    |> Ecto.Changeset.put_assoc(:userflow, userflow)
-  end
-
-  @doc """
   Adds a step to a userflow.
   """
-  def add_step(%Userflow.Model{} = userflow, group) when is_binary(group) do
+  def add_step(%Userflow.Model{} = userflow, group) do
     Multi.new()
     |> add_step(userflow, group)
     |> Repo.transaction()
@@ -62,38 +48,11 @@ defmodule Systems.Userflow.Public do
   @doc """
     Adds a step to a userflow.
   """
-  def add_step(%Multi{} = multi, %Userflow.Model{} = userflow, group) when is_binary(group) do
+  def add_step(%Multi{} = multi, %Userflow.Model{} = userflow, group) do
     multi
-    |> Multi.run(:latest_order, fn _repo, _changes ->
-      userflow = Repo.preload(userflow, :steps)
-
-      {:ok,
-       userflow.steps
-       |> Enum.map(& &1.order)
-       |> Enum.max(fn -> 0 end)}
-    end)
-    |> Multi.insert(:step, fn %{latest_order: latest_order} ->
-      build_step(userflow, group, latest_order + 1)
-    end)
-  end
-
-  def build_progress(%Account.User{} = user, %Userflow.StepModel{} = step) do
-    %Userflow.ProgressModel{}
-    |> Userflow.ProgressModel.changeset(%{})
-    |> put_assoc(:user, user)
-    |> put_assoc(:step, step)
-  end
-
-  def create_progress(%Account.User{} = user, %Userflow.StepModel{} = step) do
-    Multi.new()
-    |> create_progress(user, step)
-    |> Repo.transaction()
-  end
-
-  def create_progress(%Multi{} = multi, %Account.User{} = user, %Userflow.StepModel{} = step) do
-    multi
-    |> Multi.insert(:progress, fn _ ->
-      build_progress(user, step)
+    |> Multi.put(:next_order, next_order(userflow))
+    |> Multi.insert(:step, fn %{next_order: next_order} ->
+      prepare_step(userflow, next_order, group)
     end)
   end
 
@@ -101,12 +60,76 @@ defmodule Systems.Userflow.Public do
   Marks a step as visited for a user.
   """
   def mark_visited(%Userflow.StepModel{} = step, %Account.User{} = user) do
-    case Repo.get_by(Userflow.ProgressModel, user_id: user.id, step_id: step.id) do
-      nil ->
-        create_progress(user, step)
+    Multi.new()
+    |> mark_visited(step, user)
+    |> Repo.transaction()
+  end
 
-      _ ->
-        raise "Step already visited"
+  @doc """
+  Marks a step as visited for a user.
+  """
+  def mark_visited(%Multi{} = multi, %Userflow.StepModel{} = step, %Account.User{} = user) do
+    multi
+    |> Multi.put(:validate, fn _repo, _changes ->
+      case Repo.get_by(Userflow.ProgressModel, user_id: user.id, step_id: step.id) do
+        nil ->
+          {:ok, :step_not_visited}
+
+        _ ->
+          {:error, :step_already_visited}
+      end
+    end)
+    |> Multi.insert(:progress, prepare_progress(user, step))
+    |> Signal.Public.multi_dispatch({:userflow_step, :visited})
+  end
+
+  @doc """
+    Moves a step up in the userflow.
+  """
+  def move_step(%Userflow.StepModel{} = step, :up) do
+    Multi.new()
+    |> move_step(step, :up)
+    |> Repo.transaction()
+  end
+
+  @doc """
+    Moves a step up in the userflow.
+  """
+  def move_step(%Multi{} = multi, %Userflow.StepModel{} = step, :up) do
+    multi
+    |> Multi.run(:previous_step, fn _repo, _changes ->
+      case previous_step(step) do
+        nil ->
+          {:error, :no_previous_step}
+
+        previous_step ->
+          {:ok, previous_step}
+      end
+    end)
+    |> Multi.update(:previous_step_temp, fn %{previous_step: previous_step} ->
+      # Use a temporary value to avoid unique constraint violation
+      # First set to a negative value (assuming orders are positive)
+      Userflow.StepModel.changeset(previous_step, %{order: -1})
+    end)
+    |> Multi.update(:userflow_step, fn %{previous_step: previous_step} ->
+      Userflow.StepModel.changeset(step, %{order: previous_step.order})
+    end)
+    |> Multi.update(:previous_step_updated, fn %{previous_step: previous_step} ->
+      Userflow.StepModel.changeset(previous_step, %{order: step.order})
+    end)
+    |> Signal.Public.multi_dispatch({:userflow_step, :moved_up})
+  end
+
+  @doc """
+    Gets the previous step for a step or nil if there is no previous step.
+  """
+  def previous_step(%Userflow.StepModel{} = step) do
+    case Userflow.Queries.previous(step) |> Repo.one() do
+      nil ->
+        nil
+
+      previous_step ->
+        previous_step
     end
   end
 

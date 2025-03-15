@@ -467,3 +467,7 @@ msgstr "Criteria"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
 msgstr "Papers"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.manual.description"
+msgstr "Instructions for participants on how to request or download digital trace data."

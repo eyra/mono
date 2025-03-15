@@ -4,23 +4,17 @@ defmodule Systems.Userflow.PublicTest do
   alias Systems.Userflow
   alias Systems.Userflow
 
-  describe "get!/1" do
+  describe "get_userflow!/1" do
     test "returns userflow when it exists" do
       userflow = Userflow.Factory.insert(:userflow)
-      found = Userflow.Public.get!(userflow.id)
+      found = Userflow.Public.get_userflow!(userflow.id)
       assert found.id == userflow.id
     end
 
     test "raises when userflow does not exist" do
       assert_raise Ecto.NoResultsError, fn ->
-        Userflow.Public.get!(1)
+        Userflow.Public.get_userflow!(1)
       end
-    end
-  end
-
-  describe "create/0" do
-    test "creates userflow" do
-      {:ok, _userflow} = Userflow.Public.create()
     end
   end
 
@@ -136,6 +130,51 @@ defmodule Systems.Userflow.PublicTest do
     test "returns empty list when no progress exists", %{userflow: userflow} do
       other_user = Core.Factories.insert!(:member)
       assert [] == Userflow.Public.list_progress(userflow, other_user.id)
+    end
+  end
+
+  describe "move_step/2" do
+    setup do
+      userflow = Userflow.Factory.userflow()
+
+      {:ok, userflow: userflow}
+    end
+
+    test "moves a step up in the order", %{userflow: userflow} do
+      step1 = Enum.at(userflow.steps, 0)
+      step2 = Enum.at(userflow.steps, 1)
+
+      {:ok, result} = Userflow.Public.move_step(step2, :up)
+
+      # Verify the steps have swapped positions
+      updated_step = result.userflow_step
+      updated_previous_step = result.previous_step_updated
+
+      assert updated_step.order == step1.order
+      assert updated_previous_step.order == step2.order
+      assert updated_step.id == step2.id
+      assert updated_previous_step.id == step1.id
+    end
+
+    test "fails when trying to move the first step up", %{userflow: userflow} do
+      step1 = Enum.at(userflow.steps, 0)
+      # The first step has no previous step
+      assert {:error, :previous_step, :no_previous_step, _} =
+               Userflow.Public.move_step(step1, :up)
+    end
+
+    test "correctly updates the database with new positions", %{userflow: userflow} do
+      step2 = Enum.at(userflow.steps, 1)
+      step3 = Enum.at(userflow.steps, 2)
+
+      {:ok, _result} = Userflow.Public.move_step(step3, :up)
+
+      # Reload steps from database to verify changes persisted
+      reloaded_step2 = Repo.get!(Userflow.StepModel, step2.id)
+      reloaded_step3 = Repo.get!(Userflow.StepModel, step3.id)
+
+      assert reloaded_step3.order == step2.order
+      assert reloaded_step2.order == step3.order
     end
   end
 end

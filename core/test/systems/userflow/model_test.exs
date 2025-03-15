@@ -118,7 +118,7 @@ defmodule Systems.Userflow.ModelTest do
 
   describe "preload_graph/1" do
     test "returns correct preload graph for :down direction" do
-      assert [steps: [progress: []]] == Userflow.Model.preload_graph(:down)
+      assert [steps: [progress: [{:user, []}]]] == Userflow.Model.preload_graph(:down)
     end
 
     test "returns correct preload graph for :up direction" do

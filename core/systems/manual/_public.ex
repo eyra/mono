@@ -1,69 +1,79 @@
 defmodule Systems.Manual.Public do
-  import Ecto.Changeset
+  use Core, :public
+
+  import Systems.Manual.Assembly, only: [prepare_next_chapter: 2, prepare_next_page: 2]
 
   alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Systems.Manual
   alias Systems.Userflow
 
   @doc """
-  Creates a new manual with a chapter userflow.
+    Gets a tool by its id.
   """
-  def create(title, attrs \\ %{}) do
-    # Create a userflow for chapters
-    with {:ok, userflow} <- Userflow.Public.create() do
-      %Manual.Model{}
-      |> Manual.Model.changeset(Map.merge(attrs, %{title: title}))
-      |> put_assoc(:userflow, userflow)
-      |> Repo.insert()
-    end
+  def get_tool!(id) do
+    Repo.get!(Manual.ToolModel, id)
+  end
+
+  @doc """
+    Gets the tool associated with a manual.
+  """
+  def get_tool_by_manual(%Manual.Model{} = manual) do
+    Repo.get_by(Manual.ToolModel, manual_id: manual.id)
   end
 
   @doc """
   Gets a manual by its id.
   """
-  def get!(id) do
+  def get_manual!(id, preload \\ []) do
     Manual.Queries.get_by_id(id)
     |> Repo.one!()
+    |> Repo.preload(preload)
   end
 
-  def get_chapter_by_step!(%Userflow.StepModel{id: step_id}) do
-    Manual.Queries.get_chapter_by_userflow_step!(step_id)
-    |> Repo.one!()
+  def get_chapter!(chapter_id) do
+    Repo.get!(Manual.ChapterModel, chapter_id)
+  end
+
+  def get_chapter_by_step(%Userflow.StepModel{id: step_id}) do
+    Manual.Queries.get_chapter_by_userflow_step(step_id)
+    |> Repo.one()
   end
 
   @doc """
     Adds a chapter to a manual.
   """
-  def add_chapter(%Manual.Model{} = manual, group, attrs) do
-    add_chapter(%Ecto.Multi{}, manual, group, attrs)
+  def add_chapter(%Manual.Model{} = manual) do
+    add_chapter(Multi.new(), manual)
   end
 
   @doc """
     Adds a chapter to a manual.
   """
   def add_chapter(
-        %Ecto.Multi{} = multi,
-        %Manual.Model{userflow: manual_userflow} = manual,
-        group,
-        attrs
+        %Multi{} = multi,
+        %Manual.Model{} = manual
       ) do
     multi
-    |> Ecto.Multi.run(:userflow_step, fn _, _ ->
-      # Create a userflow step for linking the chapter to the manual userflow
-      Userflow.Public.add_step(manual_userflow, group)
+    |> Multi.put(:next_order, Userflow.Public.next_order(manual.userflow))
+    |> Multi.insert(:manual_chapter, fn %{next_order: next_order} ->
+      prepare_next_chapter(manual, next_order)
     end)
-    |> Ecto.Multi.run(:userflow, fn _, _ ->
-      # Create a new userflow for making the chapter a userflow itself
-      Userflow.Public.create()
-    end)
-    |> Ecto.Multi.insert(:chapter, fn %{userflow_step: userflow_step, userflow: userflow} ->
-      %Manual.ChapterModel{}
-      |> Manual.ChapterModel.changeset(attrs)
-      |> put_assoc(:manual, manual)
-      |> put_assoc(:userflow_step, userflow_step)
-      |> put_assoc(:userflow, userflow)
-    end)
+    |> Signal.Public.multi_dispatch({:manual_chapter, :inserted})
     |> Repo.transaction()
+  end
+
+  def remove_chapter(chapter) do
+    Multi.new()
+    |> remove_chapter(chapter)
+    |> Repo.transaction()
+  end
+
+  def remove_chapter(%Multi{} = multi, chapter) do
+    multi
+    |> Multi.delete(:manual_chapter, chapter)
+    |> Signal.Public.multi_dispatch({:manual_chapter, :deleted})
   end
 
   @doc """
@@ -74,42 +84,70 @@ defmodule Systems.Manual.Public do
     |> Repo.all()
   end
 
-  def get_page_by_step!(%Userflow.StepModel{id: step_id}) do
-    Manual.Queries.get_page_by_userflow_step!(step_id)
-    |> Repo.one!()
+  @doc """
+  Moves a chapter up in the manual.
+  """
+  def move_chapter(%Manual.ChapterModel{userflow_step: userflow_step}, :up) do
+    Userflow.Public.move_step(userflow_step, :up)
+  end
+
+  @doc """
+  Moves a chapter down in the manual.
+  """
+
+  def get_page_by_step(%Userflow.StepModel{id: step_id}) do
+    Manual.Queries.get_page_by_userflow_step(step_id)
+    |> Repo.one()
   end
 
   @doc """
     Adds a page to a chapter.
   """
-  def add_page(%Manual.ChapterModel{} = chapter, group, attrs) do
-    add_page(%Ecto.Multi{}, chapter, group, attrs)
+  def add_page(%Manual.ChapterModel{} = chapter) do
+    add_page(Multi.new(), chapter)
   end
 
   @doc """
     Adds a page to a chapter.
   """
   def add_page(
-        %Ecto.Multi{} = multi,
-        %Manual.ChapterModel{userflow: chapter_userflow} = chapter,
-        group,
-        attrs
+        %Multi{} = multi,
+        %Manual.ChapterModel{} = chapter
       ) do
-    # Create the userflow step first
     multi
-    |> Ecto.Multi.run(:userflow_step, fn _, _ ->
-      Userflow.Public.add_step(chapter_userflow, group)
+    |> Multi.put(:next_order, Userflow.Public.next_order(chapter.userflow))
+    |> Multi.insert(:manual_page, fn %{next_order: next_order} ->
+      prepare_next_page(chapter, next_order)
     end)
-    |> Ecto.Multi.insert(:page, fn %{userflow_step: userflow_step} ->
-      %Manual.PageModel{}
-      |> Manual.PageModel.changeset(attrs)
-      |> put_assoc(:chapter, chapter)
-      |> put_assoc(:userflow_step, userflow_step)
-    end)
+    |> Signal.Public.multi_dispatch({:manual_page, :inserted})
+    |> Repo.transaction()
+  end
+
+  def delete_page(%Manual.PageModel{} = page) do
+    Multi.new()
+    |> delete_page(page)
     |> Repo.transaction()
   end
 
   @doc """
+    Deletes a page from a chapter.
+  """
+  def delete_page(%Multi{} = multi, %Manual.PageModel{} = page) do
+    multi
+    |> Multi.delete(:manual_page, page)
+    |> Signal.Public.multi_dispatch({:manual_page, :deleted})
+  end
+
+  @doc """
+    Moves a page up in the chapter.
+  """
+  def move_page(%Manual.PageModel{userflow_step: userflow_step}, :up) do
+    Userflow.Public.move_step(userflow_step, :up)
+  end
+
+  @doc """
+
+  @doc \"""
   Gets the next unvisited chapter for a user in a manual.
   """
   def next_chapter(%Manual.Model{userflow: manual_userflow}, user) do
@@ -118,7 +156,7 @@ defmodule Systems.Manual.Public do
         nil
 
       step ->
-        get_chapter_by_step!(step)
+        get_chapter_by_step(step)
     end
   end
 
@@ -127,7 +165,7 @@ defmodule Systems.Manual.Public do
   """
   def next_page(%Manual.ChapterModel{userflow: chapter_userflow}, user) do
     step = Userflow.Public.next_step(chapter_userflow, user.id)
-    get_page_by_step!(step)
+    get_page_by_step(step)
   end
 
   @doc """

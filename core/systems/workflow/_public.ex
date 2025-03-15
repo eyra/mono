@@ -13,6 +13,7 @@ defmodule Systems.Workflow.Public do
   alias Systems.Alliance
   alias Systems.Feldspar
   alias Systems.Lab
+  alias Systems.Manual
   alias Systems.Graphite
   alias Systems.Instruction
   alias Systems.Zircon
@@ -147,6 +148,9 @@ defmodule Systems.Workflow.Public do
 
   def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
     do: Alliance.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:manual_tool, %{} = attrs, auth_node),
+    do: Manual.Assembly.prepare_tool(attrs, auth_node)
 
   def prepare_tool(:document_tool, %{} = attrs, auth_node),
     do: Document.Public.prepare_tool(attrs, auth_node)

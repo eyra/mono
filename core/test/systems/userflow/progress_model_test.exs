@@ -83,11 +83,11 @@ defmodule Systems.Userflow.ProgressModelTest do
 
   describe "preload_graph/1" do
     test ":down returns expected associations" do
-      assert [:user] == Userflow.ProgressModel.preload_graph(:down)
+      assert [{:user, []}] == Userflow.ProgressModel.preload_graph(:down)
     end
 
     test ":up returns expected associations" do
-      assert [:step] == Userflow.ProgressModel.preload_graph(:up)
+      assert [step: [{:userflow, []}]] == Userflow.ProgressModel.preload_graph(:up)
     end
   end
 end

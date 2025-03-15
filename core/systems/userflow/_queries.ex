@@ -32,4 +32,21 @@ defmodule Systems.Userflow.Queries do
       preload: [step: ^Userflow.StepModel.preload_graph(:up)]
     )
   end
+
+  def previous(%Userflow.StepModel{userflow_id: userflow_id, order: order}) do
+    from(s in Userflow.StepModel,
+      where: s.userflow_id == ^userflow_id,
+      where: s.order < ^order,
+      order_by: [desc: s.order],
+      limit: 1
+    )
+  end
+
+  def last_step(%Userflow.Model{} = userflow) do
+    from(s in Userflow.StepModel,
+      where: s.userflow_id == ^userflow.id,
+      order_by: [asc: s.order],
+      limit: 1
+    )
+  end
 end
