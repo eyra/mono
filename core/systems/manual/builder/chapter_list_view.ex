@@ -24,7 +24,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
     socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
   end
 
-  def update_chapter_items(%{assigns: %{manual: %{chapters: chapters}}} = socket) do
+  def update_chapter_items(%{assigns: %{chapters: chapters}} = socket) do
     chapter_items =
       chapters
       |> Enum.with_index()

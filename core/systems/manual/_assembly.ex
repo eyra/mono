@@ -12,11 +12,7 @@ defmodule Systems.Manual.Assembly do
   alias Systems.Userflow
 
   def prepare_tool(%{} = attrs, auth_node \\ auth_module().prepare_node()) do
-    chapter_title = dgettext("eyra-manual", "chapter.title.first")
-    chapter_label = dgettext("eyra-manual", "chapter.label.first")
-    page_title = dgettext("eyra-manual", "page.title.first")
-
-    manual = prepare_manual(chapter_title, chapter_label, page_title)
+    {:ok, %{manual: manual}} = create_manual()
 
     %Manual.ToolModel{}
     |> Manual.ToolModel.changeset(attrs)
@@ -24,69 +20,46 @@ defmodule Systems.Manual.Assembly do
     |> put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_manual(chapter_title, chapter_label, page_title) do
-    userflow = Userflow.Assembly.prepare_userflow()
-    chapter = prepare_first_chapter(userflow, chapter_title, chapter_label, page_title)
-
+  def prepare_manual(%Userflow.Model{} = manual_userflow) do
     %Manual.Model{}
     |> Manual.Model.changeset(%{})
-    |> put_assoc(:userflow, userflow)
-    |> put_assoc(:chapters, [chapter])
+    |> put_assoc(:userflow, manual_userflow)
   end
 
-  def prepare_first_chapter(userflow, title, label, page_title) do
-    userflow_step = Userflow.Assembly.prepare_step(userflow, 0, label)
-    userflow = Userflow.Assembly.prepare_userflow()
-    page = prepare_first_page(userflow, page_title)
-
-    %Manual.ChapterModel{}
-    |> Manual.ChapterModel.changeset(%{title: title})
-    |> put_assoc(:userflow_step, userflow_step)
-    |> put_assoc(:userflow, userflow)
-    |> put_assoc(:pages, [page])
-  end
-
-  def prepare_next_chapter(%Manual.Model{userflow: manual_userflow} = manual, order) do
-    title = dgettext("eyra-manual", "chapter.title.default")
-    page_title = dgettext("eyra-manual", "page.title.first")
-
-    userflow_step = Userflow.Assembly.prepare_step(manual_userflow, order, nil)
-    userflow = Userflow.Assembly.prepare_userflow()
-    page = prepare_first_page(userflow, page_title)
-
+  def prepare_chapter(
+        %Manual.Model{} = manual,
+        %Userflow.StepModel{} = chapter_userflow_step,
+        %Userflow.Model{} = chapter_userflow,
+        title
+      ) do
     %Manual.ChapterModel{}
     |> Manual.ChapterModel.changeset(%{title: title})
     |> put_assoc(:manual, manual)
-    |> put_assoc(:userflow_step, userflow_step)
-    |> put_assoc(:userflow, userflow)
-    |> put_assoc(:pages, [page])
+    |> put_assoc(:userflow_step, chapter_userflow_step)
+    |> put_assoc(:userflow, chapter_userflow)
   end
 
-  def prepare_first_page(userflow, title) do
-    userflow_step = Userflow.Assembly.prepare_step(userflow, 0, nil)
-
-    %Manual.PageModel{}
-    |> Manual.PageModel.changeset(%{title: title})
-    |> put_assoc(:userflow_step, userflow_step)
-  end
-
-  def prepare_next_page(%Manual.ChapterModel{userflow: chapter_userflow} = chapter, order) do
-    title = dgettext("eyra-manual", "page.title.default")
-    userflow_step = Userflow.Assembly.prepare_step(chapter_userflow, order, nil)
-
+  def prepare_page(
+        %Manual.ChapterModel{} = chapter,
+        %Userflow.StepModel{} = chapter_userflow_step,
+        title
+      ) do
     %Manual.PageModel{}
     |> Manual.PageModel.changeset(%{title: title})
     |> put_assoc(:chapter, chapter)
-    |> put_assoc(:userflow_step, userflow_step)
+    |> put_assoc(:userflow_step, chapter_userflow_step)
+  end
+
+  def create_manual() do
+    Multi.new()
+    |> create_manual(:manual)
+    |> Signal.Public.multi_dispatch({:manual, :created})
+    |> Repo.transaction()
   end
 
   def create_manual(%Manual.ToolModel{} = tool) do
-    chapter_title = dgettext("eyra-manual", "chapter.title.first")
-    chapter_label = dgettext("eyra-manual", "chapter.label.first")
-    page_title = dgettext("eyra-manual", "page.title.first")
-
     Multi.new()
-    |> Multi.insert(:manual, prepare_manual(chapter_title, chapter_label, page_title))
+    |> create_manual(:manual)
     |> Multi.update(:manual_tool, fn %{manual: manual} ->
       tool
       |> Repo.preload(:manual)
@@ -97,14 +70,74 @@ defmodule Systems.Manual.Assembly do
     |> Repo.transaction()
   end
 
-  def create_manual() do
+  def create_manual(%Multi{} = multi, manual_name) do
     chapter_title = dgettext("eyra-manual", "chapter.title.first")
     chapter_label = dgettext("eyra-manual", "chapter.label.first")
     page_title = dgettext("eyra-manual", "page.title.first")
 
-    Multi.new()
-    |> Multi.insert(:manual, prepare_manual(chapter_title, chapter_label, page_title))
-    |> Signal.Public.multi_dispatch({:manual, :manual_created})
-    |> Repo.transaction()
+    multi
+    |> Userflow.Assembly.create_userflow_and_step(
+      :manual_userflow,
+      :manual_userflow_step,
+      chapter_label
+    )
+    |> Userflow.Assembly.create_userflow_and_step(:chapter_userflow, :chapter_userflow_step, nil)
+    |> Multi.insert(manual_name, fn %{manual_userflow: manual_userflow} ->
+      prepare_manual(manual_userflow)
+    end)
+    |> Multi.insert(:manual_chapter, fn %{
+                                          manual_userflow_step: manual_userflow_step,
+                                          chapter_userflow: chapter_userflow
+                                        } = state ->
+      manual = Map.get(state, manual_name)
+      prepare_chapter(manual, manual_userflow_step, chapter_userflow, chapter_title)
+    end)
+    |> Multi.insert(:manual_page, fn %{
+                                       manual_chapter: chapter,
+                                       chapter_userflow_step: chapter_userflow_step
+                                     } ->
+      prepare_page(chapter, chapter_userflow_step, page_title)
+    end)
+  end
+
+  def create_next_chapter(%Multi{} = multi, %Manual.Model{userflow: manual_userflow} = manual) do
+    chapter_title = dgettext("eyra-manual", "chapter.title.default")
+    chapter_label = nil
+    page_title = dgettext("eyra-manual", "page.title.default")
+
+    multi
+    |> Multi.put(:manual_userflow, manual_userflow)
+    |> Userflow.Assembly.create_next_step(:manual_userflow_step, :manual_userflow)
+    |> Userflow.Assembly.create_userflow_and_step(
+      :chapter_userflow,
+      :chapter_userflow_step,
+      chapter_label
+    )
+    |> Multi.insert(:manual_chapter, fn %{
+                                          manual_userflow_step: manual_userflow_step,
+                                          chapter_userflow: chapter_userflow
+                                        } ->
+      prepare_chapter(manual, manual_userflow_step, chapter_userflow, chapter_title)
+    end)
+    |> Multi.insert(:manual_page, fn %{
+                                       manual_chapter: chapter,
+                                       chapter_userflow_step: chapter_userflow_step
+                                     } ->
+      prepare_page(chapter, chapter_userflow_step, page_title)
+    end)
+  end
+
+  def create_next_page(
+        %Multi{} = multi,
+        %Manual.ChapterModel{userflow: chapter_userflow} = chapter
+      ) do
+    page_title = dgettext("eyra-manual", "page.title.default")
+
+    multi
+    |> Multi.put(:userflow, chapter_userflow)
+    |> Userflow.Assembly.create_next_step(:userflow_step, :userflow)
+    |> Multi.insert(:manual_page, fn %{userflow_step: userflow_step} ->
+      prepare_page(chapter, userflow_step, page_title)
+    end)
   end
 end

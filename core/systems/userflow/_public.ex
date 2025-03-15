@@ -26,6 +26,10 @@ defmodule Systems.Userflow.Public do
     |> Repo.one!()
   end
 
+  def get_step!(id) do
+    Repo.get!(Userflow.StepModel, id)
+  end
+
   @doc """
   Adds a step to a userflow.
   """
@@ -124,7 +128,7 @@ defmodule Systems.Userflow.Public do
     Gets the previous step for a step or nil if there is no previous step.
   """
   def previous_step(%Userflow.StepModel{} = step) do
-    case Userflow.Queries.previous(step) |> Repo.one() do
+    case Userflow.Queries.previous_step(step) |> Repo.one() do
       nil ->
         nil
 

@@ -33,7 +33,7 @@ defmodule Systems.Userflow.Queries do
     )
   end
 
-  def previous(%Userflow.StepModel{userflow_id: userflow_id, order: order}) do
+  def previous_step(%Userflow.StepModel{userflow_id: userflow_id, order: order}) do
     from(s in Userflow.StepModel,
       where: s.userflow_id == ^userflow_id,
       where: s.order < ^order,

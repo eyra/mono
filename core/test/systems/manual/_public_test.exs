@@ -49,7 +49,7 @@ defmodule Systems.Manual.PublicTest do
   end
 
   describe "add_page/4" do
-    test "adds a step to a chapter" do
+    test "adds a page to a chapter" do
       %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
 
       assert {:ok, %{manual_page: page}} = Public.add_page(chapter)

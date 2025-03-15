@@ -1,7 +1,7 @@
 defmodule Systems.Manual.Public do
   use Core, :public
 
-  import Systems.Manual.Assembly, only: [prepare_next_chapter: 2, prepare_next_page: 2]
+  import Systems.Manual.Assembly, only: [create_next_chapter: 2, create_next_page: 2]
 
   alias Core.Repo
   alias Ecto.Multi
@@ -45,21 +45,8 @@ defmodule Systems.Manual.Public do
     Adds a chapter to a manual.
   """
   def add_chapter(%Manual.Model{} = manual) do
-    add_chapter(Multi.new(), manual)
-  end
-
-  @doc """
-    Adds a chapter to a manual.
-  """
-  def add_chapter(
-        %Multi{} = multi,
-        %Manual.Model{} = manual
-      ) do
-    multi
-    |> Multi.put(:next_order, Userflow.Public.next_order(manual.userflow))
-    |> Multi.insert(:manual_chapter, fn %{next_order: next_order} ->
-      prepare_next_chapter(manual, next_order)
-    end)
+    Multi.new()
+    |> create_next_chapter(manual)
     |> Signal.Public.multi_dispatch({:manual_chapter, :inserted})
     |> Repo.transaction()
   end
@@ -104,25 +91,15 @@ defmodule Systems.Manual.Public do
     Adds a page to a chapter.
   """
   def add_page(%Manual.ChapterModel{} = chapter) do
-    add_page(Multi.new(), chapter)
-  end
-
-  @doc """
-    Adds a page to a chapter.
-  """
-  def add_page(
-        %Multi{} = multi,
-        %Manual.ChapterModel{} = chapter
-      ) do
-    multi
-    |> Multi.put(:next_order, Userflow.Public.next_order(chapter.userflow))
-    |> Multi.insert(:manual_page, fn %{next_order: next_order} ->
-      prepare_next_page(chapter, next_order)
-    end)
+    Multi.new()
+    |> create_next_page(chapter)
     |> Signal.Public.multi_dispatch({:manual_page, :inserted})
     |> Repo.transaction()
   end
 
+  @doc """
+    Deletes a page from a chapter.
+  """
   def delete_page(%Manual.PageModel{} = page) do
     Multi.new()
     |> delete_page(page)
