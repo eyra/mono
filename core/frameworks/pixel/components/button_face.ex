@@ -79,7 +79,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain_icon(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none">
+    <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none cursor-pointer">
       <div class="flex items-center">
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
@@ -101,7 +101,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px w-full rounded bg-opacity-0 focus:outline-none">
+    <div class="pt-1 pb-1 active:pt-5px active:pb-3px w-full rounded bg-opacity-0 focus:outline-none cursor-pointer">
       <div class="flex items-center w-full">
         <div class="focus:outline-none w-full overflow-ellipsis">
           <div class="flex flex-col justify-center w-full h-full items-center">
@@ -122,7 +122,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def primary_icon(assigns) do
     ~H"""
-    <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 #{@bg_color}"}>
+    <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded cursor-pointer pl-4 pr-4 #{@bg_color}"}>
       <div class="flex justify-center items-center w-full">
         <div>
           <img class="mr-3 -mt-[2px]" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>

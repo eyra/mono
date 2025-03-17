@@ -10,6 +10,7 @@ defmodule Frameworks.Pixel.NumberIcon do
 
   attr(:number, :integer, required: true)
   attr(:active, :boolean, default: false)
+  attr(:active_on_hover, :boolean, default: false)
 
   def number_icon(assigns) do
     ~H"""

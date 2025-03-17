@@ -26,9 +26,12 @@ defmodule Systems.Manual.Builder.PageListView do
     }
   end
 
-  def update_pages(%{assigns: %{chapter: %{pages: pages}}} = socket) do
-    pages = Enum.sort_by(pages, & &1.userflow_step.order)
-    socket |> assign(pages: pages)
+  def update_pages(%{assigns: %{chapter: %{pages: [_ | _] = pages}}} = socket) do
+    socket |> assign(pages: pages |> Enum.sort_by(& &1.userflow_step.order))
+  end
+
+  def update_pages(socket) do
+    socket |> assign(pages: [])
   end
 
   def update_button(socket) do

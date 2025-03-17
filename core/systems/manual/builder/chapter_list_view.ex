@@ -20,8 +20,12 @@ defmodule Systems.Manual.Builder.ChapterListView do
     }
   end
 
-  def update_chapters(%{assigns: %{manual: %{chapters: chapters}}} = socket) do
+  def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
     socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+  end
+
+  def update_chapters(socket) do
+    socket |> assign(chapters: [])
   end
 
   def update_chapter_items(%{assigns: %{chapters: chapters}} = socket) do

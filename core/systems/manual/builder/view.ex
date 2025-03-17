@@ -14,6 +14,7 @@ defmodule Systems.Manual.Builder.View do
         manual: manual,
         selected_chapter_id: selected_chapter_id
       )
+      |> update_chapters()
       |> update_selected_chapter()
       |> compose_child(:chapter_list)
       |> compose_child(:chapter_form)
@@ -21,14 +22,22 @@ defmodule Systems.Manual.Builder.View do
     }
   end
 
-  def update_selected_chapter(%{assigns: %{manual: %{chapters: []}}} = socket) do
+  def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
+    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+  end
+
+  def update_chapters(socket) do
+    socket |> assign(chapters: [])
+  end
+
+  def update_selected_chapter(%{assigns: %{chapters: []}} = socket) do
     # If there are no chapters, we don't have a selected chapter
     socket
     |> assign(selected_chapter_id: nil, selected_chapter: nil)
   end
 
   def update_selected_chapter(
-        %{assigns: %{selected_chapter_id: selected_chapter_id, manual: %{chapters: chapters}}} =
+        %{assigns: %{selected_chapter_id: selected_chapter_id, chapters: chapters}} =
           socket
       ) do
     selected_chapter =
@@ -55,10 +64,7 @@ defmodule Systems.Manual.Builder.View do
     }
   end
 
-  def compose(:chapter_form, %{
-        manual: %{chapters: chapters},
-        selected_chapter_id: selected_chapter_id
-      }) do
+  def compose(:chapter_form, %{chapters: chapters, selected_chapter_id: selected_chapter_id}) do
     chapter = Enum.find(chapters, fn chapter -> chapter.id == selected_chapter_id end)
 
     %{
@@ -103,7 +109,7 @@ defmodule Systems.Manual.Builder.View do
       <div class="flex-grow pb-8">
         <div id="manual-builder-container" class="w-full h-full flex flex-row gap-4 rounded-lg bg-grey5 p-4">
           <!-- Master Sidebar View -->
-          <div id="manual-builder-master-sidebar" class="rounded-lg bg-white p-4 w-[480px]">
+          <div id="manual-builder-master-sidebar" class="rounded-lg bg-white p-4 w-[480px] flex-shrink-0">
             <.child name={:chapter_list} fabric={@fabric} />
           </div>
 

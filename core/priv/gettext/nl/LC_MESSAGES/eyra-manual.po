@@ -35,10 +35,6 @@ msgstr ""
 msgid "create.manual.button"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "manual.title.default"
-msgstr ""
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
 msgstr ""
@@ -101,4 +97,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "page.title.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.back.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.next.button"
 msgstr ""
