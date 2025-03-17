@@ -17,7 +17,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "chapter.title.label"
-msgstr "Chapter title"
+msgstr "Title"
 
 #, elixir-autogen, elixir-format
 msgid "open.cta.title"
@@ -45,19 +45,19 @@ msgstr "Edit manual"
 
 #, elixir-autogen, elixir-format
 msgid "manual.builder.description"
-msgstr "Create a manual with chapters and pages."
+msgstr "Create an instruction manual to effectively guide participants. Use sections to direct them to the instructions that are relevant for their use case. Choose clear and descriptive section titles and labels to help participants quickly navigate to the right section. Keep each instruction as brief as possible while maintaining clarity. You can include as many instructions as needed and enhance them with screenshots by uploading images, ensuring a seamless and effective experience."
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.list.title"
-msgstr "Chapters"
+msgstr "Sections"
 
 #, elixir-autogen, elixir-format
 msgid "create.chapter.button"
-msgstr "Add chapter"
+msgstr "Add section"
 
 #, elixir-autogen, elixir-format,
 msgid "chapter.title.default"
-msgstr "New chapter"
+msgstr "Section title"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.group.label"
@@ -65,40 +65,40 @@ msgstr "Label"
 
 #, elixir-autogen, elixir-format,
 msgid "create.page.button"
-msgstr "Add page"
+msgstr "Add instruction"
 
 #, elixir-autogen, elixir-format,
 msgid "page.title.default"
-msgstr "New page"
+msgstr "Instruction title"
 
 #, elixir-autogen, elixir-format,
 msgid "page.title.label"
-msgstr "Page title"
+msgstr "Title"
 
 #, elixir-autogen, elixir-format
 msgid "page.text.label"
-msgstr "Body text"
+msgstr "Description"
 
 #, elixir-autogen, elixir-format
 msgid "choose.image.file"
-msgstr "Upload image"
+msgstr "Select image"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.image.file"
-msgstr "Upload different image"
+msgstr "Change image"
 
 #, elixir-autogen, elixir-format,
 msgid "builder.pages.list.title"
-msgstr "Pages"
+msgstr "Instructions"
 
 #, elixir-autogen, elixir-format,
 msgid "chapter.label.first"
-msgstr "Example"
+msgstr "Section label"
 
 #, elixir-autogen, elixir-format,
 msgid "chapter.title.first"
-msgstr "First chapter"
+msgstr "Section title"
 
 #, elixir-autogen, elixir-format
 msgid "page.title.first"
-msgstr "First page"
+msgstr "Instruction title"
