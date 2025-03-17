@@ -29,7 +29,7 @@ defmodule Systems.Manual.Builder.ToolForm do
     if Fabric.exists?(fabric, :manual_builder) do
       socket
       |> compose_child(:manual_builder)
-      |> show_modal(:manual_builder, :full)
+      |> show_modal(:manual_builder, :max)
     else
       socket
     end
@@ -78,7 +78,7 @@ defmodule Systems.Manual.Builder.ToolForm do
   defp goto_manual_builder(socket) do
     socket
     |> compose_child(:manual_builder)
-    |> show_modal(:manual_builder, :full)
+    |> show_modal(:manual_builder, :max)
     |> update_button()
   end
 

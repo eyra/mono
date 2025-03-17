@@ -132,7 +132,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  @allowed_styles [:full, :page, :sheet, :dialog, :notification]
+  @allowed_styles [:max, :full, :page, :sheet, :dialog, :notification]
 
   attr(:style, :atom, required: true)
   attr(:live_component, :map, required: true)
@@ -159,6 +159,9 @@ defmodule Frameworks.Pixel.ModalView do
 
   def style_selector(assigns) do
     ~H"""
+      <%= if @style == :max do %>
+        <.max live_component={@live_component} />
+      <% end %>
       <%= if @style == :full do %>
         <.full live_component={@live_component} />
       <% end %>
@@ -179,10 +182,10 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :string, required: true)
 
-  def full(assigns) do
+  def max(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-      <div class={"modal-full p-4 lg:p-8 w-full h-full"}>
+      <div class={"modal-max p-4 lg:p-8 w-full h-full"}>
         <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8"}>
           <%!-- HEADER --%>
           <div class="shrink-0 px-8">
@@ -195,6 +198,30 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
+            <.body live_component={@live_component} />
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:live_component, :string, required: true)
+
+  def full(assigns) do
+    ~H"""
+    <div class="flex flex-row items-center justify-center w-full h-full">
+    <div class={"modal-full p-4 sm:p-12 lg:p-20 w-full h-full"}>
+      <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
+          <%!-- HEADER --%>
+          <div class="shrink-0 px-8">
+            <div class="flex flex-row">
+            <div class="flex-grow"/>
+              <.close_button live_component={@live_component} />
+            </div>
+          </div>
+          <%!-- BODY --%>
+          <div class="h-full overflow-y-scroll px-4">
             <.body live_component={@live_component} />
           </div>
         </div>
