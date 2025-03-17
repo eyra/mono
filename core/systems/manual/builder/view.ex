@@ -101,11 +101,6 @@ defmodule Systems.Manual.Builder.View do
   def render(assigns) do
     ~H"""
     <div id="manual-builder-view" class="w-full h-full flex flex-col gap-4" phx-hook="LiveContent">
-      <div>
-        <Text.body>
-          <%= dgettext("eyra-manual", "manual.builder.description") %>
-        </Text.body>
-      </div>
       <div class="flex-grow pb-8">
         <div id="manual-builder-container" class="w-full h-full flex flex-row gap-4 rounded-lg bg-grey5 p-4">
           <!-- Master Sidebar View -->

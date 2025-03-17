@@ -40,8 +40,8 @@ msgid "open.manual.button"
 msgstr "Edit manual"
 
 #, elixir-autogen, elixir-format
-msgid "manual.builder.description"
-msgstr "Create an instruction manual to effectively guide participants. Use sections to direct them to the instructions that are relevant for their use case. Choose clear and descriptive section titles and labels to help participants quickly navigate to the right section. Keep each instruction as brief as possible while maintaining clarity. You can include as many instructions as needed and enhance them with screenshots by uploading images."
+msgid "setup.annotation"
+msgstr "<div><h1>How to effectively guide participants?</h1><ul><li>Use sections to direct them to the instructions that are relevant for their use case.</li><li>Keep each instruction as brief as possible while maintaining clarity.</li><li>You can include as many instructions as needed and enhance them with screenshots by uploading images.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.list.title"

@@ -40,7 +40,7 @@ msgid "open.manual.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "manual.builder.description"
+msgid "setup.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format

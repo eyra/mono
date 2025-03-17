@@ -1,6 +1,7 @@
 defmodule Systems.Manual.Builder.ToolForm do
   use CoreWeb, :live_component
 
+  alias Frameworks.Pixel.Annotation
   alias Systems.Manual
 
   @impl true
@@ -91,7 +92,8 @@ defmodule Systems.Manual.Builder.ToolForm do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="flex flex-col gap-8">
+      <Annotation.panel annotation={dgettext("eyra-manual", "setup.annotation")} />
       <Button.dynamic_bar buttons={[@button]} />
     </div>
     """
