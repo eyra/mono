@@ -13,9 +13,9 @@ defmodule Systems.Manual.AssemblyTest do
       assert manual.title == nil
       assert manual.description == nil
       assert manual.userflow_id
-      assert chapter.title == "First chapter"
-      assert chapter.userflow_step.group == "Example"
-      assert page.title == "First page"
+      assert chapter.title == "First section"
+      assert chapter.userflow_step.group == "Section label"
+      assert page.title == "First instruction"
     end
   end
 end

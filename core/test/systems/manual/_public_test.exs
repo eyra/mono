@@ -26,7 +26,7 @@ defmodule Systems.Manual.PublicTest do
       manual = Factory.create_manual(1, 0)
 
       assert {:ok, %{manual_chapter: chapter}} = Public.add_chapter(manual)
-      assert chapter.title == "New chapter"
+      assert chapter.title == "New section"
       assert chapter.manual_id == manual.id
       assert chapter.userflow_id
     end
@@ -53,7 +53,7 @@ defmodule Systems.Manual.PublicTest do
       %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
 
       assert {:ok, %{manual_page: page}} = Public.add_page(chapter)
-      assert page.title == "New page"
+      assert page.title == "New instruction"
       assert page.userflow_step_id
     end
   end
