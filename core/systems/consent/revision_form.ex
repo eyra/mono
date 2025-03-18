@@ -36,34 +36,6 @@ defmodule Systems.Consent.RevisionForm do
     }
   end
 
-  @impl true
-  def handle_event(
-        "save",
-        %{"source_input" => source},
-        %{assigns: %{entity: %{source: old_source} = entity}} = socket
-      ) do
-    {
-      :noreply,
-      if old_source == source do
-        socket
-      else
-        save(socket, entity, %{source: source})
-      end
-    }
-  end
-
-  @impl true
-  def handle_event(
-        "save",
-        _,
-        %{assigns: %{entity: nil}} = socket
-      ) do
-    {
-      :noreply,
-      socket
-    }
-  end
-
   # Saving
 
   def save(socket, entity, attrs) do
@@ -73,6 +45,7 @@ defmodule Systems.Consent.RevisionForm do
       {:ok, entity} ->
         socket
         |> assign(entity: entity)
+        |> flash_persister_saved()
 
       {:error, changeset} ->
         socket
@@ -102,7 +75,7 @@ defmodule Systems.Consent.RevisionForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id="agreement_form" :let={form} for={@form} phx-change="save" phx-target={@myself} >
+        <.form id="agreement_form" :let={form} for={@form} phx-change="save_wysiwyg" phx-target={@myself} >
           <!-- always render wysiwyg te prevent scrollbar reset in LiveView -->
           <.wysiwyg_area form={form} field={:source} visible={@visible}/>
         </.form>

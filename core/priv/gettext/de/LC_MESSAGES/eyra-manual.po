@@ -1,0 +1,112 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.manual.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "open.manual.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "setup.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builder.chapter.list.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.chapter.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.title.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.group.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.page.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "page.title.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "page.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.text.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.image.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.image.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "builder.pages.list.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.label.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.title.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.title.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.back.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.next.button"
+msgstr ""

@@ -461,6 +461,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:min_height, :string, default: "min-h-wysiwyg-editor")
   attr(:max_height, :string, default: "max-h-wysiwyg-editor")
   attr(:visible, :boolean, default: true)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def wysiwyg_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -494,6 +495,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       errors={@errors}
+      reserve_error_space={@reserve_error_space}
       extra_space={false}
     >
       <div
@@ -514,6 +516,8 @@ defmodule Frameworks.Pixel.Form do
           data-visible={true}
           data-locked={false}
           data-target={@target}
+          data-min-height={@min_height}
+          data-max-height={@max_height}
         />
       </div>
     </.field>
@@ -550,6 +554,40 @@ defmodule Frameworks.Pixel.Form do
         <% end %>
         <div class="hidden">
           <.live_file_input upload={@uploads.photo} />
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:static_path, :any, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:image_url, :string, required: true)
+  attr(:uploads, :any, required: true)
+  attr(:primary_button_text, :string, required: true)
+  attr(:secondary_button_text, :string, required: true)
+
+  def image_input(assigns) do
+    ~H"""
+    <%= if @label_text do %>
+      <Text.title6><%= @label_text %></Text.title6>
+    <% end %>
+    <div class="flex flex-row items-top">
+      <.image_preview
+        image_url={@image_url}
+        placeholder={"/images/image_placeholder.svg"}
+        shape="w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm"
+      />
+      <.spacing value="S" direction="l" />
+      <div class="flex-wrap">
+        <%= if @image_url do %>
+          <Button.secondary_label label={@secondary_button_text} field={@uploads.image.ref} />
+        <% else %>
+          <Button.primary_label label={@primary_button_text} field={@uploads.image.ref} />
+        <% end %>
+        <div class="hidden">
+          <.live_file_input upload={@uploads.image} />
         </div>
       </div>
     </div>

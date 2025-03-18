@@ -36,6 +36,12 @@ defmodule Systems.Assignment.TemplateDataDonation do
         library: %Workflow.LibraryModel{
           items: [
             %Workflow.LibraryItemModel{
+              special: :manual,
+              tool: :manual_tool,
+              title: Assignment.WorkflowItemSpecials.translate(:manual),
+              description: dgettext("eyra-assignment", "workflow_item.manual.description")
+            },
+            %Workflow.LibraryItemModel{
               special: :donate,
               tool: :feldspar_tool,
               title: Assignment.WorkflowItemSpecials.translate(:donate),

@@ -129,8 +129,8 @@ defmodule Core.MixProject do
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "~> 1.1"},
       # Dev and test deps
+      {:ex_machina, "~> 2.8.0", only: :test},
       {:file_system, "~> 1.0.1", only: [:dev, :test]},
-      # Fixed build warnings
       {:bypass, "~> 2.1",
        github: "PSPDFKit-labs/bypass",
        ref: "3f4aac137fd1caf5a15953b43d8785966ab0e021",

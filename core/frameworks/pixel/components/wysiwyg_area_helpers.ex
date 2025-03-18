@@ -10,10 +10,10 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
       @behaviour Frameworks.Pixel.WysiwygAreaHelpers
 
       import Frameworks.Pixel.WysiwygAreaHelpers, only: [post_process: 1]
-      import Frameworks.Pixel.Form, only: [wysiwyg_area: 1]
+      import Frameworks.Pixel.Form
 
       @impl true
-      def handle_event("save", %{"_target" => [input_name]} = params, socket) do
+      def handle_event("save_wysiwyg", %{"_target" => [input_name]} = params, socket) do
         content =
           params
           |> Map.get(input_name)

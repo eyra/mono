@@ -82,16 +82,28 @@ defmodule Systems.Assignment.CrewWorkView do
     |> hide_modal(:tool_ref_view)
     |> compose_child(:context_menu)
     |> update_selected_item_id()
-    |> update_selected_item()
+    |> reset_selection()
   end
 
   defp update(socket) do
     socket
+    |> update_selected_item()
     |> update_child(:context_menu)
     |> update_child(:work_list_view)
     |> update_child(:start_view)
     |> update_child(:tool_ref_view)
+    |> update_tool_ref_modal()
   end
+
+  defp update_tool_ref_modal(%{assigns: %{tool_started: true, tool_initialized: true}} = socket) do
+    if Fabric.exists?(socket, :tool_ref_view) do
+      show_modal(socket, :tool_ref_view, :full)
+    else
+      socket
+    end
+  end
+
+  defp update_tool_ref_modal(socket), do: socket
 
   defp tasks_finished?(work_items) do
     task_ids = Enum.map(work_items, fn {_, task} -> task.id end)
@@ -145,13 +157,16 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   defp update_selected_item(
-         %{assigns: %{selected_item_id: selected_item_id, work_items: work_items}} = socket
+         %{assigns: %{work_items: work_items, selected_item_id: selected_item_id}} = socket
        ) do
     selected_item = Enum.find(work_items, fn {%{id: id}, _} -> id == selected_item_id end)
+    socket |> assign(selected_item: selected_item)
+  end
 
+  defp reset_selection(socket) do
     socket
+    |> update_selected_item()
     |> assign(
-      selected_item: selected_item,
       tool_initialized: false,
       tool_started: false
     )
@@ -328,12 +343,19 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def handle_event("tool_initialized", _, socket) do
+  def handle_event("tool_initialized", _, %{assigns: %{tool_initialized: false}} = socket) do
     {
       :noreply,
       socket
       |> assign(tool_initialized: true)
       |> show_tool_ref_view_if_needed()
+    }
+  end
+
+  def handle_event("tool_initialized", _, socket) do
+    {
+      :noreply,
+      socket
     }
   end
 
@@ -373,7 +395,7 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(selected_item_id: item_id)
-      |> update_selected_item()
+      |> reset_selection()
     }
   end
 
@@ -439,7 +461,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
   @impl true
   def handle_modal_closed(socket, :tool_ref_view) do
-    socket |> update_selected_item()
+    socket |> reset_selection()
   end
 
   def handle_modal_closed(socket, name) do
@@ -560,7 +582,7 @@ defmodule Systems.Assignment.CrewWorkView do
   defp select_next_item(socket) do
     socket
     |> select_next_item_id()
-    |> update_selected_item()
+    |> reset_selection()
   end
 
   defp select_next_item_id(

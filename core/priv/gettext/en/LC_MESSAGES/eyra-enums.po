@@ -485,3 +485,7 @@ msgstr "The group, subjects or sample being studied. (PICO, PICo, SPIDER)"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "zircon_screening_categories.setting"
 msgstr "A specific geographic or organizational location. (SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.manual"
+msgstr "Instruction manual [beta]"

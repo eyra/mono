@@ -27,6 +27,11 @@ defmodule CoreWeb.Layouts.Website.Composer do
       use CoreWeb.UI.PlainDialog
 
       import CoreWeb.Layouts.Website.Html
+
+      @impl true
+      def handle_info({:handle_auto_save_done, _}, socket) do
+        {:noreply, socket |> update_menus()}
+      end
     end
   end
 end

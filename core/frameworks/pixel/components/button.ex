@@ -67,7 +67,8 @@ defmodule Frameworks.Pixel.Button do
 
   defp face_function(:primary, nil), do: &Face.primary/1
   defp face_function(:primary, _icon), do: &Face.primary_icon/1
-  defp face_function(:secondary, _), do: &Face.secondary/1
+  defp face_function(:secondary, nil), do: &Face.secondary/1
+  defp face_function(:secondary, _icon), do: &Face.secondary_icon/1
   defp face_function(:label, nil), do: &Face.label/1
   defp face_function(:label, _icon), do: &Face.label_icon/1
   defp face_function(:forward, _), do: &Face.plain/1

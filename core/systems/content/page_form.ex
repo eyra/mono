@@ -41,7 +41,7 @@ defmodule Systems.Content.PageForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id={"#{@id}_page_form"} :let={form} for={@original_form } phx-change="save" phx-target={@myself} >
+        <.form id={"#{@id}_page_form"} :let={form} for={@original_form } phx-change="save_wysiwyg" phx-target={@myself} >
           <!-- always render wysiwyg te prevent scrollbar reset in LiveView -->
           <.wysiwyg_area form={form} field={:body} />
         </.form>

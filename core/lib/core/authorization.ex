@@ -55,6 +55,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
   grant_access(Systems.Home.Page, [:visitor, :member, :creator])
   grant_access(Systems.Lab.PublicPage, [:member])
+  grant_access(Systems.Manual.Builder.PublicPage, [:creator])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.Org.ContentPage, [:admin])

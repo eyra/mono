@@ -485,3 +485,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "zircon_screening_categories.setting"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.manual"
+msgstr ""
