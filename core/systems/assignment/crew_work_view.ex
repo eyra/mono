@@ -96,8 +96,11 @@ defmodule Systems.Assignment.CrewWorkView do
   end
 
   defp update_tool_ref_modal(%{assigns: %{tool_started: true, tool_initialized: true}} = socket) do
-    socket
-    |> show_modal(:tool_ref_view, :full)
+    if Fabric.exists?(socket, :tool_ref_view) do
+      show_modal(socket, :tool_ref_view, :full)
+    else
+      socket
+    end
   end
 
   defp update_tool_ref_modal(socket), do: socket
