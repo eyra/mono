@@ -256,15 +256,19 @@ defmodule Fabric do
 
   def prepare_modal(context, child_name, modal_style)
       when is_atom(child_name) or is_binary(child_name) do
-    child = get_child(context, child_name)
-    prepared_modal_style = Map.get(child, :prepared_modal_style)
+    if child = get_child(context, child_name) do
+      prepared_modal_style = Map.get(child, :prepared_modal_style)
 
-    if prepared_modal_style do
-      Logger.debug("already prepared modal style #{prepared_modal_style} for #{child_name}")
-      context
+      if prepared_modal_style do
+        Logger.debug("already prepared modal style #{prepared_modal_style} for #{child_name}")
+        context
+      else
+        child |> Map.put(child, prepared_modal_style: modal_style)
+        prepare_modal(context, child, modal_style)
+      end
     else
-      child |> Map.put(child, prepared_modal_style: modal_style)
-      prepare_modal(context, child, modal_style)
+      Logger.warning("Can not prepare modal with unknown child '#{child_name}'")
+      context
     end
   end
 
@@ -287,8 +291,12 @@ defmodule Fabric do
 
   def show_modal(context, child_name, modal_style)
       when is_atom(child_name) or is_binary(child_name) do
-    child = get_child(context, child_name)
-    show_modal(context, child, modal_style)
+    if child = get_child(context, child_name) do
+      show_modal(context, child, modal_style)
+    else
+      Logger.warning("Can not show modal with unknown child '#{child_name}'")
+      context
+    end
   end
 
   def show_modal(
