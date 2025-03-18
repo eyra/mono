@@ -41,7 +41,7 @@ msgstr "Edit manual"
 
 #, elixir-autogen, elixir-format
 msgid "setup.annotation"
-msgstr "<div><h1>How to set up participant instructions?</h1><ul><li>Create <b>sections</b>, so participants can navigate to the relevant section.</li><li>Use section <b>labels</b> to specify use cases, like <i>iPhone</i> or <i>Android</i>.</li><li>Provide multiple brief <b>instructions</b> within each section, including relevant <b>screenshots</b> for clarity.</li></ul></div>"
+msgstr "<div><h1>How to set up participant instructions?</h1><ul><li>Create <strong>sections</strong>, so participants can navigate to the relevant section.</li><li>Use section <strong>labels</strong> to specify use cases, like <i>iPhone</i> or <i>Android</i>.</li><li>Provide multiple brief <strong>instructions</strong> within each section, including relevant <b>screenshots</b> for clarity.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.list.title"
