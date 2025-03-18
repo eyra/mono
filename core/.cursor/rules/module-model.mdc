@@ -1,0 +1,195 @@
+---
+description: Model module guidelines
+globs: *_model.ex
+alwaysApply: true
+---
+# Model Module Guidelines
+
+## Basic Structure
+
+Every model module should follow this basic structure:
+
+```elixir
+defmodule Systems.YourSystem.Model do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "table_name" do
+    # Fields and associations
+    timestamps()
+  end
+
+  # Field definitions
+  @fields ~w(field1 field2)a
+  @required_fields ~w(field1)a
+
+  # Changeset and validation functions
+  def changeset(model, attrs \\ %{})
+  def validate(changeset)
+
+  # Preload graph definitions
+  def preload_graph(:down)
+  def preload_graph(:up)
+end
+```
+
+## Schema Definition Rules
+
+1. Table names should be singular and snake_case
+2. Always include `timestamps()`
+3. Field definitions should be grouped by type:
+   ```elixir
+   schema "example" do
+     # Basic fields
+     field(:title, :string)
+     field(:description, :string)
+
+     # Associations
+     belongs_to(:parent, Systems.Parent.Model)
+     has_many(:children, Systems.Child.Model)
+
+     timestamps()
+   end
+   ```
+
+## Field Definitions
+
+1. Define fields in module attributes:
+   ```elixir
+   @fields ~w(field1 field2)a
+   @required_fields ~w(field1)a
+   ```
+
+2. Fields should NOT include:
+   - Primary keys (id)
+   - Foreign keys (referenced via associations)
+   - Timestamp fields
+
+## Changesets and Validation
+
+1. Separate changeset creation from validation:
+   ```elixir
+   def changeset(model, attrs \\ %{}) do
+     model
+     |> cast(attrs, @fields)
+   end
+
+   def validate(changeset) do
+     changeset
+     |> validate_required(@required_fields)
+     # Additional validations
+   end
+   ```
+
+2. Changeset function should:
+   - Accept default empty map for attrs
+   - Only perform casting
+   - Not include validations
+
+3. Validate function should:
+   - Contain all validations
+   - Be called separately from changeset
+   - Return the validated changeset
+
+## Associations
+
+1. Define associations using proper Ecto relationships:
+   ```elixir
+   # One-to-many
+   has_many(:items, Systems.Item.Model)
+
+   # Many-to-one
+   belongs_to(:parent, Systems.Parent.Model)
+
+   # One-to-one
+   has_one(:detail, Systems.Detail.Model)
+   ```
+
+2. Use descriptive association names that reflect the relationship
+
+## Preload Graphs
+
+1. Always define both up and down preload graphs:
+   ```elixir
+   def preload_graph(:down), do: [:children, nested: [:items]]
+   def preload_graph(:up), do: [:parent]
+   ```
+
+2. Down preloads should include:
+   - Child associations
+   - Nested preloads when needed
+
+3. Up preloads should include:
+   - Parent associations
+   - Any upward relationships
+
+## Helper Functions
+
+1. Include helper functions for common operations:
+   ```elixir
+   def finished?(%__MODULE__{items: items}, user_id) do
+     # Implementation
+   end
+   ```
+
+2. Helper functions should:
+   - Pattern match on module struct
+   - Have clear, descriptive names
+   - Document complex logic
+   - Return consistent types
+
+## Best Practices
+
+1. Keep models focused on data structure and validation
+2. Use meaningful field and association names
+3. Document complex relationships or business rules
+4. Follow consistent naming conventions
+5. Keep validation rules in the model
+6. Use module attributes for configuration
+7. Implement preload graphs for all associations
+8. Pattern match in helper functions
+
+## Example Implementation
+
+```elixir
+defmodule Systems.Example.Model do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "example" do
+    field(:title, :string)
+    field(:description, :string)
+    field(:status, :string)
+
+    belongs_to(:parent, Systems.Parent.Model)
+    has_many(:items, Systems.Item.Model)
+
+    timestamps()
+  end
+
+  @fields ~w(title description status)a
+  @required_fields ~w(title status)a
+
+  def changeset(model, attrs \\ %{}) do
+    model
+    |> cast(attrs, @fields)
+  end
+
+  def validate(changeset) do
+    changeset
+    |> validate_required(@required_fields)
+    |> validate_length(:title, min: 3)
+    |> validate_inclusion(:status, ["draft", "published"])
+  end
+
+  def preload_graph(:down), do: [items: []]
+  def preload_graph(:up), do: [:parent]
+
+  @doc """
+  Checks if the example is complete based on its items.
+  """
+  def complete?(%__MODULE__{items: items}) when is_list(items) do
+    Enum.all?(items, & &1.status == "completed")
+  end
+end
+```

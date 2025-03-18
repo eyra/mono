@@ -3,9 +3,7 @@ defmodule Systems.Document.Public do
   import Ecto.Query, warn: false
   alias Core.Repo
 
-  alias Systems.{
-    Document
-  }
+  alias Systems.Document
 
   def get_tool!(id, preload \\ []) do
     from(tool in Document.ToolModel, preload: ^preload)

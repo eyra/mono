@@ -13,6 +13,7 @@ defmodule Systems.Routes do
         :graphite,
         :home,
         :lab,
+        :manual,
         :next_action,
         :notification,
         :org,

@@ -1,0 +1,66 @@
+defmodule Systems.Manual.ChapterListView do
+  use CoreWeb, :live_component
+
+  import Systems.Manual.Html
+
+  alias Systems.Manual
+
+  @impl true
+  def update(%{manual: manual, title: title, selected_chapter_id: selected_chapter_id}, socket) do
+    {
+      :ok,
+      socket
+      |> assign(
+        manual: manual,
+        title: title,
+        selected_chapter_id: selected_chapter_id
+      )
+      |> update_chapters()
+      |> update_chapter_items()
+    }
+  end
+
+  def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
+    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+  end
+
+  def update_chapters(socket) do
+    socket |> assign(chapters: [])
+  end
+
+  def update_chapter_items(%{assigns: %{chapters: chapters}} = socket) do
+    chapter_items =
+      chapters
+      |> Enum.with_index()
+      |> Enum.map(&map_chapter_to_item/1)
+
+    socket |> assign(chapter_items: chapter_items)
+  end
+
+  def map_chapter_to_item(
+        {%Manual.ChapterModel{id: id, title: title, userflow_step: %{group: group}}, index}
+      ) do
+    %{
+      id: id,
+      title: title,
+      tag: group,
+      number: index + 1
+    }
+  end
+
+  def handle_event("select_chapter", %{"item" => chapter_id}, socket) do
+    {:noreply,
+     socket
+     |> send_event(:parent, "select_chapter", %{chapter_id: chapter_id |> String.to_integer()})}
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <Text.title2><%= @title %></Text.title2>
+      <.chapter_list items={@chapter_items} selected_chapter_id={@selected_chapter_id} target={@myself} />
+    </div>
+    """
+  end
+end
