@@ -31,12 +31,13 @@ defmodule Systems.Project.NodePage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.tabbar_page
+    <.tabbar_page_breadcrumbs
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
+        breadcrumbs={@vm.breadcrumbs}
         menus={@menus}
         modals={@modals}
         popup={@popup}

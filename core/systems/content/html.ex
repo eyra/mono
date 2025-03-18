@@ -1,16 +1,14 @@
 defmodule Systems.Content.Html do
   use CoreWeb, :html
-
   import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
   import CoreWeb.Layouts.Website.Html, only: [website: 1]
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
-
   import CoreWeb.UI.Popup
   alias Frameworks.Pixel.ModalView
   import CoreWeb.UI.PlainDialog
-
   alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Navigation
+  alias Frameworks.Pixel.Breadcrumbs
 
   attr(:modals, :map, required: true)
   attr(:popup, :map, required: true)
@@ -110,6 +108,44 @@ defmodule Systems.Content.Html do
 
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbed.content tabs={@tabs} include_top_margin={false} />
+          </div>
+        <% end %>
+      </.live_workspace>
+    """
+  end
+
+  attr(:title, :string, required: true)
+  attr(:menus, :map, required: true)
+  attr(:modals, :list, required: true)
+  attr(:popup, :map, required: true)
+  attr(:dialog, :map, required: true)
+  attr(:tabs, :list, required: true)
+  attr(:tabbar_id, :atom, required: true)
+  attr(:initial_tab, :string, required: true)
+  attr(:show_errors, :string, required: true)
+  attr(:breadcrumbs, :list, default: [])
+
+  def tabbar_page_breadcrumbs(assigns) do
+    ~H"""
+      <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+        <%= if Enum.count(@tabs) > 0 do %>
+          <div class="flex flex-row items-center justify-between w-full h-navbar-height">
+            <Area.content>
+              <div class="flex flex-col gap-y-4 mt-4 sm:mt-0 sm:flex-row w-full justify-between">
+                  <div>
+                    <%= if Enum.count(@breadcrumbs || []) > 0 do %>
+                      <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
+                    <% end %>
+                  </div>
+                  <div class="flex justify-center">
+                    <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+                  </div>
+                  <div class=""></div>
+              </div>
+            </Area.content>
+          </div>
+          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+              <Tabbed.content tabs={@tabs} include_top_margin={false} />
           </div>
         <% end %>
       </.live_workspace>
