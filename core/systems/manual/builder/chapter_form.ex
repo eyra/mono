@@ -57,7 +57,7 @@ defmodule Systems.Manual.Builder.ChapterForm do
     ~H"""
     <div>
       <%= if @entity do %>
-        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself} >
           <.text_input form={form} field={:title} label_text={dgettext("eyra-manual", "chapter.title.label")} />
         </.form>
         <.child name={:userflow_step_form} fabric={@fabric} />

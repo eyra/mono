@@ -43,7 +43,7 @@ defmodule Systems.Userflow.StepForm do
     ~H"""
     <div>
       <%= if @entity do %>
-        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself} >
           <.text_input form={form} field={:group} label_text={@group_label} />
         </.form>
       <% end %>
