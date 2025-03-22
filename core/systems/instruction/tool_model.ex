@@ -52,7 +52,7 @@ defmodule Systems.Instruction.ToolModel do
     def form(_, :download_instruction), do: Instruction.DownloadForm
     def form(_, :general_instruction), do: Instruction.GeneralForm
 
-    def launcher(tool),
+    def launcher(tool, _user),
       do: %{
         module: Instruction.ToolView,
         params: %{

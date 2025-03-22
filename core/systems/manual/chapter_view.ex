@@ -5,22 +5,25 @@ defmodule Systems.Manual.ChapterView do
 
   use CoreWeb, :live_component
 
+  alias Systems.Userflow
+
   @impl true
-  def update(%{chapter: chapter}, socket) do
+  def update(%{chapter: chapter, user: user}, socket) do
     {
       :ok,
       socket
-      |> assign(chapter: chapter)
+      |> assign(chapter: chapter, user: user)
       |> compose_child(:chapter_desktop)
       |> compose_child(:chapter_mobile)
+      |> mark_visited()
     }
   end
 
   @impl true
-  def compose(:chapter_desktop, %{chapter: chapter}) do
+  def compose(:chapter_desktop, %{chapter: chapter, user: user}) do
     %{
       module: Manual.ChapterDesktopView,
-      params: %{chapter: chapter}
+      params: %{chapter: chapter, user: user}
     }
   end
 
@@ -37,6 +40,11 @@ defmodule Systems.Manual.ChapterView do
       :noreply,
       socket |> send_event(:parent, "back")
     }
+  end
+
+  defp mark_visited(%{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket) do
+    Userflow.Public.mark_visited(userflow_step, user)
+    socket
   end
 
   @impl true

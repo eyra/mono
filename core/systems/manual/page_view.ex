@@ -1,13 +1,21 @@
 defmodule Systems.Manual.PageView do
   use CoreWeb, :live_component
 
+  alias Systems.Userflow
+
   @impl true
-  def update(%{page: page}, socket) do
+  def update(%{page: page, user: user}, socket) do
     {
       :ok,
       socket
-      |> assign(page: page)
+      |> assign(page: page, user: user)
+      |> mark_visited()
     }
+  end
+
+  defp mark_visited(%{assigns: %{page: %{userflow_step: userflow_step}, user: user}} = socket) do
+    Userflow.Public.mark_visited(userflow_step, user)
+    socket
   end
 
   @impl true

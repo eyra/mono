@@ -47,7 +47,7 @@ defmodule Systems.Assignment.StartView do
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item, participant) do
     Workflow.ToolRefModel.tool(tool_ref)
-    |> Concept.ToolModel.launcher()
+    |> Concept.ToolModel.launcher(participant)
     |> start_action(item, participant)
   end
 

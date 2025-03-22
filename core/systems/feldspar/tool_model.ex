@@ -54,7 +54,7 @@ defmodule Systems.Feldspar.ToolModel do
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
     def form(_, _), do: Feldspar.ToolForm
 
-    def launcher(%{id: id, archive_ref: archive_ref}) when is_binary(archive_ref) do
+    def launcher(%{id: id, archive_ref: archive_ref}, _user) when is_binary(archive_ref) do
       %{
         module: Feldspar.AppView,
         params: %{
@@ -65,7 +65,7 @@ defmodule Systems.Feldspar.ToolModel do
       }
     end
 
-    def launcher(_), do: nil
+    def launcher(_, _), do: nil
 
     def task_labels(_) do
       %{

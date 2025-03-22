@@ -13,7 +13,7 @@ defmodule Manual.ChapterDesktopView do
   alias Systems.Manual
 
   @impl true
-  def update(%{chapter: chapter}, socket) do
+  def update(%{chapter: chapter, user: user}, socket) do
     selected_page_id = Map.get(socket.assigns, :selected_page_id, nil)
 
     {
@@ -21,7 +21,8 @@ defmodule Manual.ChapterDesktopView do
       socket
       |> assign(
         chapter: chapter,
-        selected_page_id: selected_page_id
+        selected_page_id: selected_page_id,
+        user: user
       )
       |> update_pages()
       |> update_selected_page()
@@ -43,13 +44,14 @@ defmodule Manual.ChapterDesktopView do
   end
 
   @impl true
-  def compose(:page_view, %{chapter: chapter, selected_page: selected_page}) do
+  def compose(:page_view, %{chapter: chapter, selected_page: selected_page, user: user}) do
     %{
       module: Manual.PageView,
       params: %{
         page: selected_page,
         title: chapter.title,
-        tag: chapter.userflow_step.group
+        tag: chapter.userflow_step.group,
+        user: user
       }
     }
   end

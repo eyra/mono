@@ -259,9 +259,9 @@ defmodule Systems.Assignment.CrewWorkView do
   @impl true
   def compose(
         :tool_ref_view,
-        %{selected_item: selected_item} = assigns
+        %{selected_item: selected_item, user: user} = assigns
       ) do
-    launcher = launcher(selected_item)
+    launcher = launcher(selected_item, user)
     compose(:tool_ref_view, Map.put(assigns, :launcher, launcher))
   end
 
@@ -638,10 +638,10 @@ defmodule Systems.Assignment.CrewWorkView do
     socket
   end
 
-  defp launcher({%{tool_ref: tool_ref}, _}) do
+  defp launcher({%{tool_ref: tool_ref}, _}, user) do
     tool_ref
     |> Workflow.ToolRefModel.tool()
-    |> Concept.ToolModel.launcher()
+    |> Concept.ToolModel.launcher(user)
   end
 
   defp embedded?(%{assigns: %{panel_info: %{embedded?: embedded?}}}) do
