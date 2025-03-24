@@ -112,7 +112,7 @@ defmodule Systems.Manual.View do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="px-4">
+    <div class="w-full h-full">
       <%= if Fabric.exists?(@fabric, :chapter) do %>
         <.child name={:chapter} fabric={@fabric} />
       <% else %>

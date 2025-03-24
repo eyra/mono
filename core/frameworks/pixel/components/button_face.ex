@@ -75,12 +75,18 @@ defmodule Frameworks.Pixel.Button.Face do
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, default: :forward)
+  attr(:icon_align, :atom, default: :right)
   attr(:text_color, :string, default: "text-grey1")
 
   def plain_icon(assigns) do
     ~H"""
     <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none cursor-pointer">
       <div class="flex items-center">
+        <%= if @icon_align != :right do %>
+          <div>
+            <img class="mr-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          </div>
+        <% end %>
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
             <div class={"flex-wrap text-button font-button #{@text_color}"}>
@@ -88,9 +94,11 @@ defmodule Frameworks.Pixel.Button.Face do
             </div>
           </div>
         </div>
-        <div>
-          <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-        </div>
+        <%= if @icon_align == :right do %>
+          <div>
+            <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          </div>
+        <% end %>
       </div>
     </div>
     """
