@@ -63,6 +63,7 @@ defmodule Systems.Manual.Html do
   attr(:back_button, :map, required: true)
   attr(:next_button, :map, required: true)
   attr(:previous_button, :map, required: true)
+  attr(:fullscreen_button, :map, default: nil)
   attr(:select_page_event, :string, required: true)
   attr(:select_page_target, :any, required: true)
 
@@ -91,7 +92,7 @@ defmodule Systems.Manual.Html do
         </div>
         <!-- Detail View -->
         <div class="flex-grow h-full flex flex-col gap-8 mb-8">
-          <.page page={@selected_page} />
+          <.page id={"desktop-page-#{@id}"} page={@selected_page} fullscreen_button={@fullscreen_button} />
           <.line />
           <div class="flex-shrink-0 flex flex-row gap-4 items-center">
             <%= if @previous_button do %>
@@ -116,6 +117,7 @@ defmodule Systems.Manual.Html do
   attr(:back_button, :map, required: true)
   attr(:next_button, :map, default: nil)
   attr(:previous_button, :map, default: nil)
+  attr(:fullscreen_button, :map, default: nil)
 
   def chapter_mobile(assigns) do
     ~H"""
@@ -130,7 +132,7 @@ defmodule Systems.Manual.Html do
           </div>
           <.line />
         </div>
-        <.page page={@selected_page} indicator={@indicator} padding="pb-[98px]" />
+        <.page id={"mobile-page-#{@id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-[98px]" />
       </div>
       <div class="absolute bottom-0 left-0 right-0 px-4 sm:px-8 h-[80px] bg-white">
         <div class="flex flex-col gap-4 h-full">
@@ -156,8 +158,10 @@ defmodule Systems.Manual.Html do
     """
   end
 
+  attr(:id, :string, required: true)
   attr(:page, :map, required: true)
   attr(:indicator, :string, default: nil)
+  attr(:fullscreen_button, :map, default: nil)
   attr(:padding, :string, default: "")
 
   def page(assigns) do
@@ -170,8 +174,11 @@ defmodule Systems.Manual.Html do
         <%= @page.title %>
       </div>
       <%= if @page.image do %>
-        <div>
+        <div id={"manual-page-#{@id}-image"} phx-hook="FullscreenImage" class="flex flex-col gap-4">
           <img src={@page.image} />
+          <%= if @fullscreen_button do %>
+            <Button.dynamic {@fullscreen_button} />
+          <% end %>
         </div>
       <% end %>
       <div class="wysiwyg">

@@ -12,4 +12,10 @@ export const MainContent = {
   getEl() {
     return document.getElementById("main-content");
   },
+  hide() {
+    this.getEl().style.display = "none";
+  },
+  show() {
+    this.getEl().style.display = "block";
+  },
 };

@@ -114,3 +114,7 @@ msgstr "%{current}/%{count}"
 #, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
 msgstr "Previous"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "image.fullscreen.button"
+msgstr "View full screen"

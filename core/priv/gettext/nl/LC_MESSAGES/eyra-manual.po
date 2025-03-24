@@ -114,3 +114,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "image.fullscreen.button"
+msgstr ""

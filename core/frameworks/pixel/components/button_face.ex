@@ -84,7 +84,7 @@ defmodule Frameworks.Pixel.Button.Face do
       <div class="flex items-center">
         <%= if @icon_align != :right do %>
           <div>
-            <img class="mr-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+            <img class="mr-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
           </div>
         <% end %>
         <div class="focus:outline-none">
@@ -96,7 +96,7 @@ defmodule Frameworks.Pixel.Button.Face do
         </div>
         <%= if @icon_align == :right do %>
           <div>
-            <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+            <img class="ml-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
           </div>
         <% end %>
       </div>

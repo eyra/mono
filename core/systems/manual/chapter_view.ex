@@ -32,6 +32,7 @@ defmodule Systems.Manual.ChapterView do
     |> update_back_button()
     |> update_next_button()
     |> update_previous_button()
+    |> update_fullscreen_button()
   end
 
   def update_title(%{assigns: %{chapter: %{title: title}}} = socket) do
@@ -142,6 +143,21 @@ defmodule Systems.Manual.ChapterView do
     socket |> assign(previous_button: previous_button)
   end
 
+  defp update_fullscreen_button(socket) do
+    fullscreen_button = %{
+      action: %{type: :send, event: "fullscreen"},
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-manual", "image.fullscreen.button"),
+        icon: :zoom,
+        icon_align: :left,
+        text_color: "text-primary"
+      }
+    }
+
+    socket |> assign(fullscreen_button: fullscreen_button)
+  end
+
   def handle_event("back", _, socket) do
     {
       :noreply,
@@ -173,6 +189,11 @@ defmodule Systems.Manual.ChapterView do
       |> update_selected_page()
       |> update_ui()
     }
+  end
+
+  def handle_event("fullscreen", _, socket) do
+    # can be ignored, is handled by the FullscreenImage hook in fullscreen_image.js
+    {:noreply, socket}
   end
 
   defp mark_visited(%{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket) do
@@ -242,8 +263,9 @@ defmodule Systems.Manual.ChapterView do
           pages={@pages}
           selected_page={@selected_page}
           back_button={@back_button}
-          next_button={@next_button}
           previous_button={@previous_button}
+          next_button={@next_button}
+          fullscreen_button={@fullscreen_button}
           select_page_event="select_page"
           select_page_target={@myself}
         />
@@ -255,9 +277,10 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           indicator={@indicator}
           selected_page={@selected_page}
-          next_button={@next_button}
-          previous_button={@previous_button}
           back_button={@back_button}
+          previous_button={@previous_button}
+          next_button={@next_button}
+          fullscreen_button={@fullscreen_button}
         />
       </div>
     </div>
