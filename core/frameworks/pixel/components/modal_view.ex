@@ -126,7 +126,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   def background(assigns) do
     ~H"""
-    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full bg-black bg-opacity-30 #{if @show do "block" else "hidden" end}"}>
+    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full backdrop-blur-md bg-black/30 #{if @show do "block" else "hidden" end}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
