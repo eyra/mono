@@ -57,8 +57,8 @@ defmodule Systems.Manual.ChapterListView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <Text.title2><%= @title %></Text.title2>
+    <div class="flex flex-col gap-4">
+      <div class="font-title5 text-title5 sm:font-title2 sm:text-title2"><%= @title %></div>
       <.chapter_list items={@chapter_items} selected_chapter_id={@selected_chapter_id} target={@myself} />
     </div>
     """

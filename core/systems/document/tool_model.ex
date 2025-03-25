@@ -54,7 +54,7 @@ defmodule Systems.Document.ToolModel do
     def ready?(tool), do: Document.ToolModel.ready?(tool)
     def form(_, _), do: Document.ToolForm
 
-    def launcher(%{id: id, ref: ref}),
+    def launcher(%{id: id, ref: ref}, _user),
       do: %{
         module: Document.PDFNavView,
         params: %{

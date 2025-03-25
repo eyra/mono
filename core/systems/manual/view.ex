@@ -4,7 +4,7 @@ defmodule Systems.Manual.View do
   alias Systems.Manual
 
   @impl true
-  def update(%{manual: manual, title: title}, socket) do
+  def update(%{manual: manual, title: title, user: user}, socket) do
     selected_chapter_id = Map.get(socket.assigns, :selected_chapter_id, nil)
 
     {
@@ -13,6 +13,7 @@ defmodule Systems.Manual.View do
       |> assign(
         manual: manual,
         title: title,
+        user: user,
         selected_chapter_id: selected_chapter_id
       )
       |> update_chapters()
@@ -78,10 +79,13 @@ defmodule Systems.Manual.View do
     nil
   end
 
-  def compose(:chapter, %{selected_chapter: selected_chapter}) do
+  def compose(:chapter, %{selected_chapter: selected_chapter, user: user}) do
     %{
       module: Manual.ChapterView,
-      params: %{chapter: selected_chapter}
+      params: %{
+        chapter: selected_chapter,
+        user: user
+      }
     }
   end
 
@@ -108,7 +112,7 @@ defmodule Systems.Manual.View do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="px-4">
+    <div class="w-full h-full">
       <%= if Fabric.exists?(@fabric, :chapter) do %>
         <.child name={:chapter} fabric={@fabric} />
       <% else %>

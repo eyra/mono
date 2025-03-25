@@ -100,13 +100,21 @@ msgid "page.title.first"
 msgstr "First instruction"
 
 #, elixir-autogen, elixir-format
-msgid "overview.title"
-msgstr "Overview"
-
-#, elixir-autogen, elixir-format
 msgid "chapter.back.button"
 msgstr "Done"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.next.button"
-msgstr "Next instruction"
+msgstr "Next"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.page.indicator"
+msgstr "%{current}/%{count}"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.previous.button"
+msgstr "Previous"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "image.fullscreen.button"
+msgstr "View full screen"

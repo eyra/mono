@@ -17,8 +17,8 @@ defprotocol Frameworks.Concept.ToolModel do
   @spec form(t, special :: atom()) :: atom()
   def form(_t, _special)
 
-  @spec launcher(t) :: %{url: URI.t()} | %{module: atom(), params: map()} | nil
-  def launcher(_t)
+  @spec launcher(t, user :: struct()) :: %{url: URI.t()} | %{module: atom(), params: map()} | nil
+  def launcher(_t, _user)
 
   @spec task_labels(t) :: map()
   def task_labels(_t)
@@ -38,7 +38,7 @@ defimpl Frameworks.Concept.ToolModel, for: Ecto.Changeset do
   def open_label(%{data: tool}), do: ToolModel.open_label(tool)
   def ready?(%{data: tool}), do: ToolModel.ready?(tool)
   def form(%{data: tool}, special), do: ToolModel.form(tool, special)
-  def launcher(%{data: tool}), do: ToolModel.launcher(tool)
+  def launcher(%{data: tool}, user), do: ToolModel.launcher(tool, user)
   def task_labels(%{data: tool}), do: ToolModel.task_labels(tool)
   def attention_list_enabled?(%{data: tool}), do: ToolModel.attention_list_enabled?(tool)
   def group_enabled?(%{data: tool}), do: ToolModel.group_enabled?(tool)

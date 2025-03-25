@@ -30,6 +30,9 @@ import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { Sticky } from "./sticky";
 import { TimeZone } from "./timezone";
+import { ResetScroll } from "./reset_scroll";
+import { FullscreenImage } from "./fullscreen_image";
+import { ButtonTouchDevice } from "./button_touch_device";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -115,6 +118,9 @@ let Hooks = {
   AutoSubmit,
   Sticky,
   TimeZone,
+  ResetScroll,
+  FullscreenImage,
+  ButtonTouchDevice,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

@@ -74,7 +74,7 @@ defmodule Systems.Userflow.Public do
   """
   def mark_visited(%Multi{} = multi, %Userflow.StepModel{} = step, %Account.User{} = user) do
     multi
-    |> Multi.put(:validate, fn _repo, _changes ->
+    |> Multi.run(:validate, fn _repo, _changes ->
       case Repo.get_by(Userflow.ProgressModel, user_id: user.id, step_id: step.id) do
         nil ->
           {:ok, :step_not_visited}
@@ -83,7 +83,10 @@ defmodule Systems.Userflow.Public do
           {:error, :step_already_visited}
       end
     end)
-    |> Multi.insert(:progress, prepare_progress(user, step))
+    |> Multi.put(:userflow_step, step)
+    |> Multi.insert(:progress, fn %{userflow_step: userflow_step} ->
+      prepare_progress(user, userflow_step)
+    end)
     |> Signal.Public.multi_dispatch({:userflow_step, :visited})
   end
 

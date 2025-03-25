@@ -67,7 +67,7 @@ defmodule Systems.Manual.Builder.PageForm do
     # Render wysiwyg in a separate form to enable `save_wysiwyg` event. See: `Frameworks.Pixel.WysiwygAreaHelpers`
     ~H"""
     <div>
-      <.form id={"#{@id}_title_form"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
+      <.form id={"#{@id}_title_form"} :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself} >
         <.spacing value="M" />
         <.image_input
             static_path={&CoreWeb.Endpoint.static_path/1}

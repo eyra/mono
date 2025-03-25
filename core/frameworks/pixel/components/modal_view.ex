@@ -186,7 +186,7 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
       <div class={"modal-max p-4 lg:p-8 w-full h-full"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8"}>
+        <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 sm:pb-8"}>
           <%!-- HEADER --%>
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
@@ -211,17 +211,17 @@ defmodule Frameworks.Pixel.ModalView do
   def full(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-    <div class={"modal-full p-4 sm:p-12 lg:p-20 w-full h-full"}>
-      <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
+    <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- HEADER --%>
-          <div class="shrink-0 px-8">
+          <div class="shrink-0 h-10 pb-4 sm-pb-8 px-4 sm:px-8">
             <div class="flex flex-row">
             <div class="flex-grow"/>
               <.close_button live_component={@live_component} />
             </div>
           </div>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4">
+          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain">
             <.body live_component={@live_component} />
           </div>
         </div>

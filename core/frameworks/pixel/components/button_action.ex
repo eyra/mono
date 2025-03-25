@@ -49,6 +49,8 @@ defmodule Frameworks.Pixel.Button.Action do
     ~H"""
     <%= if @enabled? do %>
       <div
+        id={"button-action-send-#{@event}-(#{@item})"}
+        phx-hook="ButtonTouchDevice"
         phx-click={@event}
         phx-value-item={@item}
         phx-target={@target}

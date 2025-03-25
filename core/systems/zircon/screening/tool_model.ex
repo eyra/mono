@@ -67,7 +67,7 @@ defmodule Systems.Zircon.Screening.ToolModel do
     def ready?(tool), do: Zircon.Screening.ToolModel.ready?(tool)
     def form(_, _), do: Zircon.Screening.ToolForm
 
-    def launcher(tool),
+    def launcher(tool, _user),
       do: %{
         module: Zircon.Screening.ToolView,
         params: %{
