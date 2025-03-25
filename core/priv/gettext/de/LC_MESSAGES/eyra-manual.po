@@ -113,12 +113,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "image.fullscreen.button"
-msgstr ""
+msgstr "Vergrößern"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.done.button"
-msgstr ""
+msgstr "Fertig"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
-msgstr ""
+msgstr "Übersicht"

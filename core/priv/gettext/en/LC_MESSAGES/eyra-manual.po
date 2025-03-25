@@ -113,7 +113,7 @@ msgstr "Previous"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "image.fullscreen.button"
-msgstr "View full screen"
+msgstr "Expand"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.done.button"
@@ -121,4 +121,4 @@ msgstr "Done"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
-msgstr "Section overview"
+msgstr "Overview"
