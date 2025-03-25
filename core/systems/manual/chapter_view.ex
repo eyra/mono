@@ -17,7 +17,7 @@ defmodule Systems.Manual.ChapterView do
       :ok,
       socket
       |> assign(chapter: chapter, user: user, selected_page_id: selected_page_id)
-      |> mark_visited()
+      |> mark_chapter_visited()
       |> update_ui()
     }
   end
@@ -28,6 +28,7 @@ defmodule Systems.Manual.ChapterView do
     |> update_label()
     |> update_pages()
     |> update_selected_page()
+    |> mark_selected_page_visited()
     |> update_indicator()
     |> update_back_button()
     |> update_next_button()
@@ -196,7 +197,18 @@ defmodule Systems.Manual.ChapterView do
     {:noreply, socket}
   end
 
-  defp mark_visited(%{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket) do
+  defp mark_chapter_visited(
+         %{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket
+       ) do
+    Userflow.Public.mark_visited(userflow_step, user)
+    socket
+  end
+
+  defp mark_selected_page_visited(
+         %{assigns: %{chapter: %{pages: pages}, selected_page_id: selected_page_id, user: user}} =
+           socket
+       ) do
+    %{userflow_step: userflow_step} = current_page(pages, selected_page_id)
     Userflow.Public.mark_visited(userflow_step, user)
     socket
   end
@@ -207,6 +219,10 @@ defmodule Systems.Manual.ChapterView do
 
   defp last_page?(%{number: number}, pages) do
     number == Enum.count(pages)
+  end
+
+  defp current_page(pages, selected_page_id) do
+    Enum.find(pages, &(&1.id == selected_page_id))
   end
 
   defp next_page(pages, selected_page_id) do
@@ -237,6 +253,7 @@ defmodule Systems.Manual.ChapterView do
     socket
     |> assign(selected_page_id: next_page.id)
     |> update_selected_page()
+    |> mark_selected_page_visited()
     |> update_ui()
   end
 
