@@ -39,6 +39,7 @@ defmodule Frameworks.Pixel.Button.Action do
     """
   end
 
+  attr(:id, :string, default: "?")
   attr(:event, :string, required: true)
   attr(:item, :string, default: "")
   attr(:target, :string, default: "")
@@ -49,12 +50,10 @@ defmodule Frameworks.Pixel.Button.Action do
     ~H"""
     <%= if @enabled? do %>
       <div
-        id={"button-action-send-#{@event}-(#{@item})"}
-        phx-hook="ButtonTouchDevice"
         phx-click={@event}
         phx-value-item={@item}
         phx-target={@target}
-        class="cursor-pointer focus:outline-none"
+        class="touchstart-sensitive cursor-pointer focus:outline-none"
       >
         <%= render_slot(@inner_block) %>
       </div>

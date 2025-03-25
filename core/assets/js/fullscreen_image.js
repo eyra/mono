@@ -81,8 +81,8 @@ export const FullscreenImage = {
     const closeBtn = document.createElement("div");
     closeBtn.innerHTML = `<img src="/images/icons/close_light.svg" alt="Close" width="24" height="24">`;
     closeBtn.style.position = "absolute";
-    closeBtn.style.top = "30px";
-    closeBtn.style.right = "20px";
+    closeBtn.style.top = "24px";
+    closeBtn.style.right = "32px";
     closeBtn.style.cursor = "pointer";
 
     closeBtn.addEventListener("click", (e) => {

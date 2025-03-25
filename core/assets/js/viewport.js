@@ -12,11 +12,6 @@ export const Viewport = {
     });
   },
 
-  updated() {
-    console.log("[Viewport] updated");
-    // this.pushChangeEvent();
-  },
-
   pushChangeEvent() {
     console.log(
       "[Viewport] push update event",

@@ -44,7 +44,7 @@ msgid "setup.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "builder.chapter.list.title"
+msgid "builder.chapter.overview"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -100,10 +100,6 @@ msgid "page.title.first"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "chapter.back.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "chapter.next.button"
 msgstr ""
 
@@ -117,4 +113,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "image.fullscreen.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.done.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.overview"
 msgstr ""

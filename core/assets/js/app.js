@@ -32,7 +32,7 @@ import { Sticky } from "./sticky";
 import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
-import { ButtonTouchDevice } from "./button_touch_device";
+import { TouchstartSensitive } from "./touchstart_sensitive";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -120,7 +120,7 @@ let Hooks = {
   TimeZone,
   ResetScroll,
   FullscreenImage,
-  ButtonTouchDevice,
+  TouchstartSensitive,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {
