@@ -209,30 +209,32 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped menus={@menus} footer?={false}>
-        <:header>
-          <div class="h-[180px] bg-grey5">
-          <%= if @image_info do %>
-            <Hero.image_banner title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
-          <% end %>
-          </div>
-        </:header>
-
-        <ModalView.dynamic modals={@modals} />
-
-        <%!-- hidden auto submit form --%>
-        <%= if @panel_form do %>
-          <div class="relative">
-            <div class="absolute hidden">
-              <.live_child {@panel_form} />
+      <div id={"page"} phx-hook="TouchstartSensitive" class="w-full h-full">
+        <.stripped menus={@menus} footer?={false}>
+          <:header>
+            <div class="h-[180px] bg-grey5">
+            <%= if @image_info do %>
+              <Hero.image_banner title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
+            <% end %>
             </div>
-          </div>
-        <% end %>
+          </:header>
 
-        <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="Viewport">
-          <.flow fabric={@fabric} />
-        </div>
-      </.stripped>
+          <ModalView.dynamic modals={@modals} />
+
+          <%!-- hidden auto submit form --%>
+          <%= if @panel_form do %>
+            <div class="relative">
+              <div class="absolute hidden">
+                <.live_child {@panel_form} />
+              </div>
+            </div>
+          <% end %>
+
+          <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="Viewport">
+            <.flow fabric={@fabric} />
+          </div>
+        </.stripped>
+      </div>
     """
   end
 end

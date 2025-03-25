@@ -117,7 +117,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
     ~H"""
     <div>
       <Text.title2>
-        <%= dgettext("eyra-manual", "builder.chapter.list.title") %>
+        <%= dgettext("eyra-manual", "builder.chapter.overview") %>
       </Text.title2>
       <.spacing value="M" />
       <%= if not Enum.empty?(@chapter_items) do %>

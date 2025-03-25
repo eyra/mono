@@ -2,6 +2,9 @@ defmodule Frameworks.Pixel.ModalView do
   use CoreWeb, :pixel
 
   require Logger
+
+  import Frameworks.Pixel.Toolbar
+
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 
@@ -193,7 +196,7 @@ defmodule Frameworks.Pixel.ModalView do
               <div class="flex-grow">
                 <.title3 live_component={@live_component} />
               </div>
-              <.close_button live_component={@live_component} />
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
@@ -212,17 +215,14 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
     <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
-      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
-          <%!-- HEADER --%>
-          <div class="shrink-0 h-10 pb-4 sm-pb-8 px-4 sm:px-8">
-            <div class="flex flex-row">
-            <div class="flex-grow"/>
-              <.close_button live_component={@live_component} />
-            </div>
-          </div>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain">
             <.body live_component={@live_component} />
+          </div>
+          <%!-- TOOLBAR --%>
+          <div class="flex-shrink-0">
+            <.toolbar back_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
@@ -242,7 +242,7 @@ defmodule Frameworks.Pixel.ModalView do
               <div class="flex-grow">
                 <.title2 live_component={@live_component} />
               </div>
-              <.close_button live_component={@live_component} />
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
@@ -266,7 +266,7 @@ defmodule Frameworks.Pixel.ModalView do
               <div class="flex-grow">
                 <.title2 live_component={@live_component} centered?={true}/>
               </div>
-              <.close_button live_component={@live_component} />
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
@@ -286,7 +286,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-6 right-9">
-          <.close_button live_component={@live_component} />
+            <Button.dynamic {close_icon_button(@live_component)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
@@ -305,7 +305,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-9 right-9">
-            <.close_button live_component={@live_component} />
+            <Button.dynamic {close_icon_button(@live_component)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
@@ -339,19 +339,6 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :map, required: true)
 
-  def close_button(assigns) do
-    ~H"""
-      <Button.dynamic {
-        %{
-          action: %{type: :send, event: "close_modal", item: @live_component.ref.id},
-          face: %{type: :icon, icon: :close}
-        }
-      } />
-    """
-  end
-
-  attr(:live_component, :map, required: true)
-
   def body(assigns) do
     ~H"""
       <.live_component
@@ -360,5 +347,19 @@ defmodule Frameworks.Pixel.ModalView do
         {@live_component.params}
       />
     """
+  end
+
+  defp close_icon_label_button(%{ref: %{id: item_id}}) do
+    %{
+      action: %{type: :send, event: "close_modal", item: item_id},
+      face: %{type: :plain, icon: :close, label: "Back", icon_align: :left}
+    }
+  end
+
+  defp close_icon_button(%{ref: %{id: item_id}}) do
+    %{
+      action: %{type: :send, event: "close_modal", item: item_id},
+      face: %{type: :icon, icon: :close}
+    }
   end
 end

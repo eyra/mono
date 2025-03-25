@@ -58,6 +58,9 @@ defmodule Systems.Manual.ChapterListView do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col gap-4">
+      <div class="font-title7 text-title7 text-grey2">
+          <%= dgettext("eyra-manual", "chapter.overview") %>
+      </div>
       <div class="font-title5 text-title5 sm:font-title2 sm:text-title2"><%= @title %></div>
       <.chapter_list items={@chapter_items} selected_chapter_id={@selected_chapter_id} target={@myself} />
     </div>

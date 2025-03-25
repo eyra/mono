@@ -30,9 +30,10 @@ defmodule Systems.Manual.ChapterView do
     |> update_selected_page()
     |> mark_selected_page_visited()
     |> update_indicator()
-    |> update_back_button()
-    |> update_next_button()
-    |> update_previous_button()
+    |> update_mobile_back_button()
+    |> update_desktop_back_button()
+    |> update_left_button()
+    |> update_right_button()
     |> update_fullscreen_button()
   end
 
@@ -96,20 +97,42 @@ defmodule Systems.Manual.ChapterView do
     socket |> assign(selected_page: selected_page, selected_page_id: selected_page.id)
   end
 
-  defp update_back_button(socket) do
-    back_button = %{
+  defp update_mobile_back_button(socket) do
+    mobile_back_button = %{
       action: %{type: :send, event: "back"},
-      face: %{type: :secondary, label: dgettext("eyra-manual", "chapter.back.button")}
+      face: %{type: :icon, icon: :overview}
     }
 
     socket
-    |> assign(back_button: back_button)
+    |> assign(mobile_back_button: mobile_back_button)
   end
 
-  defp update_next_button(%{assigns: %{pages: pages, selected_page: selected_page}} = socket) do
-    next_button =
+  defp update_desktop_back_button(socket) do
+    desktop_back_button = %{
+      action: %{type: :send, event: "back"},
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-manual", "chapter.overview"),
+        icon: :overview,
+        icon_align: :left
+      }
+    }
+
+    socket
+    |> assign(desktop_back_button: desktop_back_button)
+  end
+
+  defp update_right_button(%{assigns: %{pages: pages, selected_page: selected_page}} = socket) do
+    right_button =
       if last_page?(selected_page, pages) do
-        nil
+        %{
+          action: %{type: :send, event: "done"},
+          face: %{
+            type: :plain,
+            label: dgettext("eyra-manual", "chapter.done.button"),
+            icon: :done
+          }
+        }
       else
         %{
           action: %{type: :send, event: "next_page"},
@@ -122,11 +145,11 @@ defmodule Systems.Manual.ChapterView do
       end
 
     socket
-    |> assign(next_button: next_button)
+    |> assign(right_button: right_button)
   end
 
-  defp update_previous_button(%{assigns: %{selected_page: selected_page, pages: pages}} = socket) do
-    previous_button =
+  defp update_left_button(%{assigns: %{selected_page: selected_page, pages: pages}} = socket) do
+    left_button =
       if first_page?(selected_page, pages) do
         nil
       else
@@ -141,7 +164,7 @@ defmodule Systems.Manual.ChapterView do
         }
       end
 
-    socket |> assign(previous_button: previous_button)
+    socket |> assign(left_button: left_button)
   end
 
   defp update_fullscreen_button(socket) do
@@ -189,6 +212,13 @@ defmodule Systems.Manual.ChapterView do
       |> assign(selected_page_id: page_id)
       |> update_selected_page()
       |> update_ui()
+    }
+  end
+
+  def handle_event("done", _, socket) do
+    {
+      :noreply,
+      socket |> send_event(:parent, "back")
     }
   end
 
@@ -279,9 +309,9 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           pages={@pages}
           selected_page={@selected_page}
-          back_button={@back_button}
-          previous_button={@previous_button}
-          next_button={@next_button}
+          back_button={@desktop_back_button}
+          left_button={@left_button}
+          right_button={@right_button}
           fullscreen_button={@fullscreen_button}
           select_page_event="select_page"
           select_page_target={@myself}
@@ -294,9 +324,9 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           indicator={@indicator}
           selected_page={@selected_page}
-          back_button={@back_button}
-          previous_button={@previous_button}
-          next_button={@next_button}
+          back_button={@mobile_back_button}
+          left_button={@left_button}
+          right_button={@right_button}
           fullscreen_button={@fullscreen_button}
         />
       </div>
