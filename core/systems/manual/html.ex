@@ -28,10 +28,12 @@ defmodule Systems.Manual.Html do
   def chapter_list_item(assigns) do
     ~H"""
     <div
+      id={"manual-chapter-list-item-#{@id}"}
       class={"p-4 rounded-lg border cursor-pointer #{if @selected do "bg-grey6 border-grey4" else "active:bg-grey6 hover:bg-grey6 border-white" end} "}
       phx-click="select_chapter"
       phx-value-item={@id}
       phx-target={@target}
+      phx-hook="ButtonTouchDevice"
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-row gap-4">

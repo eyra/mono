@@ -32,6 +32,8 @@ import { Sticky } from "./sticky";
 import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
+import { ButtonTouchDevice } from "./button_touch_device";
+
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 window.addEventListener("phx:page-loading-stop", (info) => {
@@ -118,6 +120,7 @@ let Hooks = {
   TimeZone,
   ResetScroll,
   FullscreenImage,
+  ButtonTouchDevice,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {
