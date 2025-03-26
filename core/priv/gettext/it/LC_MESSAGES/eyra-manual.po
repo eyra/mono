@@ -101,15 +101,15 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.next.button"
-msgstr ""
+msgstr "Avanti"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.page.indicator"
-msgstr ""
+msgstr "%{current}/%{count}"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
-msgstr ""
+msgstr "Indietro"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "image.fullscreen.button"
