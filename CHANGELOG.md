@@ -9,7 +9,19 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#8 unreleased
+## \#11 unreleased
+
+## \#10 2025-03-26
+
+* Added: Manual Participant Mobile (Beta)
+* Fixed: Breadcrumbs on project page
+
+## \#9 2025-03-19
+
+* Added: Manual Researcher CMS (Beta)
+* Added: Manual Participant Desktop (Beta)
+
+## \#8 2025-02-28
 
 * Fixed: PDF not readable on mobile device
 * Added: Support for Italian in assignments (participants)
