@@ -117,7 +117,7 @@ msgstr "Ingrandisci"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.done.button"
-msgstr "Fatto"
+msgstr "Chiudi"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
@@ -125,4 +125,4 @@ msgstr "Panoramica"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.start.button"
-msgstr "Inizia"
+msgstr "Avvia"
