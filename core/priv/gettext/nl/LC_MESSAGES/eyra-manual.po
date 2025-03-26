@@ -122,3 +122,7 @@ msgstr "Klaar"
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
 msgstr "Overzicht"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.start.button"
+msgstr "Start"

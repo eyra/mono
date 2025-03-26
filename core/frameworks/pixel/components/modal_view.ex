@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.ModalView do
   use CoreWeb, :pixel
+  use Gettext, backend: CoreWeb.Gettext
 
   require Logger
 
@@ -352,7 +353,12 @@ defmodule Frameworks.Pixel.ModalView do
   defp close_icon_label_button(%{ref: %{id: item_id}}) do
     %{
       action: %{type: :send, event: "close_modal", item: item_id},
-      face: %{type: :plain, icon: :close, label: "Back", icon_align: :left}
+      face: %{
+        type: :plain,
+        icon: :close,
+        label: dgettext("eyra-pixel", "modal.back.button"),
+        icon_align: :left
+      }
     }
   end
 
