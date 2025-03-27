@@ -151,3 +151,129 @@ Optional environment variables:
 | PUBLIC_S3_URL | Public accessable url of an S3 service | "https://self-public.s3.eu-central-1.amazonaws.com" |
 | PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | "self-prod" |
 | DIST_HOSTS | Comma seperated list of hosts in the cluster, see: [OTP Distribution](https://elixirschool.com/en/lessons/advanced/otp_distribution) | "one, two" |
+
+
+## 🔧 Customizing Storage
+
+The platform supports pluggable backends for global (non-study-specific) temporary file storage using the `Systems.Storage.BuiltIn.Special` interface. This storage is used, for example, in data donation workflows.
+
+Although these files are temporary, the system must guarantee that they are stored reliably. We recommend using production-ready backends such as **S3** or **Azure Blob**.
+
+### Available built-in backends
+
+- `Systems.Storage.BuiltIn.S3`
+- `Systems.Storage.BuiltIn.LocalFS`
+
+You can configure the backend via environment variables (see examples below). The active backend is set via:
+
+```bash
+STORAGE_BUILTIN_SPECIAL=s3   # or my_backend
+---
+
+## 🛠️ Creating Your Own Backend
+
+To add a custom backend, define a module implementing the following behaviour:
+
+```elixir
+defmodule Systems.Storage.BuiltIn.Special do
+  @callback store(
+              folder :: binary(),
+              identifier :: list(tuple()) | binary(),
+              data :: binary()
+            ) :: any()
+
+  @callback list_files(folder :: binary()) :: list()
+  @callback delete_files(folder :: binary()) :: :ok | {:error, atom()}
+end
+```
+
+You can add your implementation in:
+
+```
+core/systems/storage/builtin/my_backend.ex
+```
+
+Minimal example:
+
+```elixir
+defmodule Systems.Storage.BuiltIn.MyBackend do
+  @behaviour Systems.Storage.BuiltIn.Special
+
+  def store(folder, filename, data) do
+    # Your custom storage logic here
+  end
+
+  def list_files(_folder), do: []
+  def delete_files(_folder), do: :ok
+end
+```
+The `list_files/1` and `delete_files/1` functions can be implemented as mocks if the platform’s file export functionality in the user interface is not used, and files are instead accessed directly at the final storage location — for example, when using Yoda.
+
+
+### AWS S3 example
+
+An S3 example can be found in:
+
+```
+core/systems/storage/builtin/s3.ex
+```
+Below a code snippet:
+```elixir
+def store(folder, filename, data) do
+  filepath = Path.join(folder, filename)
+  object_key = object_key(filepath)
+  content_type = content_type(object_key)
+  bucket = Access.fetch!(settings(), :bucket)
+
+  S3.put_object(bucket, object_key, data, content_type: content_type)
+  |> backend().request!()
+end
+```
+
+---
+
+### ⚙️ Configuration 
+
+To activate and configure a storage backend, you must modify the `core/config/runtime.exs` file.
+
+Below are examples for storage options that were previously available through forms in the user interface: 
+
+```elixir
+if builtin_special = System.get_env("STORAGE_BUILTIN_SPECIAL") do
+  config :core, Systems.Storage.BuiltIn, special: String.to_atom(builtin_special)
+end
+
+if yoda_url = System.get_env("STORAGE_BUILTIN_YODA_URL") do
+  config :core, Systems.Storage.BuiltIn.Yoda,
+    email: System.get_env("STORAGE_BUILTIN_YODA_EMAIL"),
+    password: System.get_env("STORAGE_BUILTIN_YODA_PASSWORD"),
+    url: yoda_url
+end
+
+if azure_blob_container = System.get_env("STORAGE_BUILTIN_AZURE_BLOB_CONTAINER") do
+  config :core, Systems.Storage.BuiltIn.AzureBlob,
+    container: azure_blob_container
+end
+```
+
+These configurations are environment-driven, so you can control them using environment variables depending on which backend is active.
+
+Example `.env` snippet for S3:
+
+```bash
+STORAGE_BUILTIN_SPECIAL=s3
+STORAGE_BUILTIN_S3_BUCKET=my-bucket
+STORAGE_BUILTIN_S3_ACCESS_KEY_ID=...
+STORAGE_BUILTIN_S3_SECRET_ACCESS_KEY=...
+STORAGE_BUILTIN_S3_REGION=...
+```
+To activate your backend implementation use:
+
+```bash
+STORAGE_BUILTIN_SPECIAL=my_backend
+```
+---
+
+### 🚧 Roadmap: UX-based Transfer
+
+We plan to support file transfer from the built-in storage to external systems (e.g., Yoda) via the user interface. Until then, this must be done manually or with automation.
