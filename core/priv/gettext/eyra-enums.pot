@@ -443,26 +443,6 @@ msgid "platforms.snapchat"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.comparison"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.intervention"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.outcome"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.population"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.study_type"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.paper_screening"
 msgstr ""
 
@@ -475,29 +455,37 @@ msgid "templates.paper_screening"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriescomparison"
+msgid "assignment_languages.it"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriescontext"
+msgid "zircon_screening_categories.comparison"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesintervention"
+msgid "zircon_screening_categories.context"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesoutcome"
+msgid "zircon_screening_categories.intervention"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesphenomenon_of_interest"
+msgid "zircon_screening_categories.outcome"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriespopulation"
+msgid "zircon_screening_categories.phenomenon_of_interest"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriessetting"
+msgid "zircon_screening_categories.population"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.setting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.manual"
 msgstr ""

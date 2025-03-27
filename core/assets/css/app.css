@@ -213,22 +213,27 @@ trix-toolbar .trix-dialog__link-fields .trix-input {
 
 trix-editor,
 .wysiwyg {
-  @apply text-grey1 text-bodylarge font-body w-full outline-none;
+  @apply text-grey1 text-bodymedium sm:text-bodylarge font-body w-full outline-none;
+}
+
+trix-editor br,
+.wysiwyg br {
+  line-height: 300%;
 }
 
 trix-editor h1,
 .wysiwyg h1 {
-  @apply text-title3 font-title3 mb-8;
+  @apply text-title6 font-title6 sm:text-title3 sm:font-title3 mb-4 sm:mb-8;
 }
 
 trix-editor h2,
 .wysiwyg h2 {
-  @apply text-title4 font-title4 mb-8;
+  @apply text-title7 font-title7 sm:text-title4 sm:font-title4 mb-4 sm:mb-8;
 }
 
 trix-editor h3,
 .wysiwyg h3 {
-  @apply text-title5 font-title5 mb-8;
+  @apply text-title7 font-title7 sm:text-title5 sm:font-title5 mb-4 sm:mb-8;
 }
 
 trix-editor strong,
@@ -272,7 +277,7 @@ trix-editor a:not(.no-underline),
 
 trix-editor ul,
 .wysiwyg ul {
-  @apply mb-8 list-none;
+  @apply mb-4 sm:mb-8 list-none;
 }
 
 trix-editor ul li::before,
@@ -290,7 +295,7 @@ trix-editor ul li::before,
 
 trix-editor ol,
 .wysiwyg ol {
-  @apply mb-8 list-none;
+  @apply mb-4 sm:mb-8 list-none;
   counter-reset: li;
 }
 
@@ -311,13 +316,13 @@ trix-editor ol li,
 
 trix-editor pre,
 .wysiwyg pre {
-  @apply text-mono font-mono text-grey2 mb-8 p-8 bg-grey5 rounded-lg relative w-full whitespace-pre-wrap;
+  @apply text-mono font-mono text-grey2 mb-4 sm:mb-8 p-4 sm:p-8 bg-grey5 rounded-lg relative w-full whitespace-pre-wrap;
   vertical-align: top;
 }
 
 trix-editor blockquote,
 .wysiwyg blockquote {
-  @apply pl-11 pr-11 mb-8 relative font-quote text-quote;
+  @apply pl-11 pr-11 mb-4 sm:mb-8 relative font-quote text-quote;
 }
 
 trix-editor blockquote::before,

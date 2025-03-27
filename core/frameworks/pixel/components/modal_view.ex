@@ -1,7 +1,11 @@
 defmodule Frameworks.Pixel.ModalView do
   use CoreWeb, :pixel
+  use Gettext, backend: CoreWeb.Gettext
 
   require Logger
+
+  import Frameworks.Pixel.Toolbar
+
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 
@@ -21,7 +25,7 @@ defmodule Frameworks.Pixel.ModalView do
 
       @impl true
       def handle_event("show_modal", modal, socket) do
-        Map.get(socket.assigns, :modals)
+        modals = Map.get(socket.assigns, :modals)
 
         {
           :noreply,
@@ -126,11 +130,13 @@ defmodule Frameworks.Pixel.ModalView do
 
   def background(assigns) do
     ~H"""
-    <div class={"modal-view fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-30 #{if @show do "block" else "hidden" end}"}>
+    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full backdrop-blur-md bg-black/30 #{if @show do "block" else "hidden" end}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
+
+  @allowed_styles [:max, :full, :page, :sheet, :dialog, :notification]
 
   attr(:style, :atom, required: true)
   attr(:live_component, :map, required: true)
@@ -138,11 +144,9 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:index, :integer, required: true)
 
   def panel(%{style: style} = assigns) do
-    allowed_styles = [:full, :page, :sheet, :dialog, :notification]
-
-    unless style in allowed_styles do
+    unless style in @allowed_styles do
       raise ArgumentError,
-            "Invalid style: #{style}. Allowed styles are: #{Enum.join(allowed_styles, ", ")}"
+            "Invalid style: #{style}. Allowed styles are: #{Enum.join(@allowed_styles, ", ")}"
     end
 
     ~H"""
@@ -159,6 +163,9 @@ defmodule Frameworks.Pixel.ModalView do
 
   def style_selector(assigns) do
     ~H"""
+      <%= if @style == :max do %>
+        <.max live_component={@live_component} />
+      <% end %>
       <%= if @style == :full do %>
         <.full live_component={@live_component} />
       <% end %>
@@ -179,21 +186,44 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :string, required: true)
 
-  def full(assigns) do
+  def max(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-      <div class={"modal-full p-4 sm:p-12 lg:p-20 w-full h-full"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
+      <div class={"modal-max p-4 lg:p-8 w-full h-full"}>
+        <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 sm:pb-8"}>
           <%!-- HEADER --%>
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
-              <div class="flex-grow"/>
-              <.close_button live_component={@live_component} />
+              <div class="flex-grow">
+                <.title3 live_component={@live_component} />
+              </div>
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4">
+          <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
             <.body live_component={@live_component} />
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:live_component, :string, required: true)
+
+  def full(assigns) do
+    ~H"""
+    <div class="flex flex-row items-center justify-center w-full h-full">
+    <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
+          <%!-- BODY --%>
+          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain">
+            <.body live_component={@live_component} />
+          </div>
+          <%!-- TOOLBAR --%>
+          <div class="flex-shrink-0">
+            <.toolbar back_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
@@ -211,9 +241,9 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title live_component={@live_component} />
+                <.title2 live_component={@live_component} />
               </div>
-              <.close_button live_component={@live_component} />
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
@@ -235,9 +265,9 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title live_component={@live_component} centered?={true}/>
+                <.title2 live_component={@live_component} centered?={true}/>
               </div>
-              <.close_button live_component={@live_component} />
+              <Button.dynamic {close_icon_button(@live_component)} />
             </div>
           </div>
           <%!-- BODY --%>
@@ -257,7 +287,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-6 right-9">
-          <.close_button live_component={@live_component} />
+            <Button.dynamic {close_icon_button(@live_component)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
@@ -276,7 +306,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-9 right-9">
-            <.close_button live_component={@live_component} />
+            <Button.dynamic {close_icon_button(@live_component)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
@@ -290,7 +320,7 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:live_component, :map, required: true)
   attr(:centered?, :boolean, default: false)
 
-  def title(assigns) do
+  def title2(assigns) do
     ~H"""
       <Text.title2 align={"#{if @centered? do "text-center" else "text-left" end}"}>
         <%= Map.get(@live_component.params, :title) %>
@@ -300,14 +330,11 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:live_component, :map, required: true)
 
-  def close_button(assigns) do
+  def title3(assigns) do
     ~H"""
-      <Button.dynamic {
-        %{
-          action: %{type: :send, event: "close_modal", item: @live_component.ref.id},
-          face: %{type: :icon, icon: :close}
-        }
-      } />
+      <Text.title3>
+        <%= Map.get(@live_component.params, :title) %>
+      </Text.title3>
     """
   end
 
@@ -321,5 +348,24 @@ defmodule Frameworks.Pixel.ModalView do
         {@live_component.params}
       />
     """
+  end
+
+  defp close_icon_label_button(%{ref: %{id: item_id}}) do
+    %{
+      action: %{type: :send, event: "close_modal", item: item_id},
+      face: %{
+        type: :plain,
+        icon: :close,
+        label: dgettext("eyra-pixel", "modal.back.button"),
+        icon_align: :left
+      }
+    }
+  end
+
+  defp close_icon_button(%{ref: %{id: item_id}}) do
+    %{
+      action: %{type: :send, event: "close_modal", item: item_id},
+      face: %{type: :icon, icon: :close}
+    }
   end
 end

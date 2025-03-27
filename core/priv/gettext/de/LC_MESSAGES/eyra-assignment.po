@@ -61,7 +61,7 @@ msgstr "Weiter"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr "Zustimmung"
+msgstr "Einwilligung"
 
 #, elixir-autogen, elixir-format
 msgid "settings.storage.title"
@@ -241,11 +241,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie die Teilnahme überdenken möchten, schließen Sie dieses Popup, um fortzufahren."
+msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie doch teilnehmen möchten, schließen Sie dieses Popup-Fenster, um fortzufahren."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr "Keine zustimmung"
+msgstr "Einwilligung verweigert"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
@@ -373,7 +373,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr "Zustimmung"
+msgstr "Einwilligung"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
@@ -443,7 +443,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Versuche es noch einmal"
+msgstr "Nicht fertig? Zurückkehren"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -467,4 +467,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.manual.description"
 msgstr ""

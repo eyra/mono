@@ -125,7 +125,7 @@ defmodule Systems.Graphite.ToolModel do
     def ready?(_), do: true
     def form(_, _), do: Graphite.ToolForm
 
-    def launcher(tool) do
+    def launcher(tool, _user) do
       %{
         module: Graphite.ToolView,
         params: %{

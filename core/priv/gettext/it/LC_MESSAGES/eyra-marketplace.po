@@ -1,0 +1,50 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.complete.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.completed.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.accepted.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.rejected.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.completed.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.pending.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.status.rejected.subtitle"
+msgstr ""
+
+#, elixir-format, elixir-autogen
+msgid "Awarded 1 credit"
+msgid_plural "Awarded %{count} credits"
+msgstr[0] ""
+msgstr[1] ""

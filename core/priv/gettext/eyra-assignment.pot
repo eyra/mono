@@ -467,3 +467,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.import"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.manual.description"
+msgstr ""

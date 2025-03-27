@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.StartView do
   use CoreWeb, :live_component
-
+  use Gettext, backend: CoreWeb.Gettext
   alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
@@ -29,7 +29,11 @@ defmodule Systems.Assignment.StartView do
   def compose(:button, %{participant: participant, work_item: work_item, loading: loading}) do
     %{
       action: start_action(work_item, participant),
-      face: %{type: :primary, label: "Start", loading: loading}
+      face: %{
+        type: :primary,
+        label: dgettext("eyra-manual", "assignment.start.button"),
+        loading: loading
+      }
     }
   end
 
@@ -47,7 +51,7 @@ defmodule Systems.Assignment.StartView do
 
   defp start_action({%{tool_ref: tool_ref}, _task} = item, participant) do
     Workflow.ToolRefModel.tool(tool_ref)
-    |> Concept.ToolModel.launcher()
+    |> Concept.ToolModel.launcher(participant)
     |> start_action(item, participant)
   end
 

@@ -443,26 +443,6 @@ msgstr ""
 msgid "platforms.snapchat"
 msgstr "Snapchat"
 
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.comparison"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.intervention"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.outcome"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.population"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "zircon_criterion_class.study_type"
-msgstr ""
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.paper_screening"
 msgstr ""
@@ -475,30 +455,38 @@ msgstr ""
 msgid "templates.paper_screening"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriescomparison"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.it"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriescontext"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.comparison"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesintervention"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.context"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesoutcome"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.intervention"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriesphenomenon_of_interest"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.outcome"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriespopulation"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.phenomenon_of_interest"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "zircon_screening_categoriessetting"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.population"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.setting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.manual"
 msgstr ""

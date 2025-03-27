@@ -13,6 +13,7 @@ defmodule Systems.Workflow.ToolRefModel do
   alias Systems.Document
   alias Systems.Alliance
   alias Systems.Lab
+  alias Systems.Manual
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
@@ -20,6 +21,7 @@ defmodule Systems.Workflow.ToolRefModel do
 
   @tools [
     :alliance_tool,
+    :manual_tool,
     :document_tool,
     :feldspar_tool,
     :graphite_tool,
@@ -32,6 +34,7 @@ defmodule Systems.Workflow.ToolRefModel do
     field(:special, Ecto.Atom)
 
     belongs_to(:alliance_tool, Alliance.ToolModel)
+    belongs_to(:manual_tool, Manual.ToolModel)
     belongs_to(:document_tool, Document.ToolModel)
     belongs_to(:feldspar_tool, Feldspar.ToolModel)
     belongs_to(:graphite_tool, Graphite.ToolModel)

@@ -1,0 +1,33 @@
+---
+description: Style rules for Elixir files
+globs: *.ex, *.exs. *.heex
+alwaysApply: true
+---
+#Elixir Style Rules
+
+## Alias Rules
+
+### No Alias Grouping
+
+Each alias must be on a separate line. Do not group aliases, even if they share the same root module.
+
+```elixir
+# INCORRECT
+alias Core.{Repo, DataCase}
+alias Systems.Userflow.{Model, StepModel, ProgressModel}
+
+# CORRECT
+alias Core.Repo
+alias Core.DataCase
+
+# For system modules, prefer a single system alias
+alias Systems.Userflow  # Then use as Userflow.Model, Userflow.StepModel, etc.
+```
+
+This rule:
+1. Makes it easier to see which modules are being used
+2. Makes git diffs cleaner when adding/removing aliases
+3. Avoids confusion about nested module structures
+4. Makes it easier to alphabetically sort aliases
+5. Improves maintainability by making dependencies explicit
+6. Ensures consistent style across the codebase

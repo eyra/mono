@@ -442,7 +442,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Probeer het nog een keer"
+msgstr "Niet klaar? Ga terug"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -466,4 +466,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.manual.description"
 msgstr ""

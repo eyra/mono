@@ -35,11 +35,11 @@ defmodule Systems.Workflow.ToolRefView do
     }
   end
 
-  def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
+  def update_launcher(%{assigns: %{tool_ref: tool_ref, user: user}} = socket) do
     launcher =
       tool_ref
       |> Workflow.ToolRefModel.tool()
-      |> Concept.ToolModel.launcher()
+      |> Concept.ToolModel.launcher(user)
 
     socket |> update_launcher(launcher)
   end

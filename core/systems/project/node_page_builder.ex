@@ -17,13 +17,16 @@ defmodule Systems.Project.NodePageBuilder do
         } = assigns
       ) do
     assigns = Map.put(assigns, :node, node)
+    branch = %Project.Branch{node_id: node.id}
+    breadcrumbs = Concept.Branch.hierarchy(branch)
 
     %{
       id: id,
       title: node.name,
-      tabbar_id: :node_page,
       show_errors: false,
-      initial_tab: :overview
+      tabbar_id: :node_page,
+      initial_tab: :overview,
+      breadcrumbs: breadcrumbs
     }
     |> put_tabs(assigns)
   end
@@ -78,14 +81,14 @@ defmodule Systems.Project.NodePageBuilder do
         branch_name = Concept.Branch.name(branch, :parent)
 
         child =
-          Fabric.prepare_child(fabric, :data_view, EndpointDataView, %{
+          Fabric.prepare_child(fabric, :data, EndpointDataView, %{
             endpoint: storage_endpoint,
             branch_name: branch_name,
             timezone: timezone
           })
 
         %{
-          id: :data_view,
+          id: :data,
           ready: ready?,
           show_errors: show_errors,
           title: dgettext("eyra-storage", "tabbar.item.data"),
@@ -96,12 +99,12 @@ defmodule Systems.Project.NodePageBuilder do
 
       nil ->
         child =
-          Fabric.prepare_child(fabric, :data_view, NodePageEmptyDataView, %{
+          Fabric.prepare_child(fabric, :data, NodePageEmptyDataView, %{
             node: node
           })
 
         %{
-          id: :data_view,
+          id: :data,
           ready: false,
           show_errors: show_errors,
           title: dgettext("eyra-storage", "tabbar.item.data"),

@@ -14,11 +14,10 @@ defmodule Systems.Project.NodePage do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
-    {
-      :ok,
-      socket
-    }
+  def mount(%{"id" => id} = params, _session, socket) do
+    initial_tab = Map.get(params, "tab")
+    tabbar_id = "node_page/#{id}"
+    {:ok, socket |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)}
   end
 
   def handle_event(:should_flash_message, %{status: status, message: message}, socket) do
@@ -32,12 +31,13 @@ defmodule Systems.Project.NodePage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.tabbar_page
+    <.tabbar_page_breadcrumbs
         title={@vm.title}
         tabs={@vm.tabs}
-        tabbar_id={@vm.tabbar_id}
         show_errors={@vm.show_errors}
-        initial_tab={@vm.initial_tab}
+        tabbar_id={@tabbar_id}
+        initial_tab={@initial_tab}
+        breadcrumbs={@vm.breadcrumbs}
         menus={@menus}
         modals={@modals}
         popup={@popup}

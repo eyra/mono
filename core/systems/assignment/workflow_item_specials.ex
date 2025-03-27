@@ -9,6 +9,7 @@ defmodule Systems.Assignment.WorkflowItemSpecials do
          :onsite_experiment,
          :donate,
          :submit,
+         :manual,
          :request_manual,
          :download_manual,
          :fork_instruction,

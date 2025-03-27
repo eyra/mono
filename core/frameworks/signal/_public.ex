@@ -17,6 +17,7 @@ defmodule Frameworks.Signal.Public do
     "Systems.Crew.Switch",
     "Systems.Graphite.Switch",
     "Systems.Instruction.Switch",
+    "Systems.Manual.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
     "Systems.Pool.Switch",

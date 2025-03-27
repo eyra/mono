@@ -6,6 +6,8 @@ defmodule CoreWeb.Routes do
       require CoreWeb.Cldr
       import Systems.Account.UserAuth
       import CoreWeb.Meta
+
+      alias CoreWeb.Validator.Plug, as: Validator
       alias Systems.Assignment
 
       pipeline :browser_base do
@@ -65,6 +67,10 @@ defmodule CoreWeb.Routes do
         plug(:fetch_session)
         plug(:fetch_current_user)
         plug(:fetch_live_flash)
+      end
+
+      pipeline :validator do
+        plug(Validator)
       end
 
       CoreWeb.Live.Routes.routes()
