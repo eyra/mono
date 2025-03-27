@@ -23,12 +23,13 @@ defmodule Systems.Home.PageBuilder do
         type: :illustration2,
         params: %{
           title: dgettext("eyra-home", "member.title"),
-          caption: "Caption"
+          caption: dgettext("eyra-home", "member.caption")
         }
       },
       active_menu_item: :home,
       next_best_action: nil,
-      blocks: []
+      blocks: [],
+      include_right_sidepadding: true
     }
   end
 
@@ -47,7 +48,8 @@ defmodule Systems.Home.PageBuilder do
       },
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
-      blocks: blocks(user, assigns, panl?: panl?)
+      blocks: blocks(user, assigns, panl?: panl?),
+      include_right_sidepadding: false
     }
   end
 

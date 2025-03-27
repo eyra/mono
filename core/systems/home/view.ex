@@ -18,10 +18,11 @@ defmodule Systems.Home.View do
   def render(assigns) do
     ~H"""
     <div>
-      <Margin.y id="page_top" />
+
       <div class="bg-grey6">
         <%= render_intro(assigns) %>
         <%= render_steps(assigns) %>
+        <%= render_available_services(assigns) %>
         <%= render_video(assigns) %>
       </div>
     </div>
@@ -31,20 +32,18 @@ defmodule Systems.Home.View do
   defp render_intro(assigns) do
     ~H"""
     <section class="py-12 bg-white">
-      <div class="flex flex-col gap-8 sm:gap-16 md:gap-0 md:flex-row justify-between mt-12 md:pl-14">
-        <div class="w-full md:w-3/4 l text-center md:text-left md:pr-12 xl:pr-0">
-          <h1 class="text-title2 xl:text-title1 font-bold text-grey1">
-            Workplace for researchers
+      <div class="flex flex-col gap-8 md:flex-row justify-between mt-12 md:pl-14">
+        <div class="w-full text-center md:text-left md:pr-12 xl:pr-0">
+          <h1 class="text-title1 font-title1 font-bold text-grey1">
+            What's Next?
           </h1>
-          <p class="mt-4 text-bodymedium lg:text-2xl xl:text-3xl 2xl:text-4xl text-grey1 px-4 md:px-0 ">
-            The Next platform is an open-source web platform developed by Eyra
-            that serves as an integration hub for sustainable software-as-a-service
-            (SaaS) solutions, empowering research. These software services are co-created
-            with researchers from various Dutch universities (e.g., UU, VU, RUG)
-            and organizations such as ODISSEI.
+          <p class="mt-6 font-intro text-2xl leading-8">
+          The Next platform is an open and inclusive platform designed to accelerate research and knowledge creation.
+          By integrating cutting-edge software services, Next empowers researchers with sustainable and privacy-conscious tools.
+          Built on open-source principles and co-created with researchers, Next fosters innovation, transparency, and collaboration.
           </p>
           <div class="flex justify-center md:justify-start mt-8">
-            <div class="w-1/2 lg:w-1/5 xl:w-1/6 ">
+            <div class="w-full w-1/3">
             <Button.dynamic
               action={%{type: :redirect, to: "https://www.eyra.co/next-software-services"}}
               face={%{type: :primary, label: "Learn more"}}
@@ -52,29 +51,8 @@ defmodule Systems.Home.View do
             </div>
           </div>
         </div>
-        <div class="w-full md:w-1/2 px-4 sm:px-16 md:px-0 lg:w-1/4 xl:w-1/5 text-center md:text-left">
-          <div class="rounded-lg shadow-xl">
-              <img
-                src={~p"/images/landing_page/yellow-abstract.webp"}
-                class="w-full rounded-t max-h-80"
-                alt="Abstract image"
-              />
-              <div class="p-4 sm:p-6">
-                  <p class="sm:text-lg lg:text-xl 2xl:text-2xl lg:font-semibold">
-                    Sign in or explore the Next platform by creating a free account.
-                  </p>
-                  <div class="mt-4 flex flex-col 2xl:flex-row items-between gap-2 justify-between  text-center">
-                    <Button.dynamic
-                      action={%{type: :click, code: "alert('Hello!')"}}
-                      face={%{type: :primary, label: "Meld je aan"}}
-                    />
-                    <Button.dynamic
-                      action={%{type: :click, code: "alert('Hello!')"}}
-                      face={%{type: :secondary, label: "inloggen"}}
-                    />
-              </div>
-            </div>
-          </div>
+        <div class="w-full hidden hidden md:block pr-12">
+            <img src={~p"/images/landing_page/drawing.svg"} alt="Image displaying " class="w-full max-h-96" />
         </div>
       </div>
     </section>
@@ -83,25 +61,29 @@ defmodule Systems.Home.View do
 
   defp render_steps(assigns) do
     ~H"""
-    <section class="bg-grey1 py-16 px-6">
-        <h2 class="text-title3 font-bold text-white md:text-left pl-8">
+    <section class="py-16 px-6">
+        <h2 class="text-title3 font-bold md:text-left pl-8">
           Here's how to get started
         </h2>
-        <div class="mt-10 justify-around w-full flex flex-col md:flex-row gap-8 lg:gap-8 px-6">
+        <div class="mt-10 justify-around w-full flex flex-col md:flex-row gap-8 lg:gap-16 px-6">
           <%= render_step_card(%{
                 image: ~p"/images/landing_page/geel-abstract.svg",
-                title: "Step 1: Log in",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                title: "Log in",
+                stepNumber: 1,
+                description: "Create your free account and gain access to the Next platform with readily available software services.",
+                button: %{label: "Create account", link: "/user/signup/creator"}
                }) %>
           <%= render_step_card(%{
                 image: ~p"/images/landing_page/hout-abstract.svg",
-                title: "Step 2: Set up your study",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                title: "Set up your study",
+                stepNumber: 2,
+                description: "Choose one of the software services and configure it to fit your research needs."
                }) %>
           <%= render_step_card(%{
                 image: ~p"/images/landing_page/blauw-abstract.svg",
-                title: "Step 3: Run your study",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                title: "Run your study",
+                stepNumber: 3,
+                description: "See your configuration in action, make adjustments, and immediately observe the effect."
                }) %>
         </div>
     </section>
@@ -110,38 +92,80 @@ defmodule Systems.Home.View do
 
   defp render_step_card(assigns) do
     ~H"""
-    <div class="bg-white w-full rounded xl:rounded-t-2xl overflow-hidden shadow">
+    <div class="bg-white w-full rounded overflow-hidden drop-shadow-lg">
       <img
-        class="w-full h-46 lg:min-h-80 2xl:min-h-80 object-cover"
+        class="w-full h-46 lg:min-h-80 2xl:min-h-80 object-contain"
         src={@image}
         alt={@title}
       />
       <div class="p-4 lg:p-6">
-        <h3 class="text-title5 font-bold">
-          <%= @title %>
-        </h3>
-        <p class="mt-4 text-bodymedium">
+        <div class="flex items-between gap-2">
+          <div class="w-6 h-6 bg-primary text-white text-xs rounded-full flex items-center justify-center font-bold">
+            {@stepNumber}
+          </div>
+          <h3 class="text-title5 font-bold">
+            <%= @title %>
+          </h3>
+        </div>
+        <p class="mt-4 text-introdesktop ">
           <%= @description %>
         </p>
+        <%= if assigns[:button] do %>
+          <div class="flex justify-start mt-6">
+            <Button.dynamic
+              action={%{type: :redirect, to: @button.link}}
+              face={%{type: :primary, label: @button.label}}
+            />
+          </div>
+        <% end %>
       </div>
     </div>
     """
   end
 
-  defp render_video(assigns) do
+  defp render_available_services(assigns) do
     ~H"""
     <section class="h-full pt-12 px-6 bg-white">
-        <h1 class="text-title2 font-bold text-grey1 text-center md:text-left">
+      <div class="px-12 flex justify-start items-center md:gap-10">
+        <img class="h-64" src={~p"/images/landing_page/services-drawing.png"}/>
+        <div class="flex flex-col justify-start items-start pr-20">
+            <div class="pb-8 text-title1 font-title1 text-grey1">
+              Available services
+            </div>
+            <div class="pb-6 flex flex-col justify-start items-start">
+                <div class="justify-center text-2xl font-intro leading-8">
+                  The Next platform is an open and inclusive platform designed to accelerate
+                  research and knowledge creation. By integrating cutting-edge software
+                  services, Next empowers researchers with sustainable and
+                  privacy-conscious tools.
+                </div>
+                <div class="pt-16">
+                  <Button.dynamic
+                    action={%{type: :redirect, to: "/next-software-services"}}
+                    face={%{type: :primary, label: "Available services"}}
+                  />
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp render_video(assigns) do
+    ~H"""
+    <section class="h-full pt-24 px-6 bg-white">
+        <h1 class="text-title1 font-bold text-center ">
           Wil je weten hoe het werkt?
         </h1>
-        <div class="flex justify-center">
-        <iframe
-          class="h-[60vh] w-full rounded-lg mt-6 shadow"
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-          title="Sneak preview"
-          allowfullscreen
-        >
-        </iframe>
+        <div class="flex justify-center pt-6">
+          <iframe
+            class="h-[60vh] w-full rounded-lg mt-6 shadow"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="Sneak preview"
+            allowfullscreen
+          >
+          </iframe>
         </div>
     </section>
     """

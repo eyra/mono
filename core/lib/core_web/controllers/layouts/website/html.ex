@@ -11,6 +11,7 @@ defmodule CoreWeb.Layouts.Website.Html do
   attr(:user, :string, required: true)
   attr(:user_agent, :string, required: true)
   attr(:menus, :map)
+  attr(:include_right_sidepadding, :boolean, default: true)
 
   slot(:inner_block, required: true)
   slot(:hero, required: true)
@@ -51,8 +52,9 @@ defmodule CoreWeb.Layouts.Website.Html do
                       <%= render_slot(@inner_block) %>
                       <Margin.y id={:page_footer_top} />
                     </div>
-                    <div class="w-0 md:w-sidepadding">
-                    </div>
+                    <%= if @include_right_sidepadding == true do %>
+                      <div class="w-0 md:w-sidepadding"></div>
+                    <% end %>
                   </div>
                 </div>
                 <div class="bg-white">
