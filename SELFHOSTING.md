@@ -130,9 +130,29 @@ defmodule Systems.Storage.BuiltIn.MyBackend do
 
   def list_files(_folder), do: []
   def delete_files(_folder), do: :ok
+
+  # Configuration
+
+  defp config do
+    Application.fetch_env!(:core, Systems.Storage.BuiltIn.MyBackend)
+  end
+
+  defp var_1 do
+    Access.get(config(), :var_1, 256)
+  end
+
+  defp var_2 do
+    Access.get(config(), :var_2, "default")
+  end
+
+  defp var_n do
+    Access.get(config(), :var_n, "https://mybackend.com") |> URI.parse()
+  end
 end
 ```
 The `list_files/1` and `delete_files/1` functions can be implemented as no-ops if the platform’s file export functionality in the user interface is not used, and files are instead accessed directly at the final storage location — for example, when using Yoda.
+
+Prevent any hardcoded variable but use the Elixir configuration system to retreive runtime values.
 
 
 #### AWS S3 example
@@ -155,45 +175,45 @@ def store(folder, filename, data) do
 end
 ```
 
-#### ⚙️ Configuration 
+#### ⚙️ Configuration
 
 To activate and configure a storage backend, you must modify the `core/config/runtime.exs` file.
 
-Below are examples for storage options that were previously available through forms in the user interface: 
+The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
+`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.
 
 ```elixir
-if builtin_special = System.get_env("STORAGE_BUILTIN_SPECIAL") do
-  config :core, Systems.Storage.BuiltIn, special: String.to_atom(builtin_special)
-end
+  if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
-if yoda_url = System.get_env("STORAGE_BUILTIN_YODA_URL") do
-  config :core, Systems.Storage.BuiltIn.Yoda,
-    email: System.get_env("STORAGE_BUILTIN_YODA_EMAIL"),
-    password: System.get_env("STORAGE_BUILTIN_YODA_PASSWORD"),
-    url: yoda_url
-end
-
-if azure_blob_container = System.get_env("STORAGE_BUILTIN_AZURE_BLOB_CONTAINER") do
-  config :core, Systems.Storage.BuiltIn.AzureBlob,
-    container: azure_blob_container
-end
+    config :core, Systems.Storage.BuiltIn.S3,
+      bucket: System.get_env("AWS_S3_BUCKET"),
+      prefix: storage_s3_prefix
+  else
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+  end
 ```
 
-These configurations are environment-driven, so you can control them using environment variables depending on which backend is active.
+That config can be replace by:
 
-Example `.env` snippet for S3:
+```elixir
+  if my_backend = System.get_env("STORAGE_BUILTIN_SPECIAL") do
+    config :core, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
+  end
 
-```bash
-STORAGE_BUILTIN_SPECIAL=s3
-STORAGE_BUILTIN_S3_BUCKET=my-bucket
-STORAGE_BUILTIN_S3_ACCESS_KEY_ID=...
-STORAGE_BUILTIN_S3_SECRET_ACCESS_KEY=...
-STORAGE_BUILTIN_S3_REGION=...
+  config Systems.Storage.BuiltIn.MyBackend,
+    var_1: System.get_env("STORAGE_BUILTIN_MYBACKEND_VAR1") |> String.integer(),
+    var_2: System.get_env("STORAGE_BUILTIN_MYBACKEND_VAR2")
+    var_n: System.get_env("STORAGE_BUILTIN_MYBACKEND_VARN")
 ```
-To activate your backend implementation use:
+
+Your environent variables should contain something like this:
 
 ```bash
-STORAGE_BUILTIN_SPECIAL=my_backend
+STORAGE_BUILTIN_SPECIAL=Systems.Storage.Builtin.MyBackend
+STORAGE_BUILTIN_MYBACKEND_MYVAR1=1024
+STORAGE_BUILTIN_MYBACKEND_MYVAR2=string value
+STORAGE_BUILTIN_MYBACKEND_MYVARN=https://client1.mybackend.com
 ```
 
 #### 🚧 Roadmap: UX-based File Transfer
