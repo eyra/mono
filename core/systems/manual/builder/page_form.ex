@@ -3,6 +3,8 @@ defmodule Systems.Manual.Builder.PageForm do
   use Frameworks.Pixel.WysiwygAreaHelpers
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
+  import Core.ImageHelpers, only: [image_from_path!: 1, encode_image_info: 2]
+
   alias Systems.Manual
 
   @impl true
@@ -12,17 +14,31 @@ defmodule Systems.Manual.Builder.PageForm do
       socket
       |> assign(entity: page)
       |> update_changeset()
+      |> update_image_url()
       |> update_wysiwyg_form()
       |> init_file_uploader(:image)
     }
   end
 
+  def update_image_url(%{assigns: %{entity: %{image: "{" <> _ = image}}} = socket) do
+    %{"url" => image_url} = Jason.decode!(image)
+    socket |> assign(image_url: image_url)
+  end
+
+  def update_image_url(%{assigns: %{entity: %{image: image_url}}} = socket) do
+    socket |> assign(image_url: image_url)
+  end
+
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_path, image_url, _original_filename}
+        {path, image_url, _original_filename}
       ) do
-    changeset = Manual.PageModel.changeset(entity, %{image: image_url})
+    encoded_image_info =
+      image_from_path!(path)
+      |> encode_image_info(image_url)
+
+    changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket
     |> save(changeset)
@@ -71,7 +87,7 @@ defmodule Systems.Manual.Builder.PageForm do
         <.spacing value="M" />
         <.image_input
             static_path={&CoreWeb.Endpoint.static_path/1}
-            image_url={@entity.image}
+            image_url={@image_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-manual", "choose.image.file")}
             secondary_button_text={dgettext("eyra-manual", "choose.other.image.file")}

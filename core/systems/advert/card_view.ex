@@ -97,13 +97,13 @@ defmodule Systems.Advert.CardView do
           <div class="relative">
 
             <%= if @label do %>
-              <div class="absolute top-6 z-10">
+              <div class="absolute top-6 z-[12]">
                 <Card.label {@label} />
               </div>
             <% end %>
 
             <%= if @icon_url do %>
-              <div class="absolute top-6 right-6 z-10">
+              <div class="absolute top-6 right-6 z-[12]">
                 <Icon.card url={@icon_url} />
               </div>
             <% end %>
@@ -112,8 +112,6 @@ defmodule Systems.Advert.CardView do
               <Image.blurhash
                 id={Integer.to_string(@id)}
                 image={@image_info}
-                transition="duration-500"
-                corners="rounded-t-lg"
               />
             </div>
           </div>

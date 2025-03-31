@@ -5,6 +5,7 @@ defmodule Systems.Manual.Html do
   import Frameworks.Pixel.NumberIcon
   import Frameworks.Pixel.Line
   import Frameworks.Pixel.Toolbar
+  import Frameworks.Pixel.Image, only: [blurhash: 1]
 
   attr(:items, :list, required: true)
   attr(:selected_chapter_id, :integer, default: nil)
@@ -123,7 +124,7 @@ defmodule Systems.Manual.Html do
             <% end %>
           </div>
         </div>
-        <.page id={"mobile-page-#{@id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
+        <.page id={"mobile-page-#{@selected_page.id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white">
         <.toolbar back_button={@back_button} left_button={@left_button} right_button={@right_button} />
@@ -147,9 +148,17 @@ defmodule Systems.Manual.Html do
         <% end %>
         <%= @page.title %>
       </div>
-      <%= if @page.image do %>
-        <div id={"manual-page-#{@id}-image"} phx-hook="FullscreenImage" class="flex flex-col gap-4">
-          <img src={@page.image} />
+      <%= if @page.image_info do %>
+        <div id={"#{@id}-image-container"} phx-hook="FullscreenImage" class="flex w-full flex-col gap-4">
+          <%= if Map.get(@page.image_info, :blur_hash) do %>
+            <.blurhash
+              id={"#{@id}-image"}
+              image={@page.image_info}
+              style="dynamic"
+            />
+          <% else %>
+            <img src={@page.image_info.url} />
+          <% end %>
           <%= if @fullscreen_button do %>
             <Button.dynamic {@fullscreen_button} />
           <% end %>

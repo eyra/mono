@@ -33,6 +33,7 @@ import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { TouchstartSensitive } from "./touchstart_sensitive";
+import { Blurhash } from "./blurhash";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
@@ -42,46 +43,6 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     Viewport.sendToServer();
   }
 });
-
-window.blurHash = () => {
-  return {
-    show: true,
-    rendered: false,
-    showBlurHash() {
-      return this.show !== false;
-    },
-    reset() {
-      console.log("Reset blurhash");
-    },
-    hideBlurHash() {
-      if (!liveSocket.socket.isConnected()) {
-        return;
-      }
-      this.show = false;
-    },
-    render() {
-      console.log("Render blurhash");
-      const img = this.$el.getElementsByTagName("img")[0];
-      if (img.complete) {
-        this.show = false;
-        return;
-      }
-      if (this.rendered) {
-        return;
-      }
-      this.rendered = true;
-      const canvas = this.$el.getElementsByTagName("canvas")[0];
-      const blurhash = canvas.dataset.blurhash;
-      const width = parseInt(canvas.getAttribute("width"), 10);
-      const height = parseInt(canvas.getAttribute("height"), 10);
-      const pixels = decode(blurhash, width, height);
-      const ctx = canvas.getContext("2d");
-      const imageData = ctx.createImageData(width, height);
-      imageData.data.set(pixels);
-      ctx.putImageData(imageData, 0, 0);
-    },
-  };
-};
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -121,6 +82,7 @@ let Hooks = {
   ResetScroll,
   FullscreenImage,
   TouchstartSensitive,
+  Blurhash,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

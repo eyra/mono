@@ -44,7 +44,9 @@ defmodule Core.ImageCatalog.Unsplash.Test do
              %{
                "urls" => %{"raw" => "http://example.org"},
                "user" => %{"username" => "tester", "name" => "Miss Test"},
-               "blur_hash" => "asdf"
+               "blur_hash" => "asdf",
+               "width" => 100,
+               "height" => 100
              }
            ]
          }}
@@ -66,7 +68,9 @@ defmodule Core.ImageCatalog.Unsplash.Test do
              %{
                "urls" => %{"raw" => "http://example.org"},
                "user" => %{"username" => "tester", "name" => "Miss Test"},
-               "blur_hash" => "asdf"
+               "blur_hash" => "asdf",
+               "width" => 100,
+               "height" => 100
              }
            ]
          }}
