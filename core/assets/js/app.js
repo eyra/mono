@@ -37,6 +37,22 @@ import { Blurhash } from "./blurhash";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
+// Force the active state on iOS touch devices by adding a touchstart
+// listener to all elements with the class "touchstart-sensitive"
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    const elements = document.querySelectorAll(".touchstart-sensitive");
+    elements.forEach((element) => {
+      if (!element.classList.contains("touchstart-listener")) {
+        element.addEventListener("touchstart", () => {});
+        element.classList.add("touchstart-listener");
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind == "initial") {
     TimeZone.sendToServer();
