@@ -30,3 +30,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "member.caption"
+msgstr ""
