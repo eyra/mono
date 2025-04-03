@@ -29,7 +29,7 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: nil,
       blocks: [],
-      include_right_sidepadding: true
+      include_right_sidepadding: false
     }
   end
 
