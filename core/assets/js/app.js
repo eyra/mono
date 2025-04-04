@@ -32,7 +32,6 @@ import { Sticky } from "./sticky";
 import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
-import { TouchstartSensitive } from "./touchstart_sensitive";
 import { Blurhash } from "./blurhash";
 
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
@@ -97,7 +96,6 @@ let Hooks = {
   TimeZone,
   ResetScroll,
   FullscreenImage,
-  TouchstartSensitive,
   Blurhash,
 };
 

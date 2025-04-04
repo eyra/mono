@@ -10,6 +10,45 @@ defmodule Systems.Content.Html do
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Breadcrumbs
 
+  attr(:items, :list, required: true)
+  attr(:target, :any, default: "")
+
+  def context_menu(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-4">
+        <div
+          id="context-menu-items"
+          class="rounded-lg shadow-floating p-6 w-[240px] bg-white hidden"
+        >
+          <div class="flex flex-col gap-6 items-left">
+            <%= for item <- @items do %>
+              <div
+                phx-target={@target}
+                phx-click="context_menu_item_click"
+                phx-value-item={item.id}
+                class="flex-wrap cursor-pointer text-grey1 hover:text-primary">
+                <button class="text-button font-button">
+                  <%= item.label %>
+                </button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="flex-grow" />
+          <div
+            id="context-menu-button"
+            phx-hook="Toggle"
+            target="context-menu-items"
+            class="flex-shrink-0 w-10 h-10 flex flex-col items-center justify-center text-primary bg-white rounded-full shadow-floating active:shadow-none cursor-pointer"
+          >
+            <div class="text-title5 font-title5 text-primary pointer-events-none">i</div>
+          </div>
+        </div>
+      </div>
+    """
+  end
+
   attr(:modals, :map, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)

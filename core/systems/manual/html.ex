@@ -38,7 +38,7 @@ defmodule Systems.Manual.Html do
       <div class="flex flex-col gap-4">
         <div class="flex flex-row gap-4">
           <div class="flex flex-row gap-4">
-            <.number_icon number={@number} active={@selected} />
+            <.number_icon number={@number} active={true} />
             <div class="flex flex-col gap-2">
               <div class="mt-[3px] sm:mt-[1px]">
                 <Text.title5 align="text-left"><%= @title %></Text.title5>
@@ -197,7 +197,7 @@ defmodule Systems.Manual.Html do
   def page_list_item(assigns) do
     ~H"""
     <div
-      class={"p-4 rounded-lg border cursor-pointer #{if @selected do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
+      class={"touchstart-sensitive p-4 rounded-lg border cursor-pointer #{if @selected do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
       phx-click={@select_page_event}
       phx-value-item={@id}
       phx-target={@select_page_target}

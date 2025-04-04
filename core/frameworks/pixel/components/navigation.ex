@@ -176,7 +176,7 @@ defmodule Frameworks.Pixel.Navigation do
 
   def desktop_navbar(assigns) do
     ~H"""
-    <div class="bg-grey5 w-full pr-6">
+    <div class="bg-grey5 w-full pl-6 pr-6">
       <.navbar {assigns} />
     </div>
     """
@@ -188,7 +188,7 @@ defmodule Frameworks.Pixel.Navigation do
 
   def mobile_navbar(assigns) do
     ~H"""
-    <div class="md:hidden bg-grey5 w-full pl-6 pr-6">
+    <div class="lg:hidden bg-grey5 w-full pl-6 pr-6">
       <.navbar {assigns} />
     </div>
     """

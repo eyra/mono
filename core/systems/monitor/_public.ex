@@ -17,7 +17,7 @@ defmodule Systems.Monitor.Public do
   end
 
   def log(event, opts) when is_list(event) do
-    Logger.notice("MONITOR: #{inspect(event)}", ansi_color: :magenta)
+    Logger.info("MONITOR: #{inspect(event)}", ansi_color: :magenta)
     value = Keyword.get(opts, :value, 1)
     Queries.upsert_event(event, value)
   end
@@ -29,7 +29,7 @@ defmodule Systems.Monitor.Public do
   end
 
   def multi_log(multi, event, opts) when is_list(event) do
-    Logger.notice("MONITOR: #{inspect(event)}", ansi_color: :magenta)
+    Logger.info("MONITOR: #{inspect(event)}", ansi_color: :magenta)
     value = Keyword.get(opts, :value, 1)
     Queries.upsert_event(multi, event, value)
   end
