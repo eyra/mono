@@ -121,3 +121,11 @@ msgstr "Taal"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Deelgenomen"
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tool.description"
+msgstr "Volg %{link} om jouw Qualtrics vragenlijst link aan te maken op te halen. Plak deze link in het \"Vragenlijst link\" veld van het formulier hieronder."

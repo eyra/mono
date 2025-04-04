@@ -8,10 +8,10 @@ defmodule Systems.Assignment.PrivacyForm do
   alias Systems.Content
 
   @impl true
-  def process_file(socket, {_path, url, original_filename}) do
+  def process_file(socket, %{public_url: public_url, original_filename: original_filename}) do
     privacy_doc =
       %Content.FileModel{}
-      |> Content.FileModel.changeset(%{name: original_filename, ref: url})
+      |> Content.FileModel.changeset(%{name: original_filename, ref: public_url})
 
     socket
     |> assign(

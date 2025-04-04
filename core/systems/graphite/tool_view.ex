@@ -15,7 +15,6 @@ defmodule Systems.Graphite.ToolView do
         user: user,
         timezone: timezone
       )
-      |> send_event(:parent, "tool_initialized")
       |> update_submission()
       |> update_open_for_submissions()
       |> update_leaderboard_description()

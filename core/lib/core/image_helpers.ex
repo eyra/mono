@@ -32,4 +32,52 @@ defmodule Core.ImageHelpers do
 
   def get_photo_url(%{photo_url: photo_url}) when not is_nil(photo_url), do: photo_url
   def get_photo_url(_), do: "/images/profile_photo_default.svg"
+
+  def image_from_path!(path) do
+    {:ok, image} = Image.open(path)
+    image
+  end
+
+  def create_image_info(image, url) do
+    {:ok, flattened_image} = Image.flatten(image)
+    {:ok, resized_image} = Image.thumbnail(flattened_image, 32, crop: :none)
+    {:ok, blur_hash} = Image.Blurhash.encode(resized_image)
+
+    %{
+      url: url,
+      width: Image.width(image),
+      height: Image.height(image),
+      blur_hash: blur_hash
+    }
+  end
+
+  def encode_image_info(image, url) do
+    create_image_info(image, url)
+    |> Jason.encode!()
+  end
+
+  def decode_image_info("{" <> _ = json_encoded_image_info) do
+    image_info = Jason.decode!(json_encoded_image_info)
+
+    %{
+      url: image_info["url"],
+      width: image_info["width"],
+      height: image_info["height"],
+      blur_hash: image_info["blur_hash"]
+    }
+  end
+
+  def decode_image_info(image_url) when is_binary(image_url) do
+    # fallback for images without height and width
+    %{
+      url: image_url,
+      width: nil,
+      height: nil,
+      blur_hash: nil
+    }
+  end
+
+  def decode_image_info(_) do
+    nil
+  end
 end

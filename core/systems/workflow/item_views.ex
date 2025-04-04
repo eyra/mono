@@ -50,6 +50,7 @@ defmodule Systems.Workflow.ItemViews do
 
   attr(:id, :any, required: true)
   attr(:title, :map, required: true)
+  attr(:description, :map, default: nil)
   attr(:icon, :string, required: true)
   attr(:status, :atom, default: :pending)
   attr(:index, :integer, required: true)
@@ -57,20 +58,20 @@ defmodule Systems.Workflow.ItemViews do
   attr(:event, :string, default: "work_item_selected")
   attr(:target, :any, default: "")
 
-  def work_item(assigns) do
+  def work_list_item(assigns) do
     ~H"""
     <div
-      class={"w-full h-16 rounded-lg cursor-pointer p-6 border-2 #{if @selected? do "border-primary" else "hover:border-grey4 border-white" end} "}
+      class={"touchstart-sensitive w-full rounded-lg cursor-pointer p-4 border #{if @selected? do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
       phx-click={@event}
       phx-value-item={@id}
       phx-target={@target}
     >
-      <div class="w-full h-full bg-white">
+      <div class="w-full h-full">
         <Align.vertical_center>
-          <div class="flex flex-row gap-6 items-center">
+          <div class="flex flex-row gap-6 items-start">
             <%= if @status == :pending do %>
               <div class="flex-shrink-0">
-                <.step_indicator bg_color="bg-grey4" text={@index+1} />
+                <.step_indicator bg_color="bg-primary" text={@index+1} />
               </div>
             <% else %>
               <div class="h-6 w-6 flex-shrink-0">
@@ -78,10 +79,15 @@ defmodule Systems.Workflow.ItemViews do
               </div>
             <% end %>
             <div class="flex-grow">
-              <Text.title6 margin="mb-0" align="text-left"><%= @title %></Text.title6>
+              <div class="flex flex-col gap-2 pt-[2px]">
+                <Text.title6 margin="mb-0" align="text-left"><%= @title %></Text.title6>
+                <%= if @description != nil and @status == :pending do %>
+                  <div class="font-body text-bodysmall"><%= @description %></div>
+                <% end %>
+              </div>
             </div>
             <%= if @icon do %>
-              <div class="w-8 h-8">
+              <div class="w-8 h-8 flex-shrink-0">
                 <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
               </div>
             <% end %>

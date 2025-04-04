@@ -15,7 +15,7 @@ defmodule Frameworks.Pixel.Toolbar do
     <div class="w-full h-full bg-white">
       <div class="px-4">
         <.line />
-        <div class="flex flex-row w-full h-[56px] justify-start xl:justify-center">
+        <div class="flex flex-row w-full h-[56px] justify-center">
             <Button.dynamic {@back_button} />
         </div>
       </div>

@@ -1,7 +1,7 @@
 defmodule Systems.Workflow.WorkListView do
   use CoreWeb, :live_component
 
-  import Systems.Workflow.ItemViews, only: [work_item: 1]
+  import Systems.Workflow.ItemViews, only: [work_list_item: 1]
 
   @impl true
   def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
@@ -35,7 +35,7 @@ defmodule Systems.Workflow.WorkListView do
     <div class="w-full h-full">
       <div class="flex flex-col gap-2">
         <%= for {item, index} <- Enum.with_index(@items) do %>
-          <.work_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
+          <.work_list_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
       </div>
     </div>

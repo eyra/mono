@@ -50,3 +50,11 @@ msgstr "Kies een zip bestand"
 #, elixir-autogen, elixir-format
 msgid "zip-too-large"
 msgstr "Het geselecteerde bestand is te groot (max 20MB)"
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr ""

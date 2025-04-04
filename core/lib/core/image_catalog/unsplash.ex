@@ -94,19 +94,26 @@ defmodule Core.ImageCatalog.Unsplash do
   end
 
   defp info(app_name, image_id, opts) do
+    decoded_image_id = URI.decode_query(image_id)
+
     %{"raw_url" => raw_url, "username" => username, "name" => name, "blur_hash" => blur_hash} =
-      URI.decode_query(image_id)
+      decoded_image_id
 
     safe_username = Phoenix.HTML.Safe.to_iodata(username)
     safe_name = Phoenix.HTML.Safe.to_iodata(name)
 
-    width = Keyword.get(opts, :width, 100)
-    height = Keyword.get(opts, :height, 100)
+    requested_width = Keyword.get(opts, :width, 100)
+    requested_height = Keyword.get(opts, :height, 100)
+
+    #
+    width = Map.get(decoded_image_id, "width", requested_width)
+    height = Map.get(decoded_image_id, "height", requested_height)
 
     %{
       id: image_id,
-      url: image_url(raw_url, w: width, h: height),
-      srcset: 1..3 |> Enum.map_join(",", &srcset_item(raw_url, width, height, &1)),
+      url: image_url(raw_url, w: requested_width, h: requested_height),
+      srcset:
+        1..3 |> Enum.map_join(",", &srcset_item(raw_url, requested_width, requested_height, &1)),
       blur_hash: blur_hash,
       width: width,
       height: height,
@@ -142,9 +149,18 @@ defmodule Core.ImageCatalog.Unsplash do
   defp parse_result_item(%{
          "urls" => %{"raw" => raw_url},
          "user" => %{"username" => username, "name" => name},
-         "blur_hash" => blur_hash
+         "blur_hash" => blur_hash,
+         "height" => height,
+         "width" => width
        }) do
-    URI.encode_query(raw_url: raw_url, username: username, name: name, blur_hash: blur_hash)
+    URI.encode_query(
+      raw_url: raw_url,
+      username: username,
+      name: name,
+      blur_hash: blur_hash,
+      height: height,
+      width: width
+    )
   end
 
   @spec conf() :: %{access_key: binary(), app_name: binary()}

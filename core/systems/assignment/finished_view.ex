@@ -37,14 +37,12 @@ defmodule Systems.Assignment.FinishedView do
     ~H"""
       <div class="flex flex-row w-full h-full">
         <div class="flex-grow" />
-        <div class="flex flex-col gap-8 items-center w-full h-full">
+        <div class="flex flex-col gap-4 sm:gap-8 items-center w-full h-full px-6">
           <div class="flex-grow" />
           <Text.title1 margin=""><%= @title %></Text.title1>
-          <Text.body_large><%= @body %></Text.body_large>
+          <Text.body_large align="text-center"><%= @body %></Text.body_large>
           <div class="flex flex-col items-center w-full pt-4">
-            <div class="flex-none">
-              <img src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
-            </div>
+            <img class="block w-[220px] h-[220px] object-cover" src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
           </div>
           <div class="pb-4">
             <Button.dynamic {@retry_button} />

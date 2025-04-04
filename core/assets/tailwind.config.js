@@ -113,7 +113,6 @@ module.exports = {
         "mobile-menu-width": "256px",
         "platform-footer-height": "62px",
         "desktop-menu-bottom-padding": "54px",
-        sidepadding: "64px",
         "navbar-height": "90px",
         "dialog-width": "320px",
         "dialog-width-sm": "400px",

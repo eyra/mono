@@ -5,6 +5,7 @@ export const Toggle = {
     this.target.style.display = "none";
 
     document.addEventListener("click", (event) => {
+      console.log("[Toggle] event.target", event.target);
       if (event.target === this.el) {
         if (this.target.style.display !== "block") {
           this.target.style.display = "block";

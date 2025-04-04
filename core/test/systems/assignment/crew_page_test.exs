@@ -26,16 +26,16 @@ defmodule Systems.Assignment.CrewPageTest do
         :online
       )
 
-    {:ok, assignment: assignment}
+    {:ok, assignment: assignment, tool: tool}
   end
 
   describe "render an assignment crew page" do
-    test "renders page", %{conn: conn, assignment: assignment, user: user} do
-      conn = put_session(conn, :panel_info, %{embedded?: false})
+    test "renders page", %{conn: conn, assignment: assignment, user: user, tool: tool} do
+      conn = put_session(conn, :panel_info, %{embedded?: false, participant: "test"})
       Assignment.Public.add_participant!(assignment, user)
 
       {:ok, _view, html} = live(conn, ~p"/assignment/#{assignment.id}")
-      assert html =~ "Start"
+      assert html =~ "<a href=\"#{tool.url}?participant=test\" target=\"_blank\">"
     end
   end
 end

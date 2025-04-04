@@ -18,8 +18,7 @@ defmodule Systems.Content.ContextMenu do
   @impl true
   def render(assigns) do
     ~H"""
-     <div class="relative">
-      <div class="absolute z-100 -right-10 bottom-6 flex flex-col gap-4">
+      <div class="flex flex-col gap-4">
         <div
           id="context-menu-items"
           class="rounded-lg shadow-floating p-6 w-[240px] bg-white hidden"
@@ -44,13 +43,12 @@ defmodule Systems.Content.ContextMenu do
             id="context-menu-button"
             phx-hook="Toggle"
             target="context-menu-items"
-            class="w-10 h-10 flex flex-col items-center justify-center text-primary bg-white rounded-full shadow-floating active:shadow-none cursor-pointer"
+            class="flex-shrink-0 w-10 h-10 flex flex-col items-center justify-center text-primary bg-white rounded-full shadow-floating active:shadow-none cursor-pointer"
           >
             <div class="text-title5 font-title5 text-primary text-grey1 pointer-events-none">i</div>
           </div>
         </div>
       </div>
-     </div>
     """
   end
 end

@@ -14,7 +14,7 @@ defmodule Systems.Assignment.BrandingForm do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_path, logo_url, _original_filename}
+        %{public_url: logo_url}
       ) do
     socket
     |> save(entity, :auto_save, %{logo_url: logo_url})

@@ -6,7 +6,6 @@ defmodule Systems.Manual.ToolView do
   def update(%{manual: manual, title: title, user: user}, socket) do
     {:ok,
      socket
-     |> send_event(:parent, "tool_initialized")
      |> assign(manual: manual, title: title, user: user)
      |> compose_child(:manual_view)}
   end
@@ -20,6 +19,13 @@ defmodule Systems.Manual.ToolView do
         title: title,
         user: user
       }
+    }
+  end
+
+  def handle_event("back", _, socket) do
+    {
+      :noreply,
+      socket |> send_event(:parent, "complete_task")
     }
   end
 

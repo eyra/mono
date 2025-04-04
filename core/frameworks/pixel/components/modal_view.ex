@@ -236,19 +236,14 @@ defmodule Frameworks.Pixel.ModalView do
   def page(assigns) do
     ~H"""
       <div class={"modal-page w-[960px] p-4 sm:px-10 sm:py-20 h-full"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
-          <%!-- HEADER --%>
-          <div class="shrink-0 px-8">
-            <div class="flex flex-row">
-              <div class="flex-grow">
-                <.title2 live_component={@live_component} />
-              </div>
-              <Button.dynamic {close_icon_button(@live_component)} />
-            </div>
-          </div>
+        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
             <.body live_component={@live_component} />
+          </div>
+           <%!-- TOOLBAR --%>
+           <div class="flex-shrink-0">
+            <.toolbar back_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
