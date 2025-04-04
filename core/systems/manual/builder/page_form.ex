@@ -30,18 +30,24 @@ defmodule Systems.Manual.Builder.PageForm do
   end
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        {path, image_url, _original_filename}
-      ) do
+  def pre_process_file(%{tmp_path: tmp_path, public_url: image_url}) do
     encoded_image_info =
-      image_from_path!(path)
+      image_from_path!(tmp_path)
       |> encode_image_info(image_url)
 
+    %{encoded_image_info: encoded_image_info}
+  end
+
+  @impl true
+  def process_file(
+        %{assigns: %{entity: entity}} = socket,
+        %{encoded_image_info: encoded_image_info}
+      ) do
     changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket
     |> save(changeset)
+    |> update_image_url()
   end
 
   def update_changeset(%{assigns: %{entity: entity}} = socket) do

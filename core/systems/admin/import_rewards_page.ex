@@ -15,7 +15,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {path, _url, original_filename}
+        %{path: path, original_filename: original_filename}
       ) do
     changeset =
       entity
