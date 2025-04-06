@@ -215,23 +215,6 @@ defmodule Frameworks.Pixel.Button do
   end
 
   attr(:label, :string, required: true)
-  attr(:field, :string, required: true)
-  attr(:bg_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-white")
-
-  def primary_label(assigns) do
-    # FIXME: Deprecation notice: Use button.dynamic instead
-
-    ~H"""
-    <label for={@field}>
-      <div class={"cursor-pointer pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}>
-        <%= @label %>
-      </div>
-    </label>
-    """
-  end
-
-  attr(:label, :string, required: true)
   attr(:event, :string, required: true)
   attr(:width, :string, default: "pl-4 pr-4")
   attr(:target, :any, default: nil)
@@ -288,23 +271,6 @@ defmodule Frameworks.Pixel.Button do
     >
       <%= @label %>
     </button>
-    """
-  end
-
-  attr(:label, :string, required: true)
-  attr(:field, :string, required: true)
-  attr(:border_color, :string, default: "border-primary")
-  attr(:text_color, :string, default: "text-primary")
-
-  def secondary_label(assigns) do
-    # FIXME: Deprecation notice: Use button.dynamic instead
-
-    ~H"""
-    <label for={@field}>
-      <div class={"cursor-pointer pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@border_color} #{@text_color}"}>
-        <%= @label %>
-      </div>
-    </label>
     """
   end
 

@@ -319,11 +319,9 @@ defmodule Systems.Admin.ImportRewardsPage do
             <.spacing value="S" />
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <Button.primary_label
-                  label="Select csv file"
-                  field={@uploads.csv.ref}
-                  bg_color="bg-tertiary"
-                  text_color="text-grey1"
+                <Button.dynamic
+                  action={%{type: :label, field: @uploads.csv.ref}}
+                  face={%{type: :primary, label: "Select csv file", bg_color: "bg-tertiary", text_color: "text-grey1"}}
                 />
                 <div class="hidden">
                   <.live_file_input upload={@uploads.csv} />

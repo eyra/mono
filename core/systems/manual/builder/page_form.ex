@@ -12,7 +12,7 @@ defmodule Systems.Manual.Builder.PageForm do
     {
       :ok,
       socket
-      |> assign(entity: page)
+      |> assign(entity: page, upload_in_progress: false)
       |> update_changeset()
       |> update_image_url()
       |> update_wysiwyg_form()
@@ -46,6 +46,7 @@ defmodule Systems.Manual.Builder.PageForm do
     changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket
+    |> assign(upload_in_progress: false)
     |> save(changeset)
     |> update_image_url()
   end
@@ -74,6 +75,15 @@ defmodule Systems.Manual.Builder.PageForm do
   end
 
   @impl true
+  def handle_event("save", %{"_target" => ["image"]}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(upload_in_progress: true)
+    }
+  end
+
+  @impl true
   def handle_event("save", %{"page_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     changeset = Manual.PageModel.changeset(entity, attrs)
 
@@ -97,6 +107,7 @@ defmodule Systems.Manual.Builder.PageForm do
             uploads={@uploads}
             primary_button_text={dgettext("eyra-manual", "choose.image.file")}
             secondary_button_text={dgettext("eyra-manual", "choose.other.image.file")}
+            loading={@upload_in_progress}
           />
         <.spacing value="M" />
         <.text_input

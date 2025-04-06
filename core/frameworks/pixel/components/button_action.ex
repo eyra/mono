@@ -89,6 +89,17 @@ defmodule Frameworks.Pixel.Button.Action do
     """
   end
 
+  attr(:field, :string, required: true)
+  slot(:inner_block, required: true)
+
+  def label(assigns) do
+    ~H"""
+    <label for={@field}>
+      <%= render_slot(@inner_block) %>
+    </label>
+    """
+  end
+
   attr(:id, :string, required: true)
   attr(:target, :string, required: true)
   slot(:inner_block, required: true)
