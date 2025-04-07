@@ -90,6 +90,11 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   @impl true
+  def handle_event("hide_modal", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "hide_modal")}
+  end
+
+  @impl true
   def handle_event("complete_task", _payload, socket) do
     {:noreply, socket |> send_event(:parent, "complete_task")}
   end

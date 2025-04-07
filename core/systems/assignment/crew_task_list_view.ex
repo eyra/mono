@@ -125,6 +125,10 @@ defmodule Systems.Assignment.CrewTaskListView do
     }
   end
 
+  def handle_event("hide_modal", _payload, socket) do
+    {:noreply, socket |> hide_modal_tool_ref_view_if_needed()}
+  end
+
   def handle_event("tool_initialized", payload, socket) do
     {:noreply, socket |> send_event(:tool_ref_view, "tool_initialized", payload)}
   end
