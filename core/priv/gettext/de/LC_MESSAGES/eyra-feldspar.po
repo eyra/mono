@@ -53,8 +53,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Sie sind dabei, Ihre gespeicherten Daten zu filtern. Sie können sie überprüfen und Ihre Einwilligung geben, bevor Sie sie teilen. Das Laden kann einen Moment dauern — vielen Dank für Ihre Geduld."
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Weiter"

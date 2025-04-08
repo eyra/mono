@@ -53,8 +53,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Sta per iniziare a filtrare i dati scaricati. Può controllarli e dare il consenso prima di condividerli. Il caricamento può richiedere un momento — grazie per la pazienza."
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Continua"

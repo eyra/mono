@@ -117,7 +117,7 @@ msgstr "Vergrößern"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.done.button"
-msgstr "Schließen"
+msgstr "Fertig"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
