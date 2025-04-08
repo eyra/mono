@@ -53,8 +53,8 @@ msgstr "Het geselecteerde bestand is te groot (max 20MB)"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "U staat op het punt om uw gedownloade gegevens te filteren. U kunt deze bekijken en toestemming geven voordat u ze deelt. Het laden kan even duren — dank voor uw geduld."
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Doorgaan"

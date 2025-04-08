@@ -117,7 +117,7 @@ msgstr "Vergroot"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.done.button"
-msgstr "Sluiten"
+msgstr "Klaar"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"

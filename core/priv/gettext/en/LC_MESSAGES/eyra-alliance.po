@@ -124,8 +124,8 @@ msgstr "Participated"
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr "Continue in new tab"
+msgstr "Continue"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tool.description"
-msgstr "You are about to leave the Next platform to participate in a questionnaire. After completing the questionnaire, you will be redirected back to Next."
+msgstr "You are about to start a questionnaire that will open in a new tab. When you finish, you will be brought back to the Next platform automatically."
