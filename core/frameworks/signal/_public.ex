@@ -31,7 +31,7 @@ defmodule Frameworks.Signal.Public do
   def dispatch(signal, message) do
     message = Map.put_new(message, :from_pid, self())
 
-    Logger.notice(
+    Logger.info(
       "SIGNAL: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}",
       ansi_color: :blue
     )

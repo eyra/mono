@@ -5,28 +5,16 @@ defmodule Systems.Document.PDFNavView do
   alias Systems.Document
 
   @impl true
-  def update(%{key: key, title: title, url: url} = params, socket) do
-    visible = Map.get(params, :visible, true)
+  def update(%{key: key, title: title, url: url}, socket) do
+    initialized = Map.get(socket.assigns, :initialized, false)
 
     {
       :ok,
       socket
-      |> assign(key: key, title: title, url: url, visible: visible)
-      |> update_state()
+      |> assign(key: key, title: title, url: url, initialized: initialized)
       |> compose_element(:ready_button)
       |> compose_child(:pdf_view)
     }
-  end
-
-  defp update_state(%{assigns: %{visible: visible}} = socket) do
-    state =
-      if visible do
-        "visible"
-      else
-        "hidden"
-      end
-
-    assign(socket, state: state)
   end
 
   @impl true
@@ -42,34 +30,47 @@ defmodule Systems.Document.PDFNavView do
   end
 
   @impl true
-  def compose(:pdf_view, %{key: key, url: url, visible: visible}) do
+  def compose(:pdf_view, %{key: key, url: url}) do
     %{
       module: Document.PDFView,
       params: %{
         key: key,
         url: url,
-        visible: visible,
+        visible: true,
         title: dgettext("eyra-assignment", "privacy.title")
       }
     }
   end
 
+  def handle_event("tool_initialized", _payload, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(initialized: true)
+      |> send_event(:parent, "tool_initialized")
+    }
+  end
+
   @impl true
   def handle_event("complete", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "complete_task")}
+    {
+      :noreply,
+      socket
+      |> send_event(:parent, "complete_task")
+      |> send_event(:parent, "hide_modal")
+    }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-
     <div class="flex flex-row w-full h-full justify-center" >
       <div class="flex-grow"/>
       <div class="w-full h-full max-w-[1200px] p-4 lg:p-8 ">
         <div class="w-full">
           <div
             class="flex flex-row items-center w-full gap-4"
-            data-state={@state}
+            data-state="visible"
           >
             <Text.title2 margin=""><%= @title %></Text.title2>
             <div class="flex-grow"/>
@@ -81,7 +82,7 @@ defmodule Systems.Document.PDFNavView do
               <.child name={:pdf_view} fabric={@fabric} />
             </div>
             <.spacing value="M" />
-            <div class="flex flex-row-reverse w-full ">
+            <div class="flex flex-row-reverse w-full pb-4 lg:pb-8">
               <div class="w-1/6">
                 <Button.dynamic {@ready_button} />
               </div>

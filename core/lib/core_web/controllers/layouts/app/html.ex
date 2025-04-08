@@ -15,8 +15,6 @@ defmodule CoreWeb.Layouts.App.Html do
   def app(assigns) do
     ~H"""
     <div class="flex flex-row">
-      <div class="w-0 md:w-sidepadding flex-shrink-0">
-      </div>
       <div class="flex-1">
         <div class="flex flex-col w-full h-viewport">
           <div class="flex-wrap">

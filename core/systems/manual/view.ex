@@ -106,6 +106,7 @@ defmodule Systems.Manual.View do
       |> assign(selected_chapter_id: nil, selected_chapter: nil)
       |> hide_child(:chapter)
       |> update_child(:chapter_list)
+      |> send_event(:parent, "back")
     }
   end
 

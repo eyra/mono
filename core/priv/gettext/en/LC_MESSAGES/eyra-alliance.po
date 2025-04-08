@@ -121,3 +121,11 @@ msgstr "Language"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Participated"
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Continue in new tab"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tool.description"
+msgstr "You are about to leave the Next platform to participate in a questionnaire. After completing the questionnaire, you will be redirected back to Next."

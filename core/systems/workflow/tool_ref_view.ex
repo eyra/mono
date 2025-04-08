@@ -10,10 +10,12 @@ defmodule Systems.Workflow.ToolRefView do
         %{
           id: id,
           title: title,
+          icon: icon,
           tool_ref: tool_ref,
           task: task,
           visible: visible,
           user: user,
+          participant: participant,
           timezone: timezone
         },
         socket
@@ -24,22 +26,30 @@ defmodule Systems.Workflow.ToolRefView do
       |> assign(
         id: id,
         title: title,
+        icon: icon,
         tool_ref: tool_ref,
         task: task,
         visible: visible,
         user: user,
+        participant: participant,
         timezone: timezone
       )
       |> reset_fabric()
+      |> update_tool_ref_name()
       |> update_launcher()
     }
   end
 
-  def update_launcher(%{assigns: %{tool_ref: tool_ref, user: user}} = socket) do
+  def update_tool_ref_name(%{assigns: %{tool_ref: tool_ref}} = socket) do
+    tool_ref_name = get_tool_ref_name(tool_ref)
+    socket |> assign(tool_ref_name: tool_ref_name)
+  end
+
+  def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
     launcher =
       tool_ref
       |> Workflow.ToolRefModel.tool()
-      |> Concept.ToolModel.launcher(user)
+      |> Concept.ToolModel.launcher()
 
     socket |> update_launcher(launcher)
   end
@@ -47,17 +57,28 @@ defmodule Systems.Workflow.ToolRefView do
   def update_launcher(
         %{
           assigns: %{
-            tool_ref: %{id: id},
+            tool_ref_name: tool_ref_name,
             user: user,
+            participant: participant,
             timezone: timezone,
             title: title,
+            icon: icon,
             visible: visible
           }
         } = socket,
         %{module: module, params: params}
       ) do
-    params = Map.merge(params, %{user: user, timezone: timezone, title: title, visible: visible})
-    child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
+    params =
+      Map.merge(params, %{
+        user: user,
+        participant: participant,
+        timezone: timezone,
+        title: title,
+        icon: icon,
+        visible: visible
+      })
+
+    child = Fabric.prepare_child(socket, tool_ref_name, module, params)
     socket |> show_child(child)
   end
 
@@ -66,6 +87,11 @@ defmodule Systems.Workflow.ToolRefView do
     tool_ref = Map.get(socket.assigns, :tool_ref)
     Logger.warning("No module launcher found for #{inspect(tool_ref)}")
     socket
+  end
+
+  @impl true
+  def handle_event("hide_modal", _payload, socket) do
+    {:noreply, socket |> send_event(:parent, "hide_modal")}
   end
 
   @impl true
@@ -79,8 +105,16 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   @impl true
-  def handle_event("tool_initialized", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "tool_initialized")}
+  def handle_event(
+        "tool_initialized",
+        _payload,
+        %{assigns: %{tool_ref_name: tool_ref_name}} = socket
+      ) do
+    {:noreply, socket |> send_event(tool_ref_name, "tool_initialized")}
+  end
+
+  defp get_tool_ref_name(%{id: id}) do
+    "tool_ref_#{id}"
   end
 
   @impl true
