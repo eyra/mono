@@ -218,7 +218,7 @@ defmodule Frameworks.Pixel.ModalView do
     <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain">
+          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
             <.body live_component={@live_component} />
           </div>
           <%!-- TOOLBAR --%>
