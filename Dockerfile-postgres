@@ -1,12 +1,12 @@
 FROM postgres:15
 
-COPY postgres_ssl/server.key /var/lib/postgresql/ssl/server.key
-COPY postgres_ssl/server.crt /var/lib/postgresql/ssl/server.crt
-COPY postgres_ssl/ca.crt     /var/lib/postgresql/ssl/ca.crt
+# COPY postgres_ssl/server.key /var/lib/postgresql/ssl/server.key
+# COPY postgres_ssl/server.crt /var/lib/postgresql/ssl/server.crt
+# COPY postgres_ssl/ca.crt     /var/lib/postgresql/ssl/ca.crt
 
-RUN chown postgres:postgres /var/lib/postgresql/ssl/server.key \
-    && chmod 600 /var/lib/postgresql/ssl/server.key \
-    && chown postgres:postgres /var/lib/postgresql/ssl/server.crt \
-    && chmod 644 /var/lib/postgresql/ssl/server.crt \
-    && chown postgres:postgres /var/lib/postgresql/ssl/ca.crt \
-    && chmod 644 /var/lib/postgresql/ssl/ca.crt
+# RUN chown postgres:postgres /var/lib/postgresql/ssl/server.key \
+#     && chmod 600 /var/lib/postgresql/ssl/server.key \
+#     && chown postgres:postgres /var/lib/postgresql/ssl/server.crt \
+#     && chmod 644 /var/lib/postgresql/ssl/server.crt \
+#     && chown postgres:postgres /var/lib/postgresql/ssl/ca.crt \
+#     && chmod 644 /var/lib/postgresql/ssl/ca.crt
