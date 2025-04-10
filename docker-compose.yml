@@ -1,9 +1,9 @@
 services:
   app:
     container_name: app
-    environment:
-      - DB_CA_PATH=/app/postgres_ssl/ca.crt
-      - DB_TLS_VERIFY=verify_peer
+    # environment:
+    #   - DB_CA_PATH=/app/postgres_ssl/ca.crt
+    #   - DB_TLS_VERIFY=verify_peer
     build:
       dockerfile: Dockerfile
       context: .
@@ -26,10 +26,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: next_dev
-    command: >
-      postgres  -c ssl=on
-                -c ssl_cert_file=/var/lib/postgresql/ssl/server.crt
-                -c ssl_key_file=/var/lib/postgresql/ssl/server.key
+    # command: >
+    #   postgres  -c ssl=on
+    #             -c ssl_cert_file=/var/lib/postgresql/ssl/server.crt
+    #             -c ssl_key_file=/var/lib/postgresql/ssl/server.key
     networks:
       - next
 
