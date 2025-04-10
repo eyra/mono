@@ -122,3 +122,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Continua"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tool.description"
+msgstr "Stai per iniziare un questionario che si aprirà in una nuova scheda. Quando lo avrai completato, verrai riportato automaticamente alla piattaforma Next."

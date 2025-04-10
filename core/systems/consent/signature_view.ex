@@ -2,11 +2,11 @@ defmodule Systems.Consent.SignatureView do
   use CoreWeb, :live_component
 
   @impl true
-  def update(%{signature: signature}, %{assigns: %{}} = socket) do
+  def update(%{title: title, signature: signature}, %{assigns: %{}} = socket) do
     {
       :ok,
       socket
-      |> assign(signature: signature)
+      |> assign(title: title, signature: signature)
       |> compose_element(:source)
     }
   end
@@ -19,6 +19,7 @@ defmodule Systems.Consent.SignatureView do
   def render(assigns) do
     ~H"""
       <div class="w-full h-full">
+        <Text.title2 align="text-left"><%= @title %></Text.title2>
         <div class="wysiwyg">
           <%= raw @source %>
         </div>

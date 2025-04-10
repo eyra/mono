@@ -9,9 +9,9 @@ defmodule Systems.Instruction.DownloadForm do
   alias Systems.Content
 
   @impl true
-  def process_file(socket, {_path, url, original_filename}) do
+  def process_file(socket, %{public_url: public_url, original_filename: original_filename}) do
     socket
-    |> handle_save(original_filename, url)
+    |> handle_save(original_filename, public_url)
     |> update_file()
     |> update_filename()
   end

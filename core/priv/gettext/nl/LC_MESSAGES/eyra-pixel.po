@@ -13,4 +13,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "modal.back.button"
-msgstr "Terug"
+msgstr "Sluiten"
