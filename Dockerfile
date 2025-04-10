@@ -42,4 +42,5 @@ WORKDIR /app/core
 # Dev Stage
 # ======================
 FROM builder AS dev
-CMD ["tail", "-f", "/dev/null"]
+
+CMD ["mix","run"]
