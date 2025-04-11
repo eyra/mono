@@ -20,7 +20,7 @@ if config_env() == :prod do
          :features,
          System.get_env("ENABLED_APP_FEATURES", "")
          |> String.split(~r"\s*,\s*")
-         |> Enum.map(&String.to_existing_atom/1)
+         |> Enum.map(&String.to_atom/1)
          |> Enum.map(&{&1, true})
 
   config :core,
