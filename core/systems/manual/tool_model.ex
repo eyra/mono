@@ -35,7 +35,7 @@ defmodule Systems.Manual.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def preload_graph(:down), do: preload_graph([:manual])

@@ -100,7 +100,7 @@ defmodule Systems.Alliance.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def validate_url(%Ecto.Changeset{} = changeset, field, _options \\ []) do

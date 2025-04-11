@@ -31,7 +31,7 @@ defmodule Systems.Storage.BuiltIn.EndpointModel do
       |> changeset(%{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def connected?(_endpoint) do

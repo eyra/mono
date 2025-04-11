@@ -79,7 +79,7 @@ defmodule Systems.Lab.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   defimpl Frameworks.Concept.ToolModel do
