@@ -70,14 +70,6 @@ config :core, Oban,
     email_delivery: 1,
     storage_delivery: 1,
     ris_processor: 1
-  ],
-  plugins: [
-    {Oban.Plugins.Pruner, max_age: 60 * 60},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
-     ]}
   ]
 
 config :packmatic, Packmatic.Source.URL,

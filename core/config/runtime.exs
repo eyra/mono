@@ -41,6 +41,30 @@ if config_env() == :prod do
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
+  # OBAN
+  oban_plugins =
+    System.get_env("ENABLED_OBAN_PLUGINS", "")
+    |> String.split(~r"\s*,\s*")
+
+  config :core, Oban,
+    plugins:
+      Enum.map(oban_plugins, fn plugin ->
+        case plugin do
+          "pruner" ->
+            {Oban.Plugins.Pruner, max_age: 60 * 60}
+
+          "lifeline" ->
+            {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)}
+
+          "advert_expiration" ->
+            {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
+
+          _ ->
+            nil
+        end
+      end)
+      |> Enum.reject(&is_nil/1)
+
   # RATE LIMITER
 
   config :core, :rate, quotas: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()

@@ -292,3 +292,4 @@ Optional environment variables:
 | PUBLIC_S3_URL | Public accessable url of an S3 service | "https://self-public.s3.eu-central-1.amazonaws.com" |
 | PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | "self-prod" |
 | DIST_HOSTS | Comma seperated list of hosts in the cluster, see: [OTP Distribution](https://elixirschool.com/en/lessons/advanced/otp_distribution) | "one, two" |
+| ENABLED_OBAN_PLUGINS | Comma seperated list of Oban plugins to enable, only pruner and lifeline supported | "pruner, lifeline"
