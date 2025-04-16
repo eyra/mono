@@ -72,6 +72,8 @@ config :core, Oban,
     ris_processor: 1
   ],
   plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60},
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
     {Oban.Plugins.Cron,
      crontab: [
        {"*/5 * * * *", Systems.Advert.ExpirationWorker}
