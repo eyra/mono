@@ -131,8 +131,8 @@ defmodule Systems.Home.HTML do
         </h1>
         <div class="flex justify-center pt-6">
           <iframe
-            class="h-1/2 lg:h-[60vh] w-full rounded-lg mt-6 shadow"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            class="h-1/2 lg:h-[60vh] w-3/4 rounded-lg mt-6 shadow"
+            src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603?sid=1d3270c1-e5ce-4dbb-921c-0fab4fcb3efc"
             title={dgettext("eyra-crew", "home.video.preview_title")}
             allowfullscreen
           >
