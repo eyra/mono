@@ -33,7 +33,7 @@ defmodule Systems.Storage.Yoda.EndpointModel do
       changeset(endpoint, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def preload_graph(:down), do: []

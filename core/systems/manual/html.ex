@@ -5,6 +5,7 @@ defmodule Systems.Manual.Html do
   import Frameworks.Pixel.NumberIcon
   import Frameworks.Pixel.Line
   import Frameworks.Pixel.Toolbar
+  import Frameworks.Pixel.Image, only: [blurhash: 1]
 
   attr(:items, :list, required: true)
   attr(:selected_chapter_id, :integer, default: nil)
@@ -37,7 +38,7 @@ defmodule Systems.Manual.Html do
       <div class="flex flex-col gap-4">
         <div class="flex flex-row gap-4">
           <div class="flex flex-row gap-4">
-            <.number_icon number={@number} active={@selected} />
+            <.number_icon number={@number} active={true} />
             <div class="flex flex-col gap-2">
               <div class="mt-[3px] sm:mt-[1px]">
                 <Text.title5 align="text-left"><%= @title %></Text.title5>
@@ -123,7 +124,7 @@ defmodule Systems.Manual.Html do
             <% end %>
           </div>
         </div>
-        <.page id={"mobile-page-#{@id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
+        <.page id={"mobile-page-#{@selected_page.id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white">
         <.toolbar back_button={@back_button} left_button={@left_button} right_button={@right_button} />
@@ -147,9 +148,17 @@ defmodule Systems.Manual.Html do
         <% end %>
         <%= @page.title %>
       </div>
-      <%= if @page.image do %>
-        <div id={"manual-page-#{@id}-image"} phx-hook="FullscreenImage" class="flex flex-col gap-4">
-          <img src={@page.image} />
+      <%= if @page.image_info do %>
+        <div id={"#{@id}-image-container"} phx-hook="FullscreenImage" class="flex w-full flex-col gap-4">
+          <%= if Map.get(@page.image_info, :blur_hash) do %>
+            <.blurhash
+              id={"#{@id}-image"}
+              image={@page.image_info}
+              style="dynamic"
+            />
+          <% else %>
+            <img src={@page.image_info.url} />
+          <% end %>
           <%= if @fullscreen_button do %>
             <Button.dynamic {@fullscreen_button} />
           <% end %>
@@ -188,7 +197,7 @@ defmodule Systems.Manual.Html do
   def page_list_item(assigns) do
     ~H"""
     <div
-      class={"p-4 rounded-lg border cursor-pointer #{if @selected do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
+      class={"touchstart-sensitive p-4 rounded-lg border cursor-pointer #{if @selected do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
       phx-click={@select_page_event}
       phx-value-item={@id}
       phx-target={@select_page_target}

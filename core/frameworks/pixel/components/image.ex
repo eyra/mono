@@ -3,57 +3,36 @@ defmodule Frameworks.Pixel.Image do
 
   attr(:id, :any, required: true)
   attr(:image, :any, required: true)
-  attr(:corners, :string, default: "")
-  attr(:transition, :string, default: "duration-500")
-  attr(:string, :string, default: "")
+  attr(:style, :string, default: "fixed")
 
   @doc """
   An image with fancy features like blur-hash.
   """
-  def blurhash(assigns) do
-    canvas_width = 32
-
-    canvas_height =
-      if assigns.image do
-        floor(assigns.image.height / (assigns.image.width / 32))
-      else
-        32
-      end
+  def blurhash(%{image: %{height: height, width: width}} = assigns)
+      when not is_nil(height) and not is_nil(width) do
+    src = Map.get(assigns.image, :url, "")
+    srcset = Map.get(assigns.image, :srcset, "")
+    blur_hash = Map.get(assigns.image, :blur_hash, "")
 
     assigns =
       assign(assigns, %{
-        canvas_width: canvas_width,
-        canvas_height: canvas_height
+        src: src,
+        srcset: srcset,
+        blur_hash: blur_hash
       })
 
     ~H"""
-    <%= if @image do %>
       <div
         id={@id}
-        class="blurhash-wrapper overflow-hidden w-full h-full relative"
-        x-data="blurHash()"
-        x-init="$nextTick(()=>render())"
-      >
-        <canvas
-          x-show="showBlurHash()"
-          x-transition:leave="transition ease-in-out duration-500"
-          x-transition:leave-start="opacity-100"
-          x-transition:leave-end="opacity-0"
-          width={@canvas_width}
-          height={@canvas_height}
-          class={"absolute z-10 object-cover w-full h-full #{@corners}"}
-          data-blurhash={@image.blur_hash}
-        />
-        <img
-          class={"object-cover w-full h-full #{@corners}"}
-          src={@image.url}
-          srcset={@image.srcset}
-          loading="lazy"
-          x-on:load="hideBlurHash()"
-          alt=""
-        />
-      </div>
-    <% end %>
+        phx-hook="Blurhash"
+        phx-update="ignore"
+        data-blurhash={@blur_hash}
+        data-image-width={@image.width}
+        data-image-height={@image.height}
+        data-style={@style}
+        data-src={@src}
+        class={"overflow-hidden w-full h-full relative"}
+      />
     """
   end
 

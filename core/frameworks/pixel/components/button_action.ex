@@ -89,6 +89,17 @@ defmodule Frameworks.Pixel.Button.Action do
     """
   end
 
+  attr(:field, :string, required: true)
+  slot(:inner_block, required: true)
+
+  def label(assigns) do
+    ~H"""
+    <label for={@field}>
+      <%= render_slot(@inner_block) %>
+    </label>
+    """
+  end
+
   attr(:id, :string, required: true)
   attr(:target, :string, required: true)
   slot(:inner_block, required: true)
@@ -140,12 +151,13 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:to, :string, required: true)
   attr(:target, :string, default: "_self")
-  attr(:event, :string, default: "")
+  attr(:phx_event, :string, default: nil)
+  attr(:phx_target, :string, default: nil)
   slot(:inner_block, required: true)
 
   def http_get(assigns) do
     ~H"""
-    <a href={@to} target={@target} phx-click={@event}>
+    <a href={@to} target={@target} phx-target={@phx_target} phx-click={@phx_event}>
       <%= render_slot(@inner_block) %>
     </a>
     """

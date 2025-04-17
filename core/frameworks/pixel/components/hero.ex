@@ -57,7 +57,7 @@ defmodule Frameworks.Pixel.Hero do
     <div class="w-full h-full" data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-full bg-grey4">
         <%= if @image_info do %>
-          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
+          <Image.blurhash id="hero" image={@image_info} />
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-14 sm:mr-14 text-shadow-md h-full">
@@ -102,7 +102,7 @@ defmodule Frameworks.Pixel.Hero do
     <div class="w-full h-full" data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-full bg-grey4">
         <%= if @image_info do %>
-          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
+          <Image.blurhash id="hero" image={@image_info} />
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md h-full">

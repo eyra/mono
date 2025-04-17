@@ -101,7 +101,7 @@ defmodule Systems.Graphite.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def open_for_submissions?(%{deadline: deadline}) when not is_nil(deadline) do
@@ -125,7 +125,7 @@ defmodule Systems.Graphite.ToolModel do
     def ready?(_), do: true
     def form(_, _), do: Graphite.ToolForm
 
-    def launcher(tool, _user) do
+    def launcher(tool) do
       %{
         module: Graphite.ToolView,
         params: %{

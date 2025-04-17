@@ -170,11 +170,19 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:label, :string, required: true)
   attr(:border_color, :string, default: "bg-primary")
   attr(:text_color, :string, default: "text-primary")
+  attr(:loading, :boolean, default: false)
 
   def secondary(assigns) do
     ~H"""
-    <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
-      <%= @label %>
+    <div class="relative">
+      <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
+        <div class={" #{if @loading do "opacity-0" else "" end}"}>
+          <%= @label %>
+        </div>
+      </div>
+      <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
+        <Spinner.static color="primary" />
+      </div>
     </div>
     """
   end

@@ -9,7 +9,12 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#11 unreleased
+## \#12 unrelease
+
+## \#11 2025-04-09
+
+* Added: Participant Task List Mobile
+* Changed: Participant Task List Desktop replaced Master-Detail with Task List centered view just like Mobile.
 
 ## \#10 2025-03-26
 

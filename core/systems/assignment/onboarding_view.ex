@@ -24,10 +24,11 @@ defmodule Systems.Assignment.OnboardingView do
   def compose(:content_page, %{page_ref: nil}), do: nil
 
   @impl true
-  def compose(:content_page, %{page_ref: %Assignment.PageRefModel{page: page}}) do
+  def compose(:content_page, %{title: title, page_ref: %Assignment.PageRefModel{page: page}}) do
     %{
       module: Content.PageView,
       params: %{
+        title: title,
         page: page
       }
     }
@@ -63,7 +64,6 @@ defmodule Systems.Assignment.OnboardingView do
       <div>
         <Area.content>
           <Margin.y id={:page_top} />
-          <Text.title2><%= @title %></Text.title2>
           <.child name={:content_page} fabric={@fabric} />
           <.spacing value="M" />
           <.wrap>

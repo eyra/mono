@@ -3,6 +3,8 @@ defmodule Systems.Manual.Builder.PageForm do
   use Frameworks.Pixel.WysiwygAreaHelpers
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
+  import Core.ImageHelpers, only: [image_from_path!: 1, encode_image_info: 2]
+
   alias Systems.Manual
 
   @impl true
@@ -10,22 +12,43 @@ defmodule Systems.Manual.Builder.PageForm do
     {
       :ok,
       socket
-      |> assign(entity: page)
+      |> assign(entity: page, upload_in_progress: false)
       |> update_changeset()
+      |> update_image_url()
       |> update_wysiwyg_form()
       |> init_file_uploader(:image)
     }
   end
 
+  def update_image_url(%{assigns: %{entity: %{image: "{" <> _ = image}}} = socket) do
+    %{"url" => image_url} = Jason.decode!(image)
+    socket |> assign(image_url: image_url)
+  end
+
+  def update_image_url(%{assigns: %{entity: %{image: image_url}}} = socket) do
+    socket |> assign(image_url: image_url)
+  end
+
+  @impl true
+  def pre_process_file(%{tmp_path: tmp_path, public_url: image_url}) do
+    encoded_image_info =
+      image_from_path!(tmp_path)
+      |> encode_image_info(image_url)
+
+    %{encoded_image_info: encoded_image_info}
+  end
+
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_path, image_url, _original_filename}
+        %{encoded_image_info: encoded_image_info}
       ) do
-    changeset = Manual.PageModel.changeset(entity, %{image: image_url})
+    changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket
+    |> assign(upload_in_progress: false)
     |> save(changeset)
+    |> update_image_url()
   end
 
   def update_changeset(%{assigns: %{entity: entity}} = socket) do
@@ -52,6 +75,15 @@ defmodule Systems.Manual.Builder.PageForm do
   end
 
   @impl true
+  def handle_event("save", %{"_target" => ["image"]}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(upload_in_progress: true)
+    }
+  end
+
+  @impl true
   def handle_event("save", %{"page_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     changeset = Manual.PageModel.changeset(entity, attrs)
 
@@ -71,10 +103,11 @@ defmodule Systems.Manual.Builder.PageForm do
         <.spacing value="M" />
         <.image_input
             static_path={&CoreWeb.Endpoint.static_path/1}
-            image_url={@entity.image}
+            image_url={@image_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-manual", "choose.image.file")}
             secondary_button_text={dgettext("eyra-manual", "choose.other.image.file")}
+            loading={@upload_in_progress}
           />
         <.spacing value="M" />
         <.text_input

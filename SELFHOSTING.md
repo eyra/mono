@@ -78,6 +78,147 @@ Change the menus here:
 * [Website](core/bundles/self/lib/layouts/website/menu_builder.ex)
 * [Workspace](core/bundles/self/lib/layouts/workspace/menu_builder.ex)
 
+### Storage
+
+The platform supports pluggable backends for global (non-study-specific) temporary file storage using the `Systems.Storage.BuiltIn.Special` interface. This storage is used, for example, in data donation workflows.
+
+Although these files are temporary, the system must guarantee that they are stored reliably. We recommend using production-ready backends such as **S3** or **Azure Blob**.
+
+#### Available built-in backends
+
+- `Systems.Storage.BuiltIn.S3`
+- `Systems.Storage.BuiltIn.LocalFS`
+
+You can configure the backend via environment variables. The active backend is set via:
+
+```bash
+STORAGE_BUILTIN_SPECIAL=s3   # or my_backend
+```
+
+#### 🛠️ Creating Your Own Backend
+
+To add a custom backend, define a module implementing the following behaviour:
+
+```elixir
+defmodule Systems.Storage.BuiltIn.Special do
+  @callback store(
+              folder :: binary(),
+              identifier :: list(tuple()) | binary(),
+              data :: binary()
+            ) :: any()
+
+  @callback list_files(folder :: binary()) :: list()
+  @callback delete_files(folder :: binary()) :: :ok | {:error, atom()}
+end
+```
+
+You can add your implementation in:
+
+```
+core/systems/storage/builtin/my_backend.ex
+```
+
+Minimal example:
+
+```elixir
+defmodule Systems.Storage.BuiltIn.MyBackend do
+  @behaviour Systems.Storage.BuiltIn.Special
+
+  def store(folder, filename, data) do
+    # Your custom storage logic here
+  end
+
+  def list_files(_folder), do: []
+  def delete_files(_folder), do: :ok
+
+  # Configuration
+
+  defp config do
+    Application.fetch_env!(:core, Systems.Storage.BuiltIn.MyBackend)
+  end
+
+  defp var_1 do
+    Access.get(config(), :var_1, 256)
+  end
+
+  defp var_2 do
+    Access.get(config(), :var_2, "default")
+  end
+
+  defp var_n do
+    Access.get(config(), :var_n, "https://mybackend.com") |> URI.parse()
+  end
+end
+```
+The `list_files/1` and `delete_files/1` functions can be implemented as no-ops if the platform’s file export functionality in the user interface is not used, and files are instead accessed directly at the final storage location — for example, when using Yoda.
+
+Prevent any hardcoded variable but use the Elixir configuration system to retreive runtime values.
+
+
+#### AWS S3 example
+
+An S3 example can be found in:
+
+```
+core/systems/storage/builtin/s3.ex
+```
+Below a code snippet:
+```elixir
+def store(folder, filename, data) do
+  filepath = Path.join(folder, filename)
+  object_key = object_key(filepath)
+  content_type = content_type(object_key)
+  bucket = Access.fetch!(settings(), :bucket)
+
+  S3.put_object(bucket, object_key, data, content_type: content_type)
+  |> backend().request!()
+end
+```
+
+#### ⚙️ Configuration
+
+To activate and configure a storage backend, you must modify the `core/config/runtime.exs` file.
+
+The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
+`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.
+
+```elixir
+  if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
+
+    config :core, Systems.Storage.BuiltIn.S3,
+      bucket: System.get_env("AWS_S3_BUCKET"),
+      prefix: storage_s3_prefix
+  else
+    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+  end
+```
+
+That config can be replace by:
+
+```elixir
+  if my_backend = System.get_env("STORAGE_BUILTIN_SPECIAL") do
+    config :core, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
+  end
+
+  config Systems.Storage.BuiltIn.MyBackend,
+    var_1: System.get_env("STORAGE_BUILTIN_MYBACKEND_VAR1") |> String.integer(),
+    var_2: System.get_env("STORAGE_BUILTIN_MYBACKEND_VAR2")
+    var_n: System.get_env("STORAGE_BUILTIN_MYBACKEND_VARN")
+```
+
+Your environent variables should contain something like this:
+
+```bash
+STORAGE_BUILTIN_SPECIAL=Systems.Storage.Builtin.MyBackend
+STORAGE_BUILTIN_MYBACKEND_MYVAR1=1024
+STORAGE_BUILTIN_MYBACKEND_MYVAR2=string value
+STORAGE_BUILTIN_MYBACKEND_MYVARN=https://client1.mybackend.com
+```
+
+#### 🚧 Roadmap: UX-based File Transfer
+
+We plan to support file transfer from the built-in storage to external systems (e.g., Yoda) via the user interface. Until then, this must be done manually or with automation.
 
 ### Rate limiters
 

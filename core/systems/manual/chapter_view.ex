@@ -6,6 +6,7 @@ defmodule Systems.Manual.ChapterView do
   use CoreWeb, :live_component
 
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
+  import Core.ImageHelpers, only: [decode_image_info: 1]
 
   alias Systems.Userflow
 
@@ -61,12 +62,12 @@ defmodule Systems.Manual.ChapterView do
       pages
       |> Enum.sort_by(& &1.userflow_step.order)
       |> Enum.with_index()
-      |> Enum.map(fn {page, index} ->
+      |> Enum.map(fn {%{image: image, id: id, title: title, text: text}, index} ->
         %{
-          id: page.id,
-          title: page.title,
-          image: page.image,
-          text: page.text,
+          id: id,
+          title: title,
+          image_info: decode_image_info(image),
+          text: text,
           number: index + 1
         }
       end)
