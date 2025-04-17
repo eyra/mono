@@ -29,7 +29,7 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: nil,
       blocks: [],
-      include_right_sidepadding: false
+      include_right_sidepadding?: false
     }
   end
 
@@ -49,7 +49,7 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
       blocks: blocks(user, assigns, panl?: panl?),
-      include_right_sidepadding: false
+      include_right_sidepadding?: false
     }
   end
 
