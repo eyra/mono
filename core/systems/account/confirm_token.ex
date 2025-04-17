@@ -69,8 +69,11 @@ defmodule Systems.Account.ConfirmToken do
   defp handle_failed(socket) do
     Logger.notice("Confirm user: handle_failed")
 
-    socket
-    |> redirect(to: ~p"/user/signin?status=activation_failed")
+    assign(socket,
+      failed: true,
+      status: :invalid,
+      changeset: User.valid_email_changeset()
+    )
   end
 
   def handle_info({:delivered_email, _email}, socket) do

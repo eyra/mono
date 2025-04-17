@@ -69,12 +69,6 @@ defmodule Next.Account.SigninPage do
             </AlertBanner.success>
           <% end %>
 
-          <%= if @status == "activation_failed" do %>
-            <AlertBanner.error>
-              <%= dgettext("eyra-account", "Account activation failed.") %>
-            </AlertBanner.error>
-          <% end %>
-
           <.spacing value="M" />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbed.content include_top_margin={false} tabs={@vm.tabs} />
