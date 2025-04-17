@@ -63,18 +63,14 @@ defmodule Systems.Account.ConfirmToken do
     Logger.notice("Confirm user: handle_succeeded #{email}")
 
     socket
-    |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
-    |> redirect(to: ~p"/user/signin?email=#{email}")
+    |> redirect(to: ~p"/user/signin?email=#{email}&status=account_activated_successfully")
   end
 
   defp handle_failed(socket) do
     Logger.notice("Confirm user: handle_failed")
 
-    assign(socket,
-      failed: true,
-      status: :invalid,
-      changeset: User.valid_email_changeset()
-    )
+    socket
+    |> redirect(to: ~p"/user/signin?status=activation_failed")
   end
 
   def handle_info({:delivered_email, _email}, socket) do
