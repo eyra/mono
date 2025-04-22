@@ -211,7 +211,7 @@ defmodule Systems.Assignment.CrewPage do
     ~H"""
       <.stripped menus={@menus} footer?={false}>
         <:header>
-          <div class="h-[180px] bg-grey5">
+          <div class="h-[120px] sm:h-[180px] bg-grey5">
           <%= if @image_info do %>
             <Hero.image_banner title={@vm.info.title} subtitle={@vm.info.subtitle} logo_url={@vm.info.logo_url} image_info={@image_info} />
           <% end %>
