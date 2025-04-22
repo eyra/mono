@@ -8,16 +8,28 @@ defmodule Systems.Manual.ChapterView do
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
   import Core.ImageHelpers, only: [decode_image_info: 1]
 
+  alias Frameworks.Utility.UserState
   alias Systems.Userflow
 
   @impl true
-  def update(%{chapter: chapter, user: user}, socket) do
-    selected_page_id = Map.get(socket.assigns, :selected_page_id, nil)
+  def update(
+        %{manual_id: manual_id, chapter: chapter, user: user, user_state_data: user_state_data},
+        socket
+      ) do
+    user_state_key = "manual-#{manual_id}-chapter-#{chapter.id}-selected-page-id"
+    user_state_value = UserState.integer_value(user_state_data, user_state_key)
+    selected_page_id = Map.get(socket.assigns, :selected_page_id, user_state_value)
 
     {
       :ok,
       socket
-      |> assign(chapter: chapter, user: user, selected_page_id: selected_page_id)
+      |> assign(
+        manual_id: manual_id,
+        chapter: chapter,
+        user: user,
+        selected_page_id: selected_page_id,
+        user_state_key: user_state_key
+      )
       |> mark_chapter_visited()
       |> update_ui()
     }
@@ -186,7 +198,8 @@ defmodule Systems.Manual.ChapterView do
   def handle_event("back", _, socket) do
     {
       :noreply,
-      socket |> send_event(:parent, "back")
+      socket
+      |> send_event(:parent, "back")
     }
   end
 
@@ -302,7 +315,7 @@ defmodule Systems.Manual.ChapterView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div id="manual_chapter_view" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_page_id} >
       <div class="hidden lg:block">
         <.chapter_desktop
           id={@chapter.id}

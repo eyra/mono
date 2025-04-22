@@ -3,21 +3,30 @@ defmodule Systems.Manual.ToolView do
 
   alias Systems.Manual
   @impl true
-  def update(%{manual: manual, title: title, user: user}, socket) do
+  def update(
+        %{manual: manual, title: title, user: user, user_state_data: user_state_data},
+        socket
+      ) do
     {:ok,
      socket
-     |> assign(manual: manual, title: title, user: user)
+     |> assign(manual: manual, title: title, user: user, user_state_data: user_state_data)
      |> compose_child(:manual_view)}
   end
 
   @impl true
-  def compose(:manual_view, %{manual: manual, title: title, user: user}) do
+  def compose(:manual_view, %{
+        manual: manual,
+        title: title,
+        user: user,
+        user_state_data: user_state_data
+      }) do
     %{
       module: Manual.View,
       params: %{
         manual: manual,
         title: title,
-        user: user
+        user: user,
+        user_state_data: user_state_data
       }
     }
   end

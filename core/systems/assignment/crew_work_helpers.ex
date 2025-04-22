@@ -14,7 +14,7 @@ defmodule Systems.Assignment.CrewWorkHelpers do
   def task_status(%{status: status}), do: status
   def task_status(_), do: :pending
 
-  def start_task(socket, {_, task}) do
+  def start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
     start_task(socket, task)
   end
 

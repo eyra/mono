@@ -16,7 +16,8 @@ defmodule Systems.Workflow.ToolRefView do
           visible: visible,
           user: user,
           participant: participant,
-          timezone: timezone
+          timezone: timezone,
+          user_state_data: user_state_data
         },
         socket
       ) do
@@ -32,7 +33,8 @@ defmodule Systems.Workflow.ToolRefView do
         visible: visible,
         user: user,
         participant: participant,
-        timezone: timezone
+        timezone: timezone,
+        user_state_data: user_state_data
       )
       |> reset_fabric()
       |> update_tool_ref_name()
@@ -63,7 +65,8 @@ defmodule Systems.Workflow.ToolRefView do
             timezone: timezone,
             title: title,
             icon: icon,
-            visible: visible
+            visible: visible,
+            user_state_data: user_state_data
           }
         } = socket,
         %{module: module, params: params}
@@ -75,7 +78,8 @@ defmodule Systems.Workflow.ToolRefView do
         timezone: timezone,
         title: title,
         icon: icon,
-        visible: visible
+        visible: visible,
+        user_state_data: user_state_data
       })
 
     child = Fabric.prepare_child(socket, tool_ref_name, module, params)

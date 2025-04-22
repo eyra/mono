@@ -13,11 +13,11 @@ defmodule Systems.Manual.Html do
 
   def chapter_list(assigns) do
     ~H"""
-    <div class="flex flex-col sm:gap-2">
+
       <%= for item <- @items do %>
         <.chapter_list_item {item} selected={@selected_chapter_id == item.id} target={@target} />
       <% end %>
-    </div>
+
     """
   end
 

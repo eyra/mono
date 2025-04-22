@@ -62,7 +62,9 @@ defmodule Systems.Manual.ChapterListView do
           <%= dgettext("eyra-manual", "chapter.overview") %>
       </div>
       <div class="font-title5 text-title5 sm:font-title2 sm:text-title2"><%= @title %></div>
-      <.chapter_list items={@chapter_items} selected_chapter_id={@selected_chapter_id} target={@myself} />
+      <div class="flex flex-col sm:gap-2">
+        <.chapter_list items={@chapter_items} selected_chapter_id={@selected_chapter_id} target={@myself} />
+      </div>
     </div>
     """
   end
