@@ -2,6 +2,8 @@ defmodule Systems.Assignment.CrewTaskListView do
   use CoreWeb, :live_component
   use Systems.Assignment.CrewWorkHelpers
 
+  alias Frameworks.Utility.UserState
+
   @impl true
   def update(
         %{
@@ -9,11 +11,15 @@ defmodule Systems.Assignment.CrewTaskListView do
           crew: crew,
           user: user,
           timezone: timezone,
-          panel_info: panel_info
+          panel_info: panel_info,
+          user_state_data: user_state_data
         },
         socket
       ) do
     show_task_list? = Enum.count(work_items) > 1
+    user_state_initialized? = Map.get(socket.assigns, :user_state_initialized?, false)
+    user_state_key = "crew-#{crew.id}-selected-item-id"
+    selected_item_id = UserState.integer_value(user_state_data, user_state_key)
 
     {
       :ok,
@@ -24,26 +30,55 @@ defmodule Systems.Assignment.CrewTaskListView do
         user: user,
         timezone: timezone,
         panel_info: panel_info,
-        show_task_list?: show_task_list?
+        show_task_list?: show_task_list?,
+        user_state_initialized?: user_state_initialized?,
+        user_state_key: user_state_key,
+        selected_item_id: selected_item_id,
+        user_state_data: user_state_data
       )
       |> update_participant()
+      |> update_selected_item_id()
       |> update_selected_item()
+      |> update_launcher()
       |> compose_child(:work_list_view)
       |> compose_child(:tool_ref_view)
+      |> show_modal_tool_ref_view_if_needed()
     }
   end
 
-  defp update_selected_item(%{assigns: %{selected_item: selected_item}} = socket)
-       when not is_nil(selected_item) do
+  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+       when not is_nil(selected_item_id) do
     socket
   end
 
-  defp update_selected_item(%{assigns: %{work_items: [single_work_item]}} = socket) do
-    socket |> assign(selected_item: single_work_item)
+  defp update_selected_item_id(%{assigns: %{work_items: [single_work_item]}} = socket) do
+    socket |> assign(selected_item_id: single_work_item.id)
+  end
+
+  defp update_selected_item_id(socket) do
+    socket |> assign(selected_item_id: nil)
+  end
+
+  defp update_selected_item(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+       when not is_nil(selected_item_id) do
+    selected_item =
+      Enum.find(socket.assigns.work_items, fn {%{id: id}, _} -> id == selected_item_id end)
+
+    socket |> assign(selected_item: selected_item)
   end
 
   defp update_selected_item(socket) do
     socket |> assign(selected_item: nil)
+  end
+
+  defp update_launcher(%{assigns: %{selected_item: selected_item}} = socket)
+       when not is_nil(selected_item) do
+    launcher = launcher(selected_item)
+    socket |> assign(launcher: launcher)
+  end
+
+  defp update_launcher(socket) do
+    socket |> assign(launcher: nil)
   end
 
   # Behaviours
@@ -78,6 +113,7 @@ defmodule Systems.Assignment.CrewTaskListView do
           user: user,
           participant: participant,
           timezone: timezone,
+          user_state_data: user_state_data,
           selected_item: {%{title: title, tool_ref: tool_ref} = selected_item, task}
         }
       ) do
@@ -93,7 +129,8 @@ defmodule Systems.Assignment.CrewTaskListView do
         visible: true,
         user: user,
         participant: participant,
-        timezone: timezone
+        timezone: timezone,
+        user_state_data: user_state_data
       }
     }
   end
@@ -102,26 +139,27 @@ defmodule Systems.Assignment.CrewTaskListView do
     nil
   end
 
+  @impl true
+  def handle_modal_closed(socket, :tool_ref_view) do
+    socket
+    |> assign(selected_item_id: nil)
+    |> update_selected_item()
+    |> update_launcher()
+  end
+
   # Events
 
   @impl true
   def handle_event(
         "work_item_selected",
         %{"item" => item_id},
-        %{assigns: %{work_items: work_items}} = socket
+        socket
       ) do
     item_id = String.to_integer(item_id)
-    selected_item = Enum.find(work_items, fn {%{id: id}, _} -> id == item_id end)
-
-    launcher = launcher(selected_item)
 
     {
       :noreply,
-      socket
-      |> assign(selected_item: selected_item, launcher: launcher)
-      |> compose_child(:tool_ref_view)
-      |> show_modal_tool_ref_view_if_needed()
-      |> start_task(selected_item)
+      socket |> start_item(item_id)
     }
   end
 
@@ -139,7 +177,20 @@ defmodule Systems.Assignment.CrewTaskListView do
 
   # Private
 
-  defp show_modal_tool_ref_view_if_needed(%{assigns: %{show_task_list?: true}} = socket) do
+  defp start_item(socket, item_id) do
+    socket
+    |> assign(selected_item_id: item_id)
+    |> update_selected_item()
+    |> update_launcher()
+    |> compose_child(:tool_ref_view)
+    |> show_modal_tool_ref_view_if_needed()
+    |> start_task()
+  end
+
+  defp show_modal_tool_ref_view_if_needed(
+         %{assigns: %{selected_item: selected_item, show_task_list?: true}} = socket
+       )
+       when not is_nil(selected_item) do
     socket |> show_modal(:tool_ref_view, :full)
   end
 
@@ -148,7 +199,11 @@ defmodule Systems.Assignment.CrewTaskListView do
   end
 
   defp hide_modal_tool_ref_view_if_needed(%{assigns: %{show_task_list?: true}} = socket) do
-    socket |> hide_modal(:tool_ref_view)
+    socket
+    |> hide_modal(:tool_ref_view)
+    |> assign(selected_item_id: nil)
+    |> update_selected_item()
+    |> update_launcher()
   end
 
   defp hide_modal_tool_ref_view_if_needed(socket) do
@@ -164,7 +219,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="w-full h-full">
+      <div id="crew_task_list_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_item_id} >
         <%= if @show_task_list? do %>
             <.task_list>
                 <.child name={:work_list_view} fabric={@fabric} />

@@ -33,7 +33,8 @@ import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { Blurhash } from "./blurhash";
-
+import { UserState } from "./user_state";
+import { UserStateObserver } from "./user_state_observer";
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 // Force the active state on iOS touch devices by adding a touchstart
@@ -97,6 +98,8 @@ let Hooks = {
   ResetScroll,
   FullscreenImage,
   Blurhash,
+  UserState,
+  UserStateObserver,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

@@ -1,11 +1,17 @@
 defmodule Systems.Manual.View do
   use CoreWeb, :live_component
 
+  alias Frameworks.Utility.UserState
   alias Systems.Manual
 
   @impl true
-  def update(%{manual: manual, title: title, user: user}, socket) do
-    selected_chapter_id = Map.get(socket.assigns, :selected_chapter_id, nil)
+  def update(
+        %{manual: manual, title: title, user: user, user_state_data: user_state_data},
+        socket
+      ) do
+    user_state_key = "manual-#{manual.id}-selected-chapter-id"
+    user_state_value = UserState.integer_value(user_state_data, user_state_key)
+    selected_chapter_id = Map.get(socket.assigns, :selected_chapter_id, user_state_value)
 
     {
       :ok,
@@ -14,12 +20,14 @@ defmodule Systems.Manual.View do
         manual: manual,
         title: title,
         user: user,
-        selected_chapter_id: selected_chapter_id
+        selected_chapter_id: selected_chapter_id,
+        user_state_key: user_state_key,
+        user_state_data: user_state_data
       )
       |> update_chapters()
       |> update_selected_chapter()
       |> compose_child(:chapter_list)
-      |> update_child(:chapter)
+      |> compose_child(:chapter)
     }
   end
 
@@ -79,12 +87,19 @@ defmodule Systems.Manual.View do
     nil
   end
 
-  def compose(:chapter, %{selected_chapter: selected_chapter, user: user}) do
+  def compose(:chapter, %{
+        selected_chapter: selected_chapter,
+        user: user,
+        manual: manual,
+        user_state_data: user_state_data
+      }) do
     %{
       module: Manual.ChapterView,
       params: %{
+        manual_id: manual.id,
         chapter: selected_chapter,
-        user: user
+        user: user,
+        user_state_data: user_state_data
       }
     }
   end
@@ -113,7 +128,7 @@ defmodule Systems.Manual.View do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="w-full h-full">
+    <div id="manual_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_chapter_id} >
       <%= if Fabric.exists?(@fabric, :chapter) do %>
         <.child name={:chapter} fabric={@fabric} />
       <% else %>

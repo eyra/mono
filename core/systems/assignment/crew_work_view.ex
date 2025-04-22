@@ -28,6 +28,7 @@ defmodule Systems.Assignment.CrewWorkView do
       ) do
     retry? = Map.get(socket.assigns, :retry?, false)
     finished? = tasks_finished?(work_items)
+    user_state_initialized? = Map.get(socket.assigns, :user_state_initialized?, false)
 
     socket =
       socket
@@ -43,7 +44,9 @@ defmodule Systems.Assignment.CrewWorkView do
         timezone: timezone,
         tester?: tester?,
         panel_info: panel_info,
-        retry?: retry?
+        retry?: retry?,
+        user_state_initialized?: user_state_initialized?,
+        user_state_data: nil
       )
 
     socket =
@@ -71,8 +74,10 @@ defmodule Systems.Assignment.CrewWorkView do
         crew: crew,
         user: user,
         timezone: timezone,
-        panel_info: panel_info
-      }) do
+        panel_info: panel_info,
+        user_state_data: user_state_data
+      })
+      when not is_nil(user_state_data) do
     %{
       module: Assignment.CrewTaskListView,
       params: %{
@@ -80,9 +85,14 @@ defmodule Systems.Assignment.CrewWorkView do
         crew: crew,
         user: user,
         timezone: timezone,
-        panel_info: panel_info
+        panel_info: panel_info,
+        user_state_data: user_state_data
       }
     }
+  end
+
+  def compose(:task_list_view, _) do
+    nil
   end
 
   def compose(:context_menu, %{context_menu_items: []}) do
@@ -213,6 +223,23 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
+  def handle_event("user_state_initialized", _, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(user_state_initialized: true)
+      |> compose_child(:task_list_view)
+    }
+  end
+
+  def handle_event("user_state_data", %{"data" => data}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(user_state_data: data)
+    }
+  end
+
   defp show_context_menu_item(socket, :privacy) do
     socket
     |> compose_child(:privacy_page)
@@ -283,7 +310,7 @@ defmodule Systems.Assignment.CrewWorkView do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="w-full h-full relative">
+      <div id="crew_work_view" class="w-full h-full relative" phx-hook="UserStateObserver" data-initialized={@user_state_initialized?}>
         <%= if exists?(@fabric, :finished_view) do %>
           <.child name={:finished_view} fabric={@fabric} />
         <% else %>
