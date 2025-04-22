@@ -61,28 +61,26 @@ defmodule Frameworks.Pixel.Hero do
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-14 sm:mr-14 text-shadow-md h-full">
-            <div class="flex flex-col gap-8 h-full">
-              <div class="flex-grow" />
+            <div class="flex flex-col gap-8 h-full justify-center">
               <div class="flex flex-row gap-12 items-center">
                 <%= if @logo_url do %>
                 <div>
                   <.image_preview
                     image_url={@logo_url}
                     placeholder={"/images/logo_placeholder.svg"}
-                    shape="w-[96px] h-[96px] rounded-full"
+                    shape="w-[48px] h-[48px] sm:w-[96px] sm:h-[96px] rounded-full"
                   />
                 </div>
                 <% end %>
                 <div class="flex flex-col gap-2">
                   <%= if @title do %>
-                    <Text.title2 margin="" color="text-white"><%= @title %></Text.title2>
+                    <div class="text-title6 font-title6 sm:text-title2 sm:font-title2 text-white"><%= @title %></div>
                   <% end %>
                   <%= if @subtitle do %>
-                    <Text.title6 align="text-left" color="text-white"><%= @subtitle %></Text.title6>
+                  <div class="text-caption font-caption sm:text-title6 sm:font-title6 text-white"><%= @subtitle %></div>
                   <% end %>
                 </div>
               </div>
-              <div class="flex-grow" />
             </div>
           </div>
         </div>
