@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # To call this script with a custom CN, run:
 # SERVER_CN=my-custom-cn ./generate.sh
 
