@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.CrewWorkHelpers do
+defmodule Systems.Assignment.CrewTaskHelpers do
   alias Frameworks.Concept
   alias Systems.Crew
   alias Systems.Workflow
@@ -15,13 +15,15 @@ defmodule Systems.Assignment.CrewWorkHelpers do
   def task_status(_), do: :pending
 
   def start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
-    start_task(socket, task)
-  end
-
-  def start_task(socket, task) do
     Crew.Public.start_task(task)
     socket
   end
+
+  def get_icon({%{group: group}, _} = _work_item) when is_binary(group) do
+    String.downcase(group)
+  end
+
+  def get_icon(_), do: nil
 
   def launcher({%{tool_ref: tool_ref}, _}) do
     launcher(tool_ref)
@@ -39,9 +41,9 @@ defmodule Systems.Assignment.CrewWorkHelpers do
 
   defmacro __using__(_opts) do
     quote do
-      @behaviour Systems.Assignment.CrewWorkHelpers
+      @behaviour Systems.Assignment.CrewTaskHelpers
 
-      import Systems.Assignment.CrewWorkHelpers
+      import Systems.Assignment.CrewTaskHelpers
       import Systems.Assignment.Html
 
       alias Systems.Assignment
@@ -58,7 +60,11 @@ defmodule Systems.Assignment.CrewWorkHelpers do
         |> send_event(:parent, "task_completed")
       end
 
-      def update_task(%{assigns: %{work_items: work_items}} = socket, updated_task) do
+      def update_task(%{assigns: %{selected_item: selected_item}} = socket, updated_task) do
+        update_task(socket, selected_item, updated_task)
+      end
+
+      def update_task(%{assigns: %{work_items: work_items}} = socket, {_, task}, updated_task) do
         work_items =
           Enum.map(work_items, fn {item, task} ->
             if task.id == updated_task.id do

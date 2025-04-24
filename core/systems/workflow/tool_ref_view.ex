@@ -42,9 +42,8 @@ defmodule Systems.Workflow.ToolRefView do
     }
   end
 
-  def update_tool_ref_name(%{assigns: %{tool_ref: tool_ref}} = socket) do
-    tool_ref_name = get_tool_ref_name(tool_ref)
-    socket |> assign(tool_ref_name: tool_ref_name)
+  def update_tool_ref_name(%{assigns: %{tool_ref: %{id: id}}} = socket) do
+    socket |> assign(tool_ref_name: "tool_ref_#{id}")
   end
 
   def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
@@ -117,15 +116,11 @@ defmodule Systems.Workflow.ToolRefView do
     {:noreply, socket |> send_event(tool_ref_name, "tool_initialized")}
   end
 
-  defp get_tool_ref_name(%{id: id}) do
-    "tool_ref_#{id}"
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
     <div class="tool-ref-view w-full h-full">
-      <.stack fabric={@fabric} />
+      <.child name={@tool_ref_name} fabric={@fabric} />
     </div>
     """
   end
