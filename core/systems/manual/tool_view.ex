@@ -31,10 +31,11 @@ defmodule Systems.Manual.ToolView do
     }
   end
 
-  def handle_event("back", _, socket) do
+  def handle_event("done", _, socket) do
     {
       :noreply,
-      socket |> send_event(:parent, "complete_task")
+      socket
+      |> send_event(:parent, "complete_task")
     }
   end
 

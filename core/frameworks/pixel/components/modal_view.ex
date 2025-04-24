@@ -223,7 +223,7 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
           <%!-- TOOLBAR --%>
           <div class="flex-shrink-0">
-            <.toolbar back_button={close_icon_label_button(@live_component)} />
+            <.toolbar close_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
@@ -243,7 +243,7 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
            <%!-- TOOLBAR --%>
            <div class="flex-shrink-0">
-            <.toolbar back_button={close_icon_label_button(@live_component)} />
+            <.toolbar close_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
