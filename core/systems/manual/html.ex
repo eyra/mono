@@ -62,7 +62,7 @@ defmodule Systems.Manual.Html do
   attr(:label, :string, default: nil)
   attr(:pages, :list, required: true)
   attr(:selected_page, :map, required: true)
-  attr(:back_button, :map, required: true)
+  attr(:close_button, :map, required: true)
   attr(:left_button, :map, default: nil)
   attr(:right_button, :map, default: nil)
   attr(:fullscreen_button, :map, default: nil)
@@ -95,7 +95,7 @@ defmodule Systems.Manual.Html do
         </div>
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white">
-        <.toolbar back_button={@back_button} left_button={@left_button} right_button={@right_button} />
+        <.toolbar close_button={@close_button} left_button={@left_button} right_button={@right_button} />
       </div>
     </div>
     """
@@ -106,7 +106,7 @@ defmodule Systems.Manual.Html do
   attr(:label, :string, default: nil)
   attr(:indicator, :string, default: nil)
   attr(:selected_page, :map, required: true)
-  attr(:back_button, :map, required: true)
+  attr(:close_button, :map, required: true)
   attr(:left_button, :map, default: nil)
   attr(:right_button, :map, default: nil)
   attr(:fullscreen_button, :map, default: nil)
@@ -127,7 +127,7 @@ defmodule Systems.Manual.Html do
         <.page id={"mobile-page-#{@selected_page.id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white">
-        <.toolbar back_button={@back_button} left_button={@left_button} right_button={@right_button} />
+        <.toolbar close_button={@close_button} left_button={@left_button} right_button={@right_button} />
       </div>
     </div>
     """
