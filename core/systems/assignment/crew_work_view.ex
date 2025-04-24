@@ -57,7 +57,7 @@ defmodule Systems.Assignment.CrewWorkView do
       else
         socket
         |> compose_child(:context_menu)
-        |> compose_child(:task_list_view)
+        |> compose_child(:task_view)
       end
 
     {
@@ -69,7 +69,30 @@ defmodule Systems.Assignment.CrewWorkView do
   # Compose
 
   @impl true
-  def compose(:task_list_view, %{
+  def compose(:task_view, %{
+        work_items: [work_item],
+        crew: crew,
+        user: user,
+        timezone: timezone,
+        panel_info: panel_info,
+        user_state_data: user_state_data
+      })
+      when not is_nil(user_state_data) do
+    %{
+      module: Assignment.CrewTaskSingleView,
+      params: %{
+        work_item: work_item,
+        crew: crew,
+        user: user,
+        timezone: timezone,
+        panel_info: panel_info,
+        user_state_data: user_state_data
+      }
+    }
+  end
+
+  @impl true
+  def compose(:task_view, %{
         work_items: work_items,
         crew: crew,
         user: user,
@@ -91,7 +114,7 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def compose(:task_list_view, _) do
+  def compose(:task_view, _) do
     nil
   end
 
@@ -167,7 +190,7 @@ defmodule Systems.Assignment.CrewWorkView do
       |> assign(retry?: true)
       |> hide_child(:finished_view)
       |> compose_child(:context_menu)
-      |> compose_child(:task_list_view)
+      |> compose_child(:task_view)
     }
   end
 
@@ -175,7 +198,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> send_event(:task_list_view, "tool_initialized")
+      |> send_event(:task_view, "tool_initialized")
     }
   end
 
@@ -184,7 +207,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> send_event(:task_list_view, "cancel_task")
+      |> send_event(:task_view, "cancel_task")
     }
   end
 
@@ -193,7 +216,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> send_event(:task_list_view, "feldspar_event", event)
+      |> send_event(:task_view, "feldspar_event", event)
     }
   end
 
@@ -212,7 +235,7 @@ defmodule Systems.Assignment.CrewWorkView do
     {
       :noreply,
       socket
-      |> send_event(:task_list_view, "complete_task")
+      |> send_event(:task_view, "complete_task")
     }
   end
 
@@ -228,7 +251,16 @@ defmodule Systems.Assignment.CrewWorkView do
       :noreply,
       socket
       |> assign(user_state_initialized: true)
-      |> compose_child(:task_list_view)
+      |> compose_child(:task_view)
+    }
+  end
+
+  def handle_event("user_state_data", _, %{assigns: %{tester?: true}} = socket) do
+    # No user state data for testers
+    {
+      :noreply,
+      socket
+      |> assign(user_state_data: %{})
     }
   end
 
@@ -315,7 +347,7 @@ defmodule Systems.Assignment.CrewWorkView do
           <.child name={:finished_view} fabric={@fabric} />
         <% else %>
           <div class="w-full h-full">
-            <.child name={:task_list_view} fabric={@fabric} />
+            <.child name={:task_view} fabric={@fabric} />
           </div>
         <% end %>
 
