@@ -193,7 +193,7 @@ defmodule Systems.Manual.ChapterView do
   def handle_event("close", _, socket) do
     {
       :noreply,
-      socket |> send_event(:root, "hide_modal")
+      socket |> send_event(:parent, "close")
     }
   end
 

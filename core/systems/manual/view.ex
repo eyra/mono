@@ -124,6 +124,13 @@ defmodule Systems.Manual.View do
     }
   end
 
+  def handle_event("close", _, socket) do
+    {
+      :noreply,
+      socket |> send_event(:parent, "close")
+    }
+  end
+
   def handle_event("done", _, socket) do
     {
       :noreply,

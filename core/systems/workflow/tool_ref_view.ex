@@ -18,9 +18,12 @@ defmodule Systems.Workflow.ToolRefView do
           participant: participant,
           timezone: timezone,
           user_state_data: user_state_data
-        },
+        } = params,
         socket
       ) do
+    # Optional param only used when the tool ref view is used as a modal
+    modal_id = Map.get(params, :modal_id)
+
     {
       :ok,
       socket
@@ -34,7 +37,8 @@ defmodule Systems.Workflow.ToolRefView do
         user: user,
         participant: participant,
         timezone: timezone,
-        user_state_data: user_state_data
+        user_state_data: user_state_data,
+        modal_id: modal_id
       )
       |> reset_fabric()
       |> update_tool_ref_name()
@@ -93,8 +97,9 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   @impl true
-  def handle_event("hide_modal", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "hide_modal")}
+  def handle_event("close", _payload, %{assigns: %{modal_id: modal_id}} = socket) do
+    # `modal_id` is optionally present when the `ToolRefView` is used as a modal
+    {:noreply, socket |> send_event(:root, "close_modal", %{"item" => modal_id})}
   end
 
   @impl true
