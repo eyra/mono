@@ -129,4 +129,4 @@ msgstr "Continua"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tool.description"
-msgstr "Stai per iniziare un questionario che si aprirà in una nuova scheda. Quando lo avrai completato, verrai riportato automaticamente alla piattaforma Next."
+msgstr "Sta per iniziare un questionario in una nuova scheda. Una volta terminato il questionario, verrà riportato automaticamente a questa pagina."
