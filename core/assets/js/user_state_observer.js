@@ -18,13 +18,11 @@ export const UserStateObserver = {
     return this.el.dataset.initialized != void 0;
   },
   notifyInitialized() {
-    console.log("[UserStateObserver] notifyInitialized");
     this.pushEventTo(this.el, "user_state_initialized", {
       key: this.key,
     });
   },
   notifyData(data) {
-    console.log("[UserStateObserver] notifyData", data);
     this.pushEventTo(this.el, "user_state_data", {
       data: data,
     });
