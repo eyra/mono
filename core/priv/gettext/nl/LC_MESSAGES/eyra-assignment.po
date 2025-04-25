@@ -192,7 +192,7 @@ msgstr "Branding"
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr "Taken"
+msgstr "Overzicht"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
