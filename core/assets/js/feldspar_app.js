@@ -10,7 +10,7 @@ export const FeldsparApp = {
     // should use the app-loaded event. This should be kept for backwards 
     // compatibility.
     iframe.addEventListener("load", () => {
-      this.onAppLoaded();
+      this.onAppLoaded({fromEvent: "onload"});
     });
 
     iframe.setAttribute("src", this.el.dataset.src);
@@ -22,7 +22,7 @@ export const FeldsparApp = {
         iframe.setAttribute("style", `height:${event.data.height}px`);
       } else if (event.data.action === "app-loaded") {
         console.log("[FeldsparApp] app-loaded event");
-        onAppLoaded();
+        onAppLoaded({fromEvent: "app-loaded"});
       }
     });
   },
@@ -31,9 +31,9 @@ export const FeldsparApp = {
     return this.el.querySelector("iframe");
   },
 
-  setupChannel() {
+  setupChannel({fromEvent}) {
     // The legacy loading event could cause the channel to be set up twice.
-    if (this.channel) {
+    if (fromEvent === "onload" && this.channel) {
       return;
     }
     this.channel = new MessageChannel();
@@ -42,10 +42,11 @@ export const FeldsparApp = {
     };
   },
 
-  onAppLoaded() {
+  onAppLoaded({fromEvent}) {
     console.log("[FeldsparApp] Initializing iframe app");
+    console.log("[FeldsparApp] Loaded from event:", fromEvent);
 
-    this.setupChannel();
+    this.setupChannel({fromEvent});
     let action = "live-init";
     let locale = this.el.dataset.locale;
 
