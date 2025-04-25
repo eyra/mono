@@ -80,7 +80,8 @@ defmodule Systems.Assignment.CrewTaskSingleView do
         user: user,
         participant: participant,
         timezone: timezone,
-        user_state_data: user_state_data
+        user_state_data: user_state_data,
+        modal_id: nil
       }
     }
   end

@@ -13,6 +13,8 @@ defmodule Frameworks.Pixel.ModalView do
     quote do
       alias Frameworks.Pixel.ModalView
 
+      import Frameworks.Pixel.ModalView, only: [modal_id: 1]
+
       @impl true
       def handle_event("prepare_modal", modal, socket) do
         Map.get(socket.assigns, :modals)
@@ -108,10 +110,11 @@ defmodule Frameworks.Pixel.ModalView do
 
       def modals(%{assigns: %{modals: modals}} = socket), do: modals
       def modals(_socket), do: []
-
-      def modal_id(%{live_component: %{ref: %{id: id}}}), do: id
     end
   end
+
+  def modal_id(%{live_component: live_component}), do: modal_id(live_component)
+  def modal_id(%{ref: %{id: id}}), do: id
 
   attr(:modals, :map, default: [])
 
@@ -184,7 +187,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def max(assigns) do
     ~H"""
@@ -210,7 +213,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def full(assigns) do
     ~H"""
@@ -231,7 +234,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def page(assigns) do
     ~H"""
@@ -250,7 +253,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def sheet(assigns) do
     ~H"""
@@ -274,7 +277,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def dialog(assigns) do
     ~H"""
@@ -293,7 +296,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def notification(assigns) do
     ~H"""
@@ -340,6 +343,7 @@ defmodule Frameworks.Pixel.ModalView do
       <.live_component
         id={@live_component.ref.id}
         module={@live_component.ref.module}
+        modal_id={modal_id(@live_component)}
         {@live_component.params}
       />
     """

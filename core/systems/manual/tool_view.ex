@@ -31,6 +31,14 @@ defmodule Systems.Manual.ToolView do
     }
   end
 
+  def handle_event("close", _payload, socket) do
+    {
+      :noreply,
+      socket
+      |> send_event(:parent, "close")
+    }
+  end
+
   def handle_event("done", _, socket) do
     {
       :noreply,
