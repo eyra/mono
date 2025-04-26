@@ -49,3 +49,75 @@ msgstr "Expected"
 #, elixir-autogen, elixir-format
 msgid "progress.started.label"
 msgstr "Started"
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.description"
+msgstr "The Next platform is an open and inclusive platform designed to accelerate research and knowledge creation. By integrating cutting-edge software services, Next empowers researchers with sustainable and privacy-conscious tools. Built on open-source principles and co-created with researchers, Next fosters innovation, transparency, and collaboration."
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.image_alt"
+msgstr "Abstract image representing collaboration and research"
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.learn_more_button"
+msgstr "Learn more"
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.title"
+msgstr "What's Next?"
+
+#, elixir-autogen, elixir-format
+msgid "home.services.button"
+msgstr "Available services"
+
+#, elixir-autogen, elixir-format
+msgid "home.services.description"
+msgstr "The Next platform is an open and inclusive platform designed to accelerate research and knowledge creation. By integrating cutting-edge software services, Next empowers researchers with sustainable and privacy-conscious tools."
+
+#, elixir-autogen, elixir-format
+msgid "home.services.image_alt"
+msgstr "Image displaying collaboration and research"
+
+#, elixir-autogen, elixir-format
+msgid "home.services.title"
+msgstr "Available services"
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.button"
+msgstr "Create account"
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.description"
+msgstr "Create your free account and gain access to the Next platform with readily available software services."
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.title"
+msgstr "Sign up"
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step2.description"
+msgstr "Choose one of the software services and configure it to fit your research needs."
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step2.title"
+msgstr "Configure"
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step3.description"
+msgstr "See your configuration in action, make adjustments, and immediately observe the effect."
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step3.title"
+msgstr "Preview"
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.title"
+msgstr "How to get started?"
+
+#, elixir-autogen, elixir-format
+msgid "home.video.preview_title"
+msgstr "Sneak preview"
+
+#, elixir-autogen, elixir-format
+msgid "home.video.title"
+msgstr "Want to know how this works?"
