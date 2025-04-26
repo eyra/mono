@@ -32,7 +32,8 @@ end
 
 defmodule GoogleSignIn.AuthorizePlug.Test do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
+  import Plug.Conn
   alias GoogleSignIn.AuthorizePlug
 
   describe "call/1" do
@@ -77,7 +78,7 @@ end
 defmodule GoogleSignIn.CallbackPlug.Test do
   use ExUnit.Case, async: false
   use Core.DataCase
-  use Plug.Test
+  import Plug.Test
   use Core.FeatureFlags.Test
   alias GoogleSignIn.CallbackPlug
 

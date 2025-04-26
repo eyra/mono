@@ -1,6 +1,6 @@
 defmodule Systems.Content.PlugTest do
   use ExUnit.Case
-  use Plug.Test
+  import Plug.Test
 
   require Systems.Content.Plug
   alias Systems.Content.Plug

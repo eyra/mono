@@ -56,7 +56,8 @@ end
 
 defmodule Core.SurfConext.AuthorizePlug.Test do
   use ExUnit.Case, async: false
-  use Plug.Test
+  import Plug.Test
+  import Plug.Conn
   alias Core.SurfConext.AuthorizePlug
 
   describe "call/1" do
