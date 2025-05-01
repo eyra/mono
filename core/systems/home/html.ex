@@ -68,7 +68,7 @@ defmodule Systems.Home.HTML do
 
   defp step_card(assigns) do
     ~H"""
-    <div class="bg-white w-full rounded overflow-hidden drop-shadow-lg">
+    <div class="bg-white w-full rounded overflow-hidden shadow-lg">
       <img
         class="w-full h-32 lg:h-48 object-cover"
         src={@image}
