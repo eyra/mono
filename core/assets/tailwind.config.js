@@ -24,7 +24,7 @@ module.exports = {
       secondary: "#FF5E5E",
       tertiary: "#FFCF60",
       success: "#6FCA37",
-      successlight: "#EBFFDF",
+      successlight: "#52BA12",
       warning: "#F28D15",
       warninglight: "#FFEFDC",
       delete: "#DB1E1E",
