@@ -43,7 +43,7 @@ defmodule Systems.Home.PageBuilder do
         type: :illustration2,
         params: %{
           title: dgettext("eyra-home", "member.title"),
-          caption: "Caption"
+          caption: dgettext("eyra-home", "member.caption")
         }
       },
       active_menu_item: :home,
