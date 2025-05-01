@@ -14,7 +14,7 @@ defmodule Systems.Home.HTML do
           </p>
           <div class="flex justify-start mt-8">
             <Button.dynamic
-              action={%{type: :redirect, to: "/next-software-services"}}
+              action={%{type: :redirect, to: "https://eyra.co/next-software-services"}}
               face={%{type: :primary, label: dgettext("eyra-crew", "home.intro.learn_more_button")}}
             />
             </div>
@@ -112,7 +112,7 @@ defmodule Systems.Home.HTML do
                   </div>
                   <div class="lg:pt-16">
                     <Button.dynamic
-                      action={%{type: :redirect, to: "/next-software-services"}}
+                      action={%{type: :redirect, to: "https://eyra.co/next-software-services"}}
                       face={%{type: :primary, label: dgettext("eyra-crew", "home.services.button")}}
                     />
                   </div>
@@ -129,15 +129,33 @@ defmodule Systems.Home.HTML do
         <h1 class="text-title3 font-title3 lg:text-title1 lg:font-title1 text-center text-grey1">
           <%= dgettext("eyra-crew", "home.video.title") %>
         </h1>
-        <div class="flex justify-center pt-6">
-          <iframe
-            class="h-1/2 lg:h-[60vh] w-3/4 rounded-lg mt-6 shadow"
-            src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603?sid=1d3270c1-e5ce-4dbb-921c-0fab4fcb3efc"
-            title={dgettext("eyra-crew", "home.video.preview_title")}
-            allowfullscreen
-          >
-          </iframe>
-        </div>
+      <div class="flex justify-center pt-6">
+      <!-- XS-SM: up to 639px -->
+      <iframe
+        loading="lazy"
+        class="block sm:hidden w-[290px] h-[202px] rounded-lg shadow"
+        src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603"
+        allowfullscreen
+      ></iframe>
+
+      <!-- SM - XL: 640px – 1023px -->
+      <iframe
+        loading="lazy"
+        class="hidden sm:block xl:hidden w-[600px] h-[360px] rounded-lg shadow"
+        src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603"
+        allowfullscreen
+      ></iframe>
+
+      <!-- XL: from 1024px up -->
+      <iframe
+          loading="lazy"
+          class="hidden xl:block h-1/2 lg:h-[60vh] w-3/4 rounded-lg mt-6 shadow"
+          src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603?sid=1d3270c1-e5ce-4dbb-921c-0fab4fcb3efc"
+          title={dgettext("eyra-crew", "home.video.preview_title")}
+          allowfullscreen
+        >
+      </iframe>
+      </div>
     </section>
     """
   end
