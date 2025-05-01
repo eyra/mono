@@ -16,12 +16,12 @@ defmodule Systems.Home.HTML do
           </p>
           <div class="flex justify-start mt-8">
             <Button.dynamic
-              action={%{type: :redirect, to: "https://eyra.co/software-development"}}
+              action={%{type: :http_get, target: "_blank", to: "https://eyra.co/software-development"}}
               face={%{type: :primary, label: dgettext("eyra-crew", "home.intro.learn_more_button")}}
             />
             </div>
           </div>
-          <div class="w-full hidden hidden lg:block pr-12">
+          <div class="w-full hidden lg:block pr-12">
               <img src={~p"/images/landing_page/drawing.svg"} alt={dgettext("eyra-crew", "home.intro.image_alt")} class="w-full max-h-96" />
           </div>
         </div>
@@ -87,7 +87,7 @@ defmodule Systems.Home.HTML do
         <%= if @button do %>
           <div class="flex justify-start mt-6">
             <Button.dynamic
-              action={%{type: :redirect, to: @button.link}}
+              action={%{type: :http_get, target: "_blank", to: @button.link}}
               face={%{type: :primary, label: @button.label}}
             />
           </div>
@@ -112,7 +112,7 @@ defmodule Systems.Home.HTML do
                   </div>
                   <div class="lg:pt-16">
                     <Button.dynamic
-                      action={%{type: :redirect, to: "https://eyra.co/next-software-services"}}
+                      action={%{type: :http_get, target: "_blank", to: "https://eyra.co/next-software-services"}}
                       face={%{type: :primary, label: dgettext("eyra-crew", "home.services.button")}}
                     />
                   </div>
