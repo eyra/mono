@@ -1,6 +1,8 @@
 defmodule Systems.Home.HTML do
   use CoreWeb, :html
 
+  import Frameworks.Pixel.NumberIcon
+
   def intro(assigns) do
     ~H"""
     <section class="py-6 lg:py-12 bg-white">
@@ -74,9 +76,7 @@ defmodule Systems.Home.HTML do
       />
       <div class="p-4 lg:p-6">
         <div class="flex items-between gap-2">
-          <div class="w-6 h-6 bg-primary text-white text-xs rounded-full flex items-center justify-center font-bold">
-            {@stepNumber}
-          </div>
+          <.number_icon number={@stepNumber} active={true} />
           <h3 class="text-title5 font-title5 text-grey1">
             <%= @title %>
           </h3>
