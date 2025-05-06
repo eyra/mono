@@ -16,7 +16,7 @@ defmodule Systems.Home.HTML do
           </p>
           <div class="flex justify-start mt-8">
             <Button.dynamic
-              action={%{type: :redirect, to: "https://eyra.co/next-software-services"}}
+              action={%{type: :redirect, to: "https://eyra.co/software-development"}}
               face={%{type: :primary, label: dgettext("eyra-crew", "home.intro.learn_more_button")}}
             />
             </div>
