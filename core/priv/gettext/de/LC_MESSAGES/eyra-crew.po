@@ -53,7 +53,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"
-msgstr ""
+msgstr "Next ist eine Open-Source-Onlineplattform mit sofort verfügbaren Softwarediensten zur Unterstützung der Forschung – mit besonderem Fokus auf Benutzerfreundlichkeit. Die Dienste auf Next werden von Eyra in enger Zusammenarbeit mit der wissenschaftlichen Gemeinschaft entwickelt. Sie werden kontinuierlich gepflegt, weiterentwickelt und an die sich wandelnden Bedürfnisse von Forschenden angepasst. Möchten Sie starten? Alles, was Sie brauchen, finden Sie weiter unten – oder klicken Sie auf 'Mehr erfahren', wenn Sie wissen möchten, wie die Softwaredienste entwickelt werden."
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
@@ -61,64 +61,64 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.learn_more_button"
-msgstr ""
+msgstr "Gestalten Sie mit uns"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.title"
-msgstr ""
+msgstr "Die Next-Plattform"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.button"
-msgstr ""
+msgstr "Dienste entdecken"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.description"
-msgstr ""
+msgstr "Neugierig auf die Softwaredienste, die Sie auf der Plattform nutzen können? Klicken Sie auf die Schaltfläche unten, um die verfügbaren Dienste und ihre Preise zu entdecken. Die Next-Plattform ist werbefrei und basiert auf einem fairen Preismodell zur Unterstützung langfristiger Nachhaltigkeit. Mit dem Kauf eines Dienstes tragen Sie direkt zum offenen Ökosystem bei, das die Plattform für Forschende wie Sie zugänglich macht."
 
 #, elixir-autogen, elixir-format
 msgid "home.services.image_alt"
-msgstr ""
+msgstr "Bild, das Zusammenarbeit und Forschung zeigt"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.title"
-msgstr ""
+msgstr "Dienste & Preise"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.button"
-msgstr ""
+msgstr "Registrieren"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.description"
-msgstr ""
+msgstr "Erstellen Sie kostenlos ein Konto und erhalten Sie Zugriff auf die sofort verfügbaren Softwaredienste der Next-Plattform."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.title"
-msgstr ""
+msgstr "Konto erstellen"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.description"
-msgstr ""
+msgstr "Starten Sie Ihr erstes Projekt und wählen Sie einen Softwaredienst aus. Sie werden sehen, wie einfach sich alles einrichten und anpassen lässt."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.title"
-msgstr ""
+msgstr "Erstellen Sie ein Projekt"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.description"
-msgstr ""
+msgstr "Vorschau und Teilen Ihres Projekts mit anderen Plattformnutzenden sind kostenlos. Eine Gebühr fällt nur an, wenn Sie veröffentlichen oder einen Dienst für Ihre Forschung nutzen."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.title"
-msgstr ""
+msgstr "Vorschau & Teilen"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.title"
-msgstr ""
+msgstr "Bereit, die Plattform zu nutzen?"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.preview_title"
-msgstr ""
+msgstr "Next-Plattform-Video"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.title"
-msgstr ""
+msgstr "Die Next-Plattform auf einen Blick"

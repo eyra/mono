@@ -12,11 +12,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Mijn omgeving"
+msgstr "Collaboratief onderzoeksplatform"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Welkom"
+msgstr "Collaboratief onderzoeksplatform"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -32,4 +32,4 @@ msgstr "Panl studies"
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
-msgstr ""
+msgstr "Ontwikkeld voor en met de sociale, geestes- en gezondheidswetenschappen"

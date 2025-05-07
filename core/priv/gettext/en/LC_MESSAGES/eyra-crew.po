@@ -52,7 +52,7 @@ msgstr "Started"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"
-msgstr "The Next platform is an open and inclusive platform designed to accelerate research and knowledge creation. By integrating cutting-edge software services, Next empowers researchers with sustainable and privacy-conscious tools. Built on open-source principles and co-created with researchers, Next fosters innovation, transparency, and collaboration."
+msgstr "Next is an open-source online platform offering readily available software services designed to support research, with a focus on ease of use. The services on Next are built by Eyra in close collaboration with the scientific community. They are continuously maintained, improved, and aligned with the evolving needs of researchers. Want to get started? You’ll find everything you need below — or click 'Learn more' if you're curious about how the software services are built."
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
@@ -60,19 +60,19 @@ msgstr "Abstract image representing collaboration and research"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.learn_more_button"
-msgstr "Learn more"
+msgstr "Co-create with us"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.title"
-msgstr "What's Next?"
+msgstr "The Next platform"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.button"
-msgstr "Available services"
+msgstr "Explore services"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.description"
-msgstr "The Next platform is an open and inclusive platform designed to accelerate research and knowledge creation. By integrating cutting-edge software services, Next empowers researchers with sustainable and privacy-conscious tools."
+msgstr "Curious about the software services you can use on the platform? Click the button below to explore the available services and their pricing. The Next platform is ad-free and runs on a fair pricing model to support long-term sustainability. By purchasing a service, you directly contribute to the open ecosystem that keeps the platform available for researchers like you."
 
 #, elixir-autogen, elixir-format
 msgid "home.services.image_alt"
@@ -80,44 +80,44 @@ msgstr "Image displaying collaboration and research"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.title"
-msgstr "Available services"
+msgstr "Services & pricing"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.button"
-msgstr "Create account"
-
-#, elixir-autogen, elixir-format
-msgid "home.steps.step1.description"
-msgstr "Create your free account and gain access to the Next platform with readily available software services."
-
-#, elixir-autogen, elixir-format
-msgid "home.steps.step1.title"
 msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
+msgid "home.steps.step1.description"
+msgstr "Create your free account and get access to the Next platform’s readily available software services."
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.title"
+msgstr "Join the platform"
+
+#, elixir-autogen, elixir-format
 msgid "home.steps.step2.description"
-msgstr "Choose one of the software services and configure it to fit your research needs."
+msgstr "Start your first project and select a software service. You’ll see how easy it is to set up and customize."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.title"
-msgstr "Configure"
+msgstr "Create a project"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.description"
-msgstr "See your configuration in action, make adjustments, and immediately observe the effect."
+msgstr "Preview and share your project with collaborators for free. A service fee only applies when you publish or start using a service for your research."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.title"
-msgstr "Preview"
+msgstr "Preview & share"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.title"
-msgstr "How to get started?"
+msgstr "Ready to start using the platform?"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.preview_title"
-msgstr "Sneak preview"
+msgstr "Next platform preview"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.title"
-msgstr "Want to know how this works?"
+msgstr "The Next platform at a glance"

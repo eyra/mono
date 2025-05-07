@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr ""
+msgstr "Piattaforma di ricerca collaborativa"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr ""
+msgstr "Piattaforma di ricerca collaborativa"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -33,4 +33,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
-msgstr ""
+msgstr "Sviluppati per e insieme alle scienze sociali, umanistiche e della salute"
