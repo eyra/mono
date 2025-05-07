@@ -53,7 +53,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"
-msgstr "Next ist eine Open-Source-Onlineplattform mit sofort verfügbaren Softwarediensten zur Unterstützung der Forschung – mit besonderem Fokus auf Benutzerfreundlichkeit. Die Dienste auf Next werden von Eyra in enger Zusammenarbeit mit der wissenschaftlichen Gemeinschaft entwickelt. Sie werden kontinuierlich gepflegt, weiterentwickelt und an die sich wandelnden Bedürfnisse von Forschenden angepasst. Möchten Sie starten? Alles, was Sie brauchen, finden Sie weiter unten – oder klicken Sie auf 'Mehr erfahren', wenn Sie wissen möchten, wie die Softwaredienste entwickelt werden."
+msgstr "Die Next-Plattform bietet Open-Source-Softwaredienste, die sofort verfügbar sind und Ihnen dabei helfen, Ihre Forschung effizient durchzuführen. Sie werden von Eyra entwickelt – für und gemeinsam mit Forschenden – und kontinuierlich verbessert. Bereit zum Start? Alles, was Sie brauchen, finden Sie weiter unten."
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
