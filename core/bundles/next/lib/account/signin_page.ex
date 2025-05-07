@@ -15,7 +15,6 @@ defmodule Next.Account.SigninPage do
 
   alias Frameworks.Pixel.Tabbed
   alias Next.Account.SigninPageBuilder
-  alias Frameworks.Pixel.AlertBanner
 
   @impl true
   def mount(params, _session, socket) do
@@ -63,11 +62,6 @@ defmodule Next.Account.SigninPage do
           <.spacing value="M" />
           <.line />
 
-          <%= if @status == "account_activated_successfully" do %>
-            <AlertBanner.success>
-              <%= dgettext("eyra-account", "Account activated successfully.") %>
-            </AlertBanner.success>
-          <% end %>
 
           <.spacing value="M" />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>

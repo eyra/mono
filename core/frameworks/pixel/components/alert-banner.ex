@@ -32,7 +32,7 @@ defmodule Frameworks.Pixel.AlertBanner do
     ~H"""
     <div
       class={[
-        "rounded flex font-semibold p-[0.625rem_1rem] justify-center items-center gap-[0.625rem]",
+        "rounded flex justify-center items-center h-10 px-4 font-label text-label",
         @bg_class,
         @text_class,
         @class
