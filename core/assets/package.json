@@ -11,7 +11,7 @@
     "lodash": "^4.17.21",
     "pdfjs-dist": "^5.2.133",
     "pinch-zoom-js": "^2.3.5",
-    "trix": "^2.1.12"
+    "trix": "^2.1.15"
   },
   "devDependencies": {
     "prettier": "2.7.1",
