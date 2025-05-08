@@ -23,12 +23,13 @@ defmodule Systems.Alliance.ToolView do
     }
   end
 
-  defp update_participant_url(%{assigns: %{tool: tool, participant: participant}} = socket)
-       when is_binary(participant) do
+  defp update_participant_url(%{assigns: %{tool: tool, participant: participant}} = socket) do
+    participant_str = if is_binary(participant), do: participant, else: to_string(participant)
+
     participant_url =
       tool
       |> Alliance.ToolModel.safe_uri()
-      |> URI.append_query(URI.encode_query(participant: participant))
+      |> URI.append_query(URI.encode_query(participant: participant_str))
       |> URI.to_string()
 
     assign(socket, participant_url: participant_url)
