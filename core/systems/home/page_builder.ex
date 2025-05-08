@@ -20,7 +20,7 @@ defmodule Systems.Home.PageBuilder do
   def view_model(_, %{current_user: nil}) do
     %{
       hero: %{
-        type: :illustration2,
+        type: :landing_page,
         params: %{
           title: dgettext("eyra-home", "member.title"),
           caption: dgettext("eyra-home", "member.caption")
@@ -40,7 +40,7 @@ defmodule Systems.Home.PageBuilder do
 
     %{
       hero: %{
-        type: :illustration2,
+        type: :landing_page,
         params: %{
           title: dgettext("eyra-home", "member.title"),
           caption: dgettext("eyra-home", "member.caption")
@@ -58,7 +58,7 @@ defmodule Systems.Home.PageBuilder do
 
     %{
       hero: %{
-        type: :illustration1,
+        type: :landing_page,
         params: %{
           title: dgettext("eyra-home", "visitor.title")
         }
