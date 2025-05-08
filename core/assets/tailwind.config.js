@@ -23,7 +23,7 @@ module.exports = {
       primarylight: "#E3EAFD",
       secondary: "#FF5E5E",
       tertiary: "#FFCF60",
-      success: "#6FCA37",
+      success: "#52BA12",
       successlight: "#EBFFDF",
       warning: "#F28D15",
       warninglight: "#FFEFDC",

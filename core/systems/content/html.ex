@@ -92,13 +92,14 @@ defmodule Systems.Content.Html do
   attr(:modals, :list, required: true)
   attr(:popup, :map, required: true)
   attr(:dialog, :map, required: true)
+  attr(:include_right_sidepadding?, :boolean, default: true)
 
   slot(:hero, required: true)
   slot(:inner_block, required: true)
 
   def live_website(assigns) do
     ~H"""
-    <.website user={@user} user_agent={@user_agent} menus={@menus} >
+    <.website user={@user} include_right_sidepadding?={@include_right_sidepadding?} user_agent={@user_agent} menus={@menus} >
       <:hero>
         <%= render_slot(@hero) %>
       </:hero>

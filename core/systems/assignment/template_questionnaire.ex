@@ -39,6 +39,12 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         library: %Workflow.LibraryModel{
           items: [
             %Workflow.LibraryItemModel{
+              special: :manual,
+              tool: :manual_tool,
+              title: Assignment.WorkflowItemSpecials.translate(:manual),
+              description: dgettext("eyra-assignment", "workflow_item.manual.description")
+            },
+            %Workflow.LibraryItemModel{
               special: :general_instruction,
               tool: :instruction_tool,
               title: Assignment.WorkflowItemSpecials.translate(:general_instruction),

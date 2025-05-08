@@ -14,7 +14,7 @@ end
 defmodule SignInWithApple.CallbackPlug.Test do
   use ExUnit.Case, async: true
   use Core.DataCase
-  use Plug.Test
+  import Plug.Test
   alias SignInWithApple.CallbackPlug
 
   setup do

@@ -4,6 +4,8 @@ defmodule Systems.Account.UserForm do
   use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Pixel.Form
 
+  alias Frameworks.Pixel.AlertBanner
+
   attr(:changeset, :map, required: true)
 
   def password_signup(assigns) do
@@ -20,10 +22,17 @@ defmodule Systems.Account.UserForm do
 
   attr(:user_type, :atom, required: true)
   attr(:for, :any, default: %{})
+  attr(:status, :string, default: "")
 
   def password_signin(assigns) do
     ~H"""
     <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} >
+      <%= if @status == "account_activated_successfully" do %>
+        <AlertBanner.success>
+          <%= dgettext("eyra-account", "Account activated successfully.") %>
+        </AlertBanner.success>
+        <.spacing value="M" />
+      <% end %>
       <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} reserve_error_space={false} />
       <.spacing value="S" />
       <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />

@@ -1,6 +1,7 @@
 defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
   use Core.DataCase
-  use Plug.Test
+  import Plug.Test
+  import Plug.Conn
   alias Plug.Conn
   alias Core.Authorization.Plug.ControllerAuthorization
   alias Core.Authorization.PermissionMap
