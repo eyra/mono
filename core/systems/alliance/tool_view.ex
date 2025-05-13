@@ -34,13 +34,24 @@ defmodule Systems.Alliance.ToolView do
     assign(socket, participant_url: participant_url)
   end
 
-  defp update_button(%{assigns: %{participant_url: participant_url}} = socket) do
+  defp update_button(%{assigns: %{participant_url: participant_url, myself: myself}} = socket) do
     button = %{
-      action: %{type: :http_get, to: participant_url, target: "_blank"},
+      action: %{
+        type: :http_get,
+        to: participant_url,
+        target: "_blank",
+        phx_event: "tool_started",
+        phx_target: myself
+      },
       face: %{type: :primary, label: dgettext("eyra-alliance", "tool.button")}
     }
 
     assign(socket, button: button)
+  end
+
+  def handle_event("tool_started", _params, socket) do
+    # Close the modal directly after the tool is started
+    {:noreply, socket |> send_event(:parent, "close")}
   end
 
   @impl true
