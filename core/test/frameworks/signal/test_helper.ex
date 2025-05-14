@@ -20,8 +20,13 @@ defmodule Frameworks.Signal.TestHelper do
     end
   end
 
+  def intercept({:force, :ok}, _message), do: :ok
+  def intercept({:force, :error}, _message), do: {:error, :force_error}
+  def intercept({:force, :continue}, _message), do: {:continue, :follow_up, "Hello, world!"}
+  def intercept({:follow_up, {:force, :continue}}, %{follow_up: "Hello, world!"}), do: :ok
+
   def intercept(signal, message) do
     send(self(), {:signal_test, {signal, message}})
-    :ok
+    {:error, :unhandled_signal}
   end
 end

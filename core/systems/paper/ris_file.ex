@@ -46,11 +46,19 @@ defmodule Systems.Paper.RISFile do
   def process(reference_file_id) when is_integer(reference_file_id) do
     Logger.info("[Paper] Processing papers: started")
 
-    Paper.Public.get_reference_file!(
-      reference_file_id,
-      Paper.ReferenceFileModel.preload_graph(:down)
-    )
-    |> process()
+    reference_file =
+      Paper.Public.get_reference_file!(
+        reference_file_id,
+        Paper.ReferenceFileModel.preload_graph(:down)
+      )
+
+    try do
+      reference_file |> process()
+    rescue
+      error ->
+        Logger.error("[Paper] Processing papers: failed -> #{inspect(error)}")
+        Paper.Public.mark_as_failed!(reference_file, error)
+    end
   end
 
   def process(%{file: %{ref: nil}}) do
@@ -108,7 +116,7 @@ defmodule Systems.Paper.RISFile do
   end
 
   def prepare_reference({:error, {error, _raw}}, reference_file) do
-    file_error = Paper.Public.prepare_file_error(reference_file, error)
+    file_error = Paper.Public.prepare_reference_file_error(reference_file, error)
     %{file_error: file_error}
   end
 
