@@ -52,7 +52,10 @@ defmodule Systems.Graphite.GenTest do
                  id: ^principal_2_id,
                  displayname: "aap-2"
                }
-             ] = from(Systems.Account.User) |> Repo.all()
+             ] =
+               from(Systems.Account.User)
+               |> Repo.all()
+               |> Enum.sort_by(& &1.id)
 
       assert [
                %Systems.Account.FeaturesModel{},

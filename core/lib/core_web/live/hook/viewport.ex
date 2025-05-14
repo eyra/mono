@@ -8,7 +8,7 @@ defmodule CoreWeb.Live.Hook.Viewport do
   import CoreWeb.UI.Responsive.Viewport
 
   @impl true
-  def on_mount(live_view_module, _params, _session, socket) do
+  def mount(live_view_module, _params, _session, socket) do
     {
       :cont,
       socket

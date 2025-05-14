@@ -177,7 +177,7 @@ defmodule Systems.Crew.PublicTest do
                  crew_id: ^crew_id,
                  user_id: ^user_b_id
                }
-             ] = Repo.all(Crew.Queries.member_query())
+             ] = Repo.all(Crew.Queries.member_query()) |> Enum.sort_by(& &1.id)
     end
 
     test "member_query/0 multi member multi crew" do

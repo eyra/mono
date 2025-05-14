@@ -3,7 +3,7 @@ defmodule CoreWeb.Live.Hook.Uri do
   use Frameworks.Concept.LiveHook
 
   @impl true
-  def on_mount(live_view_module, _params, _session, socket) do
+  def mount(live_view_module, _params, _session, socket) do
     {
       :cont,
       socket
