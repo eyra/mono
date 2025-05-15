@@ -11,7 +11,7 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :core,
   name: "Next [local]",
-  base_url: "http://localhost:4000",
+  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   upload_path: upload_path
 
 # Only in tests, remove the complexity from the password hashing algorithm
