@@ -43,4 +43,6 @@ WORKDIR /app/core
 # ======================
 FROM builder AS dev
 
+RUN mix deps.get
+
 CMD ["mix","run"]
