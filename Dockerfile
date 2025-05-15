@@ -43,8 +43,7 @@ COPY ./core /app/core
 WORKDIR /app/core
 
 RUN mix assets.install
-RUN mix assets.build
-
 RUN mix deps.get
+RUN mix assets.build
 
 CMD [ "mix","run"]
