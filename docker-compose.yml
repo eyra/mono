@@ -22,6 +22,7 @@ services:
       - 5432:5432
     volumes:
       - db_certs:/var/lib/postgresql/ssl
+      - ./postgres_data:/var/lib/postgresql/data
     restart: always
     environment:
       POSTGRES_USER: postgres

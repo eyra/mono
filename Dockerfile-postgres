@@ -21,3 +21,7 @@ RUN chown postgres:postgres /var/lib/postgresql/ssl/server.key \
     && chmod 644 /var/lib/postgresql/ssl/server.crt \
     && chown postgres:postgres /var/lib/postgresql/ssl/ca.crt \
     && chmod 644 /var/lib/postgresql/ssl/ca.crt
+
+
+RUN mkdir -p /var/lib/postgresql/data && \
+    chown -R postgres:postgres /var/lib/postgresql/data
