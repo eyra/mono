@@ -34,13 +34,13 @@ RUN asdf reshim
 RUN mix local.hex --force && mix local.rebar --force
 RUN chmod -R a+rX /root/.asdf
 
-COPY ./core /app/core
-WORKDIR /app/core
-
-
 # ======================
 # Dev Stage
 # ======================
 FROM builder AS dev
 
-CMD ["mix", "deps.get", "&&", "mix","run"]
+COPY ./core /app/core
+WORKDIR /app/core
+RUN mix deps.get
+
+CMD [ "mix","run"]
