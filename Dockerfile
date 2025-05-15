@@ -41,6 +41,10 @@ FROM builder AS dev
 
 COPY ./core /app/core
 WORKDIR /app/core
+
+RUN mix assets.install
+RUN mix assets.build
+
 RUN mix deps.get
 
 CMD [ "mix","run"]
