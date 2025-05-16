@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "tn-dependabot-security"
+      - "develop"
   workflow_dispatch:
 jobs:
   report_mix_deps:
