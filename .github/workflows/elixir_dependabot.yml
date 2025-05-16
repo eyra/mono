@@ -2,6 +2,7 @@ name: "Mix Dependency Submission"
 
 on:
   push:
+    install-deps: true
     branches:
       - "develop"
 
