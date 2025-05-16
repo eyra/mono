@@ -8,7 +8,7 @@ defmodule Frameworks.GreenLight.LiveHook do
   require Logger
 
   @impl true
-  def on_mount(live_view_module, params, session, socket) do
+  def mount(live_view_module, params, session, socket) do
     if access_allowed?(live_view_module, params, session, socket) do
       {:cont, socket}
     else

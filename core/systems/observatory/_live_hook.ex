@@ -4,7 +4,7 @@ defmodule Systems.Observatory.LiveHook do
   require Logger
 
   @impl true
-  def on_mount(live_view_module, _params, session, socket) do
+  def mount(live_view_module, _params, session, socket) do
     {
       :cont,
       socket
