@@ -1,13 +1,18 @@
-name: Dependabot Elixir Support
+name: "Mix Dependency Submission"
 
 on:
   push:
     branches:
       - "develop"
-  workflow_dispatch:
+
+# The API requires write permission on the repository to submit dependencies
+permissions:
+  contents: write
+
 jobs:
   report_mix_deps:
-    runs-on: ubuntu-24.04
+    name: "Report Mix Dependencies"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: erlef/mix-dependency-submission@v1
