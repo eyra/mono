@@ -1,0 +1,11 @@
+on:
+  push:
+    branches:
+      - "develop"
+  workflow_dispatch:
+jobs:
+  report_mix_deps:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/mix-dependency-submission@v1
