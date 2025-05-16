@@ -2,11 +2,9 @@ name: "Mix Dependency Submission"
 
 on:
   workflow_dispatch:
-    inputs:
-      install-deps:
-        type: bool
-        default: true
-        required: false
+
+inputs:
+  install-deps: true
 
 permissions:
   contents: write
