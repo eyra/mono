@@ -6,7 +6,7 @@ defmodule CoreWeb.Live.Hook.User do
   alias Systems.Account
 
   @impl true
-  def on_mount(_live_view_module, _params, session, socket) do
+  def mount(_live_view_module, _params, session, socket) do
     {:cont, socket |> assign(current_user: current_user(session))}
   end
 

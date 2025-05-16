@@ -56,7 +56,7 @@ defmodule Systems.Graphite.GenTest do
              ] =
                from(Systems.Account.User)
                |> Repo.all()
-               |> Enum.sort_by(& &1.displayname)
+               |> Enum.sort_by(& &1.id)
 
       assert [
                %Systems.Account.FeaturesModel{},
