@@ -23,9 +23,7 @@ defmodule Systems.Support.OverviewPage do
       <.tabbar_page
         title={@vm.title}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
         tabs={@vm.tabs}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

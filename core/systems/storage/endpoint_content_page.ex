@@ -52,9 +52,7 @@ defmodule Systems.Storage.EndpointContentPage do
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
       />
     """
   end

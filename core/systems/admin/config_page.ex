@@ -27,9 +27,7 @@ defmodule Systems.Admin.ConfigPage do
       show_errors={@vm.show_errors}
       initial_tab={@initial_tab}
       menus={@menus}
-      modals={@modals}
-      popup={@popup}
-      dialog={@dialog}
+      modal={@modal}
     />
     """
   end

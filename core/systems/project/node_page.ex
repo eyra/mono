@@ -39,9 +39,7 @@ defmodule Systems.Project.NodePage do
         initial_tab={@initial_tab}
         breadcrumbs={@vm.breadcrumbs}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
       />
     """
   end

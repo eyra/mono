@@ -3,9 +3,7 @@ defmodule Systems.Content.Html do
   import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
   import CoreWeb.Layouts.Website.Html, only: [website: 1]
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
-  import CoreWeb.UI.Popup
   alias Frameworks.Pixel.ModalView
-  import CoreWeb.UI.PlainDialog
   alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Breadcrumbs
@@ -49,25 +47,9 @@ defmodule Systems.Content.Html do
     """
   end
 
-  attr(:modals, :map, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
-
-  def live_block(assigns) do
-    ~H"""
-    <div>
-      <.popup_block popup={@popup} />
-      <.plain_dialog_block dialog={@dialog} />
-      <ModalView.dynamic modals={@modals} />
-    </div>
-    """
-  end
-
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
 
   slot(:top_bar)
   slot(:inner_block, required: true)
@@ -79,7 +61,7 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <ModalView.dynamic :if={@modal} modal={@modal} />
 
       <%= render_slot(@inner_block) %>
     </.workspace>
@@ -89,9 +71,7 @@ defmodule Systems.Content.Html do
   attr(:user, :map, required: true)
   attr(:user_agent, :map, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:include_right_sidepadding?, :boolean, default: true)
 
   slot(:hero, required: true)
@@ -104,7 +84,7 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <ModalView.dynamic :if={@modal} modal={@modal} />
 
       <%= render_slot(@inner_block) %>
     </.website>
@@ -113,16 +93,14 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
 
   slot(:inner_block, required: true)
 
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <ModalView.dynamic :if={@modal} modal={@modal} />
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
@@ -130,9 +108,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -140,7 +116,7 @@ defmodule Systems.Content.Html do
 
   def tabbar_page(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal}>
         <%= if Enum.count(@tabs) > 0 do %>
           <Navigation.tabbar>
             <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
@@ -156,9 +132,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -167,7 +141,7 @@ defmodule Systems.Content.Html do
 
   def tabbar_page_breadcrumbs(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal}>
         <%= if Enum.count(@tabs) > 0 do %>
           <div class="flex flex-row items-center justify-between w-full h-navbar-height">
             <Area.content>
@@ -194,9 +168,7 @@ defmodule Systems.Content.Html do
 
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -209,7 +181,7 @@ defmodule Systems.Content.Html do
   def management_page(assigns) do
     ~H"""
       <div id={:content_management_page} phx-hook="Viewport">
-        <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+        <.live_workspace title={@title} menus={@menus} modal={@modal}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
