@@ -1,3 +1,5 @@
+name: Dependabot Elixir Support
+
 on:
   push:
     branches:
