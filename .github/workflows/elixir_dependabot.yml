@@ -1,11 +1,10 @@
-name: "Mix Dependency Submission"
+name: "Mix Dependency Submission Update"
 
 on:
   workflow_dispatch:
     inputs:
       install-deps: true
 
-# The API requires write permission on the repository to submit dependencies
 permissions:
   contents: write
 
