@@ -108,6 +108,7 @@ defmodule Frameworks.Pixel.Tabbed do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:include_top_margin, :boolean, default: true)
 
@@ -120,6 +121,9 @@ defmodule Frameworks.Pixel.Tabbed do
       <% end %>
       <%= for tab <- @tabs do %>
         <.panel tab_id={tab.id}>
+          <%= if Map.has_key?(tab, :element) do %>
+            <LiveNest.HTML.element socket={@socket} {Map.from_struct(tab.element)} />
+          <% end %>
           <%= if Map.has_key?(tab, :live_component) do %>
             <.live_component id={tab.id} module={tab.live_component} {tab.props} />
           <% end %>

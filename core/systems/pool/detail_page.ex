@@ -111,7 +111,7 @@ defmodule Systems.Pool.DetailPage do
         <Navigation.action_bar breadcrumbs={[]}>
           <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>
-        <Tabbed.content tabs={@vm.tabs} />
+        <Tabbed.content socket={@socket} tabs={@vm.tabs} />
       </div>
     </.live_workspace>
     """

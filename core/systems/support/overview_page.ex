@@ -21,6 +21,7 @@ defmodule Systems.Support.OverviewPage do
   def render(assigns) do
     ~H"""
       <.tabbar_page
+        socket={@socket}
         title={@vm.title}
         menus={@menus}
         modal={@modal}

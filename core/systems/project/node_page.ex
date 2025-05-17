@@ -32,6 +32,7 @@ defmodule Systems.Project.NodePage do
   def render(assigns) do
     ~H"""
     <.tabbar_page_breadcrumbs
+        socket={@socket}
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}

@@ -44,6 +44,7 @@ defmodule Systems.Assignment.ContentPage do
   def render(assigns) do
     ~H"""
       <.management_page
+        socket={@socket}
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}

@@ -316,15 +316,15 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, current_user: user}
+         %{current_user: user}
        ) do
-    child =
-      Fabric.prepare_child(fabric, :system, Zircon.CriteriaView, %{
+    element =
+      LiveNest.Element.prepare_live_view(:criteria, Zircon.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
         title: title,
         content_flags: content_flags
-      })
+      )
 
     %{
       id: :criteria,
@@ -333,7 +333,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 

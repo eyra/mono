@@ -29,6 +29,7 @@ defmodule Systems.Lab.ContentPage do
   def render(assigns) do
     ~H"""
       <.management_page
+        socket={@socket}
         title={@vm.title}
         breadcrumbs={@vm.breadcrumbs}
         tabs={@vm.tabs}

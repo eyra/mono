@@ -106,6 +106,7 @@ defmodule Systems.Content.Html do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
@@ -123,13 +124,14 @@ defmodule Systems.Content.Html do
           </Navigation.tabbar>
 
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content tabs={@tabs} include_top_margin={false} />
+            <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} />
           </div>
         <% end %>
       </.live_workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
@@ -159,13 +161,14 @@ defmodule Systems.Content.Html do
             </Area.content>
           </div>
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-              <Tabbed.content tabs={@tabs} include_top_margin={false} />
+              <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} />
           </div>
         <% end %>
       </.live_workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
@@ -189,7 +192,7 @@ defmodule Systems.Content.Html do
           </:top_bar>
 
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content tabs={@tabs} />
+            <Tabbed.content socket={@socket} tabs={@tabs} />
           </div>
           <Tabbed.footer tabs={@tabs} />
         </.live_workspace>
