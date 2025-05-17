@@ -111,7 +111,7 @@ defmodule Systems.Assignment.BrandingForm do
       :noreply,
       socket
       |> compose_child(:image_picker)
-      |> show_popup(:image_picker)
+      |> show_modal(:image_picker, :compact)
     }
   end
 
@@ -127,13 +127,13 @@ defmodule Systems.Assignment.BrandingForm do
       |> assign(image_picker_state: state)
       |> save(entity, :auto_save, %{image_id: image_id})
       |> update_image_info()
-      |> hide_popup(:image_picker)
+      |> hide_modal(:image_picker)
     }
   end
 
   @impl true
   def handle_event("finish", _, socket) do
-    {:noreply, socket |> hide_popup(:image_picker)}
+    {:noreply, socket |> hide_modal(:image_picker)}
   end
 
   @impl true

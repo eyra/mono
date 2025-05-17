@@ -93,6 +93,8 @@ defmodule Core.MixProject do
       {:kadabra, "~> 0.6.0"},
       {:libcluster, "~> 3.3"},
       {:logger_json, "~> 6.2.1"},
+      {:live_nest, "~> 0.1.0",
+       github: "eyra/live_nest", ref: "8e83fb1711d64990a5036e928d9727fcec101138"},
       {:mime, "~> 2.0"},
       {:nimble_parsec, "~> 1.4"},
       {:nimble_options, "~> 1.0.0"},

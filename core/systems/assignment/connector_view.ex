@@ -76,8 +76,7 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    show_popup(socket, child)
-    {:noreply, socket}
+    {:noreply, socket |> show_modal(child, :compact)}
   end
 
   @impl true
@@ -89,8 +88,7 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    show_popup(socket, child)
-    {:noreply, socket}
+    {:noreply, socket |> show_modal(child, :compact)}
   end
 
   @impl true
@@ -99,14 +97,12 @@ defmodule Systems.Assignment.ConnectorView do
         %{source: %{name: :connector_popup}, connection: _connection},
         socket
       ) do
-    hide_popup(socket, :connector_popup)
-    {:noreply, socket}
+    {:noreply, socket |> hide_modal(:connector_popup)}
   end
 
   @impl true
   def handle_event("cancel", %{source: %{name: :connector_popup}}, socket) do
-    hide_popup(socket, :connector_popup)
-    {:noreply, socket}
+    {:noreply, socket |> hide_modal(:connector_popup)}
   end
 
   @impl true

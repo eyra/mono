@@ -44,6 +44,19 @@ defmodule Systems.Promotion.LandingPage do
     }
   end
 
+  @impl true
+  def compose(:preview_inform, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "preview_inform",
+        title: dgettext("eyra-promotion", "preview.inform.title"),
+        text: dgettext("eyra-promotion", "preview.inform.text")
+      }
+    }
+  end
+
   def handle_view_model_updated(socket) do
     update_image_info(socket)
   end
@@ -75,13 +88,11 @@ defmodule Systems.Promotion.LandingPage do
 
   @impl true
   def handle_event("call-to-action", _params, %{assigns: %{preview: true}} = socket) do
-    title = dgettext("eyra-promotion", "preview.inform.title")
-    text = dgettext("eyra-promotion", "preview.inform.text")
-
     {
       :noreply,
       socket
-      |> inform(title, text)
+      |> compose_child(:preview_inform)
+      |> Fabric.ModalController.show_modal(:preview_inform, :compact)
     }
   end
 
@@ -116,7 +127,7 @@ defmodule Systems.Promotion.LandingPage do
   def render(assigns) do
     ~H"""
     <div id={:promotion_landing_page} phx-hook="Viewport">
-    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal}>
       <:hero>
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>

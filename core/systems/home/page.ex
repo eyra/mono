@@ -37,7 +37,7 @@ defmodule Systems.Home.Page do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal}>
       <:hero>
         <Hero.dynamic {@vm.hero} />
       </:hero>
