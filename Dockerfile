@@ -47,3 +47,47 @@ RUN mix deps.get
 RUN mix assets.build
 
 CMD [ "mix","run"]
+
+# ======================
+# Release stage
+# ======================
+
+FROM dev AS build_release
+ARG MIX_ENV=${MIX_ENV:-prod}
+ENV BUNDLE=next
+ARG VERSION
+
+RUN ./scripts/build-frontend && ./scripts/build-release
+RUN echo "Release build info:" && \
+    echo "VERSION: $VERSION" && \
+    echo "MIX_ENV: $MIX_ENV" && \
+    echo "Contents of release directory:" && \
+    ls -l /app/core/${VERSION} && \
+    echo "Disk usage:" && \
+    du -sh /app/core/${VERSION}
+
+
+# =======================
+# Prod Stage
+# =======================
+
+FROM debian:12-slim AS prod
+
+RUN apt-get update && apt-get install -y \
+      libssl-dev libncurses-dev tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+ARG APP_NAME=core
+ARG VERSION
+
+ENV HOME=/app \
+    PORT=4000 \
+    APP_NAME=core
+
+COPY --from=build_release /app/core/${VERSION} ./
+
+ENTRYPOINT ["/app/bin/core"]
+CMD ["start"]
+

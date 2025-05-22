@@ -7,6 +7,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+      target: dev
     ports:
       - 4000:4000
     volumes:

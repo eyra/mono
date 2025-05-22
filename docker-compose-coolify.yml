@@ -1,0 +1,83 @@
+services:
+  app:
+    container_name: app
+    environment:
+      # Database variables
+      - DB_CA_PATH=/app/certs/ca.crt
+      - DB_HOST=db
+      - DB_NAME=next_dev
+      - DB_PASS=postgres
+      - DB_PORT=5432
+      - DB_TLS_VERIFY=verify_peer
+      - DB_USER=postgres
+
+      # App config variables
+      - APP_ADMINS=${APP_ADMINS}
+      - APP_DOMAIN=${APP_DOMAIN}
+      - APP_MAIL_DOMAIN=${APP_MAIL_DOMAIN}
+      - APP_NAME=${APP_NAME}
+      - ENABLED_APP_FEATURES=${ENABLED_APP_FEATURES}
+      - ENABLED_OBAN_PLUGINS=${ENABLED_OBAN_PLUGINS}
+      - FELDSPAR_S3_PREFIX=${FELDSPAR_S3_PREFIX}
+      - HTTPS_PORT=${HTTPS_PORT}
+      - HTTP_PORT=${HTTP_PORT}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - MIX_ENV=${MIX_ENV}
+      - RELEASE_ENV=${RELEASE_ENV}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - SSL_DOMAINS=${SSL_DOMAINS}
+      - STATIC_PATH=${STATIC_PATH}
+      - STORAGE_UPLOAD_MAX_SIZE=${STORAGE_UPLOAD_MAX_SIZE}
+
+      # Third-party integrations
+      - APPSIGNAL_PUSH_API_KEY=${APPSIGNAL_PUSH_API_KEY}
+      - APPSIGNAL_REVISION=${APPSIGNAL_REVISION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - CONTENT_S3_PREFIX=${CONTENT_S3_PREFIX}
+      - PUBLIC_S3_BUCKET=${PUBLIC_S3_BUCKET}
+      - PUBLIC_S3_URL=${PUBLIC_S3_URL}
+      - RATE_QUOTAS=${RATE_QUOTAS}
+      - STORAGE_S3_PREFIX=${STORAGE_S3_PREFIX}
+      - SURFCONEXT_SITE=${SURFCONEXT_SITE}
+      - UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY}
+      - UNSPLASH_APP_NAME=${UNSPLASH_APP_NAME}
+      - WEB_PUSH_PRIVATE_KEY=${WEB_PUSH_PRIVATE_KEY}
+      - WEB_PUSH_PUBLIC_KEY=${WEB_PUSH_PUBLIC_KEY}
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: prod
+      args:
+        - VERSION=coolify
+        - MIX_ENV=prod
+    ports:
+      - 4000:4000
+      - 4001:4001
+    volumes:
+      - db_certs:/app/certs
+
+  db:
+    container_name: db
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db_certs:/var/lib/postgresql/ssl
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: next_dev
+    command: >
+      postgres  -c ssl=on
+                -c ssl_cert_file=/var/lib/postgresql/ssl/server.crt
+                -c ssl_key_file=/var/lib/postgresql/ssl/server.key
+
+volumes:
+  db_certs:
