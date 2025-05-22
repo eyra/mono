@@ -88,6 +88,8 @@ ENV HOME=/app \
 
 COPY --from=build_release /app/core/${VERSION} ./
 
+RUN mkdir /home/next/uploads -p
+
 ENTRYPOINT ["/app/bin/core"]
 CMD ["start"]
 
