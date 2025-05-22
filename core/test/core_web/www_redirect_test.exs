@@ -1,6 +1,6 @@
 defmodule CoreWeb.WWWRedirect.Test do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
   alias CoreWeb.WWWRedirect
 
   def call(conn) do

@@ -548,9 +548,15 @@ defmodule Frameworks.Pixel.Form do
       <.spacing value="S" direction="l" />
       <div class="flex-wrap">
         <%= if @photo_url do %>
-          <Button.secondary_label label={@secondary_button_text} field={@uploads.photo.ref} />
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.photo.ref}}
+            face={%{type: :secondary, label: @secondary_button_text}}
+          />
         <% else %>
-          <Button.primary_label label={@primary_button_text} field={@uploads.photo.ref} />
+        <Button.dynamic
+            action={%{type: :label, field: @uploads.photo.ref}}
+            face={%{type: :primary, label: @primary_button_text}}
+          />
         <% end %>
         <div class="hidden">
           <.live_file_input upload={@uploads.photo} />
@@ -567,6 +573,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:uploads, :any, required: true)
   attr(:primary_button_text, :string, required: true)
   attr(:secondary_button_text, :string, required: true)
+  attr(:loading, :boolean, default: false)
 
   def image_input(assigns) do
     ~H"""
@@ -582,9 +589,15 @@ defmodule Frameworks.Pixel.Form do
       <.spacing value="S" direction="l" />
       <div class="flex-wrap">
         <%= if @image_url do %>
-          <Button.secondary_label label={@secondary_button_text} field={@uploads.image.ref} />
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.image.ref}}
+            face={%{type: :secondary, label: @secondary_button_text, loading: @loading}}
+          />
         <% else %>
-          <Button.primary_label label={@primary_button_text} field={@uploads.image.ref} />
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.image.ref}}
+            face={%{type: :primary, label: @primary_button_text, loading: @loading}}
+          />
         <% end %>
         <div class="hidden">
           <.live_file_input upload={@uploads.image} />

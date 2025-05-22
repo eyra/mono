@@ -32,7 +32,7 @@ defmodule Systems.Storage.Azure.EndpointModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def connected?(_endpoint) do

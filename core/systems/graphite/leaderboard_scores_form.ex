@@ -55,10 +55,10 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
   @impl true
   def process_file(
         %{assigns: %{leaderboard: leaderboard}} = socket,
-        {_local_path, csv_url, original_file_name}
+        %{public_url: csv_url, original_filename: original_filename}
       ) do
     result = Graphite.ScoresParser.from_url(csv_url, leaderboard)
-    assign(socket, csv_url: csv_url, csv_remote_file: original_file_name, parsed_results: result)
+    assign(socket, csv_url: csv_url, csv_remote_file: original_filename, parsed_results: result)
   end
 
   def handle_event(

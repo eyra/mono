@@ -1,6 +1,7 @@
 defmodule Next.Layouts.Website.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
+    mobile_navbar: [:narrow],
     mobile_menu: [:narrow]
   ]
 

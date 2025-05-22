@@ -9,10 +9,10 @@ defmodule Systems.Feldspar.ToolForm do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_path, url, original_filename}
+        %{public_url: public_url, original_filename: original_filename}
       ) do
     socket
-    |> save(entity, %{archive_ref: url, archive_name: original_filename})
+    |> save(entity, %{archive_ref: public_url, archive_name: original_filename})
   end
 
   @impl true

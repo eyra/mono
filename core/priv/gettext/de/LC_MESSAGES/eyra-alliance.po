@@ -122,3 +122,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Weiter"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tool.description"
+msgstr "Sie sind dabei, einen Fragebogen in einem neuen Tab zu starten. Wenn Sie fertig sind, kehren Sie automatisch auf diese Seite zurück."

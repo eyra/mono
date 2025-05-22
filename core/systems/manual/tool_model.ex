@@ -35,7 +35,7 @@ defmodule Systems.Manual.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def preload_graph(:down), do: preload_graph([:manual])
@@ -54,10 +54,10 @@ defmodule Systems.Manual.ToolModel do
     def ready?(tool), do: Manual.ToolModel.ready?(tool)
     def form(_, _), do: Manual.Builder.ToolForm
 
-    def launcher(%{manual: manual}, user) do
+    def launcher(%{manual: manual}) do
       %{
         module: Manual.ToolView,
-        params: %{manual: manual, user: user}
+        params: %{manual: manual}
       }
     end
 

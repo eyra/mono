@@ -13,6 +13,8 @@ defmodule Frameworks.Pixel.ModalView do
     quote do
       alias Frameworks.Pixel.ModalView
 
+      import Frameworks.Pixel.ModalView, only: [modal_id: 1]
+
       @impl true
       def handle_event("prepare_modal", modal, socket) do
         Map.get(socket.assigns, :modals)
@@ -108,10 +110,11 @@ defmodule Frameworks.Pixel.ModalView do
 
       def modals(%{assigns: %{modals: modals}} = socket), do: modals
       def modals(_socket), do: []
-
-      def modal_id(%{live_component: %{ref: %{id: id}}}), do: id
     end
   end
+
+  def modal_id(%{live_component: live_component}), do: modal_id(live_component)
+  def modal_id(%{ref: %{id: id}}), do: id
 
   attr(:modals, :map, default: [])
 
@@ -184,7 +187,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def max(assigns) do
     ~H"""
@@ -210,7 +213,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def full(assigns) do
     ~H"""
@@ -218,12 +221,12 @@ defmodule Frameworks.Pixel.ModalView do
     <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain">
+          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
             <.body live_component={@live_component} />
           </div>
           <%!-- TOOLBAR --%>
           <div class="flex-shrink-0">
-            <.toolbar back_button={close_icon_label_button(@live_component)} />
+            <.toolbar close_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
@@ -231,31 +234,26 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def page(assigns) do
     ~H"""
       <div class={"modal-page w-[960px] p-4 sm:px-10 sm:py-20 h-full"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-8 pb-8"}>
-          <%!-- HEADER --%>
-          <div class="shrink-0 px-8">
-            <div class="flex flex-row">
-              <div class="flex-grow">
-                <.title2 live_component={@live_component} />
-              </div>
-              <Button.dynamic {close_icon_button(@live_component)} />
-            </div>
-          </div>
+        <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
             <.body live_component={@live_component} />
+          </div>
+           <%!-- TOOLBAR --%>
+           <div class="flex-shrink-0">
+            <.toolbar close_button={close_icon_label_button(@live_component)} />
           </div>
         </div>
       </div>
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def sheet(assigns) do
     ~H"""
@@ -279,7 +277,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def dialog(assigns) do
     ~H"""
@@ -298,7 +296,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :string, required: true)
+  attr(:live_component, :map, required: true)
 
   def notification(assigns) do
     ~H"""
@@ -345,6 +343,7 @@ defmodule Frameworks.Pixel.ModalView do
       <.live_component
         id={@live_component.ref.id}
         module={@live_component.ref.module}
+        modal_id={modal_id(@live_component)}
         {@live_component.params}
       />
     """

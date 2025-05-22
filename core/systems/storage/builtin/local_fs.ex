@@ -13,7 +13,24 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
   @impl true
   def list_files(folder) do
     folder_path = get_full_path(folder)
+    File.mkdir(folder_path)
+
     File.ls!(folder_path)
+    |> Enum.map(fn filename ->
+      file_path = Path.join(folder_path, filename)
+      {:ok, %File.Stat{mtime: mtime, size: size}} = File.stat(file_path)
+
+      datetime =
+        mtime
+        |> NaiveDateTime.from_erl!()
+        |> DateTime.from_naive!("Etc/UTC")
+
+      %{
+        path: file_path,
+        size: size,
+        timestamp: datetime
+      }
+    end)
   end
 
   @impl true

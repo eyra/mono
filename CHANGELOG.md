@@ -9,7 +9,22 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#11 unreleased
+## \#15 unreleased
+
+## \#14 2025-04-26
+* Fixed: Next compatability with feldspar version 4 (loading issue)
+
+## \#13 2025-04-25
+* Changed: Refinement of the instruction manual builder based on feedback
+* Fixed: Mobile friendly header title for participant flow
+  
+## \#12 2025-04-19
+* Maintenance release
+
+## \#11 2025-04-09
+
+* Added: Participant Task List Mobile
+* Changed: Participant Task List Desktop replaced Master-Detail with Task List centered view just like Mobile.
 
 ## \#10 2025-03-26
 

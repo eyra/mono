@@ -10,36 +10,51 @@ defmodule Systems.Workflow.ToolRefView do
         %{
           id: id,
           title: title,
+          icon: icon,
           tool_ref: tool_ref,
           task: task,
           visible: visible,
           user: user,
-          timezone: timezone
-        },
+          participant: participant,
+          timezone: timezone,
+          user_state_data: user_state_data
+        } = params,
         socket
       ) do
+    # Optional param only used when the tool ref view is used as a modal
+    modal_id = Map.get(params, :modal_id)
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         title: title,
+        icon: icon,
         tool_ref: tool_ref,
         task: task,
         visible: visible,
         user: user,
-        timezone: timezone
+        participant: participant,
+        timezone: timezone,
+        user_state_data: user_state_data,
+        modal_id: modal_id
       )
       |> reset_fabric()
+      |> update_tool_ref_name()
       |> update_launcher()
     }
   end
 
-  def update_launcher(%{assigns: %{tool_ref: tool_ref, user: user}} = socket) do
+  def update_tool_ref_name(%{assigns: %{tool_ref: %{id: id}}} = socket) do
+    socket |> assign(tool_ref_name: "tool_ref_#{id}")
+  end
+
+  def update_launcher(%{assigns: %{tool_ref: tool_ref}} = socket) do
     launcher =
       tool_ref
       |> Workflow.ToolRefModel.tool()
-      |> Concept.ToolModel.launcher(user)
+      |> Concept.ToolModel.launcher()
 
     socket |> update_launcher(launcher)
   end
@@ -47,17 +62,30 @@ defmodule Systems.Workflow.ToolRefView do
   def update_launcher(
         %{
           assigns: %{
-            tool_ref: %{id: id},
+            tool_ref_name: tool_ref_name,
             user: user,
+            participant: participant,
             timezone: timezone,
             title: title,
-            visible: visible
+            icon: icon,
+            visible: visible,
+            user_state_data: user_state_data
           }
         } = socket,
         %{module: module, params: params}
       ) do
-    params = Map.merge(params, %{user: user, timezone: timezone, title: title, visible: visible})
-    child = Fabric.prepare_child(socket, "tool_ref_#{id}", module, params)
+    params =
+      Map.merge(params, %{
+        user: user,
+        participant: participant,
+        timezone: timezone,
+        title: title,
+        icon: icon,
+        visible: visible,
+        user_state_data: user_state_data
+      })
+
+    child = Fabric.prepare_child(socket, tool_ref_name, module, params)
     socket |> show_child(child)
   end
 
@@ -66,6 +94,12 @@ defmodule Systems.Workflow.ToolRefView do
     tool_ref = Map.get(socket.assigns, :tool_ref)
     Logger.warning("No module launcher found for #{inspect(tool_ref)}")
     socket
+  end
+
+  @impl true
+  def handle_event("close", _payload, %{assigns: %{modal_id: modal_id}} = socket) do
+    # `modal_id` is optionally present when the `ToolRefView` is used as a modal
+    {:noreply, socket |> send_event(:root, "close_modal", %{"item" => modal_id})}
   end
 
   @impl true
@@ -79,15 +113,19 @@ defmodule Systems.Workflow.ToolRefView do
   end
 
   @impl true
-  def handle_event("tool_initialized", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "tool_initialized")}
+  def handle_event(
+        "tool_initialized",
+        _payload,
+        %{assigns: %{tool_ref_name: tool_ref_name}} = socket
+      ) do
+    {:noreply, socket |> send_event(tool_ref_name, "tool_initialized")}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div class="tool-ref-view w-full h-full">
-      <.stack fabric={@fabric} />
+      <.child name={@tool_ref_name} fabric={@fabric} />
     </div>
     """
   end

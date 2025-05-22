@@ -50,3 +50,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "zip-too-large"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr "Sta per completare alcuni passaggi per donare i suoi dati. Prima della donazione, può visualizzare i dati e poi dare il consenso per condividerli. Il caricamento della pagina potrebbe richiedere qualche istante — grazie per la pazienza."
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Continua"

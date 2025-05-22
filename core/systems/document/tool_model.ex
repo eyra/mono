@@ -38,7 +38,7 @@ defmodule Systems.Document.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def preload_graph(:down), do: preload_graph([])
@@ -54,7 +54,7 @@ defmodule Systems.Document.ToolModel do
     def ready?(tool), do: Document.ToolModel.ready?(tool)
     def form(_, _), do: Document.ToolForm
 
-    def launcher(%{id: id, ref: ref}, _user),
+    def launcher(%{id: id, ref: ref}),
       do: %{
         module: Document.PDFNavView,
         params: %{

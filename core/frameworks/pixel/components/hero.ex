@@ -20,6 +20,9 @@ defmodule Frameworks.Pixel.Hero do
     <%= if @type === :illustration2 do %>
       <.illustration2 {@params} />
     <% end %>
+    <%= if @type === :landing_page do %>
+      <.landing_page {@params} />
+    <% end %>
     """
   end
 
@@ -57,32 +60,30 @@ defmodule Frameworks.Pixel.Hero do
     <div class="w-full h-full" data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-full bg-grey4">
         <%= if @image_info do %>
-          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
+          <Image.blurhash id="hero" image={@image_info} />
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-14 sm:mr-14 text-shadow-md h-full">
-            <div class="flex flex-col gap-8 h-full">
-              <div class="flex-grow" />
+            <div class="flex flex-col gap-8 h-full justify-center">
               <div class="flex flex-row gap-12 items-center">
                 <%= if @logo_url do %>
                 <div>
                   <.image_preview
                     image_url={@logo_url}
                     placeholder={"/images/logo_placeholder.svg"}
-                    shape="w-[96px] h-[96px] rounded-full"
+                    shape="w-[48px] h-[48px] sm:w-[96px] sm:h-[96px] rounded-full"
                   />
                 </div>
                 <% end %>
                 <div class="flex flex-col gap-2">
                   <%= if @title do %>
-                    <Text.title2 margin="" color="text-white"><%= @title %></Text.title2>
+                    <div class="text-title6 font-title6 sm:text-title2 sm:font-title2 text-white"><%= @title %></div>
                   <% end %>
                   <%= if @subtitle do %>
-                    <Text.title6 align="text-left" color="text-white"><%= @subtitle %></Text.title6>
+                  <div class="text-caption font-caption sm:text-title6 sm:font-title6 text-white"><%= @subtitle %></div>
                   <% end %>
                 </div>
               </div>
-              <div class="flex-grow" />
             </div>
           </div>
         </div>
@@ -102,7 +103,7 @@ defmodule Frameworks.Pixel.Hero do
     <div class="w-full h-full" data-native-title={@title}>
       <div class="relative overflow-hidden w-full h-full bg-grey4">
         <%= if @image_info do %>
-          <Image.blurhash id="hero" image={@image_info} transition="duration-1000" />
+          <Image.blurhash id="hero" image={@image_info} />
         <% end %>
         <div class="absolute z-20 top-0 left-0 w-full h-full bg-opacity-20 bg-black">
           <div class="ml-6 mr-6 sm:ml-20 sm:mr-20 text-shadow-md h-full">
@@ -162,6 +163,7 @@ defmodule Frameworks.Pixel.Hero do
   attr(:illustration, :any, default: "illustration.svg")
   attr(:text_color, :string, default: "text-white")
   attr(:bg_color, :string, default: "bg-primary")
+  attr(:caption, :string, default: nil)
 
   def illustration2(assigns) do
     ~H"""
@@ -173,9 +175,46 @@ defmodule Frameworks.Pixel.Hero do
         <p class="text-title5 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
           <%= @title %>
         </p>
+
+        <%= if @caption do %>
+          <p class="text-title6 sm:text-title5 mt-2 mx-6 lg:ml-14">
+            <%= @caption %>
+          </p>
+        <% end %>
+
       </div>
       <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
         <img src={~p"/images/#{@illustration}"} alt="">
+      </div>
+    </div>
+    """
+  end
+
+  attr(:title, :string, required: true)
+  attr(:illustration, :any, default: "illustration.svg")
+  attr(:text_color, :string, default: "text-white")
+  attr(:bg_color, :string, default: "bg-primary")
+  attr(:caption, :string, default: nil)
+
+  def landing_page(assigns) do
+    ~H"""
+    <div
+      class={"flex justify-between items-center h-full #{@text_color} #{@bg_color}"}
+      data-native-title={@title}
+    >
+      <div class="w-4/5 py-4">
+        <p class="text-title6 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
+          <%= @title %>
+        </p>
+
+        <%= if @caption do %>
+          <p class="text-title7 sm:text-title5 mt-2 mx-6 lg:ml-14">
+            <%= @caption %>
+          </p>
+        <% end %>
+      </div>
+      <div class="w-1/5 h-full">
+        <img class="object-cover h-full" src={~p"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """

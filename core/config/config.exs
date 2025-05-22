@@ -70,12 +70,6 @@ config :core, Oban,
     email_delivery: 1,
     storage_delivery: 1,
     ris_processor: 1
-  ],
-  plugins: [
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
-     ]}
   ]
 
 config :packmatic, Packmatic.Source.URL,

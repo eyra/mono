@@ -8,7 +8,7 @@ defmodule Frameworks.GreenLight.LiveHook do
   require Logger
 
   @impl true
-  def on_mount(live_view_module, params, session, socket) do
+  def mount(live_view_module, params, session, socket) do
     if access_allowed?(live_view_module, params, session, socket) do
       {:cont, socket}
     else
@@ -23,12 +23,11 @@ defmodule Frameworks.GreenLight.LiveHook do
       can_access? =
         auth_module().can_access?(
           user,
-          live_view_module.get_authorization_context(params, session, socket)
-          |> print_auth_roles(),
+          live_view_module.get_authorization_context(params, session, socket),
           live_view_module
         )
 
-      user && Logger.notice("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
+      user && Logger.debug("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
       can_access?
     else
       auth_module().can_access?(user, live_view_module)

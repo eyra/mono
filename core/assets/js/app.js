@@ -32,9 +32,26 @@ import { Sticky } from "./sticky";
 import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
-import { TouchstartSensitive } from "./touchstart_sensitive";
-
+import { Blurhash } from "./blurhash";
+import { UserState } from "./user_state";
+import { UserStateObserver } from "./user_state_observer";
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
+
+// Force the active state on iOS touch devices by adding a touchstart
+// listener to all elements with the class "touchstart-sensitive"
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    const elements = document.querySelectorAll(".touchstart-sensitive");
+    elements.forEach((element) => {
+      if (!element.classList.contains("touchstart-listener")) {
+        element.addEventListener("touchstart", () => {});
+        element.classList.add("touchstart-listener");
+      }
+    });
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
 
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind == "initial") {
@@ -42,46 +59,6 @@ window.addEventListener("phx:page-loading-stop", (info) => {
     Viewport.sendToServer();
   }
 });
-
-window.blurHash = () => {
-  return {
-    show: true,
-    rendered: false,
-    showBlurHash() {
-      return this.show !== false;
-    },
-    reset() {
-      console.log("Reset blurhash");
-    },
-    hideBlurHash() {
-      if (!liveSocket.socket.isConnected()) {
-        return;
-      }
-      this.show = false;
-    },
-    render() {
-      console.log("Render blurhash");
-      const img = this.$el.getElementsByTagName("img")[0];
-      if (img.complete) {
-        this.show = false;
-        return;
-      }
-      if (this.rendered) {
-        return;
-      }
-      this.rendered = true;
-      const canvas = this.$el.getElementsByTagName("canvas")[0];
-      const blurhash = canvas.dataset.blurhash;
-      const width = parseInt(canvas.getAttribute("width"), 10);
-      const height = parseInt(canvas.getAttribute("height"), 10);
-      const pixels = decode(blurhash, width, height);
-      const ctx = canvas.getContext("2d");
-      const imageData = ctx.createImageData(width, height);
-      imageData.data.set(pixels);
-      ctx.putImageData(imageData, 0, 0);
-    },
-  };
-};
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -120,7 +97,9 @@ let Hooks = {
   TimeZone,
   ResetScroll,
   FullscreenImage,
-  TouchstartSensitive,
+  Blurhash,
+  UserState,
+  UserStateObserver,
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {

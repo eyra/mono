@@ -50,3 +50,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "zip-too-large"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr ""

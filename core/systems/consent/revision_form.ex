@@ -38,6 +38,10 @@ defmodule Systems.Consent.RevisionForm do
 
   # Saving
 
+  def save(socket, nil, _) do
+    socket
+  end
+
   def save(socket, entity, attrs) do
     changeset = Consent.RevisionModel.changeset(entity, attrs)
 

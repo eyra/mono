@@ -67,6 +67,16 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+config :core, Oban,
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60},
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
+     ]}
+  ]
+
 config :core,
   admins: [
     "*@eyra.co"

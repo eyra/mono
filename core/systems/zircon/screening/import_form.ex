@@ -140,8 +140,8 @@ defmodule Systems.Zircon.Screening.ImportForm do
     socket
     |> assign(
       import_button: %{
-        label: dgettext("eyra-zircon", "import_form.button"),
-        field: uploads.file.ref
+        action: %{type: :label, field: uploads.file.ref},
+        face: %{type: :primary, label: dgettext("eyra-zircon", "import_form.button")}
       }
     )
   end
@@ -179,7 +179,7 @@ defmodule Systems.Zircon.Screening.ImportForm do
               <.live_file_input upload={@uploads.file} />
             </div>
             <div class="flex-wrap">
-              <Button.primary_label {@import_button} />
+              <Button.dynamic {@import_button} />
             </div>
           </div>
         </.form>

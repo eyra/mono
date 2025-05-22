@@ -23,7 +23,9 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
         |> element("[phx-click=\"confirm\"]")
         |> render_click()
 
-      assert to == "/user/signin?#{URI.encode_query(%{email: user.email})}"
+      assert to ==
+               "/user/signin?#{URI.encode_query(%{email: user.email})}&status=account_activated_successfully"
+
       assert Account.Public.get_user!(user.id).confirmed_at
     end
 

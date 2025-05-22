@@ -29,7 +29,7 @@ defmodule Systems.Storage.Centerdata.EndpointModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def connected?(_endpoint) do

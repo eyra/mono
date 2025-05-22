@@ -6,17 +6,30 @@ defmodule Systems.Manual.ChapterView do
   use CoreWeb, :live_component
 
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
+  import Core.ImageHelpers, only: [decode_image_info: 1]
 
+  alias Frameworks.Utility.UserState
   alias Systems.Userflow
 
   @impl true
-  def update(%{chapter: chapter, user: user}, socket) do
-    selected_page_id = Map.get(socket.assigns, :selected_page_id, nil)
+  def update(
+        %{manual_id: manual_id, chapter: chapter, user: user, user_state_data: user_state_data},
+        socket
+      ) do
+    user_state_key = "manual-#{manual_id}-chapter-#{chapter.id}-selected-page-id"
+    user_state_value = UserState.integer_value(user_state_data, user_state_key)
+    selected_page_id = Map.get(socket.assigns, :selected_page_id, user_state_value)
 
     {
       :ok,
       socket
-      |> assign(chapter: chapter, user: user, selected_page_id: selected_page_id)
+      |> assign(
+        manual_id: manual_id,
+        chapter: chapter,
+        user: user,
+        selected_page_id: selected_page_id,
+        user_state_key: user_state_key
+      )
       |> mark_chapter_visited()
       |> update_ui()
     }
@@ -30,8 +43,8 @@ defmodule Systems.Manual.ChapterView do
     |> update_selected_page()
     |> mark_selected_page_visited()
     |> update_indicator()
-    |> update_mobile_back_button()
-    |> update_desktop_back_button()
+    |> update_mobile_close_button()
+    |> update_desktop_close_button()
     |> update_left_button()
     |> update_right_button()
     |> update_fullscreen_button()
@@ -61,12 +74,12 @@ defmodule Systems.Manual.ChapterView do
       pages
       |> Enum.sort_by(& &1.userflow_step.order)
       |> Enum.with_index()
-      |> Enum.map(fn {page, index} ->
+      |> Enum.map(fn {%{image: image, id: id, title: title, text: text}, index} ->
         %{
-          id: page.id,
-          title: page.title,
-          image: page.image,
-          text: page.text,
+          id: id,
+          title: title,
+          image_info: decode_image_info(image),
+          text: text,
           number: index + 1
         }
       end)
@@ -97,29 +110,29 @@ defmodule Systems.Manual.ChapterView do
     socket |> assign(selected_page: selected_page, selected_page_id: selected_page.id)
   end
 
-  defp update_mobile_back_button(socket) do
-    mobile_back_button = %{
-      action: %{type: :send, event: "back"},
-      face: %{type: :icon, icon: :overview}
+  defp update_mobile_close_button(socket) do
+    mobile_close_button = %{
+      action: %{type: :send, event: "close"},
+      face: %{type: :icon, icon: :close}
     }
 
     socket
-    |> assign(mobile_back_button: mobile_back_button)
+    |> assign(mobile_close_button: mobile_close_button)
   end
 
-  defp update_desktop_back_button(socket) do
-    desktop_back_button = %{
-      action: %{type: :send, event: "back"},
+  defp update_desktop_close_button(socket) do
+    desktop_close_button = %{
+      action: %{type: :send, event: "close"},
       face: %{
         type: :plain,
-        label: dgettext("eyra-manual", "chapter.overview"),
-        icon: :overview,
+        icon: :close,
+        label: dgettext("eyra-pixel", "modal.back.button"),
         icon_align: :left
       }
     }
 
     socket
-    |> assign(desktop_back_button: desktop_back_button)
+    |> assign(desktop_close_button: desktop_close_button)
   end
 
   defp update_right_button(%{assigns: %{pages: pages, selected_page: selected_page}} = socket) do
@@ -148,21 +161,16 @@ defmodule Systems.Manual.ChapterView do
     |> assign(right_button: right_button)
   end
 
-  defp update_left_button(%{assigns: %{selected_page: selected_page, pages: pages}} = socket) do
-    left_button =
-      if first_page?(selected_page, pages) do
-        nil
-      else
-        %{
-          action: %{type: :send, event: "previous_page"},
-          face: %{
-            type: :plain,
-            label: dgettext("eyra-manual", "chapter.previous.button"),
-            icon: :back,
-            icon_align: :left
-          }
-        }
-      end
+  defp update_left_button(socket) do
+    left_button = %{
+      action: %{type: :send, event: "previous_page"},
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-manual", "chapter.previous.button"),
+        icon: :back,
+        icon_align: :left
+      }
+    }
 
     socket |> assign(left_button: left_button)
   end
@@ -182,10 +190,10 @@ defmodule Systems.Manual.ChapterView do
     socket |> assign(fullscreen_button: fullscreen_button)
   end
 
-  def handle_event("back", _, socket) do
+  def handle_event("close", _, socket) do
     {
       :noreply,
-      socket |> send_event(:parent, "back")
+      socket |> send_event(:parent, "close")
     }
   end
 
@@ -196,10 +204,21 @@ defmodule Systems.Manual.ChapterView do
     }
   end
 
-  def handle_event("previous_page", _, socket) do
+  def handle_event(
+        "previous_page",
+        _,
+        %{assigns: %{selected_page: selected_page, pages: pages}} = socket
+      ) do
+    socket =
+      if first_page?(selected_page, pages) do
+        socket |> send_event(:parent, "back")
+      else
+        socket |> go_to_previous_page()
+      end
+
     {
       :noreply,
-      socket |> go_to_previous_page()
+      socket
     }
   end
 
@@ -218,7 +237,9 @@ defmodule Systems.Manual.ChapterView do
   def handle_event("done", _, socket) do
     {
       :noreply,
-      socket |> send_event(:parent, "back")
+      socket
+      |> send_event(:parent, "done")
+      |> send_event(:parent, "back")
     }
   end
 
@@ -301,7 +322,7 @@ defmodule Systems.Manual.ChapterView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div id="manual_chapter_view" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_page_id} >
       <div class="hidden lg:block">
         <.chapter_desktop
           id={@chapter.id}
@@ -309,7 +330,7 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           pages={@pages}
           selected_page={@selected_page}
-          back_button={@desktop_back_button}
+          close_button={@desktop_close_button}
           left_button={@left_button}
           right_button={@right_button}
           fullscreen_button={@fullscreen_button}
@@ -324,7 +345,7 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           indicator={@indicator}
           selected_page={@selected_page}
-          back_button={@mobile_back_button}
+          close_button={@mobile_close_button}
           left_button={@left_button}
           right_button={@right_button}
           fullscreen_button={@fullscreen_button}

@@ -77,8 +77,8 @@ defmodule Frameworks.Pixel.Content do
           </div>
           <%= if @image do %>
             <%= if @image.type == :catalog do %>
-              <div class="flex-wrap flex-shrink-0 w-30">
-                <.blurhash id={@id} image={@image.info} corners="rounded-br-md rounded-tr-xl md:rounded-tr-md" />
+              <div class="flex-wrap flex-shrink-0 w-30 rounded-br-md rounded-tr-xl md:rounded-tr-md overflow-hidden">
+                <.blurhash id={@id} image={@image.info} />
               </div>
             <% end %>
             <%= if @image.type == :avatar do %>
