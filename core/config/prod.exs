@@ -13,3 +13,4 @@ config :core, SurfConext,
 
 config :core, CoreWeb.Endpoint,
   force_ssl: false
+
