@@ -147,25 +147,33 @@ defmodule Systems.Promotion.FormView do
   end
 
   @impl true
-  def handle_wysiwyg_update(socket) do
+  def handle_wysiwyg_update(%{assigns: assigns} = socket) do
     # When this function is called, we know for sure that a wysiwyg form has been updated.
     # Because we know we only use description and expectations fields in the wysiwyg forms, we can safely
     # extract them from the socket assigns.
+    expectations = assigns[:expectations]
+    description = assigns[:description]
+    entity = assigns.entity
 
-    [field, value] =
-      cond do
-        Map.has_key?(socket.assigns, :expectations) ->
-          [:expectations, socket.assigns.expectations]
+    cond do
+      expectations && description ->
+        attributes = %{expectations: expectations, description: description}
+        changeset = Promotion.Model.changeset(entity, :save, attributes)
+        save(socket, changeset)
 
-        Map.has_key?(socket.assigns, :description) ->
-          [:description, socket.assigns.description]
-      end
+      expectations ->
+        attributes = %{expectations: expectations}
+        changeset = Promotion.Model.changeset(entity, :save, attributes)
+        save(socket, changeset)
 
-    changeset =
-      Promotion.Model.changeset(socket.assigns.entity, :save, %{field => value})
+      description ->
+        attributes = %{description: description}
+        changeset = Promotion.Model.changeset(entity, :save, attributes)
+        save(socket, changeset)
 
-    socket
-    |> save(changeset)
+      true ->
+        socket
+    end
   end
 
   # Events
