@@ -13,9 +13,6 @@ defmodule Systems.Promotion.LandingPage do
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
 
-  import CoreWeb.Devices
-  import CoreWeb.Language
-
   alias Systems.Promotion
 
   @impl true
