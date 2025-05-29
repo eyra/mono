@@ -12,4 +12,4 @@ config :core, SurfConext,
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
 config :core, CoreWeb.Endpoint,
-  force_ssl: [rewrite_on: [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]]
+  force_ssl: [rewrite_on: [:x_forwarded_host, :x_forwarded_port]]
