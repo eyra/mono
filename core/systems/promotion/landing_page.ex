@@ -161,16 +161,7 @@ defmodule Systems.Promotion.LandingPage do
           url={@vm.banner_url}
           logo_url={@vm.logo_url}
         />
-        <.spacing value="L" />
-        <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
-          <.devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
-          <.language
-            label={dgettext("eyra-promotion", "language.available.label")}
-            language={@vm.language}
-          />
-        </div>
         <.spacing value="XL" />
-
         <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" />
       </Area.content>
     </.live_website>
