@@ -144,11 +144,13 @@ defmodule Systems.Promotion.LandingPage do
 
         <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
         <.spacing value="M" />
-        <Text.body_large><%= @vm.expectations %></Text.body_large>
+        <%!-- These fields use the raw() helper to make sure contents from the wysiwyg are rendered --%>
+        <Text.body_large><%= raw(@vm.expectations) %></Text.body_large>
         <.spacing value="M" />
         <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
         <.spacing value="M" />
-        <Text.body_large><%= @vm.description %></Text.body_large>
+        <%!-- These fields use the raw() helper to make sure contents from the wysiwyg are rendered --%>
+        <Text.body_large><%= raw(@vm.description) %></Text.body_large>
         <.spacing value="L" />
 
         <.advert_banner

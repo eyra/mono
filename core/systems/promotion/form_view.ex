@@ -1,6 +1,7 @@
 defmodule Systems.Promotion.FormView do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
+  use Frameworks.Pixel.WysiwygAreaHelpers
 
   alias Systems.{
     Promotion
@@ -58,6 +59,7 @@ defmodule Systems.Promotion.FormView do
       |> update_image_info()
       |> update_image_picker_button()
       |> update_theme_labels()
+      |> update_wysiwyg_form()
       |> compose_child(:themes)
       |> validate_for_publish()
     }
@@ -132,6 +134,40 @@ defmodule Systems.Promotion.FormView do
     end
   end
 
+  def update_wysiwyg_form(
+        %{assigns: %{entity: %{expectations: expectations, description: description}}} = socket
+      ) do
+    wysiwyg_form =
+      to_form(%{
+        "expectations" => expectations || "",
+        "description" => description || ""
+      })
+
+    socket |> assign(wysiwyg_form: wysiwyg_form)
+  end
+
+  @impl true
+  def handle_wysiwyg_update(socket) do
+    # When this function is called, we know for sure that a wysiwyg form has been updated.
+    # Because we know we only use description and expectations fields in the wysiwyg forms, we can safely
+    # extract them from the socket assigns.
+
+    [field, value] =
+      cond do
+        Map.has_key?(socket.assigns, :expectations) ->
+          [:expectations, socket.assigns.expectations]
+
+        Map.has_key?(socket.assigns, :description) ->
+          [:description, socket.assigns.description]
+      end
+
+    changeset =
+      Promotion.Model.changeset(socket.assigns.entity, :save, %{field => value})
+
+    socket
+    |> save(changeset)
+  end
+
   # Events
 
   @impl true
@@ -175,14 +211,38 @@ defmodule Systems.Promotion.FormView do
           <.spacing value="XS" />
           <.child name={:themes} fabric={@fabric} />
           <.spacing value="XL" />
+        </.form>
+
 
           <Text.title3><%= dgettext("eyra-promotion", "copy.title") %></Text.title3>
-          <.text_area form={form} field={:expectations} placeholder={dgettext("eyra-promotion", "expectations.placeholder")} label_text={dgettext("eyra-promotion", "expectations.label")} />
+
+          <.form id={"#{@id}_wysiwyg_form_expectations"} :let={form} for={@wysiwyg_form} phx-change="save_wysiwyg" phx-target={@myself} >
+            <.wysiwyg_area
+              form={form}
+              field={:expectations}
+              label_text={dgettext("eyra-promotion", "expectations.placeholder")}
+              min_height="min-h-[122px]"
+              max_height="max-h-[512px]"
+              reserve_error_space={false}
+            />
+          </.form>
           <.spacing value="XS" />
 
-          <.text_area form={form} field={:description} placeholder={dgettext("eyra-promotion", "background.placeholder")} label_text={dgettext("eyra-promotion", "background.label")} />
+
+          <.form id={"#{@id}_wysiwyg_form_description"} :let={form} for={@wysiwyg_form} phx-change="save_wysiwyg" phx-target={@myself} >
+            <.wysiwyg_area
+              form={form}
+              field={:description}
+              label_text={dgettext("eyra-promotion", "background.placeholder")}
+              min_height="min-h-[122px]"
+              max_height="max-h-[512px]"
+              reserve_error_space={false}
+            />
+          </.form>
           <.spacing value="L" />
 
+
+        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
           <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
           <.photo_input
             static_path={&CoreWeb.Endpoint.static_path/1}
@@ -201,7 +261,8 @@ defmodule Systems.Promotion.FormView do
           />
           <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
         </.form>
-    </div>
+
+      </div>
     """
   end
 end
