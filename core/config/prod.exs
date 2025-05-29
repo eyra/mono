@@ -11,6 +11,4 @@ config :core, SurfConext,
   site: "https://connect.test.surfconext.nl",
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
-config :core, CoreWeb.Endpoint,
-  force_ssl: false
-
+config :core, CoreWeb.Endpoint, force_ssl: false
