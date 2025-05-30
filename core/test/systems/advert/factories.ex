@@ -72,6 +72,8 @@ defmodule Systems.Advert.Factories do
 
     member = Crew.Factories.create_member(crew, user)
 
+    identifier = identifier ++ ["member=#{member.id}"]
+
     Crew.Factories.create_task(crew, member, identifier,
       status: status,
       expired: expired,
