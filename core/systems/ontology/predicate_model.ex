@@ -4,7 +4,7 @@ defmodule Systems.Ontology.PredicateModel do
 
   alias Systems.Ontology
   alias Systems.Account
-  
+
   schema "ontology_predicate" do
     field(:type_negated?, :boolean, default: false)
 
@@ -35,4 +35,4 @@ defmodule Systems.Ontology.PredicateModel do
 
   def preload_graph(:down), do: []
   def preload_graph(:up), do: [:subject, :type, :object]
-end 
+end

@@ -1,6 +1,6 @@
 defmodule Systems.Ontology.Ref do
   @moduledoc"""
-    A module referencing a model in the Ontology. 
+    A module referencing a model in the Ontology.
 
     One of the `term` or `predicate` must be present.
   """

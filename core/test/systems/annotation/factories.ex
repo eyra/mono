@@ -10,14 +10,14 @@ defmodule Systems.Annotation.Factories do
         reference = insert_annotation_ref(ref_type, annotation)
         Factories.insert!(:annotation, %{type: type, value: value, author: author, ai_generated: ai_generated?, references: [reference]})
     end
-    
+
     def insert_annotation(%Ontology.ConceptModel{} = type, value, %{} = author,  %Ontology.ConceptModel{} = ref_type, %Ontology.ConceptModel{} = concept, opts) do
         ai_generated? = Keyword.get(opts, :ai_generated, false)
         ontology_ref = Ontology.Factories.insert_ref(concept)
         reference = insert_annotation_ref(ref_type, ontology_ref)
         Factories.insert!(:annotation, %{type: type, value: value, author: author, ai_generated: ai_generated?, references: [reference]})
     end
- 
+
     def insert_annotation(%Ontology.ConceptModel{} = type, value, %{} = author,  %Ontology.ConceptModel{} = ref_type, %Ontology.PredicateModel{} = predicate, opts) do
         ai_generated? = Keyword.get(opts, :ai_generated, false)
         ontology_ref = Ontology.Factories.insert_ref(predicate)

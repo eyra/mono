@@ -1,5 +1,5 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---

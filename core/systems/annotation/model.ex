@@ -7,14 +7,14 @@ defmodule Systems.Annotation.Model do
   alias Systems.Annotation
   alias Systems.Ontology
   alias Systems.Account
-  
+
   schema "annotation" do
     field(:value, :string)
     field(:ai_generated?, :boolean)
 
     belongs_to(:type, Ontology.ConceptModel)
     belongs_to(:author, Account.User)
-    
+
     many_to_many(:references, Annotation.Ref,
       join_through: Annotation.Assoc,
       join_keys: [annotation_id: :id, ref_id: :id]

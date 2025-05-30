@@ -24,7 +24,7 @@ defmodule Annotation.PublicTest do
 
     test "insert_annotation/5 insert annotation on existing predicate", %{author: author, annotation_type: type, annotation_ref_type: ref_type} do
         predicate = Factories.insert!(:ontology_predicate)
-        assert {:ok, %{annotation: %Annotation.Model{}}} = insert_annotation(type, "Comment on existing predicate", author, ref_type, predicate) 
+        assert {:ok, %{annotation: %Annotation.Model{}}} = insert_annotation(type, "Comment on existing predicate", author, ref_type, predicate)
     end
 
     test "insert_annotation/5 insert nil reference", %{author: author, annotation_type: type, annotation_ref_type: ref_type} do

@@ -28,7 +28,7 @@ defmodule Ontology.PublicTest do
         end
 
         test "insert + error (different authors)", %{author: author} do
-    
+
             author2 = Factories.insert!(:member)
 
             {:ok, _} = insert_concept("Gravitational Force", author)
@@ -155,7 +155,7 @@ defmodule Ontology.PublicTest do
             assert [
                 %Ontology.PredicateModel{id: ^id1},
                 %Ontology.PredicateModel{id: ^id2}
-            ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()  
+            ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
 
             assert id1 != id2
         end
@@ -174,8 +174,8 @@ defmodule Ontology.PublicTest do
               ] = changeset.errors
 
             assert [%Ontology.PredicateModel{id: ^id1}] = from(Ontology.PredicateModel) |> Core.Repo.all()
-        end 
-        
+        end
+
     end
 
     describe "list concepts" do
@@ -188,7 +188,7 @@ defmodule Ontology.PublicTest do
             _concept_c = Factories.insert!(:ontology_concept, %{phrase: "Weak Nuclear Force", author: author_2})
 
             assert [
-                %Ontology.ConceptModel{id: ^concept_a_id}, 
+                %Ontology.ConceptModel{id: ^concept_a_id},
                 %Ontology.ConceptModel{id: ^concept_b_id},
             ] = list_concepts_by_author(author_1)
         end

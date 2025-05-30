@@ -67,8 +67,8 @@ defmodule Systems.Annotation.Public do
 
     def insert_annotation(%Multi{} = multi, multi_name, multi_child_name, type, value, user, opts) do
         Multi.insert(
-            multi, 
-            multi_name, 
+            multi,
+            multi_name,
             fn multi_state ->
                 child = Map.get(multi_state, multi_child_name)
                 prepare_annotation(type, [child], value, user, opts)
@@ -81,7 +81,7 @@ defmodule Systems.Annotation.Public do
 
         %Annotation.Model{}
         |> Annotation.Model.changeset(%{
-            value: value, 
+            value: value,
             ai_generated?: ai_generated?
         })
         |> put_assoc(:type, type)
@@ -92,12 +92,12 @@ defmodule Systems.Annotation.Public do
 
     def upsert_annotation_ref(%Multi{} = multi, multi_name, multi_child_name, type) do
         Multi.insert(
-            multi, 
-            multi_name, 
+            multi,
+            multi_name,
             fn multi_state ->
                 child = Map.get(multi_state, multi_child_name)
                 prepare_annotation_ref(type, child)
-            end, 
+            end,
             @annotation_ref_conflict_opts
         )
     end

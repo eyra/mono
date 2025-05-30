@@ -25,16 +25,16 @@ defmodule Systems.Onyx.Seeds do
 
     defconcepts = fn(keyword) ->
       Enum.map(keyword, fn({atom, text}) ->
-        atom 
-        |> Atom.to_string() 
-        |> String.upcase() 
+        atom
+        |> Atom.to_string()
+        |> String.upcase()
         |> defconcept.(text)
       end)
     end
 
     defgroup = fn(objects, subject) ->
       Enum.each(objects, fn(object) ->
-        insert_predicate(subject, subsumes, object, user) 
+        insert_predicate(subject, subsumes, object, user)
       end)
       objects
     end
@@ -54,7 +54,7 @@ defmodule Systems.Onyx.Seeds do
       interacts: "A relationship between two concepts that interact"
     ])
     |> defgroup.(deftype.("__predicate_type__", "A relationship between two concepts"))
-   
+
     # Annotation types
 
     defconcepts.([
@@ -108,27 +108,27 @@ defmodule Systems.Onyx.Seeds do
     |> defgroup.(deftype.("__research_design_template__", "A template for a research design"))
 
    defgroup.([
-      population, 
+      population,
       intervention,
       comparison,
       outcome
     ], p_i_c_o)
 
     defgroup.([
-      setting, 
-      population, 
-      intervention, 
-      comparison, 
+      setting,
+      population,
+      intervention,
+      comparison,
       outcome # Evaluation
     ])
-  
+
     defgroup.([
       population, # Sample
-      phenomenon, 
+      phenomenon,
       outcome # Evaluation
     ], s_pi_d_e_r)
   end
 end
 
 # Run the seeds
-Systems.Onyx.Seeds.run() 
+Systems.Onyx.Seeds.run()

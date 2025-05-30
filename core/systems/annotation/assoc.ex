@@ -7,7 +7,7 @@ defmodule Systems.Annotation.Assoc do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  
+
   alias Systems.Annotation
 
   schema "annotation_assoc" do
@@ -16,7 +16,7 @@ defmodule Systems.Annotation.Assoc do
 
     timestamps()
   end
-  
+
   @fields ~w()a
   @required_fields ~w()a
 
@@ -31,7 +31,7 @@ defmodule Systems.Annotation.Assoc do
   end
 
   def preload_graph(:down), do: [:ref]
-  def preload_graph(:up), do: [:annotation]  
+  def preload_graph(:up), do: [:annotation]
 
   def preload_graph(:annotation), do: [annotation: Annotation.Model.preload_graph(:up)]
   def preload_graph(:ref), do: [ref: Annotation.Ref.preload_graph(:down)]

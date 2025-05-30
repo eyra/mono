@@ -10,7 +10,7 @@ defmodule Systems.Annotation.OntologyAssoc do
 
   alias Systems.Annotation
   alias Systems.Ontology
-  
+
   schema "association_ontology_assoc" do
     belongs_to(:annotation, Annotation.Model)
     belongs_to(:ontology_ref, Ontology.Ref)
@@ -23,7 +23,7 @@ defmodule Systems.Annotation.OntologyAssoc do
 
   def changeset(ontology_assoc, attrs) do
     cast(ontology_assoc, attrs, @fields)
-  end   
+  end
 
   def validate(changeset) do
     changeset

@@ -1,6 +1,6 @@
 defmodule Systems.Ontology.Public do
   use Core, :auth
-  
+
   import Ecto.Query, only: [order_by: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
   import Systems.Ontology.Queries
@@ -11,10 +11,10 @@ defmodule Systems.Ontology.Public do
   alias Systems.Ontology
 
   @ontology_ref_conflict_opts [
-    conflict_target: [:concept_id, :predicate_id], 
+    conflict_target: [:concept_id, :predicate_id],
     on_conflict: {:replace_all_except, [:id]}
   ]
-  
+
   # Concept
 
   def get_concept(id) when is_binary(id) do
@@ -92,12 +92,12 @@ defmodule Systems.Ontology.Public do
 
   def upsert_ontology_ref(%Multi{} = multi, multi_name, multi_child_name) do
     Multi.insert(
-        multi, 
-        multi_name, 
+        multi,
+        multi_name,
         fn multi_state ->
             child = Map.get(multi_state, multi_child_name)
             prepare_ontology_ref(child)
-        end, 
+        end,
         @ontology_ref_conflict_opts
     )
   end

@@ -112,4 +112,4 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(unique_index(:annotation_assoc, [:annotation_id, :ref_id], name: :annotation_assoc_unique_assoc))
 
   end
-end 
+end

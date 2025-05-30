@@ -284,7 +284,7 @@ defmodule Core.Factories do
 
   def build(:ontology_concept) do
     build(:ontology_concept, %{
-      phrase: Faker.Lorem.words(3..5) |> Enum.join(" "), 
+      phrase: Faker.Lorem.words(3..5) |> Enum.join(" "),
       author: build(:member)
     })
   end
@@ -841,9 +841,9 @@ defmodule Core.Factories do
     {predicate, attributes} = Map.pop(attributes, :ontology_predicate)
 
     # at least one of concept or predicate must be present
-    concept = 
-      if is_nil(concept) && is_nil(predicate), 
-        do: build(:ontology_concept), 
+    concept =
+      if is_nil(concept) && is_nil(predicate),
+        do: build(:ontology_concept),
         else: concept
 
     %Ontology.Ref{
@@ -874,9 +874,9 @@ defmodule Core.Factories do
     {ontology_ref, attributes} = Map.pop(attributes, :ontology_ref)
 
     # at least one of annotation or ontology_ref must be present
-    ontology_ref = 
-      if is_nil(ontology_ref) && is_nil(annotation), 
-        do: build(:ontology_ref), 
+    ontology_ref =
+      if is_nil(ontology_ref) && is_nil(annotation),
+        do: build(:ontology_ref),
         else: ontology_ref
 
     %Annotation.Ref{

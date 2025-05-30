@@ -1,13 +1,13 @@
 defmodule Systems.Ontology.Queries do
     import Ecto.Query
     require Frameworks.Utility.Query
-  
+
     import Frameworks.Utility.Query, only: [build: 3]
 
     alias Systems.Account
     alias Systems.Ontology
- 
-    # CONCEPT 
+
+    # CONCEPT
     def concept_query() do
         from(c in Ontology.ConceptModel, as: :concept)
     end
@@ -24,7 +24,7 @@ defmodule Systems.Ontology.Queries do
         build(concept_query(), :concept, [author_id == ^user_id])
     end
 
-    # PREDICATE 
+    # PREDICATE
 
     def predicate_query() do
         from(p in Ontology.PredicateModel, as: :predicate)

@@ -40,8 +40,8 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.population,
       #   tags: [
-      #     Element.Templates.pico, 
-      #     Element.Templates.pic_o, 
+      #     Element.Templates.pico,
+      #     Element.Templates.pic_o,
       #     Element.Templates.spider
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.population.description")
@@ -51,7 +51,7 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.intervention,
       #   tags: [
-      #     Element.Templates.pico, 
+      #     Element.Templates.pico,
       #     Element.Templates.spice
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.intervention.description")
@@ -61,7 +61,7 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.comparison,
       #   tags: [
-      #     Element.Templates.pico, 
+      #     Element.Templates.pico,
       #     Element.Templates.spice
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.comparison.description")
@@ -71,8 +71,8 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.outcome,
       #   tags: [
-      #     Element.Templates.pico, 
-      #     Element.Templates.picos, 
+      #     Element.Templates.pico,
+      #     Element.Templates.picos,
       #     Element.Templates.spice
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.outcome.description")
@@ -82,7 +82,7 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.phenomenon_of_interest,
       #   tags: [
-      #     Element.Templates.spider, 
+      #     Element.Templates.spider,
       #     Element.Templates.pic_o
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.phenomenon_of_interest.description"),
@@ -92,7 +92,7 @@ defmodule Systems.Zircon.CriteriaView do
       #   type: :research_design_element,
       #   title: Element.Categories.context,
       #   tags: [
-      #     Element.Templates.pic_o, 
+      #     Element.Templates.pic_o,
       #     Element.Templates.spice
       #   ],
       #   description: dgettext("eyra-zircon", "research_design_element.context.description")

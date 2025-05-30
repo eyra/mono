@@ -23,7 +23,7 @@ defmodule Systems.Annotation.Ref do
   @required_fields ~w()a
 
   def changeset(references, attrs) do
-    references  
+    references
     |> cast(attrs, @fields)
   end
 
