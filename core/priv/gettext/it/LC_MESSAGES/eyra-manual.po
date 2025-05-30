@@ -122,7 +122,3 @@ msgstr "Fatto"
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
 msgstr "Panoramica"
-
-#, elixir-autogen, elixir-format
-msgid "assignment.start.button"
-msgstr "Avvia"

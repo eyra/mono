@@ -31,6 +31,8 @@ defmodule Core.Factories do
   alias Systems.Project
   alias Systems.Consent
   alias Systems.Monitor
+  alias Systems.Ontology
+  alias Systems.Annotation
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -278,6 +280,49 @@ defmodule Core.Factories do
     build(:consent_signature, %{})
   end
 
+  # Ontology build/1
+
+  def build(:ontology_concept) do
+    build(:ontology_concept, %{
+      phrase: Faker.Lorem.words(3..5) |> Enum.join(" "), 
+      author: build(:member)
+    })
+  end
+
+  def build(:ontology_predicate) do
+    build(:ontology_predicate, %{
+      subject: build(:ontology_concept),
+      predicate: build(:ontology_concept),
+      object: build(:ontology_concept),
+      author: build(:member)
+    })
+  end
+
+  def build(:ontology_ref) do
+    build(:ontology_ref, %{
+      concept: build(:ontology_concept)
+    })
+  end
+
+  # Annotation build/1
+
+  def build(:annotation) do
+    build(:annotation, %{
+      type: build(:ontology_concept),
+      value: Faker.Lorem.word(),
+      author: build(:member),
+      references: [build(:annotation_ref)]
+    })
+  end
+
+  def build(:annotation_ref) do
+    build(:annotation_ref, %{
+      type: build(:ontology_concept),
+      ontology_ref: build(:ontology_ref)
+    })
+  end
+
+  # build/2
   def build(:role_assignment, %{} = attributes) do
     %Authorization.RoleAssignment{}
     |> struct!(attributes)
@@ -764,6 +809,86 @@ defmodule Core.Factories do
     }
     |> struct!(attributes)
   end
+
+
+  # Ontology build/2
+  def build(:ontology_concept, %{} = attributes) do
+    {author, attributes} = Map.pop(attributes, :author, build(:member))
+
+    %Ontology.ConceptModel{
+      author: author
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:ontology_predicate, %{} = attributes) do
+    {author, attributes} = Map.pop(attributes, :author, build(:member))
+    {subject, attributes} = Map.pop(attributes, :subject, build(:ontology_concept))
+    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
+    {object, attributes} = Map.pop(attributes, :object, build(:ontology_concept))
+
+    %Ontology.PredicateModel{
+      author: author,
+      subject: subject,
+      type: type,
+      object: object
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:ontology_ref, %{} = attributes) do
+    {concept, attributes} = Map.pop(attributes, :ontology_concept)
+    {predicate, attributes} = Map.pop(attributes, :ontology_predicate)
+
+    # at least one of concept or predicate must be present
+    concept = 
+      if is_nil(concept) && is_nil(predicate), 
+        do: build(:ontology_concept), 
+        else: concept
+
+    %Ontology.Ref{
+      concept: concept,
+      predicate: predicate
+    }
+    |> struct!(attributes)
+  end
+
+  # Annotation build/2
+
+  def build(:annotation, %{} = attributes) do
+    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
+    {author, attributes} = Map.pop(attributes, :author, build(:member))
+    {references, attributes} = Map.pop(attributes, :references, [build(:annotation_ref)])
+
+    %Annotation.Model{
+      type: type,
+      author: author,
+      references: references
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:annotation_ref, %{} = attributes) do
+    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
+    {annotation, attributes} = Map.pop(attributes, :annotation)
+    {ontology_ref, attributes} = Map.pop(attributes, :ontology_ref)
+
+    # at least one of annotation or ontology_ref must be present
+    ontology_ref = 
+      if is_nil(ontology_ref) && is_nil(annotation), 
+        do: build(:ontology_ref), 
+        else: ontology_ref
+
+    %Annotation.Ref{
+      type: type,
+      annotation: annotation,
+      ontology_ref: ontology_ref
+    }
+    |> struct!(attributes)
+  end
+
+
+  # Generic
 
   def build(factory_name, %{} = attributes) do
     factory_name |> build() |> struct!(attributes)

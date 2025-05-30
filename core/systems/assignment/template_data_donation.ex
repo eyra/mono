@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.TemplateDataDonation do
   alias Systems.Assignment
   alias Systems.Workflow
-
+  alias Frameworks.Builder
   defstruct [:id]
 
   defimpl Assignment.Template do
@@ -33,35 +33,35 @@ defmodule Systems.Assignment.TemplateDataDonation do
     def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: false,
-        library: %Workflow.LibraryModel{
+        library: %Builder.LibraryModel{
           items: [
-            %Workflow.LibraryItemModel{
-              special: :manual,
-              tool: :manual_tool,
+            %Builder.LibraryItemModel{
+              id: :manual,
+              type: :manual_tool,
               title: Assignment.WorkflowItemSpecials.translate(:manual),
               description: dgettext("eyra-assignment", "workflow_item.manual.description")
             },
-            %Workflow.LibraryItemModel{
-              special: :donate,
-              tool: :feldspar_tool,
+            %Builder.LibraryItemModel{
+              id: :donate,
+              type: :feldspar_tool,
               title: Assignment.WorkflowItemSpecials.translate(:donate),
               description: dgettext("eyra-assignment", "workflow_item.donate.description")
             },
-            %Workflow.LibraryItemModel{
-              special: :questionnaire,
-              tool: :alliance_tool,
+            %Builder.LibraryItemModel{
+              id: :questionnaire,
+              type: :alliance_tool,
               title: Assignment.WorkflowItemSpecials.translate(:questionnaire),
               description: dgettext("eyra-assignment", "workflow_item.questionnaire.description")
             },
-            %Workflow.LibraryItemModel{
-              special: :request_manual,
-              tool: :document_tool,
+            %Builder.LibraryItemModel{
+              id: :request_manual,
+              type: :document_tool,
               title: Assignment.WorkflowItemSpecials.translate(:request_manual),
               description: dgettext("eyra-assignment", "workflow_item.request.description")
             },
-            %Workflow.LibraryItemModel{
-              special: :download_manual,
-              tool: :document_tool,
+            %Builder.LibraryItemModel{
+              id: :download_manual,
+              type: :document_tool,
               title: Assignment.WorkflowItemSpecials.translate(:download_manual),
               description: dgettext("eyra-assignment", "workflow_item.download.description")
             }

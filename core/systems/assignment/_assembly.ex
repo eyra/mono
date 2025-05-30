@@ -69,7 +69,7 @@ defmodule Systems.Assignment.Assembly do
       Assignment.Template.workflow_config(template)
 
     Enum.map(initial_items, fn tool_special ->
-      %{tool: tool_type} = Enum.find(library_items, &(&1.special == tool_special))
+      %{type: tool_type} = Enum.find(library_items, &(&1.id == tool_special))
       tool_auth_node = auth_module().create_node!(auth_node)
       tool = Workflow.Public.prepare_tool(tool_type, %{director: :assignment}, tool_auth_node)
       Assignment.Public.prepare_tool_ref(tool_special, tool)

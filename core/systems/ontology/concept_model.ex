@@ -1,24 +1,29 @@
-defmodule Systems.Ontology.TermModel do
+defmodule Systems.Ontology.ConceptModel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "ontology_term" do
+  alias Systems.Account
+
+  schema "ontology_concept" do
     field(:phrase, :string)
+
+    belongs_to(:author, Account.User)
 
     timestamps()
   end
 
   @fields ~w(phrase)a
-  @required_fields ~w(phrase)a
+  @required_fields @fields
 
-  def changeset(term, attrs) do
-    term
+  def changeset(concept, attrs) do
+    concept
     |> cast(attrs, @fields)
   end
 
   def validate(changeset) do
     changeset
     |> validate_required(@required_fields)
+    |> unique_constraint(:phrase, name: :ontology_concept_unique)
   end
 
   def preload_graph(:down), do: []

@@ -4,7 +4,7 @@ defmodule Systems.Workflow.BuilderView do
   require Logger
 
   import Frameworks.Pixel.SidePanel
-  import Systems.Workflow.ItemViews
+  import Frameworks.Builder.HTML, only: [library: 1]
 
   alias Systems.Workflow
 

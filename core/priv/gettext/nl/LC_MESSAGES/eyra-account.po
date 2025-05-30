@@ -157,3 +157,7 @@ msgstr "Ik weet het zeker"
 #, elixir-autogen, elixir-format
 msgid "people.confirm_remove.text"
 msgstr "Weet u zeker dat u uzelf wilt verwijderen van dit project?"
+
+#, elixir-autogen, elixir-format
+msgid "Account activated successfully."
+msgstr ""
