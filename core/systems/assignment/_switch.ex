@@ -66,12 +66,28 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept({:workflow, _} = signal, %{workflow: workflow} = message) do
+  def intercept(
+        {:workflow, event} = _signal,
+        %{workflow: workflow, from_pid: from_pid} = message
+      ) do
     if assignment = Assignment.Public.get_by(workflow, Assignment.Model.preload_graph(:down)) do
-      dispatch!(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
-      )
+      with {:workflow_item, :deleted} <- event do
+        delete_crew_tasks(message)
+      end
+
+      case event do
+        {:workflow_item, {:manual_tool, {:manual, {:manual_chapter, {:userflow_step, :visited}}}}} ->
+          update_content_page(assignment, from_pid)
+
+        {:workflow_item,
+         {:manual_tool, {:manual, {:manual_chapter, {:manual_page, {:userflow_step, :visited}}}}}} ->
+          update_content_page(assignment, from_pid)
+
+        _ ->
+          update_content_page(assignment, from_pid)
+          # Only update the crew page if event is not related to userflow tracking
+          update_crew_page(assignment, from_pid)
+      end
     end
 
     :ok
@@ -225,11 +241,7 @@ defmodule Systems.Assignment.Switch do
     update_content_page(assignment, from_pid)
   end
 
-  defp handle({:assignment, event}, %{assignment: assignment, from_pid: from_pid} = message) do
-    with {:workflow_item, :deleted} <- event do
-      delete_crew_tasks(message)
-    end
-
+  defp handle({:assignment, _}, %{assignment: assignment, from_pid: from_pid} = _message) do
     update_content_page(assignment, from_pid)
     # update all crew pages for the assignment
     update_crew_page(assignment, from_pid)
