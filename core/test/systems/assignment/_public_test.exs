@@ -414,7 +414,11 @@ defmodule Systems.Assignment.PublicTest do
       %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
       user = Factories.insert!(:member)
       member = Crew.Factories.create_member(crew, user)
-      %{id: task_id} = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
+
+      %{id: task_id} =
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+          minutes_ago: 10
+        )
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
 
@@ -425,7 +429,11 @@ defmodule Systems.Assignment.PublicTest do
       %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
       user = Factories.insert!(:member)
       member = Crew.Factories.create_member(crew, user)
-      %{id: task_id} = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
+
+      %{id: task_id} =
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+          minutes_ago: 10
+        )
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
       Crew.Public.accept_task(task_id)

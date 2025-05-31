@@ -55,7 +55,10 @@ defmodule Systems.Assignment.Private do
   def log_performance_event(%Assignment.Model{} = assignment, event) do
     Multi.new()
     |> Monitor.Public.multi_log(event)
-    |> Signal.Public.multi_dispatch({:assignment, :monitor_event}, %{assignment: assignment})
+    |> Signal.Public.multi_dispatch({:assignment, :monitor_event}, %{
+      assignment: assignment,
+      monitor_event: event
+    })
     |> Repo.transaction()
   end
 
