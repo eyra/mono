@@ -643,6 +643,19 @@ defmodule Systems.Assignment.Public do
     |> Repo.one()
   end
 
+  def get_member_by_task(%Crew.TaskModel{} = task, preload \\ []) do
+    member_id =
+      Assignment.Private.member_id(task)
+      |> String.to_integer()
+
+    from(
+      m in Crew.MemberModel,
+      where: m.id == ^member_id
+    )
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
   # Assignable
 
   def ready?(%{workflow: workflow}) do
