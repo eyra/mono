@@ -78,12 +78,25 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept({:crew, _} = signal, %{crew: crew} = message) do
+  def intercept(
+        {:crew, event} = _signal,
+        %{crew: crew, crew_member: crew_member, from_pid: from_pid} = _message
+      ) do
     if assignment = Assignment.Public.get_by(crew, Assignment.Model.preload_graph(:down)) do
-      dispatch!(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
-      )
+      case event do
+        {:crew_member, :started} ->
+          Assignment.Private.log_performance_event(assignment, :started, crew_member)
+
+        {:crew_member, :declined} ->
+          Assignment.Private.log_performance_event(assignment, :declined, crew_member)
+
+        {:crew_member, :finished_tasks} ->
+          Assignment.Private.log_performance_event(assignment, :finished, crew_member)
+      end
+
+      update_content_page(assignment, from_pid)
+      # update only the page for the crew_member that changed
+      update_crew_page(assignment, from_pid, crew_member)
     end
 
     :ok
@@ -120,31 +133,53 @@ defmodule Systems.Assignment.Switch do
   end
 
   def intercept(
-        {:consent_agreement, _} = signal,
-        %{consent_agreement: consent_agreement} = message
+        {:consent_agreement, {:consent_signature, :created}} = _signal,
+        %{
+          consent_agreement: consent_agreement,
+          consent_signature: %{user: user},
+          from_pid: from_pid
+        } = _message
       ) do
     if assignment =
-         Assignment.Public.get_by(
-           consent_agreement,
-           Assignment.Model.preload_graph(:down)
-         ) do
-      handle(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
-      )
+         Assignment.Public.get_by(consent_agreement, Assignment.Model.preload_graph(:down)) do
+      Assignment.Private.clear_performance_event(assignment, :declined, user)
+      Assignment.Private.log_performance_event(assignment, :accepted, user)
+      Assignment.Public.reset_member(assignment, user, dispatch: false)
+
+      update_content_page(assignment, from_pid)
+      # update only the page for the user that accepted the consent
+      update_crew_page(assignment, from_pid, user.id)
     end
 
     :ok
   end
 
-  def intercept({:crew_task, _} = signal, %{crew_task: %{crew_id: crew_id}} = message) do
+  def intercept(
+        {:crew_task, event} = _signal,
+        %{crew_task: %{crew_id: crew_id} = crew_task, from_pid: from_pid} = message
+      ) do
     Assignment.Public.list_by_crew(crew_id, Assignment.Model.preload_graph(:down))
-    |> Enum.each(
-      &dispatch!(
-        {:assignment, signal},
-        Map.merge(message, %{assignment: &1})
-      )
-    )
+    |> Enum.each(fn assignment ->
+      case event do
+        :started ->
+          Assignment.Private.log_performance_event(assignment, crew_task, :started)
+
+        :completed ->
+          Assignment.Private.log_performance_event(assignment, crew_task, :finished)
+
+        :accepted ->
+          payout_participants(assignment, crew_task, message)
+
+        :rejected ->
+          nil
+      end
+
+      update_crew_task_next_action(assignment, message)
+
+      update_content_page(assignment, from_pid)
+      # update only the page for the crew_member that is the owner of the crew_task
+      update_crew_page(assignment, from_pid, crew_task)
+    end)
 
     :ok
   end
@@ -182,53 +217,22 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
+  defp handle(
+         {:assignment, :monitor_event},
+         %{assignment: assignment, from_pid: from_pid} = _message
+       ) do
+    # Don't update the crew page here
+    update_content_page(assignment, from_pid)
+  end
+
   defp handle({:assignment, event}, %{assignment: assignment, from_pid: from_pid} = message) do
     with {:workflow_item, :deleted} <- event do
       delete_crew_tasks(message)
     end
 
-    with {:crew_task, :started} <- event do
-      %{crew_task: crew_task} = message
-      Assignment.Private.log_performance_event(assignment, crew_task, :started)
-    end
-
-    with {:crew_task, :completed} <- event do
-      %{crew_task: crew_task} = message
-      Assignment.Private.log_performance_event(assignment, crew_task, :finished)
-    end
-
-    with {:crew_task, :accepted} <- event do
-      payout_participants(message)
-    end
-
-    with {:crew_task, _} <- event do
-      update_crew_task_next_action(message)
-    end
-
-    with {:crew, {:crew_member, :started}} <- event do
-      %{crew_member: crew_member} = message
-      Assignment.Private.log_performance_event(assignment, :started, crew_member)
-    end
-
-    with {:crew, {:crew_member, :declined}} <- event do
-      %{crew_member: crew_member} = message
-      Assignment.Private.log_performance_event(assignment, :declined, crew_member)
-    end
-
-    with {:crew, {:crew_member, :finished_tasks}} <- event do
-      %{crew_member: crew_member} = message
-      Assignment.Private.log_performance_event(assignment, :finished, crew_member)
-    end
-
-    with {:consent_agreement, {:consent_signature, :created}} <- event do
-      %{consent_signature: %{user: user}} = message
-      Assignment.Private.clear_performance_event(assignment, :declined, user)
-      Assignment.Private.log_performance_event(assignment, :accepted, user)
-
-      Assignment.Public.reset_member(assignment, user, dispatch: false)
-    end
-
-    update_pages(assignment, from_pid)
+    update_content_page(assignment, from_pid)
+    # update all crew pages for the assignment
+    update_crew_page(assignment, from_pid)
   end
 
   defp delete_crew_tasks(%{
@@ -246,20 +250,33 @@ defmodule Systems.Assignment.Switch do
 
   defp delete_crew_tasks(_), do: nil
 
-  defp update_pages(%Assignment.Model{} = assignment, from_pid) do
-    [
-      Assignment.CrewPage,
-      Assignment.ContentPage
-    ]
-    |> Enum.each(&update_page(&1, assignment, from_pid))
+  defp update_content_page(model, from_pid) do
+    dispatch!({:page, Assignment.ContentPage}, %{id: model.id, model: model, from_pid: from_pid})
   end
 
-  defp update_page(page, model, from_pid) do
-    dispatch!({:page, page}, %{id: model.id, model: model, from_pid: from_pid})
+  defp update_crew_page(model, from_pid, %Crew.TaskModel{} = crew_task) do
+    crew_member = Assignment.Public.get_member_by_task(crew_task)
+    update_crew_page(model, from_pid, crew_member)
   end
 
-  defp update_crew_task_next_action(%{
-         assignment: %{id: assignment_id},
+  defp update_crew_page(model, from_pid, %Crew.MemberModel{user_id: user_id}) do
+    update_crew_page(model, from_pid, user_id)
+  end
+
+  defp update_crew_page(model, from_pid, user_id) when is_integer(user_id) do
+    dispatch!({:page, Assignment.CrewPage}, %{
+      id: model.id,
+      user_id: user_id,
+      model: model,
+      from_pid: from_pid
+    })
+  end
+
+  defp update_crew_page(model, from_pid) do
+    dispatch!({:page, Assignment.CrewPage}, %{id: model.id, model: model, from_pid: from_pid})
+  end
+
+  defp update_crew_task_next_action(%{id: assignment_id}, %{
          changeset: %{
            data: %{status: old_status, auth_node_id: auth_node_id},
            changes: %{status: new_status}
@@ -281,13 +298,9 @@ defmodule Systems.Assignment.Switch do
     end
   end
 
-  defp update_crew_task_next_action(_), do: nil
+  defp update_crew_task_next_action(_, _), do: nil
 
-  defp payout_participants(%{
-         assignment: assignment,
-         crew_task: crew_task,
-         changeset: %{data: %{status: old_status}}
-       }) do
+  defp payout_participants(assignment, crew_task, %{changeset: %{data: %{status: old_status}}}) do
     if old_status != :accepted do
       participants = auth_module().users_with_role(crew_task, :owner)
       Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
