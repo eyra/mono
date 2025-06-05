@@ -21,6 +21,8 @@ defmodule Systems.Assignment.CrewPageTest do
     assignment =
       Assignment.Factories.create_assignment(
         info,
+        # consent_agreement
+        nil,
         workflow,
         assignment_auth_node,
         :online

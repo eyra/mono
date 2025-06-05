@@ -41,11 +41,12 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, workflow, auth_node, %Budget.Model{} = budget) do
+  def create_assignment(info, consent_agreement, workflow, auth_node, %Budget.Model{} = budget) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
       info: info,
+      consent_agreement: consent_agreement,
       workflow: workflow,
       crew: crew,
       auth_node: auth_node,
@@ -53,11 +54,13 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, workflow, auth_node, status) when is_atom(status) do
+  def create_assignment(info, consent_agreement, workflow, auth_node, status)
+      when is_atom(status) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
       info: info,
+      consent_agreement: consent_agreement,
       workflow: workflow,
       crew: crew,
       auth_node: auth_node,
@@ -75,8 +78,9 @@ defmodule Systems.Assignment.Factories do
     tool_ref = create_tool_ref(tool)
     workflow = create_workflow()
     _workflow_item = create_workflow_item(workflow, tool_ref)
+    consent_agreement = Factories.insert!(:consent_agreement)
 
-    create_assignment(info, workflow, assignment_auth_node, status)
+    create_assignment(info, consent_agreement, workflow, assignment_auth_node, status)
   end
 
   def build_assignment() do
