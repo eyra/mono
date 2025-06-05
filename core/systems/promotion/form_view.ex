@@ -147,33 +147,28 @@ defmodule Systems.Promotion.FormView do
   end
 
   @impl true
-  def handle_wysiwyg_update(%{assigns: assigns} = socket) do
-    # When this function is called, we know for sure that a wysiwyg form has been updated.
-    # Because we know we only use description and expectations fields in the wysiwyg forms, we can safely
-    # extract them from the socket assigns.
-    expectations = assigns[:expectations]
-    description = assigns[:description]
-    entity = assigns.entity
+  def handle_wysiwyg_update(
+        %{assigns: %{expectations: expectations, description: description, entity: entity}} =
+          socket
+      )
+      when not is_nil(expectations) and not is_nil(description) do
+    attributes = %{expectations: expectations, description: description}
+    changeset = Promotion.Model.changeset(entity, :save, attributes)
+    save(socket, changeset)
+  end
 
-    cond do
-      expectations && description ->
-        attributes = %{expectations: expectations, description: description}
-        changeset = Promotion.Model.changeset(entity, :save, attributes)
-        save(socket, changeset)
+  def handle_wysiwyg_update(%{assigns: %{expectations: expectations, entity: entity}} = socket)
+      when not is_nil(expectations) do
+    attributes = %{expectations: expectations}
+    changeset = Promotion.Model.changeset(entity, :save, attributes)
+    save(socket, changeset)
+  end
 
-      expectations ->
-        attributes = %{expectations: expectations}
-        changeset = Promotion.Model.changeset(entity, :save, attributes)
-        save(socket, changeset)
-
-      description ->
-        attributes = %{description: description}
-        changeset = Promotion.Model.changeset(entity, :save, attributes)
-        save(socket, changeset)
-
-      true ->
-        socket
-    end
+  def handle_wysiwyg_update(%{assigns: %{description: description, entity: entity}} = socket)
+      when not is_nil(description) do
+    attributes = %{description: description}
+    changeset = Promotion.Model.changeset(entity, :save, attributes)
+    save(socket, changeset)
   end
 
   # Events
