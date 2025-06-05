@@ -109,7 +109,11 @@ defmodule Systems.Promotion.FormView do
       module: Systems.Promotion.WysiwygForm,
       params: %{
         field_name: :expectations,
-        entity: entity
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "expectations.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
       }
     }
   end
@@ -120,7 +124,11 @@ defmodule Systems.Promotion.FormView do
       module: Systems.Promotion.WysiwygForm,
       params: %{
         field_name: :description,
-        entity: entity
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "background.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
       }
     }
   end
@@ -131,7 +139,11 @@ defmodule Systems.Promotion.FormView do
       module: Systems.Promotion.WysiwygForm,
       params: %{
         field_name: :prerequisites,
-        entity: entity
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "prerequisites.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
       }
     }
   end

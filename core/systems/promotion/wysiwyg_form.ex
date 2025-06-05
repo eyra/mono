@@ -5,10 +5,19 @@ defmodule Systems.Promotion.WysiwygForm do
   alias Systems.Promotion
 
   @impl true
-  def update(%{id: id, entity: %Promotion.Model{} = entity, field_name: field_name}, socket)
+  def update(
+        %{id: id, entity: %Promotion.Model{} = entity, field_name: field_name} = assigns,
+        socket
+      )
       when is_atom(field_name) do
     field = Map.get(entity, field_name)
     form = to_form(%{Atom.to_string(field_name) => field})
+    label_text = Map.get(assigns, :label_text, nil)
+    label_color = Map.get(assigns, :label_color, "text-grey1")
+    min_height = Map.get(assigns, :min_height, "min-h-wysiwyg-editor")
+    max_height = Map.get(assigns, :max_height, "max-h-wysiwyg-editor")
+    reserve_error_space = Map.get(assigns, :reserve_error_space, true)
+    visible = Map.get(assigns, :visible, true)
 
     {
       :ok,
@@ -16,9 +25,14 @@ defmodule Systems.Promotion.WysiwygForm do
       |> assign(
         id: id,
         entity: entity,
-        visible: true,
+        visible: visible,
         form: form,
-        field_name: field_name
+        field_name: field_name,
+        label_text: label_text,
+        label_color: label_color,
+        min_height: min_height,
+        max_height: max_height,
+        reserve_error_space: reserve_error_space
       )
     }
   end
@@ -63,9 +77,18 @@ defmodule Systems.Promotion.WysiwygForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id="wysiwyg_form" :let={form} for={@form} phx-change="save_wysiwyg" phx-target={@myself} >
-          <!-- always render wysiwyg te prevent scrollbar reset in LiveView -->
-          <.wysiwyg_area form={form} field={@field_name} visible={@visible}/>
+        <.form id={"wysiwyg_form_#{@id}"} :let={form} for={@form} phx-change="save_wysiwyg" phx-target={@myself} >
+          <!-- always render wysiwyg to prevent scrollbar reset in LiveView -->
+          <.wysiwyg_area
+            form={form}
+            field={@field_name}
+            label_text={@label_text}
+            label_color={@label_color}
+            min_height={@min_height}
+            max_height={@max_height}
+            visible={@visible}
+            reserve_error_space={@reserve_error_space}
+          />
         </.form>
       </div>
     """
