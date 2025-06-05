@@ -140,14 +140,26 @@ defmodule Systems.Promotion.LandingPage do
         </div>
         <div class="mb-12 sm:mb-16" />
 
-        <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_large><%= render_wysiwyg(@vm.expectations) %></Text.body_large>
+        <%= if @vm.prerequisites != nil and @vm.prerequisites != "" do %>
+        <Text.title2 margin=""><%= dgettext("eyra-promotion", "prerequisites.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.prerequisites) %></Text.body_large>
+          <.spacing value="M" />
+        <% end %>
 
-        <.spacing value="M" />
-        <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_large><%= render_wysiwyg(@vm.description) %></Text.body_large>
+        <%= if @vm.expectations != nil and @vm.expectations != "" do %>
+          <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.expectations) %></Text.body_large>
+          <.spacing value="M" />
+        <% end %>
+
+        <%= if @vm.description != nil and @vm.description != "" do %>
+          <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.description) %></Text.body_large>
+        <% end %>
+
         <.spacing value="L" />
 
         <.advert_banner
