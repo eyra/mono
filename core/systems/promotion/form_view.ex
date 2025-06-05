@@ -12,7 +12,6 @@ defmodule Systems.Promotion.FormView do
 
   alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Selector
 
   @impl true
   def process_file(
@@ -40,8 +39,7 @@ defmodule Systems.Promotion.FormView do
   def update(
         %{
           id: id,
-          entity: entity,
-          themes_module: themes_module
+          entity: entity
         },
         socket
       ) do
@@ -51,26 +49,15 @@ defmodule Systems.Promotion.FormView do
       |> init_file_uploader(:photo)
       |> assign(
         id: id,
-        entity: entity,
-        themes_module: themes_module
+        entity: entity
       )
       |> update_changeset()
       |> update_image_info()
       |> update_image_picker_button()
-      |> update_theme_labels()
-      |> compose_child(:themes)
       |> validate_for_publish()
-    }
-  end
-
-  @impl true
-  def compose(:themes, %{theme_labels: items}) do
-    %{
-      module: Selector,
-      params: %{
-        items: items,
-        type: :label
-      }
+      |> compose_child(:expectations_form)
+      |> compose_child(:description_form)
+      |> compose_child(:prerequisites_form)
     }
   end
 
@@ -97,25 +84,16 @@ defmodule Systems.Promotion.FormView do
     socket |> assign(image_picker_button: image_picker_button)
   end
 
-  defp update_theme_labels(
-         %{assigns: %{entity: %{themes: themes}, themes_module: themes_module}} = socket
-       ) do
-    theme_labels = themes_module.labels(themes)
-    socket |> assign(theme_labels: theme_labels)
-  end
-
   # Save
   defp save(socket, %Promotion.Model{} = entity, attrs) do
     changeset = Promotion.Model.changeset(entity, :save, attrs)
 
     socket
     |> save(changeset)
-    |> update_theme_labels()
     |> validate_for_publish()
   end
 
   # Validate
-
   def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
       Promotion.Model.operational_changeset(entity, %{})
@@ -125,15 +103,52 @@ defmodule Systems.Promotion.FormView do
     |> assign(changeset: changeset, form: to_form(changeset))
   end
 
-  defp initial_image_query(%{assigns: %{entity: entity}}) do
-    case entity.themes do
-      nil -> ""
-      themes -> themes |> Enum.join(" ")
-    end
+  @impl true
+  def compose(:expectations_form, %{entity: entity}) do
+    %{
+      module: Systems.Promotion.WysiwygForm,
+      params: %{
+        field_name: :expectations,
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "expectations.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
+      }
+    }
+  end
+
+  @impl true
+  def compose(:description_form, %{entity: entity}) do
+    %{
+      module: Systems.Promotion.WysiwygForm,
+      params: %{
+        field_name: :description,
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "background.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
+      }
+    }
+  end
+
+  @impl true
+  def compose(:prerequisites_form, %{entity: entity}) do
+    %{
+      module: Systems.Promotion.WysiwygForm,
+      params: %{
+        field_name: :prerequisites,
+        entity: entity,
+        label_text: dgettext("eyra-promotion", "prerequisites.placeholder"),
+        min_height: "min-h-[122px]",
+        max_height: "max-h-[512px]",
+        reserve_error_space: false
+      }
+    }
   end
 
   # Events
-
   @impl true
   def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
@@ -141,11 +156,6 @@ defmodule Systems.Promotion.FormView do
       socket
       |> save(entity, attrs)
     }
-  end
-
-  def handle_event("open_image_picker", _, socket) do
-    send(self(), {:show_image_picker, initial_image_query(socket)})
-    {:noreply, socket}
   end
 
   @impl true
@@ -165,43 +175,47 @@ defmodule Systems.Promotion.FormView do
   def render(assigns) do
     ~H"""
     <div>
-        <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
-          <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
-          <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
+        <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
-          <.spacing value="L" />
-          <Text.title3><%= dgettext("eyra-promotion", "themes.title") %></Text.title3>
-          <Text.body><%= dgettext("eyra-promotion", "themes.label") %></Text.body>
-          <.spacing value="XS" />
-          <.child name={:themes} fabric={@fabric} />
-          <.spacing value="XL" />
+        <.spacing value="XL" />
+      </.form>
 
-          <Text.title3><%= dgettext("eyra-promotion", "copy.title") %></Text.title3>
-          <.text_area form={form} field={:expectations} placeholder={dgettext("eyra-promotion", "expectations.placeholder")} label_text={dgettext("eyra-promotion", "expectations.label")} />
-          <.spacing value="XS" />
+      <Text.title3><%= dgettext("eyra-promotion", "copy.title") %></Text.title3>
+      <.spacing value="XS" />
+      <.child name={:prerequisites_form} fabric={@fabric} />
+      <.spacing value="XS" />
 
-          <.text_area form={form} field={:description} placeholder={dgettext("eyra-promotion", "background.placeholder")} label_text={dgettext("eyra-promotion", "background.label")} />
-          <.spacing value="L" />
+      <.child name={:expectations_form} fabric={@fabric} />
+      <.spacing value="XS" />
 
-          <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
-          <.photo_input
-            static_path={&CoreWeb.Endpoint.static_path/1}
-            photo_url={@entity.banner_photo_url}
-            uploads={@uploads}
-            primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}
-            secondary_button_text={dgettext("eyra-promotion", "choose.other.banner.photo.file")}
-          />
+      <.child name={:description_form} fabric={@fabric} />
+      <.spacing value="XS" />
 
-          <.spacing value="S" />
+      <.spacing value="L" />
 
-          <.text_input form={form} field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
-          <.text_input form={form}
-            field={:banner_subtitle}
-            label_text={dgettext("eyra-promotion", "banner.subtitle.label")}
-          />
-          <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
-        </.form>
-    </div>
+      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
+        <.photo_input
+          static_path={&CoreWeb.Endpoint.static_path/1}
+          photo_url={@entity.banner_photo_url}
+          uploads={@uploads}
+          primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}
+          secondary_button_text={dgettext("eyra-promotion", "choose.other.banner.photo.file")}
+        />
+
+        <.spacing value="S" />
+
+        <.text_input form={form} field={:banner_title} label_text={dgettext("eyra-promotion", "banner.title.label")} />
+        <.text_input form={form}
+          field={:banner_subtitle}
+          label_text={dgettext("eyra-promotion", "banner.subtitle.label")}
+        />
+        <.url_input form={form} field={:banner_url} label_text={dgettext("eyra-promotion", "banner.url.label")} />
+      </.form>
+
+      </div>
     """
   end
 end
