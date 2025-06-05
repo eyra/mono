@@ -8,6 +8,7 @@ defmodule Systems.Promotion.LandingPage do
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   import Systems.Promotion.BannerView
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
@@ -141,13 +142,12 @@ defmodule Systems.Promotion.LandingPage do
 
         <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
         <.spacing value="M" />
-        <%!-- These fields use the raw() helper to make sure contents from the wysiwyg are rendered --%>
-        <Text.body_large><%= raw(@vm.expectations) %></Text.body_large>
+        <Text.body_large><%= render_wysiwyg(@vm.expectations) %></Text.body_large>
+
         <.spacing value="M" />
         <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
         <.spacing value="M" />
-        <%!-- These fields use the raw() helper to make sure contents from the wysiwyg are rendered --%>
-        <Text.body_large><%= raw(@vm.description) %></Text.body_large>
+        <Text.body_large><%= render_wysiwyg(@vm.description) %></Text.body_large>
         <.spacing value="L" />
 
         <.advert_banner
