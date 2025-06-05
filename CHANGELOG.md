@@ -9,7 +9,20 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#15 unreleased
+## \#16 Under development
+* ..
+
+## \#15.2 2025-05-31
+* Fixed: Realtime updates interfering participant flows
+* Added: Support for sending realtime updates to pages targeted to specific users
+
+## \#15.1 2025-05-08
+* Fixed: When a participant returns from a questionnaire back to Next, a popup is shown and the participant must click  'close'. 
+
+## \#15 2025-05-07
+* Changed: Next Landing page
+* Fixed: Account activated successfully message low contrast
+* Added: Manual builder to workflow library for Panl studies
 
 ## \#14 2025-04-26
 * Fixed: Next compatability with feldspar version 4 (loading issue)
