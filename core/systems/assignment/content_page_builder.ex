@@ -318,7 +318,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{current_user: user}
        ) do
-
     element =
       LiveNest.Element.prepare_live_view(:criteria, Zircon.CriteriaView,
         tool: zircon_screening_tool,

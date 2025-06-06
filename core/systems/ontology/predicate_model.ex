@@ -17,6 +17,18 @@ defmodule Systems.Ontology.PredicateModel do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          type_negated?: boolean(),
+          subject_id: integer() | nil,
+          type_id: integer() | nil,
+          object_id: integer() | nil,
+          author_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @fields ~w(type_negated?)a
   @required_fields @fields
   @unique_fields ~w(subject_id object_id type_id author_id type_negated?)a
@@ -29,7 +41,7 @@ defmodule Systems.Ontology.PredicateModel do
   def validate(changeset) do
     changeset
     |> validate_required(@required_fields)
-    |> unique_constraint(@unique_fields, name: :ontology_predicate_unique_predicate)
+    |> unique_constraint(@unique_fields, name: :ontology_predicate_unique)
     |> check_constraint(:object_id, name: :ontology_predicate_object_different_from_subject)
   end
 

@@ -12,6 +12,15 @@ defmodule Systems.Ontology.ConceptModel do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          phrase: String.t(),
+          author_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @fields ~w(phrase)a
   @required_fields @fields
 

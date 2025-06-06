@@ -309,7 +309,7 @@ defmodule Core.Factories do
   def build(:annotation) do
     build(:annotation, %{
       type: build(:ontology_concept),
-      value: Faker.Lorem.word(),
+      statement: Faker.Lorem.word(),
       author: build(:member),
       references: [build(:annotation_ref)]
     })
@@ -810,7 +810,6 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-
   # Ontology build/2
   def build(:ontology_concept, %{} = attributes) do
     {author, attributes} = Map.pop(attributes, :author, build(:member))
@@ -846,7 +845,7 @@ defmodule Core.Factories do
         do: build(:ontology_concept),
         else: concept
 
-    %Ontology.Ref{
+    %Ontology.RefModel{
       concept: concept,
       predicate: predicate
     }
@@ -879,14 +878,13 @@ defmodule Core.Factories do
         do: build(:ontology_ref),
         else: ontology_ref
 
-    %Annotation.Ref{
+    %Annotation.RefModel{
       type: type,
       annotation: annotation,
       ontology_ref: ontology_ref
     }
     |> struct!(attributes)
   end
-
 
   # Generic
 

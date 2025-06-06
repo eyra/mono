@@ -7,7 +7,7 @@ defmodule Systems.Zircon.CriteriaView do
   import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]
 
-  #alias Frameworks.Builder
+  # alias Frameworks.Builder
   alias Frameworks.Pixel.Text
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
@@ -18,7 +18,6 @@ defmodule Systems.Zircon.CriteriaView do
         %{"tool" => tool, "title" => title, "content_flags" => content_flags, "user" => user},
         socket
       ) do
-
     {
       :ok,
       socket
@@ -33,7 +32,6 @@ defmodule Systems.Zircon.CriteriaView do
   end
 
   defp assign_library_items(socket) do
-
     library_items = [
       # %Builder.LibraryItemModel{
       #   id: :population,
@@ -112,8 +110,7 @@ defmodule Systems.Zircon.CriteriaView do
   end
 
   @impl true
-  def handle_event("add", %{"item" => item}, socket) do
-    item |> dbg()
+  def handle_event("add", %{"item" => _item}, socket) do
     {:noreply, socket}
   end
 

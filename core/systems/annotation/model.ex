@@ -9,13 +9,13 @@ defmodule Systems.Annotation.Model do
   alias Systems.Account
 
   schema "annotation" do
-    field(:value, :string)
+    field(:statement, :string)
     field(:ai_generated?, :boolean)
 
     belongs_to(:type, Ontology.ConceptModel)
     belongs_to(:author, Account.User)
 
-    many_to_many(:references, Annotation.Ref,
+    many_to_many(:references, Annotation.RefModel,
       join_through: Annotation.Assoc,
       join_keys: [annotation_id: :id, ref_id: :id]
     )
@@ -23,9 +23,19 @@ defmodule Systems.Annotation.Model do
     timestamps()
   end
 
-  @fields ~w(value ai_generated?)a
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          statement: String.t(),
+          ai_generated?: boolean(),
+          type_id: integer() | nil,
+          author_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
+  @fields ~w(statement ai_generated?)a
   @required_fields @fields
-  @unique_fields ~w(value ai_generated? author_id type_id)a
 
   def changeset(annotation, attrs) do
     annotation
@@ -35,7 +45,6 @@ defmodule Systems.Annotation.Model do
   def validate(changeset) do
     changeset
     |> validate_required(@required_fields)
-    |> unique_constraint(@unique_fields, name: :annotation_unique)
   end
 
   def preload_graph(:down), do: [:type, :auth_node, :references]
@@ -43,5 +52,5 @@ defmodule Systems.Annotation.Model do
 
   def preload_graph(:type), do: [type: Ontology.ConceptModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
-  def preload_graph(:references), do: [references: Annotation.Ref.preload_graph(:down)]
+  def preload_graph(:references), do: [references: Annotation.RefModel.preload_graph(:down)]
 end

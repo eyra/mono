@@ -1,5 +1,5 @@
-defmodule Systems.Ontology.Ref do
-  @moduledoc"""
+defmodule Systems.Ontology.RefModel do
+  @moduledoc """
     A module referencing a model in the Ontology.
 
     One of the `term` or `predicate` must be present.
@@ -18,6 +18,15 @@ defmodule Systems.Ontology.Ref do
 
     timestamps()
   end
+
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          concept_id: integer() | nil,
+          predicate_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
 
   @fields ~w()a
   @required_fields ~w()a

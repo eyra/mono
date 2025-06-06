@@ -12,7 +12,7 @@ defmodule Systems.Annotation.Assoc do
 
   schema "annotation_assoc" do
     belongs_to(:annotation, Annotation.Model)
-    belongs_to(:ref, Annotation.Ref)
+    belongs_to(:ref, Annotation.RefModel)
 
     timestamps()
   end
@@ -34,6 +34,5 @@ defmodule Systems.Annotation.Assoc do
   def preload_graph(:up), do: [:annotation]
 
   def preload_graph(:annotation), do: [annotation: Annotation.Model.preload_graph(:up)]
-  def preload_graph(:ref), do: [ref: Annotation.Ref.preload_graph(:down)]
+  def preload_graph(:ref), do: [ref: Annotation.RefModel.preload_graph(:down)]
 end
-
