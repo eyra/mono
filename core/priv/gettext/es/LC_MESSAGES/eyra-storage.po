@@ -1,0 +1,214 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "endpoint_form.type.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.access_key_id.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.region_code.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.s3_bucket_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.secret_access_key.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.container.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.sas_token.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.password.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.user.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "aws.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builtin.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "centerdata.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "yoda.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaf.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "goto.storage.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.data.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.date.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.file.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.size.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.files.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bytes.kb.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bytes.mb.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty.files.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "empty_confirmation_view.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.recent.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.search.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.finder.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "files.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bytes.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.status.valid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 file"
+msgid_plural "* files"
+msgstr[0] ""
+msgstr[1] ""
