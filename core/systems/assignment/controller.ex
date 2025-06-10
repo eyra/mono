@@ -242,7 +242,7 @@ defmodule Systems.Assignment.Controller do
       panel: :next,
       embedded?: false,
       participant: participant,
-      query_string: []
+      meta: %{}
     }
 
     conn |> put_session(:panel_info, panel_info)

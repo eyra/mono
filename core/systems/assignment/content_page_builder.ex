@@ -270,6 +270,31 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
+  defp create_tab(:affiliate, %{affiliate: nil} = _assignment, _, _, _, _), do: nil
+
+  defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{
+         fabric: fabric
+       }) do
+    ready? = false
+
+    child =
+      Fabric.prepare_child(fabric, :affiliate, Assignment.AffiliateView, %{
+        assignment: assignment,
+        title: title,
+        content_flags: content_flags
+      })
+
+    %{
+      id: :affiliate,
+      ready: ready?,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      child: child
+    }
+  end
+
   defp create_tab(
          :import,
          %{

@@ -15,6 +15,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
       [
         settings: nil,
         workflow: nil,
+        affiliate: nil,
         import: {
           dgettext("eyra-assignment", "tabbar.item.import"),
           Assignment.Template.Flags.Import.new()
@@ -25,7 +26,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.reviewers"),
-          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool])
+          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool, :affiliate])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

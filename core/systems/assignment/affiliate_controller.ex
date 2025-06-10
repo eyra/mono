@@ -1,33 +1,30 @@
-defmodule Systems.Assignment.ExternalPanelController do
-  @moduledoc """
-   Deprecated, use AffiliateController instead
-  """
-
+defmodule Systems.Assignment.AffiliateController do
   use CoreWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Systems.Assignment
+  alias Systems.Affiliate
+
   require Logger
 
   @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
   @id_max_lenght 64
 
-  def create(conn, %{"id" => id, "entry" => _} = params) do
+  def create(conn, %{"id" => id} = params) do
     assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do
         forbidden(conn)
       else
-        start_tester(conn, params)
+        start_tester(conn, params, assignment)
       end
     else
       cond do
         invalid_id?(params) -> forbidden(conn)
-        has_no_access?(assignment, params) -> forbidden(conn)
         offline?(assignment) -> service_unavailable(conn)
-        true -> start_participant(assignment, conn, params)
+        true -> start_participant(conn, params, assignment)
       end
     end
   end
@@ -68,27 +65,21 @@ defmodule Systems.Assignment.ExternalPanelController do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
 
-  # FIXME: This is a temporary solution to allow embeds to work https://github.com/eyra/mono/issues/997
-  defp has_no_access?(_, %{"embed" => "true"}), do: false
-
-  defp has_no_access?(%{external_panel: external_panel}, params) do
-    external_panel = Atom.to_string(external_panel)
-    external_panel != get_panel(params)
-  end
-
-  defp start_tester(conn, params) do
+  defp start_tester(conn, params, assignment) do
     conn
-    |> add_panel_info(params)
+    |> obtain_instance(assignment)
     |> redirect(to: path(params))
   end
 
-  defp start_participant(%{external_panel: external_panel} = assignment, conn, params) do
+  defp start_participant(conn, params, %{affiliate: affiliate} = assignment) do
     participant_id = get_participant(params)
+    %{user: user} = affiliate_user = Affiliate.Public.obtain_user(participant_id, affiliate)
 
     conn
-    |> ExternalSignIn.sign_in(external_panel, participant_id)
+    |> assign(:current_user, user)
     |> authorize_user(assignment)
-    |> add_panel_info(params)
+    |> ensure_user_info(params, assignment, affiliate_user)
+    |> obtain_instance(assignment)
     |> redirect(to: path(params))
   end
 
@@ -113,27 +104,34 @@ defmodule Systems.Assignment.ExternalPanelController do
     conn
   end
 
-  defp add_panel_info(conn, params) do
-    panel_info = %{
-      panel: get_panel(params),
-      embedded?: embedded?(params),
-      participant: get_participant(params),
-      query_string: params
-    }
+  defp ensure_user_info(conn, params, %{affiliate: affiliate} = assignment, affiliate_user) do
+    info = strip_query_string(params)
+    user_info = Affiliate.Public.obtain_user_info!(affiliate, affiliate_user, info)
 
-    conn |> put_session(:panel_info, panel_info)
+    Logger.debug(
+      "Obtained user info for assignment #{assignment.id} and user #{affiliate_user.user.id}; info=#{inspect(user_info)}"
+    )
+
+    conn
+  end
+
+  defp obtain_instance(%{assigns: %{current_user: user}} = conn, assignment) do
+    instance = Assignment.Public.obtain_instance!(assignment, user)
+    Logger.debug("Starting session for assignment #{assignment.id} with instance #{instance.id}")
+    conn
   end
 
   # Param Mappings
 
-  defp get_panel(%{"entry" => "participate"}), do: "generic"
-  defp get_panel(%{"entry" => entry}), do: entry
-
-  defp get_participant(%{"respondent" => respondent}), do: respondent
+  defp get_participant(%{"p" => participant}), do: participant
   defp get_participant(%{"participant" => participant}), do: participant
+
   defp get_participant(_), do: nil
 
-  defp embedded?(%{"entry" => "liss"}), do: true
-  defp embedded?(%{"embed" => "true"}), do: true
-  defp embedded?(_), do: false
+  defp strip_query_string(params) do
+    params
+    |> Map.delete("id")
+    |> Map.delete("p")
+    |> Map.delete("participant")
+  end
 end

@@ -64,10 +64,6 @@ msgid "onboarding.consent.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.storage.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "connect.button"
 msgstr ""
 
@@ -80,14 +76,6 @@ msgid "connector.connect.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "connector.panel.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "connector.panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "connector.storage.text"
 msgstr ""
 
@@ -96,47 +84,7 @@ msgid "connector.storage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.storage.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "disconnect.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel_form.type.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.generic.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.generic.connection.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connection.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connection.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -471,4 +419,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.manual.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "affiliate.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.affiliate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
 msgstr ""

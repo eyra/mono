@@ -11,6 +11,7 @@ defmodule Systems.Account.Public do
 
   alias Systems.Account
   alias Systems.Account.User
+  alias Systems.Affiliate
 
   def create_profile!(user_id) do
     %Account.UserProfileModel{user_id: user_id}
@@ -50,6 +51,18 @@ defmodule Systems.Account.Public do
 
   def list_users(preload \\ []) do
     user_query()
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_affiliate_users(preload \\ []) do
+    user_query(affiliate?: true)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  def list_external_users(preload \\ []) do
+    user_query(external?: true)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -94,11 +107,28 @@ defmodule Systems.Account.Public do
     |> Repo.transaction()
   end
 
-  ## External
+  ## Affiliate
+
+  def affiliate?(%User{id: user_id}) do
+    affiliate?(user_id)
+  end
+
+  def affiliate?(nil), do: false
+
+  def affiliate?(user_id) do
+    from(au in Affiliate.User,
+      where: au.user_id == ^user_id
+    )
+    |> Repo.exists?()
+  end
+
+  # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
 
   def external?(%User{id: user_id}) do
     external?(user_id)
   end
+
+  def external?(nil), do: false
 
   def external?(user_id) do
     from(ex in ExternalSignIn.User,
@@ -107,10 +137,14 @@ defmodule Systems.Account.Public do
     |> Repo.exists?()
   end
 
-  def internal?(nil), do: false
+  # Internal users are not affiliate users and not external users
 
-  def internal?(user) do
-    not external?(user)
+  def internal?(%User{id: user_id}) do
+    internal?(user_id)
+  end
+
+  def internal?(user_id) do
+    not external?(user_id) and not affiliate?(user_id)
   end
 
   ## Database getters

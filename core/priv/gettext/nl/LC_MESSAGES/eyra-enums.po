@@ -489,3 +489,7 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.manual"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.spotify"
+msgstr "X"

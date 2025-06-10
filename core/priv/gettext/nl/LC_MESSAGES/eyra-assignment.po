@@ -62,10 +62,6 @@ msgstr "Verder"
 msgid "onboarding.consent.title"
 msgstr "Toestemming"
 
-#, elixir-autogen, elixir-format
-msgid "settings.storage.title"
-msgstr "Data opslag"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Instellen"
@@ -79,14 +75,6 @@ msgid "connector.connect.button"
 msgstr "Koppel"
 
 #, elixir-autogen, elixir-format
-msgid "connector.panel.text"
-msgstr "Koppel het panel dat je wilt gebruiken. Staat het panel dat je gebruikt er niet tussen of maak je geen gebruik van een panel? Kies dan 'Anders'."
-
-#, elixir-autogen, elixir-format
-msgid "connector.panel.title"
-msgstr "Panel instellen"
-
-#, elixir-autogen, elixir-format
 msgid "connector.storage.text"
 msgstr "Koppel de data opslag die je wilt gebruiken om de data van de deelnemers op te slaan."
 
@@ -95,48 +83,8 @@ msgid "connector.storage.title"
 msgstr "Data opslag instellen"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.storage.body"
-msgstr "Stel het soort opslag in dat je wilt gebruiken voor het opslaan van de data die door jouw deelnemers wordt gedoneerd."
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.body"
-msgstr "Stel het panel in dat je wilt gebruiken voor het werven van deelnemers."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.panel.title"
-msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
 msgstr "Ontkoppel"
-
-#, elixir-autogen, elixir-format
-msgid "panel_form.type.label"
-msgstr "Panels"
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connector.annotation"
-msgstr "<div>Het LISS panel is van hoge kwaliteit en in het bijzonder geschikt voor onderzoek waarbij een correcte afspiegeling van de Nederlandse bevolking van belang is. Het panel is probability-based, wat betekent dat het gebaseerd is op een kanssteekproef van huishoudens uit het bevolkingsregister, getrokken door het CBS.</div><div>Ga naar <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a> voor meer informatie.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connector.annotation"
-msgstr "<div>Kies deze optie als je geen panel gebruikt of als het panel dat je gebruikt niet voorkomt in de opties. Er wordt dan een link getoont die je kunt gebruiken om aan de participanten of het panel te geven voor deelname.</div>"
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connector.annotation"
-msgstr "<div>Voor meer informatie over I&O Research, ga naar <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connection.annotation"
-msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij het panel bureau of direct aan je deelnemers. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij I&O Research. Met deze url kunnen deelnemers jouw data donatie takenlijst bezoeken.<br><br>The url bevat de volgende parameters:<ul><li>participant: uniek nummer voor een deelnemer vanuit I&O Research</li><li>language: 'nl' voor Nederlands of 'en' voor Engels</li></ul></div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.liss.connection.annotation"
-msgstr "<div>Kopieer de url hieronder en geef deze aan jouw contactpersoon bij Centerdata. Met deze url kunnen LISS panelleden jouw data donatie takenlijst bezoeken. Zorg ervoor dat je alleen de data donatie taak toevoegt aan je takenlijst voor LISS panelleden. De andere taken worden bij Centerdata uitgevoerd.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
@@ -470,4 +418,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.manual.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "affiliate.body"
+msgstr "Stel het panel in dat je wilt gebruiken voor het werven van deelnemers."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.affiliate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
 msgstr ""

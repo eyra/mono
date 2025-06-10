@@ -8,7 +8,7 @@ defmodule Systems.Storage.Centerdata.Backend do
         data,
         %{
           panel_info: %{
-            query_string: %{
+            meta: %{
               "quest" => quest,
               "varname1" => varname1,
               "respondent" => respondent,

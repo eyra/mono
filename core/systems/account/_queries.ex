@@ -8,6 +8,7 @@ defmodule Systems.Account.Queries do
   alias Systems.Account.User
   alias Systems.Account.FeaturesModel
   alias Systems.Account.UserProfileModel
+  alias Systems.Affiliate
 
   # User
 
@@ -40,10 +41,23 @@ defmodule Systems.Account.Queries do
     ])
   end
 
-  def user_query(internal?: true) do
+  def user_query(affiliate?: true) do
+    user_query()
+    |> join(:left, [user: u], a in Affiliate.User, on: u.id == a.user_id, as: :affiliate)
+    |> where([affiliate: a], not is_nil(a.id))
+  end
+
+  def user_query(external?: true) do
     user_query()
     |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external)
-    |> where([external: e], is_nil(e.id))
+    |> where([external: e], not is_nil(e.id))
+  end
+
+  def user_query(internal?: true) do
+    user_query()
+    |> join(:left, [user: u], a in Affiliate.User, on: u.id == a.user_id, as: :affiliate)
+    |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external)
+    |> where([affiliate: a, external: e], is_nil(a.id) and is_nil(e.id))
   end
 
   def user_query_by_email(email_fragment) do

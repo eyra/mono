@@ -13,8 +13,8 @@ defmodule Systems.Account.Plug do
   def call(conn, _opts) do
     case current_user(conn) do
       {:ok, %{} = user} ->
-        external? = Account.Public.external?(user)
-        signof_if_needed(conn, external?)
+        signof? = not Account.Public.internal?(user)
+        signof_if_needed(conn, signof?)
 
       _ ->
         conn

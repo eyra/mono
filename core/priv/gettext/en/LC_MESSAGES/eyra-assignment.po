@@ -62,10 +62,6 @@ msgstr "Continue"
 msgid "onboarding.consent.title"
 msgstr "Consent"
 
-#, elixir-autogen, elixir-format
-msgid "settings.storage.title"
-msgstr "Data storage"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Set up"
@@ -79,14 +75,6 @@ msgid "connector.connect.button"
 msgstr "Connect"
 
 #, elixir-autogen, elixir-format
-msgid "connector.panel.text"
-msgstr "Connect the panel that you would like to use. Choose 'Other' if the panel that you use is not mentioned or if you are not using a panel."
-
-#, elixir-autogen, elixir-format
-msgid "connector.panel.title"
-msgstr "Set up Panel"
-
-#, elixir-autogen, elixir-format
 msgid "connector.storage.text"
 msgstr "Select the storage type that you would like to use to store the participant data."
 
@@ -95,48 +83,8 @@ msgid "connector.storage.title"
 msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.storage.body"
-msgstr "The data donated by participants is stored on the Next platform."
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.body"
-msgstr "Connect the panel that you will use for recruiting participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.panel.title"
-msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
 msgstr "Disconnect"
-
-#, elixir-autogen, elixir-format
-msgid "panel_form.type.label"
-msgstr "Panels"
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connector.annotation"
-msgstr "<div>The LISS panel is a high-quality panel that is especially suited for research for which a correct representation of the Dutch population is of great importance. It is based on a true probability sample of households, drawn from the population register by Statistics Netherlands.<br>More information: <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a></div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connector.annotation"
-msgstr "<div>Select this option if you do not use a panel or if the panel that you use is not available in the options. A link will be provided that you can use to give to participants or to the panel that you use to enable participation.</div>"
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connector.annotation"
-msgstr "<div>For more information about I&O research visit <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at the panel agency. With this url participants can visit your data donation workflow. The parameter 'participant' is the unique identifier for a participant.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at I&O Research. With this url participants can visit your data donation workflow. The parameter 'participant' is the unique identifier for a participant.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.liss.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at Centerdata. With this url participants can visit your data donation workflow. For the LISS panel, make sure to only add the donate task to your workflow. The other tasks are performed by Centerdata.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
@@ -471,3 +419,19 @@ msgstr "Papers"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.manual.description"
 msgstr "Provide instructions on how to request or download digital trace data by building a manual."
+
+#, elixir-autogen, elixir-format,
+msgid "affiliate.body"
+msgstr "Integrate the workflow for participants with your own system. Make sure to execute a full roundtrip test to ensure the automation is working as expected."
+
+#, elixir-autogen, elixir-format,
+msgid "tabbar.item.affiliate"
+msgstr "Automation"
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr "Send your participants anonymously to this assignment without them having to sign in. Use the url below to invite them. Make sure to include your participant id in the url. You are allowed to include any other parameter in the url. This will be send back to your system in all automation calls."
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
+msgstr "Invite your participants"

@@ -1,0 +1,60 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.body"
+msgstr "The URL to which participant progress events will be sent."
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.placeholder"
+msgstr "https://your-domain.com/api/participants/event"
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.title"
+msgstr "Webhook"
+
+#, elixir-autogen, elixir-format
+msgid "redirect_url.placeholder"
+msgstr "https://your-domain.com/participants/redirect"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect_url.body"
+msgstr "The URL to which the participant will be redirected after completing the assignment. Leave blank to keep the participant on the Next platform."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect_url.title"
+msgstr "Redirect"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.invalid_parts"
+msgstr "URL is invalid"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.missing_host"
+msgstr "URL is missing host"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.missing_scheme"
+msgstr "URL is missing scheme"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.no_spaces_allowed"
+msgstr "URL contains one or more spaces"
+
+#, elixir-autogen, elixir-format
+msgid "test.success"
+msgstr "URL is valid and reachable"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.unreachable"
+msgstr "URL is valid but unreachable"

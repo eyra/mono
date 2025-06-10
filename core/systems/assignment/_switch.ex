@@ -14,6 +14,21 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
+        {:assignment_instance, :obtained} = signal,
+        %{assignment_instance: instance} = message
+      ) do
+    assignment = Assignment.Public.get!(instance.assignment_id)
+
+    dispatch!(
+      {:assignment, signal},
+      Map.merge(message, %{assignment: assignment})
+    )
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
         {:content_page, _} = signal,
         %{content_page: content_page} = message
       ) do
