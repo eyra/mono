@@ -90,7 +90,7 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
-    url = Affiliate.Public.url_for_resource(assignment) <> "?p={your_participant_id}"
+    url = Affiliate.Public.url_for_resource(assignment) <> "?p={participant_id}"
     assign(socket, affiliate_url: url)
   end
 

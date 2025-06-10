@@ -1,5 +1,6 @@
 defmodule Systems.Affiliate.Public do
   use Systems.Affiliate.Constants
+  use CoreWeb, :verified_routes
 
   import Ecto.Query, warn: true
   import Ecto.Changeset
@@ -17,7 +18,7 @@ defmodule Systems.Affiliate.Public do
   }
 
   def url_for_resource(%resource_type{} = %{id: id}) do
-    path = "/affiliate/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
+    path = ~p"/a/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
     get_base_url() <> path
   end
 
