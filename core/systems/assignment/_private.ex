@@ -10,11 +10,30 @@ defmodule Systems.Assignment.Private do
   alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
+  alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
   alias Systems.Monitor
+
+  def ensure_affiliate!(%Assignment.Model{} = assignment) do
+    {:ok, %{assignment: assignment}} = ensure_affiliate(assignment)
+    assignment
+  end
+
+  def ensure_affiliate(%Assignment.Model{affiliate: nil} = assignment) do
+    Multi.new()
+    |> Multi.insert(:affiliate, Affiliate.Public.prepare_affiliate())
+    |> Multi.update(:assignment, fn %{affiliate: affiliate} ->
+      Assignment.Model.changeset(assignment, %{})
+      |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
+    end)
+    |> Signal.Public.multi_dispatch({:affiliate, :inserted})
+    |> Repo.transaction()
+  end
+
+  def ensure_affiliate(%Assignment.Model{} = assignment), do: {:ok, %{assignment: assignment}}
 
   def get_template(%Assignment.Model{special: special}), do: get_template(special)
 
@@ -69,14 +88,6 @@ defmodule Systems.Assignment.Private do
 
   def storage_endpoint_key(%Assignment.Model{id: id}) do
     "assignment=#{id}"
-  end
-
-  def get_panel_url(%Assignment.Model{id: id, external_panel: external_panel}) do
-    case external_panel do
-      :liss -> ~p"/assignment/#{id}/liss"
-      :ioresearch -> ~p"/assignment/#{id}/ioresearch?participant={id}"
-      :generic -> ~p"/assignment/#{id}/participate?participant={id}"
-    end
   end
 
   def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}) do

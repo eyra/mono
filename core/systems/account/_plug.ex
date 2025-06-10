@@ -4,7 +4,7 @@ defmodule Systems.Account.Plug do
   import Plug.Conn
   alias Systems.Account
 
-  @valid_participant_path ~r"^\/assignment\/(callback\/)?\d.*$"
+  @valid_participant_path ~r"^\/(assignment\/(callback\/)?\d.*|affiliate\/\.*)$"
 
   @impl true
   def init(opts), do: opts

@@ -542,12 +542,10 @@ defmodule Core.Factories do
   end
 
   def build(:affiliate_user_info, %{} = attributes) do
-    {affiliate, attributes} = Map.pop(attributes, :affiliate, build(:affiliate))
     {user, attributes} = Map.pop(attributes, :user, build(:affiliate_user))
 
     %Affiliate.UserInfoModel{
-      user: user,
-      affiliate: affiliate
+      user: user
     }
     |> struct!(attributes)
   end

@@ -129,14 +129,14 @@ defmodule Systems.Assignment.CrewPage do
   def handle_event(
         "decline",
         _payload,
-        %{assigns: %{model: model, current_user: user, panel_info: %{embedded?: embedded?}}} =
+        %{assigns: %{model: model, current_user: user, panel_info: %{redirect?: redirect?}}} =
           socket
       ) do
     Assignment.Public.decline_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
 
     socket =
-      if embedded? do
+      if redirect? do
         socket
       else
         socket
@@ -190,7 +190,7 @@ defmodule Systems.Assignment.CrewPage do
     }
 
     with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-         {:ok, storage_info} <- Storage.Private.storage_info(storage_endpoint, assignment) do
+         storage_info <- Storage.Private.storage_info(storage_endpoint) do
       Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
       socket
     else

@@ -4,6 +4,7 @@ defmodule Systems.Routes do
       use Systems.Subroutes, [
         :admin,
         :advert,
+        :affiliate,
         :alliance,
         :assignment,
         :budget,

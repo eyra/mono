@@ -436,3 +436,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr ""

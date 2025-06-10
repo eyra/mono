@@ -436,3 +436,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect"
+msgstr "Hai finito. Grazie per la tua partecipazione."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr "Non hai finito? Torna indietro"

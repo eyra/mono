@@ -13,11 +13,24 @@ defmodule Systems.Assignment.Switch do
   alias Systems.NextAction
 
   @impl true
+  def intercept({:affiliate, _} = signal, %{affiliate: affiliate} = message) do
+    if assignment = Assignment.Public.get_by(affiliate, Assignment.Model.preload_graph(:down)) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+
+    :ok
+  end
+
+  @impl true
   def intercept(
         {:assignment_instance, :obtained} = signal,
         %{assignment_instance: instance} = message
       ) do
-    assignment = Assignment.Public.get!(instance.assignment_id)
+    assignment =
+      Assignment.Public.get!(instance.assignment_id, Assignment.Model.preload_graph(:down))
 
     dispatch!(
       {:assignment, signal},

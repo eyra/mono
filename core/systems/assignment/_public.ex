@@ -16,6 +16,7 @@ defmodule Systems.Assignment.Public do
   alias Frameworks.Concept
   alias Frameworks.Signal
 
+  alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Account
   alias Systems.Content
@@ -64,6 +65,9 @@ defmodule Systems.Assignment.Public do
   end
 
   def get_by(association, preload \\ [])
+
+  def get_by(%Affiliate.Model{id: id}, preload), do: get_by(:affiliate_id, id, preload)
+
   def get_by(%Assignment.PageRefModel{assignment_id: id}, preload), do: get!(id, preload)
 
   def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)

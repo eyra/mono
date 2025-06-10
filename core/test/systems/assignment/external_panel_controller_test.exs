@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.ExternalPanelControllerTest do
   use ExUnit.Case, async: true
 
-  alias Systems.Assignment.AffiliateController, as: Controller
+  alias Systems.Assignment.ExternalPanelController, as: Controller
 
   describe "valid_id?/1" do
     test "positive integer" do

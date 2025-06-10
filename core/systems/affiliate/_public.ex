@@ -1,45 +1,69 @@
 defmodule Systems.Affiliate.Public do
+  use Systems.Affiliate.Constants
+
   import Ecto.Query, warn: true
   import Ecto.Changeset
 
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-  alias Systems.Affiliate
+
   alias Systems.Account
+  alias Systems.Affiliate
+
+  @resource_map %{
+    Systems.Assignment.Model => @annotation_resource_id
+    # add more types as needed
+  }
+
+  def url_for_resource(%resource_type{} = %{id: id}) do
+    path = "/affiliate/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
+    get_base_url() <> path
+  end
+
+  def decode_id(id) do
+    Affiliate.Sqids.decode!(id)
+  end
+
+  def redirect_url(%Affiliate.Model{redirect_url: nil}, _user), do: nil
+  def redirect_url(%Affiliate.Model{redirect_url: ""}, _user), do: nil
+
+  def redirect_url(%Affiliate.Model{redirect_url: redirect_url}, %Account.User{} = user) do
+    %{info: info} = get_user_info(get_user(user))
+    Affiliate.Private.merge(redirect_url, info)
+  end
 
   def prepare_affiliate(callback_url \\ nil, redirect_url \\ nil) do
     %Affiliate.Model{}
     |> Affiliate.Model.changeset(%{callback_url: callback_url, redirect_url: redirect_url})
   end
 
-  def obtain_user_info!(%Affiliate.Model{} = affiliate, %Affiliate.User{} = user, info) do
-    {:ok, %{user_info: user_info}} = obtain_user_info(affiliate, user, info)
-    user_info
+  def obtain_user_info!(%Affiliate.User{} = user, info) do
+    {:ok, %{affiliate_user_info: affiliate_user_info}} = obtain_user_info(user, info)
+    affiliate_user_info
   end
 
-  def obtain_user_info(%Affiliate.Model{} = affiliate, %Affiliate.User{} = user, info) do
+  def obtain_user_info(%Affiliate.User{} = user, info) do
     Multi.new()
     |> Multi.insert(
       :affiliate_user_info,
-      prepare_user_info(user, affiliate, info),
+      prepare_user_info(user, info),
       on_conflict: {:replace, [:info]},
-      conflict_target: [:user_id, :affiliate_id]
+      conflict_target: [:user_id]
     )
     |> Signal.Public.multi_dispatch({:affiliate_user_info, :obtained})
     |> Repo.transaction()
   end
 
-  def prepare_user_info(%Affiliate.User{} = user, %Affiliate.Model{} = affiliate, info) do
+  def prepare_user_info(%Affiliate.User{} = user, info) do
     %Affiliate.UserInfoModel{}
     |> Affiliate.UserInfoModel.changeset(%{info: info})
     |> put_assoc(:user, user)
-    |> put_assoc(:affiliate, affiliate)
   end
 
   def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
     user =
-      if user = get_user_by_identifier(identifier) do
+      if user = get_user_by_identifier(identifier, [:user]) do
         user
       else
         register_user!(identifier, affiliate)
@@ -48,20 +72,40 @@ defmodule Systems.Affiliate.Public do
     user
   end
 
-  def get_user_by_identifier(nil), do: nil
-
-  def get_user_by_identifier(identifier) do
-    from(u in Affiliate.User,
-      where: u.identifier == ^identifier
+  def get_user(%Account.User{} = user) do
+    from(au in Affiliate.User,
+      where: au.user_id == ^user.id
     )
+    |> Repo.one()
     |> Repo.preload([:user])
+  end
+
+  def get_user_by_identifier(_identifier, preload \\ [])
+
+  def get_user_by_identifier(nil, _preload), do: nil
+
+  def get_user_by_identifier(identifier, preload) do
+    from(au in Affiliate.User,
+      where: au.identifier == ^identifier
+    )
+    |> Repo.one()
+    |> Repo.preload(preload)
+  end
+
+  def get_user_info(%Affiliate.User{} = user) do
+    from(aui in Affiliate.UserInfoModel,
+      where: aui.user_id == ^user.id
+    )
     |> Repo.one()
   end
 
   def register_user!(organisation, external_id) do
     case register_user(organisation, external_id) do
-      {:ok, user} -> user
-      _ -> raise "Failed to register user"
+      {:ok, user} ->
+        user
+
+      _ ->
+        raise "Failed to register user"
     end
   end
 
@@ -84,15 +128,11 @@ defmodule Systems.Affiliate.Public do
         }
       })
 
-    external_user =
-      Affiliate.User.changeset(%Affiliate.User{}, %{
-        identifier: identifier,
-        affiliate: affiliate
-      })
-
-    external_user
+    %Affiliate.User{}
+    |> Affiliate.User.changeset(%{identifier: identifier})
     |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert!()
+    |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
+    |> Repo.insert()
   end
 
   def validate_url(url) do
@@ -103,5 +143,9 @@ defmodule Systems.Affiliate.Public do
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  defp get_base_url do
+    Application.get_env(:core, :base_url)
   end
 end

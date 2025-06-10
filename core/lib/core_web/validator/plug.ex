@@ -11,14 +11,14 @@ defmodule CoreWeb.Validator.Plug do
       scope "/assignment", Systems.Assignment do
         pipe_through([:browser_unprotected, :validator])
 
-        post("/:id/:entry", AffiliateController, :create,
+        post("/:id/:entry", ExternalPanelController, :create,
           private: %{
             validate: %{
               id: &Systems.Validators.Integer.valid_integer?/1,
               entry: &Systems.Validators.String.valid_non_empty?/1
             },
             validation_handler:
-              &Systems.Assignment.AffiliateController.validation_error_callback/2
+              &Systems.Assignment.ExternalPanelController.validation_error_callback/2
           }
         )
       end

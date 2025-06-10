@@ -390,7 +390,7 @@ msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Not finished? Go back"
+msgstr "Back"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -420,11 +420,11 @@ msgstr "Papers"
 msgid "workflow_item.manual.description"
 msgstr "Provide instructions on how to request or download digital trace data by building a manual."
 
-#, elixir-autogen, elixir-format,
+#, elixir-autogen, elixir-format
 msgid "affiliate.body"
 msgstr "Integrate the workflow for participants with your own system. Make sure to execute a full roundtrip test to ensure the automation is working as expected."
 
-#, elixir-autogen, elixir-format,
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"
 msgstr "Automation"
 
@@ -435,3 +435,11 @@ msgstr "Send your participants anonymously to this assignment without them havin
 #, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
 msgstr "Invite your participants"
+
+#, elixir-autogen, elixir-format,
+msgid "finished_view.body.redirect"
+msgstr "You finished your tasks on Next. Please click continue to return to the panel platform."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr "Continue"
