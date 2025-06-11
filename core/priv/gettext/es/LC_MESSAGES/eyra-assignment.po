@@ -57,11 +57,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continuar"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Consentimiento"
 
 #, elixir-autogen, elixir-format
 msgid "connect.button"
@@ -141,11 +141,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Resumen"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Información"
 
 #, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
@@ -165,7 +165,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Información"
 
 #, elixir-autogen, elixir-format
 msgid "settings.support.body"
@@ -177,7 +177,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "¿Preguntas?"
 
 #, elixir-autogen, elixir-format
 msgid "support_form.off.label"
@@ -189,19 +189,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Has rechazado participar. Puedes cerrar el navegador. Si deseas reconsiderarlo, cierra esta ventana emergente para continuar."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr ""
+msgstr "Consentimiento rechazado"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Has terminado. Gracias por tu participación."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Finalizado"
 
 #, elixir-autogen, elixir-format
 msgid "privacy_doc.placeholder"
@@ -229,7 +229,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr ""
+msgstr "Privacidad"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
@@ -321,19 +321,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Consentimiento"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Información"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "¿Preguntas?"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Privacidad"
 
 #, elixir-autogen, elixir-format
 msgid "storage.create.button"
@@ -391,7 +391,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr ""
+msgstr "¿No has terminado? Regresa"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
