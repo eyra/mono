@@ -493,3 +493,7 @@ msgstr "Instruction manual [beta]"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.spotify"
 msgstr "X"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.es"
+msgstr "Spanish"

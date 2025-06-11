@@ -493,3 +493,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platforms.spotify"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.es"
+msgstr ""

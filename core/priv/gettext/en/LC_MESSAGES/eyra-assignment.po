@@ -436,7 +436,7 @@ msgstr "Send your participants anonymously to this assignment without them havin
 msgid "affiliate.panel.title"
 msgstr "Invite your participants"
 
-#, elixir-autogen, elixir-format,
+#, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect"
 msgstr "You finished your tasks on Next. Please click continue to return to the panel platform."
 
