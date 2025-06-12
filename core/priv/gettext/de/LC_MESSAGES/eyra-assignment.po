@@ -197,7 +197,7 @@ msgstr "Einwilligung verweigert"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme."
+msgstr "Danke. Sie haben alles abgeschlossen. Sie können das Fenster jetzt schließen."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -391,7 +391,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Nicht fertig? Zurückkehren"
+msgstr "Zurück"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -439,8 +439,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
-msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme."
+msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
-msgstr "Nicht fertig? Zurückkehren"
+msgstr "Weiter"

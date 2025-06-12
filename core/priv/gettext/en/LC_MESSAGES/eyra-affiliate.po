@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.body"
-msgstr "Option to provide a webhook URL to receive real-time participant status updates."
+msgstr "Option to automate participant progress tracking by providing a webhook URL to receive real-time status updates."
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.placeholder"

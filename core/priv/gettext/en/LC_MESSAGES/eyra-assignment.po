@@ -196,7 +196,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You have finished. Thank you for your participation."
+msgstr "Thank you. You have finished. You can now close the window."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -426,19 +426,19 @@ msgstr "If you would like to connect your participant workflow to an external sy
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"
-msgstr "Automation"
+msgstr "Integration"
 
 #, elixir-autogen, elixir-format
 msgid "affiliate.panel.annotation"
-msgstr "Send your participants anonymously to this assignment without them having to sign in. Use the url below to invite them. Make sure to include your participant id in the url. You are allowed to include any other parameter in the url. This will be send back to your system in all automation calls."
+msgstr "Use the link below to invite participants. No sign-in is required. Replace 'participant_id' with a unique identifier for each participant. You can optionally add custom parameters to the link (e.g., &d=abc123). These will be automatically forwarded to any external system connected via the Integration tab."
 
 #, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
-msgstr "Invite your participants"
+msgstr "Invite link"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect"
-msgstr "You finished your tasks on Next. Please click continue to return to the panel platform."
+msgstr "Thank you. You have completed this part. Click Continue to proceed.”
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"

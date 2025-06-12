@@ -197,7 +197,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Gracias. Has terminado. Ahora puedes cerrar la ventana."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -391,7 +391,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr ""
+msgstr "Atrás"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
@@ -439,8 +439,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
-msgstr ""
+msgstr "Gracias. Ha completado esta parte. Haga clic en Continuar para seguir."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
-msgstr ""
+msgstr "Continuar"

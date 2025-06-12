@@ -197,7 +197,7 @@ msgstr "Consenso rifiutato"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Hai finito. Grazie per la tua partecipazione."
+msgstr "Grazie. Hai finito. Ora puoi chiudere la finestra."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -391,7 +391,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr "Non hai finito? Torna indietro"
+msgstr "Indietro"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
@@ -439,8 +439,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
-msgstr "Hai finito. Grazie per la tua partecipazione."
+msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
-msgstr "Non hai finito? Torna indietro"
+msgstr "Continua"
