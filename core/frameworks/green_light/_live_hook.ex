@@ -20,12 +20,17 @@ defmodule Frameworks.GreenLight.LiveHook do
         "Access denied: access not allowed, module=#{inspect(live_view_module)}, params=#{inspect(params)}"
       )
 
+      connected? = connected?(socket)
+      Logger.info("connected?(socket) = #{connected?}")
+
       {:halt, redirect(socket, to: ~p"/access_denied")}
     end
   end
 
   defp access_allowed?(live_view_module, params, session, socket) do
     user = Map.get(socket.assigns, :current_user)
+
+    Logger.info("user = #{inspect(user)}")
 
     if function_exported?(live_view_module, :get_authorization_context, 3) do
       can_access? =

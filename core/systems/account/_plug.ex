@@ -1,6 +1,8 @@
 defmodule Systems.Account.Plug do
   @behaviour Plug
 
+  require Logger
+
   import Plug.Conn
   alias Systems.Account
 
@@ -14,6 +16,7 @@ defmodule Systems.Account.Plug do
     case current_user(conn) do
       {:ok, %{} = user} ->
         signof? = not Account.Public.internal?(user)
+        Logger.info("signof? = #{signof?}, user = #{inspect(user)}")
         signof_if_needed(conn, signof?)
 
       _ ->
@@ -33,6 +36,7 @@ defmodule Systems.Account.Plug do
     if Regex.match?(@valid_participant_path, request_path) do
       conn
     else
+      Logger.info("signing off, no regex match: request_path = #{request_path}")
       Account.UserAuth.forget_user(conn)
     end
   end
