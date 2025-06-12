@@ -10,27 +10,14 @@ defmodule Frameworks.GreenLight.LiveHook do
   @impl true
   def mount(live_view_module, params, session, socket) do
     if access_allowed?(live_view_module, params, session, socket) do
-      Logger.info(
-        "Access allowed, module=#{inspect(live_view_module)}, params=#{inspect(params)}"
-      )
-
       {:cont, socket}
     else
-      Logger.info(
-        "Access denied: access not allowed, module=#{inspect(live_view_module)}, params=#{inspect(params)}"
-      )
-
-      connected? = connected?(socket)
-      Logger.info("connected?(socket) = #{connected?}")
-
       {:halt, redirect(socket, to: ~p"/access_denied")}
     end
   end
 
   defp access_allowed?(live_view_module, params, session, socket) do
     user = Map.get(socket.assigns, :current_user)
-
-    Logger.info("user = #{inspect(user)}")
 
     if function_exported?(live_view_module, :get_authorization_context, 3) do
       can_access? =
@@ -40,13 +27,9 @@ defmodule Frameworks.GreenLight.LiveHook do
           live_view_module
         )
 
-      user && Logger.info("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
+      user && Logger.debug("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
       can_access?
     else
-      Logger.info(
-        "Access denied: function_exported?(:get_authorization_context, 3) is false, module=#{inspect(live_view_module)}"
-      )
-
       auth_module().can_access?(user, live_view_module)
     end
   end

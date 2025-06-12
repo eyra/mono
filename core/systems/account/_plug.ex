@@ -15,14 +15,8 @@ defmodule Systems.Account.Plug do
   def call(conn, _opts) do
     case current_user(conn) do
       {:ok, %{} = user} ->
-        external? = Account.Public.external?(user)
-        affiliate? = Account.Public.affiliate?(user)
-
-        Logger.info(
-          "external? = #{external?}, affiliate? = #{affiliate?}, user = #{inspect(user)}"
-        )
-
-        signof_if_needed(conn, external? or affiliate?)
+        restricted_user? = Account.Public.external?(user) or Account.Public.affiliate?(user)
+        signof_if_needed(conn, restricted_user?)
 
       _ ->
         conn
@@ -37,11 +31,14 @@ defmodule Systems.Account.Plug do
     end
   end
 
-  defp signof_if_needed(%{request_path: request_path} = conn, true = _not_internal?) do
+  defp signof_if_needed(%{request_path: request_path} = conn, true = _restricted_user?) do
     if Regex.match?(@valid_participant_path, request_path) do
       conn
     else
-      Logger.info("signing off, no regex match: request_path = #{request_path}")
+      Logger.warning(
+        "signing off restricted user, no regex match: request_path=#{request_path}, regex=#{@valid_participant_path}"
+      )
+
       Account.UserAuth.forget_user(conn)
     end
   end
