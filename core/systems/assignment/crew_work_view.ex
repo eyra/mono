@@ -3,7 +3,6 @@ defmodule Systems.Assignment.CrewWorkView do
 
   require Logger
 
-  alias Frameworks.Signal
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Consent
@@ -18,10 +17,11 @@ defmodule Systems.Assignment.CrewWorkView do
           context_menu_items: context_menu_items,
           intro_page_ref: intro_page_ref,
           support_page_ref: support_page_ref,
+          affiliate: affiliate,
           crew: crew,
           user: user,
           timezone: timezone,
-          panel_info: %{embedded?: embedded?} = panel_info,
+          panel_info: panel_info,
           tester?: tester?
         },
         socket
@@ -39,6 +39,7 @@ defmodule Systems.Assignment.CrewWorkView do
         context_menu_items: context_menu_items,
         intro_page_ref: intro_page_ref,
         support_page_ref: support_page_ref,
+        affiliate: affiliate,
         crew: crew,
         user: user,
         timezone: timezone,
@@ -50,7 +51,7 @@ defmodule Systems.Assignment.CrewWorkView do
       )
 
     socket =
-      if finished? and not retry? and not embedded? do
+      if finished? and not retry? do
         socket
         |> compose_child(:finished_view)
         |> compose_child(:context_menu)
@@ -172,11 +173,13 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def compose(:finished_view, _) do
+  def compose(:finished_view, %{affiliate: affiliate, user: user}) do
     %{
       module: Assignment.FinishedView,
       params: %{
-        title: dgettext("eyra-assignment", "finished_view.title")
+        title: dgettext("eyra-assignment", "finished_view.title"),
+        user: user,
+        affiliate: affiliate
       }
     }
   end
@@ -300,14 +303,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
-      if embedded?(socket) do
-        # dont show finished view in embedded mode
-        # FIXME: This is a temporary solution to allow embeds to work https://github.com/eyra/mono/issues/997
-        socket
-      else
-        socket |> compose_child(:finished_view)
-      end
-      |> signal_tasks_finished()
+      socket |> compose_child(:finished_view)
     else
       socket
     end
@@ -322,21 +318,6 @@ defmodule Systems.Assignment.CrewWorkView do
       |> Enum.map(fn {_, task} -> task.id end)
 
     Crew.Public.tasks_finished?(task_ids)
-  end
-
-  defp signal_tasks_finished(%{assigns: %{tester?: true}} = socket) do
-    # signal has a side effect of creating performance metrics. We don't want that for testers.
-    socket
-  end
-
-  defp signal_tasks_finished(%{assigns: %{crew: crew, user: user}} = socket) do
-    %Crew.MemberModel{} = crew_member = Crew.Public.get_member(crew, user)
-    Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: crew_member})
-    socket
-  end
-
-  def embedded?(%{assigns: %{panel_info: %{embedded?: embedded?}}}) do
-    embedded?
   end
 
   @impl true

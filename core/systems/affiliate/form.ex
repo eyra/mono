@@ -77,6 +77,23 @@ defmodule Systems.Affiliate.Form do
     ~H"""
     <div>
       <.form :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself}>
+          <Text.title4><%= dgettext("eyra-affiliate", "redirect_url.title") %></Text.title4>
+          <.spacing value="XS" />
+          <Text.body><%= dgettext("eyra-affiliate", "redirect_url.body") %></Text.body>
+          <.spacing value="XS" />
+          <.url_input form={form} field={:redirect_url} placeholder={dgettext("eyra-affiliate", "redirect_url.placeholder")} reserve_error_space={false}/>
+          <.spacing value="XXS" />
+          <div class="flex flex-row items-center gap-3">
+            <div :if={@test.redirect_url.error} class="text-caption font-caption text-warning leading-6">
+              <%= @test.redirect_url.error %>
+            </div>
+            <div :if={@test.redirect_url.success} class="text-caption font-caption text-success leading-6">
+              <%= dgettext("eyra-affiliate", "test.success") %>
+            </div>
+          </div>
+
+          <.spacing value="M" />
+
           <Text.title4><%= dgettext("eyra-affiliate", "callback_url.title") %></Text.title4>
           <.spacing value="XS" />
           <Text.body><%= dgettext("eyra-affiliate", "callback_url.body") %></Text.body>
@@ -89,23 +106,6 @@ defmodule Systems.Affiliate.Form do
               <%= @test.callback_url.error %>
             </div>
             <div :if={@test.callback_url.success} class="text-caption font-caption text-success leading-6">
-              <%= dgettext("eyra-affiliate", "test.success") %>
-            </div>
-          </div>
-
-          <.spacing value="M" />
-
-          <Text.title4><%= dgettext("eyra-affiliate", "redirect_url.title") %></Text.title4>
-          <.spacing value="XS" />
-          <Text.body><%= dgettext("eyra-affiliate", "redirect_url.body") %></Text.body>
-          <.spacing value="XS" />
-          <.url_input form={form} field={:redirect_url} placeholder={dgettext("eyra-affiliate", "redirect_url.placeholder")} reserve_error_space={false}/>
-          <.spacing value="XXS" />
-          <div class="flex flex-row items-center gap-3">
-            <div :if={@test.redirect_url.error} class="text-caption font-caption text-warning leading-6">
-              <%= @test.redirect_url.error %>
-            </div>
-            <div :if={@test.redirect_url.success} class="text-caption font-caption text-success leading-6">
               <%= dgettext("eyra-affiliate", "test.success") %>
             </div>
           </div>

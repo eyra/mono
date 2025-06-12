@@ -103,7 +103,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
            privacy_doc: privacy_doc,
            consent_agreement: consent_agreement,
            page_refs: page_refs,
-           crew: crew
+           crew: crew,
+           affiliate: affiliate
          } = assignment,
          %{
            fabric: fabric,
@@ -131,7 +132,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
       user: user,
       timezone: timezone,
       panel_info: panel_info,
-      tester?: tester?
+      tester?: tester?,
+      affiliate: affiliate
     })
   end
 

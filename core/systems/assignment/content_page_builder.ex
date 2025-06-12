@@ -270,8 +270,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(:affiliate, %{affiliate: nil} = _assignment, _, _, _, _), do: nil
-
   defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{
          fabric: fabric
        }) do

@@ -12,12 +12,33 @@ defmodule Systems.Assignment.Switch do
   alias Systems.Crew
   alias Systems.NextAction
 
+  @assignment_accepted_event :assignment_accepted
+  @assignment_declined_event :assignment_declined
+  @assignment_started_event :assignment_started
+  @assignment_finished_event :assignment_finished
+
+  @task_started_event :task_started
+  @task_finished_event :task_finished
+
+  @impl true
+  def intercept({:affiliate, _} = signal, %{affiliate: affiliate} = message) do
+    if assignment = Assignment.Public.get_by(affiliate, Assignment.Model.preload_graph(:down)) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+
+    :ok
+  end
+
   @impl true
   def intercept(
         {:assignment_instance, :obtained} = signal,
         %{assignment_instance: instance} = message
       ) do
-    assignment = Assignment.Public.get!(instance.assignment_id)
+    assignment =
+      Assignment.Public.get!(instance.assignment_id, Assignment.Model.preload_graph(:down))
 
     dispatch!(
       {:assignment, signal},
@@ -115,14 +136,41 @@ defmodule Systems.Assignment.Switch do
       ) do
     if assignment = Assignment.Public.get_by(crew, Assignment.Model.preload_graph(:down)) do
       case event do
-        {:crew_member, :started} ->
-          Assignment.Private.log_performance_event(assignment, :started, crew_member)
+        {:crew_member, :accepted} ->
+          Assignment.Private.log_performance_event(assignment, :accepted, crew_member)
+
+          Assignment.Private.send_progress_event(
+            assignment,
+            @assignment_accepted_event,
+            crew_member
+          )
 
         {:crew_member, :declined} ->
           Assignment.Private.log_performance_event(assignment, :declined, crew_member)
 
+          Assignment.Private.send_progress_event(
+            assignment,
+            @assignment_declined_event,
+            crew_member
+          )
+
+        {:crew_member, :started} ->
+          Assignment.Private.log_performance_event(assignment, :started, crew_member)
+
+          Assignment.Private.send_progress_event(
+            assignment,
+            @assignment_started_event,
+            crew_member
+          )
+
         {:crew_member, :finished_tasks} ->
           Assignment.Private.log_performance_event(assignment, :finished, crew_member)
+
+          Assignment.Private.send_progress_event(
+            assignment,
+            @assignment_finished_event,
+            crew_member
+          )
       end
 
       update_content_page(assignment, from_pid)
@@ -174,7 +222,6 @@ defmodule Systems.Assignment.Switch do
     if assignment =
          Assignment.Public.get_by(consent_agreement, Assignment.Model.preload_graph(:down)) do
       Assignment.Private.clear_performance_event(assignment, :declined, user)
-      Assignment.Private.log_performance_event(assignment, :accepted, user)
       Assignment.Public.reset_member(assignment, user, dispatch: false)
 
       update_content_page(assignment, from_pid)
@@ -194,9 +241,14 @@ defmodule Systems.Assignment.Switch do
       case event do
         :started ->
           Assignment.Private.log_performance_event(assignment, crew_task, :started)
+          Assignment.Private.send_progress_event(assignment, crew_task, @task_started_event)
 
         :completed ->
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
+          Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
+
+          Assignment.Public.get_member_by_task(crew_task)
+          |> dispatch_finished_assignment()
 
         :accepted ->
           payout_participants(assignment, crew_task, message)
@@ -331,6 +383,12 @@ defmodule Systems.Assignment.Switch do
     if old_status != :accepted do
       participants = auth_module().users_with_role(crew_task, :owner)
       Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
+    end
+  end
+
+  defp dispatch_finished_assignment(crew_member) do
+    if Crew.Public.finished?(crew_member) do
+      Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: crew_member})
     end
   end
 end

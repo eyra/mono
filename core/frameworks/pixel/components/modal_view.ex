@@ -66,6 +66,10 @@ defmodule Frameworks.Pixel.ModalView do
         }
       end
 
+      def close_modal(socket, nil) do
+        socket
+      end
+
       def close_modal(socket, %{live_component: %{ref: ref}} = modal) do
         socket
         |> delete_modal(modal)

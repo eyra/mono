@@ -240,9 +240,8 @@ defmodule Systems.Assignment.Controller do
 
     panel_info = %{
       panel: :next,
-      embedded?: false,
-      participant: participant,
-      meta: %{}
+      redirect?: false,
+      participant: participant
     }
 
     conn |> put_session(:panel_info, panel_info)

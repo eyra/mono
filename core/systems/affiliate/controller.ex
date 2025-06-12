@@ -1,7 +1,11 @@
-defmodule Systems.Assignment.AffiliateController do
+defmodule Systems.Affiliate.Controller do
+  use Systems.Affiliate.Constants
+
   use CoreWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+
+  import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
   alias Systems.Assignment
   alias Systems.Affiliate
@@ -11,8 +15,30 @@ defmodule Systems.Assignment.AffiliateController do
   @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
   @id_max_lenght 64
 
-  def create(conn, %{"id" => id} = params) do
-    assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
+  def create(conn, %{"sqid" => sqid} = params) do
+    case numbers(sqid) do
+      {:ok, numbers} ->
+        start(conn, params, numbers)
+
+      {:error, error} ->
+        Logger.error("#{inspect(error)}, someone is trying to hack us")
+        forbidden(conn)
+    end
+  end
+
+  defp numbers(sqid) do
+    numbers = Affiliate.Sqids.decode!(sqid)
+
+    if Affiliate.Sqids.encode!(numbers) == sqid do
+      {:ok, numbers}
+    else
+      {:error, "Invalid sqid #{sqid}"}
+    end
+  end
+
+  defp start(conn, params, [@annotation_resource_id, assignment_id]) do
+    assignment =
+      Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do
@@ -27,6 +53,10 @@ defmodule Systems.Assignment.AffiliateController do
         true -> start_participant(conn, params, assignment)
       end
     end
+  end
+
+  defp start(conn, _params, _) do
+    forbidden(conn)
   end
 
   @doc """
@@ -60,15 +90,17 @@ defmodule Systems.Assignment.AffiliateController do
   end
 
   def valid_id?(nil), do: false
+  def valid_id?("participant_id"), do: false
 
   def valid_id?(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
 
-  defp start_tester(conn, params, assignment) do
+  defp start_tester(conn, params, %{affiliate: affiliate} = assignment) do
     conn
     |> obtain_instance(assignment)
-    |> redirect(to: path(params))
+    |> add_panel_info(params, affiliate)
+    |> redirect(to: path(assignment))
   end
 
   defp start_participant(conn, params, %{affiliate: affiliate} = assignment) do
@@ -77,13 +109,15 @@ defmodule Systems.Assignment.AffiliateController do
 
     conn
     |> assign(:current_user, user)
+    |> log_in_user_without_redirect(user)
     |> authorize_user(assignment)
-    |> ensure_user_info(params, assignment, affiliate_user)
+    |> ensure_user_info(params, affiliate_user)
     |> obtain_instance(assignment)
-    |> redirect(to: path(params))
+    |> add_panel_info(params, affiliate)
+    |> redirect(to: path(assignment))
   end
 
-  defp path(%{"id" => id}), do: "/assignment/#{id}"
+  defp path(%{id: id}), do: "/assignment/#{id}"
 
   defp forbidden(conn) do
     conn
@@ -104,12 +138,12 @@ defmodule Systems.Assignment.AffiliateController do
     conn
   end
 
-  defp ensure_user_info(conn, params, %{affiliate: affiliate} = assignment, affiliate_user) do
+  defp ensure_user_info(conn, params, affiliate_user) do
     info = strip_query_string(params)
-    user_info = Affiliate.Public.obtain_user_info!(affiliate, affiliate_user, info)
+    user_info = Affiliate.Public.obtain_user_info!(affiliate_user, info)
 
     Logger.debug(
-      "Obtained user info for assignment #{assignment.id} and user #{affiliate_user.user.id}; info=#{inspect(user_info)}"
+      "Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}"
     )
 
     conn
@@ -121,17 +155,28 @@ defmodule Systems.Assignment.AffiliateController do
     conn
   end
 
+  defp add_panel_info(conn, params, affiliate) do
+    panel_info = %{
+      panel: :affiliate,
+      redirect?: redirect?(affiliate),
+      participant: get_participant(params)
+    }
+
+    conn |> put_session(:panel_info, panel_info)
+  end
+
+  defp redirect?(%{redirect_url: nil}), do: false
+  defp redirect?(%{redirect_url: ""}), do: false
+  defp redirect?(_), do: true
+
   # Param Mappings
 
   defp get_participant(%{"p" => participant}), do: participant
-  defp get_participant(%{"participant" => participant}), do: participant
 
   defp get_participant(_), do: nil
 
   defp strip_query_string(params) do
     params
-    |> Map.delete("id")
-    |> Map.delete("p")
-    |> Map.delete("participant")
+    |> Map.delete("sqid")
   end
 end

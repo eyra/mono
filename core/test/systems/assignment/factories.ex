@@ -34,10 +34,12 @@ defmodule Systems.Assignment.Factories do
     Factories.insert!(:workflow, %{})
   end
 
-  def create_workflow_item(workflow, tool_ref) do
+  def create_workflow_item(workflow, tool_ref, title \\ "Test Task", position \\ 0) do
     Factories.insert!(:workflow_item, %{
       workflow: workflow,
-      tool_ref: tool_ref
+      tool_ref: tool_ref,
+      title: title,
+      position: position
     })
   end
 

@@ -144,7 +144,10 @@ defmodule Systems.Account.Public do
   end
 
   def internal?(user_id) do
-    not external?(user_id) and not affiliate?(user_id)
+    external? = external?(user_id)
+    affiliate? = affiliate?(user_id)
+
+    not (external? or affiliate?)
   end
 
   ## Database getters
