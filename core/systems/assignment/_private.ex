@@ -60,7 +60,7 @@ defmodule Systems.Assignment.Private do
         %{user_id: user_id} = _crew_member
       ) do
     user = Account.Public.get_user!(user_id)
-    Affiliate.Public.send_progress_event(assignment, %{progress: event}, user)
+    Affiliate.Public.send_event(assignment, %{progress: event}, user)
   end
 
   def send_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
@@ -68,7 +68,7 @@ defmodule Systems.Assignment.Private do
     {:ok, %{title: title, position: position}} = get_workflow_item(crew_task)
     task_slug = title |> slugify()
 
-    Affiliate.Public.send_progress_event(
+    Affiliate.Public.send_event(
       assignment,
       %{task_nr: position + 1, task_slug: task_slug, progress: event},
       user

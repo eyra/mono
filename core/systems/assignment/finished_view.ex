@@ -7,7 +7,6 @@ defmodule Systems.Assignment.FinishedView do
 
   @impl true
   def update(%{title: title, user: user, affiliate: affiliate}, socket) do
-    redirect_url = Affiliate.Public.redirect_url(affiliate, user)
     body_default = dgettext("eyra-assignment", "finished_view.body")
     body_redirect = dgettext("eyra-assignment", "finished_view.body.redirect")
 
@@ -18,11 +17,26 @@ defmodule Systems.Assignment.FinishedView do
         title: title,
         body_default: body_default,
         body_redirect: body_redirect,
-        redirect_url: redirect_url
+        affiliate: affiliate,
+        user: user
       )
-      |> update_retry_button()
+      |> update_redirect_url()
       |> update_redirect_button()
+      |> update_retry_button()
     }
+  end
+
+  defp update_redirect_url(%{assigns: %{affiliate: affiliate, user: user}} = socket) do
+    redirect_url =
+      case Affiliate.Public.redirect_url(affiliate, user) do
+        {:ok, redirect_url} ->
+          redirect_url
+
+        {:error, _} ->
+          nil
+      end
+
+    socket |> assign(redirect_url: redirect_url)
   end
 
   defp update_redirect_button(%{assigns: %{redirect_url: nil}} = socket) do

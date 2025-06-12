@@ -19,27 +19,18 @@ defmodule Systems.Affiliate.Public do
     # add more types as needed
   }
 
-  def send_progress_event(nil, event, _user) do
-    Logger.warning("No affiliate found for event: #{inspect(event)}")
-  end
+  def send_event(nil, _event, _user), do: {:error, :affiliate_url_missing}
+  def send_event(_affiliate, nil, _user), do: {:error, :event_missing}
 
-  def send_progress_event(%{affiliate: affiliate}, event, user) do
-    send_progress_event(affiliate, event, user)
-  end
+  def send_event(_affiliate, event, _user) when not is_map(event),
+    do: {:error, :event_invalid_format}
 
-  def send_progress_event(%{callback_url: nil}, _event, _user),
-    do: {:error, :callback_url_missing}
+  def send_event(_affiliate, _event, nil), do: {:error, :user_missing}
 
-  def send_progress_event(%{callback_url: ""}, _event, _user), do: {:error, :callback_url_missing}
-
-  def send_progress_event(%{callback_url: callback_url}, %{} = event, user) do
+  def send_event(affiliate, %{} = event, user) do
     case get_user(user) do
       {:ok, affiliate_user} ->
-        %{info: info} = get_user_info(affiliate_user)
-
-        callback_url
-        |> Affiliate.Private.merge(info, event)
-        |> Affiliate.Private.callback()
+        Affiliate.Private.callback(affiliate, get_user_info(affiliate_user), event)
 
       {:error, :user_not_found} ->
         {:error, :user_not_found}
@@ -55,22 +46,20 @@ defmodule Systems.Affiliate.Public do
     Affiliate.Sqids.decode!(id)
   end
 
-  def redirect_url(%Affiliate.Model{redirect_url: nil}, _user), do: nil
-  def redirect_url(%Affiliate.Model{redirect_url: ""}, _user), do: nil
+  def redirect_url(_affiliate, nil), do: {:error, :user_missing}
 
-  def redirect_url(%Affiliate.Model{} = affiliate, %Account.User{} = user) do
+  def redirect_url(affiliate, %Account.User{} = user) do
     case get_user(user) do
       {:ok, affiliate_user} ->
-        redirect_url(affiliate, affiliate_user)
+        Affiliate.Private.redirect_url(affiliate, get_user_info(affiliate_user))
 
-      {:error, :user_not_found} ->
-        nil
+      error ->
+        error
     end
   end
 
-  def redirect_url(%Affiliate.Model{redirect_url: redirect_url}, %Affiliate.User{} = user) do
-    %{info: info} = get_user_info(user)
-    Affiliate.Private.merge(redirect_url, info)
+  def redirect_url(%{redirect_url: redirect_url}, %Affiliate.User{} = user) do
+    Affiliate.Private.merge(redirect_url, get_user_info(user))
   end
 
   def prepare_affiliate(callback_url \\ nil, redirect_url \\ nil) do
