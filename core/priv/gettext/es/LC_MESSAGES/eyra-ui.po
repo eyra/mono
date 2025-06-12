@@ -13,31 +13,31 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "error.flash"
-msgstr ""
+msgstr "Algo salió mal"
 
 #, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
-msgstr ""
+msgstr "Guardado"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr ""
+msgstr "Cuenta"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signin"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr ""
+msgstr "Cerrar sesión"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.menu"
-msgstr ""
+msgstr "Menú"
 
 #, elixir-autogen, elixir-format
 msgid "menu.item.todo"
-msgstr ""
+msgstr "Tareas"
 
 #, elixir-autogen, elixir-format
 msgid "todo.title"
