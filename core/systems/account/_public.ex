@@ -138,10 +138,11 @@ defmodule Systems.Account.Public do
   end
 
   # Internal users are not affiliate users and not external users
-
   def internal?(%User{id: user_id}) do
     internal?(user_id)
   end
+
+  def internal?(nil), do: false
 
   def internal?(user_id) do
     external? = external?(user_id)

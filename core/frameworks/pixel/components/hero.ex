@@ -198,11 +198,8 @@ defmodule Frameworks.Pixel.Hero do
 
   def landing_page(assigns) do
     ~H"""
-    <div
-      class={"flex justify-between items-center h-full #{@text_color} #{@bg_color}"}
-      data-native-title={@title}
-    >
-      <div class="w-4/5 py-4">
+    <div class={"flex max-h-64 overflow-hidden #{@bg_color} #{@text_color}"} data-native-title={@title}>
+      <div class="flex w-4/5 flex-col justify-center  py-4">
         <p class="text-title6 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
           <%= @title %>
         </p>
@@ -213,8 +210,8 @@ defmodule Frameworks.Pixel.Hero do
           </p>
         <% end %>
       </div>
-      <div class="w-1/5 h-full">
-        <img class="object-cover h-full" src={~p"/images/#{@illustration}"} alt="">
+      <div class="w-1/5 flex">
+        <img class="object-cover flex-grow md:object-fill" src={~p"/images/#{@illustration}"} />
       </div>
     </div>
     """

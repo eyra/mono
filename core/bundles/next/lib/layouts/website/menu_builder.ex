@@ -25,13 +25,11 @@ defmodule Next.Layouts.Website.MenuBuilder do
 
   def include_map(nil),
     do: %{
-      workspace: false,
-      profile: false
+      workspace: false
     }
 
   def include_map(user),
     do: %{
-      workspace: Systems.Admin.Public.admin?(user) or user.creator,
-      profile: true
+      workspace: Systems.Admin.Public.admin?(user) or user.creator
     }
 end
