@@ -32,4 +32,4 @@ msgstr "Panl studies"
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
-msgstr "Ontwikkeld voor en met de sociale, geestes- en gezondheidswetenschappen"
+msgstr "Ontwikkeld voor en met onderzoekers"
