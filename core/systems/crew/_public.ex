@@ -175,6 +175,7 @@ defmodule Systems.Crew.Public do
         end
 
       _ ->
+        Signal.Public.dispatch!({:crew_task, :completed}, %{crew_task: task})
         {:ok, %{crew_task: task}}
     end
   end
@@ -367,6 +368,22 @@ defmodule Systems.Crew.Public do
       Crew.MemberModel.changeset(member, %{expired: true})
     )
     |> Multi.update_all(:tasks, task_query, set: [expired: true])
+  end
+
+  def started?(%Crew.MemberModel{} = member) do
+    crew = get!(member.crew_id)
+
+    task_query(crew, member, false)
+    |> Repo.all()
+    |> Enum.any?(&(&1.started_at != nil))
+  end
+
+  def finished?(%Crew.MemberModel{} = member) do
+    crew = get!(member.crew_id)
+
+    task_query(crew, member, false)
+    |> Repo.all()
+    |> Enum.all?(&(&1.status in Crew.TaskStatus.finished_states()))
   end
 
   def tasks_finished?(task_ids) when is_list(task_ids) do

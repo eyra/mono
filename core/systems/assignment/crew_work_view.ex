@@ -3,7 +3,6 @@ defmodule Systems.Assignment.CrewWorkView do
 
   require Logger
 
-  alias Frameworks.Signal
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Consent
@@ -304,9 +303,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
   defp handle_finished_state(%{assigns: %{work_items: work_items}} = socket) do
     if tasks_finished?(work_items) do
-      socket
-      |> compose_child(:finished_view)
-      |> signal_tasks_finished()
+      socket |> compose_child(:finished_view)
     else
       socket
     end
@@ -321,17 +318,6 @@ defmodule Systems.Assignment.CrewWorkView do
       |> Enum.map(fn {_, task} -> task.id end)
 
     Crew.Public.tasks_finished?(task_ids)
-  end
-
-  defp signal_tasks_finished(%{assigns: %{tester?: true}} = socket) do
-    # signal has a side effect of creating performance metrics. We don't want that for testers.
-    socket
-  end
-
-  defp signal_tasks_finished(%{assigns: %{crew: crew, user: user}} = socket) do
-    %Crew.MemberModel{} = crew_member = Crew.Public.get_member(crew, user)
-    Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: crew_member})
-    socket
   end
 
   @impl true

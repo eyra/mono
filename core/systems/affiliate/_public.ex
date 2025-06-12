@@ -2,6 +2,8 @@ defmodule Systems.Affiliate.Public do
   use Systems.Affiliate.Constants
   use CoreWeb, :verified_routes
 
+  require Logger
+
   import Ecto.Query, warn: true
   import Ecto.Changeset
 
@@ -17,6 +19,33 @@ defmodule Systems.Affiliate.Public do
     # add more types as needed
   }
 
+  def send_progress_event(nil, event, _user) do
+    Logger.warning("No affiliate found for event: #{inspect(event)}")
+  end
+
+  def send_progress_event(%{affiliate: affiliate}, event, user) do
+    send_progress_event(affiliate, event, user)
+  end
+
+  def send_progress_event(%{callback_url: nil}, _event, _user),
+    do: {:error, :callback_url_missing}
+
+  def send_progress_event(%{callback_url: ""}, _event, _user), do: {:error, :callback_url_missing}
+
+  def send_progress_event(%{callback_url: callback_url}, %{} = event, user) do
+    case get_user(user) do
+      {:ok, affiliate_user} ->
+        %{info: info} = get_user_info(affiliate_user)
+
+        callback_url
+        |> Affiliate.Private.merge(info, event)
+        |> Affiliate.Private.callback()
+
+      {:error, :user_not_found} ->
+        {:error, :user_not_found}
+    end
+  end
+
   def url_for_resource(%resource_type{} = %{id: id}) do
     path = ~p"/a/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
     get_base_url() <> path
@@ -29,8 +58,18 @@ defmodule Systems.Affiliate.Public do
   def redirect_url(%Affiliate.Model{redirect_url: nil}, _user), do: nil
   def redirect_url(%Affiliate.Model{redirect_url: ""}, _user), do: nil
 
-  def redirect_url(%Affiliate.Model{redirect_url: redirect_url}, %Account.User{} = user) do
-    %{info: info} = get_user_info(get_user(user))
+  def redirect_url(%Affiliate.Model{} = affiliate, %Account.User{} = user) do
+    case get_user(user) do
+      {:ok, affiliate_user} ->
+        redirect_url(affiliate, affiliate_user)
+
+      {:error, :user_not_found} ->
+        nil
+    end
+  end
+
+  def redirect_url(%Affiliate.Model{redirect_url: redirect_url}, %Affiliate.User{} = user) do
+    %{info: info} = get_user_info(user)
     Affiliate.Private.merge(redirect_url, info)
   end
 
@@ -74,11 +113,18 @@ defmodule Systems.Affiliate.Public do
   end
 
   def get_user(%Account.User{} = user) do
-    from(au in Affiliate.User,
-      where: au.user_id == ^user.id
-    )
-    |> Repo.one()
-    |> Repo.preload([:user])
+    user =
+      from(au in Affiliate.User,
+        where: au.user_id == ^user.id
+      )
+      |> Repo.one()
+      |> Repo.preload([:user])
+
+    if user do
+      {:ok, user}
+    else
+      {:error, :user_not_found}
+    end
   end
 
   def get_user_by_identifier(_identifier, preload \\ [])

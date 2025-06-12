@@ -488,11 +488,11 @@ msgstr "A specific geographic or organizational location. (SPICE)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.manual"
-msgstr "Instruction manual [beta]"
+msgstr "Instruction manual"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.spotify"
-msgstr "X"
+msgstr "Spotify"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.es"

@@ -17,7 +17,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr ""
+msgstr "¿Aceptas los términos y condiciones anteriores?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
@@ -25,16 +25,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "out_of_sync.error.message"
-msgstr ""
+msgstr "El texto de consentimiento ha cambiado. Por favor, actualiza la página para continuar."
 
 #, elixir-autogen, elixir-format
 msgid "signature.view.title"
-msgstr ""
+msgstr "Consentimiento"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
-msgstr ""
+msgstr "Sí, acepto"
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
-msgstr ""
+msgstr "No"

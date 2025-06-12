@@ -3,6 +3,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   use Systems.Assignment.CrewTaskHelpers
 
   alias Frameworks.Utility.UserState
+  alias Systems.Assignment
 
   # Make sure this name is unique, see: Systems.Assignment.CrewTaskSingleView
   @tool_ref_view_name :tool_ref_view_list
@@ -192,6 +193,11 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> compose_child(@tool_ref_view_name)
     |> show_modal_tool_ref_view_if_needed()
     |> start_task()
+  end
+
+  defp start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
+    Assignment.Public.start_task(task)
+    socket
   end
 
   defp show_modal_tool_ref_view_if_needed(%{assigns: %{selected_item: selected_item}} = socket)

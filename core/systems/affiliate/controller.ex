@@ -16,7 +16,24 @@ defmodule Systems.Affiliate.Controller do
   @id_max_lenght 64
 
   def create(conn, %{"sqid" => sqid} = params) do
-    start(conn, params, Affiliate.Sqids.decode!(sqid))
+    case numbers(sqid) do
+      {:ok, numbers} ->
+        start(conn, params, numbers)
+
+      {:error, error} ->
+        Logger.error("#{inspect(error)}, someone is trying to hack us")
+        forbidden(conn)
+    end
+  end
+
+  defp numbers(sqid) do
+    numbers = Affiliate.Sqids.decode!(sqid)
+
+    if Affiliate.Sqids.encode!(numbers) == sqid do
+      {:ok, numbers}
+    else
+      {:error, "Invalid sqid #{sqid}"}
+    end
   end
 
   defp start(conn, params, [@annotation_resource_id, assignment_id]) do
@@ -73,6 +90,7 @@ defmodule Systems.Affiliate.Controller do
   end
 
   def valid_id?(nil), do: false
+  def valid_id?("participant_id"), do: false
 
   def valid_id?(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
@@ -154,14 +172,11 @@ defmodule Systems.Affiliate.Controller do
   # Param Mappings
 
   defp get_participant(%{"p" => participant}), do: participant
-  defp get_participant(%{"participant" => participant}), do: participant
 
   defp get_participant(_), do: nil
 
   defp strip_query_string(params) do
     params
     |> Map.delete("sqid")
-    |> Map.delete("p")
-    |> Map.delete("participant")
   end
 end

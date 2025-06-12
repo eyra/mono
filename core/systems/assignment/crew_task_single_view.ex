@@ -2,6 +2,8 @@ defmodule Systems.Assignment.CrewTaskSingleView do
   use CoreWeb, :live_component
   use Systems.Assignment.CrewTaskHelpers
 
+  alias Systems.Assignment
+
   # Make sure this name is unique, see: Systems.Assignment.CrewTaskListView
   @tool_ref_view_name :tool_ref_view_single
 
@@ -36,6 +38,13 @@ defmodule Systems.Assignment.CrewTaskSingleView do
       |> start_task()
     }
   end
+
+  def start_task(%{assigns: %{selected_item: {_, %{started_at: nil} = task}}} = socket) do
+    Assignment.Public.start_task(task)
+    socket
+  end
+
+  def start_task(socket), do: socket
 
   defp update_launcher(%{assigns: %{selected_item: selected_item}} = socket) do
     launcher = launcher(selected_item)
