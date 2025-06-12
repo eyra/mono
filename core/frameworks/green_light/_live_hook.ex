@@ -10,9 +10,16 @@ defmodule Frameworks.GreenLight.LiveHook do
   @impl true
   def mount(live_view_module, params, session, socket) do
     if access_allowed?(live_view_module, params, session, socket) do
+      Logger.info(
+        "Access allowed, module=#{inspect(live_view_module)}, params=#{inspect(params)}"
+      )
+
       {:cont, socket}
     else
-      Logger.info("Access denied: access not allowed")
+      Logger.info(
+        "Access denied: access not allowed, module=#{inspect(live_view_module)}, params=#{inspect(params)}"
+      )
+
       {:halt, redirect(socket, to: ~p"/access_denied")}
     end
   end
