@@ -21,7 +21,7 @@ defmodule Systems.Affiliate.Controller do
         start(conn, params, numbers)
 
       {:error, error} ->
-        Logger.error("#{inspect(error)}, someone is trying to hack us")
+        Logger.error("#{inspect(error)}, someone is trying to hack us, params=#{inspect(params)}")
         forbidden(conn)
     end
   end
@@ -42,20 +42,28 @@ defmodule Systems.Affiliate.Controller do
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do
+        Logger.error("Access denied invalid id params=#{inspect(params)}")
         forbidden(conn)
       else
         start_tester(conn, params, assignment)
       end
     else
       cond do
-        invalid_id?(params) -> forbidden(conn)
-        offline?(assignment) -> service_unavailable(conn)
-        true -> start_participant(conn, params, assignment)
+        invalid_id?(params) ->
+          Logger.error("Access denied invalid id #{inspect(params)}")
+          forbidden(conn)
+
+        offline?(assignment) ->
+          service_unavailable(conn)
+
+        true ->
+          start_participant(conn, params, assignment)
       end
     end
   end
 
-  defp start(conn, _params, _) do
+  defp start(conn, params, numbers) do
+    Logger.error("Access denied params=#{inspect(params)} numbers=#{inspect(numbers)}")
     forbidden(conn)
   end
 
