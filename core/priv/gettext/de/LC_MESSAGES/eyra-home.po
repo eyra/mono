@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Kollaborative Forschungsplattform"
+msgstr "Kollaborative Plattform"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Kollaborative Forschungsplattform"
+msgstr "Kollaborative Plattform"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
