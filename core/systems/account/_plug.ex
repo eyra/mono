@@ -6,7 +6,7 @@ defmodule Systems.Account.Plug do
   import Plug.Conn
   alias Systems.Account
 
-  @valid_participant_path ~r"^\/(assignment\/(callback\/)?\d.*|affiliate\/\.*)$"
+  @valid_participant_path ~r"^\/((assignment\/(callback\/)?\d.*)|(a\/.{6,}))$"
 
   @impl true
   def init(opts), do: opts
@@ -15,9 +15,14 @@ defmodule Systems.Account.Plug do
   def call(conn, _opts) do
     case current_user(conn) do
       {:ok, %{} = user} ->
-        signof? = not Account.Public.internal?(user)
-        Logger.info("signof? = #{signof?}, user = #{inspect(user)}")
-        signof_if_needed(conn, signof?)
+        external? = Account.Public.external?(user)
+        affiliate? = Account.Public.affiliate?(user)
+
+        Logger.info(
+          "external? = #{external?}, affiliate? = #{affiliate?}, user = #{inspect(user)}"
+        )
+
+        signof_if_needed(conn, external? or affiliate?)
 
       _ ->
         conn
@@ -32,7 +37,7 @@ defmodule Systems.Account.Plug do
     end
   end
 
-  defp signof_if_needed(%{request_path: request_path} = conn, true) do
+  defp signof_if_needed(%{request_path: request_path} = conn, true = _not_internal?) do
     if Regex.match?(@valid_participant_path, request_path) do
       conn
     else
