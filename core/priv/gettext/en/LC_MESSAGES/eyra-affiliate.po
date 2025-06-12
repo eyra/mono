@@ -13,48 +13,48 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.body"
-msgstr "The URL to which participant progress events will be sent."
+msgstr "Option to automate participant progress tracking by providing a webhook URL to receive real-time status updates."
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.placeholder"
-msgstr "https://your-domain.com/api/participants/event"
+msgstr "https://your-domain.com/study?s=progress"
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.title"
-msgstr "Webhook"
+msgstr "Progress"
 
 #, elixir-autogen, elixir-format
 msgid "redirect_url.placeholder"
-msgstr "https://your-domain.com/participants/redirect"
+msgstr "https://your-domain.com/study?s=done"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.body"
-msgstr "The URL to which the participant will be redirected after completing the assignment. Leave blank to keep the participant on the Next platform."
+msgstr "Option to provide a redirect URL to which participants will be forwarded after completing the workflow."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.title"
-msgstr "Redirect"
+msgstr "End of workflow"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.invalid_parts"
-msgstr "URL is invalid"
+msgstr "Please enter a valid URL"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.missing_host"
-msgstr "URL is missing host"
+msgstr "Please include a domain"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.missing_scheme"
-msgstr "URL is missing scheme"
+msgstr "Please use a prefix like https://"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.no_spaces_allowed"
-msgstr "URL contains one or more spaces"
+msgstr "Please remove any spaces from the URL"
 
 #, elixir-autogen, elixir-format
 msgid "test.success"
-msgstr "URL is valid and reachable"
+msgstr "The URL looks good and is reachable"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.unreachable"
-msgstr "URL is valid but unreachable"
+msgstr "Please check the URL - it is not reachable"
