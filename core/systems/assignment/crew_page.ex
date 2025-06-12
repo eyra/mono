@@ -10,7 +10,6 @@ defmodule Systems.Assignment.CrewPage do
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
-  alias Frameworks.Signal
 
   alias Systems.Assignment
   alias Systems.Project
@@ -44,7 +43,6 @@ defmodule Systems.Assignment.CrewPage do
       )
       |> update_panel_info(session)
       |> update_image_info()
-      |> signal_started()
       |> update_flow()
     }
   end
@@ -68,11 +66,6 @@ defmodule Systems.Assignment.CrewPage do
   def handle_resize(socket) do
     socket
     |> update_image_info()
-  end
-
-  def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
-    Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: crew_member})
-    socket
   end
 
   defp update_image_info(
@@ -121,7 +114,13 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("accept", %{source: source}, socket) do
+  def handle_event(
+        "accept",
+        %{source: source},
+        %{assigns: %{model: model, current_user: user}} = socket
+      ) do
+    Assignment.Public.accept_member(model, user)
+    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
     {:noreply, socket |> show_next(source)}
   end
 

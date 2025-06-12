@@ -10,6 +10,7 @@ defmodule Systems.Assignment.Private do
   alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
+  alias Systems.Account
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Workflow
@@ -51,6 +52,33 @@ defmodule Systems.Assignment.Private do
   def declined_consent?(assignment, user_ref) do
     Monitor.Public.event({assignment, :declined, user_ref})
     |> Monitor.Public.exists?()
+  end
+
+  def send_progress_event(
+        %Assignment.Model{} = assignment,
+        event,
+        %{user_id: user_id} = _crew_member
+      ) do
+    user = Account.Public.get_user!(user_id)
+    Affiliate.Public.send_progress_event(assignment, %{progress: event}, user)
+  end
+
+  def send_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
+    %{user: user} = Assignment.Public.get_member_by_task(crew_task, [:user])
+    {:ok, %{title: title, position: position}} = get_workflow_item(crew_task)
+    task_slug = title |> slugify()
+
+    Affiliate.Public.send_progress_event(
+      assignment,
+      %{task_nr: position + 1, task_slug: task_slug, progress: event},
+      user
+    )
+  end
+
+  def slugify(nil), do: "?"
+
+  def slugify(title) do
+    title |> Slug.slugify(separator: ?_)
   end
 
   def log_performance_event(
