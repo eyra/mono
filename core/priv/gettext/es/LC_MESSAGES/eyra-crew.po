@@ -53,72 +53,72 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"
-msgstr ""
+msgstr "La plataforma Next ofrece servicios de software de código abierto y fácilmente accesibles, diseñados para ayudarte a llevar a cabo tu investigación de forma eficiente. Están desarrollados por Eyra, para y con investigadores, y se mejoran continuamente. ¿Listo para comenzar? A continuación encontrarás todo lo que necesitas."
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
-msgstr ""
+msgstr "Imagen abstracta que representa la colaboración y la investigación"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.learn_more_button"
-msgstr ""
+msgstr "Co-crea con nosotros"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.title"
-msgstr ""
+msgstr "La plataforma Next"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.button"
-msgstr ""
+msgstr "Explora los servicios"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.description"
-msgstr ""
+msgstr "¿Tienes curiosidad por los servicios de software que puedes utilizar en la plataforma? Haz clic en el botón de abajo para explorar los servicios disponibles y sus precios. La plataforma Next no contiene publicidad y se basa en un modelo de precios justo que apoya la sostenibilidad a largo plazo. Al adquirir un servicio, contribuyes directamente al ecosistema abierto que mantiene la plataforma disponible para investigadores como tú."
 
 #, elixir-autogen, elixir-format
 msgid "home.services.image_alt"
-msgstr ""
+msgstr "Imagen que muestra colaboración e investigación"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.title"
-msgstr ""
+msgstr "Servicios y precios"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.button"
-msgstr ""
+msgstr "Regístrate"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.description"
-msgstr ""
+msgstr "Crea tu cuenta gratuita y obtén acceso a los servicios de software disponibles en la plataforma Next."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step1.title"
-msgstr ""
+msgstr "Únete a la plataforma"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.description"
-msgstr ""
+msgstr "Inicia tu primer proyecto y selecciona un servicio de software. Verás lo fácil que es configurarlo y personalizarlo."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.title"
-msgstr ""
+msgstr "Crea un proyecto"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.description"
-msgstr ""
+msgstr "Previsualiza y comparte tu proyecto con colaboradores de forma gratuita. Solo se aplica una tarifa por el servicio cuando lo publicas o comienzas a utilizarlo en tu investigación."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.title"
-msgstr ""
+msgstr "Previsualizar y compartir"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.title"
-msgstr ""
+msgstr "¿Listo para empezar a usar la plataforma?"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.preview_title"
-msgstr ""
+msgstr "Vista previa de la plataforma Next"
 
 #, elixir-autogen, elixir-format
 msgid "home.video.title"
-msgstr ""
+msgstr "La plataforma Next de un vistazo"

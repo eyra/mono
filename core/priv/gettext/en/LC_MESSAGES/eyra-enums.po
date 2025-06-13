@@ -368,11 +368,11 @@ msgstr "Questionnaire"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.download_manual"
-msgstr "Download manual"
+msgstr "PDF download manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.request_manual"
-msgstr "Request manual"
+msgstr "PDF request manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.submit"
