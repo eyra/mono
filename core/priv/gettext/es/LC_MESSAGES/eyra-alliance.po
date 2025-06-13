@@ -125,8 +125,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Continuar"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Estás a punto de comenzar un cuestionario en una nueva pestaña. Cuando termines, serás redirigido automáticamente a esta página."
