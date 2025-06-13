@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Piattaforma collaborativa"
+msgstr "Servizi software"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Piattaforma collaborativa"
+msgstr "Servizi software"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -33,4 +33,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
-msgstr "Sviluppati per e insieme ai ricercatori"
+msgstr "Sviluppati per e con i ricercatori"

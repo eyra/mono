@@ -101,24 +101,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "chapter.next.button"
-msgstr ""
+msgstr "Siguiente"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.page.indicator"
-msgstr ""
+msgstr "%{current}/%{count}"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
-msgstr ""
+msgstr "Anterior"
 
 #, elixir-autogen, elixir-format
 msgid "image.fullscreen.button"
-msgstr ""
+msgstr "Ampliar"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.done.button"
-msgstr ""
+msgstr "Hecho"
 
 #, elixir-autogen, elixir-format
 msgid "chapter.overview"
-msgstr ""
+msgstr "Visión general"

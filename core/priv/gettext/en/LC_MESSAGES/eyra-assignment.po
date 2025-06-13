@@ -264,7 +264,7 @@ msgstr "Enables participants to donate data."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.download.description"
-msgstr "Provide instructions on how to download digital trace data by uploading a PDF manual."
+msgstr "Upload a PDF manual with instructions for downloading digital trace data. Note: Not mobile-friendly."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.questionnaire.description"
@@ -272,7 +272,7 @@ msgstr "Redirects participants to an online questionnaire."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.request.description"
-msgstr "Provide instructions on how to request digital trace data by uploading a PDF manual."
+msgstr "Upload a PDF manual with instructions for requesting digital trace data. Note: Not mobile-friendly."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download_instruction.description"
@@ -418,7 +418,7 @@ msgstr "Papers"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.manual.description"
-msgstr "Provide instructions on how to request or download digital trace data by building a manual."
+msgstr "Provide instructions on how to request or download digital trace data by building a mobile-friendly manual."
 
 #, elixir-autogen, elixir-format
 msgid "affiliate.body"
