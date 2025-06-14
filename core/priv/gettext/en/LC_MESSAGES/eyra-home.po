@@ -12,11 +12,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Collaborative platform"
+msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Collaborative platform"
+msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"

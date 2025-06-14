@@ -33,28 +33,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "zip-replace-file-button"
-msgstr ""
+msgstr "Reemplazar archivo"
 
 #, elixir-autogen, elixir-format
 msgid "zip-select-file-button"
-msgstr ""
+msgstr "Seleccionar archivo"
 
 #, elixir-autogen, elixir-format
 msgid "zip-select-label"
-msgstr ""
+msgstr "Aplicación de flujo"
 
 #, elixir-autogen, elixir-format
 msgid "zip-select-placeholder"
-msgstr ""
+msgstr "Selecciona un archivo zip"
 
 #, elixir-autogen, elixir-format
 msgid "zip-too-large"
-msgstr ""
+msgstr "El archivo seleccionado es demasiado grande (máximo 20 MB)"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Vas a seguir algunos pasos para donar tus datos. Antes de donar, puedes ver tus datos y decidir si quieres compartirlos. La página puede tardar un poco en cargar — gracias por esperar."
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Continuar"
