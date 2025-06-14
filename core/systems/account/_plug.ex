@@ -36,7 +36,7 @@ defmodule Systems.Account.Plug do
       conn
     else
       Logger.warning(
-        "signing off restricted user, no regex match: request_path=#{request_path}, regex=#{@valid_participant_path}"
+        "#[#{__MODULE__}] Signing off restricted user, no regex match: request_path=#{request_path}, regex=#{inspect(@valid_participant_path)}"
       )
 
       Account.UserAuth.forget_user(conn)

@@ -148,7 +148,7 @@ defmodule Systems.Assignment.Public do
       on_conflict: {:replace, [:updated_at]},
       conflict_target: [:assignment_id, :user_id]
     )
-    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained})
+    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, %{user: user})
     |> Repo.transaction()
   end
 

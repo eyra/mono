@@ -20,7 +20,7 @@ defmodule Systems.Assignment.CrewTaskListView do
         },
         socket
       ) do
-    user_state_key = "crew-#{crew.id}-selected-item-id"
+    user_state_key = "next://user-#{user.id}@next.eyra.co/crew/#{crew.id}/selected-task"
 
     {
       :ok,

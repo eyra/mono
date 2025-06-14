@@ -7,6 +7,7 @@ defmodule Systems.Assignment.Switch do
 
   alias Frameworks.Signal
 
+  alias Systems.Account
   alias Systems.Assignment
   alias Systems.Workflow
   alias Systems.Crew
@@ -34,16 +35,15 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
-        {:assignment_instance, :obtained} = signal,
-        %{assignment_instance: instance} = message
+        {:assignment_instance, :obtained} = _signal,
+        %{assignment_instance: instance, user: user, from_pid: from_pid} = _message
       ) do
     assignment =
       Assignment.Public.get!(instance.assignment_id, Assignment.Model.preload_graph(:down))
 
-    dispatch!(
-      {:assignment, signal},
-      Map.merge(message, %{assignment: assignment})
-    )
+    update_content_page(assignment, from_pid)
+    # update only the page for the user that changed
+    update_crew_page(assignment, from_pid, user)
 
     :ok
   end
@@ -339,6 +339,10 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp update_crew_page(model, from_pid, %Crew.MemberModel{user_id: user_id}) do
+    update_crew_page(model, from_pid, user_id)
+  end
+
+  defp update_crew_page(model, from_pid, %Account.User{id: user_id}) do
     update_crew_page(model, from_pid, user_id)
   end
 
