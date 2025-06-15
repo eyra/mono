@@ -14,7 +14,7 @@ defmodule Systems.Manual.View do
         },
         socket
       ) do
-    user_state_key = "next://user-#{user.id}@next.eyra.co/manual/#{manual_id}/selected-chapter-id"
+    user_state_key = UserState.key(user, %{manual: manual_id}, "selected-chapter")
     user_state_value = UserState.integer_value(user_state_data, user_state_key)
     selected_chapter_id = Map.get(socket.assigns, :selected_chapter_id, user_state_value)
 

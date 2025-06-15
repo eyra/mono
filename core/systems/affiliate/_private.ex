@@ -1,4 +1,6 @@
 defmodule Systems.Affiliate.Private do
+  require Logger
+
   def merge(_redirect_url, _user_info, extra_query \\ %{})
   def merge(nil, _user_info, _extra_query), do: {:error, :redirect_url_missing}
   def merge("", _user_info, _extra_query), do: {:error, :redirect_url_missing}
@@ -52,8 +54,12 @@ defmodule Systems.Affiliate.Private do
 
   def callback(url) when is_binary(url) do
     case :hackney.request(:get, url, [], "", []) do
-      {:ok, status, _headers, _client_ref} -> {:ok, status}
-      error -> error
+      {:ok, status, _headers, _client_ref} ->
+        {:ok, status}
+
+      error ->
+        Logger.error("Error calling callback url: #{url}, error: #{inspect(error)}")
+        error
     end
   end
 
