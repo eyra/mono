@@ -123,7 +123,7 @@ config :core, CoreWeb.Endpoint,
   force_ssl: [],
   render_errors: [
     formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
-    layout: {CoreWeb.Layouts, :error}
+    layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
