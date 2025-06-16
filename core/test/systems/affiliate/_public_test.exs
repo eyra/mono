@@ -102,6 +102,17 @@ defmodule Systems.Affiliate.PublicTest do
       user = Affiliate.Public.obtain_user("test_user", affiliate)
 
       assert user.id != nil
+      assert user.email == "affiliate+#{affiliate.id}_user_1@next.eyra.co"
+    end
+
+    test "obtain2 existing user" do
+      affiliate = Factories.insert!(:affiliate)
+      user = Affiliate.Public.obtain_user("test_user1", affiliate)
+      user_2 = Affiliate.Public.obtain_user("test_user2", affiliate)
+
+      assert user.id != user_2.id
+      assert user.email == "affiliate+#{affiliate.id}_user_1@next.eyra.co"
+      assert user_2.email == "affiliate+#{affiliate.id}_user_2@next.eyra.co"
     end
 
     test "obtain existing user" do
@@ -112,7 +123,7 @@ defmodule Systems.Affiliate.PublicTest do
       assert user.id == user_2.id
     end
 
-    test "obtain existing user with the same identifier as another existingaffiliate user" do
+    test "obtain existing user with the same identifier as another existing affiliate user" do
       affiliate = Factories.insert!(:affiliate)
       affiliate2 = Factories.insert!(:affiliate)
       _user = Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate})

@@ -137,7 +137,7 @@ defmodule Systems.Affiliate.Public do
 
   def register_user!(organisation, external_id) do
     case register_user(organisation, external_id) do
-      {:ok, user} ->
+      {:ok, %{user: user}} ->
         user
 
       _ ->
@@ -149,26 +149,46 @@ defmodule Systems.Affiliate.Public do
     register_user(Atom.to_string(organisation), external_id)
   end
 
-  def register_user(identifier, %Affiliate.Model{id: affiliate_id} = affiliate)
-      when is_binary(identifier) do
-    email = "affiliate+#{affiliate_id}_user_#{identifier}@next.eyra.co"
+  def register_user(identifier, affiliate) do
+    Multi.new()
+    |> Multi.run(:user_count, fn _, _ ->
+      {:ok, count_users(affiliate)}
+    end)
+    |> Multi.insert(:user, fn %{user_count: user_count} ->
+      prepare_user(affiliate, user_count + 1, identifier)
+    end)
+    |> Multi.insert(:affiliate_user, fn %{user: user} ->
+      prepare_affiliate_user(affiliate, user, identifier)
+    end)
+    |> Repo.transaction()
+  end
+
+  def count_users(%Affiliate.Model{id: affiliate_id}) do
+    from(au in Affiliate.User,
+      where: au.affiliate_id == ^affiliate_id
+    )
+    |> Repo.aggregate(:count, :id)
+  end
+
+  def prepare_user(%Affiliate.Model{id: affiliate_id}, user_id, identifier) do
+    email = "affiliate+#{affiliate_id}_user_#{user_id}@next.eyra.co"
     name = "Affiliate User #{identifier}"
 
-    user =
-      Account.User.sso_changeset(%Account.User{}, %{
-        email: email,
-        creator: false,
-        displayname: name,
-        profile: %{
-          fullname: name
-        }
-      })
+    Account.User.sso_changeset(%Account.User{}, %{
+      email: email,
+      creator: false,
+      displayname: name,
+      profile: %{
+        fullname: name
+      }
+    })
+  end
 
+  def prepare_affiliate_user(affiliate, user, identifier) do
     %Affiliate.User{}
     |> Affiliate.User.changeset(%{identifier: identifier})
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
-    |> Repo.insert()
   end
 
   def validate_url(url) do
