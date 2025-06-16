@@ -137,8 +137,8 @@ defmodule Systems.Affiliate.Public do
 
   def register_user!(organisation, external_id) do
     case register_user(organisation, external_id) do
-      {:ok, %{user: user}} ->
-        user
+      {:ok, %{affiliate_user: affiliate_user}} ->
+        affiliate_user
 
       _ ->
         raise "Failed to register user"
@@ -171,7 +171,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def prepare_user(%Affiliate.Model{id: affiliate_id}, user_id, identifier) do
-    email = "affiliate+#{affiliate_id}_user_#{user_id}@next.eyra.co"
+    email = "affiliate_#{affiliate_id}_user_#{user_id}@next.eyra.co"
     name = "Affiliate User #{identifier}"
 
     Account.User.sso_changeset(%Account.User{}, %{

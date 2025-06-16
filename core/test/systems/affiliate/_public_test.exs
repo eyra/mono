@@ -102,7 +102,7 @@ defmodule Systems.Affiliate.PublicTest do
       user = Affiliate.Public.obtain_user("test_user", affiliate)
 
       assert user.id != nil
-      assert user.email == "affiliate+#{affiliate.id}_user_1@next.eyra.co"
+      assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
     end
 
     test "obtain2 existing user" do
@@ -111,8 +111,8 @@ defmodule Systems.Affiliate.PublicTest do
       user_2 = Affiliate.Public.obtain_user("test_user2", affiliate)
 
       assert user.id != user_2.id
-      assert user.email == "affiliate+#{affiliate.id}_user_1@next.eyra.co"
-      assert user_2.email == "affiliate+#{affiliate.id}_user_2@next.eyra.co"
+      assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
+      assert user_2.user.email == "affiliate_#{affiliate.id}_user_2@next.eyra.co"
     end
 
     test "obtain existing user" do
