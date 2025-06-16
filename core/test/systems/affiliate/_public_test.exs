@@ -95,4 +95,34 @@ defmodule Systems.Affiliate.PublicTest do
       assert {:error, :econnrefused} = Affiliate.Public.send_event(affiliate, event, user)
     end
   end
+
+  describe "obtain_user" do
+    test "obtain non existing user" do
+      affiliate = Factories.insert!(:affiliate)
+      user = Affiliate.Public.obtain_user("test_user", affiliate)
+
+      assert user.id != nil
+    end
+
+    test "obtain existing user" do
+      affiliate = Factories.insert!(:affiliate)
+      user = Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate})
+      user_2 = Affiliate.Public.obtain_user("test_user", affiliate)
+
+      assert user.id == user_2.id
+    end
+
+    test "obtain existing user with the same identifier as another existingaffiliate user" do
+      affiliate = Factories.insert!(:affiliate)
+      affiliate2 = Factories.insert!(:affiliate)
+      _user = Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate})
+
+      user_2_a =
+        Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate2})
+
+      user_2_b = Affiliate.Public.obtain_user("test_user", affiliate2)
+
+      assert user_2_a.id == user_2_b.id
+    end
+  end
 end

@@ -92,7 +92,7 @@ defmodule Systems.Affiliate.Public do
 
   def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
     user =
-      if user = get_user_by_identifier(identifier, [:user]) do
+      if user = get_user(affiliate, identifier, [:user]) do
         user
       else
         register_user!(identifier, affiliate)
@@ -116,13 +116,13 @@ defmodule Systems.Affiliate.Public do
     end
   end
 
-  def get_user_by_identifier(_identifier, preload \\ [])
+  def get_user(_affiliate, _identifier, preload \\ [])
 
-  def get_user_by_identifier(nil, _preload), do: nil
+  def get_user(_, nil, _preload), do: nil
 
-  def get_user_by_identifier(identifier, preload) do
+  def get_user(%Affiliate.Model{id: affiliate_id}, identifier, preload) do
     from(au in Affiliate.User,
-      where: au.identifier == ^identifier
+      where: au.identifier == ^identifier and au.affiliate_id == ^affiliate_id
     )
     |> Repo.one()
     |> Repo.preload(preload)
