@@ -34,6 +34,7 @@ defmodule Systems.Assignment.CrewTaskListView do
         user_state_key: user_state_key,
         user_state_data: user_state_data
       )
+      |> update_title()
       |> update_participant()
       |> update_selected_item_id()
       |> update_selected_item()
@@ -43,6 +44,11 @@ defmodule Systems.Assignment.CrewTaskListView do
       |> compose_child(@tool_ref_view_name)
       |> show_modal_tool_ref_view_if_needed()
     }
+  end
+
+  defp update_title(socket) do
+    title = dgettext("eyra-assignment", "work.list.title")
+    socket |> assign(title: title)
   end
 
   defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
@@ -226,7 +232,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   def render(assigns) do
     ~H"""
       <div id="crew_task_list_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@user_state_value} >
-        <.task_list>
+        <.task_list title={@title}>
           <.child name={:work_list_view} fabric={@fabric} />
         </.task_list>
       </div>

@@ -28,11 +28,6 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
-    String.to_integer(id)
-    |> Assignment.Public.get!([:info])
-    |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
-
     {
       :ok,
       socket
@@ -208,7 +203,7 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped menus={@menus} footer?={false}>
+      <.stripped menus={@menus} footer?={false} privacy_text={@vm.footer.privacy_text} terms_text={@vm.footer.terms_text}>
         <:header>
           <div class="h-[120px] sm:h-[180px] bg-grey5">
           <%= if @image_info do %>

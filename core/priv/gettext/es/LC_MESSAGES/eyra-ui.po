@@ -141,11 +141,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link"
-msgstr ""
+msgstr "Privacidad"
 
 #, elixir-autogen, elixir-format
 msgid "terms.link"
-msgstr ""
+msgstr "Términos"
 
 #, elixir-autogen, elixir-format
 msgid "edit.button"

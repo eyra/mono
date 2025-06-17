@@ -10,12 +10,24 @@ defmodule Systems.Assignment.CrewPageBuilder do
   }
 
   def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
+    apply_language(assignment)
+
     %{
       flow: flow(assignment, assigns),
       info: assignment.info,
       crew: crew,
-      crew_member: Crew.Public.get_member_unsafe(crew, user)
+      crew_member: Crew.Public.get_member_unsafe(crew, user),
+      footer: %{
+        privacy_text: dgettext("eyra-ui", "privacy.link"),
+        terms_text: dgettext("eyra-ui", "terms.link")
+      }
     }
+  end
+
+  defp apply_language(assignment) do
+    assignment
+    |> Assignment.Model.language()
+    |> CoreWeb.Live.Hook.Locale.put_locale()
   end
 
   defp flow(%{status: status} = assignment, %{current_user: user} = assigns) do
