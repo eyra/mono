@@ -9,7 +9,6 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-
 ## \#17 Under development
 * ..
 
