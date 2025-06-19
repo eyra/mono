@@ -72,6 +72,7 @@ services:
       - db_certs:/var/lib/postgresql/ssl
       - ./postgres_data:/var/lib/postgresql/data
     restart: always
+    hostname: db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
