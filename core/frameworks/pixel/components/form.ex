@@ -281,7 +281,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
   attr(:placeholder, :string, default: "")
-  attr(:label_text, :string)
+  attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)

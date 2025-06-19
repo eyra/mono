@@ -83,7 +83,7 @@ defmodule Systems.Document.PDFNavView do
             </div>
             <.spacing value="M" />
             <div class="flex flex-row-reverse w-full pb-4 lg:pb-8">
-              <div class="w-1/6">
+              <div>
                 <Button.dynamic {@ready_button} />
               </div>
             </div>

@@ -20,6 +20,9 @@ defmodule Frameworks.Pixel.Hero do
     <%= if @type === :illustration2 do %>
       <.illustration2 {@params} />
     <% end %>
+    <%= if @type === :landing_page do %>
+      <.landing_page {@params} />
+    <% end %>
     """
   end
 
@@ -182,6 +185,33 @@ defmodule Frameworks.Pixel.Hero do
       </div>
       <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
         <img src={~p"/images/#{@illustration}"} alt="">
+      </div>
+    </div>
+    """
+  end
+
+  attr(:title, :string, required: true)
+  attr(:illustration, :any, default: "illustration.svg")
+  attr(:text_color, :string, default: "text-white")
+  attr(:bg_color, :string, default: "bg-primary")
+  attr(:caption, :string, default: nil)
+
+  def landing_page(assigns) do
+    ~H"""
+    <div class={"flex max-h-64 overflow-hidden #{@bg_color} #{@text_color}"} data-native-title={@title}>
+      <div class="flex w-4/5 flex-col justify-center  py-4">
+        <p class="text-title6 sm:text-title2 lg:text-title1 font-title1 ml-6 mr-6 lg:ml-14">
+          <%= @title %>
+        </p>
+
+        <%= if @caption do %>
+          <p class="text-title7 sm:text-title5 mt-2 mx-6 lg:ml-14">
+            <%= @caption %>
+          </p>
+        <% end %>
+      </div>
+      <div class="w-1/5 flex">
+        <img class="object-cover flex-grow md:object-fill" src={~p"/images/#{@illustration}"} />
       </div>
     </div>
     """

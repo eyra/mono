@@ -157,3 +157,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "people.confirm_remove.text"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Account activated successfully."
+msgstr ""

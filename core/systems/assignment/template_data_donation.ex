@@ -12,6 +12,8 @@ defmodule Systems.Assignment.TemplateDataDonation do
 
     def tabs(_t) do
       [
+        import: nil,
+        criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
           Assignment.Template.Flags.Settings.new()
@@ -20,9 +22,16 @@ defmodule Systems.Assignment.TemplateDataDonation do
           dgettext("eyra-assignment", "tabbar.item.workflow"),
           Assignment.Template.Flags.Workflow.new()
         },
-        import: nil,
-        criteria: nil,
-        participants: nil,
+        participants: {
+          dgettext("eyra-assignment", "tabbar.item.participants"),
+          Assignment.Template.Flags.Participants.new(
+            opt_out: [:advert_in_pool, :invite_participants]
+          )
+        },
+        affiliate: {
+          dgettext("eyra-assignment", "tabbar.item.affiliate"),
+          Assignment.Template.Flags.Affiliate.new()
+        },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
           Assignment.Template.Flags.Monitor.new()

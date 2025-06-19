@@ -164,7 +164,7 @@ defmodule Frameworks.Pixel.Navigation do
 
   def mobile_menu(assigns) do
     ~H"""
-    <div class="md:hidden bg-white p-6 h-full">
+    <div class="lg:hidden bg-white p-6 h-full">
       <Menu.generic {assigns} />
     </div>
     """

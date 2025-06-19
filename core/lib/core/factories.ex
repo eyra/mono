@@ -11,26 +11,27 @@ defmodule Core.Factories do
 
   alias Systems.Account
   alias Systems.Account.User
-  alias Systems.Notification
   alias Systems.Advert
-  alias Systems.Promotion
-  alias Systems.Assignment
-  alias Systems.Workflow
-  alias Systems.Crew
-  alias Systems.Support
+  alias Systems.Affiliate
   alias Systems.Alliance
-  alias Systems.Feldspar
-  alias Systems.Document
-  alias Systems.Lab
-  alias Systems.Graphite
-  alias Systems.Pool
-  alias Systems.Budget
+  alias Systems.Assignment
   alias Systems.Bookkeeping
-  alias Systems.Content
-  alias Systems.Org
-  alias Systems.Project
+  alias Systems.Budget
   alias Systems.Consent
+  alias Systems.Content
+  alias Systems.Crew
+  alias Systems.Document
+  alias Systems.Feldspar
+  alias Systems.Graphite
+  alias Systems.Lab
   alias Systems.Monitor
+  alias Systems.Notification
+  alias Systems.Org
+  alias Systems.Pool
+  alias Systems.Project
+  alias Systems.Promotion
+  alias Systems.Support
+  alias Systems.Workflow
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -62,11 +63,10 @@ defmodule Core.Factories do
   end
 
   def build(:external_user) do
-    %ExternalSignIn.User{
-      external_id: Faker.UUID.v4(),
+    build(:external_user, %{
       organisation: Faker.Company.name(),
-      user: build(:member)
-    }
+      external_id: Faker.UUID.v4()
+    })
   end
 
   def build(:admin) do
@@ -244,6 +244,35 @@ defmodule Core.Factories do
 
   def build(:assignment) do
     build(:assignment, %{})
+  end
+
+  def build(:assignment_instance) do
+    build(:assignment_instance, %{})
+  end
+
+  def build(:affiliate) do
+    build(:affiliate, %{
+      callback_url: Faker.Internet.url(),
+      redirect_url: Faker.Internet.url()
+    })
+  end
+
+  def build(:affiliate_user) do
+    build(:affiliate_user, %{
+      identifier: Faker.UUID.v4()
+    })
+  end
+
+  def build(:affiliate_user_info) do
+    build(:affiliate_user_info, %{
+      info:
+        %{
+          "aap" => "noot",
+          "mies" => "wim",
+          "zus" => "jet"
+        }
+        |> Jason.encode!()
+    })
   end
 
   def build(:assignment_info) do
@@ -477,14 +506,46 @@ defmodule Core.Factories do
     {crew, attributes} = Map.pop(attributes, :crew, build(:crew, %{auth_node: crew_auth_node}))
     {info, attributes} = Map.pop(attributes, :assignment_info, build(:assignment_info))
     {workflow, attributes} = Map.pop(attributes, :workflow, build(:workflow))
+    {affiliate, attributes} = Map.pop(attributes, :affiliate, nil)
 
     %Assignment.Model{
       auth_node: auth_node,
       budget: budget,
       info: info,
+      affiliate: affiliate,
       workflow: workflow,
       crew: crew,
       excluded: []
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:assignment_instance, %{} = attributes) do
+    %Assignment.InstanceModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:affiliate, %{} = attributes) do
+    %Affiliate.Model{}
+    |> struct!(attributes)
+  end
+
+  def build(:affiliate_user, %{} = attributes) do
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+    {affiliate, attributes} = Map.pop(attributes, :affiliate, build(:affiliate))
+
+    %Affiliate.User{
+      user: user,
+      affiliate: affiliate
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:affiliate_user_info, %{} = attributes) do
+    {user, attributes} = Map.pop(attributes, :user, build(:affiliate_user))
+
+    %Affiliate.UserInfoModel{
+      user: user
     }
     |> struct!(attributes)
   end
@@ -540,7 +601,11 @@ defmodule Core.Factories do
   end
 
   def build(:external_user, %{} = attributes) do
-    build(:external_user)
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+
+    %ExternalSignIn.User{
+      user: user
+    }
     |> struct!(attributes)
   end
 

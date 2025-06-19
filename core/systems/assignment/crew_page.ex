@@ -10,7 +10,6 @@ defmodule Systems.Assignment.CrewPage do
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
-  alias Frameworks.Signal
 
   alias Systems.Assignment
   alias Systems.Project
@@ -29,11 +28,6 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
-    String.to_integer(id)
-    |> Assignment.Public.get!([:info])
-    |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
-
     {
       :ok,
       socket
@@ -44,7 +38,6 @@ defmodule Systems.Assignment.CrewPage do
       )
       |> update_panel_info(session)
       |> update_image_info()
-      |> signal_started()
       |> update_flow()
     }
   end
@@ -68,11 +61,6 @@ defmodule Systems.Assignment.CrewPage do
   def handle_resize(socket) do
     socket
     |> update_image_info()
-  end
-
-  def signal_started(%{assigns: %{vm: %{crew_member: crew_member}}} = socket) do
-    Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: crew_member})
-    socket
   end
 
   defp update_image_info(
@@ -121,7 +109,13 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("accept", %{source: source}, socket) do
+  def handle_event(
+        "accept",
+        %{source: source},
+        %{assigns: %{model: model, current_user: user}} = socket
+      ) do
+    Assignment.Public.accept_member(model, user)
+    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
     {:noreply, socket |> show_next(source)}
   end
 
@@ -129,14 +123,14 @@ defmodule Systems.Assignment.CrewPage do
   def handle_event(
         "decline",
         _payload,
-        %{assigns: %{model: model, current_user: user, panel_info: %{embedded?: embedded?}}} =
+        %{assigns: %{model: model, current_user: user, panel_info: %{redirect?: redirect?}}} =
           socket
       ) do
     Assignment.Public.decline_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
 
     socket =
-      if embedded? do
+      if redirect? do
         socket
       else
         socket
@@ -190,7 +184,7 @@ defmodule Systems.Assignment.CrewPage do
     }
 
     with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-         {:ok, storage_info} <- Storage.Private.storage_info(storage_endpoint, assignment) do
+         storage_info <- Storage.Private.storage_info(storage_endpoint) do
       Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
       socket
     else
@@ -209,7 +203,7 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped menus={@menus} footer?={false}>
+      <.stripped menus={@menus} footer?={false} privacy_text={@vm.footer.privacy_text} terms_text={@vm.footer.terms_text}>
         <:header>
           <div class="h-[120px] sm:h-[180px] bg-grey5">
           <%= if @image_info do %>

@@ -3,6 +3,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   use Systems.Assignment.CrewTaskHelpers
 
   alias Frameworks.Utility.UserState
+  alias Systems.Assignment
 
   # Make sure this name is unique, see: Systems.Assignment.CrewTaskSingleView
   @tool_ref_view_name :tool_ref_view_list
@@ -19,7 +20,7 @@ defmodule Systems.Assignment.CrewTaskListView do
         },
         socket
       ) do
-    user_state_key = "crew-#{crew.id}-selected-item-id"
+    user_state_key = UserState.key(user, %{crew: crew.id}, "selected-task")
 
     {
       :ok,
@@ -33,6 +34,7 @@ defmodule Systems.Assignment.CrewTaskListView do
         user_state_key: user_state_key,
         user_state_data: user_state_data
       )
+      |> update_title()
       |> update_participant()
       |> update_selected_item_id()
       |> update_selected_item()
@@ -42,6 +44,11 @@ defmodule Systems.Assignment.CrewTaskListView do
       |> compose_child(@tool_ref_view_name)
       |> show_modal_tool_ref_view_if_needed()
     }
+  end
+
+  defp update_title(socket) do
+    title = dgettext("eyra-assignment", "work.list.title")
+    socket |> assign(title: title)
   end
 
   defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
@@ -194,6 +201,11 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> start_task()
   end
 
+  defp start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
+    Assignment.Public.start_task(task)
+    socket
+  end
+
   defp show_modal_tool_ref_view_if_needed(%{assigns: %{selected_item: selected_item}} = socket)
        when not is_nil(selected_item) do
     socket |> show_modal(@tool_ref_view_name, :full)
@@ -220,7 +232,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   def render(assigns) do
     ~H"""
       <div id="crew_task_list_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@user_state_value} >
-        <.task_list>
+        <.task_list title={@title}>
           <.child name={:work_list_view} fabric={@fabric} />
         </.task_list>
       </div>

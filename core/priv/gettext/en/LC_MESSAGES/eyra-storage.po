@@ -44,10 +44,6 @@ msgid "azure.sas_token.label"
 msgstr "SAS token"
 
 #, elixir-autogen, elixir-format
-msgid "centerdata.url.label"
-msgstr "URL"
-
-#, elixir-autogen, elixir-format
 msgid "yoda.password.label"
 msgstr "Password"
 

@@ -10,7 +10,14 @@ defmodule Systems.Consent.ClickWrapView do
 
   @impl true
   def update(
-        %{id: id, revision: revision, user: user},
+        %{
+          id: id,
+          revision: revision,
+          user: user,
+          accept_text: accept_text,
+          decline_text: decline_text,
+          validation_text: validation_text
+        },
         socket
       ) do
     signature = Consent.Public.get_signature(revision, user)
@@ -22,19 +29,24 @@ defmodule Systems.Consent.ClickWrapView do
         id: id,
         revision: revision,
         user: user,
-        signature: signature
+        signature: signature,
+        accept_text: accept_text,
+        decline_text: decline_text,
+        validation_text: validation_text
       )
-      |> update_validation()
       |> update_buttons()
     }
   end
 
-  defp update_buttons(%{assigns: %{myself: myself}} = socket) do
+  defp update_buttons(
+         %{assigns: %{myself: myself, accept_text: accept_text, decline_text: decline_text}} =
+           socket
+       ) do
     accept_button = %{
       action: %{type: :send, event: "accept", target: myself},
       face: %{
         type: :primary,
-        label: dgettext("eyra-consent", "click_wrap.accept.button")
+        label: accept_text
       }
     }
 
@@ -42,16 +54,11 @@ defmodule Systems.Consent.ClickWrapView do
       action: %{type: :send, event: "decline", target: myself},
       face: %{
         type: :label,
-        label: dgettext("eyra-consent", "click_wrap.decline.button")
+        label: decline_text
       }
     }
 
     assign(socket, buttons: [accept_button, decline_button])
-  end
-
-  defp update_validation(socket) do
-    validation = dgettext("eyra-consent", "click_wrap.consent.validation")
-    assign(socket, validation: validation)
   end
 
   @impl true
@@ -94,7 +101,7 @@ defmodule Systems.Consent.ClickWrapView do
           <%= raw @revision.source %>
         </div>
         <.spacing value="L" />
-        <Text.title6><%= @validation %></Text.title6>
+        <Text.title6><%= @validation_text %></Text.title6>
         <.spacing value="XS" />
         <div class="flex flex-row gap-4">
           <%= for button <- @buttons do %>

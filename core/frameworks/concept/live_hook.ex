@@ -4,7 +4,7 @@ defmodule Frameworks.Concept.LiveHook do
   @type session :: map()
   @type socket :: Phoenix.LiveView.Socket.t()
 
-  @callback on_mount(live_view_module(), params(), session(), socket()) ::
+  @callback mount(live_view_module(), params(), session(), socket()) ::
               {:cont | :halt, socket()}
 
   defmacro __using__(_opts) do
@@ -22,6 +22,10 @@ defmodule Frameworks.Concept.LiveHook do
 
       def optional_apply(socket, live_view_module, function, args) when is_list(args) do
         Frameworks.Utility.Module.optional_apply(live_view_module, function, args, socket)
+      end
+
+      def on_mount(live_view_module, params, session, socket) do
+        mount(live_view_module, params, session, socket)
       end
     end
   end

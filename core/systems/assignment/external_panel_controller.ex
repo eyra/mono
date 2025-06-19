@@ -1,4 +1,8 @@
 defmodule Systems.Assignment.ExternalPanelController do
+  @moduledoc """
+   Deprecated, use Systems.Affiliate.Controller instead
+  """
+
   use CoreWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
@@ -112,7 +116,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp add_panel_info(conn, params) do
     panel_info = %{
       panel: get_panel(params),
-      embedded?: embedded?(params),
+      redirect?: redirect?(params),
       participant: get_participant(params),
       query_string: params
     }
@@ -129,7 +133,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
 
-  defp embedded?(%{"entry" => "liss"}), do: true
-  defp embedded?(%{"embed" => "true"}), do: true
-  defp embedded?(_), do: false
+  defp redirect?(%{"entry" => "liss"}), do: true
+  defp redirect?(%{"embed" => "true"}), do: true
+  defp redirect?(_), do: false
 end

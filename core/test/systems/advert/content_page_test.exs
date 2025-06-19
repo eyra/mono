@@ -1,5 +1,5 @@
 defmodule Systems.Advert.ContentPageTest do
-  use CoreWeb.ConnCase, async: true
+  use CoreWeb.ConnCase, async: false
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   import Phoenix.Component, only: [assign: 2]

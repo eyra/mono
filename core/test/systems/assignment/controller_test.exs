@@ -93,7 +93,7 @@ defmodule Systems.Assignment.ControllerTest do
 
       participants = [
         %{user_id: 1, member_id: 1, public_id: 777, external_id: nil},
-        %{user_id: 2, member_id: 2, public_id: 778, external_id: "melle"},
+        %{user_id: 2, member_id: 2, public_id: 778, external_id: "external_id"},
         %{user_id: 3, member_id: 3, public_id: 779, external_id: nil}
       ]
 
@@ -153,7 +153,7 @@ defmodule Systems.Assignment.ControllerTest do
       assert [
                "Participant,Consent,Task 1,Task 2\r\n",
                "777,n/a,rejected,started\r\n",
-               "melle,yes,accepted,finished\r\n",
+               "external_id,yes,accepted,finished\r\n",
                "779,no,n/a,n/a\r\n"
              ] = csv_data
     end
@@ -165,7 +165,8 @@ defmodule Systems.Assignment.ControllerTest do
     test "export/2", %{conn: conn} do
       user1 = Factories.insert!(:member)
 
-      %{user: user2} = Factories.insert!(:external_user, %{external_id: "melle"})
+      %{user: user2} =
+        Factories.insert!(:external_user, %{organisation: "org", external_id: "external_id"})
 
       user3 = Factories.insert!(:member)
 
@@ -254,7 +255,7 @@ defmodule Systems.Assignment.ControllerTest do
         |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
-      assert response.resp_body =~ "melle,yes,accepted,finished\r\n"
+      assert response.resp_body =~ "external_id,yes,accepted,finished\r\n"
       assert response.resp_body =~ "1,n/a,rejected,started\r\n"
       assert response.resp_body =~ "3,no,n/a,n/a\r\n"
     end

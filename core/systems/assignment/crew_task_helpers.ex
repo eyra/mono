@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.CrewTaskHelpers do
   alias Frameworks.Concept
+
   alias Systems.Crew
   alias Systems.Workflow
 
@@ -13,11 +14,6 @@ defmodule Systems.Assignment.CrewTaskHelpers do
 
   def task_status(%{status: status}), do: status
   def task_status(_), do: :pending
-
-  def start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
-    Crew.Public.start_task(task)
-    socket
-  end
 
   def get_icon({%{group: group}, _} = _work_item) when is_binary(group) do
     String.downcase(group)
