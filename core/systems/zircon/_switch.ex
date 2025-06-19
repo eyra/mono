@@ -4,16 +4,12 @@ defmodule Systems.Zircon.Switch do
   alias Systems.Zircon
 
   def intercept(
-        {:paper_reference_file, :updated} = signal,
-        %{paper_reference_file: reference_file} = message
+        {:paper_reference_file, :updated},
+        %{paper_reference_file: paper_reference_file}
       ) do
-    tool = Zircon.Public.get_screening_tool_by_reference_file!(reference_file)
+    zircon_screening_tool =
+      Zircon.Public.get_screening_tool_by_reference_file!(paper_reference_file)
 
-    dispatch!(
-      {:zircon_screening_tool, signal},
-      Map.merge(message, %{zircon_screening_tool: tool})
-    )
-
-    :ok
+    {:continue, :zircon_screening_tool, zircon_screening_tool}
   end
 end

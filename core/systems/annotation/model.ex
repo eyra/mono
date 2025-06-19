@@ -4,19 +4,38 @@ defmodule Systems.Annotation.Model do
 
   import Ecto.Changeset
 
-  alias Systems.Account
+  alias Systems.Annotation
   alias Systems.Ontology
+  alias Systems.Account
 
   schema "annotation" do
-    field(:value, :string)
-    belongs_to(:term, Ontology.TermModel)
-    belongs_to(:user, Account.User)
+    field(:statement, :string)
+    field(:ai_generated?, :boolean)
+
+    belongs_to(:type, Ontology.ConceptModel)
+    belongs_to(:author, Account.User)
+
+    many_to_many(:references, Annotation.RefModel,
+      join_through: Annotation.Assoc,
+      join_keys: [annotation_id: :id, ref_id: :id]
+    )
 
     timestamps()
   end
 
-  @fields ~w(value)a
-  @required_fields ~w(value)a
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          statement: String.t(),
+          ai_generated?: boolean(),
+          type_id: integer() | nil,
+          author_id: integer() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
+  @fields ~w(statement ai_generated?)a
+  @required_fields @fields
 
   def changeset(annotation, attrs) do
     annotation
@@ -28,14 +47,10 @@ defmodule Systems.Annotation.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: []
+  def preload_graph(:down), do: [:type, :auth_node, :references]
+  def preload_graph(:up), do: []
 
-  def preload_graph(:up),
-    do: [
-      term: preload_graph(:term),
-      user: preload_graph(:user)
-    ]
-
-  def preload_graph(:term), do: [term: Systems.Ontology.TermModel.preload_graph(:up)]
-  def preload_graph(:user), do: [user: []]
+  def preload_graph(:type), do: [type: Ontology.ConceptModel.preload_graph(:down)]
+  def preload_graph(:auth_node), do: [auth_node: []]
+  def preload_graph(:references), do: [references: Annotation.RefModel.preload_graph(:down)]
 end
