@@ -35,10 +35,6 @@ msgid "choose.other.banner.photo.file"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "background.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "description.public.label"
 msgstr ""
 
@@ -47,15 +43,7 @@ msgid "background.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "devices.available.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "duration.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "expectations.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -99,9 +87,13 @@ msgid "preview.inform.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "language.available.label"
+msgid "copy.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "copy.title"
+msgid "prerequisites.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "prerequisites.public.label"
 msgstr ""
