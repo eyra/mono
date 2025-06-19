@@ -60,6 +60,10 @@ services:
         - MIX_ENV=prod
         - FORCE_SSL=${FORCE_SSL-true}
         - REWRITE_ON=${REWRITE_ON}
+
+    ports:
+      - 4000:4000
+      - 4001:4001
     volumes:
       - db_certs:/app/certs
 
