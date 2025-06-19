@@ -64,6 +64,7 @@ services:
     ports:
       - 4000:4000
       - 4001:4001
+      - 4002:4002
     volumes:
       - db_certs:/app/certs
 
