@@ -9,15 +9,27 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#16 Under development
+
+## \#17 Under development
 * ..
+
+## \#16 2025-06-18
+* Added: Affiliate system for panel company integration
+* Added: Support for end-of-flow redirect to Affiliates
+* Added: Support for sending events to Affiliates
+* Added: Integration tab in Assignment CMS for data donations (using Affiliate system)
+* Added: Participant tab in Assignment CMS for data donations (using Affiliate system)
+* Added Spanish to Assignment settings
+* Fixed: Several issues on the Landing Page
+* Fixed: Flaky tests due to strange on_mount error
+* Security: Bump Erlang/OTP due to security risk
 
 ## \#15.2 2025-05-31
 * Fixed: Realtime updates interfering participant flows
 * Added: Support for sending realtime updates to pages targeted to specific users
 
 ## \#15.1 2025-05-08
-* Fixed: When a participant returns from a questionnaire back to Next, a popup is shown and the participant must click  'close'. 
+* Fixed: When a participant returns from a questionnaire back to Next, a popup is shown and the participant must click  'close'.
 
 ## \#15 2025-05-07
 * Changed: Next Landing page
@@ -30,7 +42,7 @@
 ## \#13 2025-04-25
 * Changed: Refinement of the instruction manual builder based on feedback
 * Fixed: Mobile friendly header title for participant flow
-  
+
 ## \#12 2025-04-19
 * Maintenance release
 
