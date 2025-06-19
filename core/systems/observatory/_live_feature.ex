@@ -24,8 +24,18 @@ defmodule Systems.Observatory.LiveFeature do
       end
 
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
+        user_id =
+          if current_user = socket.assigns |> Map.get(:current_user) do
+            current_user.id
+          else
+            0
+          end
+
         socket
-        |> Observatory.Public.observe([{__MODULE__, [id]}])
+        |> Observatory.Public.observe([
+          {__MODULE__, [id]},
+          {__MODULE__, [id, user_id]}
+        ])
         |> Observatory.Public.update_view_model(__MODULE__, model, @presenter)
       end
 
