@@ -60,11 +60,6 @@ services:
         - MIX_ENV=prod
         - FORCE_SSL=${FORCE_SSL-true}
         - REWRITE_ON=${REWRITE_ON}
-
-    ports:
-      - 4000:4000
-      - 4001:4001
-      - 4002:4002
     volumes:
       - db_certs:/app/certs
 
@@ -73,8 +68,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-postgres
-    ports:
-      - 5432:5432
     volumes:
       - db_certs:/var/lib/postgresql/ssl
       - ./postgres_data:/var/lib/postgresql/data
