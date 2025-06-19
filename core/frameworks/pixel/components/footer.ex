@@ -27,10 +27,11 @@ defmodule CoreWeb.UI.Footer do
     "<a class=\"text-primary\" href=\"#{href}\" target=\"_blank\">#{text}</a>"
   end
 
-  def platform_footer(assigns) do
-    privacy_text = dgettext("eyra-ui", "privacy.link")
+  attr(:privacy_text, :string, default: dgettext("eyra-ui", "privacy.link"))
+  attr(:terms_text, :string, default: dgettext("eyra-ui", "terms.link"))
+
+  def platform_footer(%{privacy_text: privacy_text, terms_text: terms_text} = assigns) do
     privacy_url = "https://eyra.notion.site/Privacy-Policy-7acb32ac39514d68aa4d1b69717d0752"
-    terms_text = dgettext("eyra-ui", "terms.link")
     terms_url = "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c"
     eyra_url = "https://eyra.co"
 

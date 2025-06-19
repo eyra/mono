@@ -13,6 +13,9 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   attr(:menus, :map, required: true)
   attr(:footer?, :boolean, default: true)
 
+  attr(:privacy_text, :string, default: dgettext("eyra-ui", "privacy.link"))
+  attr(:terms_text, :string, default: dgettext("eyra-ui", "terms.link"))
+
   slot(:header)
   slot(:inner_block, required: true)
 
@@ -51,7 +54,7 @@ defmodule CoreWeb.Layouts.Stripped.Html do
             </div>
           </div>
           <div class="bg-grey5">
-            <.platform_footer />
+            <.platform_footer privacy_text={@privacy_text} terms_text={@terms_text} />
           </div>
         </div>
       </div>

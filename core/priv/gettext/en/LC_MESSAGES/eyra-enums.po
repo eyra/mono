@@ -368,11 +368,11 @@ msgstr "Questionnaire"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.download_manual"
-msgstr "Download manual"
+msgstr "PDF download manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.request_manual"
-msgstr "Request manual"
+msgstr "PDF request manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.submit"
@@ -488,4 +488,12 @@ msgstr "A specific geographic or organizational location. (SPICE)"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.manual"
-msgstr "Instruction manual [beta]"
+msgstr "Instruction manual"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.spotify"
+msgstr "Spotify"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.es"
+msgstr "Spanish"

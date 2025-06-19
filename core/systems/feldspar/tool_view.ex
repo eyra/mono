@@ -4,6 +4,11 @@ defmodule Systems.Feldspar.ToolView do
   alias Systems.Feldspar
 
   @impl true
+  def update(_params, %{assigns: %{started: true}} = socket) do
+    # Ignore realtime updates if started to prevent app_view from being hidden
+    {:ok, socket}
+  end
+
   def update(%{tool: tool, title: title, icon: icon}, socket) do
     description = dgettext("eyra-feldspar", "tool.description")
     loading = Map.get(socket.assigns, :loading, false)

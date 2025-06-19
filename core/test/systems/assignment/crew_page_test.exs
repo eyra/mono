@@ -21,6 +21,8 @@ defmodule Systems.Assignment.CrewPageTest do
     assignment =
       Assignment.Factories.create_assignment(
         info,
+        # consent_agreement
+        nil,
         workflow,
         assignment_auth_node,
         :online
@@ -31,7 +33,7 @@ defmodule Systems.Assignment.CrewPageTest do
 
   describe "render an assignment crew page" do
     test "renders page", %{conn: conn, assignment: assignment, user: user} do
-      conn = put_session(conn, :panel_info, %{embedded?: false, participant: "test"})
+      conn = put_session(conn, :panel_info, %{redirect?: false, participant: "test"})
       Assignment.Public.add_participant!(assignment, user)
 
       {:ok, _view, html} = live(conn, ~p"/assignment/#{assignment.id}")

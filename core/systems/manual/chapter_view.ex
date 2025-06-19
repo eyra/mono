@@ -16,7 +16,9 @@ defmodule Systems.Manual.ChapterView do
         %{manual_id: manual_id, chapter: chapter, user: user, user_state_data: user_state_data},
         socket
       ) do
-    user_state_key = "manual-#{manual_id}-chapter-#{chapter.id}-selected-page-id"
+    user_state_key =
+      UserState.key(user, %{manual: manual_id, chapter: chapter.id}, "selected-page")
+
     user_state_value = UserState.integer_value(user_state_data, user_state_key)
     selected_page_id = Map.get(socket.assigns, :selected_page_id, user_state_value)
 

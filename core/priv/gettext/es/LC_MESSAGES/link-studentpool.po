@@ -1,0 +1,96 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.students"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "students.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "students.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "spots.available"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "sample.size"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "tabbar.item.dashboard"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "active.students"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "inactive.students"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "credit.distribution.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "credit.progress.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "passed.students"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "participant.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission.selector.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "participants.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.plugin.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "adverts.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "adverts.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "excluded.adverts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.adverts"
+msgstr ""

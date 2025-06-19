@@ -13,6 +13,9 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
 
     def tabs(_t) do
       [
+        affiliate: nil,
+        import: nil,
+        criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
           Assignment.Template.Flags.Settings.new(opt_out: [:language, :panel, :storage])
@@ -21,11 +24,9 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
           dgettext("eyra-assignment", "tabbar.item.workflow"),
           Assignment.Template.Flags.Workflow.new()
         },
-        import: nil,
-        criteria: nil,
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool])
+          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool, :affiliate])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

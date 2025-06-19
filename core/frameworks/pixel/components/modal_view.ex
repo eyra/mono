@@ -10,6 +10,113 @@ defmodule Frameworks.Pixel.ModalView do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 
+  defmacro __using__(_) do
+    quote do
+      alias Frameworks.Pixel.ModalView
+
+      import Frameworks.Pixel.ModalView, only: [modal_id: 1]
+
+      @impl true
+      def handle_event("prepare_modal", modal, socket) do
+        Map.get(socket.assigns, :modals)
+
+        {
+          :noreply,
+          socket |> upsert_modal(modal |> Map.put(:prepared, true))
+        }
+      end
+
+      @impl true
+      def handle_event("show_modal", modal, socket) do
+        modals = Map.get(socket.assigns, :modals)
+
+        {
+          :noreply,
+          socket |> upsert_modal(modal |> Map.put(:prepared, false))
+        }
+      end
+
+      @impl true
+      def handle_event("hide_modal", modal, socket) do
+        {:noreply, socket |> delete_modal(modal)}
+      end
+
+      @impl true
+      def handle_event("hide_modals", _, socket) do
+        {
+          :noreply,
+          socket |> assign(modals: [])
+        }
+      end
+
+      @impl true
+      def handle_event("close_modal", %{"item" => modal_id}, socket) do
+        modal =
+          socket
+          |> modals()
+          |> Enum.find(&(modal_id(&1) == modal_id))
+          |> tap(
+            &if &1 == nil do
+              Logger.warning("Modal not found with ref: #{modal_id}")
+            end
+          )
+
+        {
+          :noreply,
+          socket |> close_modal(modal)
+        }
+      end
+
+      def close_modal(socket, %{live_component: %{ref: ref}} = modal) do
+        socket
+        |> delete_modal(modal)
+        |> Fabric.handle_modal_closed(ref)
+      end
+
+      def upsert_modal(socket, modal) do
+        if modal_exists?(socket, modal) do
+          update_modal(socket, modal)
+        else
+          insert_modal(socket, modal)
+        end
+      end
+
+      def show_modal(socket, modal) do
+        if modal_exists?(socket, modal) do
+          update_modal(socket, modal)
+        else
+          insert_modal(socket, modal)
+        end
+      end
+
+      def update_modal(socket, modal) do
+        socket
+        |> delete_modal(modal)
+        |> insert_modal(modal)
+      end
+
+      def insert_modal(%{assigns: %{modals: modals}} = socket, modal) do
+        socket |> assign(modals: modals ++ [modal])
+      end
+
+      def delete_modal(%{assigns: %{modals: modals}} = socket, modal) do
+        assign(socket, modals: Enum.reject(modals, &(modal_id(&1) == modal_id(modal))))
+      end
+
+      def modal_exists?(socket, modal) do
+        socket
+        |> modals()
+        |> Enum.find(&(modal_id(&1) == modal_id(modal))) != nil
+      end
+
+      def modals(%{assigns: %{modals: modals}} = socket), do: modals
+      def modals(_socket), do: []
+    end
+  end
+
+  def modal_id(%{live_component: live_component}), do: modal_id(live_component)
+  def modal_id(%{ref: %{id: id}}), do: id
+
   attr(:modal, :map, default: nil)
 
   def dynamic(assigns) do

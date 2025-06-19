@@ -80,7 +80,7 @@ config :core,
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en de it nl)
+config :core, CoreWeb.Gettext, locales: ~w(en es de it nl)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
@@ -147,7 +147,7 @@ config :core, CoreWeb.Endpoint,
   force_ssl: [],
   render_errors: [
     formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
-    layout: {CoreWeb.Layouts, :error}
+    layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],

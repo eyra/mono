@@ -7,6 +7,7 @@ defprotocol Systems.Assignment.Template do
           import: {title(), Template.Flags.Import.t()} | nil,
           criteria: {title(), Template.Flags.Criteria.t()} | nil,
           participants: {title(), Template.Flags.Participants.t()} | nil,
+          affiliate: {title(), Template.Flags.Affiliate.t()} | nil,
           workflow: {title(), Template.Flags.Workflow.t()} | nil,
           monitor: {binary(), Template.Flags.Monitor.t()} | nil
         ]
@@ -54,15 +55,15 @@ defmodule Systems.Assignment.Template.Flags.Settings do
     :privacy,
     :consent,
     :helpdesk,
-    :storage,
-    :panel
+    :affiliate
   ]
 end
 
 defmodule Systems.Assignment.Template.Flags.Participants do
   use Systems.Assignment.Template.Flags, [
     :advert_in_pool,
-    :invite_participants
+    :invite_participants,
+    :affiliate
   ]
 end
 
@@ -76,6 +77,10 @@ end
 
 defmodule Systems.Assignment.Template.Flags.Workflow do
   use Systems.Assignment.Template.Flags, [:library]
+end
+
+defmodule Systems.Assignment.Template.Flags.Affiliate do
+  use Systems.Assignment.Template.Flags, []
 end
 
 defmodule Systems.Assignment.Template.Flags.Monitor do

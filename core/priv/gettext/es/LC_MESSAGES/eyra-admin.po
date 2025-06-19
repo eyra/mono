@@ -1,0 +1,92 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "support.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket.tag.bug"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket.tag.question"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket.tag.tip"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.ticket.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "role.creator"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reopen.ticket.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "system.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "actions.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "create.org.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "org.content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.bank.accounts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.bank.accounts.new.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.new.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "system.citizen.pools.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""

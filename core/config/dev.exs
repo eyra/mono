@@ -10,6 +10,7 @@ upload_path =
 config :phoenix, :plug_init_mode, :runtime
 
 config :core,
+  domain: "localhost",
   name: "Next [local]",
   base_url: "http://localhost:4000",
   upload_path: upload_path

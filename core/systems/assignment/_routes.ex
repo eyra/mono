@@ -31,21 +31,6 @@ defmodule Systems.Assignment.Routes do
           }
         )
       end
-
-      scope "/assignment", Systems.Assignment do
-        pipe_through([:browser_unprotected, :validator])
-
-        post("/:id/:entry", ExternalPanelController, :create,
-          private: %{
-            validate: %{
-              id: &CoreWeb.Validator.Integer.valid_integer?/1,
-              entry: &CoreWeb.Validator.String.valid_non_empty?/1
-            },
-            validation_handler:
-              &Systems.Assignment.ExternalPanelController.validation_error_callback/2
-          }
-        )
-      end
     end
   end
 end

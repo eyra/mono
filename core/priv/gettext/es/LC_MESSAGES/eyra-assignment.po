@@ -1,0 +1,446 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "ticket.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "earned.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "togo.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "pool.target"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr "Continuar"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.consent.title"
+msgstr "Consentimiento"
+
+#, elixir-autogen, elixir-format
+msgid "connect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.connect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "connector.storage.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "disconnect.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.off.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.on.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.subtitle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.image.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.different.image.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.logo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.logo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.logo.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.branding.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.branding.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "work.list.title"
+msgstr "Resumen"
+
+#, elixir-autogen, elixir-format
+msgid "intro.page.title"
+msgstr "Información"
+
+#, elixir-autogen, elixir-format
+msgid "intro_form.off.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "intro_form.on.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.intro.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.intro.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.intro.title"
+msgstr "Información"
+
+#, elixir-autogen, elixir-format
+msgid "settings.support.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.support.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "support.page.title"
+msgstr "¿Preguntas?"
+
+#, elixir-autogen, elixir-format
+msgid "support_form.off.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "support_form.on.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "declined_view.body"
+msgstr "Has rechazado participar. Puedes cerrar el navegador. Si deseas reconsiderarlo, cierra esta ventana emergente para continuar."
+
+#, elixir-autogen, elixir-format
+msgid "declined_view.title"
+msgstr "Consentimiento rechazado"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body"
+msgstr "Gracias. Has terminado. Ahora puedes cerrar la ventana."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title"
+msgstr "Finalizado"
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.replace.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.select.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.privacy.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.privacy.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy_doc.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.title"
+msgstr "Privacidad"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.monitor"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "started.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "declined.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.language.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.subject_count.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.donate.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.questionnaire.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.request.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.download_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.fork_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.submit.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invite.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.general_instruction.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.onsite_experiment.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.consent.title"
+msgstr "Consentimiento"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.information.title"
+msgstr "Información"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.support.title"
+msgstr "¿Preguntas?"
+
+#, elixir-autogen, elixir-format
+msgid "context.menu.privacy.title"
+msgstr "Privacidad"
+
+#, elixir-autogen, elixir-format
+msgid "storage.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.goto.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.not_available.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "leaf.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "gdpr_form.confirmation_modal.body"
+msgstr ""
+
+#, elixir-autogen
+msgid "export.progress.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.consent"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.header.participant"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.no"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.not.applicable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.yes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retry.button"
+msgstr "Atrás"
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.paper_screening.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.reviewers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.settings"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.workflow"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.criteria"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.import"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.manual.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "affiliate.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.affiliate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect"
+msgstr "Gracias. Ha completado esta parte. Haga clic en Continuar para seguir."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr "Continuar"

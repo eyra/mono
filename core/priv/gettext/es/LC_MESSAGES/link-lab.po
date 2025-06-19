@@ -1,0 +1,170 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "add.day.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "day.schedule.date.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "day.schedule.location.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "day.schedule.seats.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "day.schedule.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "time.slot.item.available.label"
+msgstr ""
+
+#, elixir-format, elixir-autogen
+msgid "1 reservation"
+msgid_plural "%{count} reservations"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-format, elixir-autogen
+msgid "1 seat"
+msgid_plural "%{count} seats"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "day.schedule.byline"
+msgstr ""
+
+#, elixir-format, elixir-autogen
+msgid "1 time slot"
+msgid_plural "%{count} time slots"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "duplicate.day.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "edit.day.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "timeslot.selector.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "no.reservation.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "reservation.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "update.warning.time.slot.no.longer.available"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.query.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.expired"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.not.found"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "inquiry.checkin.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.email.not.found"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.email.found"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.email.found.more"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.cancelled"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.noreservation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.checkedin.full"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.checkedin.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "search.subject.reservation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "date.location.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""

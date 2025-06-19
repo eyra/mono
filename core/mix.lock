@@ -98,6 +98,7 @@
   "ranch": {:hex, :ranch, "1.8.1", "208169e65292ac5d333d6cdbad49388c1ae198136e4697ae2f474697140f201c", [:make, :rebar3], [], "hexpm", "aed58910f4e21deea992a67bf51632b6d60114895eb03bb392bb733064594dd0"},
   "remote_ip": {:hex, :remote_ip, "1.2.0", "fb078e12a44414f4cef5a75963c33008fe169b806572ccd17257c208a7bc760f", [:mix], [{:combine, "~> 0.10", [hex: :combine, repo: "hexpm", optional: false]}, {:plug, "~> 1.14", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm", "2ff91de19c48149ce19ed230a81d377186e4412552a597d6a5137373e5877cb7"},
   "slugify": {:hex, :slugify, "1.3.1", "0d3b8b7e5c1eeaa960e44dce94382bee34a39b3ea239293e457a9c5b47cc6fd3", [:mix], [], "hexpm", "cb090bbeb056b312da3125e681d98933a360a70d327820e4b7f91645c4d8be76"},
+  "sqids": {:hex, :sqids, "0.2.1", "38482dea665f6a97562f23eb8e3b4e29c7811d9225d742d5c8e675e2eb5d1925", [:mix], [], "hexpm", "b1a3e0ec62d6946fa630dc3cd95d956a5a7b7ca53aff09c3ec59d53cda3260c8"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.7", "354c321cf377240c7b8716899e182ce4890c5938111a1296add3ec74cf1715df", [:make, :mix, :rebar3], [], "hexpm", "fe4c190e8f37401d30167c8c405eda19469f34577987c76dde613e838bbc67f8"},
   "statistics": {:hex, :statistics, "0.6.3", "7fb182e7c1cab2980e392c7efef7ce326539f081f9defda4099550e9c2c7cb0f", [:mix], [], "hexpm", "a43d87726d240205e9ef47f29650a6e3132b4e4061e05512f32fa8120784a8e0"},
   "sweet_xml": {:git, "https://github.com/kbrw/sweet_xml.git", "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6", [ref: "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6"]},
