@@ -89,7 +89,11 @@ FROM dev AS build_release
 ARG MIX_ENV=${MIX_ENV:-prod}
 ENV BUNDLE=next
 ARG VERSION
+ARG FORCE_SSL=true
+ARG REWRITE_ON=""
 ENV MIX_ENV=${MIX_ENV}
+ENV FORCE_SSL=${FORCE_SSL}
+ENV REWRITE_ON=${REWRITE_ON}
 
 # Validate required environment variables
 RUN if [ -z "${VERSION}" ]; then echo "VERSION is unset" && exit 1; fi
