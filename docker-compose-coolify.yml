@@ -68,8 +68,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-postgres
-    ports:
-      - 5432:5432
     volumes:
       - db_certs:/var/lib/postgresql/ssl
       - ./postgres_data:/var/lib/postgresql/data
