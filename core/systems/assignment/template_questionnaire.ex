@@ -12,6 +12,8 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
 
     def tabs(_t) do
       [
+        import: nil,
+        criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
           Assignment.Template.Flags.Settings.new(opt_out: [:panel, :storage])
@@ -20,11 +22,13 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           dgettext("eyra-assignment", "tabbar.item.workflow"),
           Assignment.Template.Flags.Workflow.new()
         },
-        import: nil,
-        criteria: nil,
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new()
+        },
+        affiliate: {
+          dgettext("eyra-assignment", "tabbar.item.affiliate"),
+          Assignment.Template.Flags.Affiliate.new()
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

@@ -1,6 +1,7 @@
 defmodule Systems.Assignment.SettingsView do
   use CoreWeb, :live_component
 
+  alias Systems.Affiliate
   alias Systems.Assignment
 
   @impl true
@@ -38,8 +39,6 @@ defmodule Systems.Assignment.SettingsView do
       |> compose_child(:privacy)
       |> compose_child(:consent)
       |> compose_child(:helpdesk)
-      |> compose_child(:panel)
-      |> compose_child(:storage)
     }
   end
 
@@ -138,31 +137,14 @@ defmodule Systems.Assignment.SettingsView do
   end
 
   @impl true
-  def compose(:panel, %{content_flags: %{panel: false}}), do: nil
+  def compose(:affiliate, %{content_flags: %{affiliate: false}}), do: nil
 
   @impl true
-  def compose(:panel, %{entity: assignment, uri_origin: uri_origin}) do
+  def compose(:affiliate, %{entity: assignment}) do
     %{
-      module: Assignment.ConnectorView,
+      module: Affiliate.Form,
       params: %{
-        assignment: assignment,
-        connection: assignment.external_panel,
-        type: :panel,
-        uri_origin: uri_origin
-      }
-    }
-  end
-
-  @impl true
-  def compose(:storage, %{content_flags: %{storage: false}}), do: nil
-
-  @impl true
-  def compose(:storage, %{storage_endpoint: storage_endpoint, project_node: project_node}) do
-    %{
-      module: Assignment.StorageView,
-      params: %{
-        storage_endpoint: storage_endpoint,
-        project_node: project_node
+        assignment: assignment
       }
     }
   end
@@ -230,28 +212,6 @@ defmodule Systems.Assignment.SettingsView do
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.support.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.support.body") %></Text.body>
-            <.spacing value="M" />
-          </:header>
-          <:footer>
-            <.spacing value="L" />
-          </:footer>
-        </.child>
-
-        <.child name={:panel} fabric={@fabric}>
-          <:header>
-            <Text.title3><%= dgettext("eyra-assignment", "settings.panel.title") %></Text.title3>
-            <Text.body><%= dgettext("eyra-assignment", "settings.panel.body") %></Text.body>
-            <.spacing value="M" />
-          </:header>
-          <:footer>
-            <.spacing value="L" />
-          </:footer>
-        </.child>
-
-        <.child name={:storage} fabric={@fabric}>
-          <:header>
-            <Text.title3><%= dgettext("eyra-assignment", "settings.storage.title") %></Text.title3>
-            <Text.body><%= dgettext("eyra-assignment", "settings.storage.body") %></Text.body>
             <.spacing value="M" />
           </:header>
           <:footer>

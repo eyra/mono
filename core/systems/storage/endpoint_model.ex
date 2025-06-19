@@ -99,7 +99,6 @@ defmodule Systems.Storage.EndpointModel do
     end
 
     def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
-    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
 
     def status(special) do
       sum =

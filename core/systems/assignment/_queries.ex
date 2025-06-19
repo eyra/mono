@@ -5,11 +5,12 @@ defmodule Systems.Assignment.Queries do
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Assignment
-  alias Systems.Crew
   alias Systems.Account
+  alias Systems.Affiliate
+  alias Systems.Assignment
   alias Systems.Content
   alias Systems.Consent
+  alias Systems.Crew
   alias Systems.Project
 
   def assignment_query() do
@@ -65,7 +66,11 @@ defmodule Systems.Assignment.Queries do
     from(Crew.MemberModel, as: :member, order_by: [asc: :public_id])
   end
 
-  def participant_query(%Assignment.Model{crew: %{id: id, auth_node_id: auth_node_id}}) do
+  # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
+  def participant_query(%Assignment.Model{
+        affiliate: nil,
+        crew: %{id: id, auth_node_id: auth_node_id}
+      }) do
     build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external_user)
     |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
@@ -79,6 +84,27 @@ defmodule Systems.Assignment.Queries do
       member_id: m.id,
       public_id: m.public_id,
       external_id: e.external_id
+    })
+  end
+
+  def participant_query(%Assignment.Model{
+        affiliate: %{id: affiliate_id},
+        crew: %{id: id, auth_node_id: auth_node_id}
+      }) do
+    build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
+    |> join(:left, [user: u], au in Affiliate.User, on: u.id == au.user_id, as: :affiliate_user)
+    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+      on: ra.principal_id == u.id,
+      as: :role_assignment
+    )
+    |> where([role_assignment: ra], ra.role == :participant)
+    |> where([role_assignment: ra], ra.node_id == ^auth_node_id)
+    |> where([affiliate_user: au], au.affiliate_id == ^affiliate_id)
+    |> select([member: m, user: u, affiliate_user: au], %{
+      user_id: u.id,
+      member_id: m.id,
+      public_id: m.public_id,
+      external_id: au.identifier
     })
   end
 

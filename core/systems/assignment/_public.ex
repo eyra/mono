@@ -16,6 +16,7 @@ defmodule Systems.Assignment.Public do
   alias Frameworks.Concept
   alias Frameworks.Signal
 
+  alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Account
   alias Systems.Content
@@ -64,6 +65,9 @@ defmodule Systems.Assignment.Public do
   end
 
   def get_by(association, preload \\ [])
+
+  def get_by(%Affiliate.Model{id: id}, preload), do: get_by(:affiliate_id, id, preload)
+
   def get_by(%Assignment.PageRefModel{assignment_id: id}, preload), do: get!(id, preload)
 
   def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)
@@ -131,6 +135,40 @@ defmodule Systems.Assignment.Public do
     )
   end
 
+  def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
+    {:ok, %{assignment_instance: instance}} = obtain_instance(assignment, user)
+    instance
+  end
+
+  def obtain_instance(%Assignment.Model{} = assignment, %Account.User{} = user) do
+    Multi.new()
+    |> Multi.insert(
+      :assignment_instance,
+      prepare_instance(assignment, user),
+      on_conflict: {:replace, [:updated_at]},
+      conflict_target: [:assignment_id, :user_id]
+    )
+    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, %{user: user})
+    |> Repo.transaction()
+  end
+
+  def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
+    from(i in Assignment.InstanceModel,
+      where: i.assignment_id == ^assignment.id,
+      where: i.user_id == ^user.id
+    )
+    |> Repo.one()
+  end
+
+  def list_instances(%Assignment.Model{} = assignment, preload \\ []) do
+    from(i in Assignment.InstanceModel,
+      where: i.assignment_id == ^assignment.id,
+      order_by: [asc: i.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def list_user_ids(assignment_ids) when is_list(assignment_ids) do
     from(u in User,
       join: m in Crew.MemberModel,
@@ -143,16 +181,34 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
-  def prepare(%{} = attrs, crew, info, page_refs, workflow, budget, consent_agreement, auth_node) do
+  def prepare(
+        %{} = attrs,
+        crew,
+        info,
+        affiliate,
+        page_refs,
+        workflow,
+        budget,
+        consent_agreement,
+        auth_node
+      ) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:info, info)
+    |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
     |> Ecto.Changeset.put_assoc(:page_refs, page_refs)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:budget, budget)
     |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
+  end
+
+  def prepare_instance(%Assignment.Model{} = assignment, %User{} = user) do
+    %Assignment.InstanceModel{}
+    |> Assignment.InstanceModel.changeset(%{})
+    |> Ecto.Changeset.put_assoc(:assignment, assignment)
+    |> Ecto.Changeset.put_assoc(:user, user)
   end
 
   def prepare_info(%{} = attrs) do
@@ -454,6 +510,12 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  def accept_member(%Assignment.Model{crew: crew}, user) do
+    if member = Crew.Public.get_member(crew, user) do
+      Signal.Public.dispatch!({:crew_member, :accepted}, %{crew_member: member})
+    end
+  end
+
   def decline_member(%Assignment.Model{crew: crew}, user) do
     if member = Crew.Public.get_member(crew, user) do
       Multi.new()
@@ -547,11 +609,21 @@ defmodule Systems.Assignment.Public do
   end
 
   def start_task(tool, identifier) do
-    if task = get_task(tool, identifier) do
-      Crew.Public.start_task(task)
-    else
-      Logger.warning("Can not start task")
+    start_task(get_task(tool, identifier))
+  end
+
+  def start_task(%Crew.TaskModel{} = task) do
+    member = get_member_by_task(task)
+
+    if not Crew.Public.started?(member) do
+      Signal.Public.dispatch!({:crew_member, :started}, %{crew_member: member})
     end
+
+    Crew.Public.start_task(task)
+  end
+
+  def start_task(nil) do
+    Logger.warning("Can not start task")
   end
 
   # def apply_member_and_complete_task(

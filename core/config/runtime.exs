@@ -11,6 +11,7 @@ if config_env() == :prod do
   base_url = "#{scheme}://#{app_domain}"
 
   config :core,
+    domain: app_domain,
     name: app_name,
     base_url: base_url,
     upload_path: upload_path

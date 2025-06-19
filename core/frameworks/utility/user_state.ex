@@ -14,4 +14,16 @@ defmodule Frameworks.Utility.UserState do
       nil
     end
   end
+
+  def key(%{id: user_id}, %{} = path, name) when is_binary(name) do
+    "next://user-#{user_id}@#{domain()}/#{path_to_string(path)}/#{name}"
+  end
+
+  def path_to_string(path) do
+    Enum.map_join(path, "/", fn {key, value} -> "#{key}/#{value}" end)
+  end
+
+  def domain do
+    Application.get_env(:core, :domain, "unknown.host")
+  end
 end

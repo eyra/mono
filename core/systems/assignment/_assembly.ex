@@ -2,6 +2,7 @@ defmodule Systems.Assignment.Assembly do
   alias Core.Repo
   use Core, :auth
 
+  alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Consent
   alias Systems.Crew
@@ -19,6 +20,7 @@ defmodule Systems.Assignment.Assembly do
 
     crew = Crew.Public.prepare(crew_auth_node)
     info = Assignment.Public.prepare_info(info_attrs(template, director))
+    affiliate = Affiliate.Public.prepare_affiliate()
     page_refs = Assignment.Public.prepare_page_refs(template, auth_node)
     workflow = prepare_workflow(template, workflow_auth_node)
     consent_agreement = prepare_consent_agreement(auth_node)
@@ -27,6 +29,7 @@ defmodule Systems.Assignment.Assembly do
       %{special: template},
       crew,
       info,
+      affiliate,
       page_refs,
       workflow,
       budget,

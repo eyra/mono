@@ -67,10 +67,6 @@ msgid "Signed out successfully"
 msgstr "Uitgelogd"
 
 #, elixir-autogen, elixir-format
-msgid "account.activated.successfully"
-msgstr "Account geactiveerd"
-
-#, elixir-autogen, elixir-format
 msgid "account.created.successfully"
 msgstr "Account aangemaakt"
 

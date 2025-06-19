@@ -489,3 +489,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.manual"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.spotify"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.es"
+msgstr ""

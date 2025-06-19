@@ -62,10 +62,6 @@ msgstr "Continue"
 msgid "onboarding.consent.title"
 msgstr "Consent"
 
-#, elixir-autogen, elixir-format
-msgid "settings.storage.title"
-msgstr "Data storage"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Set up"
@@ -79,14 +75,6 @@ msgid "connector.connect.button"
 msgstr "Connect"
 
 #, elixir-autogen, elixir-format
-msgid "connector.panel.text"
-msgstr "Connect the panel that you would like to use. Choose 'Other' if the panel that you use is not mentioned or if you are not using a panel."
-
-#, elixir-autogen, elixir-format
-msgid "connector.panel.title"
-msgstr "Set up Panel"
-
-#, elixir-autogen, elixir-format
 msgid "connector.storage.text"
 msgstr "Select the storage type that you would like to use to store the participant data."
 
@@ -95,48 +83,8 @@ msgid "connector.storage.title"
 msgstr "Set up data storage"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.storage.body"
-msgstr "The data donated by participants is stored on the Next platform."
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.body"
-msgstr "Connect the panel that you will use for recruiting participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "settings.panel.title"
-msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
 msgstr "Disconnect"
-
-#, elixir-autogen, elixir-format
-msgid "panel_form.type.label"
-msgstr "Panels"
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connector.annotation"
-msgstr "<div>The LISS panel is a high-quality panel that is especially suited for research for which a correct representation of the Dutch population is of great importance. It is based on a true probability sample of households, drawn from the population register by Statistics Netherlands.<br>More information: <a href=\"https://www.lissdata.nl\">www.lissdata.nl</a></div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connector.annotation"
-msgstr "<div>Select this option if you do not use a panel or if the panel that you use is not available in the options. A link will be provided that you can use to give to participants or to the panel that you use to enable participation.</div>"
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connector.annotation"
-msgstr "<div>For more information about I&O research visit <a href=\"https://www.ioresearch.nl/\">www.ioresearch.nl</a>.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.generic.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at the panel agency. With this url participants can visit your data donation workflow. The parameter 'participant' is the unique identifier for a participant.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.ioresearch.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at I&O Research. With this url participants can visit your data donation workflow. The parameter 'participant' is the unique identifier for a participant.</div>"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panel.liss.connection.annotation"
-msgstr "<div>Copy the url below and provide it to your contact person at Centerdata. With this url participants can visit your data donation workflow. For the LISS panel, make sure to only add the donate task to your workflow. The other tasks are performed by Centerdata.</div>"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
@@ -248,7 +196,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "You have finished. Thank you for your participation."
+msgstr "Thank you. You have finished. You can now close the window."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -316,7 +264,7 @@ msgstr "Enables participants to donate data."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.download.description"
-msgstr "Provide instructions on how to download digital trace data by uploading a PDF manual."
+msgstr "Upload a PDF manual with instructions for downloading digital trace data. Note: Not mobile-friendly."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.questionnaire.description"
@@ -324,7 +272,7 @@ msgstr "Redirects participants to an online questionnaire."
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.request.description"
-msgstr "Provide instructions on how to request digital trace data by uploading a PDF manual."
+msgstr "Upload a PDF manual with instructions for requesting digital trace data. Note: Not mobile-friendly."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download_instruction.description"
@@ -442,7 +390,7 @@ msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Not finished? Go back"
+msgstr "Back"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -470,4 +418,28 @@ msgstr "Papers"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.manual.description"
-msgstr "Provide instructions on how to request or download digital trace data by building a manual."
+msgstr "Provide instructions on how to request or download digital trace data by building a mobile-friendly manual."
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.body"
+msgstr "If you would like to connect your participant workflow to an external system you can set the URLs below. Any custom participant-specific parameters included in the participant invite link are automatically forwarded to both the progress webhook and the end-of-workflow redirect URL."
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.affiliate"
+msgstr "Integration"
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr "Use the link below to invite participants. No sign-in is required. Replace 'participant_id' with a unique identifier for each participant. You can optionally add custom parameters to the link (e.g., &d=abc123). These will be automatically forwarded to any external system connected via the Integration tab."
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
+msgstr "Invite link"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.redirect"
+msgstr "Thank you. You have completed this part. Click Continue to proceed."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr "Continue"
