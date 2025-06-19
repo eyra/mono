@@ -31,4 +31,4 @@ force_ssl_opts =
     false
   end
 
-config :core, CoreWeb.Endpoint, force_ssl: force_ssl_opts
+config :core, CoreWeb.Endpoint, force_ssl: false
