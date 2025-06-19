@@ -11,5 +11,24 @@ config :core, SurfConext,
   site: "https://connect.test.surfconext.nl",
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
-config :core, CoreWeb.Endpoint,
-  force_ssl: [rewrite_on: [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]]
+ssl_enabled =
+  System.get_env("FORCE_SSL", "true")
+  |> String.downcase()
+  |> then(&(&1 in ["true", "1"]))
+
+raw_rewrite = System.get_env("REWRITE_ON", "")
+
+rewrite_on_list =
+  case String.split(raw_rewrite, ",", trim: true) do
+    [] -> [:x_forwarded_host, :x_forwarded_port, :x_forwarded_proto]
+    list -> Enum.map(list, &String.to_atom/1)
+  end
+
+force_ssl_opts =
+  if ssl_enabled do
+    [rewrite_on: rewrite_on_list]
+  else
+    false
+  end
+
+config :core, CoreWeb.Endpoint, force_ssl: force_ssl_opts
