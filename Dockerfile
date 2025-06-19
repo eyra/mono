@@ -45,33 +45,67 @@ FROM builder AS dev
 
 WORKDIR /app/core
 
-# 1) Copy only the files that affect your deps
+# 1) Copy dependency-related files first (for maximum caching)
 COPY core/mix.exs core/mix.lock ./
 
-# 2) Install dependencies (this layer is cached until mix.exs or mix.lock changes)
+# 2) Install and compile dependencies (cached until mix files change)
 RUN mix deps.get
+RUN mix deps.compile
 
-# 3) Copy the rest of the app
-COPY core/ ./
+# 3) Copy asset dependency files
+COPY core/assets/package.json core/assets/package-lock.json ./assets/
 
-# 4) Install & build assets
-RUN mix assets.install \
- && mix assets.build
+# 4) Install npm dependencies (cached until package files change)
+RUN cd assets && npm install
+
+# 5) Copy configuration files (these rarely change)
+COPY core/config/ ./config/
+
+# 6) Copy assets directory
+COPY core/assets/ ./assets/
+
+# 7) Copy other necessary files
+COPY core/priv/ ./priv/
+COPY core/bundles/ ./bundles/
+COPY core/frameworks/ ./frameworks/
+COPY core/systems/ ./systems/
+COPY core/.formatter.exs core/.credo.exs core/.bundle.ex ./
+
+# 8) Copy source code (this changes most frequently, so put it last)
+COPY core/lib/ ./lib/
+COPY core/test/ ./test/
+
+# 9) Build assets
+RUN mix assets.build
 
 CMD ["mix", "run"]
 
 
 # ======================
-# Release Stage
+# Release Stage  
 # ======================
 FROM dev AS build_release
 
 ARG MIX_ENV=${MIX_ENV:-prod}
 ENV BUNDLE=next
 ARG VERSION
+ENV MIX_ENV=${MIX_ENV}
 
-# Rebuild frontend & release
-RUN ./scripts/build-frontend && ./scripts/build-release
+# Validate required environment variables
+RUN if [ -z "${VERSION}" ]; then echo "VERSION is unset" && exit 1; fi
+RUN if [ -z "${BUNDLE}" ]; then echo "BUNDLE is unset" && exit 1; fi
+
+# Frontend build steps (from build-frontend script)
+RUN cd assets && \
+    npm install && \
+    npx -y -i browserslist@latest && \
+    npx browserslist --update-db
+
+# Production release steps (from build-release script)
+RUN mix assets.setup && \
+    mix assets.deploy && \
+    MIX_ENV=prod mix release --overwrite --path "${VERSION}" && \
+    chmod -R a+rX "${VERSION}"
 
 # Diagnostics
 RUN echo "Release build info:" && \
