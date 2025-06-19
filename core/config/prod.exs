@@ -14,7 +14,7 @@ config :core, SurfConext,
 ssl_enabled =
   System.get_env("FORCE_SSL", "true")
   |> String.downcase()
-  |> Kernel.in?(["true", "1"])
+  |> then(&(&1 in ["true", "1"]))
 
 raw_rewrite = System.get_env("REWRITE_ON", "")
 
