@@ -68,9 +68,10 @@ defmodule Systems.Assignment.Queries do
 
   # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
   def participant_query(%Assignment.Model{
-        affiliate: nil,
+        external_panel: external_panel,
         crew: %{id: id, auth_node_id: auth_node_id}
-      }) do
+      })
+      when not is_nil(external_panel) do
     build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external_user)
     |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
@@ -105,6 +106,24 @@ defmodule Systems.Assignment.Queries do
       member_id: m.id,
       public_id: m.public_id,
       external_id: au.identifier
+    })
+  end
+
+  def participant_query(%Assignment.Model{
+        crew: %{id: id, auth_node_id: auth_node_id}
+      }) do
+    build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
+    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+      on: ra.principal_id == u.id,
+      as: :role_assignment
+    )
+    |> where([role_assignment: ra], ra.role == :participant)
+    |> where([role_assignment: ra], ra.node_id == ^auth_node_id)
+    |> select([member: m, user: u], %{
+      user_id: u.id,
+      member_id: m.id,
+      public_id: m.public_id,
+      external_id: nil
     })
   end
 

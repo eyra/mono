@@ -444,3 +444,11 @@ msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
 msgstr "Continua"
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.title"
+msgstr ""
