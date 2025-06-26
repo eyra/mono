@@ -128,7 +128,7 @@ defmodule Systems.Project.NodePageGridView do
           <div class="flex flex-row items-center justify-center">
               <div class="h-full">
                 <Text.title2 margin="">
-                  <%= dgettext("eyra-project", "node.items.title") %>
+                  <%= dgettext("eyra-projects", "items.overview") %>
                   <span class="text-primary"> <%= Enum.count(@item_cards) %></span>
                 </Text.title2>
               </div>
