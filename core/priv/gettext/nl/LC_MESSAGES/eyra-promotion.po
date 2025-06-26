@@ -35,10 +35,6 @@ msgid "choose.other.banner.photo.file"
 msgstr "Kies andere foto"
 
 #, elixir-autogen, elixir-format
-msgid "background.label"
-msgstr "Geef wat achtergrond informatie over deze studie"
-
-#, elixir-autogen, elixir-format
 msgid "description.public.label"
 msgstr "Over deze studie"
 
@@ -47,16 +43,8 @@ msgid "background.placeholder"
 msgstr "Waarom voer je deze study uit?"
 
 #, elixir-autogen, elixir-format
-msgid "devices.available.label"
-msgstr "Beschikbaar op:"
-
-#, elixir-autogen, elixir-format
 msgid "duration.title"
 msgstr "Duur"
-
-#, elixir-autogen, elixir-format
-msgid "expectations.label"
-msgstr "Beschrijf wat er van de deelnemers wordt verwacht"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.public.label"
@@ -99,9 +87,13 @@ msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-autogen, elixir-format
-msgid "language.available.label"
-msgstr "Taal"
-
-#, elixir-autogen, elixir-format
 msgid "copy.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "prerequisites.placeholder"
+msgstr "Voorwaarden voor deelname aan deze studie."
+
+#, elixir-autogen, elixir-format
+msgid "prerequisites.public.label"
+msgstr "Voorwaarden voor deelname"

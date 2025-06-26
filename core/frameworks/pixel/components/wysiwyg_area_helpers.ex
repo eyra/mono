@@ -2,6 +2,7 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
   alias Frameworks.Pixel.TrixPostProcessor
 
   import Phoenix.Component, only: [assign: 3]
+  import Phoenix.HTML, only: [raw: 1]
 
   @callback handle_wysiwyg_update(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
 
@@ -35,5 +36,9 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
 
   def post_process(content) do
     TrixPostProcessor.add_target_blank(content)
+  end
+
+  def render_wysiwyg(wysiwyg_text) do
+    raw(wysiwyg_text)
   end
 end
