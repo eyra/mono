@@ -24,7 +24,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Assignment.Template.Flags.Participants.new()
+          Assignment.Template.Flags.Participants.new(opt_out: [:affiliate])
         },
         affiliate: {
           dgettext("eyra-assignment", "tabbar.item.affiliate"),
