@@ -443,3 +443,11 @@ msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te g
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
 msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.title"
+msgstr ""

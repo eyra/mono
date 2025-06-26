@@ -162,13 +162,17 @@ defmodule Systems.Assignment.ControllerTest do
   describe "export progress report" do
     setup :login_as_member
 
-    test "export/2", %{conn: conn} do
-      user1 = Factories.insert!(:member)
+    test "export/2 affiliate", %{conn: conn} do
+      affiliate = Factories.insert!(:affiliate)
+
+      %{user: user1} =
+        Factories.insert!(:affiliate_user, %{affiliate: affiliate, identifier: "affiliate_id_1"})
 
       %{user: user2} =
-        Factories.insert!(:external_user, %{organisation: "org", external_id: "external_id"})
+        Factories.insert!(:affiliate_user, %{affiliate: affiliate, identifier: "affiliate_id_2"})
 
-      user3 = Factories.insert!(:member)
+      %{user: user3} =
+        Factories.insert!(:affiliate_user, %{affiliate: affiliate, identifier: "affiliate_id_3"})
 
       crew_auth_node =
         Factories.build(:auth_node, %{
@@ -199,7 +203,8 @@ defmodule Systems.Assignment.ControllerTest do
           crew: crew,
           special: :data_donation,
           status: :online,
-          consent_agreement: consent_agreement
+          consent_agreement: consent_agreement,
+          affiliate: affiliate
         })
 
       [%{id: item_1_id}, %{id: item_2_id}] =
@@ -255,9 +260,110 @@ defmodule Systems.Assignment.ControllerTest do
         |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
-      assert response.resp_body =~ "external_id,yes,accepted,finished\r\n"
-      assert response.resp_body =~ "1,n/a,rejected,started\r\n"
-      assert response.resp_body =~ "3,no,n/a,n/a\r\n"
+      assert response.resp_body =~ "affiliate_id_1,n/a,rejected,started\r\n"
+      assert response.resp_body =~ "affiliate_id_2,yes,accepted,finished\r\n"
+      assert response.resp_body =~ "affiliate_id_3,no,n/a,n/a\r\n"
+    end
+
+    test "export/2 external panel", %{conn: conn} do
+      %{user: user1} =
+        Factories.insert!(:external_user, %{organisation: "org", external_id: "external_id_1"})
+
+      %{user: user2} =
+        Factories.insert!(:external_user, %{organisation: "org", external_id: "external_id_2"})
+
+      %{user: user3} =
+        Factories.insert!(:external_user, %{organisation: "org", external_id: "external_id_3"})
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: user1}),
+            Factories.build(:participant, %{user: user2}),
+            Factories.build(:participant, %{user: user3})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      consent_agreement =
+        Factories.insert!(:consent_agreement, %{
+          revisions: [
+            %{
+              source: "Consent agreement v1",
+              signatures: [
+                %{user: user2}
+              ]
+            }
+          ]
+        })
+
+      assignment =
+        %{workflow: workflow} =
+        Factories.insert!(:assignment, %{
+          crew: crew,
+          special: :data_donation,
+          status: :online,
+          consent_agreement: consent_agreement,
+          external_panel: :liss
+        })
+
+      [%{id: item_1_id}, %{id: item_2_id}] =
+        ["Task 1", "Task 2"]
+        |> Enum.map(&Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
+
+      member_1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
+      member_2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
+      _member_3 = Factories.insert!(:crew_member, %{crew: crew, user: user3})
+
+      Factories.insert!(:crew_task, %{
+        identifier: ["item=#{item_1_id}", "member=#{member_1.id}"],
+        crew: crew,
+        auth_node: %Core.Authorization.Node{},
+        started_at: ~N[2024-09-30 19:36:39],
+        completed_at: ~N[2024-09-30 19:36:39],
+        rejected_at: ~N[2024-09-30 19:36:39],
+        status: :rejected
+      })
+
+      Factories.insert!(:crew_task, %{
+        identifier: ["item=#{item_2_id}", "member=#{member_1.id}"],
+        crew: crew,
+        auth_node: %Core.Authorization.Node{},
+        started_at: ~N[2024-09-30 19:36:39],
+        status: :pending
+      })
+
+      Factories.insert!(:crew_task, %{
+        identifier: ["item=#{item_1_id}", "member=#{member_2.id}"],
+        crew: crew,
+        auth_node: %Core.Authorization.Node{},
+        started_at: ~N[2024-09-30 19:36:39],
+        completed_at: ~N[2024-09-30 19:36:39],
+        accepted_at: ~N[2024-09-30 19:36:39],
+        status: :accepted
+      })
+
+      Factories.insert!(:crew_task, %{
+        identifier: ["item=#{item_2_id}", "member=#{member_2.id}"],
+        crew: crew,
+        auth_node: %Core.Authorization.Node{},
+        started_at: ~N[2024-09-30 19:36:39],
+        completed_at: ~N[2024-09-30 19:36:39],
+        status: :completed
+      })
+
+      Monitor.Factories.create_monitor_event_consent_declined(assignment, user3.id)
+
+      response =
+        conn
+        |> Plug.Conn.assign(:branch, nil)
+        |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
+
+      assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
+      assert response.resp_body =~ "external_id_1,n/a,rejected,started\r\n"
+      assert response.resp_body =~ "external_id_2,yes,accepted,finished\r\n"
+      assert response.resp_body =~ "external_id_3,no,n/a,n/a\r\n"
     end
   end
 end
