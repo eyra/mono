@@ -19,7 +19,7 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   slot(:inner_block, required: true)
   slot(:top)
-  slot(:title, required: true)
+  slot(:title)
   attr(:target, :any, default: "")
 
   def clickable_card(assigns) do
@@ -38,10 +38,13 @@ defmodule Frameworks.Pixel.ClickableCard do
             phx-value-item={@id}
           >
             <%= render_slot(@top) %>
-            <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
-              <%= render_slot(@title) %>
-            </div>
-            <div class="flex-grow" />
+            <%= if @title != [] do %>
+              <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
+                <%= render_slot(@title) %>
+              </div>
+            <% else %>
+              <div class="pt-6 px-6 lg:pl-8 lg:pr-8 lg:pt-8" />
+            <% end %>
             <div>
               <div
                 class="relative pl-6 pr-6 pb-6 lg:pl-8 lg:pr-8 lg:pb-8"

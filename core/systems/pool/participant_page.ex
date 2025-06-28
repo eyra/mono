@@ -21,7 +21,7 @@ defmodule Systems.Pool.ParticipantPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus} modal={@modal} >
+    <.live_workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if @vm.member do %>

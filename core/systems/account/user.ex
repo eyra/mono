@@ -259,4 +259,15 @@ defmodule Systems.Account.User do
   def user_id(id) when is_integer(id), do: id
 
   def user_id(_), do: nil
+
+  defimpl Core.Authentication.Subject do
+    def name(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
+      do: fullname
+
+    def name(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
+      do: displayname
+
+    def name(%{email: nil}), do: "?"
+    def name(%{email: email}), do: String.split(email, "@") |> List.first()
+  end
 end

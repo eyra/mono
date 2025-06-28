@@ -1,13 +1,14 @@
 defmodule Systems.Ontology.ConceptModel do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
   import Ecto.Changeset
 
-  alias Systems.Account
+  alias Core.Authentication
 
   schema "ontology_concept" do
     field(:phrase, :string)
 
-    belongs_to(:author, Account.User)
+    belongs_to(:entity, Authentication.Entity)
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule Systems.Ontology.ConceptModel do
           __meta__: Ecto.Schema.Metadata.t(),
           id: integer() | nil,
           phrase: String.t(),
-          author_id: integer() | nil,
+          entity_id: integer() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -35,6 +36,14 @@ defmodule Systems.Ontology.ConceptModel do
     |> unique_constraint(:phrase, name: :ontology_concept_unique)
   end
 
-  def preload_graph(:down), do: []
+  def preload_graph(:down), do: preload_graph([:entity])
   def preload_graph(:up), do: []
+
+  def preload_graph(:entity), do: [entity: []]
+
+  defimpl Systems.Ontology.Element do
+    def flatten(%{} = concept) do
+      [concept]
+    end
+  end
 end

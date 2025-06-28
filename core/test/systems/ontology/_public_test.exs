@@ -7,17 +7,21 @@ defmodule Ontology.PublicTest do
 
   describe "insert_concept/3" do
     setup do
-      author = Factories.insert!(:member)
-      %{author: author}
+      user = Factories.insert!(:member)
+
+      entity =
+        Factories.insert!(:authentication_entity, %{identifier: "Systems.Account.User:#{user.id}"})
+
+      %{entity: entity}
     end
 
-    test "insert", %{author: author} do
-      assert {:ok, %Ontology.ConceptModel{}} = insert_concept("Gravitational Force", author)
+    test "insert", %{entity: entity} do
+      assert {:ok, %Ontology.ConceptModel{}} = insert_concept("Gravitational Force", entity)
     end
 
-    test "insert + insert (different phrases)", %{author: author} do
-      {:ok, %{id: id1}} = insert_concept("Gravitational Force", author)
-      {:ok, %{id: id2}} = insert_concept("Electromagnetic Force", author)
+    test "insert + insert (different phrases)", %{entity: entity} do
+      {:ok, %{id: id1}} = insert_concept("Gravitational Force", entity)
+      {:ok, %{id: id2}} = insert_concept("Electromagnetic Force", entity)
 
       assert [
                %Ontology.ConceptModel{id: ^id1},
@@ -27,24 +31,16 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + error (different authors)", %{author: author} do
-      author2 = Factories.insert!(:member)
+    test "insert + error (different entities)", %{entity: entity} do
+      user2 = Factories.insert!(:member)
 
-      {:ok, _} = insert_concept("Gravitational Force", author)
-      {:error, changeset} = insert_concept("Gravitational Force", author2)
+      entity2 =
+        Factories.insert!(:authentication_entity, %{
+          identifier: "Systems.Account.User:#{user2.id}"
+        })
 
-      assert %{
-               errors: [
-                 phrase:
-                   {"has already been taken",
-                    [constraint: :unique, constraint_name: "ontology_concept_unique"]}
-               ]
-             } = changeset
-    end
-
-    test "insert + error (same author)", %{author: author} do
-      {:ok, _} = insert_concept("Gravitational Force", author)
-      {:error, changeset} = insert_concept("Gravitational Force", author)
+      {:ok, _} = insert_concept("Gravitational Force", entity)
+      {:error, changeset} = insert_concept("Gravitational Force", entity2)
 
       assert %{
                errors: [
@@ -55,9 +51,22 @@ defmodule Ontology.PublicTest do
              } = changeset
     end
 
-    test "insert + error (same phrase and author)", %{author: author} do
-      {:ok, _} = insert_concept("Gravitational Force", author)
-      {:error, changeset} = insert_concept("Gravitational Force", author)
+    test "insert + error (same entity)", %{entity: entity} do
+      {:ok, _} = insert_concept("Gravitational Force", entity)
+      {:error, changeset} = insert_concept("Gravitational Force", entity)
+
+      assert %{
+               errors: [
+                 phrase:
+                   {"has already been taken",
+                    [constraint: :unique, constraint_name: "ontology_concept_unique"]}
+               ]
+             } = changeset
+    end
+
+    test "insert + error (same phrase and entity)", %{entity: entity} do
+      {:ok, _} = insert_concept("Gravitational Force", entity)
+      {:error, changeset} = insert_concept("Gravitational Force", entity)
 
       assert %{
                errors: [
@@ -71,19 +80,23 @@ defmodule Ontology.PublicTest do
 
   describe "insert_predicate/4" do
     setup do
-      author = Factories.insert!(:member)
-      type = Factories.insert!(:ontology_concept, %{phrase: "is_a"})
-      object = Factories.insert!(:ontology_concept, %{phrase: "Force Of Nature"})
-      %{author: author, type: type, object: object}
+      user = Factories.insert!(:member)
+
+      entity =
+        Factories.insert!(:authentication_entity, %{identifier: "Systems.Account.User:#{user.id}"})
+
+      type = Factories.insert!(:ontology_concept, %{phrase: "is_a", entity: entity})
+      object = Factories.insert!(:ontology_concept, %{phrase: "Force Of Nature", entity: entity})
+      %{entity: entity, type: type, object: object}
     end
 
-    test "insert", %{author: author, type: type, object: object} do
+    test "insert", %{entity: entity, type: type, object: object} do
       subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      assert {:ok, %Ontology.PredicateModel{}} = insert_predicate(subject, type, object, author)
+      assert {:ok, %Ontology.PredicateModel{}} = insert_predicate(subject, type, object, entity)
     end
 
-    test "insert error (same subject and object)", %{author: author, type: type, object: object} do
-      {:error, changeset} = insert_predicate(object, type, object, author)
+    test "insert error (same subject and object)", %{entity: entity, type: type, object: object} do
+      {:error, changeset} = insert_predicate(object, type, object, entity)
 
       assert [
                object_id:
@@ -95,11 +108,15 @@ defmodule Ontology.PublicTest do
              ] = changeset.errors
     end
 
-    test "insert + insert (different subjects)", %{author: author, type: type, object: object} do
-      subject1 = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      subject2 = Factories.insert!(:ontology_concept, %{phrase: "Electromagnetic Force"})
-      {:ok, %{id: id1}} = insert_predicate(subject1, type, object, author)
-      {:ok, %{id: id2}} = insert_predicate(subject2, type, object, author)
+    test "insert + insert (different subjects)", %{entity: entity, type: type, object: object} do
+      subject1 =
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
+
+      subject2 =
+        Factories.insert!(:ontology_concept, %{phrase: "Electromagnetic Force", entity: entity})
+
+      {:ok, %{id: id1}} = insert_predicate(subject1, type, object, entity)
+      {:ok, %{id: id2}} = insert_predicate(subject2, type, object, entity)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},
@@ -109,11 +126,13 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + insert (different types)", %{author: author, type: type, object: object} do
-      subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      type2 = Factories.insert!(:ontology_concept, %{phrase: "related_to"})
-      {:ok, %{id: id1}} = insert_predicate(subject, type, object, author)
-      {:ok, %{id: id2}} = insert_predicate(subject, type2, object, author)
+    test "insert + insert (different types)", %{entity: entity, type: type, object: object} do
+      subject =
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
+
+      type2 = Factories.insert!(:ontology_concept, %{phrase: "related_to", entity: entity})
+      {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
+      {:ok, %{id: id2}} = insert_predicate(subject, type2, object, entity)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},
@@ -123,11 +142,15 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + insert (different objects)", %{author: author, type: type, object: object} do
-      subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      object2 = Factories.insert!(:ontology_concept, %{phrase: "Natural Phenomenon"})
-      {:ok, %{id: id1}} = insert_predicate(subject, type, object, author)
-      {:ok, %{id: id2}} = insert_predicate(subject, type, object2, author)
+    test "insert + insert (different objects)", %{entity: entity, type: type, object: object} do
+      subject =
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
+
+      object2 =
+        Factories.insert!(:ontology_concept, %{phrase: "Natural Phenomenon", entity: entity})
+
+      {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
+      {:ok, %{id: id2}} = insert_predicate(subject, type, object2, entity)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},
@@ -137,11 +160,19 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + insert (different authors)", %{author: author, type: type, object: object} do
-      subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      author2 = Factories.insert!(:member)
-      {:ok, %{id: id1}} = insert_predicate(subject, type, object, author)
-      {:ok, %{id: id2}} = insert_predicate(subject, type, object, author2)
+    test "insert + insert (different entities)", %{entity: entity, type: type, object: object} do
+      subject =
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
+
+      user2 = Factories.insert!(:member)
+
+      entity2 =
+        Factories.insert!(:authentication_entity, %{
+          identifier: "Systems.Account.User:#{user2.id}"
+        })
+
+      {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
+      {:ok, %{id: id2}} = insert_predicate(subject, type, object, entity2)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},
@@ -152,13 +183,15 @@ defmodule Ontology.PublicTest do
     end
 
     test "insert + insert (different type_negated?)", %{
-      author: author,
+      entity: entity,
       type: type,
       object: object
     } do
-      subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      {:ok, %{id: id1}} = insert_predicate(subject, type, object, author)
-      {:ok, %{id: id2}} = insert_predicate(subject, type, object, author, type_negated?: true)
+      subject =
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
+
+      {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
+      {:ok, %{id: id2}} = insert_predicate(subject, type, object, entity, type_negated?: true)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},
@@ -168,10 +201,10 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + update", %{author: author, type: type, object: object} do
+    test "insert + update", %{entity: entity, type: type, object: object} do
       subject = Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force"})
-      {:ok, %{id: id1}} = insert_predicate(subject, type, object, author)
-      {:error, changeset} = insert_predicate(subject, type, object, author)
+      {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
+      {:error, changeset} = insert_predicate(subject, type, object, entity)
 
       assert [
                subject_id:
@@ -188,23 +221,33 @@ defmodule Ontology.PublicTest do
   end
 
   describe "list concepts" do
-    test "by author" do
-      author_1 = Factories.insert!(:member)
-      author_2 = Factories.insert!(:member)
+    test "by entities" do
+      user_1 = Factories.insert!(:member)
+      user_2 = Factories.insert!(:member)
+
+      entity_1 =
+        Factories.insert!(:authentication_entity, %{
+          identifier: "Systems.Account.User:#{user_1.id}"
+        })
+
+      entity_2 =
+        Factories.insert!(:authentication_entity, %{
+          identifier: "Systems.Account.User:#{user_2.id}"
+        })
 
       %{id: concept_a_id} =
-        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", author: author_1})
+        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity_1})
 
       %{id: concept_b_id} =
-        Factories.insert!(:ontology_concept, %{phrase: "Electromagnetic Force", author: author_1})
+        Factories.insert!(:ontology_concept, %{phrase: "Electromagnetic Force", entity: entity_1})
 
       _concept_c =
-        Factories.insert!(:ontology_concept, %{phrase: "Weak Nuclear Force", author: author_2})
+        Factories.insert!(:ontology_concept, %{phrase: "Weak Nuclear Force", entity: entity_2})
 
       assert [
                %Ontology.ConceptModel{id: ^concept_a_id},
                %Ontology.ConceptModel{id: ^concept_b_id}
-             ] = list_concepts_by_author(author_1)
+             ] = list_concepts([entity_1], [:entity])
     end
   end
 end

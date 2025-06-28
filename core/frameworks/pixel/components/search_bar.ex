@@ -51,19 +51,26 @@ defmodule Frameworks.Pixel.SearchBar do
   end
 
   defp send_to_parent(socket, "") do
-    socket
-    |> send_event(:parent, "search_query", %{
+    send_to_parent(socket, %{
       query_string: "",
       query: nil
     })
   end
 
-  defp send_to_parent(socket, query_string) do
-    socket
-    |> send_event(:parent, "search_query", %{
-      query_string: query_string,
-      query: String.split(query_string, " ")
+  defp send_to_parent(socket, query) when is_binary(query) do
+    send_to_parent(socket, %{
+      query_string: query,
+      query: String.split(query, " ")
     })
+  end
+
+  defp send_to_parent(%{fabric: %{}} = socket, message) do
+    socket
+    |> send_event(:parent, "search_query", message)
+  end
+
+  defp send_to_parent(socket, message) do
+    socket |> publish_event("search_query", message)
   end
 
   @impl true

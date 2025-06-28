@@ -211,7 +211,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic :if={@modal} modal={@modal} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
 
         <%!-- hidden auto submit form --%>
         <%= if @panel_form do %>

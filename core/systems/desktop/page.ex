@@ -28,7 +28,7 @@ defmodule Systems.Desktop.Page do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modal={@modal}>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <.child name={:desktop_view} fabric={@fabric}  />
     </.live_workspace>
     """

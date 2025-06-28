@@ -87,6 +87,7 @@ defmodule CoreWeb do
   def live_component do
     quote do
       use Fabric.LiveComponent
+      use LiveNest, :live_component
 
       unquote(pixel())
       use Frameworks.Pixel

@@ -117,12 +117,13 @@ defmodule Frameworks.Pixel.ModalView do
   def modal_id(%{live_component: live_component}), do: modal_id(live_component)
   def modal_id(%{ref: %{id: id}}), do: id
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, default: nil)
 
   def dynamic(assigns) do
     ~H"""
       <.background visible={@modal.visible} >
-        <.content modal={@modal} />
+        <.content modal={@modal} socket={@socket} />
       </.background>
     """
   end
@@ -140,18 +141,20 @@ defmodule Frameworks.Pixel.ModalView do
 
   @allowed_styles [:max, :full, :page, :sheet, :compact]
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def content(assigns) do
     ~H"""
       <div class={"w-full h-full #{if @modal.visible do "block" else "hidden" end}"} >
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <.frame modal={@modal} />
+          <.frame modal={@modal} socket={@socket} />
         </div>
       </div>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def frame(%{modal: %{style: style}} = assigns) do
@@ -162,23 +165,24 @@ defmodule Frameworks.Pixel.ModalView do
 
     ~H"""
       <%= if @modal.style == :max do %>
-        <.max modal={@modal} />
+        <.max modal={@modal} socket={@socket} />
       <% end %>
       <%= if @modal.style == :full do %>
-        <.full modal={@modal} />
+        <.full modal={@modal} socket={@socket} />
       <% end %>
       <%= if @modal.style == :page do %>
-        <.page modal={@modal} />
+        <.page modal={@modal} socket={@socket} />
       <% end %>
       <%= if @modal.style == :sheet do %>
-        <.sheet modal={@modal} />
+        <.sheet modal={@modal} socket={@socket} />
       <% end %>
       <%= if @modal.style == :compact do %>
-        <.compact modal={@modal} />
+        <.compact modal={@modal} socket={@socket} />
       <% end %>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def max(assigns) do
@@ -197,7 +201,7 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
-            <.element {Map.from_struct(@modal.element)} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
@@ -205,6 +209,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def full(assigns) do
@@ -214,7 +219,7 @@ defmodule Frameworks.Pixel.ModalView do
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
-            <.element {Map.from_struct(@modal.element)} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
           <%!-- TOOLBAR --%>
           <div class="flex-shrink-0">
@@ -226,6 +231,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def page(assigns) do
@@ -234,7 +240,7 @@ defmodule Frameworks.Pixel.ModalView do
         <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
-            <.element {Map.from_struct(@modal.element)} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
            <%!-- TOOLBAR --%>
            <div class="flex-shrink-0">
@@ -245,6 +251,7 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def sheet(assigns) do
@@ -262,13 +269,14 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
-            <.element {Map.from_struct(@modal.element)} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
 
   def compact(assigns) do
@@ -281,7 +289,7 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
-            <.element {Map.from_struct(@modal.element)} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
@@ -294,7 +302,7 @@ defmodule Frameworks.Pixel.ModalView do
   def title2(assigns) do
     ~H"""
       <Text.title2 align={"#{if @centered? do "text-center" else "text-left" end}"}>
-        <%= Map.get(@modal.element.options, :title) %>
+        <%= Keyword.get(@modal.element.options, :title) %>
       </Text.title2>
     """
   end
@@ -304,7 +312,7 @@ defmodule Frameworks.Pixel.ModalView do
   def title3(assigns) do
     ~H"""
       <Text.title3>
-        <%= Map.get(@modal.element.options, :title) %>
+        <%= Keyword.get(@modal.element.options, :title) %>
       </Text.title3>
     """
   end

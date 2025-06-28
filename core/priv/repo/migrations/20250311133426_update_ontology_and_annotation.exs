@@ -2,12 +2,29 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
   use Ecto.Migration
 
   def change do
+    create table(:authentication_entity) do
+      add(:identifier, :string, null: false)
+      timestamps()
+    end
+
+    create(
+      unique_index(:authentication_entity, [:identifier], name: :authentication_entity_unique)
+    )
+
+    create table(:actor) do
+      add(:type, :string, null: false)
+      add(:name, :string, null: false)
+      timestamps()
+    end
+
+    create(unique_index(:actor, [:name], name: :actor_unique))
+
     # First rename the term table to concept
     rename(table(:ontology_term), to: table(:ontology_concept))
 
     # Add fields to ontology_concept
     alter table(:ontology_concept) do
-      add(:author_id, references(:users, on_delete: :delete_all), null: false)
+      add(:entity_id, references(:authentication_entity, on_delete: :delete_all), null: false)
     end
 
     # Prevent duplicate concepts
@@ -19,7 +36,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
       add(:subject_id, references(:ontology_concept, on_delete: :delete_all), null: false)
       add(:object_id, references(:ontology_concept, on_delete: :delete_all), null: false)
       add(:type_negated?, :boolean, default: false, null: false)
-      add(:author_id, references(:users, on_delete: :delete_all), null: false)
+      add(:entity_id, references(:authentication_entity, on_delete: :delete_all), null: false)
       timestamps()
     end
 
@@ -32,7 +49,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(
       unique_index(
         :ontology_predicate,
-        [:subject_id, :object_id, :type_id, :author_id, :type_negated?],
+        [:subject_id, :object_id, :type_id, :entity_id, :type_negated?],
         name: :ontology_predicate_unique
       )
     )
@@ -47,14 +64,13 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     # Create annotation table
     alter table(:annotation) do
       add(:statement, :text, null: false)
-      add(:ai_generated?, :boolean, default: false, null: false)
       add(:type_id, references(:ontology_concept, on_delete: :delete_all), null: false)
-      add(:author_id, references(:users, on_delete: :delete_all), null: false)
+      add(:entity_id, references(:authentication_entity, on_delete: :delete_all), null: false)
       remove(:term)
       remove(:description)
     end
 
-    # Duplicate annotations are allowed, uniques is managed based on the references
+    # Duplicate annotations are allowed, uniqueness is dealt with by recipes
 
     # Create ontology_ref table
     create table(:ontology_ref) do
@@ -94,7 +110,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create table(:annotation_ref) do
       add(:type_id, references(:ontology_concept, on_delete: :delete_all), null: false)
       # one of the following must be present
-      add(:user_id, references(:users, on_delete: :nothing), null: true)
+      add(:entity_id, references(:authentication_entity, on_delete: :nothing), null: true)
       add(:resource_id, references(:annotation_resource, on_delete: :nothing), null: true)
       add(:annotation_id, references(:annotation, on_delete: :nothing), null: true)
       add(:ontology_ref_id, references(:ontology_ref, on_delete: :nothing), null: true)
@@ -104,7 +120,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(
       constraint(:annotation_ref, :must_have_at_least_one,
         check: """
-        user_id != null or
+        entity_id != null or
         resource_id != null or
         annotation_id != null or
         ontology_ref_id != null
@@ -114,7 +130,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
 
     # Create annotation_ref indexes
     create(index(:annotation_ref, [:type_id]))
-    create(index(:annotation_ref, [:user_id]))
+    create(index(:annotation_ref, [:entity_id]))
     create(index(:annotation_ref, [:resource_id]))
     create(index(:annotation_ref, [:annotation_id]))
     create(index(:annotation_ref, [:ontology_ref_id]))
@@ -123,7 +139,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(
       unique_index(
         :annotation_ref,
-        [:annotation_id, :ontology_ref_id, :type_id, :user_id, :resource_id],
+        [:annotation_id, :ontology_ref_id, :type_id, :entity_id, :resource_id],
         name: :annotation_ref_unique
       )
     )

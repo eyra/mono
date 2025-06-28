@@ -130,7 +130,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus} modal={@modal}>
+    <.live_workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus} modal={@modal} socket={@socket}>
       <div>
         <Area.content>
           <Margin.y id={:page_top} />

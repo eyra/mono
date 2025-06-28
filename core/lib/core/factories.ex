@@ -3,6 +3,7 @@ defmodule Core.Factories do
   This module provides factory function to be used for tests.
   """
 
+  alias Core.Authentication
   alias Core.Authorization
   alias Core.WebPush
   alias Core.Repo
@@ -75,6 +76,19 @@ defmodule Core.Factories do
     :member
     |> build(%{
       email: "admin1@example.org"
+    })
+  end
+
+  def build(:authentication_entity) do
+    build(:authentication_entity, %{
+      identifier: "Systems.Account.User:#{Faker.Random.Elixir.random_between(1, 1_000_000)}"
+    })
+  end
+
+  def build(:actor) do
+    build(:actor, %{
+      type: :system,
+      name: "System Actor"
     })
   end
 
@@ -314,7 +328,7 @@ defmodule Core.Factories do
   def build(:ontology_concept) do
     build(:ontology_concept, %{
       phrase: Faker.Lorem.words(3..5) |> Enum.join(" "),
-      author: build(:member)
+      entity: build(:authentication_entity)
     })
   end
 
@@ -323,7 +337,7 @@ defmodule Core.Factories do
       subject: build(:ontology_concept),
       predicate: build(:ontology_concept),
       object: build(:ontology_concept),
-      author: build(:member)
+      entity: build(:authentication_entity)
     })
   end
 
@@ -339,7 +353,7 @@ defmodule Core.Factories do
     build(:annotation, %{
       type: build(:ontology_concept),
       statement: Faker.Lorem.word(),
-      author: build(:member),
+      entity: build(:authentication_entity),
       references: [build(:annotation_ref)]
     })
   end
@@ -667,6 +681,16 @@ defmodule Core.Factories do
     )
   end
 
+  def build(:authentication_entity, %{} = attributes) do
+    %Authentication.Entity{}
+    |> struct!(attributes)
+  end
+
+  def build(:actor, %{} = attributes) do
+    %Authentication.Actor{}
+    |> struct!(attributes)
+  end
+
   def build(:pool_submission, %{} = attributes) do
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
     {pool, attributes} = Map.pop(attributes, :pool, build(:pool))
@@ -877,22 +901,22 @@ defmodule Core.Factories do
 
   # Ontology build/2
   def build(:ontology_concept, %{} = attributes) do
-    {author, attributes} = Map.pop(attributes, :author, build(:member))
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
 
     %Ontology.ConceptModel{
-      author: author
+      entity: entity
     }
     |> struct!(attributes)
   end
 
   def build(:ontology_predicate, %{} = attributes) do
-    {author, attributes} = Map.pop(attributes, :author, build(:member))
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
     {subject, attributes} = Map.pop(attributes, :subject, build(:ontology_concept))
     {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
     {object, attributes} = Map.pop(attributes, :object, build(:ontology_concept))
 
     %Ontology.PredicateModel{
-      author: author,
+      entity: entity,
       subject: subject,
       type: type,
       object: object
@@ -921,12 +945,12 @@ defmodule Core.Factories do
 
   def build(:annotation, %{} = attributes) do
     {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
-    {author, attributes} = Map.pop(attributes, :author, build(:member))
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
     {references, attributes} = Map.pop(attributes, :references, [build(:annotation_ref)])
 
     %Annotation.Model{
       type: type,
-      author: author,
+      entity: entity,
       references: references
     }
     |> struct!(attributes)

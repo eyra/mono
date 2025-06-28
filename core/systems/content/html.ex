@@ -47,6 +47,7 @@ defmodule Systems.Content.Html do
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
@@ -61,13 +62,14 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} />
+      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
 
       <%= render_slot(@inner_block) %>
     </.workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:user, :map, required: true)
   attr(:user_agent, :map, required: true)
   attr(:menus, :map, required: true)
@@ -84,13 +86,14 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} />
+      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
 
       <%= render_slot(@inner_block) %>
     </.website>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
@@ -100,7 +103,7 @@ defmodule Systems.Content.Html do
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <ModalView.dynamic :if={@modal} modal={@modal} />
+      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
@@ -117,14 +120,14 @@ defmodule Systems.Content.Html do
 
   def tabbar_page(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modal={@modal}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
         <%= if Enum.count(@tabs) > 0 do %>
           <Navigation.tabbar>
             <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
           </Navigation.tabbar>
 
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} />
+            <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
@@ -143,7 +146,7 @@ defmodule Systems.Content.Html do
 
   def tabbar_page_breadcrumbs(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modal={@modal}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
         <%= if Enum.count(@tabs) > 0 do %>
           <div class="flex flex-row items-center justify-between w-full h-navbar-height">
             <Area.content>
@@ -161,7 +164,7 @@ defmodule Systems.Content.Html do
             </Area.content>
           </div>
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-              <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} />
+              <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
@@ -184,7 +187,7 @@ defmodule Systems.Content.Html do
   def management_page(assigns) do
     ~H"""
       <div id={:content_management_page} phx-hook="Viewport">
-        <.live_workspace title={@title} menus={@menus} modal={@modal}>
+        <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
@@ -192,7 +195,7 @@ defmodule Systems.Content.Html do
           </:top_bar>
 
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@tabs} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
           <Tabbed.footer tabs={@tabs} />
         </.live_workspace>

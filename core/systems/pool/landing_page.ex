@@ -48,7 +48,7 @@ defmodule Systems.Pool.LandingPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("eyra-pool", "landing.title")} menus={@menus} modal={@modal}>
+    <.live_workspace title={dgettext("eyra-pool", "landing.title")} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <Text.title2><%= @vm.title %></Text.title2>

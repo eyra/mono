@@ -1,0 +1,224 @@
+defmodule Repo.Seeds.Onyx do
+  @moduledoc """
+  A module for creating the initial Ontology concepts and predicates and Annotations.
+  Values reserved for internal (technical) use have the "double underscore notation" or "dunder naming"
+  to differentiate them from user-defined dbgs.
+  """
+
+  import Systems.Ontology.Public
+
+  require Logger
+
+  use Systems.Ontology.Constants
+  use Systems.Annotation.Constants
+
+  alias Core.Authentication
+  alias Systems.Annotation
+
+  def run do
+    # System actor / entity
+    actor = Authentication.obtain_actor!(:system, "Onyx")
+    entity = Authentication.obtain_entity!(actor)
+
+    # Fundamental ontology concepts
+    %{subsumes: subsumes} = setup_ontology_fundamentals(entity)
+
+    # Fundamental annotation concepts
+    setup_annotation_fundamentals(entity)
+
+    annotate_definition = fn concept, definition ->
+      {:ok, _annotation} =
+        %Annotation.Recipe.Definition{
+          definition: definition,
+          subject: concept,
+          entity: entity
+        }
+        |> Annotation.Recipe.obtain()
+
+      concept
+    end
+
+    defconcept = fn phrase, text ->
+      concept = obtain_concept!(phrase, entity)
+      annotate_definition.(concept, text)
+    end
+
+    defconcepts = fn keyword ->
+      Enum.map(keyword, fn {atom, text} ->
+        atom
+        |> Atom.to_string()
+        |> format_concept_name()
+        |> defconcept.(text)
+      end)
+    end
+
+    defgroup = fn subjects, object ->
+      Enum.each(subjects, fn subject ->
+        obtain_predicate(subject, subsumes, object, entity)
+      end)
+
+      objects
+    end
+
+    deftype = fn phrase, text ->
+      defconcept.(phrase, text)
+    end
+
+    # Predicate types
+    defconcepts.(
+      subsumes: "A hierarchical predicate type where the subject is a specific instance or subtype of the object",
+      composes: "A compositional predicate type where the subject is a component or part of the object",
+      compares: "A relational predicate type between two concepts that are equivalent or similar",
+      influences: "A causal predicate type where the subject affects or impacts the object",
+      transforms: "A temporal predicate type where the subject changes or converts into the object",
+      interacts: "A predicate type where the subject and object have mutual effects on each other"
+    )
+    |> defgroup.(deftype.("Predicate Types", "Group of concepts used as predicate types"))
+
+    # Annotation types
+
+    defconcepts.(
+      de: "A formal, precise, and unambiguous definition of a concept",
+      reference: "An external source that provides additional information about a concept",
+      comment: "A subjective public expression",
+      note: "A message to self",
+      proposition:
+        "A statement that can be either true or false and is subject to logical evaluation",
+      prediction:
+        "A statement about a future event or outcome based on current knowledge or evidence",
+      hypothesis: "A testable proposition or prediction",
+      claim: "An assertion that requires evidence/support",
+      evidence: "Supporting data or observations",
+      conclusion: "A reasoned judgment drawn from evidence",
+      assumption: "An underlying premise taken as given"
+    )
+    |> defgroup.(deftype.("Annotation Types", "Group of concepts used as annotation types"))
+
+    # Annotation reference types
+
+    defconcepts.(
+      subject: "The main subject of an annotation",
+      example: "A concrete instance or illustration of the annotation",
+      context: "The environmental or situational framework for the annotation",
+      related: "An associated reference that provides additional understanding"
+    )
+    |> defgroup.(deftype.("Annotation Reference Types", "Group of concepts used as annotation reference types"))
+
+    # Research design elements
+
+    [
+      comparison,
+      context,
+      intervention,
+      outcome,
+      evaluation,
+      perspective,
+      phenomenon,
+      population,
+      sample,
+      setting
+    ] =
+      [
+        comparison: "The control group or alternative intervention",
+        context: "The broader environment or situational circumstances surrounding the research",
+        intervention: "The treatment, exposure, or action studied",
+        outcome: "The measurable result of the intervention",
+        evaluation: "The process of assessing or measuring outcomes",
+        perspective:
+          "The stakeholder viewpoint or role from which the research is evaluated (e.g., patient, provider, payer)",
+        phenomenon: "The qualitative research focus",
+        population: "The target group that the research aims to understand or generalize to",
+        sample:
+          "The sampling strategy or approach used to select participants from the population",
+        setting: "A specific geographic or organizational location"
+      ]
+      |> defconcepts.()
+      |> defgroup.(deftype.("Research Dimensions", "Group of concepts used to define research parameters"))
+
+    # Research design templates
+
+    [pico, pic_o, spice, spider] =
+      [
+        PICO:
+          "A framework for clinical questions focusing on Population, Intervention, Comparison, and Outcome",
+        PICo:
+          "A qualitative research framework examining Population, phenomenon of Interest, and Context",
+        SPICE:
+          "A framework for service evaluation focusing on Setting, Perspective, Intervention, Comparison, and Evaluation",
+        SPIDER:
+          "A qualitative research framework examining Sample, Phenomenon of Interest, Design, Evaluation, and Research type"
+      ]
+      |> defconcepts.()
+      |> defgroup.(deftype.("Research Frameworks", "Group of concepts used as research frameworks"))
+
+    defgroup.(
+      [
+        population,
+        intervention,
+        comparison,
+        outcome
+      ],
+      pico
+    )
+
+    defgroup.(
+      [
+        population,
+        phenomenon,
+        context
+      ],
+      pic_o
+    )
+
+    defgroup.(
+      [
+        setting,
+        perspective,
+        intervention,
+        comparison,
+        evaluation
+      ],
+      spice
+    )
+
+    defgroup.(
+      [
+        sample,
+        phenomenon,
+        evaluation
+      ],
+      spider
+    )
+  end
+
+  defp setup_ontology_fundamentals(entity) do
+    %{
+      subsumes: obtain_concept!(@subsumes, entity)
+    }
+  end
+
+  defp setup_annotation_fundamentals(entity) do
+    %{
+      definition: obtain_concept!(@definition, entity),
+      subject: obtain_concept!(@subject, entity)
+    }
+  end
+
+  defp format_concept_name(name) do
+    if contains_capital_letter?(name) do
+      name
+    else
+      name
+      |> String.split(" ")
+      |> Enum.map(&String.capitalize/1)
+      |> Enum.join(" ")
+    end
+  end
+
+  defp contains_capital_letter?(name) do
+    String.match?(name, ~r/[A-Z]/)
+  end
+end
+
+# Run the seeds
+Systems.Onyx.Seeds.run()

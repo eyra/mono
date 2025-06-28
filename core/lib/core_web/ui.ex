@@ -9,6 +9,7 @@ defmodule CoreWeb.UI do
       alias CoreWeb.UI.Area
       alias CoreWeb.UI.Margin
       alias CoreWeb.UI.Responsive.Breakpoint
+      alias CoreWeb.UI.Timestamp
     end
   end
 end

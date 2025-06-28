@@ -4,16 +4,15 @@ defmodule Systems.Annotation.Model do
 
   import Ecto.Changeset
 
+  alias Core.Authentication
   alias Systems.Annotation
   alias Systems.Ontology
-  alias Systems.Account
 
   schema "annotation" do
     field(:statement, :string)
-    field(:ai_generated?, :boolean)
 
     belongs_to(:type, Ontology.ConceptModel)
-    belongs_to(:author, Account.User)
+    belongs_to(:entity, Authentication.Entity)
 
     many_to_many(:references, Annotation.RefModel,
       join_through: Annotation.Assoc,
@@ -27,14 +26,13 @@ defmodule Systems.Annotation.Model do
           __meta__: Ecto.Schema.Metadata.t(),
           id: integer() | nil,
           statement: String.t(),
-          ai_generated?: boolean(),
           type_id: integer() | nil,
-          author_id: integer() | nil,
+          entity_id: integer() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
 
-  @fields ~w(statement ai_generated?)a
+  @fields ~w(statement)a
   @required_fields @fields
 
   def changeset(annotation, attrs) do
@@ -47,10 +45,19 @@ defmodule Systems.Annotation.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: [:type, :auth_node, :references]
+  def preload_graph(:down), do: preload_graph([:type, :entity, :references])
   def preload_graph(:up), do: []
 
   def preload_graph(:type), do: [type: Ontology.ConceptModel.preload_graph(:down)]
-  def preload_graph(:auth_node), do: [auth_node: []]
+  def preload_graph(:entity), do: [entity: []]
   def preload_graph(:references), do: [references: Annotation.RefModel.preload_graph(:down)]
+
+  defimpl Systems.Ontology.Element do
+    # TODO: add limits to the depth of the graph to avoid deep graphs and infinite recursion
+    def flatten(%{type: type, references: references} = annotation) do
+      Enum.reduce(references, [annotation, type], fn ref, acc ->
+        acc ++ Systems.Ontology.Element.flatten(ref)
+      end)
+    end
+  end
 end

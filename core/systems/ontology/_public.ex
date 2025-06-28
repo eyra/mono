@@ -1,13 +1,12 @@
 defmodule Systems.Ontology.Public do
   use Core, :auth
 
-  import Ecto.Query, only: [order_by: 3]
+  import Ecto.Query, only: [order_by: 3, select: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
   import Systems.Ontology.Queries
 
   alias Core.Repo
   alias Ecto.Multi
-  alias Systems.Account
   alias Systems.Ontology
 
   @ontology_ref_conflict_opts [
@@ -17,8 +16,8 @@ defmodule Systems.Ontology.Public do
 
   # Concept
 
-  def obtain_concept!(phrase, user) do
-    case insert_concept(phrase, user) do
+  def obtain_concept!(phrase, entity) do
+    case insert_concept(phrase, entity) do
       {:ok, concept} ->
         concept
 
@@ -30,42 +29,54 @@ defmodule Systems.Ontology.Public do
               [constraint: :unique, constraint_name: "ontology_concept_unique"]}
          ]
        }} ->
-        get_concept_by_phrase(phrase)
+        get_concept(phrase)
     end
   end
 
-  def get_concept(id) when is_binary(id) do
-    concept_query_by_id(id)
-    |> Repo.one()
+  def query_concept_ids(entities, selector) do
+    concept_query(selector)
+    |> concept_query_include(:entities, entities)
+    |> select([concept: c], c.id)
   end
 
-  def get_concept_by_phrase(phrase) when is_binary(phrase) do
-    concept_query_by_phrase(phrase)
+  def get_concept(_, preloads \\ [])
+
+  def get_concept(id, preloads) when is_integer(id) do
+    concept_query(id)
     |> Repo.one()
+    |> Repo.preload(preloads)
   end
 
-  def list_concepts_by_author(%Account.User{} = author) do
-    concept_query_by_author(author)
+  def get_concept(phrase, preloads) when is_binary(phrase) do
+    concept_query(phrase)
+    |> Repo.one()
+    |> Repo.preload(preloads)
+  end
+
+  def list_concepts(entities, preloads \\ []) when is_list(entities) do
+    concept_query()
+    |> concept_query_include(:entities, entities)
     |> order_by([concept: c], asc: c.id)
     |> Repo.all()
+    |> Repo.preload(preloads)
   end
 
-  def insert_concept(phrase, user, opts \\ []) do
-    prepare_concept(phrase, user, opts)
+  def insert_concept(phrase, entity, opts \\ []) do
+    prepare_concept(phrase, entity, opts)
     |> Repo.insert()
   end
 
-  def prepare_concept(phrase, user, _opts) do
+  def prepare_concept(phrase, entity, _opts) do
     %Ontology.ConceptModel{}
     |> Ontology.ConceptModel.changeset(%{phrase: phrase})
-    |> put_assoc(:author, user)
+    |> put_assoc(:entity, entity)
     |> Ontology.ConceptModel.validate()
   end
 
   # Predicate
 
-  def obtain_predicate(subject, subsumes, object, user) do
-    case insert_predicate(subject, subsumes, object, user) do
+  def obtain_predicate(subject, subsumes, object, entity) do
+    case insert_predicate(subject, subsumes, object, entity) do
       {:ok, predicate} ->
         predicate
 
@@ -77,46 +88,43 @@ defmodule Systems.Ontology.Public do
               [constraint: :unique, constraint_name: "ontology_predicate_unique"]}
          ]
        }} ->
-        get_predicate(subject, subsumes, object)
+        get_predicate({subject, subsumes, object, false})
     end
   end
 
-  def get_predicate(id) when is_binary(id) do
-    predicate_query_by_id(id)
+  def query_predicate_ids(selector) do
+    predicate_query(selector)
+    |> select([predicate: p], p.id)
+  end
+
+  def get_predicate(selector, preloads \\ []) do
+    predicate_query(selector)
     |> Repo.one()
+    |> Repo.preload(preloads)
   end
 
-  def get_predicate(subject, type, object, type_negated? \\ false) do
-    predicate_query(subject, type, object, type_negated?)
-    |> Repo.one()
-  end
-
-  def list_predicates_by_author(%Account.User{} = author) do
-    predicate_query_by_author(author)
+  def list_predicates(entities, preloads) when is_list(entities) do
+    predicate_query()
+    |> predicate_query_include(:entities, entities)
+    |> order_by([predicate: p], asc: p.id)
     |> Repo.all()
+    |> Repo.preload(preloads)
   end
 
-  def list_predicates_by_subject(%Ontology.ConceptModel{} = subject) do
-    predicate_query_by_subject(subject)
+  def list_predicates({%Ontology.ConceptModel{} = concept, entities}, preloads) do
+    predicate_query(concept)
+    |> predicate_query_include(:entities, entities)
+    |> order_by([predicate: p], asc: p.id)
     |> Repo.all()
+    |> Repo.preload(preloads)
   end
 
-  def list_predicates_by_type(%Ontology.ConceptModel{} = type) do
-    predicate_query_by_type(type)
-    |> Repo.all()
-  end
-
-  def list_predicates_by_object(%Ontology.ConceptModel{} = object) do
-    predicate_query_by_object(object)
-    |> Repo.all()
-  end
-
-  def insert_predicate(subject, type, object, user, opts \\ []) do
-    prepare_predicate(subject, type, object, user, opts)
+  def insert_predicate(subject, type, object, entity, opts \\ []) do
+    prepare_predicate(subject, type, object, entity, opts)
     |> Repo.insert()
   end
 
-  def prepare_predicate(subject, type, object, user, opts \\ []) do
+  def prepare_predicate(subject, type, object, entity, opts \\ []) do
     type_negated? = Keyword.get(opts, :type_negated?, false)
 
     %Ontology.PredicateModel{}
@@ -124,8 +132,15 @@ defmodule Systems.Ontology.Public do
     |> put_assoc(:subject, subject)
     |> put_assoc(:type, type)
     |> put_assoc(:object, object)
-    |> put_assoc(:author, user)
+    |> put_assoc(:entity, entity)
     |> Ontology.PredicateModel.validate()
+  end
+
+  # Ref
+
+  def query_ref_ids(entities, selector) do
+    ref_query({selector, entities})
+    |> select([ref: r], r.id)
   end
 
   def upsert_ontology_ref(%Multi{} = multi, multi_name, multi_child_name) do

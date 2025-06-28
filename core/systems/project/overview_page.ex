@@ -196,7 +196,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modal={@modal}>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>
