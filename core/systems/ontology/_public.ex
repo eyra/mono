@@ -1,0 +1,186 @@
+defmodule Systems.Ontology.Public do
+  use Core, :auth
+
+  import Ecto.Query, only: [order_by: 3, select: 3]
+  import Ecto.Changeset, only: [put_assoc: 3]
+  import Systems.Ontology.Queries
+
+  alias Core.Repo
+  alias Ecto.Multi
+  alias Systems.Ontology
+
+  @ontology_ref_conflict_opts [
+    conflict_target: [:concept_id, :predicate_id],
+    on_conflict: {:replace_all_except, [:id]}
+  ]
+
+  # Concept
+
+  def obtain_concept!(phrase, entity) do
+    case insert_concept(phrase, entity) do
+      {:ok, concept} ->
+        concept
+
+      {:error,
+       %{
+         errors: [
+           phrase:
+             {"has already been taken",
+              [constraint: :unique, constraint_name: "ontology_concept_unique"]}
+         ]
+       }} ->
+        get_concept(phrase)
+    end
+  end
+
+  def query_concept_ids(entities, selector) do
+    concept_query(selector)
+    |> concept_query_include(:entities, entities)
+    |> select([concept: c], c.id)
+  end
+
+  def get_concept(_, preloads \\ [])
+
+  def get_concept(id, preloads) when is_integer(id) do
+    concept_query(id)
+    |> Repo.one()
+    |> Repo.preload(preloads)
+  end
+
+  def get_concept(phrase, preloads) when is_binary(phrase) do
+    concept_query(phrase)
+    |> Repo.one()
+    |> Repo.preload(preloads)
+  end
+
+  def list_concepts(entities, preloads \\ []) when is_list(entities) do
+    concept_query()
+    |> concept_query_include(:entities, entities)
+    |> order_by([concept: c], asc: c.id)
+    |> Repo.all()
+    |> Repo.preload(preloads)
+  end
+
+  def insert_concept(phrase, entity, opts \\ []) do
+    prepare_concept(phrase, entity, opts)
+    |> Repo.insert()
+  end
+
+  def prepare_concept(phrase, entity, _opts) do
+    %Ontology.ConceptModel{}
+    |> Ontology.ConceptModel.changeset(%{phrase: phrase})
+    |> put_assoc(:entity, entity)
+    |> Ontology.ConceptModel.validate()
+  end
+
+  # Predicate
+
+  def obtain_predicate(subject, subsumes, object, entity) do
+    case insert_predicate(subject, subsumes, object, entity) do
+      {:ok, predicate} ->
+        predicate
+
+      {:error,
+       %{
+         errors: [
+           subject_id:
+             {"has already been taken",
+              [constraint: :unique, constraint_name: "ontology_predicate_unique"]}
+         ]
+       }} ->
+        get_predicate({subject, subsumes, object, false})
+    end
+  end
+
+  def query_predicate_ids(selector) do
+    predicate_query(selector)
+    |> select([predicate: p], p.id)
+  end
+
+  def get_predicate(selector, preloads \\ []) do
+    predicate_query(selector)
+    |> Repo.one()
+    |> Repo.preload(preloads)
+  end
+
+  def list_predicates(entities, preloads) when is_list(entities) do
+    predicate_query()
+    |> predicate_query_include(:entities, entities)
+    |> order_by([predicate: p], asc: p.id)
+    |> Repo.all()
+    |> Repo.preload(preloads)
+  end
+
+  def list_predicates({%Ontology.ConceptModel{} = concept, entities}, preloads) do
+    predicate_query(concept)
+    |> predicate_query_include(:entities, entities)
+    |> order_by([predicate: p], asc: p.id)
+    |> Repo.all()
+    |> Repo.preload(preloads)
+  end
+
+  def insert_predicate(subject, type, object, entity, opts \\ []) do
+    prepare_predicate(subject, type, object, entity, opts)
+    |> Repo.insert()
+  end
+
+  def prepare_predicate(subject, type, object, entity, opts \\ []) do
+    type_negated? = Keyword.get(opts, :type_negated?, false)
+
+    %Ontology.PredicateModel{}
+    |> Ontology.PredicateModel.changeset(%{type_negated?: type_negated?})
+    |> put_assoc(:subject, subject)
+    |> put_assoc(:type, type)
+    |> put_assoc(:object, object)
+    |> put_assoc(:entity, entity)
+    |> Ontology.PredicateModel.validate()
+  end
+
+  # Ref
+
+  def query_ref_ids(entities, selector) do
+    ref_query({selector, entities})
+    |> select([ref: r], r.id)
+  end
+
+  def upsert_ontology_ref(%Multi{} = multi, multi_name, multi_child_name) do
+    Multi.insert(
+      multi,
+      multi_name,
+      fn multi_state ->
+        child = Map.get(multi_state, multi_child_name)
+        prepare_ontology_ref(child)
+      end,
+      @ontology_ref_conflict_opts
+    )
+  end
+
+  def obtain_ontology_ref!(concept_or_predicate) do
+    case obtain_ontology_ref(concept_or_predicate) do
+      {:ok, %{ontology_ref: ontology_ref}} ->
+        ontology_ref
+
+      _ ->
+        raise "Failed to obtain ontology ref"
+    end
+  end
+
+  def obtain_ontology_ref(concept_or_predicate) do
+    Multi.new()
+    |> Multi.put(:concept_or_predicate, concept_or_predicate)
+    |> upsert_ontology_ref(:ontology_ref, :concept_or_predicate)
+    |> Repo.transaction()
+  end
+
+  def prepare_ontology_ref(%Ontology.ConceptModel{} = concept) do
+    %Ontology.RefModel{}
+    |> Ontology.RefModel.changeset(%{})
+    |> put_assoc(:concept, concept)
+  end
+
+  def prepare_ontology_ref(%Ontology.PredicateModel{} = predicate) do
+    %Ontology.RefModel{}
+    |> Ontology.RefModel.changeset(%{})
+    |> put_assoc(:predicate, predicate)
+  end
+end

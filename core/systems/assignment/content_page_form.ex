@@ -130,7 +130,7 @@ defmodule Systems.Assignment.ContentPageForm do
         socket
         |> update_switch(confirming_status_off: true)
         |> compose_child(:confirmation_modal)
-        |> show_modal(:confirmation_modal, :dialog)
+        |> show_modal(:confirmation_modal, :compact)
       }
     else
       {:ok, _} = Assignment.Public.delete_page_ref(socket.assigns.page_ref)

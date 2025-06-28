@@ -205,3 +205,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.onyx"
+msgstr "To-do"

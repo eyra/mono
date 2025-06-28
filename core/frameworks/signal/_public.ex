@@ -4,55 +4,38 @@ defmodule Frameworks.Signal.Public do
 
   import Frameworks.Utility.PrettyPrint
 
-  # FIXME: move this registration outside of framework
-  @signal_handlers [
-    "Core.APNS.SignalHandlers",
-    "Core.Mailer.SignalHandlers",
-    "Core.WebPush.SignalHandlers",
-    "Systems.Account.Switch",
-    "Systems.Admin.Switch",
-    "Systems.Advert.Switch",
-    "Systems.Assignment.Switch",
-    "Systems.Consent.Switch",
-    "Systems.Crew.Switch",
-    "Systems.Graphite.Switch",
-    "Systems.Instruction.Switch",
-    "Systems.Manual.Switch",
-    "Systems.NextAction.Switch",
-    "Systems.Observatory.Switch",
-    "Systems.Pool.Switch",
-    "Systems.Project.Switch",
-    "Systems.Storage.Switch",
-    "Systems.Student.Switch",
-    "Systems.Workflow.Switch",
-    "Systems.Zircon.Switch"
-  ]
+  alias Frameworks.Signal.Private
 
   def dispatch(signal, message) do
     message = Map.put_new(message, :from_pid, self())
 
-    Logger.info(
-      "SIGNAL: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}",
-      ansi_color: :blue
-    )
+    case Private.dispatch(signal, message) do
+      {:error, _} = error ->
+        Logger.warning(
+          "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
+        )
 
-    results = Enum.map(signal_handlers(), &intercept(&1, signal, message))
+        error
 
-    if not Enum.member?(results, :ok) do
-      Logger.warning(
-        "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
-      )
+      other ->
+        other
     end
-
-    :ok
   end
 
-  def intercept(handler, signal, message) do
-    handler.intercept(signal, message)
-  end
-
+  @doc """
+  # Deprecated, replaced by control flow in intercept/2
+  #
+  # Implement intercept/2 in your Signal Handler like this instead:
+  #
+  # ```elixir
+  # def intercept({my_entity, :updated}, %{my_entity: my_entity}) do
+  #   my_tool = get_my_tool_by_my_entity!(my_entity)
+  #   {:continue, :my_tool, my_tool}
+  # end
+  # ```
+  """
   def dispatch!(signal, message) do
-    :ok = dispatch(signal, message)
+    dispatch(signal, message)
   end
 
   @doc """
@@ -65,11 +48,5 @@ defmodule Frameworks.Signal.Public do
       :ok = dispatch(signal, Map.merge(updates, message))
       {:ok, message}
     end)
-  end
-
-  defp signal_handlers do
-    (Application.get_env(:core, :signal_handlers, []) ++
-       @signal_handlers)
-    |> Enum.map(fn module_name -> String.to_atom("Elixir.#{module_name}") end)
   end
 end

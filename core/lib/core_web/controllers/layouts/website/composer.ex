@@ -24,8 +24,6 @@ defmodule CoreWeb.Layouts.Website.Composer do
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
 
-      use CoreWeb.UI.PlainDialog
-
       import CoreWeb.Layouts.Website.Html
 
       @impl true

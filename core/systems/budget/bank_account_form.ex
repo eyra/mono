@@ -149,8 +149,6 @@ defmodule Systems.Budget.BankAccountForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content class="mb-4">
-      <Margin.y id={:page_top} />
       <Text.title3><%= dgettext("eyra-budget", "bank.account.content.title") %></Text.title3>
       <.form id="bank_account_form" :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself} >
 
@@ -186,7 +184,6 @@ defmodule Systems.Budget.BankAccountForm do
         <% end %>
       </div>
     </.form>
-      </Area.content>
     </div>
     """
   end

@@ -76,3 +76,11 @@ msgstr "Unsupported type of reference: %{type}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.errors.label"
 msgstr "Errors"
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.description"
+msgstr "Choose which categories to add as criteria."
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.title"
+msgstr "Categories"

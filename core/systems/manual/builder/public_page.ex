@@ -32,7 +32,7 @@ defmodule Systems.Manual.Builder.PublicPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} socket={@socket}>
       <:hero>
       </:hero>
       <div class="px-8 pt-8 w-full h-full">
