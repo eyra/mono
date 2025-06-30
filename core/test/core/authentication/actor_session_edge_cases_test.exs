@@ -1,6 +1,7 @@
 defmodule Core.Authentication.ActorSessionEdgeCasesTest do
   use Core.DataCase
-  use Plug.Test
+  import Plug.Test
+  import Plug.Conn
 
   alias Core.Authentication.{Actor, ActorSession, ActorToken}
   alias Core.Repo
@@ -181,7 +182,7 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
       {:ok, token, token_record} = ActorSession.create_api_token(actor, "Expiry Test")
 
       # Manually expire the token
-      expired_time = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day)
+      expired_time = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day) |> NaiveDateTime.truncate(:second)
 
       token_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
@@ -248,7 +249,10 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
       {:ok, token, token_record} = ActorSession.create_session_token(actor)
 
       # Manually expire the session token
-      expired_time = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day)
+      expired_time = 
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.truncate(:second)
+        |> NaiveDateTime.add(-1, :day) 
 
       token_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
@@ -258,9 +262,7 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
     end
 
     test "handles non-binary token input" do
-      assert_raise FunctionClauseError, fn ->
-        ActorSession.verify_session_token(123)
-      end
+      assert {:error, :invalid_token} = ActorSession.verify_session_token(123)
     end
   end
 
@@ -376,8 +378,11 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
         ActorSession.create_api_token(actor, "Expired Token")
 
       # Expire one token
-      expired_time = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day)
-
+      expired_time = 
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.truncate(:second)
+        |> NaiveDateTime.add(-1, :day) 
+      
       expired_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
       |> Repo.update!()

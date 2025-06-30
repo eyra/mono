@@ -36,8 +36,8 @@ defmodule Systems.Ontology.Public do
     end
   end
 
-  def query_concept_ids(entities, selector) do
-    concept_query(selector)
+  def query_concept_ids(entities) do
+    concept_query()
     |> concept_query_include(:entities, entities)
     |> select([concept: c], c.id)
   end
@@ -83,8 +83,8 @@ defmodule Systems.Ontology.Public do
 
   # Predicate
 
-  def obtain_predicate(subject, subsumes, object, entity) do
-    case insert_predicate(subject, subsumes, object, entity) do
+  def obtain_predicate(subject, subsumes, object, negated?, entity) do
+    case insert_predicate(subject, subsumes, object, entity, type_negated?: negated?) do
       {:ok, predicate} ->
         predicate
 
@@ -96,7 +96,7 @@ defmodule Systems.Ontology.Public do
               [constraint: :unique, constraint_name: "ontology_predicate_unique"]}
          ]
        }} ->
-        case get_predicate({subject, subsumes, object, false}) do
+        case get_predicate({subject, subsumes, object, negated?}) do
           nil -> raise "Predicate not found"
           predicate -> predicate
         end

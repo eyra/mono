@@ -148,7 +148,7 @@ defmodule Systems.Annotation.AnnotationEdgeCasesTest do
       subject = create_concept("AI", entity)
       predicate_type = create_concept("enables", entity)
       object = create_concept("Automation", entity)
-      predicate = Ontology.Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate = Ontology.Public.obtain_predicate(subject, predicate_type, object, false, entity)
       
       {:ok, %{annotation: predicate_annotation}} = 
         Public.insert_annotation(type, "Analysis of AI-automation relationship", entity, ref_type, predicate)

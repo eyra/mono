@@ -9,14 +9,14 @@ defmodule Core.Authentication.Actor do
   alias Ecto.Changeset
 
   @type t :: %__MODULE__{
-          type: :system | :agent,
+          type: atom(),
           name: String.t(),
           description: String.t() | nil,
           active: boolean()
         }
 
   schema "actor" do
-    field(:type, Ecto.Enum, values: [:system, :agent])
+    field(:type, Ecto.Atom)
     field(:name, :string)
     field(:description, :string)
     field(:active, :boolean, default: true)

@@ -43,9 +43,9 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       object = create_concept("Pattern Recognition", entity1)
       
       # Multiple entities create the same logical predicate
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity1)
-      predicate2 = Public.obtain_predicate(subject, predicate_type, object, entity2)
-      predicate3 = Public.obtain_predicate(subject, predicate_type, object, entity3)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity1)
+      predicate2 = Public.obtain_predicate(subject, predicate_type, object, false, entity2)
+      predicate3 = Public.obtain_predicate(subject, predicate_type, object, false, entity3)
       
       # Global Knowledge Commons: Same predicate ID returned
       assert predicate1.id == predicate2.id
@@ -66,14 +66,14 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       object = create_concept("Machine Learning", entity1)
       
       # Entity 1 creates first
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity1)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity1)
       original_created_at = predicate1.inserted_at
       
       # Wait a tiny bit to ensure different timestamp if created
       :timer.sleep(10)
       
       # Entity 2 tries to create same predicate
-      predicate2 = Public.obtain_predicate(subject, predicate_type, object, entity2)
+      predicate2 = Public.obtain_predicate(subject, predicate_type, object, false, entity2)
       
       # Same predicate returned
       assert predicate1.id == predicate2.id
@@ -91,7 +91,7 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       object = create_concept("Dog", entity)
       
       # Create positive predicate
-      positive_predicate = Public.obtain_predicate(subject, predicate_type, object, entity)
+      positive_predicate = Public.obtain_predicate(subject, predicate_type, object, false, entity)
       
       # Create negated predicate
       {:ok, negated_predicate} = Public.insert_predicate(subject, predicate_type, object, entity, type_negated?: true)
@@ -115,9 +115,9 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       
       # Concurrent predicate creation
       tasks = [
-        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, entity1) end),
-        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, entity2) end),
-        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, entity3) end)
+        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, false, entity1) end),
+        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, false, entity2) end),
+        Task.async(fn -> Public.obtain_predicate(subject, predicate_type, object, false, entity3) end)
       ]
       
       predicates = Enum.map(tasks, &Task.await(&1, 5000))
@@ -153,7 +153,7 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       Enum.each(subjects, fn subject ->
         Enum.each(Enum.take(predicate_types, 2), fn pred_type ->
           Enum.each(Enum.take(objects, 2), fn object ->
-            Public.obtain_predicate(subject, pred_type, object, entity1)
+            Public.obtain_predicate(subject, pred_type, object, false, entity1)
           end)
         end)
       end)
@@ -179,11 +179,11 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       
       # Both entities should get same constraint violation
       assert_raise Ecto.ConstraintError, fn ->
-        Public.obtain_predicate(concept, predicate_type, concept, entity1)
+        Public.obtain_predicate(concept, predicate_type, concept, false, entity1)
       end
       
       assert_raise Ecto.ConstraintError, fn ->
-        Public.obtain_predicate(concept, predicate_type, concept, entity2)
+        Public.obtain_predicate(concept, predicate_type, concept, false, entity2)
       end
     end
     
@@ -195,7 +195,7 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       object = create_concept("Constraint Test Object", entity)
       
       # First predicate should succeed
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
       assert predicate1.id != nil
       
       # Direct database insert of duplicate should fail due to global uniqueness
@@ -229,7 +229,7 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       predicate_type = create_concept("Legacy Predicate", entity)
       object = create_concept("Legacy Object", entity)
       
-      predicate = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate = Public.obtain_predicate(subject, predicate_type, object, false, entity)
       
       # Verify it has expected structure for global sharing
       assert predicate.subject_id == subject.id
@@ -259,7 +259,7 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
         # Create different entities for each task
         task_entity = create_entity()
         Task.async(fn ->
-          Public.obtain_predicate(subject, predicate_type, object, task_entity)
+          Public.obtain_predicate(subject, predicate_type, object, false, task_entity)
         end)
       end)
       
@@ -284,8 +284,8 @@ defmodule Systems.Ontology.GlobalKnowledgeCommonsTest do
       object = create_concept("ML", entity1)
       
       # Both entities create same relationship
-      pred1 = Public.obtain_predicate(subject, predicate_type, object, entity1)
-      pred2 = Public.obtain_predicate(subject, predicate_type, object, entity2)
+      pred1 = Public.obtain_predicate(subject, predicate_type, object, false, entity1)
+      pred2 = Public.obtain_predicate(subject, predicate_type, object, false, entity2)
       
       # Should be same predicate due to global sharing
       assert pred1.id == pred2.id

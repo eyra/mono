@@ -102,35 +102,43 @@ defmodule Systems.Annotation.PatternValidator do
     suggestions = []
 
     validation = pattern.statement_validation
-    length = String.length(statement)
+    
+    if is_nil(statement) do
+      ["Statement cannot be nil - please provide a valid statement"]
+    else
+      length = String.length(statement)
 
-    cond do
-      length < validation.min_length ->
-        ["Statement is too short - add #{validation.min_length - length} more characters"]
+      cond do
+        length < validation.min_length ->
+          ["Statement is too short - add #{validation.min_length - length} more characters"]
 
-      length > validation.max_length ->
-        ["Statement is too long - reduce by #{length - validation.max_length} characters"]
+        length > validation.max_length ->
+          ["Statement is too long - reduce by #{length - validation.max_length} characters"]
 
-      length < validation.min_length * 2 ->
-        ["Consider adding more detail for better concept extraction"]
+        length < validation.min_length * 2 ->
+          ["Consider adding more detail for better concept extraction"]
 
-      true ->
-        suggestions
+        true ->
+          suggestions
+      end
     end
   end
 
   defp suggest_reference_improvements(references, pattern) do
-    suggestions = []
-
-    # Check for missing required references
-    provided_types = Enum.map(references, & &1["type"]) |> MapSet.new()
-    required_types = Enum.map(pattern.required_references, & &1.name) |> MapSet.new()
-    missing = MapSet.difference(required_types, provided_types)
-
-    if MapSet.size(missing) > 0 do
-      suggestions ++ ["Add required references: #{Enum.join(missing, ", ")}"]
+    if is_nil(references) do
+      []
     else
-      suggestions
+      suggestions = []
+      # Check for missing required references
+      provided_types = Enum.map(references, & &1["type"]) |> MapSet.new()
+      required_types = Enum.map(pattern.required_references, & &1.name) |> MapSet.new()
+      missing = MapSet.difference(required_types, provided_types)
+
+      if MapSet.size(missing) > 0 do
+        suggestions ++ ["Add required references: #{Enum.join(missing, ", ")}"]
+      else
+        suggestions
+      end
     end
   end
 

@@ -353,35 +353,25 @@ defmodule Systems.MCP.TokenManagerEdgeCasesTest do
       end
     end
 
-    test "handles invalid actor data gracefully" do
-      # Test with invalid actor types and missing required fields
-      test_cases = [
-        # Empty name
-        %{name: "", description: "Valid description"},
-        # Nil name
-        %{name: nil, description: "Valid description"},
-        # Invalid type
-        %{type: :invalid_type, name: "Valid Name"}
-      ]
+    test "rejects empty actor name" do
+      {:error, changeset} = TokenManager.create_mcp_actor("", "Valid description", :agent)
 
-      Enum.each(test_cases, fn invalid_attrs ->
-        result =
-          TokenManager.create_mcp_actor(
-            invalid_attrs[:name],
-            invalid_attrs[:description],
-            invalid_attrs[:type] || :agent
-          )
+      assert changeset.valid? == false, "Should be invalid changeset"
+      assert changeset.errors[:name] != nil, "Should have name validation error"
+    end
 
-        case result do
-          {:error, changeset} ->
-            assert changeset.valid? == false, "Should be invalid changeset"
+    test "rejects nil actor name" do
+      {:error, changeset} = TokenManager.create_mcp_actor(nil, "Valid description", :agent)
 
-          other ->
-            flunk(
-              "Expected validation error for #{inspect(invalid_attrs)}, got: #{inspect(other)}"
-            )
-        end
-      end)
+      assert changeset.valid? == false, "Should be invalid changeset"
+      assert changeset.errors[:name] != nil, "Should have name validation error"
+    end
+
+    test "rejects invalid actor type" do
+      {:error, changeset} = TokenManager.create_mcp_actor("Valid Name", "Valid description", "invalid_type")
+
+      assert changeset.valid? == false, "Should be invalid changeset"
+      assert changeset.errors[:type] != nil, "Should have type validation error"
     end
   end
 

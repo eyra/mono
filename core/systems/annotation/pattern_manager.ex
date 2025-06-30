@@ -13,7 +13,7 @@ defmodule Systems.Annotation.PatternManager do
   @doc """
   Creates an annotation from a pattern with validation.
   """
-  def create_from_pattern(pattern_name, statement, references \\ [], %Actor{} = actor) do
+  def create_from_pattern(pattern_name, statement, references, %Actor{} = actor) when is_binary(pattern_name) and is_binary(statement) and is_list(references) do
     with {:ok, pattern} <- load_pattern(pattern_name),
          {:ok, validated_statement} <- validate_statement(statement, pattern),
          {:ok, validated_refs} <- validate_references(references, pattern),
@@ -37,6 +37,8 @@ defmodule Systems.Annotation.PatternManager do
 
   TODO: Replace with YAML support when YamlElixir dependency is added.
   """
+  def load_pattern(nil), do: {:error, "Pattern not found: nil"}
+
   def load_pattern(pattern_name) do
     case Systems.Annotation.CorePatterns.get_pattern(pattern_name) do
       {:ok, pattern} ->
@@ -147,6 +149,9 @@ defmodule Systems.Annotation.PatternManager do
     validation = pattern.statement_validation
 
     cond do
+      is_nil(statement) ->
+        {:error, "Statement cannot be nil"}
+        
       String.length(statement) < validation.min_length ->
         {:error, "Statement too short (min: #{validation.min_length})"}
 
@@ -172,7 +177,7 @@ defmodule Systems.Annotation.PatternManager do
 
   # TODO: YAML pattern compilation functions will be added when YamlElixir dependency is available
 
-  defp validate_required_references(references, required_specs) do
+  defp validate_required_references(references, required_specs) when is_list(references) do
     # Check that all required reference types are present
     provided_types = Enum.map(references, & &1["type"]) |> MapSet.new()
     required_types = Enum.map(required_specs, & &1.name) |> MapSet.new()

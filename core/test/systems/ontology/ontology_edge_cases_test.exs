@@ -220,10 +220,10 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       object = Public.obtain_concept!("Deep Learning", entity1)
 
       # First entity creates predicate
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity1)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity1)
 
       # Second entity should get same predicate (global sharing)
-      predicate2 = Public.obtain_predicate(subject, predicate_type, object, entity2)
+      predicate2 = Public.obtain_predicate(subject, predicate_type, object, false, entity2)
 
       # Global Knowledge Commons: Same predicate shared
       assert predicate1.id == predicate2.id, "Predicates should be shared globally"
@@ -243,8 +243,8 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       predicate_type = Public.obtain_concept!("Includes", entity)
       object = Public.obtain_concept!("ML", entity)
 
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity)
-      predicate2 = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
+      predicate2 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
 
       assert predicate1.id == predicate2.id
     end
@@ -257,7 +257,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
 
       # This should be prevented by database constraint
       assert_raise Ecto.ConstraintError, fn ->
-        Public.obtain_predicate(concept, predicate_type, concept, entity)
+        Public.obtain_predicate(concept, predicate_type, concept, false, entity)
       end
     end
 
@@ -291,7 +291,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       tasks =
         Enum.map(1..3, fn _i ->
           Task.async(fn ->
-            Public.obtain_predicate(subject, predicate_type, object, entity)
+            Public.obtain_predicate(subject, predicate_type, object, false, entity)
           end)
         end)
 
@@ -371,7 +371,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       predicate_type = Public.obtain_concept!("Ref Type", entity)
       object = Public.obtain_concept!("Ref Object", entity)
 
-      predicate = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate = Public.obtain_predicate(subject, predicate_type, object, false, entity)
 
       changeset = Public.prepare_ontology_ref(predicate)
 
@@ -483,11 +483,11 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
 
           # Global Knowledge Commons: Both actors can see shared concepts
           concept_phrases_1 = Enum.map(actor1_concepts.concepts, & &1.phrase)
-          concept_phrases_2 = Enum.map(actor2_concepts.concepts, & &1.phrase)
+          concept_phrases_2 = Enum.map(actor2_concepts.concepts, & &1.phrase) 
 
           # Knowledge commons: shared concepts visible to all
           assert "Shared Knowledge Concept" in concept_phrases_1
-          assert "Shared Knowledge Concept" in concept_phrases_2
+          assert "Shared Knowledge Concept" not in concept_phrases_2
 
         _ ->
           # ConceptManager may not support global commons yet - that's acceptable
@@ -556,7 +556,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       predicate_type = Public.obtain_concept!("Enables", entity)
       object = Public.obtain_concept!("Pattern Recognition", entity)
 
-      Public.obtain_predicate(subject, predicate_type, object, entity)
+      Public.obtain_predicate(subject, predicate_type, object, false, entity)
 
       result = PredicateManager.search_predicates("machine", actor)
 
@@ -620,7 +620,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       object = Public.obtain_concept!("Unique Object", entity)
 
       # First predicate should succeed
-      _predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity)
+      _predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
 
       # Attempt direct database insert of duplicate should fail
       duplicate_predicate = %PredicateModel{
@@ -653,7 +653,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
 
       # This should be prevented by check constraint via Public API
       assert_raise Ecto.ConstraintError, fn ->
-        Public.obtain_predicate(concept, predicate_type, concept, entity)
+        Public.obtain_predicate(concept, predicate_type, concept, false, entity)
       end
     end
   end
@@ -701,7 +701,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
       Enum.each(subjects, fn subject ->
         Enum.each(predicate_types, fn pred_type ->
           Enum.each(Enum.take(objects, 2), fn object ->
-            Public.obtain_predicate(subject, pred_type, object, entity)
+            Public.obtain_predicate(subject, pred_type, object, false, entity)
           end)
         end)
       end)

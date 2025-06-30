@@ -13,6 +13,7 @@ defmodule Frameworks.Utility.Query do
     Enum.reduce(clauses, query, fn clause, query ->
       quote_clause(clause, query)
     end)
+
   end
 
   def quote_clause([:join, parent, association], query) when is_atom(association) do

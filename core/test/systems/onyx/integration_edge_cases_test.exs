@@ -15,8 +15,7 @@ defmodule Systems.Onyx.IntegrationEdgeCasesTest do
   use Core.DataCase
 
   alias Systems.Annotation.PatternManager
-  alias Systems.Ontology.ConceptManager
-  alias Core.Authentication.{Entity, Actor}
+  alias Core.Authentication.Actor
   alias Core.Repo
 
   # Factory functions for test data
@@ -108,14 +107,14 @@ defmodule Systems.Onyx.IntegrationEdgeCasesTest do
     end
     
     test "handles concurrent knowledge creation safely" do
-      actor = create_actor()
-      
-      # Multiple concurrent annotation creations
+      # Multiple concurrent annotation creations with separate actors
       tasks = Enum.map(1..5, fn i ->
         Task.async(fn ->
+          # Create a unique actor for each task to avoid entity conflicts
+          actor = create_actor()
           PatternManager.create_from_pattern(
             "Statement Pattern",
-            "Concurrent test statement #{i}.",
+            "Concurrent test statement #{i} with sufficient length.",
             [],
             actor
           )

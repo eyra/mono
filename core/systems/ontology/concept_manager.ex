@@ -12,7 +12,7 @@ defmodule Systems.Ontology.ConceptManager do
   @doc """
   Creates a new concept in the ontology.
   """
-  def create_concept(phrase, description \\ nil, %Actor{} = actor) do
+  def create_concept(phrase, description \\ nil, %Actor{} = actor) when is_binary(phrase) do
     # Get entity for the actor
     {:ok, entity} = Core.Authentication.obtain_entity(actor)
 
@@ -122,7 +122,7 @@ defmodule Systems.Ontology.ConceptManager do
 
   # Private functions
 
-  defp validate_concept_phrase(phrase) do
+  defp validate_concept_phrase(phrase) when is_binary(phrase) do
     cond do
       String.length(phrase) < 2 ->
         {:error, "Concept phrase too short (minimum 2 characters)"}

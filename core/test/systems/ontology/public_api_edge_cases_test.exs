@@ -143,7 +143,7 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       
       Enum.each(invalid_component_sets, fn {subject, predicate_type, object} ->
         try do
-          Public.obtain_predicate(subject, predicate_type, object, entity)
+          Public.obtain_predicate(subject, predicate_type, object, false, entity)
         rescue
           error ->
             # Should handle invalid concepts gracefully
@@ -211,7 +211,7 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       
       # Should handle self-referential predicate constraint
       try do
-        Public.obtain_predicate(concept, predicate_type, concept, entity)
+        Public.obtain_predicate(concept, predicate_type, concept, false, entity)
       rescue
         Ecto.ConstraintError ->
           # Constraint violation is expected and handled correctly
@@ -227,7 +227,7 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
   describe "Public API Global Knowledge Commons Edge Cases" do
     test "global concept sharing with concurrent access" do
       entity1 = create_entity()
-      entity2 = create_entity()
+      _entity2 = create_entity()
       
       # Concurrent access to same concept
       tasks = Enum.map(1..5, fn _i ->
@@ -260,7 +260,7 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       tasks = Enum.map(1..3, fn i ->
         entity = if rem(i, 2) == 0, do: entity1, else: entity2
         Task.async(fn ->
-          Public.obtain_predicate(subject, predicate_type, object, entity)
+          Public.obtain_predicate(subject, predicate_type, object, false, entity)
         end)
       end)
       
@@ -284,36 +284,54 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       object = Public.obtain_concept!("Constraint Test Object", entity)
       
       # First creation should succeed
-      predicate1 = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate1 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
       assert predicate1.id != nil
       
       # Second creation should return same predicate
-      predicate2 = Public.obtain_predicate(subject, predicate_type, object, entity)
+      predicate2 = Public.obtain_predicate(subject, predicate_type, object, false, entity)
       assert predicate1.id == predicate2.id
     end
   end
 
   describe "Public API Query Operations Edge Cases" do
-    test "query_concept_ids handles invalid parameters" do
-      invalid_params = [
-        {nil, nil},
-        {[], "invalid_selector"},
-        {"invalid_entities", nil},
-        {999999, %{invalid: "selector"}}
-      ]
-      
-      Enum.each(invalid_params, fn {entities, selector} ->
-        try do
-          result = Public.query_concept_ids(entities, selector)
-          
-          # Should return list (possibly empty) or handle gracefully
-          assert is_list(result) or result == nil
-        rescue
-          _error ->
-            # Some invalid parameters may cause exceptions - acceptable
-            assert true
-        end
-      end)
+    test "query_concept_ids handles nil parameter" do
+      try do
+        result = Public.query_concept_ids(nil)
+        assert is_list(result) or result == nil
+      rescue
+        _error ->
+          assert true
+      end
+    end
+
+    test "query_concept_ids handles empty list parameter" do
+      try do
+        result = Public.query_concept_ids([])
+        assert is_list(result) or result == nil
+      rescue
+        _error ->
+          assert true
+      end
+    end
+
+    test "query_concept_ids handles string parameter" do
+      try do
+        result = Public.query_concept_ids("invalid_entities")
+        assert is_list(result) or result == nil
+      rescue
+        _error ->
+          assert true
+      end
+    end
+
+    test "query_concept_ids handles integer parameter" do
+      try do
+        result = Public.query_concept_ids(999999)
+        assert is_list(result) or result == nil
+      rescue
+        _error ->
+          assert true
+      end
     end
     
     test "query_predicate_ids handles invalid selectors" do
@@ -349,7 +367,8 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       
       # Query should handle large result sets efficiently
       {time_micros, result} = :timer.tc(fn ->
-        Public.query_concept_ids([entity], %{})
+        Public.query_concept_ids([entity])
+        |> Repo.all()
       end)
       
       # Should complete in reasonable time
@@ -407,12 +426,12 @@ defmodule Systems.Ontology.PublicApiEdgeCasesTest do
       operations = [
         fn -> Public.get_concept("Test Concept") end,
         fn -> Public.list_concepts([entity], []) end,
-        fn -> Public.query_concept_ids([entity], %{}) end
+        fn -> Public.query_concept_ids([entity]) end
       ]
       
       Enum.each(operations, fn operation ->
         try do
-          result = operation.()
+          _result = operation.()
           # Operations should succeed or fail gracefully
           assert true
         rescue

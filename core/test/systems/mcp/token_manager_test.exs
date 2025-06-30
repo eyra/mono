@@ -21,7 +21,7 @@ defmodule Systems.MCP.TokenManagerTest do
       actor = Factories.create_actor()
       custom_name = "Custom MCP Token"
 
-      assert {:ok, token, token_record} = TokenManager.create_mcp_token(actor, custom_name)
+      assert {:ok, _token, token_record} = TokenManager.create_mcp_token(actor, custom_name)
 
       assert token_record.name == custom_name
       assert token_record.actor_id == actor.id
@@ -108,7 +108,7 @@ defmodule Systems.MCP.TokenManagerTest do
 
     test "cleans up actor when token creation fails" do
       # Create an actor first to test cleanup
-      actor = Factories.create_actor(%{name: "Cleanup Test"})
+      _actor = Factories.create_actor(%{name: "Cleanup Test"})
       original_count = Core.Repo.aggregate(Actor, :count, :id)
 
       # Mock token creation failure by creating invalid token scenario
@@ -165,8 +165,8 @@ defmodule Systems.MCP.TokenManagerTest do
       tokens = TokenManager.list_mcp_tokens()
 
       # Find our tokens in the list
-      token_info1 = Enum.find(tokens, &(&1.id == token_record1.id))
-      token_info2 = Enum.find(tokens, &(&1.id == token_record2.id))
+      _token_info1 = Enum.find(tokens, &(&1.id == token_record1.id))
+      _token_info2 = Enum.find(tokens, &(&1.id == token_record2.id))
 
       # token2 should come before token1 (newer first)
       token1_index = Enum.find_index(tokens, &(&1.id == token_record1.id))
@@ -252,7 +252,7 @@ defmodule Systems.MCP.TokenManagerTest do
     end
 
     test "creates new token without revoking old one" do
-      {actor, old_token, _old_token_record} = Factories.create_actor_with_token()
+      {_actor, old_token, _old_token_record} = Factories.create_actor_with_token()
 
       assert {:ok, result} = TokenManager.rotate_token(old_token, "New Token", false)
 

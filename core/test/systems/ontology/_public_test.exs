@@ -171,8 +171,12 @@ defmodule Ontology.PublicTest do
           identifier: "Systems.Account.User:#{user2.id}"
         })
 
+      # Create different subject for second predicate to avoid unique constraint
+      subject2 =
+        Factories.insert!(:ontology_concept, %{phrase: "Magnetic Force", entity: entity2})
+
       {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
-      {:ok, %{id: id2}} = insert_predicate(subject, type, object, entity2)
+      {:ok, %{id: id2}} = insert_predicate(subject2, type, object, entity2)
 
       assert [
                %Ontology.PredicateModel{id: ^id1},

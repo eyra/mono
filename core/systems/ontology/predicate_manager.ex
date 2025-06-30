@@ -16,7 +16,7 @@ defmodule Systems.Ontology.PredicateManager do
         subject_id,
         predicate_type_id,
         object_id,
-        negated \\ false,
+        negated?,
         %Actor{} = actor
       ) do
     # Get entity for the actor
@@ -26,22 +26,22 @@ defmodule Systems.Ontology.PredicateManager do
     with {:ok, subject} <- get_concept(subject_id),
          {:ok, predicate_type} <- get_concept(predicate_type_id),
          {:ok, object} <- get_concept(object_id),
-         :ok <- validate_predicate_structure(subject, predicate_type, object, negated) do
+         :ok <- validate_predicate_structure(subject, predicate_type, object, negated?) do
       try do
-        predicate = Ontology.Public.obtain_predicate(subject, predicate_type, object, entity)
-
+        predicate = Ontology.Public.obtain_predicate(subject, predicate_type, object, negated?, entity)
+        
         %{
           success: true,
           subject_id: subject_id,
           predicate_type_id: predicate_type_id,
           object_id: object_id,
-          negated: negated,
+          negated?: negated?,
           actor_id: actor.id,
           predicate_id: predicate.id,
           # Already existed
           created: false,
           message: "Predicate retrieved successfully",
-          relationship: format_predicate_display(subject, predicate_type, object, negated)
+          relationship: format_predicate_display(subject, predicate_type, object, negated?)
         }
       rescue
         error ->
@@ -50,7 +50,7 @@ defmodule Systems.Ontology.PredicateManager do
             subject_id: subject_id,
             predicate_type_id: predicate_type_id,
             object_id: object_id,
-            negated: negated,
+            negated?: negated?,
             actor_id: actor.id,
             predicate_id: nil,
             error: "Failed to create predicate: #{inspect(error)}"
@@ -63,7 +63,7 @@ defmodule Systems.Ontology.PredicateManager do
           subject_id: subject_id,
           predicate_type_id: predicate_type_id,
           object_id: object_id,
-          negated: negated,
+          negated?: negated?,
           actor_id: actor.id,
           predicate_id: nil,
           error: reason
