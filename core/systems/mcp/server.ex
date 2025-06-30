@@ -13,22 +13,24 @@ defmodule Systems.MCP.Server do
   @capabilities %{
     tools: %{
       "create_concepts" => %{
-        description: "Create multiple concepts in the global knowledge commons (AI agent provides the concepts)",
+        description:
+          "Create multiple concepts in the global knowledge commons (AI agent provides the concepts)",
         parameters: %{
           concepts: %{
-            type: "array", 
-            required: true, 
+            type: "array",
+            required: true,
             description: "Array of concept objects with phrase and optional description"
           },
           source_statement: %{
-            type: "string", 
-            required: false, 
+            type: "string",
+            required: false,
             description: "Original statement these concepts were extracted from"
           }
         }
       },
       "create_predicates" => %{
-        description: "Create multiple predicates/relationships in the knowledge graph (AI agent provides the relationships)",
+        description:
+          "Create multiple predicates/relationships in the knowledge graph (AI agent provides the relationships)",
         parameters: %{
           predicates: %{
             type: "array",
@@ -366,17 +368,24 @@ defmodule Systems.MCP.Server do
   # Batch creation helpers
 
   defp create_multiple_concepts(concepts, source_statement, actor) do
-    results = Enum.map(concepts, fn concept ->
-      phrase = concept["phrase"] || concept[:phrase]
-      description = concept["description"] || concept[:description]
-      
-      case Systems.Ontology.ConceptManager.create_concept(phrase, description, actor) do
-        %{success: true} = result -> 
-          %{success: true, phrase: phrase, concept_id: result.concept_id, created: result.created}
-        %{success: false} = result -> 
-          %{success: false, phrase: phrase, error: result.error}
-      end
-    end)
+    results =
+      Enum.map(concepts, fn concept ->
+        phrase = concept["phrase"] || concept[:phrase]
+        description = concept["description"] || concept[:description]
+
+        case Systems.Ontology.ConceptManager.create_concept(phrase, description, actor) do
+          %{success: true} = result ->
+            %{
+              success: true,
+              phrase: phrase,
+              concept_id: result.concept_id,
+              created: result.created
+            }
+
+          %{success: false} = result ->
+            %{success: false, phrase: phrase, error: result.error}
+        end
+      end)
 
     successful = Enum.filter(results, & &1.success)
     failed = Enum.filter(results, &(not &1.success))
@@ -389,56 +398,63 @@ defmodule Systems.MCP.Server do
       results: results,
       source_statement: source_statement,
       actor_id: actor.id,
-      message: "Processed #{length(concepts)} concepts: #{length(successful)} successful, #{length(failed)} failed"
+      message:
+        "Processed #{length(concepts)} concepts: #{length(successful)} successful, #{length(failed)} failed"
     }
   end
 
   defp create_multiple_predicates(predicates, source_statement, actor) do
-    results = Enum.map(predicates, fn predicate ->
-      subject_phrase = predicate["subject"] || predicate[:subject]
-      predicate_phrase = predicate["predicate"] || predicate[:predicate] 
-      object_phrase = predicate["object"] || predicate[:object]
-      negated = predicate["negated"] || predicate[:negated] || false
+    results =
+      Enum.map(predicates, fn predicate ->
+        subject_phrase = predicate["subject"] || predicate[:subject]
+        predicate_phrase = predicate["predicate"] || predicate[:predicate]
+        object_phrase = predicate["object"] || predicate[:object]
+        negated = predicate["negated"] || predicate[:negated] || false
 
-      # First ensure the concepts exist
-      with %{success: true, concept_id: subject_id} <- 
-             Systems.Ontology.ConceptManager.create_concept(subject_phrase, nil, actor),
-           %{success: true, concept_id: predicate_id} <- 
-             Systems.Ontology.ConceptManager.create_concept(predicate_phrase, nil, actor),
-           %{success: true, concept_id: object_id} <- 
-             Systems.Ontology.ConceptManager.create_concept(object_phrase, nil, actor) do
+        # First ensure the concepts exist
+        with %{success: true, concept_id: subject_id} <-
+               Systems.Ontology.ConceptManager.create_concept(subject_phrase, nil, actor),
+             %{success: true, concept_id: predicate_id} <-
+               Systems.Ontology.ConceptManager.create_concept(predicate_phrase, nil, actor),
+             %{success: true, concept_id: object_id} <-
+               Systems.Ontology.ConceptManager.create_concept(object_phrase, nil, actor) do
+          case Systems.Ontology.PredicateManager.create_predicate(
+                 subject_id,
+                 predicate_id,
+                 object_id,
+                 negated,
+                 actor
+               ) do
+            %{success: true} = result ->
+              %{
+                success: true,
+                subject: subject_phrase,
+                predicate: predicate_phrase,
+                object: object_phrase,
+                negated: negated,
+                predicate_id: result.predicate_id
+              }
 
-        case Systems.Ontology.PredicateManager.create_predicate(
-               subject_id, predicate_id, object_id, negated, actor) do
-          %{success: true} = result -> 
-            %{
-              success: true, 
-              subject: subject_phrase,
-              predicate: predicate_phrase, 
-              object: object_phrase,
-              negated: negated,
-              predicate_id: result.predicate_id
-            }
-          %{success: false} = result -> 
+            %{success: false} = result ->
+              %{
+                success: false,
+                subject: subject_phrase,
+                predicate: predicate_phrase,
+                object: object_phrase,
+                error: result.error
+              }
+          end
+        else
+          %{success: false, error: error} ->
             %{
               success: false,
               subject: subject_phrase,
               predicate: predicate_phrase,
-              object: object_phrase, 
-              error: result.error
+              object: object_phrase,
+              error: "Failed to create required concepts: #{error}"
             }
         end
-      else
-        %{success: false, error: error} ->
-          %{
-            success: false,
-            subject: subject_phrase,
-            predicate: predicate_phrase,
-            object: object_phrase,
-            error: "Failed to create required concepts: #{error}"
-          }
-      end
-    end)
+      end)
 
     successful = Enum.filter(results, & &1.success)
     failed = Enum.filter(results, &(not &1.success))
@@ -451,7 +467,8 @@ defmodule Systems.MCP.Server do
       results: results,
       source_statement: source_statement,
       actor_id: actor.id,
-      message: "Processed #{length(predicates)} predicates: #{length(successful)} successful, #{length(failed)} failed"
+      message:
+        "Processed #{length(predicates)} predicates: #{length(successful)} successful, #{length(failed)} failed"
     }
   end
 

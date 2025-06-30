@@ -16,7 +16,7 @@ defmodule Systems.MCP.ServerTest do
 
       expected_tools = [
         "create_concepts",
-        "create_predicates", 
+        "create_predicates",
         "create_concept",
         "create_predicate",
         "create_annotation",
@@ -25,7 +25,7 @@ defmodule Systems.MCP.ServerTest do
         "validate_pattern",
         "list_patterns"
       ]
-      
+
       actual_tools = Map.keys(result.capabilities.tools) |> Enum.sort()
       assert Enum.sort(expected_tools) == actual_tools
 
