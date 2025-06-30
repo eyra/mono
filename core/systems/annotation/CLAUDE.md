@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Annotation system has evolved into a sophisticated semantic annotation framework that serves as a structured "database" for managing complex knowledge representations. While annotations can be connected to the knowledge graph in indefinite ways, the **Pattern system** provides meaningful structural organization and semantic consistency. This combination of flexibility and structure enables both creative knowledge expression and systematic knowledge management across the EYRA platform.
+The Annotation system has evolved into a sophisticated semantic annotation framework that serves as a structured "database" for managing complex knowledge representations. While annotations can be connected to the knowledge graph in indefinite ways, the **Pattern system** provides meaningful structural organization and semantic consistency. This combination of flexibility and structure enables both creative knowledge expression and systematic knowledge management across the platform.
 
 ## Purpose
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Ontology system is a sophisticated semantic knowledge management platform that provides formal knowledge representation for the EYRA platform. It serves as the foundation for semantic annotations, knowledge graphs, and advanced research workflows.
+The Ontology system is a sophisticated semantic knowledge management platform that provides formal knowledge representation for the platform. It serves as the foundation for semantic annotations, knowledge graphs, and advanced research workflows.
 
 ## Purpose
 

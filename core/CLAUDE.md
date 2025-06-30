@@ -152,6 +152,53 @@ Uses **GreenLight** framework with hierarchical permissions:
 - Prefer single system alias: `alias Systems.Account` then use `Account.Model`
 - Follow existing naming patterns and file structures
 
+### Knowledge System Design Rules
+- **Annotation Patterns**: Design patterns to be as abstract and reusable as possible (e.g., generic "Feedback Pattern" rather than specific "Concept Feedback Pattern")
+- **Concept Phrases**: Use human-readable format with spaces and capitalization (e.g., "Machine Learning Models" not "machine_learning_models")
+- **Context Through References**: Pattern meaning emerges from reference types and targets, not schema structure
+- **Natural Language Over Atomic Types**: Prefer conceptual annotations with natural language statements over pre-normalized atomic types (e.g., "Response Pattern" with statement "I reject this because..." rather than separate "Reject Pattern")
+- **Democratic Dispute Resolution**: Knowledge disputes resolved through human-centered democratic process with AI assistance:
+  - Present all available data to users
+  - AI provides context (credibility signals, sentiment analysis, fact vs. opinion classification)  
+  - Humans make final decisions based on complete context
+  - Sentiment filtering crucial for distinguishing factual claims from subjective opinions
+- **Reference Architecture**: Use untyped polymorphic references without relationship labels:
+  - Statement completeness determines reference clarity (not artificial type constraints)
+  - Natural language carries all semantic meaning and reference roles
+  - Feedback loop provides self-correcting clarification system for ambiguous statements
+  - System evolves toward clarity through collaborative refinement
+
+### Human-AI Collaborative Feedback Loop
+The core feedback loop architecture for refining human knowledge through AI assistance:
+
+1. **Original Statement**: Human posts natural language annotation (e.g., "Machine learning models can introduce bias when analyzing personal data under GDPR requirements")
+
+2. **AI Analysis/Processing**: 
+   - AI creates Feedback annotation with analysis of human statement (concept extraction, fact checking, sentiment analysis, etc.)
+   - AI processing can include concept extraction, relationship identification, quality assessment, or other knowledge refinement tasks
+   - References original annotation and relevant knowledge elements through untyped polymorphic references
+
+3. **Human Response**:
+   - Human creates Response annotation with natural language feedback (e.g., "I accept 'machine learning models' and 'personal data' but 'bias' should be 'algorithmic bias' to be more precise")
+   - References AI feedback annotation and relevant concepts
+   - No confidence scores - agreement/disagreement expressed through natural language
+
+4. **Iterative Refinement**:
+   - AI can create clarification requests for ambiguous statements
+   - Community provides additional feedback through Response annotations
+   - System based on consent rather than consensus 
+   - All perspectives preserved and visible, including minority viewpoints
+
+5. **Knowledge Formalization**:
+   - Validated knowledge elements are added to appropriate systems (ontology, annotation patterns, etc.)
+   - Formal structures extracted from refined natural language discussions
+   - Knowledge systems grow through human-AI collaborative refinement
+
+6. **Dispute Resolution**:
+   - Present all available data to humans for decision-making
+   - AI provides context (credibility signals, sentiment analysis, fact vs opinion classification)
+   - Truth determined through human democratic process, not AI judgment
+
 ### Testing Patterns
 - Use associations over foreign keys in tests
 - Always preload associations before asserting

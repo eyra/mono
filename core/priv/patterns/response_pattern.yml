@@ -1,0 +1,37 @@
+pattern:
+  name: "Response Pattern"
+  version: "1.0.0"
+  description: "Human response to AI feedback with natural language flexibility"
+  author: "system"
+  
+  statement:
+    template: "{response_content}"
+    validation:
+      min_length: 5
+      max_length: 1000
+      required_fields: ["response_content"]
+    examples:
+      - "I accept the concepts 'Machine Learning' and 'Privacy'"
+      - "I disagree with 'bias' - it should be 'Algorithmic Bias' to be more precise"
+      - "You missed the concept 'Fairness' which is central to this discussion"
+      - "The relationship should be 'Machine Learning can exhibit bias' not 'Machine Learning causes bias'"
+      
+  references:
+    required:
+      - name: "responds_to"
+        description: "The feedback annotation being responded to"
+        target_types: ["annotation"]
+        cardinality: "exactly_one"
+    optional:
+      - name: "discusses" 
+        description: "Concepts or predicates being discussed in the response"
+        target_types: ["concept", "predicate"]
+        cardinality: "zero_or_more"
+      - name: "references"
+        description: "Additional context or supporting materials"
+        target_types: ["annotation", "resource"]
+        cardinality: "zero_or_more"
+        
+  metadata:
+    category: "human_interaction"
+    use_cases: ["concept_validation", "concept_refinement", "disagreement", "clarification"]

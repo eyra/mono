@@ -1,0 +1,36 @@
+pattern:
+  name: "Statement Pattern"
+  version: "1.0.0"
+  description: "Basic human statement for knowledge contribution"
+  author: "system"
+  
+  statement:
+    template: "{statement_content}"
+    validation:
+      min_length: 10
+      max_length: 5000
+      required_fields: ["statement_content"]
+    examples:
+      - "Machine learning models can introduce bias when analyzing personal data under GDPR requirements"
+      - "Privacy-preserving techniques like differential privacy help protect individual data while enabling research"
+      - "Algorithmic fairness requires continuous monitoring and adjustment of model outputs across demographic groups"
+      
+  references:
+    required: []
+    optional:
+      - name: "builds_on"
+        description: "Previous statements or concepts this builds upon"
+        target_types: ["annotation", "concept"]
+        cardinality: "zero_or_more"
+      - name: "cites"
+        description: "External sources or references"
+        target_types: ["resource"]
+        cardinality: "zero_or_more"
+      - name: "relates_to"
+        description: "Related concepts or predicates"
+        target_types: ["concept", "predicate"]
+        cardinality: "zero_or_more"
+        
+  metadata:
+    category: "knowledge_contribution"
+    use_cases: ["initial_statement", "knowledge_sharing", "opinion_expression", "fact_claiming"]

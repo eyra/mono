@@ -32,7 +32,7 @@ defmodule Systems.Ontology.PredicateModel do
 
   @fields ~w(type_negated?)a
   @required_fields @fields
-  @unique_fields ~w(subject_id object_id type_id entity_id type_negated?)a
+  @unique_fields ~w(subject_id object_id type_id type_negated?)a
 
   def changeset(predicate, attrs) do
     predicate

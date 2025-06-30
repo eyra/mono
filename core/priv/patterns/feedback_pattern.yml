@@ -1,0 +1,35 @@
+pattern:
+  name: "Feedback Pattern"
+  version: "1.0.0"
+  description: "Generic AI feedback on human statements for concept extraction and analysis"
+  author: "system"
+  
+  statement:
+    template: "AI Analysis: {analysis_content}"
+    validation:
+      min_length: 20
+      max_length: 2000
+      required_fields: ["analysis_content"]
+      
+  references:
+    required: []
+    optional:
+      - name: "analyzes"
+        description: "The annotation being analyzed"  
+        target_types: ["annotation"]
+        cardinality: "exactly_one"
+      - name: "extracts"
+        description: "Concepts extracted from the statement"
+        target_types: ["concept"] 
+        cardinality: "zero_or_more"
+      - name: "identifies"
+        description: "Predicates or relationships identified"
+        target_types: ["predicate"]
+        cardinality: "zero_or_more"
+        
+  metadata:
+    category: "ai_interaction"
+    use_cases: ["concept_extraction", "predicate_extraction", "quality_analysis"]
+    examples:
+      - "AI Analysis: I extracted the concepts 'Machine Learning' and 'Privacy' from your statement about AI ethics."
+      - "AI Analysis: The statement discusses the relationship 'GDPR requires consent' between data protection concepts."

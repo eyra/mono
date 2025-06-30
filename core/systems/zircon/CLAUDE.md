@@ -2,7 +2,7 @@
 
 ## Overview
 
-Zircon is a comprehensive **systematic literature review platform** that serves as the **foundational knowledge population tool** for the EYRA knowledge graph. As the first system to populate the Annotation/Ontology layers, Zircon transforms systematic literature review from a specialized academic task into a **universal research capability** that feeds the next-generation knowledge system. Every researcher's systematic review contributes to a growing, AI-enhanced knowledge base.
+Zircon is a comprehensive **systematic literature review platform** that serves as the **foundational knowledge population tool** for the platform knowledge graph. As the first system to populate the Annotation/Ontology layers, Zircon transforms systematic literature review from a specialized academic task into a **universal research capability** that feeds the next-generation knowledge system. Every researcher's systematic review contributes to a growing, AI-enhanced knowledge base.
 
 ## Purpose
 

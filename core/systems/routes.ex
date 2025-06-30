@@ -15,6 +15,7 @@ defmodule Systems.Routes do
         :home,
         :lab,
         :manual,
+        :mcp,
         :next_action,
         :notification,
         :onyx,

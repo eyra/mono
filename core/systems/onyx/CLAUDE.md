@@ -2,7 +2,7 @@
 
 ## Overview
 
-Onyx is a knowledge browser system built on top of the Annotation and Ontology systems. It provides an intuitive, interactive interface for exploring, filtering, and navigating semantic knowledge structures within the EYRA platform. As a pure browsing interface, Onyx contains no data models of its own but instead provides sophisticated visualization and navigation capabilities over existing knowledge systems.
+Onyx is a knowledge browser system built on top of the Annotation and Ontology systems. It provides an intuitive, interactive interface for exploring, filtering, and navigating semantic knowledge structures within the platform. As a pure browsing interface, Onyx contains no data models of its own but instead provides sophisticated visualization and navigation capabilities over existing knowledge systems.
 
 ## Purpose
 

@@ -29,7 +29,10 @@ defmodule Systems.Ontology.Public do
               [constraint: :unique, constraint_name: "ontology_concept_unique"]}
          ]
        }} ->
-        get_concept(phrase)
+        case get_concept(phrase) do
+          nil -> raise "Concept not found: #{phrase}"
+          concept -> concept
+        end
     end
   end
 
@@ -52,6 +55,11 @@ defmodule Systems.Ontology.Public do
     |> Repo.one()
     |> Repo.preload(preloads)
   end
+
+  def get_concept(nil, _preloads), do: nil
+  def get_concept([], _preloads), do: nil
+  def get_concept({}, _preloads), do: nil
+  def get_concept(_invalid, _preloads), do: nil
 
   def list_concepts(entities, preloads \\ []) when is_list(entities) do
     concept_query()
@@ -88,7 +96,27 @@ defmodule Systems.Ontology.Public do
               [constraint: :unique, constraint_name: "ontology_predicate_unique"]}
          ]
        }} ->
-        get_predicate({subject, subsumes, object, false})
+        case get_predicate({subject, subsumes, object, false}) do
+          nil -> raise "Predicate not found"
+          predicate -> predicate
+        end
+
+      {:error, changeset} ->
+        # Check if this is a constraint violation
+        case extract_constraint_error(changeset) do
+          {:constraint_error, constraint_name, message} ->
+            raise %Ecto.ConstraintError{
+              message: message,
+              constraint: constraint_name,
+              type: :check
+            }
+
+          {:validation_error, _errors} ->
+            raise %Ecto.InvalidChangesetError{
+              action: :insert,
+              changeset: changeset
+            }
+        end
     end
   end
 
@@ -172,15 +200,64 @@ defmodule Systems.Ontology.Public do
     |> Repo.transaction()
   end
 
+  def prepare_ontology_ref({:ok, %Ontology.ConceptModel{} = concept}) do
+    prepare_ontology_ref(concept)
+  end
+
+  def prepare_ontology_ref({:ok, %Ontology.PredicateModel{} = predicate}) do
+    prepare_ontology_ref(predicate)
+  end
+
   def prepare_ontology_ref(%Ontology.ConceptModel{} = concept) do
     %Ontology.RefModel{}
-    |> Ontology.RefModel.changeset(%{})
+    |> Ontology.RefModel.changeset(%{concept_id: concept.id})
     |> put_assoc(:concept, concept)
   end
 
   def prepare_ontology_ref(%Ontology.PredicateModel{} = predicate) do
     %Ontology.RefModel{}
-    |> Ontology.RefModel.changeset(%{})
+    |> Ontology.RefModel.changeset(%{predicate_id: predicate.id})
     |> put_assoc(:predicate, predicate)
+  end
+
+  # Defensive programming for invalid inputs
+  def prepare_ontology_ref({:error, _reason}) do
+    %Ontology.RefModel{}
+    |> Ontology.RefModel.changeset(%{})
+    |> Ecto.Changeset.add_error(:base, "Invalid concept or predicate provided")
+  end
+
+  def prepare_ontology_ref(nil) do
+    %Ontology.RefModel{}
+    |> Ontology.RefModel.changeset(%{})
+    |> Ecto.Changeset.add_error(:base, "Cannot create reference from nil")
+  end
+
+  def prepare_ontology_ref(_invalid) do
+    %Ontology.RefModel{}
+    |> Ontology.RefModel.changeset(%{})
+    |> Ecto.Changeset.add_error(:base, "Invalid input for ontology reference")
+  end
+
+  # Helper function to extract constraint errors from changesets
+  defp extract_constraint_error(changeset) do
+    constraint_errors =
+      Enum.filter(changeset.errors, fn {_field, {_message, opts}} ->
+        Keyword.has_key?(opts, :constraint) or Keyword.has_key?(opts, :constraint_name)
+      end)
+
+    case constraint_errors do
+      [{field, {message, opts}}] ->
+        constraint_name = Keyword.get(opts, :constraint_name) || Keyword.get(opts, :constraint)
+        detailed_message = "#{field} #{message} (constraint: #{constraint_name})"
+        {:constraint_error, constraint_name, detailed_message}
+
+      [] ->
+        {:validation_error, changeset.errors}
+
+      _multiple ->
+        # Multiple constraint errors - return as validation error
+        {:validation_error, changeset.errors}
+    end
   end
 end

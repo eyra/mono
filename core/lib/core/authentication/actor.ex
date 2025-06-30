@@ -10,17 +10,24 @@ defmodule Core.Authentication.Actor do
 
   @type t :: %__MODULE__{
           type: :system | :agent,
-          name: String.t()
+          name: String.t(),
+          description: String.t() | nil,
+          active: boolean()
         }
 
   schema "actor" do
     field(:type, Ecto.Enum, values: [:system, :agent])
     field(:name, :string)
+    field(:description, :string)
+    field(:active, :boolean, default: true)
+
+    has_many(:tokens, Core.Authentication.ActorToken)
+
     timestamps()
   end
 
-  @fields ~w(type name)a
-  @required_fields @fields
+  @fields ~w(type name description active)a
+  @required_fields ~w(type name)a
 
   def change(actor, attrs \\ %{}) do
     actor
