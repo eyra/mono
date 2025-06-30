@@ -14,12 +14,13 @@ defmodule Core.Authentication do
   def obtain_entity(%module{id: id} = _subject) do
     identifier = encode_identifier(module, id)
 
-    result = 
+    result =
       Multi.new()
       |> Multi.run(:entity, fn _, _ ->
         case Repo.one(entity_query(identifier)) do
           nil ->
             insert_entity(identifier)
+
           entity ->
             {:ok, entity}
         end
@@ -29,6 +30,7 @@ defmodule Core.Authentication do
     case result do
       {:ok, %{entity: entity}} ->
         {:ok, entity}
+
       {:error, _, changeset, _} ->
         {:error, changeset}
     end
@@ -42,22 +44,23 @@ defmodule Core.Authentication do
   end
 
   def obtain_actor(type, name) when is_atom(type) and is_binary(name) do
-    result = 
+    result =
       Multi.new()
       |> Multi.run(:actor, fn _, _ ->
         case Repo.one(actor_query(type, name)) do
           nil ->
             insert_actor(type, name)
+
           actor ->
             {:ok, actor}
-          end
-        end)
-        |> Repo.transaction()
-
+        end
+      end)
+      |> Repo.transaction()
 
     case result do
       {:ok, %{actor: actor}} ->
         {:ok, actor}
+
       {:error, _, changeset, _} ->
         {:error, changeset}
     end

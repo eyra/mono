@@ -52,8 +52,8 @@ defmodule Core.AuthenticationEdgeCasesTest do
       subject1 = %TestSubject{id: 1, name: "Subject 1"}
       subject2 = %Actor{id: 1, name: "Actor 1", type: :agent}
 
-      assert {:ok, entity1} = Authentication.obtain_entity(subject1) 
-      assert {:ok, entity2} = Authentication.obtain_entity(subject2) 
+      assert {:ok, entity1} = Authentication.obtain_entity(subject1)
+      assert {:ok, entity2} = Authentication.obtain_entity(subject2)
 
       # Should be different entities despite same ID
       assert entity1.id != entity2.id
@@ -146,7 +146,7 @@ defmodule Core.AuthenticationEdgeCasesTest do
   describe "Core.Authentication.obtain_actor/2" do
     test "creates new actor with valid type and name" do
       Repo.delete_all(Actor)
-      
+
       test_name = "Test Agent #{System.unique_integer([:positive])}"
       assert {:ok, actor} = Authentication.obtain_actor(:agent, test_name)
       assert actor.type == :agent
@@ -168,10 +168,12 @@ defmodule Core.AuthenticationEdgeCasesTest do
 
     test "creates different actors for same name but different type" do
       Repo.delete_all(Actor)
-      
+
       shared_name = "Shared Name #{System.unique_integer([:positive])}"
       assert {:ok, _agent_actor} = Authentication.obtain_actor(:agent, shared_name)
-      assert {:error, %{errors: [name: {"has already been taken", _}]}} = Authentication.obtain_actor(:system, shared_name)
+
+      assert {:error, %{errors: [name: {"has already been taken", _}]}} =
+               Authentication.obtain_actor(:system, shared_name)
     end
 
     test "handles invalid actor types" do
@@ -192,13 +194,12 @@ defmodule Core.AuthenticationEdgeCasesTest do
 
     test "handles empty name" do
       {:error, changeset} = Authentication.obtain_actor(:agent, "")
-      assert  {"can't be blank", _} = changeset.errors[:name] 
-      
+      assert {"can't be blank", _} = changeset.errors[:name]
     end
 
     test "handles whitespace name" do
       {:error, changeset} = Authentication.obtain_actor(:agent, "  ")
-      assert  {"can't be blank", _} = changeset.errors[:name] 
+      assert {"can't be blank", _} = changeset.errors[:name]
     end
 
     test "handles very long actor names" do
@@ -208,7 +209,10 @@ defmodule Core.AuthenticationEdgeCasesTest do
         Authentication.obtain_actor(:agent, long_name)
       rescue
         error in Postgrex.Error ->
-          assert String.contains?(inspect(error), "value too long for type character varying(255)")
+          assert String.contains?(
+                   inspect(error),
+                   "value too long for type character varying(255)"
+                 )
       end
     end
 
@@ -393,7 +397,7 @@ defmodule Core.AuthenticationEdgeCasesTest do
 
     test "handles actor name uniqueness constraint" do
       Repo.delete_all(Actor)
-      
+
       # Create a unique name to avoid conflicts
       unique_name = "Unique Name #{System.unique_integer([:positive])}"
 

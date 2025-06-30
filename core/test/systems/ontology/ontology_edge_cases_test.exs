@@ -483,7 +483,7 @@ defmodule Systems.Ontology.OntologyEdgeCasesTest do
 
           # Global Knowledge Commons: Both actors can see shared concepts
           concept_phrases_1 = Enum.map(actor1_concepts.concepts, & &1.phrase)
-          concept_phrases_2 = Enum.map(actor2_concepts.concepts, & &1.phrase) 
+          concept_phrases_2 = Enum.map(actor2_concepts.concepts, & &1.phrase)
 
           # Knowledge commons: shared concepts visible to all
           assert "Shared Knowledge Concept" in concept_phrases_1

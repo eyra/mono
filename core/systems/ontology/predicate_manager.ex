@@ -28,8 +28,9 @@ defmodule Systems.Ontology.PredicateManager do
          {:ok, object} <- get_concept(object_id),
          :ok <- validate_predicate_structure(subject, predicate_type, object, negated?) do
       try do
-        predicate = Ontology.Public.obtain_predicate(subject, predicate_type, object, negated?, entity)
-        
+        predicate =
+          Ontology.Public.obtain_predicate(subject, predicate_type, object, negated?, entity)
+
         %{
           success: true,
           subject_id: subject_id,

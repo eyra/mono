@@ -7,7 +7,7 @@ defmodule Core.Authentication.Queries do
     from(a in Authentication.Actor, as: :actor)
   end
 
-  def actor_query(type, name)  do
+  def actor_query(type, name) do
     build(actor_query(), :actor, [type == ^type, name == ^name])
   end
 

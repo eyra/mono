@@ -368,7 +368,8 @@ defmodule Systems.MCP.TokenManagerEdgeCasesTest do
     end
 
     test "rejects invalid actor type" do
-      {:error, changeset} = TokenManager.create_mcp_actor("Valid Name", "Valid description", "invalid_type")
+      {:error, changeset} =
+        TokenManager.create_mcp_actor("Valid Name", "Valid description", "invalid_type")
 
       assert changeset.valid? == false, "Should be invalid changeset"
       assert changeset.errors[:type] != nil, "Should have type validation error"

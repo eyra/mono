@@ -102,7 +102,7 @@ defmodule Systems.Annotation.PatternValidator do
     suggestions = []
 
     validation = pattern.statement_validation
-    
+
     if is_nil(statement) do
       ["Statement cannot be nil - please provide a valid statement"]
     else

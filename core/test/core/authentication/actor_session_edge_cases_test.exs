@@ -182,7 +182,8 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
       {:ok, token, token_record} = ActorSession.create_api_token(actor, "Expiry Test")
 
       # Manually expire the token
-      expired_time = NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day) |> NaiveDateTime.truncate(:second)
+      expired_time =
+        NaiveDateTime.add(NaiveDateTime.utc_now(), -1, :day) |> NaiveDateTime.truncate(:second)
 
       token_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
@@ -249,10 +250,10 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
       {:ok, token, token_record} = ActorSession.create_session_token(actor)
 
       # Manually expire the session token
-      expired_time = 
+      expired_time =
         NaiveDateTime.utc_now()
         |> NaiveDateTime.truncate(:second)
-        |> NaiveDateTime.add(-1, :day) 
+        |> NaiveDateTime.add(-1, :day)
 
       token_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
@@ -378,11 +379,11 @@ defmodule Core.Authentication.ActorSessionEdgeCasesTest do
         ActorSession.create_api_token(actor, "Expired Token")
 
       # Expire one token
-      expired_time = 
+      expired_time =
         NaiveDateTime.utc_now()
         |> NaiveDateTime.truncate(:second)
-        |> NaiveDateTime.add(-1, :day) 
-      
+        |> NaiveDateTime.add(-1, :day)
+
       expired_record
       |> Ecto.Changeset.change(%{expires_at: expired_time})
       |> Repo.update!()

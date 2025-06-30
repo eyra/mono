@@ -13,7 +13,8 @@ defmodule Systems.Annotation.PatternManager do
   @doc """
   Creates an annotation from a pattern with validation.
   """
-  def create_from_pattern(pattern_name, statement, references, %Actor{} = actor) when is_binary(pattern_name) and is_binary(statement) and is_list(references) do
+  def create_from_pattern(pattern_name, statement, references, %Actor{} = actor)
+      when is_binary(pattern_name) and is_binary(statement) and is_list(references) do
     with {:ok, pattern} <- load_pattern(pattern_name),
          {:ok, validated_statement} <- validate_statement(statement, pattern),
          {:ok, validated_refs} <- validate_references(references, pattern),
@@ -151,7 +152,7 @@ defmodule Systems.Annotation.PatternManager do
     cond do
       is_nil(statement) ->
         {:error, "Statement cannot be nil"}
-        
+
       String.length(statement) < validation.min_length ->
         {:error, "Statement too short (min: #{validation.min_length})"}
 
