@@ -137,7 +137,7 @@ defmodule Systems.Annotation.PatternValidator do
   defp extract_annotation_references(_annotation) do
     # Basic implementation to extract references from annotation
     # In a full implementation, this would query the annotation_ref and annotation_assoc tables
-    
+
     # For now, return empty list as placeholder
     # TODO: Implement full reference extraction when annotation reference system is complete
     []
