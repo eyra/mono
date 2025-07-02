@@ -65,13 +65,11 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
 
     test "should return the existing annotation", %{entity: entity, subject: subject} do
       annotation_type = Factories.insert!(:ontology_concept, %{phrase: "Definition"})
-      annotation_ref_type = Factories.insert!(:ontology_concept, %{phrase: "Subject"})
 
       ontology_ref = Factories.insert!(:ontology_ref, %{concept: subject})
 
       annotation_ref =
         Factories.insert!(:annotation_ref, %{
-          type: annotation_ref_type,
           ontology_ref: ontology_ref
         })
 
@@ -251,14 +249,10 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
       annotation_type =
         Factories.insert!(:ontology_concept, %{phrase: "Definition", entity: entity})
 
-      annotation_ref_type =
-        Factories.insert!(:ontology_concept, %{phrase: "Subject", entity: entity})
-
       ontology_ref = Factories.insert!(:ontology_ref, %{concept: subject})
 
       annotation_ref =
         Factories.insert!(:annotation_ref, %{
-          type: annotation_ref_type,
           ontology_ref: ontology_ref
         })
 

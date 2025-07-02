@@ -112,18 +112,6 @@ defmodule Systems.Annotation.Queries do
     build(query, :annotation_ref, [annotation_id == ^annotation.id])
   end
 
-  def annotation_query_include(
-        query,
-        :annotation_ref_type,
-        %Systems.Ontology.ConceptModel{} = ref_type
-      ) do
-    build(query, :annotation_ref, [type_id == ^ref_type.id])
-  end
-
-  def annotation_query_include(query, :annotation_ref_type, phrase) when is_binary(phrase) do
-    build(query, :annotation_ref, type: {:annotation_ref_type, [phrase == ^phrase]})
-  end
-
   def annotation_query_join(query, :annotation_ref) do
     query
     |> join(:inner, [annotation: a], aa in Systems.Annotation.Assoc,

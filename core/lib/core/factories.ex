@@ -360,7 +360,6 @@ defmodule Core.Factories do
 
   def build(:annotation_ref) do
     build(:annotation_ref, %{
-      type: build(:ontology_concept),
       ontology_ref: build(:ontology_ref)
     })
   end
@@ -957,7 +956,6 @@ defmodule Core.Factories do
   end
 
   def build(:annotation_ref, %{} = attributes) do
-    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
     {annotation, attributes} = Map.pop(attributes, :annotation)
     {ontology_ref, attributes} = Map.pop(attributes, :ontology_ref)
 
@@ -968,7 +966,6 @@ defmodule Core.Factories do
         else: ontology_ref
 
     %Annotation.RefModel{
-      type: type,
       annotation: annotation,
       ontology_ref: ontology_ref
     }

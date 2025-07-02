@@ -15,6 +15,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
       {list_research_dimensions(), list_research_frameworks()}
       |> get_library_map(entity)
       |> get_library_items()
+      |> Enum.sort_by(& &1.title)
 
     %{
       library_items: library_items

@@ -118,8 +118,8 @@ While annotations offer **infinite flexibility** in connecting to the knowledge 
 
 ```elixir
 defprotocol Systems.Annotation.Pattern do
-  def obtain(t)  # Creates or retrieves annotation following pattern structure
-  def query(t)   # Builds queries for pattern-structured annotations
+  def obtain(t)    # Creates or retrieves annotation following pattern structure
+  def query(t)     # Builds queries for pattern-structured annotations
 end
 ```
 

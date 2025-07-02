@@ -3,18 +3,17 @@ defmodule Systems.Annotation.Factories do
   alias Systems.Annotation
   alias Systems.Ontology
 
-  def insert_annotation(type, value, author, ref_type, target, opts \\ [])
+  def insert_annotation(type, value, author, target, opts \\ [])
 
   def insert_annotation(
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Ontology.ConceptModel{} = ref_type,
         %Annotation.Model{} = annotation,
         opts
       ) do
     ai_generated? = Keyword.get(opts, :ai_generated, false)
-    reference = insert_annotation_ref(ref_type, annotation)
+    reference = insert_annotation_ref(annotation)
 
     Factories.insert!(:annotation, %{
       type: type,
@@ -29,13 +28,12 @@ defmodule Systems.Annotation.Factories do
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Ontology.ConceptModel{} = ref_type,
         %Ontology.ConceptModel{} = concept,
         opts
       ) do
     ai_generated? = Keyword.get(opts, :ai_generated, false)
     ontology_ref = Ontology.Factories.insert_ref(concept)
-    reference = insert_annotation_ref(ref_type, ontology_ref)
+    reference = insert_annotation_ref(ontology_ref)
 
     Factories.insert!(:annotation, %{
       type: type,
@@ -50,13 +48,12 @@ defmodule Systems.Annotation.Factories do
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Ontology.ConceptModel{} = ref_type,
         %Ontology.PredicateModel{} = predicate,
         opts
       ) do
     ai_generated? = Keyword.get(opts, :ai_generated, false)
     ontology_ref = Ontology.Factories.insert_ref(predicate)
-    reference = insert_annotation_ref(ref_type, ontology_ref)
+    reference = insert_annotation_ref(ontology_ref)
 
     Factories.insert!(:annotation, %{
       type: type,
@@ -67,11 +64,11 @@ defmodule Systems.Annotation.Factories do
     })
   end
 
-  def insert_annotation_ref(%Ontology.ConceptModel{} = type, %Ontology.RefModel{} = ontology_ref) do
-    Factories.insert!(:annotation_ref, %{type: type, ontology_ref: ontology_ref})
+  def insert_annotation_ref(%Ontology.RefModel{} = ontology_ref) do
+    Factories.insert!(:annotation_ref, %{ontology_ref: ontology_ref})
   end
 
-  def insert_annotation_ref(%Ontology.ConceptModel{} = type, %Annotation.Model{} = annotation) do
-    Factories.insert!(:annotation_ref, %{type: type, annotation: annotation})
+  def insert_annotation_ref(%Annotation.Model{} = annotation) do
+    Factories.insert!(:annotation_ref, %{annotation: annotation})
   end
 end

@@ -13,8 +13,6 @@ defmodule Systems.Annotation.RefModel do
   alias Systems.Ontology
 
   schema "annotation_ref" do
-    belongs_to(:type, Ontology.ConceptModel)
-
     belongs_to(:entity, Authentication.Entity)
     belongs_to(:resource, Annotation.ResourceModel)
     belongs_to(:annotation, Annotation.Model)
@@ -27,7 +25,7 @@ defmodule Systems.Annotation.RefModel do
 
   @fields ~w()a
   @required_fields ~w()a
-  @unique_fields ~w(type_id entity_id resource_id annotation_id ontology_ref_id)a
+  @unique_fields ~w(entity_id resource_id annotation_id ontology_ref_id)a
   @target_fields ~w(entity resource annotation ontology_ref)a
 
   def changeset(references, attrs) do
@@ -42,10 +40,7 @@ defmodule Systems.Annotation.RefModel do
   end
 
   # down graph
-  def preload_graph(:down),
-    do: preload_graph([:type, :annotation, :ontology_ref, :entity, :resource])
-
-  def preload_graph(:type), do: [type: Ontology.ConceptModel.preload_graph(:down)]
+  def preload_graph(:down), do: preload_graph([:annotation, :ontology_ref, :entity, :resource])
 
   def preload_graph(:entity), do: [entity: []]
   def preload_graph(:resource), do: [resource: Annotation.ResourceModel.preload_graph(:down)]
@@ -74,9 +69,8 @@ defmodule Systems.Annotation.RefModel do
     alias Systems.Ontology
     alias Systems.Annotation
 
-    def flatten(%{type: type} = annotation_ref) do
-      [annotation_ref, type] ++
-        Ontology.Element.flatten(Annotation.RefModel.get_target(annotation_ref))
+    def flatten(annotation_ref) do
+      [annotation_ref | Ontology.Element.flatten(Annotation.RefModel.get_target(annotation_ref))]
     end
   end
 end

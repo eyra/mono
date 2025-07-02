@@ -1,7 +1,7 @@
 defmodule Systems.Annotation.Pattern.Relevance do
   @moduledoc """
   A pattern for creating a Relevance Annotation.
-  A Relevance Annotation states the relevance between is relevant to a specific topic.
+  A Relevance Annotation states the relevance between a parameter and a resource.
   """
 
   alias Core.Authentication
@@ -39,15 +39,18 @@ defmodule Systems.Annotation.Pattern.Relevance do
         {:ok, annotation}
       else
         type = obtain_concept!(@relevance, entity)
-        parameter_ref = obtain_annotation_ref!({:concept, {@parameter, parameter}}, entity)
-        resource_ref = obtain_annotation_ref!({:resource, {@resource, resource}}, entity)
+        sub_type = obtain_concept!(to_sub_type_phrase(relevance), entity)
+
+        sub_type_ref = obtain_annotation_ref!(sub_type)
+        parameter_ref = obtain_annotation_ref!(parameter)
+        resource_ref = obtain_annotation_ref!(resource)
 
         annotation =
           insert_annotation!(
             type,
-            to_statement(relevance),
+            to_statement(relevance, parameter),
             entity,
-            [parameter_ref, resource_ref],
+            [sub_type_ref, parameter_ref, resource_ref],
             []
           )
 
@@ -60,7 +63,7 @@ defmodule Systems.Annotation.Pattern.Relevance do
     end
 
     defp query(relevance, parameter, resource, entity) do
-      query_annotation(@relevance, to_statement(relevance), entity)
+      query_annotation(@relevance, to_statement(relevance, parameter), entity)
       |> where(
         [annotation: a, annotation_ref: ar],
         (ar.type_id == ^@parameter and a.id == ^parameter.id) or
@@ -74,12 +77,25 @@ defmodule Systems.Annotation.Pattern.Relevance do
       |> Repo.one()
     end
 
-    defp to_statement(relevance) do
+    defp to_statement(relevance, %Annotation.Model{} = parameter) do
       case relevance do
-        :relevant -> "Relevant"
-        :irrelevant -> "Irrelevant"
-        :neutral -> "Neutral"
+        :relevant ->
+          "I find '#{parameter.statement}' relevant for this resource"
+
+        :irrelevant ->
+          "I find '#{parameter.statement}' irrelevant for this resource"
+
+        :neutral ->
+          "I'm not sure about the relevance of '#{parameter.statement}' for this resource"
       end
+    end
+
+    defp to_sub_type_phrase(relevance) do
+      relevance
+      |> Atom.to_string()
+      |> String.split("_")
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.map_join(" ", &String.capitalize(&1))
     end
   end
 end

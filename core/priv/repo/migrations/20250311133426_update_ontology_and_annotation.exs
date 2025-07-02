@@ -49,7 +49,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(
       unique_index(
         :ontology_predicate,
-        [:subject_id, :object_id, :type_id, :entity_id, :type_negated?],
+        [:subject_id, :object_id, :type_id, :type_negated?],
         name: :ontology_predicate_unique
       )
     )
@@ -66,6 +66,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
       add(:statement, :text, null: false)
       add(:type_id, references(:ontology_concept, on_delete: :delete_all), null: false)
       add(:entity_id, references(:authentication_entity, on_delete: :delete_all), null: false)
+      add(:published_at, :naive_datetime, null: true)
       remove(:term)
       remove(:description)
     end
@@ -108,7 +109,6 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(unique_index(:annotation_resource, [:value], name: :annotation_resource_unique))
 
     create table(:annotation_ref) do
-      add(:type_id, references(:ontology_concept, on_delete: :delete_all), null: false)
       # one of the following must be present
       add(:entity_id, references(:authentication_entity, on_delete: :nothing), null: true)
       add(:resource_id, references(:annotation_resource, on_delete: :nothing), null: true)
@@ -129,7 +129,6 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     )
 
     # Create annotation_ref indexes
-    create(index(:annotation_ref, [:type_id]))
     create(index(:annotation_ref, [:entity_id]))
     create(index(:annotation_ref, [:resource_id]))
     create(index(:annotation_ref, [:annotation_id]))
@@ -139,7 +138,7 @@ defmodule Systems.Repo.Migrations.UpdateOntologyAndAnnotation do
     create(
       unique_index(
         :annotation_ref,
-        [:annotation_id, :ontology_ref_id, :type_id, :entity_id, :resource_id],
+        [:annotation_id, :ontology_ref_id, :entity_id, :resource_id],
         name: :annotation_ref_unique
       )
     )

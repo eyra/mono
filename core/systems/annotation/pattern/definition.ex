@@ -26,7 +26,7 @@ defmodule Systems.Annotation.Pattern.Definition do
         {:ok, annotation}
       else
         type = obtain_concept!(@definition, entity)
-        annotation_ref = obtain_annotation_ref!({:concept, {@subject, subject}}, entity)
+        annotation_ref = obtain_annotation_ref!(subject)
         annotation = insert_annotation!(type, definition, entity, [annotation_ref], [])
         {:ok, annotation}
       end
@@ -42,7 +42,6 @@ defmodule Systems.Annotation.Pattern.Definition do
       |> annotation_query_include(:statement, definition)
       |> annotation_query_include(:entity, entity)
       |> annotation_query_join(:annotation_ref)
-      |> annotation_query_include(:annotation_ref_type, @subject)
       |> annotation_query_include(:reference, subject)
     end
 

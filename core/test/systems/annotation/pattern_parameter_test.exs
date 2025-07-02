@@ -28,7 +28,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension: %{id: dimension_id} = dimension
     } do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity
       }
@@ -67,21 +67,19 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
     test "should return the existing annotation", %{entity: entity, dimension: dimension} do
       annotation_type = Factories.insert!(:ontology_concept, %{phrase: "Parameter"})
-      annotation_ref_type = Factories.insert!(:ontology_concept, %{phrase: "Dimension"})
 
       ontology_ref = Factories.insert!(:ontology_ref, %{concept: dimension})
 
       annotation_ref =
         Factories.insert!(:annotation_ref, %{
-          type: annotation_ref_type,
           ontology_ref: ontology_ref
         })
 
-      parameter = "This is a parameter"
+      statement = "This is a parameter"
 
       annotation_existing =
         Factories.insert!(:annotation, %{
-          statement: parameter,
+          statement: statement,
           type: annotation_type,
           entity: entity,
           references: [annotation_ref]
@@ -90,7 +88,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       assert 1 = from(Annotation.Model) |> Repo.all() |> Enum.count()
 
       pattern = %Annotation.Pattern.Parameter{
-        parameter: parameter,
+        statement: statement,
         dimension: dimension,
         entity: entity
       }
@@ -107,7 +105,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension: dimension
     } do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity
       }
@@ -125,7 +123,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension: dimension
     } do
       pattern_1 = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity
       }
@@ -133,7 +131,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       assert {:ok, annotation_1} = Annotation.Pattern.obtain(pattern_1)
 
       pattern_2 = %Annotation.Pattern.Parameter{
-        parameter: "This is another parameter",
+        statement: "This is another parameter",
         dimension: dimension,
         entity: entity
       }
@@ -150,7 +148,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension: dimension
     } do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity
       }
@@ -164,7 +162,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
         })
 
       pattern_2 = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension_2,
         entity: entity
       }
@@ -180,7 +178,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension: dimension
     } do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity
       }
@@ -195,7 +193,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
         })
 
       pattern_2 = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension,
         entity: entity_2
       }
@@ -222,7 +220,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
     test "should raise an error if the dimension is not provided", %{entity: entity} do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         entity: entity
       }
 
@@ -233,7 +231,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
     test "should raise an error if the entity is not provided", %{dimension: dimension} do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter",
+        statement: "This is a parameter",
         dimension: dimension
       }
 
@@ -253,20 +251,16 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       dimension =
         Factories.insert!(:ontology_concept, %{phrase: "This Is A Dimension", entity: entity})
 
-      annotation_type = Factories.insert!(:ontology_concept, %{phrase: "Parameter"})
-      annotation_ref_type = Factories.insert!(:ontology_concept, %{phrase: "Dimension"})
       ontology_ref = Factories.insert!(:ontology_ref, %{concept: dimension})
 
       annotation_ref =
         Factories.insert!(:annotation_ref, %{
-          type: annotation_ref_type,
           ontology_ref: ontology_ref
         })
 
       annotation =
         Factories.insert!(:annotation, %{
           statement: "This is a parameter",
-          type: annotation_type,
           entity: entity,
           references: [annotation_ref]
         })
@@ -276,7 +270,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
     test "should find the one annotation", %{annotation: %{id: annotation_id}} do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is a parameter"
+        statement: "This is a parameter"
       }
 
       assert {:ok, query} = query(pattern)
@@ -285,7 +279,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
     test "should not find any annotation" do
       pattern = %Annotation.Pattern.Parameter{
-        parameter: "This is another parameter"
+        statement: "This is another parameter"
       }
 
       assert {:ok, query} = query(pattern)
