@@ -1,5 +1,6 @@
 defmodule Systems.Annotation.Public do
   use Core, :auth
+  use Gettext, backend: CoreWeb.Gettext
 
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset, only: [put_assoc: 3]
@@ -338,5 +339,28 @@ defmodule Systems.Annotation.Public do
         ontology_ref: %Ontology.RefModel{concept: %Ontology.ConceptModel{phrase: phrase}}
       }) do
     phrase
+  end
+
+  def get_most_recent_definition(
+        %Ontology.ConceptModel{} = concept,
+        %Authentication.Entity{} = entity
+      ) do
+    {:ok, query} =
+      %Annotation.Pattern.Definition{
+        subject: concept,
+        entity: entity
+      }
+      |> Annotation.Pattern.query()
+
+    query
+    |> Repo.all()
+    |> Enum.sort_by(& &1.inserted_at, :desc)
+    |> case do
+      [annotation | _] ->
+        annotation.statement
+
+      _ ->
+        dgettext("eyra-annotation", "definition.placeholder", phrase: concept.phrase)
+    end
   end
 end

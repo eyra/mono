@@ -51,7 +51,7 @@ defmodule Repo.Seeds.OnyxPrimitives do
       entity
     )
     |> defcategory(
-      deftype("Predicate Types", "Group of concepts used as predicate types", entity),
+      deftype("Predicate Type", "Describes a relationship between two concepts", entity),
       subsumes,
       entity
     )
@@ -76,7 +76,11 @@ defmodule Repo.Seeds.OnyxPrimitives do
       entity
     )
     |> defcategory(
-      deftype("Annotation Types", "Group of concepts used as annotation types", entity),
+      deftype(
+        "Annotation Type",
+        "Describes a relationship between an annotation and a concept",
+        entity
+      ),
       subsumes,
       entity
     )
@@ -93,8 +97,8 @@ defmodule Repo.Seeds.OnyxPrimitives do
     )
     |> defcategory(
       deftype(
-        "Annotation Reference Types",
-        "Group of concepts used as annotation reference types",
+        "Annotation Reference Type",
+        "Describes a relationship between an annotation and a reference",
         entity
       ),
       subsumes,

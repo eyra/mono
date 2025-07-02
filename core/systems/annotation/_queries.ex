@@ -43,9 +43,9 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        {%Systems.Ontology.ConceptModel{id: concept_id} = concept, entities}
+        {%Systems.Ontology.ConceptModel{id: concept_id} = concept, _entities}
       ) do
-    ontology_ref_ids = Ontology.Public.query_ref_ids(entities, concept)
+    ontology_ref_ids = Ontology.Public.query_ref_ids(concept)
 
     query
     |> annotation_query_join(:ontology_refs)
@@ -60,9 +60,9 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        {%Systems.Ontology.PredicateModel{id: predicate_id} = predicate, entities}
+        {%Systems.Ontology.PredicateModel{id: predicate_id} = predicate, _entities}
       ) do
-    ontology_ref_ids = Ontology.Public.query_ref_ids(entities, predicate)
+    ontology_ref_ids = Ontology.Public.query_ref_ids(predicate)
 
     query
     |> annotation_query_join(:ontology_refs)
@@ -82,6 +82,16 @@ defmodule Systems.Annotation.Queries do
     build(query, :annotation_ref,
       ontology_ref: [
         concept_id == ^concept.id
+      ]
+    )
+  end
+
+  def annotation_query_include(query, :reference, {:concept, phrase}) when is_binary(phrase) do
+    build(query, :annotation_ref,
+      ontology_ref: [
+        concept: [
+          phrase == ^phrase
+        ]
       ]
     )
   end
@@ -112,16 +122,6 @@ defmodule Systems.Annotation.Queries do
 
   def annotation_query_include(query, :annotation_ref_type, phrase) when is_binary(phrase) do
     build(query, :annotation_ref, type: {:annotation_ref_type, [phrase == ^phrase]})
-  end
-
-  def annotation_query_include(query, :reference, {:concept, phrase}) when is_binary(phrase) do
-    build(query, :annotation_ref,
-      ontology_ref: [
-        concept: [
-          phrase == ^phrase
-        ]
-      ]
-    )
   end
 
   def annotation_query_join(query, :annotation_ref) do

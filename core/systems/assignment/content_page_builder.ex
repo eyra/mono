@@ -342,11 +342,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
          %{current_user: user}
        ) do
     element =
-      LiveNest.Element.prepare_live_view(:criteria, Zircon.CriteriaView,
+      LiveNest.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
         title: title,
-        content_flags: content_flags
+        content_flags: content_flags,
+        builder: Zircon.Screening.CriteriaViewBuilder
       )
 
     %{

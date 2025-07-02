@@ -102,8 +102,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
     Annotation.Public.list_annotations({model, entities}, Annotation.Model.preload_graph(:down))
   end
 
-  defp get_models(:concept, entities, nil) do
-    Ontology.Public.list_concepts(entities, Ontology.ConceptModel.preload_graph(:down))
+  defp get_models(:concept, _entities, nil) do
+    Ontology.Public.list_concepts(Ontology.ConceptModel.preload_graph(:down))
   end
 
   defp get_models(:concept, _entities, %Annotation.Model{} = model) do
@@ -116,8 +116,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
     Ontology.Element.flatten(model)
   end
 
-  defp get_models(:predicate, entities, nil) do
-    Ontology.Public.list_predicates(entities, Ontology.PredicateModel.preload_graph(:down))
+  defp get_models(:predicate, _entities, nil) do
+    Ontology.Public.list_predicates(Ontology.PredicateModel.preload_graph(:down))
   end
 
   defp get_models(:predicate, _entities, %Annotation.Model{} = model) do
@@ -126,11 +126,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
     |> Enum.uniq_by(& &1.id)
   end
 
-  defp get_models(:predicate, entities, %Ontology.ConceptModel{} = model) do
-    Ontology.Public.list_predicates(
-      {model, entities},
-      Ontology.PredicateModel.preload_graph(:down)
-    )
+  defp get_models(:predicate, _entities, %Ontology.ConceptModel{} = model) do
+    Ontology.Public.list_predicates(model, Ontology.PredicateModel.preload_graph(:down))
   end
 
   defp matches_query?(_, nil), do: true

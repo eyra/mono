@@ -143,10 +143,10 @@ Human Validation ← AI Annotations ← Ontology Synthesis
 # Core operations
 obtain_concept!(phrase, entity)
 get_concept(id_or_phrase, preloads)
-list_concepts(entities, preloads)
+list_concepts(preloads)
 
 # Query operations
-query_concept_ids(entities, selector)
+query_concept_ids(selector)
 ```
 
 ### Predicate Management
@@ -154,8 +154,8 @@ query_concept_ids(entities, selector)
 # Relationship operations
 obtain_predicate(subject, type, object, entity)
 get_predicate(selector, preloads)
-list_predicates(entities, preloads)
-list_predicates(entities, concept, preloads)
+list_predicates(preloads)
+list_predicates(concept, preloads)
 
 # Query operations
 query_predicate_ids(selector)
@@ -166,7 +166,7 @@ query_predicate_ids(selector)
 # Multi-system integration
 obtain_ontology_ref!(concept_or_predicate)
 upsert_ontology_ref(multi, multi_name, multi_child_name)
-query_ref_ids(entities, selector)
+query_ref_ids(selector)
 ```
 
 ## Data Integrity

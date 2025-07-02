@@ -37,7 +37,13 @@ defmodule Systems.Annotation.Pattern.Definition do
     end
 
     defp query(definition, subject, entity) do
-      query_annotation(@definition, definition, entity, {:concept, {@subject, subject}})
+      annotation_query()
+      |> annotation_query_include(:type, @definition)
+      |> annotation_query_include(:statement, definition)
+      |> annotation_query_include(:entity, entity)
+      |> annotation_query_join(:annotation_ref)
+      |> annotation_query_include(:annotation_ref_type, @subject)
+      |> annotation_query_include(:reference, subject)
     end
 
     defp get(definition: definition, subject: subject, entity: entity) do

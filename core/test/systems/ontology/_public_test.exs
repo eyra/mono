@@ -160,7 +160,7 @@ defmodule Ontology.PublicTest do
       assert id1 != id2
     end
 
-    test "insert + insert (different entities)", %{entity: entity, type: type, object: object} do
+    test "insert + error (different entities)", %{entity: entity, type: type, object: object} do
       subject =
         Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity})
 
@@ -172,14 +172,19 @@ defmodule Ontology.PublicTest do
         })
 
       {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
-      {:ok, %{id: id2}} = insert_predicate(subject, type, object, entity2)
+      {:error, changeset} = insert_predicate(subject, type, object, entity2)
 
       assert [
-               %Ontology.PredicateModel{id: ^id1},
-               %Ontology.PredicateModel{id: ^id2}
-             ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
+               subject_id:
+                 {"has already been taken",
+                  [
+                    constraint: :unique,
+                    constraint_name: "ontology_predicate_unique"
+                  ]}
+             ] = changeset.errors
 
-      assert id1 != id2
+      assert [%Ontology.PredicateModel{id: ^id1}] =
+               from(Ontology.PredicateModel) |> Core.Repo.all()
     end
 
     test "insert + insert (different type_negated?)", %{
@@ -217,37 +222,6 @@ defmodule Ontology.PublicTest do
 
       assert [%Ontology.PredicateModel{id: ^id1}] =
                from(Ontology.PredicateModel) |> Core.Repo.all()
-    end
-  end
-
-  describe "list concepts" do
-    test "by entities" do
-      user_1 = Factories.insert!(:member)
-      user_2 = Factories.insert!(:member)
-
-      entity_1 =
-        Factories.insert!(:authentication_entity, %{
-          identifier: "Systems.Account.User:#{user_1.id}"
-        })
-
-      entity_2 =
-        Factories.insert!(:authentication_entity, %{
-          identifier: "Systems.Account.User:#{user_2.id}"
-        })
-
-      %{id: concept_a_id} =
-        Factories.insert!(:ontology_concept, %{phrase: "Gravitational Force", entity: entity_1})
-
-      %{id: concept_b_id} =
-        Factories.insert!(:ontology_concept, %{phrase: "Electromagnetic Force", entity: entity_1})
-
-      _concept_c =
-        Factories.insert!(:ontology_concept, %{phrase: "Weak Nuclear Force", entity: entity_2})
-
-      assert [
-               %Ontology.ConceptModel{id: ^concept_a_id},
-               %Ontology.ConceptModel{id: ^concept_b_id}
-             ] = list_concepts([entity_1], [:entity])
     end
   end
 end

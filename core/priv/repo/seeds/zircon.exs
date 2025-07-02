@@ -43,26 +43,31 @@ defmodule Repo.Seeds.Zircon do
     } =
       defconcepts(
         [
-          comparison: "The control group or alternative intervention",
+          comparison:
+            "A research dimension that defines the control group or alternative intervention",
           context:
-            "The broader environment or situational circumstances surrounding the research",
-          intervention: "The treatment, exposure, or action studied",
-          outcome: "The measurable result of the intervention",
-          evaluation: "The process of assessing or measuring outcomes",
+            "A research dimension that defines the broader environment or situational circumstances surrounding the research",
+          intervention:
+            "A research dimension that defines the treatment, exposure, or action studied",
+          outcome: "A research dimension that defines the measurable result of the intervention",
+          evaluation:
+            "A research dimension that defines the process of assessing or measuring outcomes",
           perspective:
-            "The stakeholder viewpoint or role from which the research is evaluated (e.g., patient, provider, payer)",
-          phenomenon: "The qualitative research focus",
-          population: "The target group that the research aims to understand or generalize to",
+            "A research dimension that defines the stakeholder viewpoint or role from which the research is evaluated (e.g., patient, provider, payer)",
+          phenomenon: "A research dimension that defines the qualitative research focus",
+          population:
+            "A research dimension that defines the target group that the research aims to understand or generalize to",
           sample:
-            "The sampling strategy or approach used to select participants from the population",
-          setting: "A specific geographic or organizational location"
+            "A research dimension that defines the sampling strategy or approach used to select participants from the population",
+          setting:
+            "A research dimension that defines a specific geographic or organizational location"
         ],
         entity
       )
       |> defcategory(
         deftype(
-          "Research Dimensions",
-          "Group of concepts used to define research parameters",
+          "Research Dimension",
+          "A concept used to define research parameters",
           entity
         ),
         subsumes,
@@ -88,7 +93,11 @@ defmodule Repo.Seeds.Zircon do
         entity
       )
       |> defcategory(
-        deftype("Research Frameworks", "Group of concepts used as research frameworks", entity),
+        deftype(
+          "Research Framework",
+          "A framework for conducting research described in a set of research dimensions",
+          entity
+        ),
         subsumes,
         entity
       )

@@ -32,9 +32,9 @@ defmodule Systems.Onyx.LandingPageBuilder do
     |> Enum.map(&create_tab(&1, vm, assigns))
   end
 
-  defp create_tab(:concept, %{entities: entities}, %{current_user: user}) do
+  defp create_tab(:concept, _, %{current_user: user}) do
     title = dgettext("eyra-onyx", "concept.tab.title")
-    concepts = Ontology.Public.list_concepts(entities, [:entity])
+    concepts = Ontology.Public.list_concepts([:entity])
 
     element =
       LiveNest.Element.prepare_live_view(
@@ -57,9 +57,9 @@ defmodule Systems.Onyx.LandingPageBuilder do
     }
   end
 
-  defp create_tab(:predicate, %{entities: entities}, %{current_user: user}) do
+  defp create_tab(:predicate, _, %{current_user: user}) do
     title = dgettext("eyra-onyx", "predicate.tab.title")
-    predicates = Ontology.Public.list_predicates(entities, [:entity, :subject, :type, :object])
+    predicates = Ontology.Public.list_predicates([:entity, :subject, :type, :object])
 
     element =
       LiveNest.Element.prepare_live_view(

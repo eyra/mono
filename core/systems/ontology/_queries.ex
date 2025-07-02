@@ -20,6 +20,10 @@ defmodule Systems.Ontology.Queries do
     build(concept_query(), :concept, [phrase == ^phrase])
   end
 
+  def concept_query(phrases) when is_list(phrases) do
+    build(concept_query(), :concept, [phrase in ^phrases])
+  end
+
   def concept_query(%Authentication.Entity{} = entity) do
     build(concept_query(), :concept, [entity_id == ^entity.id])
   end
@@ -38,6 +42,21 @@ defmodule Systems.Ontology.Queries do
 
   def predicate_query() do
     from(p in Ontology.PredicateModel, as: :predicate)
+  end
+
+  def predicate_query(%{subject: subject, type: type})
+      when is_binary(subject) and is_binary(type) do
+    build(predicate_query(), :predicate,
+      subject: [phrase == ^subject],
+      type: [phrase == ^type]
+    )
+  end
+
+  def predicate_query(%{object: object, type: type}) when is_binary(object) and is_binary(type) do
+    build(predicate_query(), :predicate,
+      object: [phrase == ^object],
+      type: [phrase == ^type]
+    )
   end
 
   def predicate_query({subject, type, object, type_negated?}) do
@@ -72,15 +91,13 @@ defmodule Systems.Ontology.Queries do
     from(r in Ontology.RefModel, as: :ref)
   end
 
-  def ref_query({%Ontology.ConceptModel{} = concept, entities}) do
+  def ref_query(%Ontology.ConceptModel{} = concept) do
     concept_ids =
       concept_query(concept.id)
-      |> concept_query_include(:entities, entities)
       |> select([concept: c], c.id)
 
     predicate_ids =
       predicate_query(concept)
-      |> predicate_query_include(:entities, entities)
       |> select([predicate: p], p.id)
 
     build(
@@ -90,14 +107,12 @@ defmodule Systems.Ontology.Queries do
     )
   end
 
-  def ref_query(
-        {%Ontology.PredicateModel{
-           id: predicate_id,
-           subject_id: subject_id,
-           type_id: type_id,
-           object_id: object_id
-         }, _entities}
-      ) do
+  def ref_query(%Ontology.PredicateModel{
+        id: predicate_id,
+        subject_id: subject_id,
+        type_id: type_id,
+        object_id: object_id
+      }) do
     concept_ids = [subject_id, type_id, object_id]
     build(ref_query(), :ref, concept_id in ^concept_ids or predicate_id == ^predicate_id)
   end

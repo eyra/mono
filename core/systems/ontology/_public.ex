@@ -1,5 +1,6 @@
 defmodule Systems.Ontology.Public do
   use Core, :auth
+  use Systems.Ontology.Constants
 
   import Ecto.Query, only: [order_by: 3, select: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
@@ -53,9 +54,15 @@ defmodule Systems.Ontology.Public do
     |> Repo.preload(preloads)
   end
 
-  def list_concepts(entities, preloads \\ []) when is_list(entities) do
+  def list_concepts(preloads) when is_list(preloads) do
     concept_query()
-    |> concept_query_include(:entities, entities)
+    |> order_by([concept: c], asc: c.id)
+    |> Repo.all()
+    |> Repo.preload(preloads)
+  end
+
+  def list_concepts(phrases, preloads) when is_list(phrases) and is_list(preloads) do
+    concept_query(phrases)
     |> order_by([concept: c], asc: c.id)
     |> Repo.all()
     |> Repo.preload(preloads)
@@ -103,17 +110,15 @@ defmodule Systems.Ontology.Public do
     |> Repo.preload(preloads)
   end
 
-  def list_predicates(entities, preloads) when is_list(entities) do
+  def list_predicates(preloads) do
     predicate_query()
-    |> predicate_query_include(:entities, entities)
     |> order_by([predicate: p], asc: p.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
 
-  def list_predicates({%Ontology.ConceptModel{} = concept, entities}, preloads) do
+  def list_predicates(%Ontology.ConceptModel{} = concept, preloads) do
     predicate_query(concept)
-    |> predicate_query_include(:entities, entities)
     |> order_by([predicate: p], asc: p.id)
     |> Repo.all()
     |> Repo.preload(preloads)
@@ -138,8 +143,8 @@ defmodule Systems.Ontology.Public do
 
   # Ref
 
-  def query_ref_ids(entities, selector) do
-    ref_query({selector, entities})
+  def query_ref_ids(selector) do
+    ref_query(selector)
     |> select([ref: r], r.id)
   end
 
@@ -182,5 +187,23 @@ defmodule Systems.Ontology.Public do
     %Ontology.RefModel{}
     |> Ontology.RefModel.changeset(%{})
     |> put_assoc(:predicate, predicate)
+  end
+
+  # Helper functions based on primitive concepts and predicates
+
+  def get_members_of_category(object) when is_binary(object) do
+    predicate_query(%{object: object, type: @subsumes})
+    |> Repo.all()
+    |> Repo.preload([:subject])
+    |> Enum.map(fn predicate -> predicate.subject end)
+    |> Enum.uniq()
+  end
+
+  def get_categories_for_member(subject) when is_binary(subject) do
+    predicate_query(%{subject: subject, type: @subsumes})
+    |> Repo.all()
+    |> Repo.preload([:object])
+    |> Enum.map(fn predicate -> predicate.object end)
+    |> Enum.uniq()
   end
 end

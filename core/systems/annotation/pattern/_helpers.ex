@@ -17,7 +17,7 @@ defmodule Systems.Annotation.Pattern.Helpers do
 
       def query_annotation(type_phrase, statement, entity, {:concept, {ref_type_phrase, concept}}) do
         query_annotation(type_phrase, statement, entity, ref_type_phrase)
-        |> annotation_query_include(:reference, {concept, [entity]})
+        |> annotation_query_include(:reference, concept)
       end
 
       def query_annotation(

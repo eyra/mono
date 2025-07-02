@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.CriteriaView do
+defmodule Systems.Zircon.Screening.CriteriaView do
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
 
@@ -7,7 +7,6 @@ defmodule Systems.Zircon.CriteriaView do
   import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]
 
-  # alias Frameworks.Builder
   alias Frameworks.Pixel.Text
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
@@ -15,7 +14,7 @@ defmodule Systems.Zircon.CriteriaView do
   @impl true
   def mount(
         :not_mounted_at_router,
-        %{"tool" => tool, "title" => title, "content_flags" => content_flags, "user" => user},
+        %{"tool" => tool, "title" => title, "builder" => builder, "user" => user},
         socket
       ) do
     {
@@ -24,89 +23,16 @@ defmodule Systems.Zircon.CriteriaView do
       |> assign(
         tool: tool,
         title: title,
-        content_flags: content_flags,
+        builder: builder,
         user: user
       )
-      |> assign_library_items()
+      |> assign_view_model()
     }
   end
 
-  defp assign_library_items(socket) do
-    library_items = [
-      # %Builder.LibraryItemModel{
-      #   id: :population,
-      #   type: :research_design_element,
-      #   title: Element.Categories.population,
-      #   tags: [
-      #     Element.Templates.pico,
-      #     Element.Templates.pic_o,
-      #     Element.Templates.spider
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.population.description")
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :intervention,
-      #   type: :research_design_element,
-      #   title: Element.Categories.intervention,
-      #   tags: [
-      #     Element.Templates.pico,
-      #     Element.Templates.spice
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.intervention.description")
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :comparison,
-      #   type: :research_design_element,
-      #   title: Element.Categories.comparison,
-      #   tags: [
-      #     Element.Templates.pico,
-      #     Element.Templates.spice
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.comparison.description")
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :outcome,
-      #   type: :research_design_element,
-      #   title: Element.Categories.outcome,
-      #   tags: [
-      #     Element.Templates.pico,
-      #     Element.Templates.picos,
-      #     Element.Templates.spice
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.outcome.description")
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :phenomenon_of_interest,
-      #   type: :research_design_element,
-      #   title: Element.Categories.phenomenon_of_interest,
-      #   tags: [
-      #     Element.Templates.spider,
-      #     Element.Templates.pic_o
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.phenomenon_of_interest.description"),
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :context,
-      #   type: :research_design_element,
-      #   title: Element.Categories.context,
-      #   tags: [
-      #     Element.Templates.pic_o,
-      #     Element.Templates.spice
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.context.description")
-      # },
-      # %Builder.LibraryItemModel{
-      #   id: :setting,
-      #   type: :research_design_element,
-      #   title: Element.Categories.setting,
-      #   tags: [
-      #     Element.Templates.spice
-      #   ],
-      #   description: dgettext("eyra-zircon", "research_design_element.setting.description")
-      # }
-    ]
-
-    assign(socket, library_items: library_items)
+  defp assign_view_model(%{assigns: %{tool: tool, builder: builder} = assigns} = socket) do
+    vm = builder.view_model(tool, assigns)
+    socket |> assign(vm: vm)
   end
 
   @impl true
@@ -130,7 +56,7 @@ defmodule Systems.Zircon.CriteriaView do
             <.library
               title={dgettext("eyra-zircon", "screening.criteria.library.title")}
               description={dgettext("eyra-zircon", "screening.criteria.library.description")}
-              items={Enum.map(@library_items, &Map.from_struct/1)}
+              items={Enum.map(@vm.library_items, &Map.from_struct/1)}
             />
           </.side_panel>
         </div>
