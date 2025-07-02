@@ -25,21 +25,24 @@ export const TabBar = {
     window.addEventListener("tab-clicked", (event) => {
       if (event.target.dataset.barId == this.barId) {
         console.log("[TabBar] tab-clicked", event.target.dataset.barId);
-        console.log("[TabBar] tab-clicked", event.target.dataset.tabId);
         this.show(event.target.dataset.tabId, false);
       }
     });
 
     // TabFooterItem notifies TabBar when it has been clicked.
     window.addEventListener("tab-footer-item-clicked", (event) => {
-      console.log("[TabBar] tab-footer-item-clicked", event);
-      this.show(event.target.dataset.targetTabId, true);
+      if (event.target.dataset.barId == this.barId) {
+        console.log("[TabBar] tab-footer-item-clicked", event);
+        this.show(event.target.dataset.targetTabId, true);
+      }
     });
 
     // TabContent notifies TabBar when its content has been updated.
     window.addEventListener("tab-content-updated", (event) => {
-      console.log("[TabBar] tab-content-updated");
-      this.updated();
+      if (event.target.dataset.barId == this.barId) {
+        console.log("[TabBar] tab-content-updated");
+        this.updated();
+      }
     });
   },
 
@@ -89,6 +92,7 @@ export const TabBar = {
   },
 
   loadActiveTabId() {
+    console.log("[TabBar] loadActiveTabId", this.barId);
     const tabKey = this.getActiveTabKey();
     const activeTab = window.localStorage.getItem(tabKey);
     if (typeof activeTab === "string") {
@@ -121,7 +125,7 @@ export const TabBar = {
    * It is safe to call this method with an unknown tab id (from another tab bar).
    */
   show(nextTabId, scrollToTop) {
-    console.log("[TabBar] nextTabId", nextTabId);
+    console.log("[TabBar] nextTabId", nextTabId, this.barId);
     if (nextTabId == undefined) {
       return;
     }
@@ -214,6 +218,7 @@ function setVisible(element, isVisible) {
 }
 
 function updateTab(tab, activate) {
+  console.log("[TabBar] updateTab", tab, activate);
   var hideWhenIdle =
     Array.from(tab.classList).filter((clazz) => {
       return clazz === "hide-when-idle";

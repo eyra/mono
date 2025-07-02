@@ -8,6 +8,8 @@ defmodule Systems.Paper.Public do
 
   alias Core.Repo
   alias Ecto.Changeset
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Systems.Content
   alias Systems.Paper
 
@@ -26,6 +28,20 @@ defmodule Systems.Paper.Public do
     |> Repo.update!()
   end
 
+  def mark_as_failed!(
+        %Paper.ReferenceFileModel{} = reference_file,
+        %Paper.RISError{message: message} = _error
+      ) do
+    Multi.new()
+    |> Multi.update(:paper_reference_file, update_reference_file_status(reference_file, :failed))
+    |> Multi.insert(
+      :paper_reference_file_error,
+      prepare_reference_file_error(reference_file, message)
+    )
+    |> Signal.Public.multi_dispatch({:paper_reference_file, :updated})
+    |> Repo.transaction()
+  end
+
   @doc """
     Creates a ReferenceFile without saving.
   """
@@ -39,6 +55,10 @@ defmodule Systems.Paper.Public do
     |> put_assoc(:file, content_file)
   end
 
+  def update_reference_file_status(reference_file, status) do
+    Paper.ReferenceFileModel.changeset(reference_file, %{status: status})
+  end
+
   def archive_reference_file!(reference_file_id) when is_integer(reference_file_id) do
     Paper.ReferenceFileModel
     |> Repo.get!(reference_file_id)
@@ -50,6 +70,19 @@ defmodule Systems.Paper.Public do
     %{"reference_file_id" => reference_file_id}
     |> Paper.RISProcessorJob.new()
     |> Oban.insert()
+  end
+
+  # Reference File Error
+
+  @doc """
+    Creates a ReferenceFileErrorModel without saving.
+  """
+  def prepare_reference_file_error(reference_file, error) do
+    truncated_error = String.slice(error, 0, 255)
+
+    %Paper.ReferenceFileErrorModel{}
+    |> Paper.ReferenceFileErrorModel.changeset(%{error: truncated_error})
+    |> put_assoc(:reference_file, reference_file)
   end
 
   # File Paper
@@ -69,17 +102,6 @@ defmodule Systems.Paper.Public do
 
   def finalize_file_paper(file_paper, paper) do
     put_assoc(file_paper, :paper, paper)
-  end
-
-  # File Error
-
-  @doc """
-    Creates a ReferenceFileErrorModel without saving.
-  """
-  def prepare_file_error(reference_file, error) do
-    %Paper.ReferenceFileErrorModel{}
-    |> Paper.ReferenceFileErrorModel.changeset(%{error: error})
-    |> put_assoc(:reference_file, reference_file)
   end
 
   # Paper

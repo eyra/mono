@@ -1,5 +1,6 @@
 defmodule Systems.Zircon.Public do
   use Core, :public
+  use Systems.Zircon.Constants
   import Systems.Zircon.Queries
 
   require Ecto.Query

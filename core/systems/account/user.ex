@@ -30,6 +30,23 @@ defmodule Systems.Account.User do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          email: String.t() | nil,
+          password: String.t() | nil,
+          hashed_password: String.t() | nil,
+          confirmed_at: NaiveDateTime.t() | nil,
+          verified_at: NaiveDateTime.t() | nil,
+          displayname: String.t() | nil,
+          visited_pages: list(String.t()) | nil,
+          creator: boolean() | nil,
+          profile: Systems.Account.UserProfileModel.t() | Ecto.Association.NotLoaded.t() | nil,
+          features: Systems.Account.FeaturesModel.t() | Ecto.Association.NotLoaded.t() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @doc """
   A user changeset for registration.
 
@@ -242,4 +259,15 @@ defmodule Systems.Account.User do
   def user_id(id) when is_integer(id), do: id
 
   def user_id(_), do: nil
+
+  defimpl Core.Authentication.Subject do
+    def name(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
+      do: fullname
+
+    def name(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
+      do: displayname
+
+    def name(%{email: nil}), do: "?"
+    def name(%{email: email}), do: String.split(email, "@") |> List.first()
+  end
 end

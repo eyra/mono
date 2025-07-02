@@ -3,12 +3,10 @@ defmodule Systems.Budget.FundingPage do
 
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Line
-
   import Systems.Budget.BalanceView
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
-
   alias Systems.Budget
   alias Systems.Bookkeeping
   alias Systems.Advert
@@ -177,7 +175,7 @@ defmodule Systems.Budget.FundingPage do
       :noreply,
       socket
       |> compose_child(:create_budget_form)
-      |> show_popup(:create_budget_form)
+      |> Fabric.ModalController.show_modal(:create_budget_form, :compact)
     }
   end
 
@@ -187,7 +185,7 @@ defmodule Systems.Budget.FundingPage do
       :noreply,
       socket
       |> compose_child(:edit_budget_form)
-      |> show_popup(:edit_budget_form)
+      |> Fabric.ModalController.show_modal(:edit_budget_form, :compact)
     }
   end
 
@@ -197,7 +195,7 @@ defmodule Systems.Budget.FundingPage do
       :noreply,
       socket
       |> compose_child(:budget_deposit_form)
-      |> show_popup(:budget_deposit_form)
+      |> Fabric.ModalController.show_modal(:budget_deposit_form, :compact)
     }
   end
 
@@ -220,7 +218,7 @@ defmodule Systems.Budget.FundingPage do
   end
 
   @impl true
-  def handle_event("deposit_saved", %{source: %{name: popup}}, socket) do
+  def handle_event("deposit_saved", %{source: %{name: modal_id}}, socket) do
     {
       :noreply,
       socket
@@ -228,12 +226,16 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
-      |> hide_popup(popup)
+      |> Fabric.ModalController.hide_modal(modal_id)
     }
   end
 
   @impl true
-  def handle_event("budget_saved", %{source: %{name: popup, module: Systems.Budget.Form}}, socket) do
+  def handle_event(
+        "budget_saved",
+        %{source: %{name: modal_id, module: Systems.Budget.Form}},
+        socket
+      ) do
     {
       :noreply,
       socket
@@ -241,35 +243,28 @@ defmodule Systems.Budget.FundingPage do
       |> update_selected_budget()
       |> update_balance()
       |> update_squares()
-      |> hide_popup(popup)
+      |> hide_modal(modal_id)
     }
   end
 
   @impl true
-  def handle_event("budget_cancelled", %{source: %{name: popup}}, socket) do
+  def handle_event("budget_cancelled", %{source: %{name: modal_id}}, socket) do
     {
       :noreply,
       socket
-      |> hide_popup(popup)
+      |> Fabric.ModalController.hide_modal(modal_id)
     }
   end
 
   @impl true
-  def handle_event("deposit_cancelled", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_popup(popup)}
+  def handle_event("deposit_cancelled", %{source: %{name: modal_id}}, socket) do
+    {:noreply, socket |> Fabric.ModalController.hide_modal(modal_id)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <.workspace title={dgettext("eyra-budget", "funding.title")} menus={@menus}>
-      <%= if @popup do %>
-        <.popup>
-          <div class="p-8 w-popup-md bg-white shadow-floating rounded">
-            <.live_component id={:funding_popup} module={@popup.module} {@popup} />
-          </div>
-        </.popup>
-      <% end %>
       <Margin.y id={:page_top} />
       <Area.content>
         <Text.title1>

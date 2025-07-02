@@ -76,3 +76,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "import_history.errors.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.title"
+msgstr ""

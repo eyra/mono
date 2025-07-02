@@ -87,6 +87,7 @@ defmodule CoreWeb do
   def live_component do
     quote do
       use Fabric.LiveComponent
+      use LiveNest, :live_component
 
       unquote(pixel())
       use Frameworks.Pixel
@@ -97,7 +98,12 @@ defmodule CoreWeb do
 
   def live_view do
     quote do
-      use Fabric.LiveView, CoreWeb.Layouts
+      use Phoenix.LiveView, layout: {unquote(CoreWeb.Layouts), :live}
+      use LiveNest, :routed_live_view
+      use LiveNest, :single_modal_presenter_strategy
+      use Fabric.LiveView
+      use Fabric.ModalPresenter
+      alias Frameworks.Pixel.ModalView
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers

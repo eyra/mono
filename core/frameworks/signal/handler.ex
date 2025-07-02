@@ -1,7 +1,10 @@
 defmodule Frameworks.Signal.Handler do
   @type signal :: atom | map | {:atom, signal}
   @type message :: any
-  @callback intercept(signal, message) :: any()
+  @type result :: :ok | {:error, atom()} | {:continue, atom(), any()}
+
+  @callback intercept(signal, message) :: result()
+
   defmacro __using__(_opts) do
     quote do
       alias Frameworks.Signal
@@ -21,7 +24,7 @@ defmodule Frameworks.Signal.Handler do
 
       @impl true
       def intercept(signal, _message) do
-        {:ok, :ignored}
+        {:error, :unhandled_signal}
       end
     end
   end

@@ -1,7 +1,6 @@
 defmodule Systems.Assignment.CrewPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
-  use Frameworks.Pixel.ModalView
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
@@ -135,7 +134,7 @@ defmodule Systems.Assignment.CrewPage do
       else
         socket
         |> compose_child(:declined_view)
-        |> show_modal(:declined_view, :notification)
+        |> Fabric.ModalController.show_modal(:declined_view, :compact)
       end
 
     {:noreply, socket}
@@ -212,7 +211,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic modals={@modals} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
 
         <%!-- hidden auto submit form --%>
         <%= if @panel_form do %>
