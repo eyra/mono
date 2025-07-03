@@ -110,7 +110,16 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
 
     test "flags/0 returns available flags" do
       flags_list = Flags.Participants.flags()
-      expected = [:expected, :language, :advert_in_pool, :invite_participants, :affiliate]
+
+      expected = [
+        :expected,
+        :language,
+        :advert_in_pool,
+        :invite_participants,
+        :affiliate,
+        :language_fixed_nl
+      ]
+
       assert flags_list -- expected == []
     end
   end

@@ -88,68 +88,68 @@ defmodule Systems.Assignment.Template.Flags do
       @spec new(keyword()) :: t()
       def new(options_list \\ []) do
         # Check for deprecated opt_out usage and warn user
-        _warn_if_using_deprecated_opt_out(options_list)
+        warn_if_using_deprecated_opt_out(options_list)
         # Determine which approach to use based on provided options
         cond do
-          _has_opt_in_option?(options_list) ->
-            _create_struct_with_opt_in_flags(options_list, unquote(list_of_available_flags))
+          has_opt_in_option?(options_list) ->
+            create_struct_with_opt_in_flags(options_list, unquote(list_of_available_flags))
 
-          _has_opt_out_option?(options_list) ->
-            _create_struct_with_opt_out_flags(options_list, unquote(list_of_available_flags))
+          has_opt_out_option?(options_list) ->
+            create_struct_with_opt_out_flags(options_list, unquote(list_of_available_flags))
 
           true ->
-            _create_struct_with_all_flags_disabled(unquote(list_of_available_flags))
+            create_struct_with_all_flags_disabled(unquote(list_of_available_flags))
         end
       end
 
       # Private helper functions for better readability
 
-      defp _warn_if_using_deprecated_opt_out(options_list) do
+      defp warn_if_using_deprecated_opt_out(options_list) do
         if Keyword.has_key?(options_list, :opt_out) do
           IO.warn(":opt_out is deprecated for #{inspect(__MODULE__)}; use :opt_in instead.")
         end
       end
 
-      defp _has_opt_in_option?(options_list) do
+      defp has_opt_in_option?(options_list) do
         Keyword.has_key?(options_list, :opt_in)
       end
 
-      defp _has_opt_out_option?(options_list) do
+      defp has_opt_out_option?(options_list) do
         Keyword.has_key?(options_list, :opt_out)
       end
 
-      defp _create_struct_with_opt_in_flags(options_list, all_available_flags) do
+      defp create_struct_with_opt_in_flags(options_list, all_available_flags) do
         flags_to_enable = Keyword.get(options_list, :opt_in, [])
         enabled_flags_set = MapSet.new(flags_to_enable)
 
         flags_with_boolean_values =
           all_available_flags
           |> Enum.map(fn flag_name ->
-            is_flag_enabled = MapSet.member?(enabled_flags_set, flag_name)
-            {flag_name, is_flag_enabled}
+            flag_enabled? = MapSet.member?(enabled_flags_set, flag_name)
+            {flag_name, flag_enabled?}
           end)
           |> Enum.into(%{})
 
         struct(__MODULE__, flags_with_boolean_values)
       end
 
-      defp _create_struct_with_opt_out_flags(options_list, all_available_flags) do
+      defp create_struct_with_opt_out_flags(options_list, all_available_flags) do
         flags_to_disable = Keyword.get(options_list, :opt_out, [])
         disabled_flags_set = MapSet.new(flags_to_disable)
 
         flags_with_boolean_values =
           all_available_flags
           |> Enum.map(fn flag_name ->
-            is_flag_disabled = MapSet.member?(disabled_flags_set, flag_name)
-            is_flag_enabled = not is_flag_disabled
-            {flag_name, is_flag_enabled}
+            flag_disabled? = MapSet.member?(disabled_flags_set, flag_name)
+            flag_enabled? = not flag_disabled?
+            {flag_name, flag_enabled?}
           end)
           |> Enum.into(%{})
 
         struct(__MODULE__, flags_with_boolean_values)
       end
 
-      defp _create_struct_with_all_flags_disabled(all_available_flags) do
+      defp create_struct_with_all_flags_disabled(all_available_flags) do
         # Default behavior: all flags start as false (opt-in approach)
         flags_with_boolean_values =
           all_available_flags
