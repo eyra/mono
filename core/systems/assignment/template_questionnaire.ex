@@ -44,10 +44,6 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
             ]
           )
         },
-        affiliate: {
-          dgettext("eyra-assignment", "tabbar.item.affiliate"),
-          Assignment.Template.Flags.Affiliate.new()
-        },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
           Assignment.Template.Flags.Monitor.new()
