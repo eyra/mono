@@ -19,12 +19,11 @@ defmodule Systems.Assignment.TemplateAccessBehaviorTest do
     end
 
     test "flags work with Access.get/3 as used internally by bracket notation" do
-      flags = Flags.Settings.new(opt_in: [:language, :branding])
+      flags = Flags.Settings.new(opt_in: [:branding])
 
       # These should all work with the Access behavior
-      assert Access.get(flags, :language) == true
       assert Access.get(flags, :branding) == true
-      assert Access.get(flags, :expected) == false
+      assert Access.get(flags, :information) == false
       assert Access.get(flags, :non_existent, :default_value) == :default_value
     end
 
@@ -43,8 +42,16 @@ defmodule Systems.Assignment.TemplateAccessBehaviorTest do
       assert updated_flags.consent == true
     end
 
-    test "flags work with update_in/3 for functional updates" do
-      flags = Flags.Settings.new(opt_in: [:language])
+    test "flags work with update_in/3 for functional updates in Settings" do
+      flags = Flags.Settings.new(opt_in: [:branding])
+
+      # Should be able to functionally update
+      updated_flags = update_in(flags[:branding], fn current -> not current end)
+      assert updated_flags.branding == false
+    end
+
+    test "flags work with update_in/3 for functional updates in Participants" do
+      flags = Flags.Participants.new(opt_in: [:language])
 
       # Should be able to functionally update
       updated_flags = update_in(flags[:language], fn current -> not current end)
@@ -62,7 +69,7 @@ defmodule Systems.Assignment.TemplateAccessBehaviorTest do
     end
 
     test "Map operations work on flag structs" do
-      flags = Flags.Participants.new(opt_in: [:invite_participants])
+      flags = Flags.Participants.new(opt_in: [:invite_participants, :language])
 
       # Count true flags using Map functions
       true_count =
@@ -72,8 +79,8 @@ defmodule Systems.Assignment.TemplateAccessBehaviorTest do
           if value, do: acc + 1, else: acc
         end)
 
-      # only invite_participants should be true
-      assert true_count == 1
+      # only invite_participants and language should be true
+      assert true_count == 2
     end
   end
 end

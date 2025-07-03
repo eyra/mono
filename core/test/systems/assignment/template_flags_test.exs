@@ -8,8 +8,6 @@ defmodule Systems.Assignment.TemplateFlagsTest do
       flags = Flags.Settings.new()
 
       # All flags should be false by default (opt-in behavior)
-      assert flags.expected == false
-      assert flags.language == false
       assert flags.branding == false
       assert flags.information == false
       assert flags.privacy == false
@@ -19,16 +17,14 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     end
 
     test "new/1 with opt_in enables specified flags only" do
-      flags = Flags.Settings.new(opt_in: [:language, :branding])
+      flags = Flags.Settings.new(opt_in: [:branding, :privacy])
 
       # Only specified flags should be enabled
-      assert flags.language == true
       assert flags.branding == true
+      assert flags.privacy == true
 
       # All other flags should remain disabled
-      assert flags.expected == false
       assert flags.information == false
-      assert flags.privacy == false
       assert flags.consent == false
       assert flags.helpdesk == false
       assert flags.affiliate == false
@@ -38,8 +34,6 @@ defmodule Systems.Assignment.TemplateFlagsTest do
       flags = Flags.Settings.new(opt_in: [])
 
       # All flags should remain false
-      assert flags.expected == false
-      assert flags.language == false
       assert flags.branding == false
       assert flags.information == false
       assert flags.privacy == false
@@ -49,22 +43,11 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     end
 
     test "new/1 with all flags in opt_in enables all flags" do
-      all_flags = [
-        :expected,
-        :language,
-        :branding,
-        :information,
-        :privacy,
-        :consent,
-        :helpdesk,
-        :affiliate
-      ]
+      all_flags = Flags.Settings.flags()
 
       flags = Flags.Settings.new(opt_in: all_flags)
 
       # All flags should be enabled
-      assert flags.expected == true
-      assert flags.language == true
       assert flags.branding == true
       assert flags.information == true
       assert flags.privacy == true
@@ -74,9 +57,11 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     end
 
     test "works with Participants flags" do
-      flags = Flags.Participants.new(opt_in: [:invite_participants])
+      flags = Flags.Participants.new(opt_in: [:invite_participants, :language, :expected])
 
       assert flags.invite_participants == true
+      assert flags.language == true
+      assert flags.expected == true
       assert flags.advert_in_pool == false
       assert flags.affiliate == false
     end
@@ -116,48 +101,48 @@ defmodule Systems.Assignment.TemplateFlagsTest do
   describe "backward compatibility during transition" do
     test "ignores opt_out parameter when opt_in is provided" do
       # During transition, if both are provided, opt_in should take precedence
-      flags = Flags.Settings.new(opt_in: [:language], opt_out: [:branding])
+      flags = Flags.Settings.new(opt_in: [:branding], opt_out: [:information])
 
-      assert flags.language == true
+      assert flags.branding == true
       # Should be false due to opt_in behavior, not opt_out
-      assert flags.branding == false
+      assert flags.information == false
     end
 
     test "handles non-existent flags gracefully" do
       # Should not crash if opt_in contains flags that don't exist
-      flags = Flags.Settings.new(opt_in: [:language, :non_existent_flag])
+      flags = Flags.Settings.new(opt_in: [:branding, :non_existent_flag])
 
-      assert flags.language == true
+      assert flags.branding == true
       # Other flags should remain false
-      assert flags.branding == false
+      assert flags.information == false
     end
   end
 
   describe "Access behavior for backward compatibility" do
     test "supports bracket notation access" do
-      flags = Flags.Settings.new(opt_in: [:language, :branding])
+      flags = Flags.Settings.new(opt_in: [:branding, :information])
 
       # Should work with bracket notation like a map
-      assert flags[:language] == true
       assert flags[:branding] == true
-      assert flags[:expected] == false
+      assert flags[:information] == true
       assert flags[:privacy] == false
     end
 
     test "supports Access.get/2" do
-      flags = Flags.Participants.new(opt_in: [:invite_participants])
+      flags = Flags.Participants.new(opt_in: [:invite_participants, :language])
 
       assert Access.get(flags, :invite_participants) == true
+      assert Access.get(flags, :language) == true
       assert Access.get(flags, :advert_in_pool) == false
       assert Access.get(flags, :affiliate) == false
     end
 
     test "supports get_in for nested access" do
-      flags = Flags.Settings.new(opt_in: [:language])
+      flags = Flags.Settings.new(opt_in: [:branding])
 
       # This mimics how it might be used in templates
-      assert get_in(flags, [:language]) == true
-      assert get_in(flags, [:branding]) == false
+      assert get_in(flags, [:branding]) == true
+      assert get_in(flags, [:information]) == false
     end
 
     test "returns nil for non-existent keys" do
@@ -173,17 +158,15 @@ defmodule Systems.Assignment.TemplateFlagsTest do
       # Capture the warning
       warning_output =
         capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_out: [:language, :branding])
+          flags = Flags.Settings.new(opt_out: [:branding, :information])
 
           # Should work like old opt_out behavior
           # was in opt_out, so false
-          assert flags.language == false
-          # was in opt_out, so false
           assert flags.branding == false
+          # was in opt_out, so false
+          assert flags.information == false
           # was NOT in opt_out, so true
-          assert flags.expected == true
-          # was NOT in opt_out, so true
-          assert flags.information == true
+          assert flags.privacy == true
         end)
 
       # Should contain deprecation warning
@@ -194,12 +177,12 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     test "both opt_in and opt_out provided - opt_in takes precedence with warning" do
       warning_output =
         capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_in: [:language], opt_out: [:branding])
+          flags = Flags.Settings.new(opt_in: [:branding], opt_out: [:information])
 
           # opt_in should take precedence, opt_out should be ignored
-          assert flags.language == true
+          assert flags.branding == true
           # not in opt_in, so false
-          assert flags.branding == false
+          assert flags.information == false
         end)
 
       # Should show warning since opt_out is deprecated
@@ -209,11 +192,14 @@ defmodule Systems.Assignment.TemplateFlagsTest do
 
     test "flags/0 function returns available flags" do
       assert is_list(Flags.Settings.flags())
-      assert :language in Flags.Settings.flags()
       assert :branding in Flags.Settings.flags()
-      assert :expected in Flags.Settings.flags()
+      assert :information in Flags.Settings.flags()
+      refute :language in Flags.Settings.flags()
+      refute :expected in Flags.Settings.flags()
 
       # Test other flag modules
+      assert :expected in Flags.Participants.flags()
+      assert :language in Flags.Participants.flags()
       assert :library in Flags.Workflow.flags()
       assert :consent in Flags.Monitor.flags()
 
@@ -227,8 +213,6 @@ defmodule Systems.Assignment.TemplateFlagsTest do
   describe "Default behavior tests" do
     test "new/0 without arguments sets all flags to false" do
       settings_flags = Flags.Settings.new()
-      assert settings_flags.expected == false
-      assert settings_flags.language == false
       assert settings_flags.branding == false
       assert settings_flags.information == false
       assert settings_flags.privacy == false
@@ -238,6 +222,8 @@ defmodule Systems.Assignment.TemplateFlagsTest do
 
       # Test other modules too
       participants_flags = Flags.Participants.new()
+      assert participants_flags.expected == false
+      assert participants_flags.language == false
       assert participants_flags.advert_in_pool == false
       assert participants_flags.invite_participants == false
       assert participants_flags.affiliate == false
@@ -258,15 +244,13 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     end
 
     test "new/1 with subset of flags enables only specified ones" do
-      flags = Flags.Settings.new(opt_in: [:language, :privacy])
+      flags = Flags.Settings.new(opt_in: [:branding, :privacy])
 
       # Only specified flags should be true
-      assert flags.language == true
+      assert flags.branding == true
       assert flags.privacy == true
 
       # All others should be false
-      assert flags.expected == false
-      assert flags.branding == false
       assert flags.information == false
       assert flags.consent == false
       assert flags.helpdesk == false
@@ -274,22 +258,11 @@ defmodule Systems.Assignment.TemplateFlagsTest do
     end
 
     test "new/1 with all flags enables everything" do
-      all_settings_flags = [
-        :expected,
-        :language,
-        :branding,
-        :information,
-        :privacy,
-        :consent,
-        :helpdesk,
-        :affiliate
-      ]
+      all_settings_flags = Flags.Settings.flags()
 
       flags = Flags.Settings.new(opt_in: all_settings_flags)
 
       # All should be true
-      assert flags.expected == true
-      assert flags.language == true
       assert flags.branding == true
       assert flags.information == true
       assert flags.privacy == true

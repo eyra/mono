@@ -18,9 +18,6 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
       # Check settings flags
       {_title, settings_flags} = tabs[:settings]
-      assert settings_flags.expected == true
-      # was opt_out
-      assert settings_flags.language == false
       assert settings_flags.branding == true
       assert settings_flags.information == true
       assert settings_flags.privacy == true
@@ -30,6 +27,9 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
       # Check participants flags
       {_title, participants_flags} = tabs[:participants]
+      assert participants_flags.expected == false
+      # was opt_out
+      assert participants_flags.language == false
       assert participants_flags.invite_participants == true
       # was opt_out
       assert participants_flags.advert_in_pool == false
@@ -76,8 +76,6 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
       # Check settings flags - all should be enabled (was no opt_out)
       {_title, settings_flags} = tabs[:settings]
-      assert settings_flags.expected == true
-      assert settings_flags.language == true
       assert settings_flags.branding == true
       assert settings_flags.information == true
       assert settings_flags.privacy == true
@@ -87,6 +85,8 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
       # Check participants flags
       {_title, participants_flags} = tabs[:participants]
+      assert participants_flags.expected == true
+      assert participants_flags.language == true
       assert participants_flags.affiliate == true
       # was opt_out
       assert participants_flags.advert_in_pool == false
@@ -101,15 +101,12 @@ defmodule Systems.Assignment.TemplateMigrationTest do
       # but shows a deprecation warning
       warning_output =
         capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_out: [:language, :branding])
+          flags = Flags.Settings.new(opt_out: [:branding])
 
           # With opt_out behavior, specified flags should be false, others true
           # in opt_out list
-          assert flags.language == false
           # in opt_out list
           assert flags.branding == false
-          # not in opt_out list
-          assert flags.expected == true
           # not in opt_out list
           assert flags.information == true
         end)
@@ -119,15 +116,14 @@ defmodule Systems.Assignment.TemplateMigrationTest do
     end
 
     test "opt_in takes precedence when both opt_in and opt_out are provided" do
-      flags = Flags.Settings.new(opt_in: [:language], opt_out: [:branding, :information])
+      flags = Flags.Settings.new(opt_in: [:privacy], opt_out: [:branding, :information])
 
       # Only opt_in should take effect
-      assert flags.language == true
+      assert flags.privacy == true
       # opt_out ignored
       assert flags.branding == false
       # opt_out ignored
       assert flags.information == false
-      assert flags.expected == false
     end
   end
 end

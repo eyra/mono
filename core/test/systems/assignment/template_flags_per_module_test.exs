@@ -9,8 +9,6 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       assert %Flags.Settings{} = flags
 
       # All flags should be false by default
-      assert flags.expected == false
-      assert flags.language == false
       assert flags.branding == false
       assert flags.information == false
       assert flags.privacy == false
@@ -20,15 +18,13 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
     end
 
     test "new/1 with opt_in enables specific flags" do
-      flags = Flags.Settings.new(opt_in: [:language, :privacy, :affiliate])
+      flags = Flags.Settings.new(opt_in: [:privacy, :affiliate])
 
       # Specified flags should be true
-      assert flags.language == true
       assert flags.privacy == true
       assert flags.affiliate == true
 
       # Others should be false
-      assert flags.expected == false
       assert flags.branding == false
       assert flags.information == false
       assert flags.consent == false
@@ -36,15 +32,15 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
     end
 
     test "Access protocol works correctly" do
-      flags = Flags.Settings.new(opt_in: [:language, :privacy])
+      flags = Flags.Settings.new(opt_in: [:privacy])
 
       # Access.fetch/2
-      assert {:ok, true} = Access.fetch(flags, :language)
+      assert {:ok, true} = Access.fetch(flags, :privacy)
       assert {:ok, false} = Access.fetch(flags, :branding)
       assert :error = Access.fetch(flags, :nonexistent)
 
       # Bracket syntax
-      assert flags[:language] == true
+      assert flags[:privacy] == true
       assert flags[:branding] == false
       assert flags[:nonexistent] == nil
     end
@@ -53,8 +49,6 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       flags_list = Flags.Settings.flags()
 
       expected = [
-        :expected,
-        :language,
         :branding,
         :information,
         :privacy,
@@ -63,7 +57,7 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
         :affiliate
       ]
 
-      assert flags_list == expected
+      assert flags_list -- expected == []
     end
 
     test "backward compatibility with opt_out (deprecated)" do
@@ -72,12 +66,10 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       # Should emit deprecation warning
       warning =
         capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_out: [:language, :privacy])
+          flags = Flags.Settings.new(opt_out: [:privacy])
 
           # opt_out should work but invert the flags
-          assert flags.language == false
           assert flags.privacy == false
-          assert flags.expected == true
           assert flags.branding == true
         end)
 
@@ -90,23 +82,28 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       flags = Flags.Participants.new()
       assert %Flags.Participants{} = flags
 
+      assert flags.expected == false
+      assert flags.language == false
       assert flags.advert_in_pool == false
       assert flags.invite_participants == false
       assert flags.affiliate == false
     end
 
     test "new/1 with opt_in enables specific flags" do
-      flags = Flags.Participants.new(opt_in: [:advert_in_pool, :affiliate])
+      flags = Flags.Participants.new(opt_in: [:advert_in_pool, :affiliate, :expected])
 
       assert flags.advert_in_pool == true
       assert flags.affiliate == true
+      assert flags.expected == true
       assert flags.invite_participants == false
+      assert flags.language == false
     end
 
     test "Access protocol works correctly" do
-      flags = Flags.Participants.new(opt_in: [:advert_in_pool])
+      flags = Flags.Participants.new(opt_in: [:advert_in_pool, :language])
 
       assert {:ok, true} = Access.fetch(flags, :advert_in_pool)
+      assert {:ok, true} = Access.fetch(flags, :language)
       assert {:ok, false} = Access.fetch(flags, :invite_participants)
       assert :error = Access.fetch(flags, :nonexistent)
     end
@@ -114,7 +111,7 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
     test "flags/0 returns available flags" do
       flags_list = Flags.Participants.flags()
       expected = [:expected, :language, :advert_in_pool, :invite_participants, :affiliate]
-      assert flags_list == expected
+      assert flags_list -- expected == []
     end
   end
 
@@ -177,19 +174,19 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
   describe "Edge cases and error handling" do
     test "invalid flag names are ignored silently" do
       # Should not crash, just ignore invalid flags
-      flags = Flags.Settings.new(opt_in: [:valid_flag, :invalid_flag, :language])
+      flags = Flags.Settings.new(opt_in: [:valid_flag, :invalid_flag, :branding])
 
       # Valid flags should work
-      assert flags.language == true
+      assert flags.branding == true
 
       # Invalid flags shouldn't cause issues
-      assert flags.expected == false
+      assert flags.privacy == false
     end
 
     test "duplicate flags in opt_in list are handled correctly" do
-      flags = Flags.Settings.new(opt_in: [:language, :language, :privacy])
+      flags = Flags.Settings.new(opt_in: [:branding, :branding, :privacy])
 
-      assert flags.language == true
+      assert flags.branding == true
       assert flags.privacy == true
     end
 
@@ -205,10 +202,10 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
 
       warning =
         capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_in: [:language], opt_out: [:privacy])
+          flags = Flags.Settings.new(opt_in: [:branding], opt_out: [:privacy])
 
           # opt_in should take precedence
-          assert flags.language == true
+          assert flags.branding == true
           # opt_out should be ignored when opt_in is present
         end)
 

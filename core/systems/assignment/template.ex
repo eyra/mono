@@ -89,8 +89,6 @@ defmodule Systems.Assignment.Template.Flags do
       def new(options_list \\ []) do
         # Check for deprecated opt_out usage and warn user
         _warn_if_using_deprecated_opt_out(options_list)
-        dbg(__MODULE__)
-        dbg(options_list)
         # Determine which approach to use based on provided options
         cond do
           _has_opt_in_option?(options_list) ->
