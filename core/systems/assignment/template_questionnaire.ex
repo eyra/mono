@@ -42,7 +42,6 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
               :invite_participants
             ]
           )
-
         },
         affiliate: {
           dgettext("eyra-assignment", "tabbar.item.affiliate"),
