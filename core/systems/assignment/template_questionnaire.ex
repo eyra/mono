@@ -39,8 +39,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
               :expected,
               :language,
               :advert_in_pool,
-              :invite_participants,
-              :affiliate
+              :invite_participants
             ]
           )
         },

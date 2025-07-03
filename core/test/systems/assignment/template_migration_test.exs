@@ -54,7 +54,6 @@ defmodule Systems.Assignment.TemplateMigrationTest do
       {_title, participants_flags} = tabs[:participants]
       assert participants_flags.advert_in_pool == true
       assert participants_flags.invite_participants == true
-      assert participants_flags.affiliate == true
     end
 
     test "PaperScreening template has correct opt-in flags" do
