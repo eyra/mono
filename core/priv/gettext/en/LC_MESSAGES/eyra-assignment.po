@@ -443,3 +443,15 @@ msgstr "Thank you. You have completed this part. Click Continue to proceed."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
 msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.annotation"
+msgstr "Use the link below to invite participants. No sign-in is required. Replace 'participant_id' with a unique identifier for each participant."
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.title"
+msgstr "Invite link"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "The default language for Panl studies is dutch"

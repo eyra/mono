@@ -10,10 +10,19 @@ defmodule Systems.Assignment.ParticipantsView do
   alias Systems.Affiliate
   alias Systems.Advert
   alias Systems.Pool
+  alias Systems.Assignment
 
   @impl true
   def update(
-        %{id: id, assignment: assignment, title: title, content_flags: content_flags, user: user},
+        %{
+          id: id,
+          assignment: assignment,
+          title: title,
+          content_flags: content_flags,
+          user: user,
+          viewport: viewport,
+          breakpoint: breakpoint
+        },
         socket
       ) do
     {
@@ -24,8 +33,11 @@ defmodule Systems.Assignment.ParticipantsView do
         assignment: assignment,
         title: title,
         content_flags: content_flags,
-        user: user
+        user: user,
+        viewport: viewport,
+        breakpoint: breakpoint
       )
+      |> compose_child(:general)
       |> update_advert_button()
       |> update_invite_title()
       |> update_invite_url()
@@ -36,9 +48,36 @@ defmodule Systems.Assignment.ParticipantsView do
     }
   end
 
+  @impl true
+  def compose(:general, %{
+        assignment: %{info: info},
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }) do
+    %{
+      module: Assignment.GeneralForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }
+    }
+  end
+
   defp update_invite_title(socket) do
     invite_title = dgettext("eyra-assignment", "invite.panel.title")
     assign(socket, invite_title: invite_title)
+  end
+
+  defp update_affiliate_title(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    affiliate_title = dgettext("eyra-assignment", "external.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
   end
 
   defp update_affiliate_title(socket) do
@@ -78,6 +117,15 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, invite_annotation: annotation)
   end
 
+  defp update_affiliate_annotation(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    annotation = dgettext("eyra-assignment", "external.panel.annotation")
+    assign(socket, affiliate_annotation: annotation)
+  end
+
   defp update_affiliate_annotation(socket) do
     annotation = dgettext("eyra-assignment", "affiliate.panel.annotation")
     assign(socket, affiliate_annotation: annotation)
@@ -87,6 +135,15 @@ defmodule Systems.Assignment.ParticipantsView do
     path = ~p"/assignment/#{id}/invite"
     url = get_base_url() <> path
     assign(socket, url: url)
+  end
+
+  defp update_affiliate_url(
+         %{assigns: %{assignment: %{id: id, external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    url = get_base_url() <> ~p"/assignment/#{id}/participate?participant=participant_id"
+    assign(socket, affiliate_url: url)
   end
 
   defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
@@ -121,6 +178,14 @@ defmodule Systems.Assignment.ParticipantsView do
         <Area.content>
           <Margin.y id={:page_top} />
           <Text.title2><%= @title %></Text.title2>
+          <.spacing value="L" />
+
+          <.child name={:general} fabric={@fabric} >
+            <:footer>
+              <.spacing value="L" />
+            </:footer>
+          </.child>
+
           <.spacing value="L" />
           <div class="flex flex-col gap-8" %>
             <%= if @content_flags[:advert_in_pool] do %>
