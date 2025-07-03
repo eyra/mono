@@ -6,7 +6,6 @@ defmodule Systems.Promotion.Public do
   import Ecto.Query, warn: false
 
   alias Core.Repo
-
   alias Systems.Promotion
   alias Systems.Pool
 
@@ -63,10 +62,21 @@ defmodule Systems.Promotion.Public do
 end
 
 defimpl Core.Persister, for: Systems.Promotion.Model do
+  alias Frameworks.Signal
+  alias Core.Repo
+
   def save(_promotion, changeset) do
-    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :promotion) do
-      {:ok, %{promotion: promotion}} -> {:ok, promotion}
-      _ -> {:error, changeset}
+    case Repo.update(changeset) do
+      {:ok, promotion} ->
+        Signal.Public.dispatch(
+          {:promotion, :update_and_dispatch},
+          %{promotion: promotion, changeset: changeset}
+        )
+
+        {:ok, promotion}
+
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 end
