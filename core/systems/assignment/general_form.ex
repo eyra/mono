@@ -33,18 +33,34 @@ defmodule Systems.Assignment.GeneralForm do
     }
   end
 
-  def update_language_items(%{assigns: %{entity: %{language: language}}} = socket) do
-    language =
-      if language do
-        language
-      else
-        Assignment.Languages.default()
-      end
+  def update_language_items(
+        %{
+          assigns: %{
+            entity: %{language: language},
+            content_flags: content_flags
+          }
+        } = socket
+      ) do
+    language_mode = determine_language_mode(content_flags)
+    resolved_language = resolve_language(language, language_mode)
 
-    items = Assignment.Languages.labels(language)
-
-    assign(socket, language_items: items)
+    assign(socket,
+      language_items: Assignment.Languages.labels(resolved_language),
+      language_mode: language_mode
+    )
   end
+
+  # Language modes: either :free_choice or :fixed_nl
+  defp determine_language_mode(content_flags) do
+    if Map.get(content_flags, :language_fixed_nl, false) do
+      :fixed_nl
+    else
+      :free_choice
+    end
+  end
+
+  defp resolve_language(_, :fixed_nl), do: :nl
+  defp resolve_language(language, :free_choice), do: language || Assignment.Languages.default()
 
   # Handle Events
 
@@ -83,15 +99,75 @@ defmodule Systems.Assignment.GeneralForm do
   def render(assigns) do
     ~H"""
     <div>
-        <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself} >
-          <%= if Map.get(@content_flags, :expected, false) do %>
-            <.number_input form={form} field={:subject_count} label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-          <% end %>
-          <%= if Map.get(@content_flags, :language, false) do %>
-            <.radio_group form={form} field={:language} label_text={dgettext("eyra-assignment", "settings.language.label")} items={@language_items}/>
-          <% end %>
-        </.form>
+      <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+        <.render_subject_count_field :if={show_subject_count?(@content_flags)} form={form} />
+        <.render_language_field :if={show_language_field?(@content_flags)}
+          form={form}
+          language_items={@language_items}
+          language_mode={@language_mode} />
+      </.form>
     </div>
+    """
+  end
+
+  defp show_subject_count?(content_flags) do
+    Map.get(content_flags, :expected, false)
+  end
+
+  defp show_language_field?(content_flags) do
+    Map.get(content_flags, :language, false)
+  end
+
+  defp render_subject_count_field(assigns) do
+    ~H"""
+    <.number_input
+      form={@form}
+      field={:subject_count}
+      label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
+    """
+  end
+
+  defp render_language_field(assigns) do
+    ~H"""
+    <.language_selector
+      form={@form}
+      field={:language}
+      items={@language_items}
+      mode={@language_mode} />
+    """
+  end
+
+  defp language_selector(%{mode: :fixed_nl, items: items} = assigns) do
+    items =
+      Enum.map(items, fn item ->
+        if item.id == "nl" or item.id == :nl do
+          item
+        else
+          Map.put(item, :disabled, true)
+        end
+      end)
+
+    assigns = Map.put(assigns, :items, items)
+
+    ~H"""
+    <.radio_group
+      form={@form}
+      field={@field}
+      label_text={dgettext("eyra-assignment", "settings.language.label")}
+      items={@items}
+      label_subtitle={dgettext("eyra-assignment", "settings.language.fixed_nl_message")}
+    />
+    """
+  end
+
+  defp language_selector(%{mode: :free_choice} = assigns) do
+    ~H"""
+    <.radio_group
+      form={@form}
+      field={@field}
+      label_text={dgettext("eyra-assignment", "settings.language.label")}
+      items={@items}
+    />
     """
   end
 end

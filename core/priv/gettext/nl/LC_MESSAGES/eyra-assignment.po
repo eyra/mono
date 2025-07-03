@@ -451,3 +451,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "external.panel.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "De standaardtaal voor Panl-studies is het Nederlands."

@@ -35,6 +35,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new(
             opt_in: [
+              :language_fixed_nl,
               :expected,
               :language,
               :advert_in_pool,

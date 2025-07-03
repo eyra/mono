@@ -226,6 +226,7 @@ defmodule Systems.Assignment.Template.Flags.Participants do
   - `:affiliate` - Show affiliate/partner participant options
   """
   use Systems.Assignment.Template.Flags, [
+    :language_fixed_nl,
     :expected,
     :language,
     :advert_in_pool,
