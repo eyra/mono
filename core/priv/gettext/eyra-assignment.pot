@@ -443,3 +443,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "redirect.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.title"
+msgstr ""

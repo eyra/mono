@@ -12,6 +12,10 @@
 ## \#17 Under development
 * ..
 
+## \#16.1 2025-06-25
+* Fixed: Export progress report pre-affiliate participant links
+* Fixed: Rendering pre-affiliate participant links on pre-affiliate Data Donation assignments
+
 ## \#16 2025-06-18
 * Added: Affiliate system for panel company integration
 * Added: Support for end-of-flow redirect to Affiliates

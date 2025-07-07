@@ -16,6 +16,8 @@ defmodule Systems.Assignment.ParticipantsView do
         %{id: id, assignment: assignment, title: title, content_flags: content_flags, user: user},
         socket
       ) do
+    external_panel_link? = assignment.external_panel != nil
+
     {
       :ok,
       socket
@@ -24,7 +26,8 @@ defmodule Systems.Assignment.ParticipantsView do
         assignment: assignment,
         title: title,
         content_flags: content_flags,
-        user: user
+        user: user,
+        external_panel_link?: external_panel_link?
       )
       |> update_advert_button()
       |> update_invite_title()
@@ -39,6 +42,15 @@ defmodule Systems.Assignment.ParticipantsView do
   defp update_invite_title(socket) do
     invite_title = dgettext("eyra-assignment", "invite.panel.title")
     assign(socket, invite_title: invite_title)
+  end
+
+  defp update_affiliate_title(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    affiliate_title = dgettext("eyra-assignment", "external.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
   end
 
   defp update_affiliate_title(socket) do
@@ -78,6 +90,15 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, invite_annotation: annotation)
   end
 
+  defp update_affiliate_annotation(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    annotation = dgettext("eyra-assignment", "external.panel.annotation")
+    assign(socket, affiliate_annotation: annotation)
+  end
+
   defp update_affiliate_annotation(socket) do
     annotation = dgettext("eyra-assignment", "affiliate.panel.annotation")
     assign(socket, affiliate_annotation: annotation)
@@ -87,6 +108,15 @@ defmodule Systems.Assignment.ParticipantsView do
     path = ~p"/assignment/#{id}/invite"
     url = get_base_url() <> path
     assign(socket, url: url)
+  end
+
+  defp update_affiliate_url(
+         %{assigns: %{assignment: %{id: id, external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    url = get_base_url() <> ~p"/assignment/#{id}/participate?participant=participant_id"
+    assign(socket, affiliate_url: url)
   end
 
   defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
