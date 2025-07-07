@@ -5,7 +5,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Core.Repo
   alias Frameworks.Concept
+  alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
@@ -341,6 +343,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{current_user: user}
        ) do
+    zircon_screening_tool =
+      Repo.preload(zircon_screening_tool, annotations: Annotation.Model.preload_graph(:down))
+
     element =
       LiveNest.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,

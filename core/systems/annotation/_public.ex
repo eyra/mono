@@ -2,7 +2,7 @@ defmodule Systems.Annotation.Public do
   use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, order_by: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
   import Systems.Annotation.Queries
 
@@ -40,6 +40,7 @@ defmodule Systems.Annotation.Public do
   def list_annotations(entities, preloads) when is_list(entities) do
     annotation_query()
     |> annotation_query_include(:entities, entities)
+    |> order_by([annotation: a], desc: a.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
@@ -50,6 +51,7 @@ defmodule Systems.Annotation.Public do
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
     |> annotation_query_include(:reference, {annotation, entities})
+    |> order_by([annotation: a], desc: a.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
@@ -60,6 +62,7 @@ defmodule Systems.Annotation.Public do
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
     |> annotation_query_include(:reference, {concept, entities})
+    |> order_by([annotation: a], desc: a.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
@@ -70,6 +73,7 @@ defmodule Systems.Annotation.Public do
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
     |> annotation_query_include(:reference, {predicate, entities})
+    |> order_by([annotation: a], desc: a.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end

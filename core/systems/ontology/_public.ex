@@ -69,14 +69,14 @@ defmodule Systems.Ontology.Public do
 
   def list_concepts(preloads) when is_list(preloads) do
     concept_query()
-    |> order_by([concept: c], asc: c.id)
+    |> order_by([concept: c], desc: c.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
 
   def list_concepts(phrases, preloads) when is_list(phrases) and is_list(preloads) do
     concept_query(phrases)
-    |> order_by([concept: c], asc: c.id)
+    |> order_by([concept: c], desc: c.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
@@ -134,14 +134,14 @@ defmodule Systems.Ontology.Public do
 
   def list_predicates(preloads) do
     predicate_query()
-    |> order_by([predicate: p], asc: p.id)
+    |> order_by([predicate: p], desc: p.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
 
   def list_predicates(%Ontology.ConceptModel{} = concept, preloads) do
     predicate_query(concept)
-    |> order_by([predicate: p], asc: p.id)
+    |> order_by([predicate: p], desc: p.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
