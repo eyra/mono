@@ -83,40 +83,38 @@ defmodule Systems.Annotation.Public do
       when is_binary(type_phrase) and is_binary(statement) do
     type = obtain_concept!(type_phrase, entity)
     annotation_ref = obtain_annotation_ref!(concept)
-    insert_annotation!(type, statement, entity, [annotation_ref], [])
+    insert_annotation!(type, statement, entity, [annotation_ref])
   end
 
-  def insert_annotation!(type, statement, %Authentication.Entity{} = entity, references, opts)
+  def insert_annotation!(type, statement, %Authentication.Entity{} = entity, references)
       when is_list(references) do
-    case insert_annotation(type, statement, entity, references, opts) do
+    case insert_annotation(type, statement, entity, references) do
       {:ok, annotation} ->
         annotation
 
-      _error ->
-        raise "Failed to insert annotation"
+      error ->
+        raise "Failed to insert annotation: #{inspect(error)}"
     end
   end
 
-  def insert_annotation(type, statement, entity, _, opts \\ [])
-
-  def insert_annotation(type, statement, entity, references, opts) when is_list(references) do
-    prepare_annotation(type, references, statement, entity, opts)
+  def insert_annotation(type, statement, entity, references) when is_list(references) do
+    prepare_annotation(type, references, statement, entity)
     |> Repo.insert()
   end
 
-  def insert_annotation(type, statement, entity, %Annotation.RefModel{} = ref, opts) do
+  def insert_annotation(type, statement, entity, %Annotation.RefModel{} = ref) do
     Multi.new()
     |> Multi.put(@annotation_ref, ref)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
-  def insert_annotation(type, statement, entity, resource, opts)
+  def insert_annotation(type, statement, entity, resource)
       when is_binary(resource) do
     Multi.new()
     |> upsert_resource(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
@@ -124,29 +122,28 @@ defmodule Systems.Annotation.Public do
         type,
         statement,
         entity,
-        %Annotation.ResourceModel{} = resource,
-        opts
+        %Annotation.ResourceModel{} = resource
       ) do
     Multi.new()
     |> Multi.put(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
-  def insert_annotation(type, statement, entity, %Authentication.Entity{} = ref, opts) do
+  def insert_annotation(type, statement, entity, %Authentication.Entity{} = ref) do
     Multi.new()
     |> Multi.put(@annotation_entity, ref)
     |> upsert_annotation_ref(@annotation_ref, @annotation_entity)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
-  def insert_annotation(type, statement, entity, %Annotation.Model{} = ref, opts) do
+  def insert_annotation(type, statement, entity, %Annotation.Model{} = ref) do
     Multi.new()
     |> Multi.put(@annotation_sub, ref)
     |> upsert_annotation_ref(@annotation_ref, @annotation_sub)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
@@ -154,13 +151,12 @@ defmodule Systems.Annotation.Public do
         type,
         statement,
         entity,
-        %Ontology.RefModel{} = ontology_ref,
-        opts
+        %Ontology.RefModel{} = ontology_ref
       ) do
     Multi.new()
     |> Multi.put(@ontology_ref, ontology_ref)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
@@ -168,14 +164,13 @@ defmodule Systems.Annotation.Public do
         type,
         statement,
         entity,
-        %Ontology.ConceptModel{} = concept,
-        opts
+        %Ontology.ConceptModel{} = concept
       ) do
     Multi.new()
     |> Multi.put(@ontology_concept, concept)
     |> upsert_ontology_ref(@ontology_ref, @ontology_concept)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
@@ -183,14 +178,13 @@ defmodule Systems.Annotation.Public do
         type,
         statement,
         entity,
-        %Ontology.PredicateModel{} = predicate,
-        opts
+        %Ontology.PredicateModel{} = predicate
       ) do
     Multi.new()
     |> Multi.put(@ontology_predicate, predicate)
     |> upsert_ontology_ref(@ontology_ref, @ontology_predicate)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
-    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity, opts)
+    |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
     |> Repo.transaction()
   end
 
@@ -200,15 +194,14 @@ defmodule Systems.Annotation.Public do
         multi_child_name,
         type,
         statement,
-        entity,
-        opts
+        entity
       ) do
     Multi.insert(
       multi,
       multi_name,
       fn multi_state ->
         child = Map.get(multi_state, multi_child_name)
-        prepare_annotation(type, [child], statement, entity, opts)
+        prepare_annotation(type, [child], statement, entity)
       end
     )
   end
@@ -217,16 +210,12 @@ defmodule Systems.Annotation.Public do
         %Ontology.ConceptModel{} = type,
         references,
         statement,
-        entity,
-        opts \\ []
+        entity
       )
       when is_list(references) do
-    ai_generated? = Keyword.get(opts, :ai_generated?, false)
-
     %Annotation.Model{}
     |> Annotation.Model.changeset(%{
-      statement: statement,
-      ai_generated?: ai_generated?
+      statement: statement
     })
     |> put_assoc(:type, type)
     |> put_assoc(:references, references)
@@ -259,11 +248,11 @@ defmodule Systems.Annotation.Public do
 
   def obtain_annotation_ref!(assoc) do
     case obtain_annotation_ref(assoc) do
-      {:ok, %{annotation_ref: annotation_ref}} ->
+      {:ok, annotation_ref} ->
         annotation_ref
 
-      _ ->
-        raise "Failed to obtain annotation ref"
+      error ->
+        raise "Failed to obtain annotation ref: #{inspect(error)}"
     end
   end
 
@@ -272,6 +261,13 @@ defmodule Systems.Annotation.Public do
     |> Multi.put(@annotation_sub, assoc)
     |> upsert_annotation_ref(@annotation_ref, @annotation_sub)
     |> Repo.transaction()
+    |> case do
+      {:ok, %{annotation_ref: annotation_ref}} ->
+        {:ok, annotation_ref}
+
+      error ->
+        error
+    end
   end
 
   def prepare_annotation_ref(%Authentication.Entity{} = entity) do
@@ -344,5 +340,17 @@ defmodule Systems.Annotation.Public do
       _ ->
         dgettext("eyra-annotation", "definition.placeholder", phrase: concept.phrase)
     end
+  end
+
+  def member?(annotations, %Ontology.ConceptModel{} = concept) when is_list(annotations) do
+    Enum.any?(annotations, fn %Annotation.Model{} = annotation ->
+      member?(annotation, concept)
+    end)
+  end
+
+  def member?(%Annotation.Model{} = annotation, %Ontology.ConceptModel{} = concept) do
+    Ontology.Element.flatten(annotation)
+    |> Enum.filter(fn %module{} -> module == Ontology.ConceptModel end)
+    |> Enum.any?(&(&1.phrase == concept.phrase))
   end
 end

@@ -84,3 +84,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "screening.criteria.library.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "statement.unspecified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criterion.already_exists"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criterion.insert.error"
+msgstr ""

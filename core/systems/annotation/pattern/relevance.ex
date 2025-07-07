@@ -50,8 +50,7 @@ defmodule Systems.Annotation.Pattern.Relevance do
             type,
             to_statement(relevance, parameter),
             entity,
-            [sub_type_ref, parameter_ref, resource_ref],
-            []
+            [sub_type_ref, parameter_ref, resource_ref]
           )
 
         {:ok, annotation}

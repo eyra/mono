@@ -1,4 +1,6 @@
 defmodule Core.Authentication do
+  import Ecto.Query
+  alias Ecto.Multi
   alias Core.Repo
   alias Core.Authentication
 
@@ -12,12 +14,24 @@ defmodule Core.Authentication do
   def obtain_entity(%module{id: id} = _subject) do
     identifier = encode_identifier(module, id)
 
-    case Repo.one(Authentication.Entity, identifier: identifier) do
+    Multi.new()
+    |> Multi.run(:entity, fn _, _ ->
+      fetch_or_create_entity(identifier)
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{entity: entity}} ->
+        {:ok, entity}
+
+      error ->
+        error
+    end
+  end
+
+  defp fetch_or_create_entity(identifier) do
+    case Repo.one(from(e in Authentication.Entity, where: e.identifier == ^identifier)) do
       nil ->
-        case insert_entity(identifier) do
-          {:ok, entity} -> {:ok, entity}
-          error -> error
-        end
+        insert_entity(identifier)
 
       entity ->
         {:ok, entity}
@@ -32,15 +46,23 @@ defmodule Core.Authentication do
   end
 
   def obtain_actor(type, name) do
-    case Repo.one(Authentication.Actor, type: type, name: name) do
-      nil ->
-        case insert_actor(type, name) do
-          {:ok, actor} -> {:ok, actor}
-          error -> error
-        end
+    Multi.new()
+    |> Multi.run(:actor, fn _, _ ->
+      case Repo.one(Authentication.Actor, type: type, name: name) do
+        nil ->
+          insert_actor(type, name)
 
-      actor ->
+        actor ->
+          {:ok, actor}
+      end
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{actor: actor}} ->
         {:ok, actor}
+
+      error ->
+        error
     end
   end
 

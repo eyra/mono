@@ -52,11 +52,11 @@ defmodule Systems.Project.NodePageGridView do
   @impl true
   def compose(
         :create_item_view,
-        %{node: node}
+        %{node: node, user: user}
       ) do
     %{
       module: Project.CreateItemView,
-      params: %{node: node}
+      params: %{node: node, user: user}
     }
   end
 

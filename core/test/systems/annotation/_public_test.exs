@@ -111,23 +111,6 @@ defmodule Annotation.PublicTest do
     assert annotation1.id != annotation2.id
   end
 
-  test "insert_annotation/5 insert + insert (different ai_generated?)", %{
-    entity: entity,
-    annotation_type: type
-  } do
-    ref = Factories.insert!(:annotation, %{statement: "Parent annotation"})
-
-    assert {:ok, %{annotation: annotation1}} =
-             insert_annotation(type, "Comment on existing annotation", entity, ref)
-
-    assert {:ok, %{annotation: annotation2}} =
-             insert_annotation(type, "Comment on existing annotation", entity, ref,
-               ai_generated?: true
-             )
-
-    assert annotation1.id != annotation2.id
-  end
-
   test "insert_annotation/5 insert + insert (same statement)", %{
     entity: entity,
     annotation_type: type

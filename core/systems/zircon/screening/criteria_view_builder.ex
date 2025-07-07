@@ -7,18 +7,29 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
   alias Systems.Annotation
   alias Systems.Ontology
 
-  def view_model(_model, _assigns) do
+  @parameter Systems.Annotation.Pattern.Parameter.type_phrase()
+
+  def view_model(%{annotations: annotations}, _assigns) do
     actor = Authentication.obtain_actor!(:system, "Zircon")
     entity = Authentication.obtain_entity!(actor)
 
+    dimension_list = list_research_dimensions()
+
     library_items =
-      {list_research_dimensions(), list_research_frameworks()}
+      {dimension_list, list_research_frameworks()}
       |> get_library_map(entity)
       |> get_library_items()
       |> Enum.sort_by(& &1.title)
 
+    criteria_list =
+      annotations
+      |> Enum.sort_by(& &1.inserted_at, :asc)
+      |> Enum.filter(fn annotation -> annotation.type.phrase == @parameter end)
+
     %{
-      library_items: library_items
+      dimension_list: dimension_list,
+      library_items: library_items,
+      criteria_list: criteria_list
     }
   end
 
@@ -42,18 +53,12 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
     dimension_framework_map
     |> Enum.map(fn {dimension, %{definition: definition, frameworks: frameworks}} ->
       %Builder.LibraryItemModel{
-        id: dimension.phrase |> slugify(),
-        type: :research_design_element,
+        id: dimension.phrase,
+        type: "Research Dimension",
         title: dimension.phrase,
         tags: frameworks,
         description: definition
       }
     end)
-  end
-
-  defp slugify(nil), do: "?"
-
-  defp slugify(title) do
-    title |> Slug.slugify(separator: ?_)
   end
 end

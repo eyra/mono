@@ -3,23 +3,20 @@ defmodule Systems.Annotation.Factories do
   alias Systems.Annotation
   alias Systems.Ontology
 
-  def insert_annotation(type, value, author, target, opts \\ [])
+  def insert_annotation(type, value, author, target)
 
   def insert_annotation(
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Annotation.Model{} = annotation,
-        opts
+        %Annotation.Model{} = annotation
       ) do
-    ai_generated? = Keyword.get(opts, :ai_generated, false)
     reference = insert_annotation_ref(annotation)
 
     Factories.insert!(:annotation, %{
       type: type,
       value: value,
       author: author,
-      ai_generated: ai_generated?,
       references: [reference]
     })
   end
@@ -28,10 +25,8 @@ defmodule Systems.Annotation.Factories do
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Ontology.ConceptModel{} = concept,
-        opts
+        %Ontology.ConceptModel{} = concept
       ) do
-    ai_generated? = Keyword.get(opts, :ai_generated, false)
     ontology_ref = Ontology.Factories.insert_ref(concept)
     reference = insert_annotation_ref(ontology_ref)
 
@@ -39,7 +34,6 @@ defmodule Systems.Annotation.Factories do
       type: type,
       value: value,
       author: author,
-      ai_generated: ai_generated?,
       references: [reference]
     })
   end
@@ -48,10 +42,8 @@ defmodule Systems.Annotation.Factories do
         %Ontology.ConceptModel{} = type,
         value,
         %{} = author,
-        %Ontology.PredicateModel{} = predicate,
-        opts
+        %Ontology.PredicateModel{} = predicate
       ) do
-    ai_generated? = Keyword.get(opts, :ai_generated, false)
     ontology_ref = Ontology.Factories.insert_ref(predicate)
     reference = insert_annotation_ref(ontology_ref)
 
@@ -59,7 +51,6 @@ defmodule Systems.Annotation.Factories do
       type: type,
       value: value,
       author: author,
-      ai_generated: ai_generated?,
       references: [reference]
     })
   end

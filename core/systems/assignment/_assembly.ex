@@ -8,12 +8,12 @@ defmodule Systems.Assignment.Assembly do
   alias Systems.Crew
   alias Systems.Workflow
 
-  def create(template, director, budget \\ nil) do
-    prepare(template, director, budget)
+  def create(template, director, user, budget \\ nil) do
+    prepare(template, director, user, budget)
     |> Repo.insert()
   end
 
-  def prepare(template, director, budget \\ nil) do
+  def prepare(template, director, user, budget \\ nil) do
     auth_node = auth_module().create_node!()
     crew_auth_node = auth_module().create_node!(auth_node)
     workflow_auth_node = auth_module().create_node!(crew_auth_node)
@@ -22,7 +22,7 @@ defmodule Systems.Assignment.Assembly do
     info = Assignment.Public.prepare_info(info_attrs(template, director))
     affiliate = Affiliate.Public.prepare_affiliate()
     page_refs = Assignment.Public.prepare_page_refs(template, auth_node)
-    workflow = prepare_workflow(template, workflow_auth_node)
+    workflow = prepare_workflow(template, workflow_auth_node, user)
     consent_agreement = prepare_consent_agreement(auth_node)
 
     Assignment.Public.prepare(
@@ -38,27 +38,27 @@ defmodule Systems.Assignment.Assembly do
     )
   end
 
-  defp prepare_workflow(:questionnaire = special, %{} = auth_node) do
+  defp prepare_workflow(:questionnaire = special, %{} = auth_node, user) do
     template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node)
+    initial_items = prepare_initial_items(template, auth_node, user)
     prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_workflow(:data_donation = special, %{} = auth_node) do
+  defp prepare_workflow(:data_donation = special, %{} = auth_node, user) do
     template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node)
+    initial_items = prepare_initial_items(template, auth_node, user)
     prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_workflow(:benchmark_challenge = special, %{} = auth_node) do
+  defp prepare_workflow(:benchmark_challenge = special, %{} = auth_node, user) do
     template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node)
+    initial_items = prepare_initial_items(template, auth_node, user)
     prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_workflow(:paper_screening = special, %{} = auth_node) do
+  defp prepare_workflow(:paper_screening = special, %{} = auth_node, user) do
     template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node)
+    initial_items = prepare_initial_items(template, auth_node, user)
     prepare_workflow(special, initial_items, auth_node)
   end
 
@@ -67,14 +67,17 @@ defmodule Systems.Assignment.Assembly do
     Assignment.Public.prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_initial_items(template, auth_node) do
+  defp prepare_initial_items(template, auth_node, user) do
     %{initial_items: initial_items, library: %{items: library_items}} =
       Assignment.Template.workflow_config(template)
 
     Enum.map(initial_items, fn tool_special ->
       %{type: tool_type} = Enum.find(library_items, &(&1.id == tool_special))
       tool_auth_node = auth_module().create_node!(auth_node)
-      tool = Workflow.Public.prepare_tool(tool_type, %{director: :assignment}, tool_auth_node)
+
+      tool =
+        Workflow.Public.prepare_tool(tool_type, %{director: :assignment}, tool_auth_node, user)
+
       Assignment.Public.prepare_tool_ref(tool_special, tool)
     end)
     |> Assignment.Public.prepare_workflow_items()

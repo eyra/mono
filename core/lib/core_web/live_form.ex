@@ -10,17 +10,17 @@ defmodule CoreWeb.LiveForm do
   def flash_helpers() do
     quote do
       def hide_flash(socket) do
-        Frameworks.Pixel.Flash.push_hide()
+        Frameworks.Pixel.Flash.push_hide(socket)
         socket
       end
 
       def flash_error(socket) do
-        Frameworks.Pixel.Flash.push_error()
+        Frameworks.Pixel.Flash.push_error(socket)
         socket
       end
 
       def flash_error(socket, message) do
-        Frameworks.Pixel.Flash.push_error(message)
+        Frameworks.Pixel.Flash.push_error(socket, message)
         socket
       end
 
@@ -30,13 +30,13 @@ defmodule CoreWeb.LiveForm do
       end
 
       def flash_persister_error(socket, message) do
-        Frameworks.Pixel.Flash.push_error(message)
+        Frameworks.Pixel.Flash.push_error(socket, message)
         socket
       end
 
       def flash_persister_saved(socket) do
         message = dgettext("eyra-ui", "persister.saved.flash")
-        Frameworks.Pixel.Flash.push_info(message)
+        Frameworks.Pixel.Flash.push_info(socket, message)
         socket
       end
     end

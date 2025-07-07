@@ -39,7 +39,7 @@ defmodule Systems.Annotation.Pattern.Connection do
         type = obtain_concept!(@connection, entity)
         subject_ref = obtain_annotation_ref!(subject)
         object_ref = obtain_annotation_ref!(object)
-        annotation = insert_annotation!(type, statement, entity, [subject_ref, object_ref], [])
+        annotation = insert_annotation!(type, statement, entity, [subject_ref, object_ref])
         {:ok, annotation}
       end
     end

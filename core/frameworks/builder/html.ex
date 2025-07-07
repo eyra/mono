@@ -50,7 +50,7 @@ defmodule Frameworks.Builder.HTML do
         <.wrap>
           <Button.dynamic
             face={%{type: :primary, bg_color: "bg-success", label: dgettext("eyra-workflow", "add.to.button") }}
-            action={%{type: :send, event: "add", item: @type}}
+            action={%{type: :send, event: "add", item: @id}}
           />
         </.wrap>
       </Panel.flat>

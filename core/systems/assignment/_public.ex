@@ -136,7 +136,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
-    {:ok, %{assignment_instance: instance}} = obtain_instance(assignment, user)
+    {:ok, instance} = obtain_instance(assignment, user)
     instance
   end
 
@@ -150,6 +150,13 @@ defmodule Systems.Assignment.Public do
     )
     |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, %{user: user})
     |> Repo.transaction()
+    |> case do
+      {:ok, %{assignment_instance: instance}} ->
+        {:ok, instance}
+
+      error ->
+        error
+    end
   end
 
   def get_instance(%Assignment.Model{} = assignment, %User{} = user) do

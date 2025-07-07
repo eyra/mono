@@ -79,8 +79,20 @@ msgstr "Errors"
 
 #, elixir-autogen, elixir-format
 msgid "screening.criteria.library.description"
-msgstr "Choose which categories to add as criteria."
+msgstr "Choose which dimensions to add as criteria parameters."
 
 #, elixir-autogen, elixir-format
 msgid "screening.criteria.library.title"
-msgstr "Categories"
+msgstr "Dimension"
+
+#, elixir-autogen, elixir-format
+msgid "statement.unspecified"
+msgstr "%{dimension} unspecified"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.already_exists"
+msgstr "%{dimension} already exists"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.insert.error"
+msgstr "%{dimension} could not be added"

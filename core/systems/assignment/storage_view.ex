@@ -6,7 +6,10 @@ defmodule Systems.Assignment.StorageView do
   alias Systems.Storage
 
   @impl true
-  def update(%{project_node: project_node, storage_endpoint: storage_endpoint}, socket) do
+  def update(
+        %{project_node: project_node, storage_endpoint: storage_endpoint, user: user},
+        socket
+      ) do
     special_type = Map.get(socket, :special_type, :builtin)
 
     {
@@ -15,7 +18,8 @@ defmodule Systems.Assignment.StorageView do
       |> assign(
         project_node: project_node,
         storage_endpoint: storage_endpoint,
-        special_type: special_type
+        special_type: special_type,
+        user: user
       )
       |> compose_child(:type_selector)
       |> update_storage_button()
@@ -93,7 +97,8 @@ defmodule Systems.Assignment.StorageView do
         %{
           assigns: %{
             special_type: special_type,
-            project_node: %{id: project_node_id} = project_node
+            project_node: %{id: project_node_id} = project_node,
+            user: user
           }
         } = socket
       ) do
@@ -102,14 +107,14 @@ defmodule Systems.Assignment.StorageView do
     changeset =
       Storage.Public.prepare_endpoint(special_type, %{key: "project_node=#{project_node_id}"})
 
-    create_item_result = Project.Assembly.create_item(changeset, name, project_node)
+    create_item_result = Project.Assembly.create_item(changeset, name, project_node, user)
 
     case create_item_result do
       {:ok, _} ->
         {:noreply, socket}
 
       {:error, _} ->
-        {:noreply, socket |> Frameworks.Pixel.Flash.push_error()}
+        {:noreply, socket |> Frameworks.Pixel.Flash.push_error(socket)}
     end
   end
 

@@ -27,7 +27,7 @@ defmodule Systems.Annotation.Pattern.Definition do
       else
         type = obtain_concept!(@definition, entity)
         annotation_ref = obtain_annotation_ref!(subject)
-        annotation = insert_annotation!(type, definition, entity, [annotation_ref], [])
+        annotation = insert_annotation!(type, definition, entity, [annotation_ref])
         {:ok, annotation}
       end
     end

@@ -3,25 +3,19 @@ defmodule Systems.Ontology.Factories do
   alias Systems.Ontology.ConceptModel
   alias Systems.Ontology.PredicateModel
 
-  def insert_concept(phrase, %{} = author, opts \\ []) do
-    ai_generated? = Keyword.get(opts, :ai_generated, false)
-
+  def insert_concept(phrase, %{} = author) do
     Factories.insert!(:ontology_concept, %{
       phrase: phrase,
-      author: author,
-      ai_generated: ai_generated?
+      author: author
     })
   end
 
-  def insert_predicate(%{} = subject, %{} = predicate, %{} = object, %{} = author, opts \\ []) do
-    ai_generated? = Keyword.get(opts, :ai_generated, false)
-
+  def insert_predicate(%{} = subject, %{} = predicate, %{} = object, %{} = author) do
     Factories.insert!(:ontology_predicate, %{
       subject: subject,
       predicate: predicate,
       object: object,
-      author: author,
-      ai_generated: ai_generated?
+      author: author
     })
   end
 

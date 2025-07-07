@@ -16,21 +16,34 @@ defmodule Systems.Ontology.Public do
   ]
 
   # Concept
-
   def obtain_concept!(phrase, entity) do
-    case insert_concept(phrase, entity) do
+    case obtain_concept(phrase, entity) do
       {:ok, concept} ->
         concept
 
-      {:error,
-       %{
-         errors: [
-           phrase:
-             {"has already been taken",
-              [constraint: :unique, constraint_name: "ontology_concept_unique"]}
-         ]
-       }} ->
-        get_concept(phrase)
+      error ->
+        raise "Failed to obtain concept: #{inspect(error)}"
+    end
+  end
+
+  def obtain_concept(phrase, entity) do
+    Multi.new()
+    |> Multi.run(:concept, fn _, _ ->
+      case get_concept(phrase) do
+        nil ->
+          insert_concept(phrase, entity)
+
+        concept ->
+          {:ok, concept}
+      end
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{concept: concept}} ->
+        {:ok, concept}
+
+      error ->
+        error
     end
   end
 
@@ -82,20 +95,29 @@ defmodule Systems.Ontology.Public do
 
   # Predicate
 
-  def obtain_predicate(subject, subsumes, object, entity) do
-    case insert_predicate(subject, subsumes, object, entity) do
-      {:ok, predicate} ->
-        predicate
+  def obtain_predicate!(subject, subsumes, object, entity) do
+    {:ok, predicate} = obtain_predicate(subject, subsumes, object, entity)
+    predicate
+  end
 
-      {:error,
-       %{
-         errors: [
-           subject_id:
-             {"has already been taken",
-              [constraint: :unique, constraint_name: "ontology_predicate_unique"]}
-         ]
-       }} ->
-        get_predicate({subject, subsumes, object, false})
+  def obtain_predicate(subject, subsumes, object, entity) do
+    Multi.new()
+    |> Multi.run(:predicate, fn _, _ ->
+      case get_predicate({subject, subsumes, object, false}) do
+        nil ->
+          insert_predicate(subject, subsumes, object, entity)
+
+        predicate ->
+          {:ok, predicate}
+      end
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{predicate: predicate}} ->
+        {:ok, predicate}
+
+      error ->
+        error
     end
   end
 
@@ -162,7 +184,7 @@ defmodule Systems.Ontology.Public do
 
   def obtain_ontology_ref!(concept_or_predicate) do
     case obtain_ontology_ref(concept_or_predicate) do
-      {:ok, %{ontology_ref: ontology_ref}} ->
+      {:ok, ontology_ref} ->
         ontology_ref
 
       _ ->
@@ -175,6 +197,13 @@ defmodule Systems.Ontology.Public do
     |> Multi.put(:concept_or_predicate, concept_or_predicate)
     |> upsert_ontology_ref(:ontology_ref, :concept_or_predicate)
     |> Repo.transaction()
+    |> case do
+      {:ok, %{ontology_ref: ontology_ref}} ->
+        {:ok, ontology_ref}
+
+      error ->
+        error
+    end
   end
 
   def prepare_ontology_ref(%Ontology.ConceptModel{} = concept) do

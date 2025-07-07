@@ -79,12 +79,12 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
-  def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
+  def create_item(template_or_changeset, name, %Project.NodeModel{} = node, user)
       when is_binary(name) do
     Multi.new()
     |> Multi.insert(
       :project_item,
-      prepare_item(template_or_changeset, name)
+      prepare_item(template_or_changeset, name, user)
       |> Changeset.put_assoc(:node, node)
     )
     |> EctoHelper.run(:project_node, &load_node!/1)
@@ -106,39 +106,39 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare(%{name: name}, items, user)
   end
 
-  defp prepare_item(:benchmark_challenge, name) do
+  defp prepare_item(:benchmark_challenge, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:benchmark_challenge, :project, nil)
+      Assignment.Assembly.prepare(:benchmark_challenge, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:data_donation, name) do
+  defp prepare_item(:data_donation, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:data_donation, :project, nil)
+      Assignment.Assembly.prepare(:data_donation, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:questionnaire, name) do
+  defp prepare_item(:questionnaire, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:questionnaire, :project, nil)
+      Assignment.Assembly.prepare(:questionnaire, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:paper_screening, name) do
+  defp prepare_item(:paper_screening, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:paper_screening, :project, nil)
+      Assignment.Assembly.prepare(:paper_screening, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(%Ecto.Changeset{} = changeset, name) do
+  defp prepare_item(%Ecto.Changeset{} = changeset, name, _user) do
     Project.Public.prepare_item(%{name: name, project_path: []}, changeset)
   end
 

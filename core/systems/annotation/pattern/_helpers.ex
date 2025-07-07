@@ -4,7 +4,7 @@ defmodule Systems.Annotation.Pattern.Helpers do
       use Systems.Annotation.Constants
 
       import Systems.Annotation.Queries
-      import Systems.Annotation.Public, only: [insert_annotation!: 5, obtain_annotation_ref!: 1]
+      import Systems.Annotation.Public, only: [insert_annotation!: 4, obtain_annotation_ref!: 1]
       import Systems.Ontology.Public, only: [obtain_concept!: 2, obtain_ontology_ref!: 1]
 
       alias Core.Repo

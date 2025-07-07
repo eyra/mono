@@ -18,6 +18,11 @@ defmodule Systems.Zircon.Constants do
   """
   defmacro research_parameter, do: "Research Parameter"
 
+  @doc """
+  Default criteria for a screening tool.
+  """
+  defmacro criteria_dimensions, do: ["Population", "Intervention", "Comparison", "Outcome"]
+
   defmacro __using__(_) do
     quote do
       require Systems.Zircon.Constants
@@ -26,6 +31,7 @@ defmodule Systems.Zircon.Constants do
       @research_framework Constants.research_framework()
       @research_dimension Constants.research_dimension()
       @research_parameter Constants.research_parameter()
+      @criteria_dimensions Constants.criteria_dimensions()
     end
   end
 end

@@ -5,8 +5,6 @@ defmodule Systems.Annotation.Queries do
   import Ecto.Query, warn: true
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Ontology
-
   def annotation_query do
     from(a in Systems.Annotation.Model, as: :annotation)
   end
@@ -31,7 +29,7 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        {%Systems.Annotation.Model{id: annotation_id}, _entities}
+        %Systems.Annotation.Model{id: annotation_id}
       ) do
     query
     |> where(
@@ -43,45 +41,23 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        {%Systems.Ontology.ConceptModel{id: concept_id} = concept, _entities}
-      ) do
-    ontology_ref_ids = Ontology.Public.query_ref_ids(concept)
-
-    query
-    |> annotation_query_join(:ontology_refs)
-    |> where(
-      [annotation: a, annotation_ref: ar, ontology_refs: orm],
-      a.type_id == ^concept_id or
-        ar.type_id == ^concept_id or
-        orm.id in subquery(ontology_ref_ids)
-    )
-  end
-
-  def annotation_query_include(
-        query,
-        :reference,
-        {%Systems.Ontology.PredicateModel{id: predicate_id} = predicate, _entities}
-      ) do
-    ontology_ref_ids = Ontology.Public.query_ref_ids(predicate)
-
-    query
-    |> annotation_query_join(:ontology_refs)
-    |> where(
-      [annotation: a, annotation_ref: ar, ontology_refs: orm],
-      a.type_id == ^predicate_id or
-        ar.type_id == ^predicate_id or
-        orm.id in subquery(ontology_ref_ids)
-    )
-  end
-
-  def annotation_query_include(
-        query,
-        :reference,
-        %Systems.Ontology.ConceptModel{} = concept
+        %Systems.Ontology.PredicateModel{id: predicate_id}
       ) do
     build(query, :annotation_ref,
       ontology_ref: [
-        concept_id == ^concept.id
+        predicate_id == ^predicate_id
+      ]
+    )
+  end
+
+  def annotation_query_include(
+        query,
+        :reference,
+        %Systems.Ontology.ConceptModel{id: concept_id}
+      ) do
+    build(query, :annotation_ref,
+      ontology_ref: [
+        concept_id == ^concept_id
       ]
     )
   end

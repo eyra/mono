@@ -7,7 +7,7 @@ defmodule Fabric.ModalPresenter do
 
       def handle_event("prepare_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
-          if fabric_modal.ref.id != id do
+          if fabric_modal.live_component.ref.id != id do
             Logger.debug(
               "[Warning] Preparing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
             )
@@ -27,7 +27,7 @@ defmodule Fabric.ModalPresenter do
 
       def handle_event("show_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
-          if fabric_modal.ref.id != id do
+          if fabric_modal.live_component.ref.id != id do
             Logger.debug(
               "[Warning] Showing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
             )
@@ -46,19 +46,19 @@ defmodule Fabric.ModalPresenter do
 
       def handle_event("hide_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
-          if fabric_modal.ref.id != id do
+          if fabric_modal.live_component.ref.id != id do
             Logger.debug(
               "[Warning] Hiding modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
             )
           end
         end
 
-        live_nest_modal = map_live_nest_modal(modal, true)
+        live_nest_modal = map_live_nest_modal(fabric_modal, true)
 
         {
           :noreply,
           socket
-          # |> handle_hide_modal(live_nest_modal)
+          |> handle_hide_modal(live_nest_modal)
           |> assign(fabric_modal: nil)
         }
       end

@@ -20,41 +20,43 @@ defmodule Systems.Annotation.Pattern.Parameter do
 
   defstruct [:statement, :dimension, :entity]
 
-  defimpl Systems.Annotation.Pattern do
-    use Systems.Annotation.Pattern.Helpers
+  def type_phrase(), do: "Parameter"
+end
 
-    @parameter "Parameter"
+defimpl Systems.Annotation.Pattern, for: Systems.Annotation.Pattern.Parameter do
+  use Systems.Annotation.Pattern.Helpers
 
-    def obtain(%{statement: nil}), do: raise(MissingFieldError, :statement)
-    def obtain(%{dimension: nil}), do: raise(MissingFieldError, :dimension)
-    def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
+  @parameter Systems.Annotation.Pattern.Parameter.type_phrase()
 
-    def obtain(%{
-          statement: statement,
-          dimension: dimension,
-          entity: entity
-        }) do
-      if annotation = get(statement: statement, dimension: dimension, entity: entity) do
-        {:ok, annotation}
-      else
-        type = obtain_concept!(@parameter, entity)
-        annotation_ref = obtain_annotation_ref!(dimension)
-        annotation = insert_annotation!(type, statement, entity, [annotation_ref], [])
-        {:ok, annotation}
-      end
+  def obtain(%{statement: nil}), do: raise(MissingFieldError, :statement)
+  def obtain(%{dimension: nil}), do: raise(MissingFieldError, :dimension)
+  def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
+
+  def obtain(%{
+        statement: statement,
+        dimension: dimension,
+        entity: entity
+      }) do
+    if annotation = get(statement: statement, dimension: dimension, entity: entity) do
+      {:ok, annotation}
+    else
+      type = obtain_concept!(@parameter, entity)
+      annotation_ref = obtain_annotation_ref!(dimension)
+      annotation = insert_annotation!(type, statement, entity, [annotation_ref])
+      {:ok, annotation}
     end
+  end
 
-    def query(%{statement: statement, dimension: dimension, entity: entity}) do
-      {:ok, query(statement, dimension, entity)}
-    end
+  def query(%{statement: statement, dimension: dimension, entity: entity}) do
+    {:ok, query(statement, dimension, entity)}
+  end
 
-    defp query(statement, dimension, entity) do
-      query_annotation(@parameter, statement, entity, dimension)
-    end
+  defp query(statement, dimension, entity) do
+    query_annotation(@parameter, statement, entity, dimension)
+  end
 
-    defp get(statement: statement, dimension: dimension, entity: entity) do
-      query(statement, dimension, entity)
-      |> Repo.one()
-    end
+  defp get(statement: statement, dimension: dimension, entity: entity) do
+    query(statement, dimension, entity)
+    |> Repo.one()
   end
 end

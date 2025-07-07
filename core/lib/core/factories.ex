@@ -35,6 +35,7 @@ defmodule Core.Factories do
   alias Systems.Promotion
   alias Systems.Support
   alias Systems.Workflow
+  alias Systems.Zircon
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -321,6 +322,10 @@ defmodule Core.Factories do
 
   def build(:consent_signature) do
     build(:consent_signature, %{})
+  end
+
+  def build(:zircon_screening_tool) do
+    build(:zircon_screening_tool, %{})
   end
 
   # Ontology build/1
@@ -894,6 +899,15 @@ defmodule Core.Factories do
 
     %Content.TextItemModel{
       bundle: bundle
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:zircon_screening_tool, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Zircon.Screening.ToolModel{
+      auth_node: auth_node
     }
     |> struct!(attributes)
   end
