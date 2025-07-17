@@ -6,9 +6,11 @@ defmodule Systems.Home.AvailableView do
 
   @impl true
   def update(%{title: title, cards: cards}, %{assigns: %{}} = socket) do
+    sub_heading_text = dgettext("link-advert", "submission.available.sub_heading")
+
     {
       :ok,
-      socket |> assign(title: title, cards: cards)
+      socket |> assign(title: title, cards: cards, sub_heading_text: sub_heading_text)
     }
   end
 
@@ -27,14 +29,22 @@ defmodule Systems.Home.AvailableView do
   def render(assigns) do
     ~H"""
     <div class="border-2 border-grey4 rounded p-6">
-      <div class="flex flex-row">
-        <Text.title2 margin="">
-          <%= @title %>
-          <span class="text-primary"> <%= Enum.count(@cards) %></span>
-        </Text.title2>
-        <div class="flex-grow" />
+      <div class="flex flex-col">
+        <div class="flex flex-row">
+          <Text.title2 margin="">
+            <%= @title %>
+            <span class="text-primary"> <%= Enum.count(@cards) %></span>
+          </Text.title2>
+          <div class="flex-grow" />
+          <div>
+            <img class="h-12" src="/images/panl-wide.svg" />
+          </div>
+        </div>
+        <.spacing value="S" />
         <div>
-          <img class="h-12" src="/images/panl-wide.svg" />
+          <Text.body>
+            <%= @sub_heading_text %>
+          </Text.body>
         </div>
       </div>
       <%= if not Enum.empty?(@cards) do %>

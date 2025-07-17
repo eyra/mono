@@ -89,3 +89,7 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings.forward"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "submission.available.sub_heading"
+msgstr "Hieronder vind je de meest recente studies die in panl pool gepubliceerd zijn. Klik op een studie om meer details te lezen."

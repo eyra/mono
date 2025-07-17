@@ -15,10 +15,6 @@ msgid "member.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "visitor.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "participated.title"
 msgstr ""
 

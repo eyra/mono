@@ -16,10 +16,6 @@ msgid "member.title"
 msgstr "Software-Dienste"
 
 #, elixir-autogen, elixir-format
-msgid "visitor.title"
-msgstr "Software-Dienste"
-
-#, elixir-autogen, elixir-format
 msgid "participated.title"
 msgstr ""
 
