@@ -28,7 +28,7 @@ defmodule Systems.Home.PageBuilder do
       },
       active_menu_item: :home,
       next_best_action: nil,
-      blocks: [],
+      view_type: :guest,
       include_right_sidepadding?: false
     }
   end
@@ -48,24 +48,9 @@ defmodule Systems.Home.PageBuilder do
       },
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
+      view_type: :logged_in,
       blocks: blocks(user, assigns, panl?: panl?),
       include_right_sidepadding?: false
-    }
-  end
-
-  def view_model(singleton, assigns) do
-    put_locale(nil, false)
-
-    %{
-      hero: %{
-        type: :landing_page,
-        params: %{
-          title: dgettext("eyra-home", "visitor.title")
-        }
-      },
-      active_menu_item: :home,
-      next_best_action: nil,
-      blocks: blocks(singleton, assigns, panl?: false)
     }
   end
 
@@ -86,13 +71,8 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action]
-    |> append_if(:available, feature_enabled?(:panl))
-    |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
-  end
-
-  defp block_keys(_singleton, _opts) do
     [:next_best_action, :available]
+    |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
   end
 
   defp blocks(model, assigns, opts) do
