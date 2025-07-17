@@ -1,8 +1,7 @@
 import _ from "lodash";
 
-const pdfjsVersion = "3.11.174";
 const pdfjs = require("../node_modules/pdfjs-dist");
-const worker = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.min.js`;
+const worker = "/assets/pdf.worker.min.mjs";
 
 function renderPages(hook) {
   hook.renderPages();
