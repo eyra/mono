@@ -16,10 +16,10 @@ defmodule Systems.Promotion.FormView do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {_path, url, _original_filename}
+        %{public_url: public_url}
       ) do
     socket
-    |> save(entity, %{banner_photo_url: url})
+    |> save(entity, %{banner_photo_url: public_url})
   end
 
   @impl true
