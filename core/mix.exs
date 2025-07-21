@@ -137,7 +137,7 @@ defmodule Core.MixProject do
       {:file_system, "~> 1.0.1", only: [:dev, :test]},
       {:bypass, "~> 2.1",
        github: "PSPDFKit-labs/bypass",
-       ref: "3f4aac137fd1caf5a15953b43d8785966ab0e021",
+       ref: "0a47472667340ed7d3b1250751408c44c6f9a7d7",
        only: :test},
       {:mox, "~> 1.0", only: :test},
       {:promox, "~> 0.1.0", only: :test},
