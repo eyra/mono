@@ -65,8 +65,6 @@ defmodule Core.MixProject do
   defp deps do
     [
       # Fix for build warningns
-      {:sweet_xml, "~> 0.7.4",
-       github: "kbrw/sweet_xml", ref: "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6", override: true},
       # Deps
       {:appsignal_phoenix, "~> 2.6"},
       {:assent, "~> 0.2.3"},

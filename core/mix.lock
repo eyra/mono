@@ -101,7 +101,7 @@
   "sqids": {:hex, :sqids, "0.2.1", "38482dea665f6a97562f23eb8e3b4e29c7811d9225d742d5c8e675e2eb5d1925", [:mix], [], "hexpm", "b1a3e0ec62d6946fa630dc3cd95d956a5a7b7ca53aff09c3ec59d53cda3260c8"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.7", "354c321cf377240c7b8716899e182ce4890c5938111a1296add3ec74cf1715df", [:make, :mix, :rebar3], [], "hexpm", "fe4c190e8f37401d30167c8c405eda19469f34577987c76dde613e838bbc67f8"},
   "statistics": {:hex, :statistics, "0.6.3", "7fb182e7c1cab2980e392c7efef7ce326539f081f9defda4099550e9c2c7cb0f", [:mix], [], "hexpm", "a43d87726d240205e9ef47f29650a6e3132b4e4061e05512f32fa8120784a8e0"},
-  "sweet_xml": {:git, "https://github.com/kbrw/sweet_xml.git", "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6", [ref: "8fb4eefff3d1034c1a83c16a1b033f3dc01c09f6"]},
+  "sweet_xml": {:hex, :sweet_xml, "0.7.5", "803a563113981aaac202a1dbd39771562d0ad31004ddbfc9b5090bdcd5605277", [:mix], [], "hexpm", "193b28a9b12891cae351d81a0cead165ffe67df1b73fe5866d10629f4faefb12"},
   "table_rex": {:hex, :table_rex, "3.0.0", "5189b71b3b92ed461358f40f7b7b630dc37716bf6c8ab3e934b2bc63a99028bd", [:mix], [], "hexpm", "582776d24cbe6a4d30a39a7f02035b1bc979b6cd64923d7234dd2f0ad21a18c7"},
   "tailwind": {:hex, :tailwind, "0.2.4", "5706ec47182d4e7045901302bf3a333e80f3d1af65c442ba9a9eed152fb26c2e", [:mix], [{:castore, ">= 0.0.0", [hex: :castore, repo: "hexpm", optional: false]}], "hexpm", "c6e4a82b8727bab593700c998a4d98cf3d8025678bfde059aed71d0000c3e463"},
   "telemetry": {:hex, :telemetry, "1.3.0", "fedebbae410d715cf8e7062c96a1ef32ec22e764197f70cda73d82778d61e7a2", [:rebar3], [], "hexpm", "7015fc8919dbe63764f4b4b87a95b7c0996bd539e0d499be6ec9d7f3875b79e6"},
