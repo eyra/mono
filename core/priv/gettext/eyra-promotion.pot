@@ -67,14 +67,6 @@ msgid "subtitle.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "themes.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "themes.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "title.label"
 msgstr ""
 
