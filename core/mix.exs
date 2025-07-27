@@ -132,10 +132,7 @@ defmodule Core.MixProject do
       # Dev and test deps
       {:ex_machina, "~> 2.8.0", only: :test},
       {:file_system, "~> 1.0.1", only: [:dev, :test]},
-      {:bypass, "~> 2.1",
-       github: "PSPDFKit-labs/bypass",
-       ref: "0a47472667340ed7d3b1250751408c44c6f9a7d7",
-       only: :test},
+      {:bypass, "~> 2.1", only: :test},
       {:mox, "~> 1.0", only: :test},
       {:promox, "~> 0.1.0", only: :test},
       {:mock, "~> 0.3.0", only: :test},
