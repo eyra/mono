@@ -64,7 +64,6 @@ defmodule Core.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # Fix for build warningns
       # Deps
       {:appsignal_phoenix, "~> 2.6"},
       {:assent, "~> 0.2.3"},
@@ -81,7 +80,7 @@ defmodule Core.MixProject do
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "~> 2.5.6"},
       # Unreleased commit fixes build warnings in the original repo
-      {:faker, github: "elixirs/faker", ref: "c217c88f5c968146ea4c5fb0120df3dcf9175ab4"},
+      {:faker, "~> 0.19.0-alpha.1"},
       # Fork fixes a bug in the original repo
       {:floki, github: "eyra/floki", override: true},
       {:gettext, "~> 0.19"},
