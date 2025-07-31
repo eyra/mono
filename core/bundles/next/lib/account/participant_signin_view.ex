@@ -7,21 +7,23 @@ defmodule Next.Account.ParticipantSigninView do
   alias Systems.Account.User
 
   @impl true
-  def update(%{blocks: blocks, email: email, status: status}, socket) do
+  def update(%{blocks: blocks, email: email, status: status} = params, socket) do
+    add_to_panl = Map.get(params, :add_to_panl, false)
+
     {
       :ok,
       socket
-      |> assign(email: email, blocks: blocks, status: status)
+      |> assign(email: email, blocks: blocks, status: status, add_to_panl: add_to_panl)
       |> update_password_form()
     }
   end
 
-  defp update_password_form(%{assigns: %{email: email}} = socket) do
+  defp update_password_form(%{assigns: %{email: email, add_to_panl: add_to_panl}} = socket) do
     attrs =
       if User.valid_email?(email) do
-        %{"email" => email}
+        %{"email" => email, "add_to_panl" => to_string(add_to_panl)}
       else
-        %{}
+        %{"add_to_panl" => to_string(add_to_panl)}
       end
 
     assign(socket, :password_form, to_form(attrs))

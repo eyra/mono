@@ -397,6 +397,15 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+
+  def hidden_input(assigns) do
+    ~H"""
+    <input type="hidden" name={input_name(@form, @field)} value={input_value(@form, @field)} />
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
   attr(:placeholder, :string, default: "")
   attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")

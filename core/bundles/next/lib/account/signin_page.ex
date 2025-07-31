@@ -22,6 +22,7 @@ defmodule Next.Account.SigninPage do
     initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
     registration_status = Map.get(params, "status", nil)
+    add_to_panl = Map.get(params, "add_to_panl", "false") == "true"
 
     {
       :ok,
@@ -32,7 +33,8 @@ defmodule Next.Account.SigninPage do
         initial_tab: initial_tab,
         tabbar_id: tabbar_id,
         show_errors: true,
-        status: registration_status
+        status: registration_status,
+        add_to_panl: add_to_panl
       )
       |> update_view_model()
       |> update_menus()

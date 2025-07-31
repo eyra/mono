@@ -19,9 +19,10 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account.User
 
   @impl true
-  def mount(%{"user_type" => user_type}, _session, socket) do
+  def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
+    add_to_panl = Map.get(params, "add_to_panl", "false") == "true"
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -29,6 +30,7 @@ defmodule Systems.Account.SignupPage do
       socket
       |> assign(
         creator?: creator?,
+        add_to_panl: add_to_panl,
         changeset: changeset,
         active_menu_item: nil
       )
@@ -42,7 +44,16 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_event("signup", %{"user" => user_params}, %{assigns: %{creator?: creator?}} = socket) do
+  def handle_event(
+        "signup",
+        %{"user" => user_params},
+        %{
+          assigns: %{
+            creator?: creator?,
+            add_to_panl: add_to_panl
+          }
+        } = socket
+      ) do
     user_params = Map.put(user_params, "creator", creator?)
 
     case Account.Public.register_user(user_params) do
@@ -50,6 +61,10 @@ defmodule Systems.Account.SignupPage do
         {:noreply, socket |> assign(changeset: changeset)}
 
       {:ok, user} ->
+        if add_to_panl and not creator? do
+          add_user_to_panl_pool(user)
+        end
+
         {:ok, _} =
           Account.Public.deliver_user_confirmation_instructions(
             user,
@@ -60,6 +75,17 @@ defmodule Systems.Account.SignupPage do
          socket
          |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
          |> push_navigate(to: ~p"/user/await-confirmation")}
+    end
+  end
+
+  defp add_user_to_panl_pool(user) do
+    case Systems.Pool.Public.get_panl() do
+      %Systems.Pool.Model{} = panl_pool ->
+        Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      nil ->
+        require Logger
+        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
     end
   end
 

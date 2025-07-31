@@ -37,6 +37,9 @@ defmodule Systems.Account.UserForm do
       <.spacing value="S" />
       <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
       <.spacing value="S" />
+      <%= if form[:add_to_panl] do %>
+        <.hidden_input form={form} field={:add_to_panl} />
+      <% end %>
       <Button.submit_wide label={dgettext("eyra-account", "signin.button")} bg_color="bg-grey1" />
       <.spacing value="S" />
 

@@ -26,7 +26,9 @@ defmodule Next.Account.SigninPageBuilder do
     [:participant, :creator]
   end
 
-  defp create_tab(:participant, %{fabric: fabric, email: email, status: status}) do
+  defp create_tab(:participant, %{fabric: fabric, email: email, status: status} = assigns) do
+    add_to_panl = Map.get(assigns, :add_to_panl, false)
+
     blocks =
       []
       |> append_if(:google, feature_enabled?(:member_google_sign_in))
@@ -37,7 +39,8 @@ defmodule Next.Account.SigninPageBuilder do
       Fabric.prepare_child(fabric, :participant, Next.Account.ParticipantSigninView, %{
         email: email,
         blocks: blocks,
-        status: status
+        status: status,
+        add_to_panl: add_to_panl
       })
 
     %{
