@@ -35,7 +35,7 @@ defmodule Next.Account.ParticipantSigninView do
       <div>
         <%= for block <- @blocks do %>
           <%= if block == :google do %>
-            <.google_signin creator?={false} />
+            <.google_signin creator?={false} add_to_panl={@add_to_panl} />
           <% end %>
           <%= if block == :password do %>
             <.password_signin for={@password_form} user_type={:participant} status={@status}/>

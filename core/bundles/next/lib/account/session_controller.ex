@@ -38,7 +38,7 @@ defmodule Next.Account.SessionController do
       add_to_panl = Map.get(user_params, "add_to_panl", "false") == "true"
 
       if add_to_panl and not user.creator do
-        add_user_to_panl_pool(user)
+        Systems.Pool.Public.add_user_to_panl_pool(user)
       end
 
       Account.UserAuth.log_in_user(conn, user, false, user_params)
@@ -48,17 +48,6 @@ defmodule Next.Account.SessionController do
       conn
       |> put_flash(:error, message)
       |> render_new()
-    end
-  end
-
-  defp add_user_to_panl_pool(user) do
-    case Systems.Pool.Public.get_panl() do
-      %Systems.Pool.Model{} = panl_pool ->
-        Systems.Pool.Public.add_participant!(panl_pool, user)
-
-      nil ->
-        require Logger
-        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
     end
   end
 

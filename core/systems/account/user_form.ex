@@ -76,10 +76,17 @@ defmodule Systems.Account.UserForm do
   end
 
   attr(:creator?, :boolean, required: true)
+  attr(:add_to_panl, :boolean, default: false)
 
   def google_signin(assigns) do
+    params = [{"creator", assigns.creator?}]
+    params = if assigns.add_to_panl, do: [{"add_to_panl", true} | params], else: params
+    query_string = URI.encode_query(params)
+
+    assigns = assign(assigns, :google_url, "/google-sign-in?#{query_string}")
+
     ~H"""
-      <a href={"/google-sign-in?creator=#{@creator?}"}>
+      <a href={@google_url}>
       <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
         <div class="flex w-full justify-center items-center">
           <div>

@@ -62,7 +62,7 @@ defmodule Systems.Account.SignupPage do
 
       {:ok, user} ->
         if add_to_panl and not creator? do
-          add_user_to_panl_pool(user)
+          Systems.Pool.Public.add_user_to_panl_pool(user)
         end
 
         {:ok, _} =
@@ -75,17 +75,6 @@ defmodule Systems.Account.SignupPage do
          socket
          |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
          |> push_navigate(to: ~p"/user/await-confirmation")}
-    end
-  end
-
-  defp add_user_to_panl_pool(user) do
-    case Systems.Pool.Public.get_panl() do
-      %Systems.Pool.Model{} = panl_pool ->
-        Systems.Pool.Public.add_participant!(panl_pool, user)
-
-      nil ->
-        require Logger
-        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
     end
   end
 

@@ -47,6 +47,7 @@ defmodule GoogleSignIn.CallbackPlug do
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
     creator? = Map.get(session_params || %{}, "creator", nil) == "true"
+    add_to_panl = Map.get(session_params || %{}, "add_to_panl", nil) == "true"
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
@@ -62,6 +63,10 @@ defmodule GoogleSignIn.CallbackPlug do
       else
         {register_user(google_user, creator?), true}
       end
+
+    if add_to_panl and not user.creator do
+      Systems.Pool.Public.add_user_to_panl_pool(user)
+    end
 
     log_in_user(config, conn, user, first_time?)
   end
