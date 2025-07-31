@@ -17,12 +17,13 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account
   alias Systems.Account.UserForm
   alias Systems.Account.User
+  alias Frameworks.Utility.Params
 
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
-    add_to_panl = Map.get(params, "add_to_panl", "false") == "true"
+    add_to_panl = Params.parse_add_to_panl(params)
     changeset = Account.Public.change_user_registration(%User{})
 
     {

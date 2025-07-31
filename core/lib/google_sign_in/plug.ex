@@ -42,12 +42,14 @@ defmodule GoogleSignIn.CallbackPlug do
   import GoogleSignIn.PlugUtils
   use Core.FeatureFlags
 
+  alias Frameworks.Utility.Params
+
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
-    creator? = Map.get(session_params || %{}, "creator", nil) == "true"
-    add_to_panl = Map.get(session_params || %{}, "add_to_panl", nil) == "true"
+    creator? = Params.parse_creator(session_params || %{})
+    add_to_panl = Params.parse_add_to_panl(session_params || %{})
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
