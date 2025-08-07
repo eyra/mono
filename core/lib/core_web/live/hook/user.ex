@@ -16,5 +16,9 @@ defmodule CoreWeb.Live.Hook.User do
     Account.Public.get_user_by_session_token(user_token)
   end
 
+  defp current_user(%{"user" => user}) do
+    user
+  end
+
   defp current_user(_), do: nil
 end

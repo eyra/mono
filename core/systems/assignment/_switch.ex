@@ -1,5 +1,4 @@
 defmodule Systems.Assignment.Switch do
-  alias Systems.Project
   use Frameworks.Signal.Handler
   require Logger
 
@@ -7,6 +6,7 @@ defmodule Systems.Assignment.Switch do
 
   alias Frameworks.Signal
 
+  alias Systems.Project
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Workflow

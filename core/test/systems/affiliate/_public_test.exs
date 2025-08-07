@@ -99,7 +99,7 @@ defmodule Systems.Affiliate.PublicTest do
   describe "obtain_user" do
     test "obtain non existing user" do
       affiliate = Factories.insert!(:affiliate)
-      user = Affiliate.Public.obtain_user("test_user", affiliate)
+      user = Affiliate.Public.obtain_user!("test_user", affiliate)
 
       assert user.id != nil
       assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
@@ -107,8 +107,8 @@ defmodule Systems.Affiliate.PublicTest do
 
     test "obtain2 existing user" do
       affiliate = Factories.insert!(:affiliate)
-      user = Affiliate.Public.obtain_user("test_user1", affiliate)
-      user_2 = Affiliate.Public.obtain_user("test_user2", affiliate)
+      user = Affiliate.Public.obtain_user!("test_user1", affiliate)
+      user_2 = Affiliate.Public.obtain_user!("test_user2", affiliate)
 
       assert user.id != user_2.id
       assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
@@ -118,7 +118,7 @@ defmodule Systems.Affiliate.PublicTest do
     test "obtain existing user" do
       affiliate = Factories.insert!(:affiliate)
       user = Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate})
-      user_2 = Affiliate.Public.obtain_user("test_user", affiliate)
+      user_2 = Affiliate.Public.obtain_user!("test_user", affiliate)
 
       assert user.id == user_2.id
     end
@@ -131,7 +131,7 @@ defmodule Systems.Affiliate.PublicTest do
       user_2_a =
         Factories.insert!(:affiliate_user, %{identifier: "test_user", affiliate: affiliate2})
 
-      user_2_b = Affiliate.Public.obtain_user("test_user", affiliate2)
+      user_2_b = Affiliate.Public.obtain_user!("test_user", affiliate2)
 
       assert user_2_a.id == user_2_b.id
     end

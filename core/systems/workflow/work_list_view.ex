@@ -1,7 +1,7 @@
 defmodule Systems.Workflow.WorkListView do
   use CoreWeb, :live_component
 
-  import Systems.Workflow.ItemViews, only: [work_list_item: 1]
+  import Systems.Workflow.HTML, only: [work_list_item: 1]
 
   @impl true
   def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do

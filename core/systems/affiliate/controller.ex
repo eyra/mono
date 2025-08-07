@@ -113,7 +113,7 @@ defmodule Systems.Affiliate.Controller do
 
   defp start_participant(conn, params, %{affiliate: affiliate} = assignment) do
     participant_id = get_participant(params)
-    %{user: user} = affiliate_user = Affiliate.Public.obtain_user(participant_id, affiliate)
+    %{user: user} = affiliate_user = Affiliate.Public.obtain_user!(participant_id, affiliate)
 
     conn
     |> assign(:current_user, user)

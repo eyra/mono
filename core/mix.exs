@@ -94,7 +94,7 @@ defmodule Core.MixProject do
       {:libcluster, "~> 3.3"},
       {:logger_json, "~> 6.2.1"},
       {:live_nest, "~> 0.1.0",
-       github: "eyra/live_nest", ref: "35dc1c4c7257656d71a43c35a66f83e94d24a24a"},
+       github: "eyra/live_nest", ref: "6b00e29f29d2038a5cd0d9dd695bfb5ed10733f3"},
       {:mime, "~> 2.0"},
       {:nimble_parsec, "~> 1.4"},
       {:nimble_options, "~> 1.0.0"},

@@ -9,13 +9,13 @@ defmodule Systems.Project.CreateItemView do
 
   # Initial Update
   @impl true
-  def update(%{id: id, node: node}, socket) do
+  def update(%{id: id, node: node, user: user}, socket) do
     title = dgettext("eyra-project", "create.item.title")
 
     {
       :ok,
       socket
-      |> assign(id: id, node: node, title: title)
+      |> assign(id: id, node: node, user: user, title: title)
       |> init_templates()
       |> compose_child(:template_selector)
       |> init_buttons()
@@ -90,10 +90,10 @@ defmodule Systems.Project.CreateItemView do
     }
   end
 
-  defp create_item(%{assigns: %{node: node}}, template) do
+  defp create_item(%{assigns: %{node: node, user: user}}, template) do
     default_name = Project.ItemTemplates.translate(template)
     name = Project.Public.new_item_name(node, default_name)
-    Project.Assembly.create_item(template, name, node)
+    Project.Assembly.create_item(template, name, node, user)
   end
 
   @impl true

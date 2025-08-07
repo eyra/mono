@@ -46,6 +46,30 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
+config :core, :signal,
+  handlers: [
+    "Core.APNS.SignalHandlers",
+    "Core.Mailer.SignalHandlers",
+    "Core.WebPush.SignalHandlers",
+    "Systems.Account.Switch",
+    "Systems.Admin.Switch",
+    "Systems.Advert.Switch",
+    "Systems.Assignment.Switch",
+    "Systems.Consent.Switch",
+    "Systems.Crew.Switch",
+    "Systems.Graphite.Switch",
+    "Systems.Instruction.Switch",
+    "Systems.Manual.Switch",
+    "Systems.NextAction.Switch",
+    "Systems.Observatory.Switch",
+    "Systems.Pool.Switch",
+    "Systems.Project.Switch",
+    "Systems.Storage.Switch",
+    "Systems.Student.Switch",
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
+  ]
+
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 config :core,

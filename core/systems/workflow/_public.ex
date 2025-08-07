@@ -80,30 +80,35 @@ defmodule Systems.Workflow.Public do
     |> Repo.one!()
   end
 
-  def add_item(workflow_id, %{} = item, director) when is_integer(workflow_id) do
+  def add_item(workflow_id, %{} = item, director, user) when is_integer(workflow_id) do
     get!(workflow_id)
-    |> add_item(item, director)
+    |> add_item(item, director, user)
   end
 
   def add_item(
         %Workflow.Model{auth_node: %Ecto.Association.NotLoaded{}} = workflow,
         item,
-        director
+        director,
+        user
       ) do
-    add_item(Repo.preload(workflow, :auth_node), item, director)
+    add_item(Repo.preload(workflow, :auth_node), item, director, user)
   end
 
   def add_item(
         %Workflow.Model{auth_node: workflow_auth_node} = workflow,
-        %{special: special, tool: tool_type} = _item,
-        director
+        %{type: tool_type, id: special} = _item,
+        director,
+        user
       )
       when is_atom(director) do
     Multi.new()
     |> Multi.run(:position, fn _, _ ->
       {:ok, item_count(workflow)}
     end)
-    |> Multi.insert(:tool, prepare_tool(tool_type, %{director: director}, workflow_auth_node))
+    |> Multi.insert(
+      :tool,
+      prepare_tool(tool_type, %{director: director}, workflow_auth_node, user)
+    )
     |> Multi.insert(:workflow_item, fn %{position: position, tool: tool} ->
       tool_ref = prepare_tool_ref(special, tool_type, tool)
       prepare_item(workflow, position, tool_ref)
@@ -143,28 +148,28 @@ defmodule Systems.Workflow.Public do
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
 
-  def prepare_tool(:zircon_screening_tool, %{} = attrs, auth_node),
-    do: Zircon.Public.prepare_screening_tool(attrs, auth_node)
+  def prepare_tool(:zircon_screening_tool, %{} = attrs, auth_node, user),
+    do: Zircon.Public.prepare_screening_tool(attrs, auth_node, user)
 
-  def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
+  def prepare_tool(:alliance_tool, %{} = attrs, auth_node, _user),
     do: Alliance.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:manual_tool, %{} = attrs, auth_node),
+  def prepare_tool(:manual_tool, %{} = attrs, auth_node, _user),
     do: Manual.Assembly.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:document_tool, %{} = attrs, auth_node),
+  def prepare_tool(:document_tool, %{} = attrs, auth_node, _user),
     do: Document.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:feldspar_tool, %{} = attrs, auth_node),
+  def prepare_tool(:feldspar_tool, %{} = attrs, auth_node, _user),
     do: Feldspar.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:lab_tool, %{} = attrs, auth_node),
+  def prepare_tool(:lab_tool, %{} = attrs, auth_node, _user),
     do: Lab.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:graphite_tool, %{} = attrs, auth_node),
+  def prepare_tool(:graphite_tool, %{} = attrs, auth_node, _user),
     do: Graphite.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:instruction_tool, %{} = attrs, auth_node),
+  def prepare_tool(:instruction_tool, %{} = attrs, auth_node, _user),
     do: Instruction.Public.prepare_tool(attrs, auth_node)
 
   def delete(%Workflow.ItemModel{workflow_id: workflow_id} = item) do

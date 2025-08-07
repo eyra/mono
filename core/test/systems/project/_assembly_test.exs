@@ -4,12 +4,14 @@ defmodule Systems.Project.AssemblyTest do
   alias Systems.Project
 
   test "create_item/3 create benchmark item" do
+    user = Factories.insert!(:member)
+
     %{root: %{id: root_id} = root} = Factories.insert!(:project, %{name: "Project"})
 
     item_name = "Item"
 
     {:ok, %{project_item: %{id: id}}} =
-      Project.Assembly.create_item(:benchmark_challenge, item_name, root)
+      Project.Assembly.create_item(:benchmark_challenge, item_name, root, user)
 
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 
@@ -32,12 +34,14 @@ defmodule Systems.Project.AssemblyTest do
   end
 
   test "create_item/3 create data donation item" do
+    user = Factories.insert!(:member)
+
     %{root: %{id: root_id} = root} = Factories.insert!(:project, %{name: "Project"})
 
     item_name = "Item"
 
     {:ok, %{project_item: %{id: id}}} =
-      Project.Assembly.create_item(:data_donation, item_name, root)
+      Project.Assembly.create_item(:data_donation, item_name, root, user)
 
     item = Project.Public.get_item!(id, Project.ItemModel.preload_graph(:down))
 

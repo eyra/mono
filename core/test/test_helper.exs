@@ -13,7 +13,12 @@ Application.put_env(:core, :web_push_backend, Core.WebPush.MockBackend)
 Mox.defmock(Core.APNS.MockBackend, for: Core.APNS.Backend)
 Application.put_env(:core, :apns_backend, Core.APNS.MockBackend)
 
-Application.put_env(:core, :signal_handlers, ["Frameworks.Signal.TestHelper"])
+signal = Application.get_env(:core, :signal, [])
+handlers = signal |> Keyword.get(:handlers, [])
+handlers = handlers ++ ["Frameworks.Signal.TestHelper"]
+signal = signal |> Keyword.put(:handlers, handlers)
+
+Application.put_env(:core, :signal, signal)
 
 Application.put_env(
   :core,

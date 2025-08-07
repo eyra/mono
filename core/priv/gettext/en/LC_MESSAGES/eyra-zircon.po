@@ -76,3 +76,23 @@ msgstr "Unsupported type of reference: %{type}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_history.errors.label"
 msgstr "Errors"
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.description"
+msgstr "Choose which dimensions to add as criteria parameters."
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.title"
+msgstr "Dimension"
+
+#, elixir-autogen, elixir-format
+msgid "statement.unspecified"
+msgstr "%{dimension} unspecified"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.already_exists"
+msgstr "%{dimension} already exists"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.insert.error"
+msgstr "%{dimension} could not be added"
