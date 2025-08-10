@@ -72,7 +72,7 @@ defmodule Core.MixProject do
       {:assent, "~> 0.2.3"},
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
-       github: "populimited/bamboo_phoenix", ref: "bf3e32082f3d81da78bff3ce359dd579fcf7b11f"},
+       github: "populimited/bamboo_phoenix", ref: "d3cf4888cefd9ae9c5f5c2a386ed542b98e921b6"},
       {:bamboo_ses, "~> 0.4.5"},
       {:bamboo, "~> 2.3.0"},
       {:bcrypt_elixir, "~> 3.0"},
