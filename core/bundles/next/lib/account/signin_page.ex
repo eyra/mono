@@ -23,7 +23,7 @@ defmodule Next.Account.SigninPage do
     initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
     registration_status = Map.get(params, "status", nil)
-    add_to_panl = Params.parse_add_to_panl(params)
+    add_to_panl = Params.parse_bool_param(params, "add_to_panl")
 
     {
       :ok,

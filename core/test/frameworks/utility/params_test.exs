@@ -10,18 +10,12 @@ defmodule Frameworks.Utility.ParamsTest do
       assert Params.parse_bool_param(%{"key" => true}, "key") == true
       assert Params.parse_bool_param(%{}, "key") == false
       assert Params.parse_bool_param(%{"key" => "invalid"}, "key") == false
-    end
-  end
 
-  describe "convenience functions" do
-    test "parse_add_to_panl/1" do
-      assert Params.parse_add_to_panl(%{"add_to_panl" => "true"}) == true
-      assert Params.parse_add_to_panl(%{}) == false
-    end
-
-    test "parse_creator/1" do
-      assert Params.parse_creator(%{"creator" => "true"}) == true
-      assert Params.parse_creator(%{}) == false
+      # Test specific parameter names
+      assert Params.parse_bool_param(%{"add_to_panl" => "true"}, "add_to_panl") == true
+      assert Params.parse_bool_param(%{}, "add_to_panl") == false
+      assert Params.parse_bool_param(%{"creator" => "true"}, "creator") == true
+      assert Params.parse_bool_param(%{}, "creator") == false
     end
   end
 end

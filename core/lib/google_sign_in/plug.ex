@@ -48,8 +48,8 @@ defmodule GoogleSignIn.CallbackPlug do
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
-    creator? = Params.parse_creator(session_params || %{})
-    add_to_panl = Params.parse_add_to_panl(session_params || %{})
+    creator? = Params.parse_bool_param(session_params || %{}, "creator")
+    add_to_panl = Params.parse_bool_param(session_params || %{}, "add_to_panl")
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 

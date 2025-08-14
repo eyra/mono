@@ -161,3 +161,11 @@ msgstr "Weet u zeker dat u uzelf wilt verwijderen van dit project?"
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.label"
+msgstr "Ik ga akkoord met het privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.must.be.accepted"
+msgstr "U moet akkoord gaan met het privacybeleid om door te gaan"

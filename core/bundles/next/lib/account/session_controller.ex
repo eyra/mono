@@ -36,7 +36,7 @@ defmodule Next.Account.SessionController do
     require_feature(:password_sign_in)
 
     if user = Account.Public.get_user_by_email_and_password(email, password) do
-      add_to_panl = Params.parse_add_to_panl(user_params)
+      add_to_panl = Params.parse_bool_param(user_params, "add_to_panl")
 
       if add_to_panl and not user.creator do
         Systems.Pool.Public.add_user_to_panl_pool(user)

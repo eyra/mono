@@ -20,7 +20,4 @@ defmodule Frameworks.Utility.Params do
         false
     end
   end
-
-  def parse_add_to_panl(params), do: parse_bool_param(params, "add_to_panl")
-  def parse_creator(params), do: parse_bool_param(params, "creator")
 end

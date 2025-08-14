@@ -7,6 +7,8 @@ defmodule Systems.Account.UserForm do
   alias Frameworks.Pixel.AlertBanner
 
   attr(:changeset, :map, required: true)
+  attr(:privacy_policy_visible, :boolean, default: false)
+  attr(:privacy_policy_error, :string, default: nil)
 
   def password_signup(assigns) do
     ~H"""
@@ -14,6 +16,24 @@ defmodule Systems.Account.UserForm do
         <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} reserve_error_space={false} />
         <.spacing value="S" />
         <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
+        <.spacing value="S" />
+        <%= if @privacy_policy_visible do %>
+          <.spacing value="S" />
+          <.checkbox
+            form={form}
+            field={:privacy_policy_accepted}
+            label_text={dgettext("eyra-account", "privacy.policy.label")}
+            accent={:tertiary}
+            background={:dark}
+          />
+
+          <%= if @privacy_policy_error do %>
+            <div class="text-warning text-sm mt-1">
+              <%= @privacy_policy_error %>
+            </div>
+          <% end %>
+        <% end %>
+
         <.spacing value="S" />
         <Button.submit_wide label={dgettext("eyra-account", "signup.button")} bg_color="bg-grey1" />
       </.form>
