@@ -1,10 +1,5 @@
 defmodule Systems.Zircon.Screening.CriteriaView do
-  use Phoenix.LiveView
-  use LiveNest, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
-  use Systems.Observatory.LiveFeature
-
-  require Logger
+  use CoreWeb, :embedded_live_view
 
   import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]
@@ -15,11 +10,6 @@ defmodule Systems.Zircon.Screening.CriteriaView do
 
   alias Systems.Zircon
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
-  on_mount({Systems.Observatory.LiveHook, __MODULE__})
-
   def get_model(:not_mounted_at_router, %{"tool" => tool}, _socket) do
     tool
   end
@@ -27,16 +17,13 @@ defmodule Systems.Zircon.Screening.CriteriaView do
   @impl true
   def mount(
         :not_mounted_at_router,
-        %{"title" => title, "builder" => builder},
+        %{"title" => title},
         socket
       ) do
     {
       :ok,
       socket
-      |> assign(
-        title: title,
-        builder: builder
-      )
+      |> assign(title: title)
       |> assign_criteria_elements()
     }
   end

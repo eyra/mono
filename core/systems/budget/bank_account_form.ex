@@ -30,6 +30,7 @@ defmodule Systems.Budget.BankAccountForm do
   def update(%{id: id, bank_account: nil, user: user}, socket) do
     title = dgettext("eyra-budget", "bank.account.create.title")
     bank_account = %Model{}
+
     changeset = Model.prepare(bank_account)
 
     {

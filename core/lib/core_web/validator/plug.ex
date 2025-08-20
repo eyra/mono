@@ -76,7 +76,7 @@ defmodule CoreWeb.Validator.Plug do
             handler.(conn, errors)
 
           is_atom(handler) and function_exported?(handler, :validation_error_callback, 2) ->
-            apply(handler, :validation_error_callback, [conn, errors])
+            handler.validation_error_callback(conn, errors)
 
           true ->
             default_error_handler(conn, errors)

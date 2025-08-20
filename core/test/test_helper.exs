@@ -2,6 +2,11 @@ require Promox
 
 Promox.defmock(for: Frameworks.Concept.Branch)
 
+# Ensure test signal handlers are compiled and loaded
+Code.ensure_loaded!(Frameworks.Signal.TestRecorder)
+Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
+Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
+
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
@@ -13,12 +18,9 @@ Application.put_env(:core, :web_push_backend, Core.WebPush.MockBackend)
 Mox.defmock(Core.APNS.MockBackend, for: Core.APNS.Backend)
 Application.put_env(:core, :apns_backend, Core.APNS.MockBackend)
 
-signal = Application.get_env(:core, :signal, [])
-handlers = signal |> Keyword.get(:handlers, [])
-handlers = handlers ++ ["Frameworks.Signal.TestHelper"]
-signal = signal |> Keyword.put(:handlers, handlers)
-
-Application.put_env(:core, :signal, signal)
+# TestHelper should not be globally added - it should only be active
+# when tests explicitly call isolate_signals()
+# Removed incorrect global TestHelper configuration
 
 Application.put_env(
   :core,
@@ -37,3 +39,6 @@ Application.put_env(:core, BankingClient, client: BankingClient.MockClient)
 
 Mox.defmock(Systems.Storage.MockBackend, for: Systems.Storage.Backend)
 Mox.defmock(Systems.Storage.BuiltIn.MockSpecial, for: Systems.Storage.BuiltIn.Special)
+
+Mox.defmock(Systems.Paper.RISFetcherMock, for: Systems.Paper.RISFetcher)
+Application.put_env(:core, :ris_fetcher_module, Systems.Paper.RISFetcherMock)

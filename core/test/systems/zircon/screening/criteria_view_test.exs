@@ -28,8 +28,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
     session = %{
       "user" => member,
       "tool" => tool,
-      "title" => "Test Criteria View",
-      "builder" => Screening.CriteriaViewBuilder
+      "title" => "Test Criteria View"
     }
 
     %{ontology: ontology, tool: tool, member: member, session: session}

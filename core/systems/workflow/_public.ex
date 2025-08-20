@@ -114,7 +114,7 @@ defmodule Systems.Workflow.Public do
       prepare_item(workflow, position, tool_ref)
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :added})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def list_tools(%Workflow.Model{} = workflow, special) do
@@ -182,7 +182,7 @@ defmodule Systems.Workflow.Public do
       {:ok, rearrange(items)}
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :deleted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update_position(%Workflow.ItemModel{workflow_id: workflow_id, position: old}, new)
@@ -203,8 +203,10 @@ defmodule Systems.Workflow.Public do
     |> Multi.run(:order_and_update, fn _, %{items: items} ->
       {:ok, rearrange(items, old, new)}
     end)
-    |> Signal.Public.multi_dispatch({:workflow, :rearranged}, %{id: id, workflow_id: workflow_id})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:workflow, :rearranged},
+      message: %{id: id, workflow_id: workflow_id}
+    )
+    |> Repo.commit()
   end
 
   def validate_old_position(items, id, pos) do

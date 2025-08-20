@@ -15,11 +15,16 @@
         excluded: [~r"/_build/", ~r"/deps/", ~r"/node_modules/"]
       },
       plugins: [],
-      requires: [],
+      requires: ["./lib/credo/check/warning/no_repo_transaction.ex"],
       strict: false,
       parse_timeout: 5000,
       color: true,
       checks: [
+        #
+        ## Custom Checks
+        #
+        {Credo.Check.Warning.NoRepoTransaction, []},
+
         #
         ## Consistency Checks
         #

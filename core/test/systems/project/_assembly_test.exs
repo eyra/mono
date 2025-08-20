@@ -100,7 +100,7 @@ defmodule Systems.Project.AssemblyTest do
     {:ok, _} =
       Ecto.Multi.new()
       |> Project.Assembly.update_path(project)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assert %Systems.Project.Model{
              root: %Systems.Project.NodeModel{
@@ -190,7 +190,7 @@ defmodule Systems.Project.AssemblyTest do
     {:ok, _} =
       Ecto.Multi.new()
       |> Project.Assembly.update_path(project)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assert %Systems.Project.Model{
              root: %Systems.Project.NodeModel{

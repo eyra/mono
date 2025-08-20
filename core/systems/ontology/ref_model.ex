@@ -40,7 +40,7 @@ defmodule Systems.Ontology.RefModel do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: [:concept, :predicate]
+  def preload_graph(:down), do: preload_graph([:concept, :predicate])
 
   def preload_graph(:up), do: []
 

@@ -3,7 +3,7 @@ defmodule Systems.Instruction.DownloadForm do
   use CoreWeb.FileUploader, accept: ~w(.zip)
 
   use Gettext, backend: CoreWeb.Gettext
-  import Frameworks.Pixel.Components.FileSelector
+  import Frameworks.Pixel.FileSelector
 
   alias Systems.Instruction
   alias Systems.Content

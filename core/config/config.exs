@@ -93,7 +93,7 @@ config :core, Oban,
     email_dispatchers: 1,
     email_delivery: 1,
     storage_delivery: 1,
-    ris_processor: 1
+    ris_import: 1
   ]
 
 config :packmatic, Packmatic.Source.URL,
@@ -197,5 +197,10 @@ config :core, :bundle, bundle
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+config :core, :zircon,
+  screening: [
+    agent_module: Systems.Zircon.Screening.HumanAgent
+  ]
 
 import_config "#{config_env()}.exs"

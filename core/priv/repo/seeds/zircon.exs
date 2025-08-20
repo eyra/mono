@@ -82,7 +82,7 @@ defmodule Repo.Seeds.Zircon do
       defconcepts(
         [
           PICO:
-            "A framework for clinical questions focusing on Population, Intervention, Comparison, and Outcome",
+            "A research framework for clinical questions focusing on Population, Intervention, Comparison, and Outcome",
           PICo:
             "A qualitative research framework examining Population, phenomenon of Interest, and Context",
           SPICE:

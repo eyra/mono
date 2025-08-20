@@ -302,19 +302,17 @@ defmodule Systems.Assignment.ContentPageBuilder do
              items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
            }
          },
-         {title, content_flags},
+         {title, _content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, current_user: user, timezone: timezone}
+         %{current_user: user}
        ) do
-    child =
-      Fabric.prepare_child(fabric, :system, Zircon.Screening.ImportView, %{
+    element =
+      LiveNest.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
         tool: zircon_screening_tool,
-        timezone: timezone,
         user: user,
-        title: title,
-        content_flags: content_flags
-      })
+        title: title
+      )
 
     %{
       id: :import,
@@ -323,7 +321,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
@@ -338,7 +336,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
              items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
            }
          },
-         {title, content_flags},
+         {title, _content_flags},
          _workflow_config,
          show_errors,
          %{current_user: user}
@@ -350,9 +348,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       LiveNest.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
-        title: title,
-        content_flags: content_flags,
-        builder: Zircon.Screening.CriteriaViewBuilder
+        title: title
       )
 
     %{

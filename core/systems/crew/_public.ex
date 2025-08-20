@@ -210,13 +210,13 @@ defmodule Systems.Crew.Public do
   def reject_task(%Crew.TaskModel{} = task, rejection) do
     Multi.new()
     |> reject_task(task, rejection)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def reject_task(id, rejection) do
     Multi.new()
     |> reject_task(id, rejection)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def accept_task(%Crew.TaskModel{} = task) do
@@ -238,7 +238,7 @@ defmodule Systems.Crew.Public do
   def update_task(%Crew.TaskModel{} = task, attrs, event) do
     Multi.new()
     |> multi_update(:task, task, attrs, event)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def multi_update(multi, :task, task, attrs, event) do
@@ -249,7 +249,7 @@ defmodule Systems.Crew.Public do
   def multi_update(multi, :task, changeset, event \\ :updated) do
     multi
     |> Multi.update(:crew_task, changeset)
-    |> Signal.Public.multi_dispatch({:crew_task, event}, %{changeset: changeset})
+    |> Signal.Public.multi_dispatch({:crew_task, event}, message: %{changeset: changeset})
   end
 
   def delete_task(%Crew.TaskModel{} = task) do
@@ -263,7 +263,7 @@ defmodule Systems.Crew.Public do
   def cancel(crew, user_ref) do
     Multi.new()
     |> cancel(crew, user_ref)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def cancel(%Multi{} = multi, crew, user_ref) do
@@ -331,7 +331,7 @@ defmodule Systems.Crew.Public do
         expire_at: expire_at
       })
       |> insert(:role_assignment, crew, user, :participant)
-      |> Repo.transaction()
+      |> Repo.commit()
     end
   end
 
@@ -348,7 +348,7 @@ defmodule Systems.Crew.Public do
       Multi.new()
       |> insert(:member, crew, user, %{expire_at: expire_at})
       |> insert(:role_assignment, crew, user, role)
-      |> Repo.transaction()
+      |> Repo.commit()
     end
   end
 
@@ -438,7 +438,7 @@ defmodule Systems.Crew.Public do
   def reset_member(%Crew.MemberModel{} = member, expire_at, opts) do
     Multi.new()
     |> reset_member(Repo.preload(member, [:crew]), expire_at, opts)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def reset_member(
@@ -461,7 +461,7 @@ defmodule Systems.Crew.Public do
       |> Multi.update_all(:tasks, task_query, set: task_attrs)
 
     if opts[:signal] do
-      Signal.Public.multi_dispatch(multi, {:crew_member, :reset}, %{crew_member: member})
+      Signal.Public.multi_dispatch(multi, {:crew_member, :reset}, message: %{crew_member: member})
     else
       multi
     end
@@ -511,7 +511,7 @@ defmodule Systems.Crew.Public do
     Multi.new()
     |> Multi.update_all(:members, members, set: [expired: true])
     |> Multi.update_all(:tasks, tasks, set: [expired: true])
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def pending_tasks_query(%Crew.Model{} = crew) do
@@ -532,6 +532,6 @@ defmodule Systems.Crew.Public do
     Multi.new()
     |> Multi.update_all(:members, members, set: [expired: true])
     |> Multi.update_all(:tasks, tasks, set: [expired: true])
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 end

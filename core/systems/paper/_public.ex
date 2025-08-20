@@ -39,7 +39,7 @@ defmodule Systems.Paper.Public do
       prepare_reference_file_error(reference_file, message)
     )
     |> Signal.Public.multi_dispatch({:paper_reference_file, :updated})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """
@@ -55,21 +55,145 @@ defmodule Systems.Paper.Public do
     |> put_assoc(:file, content_file)
   end
 
+  def prepare_reference_file(original_filename, url)
+      when is_binary(original_filename) and is_binary(url) do
+    prepare_reference_file(Content.Public.prepare_file(original_filename, url))
+  end
+
   def update_reference_file_status(reference_file, status) do
     Paper.ReferenceFileModel.changeset(reference_file, %{status: status})
   end
 
-  def archive_reference_file!(reference_file_id) when is_integer(reference_file_id) do
-    Paper.ReferenceFileModel
-    |> Repo.get!(reference_file_id)
-    |> Paper.ReferenceFileModel.changeset(%{status: :archived})
-    |> Repo.update!()
+  @doc """
+  Archives a reference file within a Multi transaction.
+  Adds the archive operation and signal dispatch to the given Multi.
+  """
+  def multi_archive_reference_file(multi, reference_file_id) when is_integer(reference_file_id) do
+    reference_file = Repo.get!(Paper.ReferenceFileModel, reference_file_id)
+
+    multi
+    |> Multi.update(
+      :paper_reference_file,
+      Paper.ReferenceFileModel.changeset(reference_file, %{status: :archived})
+    )
+    |> Signal.Public.multi_dispatch({:paper_reference_file, :updated},
+      name: :dispatch_archive_signal
+    )
   end
 
-  def start_processing_reference_file(reference_file_id) when is_integer(reference_file_id) do
-    %{"reference_file_id" => reference_file_id}
-    |> Paper.RISProcessorJob.new()
-    |> Oban.insert()
+  def archive_reference_file!(reference_file_id) when is_integer(reference_file_id) do
+    Multi.new()
+    |> multi_archive_reference_file(reference_file_id)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{paper_reference_file: updated_reference_file}} ->
+        updated_reference_file
+
+      {:error, _operation, changeset, _changes} ->
+        raise Ecto.InvalidChangesetError, changeset: changeset
+    end
+  end
+
+  def prepare_import_session!(reference_file, paper_set) do
+    prepare_import_session(reference_file, paper_set)
+    |> case do
+      {:ok, session} ->
+        session
+
+      {:error, error} ->
+        raise "Failed to start importing reference file: #{inspect(error)}"
+    end
+  end
+
+  def prepare_import_session(
+        %Paper.ReferenceFileModel{} = reference_file,
+        %Paper.SetModel{} = paper_set
+      ) do
+    # Create session, enqueue job, and dispatch signal atomically
+    Multi.new()
+    |> Multi.insert(
+      :paper_ris_import_session,
+      Paper.RISImportSessionModel.create_changeset(%{
+        status: :activated,
+        phase: :waiting
+      })
+      |> put_assoc(:reference_file, reference_file)
+      |> put_assoc(:paper_set, paper_set)
+    )
+    |> Multi.run(:job, fn _repo, %{paper_ris_import_session: session} ->
+      %{"session_id" => session.id}
+      |> Paper.RISImportPrepareJob.new()
+      |> Oban.insert()
+    end)
+    |> Signal.Public.multi_dispatch({:paper_ris_import_session, :waiting})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{paper_ris_import_session: session}} ->
+        {:ok, session}
+
+      {:error, _operation, changeset, _changes} ->
+        {:error, changeset}
+    end
+  end
+
+  def get_active_import_session_for_reference_file(reference_file_id)
+      when is_integer(reference_file_id) do
+    Paper.RISImportSessionModel.active_for_reference_file_tool(reference_file_id)
+    |> List.first()
+  end
+
+  def has_active_import_for_reference_file?(reference_file_id)
+      when is_integer(reference_file_id) do
+    Paper.RISImportSessionModel.has_active_import_for_reference_file?(reference_file_id)
+  end
+
+  def get_import_session!(session_id, preload \\ []) do
+    Repo.get!(Paper.RISImportSessionModel, session_id)
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Aborts an import session within a Multi transaction.
+  Adds the abort operation and signal dispatch to the given Multi.
+  """
+  def multi_abort_import_session(multi, session) do
+    multi
+    |> Multi.update(
+      :paper_ris_import_session,
+      Paper.RISImportSessionModel.update_changeset(session, %{status: :aborted})
+    )
+    |> Signal.Public.multi_dispatch({:paper_ris_import_session, :aborted},
+      name: :dispatch_abort_signal
+    )
+  end
+
+  def abort_import_session!(session) do
+    Paper.RISImportSessionModel.mark_aborted_with_signal!(session)
+  end
+
+  def commit_import_session!(session) do
+    # First, transition to importing phase with signal
+    {:ok, %{paper_ris_import_session: updated_session}} =
+      session
+      |> Paper.RISImportSessionModel.advance_phase_with_signal(:importing)
+
+    # Then enqueue async job for the actual import work
+    %{"session_id" => updated_session.id}
+    |> Paper.RISImportCommitJob.new()
+    |> Oban.insert!()
+
+    # Return the updated session in importing phase
+    updated_session
+  end
+
+  def get_recent_import_sessions_for_reference_file(reference_file_id, limit \\ 10) do
+    Paper.RISImportSessionModel.recent_for_reference_file(reference_file_id, limit)
+  end
+
+  def paper_ids_from_reference_file(%Paper.ReferenceFileModel{} = reference_file) do
+    paper_query(reference_file)
+    |> select([paper: p], p.id)
+    |> Repo.all()
   end
 
   # Reference File Error
@@ -104,6 +228,58 @@ defmodule Systems.Paper.Public do
     put_assoc(file_paper, :paper, paper)
   end
 
+  # Paper Set
+
+  def obtain_paper_set!(category, identifier) when is_atom(category) and is_integer(identifier) do
+    case get_paper_set(category, identifier) do
+      nil -> insert_paper_set!(category, identifier)
+      set -> set
+    end
+  end
+
+  def get_paper_set!(id, preload \\ []) when is_integer(id) do
+    from(Paper.SetModel, preload: ^preload)
+    |> Repo.get!(id)
+  end
+
+  def get_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
+    paper_set_query(category, identifier)
+    |> Repo.one()
+  end
+
+  def insert_paper_set!(category, identifier) when is_atom(category) and is_integer(identifier) do
+    prepare_paper_set(category, identifier)
+    |> Repo.insert!()
+  end
+
+  def prepare_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
+    %Paper.SetModel{}
+    |> Paper.SetModel.changeset(%{category: category, identifier: identifier})
+  end
+
+  def remove_paper_from_set!(paper_set_id, paper_id)
+      when is_integer(paper_set_id) and is_integer(paper_id) do
+    Multi.new()
+    |> Multi.delete_all(
+      :delete_association,
+      from(assoc in Paper.SetAssoc,
+        where: assoc.set_id == ^paper_set_id and assoc.paper_id == ^paper_id
+      )
+    )
+    |> Multi.run(:paper_set, fn _repo, _changes ->
+      {:ok, get_paper_set!(paper_set_id, [:papers])}
+    end)
+    |> Signal.Public.multi_dispatch({:paper_set, :updated})
+    |> Repo.commit()
+    |> case do
+      {:ok, _changes} ->
+        :ok
+
+      {:error, _operation, error, _changes} ->
+        raise "Failed to remove paper from set: #{inspect(error)}"
+    end
+  end
+
   # Paper
 
   @doc """
@@ -111,28 +287,33 @@ defmodule Systems.Paper.Public do
   """
   # credo:disable-for-next-line
   def prepare_paper(
-        year,
-        date,
-        abbreviated_journal,
         doi,
         title,
         subtitle,
+        year,
+        date,
+        abbreviated_journal,
         authors,
         abstract,
         keywords
       ) do
     %Paper.Model{}
     |> Paper.Model.changeset(%{
-      year: year,
-      date: date,
-      abbreviated_journal: abbreviated_journal,
       doi: doi,
       title: title,
       subtitle: subtitle,
+      year: year,
+      date: date,
+      abbreviated_journal: abbreviated_journal,
       authors: authors,
       abstract: abstract,
       keywords: keywords
     })
+  end
+
+  def get!(id, preloads \\ []) do
+    Repo.get!(Paper.Model, id)
+    |> Repo.preload(preloads)
   end
 
   # Error

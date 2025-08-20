@@ -2,7 +2,6 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-
   alias Core.Authentication
   alias Core.Authorization
   alias Core.WebPush
@@ -30,10 +29,12 @@ defmodule Core.Factories do
   alias Systems.Notification
   alias Systems.Ontology
   alias Systems.Org
+  alias Systems.Paper
   alias Systems.Pool
   alias Systems.Project
   alias Systems.Promotion
   alias Systems.Support
+  alias Systems.Version
   alias Systems.Workflow
   alias Systems.Zircon
 
@@ -324,8 +325,53 @@ defmodule Core.Factories do
     build(:consent_signature, %{})
   end
 
+  def build(:content_file) do
+    %Content.FileModel{
+      ref: "http://example.com/test_#{System.unique_integer([:positive])}.ris",
+      name: "test_#{System.unique_integer([:positive])}.ris"
+    }
+  end
+
   def build(:zircon_screening_tool) do
     build(:zircon_screening_tool, %{})
+  end
+
+  def build(:version) do
+    build(:version, %{
+      number: 1
+    })
+  end
+
+  # Paper
+  def build(:paper_ris_import_session) do
+    build(:paper_ris_import_session, %{})
+  end
+
+  def build(:paper_set) do
+    build(:paper_set, %{})
+  end
+
+  def build(:paper_set_assoc) do
+    build(:paper_set_assoc, %{})
+  end
+
+  def build(:paper) do
+    build(:paper, %{
+      version: build(:version),
+      title: Faker.Lorem.sentence(),
+      year: "#{Enum.random(2020..2024)}",
+      authors: [Faker.Person.name()],
+      abstract: Faker.Lorem.paragraph(),
+      keywords: [Faker.Lorem.word()],
+      doi: "10.1234/test.#{System.unique_integer([:positive])}.001"
+    })
+  end
+
+  def build(:paper_reference_file) do
+    build(:paper_reference_file, %{
+      status: :uploaded,
+      file: build(:content_file)
+    })
   end
 
   # Ontology build/1
@@ -982,6 +1028,71 @@ defmodule Core.Factories do
     %Annotation.RefModel{
       annotation: annotation,
       ontology_ref: ontology_ref
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:content_file, %{} = attributes) do
+    %Content.FileModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:version, %{} = attributes) do
+    %Version.Model{}
+    |> struct!(attributes)
+  end
+
+  # Paper
+
+  def build(:paper_ris_import_session, %{} = attributes) do
+    {paper_set, attributes} = Map.pop(attributes, :paper_set, build(:paper_set))
+
+    {reference_file, attributes} =
+      Map.pop(attributes, :reference_file, build(:paper_reference_file))
+
+    %Paper.RISImportSessionModel{
+      paper_set: paper_set,
+      reference_file: reference_file
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper, %{} = attributes) do
+    {version, attributes} = Map.pop(attributes, :version, build(:version))
+    {sets, attributes} = Map.pop(attributes, :sets, [])
+
+    %Paper.Model{
+      version: version,
+      sets: sets
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_set, %{} = attributes) do
+    {papers, attributes} = Map.pop(attributes, :papers, [])
+
+    %Paper.SetModel{
+      papers: papers
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_set_assoc, %{} = attributes) do
+    {paper, attributes} = Map.pop(attributes, :paper, build(:paper))
+    {set, attributes} = Map.pop(attributes, :set, build(:paper_set))
+
+    %Paper.SetAssoc{
+      paper: paper,
+      set: set
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_reference_file, %{} = attributes) do
+    {file, attributes} = Map.pop(attributes, :file, build(:content_file))
+
+    %Paper.ReferenceFileModel{
+      file: file
     }
     |> struct!(attributes)
   end

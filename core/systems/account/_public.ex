@@ -93,18 +93,20 @@ defmodule Systems.Account.Public do
   def update_user(user_changeset) do
     Multi.new()
     |> Multi.update(:user, user_changeset)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
     |> Multi.update(:user, user_changeset)
-    |> Signal.Public.multi_dispatch({:user_profile, :updated}, %{
-      user_changeset: user_changeset,
-      profile_changeset: profile_changeset
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:user_profile, :updated},
+      message: %{
+        user_changeset: user_changeset,
+        profile_changeset: profile_changeset
+      }
+    )
+    |> Repo.commit()
   end
 
   ## Affiliate
@@ -287,7 +289,7 @@ defmodule Systems.Account.Public do
 
     with {:ok, query} <- Account.UserTokenModel.verify_change_email_token_query(token, context),
          %Account.UserTokenModel{sent_to: email} <- Repo.one(query),
-         {:ok, _} <- Repo.transaction(user_email_multi(user, email, context)) do
+         {:ok, _} <- Repo.commit(user_email_multi(user, email, context)) do
       :ok
     else
       _ -> :error
@@ -361,7 +363,7 @@ defmodule Systems.Account.Public do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
     |> Ecto.Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
@@ -437,7 +439,7 @@ defmodule Systems.Account.Public do
   def confirm_user(token) do
     with {:ok, query} <- Account.UserTokenModel.verify_email_token_query(token, "confirm"),
          %User{} = user <- Repo.one(query),
-         {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user)) do
+         {:ok, %{user: user}} <- Repo.commit(confirm_user_multi(user)) do
       {:ok, user}
     else
       _ -> :error
@@ -512,7 +514,7 @@ defmodule Systems.Account.Public do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
     |> Ecto.Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
@@ -539,11 +541,13 @@ defmodule Systems.Account.Public do
   def update_features(%Account.FeaturesModel{} = features, changeset) do
     Multi.new()
     |> Repo.multi_update(:features, changeset)
-    |> Signal.Public.multi_dispatch(:features_updated, %{
-      features: features,
-      features_changeset: changeset
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch(:features_updated,
+      message: %{
+        features: features,
+        features_changeset: changeset
+      }
+    )
+    |> Repo.commit()
   end
 
   # Visited Pages
@@ -567,10 +571,12 @@ defmodule Systems.Account.Public do
 
     Multi.new()
     |> Multi.update(:user, changeset)
-    |> Signal.Public.multi_dispatch(:visited_pages_updated, %{
-      visited_pages: changeset.changes.visited_pages
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch(:visited_pages_updated,
+      message: %{
+        visited_pages: changeset.changes.visited_pages
+      }
+    )
+    |> Repo.commit()
   end
 
   def visited?(%User{visited_pages: nil}, _page_key), do: false

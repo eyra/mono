@@ -4,6 +4,7 @@ defmodule Systems.Zircon.Queries do
 
   import Frameworks.Utility.Query, only: [build: 3]
 
+  alias Systems.Account
   alias Systems.Annotation
   alias Systems.Paper
   alias Systems.Zircon
@@ -49,5 +50,19 @@ defmodule Systems.Zircon.Queries do
     build(screening_tool_annotation_assoc_query(), :screening_tool_annotation_assoc, [
       annotation_id == ^annotation_id
     ])
+  end
+
+  # SCREENING SESSION
+
+  def screening_session_query() do
+    from(s in Zircon.Screening.SessionModel, as: :screening_session)
+  end
+
+  def screening_session_query(%Zircon.Screening.ToolModel{id: tool_id}) do
+    build(screening_session_query(), :screening_session, tool: [id == ^tool_id])
+  end
+
+  def screening_session_query(tool, %Account.User{id: user_id}) do
+    build(screening_session_query(tool), :screening_session, user: [id == ^user_id])
   end
 end

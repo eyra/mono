@@ -4,6 +4,7 @@ defmodule Systems.Zircon.Public do
   use Gettext, backend: CoreWeb.Gettext
 
   require Ecto.Query
+  require Logger
   import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
   import Systems.Zircon.Queries
@@ -77,15 +78,7 @@ defmodule Systems.Zircon.Public do
     Creates an association between the given screening tool and the paper reference file at
     the given url without saving.
   """
-  def prepare_screening_tool_reference_file(tool, original_filename)
-      when is_binary(original_filename) do
-    prepare_screening_tool_reference_file(
-      tool,
-      Paper.Public.prepare_reference_file(original_filename)
-    )
-  end
-
-  def prepare_screening_tool_reference_file(tool, %{} = reference_file) do
+  def prepare_screening_tool_reference_file_assoc(tool, %{} = reference_file) do
     %Zircon.Screening.ToolReferenceFileAssoc{}
     |> Zircon.Screening.ToolReferenceFileAssoc.changeset(%{})
     |> put_assoc(:tool, tool)
@@ -95,16 +88,71 @@ defmodule Systems.Zircon.Public do
   @doc """
     Inserts a new paper reference file associated with the given screening tool.
   """
-  def insert_screening_tool_reference_file(tool, original_filename) do
-    prepare_screening_tool_reference_file(tool, original_filename)
-    |> Repo.insert!()
+  def insert_reference_file!(tool, original_filename) do
+    insert_reference_file(tool, original_filename)
+    |> case do
+      {:ok, tool} ->
+        tool
+
+      _ ->
+        raise "Failed to insert screening tool reference file"
+    end
   end
 
-  def insert_reference_file!(tool, original_filename) do
-    %{reference_file: reference_file} =
-      insert_screening_tool_reference_file(tool, original_filename)
+  def insert_reference_file!(tool, original_filename, url) when is_binary(url) do
+    insert_reference_file(tool, original_filename, url)
+    |> case do
+      {:ok, tool} ->
+        tool
 
-    reference_file
+      _ ->
+        raise "Failed to insert screening tool reference file"
+    end
+  end
+
+  def insert_reference_file(tool, original_filename) do
+    Multi.new()
+    |> Multi.put(:zircon_screening_tool, tool)
+    |> Multi.insert(:paper_reference_file, Paper.Public.prepare_reference_file(original_filename))
+    |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
+                                                                      zircon_screening_tool: tool,
+                                                                      paper_reference_file:
+                                                                        reference_file
+                                                                    } ->
+      prepare_screening_tool_reference_file_assoc(tool, reference_file)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{zircon_screening_tool_reference_file_assoc: %{reference_file: reference_file}}} ->
+        {:ok, reference_file}
+
+      error ->
+        error
+    end
+  end
+
+  def insert_reference_file(tool, original_filename, url) when is_binary(url) do
+    Multi.new()
+    |> Multi.put(:zircon_screening_tool, tool)
+    |> Multi.insert(
+      :paper_reference_file,
+      Paper.Public.prepare_reference_file(original_filename, url)
+    )
+    |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
+                                                                      zircon_screening_tool: tool,
+                                                                      paper_reference_file:
+                                                                        reference_file
+                                                                    } ->
+      prepare_screening_tool_reference_file_assoc(tool, reference_file)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{zircon_screening_tool_reference_file_assoc: %{reference_file: reference_file}}} ->
+        {:ok, reference_file}
+
+      error ->
+        error
+    end
   end
 
   def list_screening_tool_reference_files(tool) do
@@ -116,6 +164,80 @@ defmodule Systems.Zircon.Public do
   def list_reference_files(tool) do
     list_screening_tool_reference_files(tool)
     |> Enum.map(& &1.reference_file)
+  end
+
+  @doc """
+  Aborts any active import sessions for the tool and archives all uploaded reference files.
+  This clears the file selector and stops any ongoing imports.
+  """
+  def abort_active_imports!(tool) do
+    reference_files = list_reference_files(tool)
+
+    Enum.each(reference_files, fn ref_file ->
+      # Check if this file has an active import session
+      abort_session_if_active(ref_file)
+
+      # Archive any uploaded reference file to clear it from file selector
+      # This handles both files with active sessions and files waiting to be imported
+      if ref_file.status == :uploaded do
+        Paper.Public.archive_reference_file!(ref_file.id)
+      end
+    end)
+  end
+
+  defp abort_session_if_active(ref_file) do
+    if Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
+      active_session = Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
+
+      if active_session do
+        # Abort the import session
+        Paper.Public.abort_import_session!(active_session)
+      end
+    end
+  end
+
+  @doc """
+  Aborts an import by cancelling the session and archiving its reference file.
+  This completely cleans up the import, removing it from the file selector.
+  """
+  def abort_import!(session) do
+    # Build the Multi with both operations and signals
+    Multi.new()
+    |> Multi.update(
+      :paper_ris_import_session,
+      Paper.RISImportSessionModel.update_changeset(session, %{status: :aborted})
+    )
+    |> Multi.update(
+      :paper_reference_file,
+      Paper.ReferenceFileModel.changeset(
+        Paper.Public.get_reference_file!(session.reference_file_id),
+        %{status: :archived}
+      )
+    )
+    # Synchronous signals for cascading DB operations (handled by Zircon.Switch)
+    |> Signal.Public.multi_dispatch({:paper_ris_import_session, :aborted},
+      name: :dispatch_abort_signal
+    )
+    |> Signal.Public.multi_dispatch({:paper_reference_file, :updated},
+      name: :dispatch_archive_signal
+    )
+    # Use Repo.commit to dispatch collected Observatory updates
+    |> Repo.commit()
+    |> case do
+      {:ok, _changes} ->
+        :ok
+
+      {:error, operation, changeset, _} ->
+        raise "Failed to abort import at #{operation}: #{inspect(changeset)}"
+    end
+  end
+
+  def list_papers(tool) do
+    list_reference_files(tool)
+    |> Enum.reduce([], fn %{papers: papers}, acc ->
+      acc ++ papers
+    end)
+    |> Enum.uniq_by(& &1.id)
   end
 
   def insert_screening_tool_criterion(
@@ -151,7 +273,7 @@ defmodule Systems.Zircon.Public do
       |> put_assoc(:annotation, annotation)
     end)
     |> Signal.Public.multi_dispatch({:zircon_screening_tool_annotation_assoc, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def delete_screening_tool_criterion(
@@ -172,6 +294,86 @@ defmodule Systems.Zircon.Public do
       end
     end)
     |> Signal.Public.multi_dispatch({:zircon_screening_tool_annotation_assoc, :deleted})
-    |> Repo.transaction()
+    |> Repo.commit()
+  end
+
+  # Screening Session
+
+  def invalidate_screening_sessions(tool) do
+    Multi.new()
+    |> Multi.update_all(:zircon_screening_sessions, screening_session_query(tool),
+      set: [invalidated_at: DateTime.utc_now()]
+    )
+    |> Signal.Public.multi_dispatch({:zircon_screening_sessions, :invalidated})
+    |> Repo.commit()
+  end
+
+  def prepare_screening_session(identifier, agent_state, tool, user) do
+    %Zircon.Screening.SessionModel{}
+    |> Zircon.Screening.SessionModel.changeset(%{identifier: identifier, agent_state: agent_state})
+    |> put_assoc(:tool, tool)
+    |> put_assoc(:user, user)
+  end
+
+  def obtain_screening_session!(tool, user) do
+    {:ok, session} = obtain_screening_session(tool, user)
+    session
+  end
+
+  def obtain_screening_session(tool, user) do
+    case get_screening_session(tool, user) do
+      nil ->
+        session = start_screening_session!(tool, user)
+        {:ok, session}
+
+      session ->
+        {:ok, session}
+    end
+  end
+
+  def get_screening_session(tool, user) do
+    screening_session_query(tool, user) |> Repo.one()
+  end
+
+  def start_screening_session!(tool, user) do
+    case start_screening_session(tool, user) do
+      {:ok, session} ->
+        session
+
+      {:error, _} ->
+        raise "Failed to start screening agent session"
+    end
+  end
+
+  def start_screening_session(tool, user) do
+    identifier = Systems.Zircon.Sqids.encode!([tool.id, user.id])
+
+    # For now we just have one configurable screening agent module, but in the future we may have multiple agents running in parallel
+    Multi.new()
+    |> Multi.run(:zircon_screening_agent_state, fn _, _ ->
+      papers = list_papers(tool)
+
+      %{annotations: criteria} =
+        tool |> Repo.preload(annotations: Annotation.Model.preload_graph(:down))
+
+      Zircon.Config.screening_agent_module().start(identifier, papers, criteria)
+    end)
+    |> Multi.insert(:zircon_screening_session, fn %{zircon_screening_agent_state: agent_state} ->
+      prepare_screening_session(identifier, agent_state, tool, user)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{zircon_screening_session: screening_session}} ->
+        {:ok, screening_session}
+
+      {:error, _} ->
+        {:error, "Failed to start screening agent session"}
+    end
+  end
+
+  def update_screening_session(session, agent_state) do
+    session
+    |> Zircon.Screening.SessionModel.changeset(%{agent_state: agent_state})
+    |> Repo.update()
   end
 end

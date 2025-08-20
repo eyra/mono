@@ -37,7 +37,7 @@ defmodule Systems.Project.Assembly do
     |> Multi.put(:project_item, item)
     |> EctoHelper.run(:project_node, &load_node!/1)
     |> Signal.Public.multi_dispatch({:project_node, :delete_item})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @spec create(any(), any(), :empty) :: any()
@@ -56,7 +56,7 @@ defmodule Systems.Project.Assembly do
       end
     end)
     |> EctoHelper.run(:auth, &update_auth/2)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def attach_storage_to_project(%Project.Model{} = project) do
@@ -76,7 +76,7 @@ defmodule Systems.Project.Assembly do
       )
       |> Ecto.Changeset.put_assoc(:node, project.root)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def create_item(template_or_changeset, name, %Project.NodeModel{} = node, user)
@@ -91,7 +91,7 @@ defmodule Systems.Project.Assembly do
     |> EctoHelper.run(:auth, &update_auth/2)
     |> EctoHelper.run(:path, &update_path/2)
     |> Signal.Public.multi_dispatch({:project_item, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   # LOAD

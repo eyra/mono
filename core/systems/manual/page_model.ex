@@ -1,5 +1,6 @@
 defmodule Systems.Manual.PageModel do
   use Ecto.Schema
+  use Frameworks.Utility.Schema
   import Ecto.Changeset
 
   schema "manual_page" do
@@ -28,6 +29,8 @@ defmodule Systems.Manual.PageModel do
 
   def preload_graph(:down), do: [:userflow_step]
   def preload_graph(:up), do: []
+
+  def preload_graph(:userflow_step), do: [userflow_step: []]
 end
 
 defimpl Core.Persister, for: Systems.Manual.PageModel do

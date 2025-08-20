@@ -5,6 +5,12 @@ config :core,
   base_url: "http://localhost:4000",
   upload_path: "/tmp"
 
+# Selectical test configuration
+config :core,
+  selectical_base_url: "https://jkntvyihutapdkdsoleo.supabase.co",
+  selectical_api_key:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnR2eWlodXRhcGRrZHNvbGVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1ODk2NzksImV4cCI6MjAzMTE2NTY3OX0.zTsZmd3EdKFGof1gxI0LxD2aws2BGb2rboFybC_26Gk"
+
 # Print only errors during test
 config :logger, level: :error
 
@@ -63,3 +69,11 @@ config :core, :banking_backend, Systems.Banking.Dummy
 config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+
+try do
+  import_config "test.secret.exs"
+rescue
+  File.Error ->
+    # Continuing without `test.secret.exs` file...
+    nil
+end

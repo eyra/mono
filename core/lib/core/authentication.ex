@@ -18,7 +18,7 @@ defmodule Core.Authentication do
     |> Multi.run(:entity, fn _, _ ->
       fetch_or_create_entity(identifier)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{entity: entity}} ->
         {:ok, entity}
@@ -56,7 +56,7 @@ defmodule Core.Authentication do
           {:ok, actor}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{actor: actor}} ->
         {:ok, actor}
