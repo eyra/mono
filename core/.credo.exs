@@ -15,7 +15,7 @@
         excluded: [~r"/_build/", ~r"/deps/", ~r"/node_modules/"]
       },
       plugins: [],
-      requires: ["./lib/credo/check/warning/no_repo_transaction.ex"],
+      requires: ["./custom_credo_checks/no_repo_transaction.ex"],
       strict: false,
       parse_timeout: 5000,
       color: true,
