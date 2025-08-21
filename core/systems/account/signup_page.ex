@@ -18,12 +18,13 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account.UserForm
   alias Systems.Account.User
   alias Frameworks.Utility.Params
+  alias Frameworks.Signal
 
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
-    add_to_panl = Params.parse_add_to_panl(params)
+    post_signup_action = Params.parse_string_param(params, "post_signup_action")
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -31,7 +32,7 @@ defmodule Systems.Account.SignupPage do
       socket
       |> assign(
         creator?: creator?,
-        add_to_panl: add_to_panl,
+        post_signup_action: post_signup_action,
         changeset: changeset,
         active_menu_item: nil
       )
@@ -48,12 +49,7 @@ defmodule Systems.Account.SignupPage do
   def handle_event(
         "signup",
         %{"user" => user_params},
-        %{
-          assigns: %{
-            creator?: creator?,
-            add_to_panl: add_to_panl
-          }
-        } = socket
+        %{assigns: %{creator?: creator?, post_signup_action: post_signup_action}} = socket
       ) do
     user_params = Map.put(user_params, "creator", creator?)
 
@@ -62,8 +58,11 @@ defmodule Systems.Account.SignupPage do
         {:noreply, socket |> assign(changeset: changeset)}
 
       {:ok, user} ->
-        if add_to_panl and not creator? do
-          Systems.Pool.Public.add_user_to_panl_pool(user)
+        if post_signup_action do
+          Signal.Public.dispatch({:account, :post_signup}, %{
+            user: user,
+            action: post_signup_action
+          })
         end
 
         {:ok, _} =
@@ -85,7 +84,6 @@ defmodule Systems.Account.SignupPage do
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""

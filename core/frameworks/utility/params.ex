@@ -21,6 +21,20 @@ defmodule Frameworks.Utility.Params do
     end
   end
 
-  def parse_add_to_panl(params), do: parse_bool_param(params, "add_to_panl")
+  @doc "Get a trimmed string param when present; returns nil for missing/blank."
+  def parse_string_param(params, key) when is_map(params) do
+    case Map.get(params, key) do
+      nil ->
+        nil
+
+      val when is_binary(val) ->
+        v = val |> String.trim()
+        if v == "", do: nil, else: v
+
+      _ ->
+        nil
+    end
+  end
+
   def parse_creator(params), do: parse_bool_param(params, "creator")
 end

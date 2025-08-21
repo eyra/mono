@@ -7,6 +7,7 @@ defmodule Next.Account.SessionController do
 
   alias Systems.Account
   alias Frameworks.Utility.Params
+  alias Frameworks.Signal
 
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
@@ -36,10 +37,10 @@ defmodule Next.Account.SessionController do
     require_feature(:password_sign_in)
 
     if user = Account.Public.get_user_by_email_and_password(email, password) do
-      add_to_panl = Params.parse_add_to_panl(user_params)
+      post_action = Params.parse_string_param(user_params, "post_signin_action")
 
-      if add_to_panl and not user.creator do
-        Systems.Pool.Public.add_user_to_panl_pool(user)
+      if post_action do
+        Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: post_action})
       end
 
       Account.UserAuth.log_in_user(conn, user, false, user_params)

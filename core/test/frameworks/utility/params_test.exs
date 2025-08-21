@@ -14,14 +14,27 @@ defmodule Frameworks.Utility.ParamsTest do
   end
 
   describe "convenience functions" do
-    test "parse_add_to_panl/1" do
-      assert Params.parse_add_to_panl(%{"add_to_panl" => "true"}) == true
-      assert Params.parse_add_to_panl(%{}) == false
-    end
-
     test "parse_creator/1" do
       assert Params.parse_creator(%{"creator" => "true"}) == true
       assert Params.parse_creator(%{}) == false
+    end
+
+    test "parse_string_param for post_*_action" do
+      assert Params.parse_string_param(
+               %{"post_signin_action" => "add_to_panl"},
+               "post_signin_action"
+             ) ==
+               "add_to_panl"
+
+      assert Params.parse_string_param(%{}, "post_signin_action") == nil
+
+      assert Params.parse_string_param(
+               %{"post_signup_action" => "add_to_panl"},
+               "post_signup_action"
+             ) ==
+               "add_to_panl"
+
+      assert Params.parse_string_param(%{}, "post_signup_action") == nil
     end
   end
 end

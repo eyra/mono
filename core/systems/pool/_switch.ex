@@ -1,7 +1,10 @@
 defmodule Systems.Pool.Switch do
   use Frameworks.Signal.Handler
+  require Logger
 
   alias Systems.Pool
+  alias Systems.Account
+  alias Systems.Pool.AccountPostActionHandler
 
   @impl true
   def intercept(
@@ -27,6 +30,18 @@ defmodule Systems.Pool.Switch do
   @impl true
   def intercept({:pool, _}, %{pool: pool, from_pid: from_pid}) do
     update_page(Pool.DetailPage, pool, from_pid)
+    :ok
+  end
+
+  @impl true
+  def intercept({:account, :post_signin}, %{user: %Account.User{} = user, action: action}) do
+    AccountPostActionHandler.handle(user, action)
+    :ok
+  end
+
+  @impl true
+  def intercept({:account, :post_signup}, %{user: %Account.User{} = user, action: action}) do
+    AccountPostActionHandler.handle(user, action)
     :ok
   end
 

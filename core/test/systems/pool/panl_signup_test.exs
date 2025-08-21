@@ -25,17 +25,17 @@ defmodule Systems.Pool.PanlSignupTest do
     end
 
     defp assert_signup_page_loads(conn, user_type) do
-      conn = get(conn, ~p"/user/signup/#{user_type}?add_to_panl=true")
+      conn = get(conn, ~p"/user/signup/#{user_type}?post_signup_action=add_to_panl")
       response = html_response(conn, 200)
       assert response =~ "Create an account"
       assert response =~ "phx-submit=\"signup\""
     end
 
-    defp perform_signin(conn, email, password, add_to_panl \\ "true") do
+    defp perform_signin(conn, email, password, action \\ "add_to_panl") do
       post(conn, ~p"/user/session", %{
         "email" => email,
         "password" => password,
-        "add_to_panl" => add_to_panl
+        "post_signin_action" => action
       })
     end
 
@@ -112,9 +112,9 @@ defmodule Systems.Pool.PanlSignupTest do
     end
 
     test "Google signin URL includes add_to_panl parameter", %{conn: conn} do
-      conn = get(conn, ~p"/user/signin/participant?add_to_panl=true")
+      conn = get(conn, ~p"/user/signin/participant?post_signin_action=add_to_panl")
       response = html_response(conn, 200)
-      assert response =~ "/google-sign-in?add_to_panl=true&amp;creator=false"
+      assert response =~ "/google-sign-in?post_signin_action=add_to_panl&amp;creator=false"
     end
   end
 end
