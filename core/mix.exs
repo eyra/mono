@@ -148,7 +148,7 @@ defmodule Core.MixProject do
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
       {:table_rex, "== 3.0.0"},
       {:dialyxir, "== 1.4.5", only: [:dev, :test], runtime: false},
-      {:browser, "== 0.5.4"}
+      {:browser, "== 0.5.5"}
     ]
   end
 
