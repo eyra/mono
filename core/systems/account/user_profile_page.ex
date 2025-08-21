@@ -1,35 +1,33 @@
 defmodule Systems.Account.UserProfilePage do
   @moduledoc """
-  The home screen.
+  The user profile page with tabbed interface.
   """
   use Systems.Content.Composer, :live_workspace
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Core
+  alias Frameworks.Pixel.Tabbed
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
-    user
+    Core.Repo.preload(user, [:features, :profile])
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
+    tabbar_id = "user_profile"
+
+    active_tab =
+      Map.get(params, "tab", "profile")
+      |> String.to_existing_atom()
+
     {
       :ok,
       socket
-      |> compose_child(:form)
-    }
-  end
-
-  @impl true
-  def handle_event(_, _payload, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
-  def compose(:form, %{vm: %{user: user}}) do
-    %{
-      module: Systems.Account.UserProfileForm,
-      params: %{user: user}
+      |> assign(
+        tabbar_id: tabbar_id,
+        initial_tab: active_tab
+      )
     }
   end
 
@@ -37,7 +35,13 @@ defmodule Systems.Account.UserProfilePage do
   def render(assigns) do
     ~H"""
     <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
-      <.stack fabric={@fabric} />
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <div class="flex justify-center">
+          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
+        </div>
+        <Tabbed.content tabs={@vm.tabs} />
+      </Area.content>
     </.live_workspace>
     """
   end

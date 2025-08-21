@@ -17,6 +17,7 @@ defmodule CoreWeb.Live.User.Routes do
       scope "/", Systems.Account do
         pipe_through([:browser, :require_authenticated_user])
         live("/user/profile", UserProfilePage)
+        live("/user/profile/:tab", UserProfilePage)
       end
 
       scope "/", Systems.Account do

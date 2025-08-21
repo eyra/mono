@@ -66,7 +66,7 @@ defmodule Systems.Account.SignupPage do
       handle_successful_registration(socket, user, add_to_panl, creator?)
     else
       {:error, :privacy_policy_not_accepted} ->
-        handle_privacy_policy_error(socket, user_params)
+        handle_privacy_policy_error(socket)
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, socket |> assign(changeset: changeset)}
@@ -100,7 +100,7 @@ defmodule Systems.Account.SignupPage do
     end
   end
 
-  defp handle_privacy_policy_error(socket, user_params) do
+  defp handle_privacy_policy_error(socket) do
     {:noreply,
      socket
      |> assign(

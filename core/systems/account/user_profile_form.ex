@@ -15,7 +15,6 @@ defmodule Systems.Account.UserProfileForm do
     save(socket, entity, :auto_save, %{photo_url: photo_url})
   end
 
-  # Handle Selector Update
   @impl true
   def update(
         %{active_item_ids: active_item_ids, source: %{name: field}},
@@ -65,8 +64,6 @@ defmodule Systems.Account.UserProfileForm do
     |> assign(changeset: changeset)
   end
 
-  # Saving
-
   @impl true
   def handle_event(
         "save",
@@ -94,10 +91,8 @@ defmodule Systems.Account.UserProfileForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-      <Margin.y id={:page_top} />
       <Area.form>
-        <Text.title2><%= dgettext("eyra-account", "profile.title")  %></Text.title2>
+        <Text.title2><%= dgettext("eyra-account", "profile.tab.profile.title")  %></Text.title2>
         <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
           <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >
             <.photo_input
@@ -129,9 +124,7 @@ defmodule Systems.Account.UserProfileForm do
         <.wrap>
           <Button.dynamic {@signout_button} />
         </.wrap>
-
       </Area.form>
-      </Area.content>
     </div>
     """
   end

@@ -8,7 +8,7 @@ defmodule Systems.Account.FeaturesForm do
   alias Systems.Account
 
   @impl true
-  def update(%{id: id, user: user}, socket) do
+  def update(%{user: user}, socket) do
     entity = Account.Public.get_features(user)
 
     gender_labels = Genders.labels(entity.gender)
@@ -18,7 +18,6 @@ defmodule Systems.Account.FeaturesForm do
     {
       :ok,
       socket
-      |> assign(id: id)
       |> assign(user: user)
       |> assign(entity: entity)
       |> assign(gender_labels: gender_labels)
@@ -79,9 +78,12 @@ defmodule Systems.Account.FeaturesForm do
     }
   end
 
-  # Saving
-  def save(socket, %Account.FeaturesModel{} = entity, type, attrs) do
+  def save_features(socket, %Account.FeaturesModel{} = entity, type, attrs) do
     changeset = Account.FeaturesModel.changeset(entity, type, attrs)
+
+    if not changeset.valid? do
+      IO.puts("changeset errors: #{inspect(changeset.errors)}")
+    end
 
     socket
     |> save(changeset)
@@ -97,34 +99,31 @@ defmodule Systems.Account.FeaturesForm do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, %{field => active_item_id})
+      |> save_features(entity, :auto_save, %{to_string(field) => active_item_id})
     }
   end
 
-  attr(:user, :map, required: true)
   @impl true
+  @spec render(map()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-      <Margin.y id={:page_top} />
-      <Area.form>
-        <Text.title2><%= dgettext("eyra-ui", "tabbar.item.features") %></Text.title2>
-        <Text.body_medium><%= dgettext("eyra-account", "features.description") %></Text.body_medium>
-        <.spacing value="XL" />
+        <Area.form>
+          <Text.title2><%= dgettext("eyra-account", "profile.tab.features.title") %></Text.title2>
+          <Text.body_medium><%= dgettext("eyra-account", "features.description") %></Text.body_medium>
+          <.spacing value="XL" />
 
-        <Text.title3><%= dgettext("eyra-account", "features.gender.title") %></Text.title3>
-        <.child name={:gender} fabric={@fabric} />
-        <.spacing value="XL" />
+          <Text.title3><%= dgettext("eyra-account", "features.gender.title") %></Text.title3>
+          <.child name={:gender} fabric={@fabric} />
+          <.spacing value="XL" />
 
-        <Text.title3><%= dgettext("eyra-account", "features.nativelanguage.title") %></Text.title3>
-        <.child name={:native_language} fabric={@fabric} />
-        <.spacing value="XL" />
+          <Text.title3><%= dgettext("eyra-account", "features.nativelanguage.title") %></Text.title3>
+          <.child name={:native_language} fabric={@fabric} />
+          <.spacing value="XL" />
 
-        <Text.title3><%= dgettext("eyra-account", "features.dominanthand.title") %></Text.title3>
-        <.child name={:dominant_hand} fabric={@fabric} />
-      </Area.form>
-      </Area.content>
+          <Text.title3><%= dgettext("eyra-account", "features.dominanthand.title") %></Text.title3>
+          <.child name={:dominant_hand} fabric={@fabric} />
+        </Area.form>
     </div>
     """
   end
