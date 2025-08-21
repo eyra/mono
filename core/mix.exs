@@ -83,7 +83,7 @@ defmodule Core.MixProject do
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "== 2.5.6"},
       # Unreleased commit fixes build warnings in the original repo
-      {:faker, github: "elixirs/faker", ref: "c217c88f5c968146ea4c5fb0120df3dcf9175ab4"},
+      {:faker, github: "elixirs/faker", ref: "1f42d2bf89f66214270804196b8863c860237518"},
       # Fork fixes a bug in the original repo
       {:floki, github: "eyra/floki", override: true},
       {:gettext, "== 0.26.2"},
