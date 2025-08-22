@@ -68,7 +68,7 @@ defmodule Core.MixProject do
       {:sweet_xml, "~> 0.7.4",
        github: "kbrw/sweet_xml", ref: "24bfac864f23c4b8864a010683e7c9549e99fe52", override: true},
       # Deps
-      {:appsignal_phoenix, "== 2.6.0"},
+      {:appsignal_phoenix, "== 2.7.0"},
       {:assent, "== 0.2.12"},
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
