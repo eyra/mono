@@ -17,9 +17,9 @@ defmodule Systems.Zircon.Screening.ImportForm do
   end
 
   @impl true
-  def process_file(socket, {_path, url, _original_filename}) do
+  def process_file(socket, %{public_url: public_url}) do
     socket
-    |> update_reference_file(url)
+    |> update_reference_file(public_url)
     |> start_processing_reference_file()
     |> assign(reference_file: nil)
   end
