@@ -144,7 +144,7 @@ defmodule Core.MixProject do
       {:mock, "== 0.3.9", only: :test},
       {:progress_bar, "== 2.0.2", only: [:dev, :test]},
       {:phoenix_live_reload, "== 1.5.3", only: :dev},
-      {:credo, "== 1.7.11", only: [:dev, :test], runtime: false},
+      {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
       {:table_rex, "== 3.0.0"},
       {:dialyxir, "== 1.4.5", only: [:dev, :test], runtime: false},
