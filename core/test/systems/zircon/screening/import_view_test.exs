@@ -164,7 +164,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
               "doi" => "10.1234/test1"
             }
           ],
-          import_summary: %{
+          summary: %{
             "total" => 1,
             "predicted_new" => 1,
             "predicted_existing" => 0,
@@ -472,7 +472,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       |> Ecto.Changeset.change(%{
         status: :succeeded,
         completed_at: DateTime.utc_now(),
-        import_summary: %{
+        summary: %{
           "total" => 1,
           "imported" => 1,
           "skipped_duplicates" => 0

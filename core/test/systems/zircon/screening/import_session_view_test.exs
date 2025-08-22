@@ -294,7 +294,7 @@ defmodule Systems.Zircon.Screening.ImportSessionViewTest do
             }
           ],
           errors: [],
-          import_summary: %{
+          summary: %{
             "total" => 2,
             "predicted_new" => 2,
             "predicted_existing" => 0,
@@ -376,7 +376,7 @@ defmodule Systems.Zircon.Screening.ImportSessionViewTest do
             }
           ],
           errors: [],
-          import_summary: %{
+          summary: %{
             "total" => 3,
             "predicted_new" => 1,
             "predicted_existing" => 2,
@@ -460,7 +460,7 @@ defmodule Systems.Zircon.Screening.ImportSessionViewTest do
             }
           ],
           errors: [],
-          import_summary: %{
+          summary: %{
             "total" => 2,
             "predicted_new" => 2,
             "predicted_existing" => 0,
@@ -526,7 +526,7 @@ defmodule Systems.Zircon.Screening.ImportSessionViewTest do
             }
           ],
           errors: [],
-          import_summary: %{
+          summary: %{
             "total" => 1,
             "predicted_new" => 1,
             "predicted_existing" => 0,

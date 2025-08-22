@@ -22,7 +22,8 @@ defmodule Systems.Paper.RISImportSessionModel do
     )
 
     field(:entries, {:array, :map}, default: [])
-    field(:import_summary, :map, default: %{})
+    field(:summary, :map, default: %{})
+    field(:progress, :map, default: %{})
     field(:errors, {:array, :string}, default: [])
 
     field(:completed_at, :utc_datetime_usec)
@@ -33,7 +34,7 @@ defmodule Systems.Paper.RISImportSessionModel do
     timestamps()
   end
 
-  @fields ~w(status phase entries import_summary errors completed_at)a
+  @fields ~w(status phase entries summary progress errors completed_at)a
   @required_fields ~w(status phase)a
 
   def changeset(session, attrs) do

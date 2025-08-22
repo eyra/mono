@@ -96,7 +96,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     session
     |> Paper.RISImportSessionModel.update_changeset(%{
       entries: ris_entries,
-      import_summary: summary
+      summary: summary
     })
     |> Repo.update()
   end

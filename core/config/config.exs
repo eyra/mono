@@ -203,4 +203,9 @@ config :core, :zircon,
     agent_module: Systems.Zircon.Screening.HumanAgent
   ]
 
+# Paper system import configuration
+config :core, :paper,
+  import_batch_size: 100,
+  import_batch_timeout: 30_000
+
 import_config "#{config_env()}.exs"

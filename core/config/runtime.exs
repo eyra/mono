@@ -215,6 +215,12 @@ if config_env() == :prod do
     config :core, :feldspar, backend: Systems.Feldspar.LocalFS
   end
 
+  config :core, :paper,
+    import_batch_size:
+      System.get_env("PAPER_RIS_IMPORT_BATCH_SIZE", "100") |> String.to_integer(),
+    import_batch_timeout:
+      System.get_env("PAPER_RIS_IMPORT_BATCH_TIMEOUT", "30000") |> String.to_integer()
+
   config :core,
          :dist_hosts,
          "DIST_HOSTS"

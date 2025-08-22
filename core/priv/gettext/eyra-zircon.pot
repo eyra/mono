@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "1 paper"
-msgid_plural "* papers"
+msgid_plural "%{count} papers"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -78,14 +78,6 @@ msgid "paper_set_table.year.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "import_session.buttons.abort"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_view.content.empty_description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "import_view.file_import.placeholder"
 msgstr ""
 
@@ -111,14 +103,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "import_session.errors.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_view.import_section.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_session.buttons.retry"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -222,10 +206,6 @@ msgid "import_view.modal.importing_details"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "import_view.processing.default"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "import_view.processing.importing"
 msgstr ""
 
@@ -243,4 +223,18 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "import_view.button.prepare_import"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 skipped"
+msgid_plural "%{count} skipped"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.importing_papers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.importing_with_skipped"
 msgstr ""

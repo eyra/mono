@@ -5,12 +5,8 @@ defmodule Systems.Paper.RISImportCommitJob do
   alias Ecto.Multi
   alias Systems.Paper
 
-  require Logger
-
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"session_id" => session_id}}) do
-    Logger.info("RISImportCommitJob: Starting commit for session #{session_id}")
-
     session = Paper.Public.get_import_session!(session_id, [:reference_file, :paper_set])
 
     # Session should already be in importing phase (set by commit_import_session!)
@@ -19,23 +15,15 @@ defmodule Systems.Paper.RISImportCommitJob do
     # Extract new papers from session entries
     candidate_papers = extract_new_papers_from_session(session)
 
-    Logger.info("RISImportCommitJob: Found #{length(candidate_papers)} new papers to import")
-
     # Execute the import
     case execute_import_transaction(candidate_papers, session) do
       {:ok, result} ->
-        summary = update_import_summary(session.import_summary, result)
+        summary = update_import_summary(session.summary, result)
         complete_session_with_signal(session, summary)
-
-        Logger.info(
-          "RISImportCommitJob: Successfully imported #{result.inserted} papers, skipped #{result.skipped}"
-        )
-
         :ok
 
       {:error, error} ->
         handle_import_error_with_signal(session, "Import failed: #{error}")
-        Logger.error("RISImportCommitJob: Import failed: #{error}")
         {:error, error}
     end
   end
@@ -50,11 +38,81 @@ defmodule Systems.Paper.RISImportCommitJob do
   end
 
   defp execute_import_transaction(candidate_papers, session) do
-    multi = Multi.new()
-    {multi, paper_keys} = build_paper_insertion_multi(multi, candidate_papers, session.paper_set)
-    multi = add_reference_file_associations(multi, paper_keys, candidate_papers, session)
+    batch_size = Paper.Config.import_batch_size()
+    total_papers = length(candidate_papers)
+    total_batches = ceil(total_papers / batch_size)
 
-    case Repo.commit(multi) do
+    candidate_papers
+    |> Enum.chunk_every(batch_size)
+    |> Enum.with_index(1)
+    |> Enum.reduce_while({:ok, %{inserted: 0, skipped: 0, processed: 0}}, fn {batch, batch_num},
+                                                                             {:ok, totals} ->
+      papers_processed_so_far = totals.processed + length(batch)
+
+      case execute_batch_transaction(
+             batch,
+             session,
+             batch_num,
+             total_batches,
+             totals,
+             papers_processed_so_far,
+             total_papers
+           ) do
+        {:ok, batch_result} ->
+          new_totals = %{
+            inserted: totals.inserted + batch_result.inserted,
+            skipped: totals.skipped + batch_result.skipped,
+            processed: papers_processed_so_far
+          }
+
+          {:cont, {:ok, new_totals}}
+
+        {:error, reason} ->
+          {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp execute_batch_transaction(
+         batch,
+         session,
+         batch_num,
+         total_batches,
+         current_totals,
+         papers_processed,
+         total_papers
+       ) do
+    batch_timeout = Paper.Config.import_batch_timeout()
+
+    {multi, paper_keys} =
+      Multi.new()
+      |> build_paper_insertion_multi(batch, session.paper_set)
+
+    multi
+    |> add_reference_file_associations(paper_keys, batch, session)
+    |> Multi.run(:update_progress_with_counts, fn _repo, changes ->
+      # Get the actual counts from the associate_papers result
+      %{inserted: batch_inserted, skipped: batch_skipped} =
+        Map.get(changes, :associate_papers, %{inserted: 0, skipped: 0})
+
+      # Build final progress with cumulative counts
+      final_progress = %{
+        "current_batch" => batch_num,
+        "total_batches" => total_batches,
+        "papers_processed" => papers_processed,
+        "papers_imported" => current_totals.inserted + batch_inserted,
+        "papers_skipped" => current_totals.skipped + batch_skipped,
+        "total_papers" => total_papers
+      }
+
+      # Update session with final progress
+      session
+      |> Paper.RISImportSessionModel.changeset(%{progress: final_progress})
+      |> Repo.update()
+    end)
+    |> Frameworks.Signal.Public.multi_dispatch({:paper_ris_import_session, :batch_completed})
+    |> Repo.commit(timeout: batch_timeout)
+    |> case do
       {:ok, changes} ->
         result = Map.get(changes, :associate_papers, %{inserted: 0, skipped: 0})
         {:ok, result}
@@ -179,7 +237,7 @@ defmodule Systems.Paper.RISImportCommitJob do
     multi =
       Multi.run(multi, :session, fn _repo, _changes ->
         case Paper.RISImportSessionModel.mark_succeeded_with_signal(session, %{
-               import_summary: summary
+               summary: summary
              }) do
           {:ok, %{paper_ris_import_session: updated_session}} -> {:ok, updated_session}
           {:error, error} -> {:error, error}

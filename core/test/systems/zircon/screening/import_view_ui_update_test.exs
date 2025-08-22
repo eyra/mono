@@ -56,7 +56,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
             }
           ],
           errors: [],
-          import_summary: %{
+          summary: %{
             "total" => 1,
             "predicted_new" => 1,
             "predicted_existing" => 0
@@ -179,7 +179,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
 
       # Phase 1: Prompting - should show Continue button
       prompting_html = render(view)
-      assert prompting_html =~ "Continue"
+      assert prompting_html =~ "Add new papers"
       assert view |> has_element?("[phx-click='commit_import']")
 
       # Click Continue to transition to importing

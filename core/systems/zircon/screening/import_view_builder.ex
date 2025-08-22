@@ -27,7 +27,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
         paper_set_id: paper_set.id
       )
 
-    import_session_view = build_import_session_view(import_status.active_session)
+    import_session_view = build_import_session_view(import_status.active_session, nil)
 
     # Check if we should show the file selector
     # Show when: no session, or during processing/prompting phases
@@ -170,16 +170,16 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     end
   end
 
-  defp build_import_session_view(active_session) do
+  defp build_import_session_view(active_session, _batch_progress) do
     case active_session do
       %{status: :activated, phase: :prompting} = session ->
         # For prompting phase, return session data for summary display
         %{type: :prompting_summary, session: session}
 
-      %{status: :activated, phase: phase}
+      %{status: :activated, phase: phase} = session
       when phase in [:waiting, :parsing, :processing, :importing] ->
         # For processing phases, show a simple processing status (not embedded view)
-        %{type: :processing_status, session: active_session, phase: phase}
+        %{type: :processing_status, session: session, phase: phase}
 
       _ ->
         # No active session or session is completed/failed/aborted - don't show anything
@@ -321,14 +321,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     end
   end
 
-  defp build_processing_status_block(_session, phase) do
-    message =
-      case phase do
-        :waiting -> dgettext("eyra-zircon", "import_view.processing.waiting")
-        :parsing -> dgettext("eyra-zircon", "import_view.processing.parsing")
-        :processing -> dgettext("eyra-zircon", "import_view.processing.processing")
-        :importing -> dgettext("eyra-zircon", "import_view.processing.importing")
-      end
+  defp build_processing_status_block(session, phase) do
+    message = get_processing_message(session, phase)
 
     {:processing_status,
      %{
@@ -336,6 +330,61 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
        show_spinner: true,
        buttons: []
      }}
+  end
+
+  defp get_processing_message(_session, :waiting) do
+    dgettext("eyra-zircon", "import_view.processing.waiting")
+  end
+
+  defp get_processing_message(_session, :parsing) do
+    dgettext("eyra-zircon", "import_view.processing.parsing")
+  end
+
+  defp get_processing_message(_session, :processing) do
+    dgettext("eyra-zircon", "import_view.processing.processing")
+  end
+
+  defp get_processing_message(session, :importing) do
+    # Show simplified progress message with total papers to import
+    if session.progress && Map.get(session.progress, "total_papers") do
+      build_importing_message(session.progress)
+    else
+      dgettext("eyra-zircon", "import_view.processing.importing")
+    end
+  end
+
+  defp build_importing_message(progress) do
+    total_papers = Map.get(progress, "total_papers", 0)
+    papers_skipped = Map.get(progress, "papers_skipped", 0)
+
+    # Build the papers count part using total papers
+    papers_text =
+      dngettext(
+        "eyra-zircon",
+        "1 paper",
+        "%{count} papers",
+        total_papers,
+        count: total_papers
+      )
+
+    # Build the message
+    if papers_skipped > 0 do
+      skipped_text =
+        dngettext(
+          "eyra-zircon",
+          "1 skipped",
+          "%{count} skipped",
+          papers_skipped,
+          count: papers_skipped
+        )
+
+      dgettext("eyra-zircon", "import_view.processing.importing_with_skipped",
+        papers: papers_text,
+        skipped: skipped_text
+      )
+    else
+      dgettext("eyra-zircon", "import_view.processing.importing_papers", papers: papers_text)
+    end
   end
 
   defp build_prompting_summary_block(session) do

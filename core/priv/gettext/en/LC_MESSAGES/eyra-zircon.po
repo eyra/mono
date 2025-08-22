@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "1 paper"
-msgid_plural "* papers"
+msgid_plural "%{count} papers"
 msgstr[0] "1 paper"
 msgstr[1] "%{count} papers"
 
@@ -78,14 +78,6 @@ msgid "paper_set_table.year.label"
 msgstr "Year"
 
 #, elixir-autogen, elixir-format
-msgid "import_session.buttons.abort"
-msgstr "Abort"
-
-#, elixir-autogen, elixir-format
-msgid "import_view.content.empty_description"
-msgstr "No papers have been imported yet."
-
-#, elixir-autogen, elixir-format
 msgid "import_view.file_import.placeholder"
 msgstr "Choose RIS file to add papers to the collection"
 
@@ -112,14 +104,6 @@ msgstr "Next"
 #, elixir-autogen, elixir-format
 msgid "import_session.errors.search.placeholder"
 msgstr "Search errors..."
-
-#, elixir-autogen, elixir-format
-msgid "import_view.import_section.title"
-msgstr "Import papers"
-
-#, elixir-autogen, elixir-format
-msgid "import_session.buttons.retry"
-msgstr "Retry"
 
 #, elixir-autogen, elixir-format
 msgid "import_session.phase.importing"
@@ -179,7 +163,7 @@ msgstr "Search errors..."
 
 #, elixir-autogen, elixir-format
 msgid "import_view.button.continue"
-msgstr "Continue"
+msgstr "Add new papers"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.button.details"
@@ -222,10 +206,6 @@ msgid "import_view.modal.importing_details"
 msgstr "Import details"
 
 #, elixir-autogen, elixir-format
-msgid "import_view.processing.default"
-msgstr "Processing..."
-
-#, elixir-autogen, elixir-format
 msgid "import_view.processing.importing"
 msgstr "Importing papers..."
 
@@ -235,12 +215,26 @@ msgstr "Parsing file..."
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.processing"
-msgstr "Processing papers..."
+msgstr "Scanning for new papers..."
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.waiting"
 msgstr "Starting import..."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "import_view.button.prepare_import"
-msgstr "Continue"
+msgstr "Scan file"
+
+#, elixir-autogen, elixir-format
+msgid "1 skipped"
+msgid_plural "%{count} skipped"
+msgstr[0] "1 skipped"
+msgstr[1] "%{count} skipped"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.importing_papers"
+msgstr "Importing %{papers}.."
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.importing_with_skipped"
+msgstr "Importing %{papers} (%{skipped}).."

@@ -51,6 +51,46 @@ defmodule Systems.Zircon.Switch do
     :ok
   end
 
+  # Handle batch progress updates during import
+  def intercept(
+        {:paper_ris_import_session, :batch_completed},
+        %{
+          update_progress_with_counts: session,
+          from_pid: from_pid
+        } = _message
+      ) do
+    # Extract reference_file_id and progress from the updated session
+    %{reference_file_id: reference_file_id, progress: progress} = session
+
+    # Get the tool from the reference file
+    reference_file = Paper.Public.get_reference_file!(reference_file_id)
+    tool = Zircon.Public.get_screening_tool_by_reference_file!(reference_file)
+
+    # The progress field now has all cumulative counts
+    batch_progress = %{
+      batch_num: Map.get(progress, "current_batch"),
+      total_batches: Map.get(progress, "total_batches"),
+      papers_processed: Map.get(progress, "papers_processed"),
+      papers_imported: Map.get(progress, "papers_imported"),
+      papers_skipped: Map.get(progress, "papers_skipped"),
+      total_papers: Map.get(progress, "total_papers")
+    }
+
+    # Update the ImportView with batch progress info
+    # The view model builder can use this to show progress
+    Observatory.Public.collect_update(
+      {:embedded_live_view, Zircon.Screening.ImportView},
+      [tool.id],
+      %{
+        model: tool,
+        batch_progress: batch_progress,
+        from_pid: from_pid
+      }
+    )
+
+    :ok
+  end
+
   # Handle all paper_ris_import_session status changes
   def intercept(
         {:paper_ris_import_session, status},

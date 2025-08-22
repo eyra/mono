@@ -820,6 +820,137 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
   end
 
+  describe "batch progress display" do
+    test "shows correct progress message during importing phase with session progress" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in importing phase with progress data
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing,
+          progress: %{
+            "current_batch" => 3,
+            "total_batches" => 5,
+            "papers_processed" => 250,
+            "papers_imported" => 180,
+            "papers_skipped" => 70,
+            "total_papers" => 500
+          }
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Check that the message contains the progress information
+      # The new format: "Importing 500 papers (70 skipped).." (500 is total_papers)
+      IO.puts("Progress message: #{inspect(processing_status.message)}")
+      # total_papers
+      assert processing_status.message =~ "500"
+      # skipped count
+      assert processing_status.message =~ "70"
+      assert processing_status.message =~ "papers"
+      assert processing_status.message =~ "skipped"
+    end
+
+    test "shows generic importing message when no progress in session" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in importing phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing
+        })
+
+      # No progress field in session means it will show generic message
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show generic importing message
+      assert processing_status.message == "Importing papers..."
+    end
+
+    test "does not show progress for non-importing phases" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with parsing phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :parsing
+        })
+
+      # Even with progress in session, should not use it for non-importing phases
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show parsing message, not batch progress
+      assert processing_status.message == "Parsing file..."
+      refute processing_status.message =~ "imported"
+    end
+  end
+
   describe "edge cases and error handling" do
     test "handles tool with invalid ID gracefully" do
       # This should be caught by the database constraint, but let's test error handling

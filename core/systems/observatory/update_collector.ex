@@ -110,4 +110,23 @@ defmodule Systems.Observatory.UpdateCollector do
   def current_transaction_id do
     self()
   end
+
+  @doc """
+  Returns all currently collected updates.
+
+  Useful for testing and debugging to inspect what updates have been
+  collected but not yet dispatched.
+
+  ## Examples
+
+      iex> UpdateCollector.get_all()
+      []
+
+      iex> UpdateCollector.collect({:page, MyPage}, [1], %{model: model})
+      iex> UpdateCollector.get_all()
+      [{{:page, MyPage}, [1], %{model: model}}]
+  """
+  def get_all do
+    Process.get(@process_key, [])
+  end
 end
