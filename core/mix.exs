@@ -68,7 +68,7 @@ defmodule Core.MixProject do
       {:sweet_xml, "~> 0.7.4",
        github: "kbrw/sweet_xml", ref: "24bfac864f23c4b8864a010683e7c9549e99fe52", override: true},
       # Deps
-      {:appsignal_phoenix, "== 2.6.0"},
+      {:appsignal_phoenix, "== 2.7.0"},
       {:assent, "== 0.2.12"},
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
@@ -129,7 +129,7 @@ defmodule Core.MixProject do
       # Override Bypass dependency that is locked on Ranch 1.7.*
       {:ranch, "== 1.8.1", override: true},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "== 2.13.0"},
+      {:certifi, "== 2.14.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "== 1.1.7"},
       # Dev and test deps
