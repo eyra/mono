@@ -66,7 +66,7 @@ defmodule Core.MixProject do
     [
       # Deps
       {:appsignal_phoenix, "== 2.7.0"},
-      {:assent, "== 0.2.12"},
+      {:assent, "== 0.3.1"},
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
        github: "populimited/bamboo_phoenix", ref: "d3cf4888cefd9ae9c5f5c2a386ed542b98e921b6"},
