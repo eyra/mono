@@ -84,6 +84,7 @@ defmodule Core.MixProject do
       # Fork fixes a bug in the original repo
       {:floki, github: "eyra/floki", override: true},
       {:gettext, "== 0.26.2"},
+      {:hackney, "== 1.25.0"},
       {:httpoison, "== 2.2.1"},
       {:image, "== 0.59.0"},
       {:jason, "== 1.4.4"},
@@ -126,7 +127,7 @@ defmodule Core.MixProject do
       # Override Bypass dependency that is locked on Ranch 1.7.*
       {:ranch, "== 1.8.1", override: true},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "== 2.14.0"},
+      {:certifi, "== 2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "== 1.1.7"},
       # Dev and test deps
