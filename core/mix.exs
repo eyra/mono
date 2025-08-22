@@ -102,7 +102,7 @@ defmodule Core.MixProject do
       # Fork fixes a dependency warning in the original repo
       {:packmatic, "~> 1.2.0",
        github: "ftes/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
-      {:phoenix_ecto, "== 4.6.3"},
+      {:phoenix_ecto, "== 4.6.5"},
       {:phoenix_html, "== 3.3.4"},
       {:phoenix_inline_svg, "== 1.4.0"},
       {:phoenix_live_view, "== 1.0.10"},
