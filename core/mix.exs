@@ -76,7 +76,7 @@ defmodule Core.MixProject do
       {:cldr_utils, "== 2.28.3", override: true},
       {:csv, "== 2.5.0"},
       {:ecto_commons, "== 0.3.6"},
-      {:ecto_sql, "== 3.12.1"},
+      {:ecto_sql, "== 3.13.2"},
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
