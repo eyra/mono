@@ -76,7 +76,7 @@ defmodule Core.MixProject do
       {:bamboo_ses, "== 0.4.5"},
       {:bamboo, "== 2.3.1"},
       {:bcrypt_elixir, "== 3.2.0"},
-      {:cldr_utils, "== 2.28.2", override: true},
+      {:cldr_utils, "== 2.28.3", override: true},
       {:csv, "== 2.5.0"},
       {:ecto_commons, "== 0.3.6"},
       {:ecto_sql, "== 3.12.1"},
