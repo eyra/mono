@@ -81,7 +81,7 @@ defmodule Core.MixProject do
       {:ecto_commons, "== 0.3.6"},
       {:ecto_sql, "== 3.12.1"},
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
-      {:ex_aws_s3, "== 2.5.6"},
+      {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, github: "elixirs/faker", ref: "1f42d2bf89f66214270804196b8863c860237518"},
       # Fork fixes a bug in the original repo
@@ -96,13 +96,13 @@ defmodule Core.MixProject do
       {:live_nest, "~> 0.1.0",
        github: "eyra/live_nest", ref: "ba4aadc1e98b5c4829537caf8d8b109540a230fc"},
       {:mime, "== 2.0.7"},
-      {:nimble_parsec, "== 1.4.0"},
+      {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.0.2"},
       {:oban, "== 2.18.3"},
       # Fork fixes a dependency warning in the original repo
       {:packmatic, "~> 1.2.0",
        github: "ftes/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
-      {:phoenix_ecto, "== 4.6.3"},
+      {:phoenix_ecto, "== 4.6.5"},
       {:phoenix_html, "== 3.3.4"},
       {:phoenix_inline_svg, "== 1.4.0"},
       {:phoenix_live_view, "== 1.0.10"},
@@ -147,7 +147,7 @@ defmodule Core.MixProject do
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
       {:table_rex, "== 3.0.0"},
-      {:dialyxir, "== 1.4.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
       {:browser, "== 0.5.5"}
     ]
   end
