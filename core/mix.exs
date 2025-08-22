@@ -96,7 +96,7 @@ defmodule Core.MixProject do
       {:live_nest, "~> 0.1.0",
        github: "eyra/live_nest", ref: "ba4aadc1e98b5c4829537caf8d8b109540a230fc"},
       {:mime, "== 2.0.7"},
-      {:nimble_parsec, "== 1.4.0"},
+      {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.0.2"},
       {:oban, "== 2.18.3"},
       # Fork fixes a dependency warning in the original repo
