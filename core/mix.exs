@@ -77,7 +77,7 @@ defmodule Core.MixProject do
       {:csv, "== 2.5.0"},
       {:ecto_commons, "== 0.3.6"},
       {:ecto_sql, "== 3.13.2"},
-      {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
+      {:esbuild, "== 0.10.0", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0-alpha.1"},
