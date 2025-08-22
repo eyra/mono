@@ -120,7 +120,7 @@ defmodule Core.MixProject do
       {:timex, "~> 3.7",
        github: "copia-wealth-studios/timex", ref: "cc649c7a586f1266b17d57aff3c6eb1a56116ca2"},
       {:typed_struct, "== 0.2.1"},
-      {:tzdata, "== 1.1.2"},
+      {:tzdata, "== 1.1.3"},
       # i18n
       {:ex_cldr, "== 2.40.2"},
       {:ex_cldr_numbers, "== 2.33.4"},
