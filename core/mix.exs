@@ -126,7 +126,7 @@ defmodule Core.MixProject do
       # Override Bypass dependency that is locked on Ranch 1.7.*
       {:ranch, "== 1.8.1", override: true},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "== 2.14.0"},
+      {:certifi, "== 2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "== 1.1.7"},
       # Dev and test deps
