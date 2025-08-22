@@ -64,9 +64,6 @@ defmodule Core.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # Fix for build warningns
-      {:sweet_xml, "~> 0.7.4",
-       github: "kbrw/sweet_xml", ref: "24bfac864f23c4b8864a010683e7c9549e99fe52", override: true},
       # Deps
       {:appsignal_phoenix, "== 2.7.0"},
       {:assent, "== 0.2.12"},
@@ -83,7 +80,7 @@ defmodule Core.MixProject do
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
-      {:faker, github: "elixirs/faker", ref: "1f42d2bf89f66214270804196b8863c860237518"},
+      {:faker, "== 0.19.0-alpha.1"},
       # Fork fixes a bug in the original repo
       {:floki, github: "eyra/floki", override: true},
       {:gettext, "== 0.26.2"},
@@ -135,10 +132,7 @@ defmodule Core.MixProject do
       # Dev and test deps
       {:ex_machina, "== 2.8.0", only: :test},
       {:file_system, "== 1.0.1", only: [:dev, :test]},
-      {:bypass, "~> 2.1",
-       github: "PSPDFKit-labs/bypass",
-       ref: "0a47472667340ed7d3b1250751408c44c6f9a7d7",
-       only: :test},
+      {:bypass, "== 2.1.0", only: :test},
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
