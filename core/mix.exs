@@ -118,7 +118,7 @@ defmodule Core.MixProject do
       {:telemetry_metrics, "== 0.6.2"},
       {:telemetry_poller, "== 1.1.0"},
       {:timex, "~> 3.7",
-       github: "copia-wealth-studios/timex", ref: "67735ee23fdb1b163ef0e5c394c6969b6140ec80"},
+       github: "copia-wealth-studios/timex", ref: "cc649c7a586f1266b17d57aff3c6eb1a56116ca2"},
       {:typed_struct, "== 0.2.1"},
       {:tzdata, "== 1.1.2"},
       # i18n
