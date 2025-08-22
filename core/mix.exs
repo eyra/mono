@@ -81,7 +81,7 @@ defmodule Core.MixProject do
       {:ecto_commons, "== 0.3.6"},
       {:ecto_sql, "== 3.12.1"},
       {:esbuild, "== 0.8.2", runtime: Mix.env() == :dev},
-      {:ex_aws_s3, "== 2.5.6"},
+      {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, github: "elixirs/faker", ref: "1f42d2bf89f66214270804196b8863c860237518"},
       # Fork fixes a bug in the original repo
