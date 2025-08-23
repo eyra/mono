@@ -42,7 +42,7 @@ defmodule BankingProxy.MixProject do
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       # {:exsync, "~> 0.2", only: :dev},
       {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
-      {:ex_doc, "== 0.26.0", only: [:dev, :test], runtime: false}
+      {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false}
     ]
   end
 end
