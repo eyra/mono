@@ -61,7 +61,7 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - uses: softprops/action-gh-release@126b1e70939461ae1dc0252ce412cabf99778520
+      - uses: softprops/action-gh-release@fbadcc90e88ecface60a0a0d123795b784ceb239
         with:
           tag_name: "${{env.VERSION}}"
           prerelease: false
