@@ -96,7 +96,7 @@ defmodule Core.MixProject do
       {:mime, "== 2.0.7"},
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
-      {:oban, "== 2.18.3"},
+      {:oban, "== 2.20.1"},
       # Fork fixes a dependency warning in the original repo
       {:packmatic, "~> 1.2.0",
        github: "ftes/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
