@@ -107,7 +107,7 @@ defmodule Core.MixProject do
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.7.21"},
       {:plug_cowboy, "== 2.7.4"},
-      {:postgrex, "== 0.19.3"},
+      {:postgrex, "== 0.21.1"},
       {:remote_ip, "== 1.2.0"},
       {:slugify, "== 1.3.1"},
       {:sqids, "== 0.2.1"},
