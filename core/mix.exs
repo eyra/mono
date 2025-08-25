@@ -112,7 +112,7 @@ defmodule Core.MixProject do
       {:slugify, "== 1.3.1"},
       {:sqids, "== 0.2.1"},
       {:statistics, "== 0.6.3"},
-      {:tailwind, "== 0.2.4", runtime: Mix.env() == :dev},
+      {:tailwind, "== 0.3.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "== 0.6.2"},
       {:telemetry_poller, "== 1.1.0"},
       {:timex, "~> 3.7",
