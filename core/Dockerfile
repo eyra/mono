@@ -1,4 +1,4 @@
-FROM elixir:1.17.0-otp-27 AS builder
+FROM elixir:1.18.4-otp-27 AS builder
 
 WORKDIR /workspace
 
