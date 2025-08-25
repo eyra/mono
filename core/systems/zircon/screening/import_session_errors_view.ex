@@ -7,11 +7,8 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsView do
 
   alias Frameworks.Pixel.Text
 
-  @page_size 10
-
-  def get_model(:not_mounted_at_router, %{"session" => session}, _socket) do
-    # Add an id to the model so it works with the default observe_view_model
-    Map.put(session, :id, "import_session_errors")
+  def get_model(:not_mounted_at_router, %{"session" => session} = _session, _socket) do
+    session
   end
 
   def handle_view_model_updated(socket) do
@@ -19,8 +16,8 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsView do
   end
 
   @impl true
-  def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket}
+  def mount(:not_mounted_at_router, %{"title" => title} = _session, socket) do
+    {:ok, assign(socket, title: title)}
   end
 
   @impl true
@@ -46,49 +43,17 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsView do
     }
   end
 
-  defp update_pagination(%{assigns: %{vm: vm, page_index: page_index, query: query}} = socket) do
-    filtered_errors = filter_errors(vm.errors, query)
-    error_count = length(filtered_errors)
-    page_count = max(1, ceil(error_count / @page_size))
-    page_errors = filtered_errors |> Enum.slice(page_index * @page_size, @page_size)
-
-    socket
-    |> update(:vm, fn vm ->
-      vm
-      |> Map.put(:filtered_errors, filtered_errors)
-      |> Map.put(:page_errors, page_errors)
-      |> Map.put(:error_count, error_count)
-      |> Map.put(:page_count, page_count)
-      |> Map.put(:page_index, page_index)
-      |> Map.put(:query, query)
-    end)
-  end
-
-  defp filter_errors(errors, nil), do: errors
-  defp filter_errors(errors, []), do: errors
-
-  defp filter_errors(errors, query) when is_list(query) do
-    Enum.filter(errors, fn error ->
-      # Search in all fields: line number, error message, and content
-      searchable_text =
-        [
-          "Line #{error.line}",
-          error.error || "",
-          error.content || ""
-        ]
-        |> Enum.join(" ")
-        |> String.downcase()
-
-      Enum.any?(query, fn phrase ->
-        phrase |> String.downcase() |> then(&String.contains?(searchable_text, &1))
-      end)
-    end)
+  defp update_pagination(socket) do
+    # Trigger ViewBuilder to recalculate with new pagination parameters
+    update_view_model(socket)
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div data-testid="errors-block">
+      <Text.title2><%= @title %> <span class="text-warning"><%= @vm.error_count %></span></Text.title2>
+
       <%= if @vm.show_action_bar? do %>
         <.action_bar
           page_index={@vm.page_index}

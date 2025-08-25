@@ -5,6 +5,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
   alias Systems.Paper
   alias Systems.Zircon
 
+  # Threshold for showing progress - only show for 20+ items
+  @progress_threshold 20
+
   def view_model(%{id: tool_id} = tool, assigns) do
     # Extract title from different possible locations
     title =
@@ -88,7 +91,11 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       stack: stack,
       active_filename: active_file_info.filename,
       active_file_url: active_file_info.url,
-      modal_title: dgettext("eyra-zircon", "import_view.modal.importing_details")
+      modal_title: dgettext("eyra-zircon", "import_view.modal.importing_details"),
+      modal_warnings_title: dgettext("eyra-zircon", "import_session.prompting.errors_title"),
+      modal_new_papers_title:
+        dgettext("eyra-zircon", "import_session.prompting.new_papers_title"),
+      modal_duplicates_title: dgettext("eyra-zircon", "import_session.prompting.duplicates_title")
     }
 
     # Add prompting_session_id if we have a prompting summary
@@ -127,9 +134,20 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
           status
       end
 
+    # Only consider sessions with :activated status as truly "active"
+    # Completed/failed sessions shouldn't be treated as active
+    active_session =
+      case active_import do
+        %{status: :activated} ->
+          active_import
+
+        _ ->
+          nil
+      end
+
     %{
       status: import_status,
-      active_session: active_import
+      active_session: active_session
     }
   end
 
@@ -203,27 +221,14 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
   end
 
   defp get_latest_uploaded_file_info(tool) do
-    # Get the most recent reference file that is uploaded but not yet processed
-    reference_files = Zircon.Public.list_reference_files(tool)
-
-    # Find the most recently uploaded file that hasn't been processed yet
-    # Status :uploaded means file is fresh and available for import
-    latest_unprocessed_file =
-      reference_files
-      |> Enum.filter(fn ref_file -> ref_file.status == :uploaded end)
-      |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
-      |> List.first()
-
-    case latest_unprocessed_file do
+    case Zircon.Public.get_latest_uploaded_reference_file(tool) do
       nil ->
+        # No uploaded files available - file selector should show placeholder
         %{filename: nil, url: nil}
 
-      reference_file ->
-        # Preload the file association and extract info
-        reference_file = reference_file |> Repo.preload(:file)
-        filename = get_filename_from_reference_file(reference_file)
-        url = get_url_from_reference_file(reference_file)
-        %{filename: filename, url: url}
+      %{file_info: file_info} ->
+        # Return the file info
+        file_info
     end
   end
 
@@ -313,7 +318,12 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
           end
 
         processing_block = build_processing_status_block(session, phase)
-        stack ++ [processing_block]
+        # Only add the block if it's not nil (small operations don't show status)
+        if processing_block do
+          stack ++ [processing_block]
+        else
+          stack
+        end
 
       _ ->
         # This should never happen now
@@ -322,14 +332,55 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
   end
 
   defp build_processing_status_block(session, phase) do
-    message = get_processing_message(session, phase)
+    # Check if we should show the block at all
+    if should_show_processing_status?(session, phase) do
+      message = get_processing_message(session, phase)
+      progress = get_processing_progress(session, phase)
 
-    {:processing_status,
-     %{
-       message: message,
-       show_spinner: true,
-       buttons: []
-     }}
+      {:processing_status,
+       %{
+         message: message,
+         show_spinner: true,
+         progress: progress,
+         buttons: []
+       }}
+    else
+      # Don't show processing status for small operations
+      nil
+    end
+  end
+
+  defp should_show_processing_status?(session, :processing) do
+    # For processing phase, check progress.total_references
+    # This is set after parsing completes
+    if session.progress && Map.get(session.progress, "total_references") do
+      Map.get(session.progress, "total_references", 0) >= @progress_threshold
+    else
+      # No progress data yet, default to showing (shouldn't happen after our fix)
+      true
+    end
+  end
+
+  defp should_show_processing_status?(session, :importing) do
+    # For importing phase, count new papers in entries
+    entries = Map.get(session, :entries, [])
+
+    new_paper_count =
+      entries
+      |> Enum.count(fn entry ->
+        case entry do
+          %{"status" => "new"} -> true
+          %{status: "new"} -> true
+          _ -> false
+        end
+      end)
+
+    new_paper_count >= @progress_threshold
+  end
+
+  defp should_show_processing_status?(_session, _phase) do
+    # Always show for parsing and waiting phases
+    true
   end
 
   defp get_processing_message(_session, :waiting) do
@@ -344,54 +395,55 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     dgettext("eyra-zircon", "import_view.processing.processing")
   end
 
-  defp get_processing_message(session, :importing) do
-    # Show simplified progress message with total papers to import
-    if session.progress && Map.get(session.progress, "total_papers") do
-      build_importing_message(session.progress)
+  defp get_processing_message(_session, :importing) do
+    # Simple message without counts
+    dgettext("eyra-zircon", "import_view.processing.importing")
+  end
+
+  defp get_processing_progress(session, :processing) do
+    # Calculate progress percentage for processing phase
+    # We already checked threshold in should_show_processing_status?
+    if session.progress && Map.get(session.progress, "total_references") do
+      current = Map.get(session.progress, "current_reference", 0)
+      total = Map.get(session.progress, "total_references", 1)
+
+      # Calculate percentage (0-100)
+      round(current / total * 100)
     else
-      dgettext("eyra-zircon", "import_view.processing.importing")
+      nil
     end
   end
 
-  defp build_importing_message(progress) do
-    total_papers = Map.get(progress, "total_papers", 0)
-    papers_skipped = Map.get(progress, "papers_skipped", 0)
+  defp get_processing_progress(session, :importing) do
+    # Calculate progress percentage for importing phase
+    # We already checked threshold in should_show_processing_status?
+    if session.progress && Map.get(session.progress, "total_papers") do
+      processed = Map.get(session.progress, "papers_processed", 0)
+      total = Map.get(session.progress, "total_papers", 1)
 
-    # Build the papers count part using total papers
-    papers_text =
-      dngettext(
-        "eyra-zircon",
-        "1 paper",
-        "%{count} papers",
-        total_papers,
-        count: total_papers
-      )
-
-    # Build the message
-    if papers_skipped > 0 do
-      skipped_text =
-        dngettext(
-          "eyra-zircon",
-          "1 skipped",
-          "%{count} skipped",
-          papers_skipped,
-          count: papers_skipped
-        )
-
-      dgettext("eyra-zircon", "import_view.processing.importing_with_skipped",
-        papers: papers_text,
-        skipped: skipped_text
-      )
+      # Calculate percentage (0-100)
+      round(processed / total * 100)
     else
-      dgettext("eyra-zircon", "import_view.processing.importing_papers", papers: papers_text)
+      nil
     end
+  end
+
+  defp get_processing_progress(_session, :parsing) do
+    # Show progress spinner at 0% for parsing phase
+    0
+  end
+
+  defp get_processing_progress(_session, _phase) do
+    # For other phases, no specific progress
+    nil
   end
 
   defp build_prompting_summary_block(session) do
     # Parse entries to count errors and new papers
     entries = Map.get(session, :entries, [])
 
-    error_count =
+    # Count parsing errors (displayed as warnings in UI)
+    warning_count =
       entries
       |> Enum.count(fn entry ->
         case entry do
@@ -411,30 +463,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
         end
       end)
 
-    # Build summary message
-    message = build_summary_message(error_count, new_paper_count)
+    # Count duplicates
+    duplicate_count =
+      entries
+      |> Enum.count(fn entry ->
+        case entry do
+          %{"status" => "duplicate"} -> true
+          %{status: "duplicate"} -> true
+          _ -> false
+        end
+      end)
 
-    # Determine if we should show details button
-    show_details = error_count > 0 || new_paper_count > 0
-
-    # Build details button
-    details_button =
-      if show_details do
-        %{
-          action: %{type: :send, event: "show_details"},
-          face: %{
-            type: :plain,
-            label: dgettext("eyra-zircon", "import_view.button.details"),
-            icon: :details,
-            icon_align: :left
-          }
-        }
-      else
-        nil
-      end
+    # Build the three buttons for the new UI
+    summary_buttons = build_summary_buttons(warning_count, new_paper_count, duplicate_count)
 
     # Build action buttons - only continue button when there are new papers
-    buttons =
+    action_buttons =
       if new_paper_count > 0 do
         [
           %{
@@ -448,83 +492,104 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
 
     {:prompting_summary,
      %{
-       message: message,
-       error_count: error_count,
+       summary_text: dgettext("eyra-zircon", "import_view.prompting.found_in_file"),
+       summary_buttons: summary_buttons,
+       action_buttons: action_buttons,
+       warning_count: warning_count,
        new_paper_count: new_paper_count,
-       details_button: details_button,
-       buttons: buttons,
+       duplicate_count: duplicate_count,
        session_id: session.id
      }}
   end
 
-  defp build_summary_message(0, 0) do
-    papers_text = dgettext("eyra-zircon", "import_view.prompting.no_new_papers")
-    errors_text = dgettext("eyra-zircon", "import_view.prompting.no_errors")
+  defp build_summary_buttons(warning_count, new_paper_count, duplicate_count) do
+    buttons = []
 
-    dgettext("eyra-zircon", "import_view.prompting.found_template",
-      errors: errors_text,
-      papers: papers_text
-    )
-  end
+    # Add warnings button if there are warnings
+    buttons =
+      if warning_count > 0 do
+        warning_label =
+          dngettext(
+            "eyra-zircon",
+            "1 warning",
+            "%{count} warnings",
+            warning_count,
+            count: warning_count
+          )
 
-  defp build_summary_message(0, new_paper_count) do
-    papers_text =
-      dngettext(
-        "eyra-zircon",
-        "1 new paper",
-        "%{count} new papers",
-        new_paper_count,
-        count: new_paper_count
-      )
+        buttons ++
+          [
+            %{
+              action: %{type: :send, event: "show_warnings"},
+              face: %{
+                type: :plain,
+                label: warning_label,
+                icon: :details,
+                icon_align: :left,
+                text_color: "text-warning"
+              }
+            }
+          ]
+      else
+        buttons
+      end
 
-    errors_text = dgettext("eyra-zircon", "import_view.prompting.no_errors")
+    # Add new papers button if there are new papers
+    buttons =
+      if new_paper_count > 0 do
+        new_papers_label =
+          dngettext(
+            "eyra-zircon",
+            "1 new paper",
+            "%{count} new papers",
+            new_paper_count,
+            count: new_paper_count
+          )
 
-    dgettext("eyra-zircon", "import_view.prompting.found_template",
-      errors: errors_text,
-      papers: papers_text
-    )
-  end
+        buttons ++
+          [
+            %{
+              action: %{type: :send, event: "show_new_papers"},
+              face: %{
+                type: :plain,
+                label: new_papers_label,
+                icon: :details,
+                icon_align: :left
+              }
+            }
+          ]
+      else
+        buttons
+      end
 
-  defp build_summary_message(error_count, 0) do
-    errors_text =
-      dngettext(
-        "eyra-zircon",
-        "1 error",
-        "%{count} errors",
-        error_count,
-        count: error_count
-      )
+    # Add duplicates button if there are duplicates
+    buttons =
+      if duplicate_count > 0 do
+        duplicates_label =
+          dngettext(
+            "eyra-zircon",
+            "1 duplicate",
+            "%{count} duplicates",
+            duplicate_count,
+            count: duplicate_count
+          )
 
-    papers_text = dgettext("eyra-zircon", "import_view.prompting.no_new_papers")
+        buttons ++
+          [
+            %{
+              action: %{type: :send, event: "show_duplicates"},
+              face: %{
+                type: :plain,
+                label: duplicates_label,
+                icon: :details,
+                icon_align: :left
+              }
+            }
+          ]
+      else
+        buttons
+      end
 
-    dgettext("eyra-zircon", "import_view.prompting.found_template",
-      errors: errors_text,
-      papers: papers_text
-    )
-  end
-
-  defp build_summary_message(error_count, new_paper_count) do
-    errors_text =
-      dngettext(
-        "eyra-zircon",
-        "1 error",
-        "%{count} errors",
-        error_count,
-        count: error_count
-      )
-
-    papers_text =
-      dngettext(
-        "eyra-zircon",
-        "1 new paper",
-        "%{count} new papers",
-        new_paper_count,
-        count: new_paper_count
-      )
-
-    dgettext("eyra-zircon", "import_view.prompting.found_template",
-      errors: errors_text,
-      papers: papers_text
-    )
+    buttons
   end
 end

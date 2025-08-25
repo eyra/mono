@@ -10,6 +10,125 @@ defmodule Systems.Zircon.SwitchTest do
     :ok
   end
 
+  describe "processing_progress signal handling" do
+    test "collects Observatory update for processing progress" do
+      # Create test data
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create a session in processing phase with progress
+      session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 5,
+            "total_references" => 10
+          }
+        })
+
+      # Create the signal message
+      message = %{
+        paper_ris_import_session: session,
+        from_pid: self()
+      }
+
+      # Verify no updates collected yet
+      assert UpdateCollector.get_all() == []
+
+      # Call the switch handler
+      result = Switch.intercept({:paper_ris_import_session, :processing_progress}, message)
+
+      # Should return :ok after processing
+      assert result == :ok
+
+      # Verify Observatory update was collected
+      updates = UpdateCollector.get_all()
+      assert length(updates) == 1
+
+      # Verify the collected update structure
+      [{target, args, collected_message}] = updates
+
+      # Check target is correct
+      assert target == {:embedded_live_view, Systems.Zircon.Screening.ImportView}
+
+      # Check args contains tool id
+      assert args == [tool.id]
+
+      # Check message contains correct data
+      assert collected_message.model.id == tool.id
+      assert collected_message.from_pid == self()
+      # Should not have batch_progress or processing_session - just model
+      refute Map.has_key?(collected_message, :batch_progress)
+      refute Map.has_key?(collected_message, :processing_session)
+    end
+
+    test "handles processing progress at different stages" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test various progress values
+      test_cases = [
+        {1, 100},
+        {50, 100},
+        {100, 100},
+        {1, 1},
+        {7, 12}
+      ]
+
+      for {current, total} <- test_cases do
+        # Clear previous updates
+        UpdateCollector.clear()
+
+        session =
+          Core.Factories.insert!(:paper_ris_import_session, %{
+            paper_set: paper_set,
+            reference_file: reference_file,
+            status: :activated,
+            phase: :processing,
+            progress: %{
+              "current_reference" => current,
+              "total_references" => total
+            }
+          })
+
+        message = %{
+          paper_ris_import_session: session,
+          from_pid: self()
+        }
+
+        result = Switch.intercept({:paper_ris_import_session, :processing_progress}, message)
+        assert result == :ok, "Failed for progress #{current}/#{total}"
+
+        # Verify update was collected
+        updates = UpdateCollector.get_all()
+        assert length(updates) == 1
+      end
+    end
+  end
+
   describe "batch_completed signal handling with Observatory verification" do
     test "collects Observatory update with correct batch progress data" do
       # Create test data

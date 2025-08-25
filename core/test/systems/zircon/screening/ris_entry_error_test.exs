@@ -18,20 +18,20 @@ defmodule Systems.Zircon.Screening.RISEntryErrorTest do
 
       assert error.line == 12
 
-      assert error.error ==
+      assert error.message ==
                "Unsupported reference type 'BOOK'. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES"
     end
 
-    test "RISEntryError handles old field names (line/error)" do
+    test "RISEntryError handles new field names (line/message)" do
       error_data = %{
         "line" => 10,
-        "error" => "Invalid DOI format"
+        "message" => "Invalid DOI format"
       }
 
       error = RISEntryError.from_map(error_data)
 
       assert error.line == 10
-      assert error.error == "Invalid DOI format"
+      assert error.message == "Invalid DOI format"
     end
   end
 end

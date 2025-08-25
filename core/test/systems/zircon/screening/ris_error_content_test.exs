@@ -38,7 +38,7 @@ defmodule Systems.Zircon.Screening.RISErrorContentTest do
       # The content should be preserved
       assert error.line == 5
 
-      assert error.error ==
+      assert error.message ==
                "Unsupported reference type. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES"
 
       assert error.content == "TY  - BOOK"

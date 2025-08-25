@@ -22,3 +22,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "ris.error.unsupported_type"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.duplicate_paper_in_file"
+msgstr ""

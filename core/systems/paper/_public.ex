@@ -5,6 +5,7 @@ defmodule Systems.Paper.Public do
   require Ecto.Query
   import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
+  require Logger
 
   alias Core.Repo
   alias Ecto.Changeset
@@ -91,6 +92,85 @@ defmodule Systems.Paper.Public do
 
       {:error, _operation, changeset, _changes} ->
         raise Ecto.InvalidChangesetError, changeset: changeset
+    end
+  end
+
+  @doc """
+  Aborts active import sessions for multiple reference files.
+  Returns the number of sessions aborted.
+  """
+  def abort_active_imports_for_reference_files!(reference_file_ids)
+      when is_list(reference_file_ids) do
+    aborted_count =
+      reference_file_ids
+      |> Enum.filter(&has_active_import_for_reference_file?/1)
+      |> Enum.map(fn ref_file_id ->
+        Logger.info("Aborting active import session for reference file #{ref_file_id}")
+
+        active_session = get_active_import_session_for_reference_file(ref_file_id)
+
+        if active_session do
+          abort_import_session!(active_session)
+          1
+        else
+          0
+        end
+      end)
+      |> Enum.sum()
+
+    Logger.info("Aborted #{aborted_count} active import sessions")
+    aborted_count
+  end
+
+  @doc """
+  Archives multiple reference files by their IDs.
+  This is used to clean up stale uploaded files.
+  Returns the number of files archived.
+  """
+
+  def archive_reference_files([]) do
+    Logger.debug("No files to archive")
+    0
+  end
+
+  def archive_reference_files(file_ids) when is_list(file_ids) do
+    Logger.info("Archiving #{length(file_ids)} reference files: #{inspect(file_ids)}")
+
+    multi =
+      Multi.new()
+      |> Multi.update_all(
+        :archive_files,
+        # Update all reference files to archived status in one query
+        from(rf in Paper.ReferenceFileModel,
+          where: rf.id in ^file_ids
+        ),
+        set: [status: :archived, updated_at: NaiveDateTime.utc_now()]
+      )
+
+    file_ids
+    |> Enum.reduce(multi, fn file_id, acc_multi ->
+      # Add signal dispatch for each archived file
+      # We need to reload each file as a struct before dispatching
+      multi_add_reference_file_reload_and_dispatch(acc_multi, file_id)
+    end)
+    |> Repo.commit()
+  end
+
+  @doc """
+  Archives multiple reference files by their IDs.
+  This is used to clean up stale uploaded files.
+  Returns the number of files archived.
+  """
+
+  def archive_reference_files!(file_ids) when is_list(file_ids) do
+    case archive_reference_files(file_ids) do
+      {:ok, %{archive_files: {count, _}}} ->
+        Logger.info("Successfully archived #{count} reference files")
+        count
+
+      {:error, operation, error, _} ->
+        Logger.error("Failed to archive reference files at #{operation}: #{inspect(error)}")
+        raise "Failed to archive reference files: #{inspect(error)}"
     end
   end
 
@@ -335,5 +415,26 @@ defmodule Systems.Paper.Public do
 
   def finalize_ris(ris, paper) do
     Changeset.put_assoc(ris, :paper, paper)
+  end
+
+  # Helper function to reload a reference file and dispatch signal within a Multi
+  defp multi_add_reference_file_reload_and_dispatch(multi, file_id) do
+    reload_key = String.to_atom("reload_file_#{file_id}")
+    dispatch_key = String.to_atom("dispatch_archive_signal_#{file_id}")
+
+    multi
+    |> Multi.run(reload_key, fn _repo, _changes ->
+      {:ok, Repo.get!(Paper.ReferenceFileModel, file_id)}
+    end)
+    |> Multi.run(dispatch_key, fn _repo, changes ->
+      reloaded_file = Map.get(changes, reload_key)
+
+      Signal.Public.dispatch(
+        {:paper_reference_file, :updated},
+        %{paper_reference_file: reloaded_file}
+      )
+
+      {:ok, :dispatched}
+    end)
   end
 end

@@ -2,6 +2,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
   use Oban.Worker, queue: :ris_import
 
   alias Core.Repo
+  alias Ecto.Multi
   alias Systems.Paper
   alias Systems.Paper.RISEntry
 
@@ -42,12 +43,23 @@ defmodule Systems.Paper.RISImportPrepareJob do
   end
 
   defp handle_successful_parse(%{paper_set_id: paper_set_id} = session, references) do
-    # Move to processing phase with signal
-    {:ok, %{paper_ris_import_session: session}} =
-      session
-      |> Paper.RISImportSessionModel.advance_phase_with_signal(:processing)
+    # Store the total reference count in progress before transitioning to processing
+    total_references = length(references)
 
-    ris_entries = process_and_categorize_references(references, paper_set_id)
+    # Update session with initial progress info and move to processing phase atomically
+    {:ok, %{paper_ris_import_session: session}} =
+      Multi.new()
+      |> Multi.update(
+        :paper_ris_import_session,
+        Paper.RISImportSessionModel.update_changeset(session, %{
+          progress: %{"total_references" => total_references, "current_reference" => 0},
+          phase: :processing
+        })
+      )
+      |> Frameworks.Signal.Public.multi_dispatch({:paper_ris_import_session, :processing})
+      |> Repo.commit()
+
+    ris_entries = process_and_categorize_references(references, paper_set_id, session)
     summary = calculate_summary(ris_entries)
 
     case update_session_with_processed_data(session, ris_entries, summary) do
@@ -73,23 +85,63 @@ defmodule Systems.Paper.RISImportPrepareJob do
     end
   end
 
-  defp process_and_categorize_references(references, paper_set_id) do
+  defp process_and_categorize_references(references, paper_set_id, session) do
     paper_set = Repo.get!(Paper.SetModel, paper_set_id)
-    processed = Paper.RISProcessor.process_references(references, paper_set)
+    total_references = length(references)
 
-    Enum.map(processed, fn
-      {{:ok, :new, attrs}, _raw} ->
-        RISEntry.new_paper(attrs)
-        |> RISEntry.to_map()
+    # Process references with progress updates
+    {processed_entries, _} =
+      references
+      |> Enum.with_index(1)
+      |> Enum.map(fn {reference, index} ->
+        # Update progress periodically (every 10 references or on specific milestones)
+        if rem(index, 10) == 0 or index == 1 or index == total_references do
+          update_processing_progress(session, index, total_references)
+        end
 
-      {{:ok, :existing, attrs, paper_id}, _raw} ->
-        RISEntry.existing_paper(attrs, paper_id)
-        |> RISEntry.to_map()
+        # Process this reference
+        processed = Paper.RISProcessor.process_references([reference], paper_set)
 
-      {{:error, error}, _raw} ->
-        RISEntry.error(error)
-        |> RISEntry.to_map()
-    end)
+        case List.first(processed) do
+          {{:ok, :new, attrs}, _raw} ->
+            RISEntry.new_paper(attrs)
+            |> RISEntry.to_map()
+
+          {{:ok, :existing, attrs, paper_id}, _raw} ->
+            RISEntry.existing_paper(attrs, paper_id)
+            |> RISEntry.to_map()
+
+          {{:error, error}, _raw} ->
+            RISEntry.error(error)
+            |> RISEntry.to_map()
+
+          nil ->
+            # This shouldn't happen but handle gracefully
+            RISEntry.error(%{message: "Failed to process reference"})
+            |> RISEntry.to_map()
+        end
+      end)
+      |> Enum.reduce({[], 0}, fn entry, {acc, count} ->
+        {[entry | acc], count + 1}
+      end)
+
+    Enum.reverse(processed_entries)
+  end
+
+  defp update_processing_progress(session, current_reference, total_references) do
+    progress = %{
+      "current_reference" => current_reference,
+      "total_references" => total_references
+    }
+
+    # Use Multi for atomic update and signal dispatch
+    Multi.new()
+    |> Multi.update(
+      :paper_ris_import_session,
+      Paper.RISImportSessionModel.update_changeset(session, %{progress: progress})
+    )
+    |> Frameworks.Signal.Public.multi_dispatch({:paper_ris_import_session, :processing_progress})
+    |> Repo.commit()
   end
 
   defp update_session_with_processed_data(session, ris_entries, summary) do
@@ -105,7 +157,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     %{
       total: length(ris_entries),
       predicted_new: Enum.count(ris_entries, &(&1.status == "new")),
-      predicted_existing: Enum.count(ris_entries, &(&1.status == "existing")),
+      predicted_existing: Enum.count(ris_entries, &(&1.status == "duplicate")),
       predicted_errors: Enum.count(ris_entries, &(&1.status == "error")),
       # These will be updated during import
       imported: 0,

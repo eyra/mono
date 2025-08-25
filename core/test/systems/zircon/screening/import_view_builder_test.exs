@@ -25,6 +25,42 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
   end
 
+  # Helper function to build session attributes based on phase
+  defp build_session_attrs_for_phase(phase, paper_set, reference_file) do
+    case phase do
+      :processing ->
+        # Add progress data to meet threshold
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase,
+          progress: %{"total_references" => 25, "current_reference" => 5}
+        }
+
+      :importing ->
+        # Add entries with enough new papers to meet threshold
+        entries = Enum.map(1..25, fn i -> %{"status" => "new", "title" => "Paper #{i}"} end)
+
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase,
+          entries: entries
+        }
+
+      _ ->
+        # Waiting and parsing always show status
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase
+        }
+    end
+  end
+
   describe "view_model/2 basic functionality" do
     test "creates basic view model for tool with no papers" do
       tool = Core.Factories.insert!(:zircon_screening_tool)
@@ -202,13 +238,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           })
 
         # Create import session with specific phase
-        import_session =
-          Core.Factories.insert!(:paper_ris_import_session, %{
-            paper_set: paper_set,
-            reference_file: reference_file,
-            status: :activated,
-            phase: phase
-          })
+        # Add appropriate data for phases that need it
+        session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
+        import_session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
 
         result = ImportViewBuilder.view_model(tool, %{})
 
@@ -261,14 +293,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       phases = [:waiting, :parsing, :processing, :importing]
 
       for phase <- phases do
-        # Create session with specific phase
-        session =
-          Core.Factories.insert!(:paper_ris_import_session, %{
-            paper_set: paper_set,
-            reference_file: reference_file,
-            status: :activated,
-            phase: phase
-          })
+        # Create session with specific phase and appropriate data
+        session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
+        session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
 
         result = ImportViewBuilder.view_model(tool, %{})
 
@@ -752,15 +779,36 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Check prompting summary contains correct counts
       {_, summary_assigns} = prompting_summary
-      assert summary_assigns.error_count == 2
+      assert summary_assigns.warning_count == 2
       assert summary_assigns.new_paper_count == 2
+      assert summary_assigns.duplicate_count == 0
 
-      # Should have details button since there are results
-      assert summary_assigns.details_button != nil
+      # Check summary text
+      assert summary_assigns.summary_text == "Found in this file:"
+
+      # Should have summary buttons for warnings and new papers
+      assert length(summary_assigns.summary_buttons) == 2
+
+      # Check warning button
+      warning_button =
+        Enum.find(summary_assigns.summary_buttons, fn btn ->
+          btn.action.event == "show_warnings"
+        end)
+
+      assert warning_button != nil
+      assert warning_button.face.text_color == "text-warning"
+
+      # Check new papers button
+      new_papers_button =
+        Enum.find(summary_assigns.summary_buttons, fn btn ->
+          btn.action.event == "show_new_papers"
+        end)
+
+      assert new_papers_button != nil
 
       # Should have Continue button since there are new papers
-      assert length(summary_assigns.buttons) == 1
-      continue_button = hd(summary_assigns.buttons)
+      assert length(summary_assigns.action_buttons) == 1
+      continue_button = hd(summary_assigns.action_buttons)
       assert continue_button.action.event == "commit_import"
 
       # Check that prompting_session_id is set in view model
@@ -809,18 +857,106 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       {_, summary_assigns} =
         import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
 
-      assert summary_assigns.error_count == 2
+      assert summary_assigns.warning_count == 2
       assert summary_assigns.new_paper_count == 0
+      assert summary_assigns.duplicate_count == 0
 
-      # Should have details button to view errors
-      assert summary_assigns.details_button != nil
+      # Should only have warning button
+      assert length(summary_assigns.summary_buttons) == 1
+      warning_button = hd(summary_assigns.summary_buttons)
+      assert warning_button.action.event == "show_warnings"
+      assert warning_button.face.text_color == "text-warning"
 
       # Should NOT have Continue button since no new papers
-      assert summary_assigns.buttons == []
+      assert summary_assigns.action_buttons == []
     end
   end
 
   describe "batch progress display" do
+    test "shows processing progress message during processing phase with progress data" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in processing phase with progress data
+      # Use 25 references to be above the threshold of 20
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 15,
+            "total_references" => 25
+          }
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Check that we have progress percentage
+      # 15/25 * 100 = 60
+      assert processing_status.progress == 60
+      # Message should be generic without counter
+      assert processing_status.message == "Processing papers"
+    end
+
+    test "shows generic processing message when no progress data during processing phase" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in processing phase without progress data
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show generic processing message
+      assert processing_status.message == "Processing papers"
+      # No progress percentage when no data
+      assert processing_status.progress == nil
+    end
+
     test "shows correct progress message during importing phase with session progress" do
       reference_file = Core.Factories.insert!(:paper_reference_file)
 
@@ -835,6 +971,16 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           identifier: tool.id
         })
 
+      # Create entries with enough new papers to meet threshold (500 total as in progress)
+      entries =
+        Enum.map(1..500, fn i ->
+          if i <= 430 do
+            %{"status" => "new", "title" => "Paper #{i}"}
+          else
+            %{"status" => "duplicate", "title" => "Duplicate #{i}"}
+          end
+        end)
+
       # Create active import session in importing phase with progress data
       _session =
         Core.Factories.insert!(:paper_ris_import_session, %{
@@ -842,6 +988,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           reference_file: reference_file,
           status: :activated,
           phase: :importing,
+          entries: entries,
           progress: %{
             "current_batch" => 3,
             "total_batches" => 5,
@@ -862,18 +1009,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       {_, processing_status} =
         import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
 
-      # Check that the message contains the progress information
-      # The new format: "Importing 500 papers (70 skipped).." (500 is total_papers)
-      IO.puts("Progress message: #{inspect(processing_status.message)}")
-      # total_papers
-      assert processing_status.message =~ "500"
-      # skipped count
-      assert processing_status.message =~ "70"
-      assert processing_status.message =~ "papers"
-      assert processing_status.message =~ "skipped"
+      # Check that we have progress percentage for importing phase
+      # 250 processed out of 500 total = 50%
+      assert processing_status.progress == 50
+
+      # Check that the message is simple without counts
+      assert processing_status.message == "Importing papers"
     end
 
-    test "shows generic importing message when no progress in session" do
+    test "shows importing message for 20+ new papers without progress data" do
       reference_file = Core.Factories.insert!(:paper_reference_file)
 
       tool =
@@ -887,16 +1031,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           identifier: tool.id
         })
 
-      # Create active import session in importing phase
+      # Create entries with 20+ new papers to meet threshold
+      entries =
+        Enum.map(1..25, fn i ->
+          %{"status" => "new", "title" => "Paper #{i}"}
+        end)
+
+      # Create active import session in importing phase with entries but no progress
       _session =
         Core.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
-          phase: :importing
+          phase: :importing,
+          entries: entries
         })
 
-      # No progress field in session means it will show generic message
       assigns = %{}
 
       result = ImportViewBuilder.view_model(tool, assigns)
@@ -904,14 +1054,144 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       # Find the processing_status block
       {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
 
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show processing status since we have 25 new papers (>= threshold)
+      assert processing_status_tuple != nil
+      {_, processing_status} = processing_status_tuple
+
+      # Should show generic importing message
+      assert processing_status.message == "Importing papers"
+      # No progress percentage when no progress data
+      assert processing_status.progress == nil
+    end
+
+    test "hides importing status for small batches of new papers" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create entries with only 5 new papers (below threshold)
+      entries =
+        Enum.map(1..5, fn i ->
+          %{"status" => "new", "title" => "Paper #{i}"}
+        end)
+
+      # Create active import session in importing phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing,
+          entries: entries
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the import_section
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should NOT show processing status for only 5 new papers (< threshold)
+      assert processing_status_tuple == nil
+    end
+
+    test "does not show progress for small batches below threshold" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with 19 references (below threshold of 20)
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 10,
+            "total_references" => 19
+          }
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should not show processing status block at all for small batch
+      assert processing_status_tuple == nil
+    end
+
+    test "shows progress for batches at or above threshold" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with exactly 20 references (at threshold)
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 10,
+            "total_references" => 20
+          }
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
       {_, processing_status} =
         import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
 
-      # Should show generic importing message
-      assert processing_status.message == "Importing papers..."
+      # Should show progress for batch at threshold
+      # 10/20 * 100
+      assert processing_status.progress == 50
+      assert processing_status.message == "Processing papers"
     end
 
-    test "does not show progress for non-importing phases" do
+    test "shows progress spinner at 0 for parsing phase" do
       reference_file = Core.Factories.insert!(:paper_reference_file)
 
       tool =
@@ -934,7 +1214,6 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           phase: :parsing
         })
 
-      # Even with progress in session, should not use it for non-importing phases
       assigns = %{}
 
       result = ImportViewBuilder.view_model(tool, assigns)
@@ -945,9 +1224,47 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       {_, processing_status} =
         import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
 
-      # Should show parsing message, not batch progress
-      assert processing_status.message == "Parsing file..."
-      refute processing_status.message =~ "imported"
+      # Should show parsing message with progress at 0
+      assert processing_status.message == "Parsing file"
+      assert processing_status.progress == 0
+    end
+
+    test "does not show progress for waiting phase" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with waiting phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :waiting
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show waiting message without progress
+      assert processing_status.message == "Starting import"
+      assert processing_status.progress == nil
     end
   end
 

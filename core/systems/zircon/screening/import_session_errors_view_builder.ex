@@ -6,7 +6,9 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilder do
 
   def view_model(%{entries: entries, reference_file: %{file: %{name: _filename}}}, assigns) do
     errors = extract_errors(entries)
-    show_action_bar? = length(errors) > 10
+    # Action bar visibility based on total errors, not filtered
+    total_error_count = length(errors)
+    show_action_bar? = total_error_count > 10
 
     pagination =
       PaginationHelper.paginate_and_search(errors, assigns,
@@ -39,7 +41,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilder do
       searchable_text =
         [
           "Line #{line}",
-          Map.get(error, :error, ""),
+          Map.get(error, :message, ""),
           Map.get(error, :content, "")
         ]
         |> Enum.join(" ")

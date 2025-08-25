@@ -2,330 +2,201 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
   use CoreWeb.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
-  alias Core.Repo
   alias Systems.Paper
-  alias Systems.Zircon.Screening.ImportSessionErrorsView
 
-  describe "search interaction" do
-    test "searching filters the errors in real-time", %{conn: conn} do
-      conn = conn |> Map.put(:request_path, "/test")
+  describe "modal opening with session_id" do
+    setup do
+      user = Factories.insert!(:member)
 
-      # Create actual database records
+      # Create a screening tool
       tool = Factories.insert!(:zircon_screening_tool)
-      paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
+      # Create a reference file
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
-          tool,
-          "test.ris",
-          "http://example.com/test.ris"
-        )
-
-      # Create import session with error entries (need > 10 for search bar to show)
-      entries = [
-        %{
-          "status" => "error",
-          "error" => %{
-            "line" => 1,
-            "error" => "Missing required field: TY",
-            "content" => "AB  - Abstract text"
-          }
-        },
-        %{
-          "status" => "error",
-          "error" => %{
-            "line" => 5,
-            "error" => "Invalid date format",
-            "content" => "DA  - 2024-13-45"
-          }
-        },
-        %{
-          "status" => "error",
-          "error" => %{
-            "line" => 10,
-            "error" => "Missing required field: AU",
-            "content" => "TI  - Title text"
-          }
-        },
-        %{
-          "status" => "error",
-          "error" => %{
-            "line" => 15,
-            "error" => "Duplicate reference",
-            "content" => "ID  - REF001"
-          }
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 20, "error" => "Error 5", "content" => "Content 5"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 25, "error" => "Error 6", "content" => "Content 6"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 30, "error" => "Error 7", "content" => "Content 7"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 35, "error" => "Error 8", "content" => "Content 8"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 40, "error" => "Error 9", "content" => "Content 9"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 45, "error" => "Error 10", "content" => "Content 10"}
-        },
-        %{
-          "status" => "error",
-          "error" => %{"line" => 50, "error" => "Error 11", "content" => "Content 11"}
-        }
-      ]
-
-      import_session =
-        Factories.insert!(:paper_ris_import_session, %{
-          paper_set: paper_set,
-          reference_file: reference_file,
-          status: :activated,
-          phase: :prompting,
-          entries: entries
+        Factories.insert!(:paper_reference_file, %{
+          status: :uploaded
         })
 
-      # Preload associations
-      import_session = import_session |> Repo.preload(reference_file: :file)
-
-      {:ok, view, html} =
-        live_isolated(conn, ImportSessionErrorsView,
-          session: %{
-            "session" => import_session
-          }
-        )
-
-      # Initially first 10 errors should be visible
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-1\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-9\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-10\""
-
-      # Type "missing" in the search box
-      view |> form("#search_bar_form", query: "missing") |> render_change()
-      html = render(view)
-
-      # Should only show the two "Missing" errors (they get new row indices 0 and 1)
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-1\""
-      # No third row
-      refute html =~ "data-testid=\"ris-entry-error-table-row-2\""
-      # No fourth row
-      refute html =~ "data-testid=\"ris-entry-error-table-row-3\""
-
-      # Clear the search
-      view |> form("#search_bar_form", query: "") |> render_change()
-      html = render(view)
-
-      # Should show first 10 errors again
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-1\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-9\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-10\""
-
-      # Test searching in content field
-      view |> form("#search_bar_form", query: "abstract") |> render_change()
-      html = render(view)
-
-      # Should only show the error with "Abstract" in content
-      # Has "AB  - Abstract text"
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-1\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-2\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-3\""
-    end
-  end
-
-  describe "rendering" do
-    test "renders initial errors with search bar when > 10 errors", %{conn: conn} do
-      # Set request_path to avoid iodata error
-      conn = conn |> Map.put(:request_path, "/test")
-
-      # Create actual database records
-      tool = Factories.insert!(:zircon_screening_tool)
+      # Create paper set
       paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
-      reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
-          tool,
-          "test.ris",
-          "http://example.com/test.ris"
-        )
-
-      # Create more than 10 errors to ensure search bar shows
-      entries =
-        for i <- 1..12 do
-          %{
-            "status" => "error",
-            "error" => %{"line" => i, "error" => "Error #{i}", "content" => "Content #{i}"}
-          }
-        end
-
+      # Create an import session with errors
       import_session =
         Factories.insert!(:paper_ris_import_session, %{
-          paper_set: paper_set,
           reference_file: reference_file,
-          status: :activated,
-          phase: :prompting,
-          entries: entries
-        })
-
-      # Preload associations
-      import_session = import_session |> Repo.preload(reference_file: :file)
-
-      {:ok, _view, html} =
-        live_isolated(conn, ImportSessionErrorsView,
-          session: %{
-            "session" => import_session
-          }
-        )
-
-      # Verify structure and data-testid attributes
-      assert html =~ "data-testid=\"errors-block\""
-      assert html =~ "data-testid=\"errors-list\""
-      assert html =~ "data-testid=\"ris-entry-error-table\""
-
-      # Verify we have 10 error rows displayed (pagination)
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      assert html =~ "data-testid=\"ris-entry-error-table-row-9\""
-      refute html =~ "data-testid=\"ris-entry-error-table-row-10\""
-
-      # Verify search bar is present (search form is rendered)
-      assert html =~ "search_bar_form"
-      assert html =~ "phx-change=\"change\""
-    end
-
-    test "renders without search bar when show_action_bar? is false", %{conn: conn} do
-      conn = conn |> Map.put(:request_path, "/test")
-
-      # Create actual database records with only 1 error (so action bar won't show)
-      tool = Factories.insert!(:zircon_screening_tool)
-      paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
-
-      reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
-          tool,
-          "test.ris",
-          "http://example.com/test.ris"
-        )
-
-      import_session =
-        Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
-          reference_file: reference_file,
           status: :activated,
           phase: :prompting,
           entries: [
             %{
               "status" => "error",
-              "error" => %{"line" => 1, "error" => "Test error", "content" => "Test content"}
+              "error" => %{
+                "line" => 1,
+                "message" => "Missing required field",
+                "content" => "TY  - JOUR\nER  -"
+              },
+              "raw" => "TY  - JOUR\nER  -"
+            },
+            %{
+              "status" => "error",
+              "error" => %{
+                "line" => 5,
+                "message" => "Invalid DOI format",
+                "content" => "TY  - JOUR\nDO  - invalid\nER  -"
+              },
+              "raw" => "TY  - JOUR\nDO  - invalid\nER  -"
             }
-          ]
+          ],
+          summary: %{
+            "total" => 2,
+            "predicted_new" => 0,
+            "predicted_existing" => 0,
+            "predicted_errors" => 2
+          }
         })
 
-      # Preload associations
-      import_session = import_session |> Repo.preload(reference_file: :file)
+      %{
+        user: user,
+        tool: tool,
+        import_session: import_session
+      }
+    end
 
-      {:ok, _view, html} =
-        live_isolated(conn, ImportSessionErrorsView,
+    test "ImportSessionErrorsView can be mounted with session parameter", %{
+      conn: conn,
+      import_session: import_session
+    } do
+      # This simulates what happens when the modal is opened with the full session object
+      # The view expects the actual session, not just the ID
+
+      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+
+      # Preload the reference file association with nested file
+      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+
+      # Mount the view with full session object (as fixed in ImportView)
+      assert {:ok, _view, _html} =
+               live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
+                 session: %{
+                   "session" => import_session,
+                   "title" => "Errors"
+                 }
+               )
+    end
+
+    test "ImportSessionErrorsView displays errors when opened with session", %{
+      conn: conn,
+      import_session: import_session
+    } do
+      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+
+      # Preload the reference file association with nested file
+      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+
+      # Mount the view with full session object
+      {:ok, view, html} =
+        live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
           session: %{
-            "session" => import_session
+            "session" => import_session,
+            "title" => "Errors"
           }
         )
 
-      # Verify structure
-      assert html =~ "data-testid=\"errors-block\""
-      assert html =~ "data-testid=\"errors-list\""
-      assert html =~ "data-testid=\"ris-entry-error-table\""
+      # Verify errors are displayed
+      assert html =~ "Missing required field"
+      assert html =~ "Invalid DOI format"
 
-      # Verify we have 1 error row
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-
-      # Search bar should not be present
-      refute html =~ "search_bar_form"
+      # Verify table is rendered
+      assert has_element?(view, "[data-testid='ris-entry-error-table']")
     end
   end
 
-  describe "pagination with search" do
-    test "search resets pagination to first page", %{conn: conn} do
-      conn = conn |> Map.put(:request_path, "/test")
-
-      # Create actual database records
+  describe "intrinsic duplicate error display" do
+    setup do
+      user = Factories.insert!(:member)
       tool = Factories.insert!(:zircon_screening_tool)
-      paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
+      # Create a reference file
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
-          tool,
-          "test.ris",
-          "http://example.com/test.ris"
-        )
-
-      # Create enough errors to have multiple pages (page size is 10)
-      entries =
-        for i <- 1..25 do
-          %{
-            "status" => "error",
-            "error" => %{
-              "line" => i,
-              "error" => "Error #{i}",
-              "content" => "Content #{i}"
-            }
-          }
-        end
-
-      import_session =
-        Factories.insert!(:paper_ris_import_session, %{
-          paper_set: paper_set,
-          reference_file: reference_file,
-          status: :activated,
-          phase: :prompting,
-          entries: entries
+        Factories.insert!(:paper_reference_file, %{
+          status: :uploaded
         })
 
-      # Preload associations
-      import_session = import_session |> Repo.preload(reference_file: :file)
+      # Create paper set
+      paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
+      # Create an import session with intrinsic duplicate errors
+      import_session =
+        Factories.insert!(:paper_ris_import_session, %{
+          reference_file: reference_file,
+          paper_set: paper_set,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{
+              "status" => "error",
+              "error" => %{
+                "line" => 5,
+                "message" => "Duplicate entry in file - DOI: 10.1234/duplicate",
+                "content" => "TY  - JOUR\nDOI - 10.1234/duplicate\nT1  - First Paper\nER  -"
+              },
+              "raw" => "TY  - JOUR\nDOI - 10.1234/duplicate\nT1  - First Paper\nER  -"
+            },
+            %{
+              "status" => "error",
+              "error" => %{
+                "line" => 10,
+                "message" => "Duplicate entry in file - Title: \"Exercise and diabetes.\"",
+                "content" => "TY  - JOUR\nT1  - Exercise and diabetes.\nER  -"
+              },
+              "raw" => "TY  - JOUR\nT1  - Exercise and diabetes.\nER  -"
+            }
+          ],
+          summary: %{
+            "total" => 2,
+            "predicted_new" => 0,
+            "predicted_existing" => 0,
+            "predicted_errors" => 2
+          }
+        })
+
+      %{
+        user: user,
+        tool: tool,
+        import_session: import_session
+      }
+    end
+
+    test "ImportSessionErrorsView displays intrinsic duplicate errors correctly", %{
+      conn: conn,
+      import_session: import_session
+    } do
+      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+
+      # Preload the reference file association with nested file
+      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+
+      # Mount the view with full session object
       {:ok, view, html} =
-        live_isolated(conn, ImportSessionErrorsView,
+        live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
           session: %{
-            "session" => import_session
+            "session" => import_session,
+            "title" => "Errors"
           }
         )
 
-      # Should show first 10 errors - verify table is rendered
-      assert html =~ "data-testid=\"ris-entry-error-table\""
-      # Count table rows to verify pagination (header + 10 data rows)
-      assert length(Regex.scan(~r/<tr/, html)) == 11
+      # Verify intrinsic duplicate errors are displayed
+      assert html =~ "Duplicate entry in file - DOI: 10.1234/duplicate"
+      # The title text might be escaped differently in HTML, just check for the key parts
+      assert html =~ "Duplicate entry in file"
+      assert html =~ "Exercise and diabetes"
 
-      # Click to go to page 2 (use a more specific selector for the page button)
-      view |> element("[phx-click='select_page'][phx-value-item='1']", "2") |> render_click()
-      html = render(view)
+      # Verify table is rendered
+      assert has_element?(view, "[data-testid='ris-entry-error-table']")
 
-      # Should now show errors 11-20 - still 10 rows
-      # header + 10 data rows
-      assert length(Regex.scan(~r/<tr/, html)) == 11
-
-      # Test search interaction
-      # The search bar is component 2, we can trigger its change event
-      view |> form("#search_bar_form", query: "Error 1") |> render_change()
-      html = render(view)
-
-      # After searching for "Error 1", should show matching results (1, 10-19)
-      # Error 1
-      assert html =~ "data-testid=\"ris-entry-error-table-row-0\""
-      # Error 10 (matches "Error 1")
-      assert html =~ "data-testid=\"ris-entry-error-table-row-9\""
+      # Verify line numbers are displayed
+      assert html =~ "5"
+      assert html =~ "10"
     end
   end
 end

@@ -9,6 +9,7 @@ defmodule Systems.Paper.RISProcessor do
   """
 
   require Logger
+  use Gettext, backend: CoreWeb.Gettext
   alias Systems.Paper
 
   @doc """
@@ -16,19 +17,91 @@ defmodule Systems.Paper.RISProcessor do
 
   Takes parsed reference data from RISParser and:
   1. Validates the reference data
-  2. Checks if papers already exist
-  3. Builds changesets for new papers
+  2. Detects intrinsic duplicates within the file
+  3. Checks if papers already exist in the database
+  4. Builds changesets for new papers
 
   Returns categorized references ready for import.
   """
   def process_references(parsed_references, paper_set) do
-    Enum.map(parsed_references, fn
-      {:ok, attrs} ->
-        process_single_reference(attrs, paper_set)
+    # Build a map to track which references are intrinsic duplicates
+    intrinsic_duplicate_indices = find_intrinsic_duplicate_indices(parsed_references)
 
-      {:error, {reason, raw}} ->
+    # Process each reference with its index
+    parsed_references
+    |> Enum.with_index()
+    |> Enum.map(fn
+      {{:ok, {attrs, raw}}, index} ->
+        if Map.has_key?(intrinsic_duplicate_indices, index) do
+          # This is a duplicate of an earlier entry in the file
+          {{:error, format_intrinsic_duplicate_error({attrs, raw}, index)}, raw}
+        else
+          process_single_reference({attrs, raw}, paper_set)
+        end
+
+      {{:error, {reason, raw}}, _index} ->
         {{:error, reason}, raw}
     end)
+  end
+
+  # Find indices of references that are duplicates of earlier entries
+  defp find_intrinsic_duplicate_indices(parsed_references) do
+    parsed_references
+    |> Enum.with_index()
+    |> Enum.reduce({[], %{}}, fn
+      {{:ok, {attrs, _raw}}, current_index}, {seen_refs, duplicate_map} ->
+        # Check if this reference matches any previously seen reference
+        case find_matching_reference(attrs, seen_refs) do
+          nil ->
+            # Not a duplicate, add to seen references
+            {[{attrs, current_index} | seen_refs], duplicate_map}
+
+          _original_index ->
+            # This is a duplicate, mark it
+            {seen_refs, Map.put(duplicate_map, current_index, true)}
+        end
+
+      {{:error, _}, _index}, acc ->
+        # Skip error entries
+        acc
+    end)
+    # Return just the duplicate map
+    |> elem(1)
+  end
+
+  # Find if a reference matches any in the seen list
+  defp find_matching_reference(attrs, seen_refs) do
+    Enum.find(seen_refs, fn {seen_attrs, _index} ->
+      Paper.Private.papers_match?(attrs, seen_attrs)
+    end)
+  end
+
+  defp format_intrinsic_duplicate_error({attrs, _raw}, _index) do
+    doi = Map.get(attrs, :doi)
+    title = Map.get(attrs, :title)
+    # Get the actual line number from attrs
+    line_number = Map.get(attrs, :line_number, 0)
+
+    # The content should be the DOI or title that caused the duplicate
+    content =
+      cond do
+        doi && doi != "" ->
+          doi
+
+        title && title != "" ->
+          title
+
+        true ->
+          ""
+      end
+
+    # Return a structured error map like parsing errors
+    %{
+      # Use the actual line number from the RIS file
+      "line" => line_number,
+      "message" => dgettext("eyra-paper", "ris.error.duplicate_paper_in_file"),
+      "content" => content
+    }
   end
 
   @doc """
@@ -81,7 +154,7 @@ defmodule Systems.Paper.RISProcessor do
   # Private functions
 
   defp process_single_reference({attrs, raw}, paper_set) do
-    case check_paper_exists(attrs, paper_set) do
+    case Paper.Private.check_paper_exists(attrs, paper_set) do
       {:existing, paper} ->
         processed_attrs = process_paper_attributes(attrs)
         {{:ok, :existing, processed_attrs, paper.id}, raw}
@@ -89,24 +162,6 @@ defmodule Systems.Paper.RISProcessor do
       :new ->
         processed_attrs = process_paper_attributes(attrs)
         {{:ok, :new, processed_attrs}, raw}
-    end
-  end
-
-  defp check_paper_exists(attrs, paper_set) do
-    doi = Map.get(attrs, :doi)
-    title = Map.get(attrs, :title)
-
-    cond do
-      doi && Paper.Private.get_paper_by_doi(doi, paper_set) ->
-        paper = Paper.Private.get_paper_by_doi(doi, paper_set, [:version])
-        {:existing, paper}
-
-      title && Paper.Private.get_paper_by_title(title, paper_set) ->
-        paper = Paper.Private.get_paper_by_title(title, paper_set)
-        {:existing, paper}
-
-      true ->
-        :new
     end
   end
 

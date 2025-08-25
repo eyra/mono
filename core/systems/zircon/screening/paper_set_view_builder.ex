@@ -7,6 +7,10 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
   def view_model(paper_set, assigns) do
     query = Map.get(assigns, :query, nil)
     page_index = Map.get(assigns, :page_index, 0)
+
+    # Keep track of total papers before filtering for action bar visibility
+    total_paper_count = Enum.count(paper_set.papers)
+
     papers = filter_papers(paper_set.papers, query)
     paper_count = papers |> Enum.count()
     page_count = if paper_count == 0, do: 0, else: Float.ceil(paper_count / @page_size) |> round()
@@ -27,7 +31,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
       page_count: page_count,
       page: page,
       search_bar: search_bar,
-      show_action_bar?: paper_count > @page_size
+      show_action_bar?: total_paper_count > @page_size
     }
   end
 

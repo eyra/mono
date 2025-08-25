@@ -7,12 +7,12 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       entries = [
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "Parse error", "content" => "TY  - INVALID"}
+          "message" => %{"line" => 1, "message" => "Parse error", "content" => "TY  - INVALID"}
         },
         %{"status" => "new", "title" => "Valid Paper"},
         %{
           "status" => "error",
-          "error" => %{"line" => 5, "error" => "Missing field", "content" => "AU  -"}
+          "message" => %{"line" => 5, "message" => "Missing field", "content" => "AU  -"}
         }
       ]
 
@@ -40,7 +40,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
         Enum.map(1..11, fn i ->
           %{
             "status" => "error",
-            "error" => %{"line" => i, "error" => "Error #{i}", "content" => "Content #{i}"}
+            "message" => %{"line" => i, "message" => "Error #{i}", "content" => "Content #{i}"}
           }
         end)
 
@@ -65,7 +65,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
         Enum.map(1..15, fn i ->
           %{
             "status" => "error",
-            "error" => %{"line" => i, "error" => "Error #{i}", "content" => "Content #{i}"}
+            "message" => %{"line" => i, "message" => "Error #{i}", "content" => "Content #{i}"}
           }
         end)
 
@@ -94,15 +94,15 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       entries = [
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "Parse error", "content" => "TY  - INVALID"}
+          "error" => %{"line" => 1, "message" => "Parse error", "content" => "TY  - INVALID"}
         },
         %{
           "status" => "error",
-          "error" => %{"line" => 5, "error" => "Missing author", "content" => "AU  -"}
+          "error" => %{"line" => 5, "message" => "Missing author", "content" => "AU  -"}
         },
         %{
           "status" => "error",
-          "error" => %{"line" => 10, "error" => "Invalid format", "content" => "DO  - bad"}
+          "error" => %{"line" => 10, "message" => "Invalid format", "content" => "DO  - bad"}
         }
       ]
 
@@ -117,7 +117,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assert result.filtered_errors |> Enum.count() == 1
       assert result.error_count == 1
-      assert hd(result.filtered_errors).error =~ "author"
+      assert hd(result.filtered_errors).message =~ "author"
     end
 
     test "filters with multiple query terms (AND logic)" do
@@ -126,17 +126,17 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
           "status" => "error",
           "error" => %{
             "line" => 1,
-            "error" => "Parse error in format",
+            "message" => "Parse error in format",
             "content" => "TY  - INVALID"
           }
         },
         %{
           "status" => "error",
-          "error" => %{"line" => 5, "error" => "Missing author", "content" => "AU  -"}
+          "error" => %{"line" => 5, "message" => "Missing author", "content" => "AU  -"}
         },
         %{
           "status" => "error",
-          "error" => %{"line" => 10, "error" => "Invalid format", "content" => "DO  - bad"}
+          "error" => %{"line" => 10, "message" => "Invalid format", "content" => "DO  - bad"}
         }
       ]
 
@@ -158,7 +158,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       entries = [
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "PARSE ERROR", "content" => "content"}
+          "error" => %{"line" => 1, "message" => "PARSE ERROR", "content" => "content"}
         }
       ]
 
@@ -177,11 +177,11 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       entries = [
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "Error 1", "content" => "Content 1"}
+          "message" => %{"line" => 1, "message" => "Error 1", "content" => "Content 1"}
         },
         %{
           "status" => "error",
-          "error" => %{"line" => 2, "error" => "Error 2", "content" => "Content 2"}
+          "message" => %{"line" => 2, "message" => "Error 2", "content" => "Content 2"}
         }
       ]
 
@@ -222,15 +222,15 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
         # Format 1: line/error
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "Error 1", "content" => "C1"}
+          "message" => %{"line" => 1, "message" => "Error 1", "content" => "C1"}
         },
         # Format 2: line_number/message
         %{
           "status" => "error",
-          "error" => %{"line_number" => 2, "message" => "Error 2", "content" => "C2"}
+          "message" => %{"line_number" => 2, "message" => "Error 2", "content" => "C2"}
         },
         # Format 3: atom keys
-        %{"status" => "error", "error" => %{line: 3, error: "Error 3", content: "C3"}}
+        %{"status" => "error", "message" => %{line: 3, error: "Error 3", content: "C3"}}
       ]
 
       session = %{
@@ -250,13 +250,13 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       entries = [
         %{
           "status" => "error",
-          "error" => %{"line" => 1, "error" => "Error", "content" => "Content"}
+          "message" => %{"line" => 1, "message" => "Error", "content" => "Content"}
         },
         %{"status" => "new", "title" => "New Paper"},
         %{"status" => "existing", "title" => "Existing Paper"},
         %{
           "status" => "error",
-          "error" => %{"line" => 5, "error" => "Another error", "content" => "Content"}
+          "message" => %{"line" => 5, "message" => "Another error", "content" => "Content"}
         }
       ]
 
@@ -300,8 +300,11 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
     test "handles nil or missing error content gracefully" do
       entries = [
-        %{"status" => "error", "error" => %{"line" => 1, "error" => "Error", "content" => nil}},
-        %{"status" => "error", "error" => %{"line" => 2, "error" => nil, "content" => "Content"}},
+        %{"status" => "error", "error" => %{"line" => 1, "message" => "Error", "content" => nil}},
+        %{
+          "status" => "error",
+          "error" => %{"line" => 2, "message" => nil, "content" => "Content"}
+        },
         # Missing both error and content
         %{"status" => "error", "error" => %{"line" => 3}}
       ]
@@ -327,7 +330,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
         Enum.map(1..20, fn i ->
           %{
             "status" => "error",
-            "error" => %{"line" => i, "error" => "Error #{i}", "content" => "Content"}
+            "message" => %{"line" => i, "message" => "Error #{i}", "content" => "Content"}
           }
         end)
 

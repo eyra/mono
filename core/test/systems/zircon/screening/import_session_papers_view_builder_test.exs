@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
+defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
   use ExUnit.Case
-  alias Systems.Zircon.Screening.ImportSessionNewPapersViewBuilder
+  alias Systems.Zircon.Screening.ImportSessionPapersViewBuilder
 
   describe "view_model/2" do
     test "extracts new papers from entries and sets up pagination" do
@@ -13,7 +13,7 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
         },
         %{"status" => "error", "error" => "Parse error"},
         %{"status" => "new", "title" => "Paper 2", "authors" => "Doe, J.", "doi" => "10.1234/2"},
-        %{"status" => "existing", "title" => "Existing Paper"}
+        %{"status" => "duplicate", "title" => "Duplicate Paper"}
       ]
 
       session = %{
@@ -23,10 +23,10 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.new_papers) == 2
-      assert length(result.filtered_papers) == 2
+      # page_papers contains current page items, paper_count is total after filtering
+      assert length(result.page_papers) == 2
       assert result.paper_count == 2
       assert result.page_count == 1
       assert result.page_index == 0
@@ -50,9 +50,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.new_papers) == 11
+      # page_papers only has current page (10 items max)
+      assert length(result.page_papers) == 10
+      assert result.paper_count == 11
       assert result.show_action_bar? == true
       # 11 papers / 10 per page = 2 pages
       assert result.page_count == 2
@@ -77,7 +79,7 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Test first page
       assigns = %{page_index: 0}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       assert length(result.page_papers) == 10
       assert result.page_index == 0
@@ -85,7 +87,7 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Test second page
       assigns = %{page_index: 1}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       assert length(result.page_papers) == 5
       assert result.page_index == 1
@@ -105,12 +107,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Search for "learning"
       assigns = %{query: ["learning"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.filtered_papers) == 2
       assert result.paper_count == 2
-      # Papers are RISEntry structs after processing
-      assert Enum.all?(result.filtered_papers, fn
+      # Check that page_papers contains the right items
+      assert Enum.all?(result.page_papers, fn
                %{title: title} -> title && String.downcase(title) =~ "learning"
                _ -> false
              end)
@@ -130,9 +131,8 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Search for "smith"
       assigns = %{query: ["smith"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.filtered_papers) == 2
       assert result.paper_count == 2
     end
 
@@ -150,9 +150,8 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Search for "1234"
       assigns = %{query: ["1234"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.filtered_papers) == 2
       assert result.paper_count == 2
     end
 
@@ -170,10 +169,9 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Search for "machine" AND "research" - both must be present
       assigns = %{query: ["machine", "research"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       # Only the first paper has both "machine" and "research"
-      assert length(result.filtered_papers) == 1
       assert result.paper_count == 1
     end
 
@@ -188,14 +186,14 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
       }
 
       assigns = %{query: ["machine"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.filtered_papers) == 1
+      assert result.paper_count == 1
 
       assigns = %{query: ["smith"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.filtered_papers) == 1
+      assert result.paper_count == 1
     end
 
     test "handles empty query correctly" do
@@ -211,13 +209,13 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       # Test with nil query
       assigns = %{query: nil}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
-      assert length(result.filtered_papers) == 2
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      assert result.paper_count == 2
 
       # Test with empty list query
       assigns = %{query: []}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
-      assert length(result.filtered_papers) == 2
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      assert result.paper_count == 2
     end
 
     test "includes search bar component" do
@@ -228,7 +226,7 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       assert result.search_bar != nil
       assert result.search_bar.implementation == Frameworks.Pixel.SearchBar
@@ -236,11 +234,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
       assert result.search_bar.options[:debounce] == "200"
     end
 
-    test "filters only new entries, ignoring errors and existing" do
+    test "filters only new entries, ignoring errors and duplicates" do
       entries = [
         %{"status" => "new", "title" => "New Paper 1"},
         %{"status" => "error", "error" => "Parse error"},
-        %{"status" => "existing", "title" => "Existing Paper"},
+        %{"status" => "duplicate", "title" => "Duplicate Paper"},
         %{"status" => "new", "title" => "New Paper 2"}
       ]
 
@@ -251,11 +249,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert length(result.new_papers) == 2
+      assert length(result.page_papers) == 2
 
-      assert Enum.all?(result.new_papers, fn paper ->
+      assert Enum.all?(result.page_papers, fn paper ->
                paper.status == "new"
              end)
     end
@@ -273,10 +271,10 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
       }
 
       assigns = %{query: ["paper"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       # Both papers should be found regardless of key type
-      assert length(result.filtered_papers) == 2
+      assert result.paper_count == 2
     end
   end
 
@@ -289,10 +287,8 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert result.new_papers == []
-      assert result.filtered_papers == []
       assert result.page_papers == []
       assert result.paper_count == 0
       # Minimum 1 page even with no data
@@ -318,11 +314,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
       assigns = %{query: ["smith"]}
 
       # Should not crash when filtering with nil values
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
-      assert is_list(result.filtered_papers)
+      assert is_list(result.page_papers)
       # Only the one with "Smith" in authors
-      assert length(result.filtered_papers) == 1
+      assert result.paper_count == 1
     end
 
     test "calculates correct page count for exact page boundary" do
@@ -339,7 +335,7 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       assert result.page_count == 2
       assert result.paper_count == 20
@@ -363,11 +359,11 @@ defmodule Systems.Zircon.Screening.ImportSessionNewPapersViewBuilderTest do
       }
 
       assigns = %{query: ["machine"]}
-      result = ImportSessionNewPapersViewBuilder.view_model(session, assigns)
+      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
 
       # Should only find the paper with "machine" in the title (visible field)
-      assert length(result.filtered_papers) == 1
-      assert hd(result.filtered_papers).title == "Machine Paper"
+      assert result.paper_count == 1
+      assert hd(result.page_papers).title == "Machine Paper"
     end
   end
 end

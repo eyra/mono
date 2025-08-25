@@ -79,7 +79,7 @@ msgstr "Year"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.file_import.placeholder"
-msgstr "Choose RIS file to add papers to the collection"
+msgstr "Select a RIS file to import papers"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.file_import.replace_button"
@@ -103,47 +103,11 @@ msgstr "Next"
 
 #, elixir-autogen, elixir-format
 msgid "import_session.errors.search.placeholder"
-msgstr "Search errors..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.importing"
-msgstr "Importing papers..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.parsing"
-msgstr "Parsing file..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.processing"
-msgstr "Processing references..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.prompting.empty"
-msgstr "No new papers found."
+msgstr "Search errors.."
 
 #, elixir-autogen, elixir-format
 msgid "import_session.phase.prompting.new_papers"
 msgstr "New papers extracted from file"
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.unknown"
-msgstr "Processing..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.phase.waiting"
-msgstr "Starting import..."
-
-#, elixir-autogen, elixir-format
-msgid "import_session.status.aborted"
-msgstr "Import aborted"
-
-#, elixir-autogen, elixir-format
-msgid "import_session.status.failed.default"
-msgstr "Import failed"
-
-#, elixir-autogen, elixir-format
-msgid "import_session.status.succeeded"
-msgstr "Import completed successfully"
 
 #, elixir-autogen, elixir-format
 msgid "ris_entry_error_table.error.label"
@@ -166,32 +130,10 @@ msgid "import_view.button.continue"
 msgstr "Add new papers"
 
 #, elixir-autogen, elixir-format
-msgid "import_view.button.details"
-msgstr "Details"
-
-#, elixir-autogen, elixir-format
-msgid "1 error"
-msgid_plural "%{count} errors"
-msgstr[0] "<span class=\"text-warning font-body font-bold\">1 error</span>"
-msgstr[1] "<span class=\"text-warning font-body font-bold\">%{count} errors</span>"
-
-#, elixir-autogen, elixir-format
 msgid "1 new paper"
 msgid_plural "%{count} new papers"
 msgstr[0] "1 new paper"
 msgstr[1] "%{count} new papers"
-
-#, elixir-autogen, elixir-format
-msgid "import_view.prompting.found_template"
-msgstr "Found %{errors} and %{papers}."
-
-#, elixir-autogen, elixir-format
-msgid "import_view.prompting.no_errors"
-msgstr "0 errors"
-
-#, elixir-autogen, elixir-format
-msgid "import_view.prompting.no_new_papers"
-msgstr "0 new papers"
 
 #, elixir-autogen, elixir-format
 msgid "import_session.prompting.errors_title"
@@ -207,23 +149,23 @@ msgstr "Import details"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.importing"
-msgstr "Importing papers..."
+msgstr "Importing papers"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.parsing"
-msgstr "Parsing file..."
+msgstr "Parsing file"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.processing"
-msgstr "Scanning for new papers..."
+msgstr "Processing papers"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.waiting"
-msgstr "Starting import..."
+msgstr "Starting import"
 
 #, elixir-autogen, elixir-format
 msgid "import_view.button.prepare_import"
-msgstr "Scan file"
+msgstr "Start import"
 
 #, elixir-autogen, elixir-format
 msgid "1 skipped"
@@ -238,3 +180,27 @@ msgstr "Importing %{papers}.."
 #, elixir-autogen, elixir-format
 msgid "import_view.processing.importing_with_skipped"
 msgstr "Importing %{papers} (%{skipped}).."
+
+#, elixir-autogen, elixir-format
+msgid "1 warning"
+msgid_plural "%{count} warnings"
+msgstr[0] "1 warning"
+msgstr[1] "%{count} warnings"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.prompting.found_in_file"
+msgstr "Found in this file:"
+
+#, elixir-autogen, elixir-format
+msgid "1 duplicate"
+msgid_plural "%{count} duplicates"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "import_session.prompting.duplicates_title"
+msgstr "Duplicates"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.processing_with_progress"
+msgstr "Processing reference %{reference_number}"

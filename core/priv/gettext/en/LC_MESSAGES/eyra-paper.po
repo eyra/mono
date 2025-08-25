@@ -22,3 +22,7 @@ msgstr "Missing TY (Type of Reference) field - this is required for all RIS reco
 #, elixir-autogen, elixir-format
 msgid "ris.error.unsupported_type"
 msgstr "Unsupported reference type. Supported types are: %{supported_types}"
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.duplicate_paper_in_file"
+msgstr "Duplicate paper in file"

@@ -107,75 +107,101 @@ defmodule Systems.Paper.RISParser do
   end
 
   defp parse_reference(ris_lines_with_numbers) do
-    # Extract just the lines for the raw text
-    raw_lines = Enum.map(ris_lines_with_numbers, fn {line, _} -> line end)
-    raw = Enum.join(raw_lines, "\n")
+    raw = extract_raw_text(ris_lines_with_numbers)
+    first_line_num = get_first_line_number(ris_lines_with_numbers)
+    parsed_results = parse_all_lines(ris_lines_with_numbers)
 
-    # Track the first line number for reference-level errors
-    first_line_num =
-      case ris_lines_with_numbers do
-        [{_, num} | _] -> num
-        [] -> 0
-      end
+    case check_for_parse_errors(parsed_results, ris_lines_with_numbers, raw) do
+      {:error, _} = error ->
+        error
 
-    # Parse lines and collect both successful parses and errors
-    parsed_results =
-      ris_lines_with_numbers
-      |> Enum.map(fn {line, line_num} ->
-        {parse_ris_line(line), line_num}
-      end)
+      :ok ->
+        build_and_validate_reference(parsed_results, first_line_num, raw, ris_lines_with_numbers)
+    end
+  end
 
-    # Collect parse errors with line numbers (skip tags are not errors)
-    parse_errors =
-      parsed_results
-      |> Enum.filter(fn
-        {{:error, _}, _} -> true
-        # Don't treat skipped tags as errors
-        {{:skip, _}, _} -> false
-        _ -> false
-      end)
-      |> Enum.map(fn {{:error, msg}, line_num} ->
-        # Find the original line content
-        {line_content, _} = Enum.find(ris_lines_with_numbers, fn {_, num} -> num == line_num end)
+  defp extract_raw_text(ris_lines_with_numbers) do
+    ris_lines_with_numbers
+    |> Enum.map_join("\n", fn {line, _} -> line end)
+  end
 
-        %{
-          type: :parse_error,
-          line_number: line_num,
-          message: msg,
-          line_content: line_content
-        }
-      end)
+  defp get_first_line_number(ris_lines_with_numbers) do
+    case ris_lines_with_numbers do
+      [{_, num} | _] -> num
+      [] -> 0
+    end
+  end
 
-    # If we have parse errors, return them
-    if length(parse_errors) > 0 do
-      # Return the first error with structured data
+  defp parse_all_lines(ris_lines_with_numbers) do
+    Enum.map(ris_lines_with_numbers, fn {line, line_num} ->
+      {parse_ris_line(line), line_num}
+    end)
+  end
+
+  defp check_for_parse_errors(parsed_results, ris_lines_with_numbers, raw) do
+    parse_errors = extract_parse_errors(parsed_results, ris_lines_with_numbers)
+
+    if Enum.empty?(parse_errors) do
+      :ok
+    else
       first_error = List.first(parse_errors)
       {:error, {first_error, raw}}
-    else
-      # Build paper attributes from successful parses (ignore skipped tags)
-      paper_attrs =
-        parsed_results
-        |> Enum.filter(fn
-          {{:ok, _}, _} -> true
-          # Ignore skipped tags
-          {{:skip, _}, _} -> false
-          _ -> false
-        end)
-        |> Enum.reduce(%{}, fn {{:ok, {field, value}}, _}, acc ->
-          Map.put(acc, field, value)
-        end)
-
-      case validate_reference(paper_attrs) do
-        :ok ->
-          {:ok, {paper_attrs, raw}}
-
-        {:error, reason} ->
-          error_with_line =
-            create_validation_error(reason, first_line_num, ris_lines_with_numbers)
-
-          {:error, {error_with_line, raw}}
-      end
     end
+  end
+
+  defp extract_parse_errors(parsed_results, ris_lines_with_numbers) do
+    parsed_results
+    |> Enum.filter(fn
+      {{:error, _}, _} -> true
+      _ -> false
+    end)
+    |> Enum.map(fn {{:error, msg}, line_num} ->
+      line_content = find_line_content(ris_lines_with_numbers, line_num)
+
+      %{
+        type: :parse_error,
+        line_number: line_num,
+        message: msg,
+        line_content: line_content
+      }
+    end)
+  end
+
+  defp find_line_content(ris_lines_with_numbers, line_num) do
+    case Enum.find(ris_lines_with_numbers, fn {_, num} -> num == line_num end) do
+      {content, _} -> content
+      nil -> ""
+    end
+  end
+
+  defp build_and_validate_reference(parsed_results, first_line_num, raw, ris_lines_with_numbers) do
+    paper_attrs = build_paper_attributes(parsed_results, first_line_num)
+
+    case validate_reference(paper_attrs) do
+      :ok ->
+        {:ok, {paper_attrs, raw}}
+
+      {:error, reason} ->
+        error = create_validation_error(reason, first_line_num, ris_lines_with_numbers)
+        {:error, {error, raw}}
+    end
+  end
+
+  defp build_paper_attributes(parsed_results, first_line_num) do
+    parsed_results
+    |> collect_successful_fields()
+    |> Map.put(:line_number, first_line_num)
+  end
+
+  defp collect_successful_fields(parsed_results) do
+    parsed_results
+    |> Enum.filter(fn
+      {{:ok, _}, _} -> true
+      _ -> false
+    end)
+    |> Enum.reduce(%{}, fn {{:ok, {field, value}}, _}, acc ->
+      Map.put(acc, field, value)
+    end)
   end
 
   defp create_validation_error(reason, line_number, ris_lines_with_numbers) do

@@ -27,38 +27,41 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
   end
 
   describe "UI updates immediately when clicking Continue" do
-    test "shows importing message with spinner and no buttons during import", %{
+    test "shows importing message with spinner for large imports (20+ items)", %{
       conn: conn,
       tool: tool,
       paper_set: paper_set,
       reference_file: reference_file
     } do
-      # Create an import session in prompting phase with new papers
+      # Create an import session in prompting phase with 20+ papers to meet threshold
+      entries =
+        Enum.map(1..20, fn i ->
+          %{
+            "title" => "Test Paper #{i}",
+            "authors" => ["Test Author #{i}"],
+            "year" => "2024",
+            "doi" => "10.1234/test#{i}",
+            "status" => "new",
+            "processed_attrs" => %{
+              "title" => "Test Paper #{i}",
+              "authors" => ["Test Author #{i}"],
+              "year" => "2024",
+              "doi" => "10.1234/test#{i}"
+            }
+          }
+        end)
+
       import_session =
         Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
           phase: :prompting,
-          entries: [
-            %{
-              "title" => "Test Paper",
-              "authors" => ["Test Author"],
-              "year" => "2024",
-              "doi" => "10.1234/test",
-              "status" => "new",
-              "processed_attrs" => %{
-                "title" => "Test Paper",
-                "authors" => ["Test Author"],
-                "year" => "2024",
-                "doi" => "10.1234/test"
-              }
-            }
-          ],
+          entries: entries,
           errors: [],
           summary: %{
-            "total" => 1,
-            "predicted_new" => 1,
+            "total" => 20,
+            "predicted_new" => 20,
             "predicted_existing" => 0
           }
         })
@@ -145,16 +148,16 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
              "Processing status should be removed after completion"
     end
 
-    test "UI transitions correctly through all import phases", %{
+    test "small imports complete without showing progress UI", %{
       conn: conn,
       tool: tool,
       paper_set: paper_set,
       reference_file: reference_file
     } do
-      # This test verifies the complete UI flow:
-      # prompting (with Continue) -> importing (with spinner) -> succeeded (back to normal)
+      # This test verifies that small imports (< threshold) complete without showing progress UI
+      # The UI should transition from prompting directly to completion without intermediate progress
 
-      # Create session in prompting phase
+      # Create session in prompting phase with only 1 paper (below threshold)
       import_session =
         Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
@@ -163,9 +166,9 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
           phase: :prompting,
           entries: [
             %{
-              "title" => "Phase Transition Test Paper",
+              "title" => "Single Test Paper",
               "status" => "new",
-              "processed_attrs" => %{"title" => "Phase Transition Test Paper"}
+              "processed_attrs" => %{"title" => "Single Test Paper"}
             }
           ]
         })
@@ -182,20 +185,18 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
       assert prompting_html =~ "Add new papers"
       assert view |> has_element?("[phx-click='commit_import']")
 
-      # Click Continue to transition to importing
+      # Click Continue to trigger import
       view |> element("[phx-click='commit_import']") |> render_click()
 
-      # Phase 2: Importing - should show spinner, no buttons
-      # Check IMMEDIATELY, don't wait
+      # For small imports (below threshold), NO progress UI should show
+      # The import should complete quickly without intermediate UI
       importing_html = render(view)
 
-      # These assertions should PASS if the UI updates correctly
-      assert importing_html =~ "Importing papers" ||
-               importing_html =~ "import_view.processing.importing",
-             "Should show importing message immediately after clicking Continue"
+      # Should NOT show progress UI for small operations
+      refute importing_html =~ "processing-status-block",
+             "Small imports should not show progress UI (threshold behavior)"
 
-      assert importing_html =~ "spinner" || importing_html =~ "Spinner",
-             "Should show spinner during import"
+      # The import continues but without visible progress indicators
 
       refute view |> has_element?("[phx-click='commit_import']"),
              "Continue button should be removed during import"

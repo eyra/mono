@@ -9,11 +9,6 @@ defmodule Systems.Zircon.Presenter do
   end
 
   @impl true
-  def view_model(Zircon.Screening.ImportSessionView, model, assigns) do
-    Zircon.Screening.ImportSessionViewBuilder.view_model(model, assigns)
-  end
-
-  @impl true
   def view_model(Zircon.Screening.PaperSetView, model, assigns) do
     Zircon.Screening.PaperSetViewBuilder.view_model(model, assigns)
   end
@@ -29,7 +24,7 @@ defmodule Systems.Zircon.Presenter do
   end
 
   @impl true
-  def view_model(Zircon.Screening.ImportSessionNewPapersView, model, assigns) do
-    Zircon.Screening.ImportSessionNewPapersViewBuilder.view_model(model, assigns)
+  def view_model(Zircon.Screening.ImportSessionPapersView, model, assigns) do
+    Zircon.Screening.ImportSessionPapersViewBuilder.view_model(model, assigns)
   end
 end

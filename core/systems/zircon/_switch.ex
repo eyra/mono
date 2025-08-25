@@ -51,6 +51,32 @@ defmodule Systems.Zircon.Switch do
     :ok
   end
 
+  # Handle processing progress updates during RIS processing phase
+  def intercept(
+        {:paper_ris_import_session, :processing_progress},
+        %{
+          paper_ris_import_session: %{reference_file_id: reference_file_id},
+          from_pid: from_pid
+        } = _message
+      ) do
+    # Get the tool from the reference file
+    reference_file = Paper.Public.get_reference_file!(reference_file_id)
+    tool = Zircon.Public.get_screening_tool_by_reference_file!(reference_file)
+
+    # Update the ImportView with just the tool
+    # ImportViewBuilder will extract the session and its progress
+    Observatory.Public.collect_update(
+      {:embedded_live_view, Zircon.Screening.ImportView},
+      [tool.id],
+      %{
+        model: tool,
+        from_pid: from_pid
+      }
+    )
+
+    :ok
+  end
+
   # Handle batch progress updates during import
   def intercept(
         {:paper_ris_import_session, :batch_completed},
@@ -95,12 +121,10 @@ defmodule Systems.Zircon.Switch do
   def intercept(
         {:paper_ris_import_session, status},
         %{
-          paper_ris_import_session: %{reference_file_id: reference_file_id} = session,
+          paper_ris_import_session: %{reference_file_id: reference_file_id} = _session,
           from_pid: from_pid
         } = _message
       ) do
-    update_import_session_view(session, from_pid)
-
     # Always update import_view to show current status
     reference_file = Paper.Public.get_reference_file!(reference_file_id)
     tool = Zircon.Public.get_screening_tool_by_reference_file!(reference_file)
@@ -165,17 +189,6 @@ defmodule Systems.Zircon.Switch do
       [paper_set.id],
       %{
         model: paper_set,
-        from_pid: from_pid
-      }
-    )
-  end
-
-  defp update_import_session_view(model, from_pid) do
-    Observatory.Public.collect_update(
-      {:embedded_live_view, Zircon.Screening.ImportSessionView},
-      [model.id],
-      %{
-        model: model,
         from_pid: from_pid
       }
     )

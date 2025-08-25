@@ -8,6 +8,8 @@ defmodule Systems.Paper.RISEntry do
   defstruct [
     # "new" | "existing" | "error"
     :status,
+    # Line number in the original RIS file
+    :line_number,
     :title,
     :subtitle,
     # List of author strings
@@ -32,6 +34,7 @@ defmodule Systems.Paper.RISEntry do
 
   @type t :: %__MODULE__{
           status: String.t(),
+          line_number: integer() | nil,
           title: String.t() | nil,
           subtitle: String.t() | nil,
           authors: list(String.t()),
@@ -54,6 +57,7 @@ defmodule Systems.Paper.RISEntry do
   def new_paper(attrs) do
     %__MODULE__{
       status: "new",
+      line_number: attrs[:line_number],
       title: attrs[:title],
       subtitle: attrs[:subtitle],
       authors: attrs[:authors] || [],
@@ -74,7 +78,8 @@ defmodule Systems.Paper.RISEntry do
   """
   def existing_paper(attrs, paper_id) do
     %__MODULE__{
-      status: "existing",
+      status: "duplicate",
+      line_number: attrs[:line_number],
       title: attrs[:title],
       subtitle: attrs[:subtitle],
       authors: attrs[:authors] || [],
@@ -145,6 +150,7 @@ defmodule Systems.Paper.RISEntry do
 
     base = %__MODULE__{
       status: status,
+      line_number: map[:line_number],
       title: map[:title],
       subtitle: map[:subtitle],
       authors: map[:authors] || [],
@@ -205,12 +211,41 @@ defmodule Systems.Paper.RISEntry do
     |> Enum.filter(&(&1.status == "error"))
     |> Enum.map(fn %{error: error} ->
       case error do
-        %{"line" => _, "error" => _} = map -> RISEntryError.from_map(map)
-        %{line: _, error: _} = map -> RISEntryError.from_map(map)
-        %{"line_number" => _, "message" => _} = map -> RISEntryError.from_map(map)
-        %{line_number: _, message: _} = map -> RISEntryError.from_map(map)
-        # Fallback for other formats
-        _ -> error
+        %{"line" => _, "message" => _} = map ->
+          RISEntryError.from_map(map)
+
+        %{line: _, message: _} = map ->
+          RISEntryError.from_map(map)
+
+        %{"line" => _, "error" => _} = map ->
+          # Convert legacy format to new format
+          RISEntryError.from_map(%{
+            "line" => map["line"],
+            "message" => map["error"],
+            "content" => map["content"]
+          })
+
+        %{line: _, error: _} = map ->
+          # Convert legacy format to new format
+          RISEntryError.from_map(%{
+            line: map.line,
+            message: map.error,
+            content: map[:content]
+          })
+
+        %{"line_number" => _, "message" => _} = map ->
+          RISEntryError.from_map(map)
+
+        %{line_number: _, message: _} = map ->
+          RISEntryError.from_map(map)
+
+        # Fallback - if it's a string, create a basic error
+        error_string when is_binary(error_string) ->
+          RISEntryError.new(0, error_string, nil)
+
+        # Unknown format - try to convert to string
+        _ ->
+          RISEntryError.new(0, inspect(error), nil)
       end
     end)
   end

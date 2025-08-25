@@ -3,10 +3,10 @@ defmodule Systems.Zircon.Screening.ImportView do
   use CoreWeb.FileUploader, accept: ~w(.ris)
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]
-  import Phoenix.HTML, only: [raw: 1]
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.LoadingSpinner
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
 
@@ -26,10 +26,8 @@ defmodule Systems.Zircon.Screening.ImportView do
       }) do
     Logger.info("File uploaded: #{filename} at #{url}")
 
-    # Check if there's an active import session and abort it before creating new file
-    reference_files = Zircon.Public.list_reference_files(tool)
-
-    Enum.each(reference_files, &abort_active_import_if_exists/1)
+    # Clean up any existing reference files (abort active imports and archive uploaded files)
+    Zircon.Public.cleanup_reference_files_for_new_upload!(tool)
 
     # Create reference file immediately when file is uploaded so it persists across page refreshes
     _reference_file = Zircon.Public.insert_reference_file!(tool, filename, url)
@@ -61,7 +59,11 @@ defmodule Systems.Zircon.Screening.ImportView do
   defp update_file_selector(
          %{assigns: %{vm: %{active_filename: filename, active_file_url: url}}} = socket
        ) do
-    # Get initial filename from unprocessed reference files via existing view model
+    Logger.debug(
+      "ImportView.update_file_selector: filename=#{inspect(filename)}, url=#{inspect(url)}"
+    )
+
+    # Get filename from view model - will be nil when no active file
     socket
     |> assign(filename: filename, url: url)
   end
@@ -74,20 +76,6 @@ defmodule Systems.Zircon.Screening.ImportView do
     # Just restore file selector state, the Observatory framework will handle the view model update
     # ViewBuilder determines the correct filename based on active session or latest uploaded file
     update_file_selector(socket)
-  end
-
-  defp abort_active_import_if_exists(ref_file) do
-    if Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
-      Logger.info(
-        "Aborting active import session for reference file #{ref_file.id} due to file replacement"
-      )
-
-      active_session = Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
-
-      if active_session do
-        Paper.Public.abort_import_session!(active_session)
-      end
-    end
   end
 
   @impl true
@@ -133,37 +121,69 @@ defmodule Systems.Zircon.Screening.ImportView do
         _params,
         %{assigns: %{vm: %{prompting_session_id: session_id}}} = socket
       ) do
-    Logger.info("ImportView: commit_import clicked for session #{session_id}")
-    Logger.info("ImportView: Socket PID: #{inspect(self())}")
-
     session = Paper.Public.get_import_session!(session_id)
-
-    Logger.info(
-      "ImportView: Retrieved session: #{inspect(Map.take(session, [:id, :phase, :status, :reference_file_id]))}"
-    )
-
-    Logger.info("ImportView: BEFORE commit_import_session! (blocking call)")
-    updated_session = Paper.Public.commit_import_session!(session)
-    Logger.info("ImportView: AFTER commit_import_session! - session completed")
-
-    Logger.info(
-      "ImportView: Updated session: #{inspect(Map.take(updated_session, [:id, :phase, :status]))}"
-    )
+    _updated_session = Paper.Public.commit_import_session!(session)
 
     {:noreply, socket}
   end
 
   def handle_event(
-        "show_details",
+        "show_warnings",
         _params,
-        %{assigns: %{vm: %{prompting_session_id: session_id, modal_title: modal_title}}} = socket
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_warnings_title: title}}} =
+          socket
       ) do
-    # LiveNest expects a keyword list for session, which gets converted to string keys
+    # Load the full session object with preloads needed by the view
+    session = Paper.Public.get_import_session!(session_id, reference_file: :file)
+    filename = session.reference_file.file.name
+
     modal =
       LiveNest.Modal.prepare_live_view(
-        "import-session-details",
-        Systems.Zircon.Screening.ImportSessionView,
-        session: [session_id: session_id, title: modal_title],
+        "import-session-warnings",
+        Systems.Zircon.Screening.ImportSessionErrorsView,
+        session: [session: session, title: title, header: filename],
+        style: :full
+      )
+
+    {:noreply, socket |> present_modal(modal)}
+  end
+
+  def handle_event(
+        "show_new_papers",
+        _params,
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_new_papers_title: title}}} =
+          socket
+      ) do
+    # Load the full session object with preloads needed by the view
+    session = Paper.Public.get_import_session!(session_id, reference_file: :file)
+    filename = session.reference_file.file.name
+
+    modal =
+      LiveNest.Modal.prepare_live_view(
+        "import-session-new-papers",
+        Systems.Zircon.Screening.ImportSessionPapersView,
+        session: [session: session, title: title, header: filename, filter: "new"],
+        style: :full
+      )
+
+    {:noreply, socket |> present_modal(modal)}
+  end
+
+  def handle_event(
+        "show_duplicates",
+        _params,
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_duplicates_title: title}}} =
+          socket
+      ) do
+    # Load the full session object with preloads needed by the view
+    session = Paper.Public.get_import_session!(session_id, reference_file: :file)
+    filename = session.reference_file.file.name
+
+    modal =
+      LiveNest.Modal.prepare_live_view(
+        "import-session-duplicates",
+        Systems.Zircon.Screening.ImportSessionPapersView,
+        session: [session: session, title: title, header: filename, filter: "duplicates"],
         style: :full
       )
 
@@ -262,21 +282,19 @@ defmodule Systems.Zircon.Screening.ImportView do
     ~H"""
     <div data-testid="prompting-summary-block">
       <div class="flex flex-col gap-8">
-        <div class="flex flex-row items-center">
-          <div>
-            <Text.body>
-              <%= raw(@prompting_summary.message) %>
-            </Text.body>
-          </div>
-          <%= if @prompting_summary.details_button do %>
-            <div class="ml-4">
-              <Button.dynamic {@prompting_summary.details_button} />
+        <div class="flex flex-row items-center gap-3">
+          <Text.body>
+            <%= @prompting_summary.summary_text %>
+          </Text.body>
+          <%= if length(@prompting_summary.summary_buttons) > 0 do %>
+            <div class="flex flex-row gap-3">
+              <Button.dynamic_bar buttons={@prompting_summary.summary_buttons} />
             </div>
           <% end %>
         </div>
-        <%= if length(@prompting_summary.buttons) > 0 do %>
+        <%= if length(@prompting_summary.action_buttons) > 0 do %>
           <div class="flex flex-row gap-3">
-            <Button.dynamic_bar buttons={@prompting_summary.buttons} />
+            <Button.dynamic_bar buttons={@prompting_summary.action_buttons} />
           </div>
         <% end %>
       </div>
@@ -288,12 +306,16 @@ defmodule Systems.Zircon.Screening.ImportView do
     ~H"""
     <div data-testid="processing-status-block">
       <div class="flex flex-row items-center gap-3">
-        <%= if @processing_status.show_spinner do %>
-          <Frameworks.Pixel.Spinner.static color="primary" />
-        <% end %>
         <Text.body>
           <%= @processing_status.message %>
         </Text.body>
+        <%= if @processing_status[:progress] do %>
+          <LoadingSpinner.progress_spinner progress={@processing_status.progress} size={20} />
+        <% else %>
+          <%= if @processing_status.show_spinner do %>
+            <Frameworks.Pixel.Spinner.static color="primary" />
+          <% end %>
+        <% end %>
       </div>
     </div>
     """

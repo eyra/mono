@@ -62,6 +62,100 @@ Always investigate first, understand second, fix third.
 
 This is an Elixir Phoenix LiveView application using a **Systems-based architecture** where functionality is organized into autonomous systems rather than traditional MVC layers.
 
+### MVVM Pattern Implementation
+
+#### Block Architecture: Decoupling ViewBuilder and View
+The **Block concept** is the foundation for cleanly decoupling ViewBuilders from Views:
+
+- **ViewBuilder creates block structures**: Returns a `stack` of blocks, each as a tuple `{block_type, block_data}`
+- **LiveView defines block render functions**: Each block type maps to a `render_block/2` function
+- **Complete separation**: ViewBuilder knows nothing about HTML; LiveView knows nothing about data transformation
+
+```elixir
+# ViewBuilder - builds block structures with all necessary data
+def view_model(tool, assigns) do
+  %{
+    stack: [
+      {:header, %{
+        title: dgettext("eyra-zircon", "import.title"),
+        paper_count: count_papers(tool)
+      }},
+      {:import_section, %{
+        stack: [
+          {:file_selector, %{placeholder: dgettext(...)}},
+          {:prompting_summary, %{
+            summary_text: dgettext("eyra-zircon", "found_in_file"),
+            summary_buttons: build_summary_buttons(...),
+            action_buttons: build_action_buttons(...)
+          }}
+        ]
+      }}
+    ]
+  }
+end
+
+# LiveView - renders blocks without knowing how data was built
+def render(assigns) do
+  ~H"""
+  <%= for {block_type, opts} <- @vm.stack do %>
+    <%= render_block(block_type, assign(assigns, block_type, opts)) %>
+  <% end %>
+  """
+end
+
+def render_block(:header, assigns) do
+  ~H"""
+  <div data-testid="header-block">
+    <h1>{@header.title} ({@header.paper_count})</h1>
+  </div>
+  """
+end
+
+def render_block(:prompting_summary, assigns) do
+  ~H"""
+  <div data-testid="prompting-summary-block">
+    <Text.body>{@prompting_summary.summary_text}</Text.body>
+    <Button.dynamic_bar buttons={@prompting_summary.summary_buttons} />
+  </div>
+  """
+end
+```
+
+#### ViewBuilder Responsibilities (View Model Layer)
+ViewBuilders are responsible for:
+- **Block Structure Creation**: Building the `stack` of blocks with their data
+- **Data Transformation**: Converting raw model data into view-ready structures
+- **Presentation Logic**: All display-related decisions (what blocks to show, in what order)
+- **Internationalization**: All `dgettext`/`dngettext` calls for UI text and labels
+- **Conditional Display**: Determining which blocks should be included in the stack
+- **Data Aggregation**: Combining multiple data sources into block data structures
+- **UI State Management**: Managing pagination, filtering, sorting states within block data
+- **Button/Action Configuration**: Defining button faces, events, and enabled states
+
+ViewBuilders should NOT:
+- Make database queries (use Public API or pass preloaded data)
+- Handle user events (that's the LiveView's responsibility)
+- Contain HTML markup (that belongs in the render_block functions)
+- Manage process state or signals
+- Know about specific HTML structure or CSS classes
+
+#### LiveView Responsibilities (View Layer)
+LiveViews are responsible for:
+- **Block Rendering**: Defining `render_block/2` functions for each block type
+- **HTML Markup**: All HTML structure and CSS classes
+- **Event Handling**: Processing user interactions (clicks, form submissions)
+- **Process State**: Managing socket assigns and LiveView lifecycle
+- **Signal Integration**: Responding to system signals and updates
+- **Modal/Navigation**: Presenting modals and handling navigation
+- **Block Iteration**: Iterating through the stack and calling appropriate render functions
+
+Benefits of Block Architecture:
+- **Clean Separation**: ViewBuilder handles all logic; LiveView handles all presentation
+- **Testability**: ViewBuilders can be tested without LiveView; render functions are simple
+- **Reusability**: Block render functions can potentially be shared across LiveViews
+- **Maintainability**: Changes to logic don't affect rendering; changes to HTML don't affect logic
+- **Future Evolution**: Foundation for eventual general rendering engine with declarative block stacking
+
 ### Core Architecture Components
 
 #### Systems (`/systems/`)
@@ -602,3 +696,6 @@ Then ask: "Can you test this in the browser and share the logs?"
 - Tests can be debugged more easily
 - Tests document the expected behavior
 - Only resort to browser debugging when test environment truly can't reproduce the issue
+- the difference between ! and non-! functions
+- everything for setting up a testing file for isolated testing a live view
+- memorize what you learned about this simple single pupose functions

@@ -145,18 +145,20 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
       assert result.show_action_bar? == false
     end
 
-    test "action bar based on filtered papers, not total papers" do
+    test "action bar based on total papers, not filtered papers" do
       papers = create_test_papers(15)
       paper_set = %{papers: papers}
       # Query that filters down to less than 10 papers
-      # Will match "Paper 1" and "Paper 10-19"
+      # Will match "Paper 1" and "Paper 10-15"
       assigns = %{query: ["Paper 1"]}
 
       result = PaperSetViewBuilder.view_model(paper_set, assigns)
 
-      # Action bar is based on filtered results (matches only "Paper 1", "Paper 10-15")
-      # That's 7 papers total (Paper 1, Paper 10, Paper 11, Paper 12, Paper 13, Paper 14, Paper 15)
-      assert result.show_action_bar? == false
+      # Filtering matches only "Paper 1", "Paper 10-15" (7 papers)
+      assert length(result.page) == 7
+      # But action bar is based on total papers (15), not filtered (7)
+      # Since 15 > 10, action bar should show
+      assert result.show_action_bar? == true
     end
   end
 

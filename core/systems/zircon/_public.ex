@@ -167,6 +167,76 @@ defmodule Systems.Zircon.Public do
   end
 
   @doc """
+  Gets the latest uploaded reference file for a tool.
+  Returns a map with :file (the reference file) and :file_info (filename and url).
+  Returns nil if no uploaded file exists.
+  """
+  def get_latest_uploaded_reference_file(tool) do
+    reference_files = list_reference_files(tool)
+
+    # Find the most recently uploaded file that hasn't been processed yet
+    # Status :uploaded means file is fresh and available for import
+    latest_unprocessed_file =
+      reference_files
+      |> Enum.filter(fn ref_file -> ref_file.status == :uploaded end)
+      |> Enum.sort_by(& &1.inserted_at, {:desc, NaiveDateTime})
+      |> List.first()
+
+    case latest_unprocessed_file do
+      nil ->
+        nil
+
+      reference_file ->
+        # Preload the file association and extract info
+        reference_file = reference_file |> Repo.preload(:file)
+        filename = reference_file.file && reference_file.file.name
+        url = reference_file.file && reference_file.file.ref
+
+        %{
+          file: reference_file,
+          file_info: %{filename: filename, url: url}
+        }
+    end
+  end
+
+  @doc """
+  Gets all uploaded reference files for a tool.
+  Returns a list of reference file IDs that have :uploaded status.
+  """
+  def get_uploaded_reference_file_ids(tool) do
+    reference_files = list_reference_files(tool)
+
+    reference_files
+    |> Enum.filter(fn ref_file -> ref_file.status == :uploaded end)
+    |> Enum.map(& &1.id)
+  end
+
+  @doc """
+  Cleans up all reference files for a tool before uploading a new file.
+  This aborts any active imports and archives all uploaded files.
+  """
+  def cleanup_reference_files_for_new_upload!(tool) do
+    reference_files = list_reference_files(tool)
+
+    # Get all reference file IDs
+    all_ref_file_ids = Enum.map(reference_files, & &1.id)
+
+    # Abort any active imports for all reference files
+    Systems.Paper.Public.abort_active_imports_for_reference_files!(all_ref_file_ids)
+
+    # Get IDs of uploaded files to archive
+    uploaded_file_ids =
+      reference_files
+      |> Enum.filter(fn ref_file -> ref_file.status == :uploaded end)
+      |> Enum.map(& &1.id)
+
+    # Archive all uploaded files
+    if length(uploaded_file_ids) > 0 do
+      Systems.Paper.Public.archive_reference_files!(uploaded_file_ids)
+    end
+  end
+
+  @doc """
   Aborts any active import sessions for the tool and archives all uploaded reference files.
   This clears the file selector and stops any ongoing imports.
   """

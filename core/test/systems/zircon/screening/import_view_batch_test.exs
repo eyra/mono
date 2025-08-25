@@ -227,7 +227,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       assert final_session.progress["total_batches"] == 3
     end
 
-    test "progress message updates during import simulation", %{
+    test "small batch imports complete without progress UI", %{
       conn: conn,
       tool: tool,
       paper_set: paper_set
@@ -299,11 +299,9 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
           }
         )
 
-      # Check that progress message is shown
-      assert html =~ "Importing"
-      # The progress message should show: "Importing 4 papers.." (4 is total_papers)
-      assert html =~ "4"
-      assert html =~ "papers"
+      # With only 4 papers (below threshold of 20), no progress UI should show
+      refute html =~ "processing-status-block"
+      # The import continues without visible progress indicators
 
       # Update session to simulate batch 2 completion
       session
@@ -319,11 +317,8 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       })
       |> Core.Repo.update!()
 
-      # Just verify the initial state showing the batch in progress
-      # The real batch processing would update this through signals
-      # Initial state shows: "Importing 4 papers.." (4 is total_papers)
-      assert html =~ "4"
-      assert html =~ "papers"
+      # With small imports (below threshold), the UI continues without progress indicators
+      # The import happens in the background without visible UI updates
     end
   end
 

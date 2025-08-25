@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.ImportViewDetailsButtonTest do
+defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
   use CoreWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
@@ -12,8 +12,8 @@ defmodule Systems.Zircon.Screening.ImportViewDetailsButtonTest do
     %{user: user, tool: tool}
   end
 
-  describe "Details button in prompting phase" do
-    test "shows Details button and opens modal when clicked", %{conn: conn, tool: tool} do
+  describe "Summary buttons in prompting phase" do
+    test "shows warning, new papers, and existing papers buttons", %{conn: conn, tool: tool} do
       # Create the necessary setup
       paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
@@ -46,6 +46,13 @@ defmodule Systems.Zircon.Screening.ImportViewDetailsButtonTest do
                 "line" => 15,
                 "error" => "Invalid field format"
               }
+            },
+            %{
+              "title" => "Existing Paper",
+              "authors" => ["Author B"],
+              "year" => "2023",
+              "doi" => "10.1234/existing",
+              "status" => "duplicate"
             }
           ],
           errors: []
@@ -63,23 +70,31 @@ defmodule Systems.Zircon.Screening.ImportViewDetailsButtonTest do
       # Verify the prompting summary is shown
       assert html =~ "data-testid=\"prompting-summary-block\""
 
-      # Verify Details button is present
-      assert has_element?(view, "[phx-click='show_details']")
+      # Verify the "Found in this file:" text is present
+      assert html =~ "Found in this file:"
 
-      # Click the Details button
-      view |> element("[phx-click='show_details']") |> render_click()
+      # Verify all three buttons are present
+      assert has_element?(view, "[phx-click='show_warnings']")
+      assert has_element?(view, "[phx-click='show_new_papers']")
+      assert has_element?(view, "[phx-click='show_duplicates']")
 
-      # After clicking, the modal should be presented
-      # Check that the modal was triggered (the actual modal presentation
-      # is handled by LiveNest and might not show in the test DOM)
-      # We can at least verify no error occurred
+      # Verify button labels with counts
+      assert html =~ "1 warning"
+      assert html =~ "1 new paper"
+      assert html =~ "1 duplicate"
+
+      # Test clicking each button
+      view |> element("[phx-click='show_warnings']") |> render_click()
       refute render(view) =~ "phx-error"
 
-      # Verify the ImportView is still functional
-      assert has_element?(view, "[data-testid='prompting-summary-block']")
+      view |> element("[phx-click='show_new_papers']") |> render_click()
+      refute render(view) =~ "phx-error"
+
+      view |> element("[phx-click='show_duplicates']") |> render_click()
+      refute render(view) =~ "phx-error"
     end
 
-    test "Details button only shows when there are errors or papers", %{conn: conn, tool: tool} do
+    test "buttons only show when there are items to display", %{conn: conn, tool: tool} do
       # Create the necessary setup
       paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
@@ -113,8 +128,10 @@ defmodule Systems.Zircon.Screening.ImportViewDetailsButtonTest do
       # Verify the prompting summary is shown
       assert html =~ "data-testid=\"prompting-summary-block\""
 
-      # Verify Details button is NOT present when there are no entries
-      refute has_element?(view, "[phx-click='show_details']")
+      # Verify no buttons are present when there are no entries
+      refute has_element?(view, "[phx-click='show_warnings']")
+      refute has_element?(view, "[phx-click='show_new_papers']")
+      refute has_element?(view, "[phx-click='show_duplicates']")
     end
   end
 end

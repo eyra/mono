@@ -95,9 +95,9 @@ defmodule Systems.Zircon.HTML do
     """
   end
 
-  defp ris_entry_error_row(%Paper.RISEntryError{line: line, error: error, content: content}) do
+  defp ris_entry_error_row(%Paper.RISEntryError{line: line, message: message, content: content}) do
     displayed_content = content || "-"
-    [line, displayed_content, error]
+    [line, displayed_content, message]
   end
 
   attr(:uploads, :map, required: true)

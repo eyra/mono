@@ -138,7 +138,7 @@ defmodule Systems.Paper.RISImportCommitJob do
   end
 
   defp attempt_paper_insertion(ref, paper_set) do
-    case check_paper_exists_at_import_time(ref, paper_set) do
+    case Paper.Private.check_paper_exists(ref, paper_set) do
       {:existing, paper} ->
         {:ok, {:skipped, paper}}
 
@@ -149,24 +149,6 @@ defmodule Systems.Paper.RISImportCommitJob do
           {:ok, paper} -> {:ok, {:inserted, paper}}
           {:error, changeset} -> {:error, changeset}
         end
-    end
-  end
-
-  defp check_paper_exists_at_import_time(ref, paper_set) do
-    doi = Map.get(ref, :doi)
-    title = Map.get(ref, :title)
-
-    cond do
-      doi && Paper.Private.get_paper_by_doi(doi, paper_set) ->
-        paper = Paper.Private.get_paper_by_doi(doi, paper_set, [:version])
-        {:existing, paper}
-
-      title && Paper.Private.get_paper_by_title(title, paper_set) ->
-        paper = Paper.Private.get_paper_by_title(title, paper_set)
-        {:existing, paper}
-
-      true ->
-        :new
     end
   end
 
@@ -246,11 +228,11 @@ defmodule Systems.Paper.RISImportCommitJob do
 
     multi =
       Multi.update(multi, :reference_file, fn %{session: _session} ->
-        Paper.ReferenceFileModel.changeset(reference_file, %{status: :processed})
+        Paper.ReferenceFileModel.changeset(reference_file, %{status: :archived})
       end)
 
     case Repo.commit(multi) do
-      {:ok, %{session: updated_session}} ->
+      {:ok, %{session: updated_session, reference_file: _updated_ref_file}} ->
         {:ok, updated_session}
 
       {:error, _operation, error, _changes} ->

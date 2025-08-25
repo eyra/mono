@@ -294,8 +294,8 @@ defmodule Systems.Paper.RISLineTrackingTest do
   end
 
   describe "error display in UI layer" do
-    test "ImportSessionViewBuilder extracts message from structured error" do
-      alias Systems.Zircon.Screening.ImportSessionViewBuilder
+    test "ImportSessionErrorsViewBuilder extracts message from structured error" do
+      alias Systems.Zircon.Screening.ImportSessionErrorsViewBuilder
 
       # Session with structured errors
       session = %{
@@ -323,22 +323,22 @@ defmodule Systems.Paper.RISLineTrackingTest do
         errors: []
       }
 
-      view_model = ImportSessionViewBuilder.view_model(session, %{})
+      view_model = ImportSessionErrorsViewBuilder.view_model(session, %{})
 
-      # Find the prompting_errors block in the stack
-      errors_block =
-        view_model.stack
-        |> Enum.find(fn
-          {:prompting_errors, _} -> true
-          _ -> false
-        end)
+      # Check the error count directly from the view model
+      assert view_model.error_count == 2
+      assert length(view_model.errors) == 2
 
-      assert {:prompting_errors, %{count: error_count}} = errors_block
-      assert error_count == 2
+      # Verify errors are properly formatted
+      assert [error1, error2] = view_model.errors
+      assert error1.line == 5
+      assert error1.message == "Invalid RIS format"
+      assert error2.line == 10
+      assert error2.message == "Missing required field"
     end
 
-    test "ImportSessionViewBuilder handles mixed error formats" do
-      alias Systems.Zircon.Screening.ImportSessionViewBuilder
+    test "ImportSessionErrorsViewBuilder handles mixed error formats" do
+      alias Systems.Zircon.Screening.ImportSessionErrorsViewBuilder
 
       session = %{
         status: :activated,
@@ -361,21 +361,23 @@ defmodule Systems.Paper.RISLineTrackingTest do
         errors: ["Session-level error"]
       }
 
-      view_model = ImportSessionViewBuilder.view_model(session, %{})
+      view_model = ImportSessionErrorsViewBuilder.view_model(session, %{})
 
-      # Find the prompting_errors block in the stack
-      errors_block =
-        view_model.stack
-        |> Enum.find(fn
-          {:prompting_errors, _} -> true
-          _ -> false
-        end)
+      # Check the error count directly from the view model
+      assert view_model.error_count == 2
+      assert length(view_model.errors) == 2
 
-      assert {:prompting_errors, %{count: error_count}} = errors_block
+      # Verify mixed error formats are handled
+      assert [error1, error2] = view_model.errors
 
-      # Should count both entry errors and session-level errors
-      # Only entry errors are counted in prompting_errors
-      assert error_count == 2
+      # First error should be the structured one
+      assert error1.line == 3
+      assert error1.message == "Structured error message"
+
+      # Second error should be converted from legacy string to struct
+      # Default line number for string errors
+      assert error2.line == 0
+      assert error2.message == "Legacy string error"
     end
   end
 end
