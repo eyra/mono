@@ -105,7 +105,7 @@ defmodule Core.MixProject do
       {:phoenix_inline_svg, "== 1.4.0"},
       {:phoenix_live_view, "== 1.0.10"},
       {:phoenix_view, "== 2.0.4"},
-      {:phoenix, "== 1.7.21"},
+      {:phoenix, "== 1.8.0"},
       {:plug_cowboy, "== 2.7.4"},
       {:postgrex, "== 0.21.1"},
       {:remote_ip, "== 1.2.0"},
