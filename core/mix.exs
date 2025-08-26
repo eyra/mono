@@ -121,7 +121,7 @@ defmodule Core.MixProject do
       {:tzdata, "== 1.1.3"},
       # i18n
       {:ex_cldr, "== 2.40.2"},
-      {:ex_cldr_numbers, "== 2.33.4"},
+      {:ex_cldr_numbers, "== 2.35.1"},
       {:ex_cldr_dates_times, "== 2.20.3"},
       {:ex_cldr_plugs, "== 1.3.3"},
       # Override Bypass dependency that is locked on Ranch 1.7.*
