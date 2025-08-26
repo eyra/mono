@@ -77,7 +77,7 @@ defmodule Systems.Promotion.WysiwygForm do
   def render(assigns) do
     ~H"""
       <div>
-        <.form id={"wysiwyg_form_#{@id}"} :let={form} for={@form} phx-change="save_wysiwyg" phx-target={@myself} >
+        <.form id={"wysiwyg_form_#{@id}"} :let={form} for={@form} phx-change="save_wysiwyg" phx-target={@myself} id={"wysiwyg_form_#{@id}"}>
           <!-- always render wysiwyg to prevent scrollbar reset in LiveView -->
           <.wysiwyg_area
             form={form}

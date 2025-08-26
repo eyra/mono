@@ -175,7 +175,7 @@ defmodule Systems.Promotion.FormView do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+      <.form id={"top_#{@id}"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
         <.text_input form={form} field={:title} label_text={dgettext("eyra-promotion", "title.label")} />
         <.text_input form={form} field={:subtitle} label_text={dgettext("eyra-promotion", "subtitle.label")} />
 
@@ -195,7 +195,7 @@ defmodule Systems.Promotion.FormView do
 
       <.spacing value="L" />
 
-      <.form id={@id} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+      <.form id={"bottom_#{@id}"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
         <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
         <.photo_input
           static_path={&CoreWeb.Endpoint.static_path/1}
