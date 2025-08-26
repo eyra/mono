@@ -28,10 +28,12 @@ defmodule Systems.Promotion.LandingPageTest do
       workflow = Assignment.Factories.create_workflow()
       _workflow_item = Assignment.Factories.create_workflow_item(workflow, tool_ref)
       info = Assignment.Factories.create_info("10", 10)
+      consent_agreement = Factories.insert!(:consent_agreement)
 
       assignment =
         Assignment.Factories.create_assignment(
           info,
+          consent_agreement,
           workflow,
           assignment_auth_node,
           budget

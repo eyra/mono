@@ -7,7 +7,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
+
     services:
       postgres:
         image: postgres:11
@@ -24,15 +25,15 @@ jobs:
       POSTGRES_PASS: supersecret
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: "25.3.2.7"
-          elixir-version: "1.14.0"
+          otp-version: "27.3.4"
+          elixir-version: "1.17.0-otp-27"
 
       - name: Setup the Elixir project
         run: make deps
@@ -55,9 +56,6 @@ jobs:
           message: "Formatted code"
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Dialyzer
-        run: make dialyzer
-
       - name: Compile
         run: make compile
 
@@ -67,5 +65,5 @@ jobs:
       - name: Credo
         run: make credo
 
-      - name: Format
-        run: make format
+      - name: Dialyzer
+        run: make dialyzer

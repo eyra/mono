@@ -8,5 +8,5 @@ end
 
 defimpl Frameworks.Concept.ContentModel, for: Ecto.Changeset do
   def form(%{data: data}), do: Frameworks.Concept.ContentModel.form(data)
-  def ready?(changeset), do: changeset.valid?()
+  def ready?(changeset), do: changeset.valid?
 end

@@ -63,8 +63,7 @@ defmodule Systems.Account.ConfirmToken do
     Logger.notice("Confirm user: handle_succeeded #{email}")
 
     socket
-    |> put_flash(:info, dgettext("eyra-user", "account.activated.successfully"))
-    |> redirect(to: ~p"/user/signin?email=#{email}")
+    |> redirect(to: ~p"/user/signin?email=#{email}&status=account_activated_successfully")
   end
 
   defp handle_failed(socket) do

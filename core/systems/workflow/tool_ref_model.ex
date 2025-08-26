@@ -5,40 +5,42 @@ defmodule Systems.Workflow.ToolRefModel do
   require Logger
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
-  alias Frameworks.Utility
 
   alias Systems.Workflow
   alias Systems.Document
   alias Systems.Alliance
   alias Systems.Lab
+  alias Systems.Manual
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
-  alias Systems.Onyx
+  alias Systems.Zircon
 
   @tools [
     :alliance_tool,
+    :manual_tool,
     :document_tool,
     :feldspar_tool,
     :graphite_tool,
     :instruction_tool,
     :lab_tool,
-    :onyx_tool
+    :zircon_screening_tool
   ]
 
   schema "tool_refs" do
     field(:special, Ecto.Atom)
 
     belongs_to(:alliance_tool, Alliance.ToolModel)
+    belongs_to(:manual_tool, Manual.ToolModel)
     belongs_to(:document_tool, Document.ToolModel)
     belongs_to(:feldspar_tool, Feldspar.ToolModel)
     belongs_to(:graphite_tool, Graphite.ToolModel)
     belongs_to(:instruction_tool, Instruction.ToolModel)
     belongs_to(:lab_tool, Lab.ToolModel)
-    belongs_to(:onyx_tool, Onyx.ToolModel)
+    belongs_to(:zircon_screening_tool, Zircon.Screening.ToolModel)
 
     has_one(:workflow_item, Workflow.ItemModel, foreign_key: :tool_ref_id)
 
@@ -60,29 +62,25 @@ defmodule Systems.Workflow.ToolRefModel do
 
   def preload_graph(tool_id_field) when is_atom(tool_id_field) do
     if Enum.member?(@tools, tool_id_field) do
-      tool_model =
-        tool_id_field
-        |> get_tool_key()
-        |> get_tool_model()
-
-      [{tool_id_field, apply(tool_model, :preload_graph, [:down])}]
+      [
+        {
+          tool_id_field,
+          tool_id_field
+          |> tool_model()
+          |> preload_graph()
+        }
+      ]
     else
       raise ArgumentError, "Unsupported tool_id_field: #{inspect(tool_id_field)}"
     end
   end
 
-  defp get_tool_key(tool_id_field) when is_atom(tool_id_field) do
-    get_tool_key(Atom.to_string(tool_id_field))
+  def preload_graph(%Ecto.Association.BelongsTo{related: tool_model}) do
+    apply(tool_model, :preload_graph, [:down])
   end
 
-  defp get_tool_key(tool_id_field) when is_binary(tool_id_field) do
-    String.split(tool_id_field, "_") |> List.first()
-  end
-
-  defp get_tool_model(tool_key) do
-    # The tool_key is equal to the system name for now. Systems only have one tool model.
-    # If this changes, we need to update this function.
-    Utility.Module.get(tool_key, "ToolModel")
+  defp tool_model(tool_id_field) do
+    __MODULE__.__schema__(:association, tool_id_field)
   end
 
   def auth_tree(%Workflow.ToolRefModel{} = tool_ref) do

@@ -183,11 +183,12 @@ defmodule Frameworks.Pixel.Text do
 
   attr(:color, :string, default: "text-grey1")
   attr(:margin, :string, default: "mb-7 lg:mb-9")
+  attr(:align, :string, default: "text-left")
   slot(:inner_block, required: true)
 
   def title1(assigns) do
     ~H"""
-    <div class={"text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 #{@margin} #{@color}"}>
+    <div class={"text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 #{@margin} #{@color} #{@align}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -249,6 +250,19 @@ defmodule Frameworks.Pixel.Text do
   def title6(assigns) do
     ~H"""
     <div class={"text-title6 font-title6 #{@align} #{@margin} #{@color}"}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  attr(:margin, :string, default: "")
+  attr(:color, :string, default: "text-grey1")
+  attr(:align, :string, default: "text-left")
+  slot(:inner_block, required: true)
+
+  def title7(assigns) do
+    ~H"""
+    <div class={"text-title7 font-title7 #{@align} #{@margin} #{@color}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """

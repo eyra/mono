@@ -1,5 +1,5 @@
 defmodule Next.Account.SigninPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Utility.List
 
   import Core.FeatureFlags
@@ -26,7 +26,7 @@ defmodule Next.Account.SigninPageBuilder do
     [:participant, :creator]
   end
 
-  defp create_tab(:participant, %{fabric: fabric, email: email}) do
+  defp create_tab(:participant, %{fabric: fabric, email: email, status: status}) do
     blocks =
       []
       |> append_if(:google, feature_enabled?(:member_google_sign_in))
@@ -36,7 +36,8 @@ defmodule Next.Account.SigninPageBuilder do
     child =
       Fabric.prepare_child(fabric, :participant, Next.Account.ParticipantSigninView, %{
         email: email,
-        blocks: blocks
+        blocks: blocks,
+        status: status
       })
 
     %{
@@ -49,7 +50,7 @@ defmodule Next.Account.SigninPageBuilder do
     }
   end
 
-  defp create_tab(:creator, %{fabric: fabric, email: email}) do
+  defp create_tab(:creator, %{fabric: fabric, email: email, status: status}) do
     blocks =
       []
       |> append_if(:surfconext, feature_enabled?(:surfconext_sign_in))
@@ -59,7 +60,8 @@ defmodule Next.Account.SigninPageBuilder do
     child =
       Fabric.prepare_child(fabric, :creator, Next.Account.CreatorSigninView, %{
         email: email,
-        blocks: blocks
+        blocks: blocks,
+        status: status
       })
 
     %{

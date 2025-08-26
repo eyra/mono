@@ -55,6 +55,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
   grant_access(Systems.Home.Page, [:visitor, :member, :creator])
   grant_access(Systems.Lab.PublicPage, [:member])
+  grant_access(Systems.Manual.Builder.PublicPage, [:creator])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.Org.ContentPage, [:admin])
@@ -97,14 +98,21 @@ defmodule Core.Authorization do
     %Core.Authorization.Node{parent_id: parent_id}
   end
 
-  def prepare_node(principal, role) do
-    role = prepare_role(principal, role)
-    prepare_node([role])
+  def prepare_node(principals, role) when is_list(principals) do
+    roles = Enum.map(principals, &prepare_role(&1, role))
+    prepare_node(roles)
   end
 
-  def prepare_role(principal, role) when is_atom(role) do
-    principal_id = GreenLight.Principal.id(principal)
+  def prepare_node(principal, role) do
+    prepare_node([principal], role)
+  end
 
+  def prepare_role(%{} = principal, role) when is_atom(role) do
+    GreenLight.Principal.id(principal)
+    |> prepare_role(role)
+  end
+
+  def prepare_role(principal_id, role) when is_integer(principal_id) and is_atom(role) do
     %Core.Authorization.RoleAssignment{
       principal_id: principal_id,
       role: role
@@ -177,6 +185,11 @@ defmodule Core.Authorization do
     |> Repo.insert!()
   end
 
+  def delete_role_assignments(%Core.Authorization.Node{id: node_id}) do
+    from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
+    |> Core.Repo.delete_all()
+  end
+
   defp parent_node_query(entity) do
     initial_query =
       Core.Authorization.Node |> where([n], n.id == ^GreenLight.AuthorizationNode.id(entity))
@@ -236,7 +249,7 @@ defmodule Core.Authorization do
   def users_with_role(_, _, preload \\ [])
 
   def users_with_role(node_id, role, preload) when is_number(node_id) do
-    principal_ids = Core.Authorization.query_principal_ids(node_id: node_id, role: role)
+    principal_ids = query_principal_ids(node_id: node_id, role: role)
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
@@ -246,7 +259,7 @@ defmodule Core.Authorization do
   end
 
   def users_with_role(entity, role, preload) do
-    principal_ids = Core.Authorization.query_principal_ids(role: role, entity: entity)
+    principal_ids = query_principal_ids(role: role, entity: entity)
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),

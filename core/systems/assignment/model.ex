@@ -6,24 +6,27 @@ defmodule Systems.Assignment.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
 
+  alias Systems.Advert
+  alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Workflow
   alias Systems.Budget
   alias Systems.Content
   alias Systems.Consent
-  alias Systems.Advert
   alias Systems.Project
+  alias Systems.Workflow
 
   schema "assignments" do
     field(:special, Ecto.Atom)
     field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
+    # external_panel is deprecated, use affiliate association instead
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
     belongs_to(:info, Assignment.InfoModel)
+    belongs_to(:affiliate, Affiliate.Model)
     belongs_to(:privacy_doc, Content.FileModel, on_replace: :nilify)
     belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
     belongs_to(:workflow, Workflow.Model)
@@ -46,13 +49,15 @@ defmodule Systems.Assignment.Model do
     timestamps()
   end
 
-  @fields ~w(special status external_panel)a
+  @fields ~w(special status)a
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(assignment), do: assignment.auth_node_id
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     def resource_id(%{id: id}), do: "assignment/#{id}"
     def tag(_), do: dgettext("eyra-assignment", "leaf.tag")
 
@@ -101,6 +106,7 @@ defmodule Systems.Assignment.Model do
     [
       :excluded,
       info: [],
+      affiliate: [],
       page_refs: [:page],
       adverts: [],
       privacy_doc: [],

@@ -1,4 +1,5 @@
 defmodule Systems.Instruction.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   import Systems.Instruction.Queries
 
@@ -29,7 +30,7 @@ defmodule Systems.Instruction.Public do
     |> Repo.one()
   end
 
-  def prepare_tool(attrs, auth_node \\ Core.Authorization.prepare_node()) do
+  def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do
     %Instruction.ToolModel{}
     |> Instruction.ToolModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

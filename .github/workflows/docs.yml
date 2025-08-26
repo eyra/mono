@@ -7,16 +7,17 @@ on:
 
 jobs:
   docs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - id: setup-elixir
         uses: erlef/setup-elixir@v1
         with:
-          otp-version: "25.3.2.7"
-          elixir-version: "1.14.0"
+          otp-version: "27.3.4"
+          elixir-version: "1.17.0-otp-27"
 
       - name: Setup the Elixir project
         run: make deps

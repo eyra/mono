@@ -1,15 +1,16 @@
 #!/bin/bash
+# DEPRECATED: the use of this script is no longer recommended.
 
 set -e
 set -x
 
 if [ -z ${VERSION} ]; then
-    echo "VERSION is unset";
-    exit 1;
+    echo "VERSION is unset"
+    exit 1
 fi
 if [ -z ${BUNDLE} ]; then
-    echo "BUNDLE is unset";
-    exit 1;
+    echo "BUNDLE is unset"
+    exit 1
 fi
 
 cd $(dirname "$0")/..
@@ -19,3 +20,5 @@ mix assets.setup
 mix assets.deploy
 
 MIX_ENV=prod mix release --overwrite --path "${VERSION}"
+
+chmod -R a+rX "${VERSION}"

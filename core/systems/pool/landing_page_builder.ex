@@ -1,5 +1,5 @@
 defmodule Systems.Pool.LandingPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Systems.Pool
 
   def view_model(pool, %{current_user: user} = assigns) do

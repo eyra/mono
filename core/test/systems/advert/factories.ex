@@ -7,7 +7,7 @@ defmodule Systems.Advert.Factories do
   }
 
   alias Core.Factories
-  alias Core.Authorization
+  use Core, :auth
 
   def create_advert(
         researcher,
@@ -39,10 +39,12 @@ defmodule Systems.Advert.Factories do
     workflow = Assignment.Factories.create_workflow()
     _workflow_item = Assignment.Factories.create_workflow_item(workflow, tool_ref)
     info = Assignment.Factories.create_info("10", subject_count)
+    consent_agreement = Factories.insert!(:consent_agreement)
 
     assignment =
       Assignment.Factories.create_assignment(
         info,
+        consent_agreement,
         workflow,
         assignment_auth_node,
         budget
@@ -56,7 +58,7 @@ defmodule Systems.Advert.Factories do
         auth_node: advert_auth_node
       })
 
-    :ok = Authorization.assign_role(researcher, advert, :owner)
+    :ok = auth_module().assign_role(researcher, advert, :owner)
 
     advert
   end
@@ -71,6 +73,8 @@ defmodule Systems.Advert.Factories do
     expire_at = naive_timestamp(-1)
 
     member = Crew.Factories.create_member(crew, user)
+
+    identifier = identifier ++ ["member=#{member.id}"]
 
     Crew.Factories.create_task(crew, member, identifier,
       status: status,

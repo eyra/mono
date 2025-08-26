@@ -148,38 +148,40 @@ defmodule Systems.Project.AssemblyTest do
                  %Systems.Project.NodeModel{
                    id: level2,
                    project_path: [],
-                   children: [
-                     %Systems.Project.NodeModel{
-                       id: level_3_a,
-                       project_path: [],
-                       items: [
-                         %Systems.Project.ItemModel{
-                           project_path: []
-                         },
-                         %Systems.Project.ItemModel{
-                           project_path: []
-                         }
-                       ]
-                     },
-                     %Systems.Project.NodeModel{
-                       id: level_3_b,
-                       project_path: [],
-                       items: [
-                         %Systems.Project.ItemModel{
-                           project_path: []
-                         },
-                         %Systems.Project.ItemModel{
-                           project_path: []
-                         }
-                       ]
-                     }
-                   ]
+                   children: level_2_children
                  }
                ]
              }
            } =
              Repo.get!(Project.Model, project_id)
              |> Repo.preload(root: [children: [children: [:items]]])
+
+    assert [
+             %Systems.Project.NodeModel{
+               id: level_3_a,
+               project_path: [],
+               items: [
+                 %Systems.Project.ItemModel{
+                   project_path: []
+                 },
+                 %Systems.Project.ItemModel{
+                   project_path: []
+                 }
+               ]
+             },
+             %Systems.Project.NodeModel{
+               id: level_3_b,
+               project_path: [],
+               items: [
+                 %Systems.Project.ItemModel{
+                   project_path: []
+                 },
+                 %Systems.Project.ItemModel{
+                   project_path: []
+                 }
+               ]
+             }
+           ] = level_2_children |> Enum.sort_by(& &1.id)
 
     {:ok, _} =
       Ecto.Multi.new()

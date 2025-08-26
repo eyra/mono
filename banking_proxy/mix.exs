@@ -34,15 +34,15 @@ defmodule BankingProxy.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 1.8"},
-      {:jason, "~> 1.2"},
-      {:ranch, "~> 2.1"},
+      {:httpoison, "== 2.2.3"},
+      {:jason, "== 1.4.4"},
+      {:ranch, "== 2.1.0"},
       # Dev and test deps
-      {:mox, "~> 1.0", only: :test},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:mox, "== 1.2.0", only: :test},
+      {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       # {:exsync, "~> 0.2", only: :dev},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.26", only: [:dev, :test], runtime: false}
+      {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
+      {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false}
     ]
   end
 end

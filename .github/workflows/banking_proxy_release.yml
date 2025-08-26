@@ -5,12 +5,13 @@ on: workflow_dispatch
 jobs:
   tagged-release:
     name: Create Banking Proxy release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
+
     env:
       MIX_ENV: prod
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Tag name
         id: tag

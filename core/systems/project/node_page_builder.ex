@@ -1,49 +1,123 @@
 defmodule Systems.Project.NodePageBuilder do
   use Core.FeatureFlags
 
-  alias Frameworks.Utility.ViewModelBuilder
+  use Gettext, backend: CoreWeb.Gettext
+
+  alias Systems.Storage.EndpointDataView
+
+  alias Systems.Project.NodePageEmptyDataView
+  alias Systems.Project.NodePageGridView
   alias Frameworks.Concept
   alias Systems.Project
 
   def view_model(
-        %Project.NodeModel{
-          id: id
-        } = node,
-        assigns
+        %Project.NodeModel{id: id} = node,
+        %{
+          fabric: _fabric
+        } = assigns
       ) do
+    assigns = Map.put(assigns, :node, node)
     branch = %Project.Branch{node_id: node.id}
     breadcrumbs = Concept.Branch.hierarchy(branch)
-    item_cards = to_item_cards(node, assigns)
-    node_cards = to_node_cards(node, assigns)
 
     %{
       id: id,
       title: node.name,
-      breadcrumbs: breadcrumbs,
-      active_menu_item: :projects,
-      node_cards: node_cards,
-      item_cards: item_cards,
-      node: node
+      show_errors: false,
+      tabbar_id: :node_page,
+      initial_tab: :overview,
+      breadcrumbs: breadcrumbs
+    }
+    |> put_tabs(assigns)
+  end
+
+  defp put_tabs(vm, assigns) do
+    Map.put(vm, :tabs, create_tabs(false, assigns))
+  end
+
+  defp create_tabs(show_errors, assigns) do
+    get_tab_keys()
+    |> Enum.map(&create_tab(&1, show_errors, assigns))
+  end
+
+  defp create_tab(
+         :overview,
+         show_errors,
+         %{fabric: fabric, node: node} = assigns
+       ) do
+    ready? = false
+
+    child =
+      Fabric.prepare_child(
+        fabric,
+        :overview,
+        NodePageGridView,
+        %{
+          node: node,
+          user: assigns.current_user,
+          timezone: assigns.timezone
+        }
+      )
+
+    %{
+      id: :overview,
+      ready: ready?,
+      show_errors: show_errors,
+      title: dgettext("eyra-projects", "items.overview"),
+      type: :fullpage,
+      child: child
     }
   end
 
-  defp to_node_cards(%{children: children}, assigns) do
-    Enum.map(
-      children,
-      &ViewModelBuilder.view_model(&1, {Project.NodePage, :node_card}, assigns)
-    )
+  defp create_tab(
+         :data,
+         show_errors,
+         %{fabric: fabric, timezone: timezone, node: node} = _assigns
+       ) do
+    case Enum.find(node.items, &(&1.name == "Data" and &1.storage_endpoint)) do
+      %{storage_endpoint: storage_endpoint} ->
+        ready? = true
+        branch = %Project.Branch{node_id: node.id}
+        branch_name = Concept.Branch.name(branch, :parent)
+
+        child =
+          Fabric.prepare_child(fabric, :data, EndpointDataView, %{
+            endpoint: storage_endpoint,
+            branch_name: branch_name,
+            timezone: timezone
+          })
+
+        %{
+          id: :data,
+          ready: ready?,
+          show_errors: show_errors,
+          title: dgettext("eyra-storage", "tabbar.item.data"),
+          forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
+          type: :fullpage,
+          child: child
+        }
+
+      nil ->
+        child =
+          Fabric.prepare_child(fabric, :data, NodePageEmptyDataView, %{
+            node: node
+          })
+
+        %{
+          id: :data,
+          ready: false,
+          show_errors: show_errors,
+          title: dgettext("eyra-storage", "tabbar.item.data"),
+          type: :fullpage,
+          child: child
+        }
+    end
   end
 
-  defp to_item_cards(%{items: items}, assigns) do
-    items
-    |> Enum.filter(&item_feature_enabled?/1)
-    |> Enum.sort_by(& &1.inserted_at, {:asc, NaiveDateTime})
-    |> Enum.map(&ViewModelBuilder.view_model(&1, {Project.NodePage, :item_card}, assigns))
+  defp get_tab_keys() do
+    [
+      :overview,
+      :data
+    ]
   end
-
-  defp item_feature_enabled?(%{leaderboard_id: leaderboard_id}) when not is_nil(leaderboard_id) do
-    feature_enabled?(:leaderboard)
-  end
-
-  defp item_feature_enabled?(_), do: true
 end

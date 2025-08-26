@@ -2,16 +2,16 @@ defmodule Systems.Instruction.DownloadForm do
   use CoreWeb, :live_component
   use CoreWeb.FileUploader, accept: ~w(.zip)
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Frameworks.Pixel.Components.FileSelector
 
   alias Systems.Instruction
   alias Systems.Content
 
   @impl true
-  def process_file(socket, {_path, url, original_filename}) do
+  def process_file(socket, %{public_url: public_url, original_filename: original_filename}) do
     socket
-    |> handle_save(original_filename, url)
+    |> handle_save(original_filename, public_url)
     |> update_file()
     |> update_filename()
   end
@@ -78,7 +78,7 @@ defmodule Systems.Instruction.DownloadForm do
     page =
       Content.Public.prepare_page(
         get_body(name, ref),
-        Core.Authorization.prepare_node(auth_node)
+        auth_module().prepare_node(auth_node)
       )
 
     result = Instruction.Public.add_file_and_page(tool, file, page)

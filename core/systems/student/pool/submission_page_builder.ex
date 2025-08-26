@@ -1,7 +1,7 @@
 defmodule Systems.Student.Pool.SubmissionPageBuilder do
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Student,

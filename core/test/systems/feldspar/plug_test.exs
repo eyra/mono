@@ -1,6 +1,6 @@
 defmodule Systems.Feldspar.PlugTest do
   use ExUnit.Case
-  use Plug.Test
+  import Plug.Test
 
   require Systems.Feldspar.Plug
   alias Systems.Feldspar.Plug

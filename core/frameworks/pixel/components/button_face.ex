@@ -75,12 +75,18 @@ defmodule Frameworks.Pixel.Button.Face do
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, default: :forward)
+  attr(:icon_align, :atom, default: :right)
   attr(:text_color, :string, default: "text-grey1")
 
   def plain_icon(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none">
+    <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none cursor-pointer">
       <div class="flex items-center">
+        <%= if @icon_align != :right do %>
+          <div>
+            <img class="mr-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          </div>
+        <% end %>
         <div class="focus:outline-none">
           <div class="flex flex-col justify-center h-full items-center">
             <div class={"flex-wrap text-button font-button #{@text_color}"}>
@@ -88,9 +94,11 @@ defmodule Frameworks.Pixel.Button.Face do
             </div>
           </div>
         </div>
-        <div>
-          <img class="ml-4 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-        </div>
+        <%= if @icon_align == :right do %>
+          <div>
+            <img class="ml-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          </div>
+        <% end %>
       </div>
     </div>
     """
@@ -101,7 +109,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px w-full rounded bg-opacity-0 focus:outline-none">
+    <div class="pt-1 pb-1 active:pt-5px active:pb-3px w-full rounded bg-opacity-0 focus:outline-none cursor-pointer">
       <div class="flex items-center w-full">
         <div class="focus:outline-none w-full overflow-ellipsis">
           <div class="flex flex-col justify-center w-full h-full items-center">
@@ -122,10 +130,10 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def primary_icon(assigns) do
     ~H"""
-    <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded pl-4 pr-4 #{@bg_color}"}>
+    <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded cursor-pointer pl-4 pr-4 #{@bg_color}"}>
       <div class="flex justify-center items-center w-full">
         <div>
-          <img class="mr-3 -mt-1" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+          <img class="mr-3 -mt-[2px]" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
         </div>
         <div class="h-10">
           <div class="flex flex-col justify-center h-full items-center">
@@ -162,11 +170,37 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:label, :string, required: true)
   attr(:border_color, :string, default: "bg-primary")
   attr(:text_color, :string, default: "text-primary")
+  attr(:loading, :boolean, default: false)
 
   def secondary(assigns) do
     ~H"""
-    <div class={"pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
-      <%= @label %>
+    <div class="relative">
+      <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
+        <div class={" #{if @loading do "opacity-0" else "" end}"}>
+          <%= @label %>
+        </div>
+      </div>
+      <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
+        <Spinner.static color="primary" />
+      </div>
+    </div>
+    """
+  end
+
+  attr(:label, :string, required: true)
+  attr(:icon, :atom, required: true)
+  attr(:border_color, :string, default: "bg-primary")
+  attr(:text_color, :string, default: "text-primary")
+
+  def secondary_icon(assigns) do
+    ~H"""
+    <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
+      <div class="flex flex-row items-center justify-center">
+        <div>
+          <img class="mr-3 -mt-[2px]" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
+        </div>
+        <%= @label %>
+      </div>
     </div>
     """
   end

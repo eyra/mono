@@ -2,13 +2,16 @@ defmodule CoreWeb.FileUploader do
   @moduledoc """
   """
 
+  alias Phoenix.LiveView.Socket
+
   @allowed_filename_pattern ~r"^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{3,4})?$"
 
   @callback process_file(socket :: Socket.t(), info :: any()) :: Socket.t()
   @callback file_upload_start(socket :: Socket.t(), info :: any()) :: Socket.t()
   @callback file_upload_progress(socket :: Socket.t(), info :: any()) :: Socket.t()
+  @callback pre_process_file(info :: any()) :: map()
 
-  @optional_callbacks file_upload_start: 2, file_upload_progress: 2
+  @optional_callbacks file_upload_start: 2, file_upload_progress: 2, pre_process_file: 1
 
   def get_upload_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do
@@ -83,7 +86,23 @@ defmodule CoreWeb.FileUploader do
         consume_uploaded_entry(socket, entry, fn %{path: tmp_path} ->
           path = apply(unquote(store), :store, [tmp_path, entry.client_name])
           public_url = apply(unquote(store), :get_public_url, [path])
-          {:ok, {path, public_url, entry.client_name}}
+
+          info =
+            if function_exported?(__MODULE__, :pre_process_file, 1) do
+              apply(__MODULE__, :pre_process_file, [
+                %{entry: entry, tmp_path: tmp_path, public_url: public_url}
+              ])
+            else
+              %{}
+            end
+
+          result =
+            Map.merge(
+              %{path: path, public_url: public_url, original_filename: entry.client_name},
+              info
+            )
+
+          {:ok, result}
         end)
       end
 

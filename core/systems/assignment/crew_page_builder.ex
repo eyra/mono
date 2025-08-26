@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.{
     Assignment,
@@ -10,12 +10,24 @@ defmodule Systems.Assignment.CrewPageBuilder do
   }
 
   def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
+    apply_language(assignment)
+
     %{
       flow: flow(assignment, assigns),
       info: assignment.info,
       crew: crew,
-      crew_member: Crew.Public.get_member_unsafe(crew, user)
+      crew_member: Crew.Public.get_member_unsafe(crew, user),
+      footer: %{
+        privacy_text: dgettext("eyra-ui", "privacy.link"),
+        terms_text: dgettext("eyra-ui", "terms.link")
+      }
     }
+  end
+
+  defp apply_language(assignment) do
+    assignment
+    |> Assignment.Model.language()
+    |> CoreWeb.Live.Hook.Locale.put_locale()
   end
 
   defp flow(%{status: status} = assignment, %{current_user: user} = assigns) do
@@ -103,7 +115,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
            privacy_doc: privacy_doc,
            consent_agreement: consent_agreement,
            page_refs: page_refs,
-           crew: crew
+           crew: crew,
+           affiliate: affiliate
          } = assignment,
          %{
            fabric: fabric,
@@ -131,7 +144,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
       user: user,
       timezone: timezone,
       panel_info: panel_info,
-      tester?: tester?
+      tester?: tester?,
+      affiliate: affiliate
     })
   end
 
@@ -180,26 +194,26 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
     if Assignment.Public.tester?(assignment, user) or status == :online do
       member = Crew.Public.get_member(crew, user)
-      work_items(assignment, member)
+      work_items(assignment, member, user)
     else
       []
     end
   end
 
-  defp work_items(%{workflow: workflow} = assignment, %{} = member) do
+  defp work_items(%{workflow: workflow} = assignment, %{} = member, %{} = user) do
     ordered_items = Workflow.Model.ordered_items(workflow)
-    Enum.map(ordered_items, &{&1, get_or_create_task(&1, assignment, member)})
+    Enum.map(ordered_items, &{&1, get_or_create_task(&1, assignment, member, user)})
   end
 
-  defp work_items(_assignment, nil), do: []
+  defp work_items(_assignment, nil, _), do: []
 
-  defp get_or_create_task(item, %{crew: crew} = assignment, member) do
+  defp get_or_create_task(item, %{crew: crew} = assignment, member, user) do
     identifier = Assignment.Private.task_identifier(assignment, item, member)
 
     if task = Crew.Public.get_task(crew, identifier) do
       task
     else
-      Crew.Public.create_task!(crew, [member], identifier)
+      Crew.Public.create_task!(crew, [user], identifier)
     end
   end
 end

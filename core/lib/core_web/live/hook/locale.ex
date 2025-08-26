@@ -4,7 +4,7 @@ defmodule CoreWeb.Live.Hook.Locale do
   use Frameworks.Concept.LiveHook
 
   @impl true
-  def on_mount(_live_view_module, _params, _session, socket) do
+  def mount(_live_view_module, _params, _session, socket) do
     {:cont, socket |> Phoenix.Component.assign(locale: CoreWeb.Live.Hook.Locale.get_locale())}
   end
 

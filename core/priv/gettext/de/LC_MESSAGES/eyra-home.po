@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr ""
+msgstr "Software-Dienste"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr ""
+msgstr "Software-Dienste"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -30,3 +30,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "member.caption"
+msgstr "Entwickelt für und mit Forschenden"

@@ -281,7 +281,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
   attr(:placeholder, :string, default: "")
-  attr(:label_text, :string)
+  attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
@@ -461,6 +461,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:min_height, :string, default: "min-h-wysiwyg-editor")
   attr(:max_height, :string, default: "max-h-wysiwyg-editor")
   attr(:visible, :boolean, default: true)
+  attr(:reserve_error_space, :boolean, default: true)
 
   def wysiwyg_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -494,6 +495,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       errors={@errors}
+      reserve_error_space={@reserve_error_space}
       extra_space={false}
     >
       <div
@@ -514,6 +516,8 @@ defmodule Frameworks.Pixel.Form do
           data-visible={true}
           data-locked={false}
           data-target={@target}
+          data-min-height={@min_height}
+          data-max-height={@max_height}
         />
       </div>
     </.field>
@@ -544,12 +548,59 @@ defmodule Frameworks.Pixel.Form do
       <.spacing value="S" direction="l" />
       <div class="flex-wrap">
         <%= if @photo_url do %>
-          <Button.secondary_label label={@secondary_button_text} field={@uploads.photo.ref} />
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.photo.ref}}
+            face={%{type: :secondary, label: @secondary_button_text}}
+          />
         <% else %>
-          <Button.primary_label label={@primary_button_text} field={@uploads.photo.ref} />
+        <Button.dynamic
+            action={%{type: :label, field: @uploads.photo.ref}}
+            face={%{type: :primary, label: @primary_button_text}}
+          />
         <% end %>
         <div class="hidden">
           <.live_file_input upload={@uploads.photo} />
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr(:static_path, :any, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:image_url, :string, required: true)
+  attr(:uploads, :any, required: true)
+  attr(:primary_button_text, :string, required: true)
+  attr(:secondary_button_text, :string, required: true)
+  attr(:loading, :boolean, default: false)
+
+  def image_input(assigns) do
+    ~H"""
+    <%= if @label_text do %>
+      <Text.title6><%= @label_text %></Text.title6>
+    <% end %>
+    <div class="flex flex-row items-top">
+      <.image_preview
+        image_url={@image_url}
+        placeholder={"/images/image_placeholder.svg"}
+        shape="w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm"
+      />
+      <.spacing value="S" direction="l" />
+      <div class="flex-wrap">
+        <%= if @image_url do %>
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.image.ref}}
+            face={%{type: :secondary, label: @secondary_button_text, loading: @loading}}
+          />
+        <% else %>
+          <Button.dynamic
+            action={%{type: :label, field: @uploads.image.ref}}
+            face={%{type: :primary, label: @primary_button_text, loading: @loading}}
+          />
+        <% end %>
+        <div class="hidden">
+          <.live_file_input upload={@uploads.image} />
         </div>
       </div>
     </div>
@@ -562,12 +613,14 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:items, :list, required: true)
+  attr(:label_subtitle, :string, default: nil)
+  attr(:label_subtitle_color, :string, default: "text-grey2")
 
-  def radio_group(%{form: form, field: field} = assigns) do
+  def radio_group(%{form: form, field: field, items: items} = assigns) do
     field_id = String.to_atom(input_id(form, field))
     field_name = input_name(form, field)
 
-    assigns = assign(assigns, %{field_id: field_id, field_name: field_name})
+    assigns = assign(assigns, %{field_id: field_id, field_name: field_name, items: items})
 
     ~H"""
     <.field
@@ -577,16 +630,21 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       extra_space={false}
     >
+      <%= if @label_subtitle do %>
+        <div class={"text-label font-label mb-2 #{@label_subtitle_color}"}><%= @label_subtitle %></div>
+      <% end %>
+
       <div class="flex flex-row gap-8 ml-[6px] mt-3">
         <%= for item <- @items do %>
-          <label class="cursor-pointer flex flex-row gap-[18px] items-center">
+          <label class={"cursor-pointer flex flex-row gap-[18px] items-center #{if item[:disabled], do: "opacity-50 cursor-not-allowed"}"}>
             <input
               id={"#{@field_id}_#{item.id}"}
               value={item.id}
               type="radio"
               name={@field_name}
               checked={item.active}
-              class="cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary"
+              disabled={item[:disabled] || false}
+              class={"cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary #{if item[:disabled], do: "cursor-not-allowed"}"}
             />
             <div class="text-label font-label text-grey1 select-none mt-1"><%= item.value %></div>
           </label>

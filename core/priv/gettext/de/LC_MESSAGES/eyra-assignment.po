@@ -61,11 +61,7 @@ msgstr "Weiter"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr "Zustimmung"
-
-#, elixir-autogen, elixir-format
-msgid "settings.storage.title"
-msgstr ""
+msgstr "Einwilligung"
 
 #, elixir-autogen, elixir-format
 msgid "connect.button"
@@ -80,14 +76,6 @@ msgid "connector.connect.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "connector.panel.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "connector.panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "connector.storage.text"
 msgstr ""
 
@@ -96,47 +84,7 @@ msgid "connector.storage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "settings.storage.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "settings.panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "disconnect.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel_form.type.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.generic.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connector.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.generic.connection.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.ioresearch.connection.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panel.liss.connection.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -193,7 +141,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr "Aufgaben"
+msgstr "Übersicht"
 
 #, elixir-autogen, elixir-format
 msgid "intro.page.title"
@@ -241,15 +189,15 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie die Teilnahme überdenken möchten, schließen Sie dieses Popup, um fortzufahren."
+msgstr "Sie haben die Teilnahme abgelehnt. Sie können den Browser schließen. Wenn Sie doch teilnehmen möchten, schließen Sie dieses Popup-Fenster, um fortzufahren."
 
 #, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr "Keine zustimmung"
+msgstr "Einwilligung verweigert"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Sie sind fertig. Vielen Dank für Ihre Teilnahme."
+msgstr "Danke. Sie haben alles abgeschlossen. Sie können das Fenster jetzt schließen."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -373,7 +321,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr "Zustimmung"
+msgstr "Einwilligung"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
@@ -443,7 +391,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "retry.button"
-msgstr "Versuche es noch einmal"
+msgstr "Zurück"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
@@ -468,3 +416,43 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "workflow_item.manual.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "affiliate.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tabbar.item.affiliate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "affiliate.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect"
+msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "redirect.button"
+msgstr "Weiter"
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "Die Standardsprache für Panl-Studien ist Niederländisch."

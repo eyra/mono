@@ -56,7 +56,7 @@ config :core,
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en de nl)
+config :core, CoreWeb.Gettext, locales: ~w(en es de it nl)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
@@ -70,12 +70,6 @@ config :core, Oban,
     email_delivery: 1,
     storage_delivery: 1,
     ris_processor: 1
-  ],
-  plugins: [
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
-     ]}
   ]
 
 config :packmatic, Packmatic.Source.URL,
@@ -129,7 +123,7 @@ config :core, CoreWeb.Endpoint,
   force_ssl: [],
   render_errors: [
     formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
-    layout: {CoreWeb.Layouts, :error}
+    layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
@@ -156,7 +150,7 @@ config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 config :core, :storage, services: ~w(builtin yoda)
 
 config :core, BankingClient,
-  host: 'localhost',
+  host: "localhost",
   port: 5555,
   cacertfile: "../banking_proxy/certs/ca_certificate.pem",
   certfile: "../banking_proxy/certs/client_certificate.pem",

@@ -1,10 +1,12 @@
 defmodule Systems.Account.Plug do
   @behaviour Plug
 
+  require Logger
+
   import Plug.Conn
   alias Systems.Account
 
-  @valid_participant_path ~r"^\/assignment\/(callback\/)?\d.*$"
+  @valid_participant_path ~r"^\/((assignment\/(callback\/)?\d.*)|(a\/.{6,}))$"
 
   @impl true
   def init(opts), do: opts
@@ -13,8 +15,8 @@ defmodule Systems.Account.Plug do
   def call(conn, _opts) do
     case current_user(conn) do
       {:ok, %{} = user} ->
-        external? = Account.Public.external?(user)
-        signof_if_needed(conn, external?)
+        restricted_user? = Account.Public.external?(user) or Account.Public.affiliate?(user)
+        signof_if_needed(conn, restricted_user?)
 
       _ ->
         conn
@@ -29,10 +31,14 @@ defmodule Systems.Account.Plug do
     end
   end
 
-  defp signof_if_needed(%{request_path: request_path} = conn, true) do
+  defp signof_if_needed(%{request_path: request_path} = conn, true = _restricted_user?) do
     if Regex.match?(@valid_participant_path, request_path) do
       conn
     else
+      Logger.warning(
+        "#[#{__MODULE__}] Signing off restricted user, no regex match: request_path=#{request_path}, regex=#{inspect(@valid_participant_path)}"
+      )
+
       Account.UserAuth.forget_user(conn)
     end
   end

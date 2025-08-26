@@ -1,77 +1,38 @@
-version: "3.7"
-x-app: &default-app
-  build:
-    dockerfile: Dockerfile.dev
-    context: .
-
-  volumes:
-    - "tmp:/workspace/tmp"
-    - "deps:/workspace/deps"
-    - "node_modules:/workspace/assets/node_modules"
-    - "build:/workspace/_build"
-    - "elixir-ls:/workspace/.elixir_ls"
-    - ".netrc:/root/.netrc"
-x-test-env: &test-env
-  GOOGLE_AUTH_CLIENT_ID: test
-  GOOGLE_AUTH_CLIENT_SECRET: test-secret
-
 services:
-  link-app:
-    <<: *default-app
-    depends_on:
-      - db
-      - testdb
+  app:
+    container_name: app
+    environment:
+      - DB_CA_PATH=/app/certs/ca.crt
+      - DB_TLS_VERIFY=verify_peer
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: dev
     ports:
       - 4000:4000
-    environment:
-      GOOGLE_AUTH_CLIENT_ID: 921548238010-egr9u89cgrg0k4fss3j26pp2suk3gl4k.apps.googleusercontent.com
-      GOOGLE_AUTH_CLIENT_SECRET: VsQkTNpCB50wWdF1MHcslUYk
+    volumes:
+      - .:/app
+      - db_certs:/app/certs
 
   db:
+    container_name: db
     build:
-      dockerfile: testing.postgresql.Dockerfile
       context: .
+      dockerfile: Dockerfile-postgres
     ports:
       - 5432:5432
+    volumes:
+      - db_certs:/var/lib/postgresql/ssl
+      - ./postgres_data:/var/lib/postgresql/data
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: link_dev
-    volumes:
-      - "./postgres-data:/var/lib/postgresql/data:delegated"
-
-  ci:
-    <<: *default-app
-    environment:
-      <<: *test-env
-      MIX_ENV: test
-    command: "mix ci"
-    depends_on:
-      - testdb
-  docs:
-    <<: *default-app
-    environment:
-      <<: *test-env
-    command: "mix makedocs"
-
-  testdb:
-    build:
-      dockerfile: testing.postgresql.Dockerfile
-      context: .
-
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: link_test
-    volumes:
-      - "testdb:/var/lib/postgresql/data"
+      POSTGRES_DB: next_dev
+    command: >
+      postgres  -c ssl=on
+                -c ssl_cert_file=/var/lib/postgresql/ssl/server.crt
+                -c ssl_key_file=/var/lib/postgresql/ssl/server.key
 
 volumes:
-  tmp:
-  deps:
-  node_modules:
-  build:
-  elixir-ls:
-  testdb:
+  db_certs:

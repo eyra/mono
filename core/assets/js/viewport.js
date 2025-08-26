@@ -12,11 +12,6 @@ export const Viewport = {
     });
   },
 
-  updated() {
-    console.log("[Viewport] updated");
-    // this.pushChangeEvent();
-  },
-
   pushChangeEvent() {
     console.log(
       "[Viewport] push update event",
@@ -53,7 +48,7 @@ export const Viewport = {
         xhr.setRequestHeader("x-csrf-token", csrfToken);
         xhr.onreadystatechange = function () {
           console.log(
-            "[Veiwport] POST onreadystatechange",
+            "[Viewport] POST onreadystatechange",
             this.status,
             this.readyState
           );

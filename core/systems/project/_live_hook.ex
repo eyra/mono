@@ -6,7 +6,7 @@ defmodule Systems.Project.LiveHook do
   alias Systems.Project
 
   @impl true
-  def on_mount(_live_view_module, _params, _session, socket) do
+  def mount(_live_view_module, _params, _session, socket) do
     branch =
       with model <- Map.get(socket.assigns, :model, nil),
            false <- model == nil,

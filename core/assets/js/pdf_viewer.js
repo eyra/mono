@@ -67,8 +67,12 @@ export const PDFViewer = {
         console.log("[PDFViewer] pdfWidth", pdfWidth);
         console.log("[PDFViewer] viewport.width", viewport.width);
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = viewport.width * ratio;
+        canvas.height = viewport.height * ratio;
+        canvas.style.width = viewport.width + "px";
+        canvas.style.height = viewport.height + "px";
+        context.scale(ratio, ratio);
 
         const annotations = await page.getAnnotations();
 

@@ -4,21 +4,18 @@ defmodule Systems.Content.PageView do
   alias Systems.Content
 
   @impl true
-  def update(%{page: %Content.PageModel{body: body}}, socket) do
+  def update(%{title: title, page: %Content.PageModel{body: body}}, socket) do
     {
       :ok,
-      socket |> assign(body: body)
+      socket |> assign(title: title, body: body)
     }
-  end
-
-  def handle_event("close", _, socket) do
-    {:noreply, socket |> send_event(:parent, "close_page")}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
       <div>
+        <Text.title2 align="text-left"><%= @title %></Text.title2>
         <div class="wysiwyg">
           <%= raw @body %>
         </div>

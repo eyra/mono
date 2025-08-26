@@ -1,5 +1,5 @@
 defmodule Systems.Observatory.LiveFeature do
-  @callback handle_view_model_updated(Socket.t()) :: Socket.t()
+  @callback handle_view_model_updated(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
 
   defmacro __using__(_opts \\ []) do
     quote do
@@ -12,7 +12,7 @@ defmodule Systems.Observatory.LiveFeature do
 
       @presenter Frameworks.Concept.System.presenter(__MODULE__)
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       alias Systems.Observatory
 
       # Stubs for messages that are handled in Live Hooks
@@ -24,8 +24,18 @@ defmodule Systems.Observatory.LiveFeature do
       end
 
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
+        user_id =
+          if current_user = socket.assigns |> Map.get(:current_user) do
+            current_user.id
+          else
+            0
+          end
+
         socket
-        |> Observatory.Public.observe([{__MODULE__, [id]}])
+        |> Observatory.Public.observe([
+          {__MODULE__, [id]},
+          {__MODULE__, [id, user_id]}
+        ])
         |> Observatory.Public.update_view_model(__MODULE__, model, @presenter)
       end
 

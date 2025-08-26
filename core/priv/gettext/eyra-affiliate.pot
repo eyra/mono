@@ -1,0 +1,60 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "callback_url.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect_url.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect_url.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect_url.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.invalid_parts"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.missing_host"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.missing_scheme"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.no_spaces_allowed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "test.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.unreachable"
+msgstr ""

@@ -50,3 +50,11 @@ msgstr "Select a zip file"
 #, elixir-autogen, elixir-format
 msgid "zip-too-large"
 msgstr "The selected file is too large (max 20MB)"
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr "You are about to go through a few steps to donate your data. Before donating, you can view your data and then give your consent to share it. The page may take a moment to load — thank you for your patience."
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Continue"

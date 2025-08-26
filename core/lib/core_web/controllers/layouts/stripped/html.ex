@@ -13,24 +13,25 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   attr(:menus, :map, required: true)
   attr(:footer?, :boolean, default: true)
 
+  attr(:privacy_text, :string, default: dgettext("eyra-ui", "privacy.link"))
+  attr(:terms_text, :string, default: dgettext("eyra-ui", "terms.link"))
+
   slot(:header)
   slot(:inner_block, required: true)
 
   def stripped(assigns) do
     ~H"""
     <div class="flex flex-row">
-      <div class="w-0 md:w-sidepadding flex-shrink-0">
-      </div>
       <div class="flex-1">
         <div id="main-content" class="flex flex-col w-full h-viewport">
-            <div class="flex-wrap md:hidden">
+            <div class="flex-wrap lg:hidden">
               <Navigation.mobile_navbar {@menus.mobile_navbar} />
             </div>
-            <div class="flex-wrap hidden md:flex">
+            <div class="flex-wrap hidden lg:flex">
               <Navigation.desktop_navbar {@menus.desktop_navbar} />
             </div>
           <div class="flex-1">
-            <div class="flex flex-col h-full border-t border-l border-b border-grey4">
+            <div class="flex flex-col h-full border-t border-b border-grey4">
               <%= render_slot(@header) %>
               <%= if @title do %>
                 <div class="flex-none">
@@ -43,8 +44,6 @@ defmodule CoreWeb.Layouts.Stripped.Html do
                     <%= render_slot(@inner_block) %>
                     <Margin.y id={:page_footer_top} />
                   </div>
-                  <div class="w-0 md:w-sidepadding flex-shrink-0">
-                  </div>
                 </div>
               </div>
               <%= if @footer? do %>
@@ -55,7 +54,7 @@ defmodule CoreWeb.Layouts.Stripped.Html do
             </div>
           </div>
           <div class="bg-grey5">
-            <.platform_footer />
+            <.platform_footer privacy_text={@privacy_text} terms_text={@terms_text} />
           </div>
         </div>
       </div>

@@ -74,7 +74,7 @@ defmodule Systems.Crew.RejectView do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         Enum.each(changeset.errors, fn {key, {error, _}} ->
-          Logger.warn("Reject failed: #{key} -> #{error}")
+          Logger.warning("Reject failed: #{key} -> #{error}")
         end)
 
         {:noreply, socket |> assign(changeset: changeset)}

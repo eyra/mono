@@ -1,6 +1,9 @@
 defmodule Next.Account.SessionController do
-  use CoreWeb, :controller
-  import CoreWeb.Gettext
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
 

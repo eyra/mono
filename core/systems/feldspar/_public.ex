@@ -1,4 +1,5 @@
 defmodule Systems.Feldspar.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   alias Core.Repo
 
@@ -13,7 +14,7 @@ defmodule Systems.Feldspar.Public do
     |> Repo.get!(id)
   end
 
-  def prepare_tool(attrs, auth_node \\ Core.Authorization.prepare_node()) do
+  def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do
     %Feldspar.ToolModel{}
     |> Feldspar.ToolModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

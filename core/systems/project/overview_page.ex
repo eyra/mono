@@ -6,15 +6,12 @@ defmodule Systems.Project.OverviewPage do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
 
   alias Systems.Account
   alias Systems.Project
 
   @impl true
-  def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
-    user
-  end
+  def get_model(_params, _session, %{assigns: %{current_user: user}}), do: user
 
   @impl true
   def mount(_params, _session, socket) do
@@ -36,7 +33,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def compose(:people_page, %{active_project: project_id}) do
+  def compose(:people_page, %{active_project: project_id, current_user: current_user} = _) do
     owners =
       project_id
       |> String.to_integer()
@@ -55,7 +52,8 @@ defmodule Systems.Project.OverviewPage do
       params: %{
         title: dgettext("eyra-project", "people.page.title"),
         people: owners,
-        users: creators
+        users: creators,
+        current_user: current_user
       }
     }
   end
@@ -68,7 +66,7 @@ defmodule Systems.Project.OverviewPage do
       ) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
-    {:noreply, push_redirect(socket, to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true
@@ -184,7 +182,7 @@ defmodule Systems.Project.OverviewPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>

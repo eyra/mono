@@ -1,4 +1,10 @@
 defprotocol Frameworks.Concept.ToolModel do
+  @type launcher ::
+          %{url: URI.t()}
+          | %{module: atom(), params: map()}
+          | %{module: atom(), params: map(), url: URI.t()}
+          | nil
+
   @spec key(t) :: atom()
   def key(_t)
 
@@ -17,7 +23,7 @@ defprotocol Frameworks.Concept.ToolModel do
   @spec form(t, special :: atom()) :: atom()
   def form(_t, _special)
 
-  @spec launcher(t) :: %{url: URI.t()} | %{module: atom(), params: map()} | nil
+  @spec launcher(t) :: launcher()
   def launcher(_t)
 
   @spec task_labels(t) :: map()

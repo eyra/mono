@@ -67,7 +67,8 @@ defmodule Frameworks.Pixel.Button do
 
   defp face_function(:primary, nil), do: &Face.primary/1
   defp face_function(:primary, _icon), do: &Face.primary_icon/1
-  defp face_function(:secondary, _), do: &Face.secondary/1
+  defp face_function(:secondary, nil), do: &Face.secondary/1
+  defp face_function(:secondary, _icon), do: &Face.secondary_icon/1
   defp face_function(:label, nil), do: &Face.label/1
   defp face_function(:label, _icon), do: &Face.label_icon/1
   defp face_function(:forward, _), do: &Face.plain/1
@@ -96,7 +97,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, default: "bg-primary")
 
   def primary(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -118,7 +119,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:icon, :string, default: "/images/back.svg")
 
   def back(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@path}>
@@ -144,7 +145,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:label, :string, required: true)
 
   def delete(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <a
@@ -172,7 +173,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-white")
 
   def primary_alpine(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -191,7 +192,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, required: true)
 
   def primary_icon(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -214,29 +215,12 @@ defmodule Frameworks.Pixel.Button do
   end
 
   attr(:label, :string, required: true)
-  attr(:field, :string, required: true)
-  attr(:bg_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-white")
-
-  def primary_label(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
-
-    ~H"""
-    <label for={@field}>
-      <div class={"cursor-pointer pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}>
-        <%= @label %>
-      </div>
-    </label>
-    """
-  end
-
-  attr(:label, :string, required: true)
   attr(:event, :string, required: true)
   attr(:width, :string, default: "pl-4 pr-4")
   attr(:target, :any, default: nil)
 
   def primary_live_view(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -254,7 +238,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, required: true)
 
   def primary_wide(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <Action.redirect to={@to}>
@@ -277,7 +261,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:text_color, :string, default: "text-primary")
 
   def secondary_alpine(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -291,30 +275,13 @@ defmodule Frameworks.Pixel.Button do
   end
 
   attr(:label, :string, required: true)
-  attr(:field, :string, required: true)
-  attr(:border_color, :string, default: "border-primary")
-  attr(:text_color, :string, default: "text-primary")
-
-  def secondary_label(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
-
-    ~H"""
-    <label for={@field}>
-      <div class={"cursor-pointer pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@border_color} #{@text_color}"}>
-        <%= @label %>
-      </div>
-    </label>
-    """
-  end
-
-  attr(:label, :string, required: true)
   attr(:event, :string, required: true)
   attr(:color, :string, default: "text-delete")
   attr(:width, :string, default: "pl-4 pr-4")
   attr(:target, :any)
 
   def secondary_live_view(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -333,7 +300,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:target, :string, default: "")
 
   def submit(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -351,7 +318,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:bg_color, :string, default: "bg-primary")
 
   def submit_wide(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <button
@@ -369,7 +336,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:face, :map, required: true)
 
   def menu(assigns) do
-    Logger.warning("Deprecation notice: Use button.dynamic instead")
+    # FIXME: Deprecation notice: Use button.dynamic instead
 
     ~H"""
     <div

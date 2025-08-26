@@ -1,8 +1,13 @@
 defmodule Systems.Assignment.ExternalPanelController do
-  use CoreWeb, :controller
+  @moduledoc """
+   Deprecated, use Systems.Affiliate.Controller instead
+  """
+
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Systems.Assignment
-
   require Logger
 
   @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
@@ -10,8 +15,6 @@ defmodule Systems.Assignment.ExternalPanelController do
 
   def create(conn, %{"id" => id, "entry" => _} = params) do
     assignment = Assignment.Public.get!(id, [:info, :crew, :auth_node])
-
-    Logger.warn("[ExternalPanelController] create: #{inspect(params)}")
 
     if tester?(assignment, conn) do
       if invalid_id?(params) do
@@ -27,6 +30,17 @@ defmodule Systems.Assignment.ExternalPanelController do
         true -> start_participant(assignment, conn, params)
       end
     end
+  end
+
+  @doc """
+  Controller level callback for handling path parameter type validation errors.
+  """
+  def validation_error_callback(conn, _errors) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"400")
+    |> halt()
   end
 
   defp tester?(assignment, %{assigns: %{current_user: %{} = user}}) do
@@ -102,7 +116,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp add_panel_info(conn, params) do
     panel_info = %{
       panel: get_panel(params),
-      embedded?: embedded?(params),
+      redirect?: redirect?(params),
       participant: get_participant(params),
       query_string: params
     }
@@ -119,7 +133,7 @@ defmodule Systems.Assignment.ExternalPanelController do
   defp get_participant(%{"participant" => participant}), do: participant
   defp get_participant(_), do: nil
 
-  defp embedded?(%{"entry" => "liss"}), do: true
-  defp embedded?(%{"embed" => "true"}), do: true
-  defp embedded?(_), do: false
+  defp redirect?(%{"entry" => "liss"}), do: true
+  defp redirect?(%{"embed" => "true"}), do: true
+  defp redirect?(_), do: false
 end

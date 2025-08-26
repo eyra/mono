@@ -1,13 +1,15 @@
 defmodule Systems.Project.Assembly do
   import Ecto.Query, warn: false
+  use Gettext, backend: CoreWeb.Gettext
 
-  alias Core.Authorization
+  require Logger
+  use Core, :auth
   alias Core.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Frameworks.Utility.EctoHelper
-
+  alias Systems.Storage
   alias Systems.Assignment
   alias Systems.Project
 
@@ -20,11 +22,8 @@ defmodule Systems.Project.Assembly do
   def template(%Assignment.Model{special: template}), do: template
   def template(_), do: nil
 
-  def delete(%Project.Model{auth_node: %{id: node_id}}) do
-    from(ra in Authorization.RoleAssignment,
-      where: ra.node_id == ^node_id
-    )
-    |> Repo.delete_all()
+  def delete(%Project.Model{auth_node: auth_node}) do
+    auth_module().delete_role_assignments(auth_node)
   end
 
   def delete(%Project.ItemModel{id: id} = item) do
@@ -41,12 +40,42 @@ defmodule Systems.Project.Assembly do
     |> Repo.transaction()
   end
 
+  @spec create(any(), any(), :empty) :: any()
   def create(name, user, :empty) do
-    project = prepare_project(name, [], user)
+    project_changeset = prepare_project(name, [], user)
 
     Multi.new()
-    |> Multi.insert(:project, project)
+    |> Multi.insert(:project, project_changeset)
+    |> Multi.run(:storage_setup, fn _repo, %{project: new_project} ->
+      case attach_storage_to_project(new_project) do
+        {:ok, %{storage_endpoint: endpoint, storage_item: item}} ->
+          {:ok, %{endpoint: endpoint, item: item}}
+
+        {:error, _, reason, _} ->
+          {:error, reason}
+      end
+    end)
     |> EctoHelper.run(:auth, &update_auth/2)
+    |> Repo.transaction()
+  end
+
+  def attach_storage_to_project(%Project.Model{} = project) do
+    Multi.new()
+    |> Multi.run(:project, fn _repo, _changes ->
+      {:ok, Repo.preload(project, :root)}
+    end)
+    |> Multi.insert(:storage_endpoint, fn %{project: project} ->
+      key = Project.Private.get_project_key(project)
+
+      Storage.Public.prepare_endpoint(:builtin, %{key: key})
+    end)
+    |> Multi.insert(:storage_item, fn %{project: project, storage_endpoint: endpoint} ->
+      Project.Public.prepare_item(
+        %{name: dgettext("eyra-storage", "default.name"), project_path: []},
+        endpoint
+      )
+      |> Ecto.Changeset.put_assoc(:node, project.root)
+    end)
     |> Repo.transaction()
   end
 
@@ -188,16 +217,16 @@ defmodule Systems.Project.Assembly do
 
   def update_auth(multi, %Project.Model{} = project) do
     auth_tree = Project.Model.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 
   def update_auth(multi, %Project.NodeModel{} = project) do
     auth_tree = Project.NodeModel.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 
   def update_auth(multi, %Project.ItemModel{} = project) do
     auth_tree = Project.ItemModel.auth_tree(project)
-    Authorization.link(multi, auth_tree)
+    auth_module().link(multi, auth_tree)
   end
 end

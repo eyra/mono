@@ -15,7 +15,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        {path, _url, original_filename}
+        %{path: path, original_filename: original_filename}
       ) do
     changeset =
       entity
@@ -308,7 +308,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title="Import rewards" menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+    <.live_workspace title="Import rewards" menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
       <Margin.y id={:page_top} />
       <Area.content>
         <Panel.flat bg_color="bg-grey1">
@@ -319,11 +319,9 @@ defmodule Systems.Admin.ImportRewardsPage do
             <.spacing value="S" />
             <div class="flex flex-row gap-4">
               <div class="flex-wrap">
-                <Button.primary_label
-                  label="Select csv file"
-                  field={@uploads.csv.ref}
-                  bg_color="bg-tertiary"
-                  text_color="text-grey1"
+                <Button.dynamic
+                  action={%{type: :label, field: @uploads.csv.ref}}
+                  face={%{type: :primary, label: "Select csv file", bg_color: "bg-tertiary", text_color: "text-grey1"}}
                 />
                 <div class="hidden">
                   <.live_file_input upload={@uploads.csv} />

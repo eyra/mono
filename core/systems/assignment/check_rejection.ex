@@ -2,7 +2,7 @@ defmodule Systems.Assignment.CheckRejection do
   @behaviour Systems.NextAction.ViewModel
   use CoreWeb, :verified_routes
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   @impl Systems.NextAction.ViewModel
   def to_view_model(_count, %{"id" => id}) do

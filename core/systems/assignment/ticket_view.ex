@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.TicketView do
   use CoreWeb, :html
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Frameworks.Pixel.Text
 
   attr(:public_id, :string, required: true)

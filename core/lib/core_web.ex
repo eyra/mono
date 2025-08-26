@@ -5,7 +5,7 @@ defmodule CoreWeb do
 
   This can be used in your application as:
 
-      use CoreWeb, :controller
+      use CoreWeb, {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
       use CoreWeb, :html
 
   The definitions below will be executed for every view,
@@ -26,16 +26,15 @@ defmodule CoreWeb do
     end
   end
 
-  def controller(
-        opts \\ [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]
-      ) do
+  def controller(opts) do
     quote do
+      use Core, :auth
       use Phoenix.Controller, unquote(opts)
 
       unquote(utility())
 
       import Plug.Conn
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       import Core.FeatureFlags
 
       alias CoreWeb.Loaders
@@ -44,7 +43,6 @@ defmodule CoreWeb do
 
       plug(Systems.Project.BranchPlug)
 
-      # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
   end
@@ -59,7 +57,7 @@ defmodule CoreWeb do
       import Phoenix.HTML.Link, only: [link: 2]
       import Phoenix.HTML.Tag, only: [csrf_meta_tag: 0]
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
 
       unquote(verified_routes())
       unquote(utility())
@@ -103,7 +101,6 @@ defmodule CoreWeb do
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
-      import Core.Authorization, only: [can_access?: 2]
 
       unquote(pixel())
       use Frameworks.Pixel
@@ -122,7 +119,7 @@ defmodule CoreWeb do
       use CoreWeb.Live.Feature.Uri
       use CoreWeb.Live.Feature.Model
       use CoreWeb.Live.Feature.Menus
-      use CoreWeb.Live.Feature.Tabbar
+      use CoreWeb.Live.Feature.Tabbed
       use CoreWeb.Live.Feature.Actions
     end
   end
@@ -136,24 +133,19 @@ defmodule CoreWeb do
     end
   end
 
-  def auth_helpers() do
-    quote do
-    end
-  end
-
   def channel do
     quote do
       use Phoenix.Channel
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
     end
   end
 
   defp component_helpers do
     quote do
+      use Core, :auth
       import Core.FeatureFlags
-      import Core.Authorization, only: [can?: 4]
 
-      import CoreWeb.Gettext
+      use Gettext, backend: CoreWeb.Gettext
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder
 

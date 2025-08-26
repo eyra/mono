@@ -1,7 +1,7 @@
 defmodule Systems.Student.Pool.OverviewPlugin do
   use CoreWeb, :live_component
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid
@@ -43,7 +43,7 @@ defmodule Systems.Student.Pool.OverviewPlugin do
   end
 
   defp owner?(entity, user) do
-    Core.Authorization.user_has_role?(user, entity, :owner)
+    auth_module().user_has_role?(user, entity, :owner)
   end
 
   @impl true

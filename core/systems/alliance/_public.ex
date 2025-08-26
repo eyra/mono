@@ -28,11 +28,10 @@ defmodule Systems.Alliance.Public do
   IDEA: A list of alliances can be access by the notification icon which is shown
   on all screens.
   """
-
+  use Core, :public
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Core.Repo
-  alias Core.Authorization
 
   alias Frameworks.{
     Signal
@@ -60,7 +59,7 @@ defmodule Systems.Alliance.Public do
   @doc """
   Creates a alliance_tool.
   """
-  def prepare_tool(attrs, auth_node \\ Authorization.prepare_node()) do
+  def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do
     %Alliance.ToolModel{}
     |> Alliance.ToolModel.changeset(:mount, attrs)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)

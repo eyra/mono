@@ -1,4 +1,5 @@
 defmodule Systems.Citizen.Public do
+  use Core, :public
   @pool_director_key "citizen"
 
   alias Systems.{

@@ -7,8 +7,8 @@ defmodule Systems.Assignment.Presenter do
   }
 
   @impl true
-  def view_model(Alliance.CallbackPage = page, %Alliance.ToolModel{} = tool, assigns) do
-    builder(page).view_model(tool, assigns)
+  def view_model(Alliance.CallbackPage, %Alliance.ToolModel{} = tool, assigns) do
+    Assignment.AllianceCallbackPageBuilder.view_model(tool, assigns)
   end
 
   @impl true
@@ -18,5 +18,4 @@ defmodule Systems.Assignment.Presenter do
 
   def builder(Assignment.CrewPage), do: Assignment.CrewPageBuilder
   def builder(Assignment.ContentPage), do: Assignment.ContentPageBuilder
-  def builder(Alliance.CallbackPage), do: Assignment.AllianceCallbackPageBuilder
 end

@@ -9,7 +9,7 @@ defmodule Frameworks.Pixel.LoadingSpinner do
     ~H"""
       <div class="flex w-full h-full items-center justify-between gap-2">
         <div class={"#{@size} animate-spin"}>
-          <img src={~p"/images/icons/loading_primary@3x.png"} alt={"Loading"}>
+          <img src={~p"/images/icons/spinner_static_primary@3x.png"} alt={"Loading"}>
         </div>
         <%= if @show_loading_text? do %>
           <div class="font-light text-grey2">
@@ -20,11 +20,15 @@ defmodule Frameworks.Pixel.LoadingSpinner do
     """
   end
 
+  attr(:size, :string, default: "w-6 h-6")
+  attr(:show_loading_text?, :boolean, default: false)
+  attr(:loading_text, :string, default: "Loading")
+
   def secondary(assigns) do
     ~H"""
       <div class="flex w-full h-full items-center justify-between gap-2">
         <div class={"#{@size} animate-spin"}>
-          <img src={~p"/images/icons/loading_white@3x.png"} alt={"Loading"}>
+          <img src={~p"/images/icons/spinner_static_white@3x.png"} alt={"Loading"}>
         </div>
         <%= if @show_loading_text? do %>
           <div class="font-light text-grey2">

@@ -2,14 +2,68 @@ defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
   import Systems.NextAction.TestHelper
 
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Budget
+  alias Systems.Monitor
+
+  alias Core.Factories
+
+  describe "assignment instances" do
+    test "obtain_instance!/3 inserts an instance and inserts external panel info" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      Assignment.Public.obtain_instance!(assignment, user)
+
+      assert Assignment.Public.get_instance(assignment, user) != nil
+    end
+
+    test "obtain_instance!/3 updates instance" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      instance = Assignment.Public.obtain_instance!(assignment, user)
+      instance_2 = Assignment.Public.obtain_instance!(assignment, user)
+
+      assert instance.id == instance_2.id
+    end
+
+    test "get_instance/2 returns nil if no instance exists" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      assert Assignment.Public.get_instance(assignment, user) == nil
+    end
+
+    test "get_instance/2 returns instance if it exists" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
+
+      assert %{id: ^instance_id} = Assignment.Public.get_instance(assignment, user)
+    end
+
+    test "list_instances/1 returns all instances" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user_2} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user_3} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
+      %{id: instance_id_2} = Assignment.Public.obtain_instance!(assignment, user_2)
+      %{id: instance_id_3} = Assignment.Public.obtain_instance!(assignment, user_3)
+
+      assert [
+               %{id: ^instance_id},
+               %{id: ^instance_id_2},
+               %{id: ^instance_id_3}
+             ] = Assignment.Public.list_instances(assignment)
+    end
+  end
+
   describe "assignments" do
-    alias Systems.Assignment
-    alias Systems.Crew
-    alias Systems.Budget
-    alias Systems.Monitor
-
-    alias Core.Factories
-
     test "list_participants?/1 with 1 expired member" do
       user = %{id: user_id} = Factories.insert!(:member)
 
@@ -121,6 +175,37 @@ defmodule Systems.Assignment.PublicTest do
                  public_id: 1,
                  external_id: ^external_id
                }
+             ] = Assignment.Public.list_participants(assignment)
+    end
+
+    test "list_participants?/1 with 1 affiliate user" do
+      affiliate = Factories.build(:affiliate) |> Repo.insert!()
+
+      affiliate_user =
+        %{identifier: identifier, user: %{id: user_id}} =
+        Factories.insert!(:affiliate_user, %{identifier: "test", affiliate: affiliate})
+
+      crew_auth_node =
+        Factories.build(:auth_node, %{
+          role_assignments: [
+            Factories.build(:participant, %{user: affiliate_user.user})
+          ]
+        })
+
+      crew = Factories.insert!(:crew, %{auth_node: crew_auth_node})
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          affiliate: affiliate,
+          crew: crew,
+          special: :data_donation,
+          status: :online
+        })
+
+      %{id: member_id} = Crew.Factories.create_member(crew, affiliate_user.user)
+
+      assert [
+               %{user_id: ^user_id, member_id: ^member_id, public_id: 1, external_id: ^identifier}
              ] = Assignment.Public.list_participants(assignment)
     end
 
@@ -414,7 +499,11 @@ defmodule Systems.Assignment.PublicTest do
       %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
       user = Factories.insert!(:member)
       member = Crew.Factories.create_member(crew, user)
-      %{id: task_id} = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
+
+      %{id: task_id} =
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+          minutes_ago: 10
+        )
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
 
@@ -425,7 +514,11 @@ defmodule Systems.Assignment.PublicTest do
       %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
       user = Factories.insert!(:member)
       member = Crew.Factories.create_member(crew, user)
-      %{id: task_id} = Crew.Factories.create_task(crew, member, ["task1"], minutes_ago: 10)
+
+      %{id: task_id} =
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+          minutes_ago: 10
+        )
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
       Crew.Public.accept_task(task_id)

@@ -1,4 +1,6 @@
 defmodule Systems.Rate.Public do
+  use Core, :public
+
   defmodule RateLimitError do
     defexception [:message]
   end

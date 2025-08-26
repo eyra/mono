@@ -121,3 +121,11 @@ msgstr "Taal"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Deelgenomen"
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "tool.description"
+msgstr "U staat op het punt om een vragenlijst te starten in een nieuw tabblad. Als u klaar bent, komt u automatisch terug op deze pagina."

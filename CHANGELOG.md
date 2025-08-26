@@ -9,9 +9,89 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#7 unreleased
+## \#17 Under development
+* ..
 
-* Added - Support for Onyx RIS upload (behind feature flag)
+## \#16.1 2025-06-25
+* Fixed: Export progress report pre-affiliate participant links
+* Fixed: Rendering pre-affiliate participant links on pre-affiliate Data Donation assignments
+
+## \#16 2025-06-18
+* Added: Affiliate system for panel company integration
+* Added: Support for end-of-flow redirect to Affiliates
+* Added: Support for sending events to Affiliates
+* Added: Integration tab in Assignment CMS for data donations (using Affiliate system)
+* Added: Participant tab in Assignment CMS for data donations (using Affiliate system)
+* Added Spanish to Assignment settings
+* Fixed: Several issues on the Landing Page
+* Fixed: Flaky tests due to strange on_mount error
+* Security: Bump Erlang/OTP due to security risk
+
+## \#15.2 2025-05-31
+* Fixed: Realtime updates interfering participant flows
+* Added: Support for sending realtime updates to pages targeted to specific users
+
+## \#15.1 2025-05-08
+* Fixed: When a participant returns from a questionnaire back to Next, a popup is shown and the participant must click  'close'.
+
+## \#15 2025-05-07
+* Changed: Next Landing page
+* Fixed: Account activated successfully message low contrast
+* Added: Manual builder to workflow library for Panl studies
+
+## \#14 2025-04-26
+* Fixed: Next compatability with feldspar version 4 (loading issue)
+
+## \#13 2025-04-25
+* Changed: Refinement of the instruction manual builder based on feedback
+* Fixed: Mobile friendly header title for participant flow
+
+## \#12 2025-04-19
+* Maintenance release
+
+## \#11 2025-04-09
+
+* Added: Participant Task List Mobile
+* Changed: Participant Task List Desktop replaced Master-Detail with Task List centered view just like Mobile.
+
+## \#10 2025-03-26
+
+* Added: Manual Participant Mobile (Beta)
+* Fixed: Breadcrumbs on project page
+
+## \#9 2025-03-19
+
+* Added: Manual Researcher CMS (Beta)
+* Added: Manual Participant Desktop (Beta)
+
+## \#8 2025-02-28
+
+* Fixed: PDF not readable on mobile device
+* Added: Support for Italian in assignments (participants)
+* Changed: Use of authorization module to speed up compile time
+* Added: Ask for permission before removing yourself from a project
+* Added: Overview and Files tab in project. The Files tab replaces the data card.
+* Changed: Auto-connect Next storage
+* Changed: Updated German copy data donation participant flow
+
+## \#7.1 2025-01-09
+
+* Fixed: Resolved an issue where Feldspar apps were not preloaded in certain edge cases, resulting in excessive user wait times.
+* Added: Support for multiple modal views, including background preloading for improved performance.
+
+## \#7 2025-01-07
+
+* Changed: Bump erlang to 27.1.2
+* Changed: Bump elixir to 1.17.0
+* Fixed: Support for running the app locally in Docker
+* Changed: Github release workflow uses Docker
+* Changed: Using Debian on production
+* Added: Support for sending logging to AppSignal
+
+## \#6.2 2024-11-28
+
+* Added: AppSignal support
+* Added: Support for Onyx RIS upload (behind feature flag)
 
 ## \#6.2 2024-11-28
 

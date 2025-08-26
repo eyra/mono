@@ -2,7 +2,7 @@ defmodule Systems.Feldspar.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Changeset
 
   alias Systems.Workflow
@@ -38,12 +38,14 @@ defmodule Systems.Feldspar.ToolModel do
       changeset(tool, %{})
       |> validate()
 
-    changeset.valid?()
+    changeset.valid?
   end
 
   def preload_graph(:down), do: preload_graph([])
 
   defimpl Frameworks.Concept.ToolModel do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Feldspar
     def key(_), do: :feldspar
     def auth_tree(%{auth_node: auth_node}), do: auth_node
@@ -52,18 +54,14 @@ defmodule Systems.Feldspar.ToolModel do
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
     def form(_, _), do: Feldspar.ToolForm
 
-    def launcher(%{id: id, archive_ref: archive_ref}) when is_binary(archive_ref) do
+    def launcher(tool) do
       %{
-        module: Feldspar.AppView,
+        module: Feldspar.ToolView,
         params: %{
-          key: "feldspar_tool_#{id}",
-          url: archive_ref <> "/index.html",
-          locale: Gettext.get_locale(CoreWeb.Gettext)
+          tool: tool
         }
       }
     end
-
-    def launcher(_), do: nil
 
     def task_labels(_) do
       %{

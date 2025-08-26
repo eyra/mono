@@ -2,7 +2,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   use CoreWeb, :verified_routes
   use Systems.Content.PageBuilder
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   alias Frameworks.Concept
   alias Systems.Content
   alias Systems.Graphite
@@ -20,7 +20,6 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
       tabs: tabs,
       actions: actions(leaderboard, action_map),
       show_errors: false,
-      initial_tab: "settings_form",
       tabbar_id: "leaderboard_content/#{id}",
       active_menu_item: :projects
     }

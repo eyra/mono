@@ -4,7 +4,7 @@ defmodule Systems.Observatory.LiveHook do
   require Logger
 
   @impl true
-  def on_mount(live_view_module, _params, session, socket) do
+  def mount(live_view_module, _params, session, socket) do
     {
       :cont,
       socket
@@ -35,7 +35,7 @@ defmodule Systems.Observatory.LiveHook do
         {:cont, socket |> handle_model_update(live_view_module, model, from_pid)}
 
       %{topic: _topic, payload: {_signal, %{model: model}}}, socket ->
-        Logger.warn("Unknown sender, no from_pid provided")
+        Logger.warning("Unknown sender, no from_pid provided")
         {:cont, socket |> handle_model_update(live_view_module, model, nil)}
 
       _, socket ->

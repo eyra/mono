@@ -16,6 +16,7 @@ defmodule Systems.Workflow.Platforms do
          :netflix,
          :samsung,
          :snapchat,
+         :spotify,
          :tiktok,
          :whatsapp,
          :x,

@@ -368,11 +368,11 @@ msgstr "Questionnaire"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.download_manual"
-msgstr "Download manual"
+msgstr "PDF download manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.request_manual"
-msgstr "Request manual"
+msgstr "PDF request manual"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_workflow_item_types.submit"
@@ -442,26 +442,6 @@ msgstr "rejected"
 msgid "platforms.snapchat"
 msgstr "Snapchat"
 
-#, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.comparison"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.intervention"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.outcome"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.population"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onyx_criterion_class.study_type"
-msgstr ""
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_workflow_item_types.paper_screening"
 msgstr "Paper screening"
@@ -473,3 +453,47 @@ msgstr "Paper screening"
 #, elixir-autogen, elixir-format
 msgid "templates.paper_screening"
 msgstr "Paper screening"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.it"
+msgstr "Italian"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.comparison"
+msgstr "The control group or alternative intervention. (PICO, SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.context"
+msgstr "The environment, setting, or situational focus. (PICo, SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.intervention"
+msgstr "The treatment, exposure, or action studied. (PICO, SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.outcome"
+msgstr "The measurable result of the intervention. (PICO, PICOS, SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.phenomenon_of_interest"
+msgstr " The qualitative research focus. (SPIDER, PICo)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.population"
+msgstr "The group, subjects or sample being studied. (PICO, PICo, SPIDER)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "zircon_screening_categories.setting"
+msgstr "A specific geographic or organizational location. (SPICE)"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_workflow_item_types.manual"
+msgstr "Instruction manual"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platforms.spotify"
+msgstr "Spotify"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.es"
+msgstr "Spanish"

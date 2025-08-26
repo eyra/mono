@@ -1,0 +1,116 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "advert.subject.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.reward.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.fund.description.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "required.funding.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.broke.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.poor.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.status.rich.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "advert.default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaf.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "close.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "preview.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "retract.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "clicks.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "views.metric.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "clickthrough.rate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "promotion.apply.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""

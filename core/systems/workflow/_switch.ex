@@ -4,6 +4,17 @@ defmodule Systems.Workflow.Switch do
   alias Frameworks.Signal
   alias Systems.Workflow
 
+  def intercept({:manual_tool, _} = signal, %{manual_tool: tool} = message) do
+    workflow_item = Workflow.Public.get_item_by_tool(tool, [:workflow, :tool_ref])
+
+    dispatch!(
+      {:workflow_item, signal},
+      Map.merge(message, %{workflow_item: workflow_item})
+    )
+
+    :ok
+  end
+
   @impl true
   def intercept(
         {:instruction_tool, _} = signal,

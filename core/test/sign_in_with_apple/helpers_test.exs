@@ -1,6 +1,6 @@
 defmodule SignInWithApple.Helpers.Test do
   use ExUnit.Case, async: true
-  use Plug.Test
+  import Plug.Test
 
   alias SignInWithApple.Helpers
 
@@ -9,7 +9,7 @@ defmodule SignInWithApple.Helpers.Test do
   end
 
   test "apply_defaults/1 merges the Apple required defaults" do
-    assert Helpers.apply_defaults([]) |> Keyword.get(:site) == "https://appleid.apple.com"
+    assert Helpers.apply_defaults([]) |> Keyword.get(:base_url) == "https://appleid.apple.com"
   end
 
   test "html_sign_in_button/1 returns the html for the button" do

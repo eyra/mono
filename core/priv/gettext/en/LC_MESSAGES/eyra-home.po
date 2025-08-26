@@ -12,11 +12,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "My home"
+msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "visitor.title"
-msgstr "Welcome"
+msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
@@ -29,3 +29,7 @@ msgstr "Panl studies"
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr "Panl studies"
+
+#, elixir-autogen, elixir-format
+msgid "member.caption"
+msgstr "Developed for and with researchers"

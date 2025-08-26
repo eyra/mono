@@ -12,6 +12,7 @@ defmodule Systems.Assignment.ContentPage do
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
     Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
+    |> Assignment.Private.ensure_affiliate!()
   end
 
   @impl true
@@ -53,7 +54,7 @@ defmodule Systems.Assignment.ContentPage do
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
         menus={@menus}
-        modal={@modal}
+        modals={@modals}
         popup={@popup}
         dialog={@dialog}
       />

@@ -1,7 +1,7 @@
 defmodule Systems.Storage.EndpointModel do
   @fields ~w()a
   @required_fields @fields
-  @special_fields ~w(builtin yoda centerdata aws azure)a
+  @special_fields ~w(builtin yoda aws azure)a
 
   use Ecto.Schema
 
@@ -9,7 +9,7 @@ defmodule Systems.Storage.EndpointModel do
   use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
   alias Frameworks.Utility.Assets
@@ -24,7 +24,6 @@ defmodule Systems.Storage.EndpointModel do
 
     belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
-    belongs_to(:centerdata, Storage.Centerdata.EndpointModel, on_replace: :delete)
     belongs_to(:aws, Storage.AWS.EndpointModel, on_replace: :delete)
     belongs_to(:azure, Storage.Azure.EndpointModel, on_replace: :delete)
 
@@ -79,6 +78,8 @@ defmodule Systems.Storage.EndpointModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
+    use Gettext, backend: CoreWeb.Gettext
+
     alias Frameworks.Concept
 
     def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
@@ -97,7 +98,6 @@ defmodule Systems.Storage.EndpointModel do
     end
 
     def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
-    def status(%Storage.Centerdata.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
 
     def status(special) do
       sum =

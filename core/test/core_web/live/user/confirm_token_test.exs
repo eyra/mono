@@ -18,12 +18,11 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
       {:ok, view, _html} = live(conn, ~p"/user/confirm/#{token}")
 
-      {:error, {:redirect, %{to: to}}} =
-        view
-        |> element("[phx-click=\"confirm\"]")
-        |> render_click()
+      {:error, {:redirect, %{to: to}}} = render_click(view, "confirm")
 
-      assert to == "/user/signin?#{URI.encode_query(%{email: user.email})}"
+      assert to ==
+               "/user/signin?#{URI.encode_query(%{email: user.email})}&status=account_activated_successfully"
+
       assert Account.Public.get_user!(user.id).confirmed_at
     end
 
@@ -39,16 +38,14 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
       {:error, {:redirect, %{to: _to}}} =
         view
-        |> element("[phx-click=\"confirm\"]")
-        |> render_click()
+        |> render_click("confirm")
 
       # The second time should not redirect
       {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
 
       html =
         view
-        |> element("[phx-click=\"confirm\"]")
-        |> render_click()
+        |> render_click("confirm")
 
       assert html =~ "Account activation"
     end
@@ -58,8 +55,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
 
       view
-      |> element("[phx-click=\"confirm\"]")
-      |> render_click()
+      |> render_click("confirm")
 
       refute user.confirmed_at
     end
@@ -69,8 +65,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
       html =
         view
-        |> element("[phx-click=\"confirm\"]")
-        |> render_click()
+        |> render_click("confirm")
 
       assert html =~ "Account activation"
     end
@@ -79,8 +74,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
       view
-      |> element("[phx-click=\"confirm\"]")
-      |> render_click()
+      |> render_click("confirm")
 
       html =
         view
@@ -95,8 +89,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
       view
-      |> element("[phx-click=\"confirm\"]")
-      |> render_click()
+      |> render_click("confirm")
 
       html =
         view
@@ -112,8 +105,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
       view
-      |> element("[phx-click=\"confirm\"]")
-      |> render_click()
+      |> render_click("confirm")
 
       html =
         view
@@ -129,8 +121,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
       view
-      |> element("[phx-click=\"confirm\"]")
-      |> render_click()
+      |> render_click("confirm")
 
       html =
         view

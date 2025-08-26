@@ -1,0 +1,124 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.manual.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.manual.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "setup.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builder.chapter.overview"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.chapter.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.group.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.page.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.title.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.text.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.image.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.image.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "builder.pages.list.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.label.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "page.title.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.next.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.page.indicator"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.previous.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "image.fullscreen.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.done.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "chapter.overview"
+msgstr ""

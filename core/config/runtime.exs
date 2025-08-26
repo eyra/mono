@@ -11,6 +11,7 @@ if config_env() == :prod do
   base_url = "#{scheme}://#{app_domain}"
 
   config :core,
+    domain: app_domain,
     name: app_name,
     base_url: base_url,
     upload_path: upload_path
@@ -20,7 +21,7 @@ if config_env() == :prod do
          :features,
          System.get_env("ENABLED_APP_FEATURES", "")
          |> String.split(~r"\s*,\s*")
-         |> Enum.map(&String.to_existing_atom/1)
+         |> Enum.map(&String.to_atom/1)
          |> Enum.map(&{&1, true})
 
   config :core,
@@ -40,6 +41,30 @@ if config_env() == :prod do
 
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
+
+  # OBAN
+  oban_plugins =
+    System.get_env("ENABLED_OBAN_PLUGINS", "")
+    |> String.split(~r"\s*,\s*")
+
+  config :core, Oban,
+    plugins:
+      Enum.map(oban_plugins, fn plugin ->
+        case plugin do
+          "pruner" ->
+            {Oban.Plugins.Pruner, max_age: 60 * 60}
+
+          "lifeline" ->
+            {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)}
+
+          "advert_expiration" ->
+            {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
+
+          _ ->
+            nil
+        end
+      end)
+      |> Enum.reject(&is_nil/1)
 
   # RATE LIMITER
 
@@ -83,17 +108,41 @@ if config_env() == :prod do
     config :core, :azure_storage_backend, sas_token: sas_token
   end
 
+  # DATABASE
+  cacertfile = System.get_env("DB_CA_PATH")
+
+  verify_mode =
+    case System.get_env("DB_TLS_VERIFY") do
+      "verify_peer" -> :verify_peer
+      "verify_none" -> :verify_none
+      _ -> :verify_peer
+    end
+
   database_url = System.get_env("DB_URL")
+  db_host = System.fetch_env!("DB_HOST")
 
   if database_url do
-    config :core, Core.Repo, url: database_url
+    config :core, Core.Repo,
+      url: database_url,
+      ssl: [
+        cacertfile: cacertfile,
+        verify: verify_mode,
+        server_name_indication: to_charlist(db_host)
+      ]
   else
     config :core, Core.Repo,
       username: System.get_env("DB_USER"),
       password: System.get_env("DB_PASS"),
       database: System.get_env("DB_NAME"),
-      hostname: System.get_env("DB_HOST")
+      hostname: System.get_env("DB_HOST"),
+      ssl: [
+        cacertfile: cacertfile,
+        verify: verify_mode,
+        server_name_indication: to_charlist(db_host)
+      ]
   end
+
+  # END DATABASE
 
   config :core, GoogleSignIn,
     redirect_uri: "#{base_url}/google-sign-in/auth",
@@ -122,6 +171,7 @@ if config_env() == :prod do
       otp_app: :core,
       name: "Next",
       env: app_domain,
+      revision: System.get_env("APPSIGNAL_REVISION"),
       push_api_key: push_api_key,
       active: true
   end

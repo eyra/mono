@@ -1,4 +1,5 @@
 defmodule Frameworks.Signal.Public do
+  use Core, :public
   require Logger
 
   import Frameworks.Utility.PrettyPrint
@@ -16,33 +17,38 @@ defmodule Frameworks.Signal.Public do
     "Systems.Crew.Switch",
     "Systems.Graphite.Switch",
     "Systems.Instruction.Switch",
+    "Systems.Manual.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
-    "Systems.Onyx.Switch",
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
     "Systems.Student.Switch",
-    "Systems.Workflow.Switch"
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
   ]
 
   def dispatch(signal, message) do
     message = Map.put_new(message, :from_pid, self())
 
-    Logger.notice(
+    Logger.info(
       "SIGNAL: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}",
       ansi_color: :blue
     )
 
-    results = Enum.map(signal_handlers(), & &1.intercept(signal, message))
+    results = Enum.map(signal_handlers(), &intercept(&1, signal, message))
 
     if not Enum.member?(results, :ok) do
-      Logger.warn(
+      Logger.warning(
         "Unhandeld signal: #{pretty_print(signal)} => #{pretty_print(Map.keys(message))}, FROM: #{inspect(Map.get(message, :from_pid))}"
       )
     end
 
     :ok
+  end
+
+  def intercept(handler, signal, message) do
+    handler.intercept(signal, message)
   end
 
   def dispatch!(signal, message) do

@@ -11,9 +11,9 @@ defmodule Frameworks.Pixel.Tag do
 
   def tag(assigns) do
     ~H"""
-    <div class="h-8 bg-white rounded">
-      <div class={"flex flex-col justify-center h-full rounded items-center #{@bg_color} #{@bg_opacity}"}>
-        <div class={"text-label font-label ml-3 mr-3 #{@text_color}"}>
+    <div class="bg-white rounded">
+      <div class={"flex flex-col justify-center rounded items-center #{@bg_color} #{@bg_opacity}"}>
+        <div class={"text-label font-label py-[6px] ml-3 mr-3 #{@text_color}"}>
           <%= @text %>
         </div>
       </div>

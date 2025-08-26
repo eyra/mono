@@ -52,3 +52,4 @@ logfile
 /core/config/dev.secret.exs
 /core/docker.env
 /core/playground.exs
+core/.elixir_ls/*

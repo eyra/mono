@@ -7,9 +7,17 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix_live_view,
+  debug_heex_annotations: true,
+  debug_attributes: true,
+  enable_expensive_runtime_checks: true
+
 config :core,
+  domain: "localhost",
   name: "Next [local]",
-  base_url: "http://localhost:4000",
+  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   upload_path: upload_path
 
 # Only in tests, remove the complexity from the password hashing algorithm
@@ -18,11 +26,25 @@ config :bcrypt_elixir, :log_rounds, 1
 config :logger, level: :debug
 
 # Configure your database
+cacertfile = System.get_env("DB_CA_PATH")
+
+verify_mode =
+  case System.get_env("DB_TLS_VERIFY") do
+    "verify_peer" -> :verify_peer
+    "verify_none" -> :verify_none
+    _ -> :verify_peer
+  end
+
 config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "next_dev",
-  hostname: "localhost",
+  hostname: "db",
+  ssl: [
+    cacertfile: cacertfile,
+    verify: :verify_peer,
+    server_name_indication: to_charlist("db")
+  ],
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -49,6 +71,16 @@ config :core, CoreWeb.Endpoint,
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
+  ]
+
+config :core, Oban,
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60},
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
+     ]}
   ]
 
 config :core,

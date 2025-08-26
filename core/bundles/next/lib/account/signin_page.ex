@@ -13,7 +13,7 @@ defmodule Next.Account.SigninPage do
 
   import Frameworks.Pixel.Line
 
-  alias Frameworks.Pixel.Tabbar
+  alias Frameworks.Pixel.Tabbed
   alias Next.Account.SigninPageBuilder
 
   @impl true
@@ -21,6 +21,7 @@ defmodule Next.Account.SigninPage do
     user_type = Map.get(params, "user_type", "participant")
     initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
+    registration_status = Map.get(params, "status", nil)
 
     {
       :ok,
@@ -30,7 +31,8 @@ defmodule Next.Account.SigninPage do
         user_type: user_type,
         initial_tab: initial_tab,
         tabbar_id: tabbar_id,
-        show_errors: true
+        show_errors: true,
+        status: registration_status
       )
       |> update_view_model()
       |> update_menus()
@@ -56,12 +58,14 @@ defmodule Next.Account.SigninPage do
           <Margin.y id={:page_top} />
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
-          <Tabbar.container id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} type={:segmented} size={:full} />
+          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} type={:segmented} size={:full} />
           <.spacing value="M" />
           <.line />
+
+
           <.spacing value="M" />
-          <div id="tabbar_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbar.content include_top_margin={false} tabs={@vm.tabs} />
+          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbed.content include_top_margin={false} tabs={@vm.tabs} />
           </div>
         </Area.form>
       </div>

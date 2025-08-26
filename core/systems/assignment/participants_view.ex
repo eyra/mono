@@ -3,16 +3,26 @@ defmodule Systems.Assignment.ParticipantsView do
 
   require Logger
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
+  alias Systems.Affiliate
   alias Systems.Advert
   alias Systems.Pool
+  alias Systems.Assignment
 
   @impl true
   def update(
-        %{id: id, assignment: assignment, title: title, content_flags: content_flags, user: user},
+        %{
+          id: id,
+          assignment: assignment,
+          title: title,
+          content_flags: content_flags,
+          user: user,
+          viewport: viewport,
+          breakpoint: breakpoint
+        },
         socket
       ) do
     {
@@ -23,18 +33,56 @@ defmodule Systems.Assignment.ParticipantsView do
         assignment: assignment,
         title: title,
         content_flags: content_flags,
-        user: user
+        user: user,
+        viewport: viewport,
+        breakpoint: breakpoint
       )
-      |> update_invite_title()
+      |> compose_child(:general)
       |> update_advert_button()
-      |> update_annotation()
-      |> update_url()
+      |> update_invite_title()
+      |> update_invite_url()
+      |> update_invite_annotation()
+      |> update_affiliate_title()
+      |> update_affiliate_url()
+      |> update_affiliate_annotation()
+    }
+  end
+
+  @impl true
+  def compose(:general, %{
+        assignment: %{info: info},
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }) do
+    %{
+      module: Assignment.GeneralForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }
     }
   end
 
   defp update_invite_title(socket) do
     invite_title = dgettext("eyra-assignment", "invite.panel.title")
     assign(socket, invite_title: invite_title)
+  end
+
+  defp update_affiliate_title(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    affiliate_title = dgettext("eyra-assignment", "external.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
+  end
+
+  defp update_affiliate_title(socket) do
+    affiliate_title = dgettext("eyra-assignment", "affiliate.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
@@ -64,15 +112,43 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, advert_button: advert_button)
   end
 
-  defp update_annotation(socket) do
+  defp update_invite_annotation(socket) do
     annotation = dgettext("eyra-assignment", "invite.panel.annotation")
-    assign(socket, annotation: annotation)
+    assign(socket, invite_annotation: annotation)
   end
 
-  defp update_url(%{assigns: %{assignment: %{id: id}}} = socket) do
+  defp update_affiliate_annotation(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    annotation = dgettext("eyra-assignment", "external.panel.annotation")
+    assign(socket, affiliate_annotation: annotation)
+  end
+
+  defp update_affiliate_annotation(socket) do
+    annotation = dgettext("eyra-assignment", "affiliate.panel.annotation")
+    assign(socket, affiliate_annotation: annotation)
+  end
+
+  defp update_invite_url(%{assigns: %{assignment: %{id: id}}} = socket) do
     path = ~p"/assignment/#{id}/invite"
     url = get_base_url() <> path
     assign(socket, url: url)
+  end
+
+  defp update_affiliate_url(
+         %{assigns: %{assignment: %{id: id, external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    url = get_base_url() <> ~p"/assignment/#{id}/participate?participant=participant_id"
+    assign(socket, affiliate_url: url)
+  end
+
+  defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
+    url = Affiliate.Public.url_for_resource(assignment) <> "?p=participant_id"
+    assign(socket, affiliate_url: url)
   end
 
   defp get_base_url do
@@ -103,6 +179,14 @@ defmodule Systems.Assignment.ParticipantsView do
           <Margin.y id={:page_top} />
           <Text.title2><%= @title %></Text.title2>
           <.spacing value="L" />
+
+          <.child name={:general} fabric={@fabric} >
+            <:footer>
+              <.spacing value="L" />
+            </:footer>
+          </.child>
+
+          <.spacing value="L" />
           <div class="flex flex-col gap-8" %>
             <%= if @content_flags[:advert_in_pool] do %>
               <div class="border-grey4 border-2 rounded p-6">
@@ -128,8 +212,8 @@ defmodule Systems.Assignment.ParticipantsView do
                   </div>
                 </:title>
                 <.spacing value="S" />
-                <%= if @annotation do %>
-                  <Annotation.view annotation={@annotation} />
+                <%= if @invite_annotation do %>
+                  <Annotation.view annotation={@invite_annotation} />
                 <% end %>
                 <%= if @url do %>
                   <.spacing value="S" />
@@ -149,6 +233,10 @@ defmodule Systems.Assignment.ParticipantsView do
                   </div>
                 <% end %>
               </Panel.flat>
+            <% end %>
+
+            <%= if @content_flags[:affiliate] do %>
+              <Affiliate.Html.url_panel title={@affiliate_title} annotation={@affiliate_annotation} url={@affiliate_url} />
             <% end %>
           </div>
         </Area.content>

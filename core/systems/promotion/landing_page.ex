@@ -8,13 +8,11 @@ defmodule Systems.Promotion.LandingPage do
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   import Systems.Promotion.BannerView
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
 
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
-
-  import CoreWeb.Devices
-  import CoreWeb.Language
 
   alias Systems.Promotion
 
@@ -116,7 +114,7 @@ defmodule Systems.Promotion.LandingPage do
   def render(assigns) do
     ~H"""
     <div id={:promotion_landing_page} phx-hook="Viewport">
-    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} popup={@popup} dialog={@dialog}>
+    <.live_website user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
       <:hero>
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
@@ -142,13 +140,26 @@ defmodule Systems.Promotion.LandingPage do
         </div>
         <div class="mb-12 sm:mb-16" />
 
-        <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_large><%= @vm.expectations %></Text.body_large>
-        <.spacing value="M" />
-        <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_large><%= @vm.description %></Text.body_large>
+        <%= if @vm.prerequisites != nil and @vm.prerequisites != "" do %>
+        <Text.title2 margin=""><%= dgettext("eyra-promotion", "prerequisites.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.prerequisites) %></Text.body_large>
+          <.spacing value="M" />
+        <% end %>
+
+        <%= if @vm.expectations != nil and @vm.expectations != "" do %>
+          <Text.title2 margin=""><%= dgettext("eyra-promotion", "expectations.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.expectations) %></Text.body_large>
+          <.spacing value="M" />
+        <% end %>
+
+        <%= if @vm.description != nil and @vm.description != "" do %>
+          <Text.title2 margin=""><%= dgettext("eyra-promotion", "description.public.label") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_large><%= render_wysiwyg(@vm.description) %></Text.body_large>
+        <% end %>
+
         <.spacing value="L" />
 
         <.advert_banner
@@ -159,16 +170,7 @@ defmodule Systems.Promotion.LandingPage do
           url={@vm.banner_url}
           logo_url={@vm.logo_url}
         />
-        <.spacing value="L" />
-        <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-8 items-center">
-          <.devices label={dgettext("eyra-promotion", "devices.available.label")} devices={@vm.devices} />
-          <.language
-            label={dgettext("eyra-promotion", "language.available.label")}
-            language={@vm.language}
-          />
-        </div>
         <.spacing value="XL" />
-
         <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" />
       </Area.content>
     </.live_website>

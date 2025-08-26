@@ -1,0 +1,8 @@
+---
+description: Authorization rules
+globs: systems/**/*.ex, systems/**/*.exs, systems/**/*.heex
+alwaysApply: false
+---
+
+
+cd ..

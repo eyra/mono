@@ -1,4 +1,5 @@
 defmodule Systems.Workflow.Public do
+  use Core, :public
   import Ecto.Query, warn: false
   import Systems.Workflow.Queries
 
@@ -12,9 +13,10 @@ defmodule Systems.Workflow.Public do
   alias Systems.Alliance
   alias Systems.Feldspar
   alias Systems.Lab
+  alias Systems.Manual
   alias Systems.Graphite
   alias Systems.Instruction
-  alias Systems.Onyx
+  alias Systems.Zircon
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
@@ -141,11 +143,14 @@ defmodule Systems.Workflow.Public do
     |> Ecto.Changeset.put_assoc(tool_type, tool)
   end
 
-  def prepare_tool(:onyx_tool, %{} = attrs, auth_node),
-    do: Onyx.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:zircon_screening_tool, %{} = attrs, auth_node),
+    do: Zircon.Public.prepare_screening_tool(attrs, auth_node)
 
   def prepare_tool(:alliance_tool, %{} = attrs, auth_node),
     do: Alliance.Public.prepare_tool(attrs, auth_node)
+
+  def prepare_tool(:manual_tool, %{} = attrs, auth_node),
+    do: Manual.Assembly.prepare_tool(attrs, auth_node)
 
   def prepare_tool(:document_tool, %{} = attrs, auth_node),
     do: Document.Public.prepare_tool(attrs, auth_node)

@@ -1,7 +1,8 @@
 defmodule Systems.Pool.Public do
+  use Core, :public
   use Core.FeatureFlags
 
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Pool.Queries
 
@@ -11,7 +12,6 @@ defmodule Systems.Pool.Public do
   alias Frameworks.Concept.Directable
 
   alias Core.Repo
-  alias Core.Authorization
 
   alias Systems.Account
   alias Systems.Pool
@@ -34,7 +34,7 @@ defmodule Systems.Pool.Public do
 
   def list_owned(user, preload \\ []) do
     node_ids =
-      Authorization.query_node_ids(
+      auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
@@ -116,7 +116,7 @@ defmodule Systems.Pool.Public do
   end
 
   def list_participants(%Pool.Model{} = pool) do
-    Authorization.users_with_role(pool, :participant)
+    auth_module().users_with_role(pool, :participant)
   end
 
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
@@ -172,13 +172,13 @@ defmodule Systems.Pool.Public do
   end
 
   def add_participant!(pool, user) do
-    if not Authorization.user_has_role?(user, pool, :participant) do
-      :ok = Authorization.assign_role(user, pool, :participant)
+    if not auth_module().user_has_role?(user, pool, :participant) do
+      :ok = auth_module().assign_role(user, pool, :participant)
     end
   end
 
   def remove_participant(pool, user) do
-    Authorization.remove_role!(user, pool, :participant)
+    auth_module().remove_role!(user, pool, :participant)
   end
 
   def get_submission!(term, preload \\ [:criteria])

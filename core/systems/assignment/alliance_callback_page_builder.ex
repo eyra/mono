@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
-  import CoreWeb.Gettext
+  use Gettext, backend: CoreWeb.Gettext
 
-  alias Core.Authorization
+  use Core, :auth
   alias Phoenix.LiveView
 
   alias Systems.Account
@@ -32,7 +32,7 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
     if Assignment.Public.member?(assignment, user) do
       :participant
     else
-      if Authorization.user_has_role?(user, crew, :tester) do
+      if auth_module().user_has_role?(user, crew, :tester) do
         :tester
       else
         :expired
@@ -49,6 +49,6 @@ defmodule Systems.Assignment.AllianceCallbackPageBuilder do
   end
 
   def handle_forward(%{assigns: %{current_user: user}} = socket) do
-    LiveView.push_redirect(socket, to: Account.Public.start_page_path(user))
+    LiveView.push_navigate(socket, to: Account.Public.start_page_path(user))
   end
 end

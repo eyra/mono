@@ -1,0 +1,290 @@
+---
+description: Unit Test Rules and Patterns
+globs: tests/**/*_test.exs
+alwaysApply: true
+---
+# Unit Test Rules and Patterns
+
+## Testing Ecto Associations
+
+### Use Associations Over Foreign Keys
+
+When testing relationships between models, always use preloaded associations instead of checking foreign keys directly.
+
+```elixir
+# INCORRECT - checking foreign keys
+test "creates relationship", %{user: user} do
+  {:ok, progress} = create_progress(user)
+  assert progress.user_id == user.id
+  assert progress.step_id == step.id
+end
+
+# CORRECT - using preloaded associations
+test "creates relationship", %{user: user} do
+  {:ok, progress} = create_progress(user)
+  progress = Repo.preload(progress, [:user, :step])
+  assert progress.user.id == user.id
+  assert progress.step.id == step.id
+end
+```
+
+### Setting Up Associations in Tests
+
+When creating test data with associations:
+
+1. Use `put_assoc/3` instead of setting foreign keys:
+```elixir
+# INCORRECT - setting foreign keys
+attrs = %{
+  name: "test",
+  user_id: user.id
+}
+
+# CORRECT - using put_assoc
+%Model{}
+|> changeset(attrs)
+|> put_assoc(:user, user)
+|> Repo.insert!()
+```
+
+2. Keep basic attributes separate from associations:
+```elixir
+# INCORRECT - mixing attributes and associations
+attrs = %{
+  title: "Test",
+  visited_at: DateTime.utc_now(),
+  user_id: user.id,
+  step_id: step.id
+}
+
+# CORRECT - separate attributes and associations
+attrs = %{
+  title: "Test",
+  visited_at: DateTime.utc_now()
+}
+
+%Model{}
+|> changeset(attrs)
+|> put_assoc(:user, user)
+|> put_assoc(:step, step)
+```
+
+3. For factory functions, prefer association structs over IDs:
+```elixir
+# INCORRECT
+def build(:progress, attrs) do
+  %Progress{
+    user_id: attrs[:user_id],
+    step_id: attrs[:step_id]
+  }
+end
+
+# CORRECT
+def build(:progress, %{user: user, step: step} = attrs) do
+  %Progress{}
+  |> changeset(Map.drop(attrs, [:user, :step]))
+  |> put_assoc(:user, user)
+  |> put_assoc(:step, step)
+end
+```
+
+### Testing Association Constraints
+
+When testing uniqueness or other constraints:
+
+1. Create the initial record using associations
+2. Test the constraint using the same association pattern
+3. Use `assert_raise Ecto.ConstraintError` for database-level constraints
+
+```elixir
+test "enforces unique user and step", %{user: user, step: step} do
+  # Create first record
+  %Progress{}
+  |> changeset(attrs)
+  |> put_assoc(:user, user)
+  |> put_assoc(:step, step)
+  |> Repo.insert!()
+
+  # Test constraint
+  assert_raise Ecto.ConstraintError, fn ->
+    %Progress{}
+    |> changeset(attrs)
+    |> put_assoc(:user, user)
+    |> put_assoc(:step, step)
+    |> Repo.insert!()
+  end
+end
+```
+
+### Preloading in Tests
+
+1. Always preload associations before making assertions about them
+2. Preload the full chain when testing nested associations
+3. Use preload graphs when defined by the model
+
+```elixir
+# Single level preload
+record = Repo.preload(record, [:user, :step])
+
+# Nested preload
+progress = Repo.preload(progress, [:user, step: :userflow])
+
+# Using model's preload graph
+record = Repo.preload(record, Model.preload_graph(:down))
+```
+
+This rule:
+1. Makes tests more maintainable by following Ecto's design patterns
+2. Makes relationships between models explicit
+3. Ensures proper testing of associations rather than just foreign keys
+4. Helps catch association-related issues early
+5. Makes test intentions clearer by separating data setup from assertions
+
+## Test Module Structure
+1. Use appropriate test case module:
+   - Use `Core.DataCase` for tests requiring database access
+   - Use `ExUnit.Case` for pure functional tests
+   - Use `CoreWeb.ConnCase` for controller/LiveView tests
+   - Set `async: true` when possible
+
+2. Module naming:
+   - Test modules should end with `Test`
+   - Follow the same namespace as the module being tested
+   - Example: `Systems.Userflow.ModelTest` for `Systems.Userflow.Model`
+
+## Test Organization
+1. Group tests using `describe` blocks:
+   - One describe block per function/feature
+   - Name format: `"function_name/arity"` or descriptive feature name
+   - Example: `describe "changeset/2" do`
+
+2. Individual tests:
+   - Clear, descriptive names indicating the scenario
+   - Follow pattern: "scenario description"
+   - Example: `test "valid attributes"`, `test "invalid attributes"`
+
+## Factory Organization
+1. Core Factories:
+   - Located in `Core.Factories`
+   - Contains basic `build` functions for all models
+   - Handles common model creation across systems
+   - Example: `Factories.build(:member)`, `Factories.build(:auth_node)`
+
+2. System Factories:
+   - Each system has its own Factories module (e.g., `Systems.Userflow.Factories`)
+   - Located in `test/systems/[system]/factories.ex`
+   - Provides system-specific factory functions
+   - Uses `Core.Factories` for basic model creation
+   - Example: `Userflow.Factories.create_step()`
+
+3. Factory Function Types:
+   - `build` functions: Create structs without persistence (in `Core.Factories`)
+   - `create` functions: Build and persist records (in system factories)
+   - Helper functions: Create complex scenarios or related records
+
+4. Factory Best Practices:
+   - Keep factory functions focused and composable
+   - Use meaningful defaults that represent common scenarios
+   - Allow overriding of attributes via parameters
+   - Document complex factory functions
+   - Example:
+     ```elixir
+     # In Core.Factories
+     def build(:userflow) do
+       build(:userflow, %{name: "test flow"})
+     end
+
+     # In Systems.Userflow.Factories
+     def create_complete_userflow(attrs \\ %{}, opts \\ []) do
+       userflow = Core.Factories.build(:userflow, attrs) |> Repo.insert!()
+       # Add additional setup...
+       userflow
+     end
+     ```
+
+## Test Data Setup
+1. Use factories for test data:
+   - Use `Core.Factories` for basic model creation
+   - Use system-specific factories for specialized data
+   - Example: `Factories.build(:member)`, `Userflow.Factories.create_step()`
+
+2. Setup blocks:
+   - Use `setup` blocks for common test data
+   - Clean up test data when needed
+   - Example:
+     ```elixir
+     setup do
+       user = Factories.insert!(:member)
+       {:ok, user: user}
+     end
+     ```
+
+## Assertions
+1. Pattern matching assertions:
+   - Use pattern matching in assertions when possible
+   - Match on specific fields/values
+   - Example:
+     ```elixir
+     assert %{valid?: true, changes: %{name: "test"}} = changeset
+     ```
+
+2. Error testing:
+   - Use `assert_raise` for expected errors
+   - Test both positive and negative cases
+   - Example:
+     ```elixir
+     assert_raise Ecto.ConstraintError, fn ->
+       # code that should raise
+     end
+     ```
+
+## Mocking and Signals
+1. Signal testing:
+   - Use `Frameworks.Signal.TestHelper` for signal tests
+   - Assert signal dispatch with `assert_signal_dispatched`
+   - Example:
+     ```elixir
+     assert_signal_dispatched(:user_created)
+     ```
+
+2. External dependencies:
+   - Mock external services when needed
+   - Use setup blocks for mock configuration
+   - Clean up mocks after tests
+
+## Database Tests
+1. Transaction handling:
+   - Tests run in a transaction by default
+   - Use `Core.DataCase` for database tests
+   - Clean up any data created outside transactions
+
+2. Preloading:
+   - Test preload graphs when relevant
+   - Verify association loading
+   - Example: test both `:up` and `:down` preloads
+
+## LiveView Tests
+1. LiveView testing:
+   - Use `import Phoenix.LiveViewTest`
+   - Test both initial render and events
+   - Example:
+     ```elixir
+     {:ok, view, html} = live(conn, ~p"/path")
+     assert html =~ "expected content"
+     ```
+
+## Best Practices
+1. Test organization:
+   - Keep tests focused and atomic
+   - Use descriptive variable names
+   - Follow arrange-act-assert pattern
+
+2. Coverage:
+   - Test both success and failure cases
+   - Test edge cases and boundaries
+   - Test authorization where applicable
+
+3. Readability:
+   - Use clear test descriptions
+   - Comment complex test setups
+   - Keep test code simple and clear

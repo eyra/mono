@@ -18,7 +18,7 @@ defmodule Frameworks.Pixel.ClickableCard do
   attr(:right_actions, :list, default: [])
 
   slot(:inner_block, required: true)
-  slot(:top, default: nil)
+  slot(:top)
   slot(:title, required: true)
   attr(:target, :any, default: "")
 
@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.ClickableCard do
     ~H"""
     <div
       x-data="{show_actions: false}"
-      class={"h-full rounded-lg bg-#{@bg_color} #{@size}"}
+      class={"h-full overflow-hidden rounded-lg bg-#{@bg_color} #{@size}"}
       id={"card-#{@id}"}
     >
       <div class="flex flex-col h-full">
@@ -37,7 +37,7 @@ defmodule Frameworks.Pixel.ClickableCard do
             phx-click="card_clicked"
             phx-value-item={@id}
           >
-            <%= if @top do render_slot(@top) end %>
+            <%= render_slot(@top) %>
             <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
               <%= render_slot(@title) %>
             </div>
