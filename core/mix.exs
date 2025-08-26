@@ -134,7 +134,7 @@ defmodule Core.MixProject do
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
-      {:progress_bar, "== 2.0.2", only: [:dev, :test]},
+      {:progress_bar, "== 3.0.0", only: [:dev, :test]},
       {:phoenix_live_reload, "== 1.6.0", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
