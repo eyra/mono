@@ -85,7 +85,7 @@ defmodule Core.MixProject do
       {:floki, github: "eyra/floki", override: true},
       {:gettext, "== 0.26.2"},
       {:hackney, "== 1.25.0"},
-      {:httpoison, "== 2.2.1"},
+      {:httpoison, "== 2.2.3"},
       {:image, "== 0.62.0"},
       {:jason, "== 1.4.4"},
       {:kadabra, "== 0.6.1"},
