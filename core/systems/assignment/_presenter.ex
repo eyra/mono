@@ -18,5 +18,4 @@ defmodule Systems.Assignment.Presenter do
 
   def builder(Assignment.CrewPage), do: Assignment.CrewPageBuilder
   def builder(Assignment.ContentPage), do: Assignment.ContentPageBuilder
-
 end

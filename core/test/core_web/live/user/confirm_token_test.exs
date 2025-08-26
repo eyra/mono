@@ -18,7 +18,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
       {:ok, view, _html} = live(conn, ~p"/user/confirm/#{token}")
 
-     {:error, {:redirect, %{to: to}}} = render_click(view, "confirm")
+      {:error, {:redirect, %{to: to}}} = render_click(view, "confirm")
 
       assert to ==
                "/user/signin?#{URI.encode_query(%{email: user.email})}&status=account_activated_successfully"
