@@ -34,7 +34,7 @@ defmodule BankingProxy.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "== 1.8.2"},
+      {:httpoison, "== 2.2.3"},
       {:jason, "== 1.4.4"},
       {:ranch, "== 2.1.0"},
       # Dev and test deps
