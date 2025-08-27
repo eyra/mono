@@ -96,7 +96,7 @@ defmodule Core.MixProject do
       {:oban, "== 2.20.1"},
       # Fork supports elixir 1.18.4
       {:packmatic, "~> 1.2.0",
-       github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
+       github: "eyra/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
       {:phoenix_ecto, "== 4.6.5"},
       {:phoenix_html, "== 3.3.4"},
       {:phoenix_inline_svg, "== 1.4.0"},
