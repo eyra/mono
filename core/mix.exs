@@ -74,7 +74,7 @@ defmodule Core.MixProject do
       {:bamboo, "== 2.3.1"},
       {:bcrypt_elixir, "== 3.3.2"},
       {:cldr_utils, "== 2.28.3", override: true},
-      {:csv, "== 2.5.0"},
+      {:csv, "== 3.2.2"},
       {:ecto_sql, "== 3.13.2"},
       {:esbuild, "== 0.10.0", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "== 2.5.8"},
