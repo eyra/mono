@@ -98,7 +98,7 @@ defmodule Core.MixProject do
       {:packmatic, "~> 1.2.0",
        github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
       {:phoenix_ecto, "== 4.6.5"},
-      {:phoenix_html, "== 3.3.4"},
+      {:phoenix_html, "== 4.2.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
       {:phoenix_live_view, "== 1.1.8"},
       {:phoenix_view, "== 2.0.4"},
