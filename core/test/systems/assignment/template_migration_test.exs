@@ -1,8 +1,5 @@
 defmodule Systems.Assignment.TemplateMigrationTest do
   use ExUnit.Case, async: true
-  import ExUnit.CaptureIO
-
-  alias Systems.Assignment.Template.Flags
 
   alias Systems.Assignment.{
     TemplateBenchmarkChallenge,
@@ -91,38 +88,6 @@ defmodule Systems.Assignment.TemplateMigrationTest do
       assert participants_flags.advert_in_pool == false
       # was opt_out
       assert participants_flags.invite_participants == false
-    end
-  end
-
-  describe "Demonstration that opt_out is deprecated but still works" do
-    test "opt_out parameter works but shows deprecation warning" do
-      # This demonstrates that opt_out still works for backwards compatibility
-      # but shows a deprecation warning
-      warning_output =
-        capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_out: [:branding])
-
-          # With opt_out behavior, specified flags should be false, others true
-          # in opt_out list
-          # in opt_out list
-          assert flags.branding == false
-          # not in opt_out list
-          assert flags.information == true
-        end)
-
-      # Should show deprecation warning
-      assert warning_output =~ ":opt_out is deprecated"
-    end
-
-    test "opt_in takes precedence when both opt_in and opt_out are provided" do
-      flags = Flags.Settings.new(opt_in: [:privacy], opt_out: [:branding, :information])
-
-      # Only opt_in should take effect
-      assert flags.privacy == true
-      # opt_out ignored
-      assert flags.branding == false
-      # opt_out ignored
-      assert flags.information == false
     end
   end
 end

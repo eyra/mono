@@ -70,7 +70,7 @@ defmodule Core.MixProject do
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
        github: "populimited/bamboo_phoenix", ref: "d3cf4888cefd9ae9c5f5c2a386ed542b98e921b6"},
-      {:bamboo_ses, "== 0.4.5"},
+      {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "== 2.3.1"},
       {:bcrypt_elixir, "== 3.3.2"},
       {:cldr_utils, "== 2.28.3", override: true},
@@ -80,6 +80,7 @@ defmodule Core.MixProject do
       {:ex_aws_s3, "== 2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0-alpha.1"},
+      {:gen_smtp, "== 1.3.0"},
       {:gettext, "== 0.26.2"},
       {:hackney, "== 1.25.0"},
       {:httpoison, "== 2.2.3"},
@@ -93,16 +94,15 @@ defmodule Core.MixProject do
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
       {:oban, "== 2.20.1"},
-      # Fork fixes a dependency warning in the original repo
+      # Fork supports elixir 1.18.4
       {:packmatic, "~> 1.2.0",
-       github: "ftes/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
+       github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
       {:phoenix_ecto, "== 4.6.5"},
       {:phoenix_html, "== 3.3.4"},
       {:phoenix_inline_svg, "== 1.4.0"},
       {:phoenix_live_view, "== 1.1.8"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.7.21"},
-      {:plug_cowboy, "== 2.7.4"},
       {:postgrex, "== 0.21.1"},
       {:remote_ip, "== 1.2.0"},
       {:slugify, "== 1.3.1"},
@@ -111,8 +111,7 @@ defmodule Core.MixProject do
       {:tailwind, "== 0.3.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "== 0.6.2"},
       {:telemetry_poller, "== 1.3.0"},
-      {:timex, "~> 3.7",
-       github: "copia-wealth-studios/timex", ref: "cc649c7a586f1266b17d57aff3c6eb1a56116ca2"},
+      {:timex, "== 3.7.13"},
       {:typed_struct, "== 0.3.0"},
       {:tzdata, "== 1.1.3"},
       # i18n
@@ -120,8 +119,6 @@ defmodule Core.MixProject do
       {:ex_cldr_numbers, "== 2.35.1"},
       {:ex_cldr_dates_times, "== 2.22.0"},
       {:ex_cldr_plugs, "== 1.3.3"},
-      # Override Bypass dependency that is locked on Ranch 1.7.*
-      {:ranch, "== 1.8.1", override: true},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "== 2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
@@ -134,7 +131,6 @@ defmodule Core.MixProject do
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
-      {:progress_bar, "== 2.0.2", only: [:dev, :test]},
       {:phoenix_live_reload, "== 1.6.0", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},

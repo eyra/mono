@@ -14,7 +14,7 @@
     "trix": "2.1.15"
   },
   "devDependencies": {
-    "prettier": "2.8.8",
+    "prettier": "3.6.2",
     "prettier-plugin-eex": "0.6.0"
   }
 }
