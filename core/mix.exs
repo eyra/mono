@@ -70,7 +70,7 @@ defmodule Core.MixProject do
       # Fork supports Phoenix 1.7
       {:bamboo_phoenix,
        github: "populimited/bamboo_phoenix", ref: "d3cf4888cefd9ae9c5f5c2a386ed542b98e921b6"},
-      {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
+      {:bamboo_ses, github: "eyra/bamboo_ses", ref: "0f08fd0dd7f743a4c2b91fa9638a09b5774b7ae2"},
       {:bamboo, "== 2.3.1"},
       {:bcrypt_elixir, "== 3.3.2"},
       {:cldr_utils, "== 2.28.3", override: true},
