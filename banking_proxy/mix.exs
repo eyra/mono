@@ -36,7 +36,7 @@ defmodule BankingProxy.MixProject do
     [
       {:httpoison, "== 2.2.3"},
       {:jason, "== 1.4.4"},
-      {:ranch, "== 2.1.0"},
+      {:ranch, "== 2.2.0"},
       # Dev and test deps
       {:mox, "== 1.2.0", only: :test},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
