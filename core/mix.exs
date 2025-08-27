@@ -71,7 +71,7 @@ defmodule Core.MixProject do
       {:bamboo_phoenix,
        github: "populimited/bamboo_phoenix", ref: "d3cf4888cefd9ae9c5f5c2a386ed542b98e921b6"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
-      {:bamboo, "== 2.3.1"},
+      {:bamboo, "== 2.5.0"},
       {:bcrypt_elixir, "== 3.3.2"},
       {:cldr_utils, "== 2.28.3", override: true},
       {:csv, "== 2.5.0"},
