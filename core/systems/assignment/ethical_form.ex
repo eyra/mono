@@ -91,7 +91,7 @@ defmodule Systems.Assignment.EthicalForm do
 
   defp link_as_string(label, url) do
     label
-    |> Phoenix.HTML.Link.link(
+    |> link(
       class: "text-primary underline",
       target: "_blank",
       to: url

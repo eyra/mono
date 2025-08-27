@@ -73,27 +73,6 @@ defmodule Systems.Project.NodeModel do
              id: id,
              name: name
            },
-           {Project.NodePage, :item_card},
-           _user
-         ) do
-      path = ~p"/project/item/#{id}/content"
-
-      %{
-        type: :secondary,
-        id: id,
-        path: path,
-        title: name,
-        tags: [],
-        right_actions: [],
-        left_actions: []
-      }
-    end
-
-    defp vm(
-           %{
-             id: id,
-             name: name
-           },
            {Project.NodePage, :node_card},
            _user
          ) do
