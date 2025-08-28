@@ -13,6 +13,7 @@ defmodule Core.MixProject do
       consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
       deps: deps(),
+      listeners: [Phoenix.CodeReloader],
       # The main page in the docs
       docs: [
         main: "readme",
@@ -95,8 +96,7 @@ defmodule Core.MixProject do
       {:nimble_options, "== 1.1.1"},
       {:oban, "== 2.20.1"},
       # Fork supports elixir 1.18.4
-      {:packmatic, "~> 1.2.0",
-       github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
+      {:packmatic, github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
       {:phoenix_ecto, "== 4.6.5"},
       {:phoenix_html, "== 4.2.1"},
       {:phoenix_html_helpers, "== 1.0.1"},
@@ -104,6 +104,7 @@ defmodule Core.MixProject do
       {:phoenix_live_view, "== 1.1.8"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.0"},
+      {:plug_cowboy, "== 2.7.4"},
       {:postgrex, "== 0.21.1"},
       {:remote_ip, "== 1.2.0"},
       {:slugify, "== 1.3.1"},
