@@ -7,6 +7,7 @@ defmodule CoreWeb.Layouts.Website.Html do
   import CoreWeb.UI.Footer
 
   alias Frameworks.Pixel.Navigation
+  alias Phoenix.LiveView.JS
 
   attr(:user, :string, required: true)
   attr(:user_agent, :string, required: true)
@@ -20,15 +21,18 @@ defmodule CoreWeb.Layouts.Website.Html do
     ~H"""
     <div class="flex flex-row">
       <div class="flex-1">
-        <div
-          x-data="{native_menu: false, mobile_menu: false}"
-          @toggle-native-menu.window="native_menu = !native_menu"
-        >
+        <div>
+          <%!-- Invisible backdrop for clicking outside menu --%>
           <div
-            class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport"
-            x-cloak
-            x-show="mobile_menu"
-            @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
+            id="mobile-menu-backdrop"
+            class="fixed inset-0 z-20 hidden"
+            phx-click={JS.hide(to: "#mobile-menu") |> JS.hide(to: "#mobile-menu-backdrop")}
+          ></div>
+
+          <%!-- Mobile menu panel --%>
+          <div
+            id="mobile-menu"
+            class="fixed z-30 right-0 top-0 w-mobile-menu-width h-viewport hidden"
           >
             <Navigation.mobile_menu {@menus.mobile_menu} />
           </div>

@@ -167,25 +167,6 @@ defmodule Frameworks.Pixel.Button do
     """
   end
 
-  attr(:label, :string, required: true)
-  attr(:click, :string, required: true)
-  attr(:bg_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-white")
-
-  def primary_alpine(assigns) do
-    # FIXME: Deprecation notice: Use button.dynamic instead
-
-    ~H"""
-    <button
-      @click={@click}
-      class={"pt-15px pb-15px active:shadow-top4px active:pt-4 active:pb-14px leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@bg_color} #{@text_color}"}
-      type="button"
-    >
-      <%= @label %>
-    </button>
-    """
-  end
-
   attr(:to, :string, required: true)
   attr(:label, :string, required: true)
   attr(:icon, :string, required: true)
@@ -256,25 +237,6 @@ defmodule Frameworks.Pixel.Button do
   end
 
   attr(:label, :string, required: true)
-  attr(:click, :string, required: true)
-  attr(:border_color, :string, default: "border-primary")
-  attr(:text_color, :string, default: "text-primary")
-
-  def secondary_alpine(assigns) do
-    # FIXME: Deprecation notice: Use button.dynamic instead
-
-    ~H"""
-    <button
-      @click={@click}
-      class={"pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 leading-none font-button text-button focus:outline-none rounded pr-4 pl-4 #{@border_color} #{@text_color}"}
-      type="button"
-    >
-      <%= @label %>
-    </button>
-    """
-  end
-
-  attr(:label, :string, required: true)
   attr(:event, :string, required: true)
   attr(:color, :string, default: "text-delete")
   attr(:width, :string, default: "pl-4 pr-4")
@@ -296,7 +258,6 @@ defmodule Frameworks.Pixel.Button do
 
   attr(:label, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")
-  attr(:alpine_onclick, :string, default: "")
   attr(:target, :string, default: "")
 
   def submit(assigns) do
@@ -304,7 +265,6 @@ defmodule Frameworks.Pixel.Button do
 
     ~H"""
     <button
-      x-on:click={@alpine_onclick}
       class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
       type="submit"
       phx-target={@target}
@@ -342,7 +302,7 @@ defmodule Frameworks.Pixel.Button do
     <div
       id={@id}
       phx-hook="NativeWrapper"
-      @click={"nativeWrapperHook.toggleSidePanel(); $parent.overlay = #{@overlay?}"}
+      class="cursor-pointer"
     >
       <.action {@action}>
         <.face {@face} />

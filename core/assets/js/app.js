@@ -9,8 +9,6 @@
 //
 
 import { PDFViewer } from "./pdf_viewer";
-import "alpine-magic-helpers/dist/component";
-import Alpine from "alpinejs";
 import "phoenix_html";
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
@@ -68,6 +66,11 @@ const NativeWrapper = {
   mounted() {
     console.log("NativeWrapper mounted");
     window.nativeWrapperHook = this;
+
+    // Add click event listener to handle native panel toggle
+    this.el.addEventListener("click", () => {
+      this.toggleSidePanel();
+    });
   },
   toggleSidePanel() {
     console.log("NativeWrapper::toggleSidePanel");
@@ -105,12 +108,8 @@ let Hooks = {
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
-      if (from.__x) {
-        window.Alpine.clone(from.__x, to);
-      } else {
-        LiveContent.onBeforeElUpdated(from, to);
-        TabBar.onBeforeElUpdated(from, to);
-      }
+      LiveContent.onBeforeElUpdated(from, to);
+      TabBar.onBeforeElUpdated(from, to);
     },
   },
   params: {
