@@ -7,7 +7,7 @@
     "@bundled-es-modules/pdfjs-dist": "3.6.172-alpha.1",
     "alpine-magic-helpers": "1.2.2",
     "alpinejs": "2.8.2",
-    "blurhash": "1.1.5",
+    "blurhash": "2.0.5",
     "lodash": "4.17.21",
     "pdfjs-dist": "3.11.174",
     "pinch-zoom-js": "2.3.5",
