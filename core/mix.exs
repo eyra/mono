@@ -111,7 +111,7 @@ defmodule Core.MixProject do
       {:sqids, "== 0.2.1"},
       {:statistics, "== 0.6.3"},
       {:tailwind, "== 0.3.1", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "== 0.6.2"},
+      {:telemetry_metrics, "== 1.1.0"},
       {:telemetry_poller, "== 1.3.0"},
       {:timex, "== 3.7.13"},
       {:typed_struct, "== 0.3.0"},
@@ -136,7 +136,7 @@ defmodule Core.MixProject do
       {:phoenix_live_reload, "== 1.6.0", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
-      {:table_rex, "== 3.2.0"},
+      {:table_rex, "== 4.1.0"},
       {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
       {:browser, "== 0.5.5"}
     ]

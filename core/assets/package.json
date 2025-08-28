@@ -5,7 +5,7 @@
   "scripts": {},
   "dependencies": {
     "@bundled-es-modules/pdfjs-dist": "3.6.172-alpha.1",
-    "blurhash": "1.1.5",
+    "blurhash": "2.0.5",
     "lodash": "4.17.21",
     "pdfjs-dist": "3.11.174",
     "pinch-zoom-js": "2.3.5",
