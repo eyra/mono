@@ -136,7 +136,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "import_session.prompting.errors_title"
+msgid "import_session.prompting.warnings_title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy

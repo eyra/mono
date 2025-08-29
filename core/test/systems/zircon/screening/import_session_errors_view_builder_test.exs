@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
+defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
   use ExUnit.Case
-  alias Systems.Zircon.Screening.ImportSessionErrorsViewBuilder
+  alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
   describe "view_model/2" do
     test "extracts errors from entries and sets up pagination" do
@@ -23,7 +23,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.errors) == 2
       assert result.filtered_errors |> Enum.count() == 2
@@ -51,7 +51,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.errors) == 11
       assert result.show_action_bar? == true
@@ -76,7 +76,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       # Test first page
       assigns = %{page_index: 0}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.page_errors) == 10
       assert result.page_index == 0
@@ -84,7 +84,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       # Test second page
       assigns = %{page_index: 1}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.page_errors) == 5
       assert result.page_index == 1
@@ -113,7 +113,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       # Search for "author"
       assigns = %{query: ["author"]}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert result.filtered_errors |> Enum.count() == 1
       assert result.error_count == 1
@@ -147,7 +147,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       # Search for "error" AND "format" - both must be present
       assigns = %{query: ["error", "format"]}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       # Only the first error has both "error" and "format" in the text
       assert result.filtered_errors |> Enum.count() == 1
@@ -168,7 +168,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       }
 
       assigns = %{query: ["parse"]}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert result.filtered_errors |> Enum.count() == 1
     end
@@ -192,12 +192,12 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       # Test with nil query
       assigns = %{query: nil}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
       assert result.filtered_errors |> Enum.count() == 2
 
       # Test with empty list query
       assigns = %{query: []}
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
       assert result.filtered_errors |> Enum.count() == 2
     end
 
@@ -209,7 +209,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert result.search_bar != nil
       assert result.search_bar.implementation == Frameworks.Pixel.SearchBar
@@ -240,7 +240,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.errors) == 3
       # All errors should be properly extracted regardless of format
@@ -267,7 +267,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.errors) == 2
 
@@ -287,7 +287,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert result.errors == []
       assert result.filtered_errors == []
@@ -317,7 +317,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
       assigns = %{query: ["error"]}
 
       # Should not crash when filtering with nil values
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert is_list(result.filtered_errors)
       # First error should match the query "error"
@@ -341,7 +341,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionErrorsViewBuilder.view_model(session, assigns)
+      result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert result.page_count == 2
       assert result.error_count == 20

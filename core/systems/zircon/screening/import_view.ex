@@ -69,10 +69,6 @@ defmodule Systems.Zircon.Screening.ImportView do
   end
 
   def handle_view_model_updated(socket) do
-    Logger.info("ImportView: handle_view_model_updated called - UI should update now")
-    Logger.info("ImportView: PID receiving update: #{inspect(self())}")
-    Logger.info("ImportView: Current model ID: #{socket.assigns.model.id}")
-
     # Just restore file selector state, the Observatory framework will handle the view model update
     # ViewBuilder determines the correct filename based on active session or latest uploaded file
     update_file_selector(socket)
@@ -140,7 +136,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-warnings",
-        Systems.Zircon.Screening.ImportSessionErrorsView,
+        Systems.Zircon.Screening.ImportSessionWarningsView,
         session: [session: session, title: title, header: filename],
         style: :full
       )

@@ -19,8 +19,8 @@ defmodule Systems.Zircon.Presenter do
   end
 
   @impl true
-  def view_model(Zircon.Screening.ImportSessionErrorsView, model, assigns) do
-    Zircon.Screening.ImportSessionErrorsViewBuilder.view_model(model, assigns)
+  def view_model(Zircon.Screening.ImportSessionWarningsView, model, assigns) do
+    Zircon.Screening.ImportSessionWarningsViewBuilder.view_model(model, assigns)
   end
 
   @impl true

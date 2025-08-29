@@ -294,8 +294,8 @@ defmodule Systems.Paper.RISLineTrackingTest do
   end
 
   describe "error display in UI layer" do
-    test "ImportSessionErrorsViewBuilder extracts message from structured error" do
-      alias Systems.Zircon.Screening.ImportSessionErrorsViewBuilder
+    test "ImportSessionWarningsViewBuilder extracts message from structured error" do
+      alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
       # Session with structured errors
       session = %{
@@ -323,7 +323,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
         errors: []
       }
 
-      view_model = ImportSessionErrorsViewBuilder.view_model(session, %{})
+      view_model = ImportSessionWarningsViewBuilder.view_model(session, %{})
 
       # Check the error count directly from the view model
       assert view_model.error_count == 2
@@ -337,8 +337,8 @@ defmodule Systems.Paper.RISLineTrackingTest do
       assert error2.message == "Missing required field"
     end
 
-    test "ImportSessionErrorsViewBuilder handles mixed error formats" do
-      alias Systems.Zircon.Screening.ImportSessionErrorsViewBuilder
+    test "ImportSessionWarningsViewBuilder handles mixed error formats" do
+      alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
       session = %{
         status: :activated,
@@ -361,7 +361,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
         errors: ["Session-level error"]
       }
 
-      view_model = ImportSessionErrorsViewBuilder.view_model(session, %{})
+      view_model = ImportSessionWarningsViewBuilder.view_model(session, %{})
 
       # Check the error count directly from the view model
       assert view_model.error_count == 2

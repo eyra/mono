@@ -91,8 +91,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       stack: stack,
       active_filename: active_file_info.filename,
       active_file_url: active_file_info.url,
-      modal_title: dgettext("eyra-zircon", "import_view.modal.importing_details"),
-      modal_warnings_title: dgettext("eyra-zircon", "import_session.prompting.errors_title"),
+      modal_warnings_title: dgettext("eyra-zircon", "import_session.prompting.warnings_title"),
       modal_new_papers_title:
         dgettext("eyra-zircon", "import_session.prompting.new_papers_title"),
       modal_duplicates_title: dgettext("eyra-zircon", "import_session.prompting.duplicates_title")

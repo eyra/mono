@@ -136,8 +136,8 @@ msgstr[0] "1 new paper"
 msgstr[1] "%{count} new papers"
 
 #, elixir-autogen, elixir-format
-msgid "import_session.prompting.errors_title"
-msgstr "Errors"
+msgid "import_session.prompting.warnings_title"
+msgstr "Warnings"
 
 #, elixir-autogen, elixir-format
 msgid "import_session.prompting.new_papers_title"

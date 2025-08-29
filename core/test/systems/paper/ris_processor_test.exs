@@ -425,7 +425,7 @@ defmodule Systems.Paper.RISProcessorTest do
 
     test "intrinsic duplicate errors have proper structure for display", %{paper_set: paper_set} do
       # This test ensures intrinsic duplicate errors have the same structure as parsing errors
-      # so they can be displayed properly in ImportSessionErrorsView
+      # so they can be displayed properly in ImportSessionWarningsView
       alias Systems.Paper.RISParser
 
       ris_content = """

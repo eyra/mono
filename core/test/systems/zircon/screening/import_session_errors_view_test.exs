@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
+defmodule Systems.Zircon.Screening.ImportSessionWarningsViewTest do
   use CoreWeb.ConnCase
   import Phoenix.LiveViewTest
 
@@ -62,7 +62,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
       }
     end
 
-    test "ImportSessionErrorsView can be mounted with session parameter", %{
+    test "ImportSessionWarningsView can be mounted with session parameter", %{
       conn: conn,
       import_session: import_session
     } do
@@ -76,15 +76,15 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
 
       # Mount the view with full session object (as fixed in ImportView)
       assert {:ok, _view, _html} =
-               live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
+               live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
                  session: %{
                    "session" => import_session,
-                   "title" => "Errors"
+                   "title" => "Warnings"
                  }
                )
     end
 
-    test "ImportSessionErrorsView displays errors when opened with session", %{
+    test "ImportSessionWarningsView displays errors when opened with session", %{
       conn: conn,
       import_session: import_session
     } do
@@ -95,10 +95,10 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
 
       # Mount the view with full session object
       {:ok, view, html} =
-        live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
+        live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
           session: %{
             "session" => import_session,
-            "title" => "Errors"
+            "title" => "Warnings"
           }
         )
 
@@ -167,7 +167,7 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
       }
     end
 
-    test "ImportSessionErrorsView displays intrinsic duplicate errors correctly", %{
+    test "ImportSessionWarningsView displays intrinsic duplicate errors correctly", %{
       conn: conn,
       import_session: import_session
     } do
@@ -178,10 +178,10 @@ defmodule Systems.Zircon.Screening.ImportSessionErrorsViewTest do
 
       # Mount the view with full session object
       {:ok, view, html} =
-        live_isolated(conn, Systems.Zircon.Screening.ImportSessionErrorsView,
+        live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
           session: %{
             "session" => import_session,
-            "title" => "Errors"
+            "title" => "Warnings"
           }
         )
 

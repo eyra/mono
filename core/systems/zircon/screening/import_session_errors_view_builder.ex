@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.ImportSessionErrorsViewBuilder do
+defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Paper.RISEntry

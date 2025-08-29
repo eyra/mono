@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.ImportSessionErrorsView do
+defmodule Systems.Zircon.Screening.ImportSessionWarningsView do
   use CoreWeb, :embedded_live_view
   use Gettext, backend: CoreWeb.Gettext
 
