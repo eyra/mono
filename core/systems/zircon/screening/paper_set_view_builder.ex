@@ -14,9 +14,16 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
     papers = filter_papers(paper_set.papers, query)
     paper_count = papers |> Enum.count()
     page_count = if paper_count == 0, do: 0, else: Float.ceil(paper_count / @page_size) |> round()
-    # Handle negative page_index by treating it as 0
-    safe_page_index = if page_index < 0, do: 0, else: page_index
-    page = papers |> Enum.slice(safe_page_index * @page_size, @page_size)
+
+    # Adjust page_index if it's out of bounds after deletion
+    adjusted_page_index =
+      cond do
+        page_index < 0 -> 0
+        page_index >= page_count and page_count > 0 -> page_count - 1
+        true -> page_index
+      end
+
+    page = papers |> Enum.slice(adjusted_page_index * @page_size, @page_size)
 
     search_bar =
       LiveNest.Element.prepare_live_component(:search_bar, Pixel.SearchBar,
@@ -27,7 +34,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
       )
 
     %{
-      page_index: page_index,
+      page_index: adjusted_page_index,
       page_count: page_count,
       page: page,
       search_bar: search_bar,

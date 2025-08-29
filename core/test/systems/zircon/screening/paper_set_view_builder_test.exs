@@ -84,16 +84,19 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
       assert result.page_count == 3
     end
 
-    test "returns empty page for out-of-bounds page_index" do
+    test "adjusts out-of-bounds page_index to last valid page" do
       papers = create_test_papers(15)
       paper_set = %{papers: papers}
-      # Way beyond available pages
+      # Way beyond available pages (only 0 and 1 exist)
       assigns = %{page_index: 5}
 
       result = PaperSetViewBuilder.view_model(paper_set, assigns)
 
-      assert result.page == []
-      assert result.page_index == 5
+      # Should adjust to last valid page (page 1)
+      assert result.page_index == 1
+      # Should show the last page content
+      assert length(result.page) == 5
+      assert hd(result.page).title == "Paper 11"
     end
 
     test "correctly slices papers for each page" do
@@ -308,6 +311,33 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
   end
 
   describe "edge cases and error handling" do
+    test "adjusts page_index when last page becomes empty after deletion" do
+      # Create 21 papers (3 pages: 10, 10, 1)
+      papers = create_test_papers(21)
+      paper_set = %{papers: papers}
+
+      # User is on page 2 (the last page with 1 paper)
+      assigns = %{page_index: 2}
+
+      result = PaperSetViewBuilder.view_model(paper_set, assigns)
+      assert result.page_index == 2
+      assert length(result.page) == 1
+      assert result.page_count == 3
+
+      # Simulate deletion of the last paper (Paper 21)
+      remaining_papers = Enum.take(papers, 20)
+      updated_paper_set = %{papers: remaining_papers}
+
+      # View model is rebuilt with same page_index
+      result_after_delete = PaperSetViewBuilder.view_model(updated_paper_set, assigns)
+
+      # BUG: page_index should be adjusted to 1 (last valid page)
+      # but currently stays at 2 (out of bounds)
+      assert result_after_delete.page_count == 2, "Should have 2 pages after deletion"
+      assert result_after_delete.page_index == 1, "Should adjust to last valid page (1)"
+      assert length(result_after_delete.page) == 10, "Should show last page with 10 papers"
+    end
+
     test "handles empty paper set" do
       paper_set = %{papers: []}
 
@@ -325,8 +355,10 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
 
       result = PaperSetViewBuilder.view_model(paper_set, assigns)
 
-      assert result.page == []
-      assert result.page_index == 1000
+      # Should adjust to last valid page (page 0 since only 5 papers = 1 page)
+      assert result.page_index == 0
+      assert length(result.page) == 5
+      assert hd(result.page).title == "Paper 1"
     end
 
     test "handles negative page_index" do
@@ -336,8 +368,8 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
 
       result = PaperSetViewBuilder.view_model(paper_set, assigns)
 
-      # Negative index is preserved in result but treated as 0 for slicing
-      assert result.page_index == -1
+      # Negative index is adjusted to 0
+      assert result.page_index == 0
       # Should return first page
       assert length(result.page) == 10
       assert hd(result.page).title == "Paper 1"
