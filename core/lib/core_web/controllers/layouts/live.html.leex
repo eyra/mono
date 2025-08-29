@@ -1,9 +1,8 @@
 <main class="w-full">
   <div>
+    <%= if Phoenix.Flash.get(@flash, :error) do %>
     <div
-        x-cloak
-        x-data="{ }"
-        x-bind:class="{'hidden': <%= Phoenix.Flash.get(@flash, :error) === nil %>}"
+        id="flash-error"
         class="fixed z-20 top-6 w-full pointer-events-none"
     >
       <div class="flex flex-row items-center justify-center" >
@@ -32,10 +31,10 @@
         </div>
       </div>
     </div>
+    <% end %>
+    <%= if Phoenix.Flash.get(@flash, :info) do %>
     <div
-        x-cloak
-        x-data="{ }"
-        x-bind:class="{'hidden': <%= Phoenix.Flash.get(@flash, :info) === nil %>}"
+        id="flash-info"
         class="fixed z-20 bottom-6 right-6 pointer-events-none"
     >
       <div class="flex flex-row" >
@@ -63,6 +62,7 @@
         </div>
       </div>
     </div>
+    <% end %>
   </div>
   <div class="h-full">
     <%= @inner_content %>
