@@ -129,7 +129,7 @@ defmodule Core.MixProject do
       {:ex_machina, "== 2.8.0", only: :test},
       {:file_system, "== 1.1.0", only: [:dev, :test]},
       {:bypass, "== 2.1.0", only: :test},
-      {:lazy_html, "== 0.1.6", only: :test},
+      {:lazy_html, "== 0.1.7", only: :test},
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
