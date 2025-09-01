@@ -23,6 +23,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     paper_count = paper_set.papers |> Enum.count()
     import_status = determine_import_status(tool)
 
+    # Determine if we should show a flash error
+    flash_error = determine_flash_error(tool, import_status, assigns)
+
     button_config = build_button_config(import_status)
 
     paper_set_view =
@@ -94,7 +97,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       modal_warnings_title: dgettext("eyra-zircon", "import_session.prompting.warnings_title"),
       modal_new_papers_title:
         dgettext("eyra-zircon", "import_session.prompting.new_papers_title"),
-      modal_duplicates_title: dgettext("eyra-zircon", "import_session.prompting.duplicates_title")
+      modal_duplicates_title:
+        dgettext("eyra-zircon", "import_session.prompting.duplicates_title"),
+      flash_error: flash_error
     }
 
     # Add prompting_session_id if we have a prompting summary
@@ -409,7 +414,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       # Calculate percentage (0-100)
       round(current / total * 100)
     else
-      nil
+      # Start at 0% when no progress data
+      0
     end
   end
 
@@ -590,5 +596,28 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       end
 
     buttons
+  end
+
+  defp determine_flash_error(%{id: tool_id}, import_status, assigns) do
+    # Show flash error only on transition: when we HAD an active session and now we don't
+    # This prevents showing old errors repeatedly
+
+    old_vm = Map.get(assigns, :vm, %{})
+    had_active_session = Map.get(old_vm, :active_filename) != nil
+
+    if had_active_session and import_status.active_session == nil do
+      # We just transitioned from active to inactive - check if it failed
+      paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool_id)
+
+      case Paper.Public.get_most_recent_import_session(paper_set.id) do
+        %{status: :failed, errors: [error | _]} ->
+          error
+
+        _ ->
+          nil
+      end
+    else
+      nil
+    end
   end
 end

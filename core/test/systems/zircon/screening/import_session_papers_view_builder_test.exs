@@ -23,7 +23,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       # page_papers contains current page items, paper_count is total after filtering
       assert length(result.page_papers) == 2
@@ -50,7 +54,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       # page_papers only has current page (10 items max)
       assert length(result.page_papers) == 10
@@ -79,7 +87,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Test first page
       assigns = %{page_index: 0}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert length(result.page_papers) == 10
       assert result.page_index == 0
@@ -87,7 +100,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Test second page
       assigns = %{page_index: 1}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert length(result.page_papers) == 5
       assert result.page_index == 1
@@ -107,7 +125,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Search for "learning"
       assigns = %{query: ["learning"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.paper_count == 2
       # Check that page_papers contains the right items
@@ -131,7 +154,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Search for "smith"
       assigns = %{query: ["smith"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.paper_count == 2
     end
@@ -150,7 +178,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Search for "1234"
       assigns = %{query: ["1234"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.paper_count == 2
     end
@@ -169,7 +202,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Search for "machine" AND "research" - both must be present
       assigns = %{query: ["machine", "research"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       # Only the first paper has both "machine" and "research"
       assert result.paper_count == 1
@@ -186,12 +224,22 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
       }
 
       assigns = %{query: ["machine"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.paper_count == 1
 
       assigns = %{query: ["smith"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.paper_count == 1
     end
@@ -209,12 +257,24 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       # Test with nil query
       assigns = %{query: nil}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
+
       assert result.paper_count == 2
 
       # Test with empty list query
       assigns = %{query: []}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
+
       assert result.paper_count == 2
     end
 
@@ -226,7 +286,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.search_bar != nil
       assert result.search_bar.implementation == Frameworks.Pixel.SearchBar
@@ -249,7 +313,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert length(result.page_papers) == 2
 
@@ -271,10 +339,162 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
       }
 
       assigns = %{query: ["paper"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       # Both papers should be found regardless of key type
       assert result.paper_count == 2
+    end
+  end
+
+  describe "filter parameter" do
+    test "filters entries by 'duplicates' filter when specified" do
+      entries = [
+        %{"status" => "new", "title" => "New Paper 1"},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 1", "paper_id" => 123},
+        %{"status" => "new", "title" => "New Paper 2"},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 2", "paper_id" => 124},
+        %{"status" => "error", "error" => "Parse error"}
+      ]
+
+      session = %{
+        entries: entries,
+        reference_file: %{file: %{name: "test.ris"}}
+      }
+
+      # Test with duplicates filter
+      assigns = %{}
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: "duplicates"},
+          assigns
+        )
+
+      # Should only show duplicates
+      assert length(result.page_papers) == 2
+      assert result.paper_count == 2
+
+      assert Enum.all?(result.page_papers, fn paper ->
+               paper.status == "duplicate"
+             end)
+    end
+
+    test "filters entries by 'new' filter by default" do
+      entries = [
+        %{"status" => "new", "title" => "New Paper 1"},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 1"},
+        %{"status" => "new", "title" => "New Paper 2"},
+        %{"status" => "error", "error" => "Parse error"}
+      ]
+
+      session = %{
+        entries: entries,
+        reference_file: %{file: %{name: "test.ris"}}
+      }
+
+      # Test without filter (should default to "new")
+      assigns = %{}
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
+
+      # Should only show new papers
+      assert length(result.page_papers) == 2
+      assert result.paper_count == 2
+
+      assert Enum.all?(result.page_papers, fn paper ->
+               paper.status == "new"
+             end)
+    end
+
+    test "shows correct papers when 0 new papers but duplicates exist" do
+      # This is the key test case for the bug
+      entries = [
+        %{"status" => "duplicate", "title" => "Duplicate Paper 1", "paper_id" => 123},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 2", "paper_id" => 124},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 3", "paper_id" => 125},
+        %{"status" => "error", "error" => "Parse error"}
+      ]
+
+      session = %{
+        entries: entries,
+        reference_file: %{file: %{name: "test.ris"}}
+      }
+
+      # Test with "new" filter - should show 0 papers
+      assigns = %{}
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
+
+      assert result.paper_count == 0
+      assert result.page_papers == []
+
+      # Test with "duplicates" filter - should show 3 papers
+      assigns = %{}
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: "duplicates"},
+          assigns
+        )
+
+      assert result.paper_count == 3
+      assert length(result.page_papers) == 3
+
+      assert Enum.all?(result.page_papers, fn paper ->
+               paper.status == "duplicate"
+             end)
+    end
+
+    test "REPRODUCES BUG: filter not passed correctly shows new papers when duplicates clicked" do
+      # This test reproduces the actual bug where the filter isn't being passed correctly
+      # When duplicates button is clicked but filter doesn't get through, it defaults to "new"
+      entries = [
+        %{"status" => "duplicate", "title" => "Duplicate Paper 1", "paper_id" => 123},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 2", "paper_id" => 124},
+        %{"status" => "duplicate", "title" => "Duplicate Paper 3", "paper_id" => 125}
+      ]
+
+      session = %{
+        entries: entries,
+        reference_file: %{file: %{name: "test.ris"}}
+      }
+
+      # Simulate what happens when the filter doesn't get passed through correctly
+      # The ViewBuilder would receive empty assigns or assigns without filter
+      # No filter in assigns!
+      assigns = %{}
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
+
+      # Bug behavior: defaults to "new" filter, shows 0 papers
+      # This should FAIL if we want duplicates but it shows new papers (0)
+      assert result.paper_count == 0, "Should show 0 papers with default 'new' filter"
+      assert result.page_papers == []
+
+      # The description would also be wrong - it would show "New papers extracted from file"
+      # when it should show "Duplicates found in file"
+      assert result.description =~ "New papers",
+             "Description shows new papers text instead of duplicates"
+
+      # THIS IS THE BUG: When clicking duplicates button (2nd button when 0 new papers),
+      # the filter doesn't get set to "duplicates", so it defaults to "new" and shows 0 papers
     end
   end
 
@@ -287,7 +507,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.page_papers == []
       assert result.paper_count == 0
@@ -314,7 +538,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
       assigns = %{query: ["smith"]}
 
       # Should not crash when filtering with nil values
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert is_list(result.page_papers)
       # Only the one with "Smith" in authors
@@ -335,7 +563,11 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
 
       assigns = %{}
 
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       assert result.page_count == 2
       assert result.paper_count == 20
@@ -359,7 +591,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
       }
 
       assigns = %{query: ["machine"]}
-      result = ImportSessionPapersViewBuilder.view_model(session, assigns)
+
+      result =
+        ImportSessionPapersViewBuilder.view_model(
+          %{session: session, filter: Map.get(assigns, :filter, "new")},
+          assigns
+        )
 
       # Should only find the paper with "machine" in the title (visible field)
       assert result.paper_count == 1

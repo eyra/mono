@@ -69,9 +69,20 @@ defmodule Systems.Zircon.Screening.ImportView do
   end
 
   def handle_view_model_updated(socket) do
-    # Just restore file selector state, the Observatory framework will handle the view model update
-    # ViewBuilder determines the correct filename based on active session or latest uploaded file
-    update_file_selector(socket)
+    socket = update_file_selector(socket)
+
+    # Check if the ViewBuilder determined we need to show a flash error
+    flash_error = Map.get(socket.assigns.vm, :flash_error)
+
+    case flash_error do
+      nil ->
+        socket
+
+      error_message ->
+        # Use Pixel.Flash.push_error to send flash to parent LiveView
+        Frameworks.Pixel.Flash.push_error(socket, error_message)
+        socket
+    end
   end
 
   @impl true

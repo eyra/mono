@@ -87,7 +87,7 @@ defmodule Systems.Paper.RISParserTest do
       [{:error, {error_message, raw}}] = references
 
       assert error_message.message ==
-               "Missing TY (Type of Reference) field - this is required for all RIS records"
+               "This file is missing required reference type information. Please upload a RIS bibliography file instead."
 
       assert error_message.type == :validation_error
       assert error_message.line_number == 1
@@ -318,7 +318,7 @@ defmodule Systems.Paper.RISParserTest do
       [{:error, {error, _raw}}] = references
       assert error.type == :parse_error
       assert error.line_number == 3
-      assert error.message =~ "Invalid RIS line"
+      assert error.message =~ "invalid formatting"
     end
 
     test "handles empty values" do

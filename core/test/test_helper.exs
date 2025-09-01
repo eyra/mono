@@ -39,6 +39,3 @@ Application.put_env(:core, BankingClient, client: BankingClient.MockClient)
 
 Mox.defmock(Systems.Storage.MockBackend, for: Systems.Storage.Backend)
 Mox.defmock(Systems.Storage.BuiltIn.MockSpecial, for: Systems.Storage.BuiltIn.Special)
-
-Mox.defmock(Systems.Paper.RISFetcherMock, for: Systems.Paper.RISFetcher)
-Application.put_env(:core, :ris_fetcher_module, Systems.Paper.RISFetcherMock)

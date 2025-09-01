@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "ris.error.invalid_line_format"
-msgstr "Invalid RIS line format"
+msgstr "This file contains invalid formatting. Please upload a RIS bibliography file instead."
 
 #, elixir-autogen, elixir-format
 msgid "ris.error.missing_type_field"
-msgstr "Missing TY (Type of Reference) field - this is required for all RIS records"
+msgstr "This file is missing required reference type information. Please upload a RIS bibliography file instead."
 
 #, elixir-autogen, elixir-format
 msgid "ris.error.unsupported_type"
@@ -26,3 +26,39 @@ msgstr "Unsupported reference type. Supported types are: %{supported_types}"
 #, elixir-autogen, elixir-format
 msgid "ris.error.duplicate_paper_in_file"
 msgstr "Duplicate paper in file"
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.binary_file_detected"
+msgstr "This appears to be an image or document file. Please upload a RIS bibliography file instead."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.file_too_large"
+msgstr "The file is too large. Please upload a file smaller than %{max_size}."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_content"
+msgstr "The file could not be read. Please check the file and try again."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_ris_structure"
+msgstr "This doesn't appear to be a valid bibliography file. Please upload a RIS bibliography file instead."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_text_encoding"
+msgstr "The file contains invalid characters. Please save it as a plain text file and try again."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.missing_ris_end_marker"
+msgstr "This file appears to be incomplete. Please upload a complete RIS bibliography file instead."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.missing_ris_header"
+msgstr "This doesn't appear to be a RIS file. Please upload a RIS bibliography file instead."
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.validation_timeout"
+msgstr "File validation timed out. The file may be too complex or malformed"
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.not_valid_ris_file"
+msgstr "This doesn't appear to be a valid RIS file. Please upload a RIS bibliography file instead."

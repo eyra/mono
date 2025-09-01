@@ -69,6 +69,9 @@ defmodule Systems.Paper.RISParser do
     @keyword_tag => :keywords
   }
 
+  # Maximum number of lines to process (supports ~100,000 papers with ~15 lines each)
+  @max_lines 1_500_000
+
   @doc """
   Parse RIS content into structured data.
 
@@ -76,11 +79,23 @@ defmodule Systems.Paper.RISParser do
   Each reference includes the raw RIS text for that reference.
   """
   def parse_content(ris_content) when is_binary(ris_content) do
-    ris_content
-    |> String.split(~r{(\r\n|\r|\n)})
-    # Add line numbers starting from 1
-    |> Enum.with_index(1)
-    |> Enum.reject(fn {line, _} -> line == "" end)
+    lines =
+      ris_content
+      |> String.split(~r{(\r\n|\r|\n)})
+      # Limit number of lines processed
+      |> Enum.take(@max_lines)
+      # Add line numbers starting from 1
+      |> Enum.with_index(1)
+      |> Enum.reject(fn {line, _} -> line == "" end)
+
+    # Log warning if we hit the line limit
+    if length(lines) >= @max_lines do
+      Logger.warning(
+        "RIS file exceeded maximum line limit of #{@max_lines}. File may be truncated."
+      )
+    end
+
+    lines
     |> chunk_references()
     |> Enum.map(&parse_reference/1)
   end

@@ -56,4 +56,44 @@ defmodule Systems.Content.S3 do
     # Allow mocking
     Access.get(s3_settings(), :s3_backend, ExAws)
   end
+
+  @doc """
+  Stream file content from S3 in chunks without loading into memory.
+  Returns {:ok, stream} or {:error, reason}
+  """
+  def stream(path) do
+    bucket = Access.fetch!(s3_settings(), :bucket)
+
+    # Extract object key from path/URL
+    object_key =
+      if String.contains?(path, bucket) do
+        # Full S3 URL - extract key from URL
+        uri = URI.parse(path)
+        String.trim_leading(uri.path, "/")
+      else
+        # Just the filename/key
+        object_key(path)
+      end
+
+    # Create S3 download stream with configurable chunk size
+    chunk_size = get_stream_chunk_size()
+
+    stream =
+      ExAws.S3.download_file(bucket, object_key, :memory, chunk_size: chunk_size)
+      |> ExAws.stream!(backend())
+      |> Stream.map(fn
+        {:ok, chunk} -> chunk
+        {:error, reason} -> throw({:error, reason})
+      end)
+
+    {:ok, stream}
+  rescue
+    error ->
+      {:error, "Failed to stream from S3: #{inspect(error)}"}
+  end
+
+  defp get_stream_chunk_size do
+    Application.fetch_env!(:core, :paper)
+    |> Keyword.fetch!(:ris_stream_chunk_size)
+  end
 end

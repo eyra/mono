@@ -35,14 +35,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure small batch size for testing
-      original_batch_size = Application.get_env(:core, :paper)[:import_batch_size]
-      Application.put_env(:core, :paper, import_batch_size: 5, import_batch_timeout: 30_000)
+      original_config = Application.get_env(:core, :paper)
+
+      updated_config =
+        Keyword.merge(original_config, import_batch_size: 5, import_batch_timeout: 30_000)
+
+      Application.put_env(:core, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper,
-          import_batch_size: original_batch_size,
-          import_batch_timeout: 30_000
-        )
+        Application.put_env(:core, :paper, original_config)
       end)
 
       # Create reference file with file association
@@ -128,14 +129,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure small batch size
-      original_batch_size = Application.get_env(:core, :paper)[:import_batch_size]
-      Application.put_env(:core, :paper, import_batch_size: 3, import_batch_timeout: 30_000)
+      original_config = Application.get_env(:core, :paper)
+
+      updated_config =
+        Keyword.merge(original_config, import_batch_size: 3, import_batch_timeout: 30_000)
+
+      Application.put_env(:core, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper,
-          import_batch_size: original_batch_size,
-          import_batch_timeout: 30_000
-        )
+        Application.put_env(:core, :paper, original_config)
       end)
 
       # Create some existing papers (duplicates)
@@ -235,14 +237,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       # This test simulates checking the progress message at different stages
 
       # Configure very small batch size
-      original_batch_size = Application.get_env(:core, :paper)[:import_batch_size]
-      Application.put_env(:core, :paper, import_batch_size: 2, import_batch_timeout: 30_000)
+      original_config = Application.get_env(:core, :paper)
+
+      updated_config =
+        Keyword.merge(original_config, import_batch_size: 2, import_batch_timeout: 30_000)
+
+      Application.put_env(:core, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper,
-          import_batch_size: original_batch_size,
-          import_batch_timeout: 30_000
-        )
+        Application.put_env(:core, :paper, original_config)
       end)
 
       # Create reference file with file association
@@ -329,14 +332,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure batch size
-      original_batch_size = Application.get_env(:core, :paper)[:import_batch_size]
-      Application.put_env(:core, :paper, import_batch_size: 5, import_batch_timeout: 30_000)
+      original_config = Application.get_env(:core, :paper)
+
+      updated_config =
+        Keyword.merge(original_config, import_batch_size: 5, import_batch_timeout: 30_000)
+
+      Application.put_env(:core, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper,
-          import_batch_size: original_batch_size,
-          import_batch_timeout: 30_000
-        )
+        Application.put_env(:core, :paper, original_config)
       end)
 
       file = Factories.insert!(:content_file, %{name: "test.ris"})

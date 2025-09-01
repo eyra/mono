@@ -45,6 +45,13 @@ config :core, Core.Repo,
 config :bcrypt_elixir,
   log_rounds: 4
 
+# Paper system configuration for tests
+config :core, :paper,
+  # Use smaller file size limit for tests (10MB)
+  ris_max_file_size: 10_485_760,
+  # Use smaller chunk size for tests (1KB)
+  ris_stream_chunk_size: 1_024
+
 config :core, CoreWeb.Endpoint,
   http: [port: 4002],
   force_ssl: false,

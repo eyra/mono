@@ -22,7 +22,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
 
       assert error.type == :parse_error
       assert error.line_number == 3
-      assert error.message =~ "Invalid RIS line"
+      assert error.message =~ "invalid formatting"
     end
 
     test "tracks line number for missing TY field" do
@@ -41,7 +41,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
       assert error.type == :validation_error
       # First line of the reference
       assert error.line_number == 1
-      assert error.message =~ "Missing TY"
+      assert error.message =~ "missing required reference type"
     end
 
     test "tracks line numbers for multiple errors in different references" do
@@ -69,12 +69,12 @@ defmodule Systems.Paper.RISLineTrackingTest do
 
       assert error1.type == :validation_error
       assert error1.line_number == 1
-      assert error1.message =~ "Missing TY"
+      assert error1.message =~ "missing required reference type"
 
       # Second error - invalid line format
       assert error2.type == :parse_error
       assert error2.line_number == 7
-      assert error2.message =~ "Invalid RIS line"
+      assert error2.message =~ "invalid formatting"
 
       # Third error - unsupported type
       assert error3.type == :validation_error
@@ -100,7 +100,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
 
       assert error.type == :parse_error
       assert error.line_number == 4
-      assert error.message =~ "Invalid RIS line"
+      assert error.message =~ "invalid formatting"
     end
   end
 
@@ -109,7 +109,8 @@ defmodule Systems.Paper.RISLineTrackingTest do
       error_data = %{
         type: :parse_error,
         line_number: 5,
-        message: "Invalid RIS line format"
+        message:
+          "This file contains invalid formatting. Please upload a RIS bibliography file instead."
       }
 
       entry = RISEntry.error(error_data)
@@ -118,7 +119,9 @@ defmodule Systems.Paper.RISLineTrackingTest do
       assert entry.error == error_data
       assert entry.error.type == :parse_error
       assert entry.error.line_number == 5
-      assert entry.error.message == "Invalid RIS line format"
+
+      assert entry.error.message ==
+               "This file contains invalid formatting. Please upload a RIS bibliography file instead."
     end
 
     test "handles string errors for backward compatibility" do
@@ -256,14 +259,14 @@ defmodule Systems.Paper.RISLineTrackingTest do
           assert attrs.title == "First Article"
           assert error.type == :parse_error
           assert error.line_number == 9
-          assert error.message =~ "Invalid RIS line"
+          assert error.message =~ "invalid formatting"
 
         # Both might be errors if AB continuation lines are invalid
         [{:error, {error1, _}}, {:error, {error2, _}}] ->
           # The multiline abstract causes an error
           assert error1.type == :parse_error
           assert error2.type == :parse_error
-          assert error2.message =~ "Invalid RIS line"
+          assert error2.message =~ "invalid formatting"
       end
     end
 
@@ -289,7 +292,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
       assert error.type == :validation_error
       # Where the problematic reference starts
       assert error.line_number == 7
-      assert error.message =~ "Missing TY"
+      assert error.message =~ "missing required reference type"
     end
   end
 

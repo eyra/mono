@@ -270,6 +270,15 @@ defmodule Systems.Paper.Public do
     Paper.RISImportSessionModel.recent_for_reference_file(reference_file_id, limit)
   end
 
+  def get_most_recent_import_session(paper_set_id) do
+    from(s in Paper.RISImportSessionModel,
+      where: s.paper_set_id == ^paper_set_id,
+      order_by: [desc: s.inserted_at],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def paper_ids_from_reference_file(%Paper.ReferenceFileModel{} = reference_file) do
     paper_query(reference_file)
     |> select([paper: p], p.id)

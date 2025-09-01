@@ -1,7 +1,6 @@
 defmodule Systems.Zircon.Screening.ImportViewTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
-  import Mox
   import Frameworks.Signal.TestHelper
   import Ecto.Query
 
@@ -11,6 +10,10 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
     # Isolate signals to prevent workflow errors (includes nested LiveViews)
     # Keeps TestHelper, Zircon.Switch, and Observatory.Switch active
     isolate_signals(except: [Systems.Zircon.Switch, Systems.Observatory.Switch])
+
+    # Use LocalFS backend for tests with real files
+    Application.put_env(:core, :content, backend: Systems.Content.LocalFS)
+
     # Create required entities for ImportView
     auth_node = Factories.insert!(:auth_node)
 
@@ -521,13 +524,18 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Create a reference file associated with the tool
       reference_file = Systems.Zircon.Public.insert_reference_file!(tool, "test.ris")
 
-      # Update the reference file with a URL
-      reference_file =
-        reference_file
-        |> Systems.Paper.ReferenceFileModel.changeset(%{
-          file: %{ref: "https://example.com/test.ris", name: "test.ris"}
+      # Update reference file to point to actual test RIS file
+      test_file_path = Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/small.ris")
+      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
+
+      Core.Repo.update!(
+        Ecto.Changeset.change(reference_file.file, %{
+          ref: test_file_path
         })
-        |> Core.Repo.update!()
+      )
+
+      # Reload to get the updated file ref
+      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
 
       # Create session manually (avoiding automatic Oban job execution)
       session =
@@ -537,19 +545,6 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
           status: :activated,
           phase: :waiting
         })
-
-      # Mock the fetcher to succeed with valid RIS content
-      expect(Systems.Paper.RISFetcherMock, :fetch_content, fn _reference_file ->
-        {:ok,
-         """
-         TY  - JOUR
-         TI  - Test Paper Title
-         AU  - Smith, John
-         PY  - 2023
-         DO  - 10.1234/test.doi
-         ER  -
-         """}
-      end)
 
       # Run the job manually to process the file (but not import yet)
       result =
@@ -564,7 +559,8 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert processed_session.status == :activated
       # After parsing and processing, it goes to prompting phase
       assert processed_session.phase == :prompting
-      assert length(processed_session.entries) == 1
+      # small.ris has 3 papers
+      assert length(processed_session.entries) == 3
 
       # Now manually continue the import (this is what the Continue button would do)
       final_session = Systems.Paper.Public.commit_import_session!(processed_session)

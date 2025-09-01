@@ -2,39 +2,36 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
   use Core.DataCase
   use Oban.Testing, repo: Core.Repo
 
-  import Mox
   import Frameworks.Signal.TestHelper
-
-  alias Systems.Paper.RISFetcherMock
-
-  setup :verify_on_exit!
 
   setup do
     # Isolate signals to prevent unwanted side effects during unit testing
     # Could also use: isolate_signals(except: Systems.Paper.Switch) to test paper signals
     isolate_signals()
     on_exit(&restore_signal_handlers/0)
+
+    # Use LocalFS backend for tests with real files
+    Application.put_env(:core, :content, backend: Systems.Content.LocalFS)
+    :ok
   end
 
   describe "RISImportPrepareJob" do
-    test "verifies mock is configured" do
-      # Quick test to verify our mock configuration works
-      fetcher_module = Application.get_env(:core, :ris_fetcher_module)
-      assert fetcher_module == Systems.Paper.RISFetcherMock
-    end
-
     setup do
       # Create minimal required entities (no complex workflow setup needed due to signal isolation)
       # Create paper set
       paper_set = Factories.insert!(:paper_set)
 
       # Create reference file
+      # Use the small.ris test file
+      test_file_path = Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/small.ris")
+
       reference_file =
         Factories.insert!(:paper_reference_file, %{
           status: :uploaded,
           file:
             Factories.build(:content_file, %{
-              ref: "http://example.com/test.ris"
+              ref: test_file_path,
+              name: "small.ris"
             })
         })
 
@@ -45,10 +42,16 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       paper_set: paper_set,
       reference_file: reference_file
     } do
-      # Mock RISFetcher to return an error when fetching content
-      expect(RISFetcherMock, :fetch_content, fn _reference_file ->
-        {:error, "Failed to fetch RIS content"}
-      end)
+      # Update reference file to point to non-existent file
+      reference_file = reference_file |> Repo.preload(:file, force: true)
+
+      Repo.update!(
+        Ecto.Changeset.change(reference_file.file, %{
+          ref: "/nonexistent/fake.ris"
+        })
+      )
+
+      reference_file = reference_file |> Repo.preload(:file, force: true)
 
       # Create an import session first
       session =
@@ -63,13 +66,14 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       job_args = %{"session_id" => session.id}
 
       # The job should handle the fetch error gracefully
-      assert {:error, "Failed to fetch RIS content"} =
-               perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert {:discard, error_msg} = result
+      assert error_msg =~ "File not found"
 
       # Verify the session was updated with error status
       updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
-      assert "Failed to fetch RIS content" in updated_session.errors
+      assert Enum.any?(updated_session.errors, &(&1 =~ "File not found"))
       assert updated_session.completed_at != nil
     end
 
@@ -77,22 +81,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       paper_set: paper_set,
       reference_file: reference_file
     } do
-      # Mock RISFetcher to return valid RIS content with one paper
-      # Note: RIS format is very specific about spacing and line endings
-      ris_content = """
-      TY  - JOUR
-      TI  - Test Paper Title
-      AU  - Smith, John
-      PY  - 2023
-      DO  - 10.1234/test.doi
-      AB  - Test abstract
-      KW  - test keyword
-      ER  -
-      """
-
-      expect(RISFetcherMock, :fetch_content, fn _reference_file ->
-        {:ok, ris_content}
-      end)
+      # Reference file already points to small.ris which has 3 papers
 
       # Create an import session
       session =
@@ -115,8 +104,9 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       assert updated_session.completed_at == nil
 
       ris_entries = updated_session.entries
-      assert length(ris_entries) == 1
-      assert List.first(ris_entries)["status"] == "new"
+      # small.ris has 3 papers
+      assert length(ris_entries) == 3
+      assert Enum.all?(ris_entries, fn entry -> entry["status"] == "new" end)
 
       # No papers should be created yet (two-phase workflow)
       papers =
@@ -140,100 +130,122 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       # The test's main purpose is to verify duplicate prevention, which is already tested above
     end
 
-    test "updates progress during processing phase", %{
-      paper_set: paper_set,
-      reference_file: reference_file
+    test "handles file-level validation errors (binary file)", %{
+      paper_set: paper_set
     } do
-      # Create RIS content with multiple papers to test progress updates
-      ris_content = """
-      TY  - JOUR
-      TI  - First Paper Title
-      AU  - Smith, John
-      PY  - 2023
-      DO  - 10.1234/test1.doi
-      ER  -
+      # Create a binary file (fake JPEG)
+      binary_content = <<0xFF, 0xD8, 0xFF, 0xE0>> <> String.duplicate("A", 1000)
+      temp_file = Path.join(System.tmp_dir!(), "binary_test.ris")
+      File.write!(temp_file, binary_content)
 
-      TY  - JOUR
-      TI  - Second Paper Title
-      AU  - Doe, Jane
-      PY  - 2023
-      DO  - 10.1234/test2.doi
-      ER  -
+      reference_file =
+        Factories.insert!(:paper_reference_file, %{
+          status: :uploaded,
+          file:
+            Factories.build(:content_file, %{
+              ref: temp_file,
+              name: "binary_test.ris"
+            })
+        })
 
-      TY  - JOUR
-      TI  - Third Paper Title
-      AU  - Johnson, Bob
-      PY  - 2023
-      DO  - 10.1234/test3.doi
-      ER  -
+      # Create an import session
+      session =
+        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+          paper_set_id: paper_set.id,
+          reference_file_id: reference_file.id,
+          status: :activated,
+          phase: :waiting
+        })
 
-      TY  - JOUR
-      TI  - Fourth Paper Title
-      AU  - Williams, Alice
-      PY  - 2023
-      DO  - 10.1234/test4.doi
-      ER  -
+      # Run the import job - should fail with validation error
+      job_args = %{"session_id" => session.id}
+      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert {:discard, error_msg} = result
+      assert error_msg =~ "image or document file"
 
-      TY  - JOUR
-      TI  - Fifth Paper Title
-      AU  - Brown, Charlie
-      PY  - 2023
-      DO  - 10.1234/test5.doi
-      ER  -
+      # Verify the session was marked as failed
+      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      assert updated_session.status == :failed
+      # Should still be in processing phase
+      assert updated_session.phase == :processing
+      assert Enum.any?(updated_session.errors, &(&1 =~ "image or document file"))
+      assert updated_session.completed_at != nil
 
-      TY  - JOUR
-      TI  - Sixth Paper Title
-      AU  - Davis, David
-      PY  - 2023
-      DO  - 10.1234/test6.doi
-      ER  -
+      # Verify the reference file was marked as failed
+      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      assert updated_file.status == :failed
 
-      TY  - JOUR
-      TI  - Seventh Paper Title
-      AU  - Miller, Eve
-      PY  - 2023
-      DO  - 10.1234/test7.doi
-      ER  -
+      # Clean up temp file
+      File.rm!(temp_file)
+    end
 
-      TY  - JOUR
-      TI  - Eighth Paper Title
-      AU  - Wilson, Frank
-      PY  - 2023
-      DO  - 10.1234/test8.doi
-      ER  -
-
-      TY  - JOUR
-      TI  - Ninth Paper Title
-      AU  - Moore, Grace
-      PY  - 2023
-      DO  - 10.1234/test9.doi
-      ER  -
-
-      TY  - JOUR
-      TI  - Tenth Paper Title
-      AU  - Taylor, Henry
-      PY  - 2023
-      DO  - 10.1234/test10.doi
-      ER  -
-
-      TY  - JOUR
-      TI  - Eleventh Paper Title
-      AU  - Anderson, Isabel
-      PY  - 2023
-      DO  - 10.1234/test11.doi
-      ER  -
-
-      TY  - JOUR
-      TI  - Twelfth Paper Title
-      AU  - Thomas, Jack
-      PY  - 2023
-      DO  - 10.1234/test12.doi
-      ER  -
+    test "handles file-level validation errors (not a RIS file)", %{
+      paper_set: paper_set
+    } do
+      # Create a non-RIS text file
+      non_ris_content = """
+      This is not a RIS file.
+      Just some random text.
+      No RIS structure here.
       """
 
-      expect(RISFetcherMock, :fetch_content, fn _reference_file ->
-        {:ok, ris_content}
-      end)
+      temp_file = Path.join(System.tmp_dir!(), "not_ris.txt")
+      File.write!(temp_file, non_ris_content)
+
+      reference_file =
+        Factories.insert!(:paper_reference_file, %{
+          status: :uploaded,
+          file:
+            Factories.build(:content_file, %{
+              ref: temp_file,
+              name: "not_ris.txt"
+            })
+        })
+
+      # Create an import session
+      session =
+        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+          paper_set_id: paper_set.id,
+          reference_file_id: reference_file.id,
+          status: :activated,
+          phase: :waiting
+        })
+
+      # Run the import job - should fail with validation error
+      job_args = %{"session_id" => session.id}
+      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert {:discard, error_msg} = result
+      assert error_msg =~ "doesn't appear to be a valid RIS file"
+
+      # Verify the session was marked as failed
+      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      assert updated_session.status == :failed
+      assert Enum.any?(updated_session.errors, &(&1 =~ "doesn't appear to be a valid RIS file"))
+
+      # Verify the reference file was marked as failed
+      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      assert updated_file.status == :failed
+
+      # Clean up temp file
+      File.rm!(temp_file)
+    end
+
+    test "updates progress during processing phase", %{
+      paper_set: paper_set
+    } do
+      # Use twelve_papers.ris to test progress tracking
+      test_file_path =
+        Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/twelve_papers.ris")
+
+      reference_file =
+        Factories.insert!(:paper_reference_file, %{
+          status: :uploaded,
+          file:
+            Factories.build(:content_file, %{
+              ref: test_file_path,
+              name: "twelve_papers.ris"
+            })
+        })
 
       # Create an import session
       session =

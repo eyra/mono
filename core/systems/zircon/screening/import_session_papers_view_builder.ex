@@ -4,17 +4,19 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
   alias Systems.Paper.RISEntry
   alias Frameworks.Utility.PaginationHelper
 
-  def view_model(%{entries: entries, reference_file: %{file: %{name: filename}}}, assigns) do
-    filter = Map.get(assigns, :filter, "new")
-
+  def view_model(%{session: session, filter: filter}, assigns) do
+    # Extract entries and filename from session
+    entries = Map.get(session, :entries, [])
+    reference_file = Map.get(session, :reference_file, %{})
+    file = Map.get(reference_file, :file, %{})
+    filename = Map.get(file, :name, "unknown.ris")
     # Filter entries first (lightweight operation on maps)
     filtered_entries = filter_entries_by_status(entries, filter)
 
     # Action bar visibility based on total entries for this filter, not search results
     total_filtered_count = length(filtered_entries)
 
-    description =
-      dgettext("eyra-zircon", "import_session.phase.prompting.new_papers", filename: filename)
+    description = get_description_for_filter(filter, filename)
 
     show_action_bar? = total_filtered_count > 10
 
@@ -93,5 +95,13 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
   # Helper to get field from map with atom or string keys
   defp get_field(map, keys) when is_list(keys) do
     Enum.find_value(keys, fn key -> Map.get(map, key) end)
+  end
+
+  defp get_description_for_filter("duplicates", filename) do
+    dgettext("eyra-zircon", "import_session.phase.prompting.duplicates", filename: filename)
+  end
+
+  defp get_description_for_filter(_filter, filename) do
+    dgettext("eyra-zircon", "import_session.phase.prompting.new_papers", filename: filename)
   end
 end

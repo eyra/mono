@@ -26,3 +26,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "ris.error.duplicate_paper_in_file"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.binary_file_detected"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.file_too_large"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_content"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_ris_structure"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.invalid_text_encoding"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.missing_ris_end_marker"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.missing_ris_header"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.validation_timeout"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris.error.not_valid_ris_file"
+msgstr ""

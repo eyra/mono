@@ -724,6 +724,75 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
   end
 
+  describe "button creation with zero new papers" do
+    test "creates correct buttons when there are warnings, 0 new papers, and duplicates" do
+      # This test ensures that when there are 0 new papers, the duplicates button
+      # is created with the correct event handler
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "duplicates_only.ris",
+              ref: "http://example.com/duplicates.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session with warnings, 0 new papers, and duplicates
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "error", "error" => "Parse error 1"},
+            %{"status" => "error", "error" => "Parse error 2"},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 1", "paper_id" => 123},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 2", "paper_id" => 124},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 3", "paper_id" => 125}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Check prompting summary
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, summary_assigns} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+
+      assert summary_assigns.warning_count == 2
+      assert summary_assigns.new_paper_count == 0
+      assert summary_assigns.duplicate_count == 3
+
+      # Should have exactly 2 buttons: warnings and duplicates (no new papers button)
+      assert length(summary_assigns.summary_buttons) == 2
+
+      # First button should be warnings
+      warning_button = Enum.at(summary_assigns.summary_buttons, 0)
+      assert warning_button.action.event == "show_warnings"
+      assert warning_button.face.text_color == "text-warning"
+
+      # Second button should be duplicates
+      duplicates_button = Enum.at(summary_assigns.summary_buttons, 1)
+      assert duplicates_button.action.event == "show_duplicates"
+
+      # Should NOT have Continue button since no new papers
+      assert summary_assigns.action_buttons == []
+    end
+  end
+
   describe "prompting phase with mixed results" do
     test "shows prompting summary when session has both errors and new papers" do
       # Create reference file
@@ -953,8 +1022,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Should show generic processing message
       assert processing_status.message == "Processing papers"
-      # No progress percentage when no data
-      assert processing_status.progress == nil
+      # Starts at 0% when no progress data
+      assert processing_status.progress == 0
     end
 
     test "shows correct progress message during importing phase with session progress" do
@@ -1314,6 +1383,282 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
                "http://example.com/file1.ris",
                "http://example.com/file2.ris"
              ]
+    end
+  end
+
+  describe "flash error handling" do
+    setup do
+      # Create tool with paper set
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      {:ok, tool: tool, paper_set: paper_set}
+    end
+
+    test "shows flash error when transitioning from active to failed", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create a reference file
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            }),
+          status: :uploaded
+        })
+
+      # Associate with tool
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
+        |> Core.Repo.update!()
+
+      # Create a failed import session
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          phase: :processing,
+          errors: ["Invalid text encoding"]
+        })
+
+      # First call: simulating active session (old VM has active_filename)
+      old_assigns = %{
+        vm: %{
+          active_filename: "test.ris"
+        }
+      }
+
+      # Second call: no active session (transition happened)
+      result = ImportViewBuilder.view_model(tool, old_assigns)
+
+      # Should detect the transition and show flash error
+      assert result.flash_error == "Invalid text encoding"
+    end
+
+    test "does not show flash error when no previous active session", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create a failed session
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+          status: :failed
+        })
+
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          errors: ["Some error"]
+        })
+
+      # No previous active session in assigns
+      assigns = %{vm: %{}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash error (no transition)
+      assert result.flash_error == nil
+    end
+
+    test "does not show flash error when session is still active", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create an active session
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+          status: :uploaded
+        })
+
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
+        |> Core.Repo.update!()
+
+      _active_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      # Has previous active filename
+      assigns = %{vm: %{active_filename: "test.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash error (session still active)
+      assert result.flash_error == nil
+    end
+
+    test "shows most recent error when multiple failed sessions exist", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create multiple failed sessions with different timestamps
+      ref_file1 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "old.ris"})
+        })
+
+      ref_file2 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "recent.ris"})
+        })
+
+      # Older failed session
+      _old_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file1,
+          status: :failed,
+          errors: ["Old error message"],
+          inserted_at: ~N[2024-01-01 10:00:00]
+        })
+
+      # More recent failed session
+      _recent_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file2,
+          status: :failed,
+          errors: ["Recent error message"],
+          inserted_at: ~N[2024-01-02 10:00:00]
+        })
+
+      # Simulate transition from active to inactive
+      assigns = %{vm: %{active_filename: "recent.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should show the most recent error
+      assert result.flash_error == "Recent error message"
+    end
+
+    test "handles empty error list gracefully", %{tool: tool, paper_set: paper_set} do
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"})
+        })
+
+      # Failed session with empty errors
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          # Empty error list
+          errors: []
+        })
+
+      assigns = %{vm: %{active_filename: "test.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should handle empty errors gracefully
+      assert result.flash_error == nil
+    end
+
+    test "shows specific validation error messages", %{tool: tool, paper_set: paper_set} do
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "binary.jpg"})
+        })
+
+      # Test different error messages
+      test_cases = [
+        "Invalid text encoding",
+        "Binary file detected",
+        "Not a valid RIS file",
+        "File exceeds maximum allowed size of 10MB"
+      ]
+
+      for error_message <- test_cases do
+        # Update or create session with specific error
+        session =
+          Core.Factories.insert!(:paper_ris_import_session, %{
+            paper_set: paper_set,
+            reference_file: ref_file,
+            status: :failed,
+            errors: [error_message]
+          })
+
+        assigns = %{vm: %{active_filename: "binary.jpg"}}
+        result = ImportViewBuilder.view_model(tool, assigns)
+
+        assert result.flash_error == error_message
+
+        # Clean up for next iteration
+        Core.Repo.delete!(session)
+      end
+    end
+
+    test "does not show flash when transitioning between different active sessions", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create two active sessions for different files
+      ref_file1 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "file1.ris"}),
+          status: :uploaded
+        })
+
+      ref_file2 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "file2.ris"}),
+          status: :uploaded
+        })
+
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file1, ref_file2])
+        |> Core.Repo.update!()
+
+      _session1 =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file1,
+          status: :activated,
+          phase: :prompting
+        })
+
+      _session2 =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file2,
+          status: :activated,
+          phase: :processing
+        })
+
+      # Transition from one active file to another
+      assigns = %{vm: %{active_filename: "file1.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash (both are active, just switching)
+      assert result.flash_error == nil
     end
   end
 end

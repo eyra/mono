@@ -13,7 +13,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "1 paper"
-msgid_plural "%{count} papers"
+msgid_plural "* papers"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -144,10 +144,6 @@ msgid "import_session.prompting.new_papers_title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "import_view.modal.importing_details"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "import_view.processing.importing"
 msgstr ""
 
@@ -165,20 +161,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "import_view.button.prepare_import"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "1 skipped"
-msgid_plural "%{count} skipped"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_view.processing.importing_papers"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_view.processing.importing_with_skipped"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -202,5 +184,5 @@ msgid "import_session.prompting.duplicates_title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "import_view.processing.processing_with_progress"
+msgid "import_session.phase.prompting.duplicates"
 msgstr ""

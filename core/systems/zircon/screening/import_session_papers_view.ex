@@ -7,11 +7,16 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
 
   alias Frameworks.Pixel.Text
 
-  def get_model(:not_mounted_at_router, %{"session" => session}, _socket) do
-    # Add an id to the model so it works with the default observe_view_model
-    # Use filter to create unique id
-    filter = Map.get(session, "filter", "new")
-    Map.put(session, :id, "import_session_papers_#{filter}")
+  def get_model(
+        :not_mounted_at_router,
+        %{"session" => %{id: id} = session, "filter" => filter},
+        _socket
+      ) do
+    %{
+      id: id,
+      session: session,
+      filter: filter
+    }
   end
 
   def handle_view_model_updated(socket) do
@@ -19,8 +24,10 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
   end
 
   @impl true
-  def mount(:not_mounted_at_router, %{"title" => title} = session, socket) do
-    filter = Map.get(session, "filter", "new")
+  def mount(:not_mounted_at_router, session, socket) when is_map(session) do
+    # Extract title and filter, handling both string and atom keys
+    title = Map.get(session, "title")
+    filter = Map.get(session, "filter")
     {:ok, socket |> assign(title: title, page_index: 0, query: nil, filter: filter)}
   end
 
