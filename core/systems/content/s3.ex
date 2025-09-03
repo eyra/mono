@@ -79,12 +79,10 @@ defmodule Systems.Content.S3 do
     chunk_size = get_stream_chunk_size()
 
     stream =
-      ExAws.S3.download_file(bucket, object_key, :memory, chunk_size: chunk_size)
-      |> ExAws.stream!(backend())
-      |> Stream.map(fn
-        {:ok, chunk} -> chunk
-        {:error, reason} -> throw({:error, reason})
-      end)
+      bucket
+      |> ExAws.S3.download_file(object_key, :memory, chunk_size: chunk_size)
+      |> ExAws.stream!()
+      |> Stream.map(fn chunk -> chunk end)
 
     {:ok, stream}
   rescue
