@@ -1,5 +1,8 @@
 defmodule Systems.Paper.RISImportPrepareJob do
   use Oban.Worker, queue: :ris_import
+  use Gettext, backend: CoreWeb.Gettext
+
+  require Logger
 
   alias Core.Repo
   alias Ecto.Multi
@@ -44,7 +47,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
         process_ris_stream(session, content_stream)
 
       {:error, error} ->
-        handle_error(session, error)
+        handle_fetch_error(session, error)
     end
   end
 
@@ -209,16 +212,9 @@ defmodule Systems.Paper.RISImportPrepareJob do
     |> Enum.map_join(", ", fn {field, {message, _}} -> "#{field}: #{message}" end)
   end
 
-  defp handle_error(session, error) do
-    handle_session_error(session, error)
-  end
-
-  defp handle_session_error(%{errors: errors, reference_file: reference_file} = session, error) do
-    error_message =
-      case error do
-        message when is_binary(message) -> message
-        _ -> inspect(error)
-      end
+  defp handle_fetch_error(%{errors: errors, reference_file: reference_file} = session, error) do
+    Logger.error("Failed to fetch file: #{inspect(error)}")
+    error_message = dgettext("eyra-content", "file.error.fetch_failed")
 
     # Mark session as failed
     Paper.RISImportSessionModel.mark_failed_with_signal!(session, %{

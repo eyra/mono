@@ -21,3 +21,7 @@ msgstr "Interested in publishing?"
 #, elixir-autogen, elixir-format
 msgid "file.error.not_found"
 msgstr "File not found"
+
+#, elixir-autogen, elixir-format
+msgid "file.error.fetch_failed"
+msgstr "Unable to process the file. Please try again. If the problem persists, please contact support."

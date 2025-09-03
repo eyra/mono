@@ -68,12 +68,14 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       # The job should handle the fetch error gracefully
       result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
-      assert error_msg =~ "File not found"
+
+      assert error_msg =~
+               "Unable to process the file. Please try again. If the problem persists, please contact support."
 
       # Verify the session was updated with error status
       updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
-      assert Enum.any?(updated_session.errors, &(&1 =~ "File not found"))
+      assert Enum.any?(updated_session.errors, &(&1 =~ "Unable to process the file"))
       assert updated_session.completed_at != nil
     end
 

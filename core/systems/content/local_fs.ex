@@ -2,6 +2,14 @@ defmodule Systems.Content.LocalFS do
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
+  defmodule Error do
+    defexception [:message]
+
+    def file_not_found(full_path) do
+      %__MODULE__{message: "File not found: #{inspect(full_path)}"}
+    end
+  end
+
   def public_path, do: "/uploads"
 
   def get_public_url(path) do
@@ -55,7 +63,7 @@ defmodule Systems.Content.LocalFS do
       stream = create_file_stream(full_path, chunk_size)
       {:ok, stream}
     else
-      {:error, dgettext("eyra-content", "file.error.not_found")}
+      {:error, Error.file_not_found(full_path)}
     end
   end
 

@@ -1,5 +1,14 @@
 defmodule Systems.Content.S3 do
+  use Gettext, backend: CoreWeb.Gettext
   alias ExAws.S3
+
+  defmodule Error do
+    defexception [:message]
+
+    def failed_to_setup_stream(error) do
+      %__MODULE__{message: "Failed to setup S3 stream: #{inspect(error)}"}
+    end
+  end
 
   def store(file, original_filename) do
     bucket = Access.fetch!(s3_settings(), :bucket)
@@ -87,7 +96,7 @@ defmodule Systems.Content.S3 do
     {:ok, stream}
   rescue
     error ->
-      {:error, "Failed to stream from S3: #{inspect(error)}"}
+      {:error, Error.failed_to_setup_stream(error)}
   end
 
   defp get_stream_chunk_size do

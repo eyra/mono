@@ -59,7 +59,9 @@ defmodule Systems.Content.LocalFSStreamTest do
     end
 
     test "returns error for non-existent file" do
-      assert {:error, message} = LocalFS.stream("/non/existent/file.ris")
+      assert {:error, %Systems.Content.LocalFS.Error{message: message}} =
+               LocalFS.stream("/non/existent/file.ris")
+
       assert message =~ "not found"
     end
 
