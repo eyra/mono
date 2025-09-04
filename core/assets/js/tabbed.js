@@ -139,6 +139,7 @@ export const TabBar = {
     }
 
     this.saveActiveTabId(nextTabId);
+    this.updateUrlWithTab(nextTabId);
 
     // Activate active tab
     tabs.forEach((tab) => {
@@ -160,6 +161,14 @@ export const TabBar = {
     if (scrollToTop) {
       console.log("[TabBar] scrollToTop");
       MainContent.scrollToTop(this.el);
+    }
+  },
+
+  updateUrlWithTab(tabId) {
+    if (this.el.dataset.preserveTabInUrl  === "true") {
+      const url = new URL(window.location);
+      url.searchParams.set('tab', tabId);
+      window.history.replaceState({}, '', url);
     }
   },
 };

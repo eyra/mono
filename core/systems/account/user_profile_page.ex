@@ -38,7 +38,7 @@ defmodule Systems.Account.UserProfilePage do
       <Area.content>
         <Margin.y id={:page_top} />
         <div class="flex justify-center">
-          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
+          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} preserve_tab_in_url={true} />
         </div>
         <Tabbed.content tabs={@vm.tabs} />
       </Area.content>
