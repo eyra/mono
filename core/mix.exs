@@ -108,7 +108,7 @@ defmodule Core.MixProject do
       # TODO: Switch back to hex version once released (likely 1.1.11 or 1.2.0)
       {:phoenix_live_view,
        github: "phoenixframework/phoenix_live_view",
-       ref: "8a979c4bc921435b90456b32f0a64036d3a47ded",
+       ref: "c10752eecc075b8e90639b4742cce7b79f3818de",
        override: true},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
