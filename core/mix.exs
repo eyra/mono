@@ -90,7 +90,7 @@ defmodule Core.MixProject do
       {:kadabra, "== 0.6.1"},
       {:libcluster, "== 3.5.0"},
       {:logger_json, "== 7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "0.1.2"},
+      {:live_nest, github: "eyra/live_nest", ref: "ccc85f40883576517f870d7a9a4ed2f47044e230"},
       {:mime, "== 2.0.7"},
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
@@ -105,11 +105,9 @@ defmodule Core.MixProject do
       # Temporary: Using commit with fix for "no component for CID" errors
       # Bug: https://github.com/phoenixframework/phoenix_live_view/issues/3983
       # Fix: https://github.com/phoenixframework/phoenix_live_view/pull/3981
-      # TODO: Switch back to hex version once released (likely 1.1.11 or 1.2.0)
+      # TODO: Switch back to hex version once released (likely 1.2.0)
       {:phoenix_live_view,
-       github: "phoenixframework/phoenix_live_view",
-       ref: "8a979c4bc921435b90456b32f0a64036d3a47ded",
-       override: true},
+       github: "mellelieuwes/phoenix_live_view", ref: "1.1.11", override: true},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},
@@ -160,7 +158,6 @@ defmodule Core.MixProject do
     [
       setup: [
         "deps.get",
-        "phoenix_live_view.rebuild",
         "ecto.setup",
         "assets.setup",
         "assets.install",
@@ -184,16 +181,11 @@ defmodule Core.MixProject do
       "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js",
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.install": "cmd cd ./assets && npm install",
-      "assets.build": ["phoenix_live_view.rebuild", "tailwind default", "esbuild default"],
+      "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": [
-        "phoenix_live_view.rebuild",
         "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
-      ],
-      # Rebuild phoenix_live_view JS assets to fix the CID bug in pre-compiled files
-      "phoenix_live_view.rebuild": [
-        "cmd if [ -d deps/phoenix_live_view ]; then cd deps/phoenix_live_view && npm install --silent && mix deps.get && mix assets.build; fi"
       ],
       run: "phx.server"
     ]
