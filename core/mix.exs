@@ -101,6 +101,7 @@ defmodule Core.MixProject do
       {:phoenix_html, "== 4.2.1"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
+
       # Temporary: Using commit with fix for "no component for CID" errors
       # Bug: https://github.com/phoenixframework/phoenix_live_view/issues/3983
       # Fix: https://github.com/phoenixframework/phoenix_live_view/pull/3981
@@ -110,7 +111,7 @@ defmodule Core.MixProject do
        ref: "8a979c4bc921435b90456b32f0a64036d3a47ded",
        override: true},
       {:phoenix_view, "== 2.0.4"},
-      {:phoenix, "== 1.8.0"},
+      {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},
       {:postgrex, "== 0.21.1"},
       {:remote_ip, "== 1.2.0"},
@@ -136,11 +137,11 @@ defmodule Core.MixProject do
       {:ex_machina, "== 2.8.0", only: :test},
       {:file_system, "== 1.1.0", only: [:dev, :test]},
       {:bypass, "== 2.1.0", only: :test},
-      {:lazy_html, "== 0.1.6", only: :test},
+      {:lazy_html, "== 0.1.7", only: :test},
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
-      {:phoenix_live_reload, "== 1.6.0", only: :dev},
+      {:phoenix_live_reload, "== 1.6.1", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
       {:table_rex, "== 4.1.0"},
