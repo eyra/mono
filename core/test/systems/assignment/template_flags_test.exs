@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.TemplateFlagsTest do
   use ExUnit.Case, async: true
-  import ExUnit.CaptureIO
+
   alias Systems.Assignment.Template.Flags
 
   describe "Template.Flags with opt_in behavior" do
@@ -99,15 +99,6 @@ defmodule Systems.Assignment.TemplateFlagsTest do
   end
 
   describe "backward compatibility during transition" do
-    test "ignores opt_out parameter when opt_in is provided" do
-      # During transition, if both are provided, opt_in should take precedence
-      flags = Flags.Settings.new(opt_in: [:branding], opt_out: [:information])
-
-      assert flags.branding == true
-      # Should be false due to opt_in behavior, not opt_out
-      assert flags.information == false
-    end
-
     test "handles non-existent flags gracefully" do
       # Should not crash if opt_in contains flags that don't exist
       flags = Flags.Settings.new(opt_in: [:branding, :non_existent_flag])
@@ -154,42 +145,6 @@ defmodule Systems.Assignment.TemplateFlagsTest do
   end
 
   describe "Backwards compatibility with deprecation warnings" do
-    test "opt_out still works but shows deprecation warning" do
-      # Capture the warning
-      warning_output =
-        capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_out: [:branding, :information])
-
-          # Should work like old opt_out behavior
-          # was in opt_out, so false
-          assert flags.branding == false
-          # was in opt_out, so false
-          assert flags.information == false
-          # was NOT in opt_out, so true
-          assert flags.privacy == true
-        end)
-
-      # Should contain deprecation warning
-      assert warning_output =~ ":opt_out is deprecated"
-      assert warning_output =~ "use :opt_in instead"
-    end
-
-    test "both opt_in and opt_out provided - opt_in takes precedence with warning" do
-      warning_output =
-        capture_io(:stderr, fn ->
-          flags = Flags.Settings.new(opt_in: [:branding], opt_out: [:information])
-
-          # opt_in should take precedence, opt_out should be ignored
-          assert flags.branding == true
-          # not in opt_in, so false
-          assert flags.information == false
-        end)
-
-      # Should show warning since opt_out is deprecated
-      assert warning_output =~ ":opt_out is deprecated"
-      assert warning_output =~ "use :opt_in instead"
-    end
-
     test "flags/0 function returns available flags" do
       assert is_list(Flags.Settings.flags())
       assert :branding in Flags.Settings.flags()

@@ -37,7 +37,7 @@ end
 
 defmodule Core.SurfConext.CallbackController do
   require Logger
-  use Phoenix.Controller, namespace: CoreWeb
+  use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
 
   import Core.SurfConext.PlugUtils

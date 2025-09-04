@@ -1,7 +1,7 @@
 defmodule Systems.Storage.EndpointModel do
   @fields ~w()a
   @required_fields @fields
-  @special_fields ~w(builtin yoda centerdata aws azure)a
+  @special_fields ~w(builtin yoda aws azure)a
 
   use Ecto.Schema
 
@@ -24,7 +24,6 @@ defmodule Systems.Storage.EndpointModel do
 
     belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
-    belongs_to(:centerdata, Storage.Centerdata.EndpointModel, on_replace: :delete)
     belongs_to(:aws, Storage.AWS.EndpointModel, on_replace: :delete)
     belongs_to(:azure, Storage.Azure.EndpointModel, on_replace: :delete)
 

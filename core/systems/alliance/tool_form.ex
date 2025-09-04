@@ -102,7 +102,7 @@ defmodule Systems.Alliance.ToolForm do
 
   defp link_as_string(label, url) do
     label
-    |> Phoenix.HTML.Link.link(
+    |> link(
       class: "text-white underline",
       target: "_blank",
       to: url

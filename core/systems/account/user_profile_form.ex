@@ -10,9 +10,9 @@ defmodule Systems.Account.UserProfileForm do
   @impl true
   def process_file(
         %{assigns: %{entity: entity}} = socket,
-        %{photo_url: photo_url}
+        %{public_url: public_url}
       ) do
-    save(socket, entity, :auto_save, %{photo_url: photo_url})
+    save(socket, entity, :auto_save, %{photo_url: public_url})
   end
 
   @impl true

@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, user-scalable=no, initial-scale=1.0" />
     <meta name="theme-color" content="#F6F6F6">
     <meta name="mobile-web-app-capable" content="yes">
-    <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@1.1.x/dist/index.min.js"></script>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
@@ -21,18 +20,11 @@
     />
     <script src="<%= CoreWeb.Endpoint.static_path("/assets/app.js") %>" defer></script>
   </head>
-  <body class="font-body bg-grey5 scrollbar-hidden" x-data="{ overlay: false}" >
-    <div
-      x-cloak
-      x-show="overlay"
-      class="fixed z-10 w-full h-full backdrop-blur-md bg-black/30"
-    >
-    </div>
+  <body class="font-body bg-grey5 scrollbar-hidden">
     <div class="flex flex-row">
+      <%= if Phoenix.Flash.get(@flash, :error) do %>
       <div
-          x-cloak
-          x-data="{ visible: <%= Phoenix.Flash.get(@flash, :error) != nil %> }"
-          x-show="visible"
+          id="flash-error"
           class="fixed z-20 top-6 w-full pointer-events-none"
       >
         <div class="flex flex-row items-center justify-center" >
@@ -49,7 +41,8 @@
                 </div>
 
                 <button
-                  x-on:click="visible = false"
+                  phx-click="lv:clear-flash"
+                  phx-value-key="error"
                   type="button"
                   class="w-button-sm h-button-sm flex-shrink-0 cursor-pointer active:opacity-50 mt-5 mr-4 mb-4"
                 >
@@ -62,6 +55,7 @@
           </div>
         </div>
       </div>
+      <% end %>
       <div class="flex flex-col w-full">
         <div class="flex-grow">
           <%= @inner_content %>

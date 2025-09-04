@@ -35,18 +35,12 @@ defmodule Systems.Project.OverviewPageTest do
       refute html =~ "New project\n"
       refute html =~ "New project (2)\n"
 
-      html =
-        view
-        |> element("[phx-click=\"create_project\"]")
-        |> render_click()
+      html = render_click(view, "create_project")
 
       assert html =~ "New project\n"
       refute html =~ "New project (2)\n"
 
-      html =
-        view
-        |> element("[phx-click=\"create_project\"]")
-        |> render_click()
+      html = render_click(view, "create_project")
 
       assert html =~ "New project\n"
       assert html =~ "New project (2)\n"

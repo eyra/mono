@@ -11,12 +11,12 @@ defmodule Frameworks.Pixel.Button.Action do
     """
   end
 
-  attr(:code, :string, required: true)
+  attr(:js, :any, required: true)
   slot(:inner_block, required: true)
 
-  def click(assigns) do
+  def phoenix_js(assigns) do
     ~H"""
-    <div x-on:click={@code} class="cursor-pointer focus:outline-none">
+    <div phx-click={@js} class="cursor-pointer focus:outline-none">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -122,7 +122,7 @@ defmodule Frameworks.Pixel.Button.Action do
     <div
       id={@id}
       phx-hook="NativeWrapper"
-      @click={"nativeWrapperHook.toggleSidePanel(); $parent.overlay = true"}
+      class="cursor-pointer"
     >
       <%= render_slot(@inner_block) %>
     </div>

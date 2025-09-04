@@ -54,8 +54,9 @@ defmodule CoreWeb do
       # Use base HTML functionality
       import Phoenix.HTML, only: [raw: 1]
       import Phoenix.HTML.Form
-      import Phoenix.HTML.Link, only: [link: 2]
-      import Phoenix.HTML.Tag, only: [csrf_meta_tag: 0]
+      import PhoenixHTMLHelpers.Link, only: [link: 2]
+      import PhoenixHTMLHelpers.Tag, only: [csrf_meta_tag: 0]
+      import PhoenixHTMLHelpers.Form
 
       use Gettext, backend: CoreWeb.Gettext
 

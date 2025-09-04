@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ inputs.branch || github.ref }}
 
@@ -61,7 +61,7 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - uses: softprops/action-gh-release@f2352b97da0095b4dbbd885a81023e3deabf4fef
+      - uses: softprops/action-gh-release@fbadcc90e88ecface60a0a0d123795b784ceb239
         with:
           tag_name: "${{env.VERSION}}"
           prerelease: false
