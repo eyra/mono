@@ -82,7 +82,7 @@ CMD ["mix", "run"]
 
 
 # ======================
-# Release Stage  
+# Release Stage
 # ======================
 FROM dev AS build_release
 
@@ -106,7 +106,12 @@ RUN cd assets && \
     npx browserslist --update-db
 
 # Production release steps (from build-release script)
-RUN mix assets.setup && \
+# Create prod.exs for phoenix_live_view only if it doesn't exist (workaround for GitHub version)
+RUN if [ -d "deps/phoenix_live_view/config" ] && [ ! -f "deps/phoenix_live_view/config/prod.exs" ]; then \
+        echo "Creating missing phoenix_live_view/config/prod.exs..."; \
+        echo "import Config" > deps/phoenix_live_view/config/prod.exs; \
+    fi && \
+    mix assets.setup && \
     mix assets.deploy && \
     MIX_ENV=prod mix release --overwrite --path "${VERSION}" && \
     chmod -R a+rX "${VERSION}"
