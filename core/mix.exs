@@ -101,13 +101,7 @@ defmodule Core.MixProject do
       {:phoenix_html, "== 4.2.1"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
-
-      # Temporary: Using commit with fix for "no component for CID" errors
-      # Bug: https://github.com/phoenixframework/phoenix_live_view/issues/3983
-      # Fix: https://github.com/phoenixframework/phoenix_live_view/pull/3981
-      # TODO: Switch back to hex version once released (likely 1.2.0)
-      {:phoenix_live_view,
-       github: "mellelieuwes/phoenix_live_view", ref: "1.1.11", override: true},
+      {:phoenix_live_view, "== 1.1.11"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},
