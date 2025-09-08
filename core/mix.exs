@@ -127,7 +127,7 @@ defmodule Core.MixProject do
       {:ssl_verify_fun, "== 1.1.7"},
       # Dev and test deps
       {:ex_machina, "== 2.8.0", only: :test},
-      {:file_system, "== 1.1.0", only: [:dev, :test]},
+      {:file_system, "== 1.1.1", only: [:dev, :test]},
       {:bypass, "== 2.1.0", only: :test},
       {:lazy_html, "== 0.1.7", only: :test},
       {:mox, "== 1.2.0", only: :test},
