@@ -118,7 +118,7 @@ defmodule Core.MixProject do
       {:tzdata, "== 1.1.3"},
       # i18n
       {:ex_cldr, "== 2.43.1"},
-      {:ex_cldr_numbers, "== 2.35.1"},
+      {:ex_cldr_numbers, "== 2.35.2"},
       {:ex_cldr_dates_times, "== 2.23.0"},
       {:ex_cldr_plugs, "== 1.3.3"},
       # Optional, but recommended for SSL validation with :httpc adapter
