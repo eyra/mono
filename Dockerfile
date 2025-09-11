@@ -82,7 +82,7 @@ CMD ["mix", "run"]
 
 
 # ======================
-# Release Stage  
+# Release Stage
 # ======================
 FROM dev AS build_release
 

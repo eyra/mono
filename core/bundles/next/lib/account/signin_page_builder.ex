@@ -27,7 +27,7 @@ defmodule Next.Account.SigninPageBuilder do
   end
 
   defp create_tab(:participant, %{fabric: fabric, email: email, status: status} = assigns) do
-    add_to_panl = Map.get(assigns, :add_to_panl, false)
+    post_signin_action = Map.get(assigns, :post_signin_action)
 
     blocks =
       []
@@ -40,7 +40,7 @@ defmodule Next.Account.SigninPageBuilder do
         email: email,
         blocks: blocks,
         status: status,
-        add_to_panl: add_to_panl
+        post_signin_action: post_signin_action
       })
 
     %{

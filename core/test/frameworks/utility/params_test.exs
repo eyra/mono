@@ -10,12 +10,24 @@ defmodule Frameworks.Utility.ParamsTest do
       assert Params.parse_bool_param(%{"key" => true}, "key") == true
       assert Params.parse_bool_param(%{}, "key") == false
       assert Params.parse_bool_param(%{"key" => "invalid"}, "key") == false
+    end
 
-      # Test specific parameter names
-      assert Params.parse_bool_param(%{"add_to_panl" => "true"}, "add_to_panl") == true
-      assert Params.parse_bool_param(%{}, "add_to_panl") == false
-      assert Params.parse_bool_param(%{"creator" => "true"}, "creator") == true
-      assert Params.parse_bool_param(%{}, "creator") == false
+    test "parse_string_param for post_*_action" do
+      assert Params.parse_string_param(
+               %{"post_signin_action" => "add_to_panl"},
+               "post_signin_action"
+             ) ==
+               "add_to_panl"
+
+      assert Params.parse_string_param(%{}, "post_signin_action") == nil
+
+      assert Params.parse_string_param(
+               %{"post_signup_action" => "add_to_panl"},
+               "post_signup_action"
+             ) ==
+               "add_to_panl"
+
+      assert Params.parse_string_param(%{}, "post_signup_action") == nil
     end
   end
 end

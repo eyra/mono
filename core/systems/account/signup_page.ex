@@ -18,12 +18,13 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account.UserForm
   alias Systems.Account.User
   alias Frameworks.Utility.Params
+  alias Frameworks.Signal
 
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
-    add_to_panl = Params.parse_bool_param(params, "add_to_panl")
+    post_signup_action = Params.parse_string_param(params, "post_signup_action")
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -31,7 +32,7 @@ defmodule Systems.Account.SignupPage do
       socket
       |> assign(
         creator?: creator?,
-        add_to_panl: add_to_panl,
+        post_signup_action: post_signup_action,
         privacy_policy_accepted: false,
         privacy_policy_error: nil,
         changeset: changeset,
@@ -52,8 +53,8 @@ defmodule Systems.Account.SignupPage do
         %{"user" => user_params},
         %{
           assigns: %{
+            post_signup_action: post_signup_action,
             creator?: creator?,
-            add_to_panl: add_to_panl,
             privacy_policy_accepted: privacy_policy_accepted
           }
         } = socket
@@ -61,9 +62,9 @@ defmodule Systems.Account.SignupPage do
     user_params = Map.put(user_params, "creator", creator?)
 
     with :ok <-
-           validate_privacy_policy(add_to_panl, socket.assigns.privacy_policy_accepted),
+           validate_privacy_policy(post_signup_action == "add_to_panl", privacy_policy_accepted),
          {:ok, user} <- Account.Public.register_user(user_params) do
-      handle_successful_registration(socket, user, add_to_panl, creator?)
+      handle_successful_registration(socket, user)
     else
       {:error, :privacy_policy_not_accepted} ->
         handle_privacy_policy_error(socket)
@@ -109,9 +110,12 @@ defmodule Systems.Account.SignupPage do
      )}
   end
 
-  defp handle_successful_registration(socket, user, add_to_panl, creator?) do
-    if add_to_panl and not creator? do
-      Systems.Pool.Public.add_user_to_panl_pool(user)
+  defp handle_successful_registration(socket, user) do
+    if socket.assigns.post_signup_action do
+      Signal.Public.dispatch({:account, :post_signup}, %{
+        user: user,
+        action: socket.assigns.post_signup_action
+      })
     end
 
     {:ok, _} =
@@ -137,7 +141,7 @@ defmodule Systems.Account.SignupPage do
           <Text.title2><%= dgettext("eyra-account", "signup.title") %></Text.title2>
           <UserForm.password_signup
             changeset={@changeset}
-            privacy_policy_visible={@add_to_panl}
+            privacy_policy_visible={@post_signup_action == "add_to_panl"}
             privacy_policy_error={@privacy_policy_error}
           />
         </Area.form>

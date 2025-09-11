@@ -90,7 +90,7 @@ defmodule Core.MixProject do
       {:kadabra, "== 0.6.1"},
       {:libcluster, "== 3.5.0"},
       {:logger_json, "== 7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "0.1.2"},
+      {:live_nest, github: "eyra/live_nest", ref: "ccc85f40883576517f870d7a9a4ed2f47044e230"},
       {:mime, "== 2.0.7"},
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
@@ -101,7 +101,7 @@ defmodule Core.MixProject do
       {:phoenix_html, "== 4.2.1"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
-      {:phoenix_live_view, "== 1.1.10"},
+      {:phoenix_live_view, "== 1.1.11"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},
@@ -110,7 +110,7 @@ defmodule Core.MixProject do
       {:slugify, "== 1.3.1"},
       {:sqids, "== 0.2.1"},
       {:statistics, "== 0.6.3"},
-      {:tailwind, "== 0.3.1", runtime: Mix.env() == :dev},
+      {:tailwind, "== 0.4.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "== 1.1.0"},
       {:telemetry_poller, "== 1.3.0"},
       {:timex, "== 3.7.13"},
@@ -118,8 +118,8 @@ defmodule Core.MixProject do
       {:tzdata, "== 1.1.3"},
       # i18n
       {:ex_cldr, "== 2.43.1"},
-      {:ex_cldr_numbers, "== 2.35.1"},
-      {:ex_cldr_dates_times, "== 2.23.0"},
+      {:ex_cldr_numbers, "== 2.35.2"},
+      {:ex_cldr_dates_times, "== 2.24.0"},
       {:ex_cldr_plugs, "== 1.3.3"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "== 2.15.0"},
@@ -127,7 +127,7 @@ defmodule Core.MixProject do
       {:ssl_verify_fun, "== 1.1.7"},
       # Dev and test deps
       {:ex_machina, "== 2.8.0", only: :test},
-      {:file_system, "== 1.1.0", only: [:dev, :test]},
+      {:file_system, "== 1.1.1", only: [:dev, :test]},
       {:bypass, "== 2.1.0", only: :test},
       {:lazy_html, "== 0.1.7", only: :test},
       {:mox, "== 1.2.0", only: :test},
@@ -135,7 +135,7 @@ defmodule Core.MixProject do
       {:mock, "== 0.3.9", only: :test},
       {:phoenix_live_reload, "== 1.6.1", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
-      {:ex_doc, "== 0.38.3", only: [:dev, :test], runtime: false},
+      {:ex_doc, "== 0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "== 4.1.0"},
       {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
       {:browser, "== 0.5.5"}
@@ -150,7 +150,13 @@ defmodule Core.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.install", "assets.build"],
+      setup: [
+        "deps.get",
+        "ecto.setup",
+        "assets.setup",
+        "assets.install",
+        "assets.build"
+      ],
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
@@ -170,7 +176,11 @@ defmodule Core.MixProject do
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.install": "cmd cd ./assets && npm install",
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      "assets.deploy": [
+        "tailwind default --minify",
+        "esbuild default --minify",
+        "phx.digest"
+      ],
       run: "phx.server"
     ]
   end
