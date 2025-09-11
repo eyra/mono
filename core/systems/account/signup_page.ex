@@ -84,13 +84,12 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_event("toggle", %{"checkbox" => field}, socket) do
-    current_value = Map.get(socket.assigns, :privacy_policy_accepted, false)
-    new_value = !current_value
+  def handle_info({"active_item_ids", %{active_item_ids: active_item_ids}}, socket) do
+    privacy_policy_accepted = :privacy_policy_accepted in active_item_ids
 
     {:noreply,
      socket
-     |> assign(privacy_policy_accepted: new_value)}
+     |> assign(privacy_policy_accepted: privacy_policy_accepted, privacy_policy_error: nil)}
   end
 
   defp validate_privacy_policy(show_privacy_policy?, privacy_policy_accepted) do
@@ -142,6 +141,7 @@ defmodule Systems.Account.SignupPage do
           <UserForm.password_signup
             changeset={@changeset}
             privacy_policy_visible={@post_signup_action == "add_to_panl"}
+            privacy_policy_accepted={@privacy_policy_accepted}
             privacy_policy_error={@privacy_policy_error}
           />
         </Area.form>

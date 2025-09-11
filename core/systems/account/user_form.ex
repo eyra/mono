@@ -8,6 +8,7 @@ defmodule Systems.Account.UserForm do
 
   attr(:changeset, :map, required: true)
   attr(:privacy_policy_visible, :boolean, default: false)
+  attr(:privacy_policy_accepted, :boolean, default: false)
   attr(:privacy_policy_error, :string, default: nil)
 
   def password_signup(assigns) do
@@ -18,21 +19,26 @@ defmodule Systems.Account.UserForm do
         <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
         <.spacing value="S" />
         <%= if @privacy_policy_visible do %>
-          Checkbox placeholder
           <.spacing value="S" />
-          <%!-- <.checkbox
-            form={form}
-            field={:privacy_policy_accepted}
-            label_text={dgettext("eyra-account", "privacy.policy.label")}
-            accent={:tertiary}
-            background={:dark}
+          <.live_component
+            module={Frameworks.Pixel.Selector}
+            id="privacy_policy_selector"
+            items={[
+              %{
+                id: :privacy_policy_accepted,
+                value: dgettext("eyra-account", "privacy.policy.label"),
+                active: @privacy_policy_accepted,
+              }
+            ]}
+            type={:checkbox}
+            optional?={false}
           />
 
           <%= if @privacy_policy_error do %>
             <div class="text-warning text-sm mt-1">
               <%= @privacy_policy_error %>
             </div>
-          <% end %> --%>
+          <% end %>
         <% end %>
 
         <.spacing value="S" />
