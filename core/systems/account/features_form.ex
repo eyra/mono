@@ -1,10 +1,8 @@
 defmodule Systems.Account.FeaturesForm do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages}
-  alias Frameworks.Pixel.Selector
-  alias Frameworks.Pixel.Text
-
+  alias Core.Enums.Genders
+  alias Frameworks.Pixel.{Selector, Text}
   alias Systems.Account
 
   @impl true
@@ -12,17 +10,15 @@ defmodule Systems.Account.FeaturesForm do
     entity = Account.Public.get_features(user)
 
     gender_labels = Genders.labels(entity.gender)
-    dominanthand_labels = DominantHands.labels(entity.dominant_hand)
-    nativelanguage_labels = NativeLanguages.labels(entity.native_language)
+    changeset = Account.FeaturesModel.changeset(entity, :auto_save, %{})
 
     {
       :ok,
       socket
       |> assign(user: user)
       |> assign(entity: entity)
+      |> assign(changeset: changeset)
       |> assign(gender_labels: gender_labels)
-      |> assign(dominanthand_labels: dominanthand_labels)
-      |> assign(nativelanguage_labels: nativelanguage_labels)
       |> update_ui()
     }
   end
@@ -33,16 +29,10 @@ defmodule Systems.Account.FeaturesForm do
 
   defp update_ui(socket, entity) do
     gender_labels = Genders.labels(entity.gender)
-    dominanthand_labels = DominantHands.labels(entity.dominant_hand)
-    nativelanguage_labels = NativeLanguages.labels(entity.native_language)
 
     socket
     |> assign(gender_labels: gender_labels)
-    |> assign(dominanthand_labels: dominanthand_labels)
-    |> assign(nativelanguage_labels: nativelanguage_labels)
     |> compose_child(:gender)
-    |> compose_child(:dominant_hand)
-    |> compose_child(:native_language)
   end
 
   @impl true
@@ -56,36 +46,11 @@ defmodule Systems.Account.FeaturesForm do
     }
   end
 
-  @impl true
-  def compose(:dominant_hand, %{dominanthand_labels: dominanthand_labels}) do
-    %{
-      module: Selector,
-      params: %{
-        items: dominanthand_labels,
-        type: :radio
-      }
-    }
-  end
-
-  @impl true
-  def compose(:native_language, %{nativelanguage_labels: nativelanguage_labels}) do
-    %{
-      module: Selector,
-      params: %{
-        items: nativelanguage_labels,
-        type: :radio
-      }
-    }
-  end
-
   def save_features(socket, %Account.FeaturesModel{} = entity, type, attrs) do
     changeset = Account.FeaturesModel.changeset(entity, type, attrs)
 
-    if not changeset.valid? do
-      IO.puts("changeset errors: #{inspect(changeset.errors)}")
-    end
-
     socket
+    |> assign(changeset: changeset)
     |> save(changeset)
     |> update_ui()
   end
@@ -104,6 +69,12 @@ defmodule Systems.Account.FeaturesForm do
   end
 
   @impl true
+  def handle_event(event, %{"features_model" => attrs}, %{assigns: %{entity: entity}} = socket)
+      when event in ["change", "submit"] do
+    {:noreply, save_features(socket, entity, :auto_save, attrs)}
+  end
+
+  @impl true
   @spec render(map()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~H"""
@@ -111,18 +82,23 @@ defmodule Systems.Account.FeaturesForm do
         <Area.form>
           <Text.title2><%= dgettext("eyra-account", "profile.tab.features.title") %></Text.title2>
           <Text.body_medium><%= dgettext("eyra-account", "features.description") %></Text.body_medium>
+
           <.spacing value="XL" />
 
           <Text.title3><%= dgettext("eyra-account", "features.gender.title") %></Text.title3>
           <.child name={:gender} fabric={@fabric} />
+
           <.spacing value="XL" />
 
-          <Text.title3><%= dgettext("eyra-account", "features.nativelanguage.title") %></Text.title3>
-          <.child name={:native_language} fabric={@fabric} />
-          <.spacing value="XL" />
-
-          <Text.title3><%= dgettext("eyra-account", "features.dominanthand.title") %></Text.title3>
-          <.child name={:dominant_hand} fabric={@fabric} />
+          <Text.title3><%= dgettext("eyra-account", "features.birthyear.title") %></Text.title3>
+          <.spacing value="S" />
+          <.form :let={form} for={@changeset} phx-change="change" phx-submit="submit" phx-target={@myself}>
+            <.number_input
+              form={form}
+              field={:birth_year}
+              label_text=""
+            />
+          </.form>
         </Area.form>
     </div>
     """

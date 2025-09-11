@@ -67,6 +67,10 @@ msgid "features.description"
 msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
 
 #, elixir-autogen, elixir-format
+msgid "features.birthyear.title"
+msgstr "Birth year"
+
+#, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
 msgstr "Dominant hand"
 

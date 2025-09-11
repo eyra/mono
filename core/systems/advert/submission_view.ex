@@ -1,7 +1,7 @@
 defmodule Systems.Advert.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.{Genders, DominantHands, NativeLanguages}
+  alias Core.Enums.{Genders, NativeLanguages}
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept.Directable
@@ -13,7 +13,6 @@ defmodule Systems.Advert.SubmissionView do
 
   @enums_mapping %{
     genders: Genders,
-    dominant_hands: DominantHands,
     native_languages: NativeLanguages
   }
 
@@ -187,9 +186,6 @@ defmodule Systems.Advert.SubmissionView do
 
   defp inclusion_title(:native_languages),
     do: dgettext("eyra-account", "features.nativelanguage.title")
-
-  defp inclusion_title(:dominant_hands),
-    do: dgettext("eyra-account", "features.dominanthand.title")
 
   @impl true
   def handle_event(

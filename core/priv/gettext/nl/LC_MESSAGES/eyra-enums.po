@@ -24,15 +24,23 @@ msgstr "Tablet"
 
 #, elixir-autogen, elixir-format
 msgid "genders.man"
-msgstr "M"
+msgstr "Man"
 
 #, elixir-autogen, elixir-format
 msgid "genders.woman"
-msgstr "V"
+msgstr "Vrouw"
 
 #, elixir-autogen, elixir-format
 msgid "genders.x"
-msgstr "X"
+msgstr "Anders"
+
+#, elixir-autogen, elixir-format
+msgid "genders.non_binary"
+msgstr "Non-binair"
+
+#, elixir-autogen, elixir-format
+msgid "genders.prefer_not_to_say"
+msgstr "Zeg ik liever niet"
 
 #, elixir-autogen, elixir-format
 msgid "themes.art"

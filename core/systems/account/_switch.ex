@@ -4,7 +4,8 @@ defmodule Systems.Account.Switch do
 
   alias Systems.{
     NextAction,
-    Email
+    Email,
+    Monitor
   }
 
   alias Systems.Account.NextActions.{CompleteProfile, PromotePushStudent}
@@ -42,6 +43,12 @@ defmodule Systems.Account.Switch do
       NextAction.Public.clear_next_action(user, PromotePushStudent)
     end
 
+    :ok
+  end
+
+  @impl true
+  def intercept(:features_updated, %{features: features, features_changeset: _changeset}) do
+    Monitor.Public.log({features, :updated, features.user_id})
     :ok
   end
 

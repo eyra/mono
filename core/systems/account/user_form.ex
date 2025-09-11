@@ -17,7 +17,8 @@ defmodule Systems.Account.UserForm do
         <.spacing value="S" />
         <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
         <.spacing value="S" />
-        <%= if @privacy_policy_visible do %>
+        <%!-- <%= if @privacy_policy_visible do %> # temporary disabled for merging
+
           <.spacing value="S" />
           <.checkbox
             form={form}
@@ -32,7 +33,7 @@ defmodule Systems.Account.UserForm do
               <%= @privacy_policy_error %>
             </div>
           <% end %>
-        <% end %>
+        <% end %> --%>
 
         <.spacing value="S" />
         <Button.submit_wide label={dgettext("eyra-account", "signup.button")} bg_color="bg-grey1" />
