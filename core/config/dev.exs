@@ -9,6 +9,11 @@ upload_path =
 
 config :phoenix, :plug_init_mode, :runtime
 
+config :phoenix_live_view,
+  debug_heex_annotations: true,
+  debug_attributes: true,
+  enable_expensive_runtime_checks: true
+
 config :core,
   domain: "localhost",
   name: "Next [local]",

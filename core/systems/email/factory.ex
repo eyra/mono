@@ -1,5 +1,5 @@
 defmodule Systems.Email.Factory do
-  use Bamboo.Phoenix, component: Systems.Email.EmailHTML
+  use Bamboo.Phoenix, template: Systems.Email.EmailHTML
 
   alias Systems.{
     Email
@@ -52,7 +52,7 @@ defmodule Systems.Email.Factory do
     mail_user(to_user)
     |> from(from_user.email)
     |> subject(subject)
-    |> render(:debug_message, message: message, from_user: from_user, to_user: to_user)
+    |> render(:debug_message, body: message, from_user: from_user, to_user: to_user)
   end
 
   def notification(title, byline, message, to) do

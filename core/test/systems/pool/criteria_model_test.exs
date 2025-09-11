@@ -7,9 +7,8 @@ defmodule Systems.Pool.CriteriaModelTest do
   describe "eligitible?/2" do
     setup do
       features = %Account.FeaturesModel{
-        gender: :m,
-        dominant_hand: :right,
-        native_language: :nl,
+        gender: :man,
+        birth_year: 1995,
         study_program_codes: [:vu_sbe_bk_1, :vu_sbe_bk_1_h]
       }
 
@@ -18,9 +17,7 @@ defmodule Systems.Pool.CriteriaModelTest do
 
     test "eligitable without criteria", %{features: features} do
       criteria = %Pool.CriteriaModel{
-        genders: nil,
-        dominant_hands: nil,
-        native_languages: nil
+        genders: nil
       }
 
       assert Pool.CriteriaModel.eligitable?(criteria, features)
@@ -28,9 +25,7 @@ defmodule Systems.Pool.CriteriaModelTest do
 
     test "eligitable with matching gender", %{features: features} do
       criteria = %Pool.CriteriaModel{
-        genders: [:m],
-        dominant_hands: nil,
-        native_languages: nil
+        genders: [:man]
       }
 
       assert Pool.CriteriaModel.eligitable?(criteria, features)
@@ -38,52 +33,34 @@ defmodule Systems.Pool.CriteriaModelTest do
 
     test "not eligitable without matching gender", %{features: features} do
       criteria = %Pool.CriteriaModel{
-        genders: [:v],
-        dominant_hands: nil,
-        native_languages: nil
+        genders: [:woman]
       }
 
       assert not Pool.CriteriaModel.eligitable?(criteria, features)
     end
 
-    test "eligitable with matching dominant hand", %{features: features} do
+    test "eligitable when criteria allows multiple genders including user's gender", %{
+      features: features
+    } do
       criteria = %Pool.CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:right],
-        native_languages: nil
+        genders: [:man, :woman]
       }
 
       assert Pool.CriteriaModel.eligitable?(criteria, features)
     end
 
-    test "not eligitable without matching dominant hand", %{features: features} do
+    test "eligitable with no gender criteria" do
       criteria = %Pool.CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:left],
-        native_languages: nil
+        genders: []
       }
 
-      assert not Pool.CriteriaModel.eligitable?(criteria, features)
-    end
-
-    test "eligitable with matching native language", %{features: features} do
-      criteria = %Pool.CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:right],
-        native_languages: [:nl, :en]
+      features = %Account.FeaturesModel{
+        gender: :woman,
+        birth_year: 1990,
+        study_program_codes: []
       }
 
       assert Pool.CriteriaModel.eligitable?(criteria, features)
-    end
-
-    test "not eligitable without matching native language", %{features: features} do
-      criteria = %Pool.CriteriaModel{
-        genders: [:m],
-        dominant_hands: [:right],
-        native_languages: [:en]
-      }
-
-      assert not Pool.CriteriaModel.eligitable?(criteria, features)
     end
   end
 end

@@ -5,7 +5,7 @@ defmodule Systems.Email.Form do
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button
-  use Bamboo.Phoenix, component: Systems.Email.EmailHTML
+  use Bamboo.Phoenix, template: Systems.Email.EmailHTML
 
   alias Systems.Account
   alias Systems.Email

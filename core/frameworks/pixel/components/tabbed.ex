@@ -25,10 +25,18 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:tabs, :any, required: true)
   attr(:size, :atom, default: :wide)
   attr(:initial_tab, :any, default: nil)
+  attr(:preserve_tab_in_url, :boolean, default: false)
 
   def bar(assigns) do
+    assigns =
+      assign(
+        assigns,
+        :string_preserve_tab,
+        if(assigns.preserve_tab_in_url, do: "true", else: "false")
+      )
+
     ~H"""
-      <div id={@id} data-initial-tab={@initial_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
+      <div id={@id} data-initial-tab={@initial_tab} data-="true" data-preserve-tab-in-url={@string_preserve_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
         <%= if @size == :full do %>
           <.bar_full id={@id} type={@type} tabs={@tabs} />
         <% end %>

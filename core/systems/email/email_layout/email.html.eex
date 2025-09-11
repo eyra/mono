@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -34,7 +35,7 @@
             </tr>
             <tr>
                 <td colspan="2" class="content">
-                    <%= @inner_content %>
+<%= @inner_content %>
                 </td>
             </tr>
             <tr class="footer-images">

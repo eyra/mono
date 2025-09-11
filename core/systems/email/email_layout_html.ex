@@ -4,6 +4,17 @@ defmodule Systems.Email.EmailLayoutHTML do
   embed_templates("email_layout/*.html", suffix: "_html")
   embed_templates("email_layout/*.text", suffix: "_text")
 
+  # Define layout template functions for bamboo_phoenix 2.0
+  # Returns whatever the embedded templates return naturally
+  # bamboo_phoenix will handle the normalization
+  def email("html", assigns) do
+    email_html(assigns)
+  end
+
+  def email("text", assigns) do
+    email_text(assigns)
+  end
+
   @scales ["", "@2x", "@3x"]
   def header_image_tag(name) do
     image_tag("header-#{name}")

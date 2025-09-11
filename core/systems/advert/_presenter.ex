@@ -25,6 +25,5 @@ defmodule Systems.Advert.Presenter do
   end
 
   defp builder(Advert.ContentPage), do: Advert.ContentPageBuilder
-  defp builder(Alliance.CallbackPage), do: Advert.Builders.AssignmentCallbackPage
   defp builder(Promotion.LandingPage), do: Advert.PromotionLandingPageBuilder
 end

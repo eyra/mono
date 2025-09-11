@@ -93,6 +93,10 @@
 * Added: AppSignal support
 * Added: Support for Onyx RIS upload (behind feature flag)
 
+## \#6.2 2024-11-28
+
+* Added: AppSignal support
+
 ## \#6.1 2024-11-19
 
 * Fixed: Memory issues by temporary removing Sentry support

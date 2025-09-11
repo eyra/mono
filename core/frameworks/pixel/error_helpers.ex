@@ -4,7 +4,7 @@ defmodule Frameworks.Pixel.ErrorHelpers do
   """
 
   alias Phoenix.HTML.Form
-  alias Phoenix.HTML.Tag
+  alias PhoenixHTMLHelpers.Tag
 
   @doc """
   Checkss if there are errors.

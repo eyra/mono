@@ -12,7 +12,9 @@ defmodule Systems.Support.HelpdeskPageTest do
 
       view
       |> element("form")
-      |> render_submit(%{ticket_model: %{title: "my ticket", description: "a ticket description"}})
+      |> render_submit(%{
+        ticket_model: %{title: "my ticket", description: "a ticket description"}
+      })
 
       assert %{description: "a ticket description"} =
                Support.Public.list_tickets(:open) |> Enum.find(&(&1.title == "my ticket"))

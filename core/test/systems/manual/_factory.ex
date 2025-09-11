@@ -30,7 +30,7 @@ defmodule Systems.Manual.Factory do
     manual = insert(:manual, %{userflow: manual_userflow})
 
     chapters =
-      Enum.map(1..chapter_count, fn chapter_index ->
+      Enum.map(Range.new(1, chapter_count, 1), fn chapter_index ->
         chapter_step =
           Userflow.Factory.insert(:step, %{
             userflow: manual_userflow,
@@ -47,7 +47,7 @@ defmodule Systems.Manual.Factory do
           )
 
         pages =
-          Enum.map(1..page_count, fn page_index ->
+          Enum.map(Range.new(1, page_count, 1), fn page_index ->
             page_step =
               Userflow.Factory.insert(:step, %{
                 userflow: chapter_userflow,

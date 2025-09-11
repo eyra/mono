@@ -24,7 +24,8 @@ defmodule Systems.Graphite.ScoresParser do
   end
 
   def from_lines(lines, leaderboard) do
-    records = to_records(lines)
+    lines_list = Enum.to_list(lines)
+    records = to_records(lines_list)
 
     %Graphite.ScoresParseResult{
       csv: lines,
