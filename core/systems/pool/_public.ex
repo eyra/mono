@@ -177,6 +177,19 @@ defmodule Systems.Pool.Public do
     end
   end
 
+  def add_user_to_panl_pool(%Account.User{} = user) do
+    case get_panl() do
+      %Pool.Model{} = panl_pool ->
+        add_participant!(panl_pool, user)
+        :ok
+
+      nil ->
+        require Logger
+        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
+        :error
+    end
+  end
+
   def remove_participant(pool, user) do
     auth_module().remove_role!(user, pool, :participant)
   end

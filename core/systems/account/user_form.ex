@@ -23,8 +23,18 @@ defmodule Systems.Account.UserForm do
   attr(:user_type, :atom, required: true)
   attr(:for, :any, default: %{})
   attr(:status, :string, default: "")
+  attr(:post_signup_action, :string, default: nil)
 
   def password_signin(assigns) do
+    signup_url =
+      if assigns.post_signup_action do
+        ~p"/user/signup/#{assigns.user_type}?post_signup_action=#{assigns.post_signup_action}"
+      else
+        ~p"/user/signup/#{assigns.user_type}"
+      end
+
+    assigns = assign(assigns, :signup_url, signup_url)
+
     ~H"""
     <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} >
       <%= if @status == "account_activated_successfully" do %>
@@ -37,13 +47,16 @@ defmodule Systems.Account.UserForm do
       <.spacing value="S" />
       <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
       <.spacing value="S" />
+      <%= if form[:post_signin_action] do %>
+        <.hidden_input form={form} field={:post_signin_action} />
+      <% end %>
       <Button.submit_wide label={dgettext("eyra-account", "signin.button")} bg_color="bg-grey1" />
       <.spacing value="S" />
 
       <div class="flex flex-row" >
         <.spacing value="M" />
         <Button.dynamic
-          action={%{type: :redirect, to: ~p"/user/signup/#{@user_type}"}}
+          action={%{type: :redirect, to: @signup_url}}
           face={%{type: :link, text: dgettext("eyra-user", "register.link")}}
         />
         <div class="ml-2"></div>|<div class="ml-2"></div>
@@ -73,10 +86,22 @@ defmodule Systems.Account.UserForm do
   end
 
   attr(:creator?, :boolean, required: true)
+  attr(:post_signin_action, :string, default: nil)
 
   def google_signin(assigns) do
+    query_string =
+      [{"creator", assigns.creator?}]
+      |> then(fn p ->
+        if assigns.post_signin_action,
+          do: [{"post_signin_action", assigns.post_signin_action} | p],
+          else: p
+      end)
+      |> URI.encode_query()
+
+    assigns = assign(assigns, :google_url, "/google-sign-in?#{query_string}")
+
     ~H"""
-      <a href={"/google-sign-in?creator=#{@creator?}"}>
+      <a href={@google_url}>
       <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
         <div class="flex w-full justify-center items-center">
           <div>

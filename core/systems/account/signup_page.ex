@@ -17,11 +17,14 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account
   alias Systems.Account.UserForm
   alias Systems.Account.User
+  alias Frameworks.Utility.Params
+  alias Frameworks.Signal
 
   @impl true
-  def mount(%{"user_type" => user_type}, _session, socket) do
+  def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
+    post_signup_action = Params.parse_string_param(params, "post_signup_action")
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -29,6 +32,7 @@ defmodule Systems.Account.SignupPage do
       socket
       |> assign(
         creator?: creator?,
+        post_signup_action: post_signup_action,
         changeset: changeset,
         active_menu_item: nil
       )
@@ -42,7 +46,11 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_event("signup", %{"user" => user_params}, %{assigns: %{creator?: creator?}} = socket) do
+  def handle_event(
+        "signup",
+        %{"user" => user_params},
+        %{assigns: %{creator?: creator?, post_signup_action: post_signup_action}} = socket
+      ) do
     user_params = Map.put(user_params, "creator", creator?)
 
     case Account.Public.register_user(user_params) do
@@ -50,6 +58,13 @@ defmodule Systems.Account.SignupPage do
         {:noreply, socket |> assign(changeset: changeset)}
 
       {:ok, user} ->
+        if post_signup_action do
+          Signal.Public.dispatch({:account, :post_signup}, %{
+            user: user,
+            action: post_signup_action
+          })
+        end
+
         {:ok, _} =
           Account.Public.deliver_user_confirmation_instructions(
             user,
@@ -69,7 +84,6 @@ defmodule Systems.Account.SignupPage do
     {:noreply, socket |> assign(changeset: changeset)}
   end
 
-  # data(changeset, :any)
   @impl true
   def render(assigns) do
     ~H"""
