@@ -54,7 +54,7 @@ defmodule Systems.Manual.Assembly do
     Multi.new()
     |> create_manual(:manual)
     |> Signal.Public.multi_dispatch({:manual, :created})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def create_manual(%Manual.ToolModel{} = tool) do
@@ -67,7 +67,7 @@ defmodule Systems.Manual.Assembly do
       |> put_assoc(:manual, manual |> Repo.preload(Manual.Model.preload_graph(:down)))
     end)
     |> Signal.Public.multi_dispatch({:manual_tool, :manual_created})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def create_manual(%Multi{} = multi, manual_name) do

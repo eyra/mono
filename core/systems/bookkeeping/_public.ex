@@ -58,7 +58,7 @@ defmodule Systems.Bookkeeping.Public do
     result =
       Multi.new()
       |> update_records(entry)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     case result do
       {:ok, any} -> {:ok, any}

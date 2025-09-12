@@ -6,6 +6,7 @@ defmodule Core.Repo do
 
   import Ecto.Query, warn: false
   alias Ecto.Multi
+  alias Systems.Observatory
 
   require Logger
 
@@ -102,5 +103,61 @@ defmodule Core.Repo do
        when is_atom(module) and is_atom(field) and is_integer(model_id) do
     field_id = String.to_existing_atom("#{field}_id")
     from(e in module, where: field(e, ^field_id) == ^model_id)
+  end
+
+  @doc """
+  Executes a Multi transaction and dispatches collected Observatory updates after commit.
+
+  This ensures that any Observatory updates collected during the transaction
+  are only dispatched if the transaction succeeds. If the transaction fails,
+  collected updates are cleared without being dispatched.
+
+  This is useful when you have signal handlers that collect Observatory updates
+  and you want to ensure they are only dispatched after the database changes
+  are committed.
+
+  ## Examples
+
+      Multi.new()
+      |> Multi.update(:model, changeset)
+      |> Signal.Public.multi_dispatch({:model, :updated})
+      |> Repo.commit()
+
+      # With options passed to transaction
+      Multi.new()
+      |> Multi.insert(:model, changeset)
+      |> Repo.commit(returning: true)
+
+  ## Options
+
+  All options are passed through to `Repo.transaction/2`. Common options:
+    - `:returning` - Whether to return the result of the transaction (default: true)
+    - `:timeout` - Transaction timeout in milliseconds
+    - `:pool_timeout` - Time to wait for a database connection
+
+  ## Returns
+
+    - `{:ok, result}` - Transaction succeeded and updates were dispatched
+    - `{:error, operation, failed_value, changes_so_far}` - Transaction failed
+  """
+  @spec commit(Ecto.Multi.t(), Keyword.t()) ::
+          {:ok, any()} | {:error, any()} | Ecto.Multi.failure()
+  def commit(multi, opts \\ []) do
+    # credo:disable-for-next-line Credo.Check.Warning.NoRepoTransaction
+    case transaction(multi, opts) do
+      {:ok, result} ->
+        # Transaction succeeded, commit all collected Observatory updates
+        Observatory.Public.commit_updates()
+        {:ok, result}
+
+      {:error, _operation, _failed_value, _changes_so_far} = error ->
+        # Transaction failed, clear collected updates without committing
+        Observatory.Public.clear_updates()
+        error
+
+      {:error, _} = error ->
+        Observatory.Public.clear_updates()
+        error
+    end
   end
 end

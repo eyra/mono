@@ -580,6 +580,7 @@ defmodule Systems.Account.PublicTest do
     alias Systems.Account
 
     setup do
+      isolate_signals()
       %{user: Factories.insert!(:member)}
     end
 
@@ -624,6 +625,8 @@ defmodule Systems.Account.PublicTest do
     alias Systems.Account
 
     setup do
+      isolate_signals()
+
       url_resolver = fn target, _ ->
         case target do
           Systems.Account.UserSettings -> "/settings"

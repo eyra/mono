@@ -66,7 +66,7 @@ defmodule Systems.Org.Public do
         |> Org.Public.create_node!()
       }
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def create_node!(%{} = attrs) do

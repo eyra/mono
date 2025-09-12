@@ -38,7 +38,7 @@ defmodule Systems.Consent.Public do
         revision -> {:ok, revision}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def bump_revision_if_needed!(agreement) do
@@ -72,7 +72,7 @@ defmodule Systems.Consent.Public do
     Multi.new()
     |> Multi.insert(:consent_signature, prepare_signature(revision, user))
     |> Signal.Public.multi_dispatch({:consent_signature, :created})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def prepare_signature(revision, user) do
@@ -186,7 +186,7 @@ defmodule Systems.Consent.Public do
     end)
     |> Multi.update(:consent_revision, changeset)
     |> Signal.Public.multi_dispatch({:consent_revision, :updated})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def list_signatures(%Consent.AgreementModel{} = consent_agreement) do

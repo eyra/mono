@@ -1,6 +1,7 @@
 defmodule Systems.Observatory.Public do
   use Core, :public
   alias CoreWeb.Endpoint
+  alias Systems.Observatory.UpdateCollector
 
   def subscribe(signal, key \\ []) do
     Endpoint.subscribe(topic_key(signal, key))
@@ -31,7 +32,7 @@ defmodule Systems.Observatory.Public do
   def observe(socket, subscriptions \\ []) do
     if Phoenix.LiveView.connected?(socket) do
       for {signal, key} <- subscriptions do
-        __MODULE__.subscribe(signal, key)
+        subscribe(signal, key)
       end
     end
 
@@ -53,6 +54,51 @@ defmodule Systems.Observatory.Public do
         model,
         presenter
       ) do
-    apply(presenter, :view_model, [page, model, assigns])
+    presenter.view_model(page, model, assigns)
+  end
+
+  @doc """
+  Collects an Observatory update to be dispatched later within a transaction.
+
+  This is a convenience wrapper around UpdateCollector.collect/3.
+  Use this when you want to defer LiveView updates until after a transaction commits.
+
+  ## Examples
+
+      Observatory.Public.collect_update({:page, MyPage}, [id], %{model: model})
+      Observatory.Public.collect_update({:embedded_live_view, MyView}, [id, user_id], %{model: model})
+  """
+  def collect_update(target, args, message) do
+    UpdateCollector.collect(target, args, message)
+  end
+
+  @doc """
+  Commits all collected Observatory updates by dispatching them.
+
+  This is a convenience wrapper around UpdateCollector.dispatch_all/0.
+  Call this after your transaction commits to send all collected updates.
+
+  ## Examples
+
+      Multi.run(multi, :commit_observatory, fn _, _ ->
+        Observatory.Public.commit_updates()
+        {:ok, :committed}
+      end)
+  """
+  def commit_updates do
+    UpdateCollector.dispatch_all()
+  end
+
+  @doc """
+  Clears all collected Observatory updates without dispatching them.
+
+  This is useful in error cases where you want to abandon collected updates.
+
+  ## Examples
+
+      Observatory.Public.clear_updates()
+  """
+  def clear_updates do
+    UpdateCollector.clear()
   end
 end

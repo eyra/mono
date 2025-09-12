@@ -31,7 +31,7 @@ defmodule Systems.Assignment.Private do
       |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
     end)
     |> Signal.Public.multi_dispatch({:affiliate, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def ensure_affiliate(%Assignment.Model{} = assignment), do: {:ok, %{assignment: assignment}}
@@ -102,11 +102,13 @@ defmodule Systems.Assignment.Private do
   def log_performance_event(%Assignment.Model{} = assignment, event) do
     Multi.new()
     |> Monitor.Public.multi_log(event)
-    |> Signal.Public.multi_dispatch({:assignment, :monitor_event}, %{
-      assignment: assignment,
-      monitor_event: event
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:assignment, :monitor_event},
+      message: %{
+        assignment: assignment,
+        monitor_event: event
+      }
+    )
+    |> Repo.commit()
   end
 
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
@@ -223,6 +225,14 @@ defmodule Systems.Assignment.Private do
 
   def task_identifier(
         %{special: :questionnaire},
+        %Workflow.ItemModel{id: item_id},
+        member_id
+      ) do
+    ["item=#{item_id}", "member=#{member_id}"]
+  end
+
+  def task_identifier(
+        %{special: :paper_screening},
         %Workflow.ItemModel{id: item_id},
         member_id
       ) do

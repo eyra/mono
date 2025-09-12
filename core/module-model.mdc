@@ -106,7 +106,7 @@ end
 
 1. Always define both up and down preload graphs:
    ```elixir
-   def preload_graph(:down), do: [:children, nested: [:items]]
+   def preload_graph(:down), do: preload_graph([:children, nested: [:items]])
    def preload_graph(:up), do: [:parent]
    ```
 

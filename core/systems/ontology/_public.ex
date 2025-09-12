@@ -37,7 +37,7 @@ defmodule Systems.Ontology.Public do
           {:ok, concept}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{concept: concept}} ->
         {:ok, concept}
@@ -111,7 +111,7 @@ defmodule Systems.Ontology.Public do
           {:ok, predicate}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{predicate: predicate}} ->
         {:ok, predicate}
@@ -196,7 +196,7 @@ defmodule Systems.Ontology.Public do
     Multi.new()
     |> Multi.put(:concept_or_predicate, concept_or_predicate)
     |> upsert_ontology_ref(:ontology_ref, :concept_or_predicate)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{ontology_ref: ontology_ref}} ->
         {:ok, ontology_ref}

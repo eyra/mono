@@ -126,7 +126,7 @@ defmodule Systems.Graphite.Public do
     end)
     |> Multi.insert(:graphite_submission, submission)
     |> Signal.Public.multi_dispatch({:graphite_submission, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update_leaderboard(leaderboard, attrs) do
@@ -134,7 +134,7 @@ defmodule Systems.Graphite.Public do
     |> Multi.update(:graphite_leaderboard, fn _ ->
       Graphite.LeaderboardModel.changeset(leaderboard, attrs)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update_submission(submission, attrs) do
@@ -151,7 +151,7 @@ defmodule Systems.Graphite.Public do
       |> Graphite.SubmissionModel.validate()
     end)
     |> Signal.Public.multi_dispatch({:graphite_submission, :updated})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def list_submissions(struct, preload \\ [])
@@ -191,7 +191,7 @@ defmodule Systems.Graphite.Public do
     )
     |> Multi.update(:graphite_leaderboard, leaderboard_changeset)
     |> Signal.Public.multi_dispatch({:graphite_leaderboard, :updated})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   defp create_scores(line, leaderboard, datetime) do

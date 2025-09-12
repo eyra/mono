@@ -1,4 +1,16 @@
 defmodule Systems.Observatory.Switch do
+  @moduledoc """
+  DEPRECATED: This module is no longer needed and will be removed in a future version.
+
+  Observatory updates should now be collected during transactions using:
+    Observatory.Public.collect_update({:page, MyPage}, [id], %{model: model})
+
+  And committed after transaction using:
+    Observatory.Public.commit_updates()
+
+  This module now acts as a pass-through for backwards compatibility.
+  """
+
   use Frameworks.Signal.Handler
 
   alias Systems.{

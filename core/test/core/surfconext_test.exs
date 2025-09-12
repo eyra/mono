@@ -73,6 +73,8 @@ defmodule Core.SurfConext.Test do
     end
 
     test "dispatches signal" do
+      isolate_signals()
+
       sso_info = %{
         "sub" => Faker.UUID.v4(),
         "email" => Faker.Internet.email(),

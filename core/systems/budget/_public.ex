@@ -244,7 +244,7 @@ defmodule Systems.Budget.Public do
       when is_integer(amount) and is_binary(idempotence_key) do
     Multi.new()
     |> create_reward(budget, amount, user, idempotence_key)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def create_reward(
@@ -387,7 +387,7 @@ defmodule Systems.Budget.Public do
   def rollback_deposit(%Budget.RewardModel{} = reward) do
     Multi.new()
     |> rollback_deposit(reward)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def rollback_deposit(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
@@ -477,7 +477,7 @@ defmodule Systems.Budget.Public do
         error -> error
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   defp link_deposit_transaction(reward, deposit) do

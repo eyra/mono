@@ -17,3 +17,11 @@ msgstr "Thank you for your interest. Publishing on the Next platform is subject 
 #, elixir-autogen, elixir-format
 msgid "request.verification.title"
 msgstr "Interested in publishing?"
+
+#, elixir-autogen, elixir-format
+msgid "file.error.not_found"
+msgstr "File not found"
+
+#, elixir-autogen, elixir-format
+msgid "file.error.fetch_failed"
+msgstr "Unable to process the file. Please try again. If the problem persists, please contact support."

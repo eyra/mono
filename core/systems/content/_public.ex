@@ -36,7 +36,7 @@ defmodule Systems.Content.Public do
     Multi.new()
     |> Multi.update(:content_repository, repository)
     |> Signal.Public.multi_dispatch({:content_repository, :update})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def store(path, original_filename) do
@@ -86,7 +86,7 @@ defmodule Systems.Content.Public do
         |> Enum.map(&create_text_item!(&1, bundle))
       }
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   defp translate_item({locale, text}), do: %{locale: Atom.to_string(locale), text: text}

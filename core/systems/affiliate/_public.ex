@@ -81,7 +81,7 @@ defmodule Systems.Affiliate.Public do
       conflict_target: [:user_id]
     )
     |> Signal.Public.multi_dispatch({:affiliate_user_info, :obtained})
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{affiliate_user_info: affiliate_user_info}} ->
         {:ok, affiliate_user_info}
@@ -118,7 +118,7 @@ defmodule Systems.Affiliate.Public do
           {:ok, user}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{affiliate_user: affiliate_user}} ->
         {:ok, affiliate_user}
@@ -183,7 +183,7 @@ defmodule Systems.Affiliate.Public do
     |> Multi.insert(:affiliate_user, fn %{user: user} ->
       prepare_affiliate_user(affiliate, user, identifier)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{affiliate_user: affiliate_user}} ->
         {:ok, affiliate_user}

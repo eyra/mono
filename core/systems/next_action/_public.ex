@@ -111,8 +111,7 @@ defmodule Systems.NextAction.Public do
   def to_view_model(%NextAction.Model{action: action, count: count, params: params}) do
     action_type = String.to_existing_atom(action)
 
-    action_type
-    |> apply(:to_view_model, [count, params])
+    action_type.to_view_model(count, params)
     |> Map.put(:action_type, action_type)
   end
 end

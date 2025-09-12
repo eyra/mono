@@ -9,7 +9,7 @@ defmodule Systems.Email.Dispatcher do
       }) do
     Multi.new()
     |> dispatch_multi(0, to, args)
-    |> Repo.transaction()
+    |> Repo.commit()
 
     :ok
   end

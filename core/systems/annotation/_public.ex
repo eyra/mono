@@ -110,7 +110,7 @@ defmodule Systems.Annotation.Public do
     Multi.new()
     |> Multi.put(@annotation_ref, ref)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(type, statement, entity, resource)
@@ -119,7 +119,7 @@ defmodule Systems.Annotation.Public do
     |> upsert_resource(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(
@@ -132,7 +132,7 @@ defmodule Systems.Annotation.Public do
     |> Multi.put(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(type, statement, entity, %Authentication.Entity{} = ref) do
@@ -140,7 +140,7 @@ defmodule Systems.Annotation.Public do
     |> Multi.put(@annotation_entity, ref)
     |> upsert_annotation_ref(@annotation_ref, @annotation_entity)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(type, statement, entity, %Annotation.Model{} = ref) do
@@ -148,7 +148,7 @@ defmodule Systems.Annotation.Public do
     |> Multi.put(@annotation_sub, ref)
     |> upsert_annotation_ref(@annotation_ref, @annotation_sub)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(
@@ -161,7 +161,7 @@ defmodule Systems.Annotation.Public do
     |> Multi.put(@ontology_ref, ontology_ref)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(
@@ -175,7 +175,7 @@ defmodule Systems.Annotation.Public do
     |> upsert_ontology_ref(@ontology_ref, @ontology_concept)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(
@@ -189,7 +189,7 @@ defmodule Systems.Annotation.Public do
     |> upsert_ontology_ref(@ontology_ref, @ontology_predicate)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
     |> insert_annotation(@annotation, @annotation_ref, type, statement, entity)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def insert_annotation(
@@ -264,7 +264,7 @@ defmodule Systems.Annotation.Public do
     Multi.new()
     |> Multi.put(@annotation_sub, assoc)
     |> upsert_annotation_ref(@annotation_ref, @annotation_sub)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{annotation_ref: annotation_ref}} ->
         {:ok, annotation_ref}

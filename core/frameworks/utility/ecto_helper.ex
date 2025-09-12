@@ -29,27 +29,27 @@ defmodule Frameworks.Utility.EctoHelper do
   def upsert_and_dispatch(%{data: %{id: id}} = changeset, key) when not is_nil(id) do
     Multi.new()
     |> Repo.multi_update(key, changeset)
-    |> Signal.Public.multi_dispatch({key, :updated}, %{changeset: changeset})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({key, :updated}, message: %{changeset: changeset})
+    |> Repo.commit()
   end
 
   def upsert_and_dispatch(changeset, key) do
     Multi.new()
     |> Multi.insert(key, changeset)
-    |> Signal.Public.multi_dispatch({key, :inserted}, %{changeset: changeset})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({key, :inserted}, message: %{changeset: changeset})
+    |> Repo.commit()
   end
 
   def update_and_dispatch(%Changeset{} = changeset, key) do
     Multi.new()
     |> update_and_dispatch(changeset, key)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update_and_dispatch(%Multi{} = multi, %Changeset{} = changeset, key) do
     multi
     |> Repo.multi_update(key, changeset)
-    |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, %{changeset: changeset})
+    |> Signal.Public.multi_dispatch({key, :update_and_dispatch}, message: %{changeset: changeset})
   end
 
   def delete(multi, name, %table{id: id}) do
@@ -109,7 +109,7 @@ defmodule Frameworks.Utility.EctoHelper do
         Multi.run(multi, name, fn _, args ->
           Multi.new()
           |> function.(args)
-          |> Repo.transaction()
+          |> Repo.commit()
         end)
 
       _ ->

@@ -9,7 +9,9 @@ defmodule Systems.Promotion.Private do
   def log_performance_event(%Promotion.Model{} = promotion, topic) do
     Multi.new()
     |> Monitor.Public.multi_log({promotion, topic})
-    |> Signal.Public.multi_dispatch({:promotion, :performance_event}, %{promotion: promotion})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:promotion, :performance_event},
+      message: %{promotion: promotion}
+    )
+    |> Repo.commit()
   end
 end

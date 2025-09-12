@@ -250,7 +250,7 @@ defmodule Systems.Pool.Public do
       notify_when_submitted(submission, changeset)
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update(%Pool.SubmissionModel{} = submission, attrs) do
@@ -264,7 +264,7 @@ defmodule Systems.Pool.Public do
     |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
       Signal.Public.dispatch!({:criteria, :updated}, %{criteria: criteria})
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def select(nil, _user), do: nil
@@ -416,7 +416,7 @@ defmodule Systems.Pool.Public do
 
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   defp update_pools([_ | _] = pool_names, user, command) do

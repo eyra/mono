@@ -30,8 +30,8 @@ defmodule Systems.Annotation.Assoc do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down), do: [:ref]
-  def preload_graph(:up), do: [:annotation]
+  def preload_graph(:down), do: preload_graph([:ref])
+  def preload_graph(:up), do: preload_graph([:annotation])
 
   def preload_graph(:annotation), do: [annotation: Annotation.Model.preload_graph(:up)]
   def preload_graph(:ref), do: [ref: Annotation.RefModel.preload_graph(:down)]

@@ -99,9 +99,13 @@ defmodule Fabric.ModalPresenter do
             id: id,
             type: :live_component,
             implementation: module,
-            options: params
+            options: to_keyword_list(params)
           }
         }
+      end
+
+      defp to_keyword_list(%{} = params) do
+        Enum.into(params, [], fn {k, v} -> {k, v} end)
       end
     end
   end

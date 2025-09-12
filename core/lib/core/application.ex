@@ -23,6 +23,7 @@ defmodule Core.Application do
       Core.Repo,
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
+      {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
       {Oban, oban_config()},
       {Banking.Supervisor, [{:euro, "account-number"}]},
       CoreWeb.Endpoint,

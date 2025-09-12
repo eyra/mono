@@ -41,6 +41,7 @@ defmodule Systems.Admin.SystemView do
     %{
       module: Citizen.Pool.Form,
       params: %{
+        title: dgettext("eyra-admin", "system.citizen.pools.new.title"),
         pool: pool,
         user: user,
         locale: locale
@@ -53,6 +54,7 @@ defmodule Systems.Admin.SystemView do
     %{
       module: Budget.BankAccountForm,
       params: %{
+        title: dgettext("eyra-admin", "system.bank.accounts.new.title"),
         bank_account: bank_account,
         user: user,
         locale: locale

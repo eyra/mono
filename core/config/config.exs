@@ -93,7 +93,7 @@ config :core, Oban,
     email_dispatchers: 1,
     email_delivery: 1,
     storage_delivery: 1,
-    ris_processor: 1
+    ris_import: 1
   ]
 
 config :packmatic, Packmatic.Source.URL,
@@ -197,5 +197,19 @@ config :core, :bundle, bundle
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+config :core, :zircon,
+  screening: [
+    agent_module: Systems.Zircon.Screening.HumanAgent
+  ]
+
+# Paper system import configuration
+config :core, :paper,
+  import_batch_size: 100,
+  import_batch_timeout: 30_000,
+  # Maximum allowed RIS file size (default 150MB - supports ~100,000 paper references)
+  ris_max_file_size: 157_286_400,
+  # Chunk size for streaming RIS files (default 64KB)
+  ris_stream_chunk_size: 65_536
 
 import_config "#{config_env()}.exs"

@@ -117,6 +117,29 @@ defmodule CoreWeb do
     end
   end
 
+  def embedded_live_view do
+    quote do
+      use Phoenix.LiveView
+      use LiveNest, :embedded_live_view
+      use Gettext, backend: CoreWeb.Gettext
+      use Systems.Observatory.LiveFeature
+      use CoreWeb.UI
+
+      require Logger
+
+      # Standard embedded LiveView hooks
+      on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+      on_mount({Systems.Observatory.LiveHook, __MODULE__})
+
+      # Include stack helpers for block-based architecture
+      import CoreWeb.Live.Feature.Stack
+
+      unquote(utility())
+    end
+  end
+
   def live_features do
     quote do
       use Frameworks.GreenLight.LiveFeature
@@ -127,6 +150,7 @@ defmodule CoreWeb do
       use CoreWeb.Live.Feature.Menus
       use CoreWeb.Live.Feature.Tabbed
       use CoreWeb.Live.Feature.Actions
+      use CoreWeb.Live.Feature.Stack
     end
   end
 

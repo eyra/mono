@@ -2,7 +2,7 @@ defmodule Systems.Assignment.PrivacyForm do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.pdf)
 
-  import Frameworks.Pixel.Components.FileSelector
+  import Frameworks.Pixel.FileSelector
 
   alias Systems.Assignment
   alias Systems.Content

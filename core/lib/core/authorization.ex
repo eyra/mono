@@ -303,7 +303,7 @@ defmodule Core.Authorization do
   def link(auth_tree) do
     Multi.new()
     |> link(auth_tree)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def link(multi, {parent, [h | t]}) do

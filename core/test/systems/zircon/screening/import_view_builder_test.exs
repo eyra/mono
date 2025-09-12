@@ -1,0 +1,1664 @@
+defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
+  use Core.DataCase
+  alias Systems.Zircon.Screening.ImportViewBuilder
+
+  # Helper function to extract import buttons assigns from nested structure
+  defp get_import_buttons_assigns(stack) do
+    with {_, import_section_assigns} <-
+           Enum.find(stack, fn {type, _} -> type == :import_section end),
+         {_, import_buttons_assigns} <-
+           Enum.find(import_section_assigns.stack, fn {type, _} -> type == :import_buttons end) do
+      import_buttons_assigns
+    else
+      _ -> nil
+    end
+  end
+
+  # Helper function to check if a block type exists in the import section stack
+  defp has_block_in_import_section?(stack, block_type) do
+    case Enum.find(stack, fn {type, _} -> type == :import_section end) do
+      {_, import_section_assigns} ->
+        Enum.any?(import_section_assigns.stack, fn {type, _} -> type == block_type end)
+
+      nil ->
+        false
+    end
+  end
+
+  # Helper function to build session attributes based on phase
+  defp build_session_attrs_for_phase(phase, paper_set, reference_file) do
+    case phase do
+      :processing ->
+        # Add progress data to meet threshold
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase,
+          progress: %{"total_references" => 25, "current_reference" => 5}
+        }
+
+      :importing ->
+        # Add entries with enough new papers to meet threshold
+        entries = Enum.map(1..25, fn i -> %{"status" => "new", "title" => "Paper #{i}"} end)
+
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase,
+          entries: entries
+        }
+
+      _ ->
+        # Waiting and parsing always show status
+        %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: phase
+        }
+    end
+  end
+
+  describe "view_model/2 basic functionality" do
+    test "creates basic view model for tool with no papers" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      assert %{stack: stack, active_filename: nil, active_file_url: nil} = result
+      # header and import_section blocks (no content when 0 papers)
+      assert length(stack) == 2
+
+      # Check header block
+      {header_type, header_assigns} = Enum.at(stack, 0)
+      assert header_type == :header
+      assert header_assigns.title == "Import Papers"
+      assert header_assigns.paper_count == 0
+
+      # Check import_section block (now second in stack)
+      {import_section_type, import_section_assigns} = Enum.at(stack, 1)
+      assert import_section_type == :import_section
+
+      # Check nested blocks in import_section stack
+      # Should have both file selector and import buttons when no session and no file
+      assert length(import_section_assigns.stack) >= 1
+
+      # Check file selector exists
+      {file_selector_type, _file_selector_assigns} =
+        import_section_assigns.stack
+        |> Enum.find(fn {type, _} -> type == :import_file_selector end)
+
+      assert file_selector_type == :import_file_selector
+
+      # No content block when there are no papers
+    end
+
+    test "creates view model for tool with papers" do
+      # Create tool first to get its ID
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      # Create papers
+      paper1 = Core.Factories.insert!(:paper, %{title: "Test Paper 1"})
+      paper2 = Core.Factories.insert!(:paper, %{title: "Test Paper 2"})
+
+      # Create paper set with papers, using the tool's category and identifier
+      _paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id,
+          papers: [paper1, paper2]
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      assert %{stack: stack} = result
+
+      # Check header block
+      {_, header_assigns} = Enum.at(stack, 0)
+      assert header_assigns.paper_count == 2
+
+      # Check import_section block (now second in stack)
+      {import_section_type, _} = Enum.at(stack, 1)
+      assert import_section_type == :import_section
+
+      # Check content block (now third in stack)
+      {content_type, content_assigns} = Enum.at(stack, 2)
+      assert content_type == :content
+      # Has papers
+      refute is_nil(content_assigns.paper_set_view)
+    end
+
+    test "extracts title from assigns with different structures" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      # Test direct title
+      assigns = %{"title" => "Custom Title"}
+      result = ImportViewBuilder.view_model(tool, assigns)
+      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      assert header_assigns.title == "Custom Title"
+
+      # Test session title
+      assigns = %{session: %{"title" => "Session Title"}}
+      result = ImportViewBuilder.view_model(tool, assigns)
+      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      assert header_assigns.title == "Session Title"
+
+      # Test default title
+      assigns = %{}
+      result = ImportViewBuilder.view_model(tool, assigns)
+      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      assert header_assigns.title == "Import Papers"
+    end
+  end
+
+  describe "import status determination" do
+    test "returns idle status when no reference files exist" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      {_, _header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      # No file uploaded, so should have file selector but no import buttons
+      assert has_block_in_import_section?(result.stack, :import_file_selector)
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+      # header and import_section (no content when 0 papers)
+      assert length(result.stack) == 2
+    end
+
+    test "returns active import status when session is running" do
+      # Create reference file
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      # Create tool with reference file
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      # Create paper set with the tool's category and identifier
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session
+      _import_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :parsing
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      {_, _header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      # Button is not shown during active imports - it's handled in the processing_status block
+      # header and import_section (no content when 0 papers)
+      assert length(result.stack) == 2
+
+      # Check processing_status block exists nested in import_section
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_block =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      assert processing_status_block != nil
+    end
+  end
+
+  describe "button configuration" do
+    test "includes import session block during active import phases" do
+      active_phases = [:waiting, :parsing, :processing, :importing]
+
+      for phase <- active_phases do
+        # Create reference file
+        reference_file = Core.Factories.insert!(:paper_reference_file)
+
+        # Create tool with reference file
+        tool =
+          Core.Factories.insert!(:zircon_screening_tool, %{
+            reference_files: [reference_file]
+          })
+
+        # Create paper set with the tool's category and identifier
+        paper_set =
+          Core.Factories.insert!(:paper_set, %{
+            category: :zircon_screening_tool,
+            identifier: tool.id
+          })
+
+        # Create import session with specific phase
+        # Add appropriate data for phases that need it
+        session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
+        import_session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
+
+        result = ImportViewBuilder.view_model(tool, %{})
+
+        # During active imports, the processing_status block should be present nested in import_section
+        {_, import_section} =
+          result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+        processing_status_block =
+          import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+        assert processing_status_block != nil,
+               "Expected processing_status block for phase #{phase}"
+
+        # When no papers, we only have 2 blocks (header and import_section)
+        assert length(result.stack) >= 2,
+               "Expected at least 2 blocks in stack (header, import_section) for active phase #{phase}"
+
+        # Clean up for next iteration
+        Core.Repo.delete!(import_session)
+      end
+    end
+
+    test "shows normal button when idle or completed" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # No file uploaded, so should have file selector but no import buttons
+      assert has_block_in_import_section?(result.stack, :import_file_selector)
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+    end
+  end
+
+  describe "import session view" do
+    test "shows import session view for active sessions" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      phases = [:waiting, :parsing, :processing, :importing]
+
+      for phase <- phases do
+        # Create session with specific phase and appropriate data
+        session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
+        session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
+
+        result = ImportViewBuilder.view_model(tool, %{})
+
+        # Should have processing status for active processing sessions
+        {_, import_section} =
+          result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+        session_block =
+          import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+        assert session_block, "Should have processing status block for phase #{phase}"
+
+        # Clean up for next iteration
+        Core.Repo.delete!(session)
+      end
+    end
+  end
+
+  describe "display state logic" do
+    test "no content block when no papers" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # No content block should exist when there are no papers
+      content_block = result.stack |> Enum.find(fn {type, _} -> type == :content end)
+      assert content_block == nil
+    end
+
+    test "includes content block when papers exist" do
+      # Create tool first to get its ID
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      # Create paper
+      paper = Core.Factories.insert!(:paper)
+
+      # Create paper set with papers, using the tool's category and identifier
+      _paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id,
+          papers: [paper]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Content block should exist when there are papers
+      {content_type, content_assigns} =
+        result.stack |> Enum.find(fn {type, _} -> type == :content end)
+
+      assert content_type == :content
+      refute is_nil(content_assigns.paper_set_view)
+    end
+  end
+
+  describe "file information extraction" do
+    test "returns nil file info when no reference files" do
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      assert result.active_filename == nil
+      assert result.active_file_url == nil
+    end
+
+    test "extracts file info from uploaded reference files" do
+      filename = "test_file.ris"
+      url = "http://example.com/test_file.ris"
+
+      # Create reference file with specific filename and url
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: filename,
+              ref: url
+            })
+        })
+
+      # Create tool with the reference file
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      assert result.active_filename == filename
+      assert result.active_file_url == url
+    end
+
+    test "prefers active session file info over uploaded files" do
+      # Create uploaded reference file
+      uploaded_ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "uploaded.ris",
+              ref: "http://example.com/uploaded.ris"
+            })
+        })
+
+      # Create active session reference file
+      session_ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "session.ris",
+              ref: "http://example.com/session.ris"
+            })
+        })
+
+      # Create tool with both reference files
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [uploaded_ref_file, session_ref_file]
+        })
+
+      # Create paper set with the tool's category and identifier
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session with the session reference file
+      _import_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: session_ref_file,
+          status: :activated,
+          phase: :parsing
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should prefer the active session file info
+      assert result.active_filename == "session.ris"
+      assert result.active_file_url == "http://example.com/session.ris"
+    end
+  end
+
+  describe "import session view logic" do
+    test "includes import session block only for active sessions" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      # Create tool with reference file
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with active session
+      active_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # header and import_section (no content when 0 papers)
+      assert length(result.stack) == 2
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      # Check that processing_status is nested inside import_section
+      processing_status_block =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      assert processing_status_block != nil
+
+      # Clean up and test with completed session
+      Core.Repo.delete!(active_session)
+
+      _completed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :succeeded,
+          phase: :importing
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # header and import_section (no content when 0 papers)
+      assert length(result.stack) == 2
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      # Check that there's no import_session or processing_status nested in import_section (should have file selector instead)
+      import_session_block =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :import_session end)
+
+      processing_status_block =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      assert import_session_block == nil
+      assert processing_status_block == nil
+
+      file_selector_block =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :import_file_selector end)
+
+      assert file_selector_block != nil
+    end
+  end
+
+  describe "import button visibility logic" do
+    test "shows import buttons when no active session and filename exists" do
+      # Create tool with uploaded file
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should have import buttons block
+      assert has_block_in_import_section?(result.stack, :import_buttons)
+
+      buttons = get_import_buttons_assigns(result.stack)
+      assert buttons != nil
+      assert buttons.import_button_face.type == :primary
+      assert buttons.import_button_enabled == true
+    end
+
+    test "does not show import buttons when no filename" do
+      # Create tool without any reference files
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should NOT have import buttons block (no file uploaded)
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+    end
+
+    test "does not show import buttons during active session" do
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active session
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should NOT have import buttons block during active session
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+    end
+
+    test "shows file selector during processing phases" do
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      processing_phases = [:waiting, :parsing, :processing]
+
+      for phase <- processing_phases do
+        # Create session with specific phase
+        session =
+          Core.Factories.insert!(:paper_ris_import_session, %{
+            paper_set: paper_set,
+            reference_file: reference_file,
+            status: :activated,
+            phase: phase
+          })
+
+        result = ImportViewBuilder.view_model(tool, %{})
+
+        # Should show file selector during processing phases
+        assert has_block_in_import_section?(result.stack, :import_file_selector),
+               "Expected file selector for phase #{phase}"
+
+        # Import session is embedded separately, not as a block in the stack
+        # The processing/waiting state is shown in the button with loading spinner
+
+        # But NO import buttons
+        refute has_block_in_import_section?(result.stack, :import_buttons),
+               "Should not have import buttons for phase #{phase}"
+
+        # Clean up for next iteration
+        Core.Repo.delete!(session)
+      end
+    end
+
+    test "shows file selector during prompting phase with errors" do
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session in prompting phase with errors
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "error", "error" => %{"line" => 1, "error" => "Test error"}}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should show file selector when there are errors
+      assert has_block_in_import_section?(result.stack, :import_file_selector)
+
+      # Should also show prompting summary
+      assert has_block_in_import_section?(result.stack, :prompting_summary)
+
+      # But NO import buttons
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+    end
+
+    test "shows file selector during prompting phase without errors" do
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session in prompting phase with new papers (no errors)
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "new", "title" => "Test Paper"}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should show file selector during prompting phase (allows user to replace file)
+      assert has_block_in_import_section?(result.stack, :import_file_selector)
+
+      # Should show prompting summary
+      assert has_block_in_import_section?(result.stack, :prompting_summary)
+
+      # No import buttons
+      refute has_block_in_import_section?(result.stack, :import_buttons)
+    end
+  end
+
+  describe "button creation with zero new papers" do
+    test "creates correct buttons when there are warnings, 0 new papers, and duplicates" do
+      # This test ensures that when there are 0 new papers, the duplicates button
+      # is created with the correct event handler
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "duplicates_only.ris",
+              ref: "http://example.com/duplicates.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session with warnings, 0 new papers, and duplicates
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "error", "error" => "Parse error 1"},
+            %{"status" => "error", "error" => "Parse error 2"},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 1", "paper_id" => 123},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 2", "paper_id" => 124},
+            %{"status" => "duplicate", "title" => "Duplicate Paper 3", "paper_id" => 125}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Check prompting summary
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, summary_assigns} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+
+      assert summary_assigns.warning_count == 2
+      assert summary_assigns.new_paper_count == 0
+      assert summary_assigns.duplicate_count == 3
+
+      # Should have exactly 2 buttons: warnings and duplicates (no new papers button)
+      assert length(summary_assigns.summary_buttons) == 2
+
+      # First button should be warnings
+      warning_button = Enum.at(summary_assigns.summary_buttons, 0)
+      assert warning_button.action.event == "show_warnings"
+      assert warning_button.face.text_color == "text-warning"
+
+      # Second button should be duplicates
+      duplicates_button = Enum.at(summary_assigns.summary_buttons, 1)
+      assert duplicates_button.action.event == "show_duplicates"
+
+      # Should NOT have Continue button since no new papers
+      assert summary_assigns.action_buttons == []
+    end
+  end
+
+  describe "prompting phase with mixed results" do
+    test "shows prompting summary when session has both errors and new papers" do
+      # Create reference file
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "mixed_results.ris",
+              ref: "http://example.com/mixed.ris"
+            })
+        })
+
+      # Create tool with reference file
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session in prompting phase with both errors and new papers
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "new", "title" => "New Paper 1", "doi" => "10.1234/test1"},
+            %{"status" => "error", "error" => "Parse error on line 15"},
+            %{"status" => "new", "title" => "New Paper 2", "doi" => "10.1234/test2"},
+            %{"status" => "existing", "title" => "Existing Paper"},
+            %{"status" => "error", "error" => "Invalid format"}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should have header and import_section blocks (no content when 0 papers imported yet)
+      assert length(result.stack) == 2
+
+      # Check import_section contains prompting_summary
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      prompting_summary =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+
+      assert prompting_summary != nil
+
+      # Check prompting summary contains correct counts
+      {_, summary_assigns} = prompting_summary
+      assert summary_assigns.warning_count == 2
+      assert summary_assigns.new_paper_count == 2
+      assert summary_assigns.duplicate_count == 0
+
+      # Check summary text
+      assert summary_assigns.summary_text == "Found in this file:"
+
+      # Should have summary buttons for warnings and new papers
+      assert length(summary_assigns.summary_buttons) == 2
+
+      # Check warning button
+      warning_button =
+        Enum.find(summary_assigns.summary_buttons, fn btn ->
+          btn.action.event == "show_warnings"
+        end)
+
+      assert warning_button != nil
+      assert warning_button.face.text_color == "text-warning"
+
+      # Check new papers button
+      new_papers_button =
+        Enum.find(summary_assigns.summary_buttons, fn btn ->
+          btn.action.event == "show_new_papers"
+        end)
+
+      assert new_papers_button != nil
+
+      # Should have Continue button since there are new papers
+      assert length(summary_assigns.action_buttons) == 1
+      continue_button = hd(summary_assigns.action_buttons)
+      assert continue_button.action.event == "commit_import"
+
+      # Check that prompting_session_id is set in view model
+      assert Map.has_key?(result, :prompting_session_id)
+    end
+
+    test "shows prompting summary with only errors (no new papers)" do
+      reference_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "errors_only.ris",
+              ref: "http://example.com/errors.ris"
+            })
+        })
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create session with only errors
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :prompting,
+          entries: [
+            %{"status" => "error", "error" => "Parse error 1"},
+            %{"status" => "error", "error" => "Parse error 2"}
+          ]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Check prompting summary
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, summary_assigns} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+
+      assert summary_assigns.warning_count == 2
+      assert summary_assigns.new_paper_count == 0
+      assert summary_assigns.duplicate_count == 0
+
+      # Should only have warning button
+      assert length(summary_assigns.summary_buttons) == 1
+      warning_button = hd(summary_assigns.summary_buttons)
+      assert warning_button.action.event == "show_warnings"
+      assert warning_button.face.text_color == "text-warning"
+
+      # Should NOT have Continue button since no new papers
+      assert summary_assigns.action_buttons == []
+    end
+  end
+
+  describe "batch progress display" do
+    test "shows processing progress message during processing phase with progress data" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in processing phase with progress data
+      # Use 25 references to be above the threshold of 20
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 15,
+            "total_references" => 25
+          }
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Check that we have progress percentage
+      # 15/25 * 100 = 60
+      assert processing_status.progress == 60
+      # Message should be generic without counter
+      assert processing_status.message == "Processing papers"
+    end
+
+    test "shows generic processing message when no progress data during processing phase" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create active import session in processing phase without progress data
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show generic processing message
+      assert processing_status.message == "Processing papers"
+      # Starts at 0% when no progress data
+      assert processing_status.progress == 0
+    end
+
+    test "shows correct progress message during importing phase with session progress" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create entries with enough new papers to meet threshold (500 total as in progress)
+      entries =
+        Enum.map(1..500, fn i ->
+          if i <= 430 do
+            %{"status" => "new", "title" => "Paper #{i}"}
+          else
+            %{"status" => "duplicate", "title" => "Duplicate #{i}"}
+          end
+        end)
+
+      # Create active import session in importing phase with progress data
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing,
+          entries: entries,
+          progress: %{
+            "current_batch" => 3,
+            "total_batches" => 5,
+            "papers_processed" => 250,
+            "papers_imported" => 180,
+            "papers_skipped" => 70,
+            "total_papers" => 500
+          }
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Check that we have progress percentage for importing phase
+      # 250 processed out of 500 total = 50%
+      assert processing_status.progress == 50
+
+      # Check that the message is simple without counts
+      assert processing_status.message == "Importing papers"
+    end
+
+    test "shows importing message for 20+ new papers without progress data" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create entries with 20+ new papers to meet threshold
+      entries =
+        Enum.map(1..25, fn i ->
+          %{"status" => "new", "title" => "Paper #{i}"}
+        end)
+
+      # Create active import session in importing phase with entries but no progress
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing,
+          entries: entries
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show processing status since we have 25 new papers (>= threshold)
+      assert processing_status_tuple != nil
+      {_, processing_status} = processing_status_tuple
+
+      # Should show generic importing message
+      assert processing_status.message == "Importing papers"
+      # No progress percentage when no progress data
+      assert processing_status.progress == nil
+    end
+
+    test "hides importing status for small batches of new papers" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Create entries with only 5 new papers (below threshold)
+      entries =
+        Enum.map(1..5, fn i ->
+          %{"status" => "new", "title" => "Paper #{i}"}
+        end)
+
+      # Create active import session in importing phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :importing,
+          entries: entries
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the import_section
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should NOT show processing status for only 5 new papers (< threshold)
+      assert processing_status_tuple == nil
+    end
+
+    test "does not show progress for small batches below threshold" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with 19 references (below threshold of 20)
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 10,
+            "total_references" => 19
+          }
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      processing_status_tuple =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should not show processing status block at all for small batch
+      assert processing_status_tuple == nil
+    end
+
+    test "shows progress for batches at or above threshold" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with exactly 20 references (at threshold)
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :processing,
+          progress: %{
+            "current_reference" => 10,
+            "total_references" => 20
+          }
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show progress for batch at threshold
+      # 10/20 * 100
+      assert processing_status.progress == 50
+      assert processing_status.message == "Processing papers"
+    end
+
+    test "shows progress spinner at 0 for parsing phase" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with parsing phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :parsing
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show parsing message with progress at 0
+      assert processing_status.message == "Parsing file"
+      assert processing_status.progress == 0
+    end
+
+    test "does not show progress for waiting phase" do
+      reference_file = Core.Factories.insert!(:paper_reference_file)
+
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [reference_file]
+        })
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      # Test with waiting phase
+      _session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: reference_file,
+          status: :activated,
+          phase: :waiting
+        })
+
+      assigns = %{}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Find the processing_status block
+      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+
+      {_, processing_status} =
+        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+
+      # Should show waiting message without progress
+      assert processing_status.message == "Starting import"
+      assert processing_status.progress == nil
+    end
+  end
+
+  describe "edge cases and error handling" do
+    test "handles tool with invalid ID gracefully" do
+      # This should be caught by the database constraint, but let's test error handling
+      # Non-existent ID
+      tool = %{id: 99_999}
+
+      assert_raise FunctionClauseError, fn ->
+        ImportViewBuilder.view_model(tool, %{})
+      end
+    end
+
+    test "handles complex scenarios with multiple reference files" do
+      # Create multiple reference files
+      ref_file_1 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "file1.ris",
+              ref: "http://example.com/file1.ris"
+            })
+        })
+
+      ref_file_2 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "file2.ris",
+              ref: "http://example.com/file2.ris"
+            })
+        })
+
+      # Create tool with multiple reference files
+      tool =
+        Core.Factories.insert!(:zircon_screening_tool, %{
+          reference_files: [ref_file_1, ref_file_2]
+        })
+
+      result = ImportViewBuilder.view_model(tool, %{})
+
+      # Should get the most recent uploaded file
+      assert result.active_filename in ["file1.ris", "file2.ris"]
+
+      assert result.active_file_url in [
+               "http://example.com/file1.ris",
+               "http://example.com/file2.ris"
+             ]
+    end
+  end
+
+  describe "flash error handling" do
+    setup do
+      # Create tool with paper set
+      tool = Core.Factories.insert!(:zircon_screening_tool)
+
+      paper_set =
+        Core.Factories.insert!(:paper_set, %{
+          category: :zircon_screening_tool,
+          identifier: tool.id
+        })
+
+      {:ok, tool: tool, paper_set: paper_set}
+    end
+
+    test "shows flash error when transitioning from active to failed", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create a reference file
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file:
+            Core.Factories.build(:content_file, %{
+              name: "test.ris",
+              ref: "http://example.com/test.ris"
+            }),
+          status: :uploaded
+        })
+
+      # Associate with tool
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
+        |> Core.Repo.update!()
+
+      # Create a failed import session
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          phase: :processing,
+          errors: ["Invalid text encoding"]
+        })
+
+      # First call: simulating active session (old VM has active_filename)
+      old_assigns = %{
+        vm: %{
+          active_filename: "test.ris"
+        }
+      }
+
+      # Second call: no active session (transition happened)
+      result = ImportViewBuilder.view_model(tool, old_assigns)
+
+      # Should detect the transition and show flash error
+      assert result.flash_error == "Invalid text encoding"
+    end
+
+    test "does not show flash error when no previous active session", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create a failed session
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+          status: :failed
+        })
+
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          errors: ["Some error"]
+        })
+
+      # No previous active session in assigns
+      assigns = %{vm: %{}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash error (no transition)
+      assert result.flash_error == nil
+    end
+
+    test "does not show flash error when session is still active", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create an active session
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+          status: :uploaded
+        })
+
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
+        |> Core.Repo.update!()
+
+      _active_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :activated,
+          phase: :processing
+        })
+
+      # Has previous active filename
+      assigns = %{vm: %{active_filename: "test.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash error (session still active)
+      assert result.flash_error == nil
+    end
+
+    test "shows most recent error when multiple failed sessions exist", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create multiple failed sessions with different timestamps
+      ref_file1 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "old.ris"})
+        })
+
+      ref_file2 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "recent.ris"})
+        })
+
+      # Older failed session
+      _old_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file1,
+          status: :failed,
+          errors: ["Old error message"],
+          inserted_at: ~N[2024-01-01 10:00:00]
+        })
+
+      # More recent failed session
+      _recent_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file2,
+          status: :failed,
+          errors: ["Recent error message"],
+          inserted_at: ~N[2024-01-02 10:00:00]
+        })
+
+      # Simulate transition from active to inactive
+      assigns = %{vm: %{active_filename: "recent.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should show the most recent error
+      assert result.flash_error == "Recent error message"
+    end
+
+    test "handles empty error list gracefully", %{tool: tool, paper_set: paper_set} do
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "test.ris"})
+        })
+
+      # Failed session with empty errors
+      _failed_session =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file,
+          status: :failed,
+          # Empty error list
+          errors: []
+        })
+
+      assigns = %{vm: %{active_filename: "test.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should handle empty errors gracefully
+      assert result.flash_error == nil
+    end
+
+    test "shows specific validation error messages", %{tool: tool, paper_set: paper_set} do
+      ref_file =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "binary.jpg"})
+        })
+
+      # Test different error messages
+      test_cases = [
+        "Invalid text encoding",
+        "Binary file detected",
+        "Not a valid RIS file",
+        "File exceeds maximum allowed size of 10MB"
+      ]
+
+      for error_message <- test_cases do
+        # Update or create session with specific error
+        session =
+          Core.Factories.insert!(:paper_ris_import_session, %{
+            paper_set: paper_set,
+            reference_file: ref_file,
+            status: :failed,
+            errors: [error_message]
+          })
+
+        assigns = %{vm: %{active_filename: "binary.jpg"}}
+        result = ImportViewBuilder.view_model(tool, assigns)
+
+        assert result.flash_error == error_message
+
+        # Clean up for next iteration
+        Core.Repo.delete!(session)
+      end
+    end
+
+    test "does not show flash when transitioning between different active sessions", %{
+      tool: tool,
+      paper_set: paper_set
+    } do
+      # Create two active sessions for different files
+      ref_file1 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "file1.ris"}),
+          status: :uploaded
+        })
+
+      ref_file2 =
+        Core.Factories.insert!(:paper_reference_file, %{
+          file: Core.Factories.build(:content_file, %{name: "file2.ris"}),
+          status: :uploaded
+        })
+
+      tool =
+        tool
+        |> Core.Repo.preload(:reference_files)
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.put_assoc(:reference_files, [ref_file1, ref_file2])
+        |> Core.Repo.update!()
+
+      _session1 =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file1,
+          status: :activated,
+          phase: :prompting
+        })
+
+      _session2 =
+        Core.Factories.insert!(:paper_ris_import_session, %{
+          paper_set: paper_set,
+          reference_file: ref_file2,
+          status: :activated,
+          phase: :processing
+        })
+
+      # Transition from one active file to another
+      assigns = %{vm: %{active_filename: "file1.ris"}}
+
+      result = ImportViewBuilder.view_model(tool, assigns)
+
+      # Should not show flash (both are active, just switching)
+      assert result.flash_error == nil
+    end
+  end
+end

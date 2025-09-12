@@ -217,6 +217,14 @@ defmodule Frameworks.Pixel.ModalView do
     <div class="flex flex-row items-center justify-center w-full h-full">
     <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
+          <%!-- HEADER --%>
+          <%!-- OPTIONAL LIGHT GREY TITLE THAT DESCRIBES THE CONTEXT OF THE MODAL --%>
+          <div :if={Keyword.get(@modal.element.options, :header)} class="px-4 sm:px-8">
+            <Text.title6 color="text-grey2">
+              <%= Keyword.get(@modal.element.options, :header) %>
+            </Text.title6>
+            <.spacing value="XS" />
+          </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
             <.element {Map.from_struct(@modal.element)} socket={@socket} />

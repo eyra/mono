@@ -67,14 +67,6 @@ msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-autogen, elixir-format
-msgid "themes.label"
-msgstr "Which theme fits your study best? You could select multiple."
-
-#, elixir-autogen, elixir-format
-msgid "themes.title"
-msgstr "Themes"
-
-#, elixir-autogen, elixir-format
 msgid "title.label"
 msgstr "Title"
 

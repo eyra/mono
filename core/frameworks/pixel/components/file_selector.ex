@@ -1,4 +1,4 @@
-defmodule Frameworks.Pixel.Components.FileSelector do
+defmodule Frameworks.Pixel.FileSelector do
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Text
@@ -13,6 +13,9 @@ defmodule Frameworks.Pixel.Components.FileSelector do
   attr(:replace_button, :string, required: true)
   attr(:select_button, :map, required: true)
   attr(:file_key, :atom, default: :file)
+  attr(:background_color, :string, default: "bg-transparent")
+
+  slot(:inner_block)
 
   def file_selector(assigns) do
     button_label =
@@ -38,8 +41,8 @@ defmodule Frameworks.Pixel.Components.FileSelector do
           <.spacing value="XXS" />
         <% end %>
 
-        <div class="h-file-selector border-grey4 border-2 rounded pl-6 pr-6">
-          <div class="flex flex-row items-center h-full">
+        <div class={"flex flex-col border-grey4 border-2 rounded pl-6 pr-6 #{@background_color}"}>
+          <div class="flex flex-row items-center h-file-selector">
             <div class="flex-grow">
               <%= if @filename do %>
                 <Text.body_large color="text-grey1"><%= @filename %></Text.body_large>
@@ -48,22 +51,27 @@ defmodule Frameworks.Pixel.Components.FileSelector do
               <% end %>
             </div>
 
-          <div>
-            <%= if @upload_in_progress do %>
-              <%= if @uploads[:file].entries do %>
-                <LoadingSpinner.progress_spinner progress={Enum.at(@uploads[@file_key].entries, 0).progress} />
+            <div>
+              <%= if @upload_in_progress do %>
+                <%= if @uploads[:file].entries do %>
+                  <LoadingSpinner.progress_spinner progress={Enum.at(@uploads[@file_key].entries, 0).progress} />
+                <% end %>
+              <% else %>
+              <label for={@uploads.file.ref}>
+                <Button.Face.primary label={@button_label} bg_color="bg-tertiary" text_color="text-grey1" />
+              </label>
               <% end %>
-            <% else %>
-            <label for={@uploads.file.ref}>
-              <Button.Face.primary label={@button_label} bg_color="bg-tertiary" text_color="text-grey1" />
-            </label>
-            <% end %>
+            </div>
+
           </div>
-          </div>
-          <div class="hidden">
-            <.live_file_input upload={@uploads.file} />
-          </div>
+
+          <%= render_slot(@inner_block) %>
+
         </div>
+        <div class="hidden">
+          <.live_file_input upload={@uploads.file} />
+        </div>
+
       </.form>
     """
   end
