@@ -82,7 +82,7 @@ defmodule Core.MixProject do
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0-alpha.1"},
       {:gen_smtp, "== 1.3.0"},
-      {:gettext, "== 0.26.2"},
+      {:gettext, "== 1.0.0"},
       {:hackney, "== 1.25.0"},
       {:httpoison, "== 2.2.3"},
       {:image, "== 0.62.0"},
