@@ -51,12 +51,14 @@ defmodule Frameworks.Pixel.Flash do
 
   def push_hide(socket), do: push(socket, :hide_flash)
 
-  def push(%{parent_pid: nil}, payload) do
+  def push(%{parent_pid: nil} = socket, payload) do
     push(self(), payload)
+    socket
   end
 
-  def push(%{parent_pid: parent_pid}, payload) do
+  def push(%{parent_pid: parent_pid} = socket, payload) do
     push(parent_pid, payload)
+    socket
   end
 
   def push(pid, payload) do

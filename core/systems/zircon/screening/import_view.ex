@@ -4,6 +4,7 @@ defmodule Systems.Zircon.Screening.ImportView do
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]
 
+  alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.LoadingSpinner
@@ -16,7 +17,10 @@ defmodule Systems.Zircon.Screening.ImportView do
   @impl true
   def file_upload_start(socket, {original_filename, _}) do
     Logger.info("File upload started: #{original_filename}")
-    socket |> update_view_model()
+
+    socket
+    |> Flash.push_hide()
+    |> update_view_model()
   end
 
   @impl true
@@ -79,8 +83,7 @@ defmodule Systems.Zircon.Screening.ImportView do
         socket
 
       error_message ->
-        # Use Pixel.Flash.push_error to send flash to parent LiveView
-        Frameworks.Pixel.Flash.push_error(socket, error_message)
+        Flash.push_error(socket, error_message)
         socket
     end
   end
