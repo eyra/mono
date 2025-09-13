@@ -117,7 +117,7 @@ defmodule Core.MixProject do
       {:typed_struct, "== 0.3.0"},
       {:tzdata, "== 1.1.3"},
       # i18n
-      {:ex_cldr, "== 2.43.1"},
+      {:ex_cldr, "== 2.43.2"},
       {:ex_cldr_numbers, "== 2.35.2"},
       {:ex_cldr_dates_times, "== 2.24.0"},
       {:ex_cldr_plugs, "== 1.3.3"},
