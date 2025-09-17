@@ -1,4 +1,4 @@
-FROM postgres:15
+FROM postgres:17
 
 # Create ssl directory for certificates
 RUN mkdir -p /var/lib/postgresql/ssl
