@@ -11,10 +11,6 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr ""

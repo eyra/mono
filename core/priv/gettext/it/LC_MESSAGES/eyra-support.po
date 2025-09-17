@@ -32,13 +32,17 @@ msgid "create_ticket.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "ticket_created.info.flash"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "ticket.type"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "content.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "form.description.next"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.next.button"
 msgstr ""

@@ -402,6 +402,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:debounce, :string, default: "1000")
+  attr(:reserve_error_space, :boolean, default: true)
 
   def text_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -434,6 +435,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       errors={@errors}
+      reserve_error_space={@reserve_error_space}
       extra_space={false}
     >
       <textarea

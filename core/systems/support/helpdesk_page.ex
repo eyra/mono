@@ -8,7 +8,16 @@ defmodule Systems.Support.HelpdeskPage do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket |> compose_child(:helpdesk_form)}
+    {
+      :ok,
+      socket
+      |> assign(first: true, ticket_created: false)
+      |> compose_child(:helpdesk_form)
+    }
+  end
+
+  def compose(:helpdesk_form, %{vm: %{ticket_created: true}}) do
+    nil
   end
 
   @impl true
@@ -20,21 +29,48 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
+  def handle_event("ticket_created", _params, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(
+        first: false,
+        ticket_created: true
+      )
+      |> update_child(:helpdesk_form)
+    }
+  end
+
+  def handle_event("next", _params, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(ticket_created: false, first: true)
+      |> update_child(:helpdesk_form)
+    }
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+      <div id="helpdesk_content" phx-hook="LiveContent" data-show-errors={true}>
       <Area.content>
         <Area.form>
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-support", "form.title") %></Text.title2>
-          <Text.body_large><%= dgettext("eyra-support", "form.description") %>
-          </Text.body_large>
-        </Area.form>
-      </Area.content>
-
-      <.spacing value="XL" />
-
-      <.child name={:helpdesk_form} fabric={@fabric} />
+          <%= if @ticket_created do %>
+            <Text.body_large><%= @vm.next.description %></Text.body_large>
+            <.spacing value="M" />
+            <Button.dynamic_bar buttons={[@vm.next.button]} />
+          <% else %>
+            <Text.body_large><%= @vm.first.description %></Text.body_large>
+            <.spacing value="XL" />
+            <.child name={:helpdesk_form} fabric={@fabric} />
+          <% end %>
+          </Area.form>
+        </Area.content>
+      </div>
     </.live_workspace>
     """
   end

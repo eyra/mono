@@ -10,10 +10,6 @@ msgid ""
 msgstr ""
 "Language: nl\n"
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr "Opdracht"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr "Jouw deelnemer ID"

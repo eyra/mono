@@ -43,14 +43,6 @@ msgid "content.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "ethical.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "ethical.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "nextid.description"
 msgstr ""
 
@@ -64,10 +56,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "ethical.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -96,10 +84,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "ethical.review.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
