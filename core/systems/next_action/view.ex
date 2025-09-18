@@ -30,7 +30,7 @@ defmodule Systems.NextAction.View do
 
   attr(:subtitle_css, :string, default: "text-bodysmall md:text-bodymedium font-body text-grey1")
 
-  def normal(%{style: style} = assigns) do
+  def normal(assigns) do
     assigns =
       assign(assigns, %{
         colors: colors(assigns)
