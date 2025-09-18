@@ -4,10 +4,9 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {
-    "@bundled-es-modules/pdfjs-dist": "3.6.172-alpha.1",
     "blurhash": "2.0.5",
     "lodash": "4.17.21",
-    "pdfjs-dist": "3.11.174",
+    "pdfjs-dist": "5.4.149",
     "pinch-zoom-js": "2.3.5",
     "trix": "2.1.15"
   },
