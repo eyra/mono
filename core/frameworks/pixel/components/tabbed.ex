@@ -36,7 +36,7 @@ defmodule Frameworks.Pixel.Tabbed do
       )
 
     ~H"""
-      <div id={@id} data-initial-tab={@initial_tab} data-="true" data-preserve-tab-in-url={@string_preserve_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
+      <div id={@id} data-initial-tab={@initial_tab} data-preserve-tab-in-url={@string_preserve_tab} phx-hook="TabBar" class={"#{shape(assigns)}"}>
         <%= if @size == :full do %>
           <.bar_full id={@id} type={@type} tabs={@tabs} />
         <% end %>
