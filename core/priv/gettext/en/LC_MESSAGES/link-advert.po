@@ -89,3 +89,7 @@ msgstr "Settings"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings.forward"
 msgstr "Go to Settings"
+
+#, elixir-autogen, elixir-format
+msgid "submission.available.sub_heading"
+msgstr "Here you can find the most recent studies published in the panl pool. Click on a study to read more details."

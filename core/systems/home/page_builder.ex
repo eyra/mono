@@ -28,7 +28,7 @@ defmodule Systems.Home.PageBuilder do
       },
       active_menu_item: :home,
       next_best_action: nil,
-      blocks: [],
+      view_type: :guest,
       include_right_sidepadding?: false
     }
   end
@@ -48,24 +48,9 @@ defmodule Systems.Home.PageBuilder do
       },
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
+      view_type: :logged_in,
       blocks: blocks(user, assigns, panl?: panl?),
       include_right_sidepadding?: false
-    }
-  end
-
-  def view_model(singleton, assigns) do
-    put_locale(nil, false)
-
-    %{
-      hero: %{
-        type: :landing_page,
-        params: %{
-          title: dgettext("eyra-home", "visitor.title")
-        }
-      },
-      active_menu_item: :home,
-      next_best_action: nil,
-      blocks: blocks(singleton, assigns, panl?: false)
     }
   end
 
@@ -86,13 +71,8 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action]
-    |> append_if(:available, feature_enabled?(:panl))
+    [:next_best_action, :available_adverts]
     |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
-  end
-
-  defp block_keys(_singleton, _opts) do
-    [:next_best_action, :available]
   end
 
   defp blocks(model, assigns, opts) do
@@ -131,14 +111,14 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:available, %Account.User{} = user, assigns, _opts) do
+  defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
     cards =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
       |> Enum.map(&to_card(&1, assigns))
 
     %{
-      module: Home.AvailableView,
+      module: Home.AdvertsView,
       params: %{
         title: dgettext("eyra-home", "available.member.title"),
         cards: cards
@@ -146,14 +126,14 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
-  defp block(:available, _, assigns, _opts) do
+  defp block(:available_adverts, _, assigns, _opts) do
     cards =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&Advert.Public.validate_open(&1))
       |> Enum.map(&to_card(&1, assigns))
 
     %{
-      module: Home.AvailableView,
+      module: Home.AdvertsView,
       params: %{
         title: dgettext("eyra-home", "available.visitor.title"),
         cards: cards

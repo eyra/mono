@@ -213,6 +213,26 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   @impl true
+  def handle_event(
+        "active_item_ids",
+        %{
+          active_item_ids: selected_values,
+          source: %{name: criteria_field}
+        },
+        %{assigns: %{entity: criteria}} = socket
+      )
+      when criteria_field in [:genders, :native_languages, :dominant_hands] do
+    attrs = %{criteria_field => selected_values}
+
+    socket =
+      save_closure(socket, fn socket ->
+        save(socket, criteria, attrs)
+      end)
+
+    {:noreply, socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>

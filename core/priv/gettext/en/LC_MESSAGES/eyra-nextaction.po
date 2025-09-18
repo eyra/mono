@@ -69,3 +69,15 @@ msgstr "Visit the contribution page for further details"
 #, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr "One of your contributions is rejected"
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.cta"
+msgstr "Go to Profile"
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.description"
+msgstr "Please fill in your personal characteristics to participate in more studies."
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.title"
+msgstr "Complete Your Characteristics"

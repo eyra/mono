@@ -69,3 +69,15 @@ msgstr "Bezoek de pagina van deze bijdrage voor meer details"
 #, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr "Een van je bijdragen is afgekeurd"
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.cta"
+msgstr "Ga naar profiel"
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.description"
+msgstr "Vul je persoonlijke kenmerken in om aan meer onderzoeken deel te nemen."
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.title"
+msgstr "Kenmerken invullen"
