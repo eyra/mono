@@ -1,4 +1,4 @@
-defmodule Systems.Home.AvailableView do
+defmodule Systems.Home.AdvertsView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Grid

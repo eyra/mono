@@ -71,7 +71,7 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action, :available]
+    [:next_best_action, :available_adverts]
     |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
   end
 
@@ -111,14 +111,14 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:available, %Account.User{} = user, assigns, _opts) do
+  defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
     cards =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
       |> Enum.map(&to_card(&1, assigns))
 
     %{
-      module: Home.AvailableView,
+      module: Home.AdvertsView,
       params: %{
         title: dgettext("eyra-home", "available.member.title"),
         cards: cards
@@ -126,14 +126,14 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
-  defp block(:available, _, assigns, _opts) do
+  defp block(:available_adverts, _, assigns, _opts) do
     cards =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&Advert.Public.validate_open(&1))
       |> Enum.map(&to_card(&1, assigns))
 
     %{
-      module: Home.AvailableView,
+      module: Home.AdvertsView,
       params: %{
         title: dgettext("eyra-home", "available.visitor.title"),
         cards: cards
