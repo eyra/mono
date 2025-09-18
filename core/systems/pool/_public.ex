@@ -297,21 +297,15 @@ defmodule Systems.Pool.Public do
 
   def count_eligitable_users(
         %Pool.CriteriaModel{
-          genders: genders,
-          dominant_hands: dominant_hands,
-          native_languages: native_languages
+          genders: genders
         },
         include,
         exclude
       ) do
     genders = genders |> to_string_list()
-    dominant_hands = dominant_hands |> to_string_list()
-    native_languages = native_languages |> to_string_list()
 
     query_count_users(include, exclude)
     |> optional_where(:gender, genders)
-    |> optional_where(:dominant_hand, dominant_hands)
-    |> optional_where(:native_language, native_languages)
     |> Repo.one()
   end
 

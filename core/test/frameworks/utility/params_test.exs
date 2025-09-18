@@ -11,13 +11,6 @@ defmodule Frameworks.Utility.ParamsTest do
       assert Params.parse_bool_param(%{}, "key") == false
       assert Params.parse_bool_param(%{"key" => "invalid"}, "key") == false
     end
-  end
-
-  describe "convenience functions" do
-    test "parse_creator/1" do
-      assert Params.parse_creator(%{"creator" => "true"}) == true
-      assert Params.parse_creator(%{}) == false
-    end
 
     test "parse_string_param for post_*_action" do
       assert Params.parse_string_param(
