@@ -89,7 +89,7 @@ msgstr "Manage your data on the project files tab."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data"
-msgstr "Files"
+msgstr "Data analysis"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.data.forward"
@@ -181,7 +181,7 @@ msgstr "Found %{result} out of %{total} files"
 
 #, elixir-autogen, elixir-format
 msgid "files.finder.title"
-msgstr "Finder"
+msgstr "Files"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"

@@ -13,4 +13,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "items.overview"
-msgstr "Overview"
+msgstr "Data collection"
