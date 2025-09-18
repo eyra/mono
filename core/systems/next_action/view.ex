@@ -33,7 +33,7 @@ defmodule Systems.NextAction.View do
   def normal(%{style: style} = assigns) do
     assigns =
       assign(assigns, %{
-        colors: colors(style)
+        colors: colors(assigns)
       })
 
     ~H"""
