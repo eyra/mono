@@ -29,7 +29,7 @@ defmodule Systems.Citizen.Director do
 
   @impl true
   def inclusion_criteria() do
-    [:genders]
+    [:genders, :birth_years]
   end
 
   @impl true
