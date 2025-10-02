@@ -177,6 +177,19 @@ defmodule Systems.Pool.Public do
     end
   end
 
+  def add_user_to_panl_pool(%Account.User{} = user) do
+    case get_panl() do
+      %Pool.Model{} = panl_pool ->
+        add_participant!(panl_pool, user)
+        :ok
+
+      nil ->
+        require Logger
+        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
+        :error
+    end
+  end
+
   def remove_participant(pool, user) do
     auth_module().remove_role!(user, pool, :participant)
   end
@@ -284,21 +297,15 @@ defmodule Systems.Pool.Public do
 
   def count_eligitable_users(
         %Pool.CriteriaModel{
-          genders: genders,
-          dominant_hands: dominant_hands,
-          native_languages: native_languages
+          genders: genders
         },
         include,
         exclude
       ) do
     genders = genders |> to_string_list()
-    dominant_hands = dominant_hands |> to_string_list()
-    native_languages = native_languages |> to_string_list()
 
     query_count_users(include, exclude)
     |> optional_where(:gender, genders)
-    |> optional_where(:dominant_hand, dominant_hands)
-    |> optional_where(:native_language, native_languages)
     |> Repo.one()
   end
 

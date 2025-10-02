@@ -1,18 +1,10 @@
-defmodule Systems.Home.View do
+defmodule Systems.Home.GuestView do
   use CoreWeb, :live_component
   import Systems.Home.HTML
 
   @impl true
-  def update(%{blocks: blocks}, socket) do
-    {:ok, update_blocks(socket, blocks)}
-  end
-
-  defp update_blocks(socket, []), do: socket
-
-  defp update_blocks(socket, [{name, map} | tail]) do
-    socket
-    |> add_child(name, map)
-    |> update_blocks(tail)
+  def update(_params, socket) do
+    {:ok, socket}
   end
 
   @impl true

@@ -28,7 +28,7 @@ msgstr "Password"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "Account"
+msgstr "My profile"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -64,7 +64,11 @@ msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde 
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "These characteristics are optional, they are currently not used by any application on the platform."
+msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
+
+#, elixir-autogen, elixir-format
+msgid "features.birthyear.title"
+msgstr "Birth year"
 
 #, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
@@ -157,3 +161,19 @@ msgstr "Are you sure you want to remove yourself from this project?"
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.label"
+msgstr "I agree to the privacy policy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.must.be.accepted"
+msgstr "You must accept the privacy policy to continue"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.profile.title"
+msgstr "My profile"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr "Panl"

@@ -3,8 +3,8 @@ defmodule Systems.Account.Switch do
   import Ecto.Changeset
 
   alias Systems.{
-    NextAction,
-    Email
+    Email,
+    NextAction
   }
 
   alias Systems.Account.NextActions.{CompleteProfile, PromotePushStudent}

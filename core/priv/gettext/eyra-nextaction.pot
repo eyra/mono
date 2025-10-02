@@ -69,3 +69,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment.check.rejection.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fillin.characteristics.title"
+msgstr ""
