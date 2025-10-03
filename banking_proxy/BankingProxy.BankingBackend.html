@@ -4,34 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="generator" content="ExDoc v0.38.4">
     <meta name="project" content="banking_proxy v0.1.0">
 
 
     <title>BankingProxy.BankingBackend — banking_proxy v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-31AE7ED1.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-HJ5ACJPS.js"></script>
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-D51E17FF.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
 
   </head>
-  <body class="sidebar-closed">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -57,32 +45,8 @@ banking_proxy
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
 <output role="status" id="toast"></output>
@@ -113,12 +77,14 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">BankingProxy.BankingBackend</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(banking_proxy v0.1.0)</small>
 
-    <span translate="no">BankingProxy.BankingBackend</span> <small>behaviour</small>
-    <small class="app-vsn" translate="no">(banking_proxy v0.1.0)</small>
+    </h1>
 
-  </h1>
+  </div>
 
 
 </div>
@@ -137,7 +103,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:list_payments_result/0" data-no-tooltip translate="no">list_payments_result()</a>
+        <a href="#t:list_payments_result/0" data-no-tooltip="" translate="no">list_payments_result()</a>
 
       </div>
 
@@ -145,7 +111,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:payment/0" data-no-tooltip translate="no">payment()</a>
+        <a href="#t:payment/0" data-no-tooltip="" translate="no">payment()</a>
 
       </div>
 
@@ -153,7 +119,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:payment_alias/0" data-no-tooltip translate="no">payment_alias()</a>
+        <a href="#t:payment_alias/0" data-no-tooltip="" translate="no">payment_alias()</a>
 
       </div>
 
@@ -161,7 +127,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:transaction/0" data-no-tooltip translate="no">transaction()</a>
+        <a href="#t:transaction/0" data-no-tooltip="" translate="no">transaction()</a>
 
       </div>
 
@@ -175,7 +141,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:list_payments/0" data-no-tooltip translate="no">list_payments()</a>
+        <a href="#c:list_payments/0" data-no-tooltip="" translate="no">list_payments()</a>
 
       </div>
 
@@ -183,7 +149,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:list_payments/1" data-no-tooltip translate="no">list_payments(binary)</a>
+        <a href="#c:list_payments/1" data-no-tooltip="" translate="no">list_payments(binary)</a>
 
       </div>
 
@@ -191,7 +157,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:serialize_connection/0" data-no-tooltip translate="no">serialize_connection()</a>
+        <a href="#c:serialize_connection/0" data-no-tooltip="" translate="no">serialize_connection()</a>
 
       </div>
 
@@ -199,7 +165,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:submit_payment/1" data-no-tooltip translate="no">submit_payment(transaction)</a>
+        <a href="#c:submit_payment/1" data-no-tooltip="" translate="no">submit_payment(transaction)</a>
 
       </div>
 
@@ -217,16 +183,19 @@ Pages
       </a>
       <span class="text">Types</span>
     </h1>
+
     <div class="types-list">
 <section class="detail" id="t:list_payments_result/0">
 
   <div class="detail-header">
-    <a href="#t:list_payments_result/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+    <a href="#t:list_payments_result/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_payments_result()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payments_result()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -247,12 +216,14 @@ Pages
 <section class="detail" id="t:payment/0">
 
   <div class="detail-header">
-    <a href="#t:payment/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+    <a href="#t:payment/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">payment()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payment()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -276,12 +247,14 @@ Pages
 <section class="detail" id="t:payment_alias/0">
 
   <div class="detail-header">
-    <a href="#t:payment_alias/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+    <a href="#t:payment_alias/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">payment_alias()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payment_alias()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -298,12 +271,14 @@ Pages
 <section class="detail" id="t:transaction/0">
 
   <div class="detail-header">
-    <a href="#t:transaction/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
+    <a href="#t:transaction/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">transaction()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">transaction()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -333,16 +308,19 @@ Pages
       </a>
       <span class="text">Callbacks</span>
     </h1>
+
     <div class="callbacks-list">
 <section class="detail" id="c:list_payments/0">
 
   <div class="detail-header">
-    <a href="#c:list_payments/0" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+    <a href="#c:list_payments/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_payments()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payments()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -359,12 +337,14 @@ Pages
 <section class="detail" id="c:list_payments/1">
 
   <div class="detail-header">
-    <a href="#c:list_payments/1" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+    <a href="#c:list_payments/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_payments(binary)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payments(binary)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -381,12 +361,14 @@ Pages
 <section class="detail" id="c:serialize_connection/0">
 
   <div class="detail-header">
-    <a href="#c:serialize_connection/0" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+    <a href="#c:serialize_connection/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">serialize_connection()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">serialize_connection()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -403,12 +385,14 @@ Pages
 <section class="detail" id="c:submit_payment/1">
 
   <div class="detail-header">
-    <a href="#c:submit_payment/1" class="detail-link" data-no-tooltip aria-label="Link to this callback">
+    <a href="#c:submit_payment/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">submit_payment(transaction)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">submit_payment(transaction)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -443,7 +427,7 @@ Pages
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

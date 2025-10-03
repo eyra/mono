@@ -4,34 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="generator" content="ExDoc v0.38.4">
     <meta name="project" content="banking_proxy v0.1.0">
 
 
     <title>BankingProxy — banking_proxy v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-31AE7ED1.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-HJ5ACJPS.js"></script>
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-D51E17FF.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
 
   </head>
-  <body class="sidebar-closed">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -57,32 +45,8 @@ banking_proxy
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
 <output role="status" id="toast"></output>
@@ -113,59 +77,28 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>BankingProxy</h1>
 
 
-    <span>BankingProxy</span>
-  </h1>
+  </div>
+
 
 <p>The banking proxy allows for a limited interaction with a
-banking account.</p><h2 id="dev-installation" class="section-heading">
-  <a href="#dev-installation" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Dev Installation</span>
-</h2>
-<p>Several credentials are needed to run the application.</p><h3 id="ssl-certificates" class="section-heading">
-  <a href="#ssl-certificates" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">SSL certificates</span>
-</h3>
-<p>First download the SSL certificate generation script:</p><p><a href="https://github.com/michaelklishin/tls-gen">https://github.com/michaelklishin/tls-gen</a></p><p>Then run it (without setting a password) with the &quot;basic&quot;
+banking account.</p><h2 id="dev-installation" class="section-heading"><a href="#dev-installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Dev Installation</span></h2><p>Several credentials are needed to run the application.</p><h3 id="ssl-certificates" class="section-heading"><a href="#ssl-certificates" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">SSL certificates</span></h3><p>First download the SSL certificate generation script:</p><p><a href="https://github.com/michaelklishin/tls-gen">https://github.com/michaelklishin/tls-gen</a></p><p>Then run it (without setting a password) with the &quot;basic&quot;
 settings. Place the resulting certificates in the <code class="inline">certs/</code>
-folder within this project.</p><h3 id="bunq" class="section-heading">
-  <a href="#bunq" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Bunq</span>
-</h3>
-<p>Bunq requires several tokens &amp; keys. These can be generated by
+folder within this project.</p><h3 id="bunq" class="section-heading"><a href="#bunq" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Bunq</span></h3><p>Bunq requires several tokens &amp; keys. These can be generated by
 the setup tool. Run <a href="https://hexdocs.pm/mix/Mix.Tasks.Escript.Build.html"><code class="inline">mix escript.build</code></a> to generate it. Now get a Bunq API key via their app.</p><p>Run <code class="inline">./banking_setup &lt;BUNQ_API_KEY&gt;</code> to generate the tokens. It
 will ask to generate the <code class="inline">config/dev.exs</code> file when in
-development mode.</p><h2 id="production-installation" class="section-heading">
-  <a href="#production-installation" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Production Installation</span>
-</h2>
-<p>Build a release via:</p><p><a href="https://github.com/eyra/mono/actions">https://github.com/eyra/mono/actions</a></p><p>Go to &quot;Release Banking Proxy&quot; and &quot;Run workflow&quot;.</p><p>Take the release artifacts. The <code class="inline">banking_setup</code> tool can be used
+development mode.</p><h2 id="production-installation" class="section-heading"><a href="#production-installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Production Installation</span></h2><p>Build a release via:</p><p><a href="https://github.com/eyra/mono/actions">https://github.com/eyra/mono/actions</a></p><p>Go to &quot;Release Banking Proxy&quot; and &quot;Run workflow&quot;.</p><p>Take the release artifacts. The <code class="inline">banking_setup</code> tool can be used
 on a machine with Erlang installed (no need for Elixir). Run it
 to generate the tokens etc. needed. It needs a Bunq API key as
 argument.</p><p>Next create SSL certificates (see dev section).</p><p>Configure the server so that the environment variables as defined in <code class="inline">config/runtime.exs</code> are set.</p>
+
 </div>
 
 <div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
-
-      <a href="api-reference.html" class="bottom-actions-button" rel="prev">
-        <span class="subheader">
-          ← Previous Page
-        </span>
-        <span class="title">
-API Reference
-        </span>
-      </a>
 
   </div>
   <div class="bottom-actions-item">
@@ -189,7 +122,7 @@ API Reference
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 

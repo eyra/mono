@@ -4,34 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.36.1">
+    <meta name="generator" content="ExDoc v0.38.4">
     <meta name="project" content="banking_proxy v0.1.0">
 
 
     <title>Bunq.API — banking_proxy v0.1.0</title>
-    <link rel="stylesheet" href="dist/html-elixir-QYVRUQZX.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-31AE7ED1.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-HJ5ACJPS.js"></script>
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-D51E17FF.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
 
   </head>
-  <body class="sidebar-closed">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -57,32 +45,8 @@ banking_proxy
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
 <output role="status" id="toast"></output>
@@ -113,12 +77,14 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Bunq.API</span> 
+      <small class="app-vsn" translate="no">(banking_proxy v0.1.0)</small>
 
-    <span translate="no">Bunq.API</span> 
-    <small class="app-vsn" translate="no">(banking_proxy v0.1.0)</small>
+    </h1>
 
-  </h1>
+  </div>
 
 
     <section id="moduledoc">
@@ -141,7 +107,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_conn/2" data-no-tooltip translate="no">create_conn(endpoint, private_key)</a>
+        <a href="#create_conn/2" data-no-tooltip="" translate="no">create_conn(endpoint, private_key)</a>
 
       </div>
 
@@ -149,7 +115,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_conn/5" data-no-tooltip translate="no">create_conn(endpoint, private_key, api_key, installation_token, device_id)</a>
+        <a href="#create_conn/5" data-no-tooltip="" translate="no">create_conn(endpoint, private_key, api_key, installation_token, device_id)</a>
 
       </div>
 
@@ -157,7 +123,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_installation/1" data-no-tooltip translate="no">create_installation(conn)</a>
+        <a href="#create_installation/1" data-no-tooltip="" translate="no">create_installation(conn)</a>
 
       </div>
 
@@ -165,7 +131,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_sandbox_company/1" data-no-tooltip translate="no">create_sandbox_company(conn)</a>
+        <a href="#create_sandbox_company/1" data-no-tooltip="" translate="no">create_sandbox_company(conn)</a>
 
       </div>
 
@@ -173,7 +139,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#generate_key/0" data-no-tooltip translate="no">generate_key()</a>
+        <a href="#generate_key/0" data-no-tooltip="" translate="no">generate_key()</a>
 
       </div>
 
@@ -181,7 +147,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#initialize/0" data-no-tooltip translate="no">initialize()</a>
+        <a href="#initialize/0" data-no-tooltip="" translate="no">initialize()</a>
 
       </div>
 
@@ -189,7 +155,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_accounts/1" data-no-tooltip translate="no">list_accounts(conn)</a>
+        <a href="#list_accounts/1" data-no-tooltip="" translate="no">list_accounts(conn)</a>
 
       </div>
 
@@ -197,7 +163,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_payments/1" data-no-tooltip translate="no">list_payments(conn)</a>
+        <a href="#list_payments/1" data-no-tooltip="" translate="no">list_payments(conn)</a>
 
       </div>
 
@@ -205,7 +171,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#list_payments/2" data-no-tooltip translate="no">list_payments(conn, cursor)</a>
+        <a href="#list_payments/2" data-no-tooltip="" translate="no">list_payments(conn, cursor)</a>
 
       </div>
 
@@ -213,7 +179,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#process_request_body/1" data-no-tooltip translate="no">process_request_body(body)</a>
+        <a href="#process_request_body/1" data-no-tooltip="" translate="no">process_request_body(body)</a>
 
       </div>
 
@@ -221,7 +187,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#production_endpoint/0" data-no-tooltip translate="no">production_endpoint()</a>
+        <a href="#production_endpoint/0" data-no-tooltip="" translate="no">production_endpoint()</a>
 
       </div>
 
@@ -229,7 +195,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#public_key_pem/1" data-no-tooltip translate="no">public_key_pem(private_key)</a>
+        <a href="#public_key_pem/1" data-no-tooltip="" translate="no">public_key_pem(private_key)</a>
 
       </div>
 
@@ -237,7 +203,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#register_device/1" data-no-tooltip translate="no">register_device(conn)</a>
+        <a href="#register_device/1" data-no-tooltip="" translate="no">register_device(conn)</a>
 
       </div>
 
@@ -245,7 +211,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#request_sandbox_money/2" data-no-tooltip translate="no">request_sandbox_money(conn, map)</a>
+        <a href="#request_sandbox_money/2" data-no-tooltip="" translate="no">request_sandbox_money(conn, map)</a>
 
       </div>
 
@@ -253,7 +219,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#sandbox_endpoint/0" data-no-tooltip translate="no">sandbox_endpoint()</a>
+        <a href="#sandbox_endpoint/0" data-no-tooltip="" translate="no">sandbox_endpoint()</a>
 
       </div>
 
@@ -261,7 +227,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#select_account_with_iban/2" data-no-tooltip translate="no">select_account_with_iban(conn, iban)</a>
+        <a href="#select_account_with_iban/2" data-no-tooltip="" translate="no">select_account_with_iban(conn, iban)</a>
 
       </div>
 
@@ -269,7 +235,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_session/1" data-no-tooltip translate="no">start_session(conn)</a>
+        <a href="#start_session/1" data-no-tooltip="" translate="no">start_session(conn)</a>
 
       </div>
 
@@ -277,7 +243,7 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#submit_payment/2" data-no-tooltip translate="no">submit_payment(conn, map)</a>
+        <a href="#submit_payment/2" data-no-tooltip="" translate="no">submit_payment(conn, map)</a>
 
       </div>
 
@@ -295,16 +261,19 @@ Pages
       </a>
       <span class="text">Functions</span>
     </h1>
+
     <div class="functions-list">
 <section class="detail" id="create_conn/2">
 
   <div class="detail-header">
-    <a href="#create_conn/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#create_conn/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_conn(endpoint, private_key)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_conn(endpoint, private_key)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -315,12 +284,14 @@ Pages
 <section class="detail" id="create_conn/5">
 
   <div class="detail-header">
-    <a href="#create_conn/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#create_conn/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_conn(endpoint, private_key, api_key, installation_token, device_id)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_conn(endpoint, private_key, api_key, installation_token, device_id)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -331,12 +302,14 @@ Pages
 <section class="detail" id="create_installation/1">
 
   <div class="detail-header">
-    <a href="#create_installation/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#create_installation/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_installation(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_installation(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -347,12 +320,14 @@ Pages
 <section class="detail" id="create_sandbox_company/1">
 
   <div class="detail-header">
-    <a href="#create_sandbox_company/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#create_sandbox_company/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">create_sandbox_company(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_sandbox_company(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -363,12 +338,14 @@ Pages
 <section class="detail" id="generate_key/0">
 
   <div class="detail-header">
-    <a href="#generate_key/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#generate_key/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">generate_key()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">generate_key()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -379,12 +356,14 @@ Pages
 <section class="detail" id="initialize/0">
 
   <div class="detail-header">
-    <a href="#initialize/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#initialize/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">initialize()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">initialize()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -395,12 +374,14 @@ Pages
 <section class="detail" id="list_accounts/1">
 
   <div class="detail-header">
-    <a href="#list_accounts/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#list_accounts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_accounts(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_accounts(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -411,12 +392,14 @@ Pages
 <section class="detail" id="list_payments/1">
 
   <div class="detail-header">
-    <a href="#list_payments/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#list_payments/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_payments(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payments(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -427,12 +410,14 @@ Pages
 <section class="detail" id="list_payments/2">
 
   <div class="detail-header">
-    <a href="#list_payments/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#list_payments/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">list_payments(conn, cursor)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payments(conn, cursor)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -443,12 +428,14 @@ Pages
 <section class="detail" id="process_request_body/1">
 
   <div class="detail-header">
-    <a href="#process_request_body/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#process_request_body/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">process_request_body(body)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">process_request_body(body)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -459,12 +446,14 @@ Pages
 <section class="detail" id="production_endpoint/0">
 
   <div class="detail-header">
-    <a href="#production_endpoint/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#production_endpoint/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">production_endpoint()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">production_endpoint()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -475,12 +464,14 @@ Pages
 <section class="detail" id="public_key_pem/1">
 
   <div class="detail-header">
-    <a href="#public_key_pem/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#public_key_pem/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">public_key_pem(private_key)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">public_key_pem(private_key)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -491,12 +482,14 @@ Pages
 <section class="detail" id="register_device/1">
 
   <div class="detail-header">
-    <a href="#register_device/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#register_device/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">register_device(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register_device(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -507,12 +500,14 @@ Pages
 <section class="detail" id="request_sandbox_money/2">
 
   <div class="detail-header">
-    <a href="#request_sandbox_money/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#request_sandbox_money/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">request_sandbox_money(conn, map)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">request_sandbox_money(conn, map)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -523,12 +518,14 @@ Pages
 <section class="detail" id="sandbox_endpoint/0">
 
   <div class="detail-header">
-    <a href="#sandbox_endpoint/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#sandbox_endpoint/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">sandbox_endpoint()</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sandbox_endpoint()</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -539,12 +536,14 @@ Pages
 <section class="detail" id="select_account_with_iban/2">
 
   <div class="detail-header">
-    <a href="#select_account_with_iban/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#select_account_with_iban/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">select_account_with_iban(conn, iban)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">select_account_with_iban(conn, iban)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -555,12 +554,14 @@ Pages
 <section class="detail" id="start_session/1">
 
   <div class="detail-header">
-    <a href="#start_session/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#start_session/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">start_session(conn)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_session(conn)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -571,12 +572,14 @@ Pages
 <section class="detail" id="submit_payment/2">
 
   <div class="detail-header">
-    <a href="#submit_payment/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+    <a href="#submit_payment/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">submit_payment(conn, map)</h1>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">submit_payment(conn, map)</h1>
 
 
+    </div>
   </div>
 
   <section class="docstring">
@@ -605,7 +608,7 @@ Pages
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.36.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
           <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
 
