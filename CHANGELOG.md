@@ -9,8 +9,13 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#17 Under development
-* ..
+## \#17 2025-10-01
+* Fixed: PDF viewer no longer refreshes when pressing Done button
+* Fixed: Changing number of participants no longer causes page refresh
+* Fixed: Helpdesk form type switching no longer causes immediate submit
+* Removed: Alpine.js completely removed from codebase
+* Updated: Phoenix LiveView to 1.1.11
+* Updated: Major dependency updates for improved stability
 
 ## \#16.1 2025-06-25
 * Fixed: Export progress report pre-affiliate participant links
