@@ -93,3 +93,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "submission.available.sub_heading"
 msgstr "Hieronder vind je de meest recente studies die in panl pool gepubliceerd zijn. Klik op een studie om meer details te lezen."
+
+#, elixir-autogen, elixir-format
+msgid "submission.criteria.birth_years.min_label"
+msgstr "Minimaal geboortejaar"
+
+#, elixir-autogen, elixir-format
+msgid "submission.criteria.birth_years.max_label"
+msgstr "Maximaal geboortejaar"

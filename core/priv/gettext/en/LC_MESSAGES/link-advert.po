@@ -93,3 +93,11 @@ msgstr "Go to Settings"
 #, elixir-autogen, elixir-format
 msgid "submission.available.sub_heading"
 msgstr "Here you can find the most recent studies published in the panl pool. Click on a study to read more details."
+
+#, elixir-autogen, elixir-format
+msgid "submission.criteria.birth_years.min_label"
+msgstr "Minimum birth year"
+
+#, elixir-autogen, elixir-format
+msgid "submission.criteria.birth_years.max_label"
+msgstr "Maximum birth year"

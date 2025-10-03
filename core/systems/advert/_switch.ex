@@ -28,6 +28,15 @@ defmodule Systems.Advert.Switch do
   end
 
   @impl true
+  def intercept({:submission, _} = signal, %{submission: submission} = message) do
+    if advert = Advert.Public.get_by_submission(submission, Advert.Model.preload_graph(:down)) do
+      dispatch!({:advert, signal}, Map.merge(message, %{advert: advert}))
+    end
+
+    :ok
+  end
+
+  @impl true
   def intercept({:advert, _} = signal, message) do
     handle(signal, message)
     :ok
