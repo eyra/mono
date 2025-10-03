@@ -51,7 +51,7 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   defp persist_criteria_changes(
-         %{assigns: %{vm: %{entity: %{criteria: criteria} = vm}}} = socket,
+         %{assigns: %{vm: %{entity: %{criteria: criteria}}}} = socket,
          attrs
        ) do
     changeset = Pool.CriteriaModel.changeset(criteria, attrs)
