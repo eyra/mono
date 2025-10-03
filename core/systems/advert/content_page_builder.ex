@@ -79,14 +79,13 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   defp create_tab(
          :pool,
-         %{submission: submission},
+         %Advert.Model{submission: _} = advert,
          show_errors,
          %{fabric: fabric, current_user: user}
        ) do
     child =
       Fabric.prepare_child(fabric, :submission_form, Advert.SubmissionView, %{
-        entity: submission,
-        user: user
+        vm: Advert.SubmissionViewBuilder.view_model(advert, %{current_user: user})
       })
 
     %{

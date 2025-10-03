@@ -3,52 +3,21 @@ defmodule Systems.Advert.SubmissionView do
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-
-  alias Systems.Advert.AdvertHelpers
-  alias Systems.Advert.SelectorLabels
-
   alias Systems.Advert
   alias Systems.Pool
 
   @impl true
-  def update(
-        _,
-        %{assigns: %{entity: _}} = socket
-      ) do
+  def update(%{vm: vm}, socket) do
     {
       :ok,
       socket
-      |> update_adverts_list()
-      |> compose_child(:exclude_adverts)
-      |> update_ui()
-    }
-  end
-
-  # Initial update
-  @impl true
-  def update(
-        %{
-          id: id,
-          entity: %{criteria: criteria} = submission,
-          user: user
-        },
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(id: id)
-      |> assign(entity: criteria)
-      |> assign(submission: submission)
-      |> assign(user: user)
-      |> assign(changeset: Pool.CriteriaModel.changeset(criteria, %{}))
-      |> update_adverts_list()
-      |> update_ui()
+      |> assign(vm: vm)
+      |> build_children()
     }
   end
 
   defp compose_inclusion_selectors(
-         %{assigns: %{selector_option_labels: selector_option_labels}} = socket
+         %{assigns: %{vm: %{selector_option_labels: selector_option_labels}}} = socket
        ) do
     selector_option_labels
     |> Map.keys()
@@ -56,7 +25,7 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   @impl true
-  def compose(:exclude_adverts, %{advert_labels: items}) do
+  def compose(:exclude_adverts, %{vm: %{advert_labels: items}}) do
     %{
       module: Selector,
       params: %{
@@ -68,7 +37,7 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   @impl true
-  def compose(:genders, %{selector_option_labels: selector_option_labels}) do
+  def compose(:genders, %{vm: %{selector_option_labels: selector_option_labels}}) do
     items = Map.get(selector_option_labels, :genders)
 
     %{
@@ -81,60 +50,15 @@ defmodule Systems.Advert.SubmissionView do
     }
   end
 
-  defp update_adverts_list(%{assigns: _} = socket) do
-    socket
-    |> assign(
-      AdvertHelpers.update_adverts(%{
-        user: socket.assigns.user,
-        submission: socket.assigns.submission
-      })
-    )
-  end
-
-  defp update_ui(%{assigns: %{entity: criteria}} = socket) do
-    socket
-    |> compose_child(:exclude_adverts)
-    |> update_ui(criteria)
-    |> compose_inclusion_selectors()
-  end
-
-  defp update_ui(
-         %{
-           assigns: %{
-             submission: %{pool: %{name: pool_name} = pool},
-             excluded_user_ids: excluded_user_ids
-           }
-         } = socket,
-         criteria
+  defp persist_criteria_changes(
+         %{assigns: %{vm: %{entity: %{criteria: criteria}}}} = socket,
+         attrs
        ) do
-    selector_option_labels = SelectorLabels.selector_option_labels(pool, criteria)
-
-    user_ids_in_pool =
-      pool
-      |> Pool.Public.list_participants()
-      |> Enum.map(& &1.id)
-
-    pool_size = Enum.count(user_ids_in_pool)
-    pool_title = Pool.Model.title(pool_name)
-
-    sample_size =
-      Pool.Public.count_eligitable_users(criteria, user_ids_in_pool, excluded_user_ids)
-
-    socket
-    |> assign(
-      selector_option_labels: selector_option_labels,
-      sample_size: sample_size,
-      pool_size: pool_size,
-      pool_title: pool_title
-    )
-  end
-
-  def save(socket, %Pool.CriteriaModel{} = entity, attrs) do
-    changeset = Pool.CriteriaModel.changeset(entity, attrs)
+    changeset = Pool.CriteriaModel.changeset(criteria, attrs)
 
     socket
     |> save(changeset)
-    |> update_ui()
+    |> flash_persister_saved()
   end
 
   defp inclusion_criterium_title(:genders), do: dgettext("eyra-account", "features.gender.title")
@@ -150,7 +74,7 @@ defmodule Systems.Advert.SubmissionView do
           source: %{name: :exclude_adverts},
           current_items: current_items
         },
-        %{assigns: %{assignment: assignment}} = socket
+        %{assigns: %{vm: %{assignment: assignment}}} = socket
       ) do
     Advert.Public.handle_exclusion(assignment, current_items)
     excluded_user_ids = Advert.Public.list_excluded_user_ids(excluded_advert_ids)
@@ -159,7 +83,6 @@ defmodule Systems.Advert.SubmissionView do
       :noreply,
       socket
       |> assign(excluded_user_ids: excluded_user_ids)
-      |> update_ui()
       |> flash_persister_saved()
     }
   end
@@ -171,26 +94,24 @@ defmodule Systems.Advert.SubmissionView do
           active_item_ids: selected_values,
           source: %{name: criteria_field}
         },
-        %{
-          assigns: %{entity: criteria}
-        } = socket
+        socket
       )
       when criteria_field == :genders do
     attrs = %{criteria_field => selected_values}
 
-    {:noreply, save(socket, criteria, attrs)}
-  end
-
-  @impl true
-  def handle_event("change", %{"criteria_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
-    changeset = Pool.CriteriaModel.changeset(entity, attrs)
-
     {
       :noreply,
       socket
-      |> save(changeset)
-      |> assign(entity: Ecto.Changeset.apply_changes(changeset))
-      |> update_ui()
+      |> persist_criteria_changes(attrs)
+    }
+  end
+
+  @impl true
+  def handle_event("change", %{"criteria_model" => attrs}, socket) do
+    {
+      :noreply,
+      socket
+      |> persist_criteria_changes(attrs)
     }
   end
 
@@ -205,9 +126,9 @@ defmodule Systems.Advert.SubmissionView do
         <Text.sub_head color="text-grey1">
           <%= raw(
             dgettext("link-advert", "submission.criteria.status",
-              sample: "<span class=\"text-primary\">#{@sample_size}</span>",
-              total: @pool_size,
-              pool: @pool_title
+              sample: "<span class=\"text-primary\">#{@vm.sample_size}</span>",
+              total: @vm.pool_size,
+              pool: @vm.pool_title
             )
           ) %>
         </Text.sub_head>
@@ -219,30 +140,11 @@ defmodule Systems.Advert.SubmissionView do
             <.spacing value="M" />
 
             <div class="flex flex-col gap-14">
-            <%!-- This is responsible for rendering all selector childs, with their respective options. --%>
-              <%= for field <- Map.keys(@selector_option_labels) do %>
-                <div>
-                  <Text.title4><%= inclusion_criterium_title(field) %></Text.title4>
-                  <.spacing value="S" />
-                  <.child name={field} fabric={@fabric} />
-                </div>
-              <% end %>
+              <.render_inclusion_selectors selector_option_labels={@vm.selector_option_labels} fabric={@fabric} />
 
-              <div>
-              <%!-- This renders the min-max birth years number inputs --%>
-                <Text.title4>
-                  <%= inclusion_criterium_title(:birth_years) %>
-                </Text.title4>
-                <.spacing value="S" />
-                <.form :let={form} for={@changeset} phx-change="change" phx-target={@myself}>
-                  <div class="flex gap-4">
-                    <.number_input form={form} field={:min_birth_year} label_text={dgettext("link-advert", "submission.criteria.birth_years.min_label")} />
-                    <.number_input form={form} field={:max_birth_year} label_text={dgettext("link-advert", "submission.criteria.birth_years.max_label")} />
-                  </div>
-                </.form>
-              </div>
-
+              <.render_age_inputs changeset={@vm.changeset} myself={@myself} />
             </div>
+
             <.spacing value="XL" />
           </div>
           <div class="xl:max-w-form">
@@ -252,7 +154,7 @@ defmodule Systems.Advert.SubmissionView do
             <Text.title4><%= dgettext("link-advert", "exclusion.select.label") %></Text.title4>
             <.spacing value="S" />
 
-            <%= if Enum.count(@advert_labels) == 0 do %>
+            <%= if Enum.count(@vm.advert_labels) == 0 do %>
               <Text.title6 color="text-grey2" margin="m-0"><%= dgettext("link-advert", "no.previous.adverts.available") %></Text.title6>
             <% else %>
               <.child name={:exclude_adverts} fabric={@fabric} />
@@ -263,5 +165,42 @@ defmodule Systems.Advert.SubmissionView do
       </Area.content>
     </div>
     """
+  end
+
+  defp render_age_inputs(assigns) do
+    ~H"""
+    <div>
+      <Text.title4>
+        <%= inclusion_criterium_title(:birth_years) %>
+      </Text.title4>
+      <.spacing value="S" />
+      <.form :let={form} for={@changeset} phx-change="change" phx-target={@myself}>
+        <div class="flex gap-4">
+          <.number_input form={form} field={:min_birth_year} label_text={dgettext("link-advert", "submission.criteria.birth_years.min_label")} />
+          <.number_input form={form} field={:max_birth_year} label_text={dgettext("link-advert", "submission.criteria.birth_years.max_label")} />
+        </div>
+      </.form>
+    </div>
+    """
+  end
+
+  defp render_inclusion_selectors(assigns) do
+    ~H"""
+    <div>
+      <%= for field <- Map.keys(@selector_option_labels) do %>
+        <div>
+          <Text.title4><%= inclusion_criterium_title(field) %></Text.title4>
+          <.spacing value="S" />
+          <.child name={field} fabric={@fabric} />
+        </div>
+      <% end %>
+    </div>
+    """
+  end
+
+  defp build_children(socket) do
+    socket
+    |> compose_child(:exclude_adverts)
+    |> compose_inclusion_selectors()
   end
 end

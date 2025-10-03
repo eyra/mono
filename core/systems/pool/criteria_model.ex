@@ -77,3 +77,14 @@ defmodule Systems.Pool.CriteriaModel do
     field == nil || Enum.empty?(field) || Enum.member?(field, value)
   end
 end
+
+defimpl Core.Persister, for: Systems.Pool.CriteriaModel do
+  alias Systems.Pool
+
+  def save(criteria, changeset) do
+    case Pool.Public.update(criteria, changeset) do
+      {:ok, %{criteria: criteria}} -> {:ok, criteria}
+      _ -> {:error, changeset}
+    end
+  end
+end

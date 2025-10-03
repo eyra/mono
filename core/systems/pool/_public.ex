@@ -276,6 +276,7 @@ defmodule Systems.Pool.Public do
     |> Multi.update(:criteria, changeset)
     |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
       Signal.Public.dispatch!({:criteria, :updated}, %{criteria: criteria})
+      {:ok, true}
     end)
     |> Repo.transaction()
   end
