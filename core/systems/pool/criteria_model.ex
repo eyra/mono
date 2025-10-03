@@ -33,12 +33,10 @@ defmodule Systems.Pool.CriteriaModel do
     min_year = get_field(changeset, :min_birth_year)
     max_year = get_field(changeset, :max_birth_year)
 
-    cond do
-      min_year && max_year && min_year > max_year ->
-        add_error(changeset, :max_birth_year, "must be greater than or equal to min birth year")
-
-      true ->
-        changeset
+    if min_year && max_year && min_year > max_year do
+      add_error(changeset, :max_birth_year, "must be greater than or equal to min birth year")
+    else
+      changeset
     end
   end
 

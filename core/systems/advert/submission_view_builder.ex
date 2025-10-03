@@ -67,9 +67,7 @@ defmodule Systems.Advert.SubmissionViewBuilder do
     |> Enum.flat_map(& &1.root.items)
     |> Enum.reject(&(&1.advert == nil))
     |> Enum.map(& &1.advert)
-    |> Enum.reject(&is_nil(&1))
-    |> Enum.reject(&(&1.assignment_id == nil))
-    |> Enum.filter(&(&1.id != advert_id))
+    |> Enum.reject(&(is_nil(&1) or &1.assignment_id == nil or &1.id == advert_id))
     |> Enum.map(&to_advert_label(&1, excluded_assignment_ids))
   end
 

@@ -51,15 +51,22 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   defp persist_criteria_changes(
-         %{assigns: %{vm: %{entity: %{criteria: criteria}}}} = socket,
+         %{assigns: %{vm: %{entity: %{criteria: criteria} = vm}}} = socket,
          attrs
        ) do
     changeset = Pool.CriteriaModel.changeset(criteria, attrs)
 
     socket
     |> save(changeset)
-    |> flash_persister_saved()
+    |> update_vm_changeset()
   end
+
+  defp update_vm_changeset(%{assigns: %{vm: vm, changeset: changeset}} = socket) do
+    socket
+    |> assign(vm: Map.put(vm, :changeset, changeset))
+  end
+
+  defp update_vm_changeset(socket), do: socket
 
   defp inclusion_criterium_title(:genders), do: dgettext("eyra-account", "features.gender.title")
 
