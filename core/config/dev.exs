@@ -9,10 +9,15 @@ upload_path =
 
 config :phoenix, :plug_init_mode, :runtime
 
+config :phoenix_live_view,
+  debug_heex_annotations: true,
+  debug_attributes: true,
+  enable_expensive_runtime_checks: true
+
 config :core,
   domain: "localhost",
   name: "Next [local]",
-  base_url: "http://localhost:4000",
+  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   upload_path: upload_path
 
 # Only in tests, remove the complexity from the password hashing algorithm

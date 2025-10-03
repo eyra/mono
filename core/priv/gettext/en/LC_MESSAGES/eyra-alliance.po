@@ -43,14 +43,6 @@ msgid "content.title"
 msgstr "Campaign"
 
 #, elixir-autogen, elixir-format
-msgid "ethical.label"
-msgstr "I hereby state that my study conforms to all ethical standards."
-
-#, elixir-autogen, elixir-format
-msgid "ethical.title"
-msgstr "Ethical review"
-
-#, elixir-autogen, elixir-format
 msgid "nextid.description"
 msgstr "Next automatically adds the participant ID to your Qualtrics URL. To use this ID in Qualtrics, add an embedded data element field with the name \"participant\", as %{link} in \"PART 2\"."
 
@@ -65,10 +57,6 @@ msgstr "How to set up your questionnaire on Qualtrics?"
 #, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
 msgstr "Copy"
-
-#, elixir-autogen, elixir-format
-msgid "ethical.description"
-msgstr "Make sure that you have approval from the Ethical Review Board of your institution, if required for your study. Provide your received ERB code."
 
 #, elixir-autogen, elixir-format
 msgid "link.description"
@@ -97,10 +85,6 @@ msgstr "%{duration} minutes"
 #, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
 msgstr "Duration"
-
-#, elixir-autogen, elixir-format
-msgid "ethical.review.link"
-msgstr "ethical checklist"
 
 #, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"

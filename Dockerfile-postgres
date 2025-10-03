@@ -1,12 +1,27 @@
-FROM postgres:15
+FROM postgres:17
 
-COPY postgres_ssl/server.key /var/lib/postgresql/ssl/server.key
-COPY postgres_ssl/server.crt /var/lib/postgresql/ssl/server.crt
-COPY postgres_ssl/ca.crt     /var/lib/postgresql/ssl/ca.crt
+# Create ssl directory for certificates
+RUN mkdir -p /var/lib/postgresql/ssl
 
+# Copy only the necessary files for generation
+COPY ./postgres_ssl/generate.sh /tmp/generate.sh
+COPY ./postgres_ssl/san_config.cnf /tmp/san_config.cnf
+
+# Set working directory
+WORKDIR /tmp
+
+# Generate certificates directly in the ssl directory
+RUN chmod +x /tmp/generate.sh && \
+    CERTS_OUTPUT_DIR=/var/lib/postgresql/ssl SERVER_CN=db /tmp/generate.sh
+
+# Set proper ownership and permissions for PostgreSQL to read the SSL files
 RUN chown postgres:postgres /var/lib/postgresql/ssl/server.key \
     && chmod 600 /var/lib/postgresql/ssl/server.key \
     && chown postgres:postgres /var/lib/postgresql/ssl/server.crt \
     && chmod 644 /var/lib/postgresql/ssl/server.crt \
     && chown postgres:postgres /var/lib/postgresql/ssl/ca.crt \
     && chmod 644 /var/lib/postgresql/ssl/ca.crt
+
+
+RUN mkdir -p /var/lib/postgresql/data && \
+    chown -R postgres:postgres /var/lib/postgresql/data

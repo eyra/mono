@@ -14,6 +14,7 @@ defmodule Systems.Promotion.Model do
     field(:subtitle, :string)
     field(:expectations, :string)
     field(:description, :string)
+    field(:prerequisites, :string)
     field(:banner_photo_url, :string)
     field(:banner_title, :string)
     field(:banner_subtitle, :string)
@@ -30,13 +31,13 @@ defmodule Systems.Promotion.Model do
     timestamps()
   end
 
-  @plain_fields ~w(title subtitle expectations description banner_photo_url banner_title banner_subtitle banner_url)a
+  @plain_fields ~w(title subtitle expectations description prerequisites banner_photo_url banner_title banner_subtitle banner_url)a
   @rich_fields ~w(themes image_id marks)a
   @technical_fields ~w(director)a
 
   @fields @plain_fields ++ @rich_fields ++ @technical_fields
 
-  @publish_required_fields ~w(title subtitle expectations description banner_title banner_subtitle)a
+  @publish_required_fields ~w(title subtitle expectations description prerequisites banner_title banner_subtitle)a
 
   def plain_fields, do: @plain_fields
 

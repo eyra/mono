@@ -56,8 +56,7 @@ defmodule Systems.Document.PDFNavView do
     {
       :noreply,
       socket
-      |> send_event(:parent, "complete_task")
-      |> send_event(:parent, "close")
+      |> send_event(:parent, "complete_task_and_close")
     }
   end
 

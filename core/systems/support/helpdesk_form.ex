@@ -1,28 +1,43 @@
 defmodule Systems.Support.HelpdeskForm do
-  use CoreWeb.LiveForm
+  use CoreWeb, :live_component
 
   import Frameworks.Pixel.Form
+
   alias Systems.Support
   alias Core.Enums
-  alias Systems.Account
   alias Frameworks.Pixel.Selector
 
   @impl true
   def update(%{id: id, user: user}, socket) do
-    changeset = Support.Public.new_ticket_changeset()
-    type = changeset.changes.type
-    type_labels = Enums.TicketTypes.labels(type)
-
     {
       :ok,
       socket
       |> assign(:id, id)
       |> assign(:user, user)
-      |> assign(:changeset, Support.Public.new_ticket_changeset())
-      |> assign(:type_labels, type_labels)
-      |> assign(:type, type)
+      |> initialize()
       |> compose_child(:type_selector)
     }
+  end
+
+  defp initialize(socket) do
+    if Map.has_key?(socket.assigns, :type) do
+      socket
+    else
+      force_initialize(socket)
+    end
+  end
+
+  defp force_initialize(socket) do
+    type = :question
+    # Create a changeset with empty values to ensure form fields are reset
+    empty_attrs = %{title: "", description: "", type: type}
+
+    socket
+    |> assign(
+      changeset: Support.Public.prepare_ticket(empty_attrs),
+      type: type,
+      type_labels: Enums.TicketTypes.labels(type)
+    )
   end
 
   @impl true
@@ -37,28 +52,28 @@ defmodule Systems.Support.HelpdeskForm do
   end
 
   @impl true
+  def handle_event("change", _, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event(
-        "create_ticket",
+        "submit",
         %{"ticket_model" => data},
         %{assigns: %{user: user, type: type}} = socket
       ) do
     data = data |> Map.put("type", type)
 
-    case Support.Public.create_ticket(user, data) do
-      {:ok, _} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, dgettext("eyra-support", "ticket_created.info.flash"))
-         |> push_navigate(to: Account.Public.start_page_path(user))}
+    socket =
+      case Support.Public.create_ticket(user, data) do
+        {:ok, _} ->
+          socket |> send_event(:parent, "ticket_created")
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
-  end
+        {:error, changeset} ->
+          assign(socket, :changeset, changeset)
+      end
 
-  @impl true
-  def handle_event("store_state", %{"ticket_model" => ticket}, socket) do
-    {:noreply, assign(socket, :changeset, Support.Public.new_ticket_changeset(ticket))}
+    {:noreply, socket}
   end
 
   @impl true
@@ -78,28 +93,24 @@ defmodule Systems.Support.HelpdeskForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Area.content>
-      <Area.form>
+        <Text.title3><%= dgettext("eyra-support", "ticket.type") %></Text.title3>
+        <.child name={:type_selector} fabric={@fabric} />
+        <.spacing value="L" />
         <.form
-          :let={form}
           id={@id}
           for={@changeset}
-          phx-submit="create_ticket"
-          phx-change="store_state"
+          :let={form}
+
+          phx-submit="submit"
+          phx-change="change"
           phx-target={@myself}
         >
-          <Text.title3><%= dgettext("eyra-support", "ticket.type") %></Text.title3>
-          <.child name={:type_selector} fabric={@fabric} />
-          <.spacing value="L" />
-
           <.text_input form={form} field={:title} label_text={dgettext("eyra-support", "ticket.title.label")} />
           <.spacing value="S" />
           <.text_area form={form} field={:description} label_text={dgettext("eyra-support", "ticket.description.label")} />
-
+          <.spacing value="S" />
           <Button.submit label={dgettext("eyra-support", "create_ticket.button")} />
         </.form>
-      </Area.form>
-      </Area.content>
     </div>
     """
   end

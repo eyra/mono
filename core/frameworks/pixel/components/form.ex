@@ -402,6 +402,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:debounce, :string, default: "1000")
+  attr(:reserve_error_space, :boolean, default: true)
 
   def text_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -434,6 +435,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       errors={@errors}
+      reserve_error_space={@reserve_error_space}
       extra_space={false}
     >
       <textarea
@@ -613,12 +615,14 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:items, :list, required: true)
+  attr(:label_subtitle, :string, default: nil)
+  attr(:label_subtitle_color, :string, default: "text-grey2")
 
-  def radio_group(%{form: form, field: field} = assigns) do
+  def radio_group(%{form: form, field: field, items: items} = assigns) do
     field_id = String.to_atom(input_id(form, field))
     field_name = input_name(form, field)
 
-    assigns = assign(assigns, %{field_id: field_id, field_name: field_name})
+    assigns = assign(assigns, %{field_id: field_id, field_name: field_name, items: items})
 
     ~H"""
     <.field
@@ -628,87 +632,27 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       extra_space={false}
     >
+      <%= if @label_subtitle do %>
+        <div class={"text-label font-label mb-2 #{@label_subtitle_color}"}><%= @label_subtitle %></div>
+      <% end %>
+
       <div class="flex flex-row gap-8 ml-[6px] mt-3">
         <%= for item <- @items do %>
-          <label class="cursor-pointer flex flex-row gap-[18px] items-center">
+          <label class={"cursor-pointer flex flex-row gap-[18px] items-center #{if item[:disabled], do: "opacity-50 cursor-not-allowed"}"}>
             <input
               id={"#{@field_id}_#{item.id}"}
               value={item.id}
               type="radio"
               name={@field_name}
               checked={item.active}
-              class="cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary"
+              disabled={item[:disabled] || false}
+              class={"cursor-pointer appearance-none w-3 h-3 rounded-full outline outline-2 outline-offset-4 outline-grey3 checked:bg-primary checked:outline-primary #{if item[:disabled], do: "cursor-not-allowed"}"}
             />
             <div class="text-label font-label text-grey1 select-none mt-1"><%= item.value %></div>
           </label>
         <% end %>
       </div>
     </.field>
-    """
-  end
-
-  attr(:form, :any, required: true)
-  attr(:field, :atom, required: true)
-  attr(:label_text, :string)
-  attr(:label_color, :string, default: "text-grey1")
-  attr(:accent, :atom, default: :primary)
-  attr(:background, :atom, default: :light)
-
-  def checkbox(%{form: form, field: field, background: background, accent: accent} = assigns) do
-    error? = field_has_error?(assigns, form)
-
-    check_value =
-      case input_value(form, field) do
-        nil -> false
-        value -> value
-      end
-
-    assigns =
-      assign(assigns, %{
-        check_value: check_value,
-        check_icon: "check_#{background}.svg",
-        active_bg_color: "bg-#{accent}",
-        inactive_bg_color: "bg-opacity-0",
-        error?: error?,
-        border_color: get_border_color({false, error?, background}),
-        target: target(form)
-      })
-
-    ~H"""
-    <div
-      class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
-      x-data={"{ active: #{@check_value} }"}
-      x-on:click={"active = !active, $parent.focus = '#{@field}'"}
-      phx-click="toggle"
-      phx-value-checkbox={@field}
-      phx-target={@target}
-    >
-      <div
-        class="flex flex-row mb-3 gap-5 sm:gap-3 cursor-pointer items-center"
-        x-data={"{ active: #{@check_value} }"}
-        x-on:click="active = !active"
-        phx-click="toggle"
-        phx-value-checkbox={@field}
-        phx-target={@target}
-      >
-        <div
-          class="flex-shrink-0 w-6 h-6 rounded"
-          x-bind:class={"{ '#{@active_bg_color}': active, '#{@inactive_bg_color} border-2 #{@border_color}': !active }"}
-        >
-          <img
-            x-show="active"
-            src={~p"/images/icons/#{@check_icon}"}
-            alt={"#{@field} is selected"}
-          />
-        </div>
-        <div
-          class="mt-0.5 text-title6 font-title6 leading-snug"
-          x-bind:class={"{ '#{@label_color}': active || #{not @error?}, 'text-warning': !active && #{@error?} }"}
-        >
-          <%= @label_text %>
-        </div>
-      </div>
-    </div>
     """
   end
 

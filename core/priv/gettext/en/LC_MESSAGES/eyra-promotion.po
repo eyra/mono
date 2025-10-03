@@ -35,10 +35,6 @@ msgid "choose.other.banner.photo.file"
 msgstr "Choose different photo"
 
 #, elixir-autogen, elixir-format
-msgid "background.label"
-msgstr "Provide some background information about this study"
-
-#, elixir-autogen, elixir-format
 msgid "description.public.label"
 msgstr "About this study"
 
@@ -47,16 +43,8 @@ msgid "background.placeholder"
 msgstr "Why are you performing this study?"
 
 #, elixir-autogen, elixir-format
-msgid "devices.available.label"
-msgstr "Available on:"
-
-#, elixir-autogen, elixir-format
 msgid "duration.title"
 msgstr "Duration"
-
-#, elixir-autogen, elixir-format
-msgid "expectations.label"
-msgstr "Describe what is expected of participants"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.public.label"
@@ -79,14 +67,6 @@ msgid "subtitle.label"
 msgstr "Can you explain in one line what your study is about?"
 
 #, elixir-autogen, elixir-format
-msgid "themes.label"
-msgstr "Which theme fits your study best? You could select multiple."
-
-#, elixir-autogen, elixir-format
-msgid "themes.title"
-msgstr "Themes"
-
-#, elixir-autogen, elixir-format
 msgid "title.label"
 msgstr "Title"
 
@@ -99,9 +79,13 @@ msgid "preview.inform.title"
 msgstr "Preview"
 
 #, elixir-autogen, elixir-format
-msgid "language.available.label"
-msgstr "Language"
-
-#, elixir-autogen, elixir-format
 msgid "copy.title"
 msgstr "Give further information"
+
+#, elixir-autogen, elixir-format
+msgid "prerequisites.placeholder"
+msgstr "Prerequisites for participation"
+
+#, elixir-autogen, elixir-format
+msgid "prerequisites.public.label"
+msgstr "Prerequisites for participation"

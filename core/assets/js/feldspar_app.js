@@ -1,37 +1,32 @@
 export const FeldsparApp = {
   mounted() {
-    console.log("[FeldsparApp] Mounted");
+    const iframe = this.el.querySelector("iframe");
 
-    console.log(this.el.dataset);
-
-    const iframe = this.getIframe();
-
-    // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30) 
-    // should use the app-loaded event. This should be kept for backwards 
+    // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
+    // should use the app-loaded event. This should be kept for backwards
     // compatibility.
     iframe.addEventListener("load", () => {
-      this.onAppLoaded({fromEvent: "onload"});
+      this.onAppLoaded({ fromEvent: "onload" });
     });
 
     iframe.setAttribute("src", this.el.dataset.src);
 
     const onAppLoaded = this.onAppLoaded.bind(this);
-    window.addEventListener("message", function(event) {
+    this.messageListener = function (event) {
       if (event.data.action === "resize") {
-        console.log("[FeldsparApp] resize event:", event.data.height)
         iframe.setAttribute("style", `height:${event.data.height}px`);
       } else if (event.data.action === "app-loaded") {
-        console.log("[FeldsparApp] app-loaded event");
-        onAppLoaded({fromEvent: "app-loaded"});
+        onAppLoaded({ fromEvent: "app-loaded" });
       }
-    });
+    };
+    window.addEventListener("message", this.messageListener);
   },
 
   getIframe() {
     return this.el.querySelector("iframe");
   },
 
-  setupChannel({fromEvent}) {
+  setupChannel({ fromEvent }) {
     // The legacy loading event could cause the channel to be set up twice.
     if (fromEvent === "onload" && this.channel) {
       return;
@@ -42,15 +37,18 @@ export const FeldsparApp = {
     };
   },
 
-  onAppLoaded({fromEvent}) {
-    console.log("[FeldsparApp] Initializing iframe app");
-    console.log("[FeldsparApp] Loaded from event:", fromEvent);
-
-    this.setupChannel({fromEvent});
+  onAppLoaded({ fromEvent }) {
+    this.setupChannel({ fromEvent });
     let action = "live-init";
     let locale = this.el.dataset.locale;
 
     const iframe = this.getIframe();
+
+    // Only add safety check for app-loaded events (not onload)
+    // The onload event is reliable, app-loaded can fail due to modal timing
+    if (fromEvent === "app-loaded" && (!iframe || !iframe.contentWindow)) {
+      return;
+    }
 
     iframe.contentWindow.postMessage({ action, locale }, "*", [
       this.channel.port2,

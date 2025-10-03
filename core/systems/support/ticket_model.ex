@@ -16,11 +16,17 @@ defmodule Systems.Support.TicketModel do
     timestamps()
   end
 
-  @doc false
   def changeset(ticket, attrs) do
-    ticket
-    |> cast(attrs, [:type, :title, :description, :completed_at])
-    |> validate_required([:title, :description])
+    cast(ticket, attrs, [:type, :title, :description, :completed_at])
+  end
+
+  def change_type(%Ecto.Changeset{} = changeset, type) when is_binary(type) do
+    changeset |> put_change(:type, type)
+  end
+
+  def validate(changeset) do
+    changeset
+    |> validate_required([:title, :description, :type])
   end
 
   def tag(ticket) do

@@ -5,10 +5,65 @@ defmodule Frameworks.Pixel.ClickableCard do
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
+  alias Phoenix.LiveView.JS
 
   defp has_actions?(%{left_actions: [_ | _]}), do: true
   defp has_actions?(%{right_actions: [_ | _]}), do: true
   defp has_actions?(_), do: false
+
+  # Helper function to show actions
+  defp show_actions_js(card_id) do
+    JS.hide(to: "#card-#{card_id}-show-more")
+    |> JS.show(to: "#card-#{card_id}-hide-more")
+    |> JS.show(to: ".card-#{card_id}-actions")
+  end
+
+  # Helper function to hide actions
+  defp hide_actions_js(card_id) do
+    JS.show(to: "#card-#{card_id}-show-more")
+    |> JS.hide(to: "#card-#{card_id}-hide-more")
+    |> JS.hide(to: ".card-#{card_id}-actions")
+  end
+
+  # Component for the show more button
+  attr(:card_id, :any, required: true)
+
+  def show_more_button(assigns) do
+    ~H"""
+    <div id={"card-#{@card_id}-show-more"}
+         phx-click={show_actions_js(@card_id)}>
+      <Button.Face.icon icon={:more_horizontal} />
+    </div>
+    """
+  end
+
+  # Component for the hide button
+  attr(:card_id, :any, required: true)
+
+  def hide_button(assigns) do
+    ~H"""
+    <div id={"card-#{@card_id}-hide-more"}
+         phx-click={hide_actions_js(@card_id)}
+         class="hidden">
+      <Button.Face.icon icon={:close} />
+    </div>
+    """
+  end
+
+  # Component for action button wrapper
+  attr(:card_id, :any, required: true)
+  attr(:button, :map, required: true)
+  attr(:index, :integer, required: true)
+  attr(:position, :atom, required: true)
+
+  def action_button(assigns) do
+    ~H"""
+    <div id={"card-#{@card_id}-actions-#{@position}-#{@index}"}
+         class={"card-#{@card_id}-actions hidden"}>
+      <Button.dynamic {@button} />
+    </div>
+    """
+  end
 
   attr(:id, :integer, required: true)
   attr(:bg_color, :string, default: "grey6")
@@ -25,7 +80,6 @@ defmodule Frameworks.Pixel.ClickableCard do
   def clickable_card(assigns) do
     ~H"""
     <div
-      x-data="{show_actions: false}"
       class={"h-full overflow-hidden rounded-lg bg-#{@bg_color} #{@size}"}
       id={"card-#{@id}"}
     >
@@ -56,28 +110,17 @@ defmodule Frameworks.Pixel.ClickableCard do
         <%= if has_actions?(assigns) do %>
         <div class="flex-wrap pl-22px pr-22px pb-22px lg:pl-30px lg:pr-30px lg:pb-30px">
           <div class="flex flex-row gap-4 items-center">
-            <div x-show="!show_actions">
-              <Button.dynamic
-                action={%{type: :click, code: "show_actions = true"}}
-                face={%{type: :icon, icon: :more_horizontal}}
-              />
-            </div>
-            <div x-show="show_actions">
-              <Button.dynamic
-                action={%{type: :click, code: "show_actions = false"}}
-                face={%{type: :icon, icon: :close}}
-              />
-            </div>
-            <%= for button <- @left_actions do %>
-              <div x-show="show_actions">
-                <Button.dynamic {button} />
-              </div>
+            <.show_more_button card_id={@id} />
+            <.hide_button card_id={@id} />
+
+            <%= for {button, index} <- Enum.with_index(@left_actions) do %>
+              <.action_button card_id={@id} button={button} index={index} position={:left} />
             <% end %>
+
             <div class="flex-grow" />
-            <%= for button <- @right_actions do %>
-              <div x-show="show_actions">
-                <Button.dynamic {button} />
-              </div>
+
+            <%= for {button, index} <- Enum.with_index(@right_actions) do %>
+              <.action_button card_id={@id} button={button} index={index} position={:right} />
             <% end %>
           </div>
         </div>

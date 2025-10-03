@@ -33,30 +33,11 @@ defmodule Systems.Assignment.SettingsView do
         title: title,
         content_flags: content_flags
       )
-      |> compose_child(:general)
       |> compose_child(:branding)
       |> compose_child(:information)
       |> compose_child(:privacy)
       |> compose_child(:consent)
       |> compose_child(:helpdesk)
-    }
-  end
-
-  @impl true
-  def compose(:general, %{
-        entity: %{info: info},
-        viewport: viewport,
-        breakpoint: breakpoint,
-        content_flags: content_flags
-      }) do
-    %{
-      module: Assignment.GeneralForm,
-      params: %{
-        entity: info,
-        viewport: viewport,
-        breakpoint: breakpoint,
-        content_flags: content_flags
-      }
     }
   end
 
@@ -162,12 +143,6 @@ defmodule Systems.Assignment.SettingsView do
         <Margin.y id={:page_top} />
         <Text.title2><%= @title %></Text.title2>
         <.spacing value="L" />
-
-        <.child name={:general} fabric={@fabric} >
-          <:footer>
-            <.spacing value="L" />
-          </:footer>
-        </.child>
 
         <.child name={:branding} fabric={@fabric} >
           <:footer>
