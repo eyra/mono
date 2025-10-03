@@ -99,7 +99,7 @@ defmodule Systems.Assignment.GeneralForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+      <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-submit="save" phx-change="save" phx-target={@myself}>
         <.render_subject_count_field :if={show_subject_count?(@content_flags)} form={form} />
         <.render_language_field :if={show_language_field?(@content_flags)}
           form={form}

@@ -35,23 +35,11 @@ defmodule Systems.Support.PublicTest do
       {:ok, ticket} =
         Public.create_ticket(member, %{
           title: Faker.Lorem.sentence(),
-          description: Faker.Lorem.sentence()
+          description: Faker.Lorem.sentence(),
+          type: :question
         })
 
       assert ticket.user.id == member.id
-    end
-  end
-
-  describe "new_ticket_changeset/1" do
-    test "associate the ticket with the user" do
-      changeset =
-        Public.new_ticket_changeset(%{
-          member: Factories.build(:member),
-          title: Faker.Lorem.sentence(),
-          description: Faker.Lorem.sentence()
-        })
-
-      assert changeset.valid?
     end
   end
 end

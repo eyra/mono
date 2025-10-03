@@ -56,14 +56,24 @@ defmodule Systems.Support.Public do
     |> Repo.update_all(set: [completed_at: nil])
   end
 
-  def create_ticket(user, attrs \\ %{}) do
+  def create_ticket(user, attrs) do
+    changeset = validate_ticket(user, attrs)
+
+    if changeset.valid? do
+      Repo.insert(changeset)
+    else
+      {:error, %{changeset | action: :insert}}
+    end
+  end
+
+  def validate_ticket(user, attrs) do
     %TicketModel{}
     |> TicketModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert()
+    |> TicketModel.validate()
   end
 
-  def new_ticket_changeset(attrs \\ %{type: :question}) do
+  def prepare_ticket(attrs \\ %{type: :question}) do
     TicketModel.changeset(%TicketModel{}, attrs)
   end
 end

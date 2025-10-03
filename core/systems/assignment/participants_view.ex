@@ -25,6 +25,8 @@ defmodule Systems.Assignment.ParticipantsView do
         },
         socket
       ) do
+    external_panel_link? = assignment.external_panel != nil
+
     {
       :ok,
       socket
@@ -34,6 +36,7 @@ defmodule Systems.Assignment.ParticipantsView do
         title: title,
         content_flags: content_flags,
         user: user,
+        external_panel_link?: external_panel_link?,
         viewport: viewport,
         breakpoint: breakpoint
       )

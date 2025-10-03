@@ -10,10 +10,6 @@
 msgid ""
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr ""

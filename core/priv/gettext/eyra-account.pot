@@ -95,10 +95,6 @@ msgid "login.surf.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "ehtical.code.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "signin.button"
 msgstr ""
 

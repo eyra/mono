@@ -15,6 +15,14 @@ msgid "form.description"
 msgstr "Do you have a question about the platform? Or do you want to give us feedback? Fill out the form below. We will reply by sending an email."
 
 #, elixir-autogen, elixir-format
+msgid "form.description.next"
+msgstr "Thank you for your message. We will get back to you as soon as possible."
+
+#, elixir-autogen, elixir-format
+msgid "form.next.button"
+msgstr "Send another message"
+
+#, elixir-autogen, elixir-format
 msgid "form.title"
 msgstr "Helpdesk"
 
@@ -29,10 +37,6 @@ msgstr "Subject"
 #, elixir-autogen, elixir-format
 msgid "create_ticket.button"
 msgstr "Submit"
-
-#, elixir-autogen, elixir-format
-msgid "ticket_created.info.flash"
-msgstr "Report is received"
 
 #, elixir-autogen, elixir-format
 msgid "ticket.type"

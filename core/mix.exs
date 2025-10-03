@@ -98,10 +98,10 @@ defmodule Core.MixProject do
       # Fork supports elixir 1.18.4
       {:packmatic, github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
       {:phoenix_ecto, "== 4.6.5"},
-      {:phoenix_html, "== 4.2.1"},
+      {:phoenix_html, "== 4.3.0"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
-      {:phoenix_live_view, "== 1.1.11"},
+      {:phoenix_live_view, "== 1.1.13"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},
@@ -117,10 +117,10 @@ defmodule Core.MixProject do
       {:typed_struct, "== 0.3.0"},
       {:tzdata, "== 1.1.3"},
       # i18n
-      {:ex_cldr, "== 2.43.1"},
+      {:ex_cldr, "== 2.43.2"},
       {:ex_cldr_numbers, "== 2.35.2"},
       {:ex_cldr_dates_times, "== 2.24.0"},
-      {:ex_cldr_plugs, "== 1.3.3"},
+      {:ex_cldr_plugs, "== 1.3.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "== 2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
@@ -129,7 +129,7 @@ defmodule Core.MixProject do
       {:ex_machina, "== 2.8.0", only: :test},
       {:file_system, "== 1.1.1", only: [:dev, :test]},
       {:bypass, "== 2.1.0", only: :test},
-      {:lazy_html, "== 0.1.7", only: :test},
+      {:lazy_html, "== 0.1.8", only: :test},
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
