@@ -380,7 +380,10 @@ defmodule Systems.Zircon.Public do
 
   def prepare_screening_session(identifier, agent_state, tool, user) do
     %Zircon.Screening.SessionModel{}
-    |> Zircon.Screening.SessionModel.changeset(%{identifier: identifier, agent_state: agent_state})
+    |> Zircon.Screening.SessionModel.changeset(%{
+      identifier: identifier,
+      agent_state: agent_state
+    })
     |> put_assoc(:tool, tool)
     |> put_assoc(:user, user)
   end

@@ -64,11 +64,15 @@ msgstr "Om credits te kunnen behalen voor onderzoeksparticipatie (OP / RPR) voor
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "Deze kenmerken zijn optioneel. Voor de huidige toepassingen op het platform worden ze niet gebruikt."
+msgstr "Een aantal studies heeft specifieke geschiktheidseisen. Door de optionele kenmerken hieronder te selecteren, kun je deelnemen aan studies die jouw kenmerken als vereisten specificeren."
+
+#, elixir-autogen, elixir-format
+msgid "features.birthyear.title"
+msgstr "Geboortejaar"
 
 #, elixir-autogen, elixir-format
 msgid "features.dominanthand.title"
-msgstr "Voorkeurshand"
+msgstr "Dominante hand"
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
@@ -93,10 +97,6 @@ msgstr "Inloggen met Google"
 #, elixir-autogen, elixir-format
 msgid "login.surf.button"
 msgstr "Inloggen met SURFconext"
-
-#, elixir-autogen, elixir-format
-msgid "ehtical.code.label"
-msgstr "Code"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signin.button"
@@ -161,3 +161,19 @@ msgstr "Weet u zeker dat u uzelf wilt verwijderen van dit project?"
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.label"
+msgstr "Ik ga akkoord met het privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.must.be.accepted"
+msgstr "U moet akkoord gaan met het privacybeleid om door te gaan"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.profile.title"
+msgstr "Mijn profiel"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr "Panl"

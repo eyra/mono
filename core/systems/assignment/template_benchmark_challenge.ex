@@ -18,7 +18,17 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
         criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
-          Assignment.Template.Flags.Settings.new(opt_out: [:language, :panel, :storage])
+          Assignment.Template.Flags.Settings.new(
+            opt_in: [
+              :expected,
+              :branding,
+              :information,
+              :privacy,
+              :consent,
+              :helpdesk,
+              :affiliate
+            ]
+          )
         },
         workflow: {
           dgettext("eyra-assignment", "tabbar.item.workflow"),
@@ -26,7 +36,7 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool, :affiliate])
+          Assignment.Template.Flags.Participants.new(opt_in: [:invite_participants])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

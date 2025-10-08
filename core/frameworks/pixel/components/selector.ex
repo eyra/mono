@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Selector do
   use CoreWeb, :live_component
 
   import CoreWeb.LiveDefaults
+  alias Phoenix.LiveView.JS
 
   @defaults [
     background: :light,
@@ -82,19 +83,32 @@ defmodule Frameworks.Pixel.Selector do
          active_item_ids
        ) do
     if multiselect?(type) do
-      socket
-      |> send_event(:parent, "active_item_ids", %{
+      send_parent_event(socket, "active_item_ids", %{
         active_item_ids: active_item_ids,
         current_items: current_items
       })
     else
       active_item_id = List.first(active_item_ids)
 
-      socket
-      |> send_event(:parent, "active_item_id", %{
+      send_parent_event(socket, "active_item_id", %{
         active_item_id: active_item_id,
         current_items: current_items
       })
+    end
+  end
+
+  # Helper to send events to parent, with fallback for non-Fabric contexts
+  defp send_parent_event(socket, event_name, payload) do
+    # Check if Fabric is available (fabric key exists in assigns)
+    if Map.has_key?(socket.assigns, :fabric) do
+      # Use Fabric's send_event
+      socket |> send_event(:parent, event_name, payload)
+    else
+      # Fallback to standard Phoenix LiveView messaging
+      # Send message to parent PID if available, otherwise to self (the LiveView)
+      target_pid = socket.parent_pid || self()
+      send(target_pid, {event_name, payload})
+      socket
     end
   end
 
@@ -157,28 +171,65 @@ defmodule Frameworks.Pixel.Selector do
   defp item_component(:segmented), do: &Frameworks.Pixel.Selector.Item.segment/1
   defp item_component(_), do: &Frameworks.Pixel.Selector.Item.label/1
 
+  # Creates optimistic UI updates for selector items
+  defp toggle_item_js(item_id, type, optional?) do
+    base_js = %JS{}
+
+    cond do
+      type in [:radio, :segmented] ->
+        # For single-select, hide all active icons, show all inactive, then toggle clicked
+        base_js
+        |> JS.hide(to: ".selector-icon-active")
+        |> JS.show(to: ".selector-icon-inactive")
+        |> JS.show(to: "[data-selector-item='#{item_id}'] .selector-icon-active")
+        |> JS.hide(to: "[data-selector-item='#{item_id}'] .selector-icon-inactive")
+        |> JS.remove_class("bg-primary text-white", to: "[data-selector-segment]")
+        |> JS.add_class("bg-grey5 text-grey2", to: "[data-selector-segment]")
+        |> JS.add_class("bg-primary text-white",
+          to: "[data-selector-item='#{item_id}'] [data-selector-segment]"
+        )
+        |> JS.remove_class("bg-grey5 text-grey2",
+          to: "[data-selector-item='#{item_id}'] [data-selector-segment]"
+        )
+
+      optional? ->
+        # For optional multi-select, just toggle the clicked item
+        base_js
+        |> JS.toggle(to: "[data-selector-item='#{item_id}'] .selector-icon-active")
+        |> JS.toggle(to: "[data-selector-item='#{item_id}'] .selector-icon-inactive")
+        |> JS.toggle_class("bg-primary text-white bg-grey5 text-grey2",
+          to: "[data-selector-item='#{item_id}'] [data-selector-segment]"
+        )
+
+      true ->
+        # For required multi-select, toggle (server handles preventing last deselection)
+        base_js
+        |> JS.toggle(to: "[data-selector-item='#{item_id}'] .selector-icon-active")
+        |> JS.toggle(to: "[data-selector-item='#{item_id}'] .selector-icon-inactive")
+        |> JS.toggle_class("bg-primary text-white bg-grey5 text-grey2",
+          to: "[data-selector-item='#{item_id}'] [data-selector-segment]"
+        )
+    end
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
     <div class={"#{grid_options(@type, @grid_options)} #{@opts}"}>
       <%= for {item, _} <- Enum.with_index(@current_items) do %>
-        <div x-data={"{ active: #{item.active}, is_optional: #{@optional?} }"}>
-          <div
-            x-on:mousedown="if (is_optional) { active = !active }"
-            class="cursor-pointer select-none"
-            phx-click="toggle"
-            phx-value-item={"#{item.id}"}
-            phx-target={@myself}
-          >
-            <.function_component
-              function={item_component(@type)}
-              props={%{
-                item: item,
-                multiselect?: multiselect?(@type),
-                background: @background
-              }}
-            />
-          </div>
+        <div
+          data-selector-item={"#{item.id}"}
+          class="cursor-pointer select-none"
+          phx-click={toggle_item_js(item.id, @type, @optional?) |> JS.push("toggle", value: %{item: item.id}, target: @myself)}
+        >
+          <.function_component
+            function={item_component(@type)}
+            props={%{
+              item: item,
+              multiselect?: multiselect?(@type),
+              background: @background
+            }}
+          />
         </div>
       <% end %>
     </div>
@@ -223,12 +274,14 @@ defmodule Frameworks.Pixel.Selector.Item do
     <button class="flex flex-row gap-3 items-center">
       <div>
         <img
-          x-show="active"
+          class="selector-icon-active"
+          style={!@item.active && "display: none"}
           src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
-          x-show="!active"
+          class="selector-icon-inactive"
+          style={@item.active && "display: none"}
           src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />
@@ -247,8 +300,12 @@ defmodule Frameworks.Pixel.Selector.Item do
   def label(assigns) do
     ~H"""
     <div
-      x-bind:class="{ 'bg-primary text-white': active, 'bg-grey5 text-grey2': !active}"
-      class="rounded-full px-6 py-3 text-label font-label select-none"
+      data-selector-segment
+      class={[
+        "rounded-full px-6 py-3 text-label font-label select-none",
+        @item.active && "bg-primary text-white",
+        !@item.active && "bg-grey5 text-grey2"
+      ]}
     >
       <%= @item.value %>
     </div>
@@ -262,8 +319,12 @@ defmodule Frameworks.Pixel.Selector.Item do
   def segment(assigns) do
     ~H"""
     <div
-      x-bind:class="{ 'bg-primary text-white': active, 'bg-grey5 text-grey2': !active}"
-      class="px-6 py-3 text-label font-label select-none"
+      data-selector-segment
+      class={[
+        "px-6 py-3 text-label font-label select-none",
+        @item.active && "bg-primary text-white",
+        !@item.active && "bg-grey5 text-grey2"
+      ]}
     >
       <%= @item.value %>
     </div>
@@ -318,12 +379,14 @@ defmodule Frameworks.Pixel.Selector.Item do
     <div class="flex flex-row gap-3 items-center">
       <div class="flex-shrink-0">
         <img
-          x-show="active"
+          class="selector-icon-active"
+          style={!@item.active && "display: none"}
           src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
-          x-show="!active"
+          class="selector-icon-inactive"
+          style={@item.active && "display: none"}
           src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />

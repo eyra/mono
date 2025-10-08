@@ -96,8 +96,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
 
       # Click Continue to start import
       view
-      |> element("[phx-click='commit_import']")
-      |> render_click()
+      |> render_click(:commit_import)
 
       # The session should now be in importing phase
       updated_session = Paper.Public.get_import_session!(session.id)
@@ -203,8 +202,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
 
       # Click Continue to start import
       view
-      |> element("[phx-click='commit_import']")
-      |> render_click()
+      |> render_click(:commit_import)
 
       # Run the import job
       assert :ok =
@@ -388,8 +386,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
 
       # Click Continue to start import
       view
-      |> element("[phx-click='commit_import']")
-      |> render_click()
+      |> render_click(:commit_import)
 
       # Run the import job - should handle the error
       _result =

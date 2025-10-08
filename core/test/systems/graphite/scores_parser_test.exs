@@ -5,6 +5,8 @@ defmodule Systems.Graphite.ScoresParserTest do
   alias Systems.Graphite.ScoresParser
   alias Systems.Graphite.Factories
 
+  defp add_newlines(lines), do: Enum.map(lines, &(&1 <> "\n"))
+
   describe "from_lines/2" do
     test "error rejected with unknown submission" do
       lines =
@@ -12,6 +14,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "1,git@github.com:eyra/fertility-prediction-challenge.git,92ec9ad16ca8eeb96c3f55bfe2e0261dd36d6874,error,Repo does not have expect Dockerfile with name: Dockerfile,,,,"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       leaderboard = Factories.create_leaderboard(%{})
@@ -45,6 +48,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "#{submission.id},#{url},#{ref},error,Repo does not have expect Dockerfile with name: Dockerfile,,,,"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -76,6 +80,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "1,git@github.com:eyra/fertility-prediction-challenge.git,1caf4130b561896a615cf3278c1cabce9705f0be,success,,0.7772151898734178,0,0.0,0"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       leaderboard =
@@ -118,6 +123,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,+0.0,0"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -164,6 +170,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,+0.0,0",
           ""
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -208,6 +215,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "#{submission.id},#{url},#{ref},success,,,,,"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -252,6 +260,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,0.0,0"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -297,6 +306,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "submission-id,url,ref,status,error_message,accuracy,precision,recall,f1_score",
           "#{submission.id},#{url},#{ref},success,,0.7772151898734178,0,0.0,0"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{
@@ -358,6 +368,7 @@ defmodule Systems.Graphite.ScoresParserTest do
           "#{submission.id},#{url},#{ref},success,,0.7670886075949367,0.42857142857142855,0.13636363636363635,0.20689655172413793",
           "#{submission.id},#{url},#{ref},error,Failed to reset repo to ref,,,,"
         ]
+        |> add_newlines()
         |> CSV.decode(headers: true)
 
       assert %Systems.Graphite.ScoresParseResult{

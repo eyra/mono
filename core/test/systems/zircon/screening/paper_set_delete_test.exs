@@ -76,7 +76,7 @@ defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
       assert initial_count == 3
 
       # Click the delete button for paper2
-      view |> element("[phx-click='delete'][phx-value-item='#{paper2.id}']") |> render_click()
+      render_click(view, :delete, %{"item" => "#{paper2.id}"})
 
       # Check the updated HTML
       updated_html = render(view)
@@ -115,7 +115,7 @@ defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
 
       # Delete all papers one by one
       Enum.each(papers, fn paper ->
-        view |> element("[phx-click='delete'][phx-value-item='#{paper.id}']") |> render_click()
+        render_click(view, :delete, %{"item" => "#{paper.id}"})
       end)
 
       # Verify all papers are removed from the set

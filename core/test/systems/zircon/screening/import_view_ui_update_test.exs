@@ -86,7 +86,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
 
       # Click the Continue button
 
-      view |> element("[phx-click='commit_import']") |> render_click()
+      view |> render_click(:commit_import)
 
       # IMMEDIATELY check the UI - should show importing state
       # Don't wait for completion, check right after the click
@@ -186,7 +186,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
       assert view |> has_element?("[phx-click='commit_import']")
 
       # Click Continue to trigger import
-      view |> element("[phx-click='commit_import']") |> render_click()
+      view |> render_click(:commit_import)
 
       # For small imports (below threshold), NO progress UI should show
       # The import should complete quickly without intermediate UI

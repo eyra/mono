@@ -188,6 +188,10 @@ defmodule Systems.Assignment.CrewTaskListView do
     {:noreply, socket |> handle_task_completed()}
   end
 
+  def handle_event("complete_task_and_close", _, socket) do
+    {:noreply, socket |> handle_task_completed() |> hide_modal_tool_ref_view()}
+  end
+
   # Private
 
   defp start_item(socket, item_id) do

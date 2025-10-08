@@ -35,7 +35,7 @@ defmodule Frameworks.Pixel.FileSelector do
       assign(assigns, %{upload_in_progress: upload_in_progress, button_label: button_label})
 
     ~H"""
-      <.form id={"#{@id}_file_selector_form"} for={%{}} phx-change="change" phx-target="" >
+      <.form id={"#{@id}_file_selector_form"} for={%{}} phx-change="change" >
         <%= if @label do %>
           <Text.form_field_label id={"#{@id}_label"} ><%= @label %></Text.form_field_label>
           <.spacing value="XXS" />

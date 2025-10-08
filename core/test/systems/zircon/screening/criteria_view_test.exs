@@ -70,7 +70,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
       html =
-        view |> element(~s{[phx-click="add"][phx-value-item="Dimension 1"]}) |> render_click()
+        view |> render_click(:add, %{"item" => "Dimension 1"})
 
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
@@ -98,10 +98,10 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
 
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
-      view |> element(~s{[phx-click="add"][phx-value-item="Dimension 1"]}) |> render_click()
+      view |> render_click(:add, %{"item" => "Dimension 1"})
 
       html =
-        view |> element(~s{[phx-click="add"][phx-value-item="Dimension 1"]}) |> render_click()
+        view |> render_click(:add, %{"item" => "Dimension 1"})
 
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_1_statement\""
@@ -130,8 +130,8 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
 
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
-      view |> element(~s{[phx-click="add"][phx-value-item="Dimension 1"]"}) |> render_click()
-      view |> element(~s{[phx-click="add"][phx-value-item="Dimension 2"]}) |> render_click()
+      view |> render_click(:add, %{"item" => "Dimension 1"})
+      view |> render_click(:add, %{"item" => "Dimension 2"})
 
       html = view |> render()
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
@@ -164,8 +164,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
       view
-      |> element(~s{[phx-click="delete"][phx-value-item="criterion_form_0"]})
-      |> render_click()
+      |> render_click(:delete, %{"item" => "criterion_form_0"})
 
       html = view |> render()
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""

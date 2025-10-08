@@ -28,12 +28,8 @@ defmodule Systems.Support.TicketPageTest do
       ticket = Factories.insert!(:helpdesk_ticket)
       {:ok, view, _html} = live(conn, ~p"/support/ticket/#{ticket.id}")
 
-      html =
-        view
-        |> element("[phx-click=\"close_ticket\"]")
-        |> render_click()
-
-      assert {:error, {:live_redirect, %{kind: :push, to: "/support/ticket"}}} = html
+      assert {:error, {:live_redirect, %{kind: :push, to: "/support/ticket"}}} =
+               render_click(view, "close_ticket")
     end
   end
 end

@@ -219,12 +219,9 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Check that the file selector is present
       assert has_element?(view, "[data-testid='file-selector']")
 
-      # Test file upload interaction - we can simulate a file change event
-      # First, let's verify the view can handle the file change event
-      result =
-        view
-        |> element("form#ris_file_file_selector_form")
-        |> render_change(%{"_target" => ["file"]})
+      # Test file upload interaction - verify the change event handler exists and works
+      # The handle_event("change", ...) in ImportView should handle this
+      result = render_change(view, :change, %{"_target" => ["file"]})
 
       # The change event should be handled without errors (returns the updated view)
       assert result |> String.contains?("data-testid")
@@ -261,10 +258,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert html =~ ~r/accept="\.ris"/
 
       # Verify that the file change handler works
-      file_change_result =
-        view
-        |> element("form#ris_file_file_selector_form")
-        |> render_change(%{"_target" => ["file"], "file" => %{}})
+      file_change_result = render_change(view, :change, %{"_target" => ["file"], "file" => %{}})
 
       # Should return updated HTML without errors
       assert file_change_result |> String.contains?("data-testid")
@@ -293,13 +287,15 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # Simulate file upload using Phoenix LiveView's file_input helper
       upload_file = %{
+        last_modified: 1_594_171_879_000,
         name: "sample.ris",
         content: test_ris_content,
+        size: byte_size(test_ris_content),
         type: "text/plain"
       }
 
       # Upload the file - this creates the upload entry but doesn't automatically call process_file in tests
-      upload_result = file_input(view, "form#ris_file_file_selector_form", :file, [upload_file])
+      upload_result = file_input(view, "form", :file, [upload_file])
 
       # Verify the file upload was successful
       assert length(upload_result.entries) == 1

@@ -27,7 +27,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.reviewers"),
-          Assignment.Template.Flags.Participants.new(opt_out: [:advert_in_pool, :affiliate])
+          Assignment.Template.Flags.Participants.new(opt_in: [:invite_participants])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

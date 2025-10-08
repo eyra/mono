@@ -10,10 +10,6 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr "Settings"
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr "Your participant ID"
@@ -451,3 +447,7 @@ msgstr "Use the link below to invite participants. No sign-in is required. Repla
 #, elixir-autogen, elixir-format
 msgid "external.panel.title"
 msgstr "Invite link"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "The default language for Panl studies is dutch"

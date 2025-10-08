@@ -10,10 +10,19 @@ defmodule Systems.Assignment.ParticipantsView do
   alias Systems.Affiliate
   alias Systems.Advert
   alias Systems.Pool
+  alias Systems.Assignment
 
   @impl true
   def update(
-        %{id: id, assignment: assignment, title: title, content_flags: content_flags, user: user},
+        %{
+          id: id,
+          assignment: assignment,
+          title: title,
+          content_flags: content_flags,
+          user: user,
+          viewport: viewport,
+          breakpoint: breakpoint
+        },
         socket
       ) do
     external_panel_link? = assignment.external_panel != nil
@@ -27,8 +36,11 @@ defmodule Systems.Assignment.ParticipantsView do
         title: title,
         content_flags: content_flags,
         user: user,
-        external_panel_link?: external_panel_link?
+        external_panel_link?: external_panel_link?,
+        viewport: viewport,
+        breakpoint: breakpoint
       )
+      |> compose_child(:general)
       |> update_advert_button()
       |> update_invite_title()
       |> update_invite_url()
@@ -36,6 +48,24 @@ defmodule Systems.Assignment.ParticipantsView do
       |> update_affiliate_title()
       |> update_affiliate_url()
       |> update_affiliate_annotation()
+    }
+  end
+
+  @impl true
+  def compose(:general, %{
+        assignment: %{info: info},
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }) do
+    %{
+      module: Assignment.GeneralForm,
+      params: %{
+        entity: info,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      }
     }
   end
 
@@ -151,6 +181,14 @@ defmodule Systems.Assignment.ParticipantsView do
         <Area.content>
           <Margin.y id={:page_top} />
           <Text.title2><%= @title %></Text.title2>
+          <.spacing value="L" />
+
+          <.child name={:general} fabric={@fabric} >
+            <:footer>
+              <.spacing value="L" />
+            </:footer>
+          </.child>
+
           <.spacing value="L" />
           <div class="flex flex-col gap-8" %>
             <%= if @content_flags[:advert_in_pool] do %>

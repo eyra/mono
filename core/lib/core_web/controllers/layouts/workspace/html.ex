@@ -8,6 +8,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
 
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Hero
+  alias Phoenix.LiveView.JS
 
   attr(:title, :string, default: nil)
   attr(:menus, :map)
@@ -17,12 +18,18 @@ defmodule CoreWeb.Layouts.Workspace.Html do
 
   def workspace(assigns) do
     ~H"""
-    <div class="w-full h-viewport" x-data="{mobile_menu: false}">
+    <div class="w-full h-viewport">
+      <%!-- Invisible backdrop for clicking outside menu --%>
       <div
-        class="fixed right-0 top-0 w-mobile-menu-width h-viewport"
-        x-cloak
-        x-show="mobile_menu"
-        @click.away="mobile_menu = !mobile_menu, $parent.overlay = false"
+        id="mobile-menu-backdrop"
+        class="fixed inset-0 z-20 hidden"
+        phx-click={JS.hide(to: "#mobile-menu") |> JS.hide(to: "#mobile-menu-backdrop")}
+      ></div>
+
+      <%!-- Mobile menu panel --%>
+      <div
+        id="mobile-menu"
+        class="fixed right-0 top-0 w-mobile-menu-width h-viewport z-30 hidden"
       >
         <Navigation.mobile_menu {@menus.mobile_menu} />
       </div>

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "schedule:earlyMondays",
+    "group:allNonMajor"
+  ],
+  "timezone": "Europe/Amsterdam",
+  "prConcurrentLimit": 1,
+  "branchConcurrentLimit": 1,
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "automerge": false
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "rangeStrategy": "pin"
+}

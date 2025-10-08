@@ -35,6 +35,14 @@ msgid "genders.x"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "genders.non_binary"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "genders.prefer_not_to_say"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "themes.art"
 msgstr ""
 

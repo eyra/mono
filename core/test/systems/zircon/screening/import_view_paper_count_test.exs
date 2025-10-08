@@ -77,8 +77,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
 
       # Delete paper2 from the paper set view
       paper_set_view
-      |> element("[phx-click='delete'][phx-value-item='#{paper2.id}']")
-      |> render_click()
+      |> render_click(:delete, %{"item" => "#{paper2.id}"})
 
       # Give time for signal propagation and Observatory update
       Process.sleep(100)
@@ -210,8 +209,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
 
       # Delete paper1
       paper_set_view
-      |> element("[phx-click='delete'][phx-value-item='#{paper1.id}']")
-      |> render_click()
+      |> render_click(:delete, %{"item" => "#{paper1.id}"})
 
       Process.sleep(50)
 
@@ -221,8 +219,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
 
       # Delete paper2
       paper_set_view
-      |> element("[phx-click='delete'][phx-value-item='#{paper2.id}']")
-      |> render_click()
+      |> render_click(:delete, %{"item" => "#{paper2.id}"})
 
       Process.sleep(50)
 
@@ -232,8 +229,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
 
       # Delete paper3 (last one)
       paper_set_view
-      |> element("[phx-click='delete'][phx-value-item='#{paper3.id}']")
-      |> render_click()
+      |> render_click(:delete, %{"item" => "#{paper3.id}"})
 
       Process.sleep(50)
 

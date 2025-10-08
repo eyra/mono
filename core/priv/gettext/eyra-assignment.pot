@@ -10,10 +10,6 @@
 msgid ""
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr ""
@@ -450,4 +446,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "external.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.language.fixed_nl_message"
 msgstr ""

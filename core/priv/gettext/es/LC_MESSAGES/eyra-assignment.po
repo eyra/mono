@@ -11,10 +11,6 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
-msgid "form.title"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "ticket.title"
 msgstr ""
@@ -452,3 +448,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "external.panel.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "El idioma predeterminado para los estudios de Panl es el neerlandés."

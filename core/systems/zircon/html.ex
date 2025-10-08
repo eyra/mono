@@ -105,7 +105,7 @@ defmodule Systems.Zircon.HTML do
 
   def ris_selector_form(assigns) do
     ~H"""
-      <.form id={"ris_selector_form"} for={%{}} phx-change="change" phx-target="" >
+      <.form id={"ris_selector_form"} for={%{}} phx-change="change" >
         <div class="flex flex-row">
           <div class="hidden">
             <.live_file_input upload={@uploads.file} />

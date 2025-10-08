@@ -84,13 +84,11 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
       assert html =~ "1 duplicate"
 
       # Test clicking each button
-      view |> element("[phx-click='show_warnings']") |> render_click()
+      view |> render_click(:show_warnings)
       refute render(view) =~ "phx-error"
-
-      view |> element("[phx-click='show_new_papers']") |> render_click()
+      view |> render_click(:show_new_papers)
       refute render(view) =~ "phx-error"
-
-      view |> element("[phx-click='show_duplicates']") |> render_click()
+      view |> render_click(:show_duplicates)
       refute render(view) =~ "phx-error"
     end
 

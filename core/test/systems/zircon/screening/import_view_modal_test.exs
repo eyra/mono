@@ -54,7 +54,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session_data)
 
       # Click the warnings button
-      view |> element("[phx-click='show_warnings']") |> render_click()
+      render_click(view, :show_warnings)
 
       # Modal should be triggered without errors
       refute render(view) =~ "phx-error"
@@ -100,7 +100,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session_data)
 
       # Click the new papers button
-      view |> element("[phx-click='show_new_papers']") |> render_click()
+      render_click(view, :show_new_papers)
 
       # Modal should be triggered without errors
       refute render(view) =~ "phx-error"
@@ -149,7 +149,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session_data)
 
       # Click the duplicates button
-      view |> element("[phx-click='show_duplicates']") |> render_click()
+      render_click(view, :show_duplicates)
 
       # Modal should be triggered without errors
       refute render(view) =~ "phx-error"
@@ -215,13 +215,13 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       assert html =~ "1 duplicate"
 
       # Test that each button can be clicked without errors
-      view |> element("[phx-click='show_warnings']") |> render_click()
+      render_click(view, :show_warnings)
       refute render(view) =~ "phx-error"
 
-      view |> element("[phx-click='show_new_papers']") |> render_click()
+      render_click(view, :show_new_papers)
       refute render(view) =~ "phx-error"
 
-      view |> element("[phx-click='show_duplicates']") |> render_click()
+      render_click(view, :show_duplicates)
       refute render(view) =~ "phx-error"
     end
   end

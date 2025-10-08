@@ -16,7 +16,16 @@ defmodule Systems.Assignment.TemplateDataDonation do
         criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
-          Assignment.Template.Flags.Settings.new()
+          Assignment.Template.Flags.Settings.new(
+            opt_in: [
+              :branding,
+              :information,
+              :privacy,
+              :consent,
+              :helpdesk,
+              :affiliate
+            ]
+          )
         },
         workflow: {
           dgettext("eyra-assignment", "tabbar.item.workflow"),
@@ -25,7 +34,11 @@ defmodule Systems.Assignment.TemplateDataDonation do
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new(
-            opt_out: [:advert_in_pool, :invite_participants]
+            opt_in: [
+              :expected,
+              :language,
+              :affiliate
+            ]
           )
         },
         affiliate: {

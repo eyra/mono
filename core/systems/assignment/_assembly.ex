@@ -88,6 +88,14 @@ defmodule Systems.Assignment.Assembly do
     Consent.Public.prepare_agreement(agreement_auth_node)
   end
 
+  defp info_attrs(:questionnaire, director) do
+    %{
+      director: director,
+      devices: [:phone, :tablet, :desktop],
+      language: :nl
+    }
+  end
+
   defp info_attrs(:lab, director) do
     %{
       director: director,

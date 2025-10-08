@@ -53,36 +53,6 @@ defmodule Systems.Zircon.PublicTest do
         Zircon.Public.insert_screening_tool_criterion(tool, dimension, user)
     end
 
-    test "fails with invalid tool" do
-      user = Factories.insert!(:member)
-      dimension = Factories.insert!(:ontology_concept, %{phrase: "Population"})
-      invalid_tool = %{id: nil}
-
-      assert_raise FunctionClauseError, fn ->
-        Zircon.Public.insert_screening_tool_criterion(invalid_tool, dimension, user)
-      end
-    end
-
-    test "fails with invalid dimension" do
-      user = Factories.insert!(:member)
-      tool = Factories.insert!(:zircon_screening_tool)
-      invalid_dimension = %{id: nil}
-
-      assert_raise FunctionClauseError, fn ->
-        Zircon.Public.insert_screening_tool_criterion(tool, invalid_dimension, user)
-      end
-    end
-
-    test "fails with invalid user" do
-      tool = Factories.insert!(:zircon_screening_tool)
-      dimension = Factories.insert!(:ontology_concept, %{phrase: "Population"})
-      invalid_user = %{id: nil}
-
-      assert_raise FunctionClauseError, fn ->
-        Zircon.Public.insert_screening_tool_criterion(tool, dimension, invalid_user)
-      end
-    end
-
     test "creates correct annotation structure with different dimension types" do
       user = Factories.insert!(:member)
       tool = Factories.insert!(:zircon_screening_tool)

@@ -14,6 +14,11 @@ defmodule CoreWeb.LiveForm do
         socket
       end
 
+      def flash_info(socket, message) do
+        Frameworks.Pixel.Flash.push_info(socket, message)
+        socket
+      end
+
       def flash_error(socket) do
         Frameworks.Pixel.Flash.push_error(socket)
         socket

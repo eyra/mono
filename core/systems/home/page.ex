@@ -19,9 +19,16 @@ defmodule Systems.Home.Page do
   end
 
   @impl true
-  def compose(:home_view, %{vm: %{blocks: blocks}}) do
+  def compose(:home_view, %{vm: %{view_type: :guest}}) do
     %{
-      module: Home.View,
+      module: Home.GuestView,
+      params: %{}
+    }
+  end
+
+  def compose(:home_view, %{vm: %{view_type: :logged_in, blocks: blocks}}) do
+    %{
+      module: Home.LoggedInView,
       params: %{
         blocks: blocks
       }

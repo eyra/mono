@@ -1,7 +1,7 @@
 # ======================
 # Builder Stage
 # ======================
-FROM debian:12 AS builder
+FROM debian:13 AS builder
 
 WORKDIR /root
 
@@ -82,7 +82,7 @@ CMD ["mix", "run"]
 
 
 # ======================
-# Release Stage  
+# Release Stage
 # ======================
 FROM dev AS build_release
 
@@ -124,7 +124,7 @@ RUN echo "Release build info:" && \
 # =======================
 # Prod Stage
 # =======================
-FROM debian:12-slim AS prod
+FROM debian:13-slim AS prod
 
 RUN apt-get update && apt-get install -y \
       libssl-dev \

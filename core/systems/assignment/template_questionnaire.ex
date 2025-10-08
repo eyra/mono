@@ -17,7 +17,16 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         criteria: nil,
         settings: {
           dgettext("eyra-assignment", "tabbar.item.settings"),
-          Assignment.Template.Flags.Settings.new(opt_out: [:panel, :storage])
+          Assignment.Template.Flags.Settings.new(
+            opt_in: [
+              :branding,
+              :information,
+              :privacy,
+              :consent,
+              :helpdesk,
+              :affiliate
+            ]
+          )
         },
         workflow: {
           dgettext("eyra-assignment", "tabbar.item.workflow"),
@@ -25,11 +34,15 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Assignment.Template.Flags.Participants.new()
-        },
-        affiliate: {
-          dgettext("eyra-assignment", "tabbar.item.affiliate"),
-          Assignment.Template.Flags.Affiliate.new()
+          Assignment.Template.Flags.Participants.new(
+            opt_in: [
+              :language_fixed_nl,
+              :expected,
+              :language,
+              :advert_in_pool,
+              :invite_participants
+            ]
+          )
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
