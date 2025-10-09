@@ -13,9 +13,11 @@
 * Fixed: PDF viewer no longer refreshes when pressing Done button
 * Fixed: Changing number of participants no longer causes page refresh
 * Fixed: Helpdesk form type switching no longer causes immediate submit
+* Fixed: Cannot change Next profile picture
 * Removed: Alpine.js completely removed from codebase
 * Updated: Phoenix LiveView to 1.1.11
 * Updated: Major dependency updates for improved stability
+* Updated: Moved number of participants and participant language to participant tab
 
 ## \#16.1 2025-06-25
 * Fixed: Export progress report pre-affiliate participant links
