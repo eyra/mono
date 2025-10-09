@@ -158,3 +158,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr "Acepto los términos, condiciones y la política de privacidad"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr "Debe aceptar los términos, condiciones y la política de privacidad para continuar"

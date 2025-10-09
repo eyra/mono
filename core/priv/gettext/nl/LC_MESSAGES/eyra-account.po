@@ -163,12 +163,20 @@ msgid "Account activated successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.label"
+msgid "panl.privacy.policy.label"
 msgstr "Ik ga akkoord met het privacybeleid"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.must.be.accepted"
+msgid "panl.privacy.policy.required"
 msgstr "U moet akkoord gaan met het privacybeleid om door te gaan"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr "Ik ga akkoord met de voorwaarden en het privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr "U moet akkoord gaan met de voorwaarden en het privacybeleid om door te gaan"
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
