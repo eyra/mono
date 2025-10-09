@@ -75,7 +75,116 @@ defmodule Frameworks.Pixel.SelectorTest do
     {:ok, [conn: conn]}
   end
 
-  describe "Selector component" do
+  describe "Selector component rendering" do
+    test "renders radio selector correctly", %{conn: conn} do
+      items = [
+        %{id: :option1, value: "Option 1", active: true},
+        %{id: :option2, value: "Option 2", active: false},
+        %{id: :option3, value: "Option 3", active: false}
+      ]
+
+      {:ok, _view, html} =
+        live_isolated(conn, View,
+          session: %{"items" => items, "type" => :radio, "optional?" => false}
+        )
+
+      assert html =~ "Option 1"
+      assert html =~ "Option 2"
+      assert html =~ "Option 3"
+      assert html =~ "selector-icon-active"
+      assert html =~ "selector-icon-inactive"
+    end
+
+    test "renders checkbox selector correctly", %{conn: conn} do
+      items = [
+        %{id: :check1, value: "Check 1", active: true},
+        %{id: :check2, value: "Check 2", active: false},
+        %{id: :check3, value: "Check 3", active: true}
+      ]
+
+      {:ok, _view, html} =
+        live_isolated(conn, View, session: %{"items" => items, "type" => :checkbox})
+
+      assert html =~ "Check 1"
+      assert html =~ "Check 2"
+      assert html =~ "Check 3"
+    end
+
+    test "renders segmented selector correctly", %{conn: conn} do
+      items = [
+        %{id: :seg1, value: "First", active: true},
+        %{id: :seg2, value: "Second", active: false},
+        %{id: :seg3, value: "Third", active: false}
+      ]
+
+      {:ok, _view, html} =
+        live_isolated(conn, View,
+          session: %{"items" => items, "type" => :segmented, "optional?" => false}
+        )
+
+      assert html =~ "First"
+      assert html =~ "Second"
+      assert html =~ "Third"
+      assert html =~ "data-selector-segment"
+    end
+
+    test "handles selector toggle events", %{conn: conn} do
+      items = [
+        %{id: :option1, value: "Option 1", active: true},
+        %{id: :option2, value: "Option 2", active: false}
+      ]
+
+      {:ok, view, _html} =
+        live_isolated(conn, View,
+          session: %{"items" => items, "type" => :radio, "optional?" => false}
+        )
+
+      view
+      |> element("[data-selector-item='option2']")
+      |> render_click()
+
+      html = render(view)
+      assert html =~ "Option 2"
+    end
+
+    test "renders label selector correctly", %{conn: conn} do
+      items = [
+        %{id: :label1, value: "Tag 1", active: true},
+        %{id: :label2, value: "Tag 2", active: false},
+        %{id: :label3, value: "Tag 3", active: true}
+      ]
+
+      {:ok, _view, html} =
+        live_isolated(conn, View, session: %{"items" => items, "type" => :label})
+
+      assert html =~ "Tag 1"
+      assert html =~ "Tag 2"
+      assert html =~ "Tag 3"
+      assert html =~ "data-selector-segment"
+    end
+
+    test "handles optional vs required selection", %{conn: conn} do
+      items = [
+        %{id: :option1, value: "Option 1", active: true},
+        %{id: :option2, value: "Option 2", active: false}
+      ]
+
+      {:ok, view, _html} =
+        live_isolated(conn, View,
+          session: %{"items" => items, "type" => :radio, "optional?" => true}
+        )
+
+      view
+      |> element("[data-selector-item='option1']")
+      |> render_click()
+
+      html = render(view)
+      assert html =~ "Option 1"
+      assert html =~ "Option 2"
+    end
+  end
+
+  describe "Selector with HTML content" do
     test "renders radio selector with plain text (escapes HTML when raw? is false)", %{conn: conn} do
       items = [
         %{id: :option1, value: "Option 1", active: true},
