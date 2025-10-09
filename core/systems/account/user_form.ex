@@ -6,6 +6,13 @@ defmodule Systems.Account.UserForm do
 
   alias Frameworks.Pixel.AlertBanner
 
+  # Helper function to create a clickable policy link
+  defp policy_link(url, text_key) do
+    link_text = Gettext.dgettext(CoreWeb.Gettext, "eyra-account", text_key)
+
+    "<a href='#{url}' target='_blank' rel='noopener noreferrer' class='text-semibold text-primary underline hover:opacity-80' onclick='event.stopPropagation();'>#{link_text}</a>"
+  end
+
   attr(:changeset, :map, required: true)
   attr(:panl_privacy_policy_visible, :boolean, default: false)
   attr(:panl_privacy_policy_accepted, :boolean, default: false)
@@ -26,12 +33,16 @@ defmodule Systems.Account.UserForm do
             items={[
               %{
                 id: :next_privacy_policy_accepted,
-                value: dgettext("eyra-account", "privacy.next-policy.label"),
-                active: @next_privacy_policy_accepted,
+                value: dgettext("eyra-account", "privacy.next-policy.label",
+                  terms_link: policy_link("https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c", "privacy.link.terms"),
+                  privacy_link: policy_link("https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752", "privacy.link.privacy")
+                ),
+                active: @next_privacy_policy_accepted
               }
             ]}
             type={:checkbox}
             optional?={false}
+            raw?={true}
           />
 
         <%= if @next_privacy_policy_error do %>
@@ -48,12 +59,16 @@ defmodule Systems.Account.UserForm do
             items={[
               %{
                 id: :panl_privacy_policy_accepted,
-                value: dgettext("eyra-account", "panl.privacy.policy.label"),
-                active: @panl_privacy_policy_accepted,
+                value: dgettext("eyra-account", "panl.privacy.policy.label",
+                  terms_link: policy_link("https://panl.nl/terms", "privacy.link.terms"),
+                  privacy_link: policy_link("https://panl.nl/privacy", "privacy.link.privacy")
+                ),
+                active: @panl_privacy_policy_accepted
               }
             ]}
             type={:checkbox}
             optional?={false}
+            raw?={true}
           />
 
           <%= if @panl_privacy_policy_error do %>

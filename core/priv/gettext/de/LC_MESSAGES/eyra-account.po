@@ -161,8 +161,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Ich stimme den Geschäftsbedingungen und der Datenschutzerklärung zu"
+msgstr "Ich stimme den %{terms_link} und der %{privacy_link} zu"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"
 msgstr "Sie müssen den Geschäftsbedingungen und der Datenschutzerklärung zustimmen, um fortzufahren"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Geschäftsbedingungen"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Datenschutzerklärung"
