@@ -274,6 +274,7 @@ defmodule Systems.Zircon.Screening.ImportView do
           select_button={@import_file_selector.select_button}
           replace_button={@import_file_selector.replace_button}
           background_color="bg-white"
+          target={nil}
         />
       </div>
     </div>

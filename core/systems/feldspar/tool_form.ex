@@ -91,6 +91,7 @@ defmodule Systems.Feldspar.ToolForm do
         replace_button={@replace_button}
         select_button={@select_button}
         uploads={@uploads}
+        target={@myself}
       />
     </div>
     """

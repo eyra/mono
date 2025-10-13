@@ -85,7 +85,7 @@ defmodule Systems.Graphite.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id={"#{@id}_graphite_tool_form"} :let={form} for={@changeset} phx-change="change" >
+      <.form id={"#{@id}_graphite_tool_form"} :let={form} for={@changeset} phx-change="change" phx-target={@myself}>
         <.datetime_input form={form} field={:deadline_string} label_text={dgettext("eyra-graphite", "deadline.label", timezone: @timezone)}/>
         <%= if feature_enabled?(:leaderboard) do %>
           <.spacing value="XS" />

@@ -14,6 +14,7 @@ defmodule Frameworks.Pixel.FileSelector do
   attr(:select_button, :map, required: true)
   attr(:file_key, :atom, default: :file)
   attr(:background_color, :string, default: "bg-transparent")
+  attr(:target, :any, required: true)
 
   slot(:inner_block)
 
@@ -35,7 +36,7 @@ defmodule Frameworks.Pixel.FileSelector do
       assign(assigns, %{upload_in_progress: upload_in_progress, button_label: button_label})
 
     ~H"""
-      <.form id={"#{@id}_file_selector_form"} for={%{}} phx-change="change" >
+      <.form id={"#{@id}_file_selector_form"} for={%{}} phx-change="change" phx-target={@target} >
         <%= if @label do %>
           <Text.form_field_label id={"#{@id}_label"} ><%= @label %></Text.form_field_label>
           <.spacing value="XXS" />

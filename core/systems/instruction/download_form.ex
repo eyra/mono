@@ -125,6 +125,7 @@ defmodule Systems.Instruction.DownloadForm do
           placeholder={dgettext("eyra-instruction", "download_form.file.placeholder")}
           select_button={dgettext("eyra-instruction", "download_form.file.select.button")}
           replace_button={dgettext("eyra-instruction", "download_form.file.replace.button")}
+          target={@myself}
           />
       </div>
     """
