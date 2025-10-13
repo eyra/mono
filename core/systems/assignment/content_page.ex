@@ -41,10 +41,16 @@ defmodule Systems.Assignment.ContentPage do
     update_view_model(socket)
   end
 
+  def notify_modal_controller(socket, modal_id) do
+    Logger.warning("notify_modal_controller #{modal_id}")
+    socket
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
       <.management_page
+        socket={@socket}
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
@@ -54,9 +60,7 @@ defmodule Systems.Assignment.ContentPage do
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
       />
     """
   end

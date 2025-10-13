@@ -308,11 +308,11 @@ defmodule Systems.Admin.ImportRewardsPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title="Import rewards" menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title="Import rewards" menus={@menus} modal={@modal} socket={@socket}>
       <Margin.y id={:page_top} />
       <Area.content>
         <Panel.flat bg_color="bg-grey1">
-          <.form id="import_form" :let={form} for={@changeset} phx-change="change" phx-target="" >
+          <.form id="import_form" :let={form} for={@changeset} phx-change="change" >
             <Text.title3 color="text-white">Setup the import session</Text.title3>
             <.spacing value="XXS" />
             <Text.body_large color="text-white">Selected file: <span class="text-tertiary"><%= @uploaded_file %></span></Text.body_large>

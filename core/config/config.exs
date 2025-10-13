@@ -46,6 +46,30 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
+config :core, :signal,
+  handlers: [
+    "Core.APNS.SignalHandlers",
+    "Core.Mailer.SignalHandlers",
+    "Core.WebPush.SignalHandlers",
+    "Systems.Account.Switch",
+    "Systems.Admin.Switch",
+    "Systems.Advert.Switch",
+    "Systems.Assignment.Switch",
+    "Systems.Consent.Switch",
+    "Systems.Crew.Switch",
+    "Systems.Graphite.Switch",
+    "Systems.Instruction.Switch",
+    "Systems.Manual.Switch",
+    "Systems.NextAction.Switch",
+    "Systems.Observatory.Switch",
+    "Systems.Pool.Switch",
+    "Systems.Project.Switch",
+    "Systems.Storage.Switch",
+    "Systems.Student.Switch",
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
+  ]
+
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 config :core,
@@ -69,7 +93,7 @@ config :core, Oban,
     email_dispatchers: 1,
     email_delivery: 1,
     storage_delivery: 1,
-    ris_processor: 1
+    ris_import: 1
   ]
 
 config :packmatic, Packmatic.Source.URL,
@@ -173,5 +197,19 @@ config :core, :bundle, bundle
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+config :core, :zircon,
+  screening: [
+    agent_module: Systems.Zircon.Screening.HumanAgent
+  ]
+
+# Paper system import configuration
+config :core, :paper,
+  import_batch_size: 100,
+  import_batch_timeout: 30_000,
+  # Maximum allowed RIS file size (default 150MB - supports ~100,000 paper references)
+  ris_max_file_size: 157_286_400,
+  # Chunk size for streaming RIS files (default 64KB)
+  ris_stream_chunk_size: 65_536
 
 import_config "#{config_env()}.exs"

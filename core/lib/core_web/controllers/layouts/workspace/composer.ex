@@ -28,8 +28,6 @@ defmodule CoreWeb.Layouts.Workspace.Composer do
       on_mount({CoreWeb.Live.Hook.Tabbed, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Actions, __MODULE__})
 
-      use CoreWeb.UI.PlainDialog
-
       import CoreWeb.Layouts.Workspace.Html
 
       @impl true

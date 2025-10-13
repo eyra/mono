@@ -8,20 +8,24 @@ defmodule Frameworks.Pixel.Table do
   attr(:head_cells, :list, required: true)
   attr(:rows, :list, required: true)
   attr(:border, :boolean, default: true)
+  attr(:top_line?, :boolean, default: false)
+  attr(:id, :string, default: nil)
 
   def table(assigns) do
     ~H"""
-    <div class={"overflow-hidden #{if @border do "border-[2px] border-grey4 rounded-lg" end} w-full"}>
+    <div class={"overflow-hidden #{if @border do "border-[2px] border-grey4 rounded-lg" end} w-full"} data-testid={@id}>
       <table class="w-full table-fixed">
         <.head cells={@head_cells} layout={@layout} border={@border}/>
         <tbody>
           <%= for {cells, index} <- Enum.with_index(@rows) do %>
             <.row
               top={index == 0}
+              top_line?={@top_line?}
               bottom={index == Enum.count(@rows)-1}
               cells={cells}
               layout={@layout}
               border={@border}
+              row_id={if @id, do: "#{@id}-row-#{index}", else: nil}
             />
           <% end %>
         </tbody>
@@ -70,13 +74,15 @@ defmodule Frameworks.Pixel.Table do
   attr(:cells, :list, required: true)
   attr(:layout, :list, required: true)
   attr(:top, :boolean, default: false)
+  attr(:top_line?, :boolean, default: false)
   attr(:bottom, :boolean, default: false)
   attr(:border, :boolean, default: true)
+  attr(:row_id, :string, default: nil)
 
   def row(assigns) do
     ~H"""
-    <tr class={
-      "h-12 w-full #{if not @top do "border-collapse border-y border-grey4 border-spacing-y-1" end}"}>
+    <tr data-testid={@row_id} class={
+      "h-12 w-full #{if not @top or @top_line? do "border-collapse border-y border-grey4 border-spacing-y-1" end}"}>
       <%= for {cell, index} <- Enum.with_index(@cells) do %>
         <.row_cell
           content={cell}
@@ -158,6 +164,14 @@ defmodule Frameworks.Pixel.Table do
   def content(%{type: :action} = assigns) do
     ~H"""
       <Button.dynamic {@value} />
+    """
+  end
+
+  def content(%{type: :text_truncate} = assigns) do
+    ~H"""
+      <div class="truncate">
+        <%= @value %>
+      </div>
     """
   end
 

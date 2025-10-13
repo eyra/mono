@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   require Logger
 
+  import LiveNest.HTML
   import Frameworks.Pixel.Toolbar
 
   alias Frameworks.Pixel.Button
@@ -66,10 +67,6 @@ defmodule Frameworks.Pixel.ModalView do
         }
       end
 
-      def close_modal(socket, nil) do
-        socket
-      end
-
       def close_modal(socket, %{live_component: %{ref: ref}} = modal) do
         socket
         |> delete_modal(modal)
@@ -120,78 +117,73 @@ defmodule Frameworks.Pixel.ModalView do
   def modal_id(%{live_component: live_component}), do: modal_id(live_component)
   def modal_id(%{ref: %{id: id}}), do: id
 
-  attr(:modals, :map, default: [])
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, default: nil)
 
   def dynamic(assigns) do
     ~H"""
-      <.background show={Enum.find(@modals, & &1.prepared == false) != nil} >
-        <%= for modal <- @modals do %>
-          <.panel {modal} />
-        <% end %>
+      <.background visible={@modal.visible} >
+        <.content modal={@modal} socket={@socket} />
       </.background>
     """
   end
 
-  attr(:show, :boolean, default: false)
+  attr(:visible, :boolean, default: false)
   slot(:inner_block, required: true)
 
   def background(assigns) do
     ~H"""
-    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full backdrop-blur-md bg-black/30 #{if @show do "block" else "hidden" end}"}>
+    <div class={"modal-view fixed z-50 left-0 top-0 w-full h-full backdrop-blur-md bg-black/30 #{if @visible do "block" else "hidden" end}"}>
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
 
-  @allowed_styles [:max, :full, :page, :sheet, :dialog, :notification]
+  @allowed_styles [:max, :full, :page, :sheet, :compact]
 
-  attr(:style, :atom, required: true)
-  attr(:live_component, :map, required: true)
-  attr(:prepared, :boolean, default: false)
-  attr(:index, :integer, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
-  def panel(%{style: style} = assigns) do
+  def content(assigns) do
+    ~H"""
+      <div class={"w-full h-full #{if @modal.visible do "block" else "hidden" end}"} >
+        <div class="flex flex-row items-center justify-center w-full h-full">
+          <.frame modal={@modal} socket={@socket} />
+        </div>
+      </div>
+    """
+  end
+
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
+
+  def frame(%{modal: %{style: style}} = assigns) do
     unless style in @allowed_styles do
       raise ArgumentError,
             "Invalid style: #{style}. Allowed styles are: #{Enum.join(@allowed_styles, ", ")}"
     end
 
     ~H"""
-      <div class={"w-full h-full #{if @prepared do "hidden" else "block" end}"} >
-        <div class="flex flex-row items-center justify-center w-full h-full">
-          <.style_selector live_component={@live_component} style={@style} />
-        </div>
-      </div>
-    """
-  end
-
-  attr(:live_component, :map, required: true)
-  attr(:style, :atom, required: true)
-
-  def style_selector(assigns) do
-    ~H"""
-      <%= if @style == :max do %>
-        <.max live_component={@live_component} />
+      <%= if @modal.style == :max do %>
+        <.max modal={@modal} socket={@socket} />
       <% end %>
-      <%= if @style == :full do %>
-        <.full live_component={@live_component} />
+      <%= if @modal.style == :full do %>
+        <.full modal={@modal} socket={@socket} />
       <% end %>
-      <%= if @style == :page do %>
-        <.page live_component={@live_component} />
+      <%= if @modal.style == :page do %>
+        <.page modal={@modal} socket={@socket} />
       <% end %>
-      <%= if @style == :sheet do %>
-        <.sheet live_component={@live_component} />
+      <%= if @modal.style == :sheet do %>
+        <.sheet modal={@modal} socket={@socket} />
       <% end %>
-      <%= if @style == :dialog do %>
-        <.dialog live_component={@live_component} />
-      <% end %>
-      <%= if @style == :notification do %>
-        <.notification live_component={@live_component} />
+      <%= if @modal.style == :compact do %>
+        <.compact modal={@modal} socket={@socket} />
       <% end %>
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
   def max(assigns) do
     ~H"""
@@ -202,14 +194,14 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title3 live_component={@live_component} />
+                <.title3 modal={@modal} />
               </div>
-              <Button.dynamic {close_icon_button(@live_component)} />
+              <Button.dynamic {close_icon_button(@modal)} />
             </div>
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
-            <.body live_component={@live_component} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
@@ -217,20 +209,29 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
   def full(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
     <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
+          <%!-- HEADER --%>
+          <%!-- OPTIONAL LIGHT GREY TITLE THAT DESCRIBES THE CONTEXT OF THE MODAL --%>
+          <div :if={Keyword.get(@modal.element.options, :header)} class="px-4 sm:px-8">
+            <Text.title6 color="text-grey2">
+              <%= Keyword.get(@modal.element.options, :header) %>
+            </Text.title6>
+            <.spacing value="XS" />
+          </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
-            <.body live_component={@live_component} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
           <%!-- TOOLBAR --%>
           <div class="flex-shrink-0">
-            <.toolbar close_button={close_icon_label_button(@live_component)} />
+            <.toolbar close_button={close_icon_label_button(@modal)} />
           </div>
         </div>
       </div>
@@ -238,7 +239,8 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
   def page(assigns) do
     ~H"""
@@ -246,18 +248,19 @@ defmodule Frameworks.Pixel.ModalView do
         <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
-            <.body live_component={@live_component} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
            <%!-- TOOLBAR --%>
            <div class="flex-shrink-0">
-            <.toolbar close_button={close_icon_label_button(@live_component)} />
+            <.toolbar close_button={close_icon_label_button(@modal)} />
           </div>
         </div>
       </div>
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
   def sheet(assigns) do
     ~H"""
@@ -267,95 +270,64 @@ defmodule Frameworks.Pixel.ModalView do
           <div class="shrink-0 px-8">
             <div class="flex flex-row">
               <div class="flex-grow">
-                <.title2 live_component={@live_component} centered?={true}/>
+                <.title2 modal={@modal} centered?={true}/>
               </div>
-              <Button.dynamic {close_icon_button(@live_component)} />
+              <Button.dynamic {close_icon_button(@modal)} />
             </div>
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
-            <.body live_component={@live_component} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:socket, :map, required: true)
+  attr(:modal, :map, required: true)
 
-  def dialog(assigns) do
+  def compact(assigns) do
     ~H"""
       <div class="modal-dialog w-[700px] px-4 sm:px-10">
         <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-6 right-9">
-            <Button.dynamic {close_icon_button(@live_component)} />
+            <Button.dynamic {close_icon_button(@modal)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full w-full overflow-y-scroll">
-            <.body live_component={@live_component} />
+            <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
       </div>
     """
   end
 
-  attr(:live_component, :map, required: true)
-
-  def notification(assigns) do
-    ~H"""
-      <div class="modal-notification w-[700px] px-4 sm:px-10">
-        <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
-          <%!-- Floating close button --%>
-          <div class="absolute z-30 top-9 right-9">
-            <Button.dynamic {close_icon_button(@live_component)} />
-          </div>
-          <%!-- BODY --%>
-          <div class="h-full w-full overflow-y-scroll">
-            <.body live_component={@live_component} />
-          </div>
-        </div>
-      </div>
-    """
-  end
-
-  attr(:live_component, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:centered?, :boolean, default: false)
 
   def title2(assigns) do
     ~H"""
       <Text.title2 align={"#{if @centered? do "text-center" else "text-left" end}"}>
-        <%= Map.get(@live_component.params, :title) %>
+        <%= Keyword.get(@modal.element.options, :title) %>
       </Text.title2>
     """
   end
 
-  attr(:live_component, :map, required: true)
+  attr(:modal, :map, required: true)
 
   def title3(assigns) do
     ~H"""
       <Text.title3>
-        <%= Map.get(@live_component.params, :title) %>
+        <%= Keyword.get(@modal.element.options, :title) %>
       </Text.title3>
     """
   end
 
-  attr(:live_component, :map, required: true)
-
-  def body(assigns) do
-    ~H"""
-      <.live_component
-        id={@live_component.ref.id}
-        module={@live_component.ref.module}
-        modal_id={modal_id(@live_component)}
-        {@live_component.params}
-      />
-    """
-  end
-
-  defp close_icon_label_button(%{ref: %{id: item_id}}) do
+  defp close_icon_label_button(%LiveNest.Modal{element: %{id: element_id}}) do
     %{
-      action: %{type: :send, event: "close_modal", item: item_id},
+      action: %{type: :send, event: "close_modal", item: element_id},
       face: %{
         type: :plain,
         icon: :close,
@@ -365,9 +337,9 @@ defmodule Frameworks.Pixel.ModalView do
     }
   end
 
-  defp close_icon_button(%{ref: %{id: item_id}}) do
+  defp close_icon_button(%LiveNest.Modal{element: %{id: element_id}}) do
     %{
-      action: %{type: :send, event: "close_modal", item: item_id},
+      action: %{type: :send, event: "close_modal", item: element_id},
       face: %{type: :icon, icon: :close}
     }
   end

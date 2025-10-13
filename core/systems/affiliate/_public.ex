@@ -68,7 +68,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def obtain_user_info!(%Affiliate.User{} = user, info) do
-    {:ok, %{affiliate_user_info: affiliate_user_info}} = obtain_user_info(user, info)
+    {:ok, affiliate_user_info} = obtain_user_info(user, info)
     affiliate_user_info
   end
 
@@ -81,7 +81,14 @@ defmodule Systems.Affiliate.Public do
       conflict_target: [:user_id]
     )
     |> Signal.Public.multi_dispatch({:affiliate_user_info, :obtained})
-    |> Repo.transaction()
+    |> Repo.commit()
+    |> case do
+      {:ok, %{affiliate_user_info: affiliate_user_info}} ->
+        {:ok, affiliate_user_info}
+
+      error ->
+        error
+    end
   end
 
   def prepare_user_info(%Affiliate.User{} = user, info) do
@@ -90,15 +97,35 @@ defmodule Systems.Affiliate.Public do
     |> put_assoc(:user, user)
   end
 
-  def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
-    user =
-      if user = get_user(affiliate, identifier, [:user]) do
-        user
-      else
-        register_user!(identifier, affiliate)
-      end
+  def obtain_user!(identifier, %Affiliate.Model{} = affiliate) do
+    case obtain_user(identifier, affiliate) do
+      {:ok, affiliate_user} ->
+        affiliate_user
 
-    user
+      error ->
+        raise "Failed to obtain user: #{inspect(error)}"
+    end
+  end
+
+  def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
+    Multi.new()
+    |> Multi.run(:affiliate_user, fn _, _ ->
+      case get_user(affiliate, identifier, [:user]) do
+        nil ->
+          register_user(identifier, affiliate)
+
+        user ->
+          {:ok, user}
+      end
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{affiliate_user: affiliate_user}} ->
+        {:ok, affiliate_user}
+
+      error ->
+        error
+    end
   end
 
   def get_user(%Account.User{} = user) do
@@ -137,19 +164,15 @@ defmodule Systems.Affiliate.Public do
 
   def register_user!(organisation, external_id) do
     case register_user(organisation, external_id) do
-      {:ok, %{affiliate_user: affiliate_user}} ->
+      {:ok, affiliate_user} ->
         affiliate_user
 
-      _ ->
-        raise "Failed to register user"
+      error ->
+        raise "Failed to register user: #{inspect(error)}"
     end
   end
 
-  def register_user(organisation, external_id) when is_atom(organisation) do
-    register_user(Atom.to_string(organisation), external_id)
-  end
-
-  def register_user(identifier, affiliate) do
+  defp register_user(identifier, affiliate) do
     Multi.new()
     |> Multi.run(:user_count, fn _, _ ->
       {:ok, count_users(affiliate)}
@@ -160,7 +183,14 @@ defmodule Systems.Affiliate.Public do
     |> Multi.insert(:affiliate_user, fn %{user: user} ->
       prepare_affiliate_user(affiliate, user, identifier)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
+    |> case do
+      {:ok, %{affiliate_user: affiliate_user}} ->
+        {:ok, affiliate_user}
+
+      error ->
+        error
+    end
   end
 
   def count_users(%Affiliate.Model{id: affiliate_id}) do

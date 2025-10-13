@@ -2,7 +2,7 @@ defmodule Systems.Assignment.PrivacyForm do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.pdf)
 
-  import Frameworks.Pixel.Components.FileSelector
+  import Frameworks.Pixel.FileSelector
 
   alias Systems.Assignment
   alias Systems.Content
@@ -89,6 +89,7 @@ defmodule Systems.Assignment.PrivacyForm do
           placeholder={dgettext("eyra-assignment", "privacy_doc.placeholder")}
           select_button={dgettext("eyra-assignment", "privacy_doc.select.button")}
           replace_button={dgettext("eyra-assignment", "privacy_doc.replace.button")}
+          target={@myself}
         />
         <%= if get_child(@fabric, :file_copy_view) do %>
           <.spacing value="S" />

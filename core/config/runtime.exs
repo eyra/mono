@@ -215,6 +215,20 @@ if config_env() == :prod do
     config :core, :feldspar, backend: Systems.Feldspar.LocalFS
   end
 
+  config :core, :paper,
+    import_batch_size:
+      System.get_env("PAPER_RIS_IMPORT_BATCH_SIZE", "100") |> String.to_integer(),
+    import_batch_timeout:
+      System.get_env("PAPER_RIS_IMPORT_BATCH_TIMEOUT", "30000") |> String.to_integer(),
+    # Maximum allowed RIS file size (default 150MB, supports ~100,000 paper references)
+    ris_max_file_size:
+      System.get_env("PAPER_RIS_MAX_FILE_SIZE", "157286400") |> String.to_integer(),
+    # Chunk size for streaming RIS files (default 64KB)
+    # Smaller chunks (8KB-32KB): Better for unreliable networks, lower memory usage
+    # Larger chunks (128KB-1MB): Better for fast networks, reduces overhead for large files
+    ris_stream_chunk_size:
+      System.get_env("PAPER_RIS_STREAM_CHUNK_SIZE", "65536") |> String.to_integer()
+
   config :core,
          :dist_hosts,
          "DIST_HOSTS"

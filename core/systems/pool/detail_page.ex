@@ -95,7 +95,7 @@ defmodule Systems.Pool.DetailPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <%= if @email_dialog do %>
         <div
           class="fixed z-20 left-0 top-0 w-full h-full bg-black bg-opacity-20"
@@ -111,7 +111,7 @@ defmodule Systems.Pool.DetailPage do
         <Navigation.action_bar breadcrumbs={[]}>
           <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>
-        <Tabbed.content tabs={@vm.tabs} />
+        <Tabbed.content socket={@socket} tabs={@vm.tabs} bar_id={@tabbar_id} />
       </div>
     </.live_workspace>
     """
