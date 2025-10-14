@@ -26,23 +26,68 @@ defmodule Systems.Pool.SubmissionPage do
   end
 
   @impl true
+  def compose(:publish_inform, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "publish_inform",
+        title: dgettext("eyra-submission", "publish.success.title"),
+        text: dgettext("eyra-submission", "publish.success.text")
+      }
+    }
+  end
+
+  def compose(:publish_error, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "publish_error",
+        title: dgettext("eyra-submission", "publish.error.title"),
+        text: dgettext("eyra-submission", "publish.error.text")
+      }
+    }
+  end
+
+  def compose(:retract_admin_success, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "retract_admin_success",
+        title: dgettext("eyra-submission", "retract.admin.success.title"),
+        text: dgettext("eyra-submission", "retract.admin.success.text")
+      }
+    }
+  end
+
+  def compose(:complete_admin_success, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "complete_admin_success",
+        title: dgettext("eyra-submission", "complete.admin.success.title"),
+        text: dgettext("eyra-submission", "complete.admin.success.text")
+      }
+    }
+  end
+
+  @impl true
   def handle_event("publish", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     socket =
       if ready_for_publish?(submission) do
         {:ok, _} =
           Pool.Public.update(submission, %{status: :accepted, accepted_at: Timestamp.naive_now()})
 
-        title = dgettext("eyra-submission", "publish.success.title")
-        text = dgettext("eyra-submission", "publish.success.text")
-
         socket
-        |> inform(title, text)
+        |> compose_child(:publish_inform)
+        |> Fabric.ModalController.show_modal(:publish_inform, :compact)
       else
-        title = dgettext("eyra-submission", "publish.error.title")
-        text = dgettext("eyra-submission", "publish.error.text")
-
         socket
-        |> inform(title, text)
+        |> compose_child(:publish_error)
+        |> Fabric.ModalController.show_modal(:publish_error, :compact)
       end
 
     {:noreply, socket}
@@ -52,13 +97,11 @@ defmodule Systems.Pool.SubmissionPage do
   def handle_event("retract", _params, %{assigns: %{vm: %{submission: submission}}} = socket) do
     {:ok, _} = Pool.Public.update(submission, %{status: :idle})
 
-    title = dgettext("eyra-submission", "retract.admin.success.title")
-    text = dgettext("eyra-submission", "retract.admin.success.text")
-
     {
       :noreply,
       socket
-      |> inform(title, text)
+      |> compose_child(:retract_admin_success)
+      |> Fabric.ModalController.show_modal(:retract_admin_success, :compact)
     }
   end
 
@@ -67,14 +110,12 @@ defmodule Systems.Pool.SubmissionPage do
     {:ok, _} =
       Pool.Public.update(submission, %{status: :completed, completed_at: Timestamp.naive_now()})
 
-    title = dgettext("eyra-submission", "complete.admin.success.title")
-    text = dgettext("eyra-submission", "complete.admin.success.text")
-
     {
       :noreply,
       socket
       |> assign(accepted?: false)
-      |> inform(title, text)
+      |> compose_child(:complete_admin_success)
+      |> Fabric.ModalController.show_modal(:complete_admin_success, :compact)
     }
   end
 
@@ -89,7 +130,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={dgettext("link-studentpool", "submission.title")} menus={@menus} modal={@modal} socket={@socket}>
       <div>
         <Area.content>
           <Margin.y id={:page_top} />

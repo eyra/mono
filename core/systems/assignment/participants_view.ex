@@ -168,7 +168,7 @@ defmodule Systems.Assignment.ParticipantsView do
       Advert.Assembly.create(assignment, user, pool)
     else
       Logger.error("Panl pool not found")
-      Frameworks.Pixel.Flash.push_error("Panl pool not found")
+      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
     end
 
     {:noreply, socket}

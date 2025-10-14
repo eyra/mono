@@ -22,6 +22,18 @@ defmodule Systems.Account.FeaturesModel do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          gender: atom(),
+          birth_year: integer(),
+          study_program_codes: list(atom()),
+          user_id: integer() | nil,
+          user: User.t() | Ecto.Association.NotLoaded.t() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @fields ~w(gender birth_year study_program_codes)a
   @required_fields ~w()a
 

@@ -335,7 +335,7 @@ defmodule Systems.Crew.PublicTest do
 
       Ecto.Multi.new()
       |> Crew.Public.expire_member(member)
-      |> Core.Repo.transaction()
+      |> Core.Repo.commit()
 
       assert %{expired: true} = Crew.Public.get_member!(member.id)
       assert %{expired: true} = Crew.Public.get_task!(task.id)

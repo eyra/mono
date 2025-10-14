@@ -68,7 +68,7 @@ defmodule Next.Account.SigninPage do
 
           <.spacing value="M" />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content include_top_margin={false} tabs={@vm.tabs} />
+            <Tabbed.content socket={@socket} include_top_margin={false} tabs={@vm.tabs} bar_id={@tabbar_id} />
           </div>
         </Area.form>
       </div>

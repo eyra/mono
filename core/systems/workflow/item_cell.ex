@@ -71,7 +71,7 @@ defmodule Systems.Workflow.ItemCell do
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
     item_view = %{
-      function: &Workflow.ItemViews.collapsed/1,
+      function: &Workflow.HTML.collapsed/1,
       props: %{
         # title: title,
         inner_block: nil

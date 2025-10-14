@@ -10,9 +10,6 @@ defmodule Systems.Content.Composer do
       use CoreWeb.Layouts.Website.Composer
       use CoreWeb.LiveDefaults
 
-      use CoreWeb.UI.Popup
-      use Frameworks.Pixel.ModalView
-
       use Gettext, backend: CoreWeb.Gettext
       import Systems.Content.Html
     end
@@ -24,9 +21,6 @@ defmodule Systems.Content.Composer do
 
       use CoreWeb.Layouts.Workspace.Composer
       use CoreWeb.LiveDefaults
-
-      use CoreWeb.UI.Popup
-      use Frameworks.Pixel.ModalView
 
       use Gettext, backend: CoreWeb.Gettext
       import Systems.Content.Html

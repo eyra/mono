@@ -17,7 +17,7 @@ defmodule Systems.Advert.Assembly do
   def delete(%Advert.Model{} = advert) do
     Multi.new()
     |> delete(advert)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def delete(
@@ -75,7 +75,7 @@ defmodule Systems.Advert.Assembly do
     Multi.new()
     |> Multi.insert(:project_item, project_item)
     |> Signal.Public.multi_dispatch({:project_item, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def get_advert_name(nil, project_node) do

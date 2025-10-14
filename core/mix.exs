@@ -101,7 +101,7 @@ defmodule Core.MixProject do
       {:phoenix_html, "== 4.3.0"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
-      {:phoenix_live_view, "== 1.1.12"},
+      {:phoenix_live_view, "== 1.1.13"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},

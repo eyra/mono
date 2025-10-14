@@ -14,8 +14,8 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "1 paper"
 msgid_plural "* papers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 paper"
+msgstr[1] "%{count} papers"
 
 #, elixir-autogen, elixir-format
 msgid "leaf.tag"
@@ -37,42 +37,152 @@ msgstr ""
 msgid "pending.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "papers_form.description"
-msgstr "Import papers from a RIS file (.ris or .txt)"
-
-#, elixir-autogen, elixir-format
-msgid "import_form.button"
-msgstr "Import papers"
-
-#, elixir-autogen, elixir-format
-msgid "import_history.file.label"
-msgstr "File"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.timestamp.label"
-msgstr "Timestamp"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.all_count.label"
-msgstr "Papers"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.duplicate_count.label"
-msgstr "Duplicate"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.new_count.label"
-msgstr "Unique"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.title"
-msgstr "Imports"
-
 #, elixir-autogen, elixir-format
 msgid "unsupported_type_of_reference"
 msgstr "Unsupported type of reference: %{type}"
 
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.description"
+msgstr "Choose which dimensions to add as criteria parameters."
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.title"
+msgstr "Dimension"
+
+#, elixir-autogen, elixir-format
+msgid "statement.unspecified"
+msgstr "%{dimension} unspecified"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.already_exists"
+msgstr "%{dimension} already exists"
+
+#, elixir-autogen, elixir-format
+msgid "criterion.insert.error"
+msgstr "%{dimension} could not be added"
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.authors.label"
+msgstr "Authors"
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.doi.label"
+msgstr "DOI"
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.year.label"
+msgstr "Year"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.placeholder"
+msgstr "Select a RIS file to import papers"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.replace_button"
+msgstr "Select other RIS file"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.select_button"
+msgstr "Select file"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.title"
+msgstr "Import Papers"
+
+#, elixir-autogen, elixir-format
+msgid "paper_set.search.placeholder"
+msgstr "Search papers..."
+
+#, elixir-autogen, elixir-format
+msgid "tool_view.button.next"
+msgstr "Next"
+
+#, elixir-autogen, elixir-format
+msgid "import_session.errors.search.placeholder"
+msgstr "Search errors.."
+
+#, elixir-autogen, elixir-format
+msgid "import_session.phase.prompting.new_papers"
+msgstr "New papers extracted from file"
+
+#, elixir-autogen, elixir-format
+msgid "ris_entry_error_table.error.label"
+msgstr "Error"
+
+#, elixir-autogen, elixir-format
+msgid "ris_entry_error_table.line.label"
+msgstr "Line"
+
+#, elixir-autogen, elixir-format
+msgid "ris_entry_error_table.content.label"
+msgstr "Content"
+
 #, elixir-autogen, elixir-format, fuzzy
-msgid "import_history.errors.label"
-msgstr "Errors"
+msgid "import_session.papers.search.placeholder"
+msgstr "Search errors..."
+
+#, elixir-autogen, elixir-format
+msgid "import_view.button.continue"
+msgstr "Add new papers"
+
+#, elixir-autogen, elixir-format
+msgid "1 new paper"
+msgid_plural "%{count} new papers"
+msgstr[0] "1 new paper"
+msgstr[1] "%{count} new papers"
+
+#, elixir-autogen, elixir-format
+msgid "import_session.prompting.warnings_title"
+msgstr "Warnings"
+
+#, elixir-autogen, elixir-format
+msgid "import_session.prompting.new_papers_title"
+msgstr "New papers"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.importing"
+msgstr "Importing papers"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.parsing"
+msgstr "Parsing file"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.processing"
+msgstr "Processing papers"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.waiting"
+msgstr "Starting import"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.button.prepare_import"
+msgstr "Start import"
+
+#, elixir-autogen, elixir-format
+msgid "1 warning"
+msgid_plural "%{count} warnings"
+msgstr[0] "1 warning"
+msgstr[1] "%{count} warnings"
+
+#, elixir-autogen, elixir-format
+msgid "import_view.prompting.found_in_file"
+msgstr "Found in this file:"
+
+#, elixir-autogen, elixir-format
+msgid "1 duplicate"
+msgid_plural "%{count} duplicates"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "import_session.prompting.duplicates_title"
+msgstr "Duplicates"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.phase.prompting.duplicates"
+msgstr "New papers extracted from file"

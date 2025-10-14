@@ -79,7 +79,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
     ~H"""
     <div>
       <div>
-      <Frameworks.Pixel.Components.FileSelector.file_selector
+      <Frameworks.Pixel.FileSelector.file_selector
         id={@id}
         label={@label}
         placeholder={@placeholder}
@@ -87,6 +87,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
         replace_button={@replace_button}
         select_button={@select_button}
         uploads={@uploads}
+        target={@myself}
       />
     </div>
 

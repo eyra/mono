@@ -55,9 +55,9 @@ defmodule Systems.Feldspar.ToolForm do
   defp handle_upload_error(socket) do
     if has_upload_error(socket) do
       if has_upload_error(socket, :too_large) do
-        Frameworks.Pixel.Flash.push_error(dgettext("eyra-feldspar", "zip-too-large"))
+        Frameworks.Pixel.Flash.push_error(socket, dgettext("eyra-feldspar", "zip-too-large"))
       else
-        Frameworks.Pixel.Flash.push_error()
+        Frameworks.Pixel.Flash.push_error(socket)
       end
     end
 
@@ -83,7 +83,7 @@ defmodule Systems.Feldspar.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Frameworks.Pixel.Components.FileSelector.file_selector
+      <Frameworks.Pixel.FileSelector.file_selector
         id={@id}
         label={@label}
         placeholder={@placeholder}
@@ -91,6 +91,7 @@ defmodule Systems.Feldspar.ToolForm do
         replace_button={@replace_button}
         select_button={@select_button}
         uploads={@uploads}
+        target={@myself}
       />
     </div>
     """

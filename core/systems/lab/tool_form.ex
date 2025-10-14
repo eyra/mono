@@ -1,11 +1,8 @@
 defmodule Systems.Lab.ToolForm do
   use CoreWeb.LiveForm
-
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
   @impl true
   def update(
@@ -92,7 +89,7 @@ defmodule Systems.Lab.ToolForm do
 
   @impl true
   def handle_event("day_view_hide", _payload, socket) do
-    {:noreply, socket |> hide_popup(:day_view)}
+    {:noreply, socket |> hide_modal(:day_view)}
   end
 
   @impl true
@@ -109,7 +106,7 @@ defmodule Systems.Lab.ToolForm do
       |> update_entity()
       |> update_day_list_items()
       |> update_byline()
-      |> hide_popup(:day_view)
+      |> hide_modal(:day_view)
     }
   end
 
@@ -122,7 +119,7 @@ defmodule Systems.Lab.ToolForm do
       socket
       |> assign(day_model: day_model)
       |> compose_child(:day_view)
-      |> show_popup(:day_view)
+      |> show_modal(:day_view, :compact)
     }
   end
 
@@ -141,7 +138,7 @@ defmodule Systems.Lab.ToolForm do
       socket
       |> assign(day_model: day_model)
       |> compose_child(:day_view)
-      |> show_popup(:day_view)
+      |> show_modal(:day_view, :compact)
     }
   end
 
@@ -155,7 +152,7 @@ defmodule Systems.Lab.ToolForm do
       socket
       |> assign(day_model: day_model)
       |> compose_child(:day_view)
-      |> show_popup(:day_view)
+      |> show_modal(:day_view, :compact)
     }
   end
 
