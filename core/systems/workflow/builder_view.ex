@@ -45,7 +45,7 @@ defmodule Systems.Workflow.BuilderView do
       |> update_render_library()
       |> reset_children()
       |> order_items()
-      |> compose_item_cells()
+      |> compose_workflow_items()
     }
   end
 
@@ -53,15 +53,15 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, render_library?: true)
   end
 
-  defp compose_item_cells(%{assigns: %{ordered_items: ordered_items}} = socket) do
+  defp compose_workflow_items(%{assigns: %{ordered_items: ordered_items}} = socket) do
     Enum.reduce(ordered_items, socket, fn item, socket ->
-      compose_child(socket, "item_cell_#{item.id}")
+      compose_child(socket, "workflow_item_#{item.id}")
     end)
   end
 
   @impl true
   def compose(
-        "item_cell_" <> item_id,
+        "workflow_item_" <> item_id,
         %{
           ordered_items: ordered_items,
           ordering_enabled?: ordering_enabled?,
