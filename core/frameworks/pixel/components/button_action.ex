@@ -42,7 +42,7 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:id, :string, default: "?")
   attr(:event, :string, required: true)
   attr(:item, :string, default: "")
-  attr(:target, :string, default: "")
+  attr(:target, :any, default: nil)
   attr(:enabled?, :boolean, default: true)
   slot(:inner_block, required: true)
 
