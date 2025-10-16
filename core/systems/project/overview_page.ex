@@ -114,7 +114,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event("delete_confirm", _params, %{assigns: %{project_id: project_id}} = socket) do
+  def handle_event("confirm_ok", _params, %{assigns: %{project_id: project_id}} = socket) do
     Project.Public.delete(project_id)
 
     {
@@ -126,12 +126,18 @@ defmodule Systems.Project.OverviewPage do
       )
       |> update_view_model()
       |> update_menus()
+      |> Fabric.ModalController.hide_modal(:delete_confirm)
     }
   end
 
   @impl true
-  def handle_event("delete_cancel", _params, socket) do
-    {:noreply, socket |> assign(project_id: nil, dialog: nil)}
+  def handle_event("confirm_cancel", _params, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(project_id: nil, dialog: nil)
+      |> Fabric.ModalController.hide_modal(:delete_confirm)
+    }
   end
 
   @impl true
