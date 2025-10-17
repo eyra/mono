@@ -35,7 +35,6 @@ defmodule CoreWeb.UI.Dialog.Plain do
              primary_button_label: primary_button_label,
              secondary_button_label: secondary_button_label,
              target: target
-
            }
          } = socket
        ) do
