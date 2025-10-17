@@ -5,6 +5,8 @@ defmodule CoreWeb.UI.Dialog.Plain do
   import CoreWeb.UI.Dialog
 
   def update(%{type: type, title: title, text: text} = params, socket) do
+    target = Map.get(params, :target, nil)
+
     primary_button_label =
       params |> Map.get(:primary_button_label, dgettext("eyra-ui", "ok.button"))
 
@@ -19,7 +21,8 @@ defmodule CoreWeb.UI.Dialog.Plain do
         title: title,
         text: text,
         primary_button_label: primary_button_label,
-        secondary_button_label: secondary_button_label
+        secondary_button_label: secondary_button_label,
+        target: target
       )
       |> update_buttons()
     }
@@ -30,17 +33,19 @@ defmodule CoreWeb.UI.Dialog.Plain do
            assigns: %{
              type: :confirm,
              primary_button_label: primary_button_label,
-             secondary_button_label: secondary_button_label
+             secondary_button_label: secondary_button_label,
+             target: target
+
            }
          } = socket
        ) do
     buttons = [
       %{
-        action: %{type: :send, event: "confirm_ok"},
+        action: %{type: :send, event: "confirm_ok", target: target},
         face: %{type: :primary, label: primary_button_label}
       },
       %{
-        action: %{type: :send, event: "confirm_cancel"},
+        action: %{type: :send, event: "confirm_cancel", target: target},
         face: %{type: :label, label: secondary_button_label}
       }
     ]
