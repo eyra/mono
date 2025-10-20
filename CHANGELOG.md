@@ -9,6 +9,9 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#17.1 2025-10-15
+Fixed: High CPU usage when viewing PDF
+
 ## \#17 2025-10-01
 * Fixed: PDF viewer no longer refreshes when pressing Done button
 * Fixed: Changing number of participants no longer causes page refresh
