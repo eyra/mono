@@ -190,6 +190,7 @@ defmodule Frameworks.Pixel.Tabbed do
     tabs |> Enum.chunk_every(2, 1, [%{id: "fake_tab"}])
   end
 
+  attr(:bar_id, :string, required: true)
   attr(:tabs, :any, required: true)
   slot(:inner_block)
 
@@ -203,6 +204,7 @@ defmodule Frameworks.Pixel.Tabbed do
             <div
               id={"tab-footer-item-#{tab1.id}"}
               phx-hook="TabFooterItem"
+              data-bar-id={@bar_id}
               data-tab-id={tab1.id}
               data-target-tab-id={tab2.id}
               class="tab-footer-item cursor-pointer hidden"
