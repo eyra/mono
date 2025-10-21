@@ -122,22 +122,18 @@ defmodule Systems.Assignment.CrewPage do
   def handle_event(
         "decline",
         _payload,
-        %{assigns: %{model: model, current_user: user, panel_info: %{redirect?: redirect?}}} =
+        %{assigns: %{model: model, current_user: user}} =
           socket
       ) do
     Assignment.Public.decline_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
 
-    socket =
-      if redirect? do
-        socket
-      else
-        socket
-        |> compose_child(:declined_view)
-        |> Fabric.ModalController.show_modal(:declined_view, :compact)
-      end
-
-    {:noreply, socket}
+    {
+      :noreply,
+      socket
+      |> compose_child(:declined_view)
+      |> Fabric.ModalController.show_modal(:declined_view, :compact)
+    }
   end
 
   @impl true
