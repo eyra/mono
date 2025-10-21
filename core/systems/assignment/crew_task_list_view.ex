@@ -22,6 +22,13 @@ defmodule Systems.Assignment.CrewTaskListView do
       ) do
     user_state_key = UserState.key(user, %{crew: crew.id}, "selected-task")
 
+    selected_item_id =
+      Map.get(
+        socket.assigns,
+        :selected_item_id,
+        UserState.integer_value(user_state_data, user_state_key)
+      )
+
     {
       :ok,
       socket
@@ -32,12 +39,11 @@ defmodule Systems.Assignment.CrewTaskListView do
         timezone: timezone,
         panel_info: panel_info,
         user_state_key: user_state_key,
-        user_state_data: user_state_data
+        user_state_data: user_state_data,
+        selected_item_id: selected_item_id
       )
       |> update_title()
       |> update_participant()
-      |> update_selected_item_id()
-      |> update_selected_item()
       |> update_user_state_value()
       |> update_launcher()
       |> compose_child(:work_list_view)
@@ -51,19 +57,8 @@ defmodule Systems.Assignment.CrewTaskListView do
     socket |> assign(title: title)
   end
 
-  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
+  defp update_user_state_value(%{assigns: %{selected_item_id: selected_item_id}} = socket)
        when not is_nil(selected_item_id) do
-    socket
-  end
-
-  defp update_selected_item_id(
-         %{assigns: %{user_state_data: user_state_data, user_state_key: user_state_key}} = socket
-       ) do
-    selected_item_id = UserState.integer_value(user_state_data, user_state_key)
-    socket |> assign(selected_item_id: selected_item_id)
-  end
-
-  defp update_user_state_value(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
     socket |> assign(user_state_value: selected_item_id)
   end
 
