@@ -311,7 +311,7 @@ defmodule Systems.Workflow.PublicTest do
     Multi.new()
     |> Multi.update(:item_c, Workflow.ItemModel.changeset(item_c, %{position: 3}))
     |> Multi.update(:item_d, Workflow.ItemModel.changeset(item_d, %{position: 2}))
-    |> Repo.transaction()
+    |> Repo.commit()
 
     {:error, :validate_old_position, :out_of_sync, _} = Workflow.Public.update_position(item_d, 1)
   end
@@ -328,7 +328,7 @@ defmodule Systems.Workflow.PublicTest do
 
     Multi.new()
     |> Multi.delete(:item_c, item_c)
-    |> Repo.transaction()
+    |> Repo.commit()
 
     {:error, :validate_old_position, :out_of_bounds, _} =
       Workflow.Public.update_position(item_d, 0)

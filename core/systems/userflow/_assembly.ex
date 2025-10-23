@@ -58,7 +58,7 @@ defmodule Systems.Userflow.Assembly do
   def create_progress(%Account.User{} = user, %Userflow.StepModel{} = step) do
     Multi.new()
     |> create_progress(user, step)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """

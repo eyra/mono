@@ -23,6 +23,7 @@ defmodule Systems.Workflow.ItemCell do
       socket
       |> assign(
         id: id,
+        testid: "workflow-item-#{item.position}",
         type: type,
         item: item,
         relative_position: relative_position,
@@ -71,7 +72,7 @@ defmodule Systems.Workflow.ItemCell do
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
     item_view = %{
-      function: &Workflow.ItemViews.collapsed/1,
+      function: &Workflow.HTML.collapsed/1,
       props: %{
         # title: title,
         inner_block: nil
@@ -149,7 +150,7 @@ defmodule Systems.Workflow.ItemCell do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={@id} class="bg-white rounded-md p-6" phx-hook="Cell" >
+    <div id={@id} data-testid={@testid} class="bg-white rounded-md p-6" phx-hook="Cell" >
       <div class="flex flex-row gap-4 items-center mb-8">
         <Text.title3 margin=""><%= @type %></Text.title3>
         <%= if @ready? do %>

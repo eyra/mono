@@ -36,7 +36,7 @@ defmodule Systems.Graphite.Assembly do
     Multi.new()
     |> Multi.insert(:project_item, project_item)
     |> Signal.Public.multi_dispatch({:project_item, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def get_leaderboard_name(nil, project_node) do

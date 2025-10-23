@@ -136,7 +136,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
-    {:ok, %{assignment_instance: instance}} = obtain_instance(assignment, user)
+    {:ok, instance} = obtain_instance(assignment, user)
     instance
   end
 
@@ -148,8 +148,15 @@ defmodule Systems.Assignment.Public do
       on_conflict: {:replace, [:updated_at]},
       conflict_target: [:assignment_id, :user_id]
     )
-    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, %{user: user})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, message: %{user: user})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_instance: instance}} ->
+        {:ok, instance}
+
+      error ->
+        error
+    end
   end
 
   def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
@@ -270,7 +277,7 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Multi.insert(:assignment_page_ref, page_ref)
     |> Signal.Public.multi_dispatch({:assignment_page_ref, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def delete_page_ref(
@@ -284,10 +291,12 @@ defmodule Systems.Assignment.Public do
 
     Multi.new()
     |> Multi.delete_all(:assignment_page_refs, page_refs)
-    |> Signal.Public.multi_dispatch({:assignment_page_ref, :deleted}, %{
-      assignment_page_ref: page_ref
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:assignment_page_ref, :deleted},
+      message: %{
+        assignment_page_ref: page_ref
+      }
+    )
+    |> Repo.commit()
   end
 
   def delete_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
@@ -310,7 +319,7 @@ defmodule Systems.Assignment.Public do
       Multi.new()
       |> EctoHelper.update_and_dispatch(changeset, :assignment)
       |> Multi.delete(:storage_endpoint_special, storage_endpoint_special)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assignment
   end
@@ -355,14 +364,14 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Assignment.ExcludeModel.exclude(assignment1, assignment2)
     |> Assignment.ExcludeModel.exclude(assignment2, assignment1)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def include(%Assignment.Model{} = assignment1, %Assignment.Model{} = assignment2) do
     Multi.new()
     |> Assignment.ExcludeModel.include(assignment1, assignment2)
     |> Assignment.ExcludeModel.include(assignment2, assignment1)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update(assignment, %{} = attrs) do
@@ -506,7 +515,7 @@ defmodule Systems.Assignment.Public do
       |> Multi.run(:member, fn _, _ ->
         run_apply_member(crew, user, identifier, expire_at)
       end)
-      |> Repo.transaction()
+      |> Repo.commit()
     end
   end
 
@@ -520,8 +529,8 @@ defmodule Systems.Assignment.Public do
     if member = Crew.Public.get_member(crew, user) do
       Multi.new()
       |> Crew.Public.expire_member(member)
-      |> Signal.Public.multi_dispatch({:crew_member, :declined}, %{crew_member: member})
-      |> Repo.transaction()
+      |> Signal.Public.multi_dispatch({:crew_member, :declined}, message: %{crew_member: member})
+      |> Repo.commit()
     else
       Logger.warning("Unable to decline member, probably expired already")
     end
@@ -563,14 +572,14 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)
     |> rollback_deposit(assignment, user)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
     |> rollback_deposit(assignment, user)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def cancel(id, user) do
@@ -781,7 +790,7 @@ defmodule Systems.Assignment.Public do
 
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do

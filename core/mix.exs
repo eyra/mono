@@ -98,10 +98,10 @@ defmodule Core.MixProject do
       # Fork supports elixir 1.18.4
       {:packmatic, github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
       {:phoenix_ecto, "== 4.6.5"},
-      {:phoenix_html, "== 4.2.1"},
+      {:phoenix_html, "== 4.3.0"},
       {:phoenix_html_helpers, "== 1.0.1"},
       {:phoenix_inline_svg, "== 1.4.0"},
-      {:phoenix_live_view, "== 1.1.12"},
+      {:phoenix_live_view, "== 1.1.13"},
       {:phoenix_view, "== 2.0.4"},
       {:phoenix, "== 1.8.1"},
       {:plug_cowboy, "== 2.7.4"},

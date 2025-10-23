@@ -42,11 +42,15 @@ defmodule GoogleSignIn.CallbackPlug do
   import GoogleSignIn.PlugUtils
   use Core.FeatureFlags
 
+  alias Frameworks.Utility.Params
+  alias Frameworks.Signal
+
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
-    creator? = Map.get(session_params || %{}, "creator", nil) == "true"
+    creator? = Params.parse_creator(session_params || %{})
+    post_action = Params.parse_string_param(session_params || %{}, "post_signin_action")
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
@@ -62,6 +66,10 @@ defmodule GoogleSignIn.CallbackPlug do
       else
         {register_user(google_user, creator?), true}
       end
+
+    if post_action do
+      Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: post_action})
+    end
 
     log_in_user(config, conn, user, first_time?)
   end

@@ -19,9 +19,16 @@ defmodule Systems.Home.Page do
   end
 
   @impl true
-  def compose(:home_view, %{vm: %{blocks: blocks}}) do
+  def compose(:home_view, %{vm: %{view_type: :guest}}) do
     %{
-      module: Home.View,
+      module: Home.GuestView,
+      params: %{}
+    }
+  end
+
+  def compose(:home_view, %{vm: %{view_type: :logged_in, blocks: blocks}}) do
+    %{
+      module: Home.LoggedInView,
       params: %{
         blocks: blocks
       }
@@ -37,7 +44,7 @@ defmodule Systems.Home.Page do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} socket={@socket}>
       <:hero>
         <Hero.dynamic {@vm.hero} />
       </:hero>

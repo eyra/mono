@@ -23,7 +23,7 @@ defmodule Next.Account.CreatorSigninView do
         %{}
       end
 
-    assign(socket, :password_form, to_form(attrs))
+    socket |> assign(:password_form, to_form(attrs))
   end
 
   @impl true

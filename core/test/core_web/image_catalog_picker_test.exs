@@ -1,5 +1,7 @@
 defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
-  use Fabric.LiveView, CoreWeb.Layouts
+  use Phoenix.LiveView, layout: {Fabric.TestLayouts, :live}
+  use Fabric.LiveView
+
   alias Frameworks.Pixel.ImageCatalogPicker
 
   @impl true

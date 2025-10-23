@@ -4,21 +4,7 @@ defmodule Fabric.LiveView do
     defstruct [:pid]
   end
 
-  defmacro __using__(layout) do
-    quote do
-      use Phoenix.LiveView, layout: {unquote(layout), :live}
-      unquote(helpers())
-    end
-  end
-
-  defmacro __using__() do
-    quote do
-      use Phoenix.LiveView
-      unquote(helpers())
-    end
-  end
-
-  def helpers() do
+  defmacro __using__(_) do
     quote do
       # Function handle_event/3 only terminates with explicit exception.
       @dialyzer {:nowarn_function, handle_event: 3}

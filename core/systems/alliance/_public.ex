@@ -80,7 +80,7 @@ defmodule Systems.Alliance.Public do
     result =
       Multi.new()
       |> Repo.multi_update(:tool, changeset)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     with {:ok, %{tool: tool}} <- result do
       Signal.Public.dispatch!({:alliance_tool, :updated}, %{alliance_tool: tool})

@@ -397,20 +397,30 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+
+  def hidden_input(assigns) do
+    ~H"""
+    <input type="hidden" name={input_name(@form, @field)} value={input_value(@form, @field)} />
+    """
+  end
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
   attr(:placeholder, :string, default: "")
   attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:debounce, :string, default: "1000")
+  attr(:height, :string, default: "h-64")
   attr(:reserve_error_space, :boolean, default: true)
 
-  def text_area(%{form: form, field: field} = assigns) do
+  def text_area(%{form: form, field: field, height: height} = assigns) do
     errors = guarded_errors(form, field)
     has_errors = Enum.count(errors) > 0
     field_id = String.to_atom(input_id(form, field))
 
     input_static_class =
-      "#{field_tag(@input)} field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full h-64 border-2 focus:outline-none rounded"
+      "#{field_tag(@input)} field-input text-grey1 text-bodymedium font-body pl-3 pt-2 w-full #{height} border-2 focus:outline-none rounded"
 
     input_dynamic_class = "border-grey3"
     active_color = active_input_color(assigns)

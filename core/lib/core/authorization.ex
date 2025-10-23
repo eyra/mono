@@ -56,6 +56,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Manual.Builder.PublicPage, [:creator])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
+  grant_access(Systems.Onyx.LandingPage, [:admin])
   grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
@@ -300,7 +301,7 @@ defmodule Core.Authorization do
   def link(auth_tree) do
     Multi.new()
     |> link(auth_tree)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def link(multi, {parent, [h | t]}) do

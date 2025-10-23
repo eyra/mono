@@ -117,7 +117,7 @@ defmodule Systems.Student.Public do
     |> update_class_accociations(user, added_to_classes, deleted_from_classes)
     |> update_pool_participations(user, added_to_pools, deleted_from_pools)
     |> migrate_wallets(user, added_to_pools)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def migrate_wallets(multi, %User{} = user, added_to_pools) do

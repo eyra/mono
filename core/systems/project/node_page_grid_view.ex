@@ -52,11 +52,11 @@ defmodule Systems.Project.NodePageGridView do
   @impl true
   def compose(
         :create_item_view,
-        %{node: node}
+        %{node: node, user: user}
       ) do
     %{
       module: Project.CreateItemView,
-      params: %{node: node}
+      params: %{node: node, user: user}
     }
   end
 
@@ -78,7 +78,7 @@ defmodule Systems.Project.NodePageGridView do
       socket
       |> assign(focussed_item: item)
       |> compose_child(:project_item_form)
-      |> show_modal(:project_item_form, :dialog)
+      |> show_modal(:project_item_form, :compact)
     }
   end
 
@@ -98,7 +98,7 @@ defmodule Systems.Project.NodePageGridView do
       :noreply,
       socket
       |> compose_child(:create_item_view)
-      |> show_modal(:create_item_view, :dialog)
+      |> show_modal(:create_item_view, :compact)
     }
   end
 

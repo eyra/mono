@@ -6,6 +6,8 @@ defmodule Next.Account.SessionController do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
+  alias Frameworks.Utility.Params
+  alias Frameworks.Signal
 
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
@@ -35,6 +37,12 @@ defmodule Next.Account.SessionController do
     require_feature(:password_sign_in)
 
     if user = Account.Public.get_user_by_email_and_password(email, password) do
+      post_action = Params.parse_string_param(user_params, "post_signin_action")
+
+      if post_action do
+        Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: post_action})
+      end
+
       Account.UserAuth.log_in_user(conn, user, false, user_params)
     else
       message = dgettext("eyra-user", "Invalid email or password")

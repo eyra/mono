@@ -41,16 +41,28 @@ defmodule Frameworks.Pixel.Flash do
     |> schedule_hide(auto_hide)
   end
 
-  def push_error(), do: push_error(default_error())
-  def push_error(message), do: push(:error, message, false)
-  def push_info(message), do: push(:info, message, true)
+  def push_error(socket), do: push_error(socket, default_error())
 
-  def push(type, message, auto_hide) do
-    send(self(), {:show_flash, %{type: type, message: message, auto_hide: auto_hide}})
+  def push_error(socket, message),
+    do: push(socket, {:show_flash, %{type: :error, message: message, auto_hide: false}})
+
+  def push_info(socket, message),
+    do: push(socket, {:show_flash, %{type: :info, message: message, auto_hide: true}})
+
+  def push_hide(socket), do: push(socket, :hide_flash)
+
+  def push(%{parent_pid: nil} = socket, payload) do
+    push(self(), payload)
+    socket
   end
 
-  def push_hide() do
-    send(self(), :hide_flash)
+  def push(%{parent_pid: parent_pid} = socket, payload) do
+    push(parent_pid, payload)
+    socket
+  end
+
+  def push(pid, payload) do
+    send(pid, payload)
   end
 
   defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket)

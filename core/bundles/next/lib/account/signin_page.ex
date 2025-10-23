@@ -15,6 +15,7 @@ defmodule Next.Account.SigninPage do
 
   alias Frameworks.Pixel.Tabbed
   alias Next.Account.SigninPageBuilder
+  alias Frameworks.Utility.Params
 
   @impl true
   def mount(params, _session, socket) do
@@ -22,6 +23,7 @@ defmodule Next.Account.SigninPage do
     initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
     registration_status = Map.get(params, "status", nil)
+    post_signin_action = Params.parse_string_param(params, "post_signin_action")
 
     {
       :ok,
@@ -32,7 +34,8 @@ defmodule Next.Account.SigninPage do
         initial_tab: initial_tab,
         tabbar_id: tabbar_id,
         show_errors: true,
-        status: registration_status
+        status: registration_status,
+        post_signin_action: post_signin_action
       )
       |> update_view_model()
       |> update_menus()
@@ -65,7 +68,7 @@ defmodule Next.Account.SigninPage do
 
           <.spacing value="M" />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content include_top_margin={false} tabs={@vm.tabs} />
+            <Tabbed.content socket={@socket} include_top_margin={false} tabs={@vm.tabs} bar_id={@tabbar_id} />
           </div>
         </Area.form>
       </div>

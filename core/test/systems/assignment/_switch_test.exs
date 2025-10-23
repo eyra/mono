@@ -7,6 +7,8 @@ defmodule Systems.Assignment.SwitchTest do
 
   describe "crew events" do
     setup do
+      isolate_signals(except: [Systems.Assignment.Switch])
+
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
       crew_member = Factories.insert!(:crew_member, %{crew: crew, user: user})
@@ -53,6 +55,8 @@ defmodule Systems.Assignment.SwitchTest do
 
   describe "crew_task events" do
     setup do
+      isolate_signals(except: [Systems.Assignment.Switch])
+
       user = Factories.insert!(:member)
 
       %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
@@ -122,6 +126,8 @@ defmodule Systems.Assignment.SwitchTest do
 
   describe "assignment events" do
     setup do
+      isolate_signals(except: [Systems.Assignment.Switch])
+
       assignment = Assignment.Factories.create_assignment(31, 1)
       %{assignment: assignment}
     end
@@ -144,6 +150,8 @@ defmodule Systems.Assignment.SwitchTest do
 
   describe "consent_agreement events" do
     setup do
+      isolate_signals(except: [Systems.Assignment.Switch])
+
       user = Factories.insert!(:member)
 
       %{crew: crew, consent_agreement: agreement, workflow: workflow} =

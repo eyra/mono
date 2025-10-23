@@ -9,7 +9,7 @@ defmodule Systems.Monitor.Queries do
   def upsert_event([_ | _] = identifier, value) do
     Multi.new()
     |> upsert_event(identifier, value)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def upsert_event(%Multi{} = multi, [_ | _] = identifier, value) do
