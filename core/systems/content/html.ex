@@ -197,7 +197,7 @@ defmodule Systems.Content.Html do
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
-          <Tabbed.footer tabs={@tabs} />
+          <Tabbed.footer bar_id={@tabbar_id} tabs={@tabs} />
         </.live_workspace>
       </div>
     """
