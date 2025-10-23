@@ -9,8 +9,29 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#18 2025-10-22
+* Added: Annotation Recipes (WIP)
+* Added:Ontology + Annotation + Criteria Live View (WIP)
+* Added: support for LiveView tabs
+* Added: Base LiveNest integration including LiveNest Modals
+* Added: Core.Seeder module
+* Added: git worktree scripts
+* Added: Connected Criteria Library items to Annotation/Ontology data
+* Added: Draft version of the Annotation/Ontology systems with a simple Onyx Browser
+* Added: Add banner to prompt participant to fill in characteristics
+* Added: Panl onboarding flow: add participants to Panl from sign-up/in
+* Added: Panl onboarding flow: implement add_to_panl functionality for google signin
+* Added: Logged in landing page with available advertisements
+* Added: tab-bar to the profile page
+* Added: Show privacy policy agreement checkbox based on add_to_panl parameter
+* Added: Support for test IDs to improve end-to-end testing
+* Changed: Improved error handling stream setup in Content.LocalFS and Content.S3
+* Changed: Fix search logic from OR to AND across all ViewBuilders
+* Changed: Refactor Zircon system with enhanced Annotation/Ontology integration
+* Changed: Update sorting and preloading for Annotation/Ontology systems
+
 ## \#17.1 2025-10-15
-Fixed: High CPU usage when viewing PDF
+* Fixed: High CPU usage when viewing PDF
 
 ## \#17 2025-10-01
 * Fixed: PDF viewer no longer refreshes when pressing Done button
