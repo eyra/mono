@@ -11,11 +11,11 @@ defmodule Systems.Account.UserProfileTab do
   @type user :: Systems.Account.User.t()
   @type fabric :: any()
   @type tab_spec :: %{
-          key: atom(),
           id: atom(),
           title: String.t(),
-          module: module(),
-          params: map()
+          type: atom(),
+          child: Fabric.LiveComponent.Model.t(),
+          ready?: boolean()
         }
 
   @callback key() :: atom()
