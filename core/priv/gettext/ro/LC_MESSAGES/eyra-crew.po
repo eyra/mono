@@ -1,0 +1,124 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "task.completed.message.part1"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.completed.message.part2"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.completed.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.expired.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task.expired.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "tester.completed.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "tester.completed.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.finished.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.remaining.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "progress.started.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.image_alt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.learn_more_button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.intro.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.services.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.services.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.services.image_alt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.services.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step1.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step2.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step2.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step3.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.step3.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.steps.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.video.preview_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "home.video.title"
+msgstr ""
