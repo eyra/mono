@@ -6,14 +6,15 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Crew,
     Workflow,
     Consent,
-    Account
+    Account,
+    Affiliate
   }
 
   def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
     apply_language(assignment)
 
     %{
-      flow: flow(assignment, assigns),
+      view: current_view(assignment, assigns),
       info: assignment.info,
       crew: crew,
       crew_member: Crew.Public.get_member_unsafe(crew, user),
@@ -30,84 +31,104 @@ defmodule Systems.Assignment.CrewPageBuilder do
     |> CoreWeb.Live.Hook.Locale.put_locale()
   end
 
-  defp flow(%{status: status} = assignment, %{current_user: user} = assigns) do
+  # State machine - determines which view to show based on current state
+  defp current_view(%{status: status} = assignment, %{current_user: user} = assigns) do
     tester? = Assignment.Public.tester?(assignment, user)
+    previous_view = extract_previous_view_module(assigns)
 
     if tester? or status == :online do
-      flow(assignment, assigns, current_flow(assigns), tester?)
+      cond do
+        # If returning from finished view and consent declined, show consent again
+        previous_view == Assignment.FinishedView and declined_consent?(assignment, user) ->
+          consent_view(assignment, assigns, tester?)
+
+        tasks_finished?(assignment, user) ->
+          finished_view(assignment, assigns)
+
+        declined_consent?(assignment, user) ->
+          finished_view(assignment, assigns)
+
+        not consent_signed?(assignment, user, tester?) ->
+          consent_view(assignment, assigns, tester?)
+
+        not intro_visited?(assignment, user) ->
+          intro_view(assignment, assigns)
+
+        true ->
+          work_view(assignment, assigns, tester?)
+      end
     else
-      []
-    end
-  end
-
-  defp flow(assignment, assigns, nil, tester?), do: full_flow(assignment, assigns, tester?)
-
-  defp flow(assignment, assigns, current_flow, tester?) do
-    full_flow(assignment, assigns, tester?)
-    |> Enum.filter(fn %{ref: %{id: id}} ->
-      Enum.find(current_flow, &(&1.ref.id == id)) != nil
-    end)
-  end
-
-  defp full_flow(assignment, assigns, tester?) do
-    [
-      intro_view(assignment, assigns),
-      consent_view(assignment, assigns, tester?),
-      work_view(assignment, assigns, tester?)
-    ]
-    |> Enum.filter(&(not is_nil(&1)))
-  end
-
-  defp current_flow(%{fabric: %{children: children}}), do: children
-
-  defp intro_view(
-         %{id: assignment_id, page_refs: page_refs},
-         %{current_user: user, fabric: fabric}
-       ) do
-    visited? = Account.Public.visited?(user, {:assignment_information, assignment_id})
-    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
-
-    if is_nil(intro_page_ref) or visited? do
+      # Assignment not online and user is not a tester - no view
       nil
-    else
-      Fabric.prepare_child(fabric, :onboarding_view_intro, Assignment.OnboardingView, %{
-        page_ref: intro_page_ref,
-        title: dgettext("eyra-assignment", "onboarding.intro.title"),
-        user: user
-      })
     end
   end
 
-  defp consent_view(%{consent_agreement: nil}, _, _), do: nil
+  # State checks
+  defp declined_consent?(assignment, user) do
+    Assignment.Private.declined_consent?(assignment, user.id)
+  end
 
-  defp consent_view(
-         %{consent_agreement: consent_agreement},
-         %{current_user: user, fabric: fabric},
-         tester?
-       ) do
+  defp tasks_finished?(assignment, user) do
+    work_items = work_items(assignment, %{current_user: user})
+    work_items_finished?(work_items)
+  end
+
+  defp consent_signed?(%{consent_agreement: nil}, _user, _tester?), do: true
+
+  defp consent_signed?(%{consent_agreement: consent_agreement}, user, tester?) do
     revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
     signature = Consent.Public.get_signature(consent_agreement, user)
 
     case {revision, signature, tester?} do
       {_, signature, false} when not is_nil(signature) ->
-        # normal flow: no consent view with signature
-        nil
+        # normal flow: consent signed if signature exists
+        true
 
       {%{id: id}, %{revision_id: revision_id}, true} when id == revision_id ->
-        # preview flow: no consent view with signature on the latest version
-        nil
+        # preview flow: consent signed if signature on latest version
+        true
 
       _ ->
-        Fabric.prepare_child(
-          fabric,
-          :onboarding_view_consent,
-          Assignment.OnboardingConsentView,
-          %{
-            revision: revision,
-            user: user
-          }
-        )
+        false
     end
+  end
+
+  defp intro_visited?(%{id: assignment_id, page_refs: page_refs}, user) do
+    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
+
+    is_nil(intro_page_ref) or
+      Account.Public.visited?(user, {:assignment_information, assignment_id})
+  end
+
+  defp intro_view(
+         %{page_refs: page_refs},
+         %{current_user: user, fabric: fabric}
+       ) do
+    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
+
+    Fabric.prepare_child(fabric, :current_view, Assignment.OnboardingView, %{
+      page_ref: intro_page_ref,
+      title: dgettext("eyra-assignment", "onboarding.intro.title"),
+      user: user
+    })
+  end
+
+  defp consent_view(
+         %{consent_agreement: consent_agreement},
+         %{current_user: user, fabric: fabric},
+         _tester?
+       ) do
+    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+
+    Fabric.prepare_child(
+      fabric,
+      :current_view,
+      Assignment.OnboardingConsentView,
+      %{
+        revision: revision,
+        user: user
+      }
+    )
   end
 
   defp work_view(
@@ -115,8 +136,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
            privacy_doc: privacy_doc,
            consent_agreement: consent_agreement,
            page_refs: page_refs,
-           crew: crew,
-           affiliate: affiliate
+           crew: crew
          } = assignment,
          %{
            fabric: fabric,
@@ -133,7 +153,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
     support_page_ref = Enum.find(page_refs, &(&1.key == :assignment_helpdesk))
 
-    Fabric.prepare_child(fabric, :work_view, Assignment.CrewWorkView, %{
+    Fabric.prepare_child(fabric, :current_view, Assignment.CrewWorkView, %{
       work_items: work_items,
       privacy_doc: privacy_doc,
       consent_agreement: consent_agreement,
@@ -144,8 +164,75 @@ defmodule Systems.Assignment.CrewPageBuilder do
       user: user,
       timezone: timezone,
       panel_info: panel_info,
-      tester?: tester?,
-      affiliate: affiliate
+      tester?: tester?
+    })
+  end
+
+  defp finished_view(
+         %{affiliate: affiliate} = assignment,
+         %{fabric: fabric, current_user: user}
+       ) do
+    declined? = Assignment.Private.declined_consent?(assignment, user.id)
+
+    redirect_url =
+      case Affiliate.Public.redirect_url(affiliate, user) do
+        {:ok, url} -> url
+        {:error, _} -> nil
+      end
+
+    title =
+      if declined? do
+        dgettext("eyra-assignment", "finished_view.title.declined")
+      else
+        dgettext("eyra-assignment", "finished_view.title")
+      end
+
+    body =
+      cond do
+        declined? and redirect_url ->
+          dgettext("eyra-assignment", "finished_view.body.declined.redirect")
+
+        declined? ->
+          dgettext("eyra-assignment", "finished_view.body.declined")
+
+        redirect_url ->
+          dgettext("eyra-assignment", "finished_view.body.redirect")
+
+        true ->
+          dgettext("eyra-assignment", "finished_view.body")
+      end
+
+    show_illustration = not declined? and is_nil(redirect_url)
+
+    retry_button = %{
+      action: %{type: :send, event: "retry"},
+      face: %{
+        type: :plain,
+        icon: :back,
+        icon_align: :left,
+        label: dgettext("eyra-assignment", "back.button")
+      }
+    }
+
+    redirect_button =
+      if redirect_url do
+        %{
+          action: %{type: :http_get, to: redirect_url},
+          face: %{
+            type: :primary,
+            label: dgettext("eyra-assignment", "redirect.button")
+          }
+        }
+      else
+        nil
+      end
+
+    Fabric.prepare_child(fabric, :current_view, Assignment.FinishedView, %{
+      title: title,
+      body: body,
+      show_illustration: show_illustration,
+      retry_button: retry_button,
+      redirect_button: redirect_button
     })
   end
 
@@ -216,4 +303,28 @@ defmodule Systems.Assignment.CrewPageBuilder do
       Crew.Public.create_task!(crew, [user], identifier)
     end
   end
+
+  defp work_items_finished?([]), do: false
+
+  defp work_items_finished?(work_items) do
+    task_ids =
+      work_items
+      |> Enum.reject(fn {_, task} -> task == nil end)
+      |> Enum.map(fn {_, task} -> task.id end)
+
+    if Enum.empty?(task_ids) do
+      false
+    else
+      Crew.Public.tasks_finished?(task_ids)
+    end
+  end
+
+  # Extract previous view module using pattern matching
+  defp extract_previous_view_module(%{
+         vm: %{view: %Fabric.LiveComponent.Model{ref: %{module: module}}}
+       }),
+       do: module
+
+  defp extract_previous_view_module(%{vm: %{view: %{module: module}}}), do: module
+  defp extract_previous_view_module(_assigns), do: nil
 end

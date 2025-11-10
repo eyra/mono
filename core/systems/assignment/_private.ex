@@ -120,17 +120,9 @@ defmodule Systems.Assignment.Private do
     "assignment=#{id}"
   end
 
-  def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}) do
-    case external_panel do
-      :liss ->
-        ~p"/assignment/#{id}/liss?respondent=preview&quest=quest&varname1=varname1&token=token&page=page"
-
-      :ioresearch ->
-        ~p"/assignment/#{id}/ioresearch?participant=preview"
-
-      _ ->
-        ~p"/assignment/#{id}/participate?participant=preview"
-    end
+  def get_preview_url(%Assignment.Model{id: id}) do
+    # Preview uses internal controller, not affiliate system
+    ~p"/assignment/#{id}/preview"
   end
 
   def page_title_default(:assignment_information),

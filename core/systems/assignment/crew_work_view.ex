@@ -17,7 +17,6 @@ defmodule Systems.Assignment.CrewWorkView do
           context_menu_items: context_menu_items,
           intro_page_ref: intro_page_ref,
           support_page_ref: support_page_ref,
-          affiliate: affiliate,
           crew: crew,
           user: user,
           timezone: timezone,
@@ -26,8 +25,6 @@ defmodule Systems.Assignment.CrewWorkView do
         },
         socket
       ) do
-    retry? = Map.get(socket.assigns, :retry?, false)
-    finished? = tasks_finished?(work_items)
     user_state_initialized? = Map.get(socket.assigns, :user_state_initialized?, false)
 
     socket =
@@ -39,27 +36,16 @@ defmodule Systems.Assignment.CrewWorkView do
         context_menu_items: context_menu_items,
         intro_page_ref: intro_page_ref,
         support_page_ref: support_page_ref,
-        affiliate: affiliate,
         crew: crew,
         user: user,
         timezone: timezone,
         tester?: tester?,
         panel_info: panel_info,
-        retry?: retry?,
         user_state_initialized?: user_state_initialized?,
         user_state_data: nil
       )
-
-    socket =
-      if finished? and not retry? do
-        socket
-        |> compose_child(:finished_view)
-        |> compose_child(:context_menu)
-      else
-        socket
-        |> compose_child(:context_menu)
-        |> compose_child(:task_view)
-      end
+      |> compose_child(:context_menu)
+      |> compose_child(:task_view)
 
     {
       :ok,
@@ -173,13 +159,14 @@ defmodule Systems.Assignment.CrewWorkView do
     }
   end
 
-  def compose(:finished_view, %{affiliate: affiliate, user: user}) do
+  def compose(:finished_view, %{affiliate: affiliate, user: user, declined?: declined?}) do
     %{
       module: Assignment.FinishedView,
       params: %{
         title: dgettext("eyra-assignment", "finished_view.title"),
         user: user,
-        affiliate: affiliate
+        affiliate: affiliate,
+        declined: declined?
       }
     }
   end

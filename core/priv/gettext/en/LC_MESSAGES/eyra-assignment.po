@@ -451,3 +451,23 @@ msgstr "Invite link"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "The default language for Panl studies is dutch"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined"
+msgstr "You declined to participate. Thank you for your time. You can now close this window."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect"
+msgstr "You declined to participate. Thank you for your time. Click Continue to return."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title.declined"
+msgstr "Consent Declined"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr "Welcome! Click continue to start participating in this assignment."

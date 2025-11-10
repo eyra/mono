@@ -332,6 +332,12 @@ defmodule Core.Factories do
     }
   end
 
+  def build(:content_page) do
+    build(:content_page, %{
+      body: "Test page content"
+    })
+  end
+
   def build(:zircon_screening_tool) do
     build(:zircon_screening_tool, %{})
   end
@@ -661,6 +667,17 @@ defmodule Core.Factories do
 
   def build(:assignment_info, %{} = attributes) do
     %Assignment.InfoModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:assignment_page_ref, %{} = attributes) do
+    {assignment, attributes} = Map.pop(attributes, :assignment, build(:assignment))
+    {page, attributes} = Map.pop(attributes, :page, build(:content_page))
+
+    %Assignment.PageRefModel{
+      assignment: assignment,
+      page: page
+    }
     |> struct!(attributes)
   end
 
@@ -1034,6 +1051,15 @@ defmodule Core.Factories do
 
   def build(:content_file, %{} = attributes) do
     %Content.FileModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:content_page, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Content.PageModel{
+      auth_node: auth_node
+    }
     |> struct!(attributes)
   end
 

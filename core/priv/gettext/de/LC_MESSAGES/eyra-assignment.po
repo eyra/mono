@@ -452,3 +452,23 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "Die Standardsprache für Panl-Studien ist Niederländisch."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined"
+msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect"
+msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.title.declined"
+msgstr "Fertig"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""

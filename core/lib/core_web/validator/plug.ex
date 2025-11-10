@@ -8,17 +8,16 @@ defmodule CoreWeb.Validator.Plug do
 
   Example route registration:
 
-      scope "/assignment", Systems.Assignment do
-        pipe_through([:browser_unprotected, :validator])
+      scope "/a", Systems.Affiliate do
+        pipe_through([:browser, :validator])
 
-        post("/:id/:entry", ExternalPanelController, :create,
+        get("/:sqid", Controller, :create,
           private: %{
             validate: %{
-              id: &Systems.Validators.Integer.valid_integer?/1,
-              entry: &Systems.Validators.String.valid_non_empty?/1
+              sqid: &Systems.Validators.String.valid_non_empty?/1
             },
             validation_handler:
-              &Systems.Assignment.ExternalPanelController.validation_error_callback/2
+              &Systems.Affiliate.Controller.validation_error_callback/2
           }
         )
       end

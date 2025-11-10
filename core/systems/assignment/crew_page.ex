@@ -37,22 +37,14 @@ defmodule Systems.Assignment.CrewPage do
       )
       |> update_panel_info(session)
       |> update_image_info()
-      |> update_flow()
-    }
-  end
-
-  @impl true
-  def compose(:declined_view, _) do
-    %{
-      module: Assignment.DeclinedView,
-      params: %{}
+      |> update_view_model()
     }
   end
 
   @impl true
   def handle_view_model_updated(socket) do
     socket
-    |> update_flow()
+    |> install_current_view()
     |> update_image_info()
   end
 
@@ -86,12 +78,17 @@ defmodule Systems.Assignment.CrewPage do
     assign(socket, panel_info: nil)
   end
 
-  defp update_flow(%{assigns: %{vm: %{flow: flow}}} = socket) do
-    socket |> install_children(flow)
+  defp install_current_view(%{assigns: %{vm: %{view: nil}}} = socket) do
+    # No view to show (assignment offline and not a tester)
+    socket |> install_children([])
+  end
+
+  defp install_current_view(%{assigns: %{vm: %{view: view}}} = socket) do
+    socket |> install_children([view])
   end
 
   def handle_info({:complete_task, _}, socket) do
-    {:noreply, socket |> send_event(:flow, "complete_task")}
+    {:noreply, socket |> send_event(:current_view, "complete_task")}
   end
 
   #
@@ -103,37 +100,36 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_event("continue", %{source: source}, socket) do
-    {:noreply, socket |> show_next(source)}
+  def handle_event("continue", _params, socket) do
+    {:noreply, socket |> update_view_model()}
   end
 
   @impl true
   def handle_event(
         "accept",
-        %{source: source},
+        _params,
         %{assigns: %{model: model, current_user: user}} = socket
       ) do
     Assignment.Public.accept_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
-    {:noreply, socket |> show_next(source)}
+    {:noreply, socket |> update_view_model()}
   end
 
   @impl true
   def handle_event(
         "decline",
-        _payload,
-        %{assigns: %{model: model, current_user: user}} =
-          socket
+        _params,
+        %{assigns: %{model: model, current_user: user}} = socket
       ) do
     Assignment.Public.decline_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
+    {:noreply, socket |> update_view_model()}
+  end
 
-    {
-      :noreply,
-      socket
-      |> compose_child(:declined_view)
-      |> Fabric.ModalController.show_modal(:declined_view, :compact)
-    }
+  @impl true
+  def handle_event("retry", _params, socket) do
+    # Retry from finished view - rebuild state machine
+    {:noreply, socket |> update_view_model()}
   end
 
   @impl true
@@ -143,11 +139,11 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event(name, event, socket) do
-    Logger.debug("[CrewPage] Forwarding event to flow: #{name}")
+    Logger.debug("[CrewPage] Forwarding event to current view: #{name}")
 
     {
       :noreply,
-      socket |> send_event(:flow, name, event)
+      socket |> send_event(:current_view, name, event)
     }
   end
 
@@ -219,7 +215,7 @@ defmodule Systems.Assignment.CrewPage do
         <% end %>
 
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="Viewport">
-          <.flow fabric={@fabric} />
+          <.child name={:current_view} fabric={@fabric} />
         </div>
       </.stripped>
     """

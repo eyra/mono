@@ -43,10 +43,6 @@ msgid "todo.title"
 msgstr "To-do"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.features"
-msgstr "Characteristics"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.student"
 msgstr "Study program"
 

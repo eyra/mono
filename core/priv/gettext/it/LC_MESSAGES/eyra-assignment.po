@@ -452,3 +452,23 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "La lingua predefinita per gli studi Panl è l'olandese."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined"
+msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect"
+msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.title.declined"
+msgstr "Fatto"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""

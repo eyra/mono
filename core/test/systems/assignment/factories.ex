@@ -88,4 +88,41 @@ defmodule Systems.Assignment.Factories do
   def build_assignment() do
     Factories.insert!(:assignment, %{})
   end
+
+  def create_base_assignment do
+    create_full_assignment(nil)
+  end
+
+  def create_assignment_with_consent do
+    consent_agreement = Factories.insert!(:consent_agreement)
+    _revision = Factories.insert!(:consent_revision, %{agreement: consent_agreement})
+    create_full_assignment(consent_agreement)
+  end
+
+  defp create_full_assignment(consent_agreement) do
+    auth_node = Factories.insert!(:auth_node)
+    tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
+
+    tool = create_tool(tool_auth_node)
+    tool_ref = create_tool_ref(tool)
+    workflow = create_workflow()
+    _workflow_item = create_workflow_item(workflow, tool_ref)
+    info = create_info("10", 100)
+
+    assignment =
+      create_assignment(
+        info,
+        consent_agreement,
+        workflow,
+        auth_node,
+        :online
+      )
+
+    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+  end
+
+  def add_participant(%{} = assignment, user) do
+    Systems.Assignment.Public.add_participant!(assignment, user)
+    assignment |> Core.Repo.preload([:crew], force: true)
+  end
 end

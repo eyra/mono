@@ -3,78 +3,32 @@ defmodule Systems.Assignment.FinishedView do
 
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Affiliate
-
   @impl true
-  def update(%{title: title, user: user, affiliate: affiliate}, socket) do
-    body_default = dgettext("eyra-assignment", "finished_view.body")
-    body_redirect = dgettext("eyra-assignment", "finished_view.body.redirect")
-
+  def update(
+        %{
+          title: title,
+          body: body,
+          show_illustration: show_illustration,
+          retry_button: retry_button,
+          redirect_button: redirect_button
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
         title: title,
-        body_default: body_default,
-        body_redirect: body_redirect,
-        affiliate: affiliate,
-        user: user
+        body: body,
+        show_illustration: show_illustration,
+        retry_button: retry_button,
+        redirect_button: redirect_button
       )
-      |> update_redirect_url()
-      |> update_redirect_button()
-      |> update_retry_button()
     }
-  end
-
-  defp update_redirect_url(%{assigns: %{affiliate: affiliate, user: user}} = socket) do
-    redirect_url =
-      case Affiliate.Public.redirect_url(affiliate, user) do
-        {:ok, redirect_url} ->
-          redirect_url
-
-        {:error, _} ->
-          nil
-      end
-
-    socket |> assign(redirect_url: redirect_url)
-  end
-
-  defp update_redirect_button(%{assigns: %{redirect_url: nil}} = socket) do
-    socket |> assign(redirect_button: nil)
-  end
-
-  defp update_redirect_button(%{assigns: %{redirect_url: redirect_url}} = socket) do
-    redirect_button = %{
-      action: %{type: :http_get, to: redirect_url},
-      face: %{
-        type: :primary,
-        label: dgettext("eyra-assignment", "redirect.button")
-      }
-    }
-
-    socket |> assign(redirect_button: redirect_button)
-  end
-
-  defp update_retry_button(socket) do
-    retry_button = %{
-      action: %{type: :send, event: "retry"},
-      face: %{
-        type: :plain,
-        icon: :back,
-        icon_align: :left,
-        label: dgettext("eyra-assignment", "retry.button")
-      }
-    }
-
-    assign(socket, retry_button: retry_button)
   end
 
   def handle_event("retry", _, socket) do
     {:noreply, socket |> send_event(:parent, "retry")}
-  end
-
-  def handle_event("redirect", _, socket) do
-    {:noreply, socket |> send_event(:parent, "redirect")}
   end
 
   @impl true
@@ -85,14 +39,13 @@ defmodule Systems.Assignment.FinishedView do
         <div class="flex flex-col gap-4 sm:gap-8 items-center w-full h-full px-6">
           <div class="flex-grow" />
           <Text.title1 margin=""><%= @title %></Text.title1>
-          <div :if={@redirect_url == nil}>
-            <Text.body_large align="text-center"><%= @body_default %></Text.body_large>
-            <div :if={@redirect_url == nil} class="flex flex-col items-center w-full pt-4">
+          <div>
+            <Text.body_large align="text-center">
+              <%= @body %>
+            </Text.body_large>
+            <div :if={@show_illustration} class="flex flex-col items-center w-full pt-4">
               <img class="block w-[220px] h-[220px] object-cover" src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
             </div>
-          </div>
-          <div :if={@redirect_url}>
-            <Text.body_large align="text-center"><%= @body_redirect %></Text.body_large>
           </div>
 
           <div class="flex flex-row items-center gap-6">
