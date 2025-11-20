@@ -8,6 +8,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   alias Systems.Pool
   alias Systems.Promotion
   alias Systems.Assignment
+  alias Systems.Localization.Resolvers.AssignmentLanguageEnforced
 
   def view_model(
         %Advert.Model{
@@ -24,9 +25,8 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
         } = advert,
         _assigns
       ) do
-    assignment
-    |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
+    _locale =
+      AssignmentLanguageEnforced.resolve(%{assignment: assignment}, assignment: assignment)
 
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
     icon_url = "/images/#{pool_name |> String.downcase()}-wide-dark.svg"

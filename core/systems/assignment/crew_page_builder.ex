@@ -9,8 +9,10 @@ defmodule Systems.Assignment.CrewPageBuilder do
     Account
   }
 
+  alias Systems.Localization.Resolvers.AssignmentLanguageEnforced
+
   def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
-    apply_language(assignment)
+    _locale = AssignmentLanguageEnforced.resolve(assigns, assignment: assignment)
 
     %{
       flow: flow(assignment, assigns),
@@ -22,12 +24,6 @@ defmodule Systems.Assignment.CrewPageBuilder do
         terms_text: dgettext("eyra-ui", "terms.link")
       }
     }
-  end
-
-  defp apply_language(assignment) do
-    assignment
-    |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
   end
 
   defp flow(%{status: status} = assignment, %{current_user: user} = assigns) do
