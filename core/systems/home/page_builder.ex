@@ -12,12 +12,18 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Advert
+  alias Systems.Localization.Resolvers.LandingPage
   alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Crew
 
+  @default_locale "en"
+
   # For guest users
-  def view_model(_, %{current_user: nil}) do
+  def view_model(_, %{current_user: nil} = assigns) do
+    locale = resolve_locale(assigns, logged_in?: false, panl_participant?: false)
+    put_locale(locale)
+
     %{
       hero: %{
         type: :landing_page,
@@ -36,7 +42,8 @@ defmodule Systems.Home.PageBuilder do
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
     panl? = panl_participant?(user)
-    put_locale(user, panl?)
+    locale = resolve_locale(assigns, logged_in?: true, panl_participant?: panl?)
+    put_locale(locale)
 
     %{
       hero: %{
@@ -62,12 +69,21 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp put_locale(%Systems.Account.User{creator: false}, true) do
-    CoreWeb.Live.Hook.Locale.put_locale("nl")
+  defp resolve_locale(assigns, opts) do
+    LandingPage.resolve_locale(
+      logged_in?: Keyword.get(opts, :logged_in?, false),
+      panl_participant?: Keyword.get(opts, :panl_participant?, false),
+      accept_language: accept_language_header(assigns),
+      default_locale: @default_locale
+    )
   end
 
-  defp put_locale(_, _) do
-    CoreWeb.Live.Hook.Locale.put_locale("en")
+  defp accept_language_header(%{session: session}) when is_map(session) do
+    Map.get(session, "accept_language")
+  end
+
+  defp put_locale(locale) do
+    CoreWeb.Live.Hook.Locale.put_locale(locale)
   end
 
   defp block_keys(%Account.User{}, opts) do

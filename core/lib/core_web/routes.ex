@@ -15,6 +15,7 @@ defmodule CoreWeb.Routes do
         plug(:fetch_session)
 
         plug(Systems.Account.Plug)
+        plug(CoreWeb.Plug.AcceptLanguage)
 
         plug(Cldr.Plug.PutLocale,
           apps: [
