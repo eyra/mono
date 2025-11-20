@@ -28,7 +28,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsForm do
   def render(assigns) do
     ~H"""
     <div>
-      <.form id="select_file_form" for={%{}} phx-change="change" phx-target="" >
+      <.form id="select_file_form" for={%{}} phx-change="change" >
         <div class="flex flex-row items-center">
           <Text.title2 margin="mb-0">
             <%= dgettext("eyra-graphite","tabbar.item.submissions.title") %>

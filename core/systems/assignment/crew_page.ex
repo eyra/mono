@@ -1,7 +1,6 @@
 defmodule Systems.Assignment.CrewPage do
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
-  use Frameworks.Pixel.ModalView
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
@@ -123,22 +122,18 @@ defmodule Systems.Assignment.CrewPage do
   def handle_event(
         "decline",
         _payload,
-        %{assigns: %{model: model, current_user: user, panel_info: %{redirect?: redirect?}}} =
+        %{assigns: %{model: model, current_user: user}} =
           socket
       ) do
     Assignment.Public.decline_member(model, user)
     socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
 
-    socket =
-      if redirect? do
-        socket
-      else
-        socket
-        |> compose_child(:declined_view)
-        |> show_modal(:declined_view, :notification)
-      end
-
-    {:noreply, socket}
+    {
+      :noreply,
+      socket
+      |> compose_child(:declined_view)
+      |> Fabric.ModalController.show_modal(:declined_view, :compact)
+    }
   end
 
   @impl true
@@ -212,7 +207,7 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic modals={@modals} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
 
         <%!-- hidden auto submit form --%>
         <%= if @panel_form do %>

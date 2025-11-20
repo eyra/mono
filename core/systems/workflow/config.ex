@@ -1,5 +1,5 @@
 defmodule Systems.Workflow.Config do
-  @type library :: Systems.Workflow.LibraryModel.t()
+  @type library :: Frameworks.Builder.LibraryModel.t()
   @type item :: atom()
 
   @type t :: %__MODULE__{

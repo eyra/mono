@@ -5,6 +5,12 @@ config :core,
   base_url: "http://localhost:4000",
   upload_path: "/tmp"
 
+# Selectical test configuration
+config :core,
+  selectical_base_url: "https://jkntvyihutapdkdsoleo.supabase.co",
+  selectical_api_key:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnR2eWlodXRhcGRrZHNvbGVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1ODk2NzksImV4cCI6MjAzMTE2NTY3OX0.zTsZmd3EdKFGof1gxI0LxD2aws2BGb2rboFybC_26Gk"
+
 # Print only errors during test
 config :logger, level: :error
 
@@ -39,6 +45,13 @@ config :core, Core.Repo,
 config :bcrypt_elixir,
   log_rounds: 4
 
+# Paper system configuration for tests
+config :core, :paper,
+  # Use smaller file size limit for tests (10MB)
+  ris_max_file_size: 10_485_760,
+  # Use smaller chunk size for tests (1KB)
+  ris_stream_chunk_size: 1_024
+
 config :core, CoreWeb.Endpoint,
   http: [port: 4002],
   force_ssl: false,
@@ -63,3 +76,11 @@ config :core, :banking_backend, Systems.Banking.Dummy
 config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+
+try do
+  import_config "test.secret.exs"
+rescue
+  File.Error ->
+    # Continuing without `test.secret.exs` file...
+    nil
+end

@@ -37,7 +37,7 @@ defmodule Systems.Project.Assembly do
     |> Multi.put(:project_item, item)
     |> EctoHelper.run(:project_node, &load_node!/1)
     |> Signal.Public.multi_dispatch({:project_node, :delete_item})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @spec create(any(), any(), :empty) :: any()
@@ -56,7 +56,7 @@ defmodule Systems.Project.Assembly do
       end
     end)
     |> EctoHelper.run(:auth, &update_auth/2)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def attach_storage_to_project(%Project.Model{} = project) do
@@ -76,22 +76,22 @@ defmodule Systems.Project.Assembly do
       )
       |> Ecto.Changeset.put_assoc(:node, project.root)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
-  def create_item(template_or_changeset, name, %Project.NodeModel{} = node)
+  def create_item(template_or_changeset, name, %Project.NodeModel{} = node, user)
       when is_binary(name) do
     Multi.new()
     |> Multi.insert(
       :project_item,
-      prepare_item(template_or_changeset, name)
+      prepare_item(template_or_changeset, name, user)
       |> Changeset.put_assoc(:node, node)
     )
     |> EctoHelper.run(:project_node, &load_node!/1)
     |> EctoHelper.run(:auth, &update_auth/2)
     |> EctoHelper.run(:path, &update_path/2)
     |> Signal.Public.multi_dispatch({:project_item, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   # LOAD
@@ -106,39 +106,39 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare(%{name: name}, items, user)
   end
 
-  defp prepare_item(:benchmark_challenge, name) do
+  defp prepare_item(:benchmark_challenge, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:benchmark_challenge, :project, nil)
+      Assignment.Assembly.prepare(:benchmark_challenge, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:data_donation, name) do
+  defp prepare_item(:data_donation, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:data_donation, :project, nil)
+      Assignment.Assembly.prepare(:data_donation, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:questionnaire, name) do
+  defp prepare_item(:questionnaire, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:questionnaire, :project, nil)
+      Assignment.Assembly.prepare(:questionnaire, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(:paper_screening, name) do
+  defp prepare_item(:paper_screening, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:paper_screening, :project, nil)
+      Assignment.Assembly.prepare(:paper_screening, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(%Ecto.Changeset{} = changeset, name) do
+  defp prepare_item(%Ecto.Changeset{} = changeset, name, _user) do
     Project.Public.prepare_item(%{name: name, project_path: []}, changeset)
   end
 

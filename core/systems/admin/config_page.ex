@@ -21,15 +21,14 @@ defmodule Systems.Admin.ConfigPage do
   def render(assigns) do
     ~H"""
     <.tabbar_page
+      socket={@socket}
       title={@vm.title}
       tabs={@vm.tabs}
       tabbar_id={@vm.tabbar_id}
       show_errors={@vm.show_errors}
       initial_tab={@initial_tab}
       menus={@menus}
-      modals={@modals}
-      popup={@popup}
-      dialog={@dialog}
+      modal={@modal}
     />
     """
   end

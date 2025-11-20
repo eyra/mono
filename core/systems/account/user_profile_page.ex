@@ -34,13 +34,13 @@ defmodule Systems.Account.UserProfilePage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <div class="flex justify-center">
           <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} preserve_tab_in_url={true} />
         </div>
-        <Tabbed.content tabs={@vm.tabs} />
+        <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@vm.tabs} />
       </Area.content>
     </.live_workspace>
     """

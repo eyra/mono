@@ -2,7 +2,7 @@ defmodule Core.Factories do
   @moduledoc """
   This module provides factory function to be used for tests.
   """
-
+  alias Core.Authentication
   alias Core.Authorization
   alias Core.WebPush
   alias Core.Repo
@@ -14,6 +14,7 @@ defmodule Core.Factories do
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Alliance
+  alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
   alias Systems.Budget
@@ -26,12 +27,16 @@ defmodule Core.Factories do
   alias Systems.Lab
   alias Systems.Monitor
   alias Systems.Notification
+  alias Systems.Ontology
   alias Systems.Org
+  alias Systems.Paper
   alias Systems.Pool
   alias Systems.Project
   alias Systems.Promotion
   alias Systems.Support
+  alias Systems.Version
   alias Systems.Workflow
+  alias Systems.Zircon
 
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
@@ -73,6 +78,19 @@ defmodule Core.Factories do
     :member
     |> build(%{
       email: "admin1@example.org"
+    })
+  end
+
+  def build(:authentication_entity) do
+    build(:authentication_entity, %{
+      identifier: "Systems.Account.User:#{Faker.Random.Elixir.random_between(1, 1_000_000)}"
+    })
+  end
+
+  def build(:actor) do
+    build(:actor, %{
+      type: :system,
+      name: "System Actor"
     })
   end
 
@@ -307,6 +325,97 @@ defmodule Core.Factories do
     build(:consent_signature, %{})
   end
 
+  def build(:content_file) do
+    %Content.FileModel{
+      ref: "http://example.com/test_#{System.unique_integer([:positive])}.ris",
+      name: "test_#{System.unique_integer([:positive])}.ris"
+    }
+  end
+
+  def build(:zircon_screening_tool) do
+    build(:zircon_screening_tool, %{})
+  end
+
+  def build(:version) do
+    build(:version, %{
+      number: 1
+    })
+  end
+
+  # Paper
+  def build(:paper_ris_import_session) do
+    build(:paper_ris_import_session, %{})
+  end
+
+  def build(:paper_set) do
+    build(:paper_set, %{})
+  end
+
+  def build(:paper_set_assoc) do
+    build(:paper_set_assoc, %{})
+  end
+
+  def build(:paper) do
+    build(:paper, %{
+      version: build(:version),
+      title: Faker.Lorem.sentence(),
+      year: "#{Enum.random(2020..2024)}",
+      authors: [Faker.Person.name()],
+      abstract: Faker.Lorem.paragraph(),
+      keywords: [Faker.Lorem.word()],
+      doi: "10.1234/test.#{System.unique_integer([:positive])}.001"
+    })
+  end
+
+  def build(:paper_reference_file) do
+    build(:paper_reference_file, %{
+      status: :uploaded,
+      file: build(:content_file)
+    })
+  end
+
+  # Ontology build/1
+
+  def build(:ontology_concept) do
+    build(:ontology_concept, %{
+      phrase: Faker.Lorem.words(3..5) |> Enum.join(" "),
+      entity: build(:authentication_entity)
+    })
+  end
+
+  def build(:ontology_predicate) do
+    build(:ontology_predicate, %{
+      subject: build(:ontology_concept),
+      predicate: build(:ontology_concept),
+      object: build(:ontology_concept),
+      entity: build(:authentication_entity)
+    })
+  end
+
+  def build(:ontology_ref) do
+    build(:ontology_ref, %{
+      concept: build(:ontology_concept)
+    })
+  end
+
+  # Annotation build/1
+
+  def build(:annotation) do
+    build(:annotation, %{
+      type: build(:ontology_concept),
+      statement: Faker.Lorem.word(),
+      entity: build(:authentication_entity),
+      references: [build(:annotation_ref)]
+    })
+  end
+
+  def build(:annotation_ref) do
+    build(:annotation_ref, %{
+      ontology_ref: build(:ontology_ref)
+    })
+  end
+
+  # build/2
   def build(:role_assignment, %{} = attributes) do
     %Authorization.RoleAssignment{}
     |> struct!(attributes)
@@ -622,6 +731,16 @@ defmodule Core.Factories do
     )
   end
 
+  def build(:authentication_entity, %{} = attributes) do
+    %Authentication.Entity{}
+    |> struct!(attributes)
+  end
+
+  def build(:actor, %{} = attributes) do
+    %Authentication.Actor{}
+    |> struct!(attributes)
+  end
+
   def build(:pool_submission, %{} = attributes) do
     {criteria, attributes} = Map.pop(attributes, :criteria, build(:criteria))
     {pool, attributes} = Map.pop(attributes, :pool, build(:pool))
@@ -829,6 +948,156 @@ defmodule Core.Factories do
     }
     |> struct!(attributes)
   end
+
+  def build(:zircon_screening_tool, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Zircon.Screening.ToolModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  # Ontology build/2
+  def build(:ontology_concept, %{} = attributes) do
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
+
+    %Ontology.ConceptModel{
+      entity: entity
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:ontology_predicate, %{} = attributes) do
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
+    {subject, attributes} = Map.pop(attributes, :subject, build(:ontology_concept))
+    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
+    {object, attributes} = Map.pop(attributes, :object, build(:ontology_concept))
+
+    %Ontology.PredicateModel{
+      entity: entity,
+      subject: subject,
+      type: type,
+      object: object
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:ontology_ref, %{} = attributes) do
+    {concept, attributes} = Map.pop(attributes, :ontology_concept)
+    {predicate, attributes} = Map.pop(attributes, :ontology_predicate)
+
+    # at least one of concept or predicate must be present
+    concept =
+      if is_nil(concept) && is_nil(predicate),
+        do: build(:ontology_concept),
+        else: concept
+
+    %Ontology.RefModel{
+      concept: concept,
+      predicate: predicate
+    }
+    |> struct!(attributes)
+  end
+
+  # Annotation build/2
+
+  def build(:annotation, %{} = attributes) do
+    {type, attributes} = Map.pop(attributes, :type, build(:ontology_concept))
+    {entity, attributes} = Map.pop(attributes, :entity, build(:authentication_entity))
+    {references, attributes} = Map.pop(attributes, :references, [build(:annotation_ref)])
+
+    %Annotation.Model{
+      type: type,
+      entity: entity,
+      references: references
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:annotation_ref, %{} = attributes) do
+    {annotation, attributes} = Map.pop(attributes, :annotation)
+    {ontology_ref, attributes} = Map.pop(attributes, :ontology_ref)
+
+    # at least one of annotation or ontology_ref must be present
+    ontology_ref =
+      if is_nil(ontology_ref) && is_nil(annotation),
+        do: build(:ontology_ref),
+        else: ontology_ref
+
+    %Annotation.RefModel{
+      annotation: annotation,
+      ontology_ref: ontology_ref
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:content_file, %{} = attributes) do
+    %Content.FileModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:version, %{} = attributes) do
+    %Version.Model{}
+    |> struct!(attributes)
+  end
+
+  # Paper
+
+  def build(:paper_ris_import_session, %{} = attributes) do
+    {paper_set, attributes} = Map.pop(attributes, :paper_set, build(:paper_set))
+
+    {reference_file, attributes} =
+      Map.pop(attributes, :reference_file, build(:paper_reference_file))
+
+    %Paper.RISImportSessionModel{
+      paper_set: paper_set,
+      reference_file: reference_file
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper, %{} = attributes) do
+    {version, attributes} = Map.pop(attributes, :version, build(:version))
+    {sets, attributes} = Map.pop(attributes, :sets, [])
+
+    %Paper.Model{
+      version: version,
+      sets: sets
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_set, %{} = attributes) do
+    {papers, attributes} = Map.pop(attributes, :papers, [])
+
+    %Paper.SetModel{
+      papers: papers
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_set_assoc, %{} = attributes) do
+    {paper, attributes} = Map.pop(attributes, :paper, build(:paper))
+    {set, attributes} = Map.pop(attributes, :set, build(:paper_set))
+
+    %Paper.SetAssoc{
+      paper: paper,
+      set: set
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:paper_reference_file, %{} = attributes) do
+    {file, attributes} = Map.pop(attributes, :file, build(:content_file))
+
+    %Paper.ReferenceFileModel{
+      file: file
+    }
+    |> struct!(attributes)
+  end
+
+  # Generic
 
   def build(factory_name, %{} = attributes) do
     factory_name |> build() |> struct!(attributes)

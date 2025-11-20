@@ -1,6 +1,7 @@
 import _ from "lodash";
 
-const pdfjsVersion = "5.4.149";
+// IMPORTANT: When updating pdfjs-dist in package.json, update this version to match!
+const pdfjsVersion = "5.4.296";
 const pdfjs = require("../node_modules/pdfjs-dist");
 const worker = `https://unpkg.com/pdfjs-dist@${pdfjsVersion}/build/pdf.worker.min.mjs`;
 

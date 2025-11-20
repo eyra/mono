@@ -56,7 +56,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def bar_wide(assigns) do
     ~H"""
-    <div id="tab_bar_wide" class={"flex flex-row items-center h-full #{gap(@type)}"}>
+    <div id={"#{@id}-wide"} class={"flex flex-row items-center h-full #{gap(@type)}"}>
       <%= for {tab, index} <- Enum.with_index(@tabs) do %>
         <div class="flex-shrink-0 h-full">
           <.tab bar_id={@id} size="wide" opts="" {get_tab(@type, tab, index)} />
@@ -72,7 +72,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def bar_full(assigns) do
     ~H"""
-    <div id="tab_bar_full" class={"flex flex-row items-center h-full w-full #{gap(@type)}"}>
+    <div id={"#{@id}-full"} class={"flex flex-row items-center h-full w-full #{gap(@type)}"}>
       <div class="flex flex-row h-full w-full">
         <%= for {tab, index} <- Enum.with_index(@tabs) do %>
           <div class="flex-1 h-full">
@@ -89,7 +89,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def bar_narrow(assigns) do
     ~H"""
-    <div id="tab_bar_narrow">
+    <div id={"#{@id}-narrow"}>
       <div id="tab_bar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full hidden">
         <.dropdown bar_id={@id} tabs={@tabs} />
       </div>
@@ -116,18 +116,23 @@ defmodule Frameworks.Pixel.Tabbed do
     """
   end
 
+  attr(:socket, :map, required: true)
+  attr(:bar_id, :string, required: true)
   attr(:tabs, :list, required: true)
   attr(:include_top_margin, :boolean, default: true)
 
   def content(assigns) do
     ~H"""
-    <div id="tab_content" phx-hook="TabContent">
+    <div id={"#{@bar_id}-tab_content"} phx-hook="TabContent">
       <%= if @include_top_margin do %>
         <div class="hidden md:block h-navbar-height" />
         <div class="h-navbar-height" />
       <% end %>
       <%= for tab <- @tabs do %>
-        <.panel tab_id={tab.id}>
+        <.panel tab_id={tab.id} bar_id={@bar_id}>
+          <%= if Map.has_key?(tab, :element) do %>
+            <LiveNest.HTML.element socket={@socket} {Map.from_struct(tab.element)} />
+          <% end %>
           <%= if Map.has_key?(tab, :live_component) do %>
             <.live_component id={tab.id} module={tab.live_component} {tab.props} />
           <% end %>
@@ -143,12 +148,13 @@ defmodule Frameworks.Pixel.Tabbed do
     """
   end
 
+  attr(:bar_id, :string, required: true)
   attr(:tab_id, :string, required: true)
   slot(:inner_block, required: true)
 
   def panel(assigns) do
     ~H"""
-    <div id={"tab_panel_#{@tab_id}"} data-tab-id={@tab_id} class="tab-panel hidden">
+    <div id={"#{@bar_id}-tab_panel_#{@tab_id}"} data-tab-id={@tab_id} class="tab-panel hidden">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -184,6 +190,7 @@ defmodule Frameworks.Pixel.Tabbed do
     tabs |> Enum.chunk_every(2, 1, [%{id: "fake_tab"}])
   end
 
+  attr(:bar_id, :string, required: true)
   attr(:tabs, :any, required: true)
   slot(:inner_block)
 
@@ -197,6 +204,7 @@ defmodule Frameworks.Pixel.Tabbed do
             <div
               id={"tab-footer-item-#{tab1.id}"}
               phx-hook="TabFooterItem"
+              data-bar-id={@bar_id}
               data-tab-id={tab1.id}
               data-target-tab-id={tab2.id}
               class="tab-footer-item cursor-pointer hidden"
@@ -262,7 +270,7 @@ defmodule Frameworks.Pixel.Tabbed do
   def tab(assigns) do
     ~H"""
     <div
-      id={"tab_#{@size}_#{@id}"}
+      id={"#{@bar_id}-tab_#{@size}_#{@id}"}
       data-tab-id={@id}
       data-bar-id={@bar_id}
       phx-hook="Tab"

@@ -58,6 +58,24 @@ defmodule Systems.Project.OverviewPage do
     }
   end
 
+  def compose(:delete_confirm, _) do
+    item = dgettext("eyra-project", "delete.confirm")
+    title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
+    text = String.capitalize(dgettext("eyra-ui", "delete.confirm.text", item: item))
+    primary_button_label = dgettext("eyra-ui", "delete.confirm.label")
+
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :confirm,
+        id: "delete_confirm",
+        title: title,
+        text: text,
+        primary_button_label: primary_button_label
+      }
+    }
+  end
+
   @impl true
   def handle_event(
         "card_clicked",
@@ -80,27 +98,23 @@ defmodule Systems.Project.OverviewPage do
       socket
       |> assign(active_project: project_id)
       |> compose_child(:project_form)
-      |> show_modal(:project_form, :dialog)
+      |> Fabric.ModalController.show_modal(:project_form, :compact)
     }
   end
 
   @impl true
   def handle_event("delete", %{"item" => project_id}, socket) do
-    item = dgettext("eyra-project", "delete.confirm")
-    title = String.capitalize(dgettext("eyra-ui", "delete.confirm.title", item: item))
-    text = String.capitalize(dgettext("eyra-ui", "delete.confirm.text", item: item))
-    confirm_label = dgettext("eyra-ui", "delete.confirm.label")
-
     {
       :noreply,
       socket
       |> assign(project_id: String.to_integer(project_id))
-      |> confirm("delete", title, text, confirm_label)
+      |> compose_child(:delete_confirm)
+      |> Fabric.ModalController.show_modal(:delete_confirm, :compact)
     }
   end
 
   @impl true
-  def handle_event("delete_confirm", _params, %{assigns: %{project_id: project_id}} = socket) do
+  def handle_event("confirm_ok", _params, %{assigns: %{project_id: project_id}} = socket) do
     Project.Public.delete(project_id)
 
     {
@@ -112,12 +126,18 @@ defmodule Systems.Project.OverviewPage do
       )
       |> update_view_model()
       |> update_menus()
+      |> Fabric.ModalController.hide_modal(:delete_confirm)
     }
   end
 
   @impl true
-  def handle_event("delete_cancel", _params, socket) do
-    {:noreply, socket |> assign(project_id: nil, dialog: nil)}
+  def handle_event("confirm_cancel", _params, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(project_id: nil, dialog: nil)
+      |> Fabric.ModalController.hide_modal(:delete_confirm)
+    }
   end
 
   @impl true
@@ -127,7 +147,7 @@ defmodule Systems.Project.OverviewPage do
       socket
       |> assign(active_project: project_id)
       |> compose_child(:people_page)
-      |> show_modal(:people_page, :page)
+      |> Fabric.ModalController.show_modal(:people_page, :page)
     }
   end
 
@@ -176,13 +196,13 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event("finish", %{source: %{name: modal_view}}, socket) do
-    {:noreply, socket |> hide_modal(modal_view)}
+    {:noreply, socket |> Fabric.ModalController.hide_modal(modal_view)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if Enum.count(@vm.cards) > 0 do %>

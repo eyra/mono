@@ -8,3 +8,7 @@ deps/
 
 # Ignore generated js hook files for components
 assets/js/_hooks/
+
+# Ignore secrets
+config/dev.secret.exs
+config/test.secret.exs

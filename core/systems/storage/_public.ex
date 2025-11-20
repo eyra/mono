@@ -63,10 +63,12 @@ defmodule Systems.Storage.Public do
     Multi.new()
     |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
     |> Monitor.Public.multi_log({endpoint, :files})
-    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}}, %{
-      storage_endpoint: endpoint
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
+      message: %{
+        storage_endpoint: endpoint
+      }
+    )
+    |> Repo.commit()
 
     %{
       endpoint_id: endpoint_id,
@@ -87,21 +89,23 @@ defmodule Systems.Storage.Public do
     Multi.new()
     |> Monitor.Public.multi_reset({endpoint, :bytes})
     |> Monitor.Public.multi_reset({endpoint, :files})
-    |> Signal.Public.multi_dispatch({:storage_endpoint, :delete_files}, %{
-      storage_endpoint: endpoint
-    })
+    |> Signal.Public.multi_dispatch({:storage_endpoint, :delete_files},
+      message: %{
+        storage_endpoint: endpoint
+      }
+    )
     |> Multi.run(:delete_files, fn _, _ ->
       case apply_on_special_backend(endpoint, :delete_files) do
         :ok -> {:ok, true}
         {:error, error} -> {:error, error}
       end
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def connected?(special) do
     {_, backend} = Storage.Private.special_info(special)
-    connected? = apply(backend, :connected?, [special])
+    connected? = backend.connected?(special)
 
     if connected? do
       Monitor.Public.log({special, :connected})

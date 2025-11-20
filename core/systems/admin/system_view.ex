@@ -41,6 +41,7 @@ defmodule Systems.Admin.SystemView do
     %{
       module: Citizen.Pool.Form,
       params: %{
+        title: dgettext("eyra-admin", "system.citizen.pools.new.title"),
         pool: pool,
         user: user,
         locale: locale
@@ -53,6 +54,7 @@ defmodule Systems.Admin.SystemView do
     %{
       module: Budget.BankAccountForm,
       params: %{
+        title: dgettext("eyra-admin", "system.bank.accounts.new.title"),
         bank_account: bank_account,
         user: user,
         locale: locale
@@ -73,7 +75,7 @@ defmodule Systems.Admin.SystemView do
       socket
       |> assign(active_bank_account: bank_account)
       |> compose_child(:bank_account_form)
-      |> show_popup(:bank_account_form)
+      |> show_modal(:bank_account_form, :compact)
     }
   end
 
@@ -84,7 +86,7 @@ defmodule Systems.Admin.SystemView do
       socket
       |> assign(active_bank_account: nil)
       |> compose_child(:bank_account_form)
-      |> show_popup(:bank_account_form)
+      |> show_modal(:bank_account_form, :compact)
     }
   end
 
@@ -101,7 +103,7 @@ defmodule Systems.Admin.SystemView do
       socket
       |> assign(active_pool: pool)
       |> compose_child(:pool_form)
-      |> show_popup(:pool_form)
+      |> show_modal(:pool_form, :compact)
     }
   end
 
@@ -112,18 +114,18 @@ defmodule Systems.Admin.SystemView do
       socket
       |> assign(active_pool: nil)
       |> compose_child(:pool_form)
-      |> show_popup(:pool_form)
+      |> show_modal(:pool_form, :compact)
     }
   end
 
   @impl true
   def handle_event("saved", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_popup(popup)}
+    {:noreply, socket |> hide_modal(popup)}
   end
 
   @impl true
   def handle_event("cancelled", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_popup(popup)}
+    {:noreply, socket |> hide_modal(popup)}
   end
 
   @impl true
