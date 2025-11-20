@@ -505,3 +505,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment_languages.es"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.lt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.ro"
+msgstr ""

@@ -1,0 +1,128 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "currency.label.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "currency.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "currency.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.budgets.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "funding.budgets.new.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.currency.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.edit.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "edit.button.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deposit.button.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deposit.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "linked.assignments.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.available.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.reserved.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.spend.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deposit.amount.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deposit.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "deposit.reference.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.icon.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.icon.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.edit.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "bank.account.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget.default.name"
+msgstr ""

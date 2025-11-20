@@ -31,10 +31,6 @@ msgid "genders.woman"
 msgstr "Vrouw"
 
 #, elixir-autogen, elixir-format
-msgid "genders.x"
-msgstr "Anders"
-
-#, elixir-autogen, elixir-format
 msgid "genders.non_binary"
 msgstr "Non-binair"
 
@@ -505,3 +501,11 @@ msgstr "X"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.es"
 msgstr "Engels"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.lt"
+msgstr "Litouws"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.ro"
+msgstr "Roemeens"

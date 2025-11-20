@@ -4,7 +4,7 @@ defmodule CoreWeb.Cldr do
   """
   use Cldr,
     otp_app: :core,
-    locales: ["en", "es", "de", "it", "nl"],
+    locales: ["en", "es", "de", "it", "nl", "lt"],
     default: "en",
     gettext: CoreWeb.Gettext,
     providers: [Cldr.Number, Cldr.DateTime]
