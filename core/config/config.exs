@@ -80,7 +80,7 @@ config :core,
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro)
+config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
