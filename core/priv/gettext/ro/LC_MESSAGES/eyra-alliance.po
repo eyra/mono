@@ -1,0 +1,116 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "config.url.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reward.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "apply.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "open.cta.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "nextid.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "nextid.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "setup.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.copy.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "link.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "link.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "nextid.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "redirect.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "study.instructions.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "duration.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.closed.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.open.highlight.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "language.highlight.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "participated.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr ""
