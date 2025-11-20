@@ -35,7 +35,7 @@ defmodule Systems.Home.PageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl? = panl_participant?(user)
+    panl? = Pool.Public.panl_participant?(user)
     put_locale(user, panl?)
 
     %{
@@ -52,14 +52,6 @@ defmodule Systems.Home.PageBuilder do
       blocks: blocks(user, assigns, panl?: panl?),
       include_right_sidepadding?: false
     }
-  end
-
-  defp panl_participant?(%Account.User{} = user) do
-    if pool = Pool.Public.get_panl() do
-      Pool.Public.participant?(pool, user)
-    else
-      false
-    end
   end
 
   defp put_locale(%Systems.Account.User{creator: false}, true) do

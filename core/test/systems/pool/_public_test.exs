@@ -68,4 +68,59 @@ defmodule Systems.Pool.PublicTest do
              } = Public.get!(pool.id, auth_node: [:role_assignments])
     end
   end
+
+  describe "panl_participant?/1" do
+    test "returns true when user is participant of PANL pool" do
+      user = Factories.insert!(:member)
+
+      panl_pool =
+        Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
+      Public.add_participant!(panl_pool, user)
+
+      assert Public.panl_participant?(user)
+    end
+
+    test "returns false when user is not participant of PANL pool" do
+      user = Factories.insert!(:member)
+      Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
+      refute Public.panl_participant?(user)
+    end
+
+    test "returns false when PANL pool does not exist" do
+      user = Factories.insert!(:member)
+
+      if panl_pool = Public.get_panl() do
+        Repo.delete(panl_pool)
+      end
+
+      refute Public.panl_participant?(user)
+    end
+
+    test "returns false when user is participant of different pool but not PANL pool" do
+      user = Factories.insert!(:member)
+      Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
+      other_pool = Factories.insert!(:pool, %{name: "Other Pool", director: :citizen})
+
+      Public.add_participant!(other_pool, user)
+
+      refute Public.panl_participant?(user)
+    end
+
+    test "returns true when user is participant of PANL pool and also other pools" do
+      user = Factories.insert!(:member)
+
+      panl_pool =
+        Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
+      other_pool = Factories.insert!(:pool, %{name: "Other Pool", director: :citizen})
+
+      Public.add_participant!(panl_pool, user)
+      Public.add_participant!(other_pool, user)
+
+      assert Public.panl_participant?(user)
+    end
+  end
 end
