@@ -13,10 +13,13 @@ defmodule Self.Account.SigninPage do
 
   alias Systems.Account.User
   alias Systems.Account.UserForm
+  alias Systems.Localization.Resolvers.SignupSignin
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(params, session, socket) do
     require_feature(:password_sign_in)
+    post_signin_action = Map.get(params, "post_signin_action")
+    _locale = SignupSignin.resolve(%{session: session, post_signin_action: post_signin_action})
 
     {
       :ok,

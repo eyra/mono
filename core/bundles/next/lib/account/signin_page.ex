@@ -16,14 +16,16 @@ defmodule Next.Account.SigninPage do
   alias Frameworks.Pixel.Tabbed
   alias Next.Account.SigninPageBuilder
   alias Frameworks.Utility.Params
+  alias Systems.Localization.Resolvers.SignupSignin
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(params, session, socket) do
     user_type = Map.get(params, "user_type", "participant")
     initial_tab = Map.get(params, "tab", user_type)
     tabbar_id = "account_signin"
     registration_status = Map.get(params, "status", nil)
     post_signin_action = Params.parse_string_param(params, "post_signin_action")
+    _locale = SignupSignin.resolve(%{session: session, post_signin_action: post_signin_action})
 
     {
       :ok,

@@ -17,15 +17,17 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account
   alias Systems.Account.UserForm
   alias Systems.Account.User
+  alias Systems.Localization.Resolvers.SignupSignin
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
   @impl true
-  def mount(%{"user_type" => user_type} = params, _session, socket) do
+  def mount(%{"user_type" => user_type} = params, session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
     post_signup_action = Params.parse_string_param(params, "post_signup_action")
     changeset = Account.Public.change_user_registration(%User{})
+    _locale = SignupSignin.resolve(%{session: session, post_signup_action: post_signup_action})
 
     {
       :ok,

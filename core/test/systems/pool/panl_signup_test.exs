@@ -24,10 +24,10 @@ defmodule Systems.Pool.PanlSignupTest do
       {user, password}
     end
 
-    defp assert_signup_page_loads(conn, user_type) do
+    defp assert_signup_page_loads_with_panl(conn, user_type) do
       conn = get(conn, ~p"/user/signup/#{user_type}?post_signup_action=add_to_panl")
       response = html_response(conn, 200)
-      assert response =~ "Create an account"
+      assert response =~ "Maak een account aan"
       assert response =~ "phx-submit=\"signup\""
     end
 
@@ -48,8 +48,8 @@ defmodule Systems.Pool.PanlSignupTest do
 
     test "signup pages load correctly with add_to_panl parameter", %{conn: conn} do
       # Both participant and creator signup pages should load (restriction is server-side)
-      assert_signup_page_loads(conn, "participant")
-      assert_signup_page_loads(conn, "creator")
+      assert_signup_page_loads_with_panl(conn, "participant")
+      assert_signup_page_loads_with_panl(conn, "creator")
     end
 
     test "signin behavior with add_to_panl parameter", %{conn: conn} do
