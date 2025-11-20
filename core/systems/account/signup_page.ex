@@ -20,6 +20,17 @@ defmodule Systems.Account.SignupPage do
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
+  @privacy_assignments %{
+    "next_privacy_policy_accepted" => %{
+      accepted_key: :next_privacy_policy_accepted,
+      error_key: :next_privacy_policy_error
+    },
+    "panl_privacy_policy_accepted" => %{
+      accepted_key: :panl_privacy_policy_accepted,
+      error_key: :panl_privacy_policy_error
+    }
+  }
+
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
@@ -83,18 +94,52 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_info({"active_item_ids", %{active_item_ids: active_item_ids}}, socket) do
-    next_privacy_policy_accepted = :next_privacy_policy_accepted in active_item_ids
-    panl_privacy_policy_accepted = :panl_privacy_policy_accepted in active_item_ids
+  def handle_info(
+        {"active_item_ids", %{active_item_ids: active_item_ids} = payload},
+        socket
+      ) do
+    normalized_ids = normalize_ids(active_item_ids)
+    component_id = component_id_from_payload(payload)
 
-    {:noreply,
-     socket
-     |> assign(
-       next_privacy_policy_accepted: next_privacy_policy_accepted,
-       next_privacy_policy_error: nil,
-       panl_privacy_policy_accepted: panl_privacy_policy_accepted,
-       panl_privacy_policy_error: nil
-     )}
+    socket = maybe_assign_privacy_component(socket, component_id, normalized_ids)
+
+    {:noreply, socket}
+  end
+
+  defp normalize_ids(ids) do
+    ids
+    |> List.wrap()
+    |> Enum.map(&normalize_active_item_id/1)
+  end
+
+  defp normalize_active_item_id(id) when is_atom(id), do: Atom.to_string(id)
+  defp normalize_active_item_id(id) when is_binary(id), do: id
+  defp normalize_active_item_id(id), do: to_string(id)
+
+  defp component_id_from_payload(payload) do
+    payload
+    |> Map.get(:current_items, [])
+    |> List.wrap()
+    |> Enum.find_value(&extract_component_id/1)
+  end
+
+  defp extract_component_id(%{id: id}) when not is_nil(id), do: normalize_active_item_id(id)
+  defp extract_component_id(_), do: nil
+
+  defp maybe_assign_privacy_component(socket, nil, _normalized_ids), do: socket
+
+  defp maybe_assign_privacy_component(socket, component_id, normalized_ids) do
+    case Map.fetch(@privacy_assignments, component_id) do
+      {:ok, %{accepted_key: accepted_key, error_key: error_key}} ->
+        accepted? = component_id in normalized_ids
+
+        socket
+        |> assign(accepted_key, accepted?)
+        |> assign(error_key, nil)
+
+      :error ->
+        socket
+    end
   end
 
   defp validate_privacy_policies(%{

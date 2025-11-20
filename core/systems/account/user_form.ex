@@ -41,7 +41,7 @@ defmodule Systems.Account.UserForm do
               }
             ]}
             type={:checkbox}
-            optional?={false}
+            optional?={true}
             raw?={true}
           />
 
@@ -67,7 +67,7 @@ defmodule Systems.Account.UserForm do
               }
             ]}
             type={:checkbox}
-            optional?={false}
+            optional?={true}
             raw?={true}
           />
 
