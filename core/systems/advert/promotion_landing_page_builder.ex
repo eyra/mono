@@ -81,8 +81,13 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
           }
         } = socket
       ) do
-    Pool.Public.add_participant!(pool, user)
     Promotion.Private.log_performance_event(promotion, :clicks)
-    LiveView.push_navigate(socket, to: ~p"/assignment/#{id}/apply")
+
+    if user do
+      Pool.Public.add_participant!(pool, user)
+      LiveView.push_navigate(socket, to: ~p"/assignment/#{id}/apply")
+    else
+      LiveView.push_navigate(socket, to: ~p"/user/signin?#{[post_signin_action: "add_to_panl"]}")
+    end
   end
 end

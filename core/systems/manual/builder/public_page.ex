@@ -2,6 +2,7 @@ defmodule Systems.Manual.Builder.PublicPage do
   use Systems.Content.Composer, :live_website
 
   alias Systems.Manual
+  alias Systems.Localization.Resolvers.AssignmentLanguageEnforced
 
   @impl true
   def get_model(%{"id" => manual_id}, _session, _socket) do
@@ -9,16 +10,21 @@ defmodule Systems.Manual.Builder.PublicPage do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     {
       :ok,
       socket
+      |> assign(session: session)
       |> compose_child(:manual_builder)
     }
   end
 
   @impl true
   def compose(:manual_builder, %{model: manual}) do
+    manual
+    |> Manual.Public.get_assignment_for_manual()
+    |> then(&AssignmentLanguageEnforced.resolve(%{assignment: &1}))
+
     %{
       module: Manual.Builder.View,
       params: %{manual: manual}

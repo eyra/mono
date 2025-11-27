@@ -27,7 +27,7 @@ defmodule Systems.Account.SignupPage do
     creator? = user_type == "creator"
     post_signup_action = Params.parse_string_param(params, "post_signup_action")
     changeset = Account.Public.change_user_registration(%User{})
-    _locale = SignupSignin.resolve(%{session: session, post_signup_action: post_signup_action})
+    locale = SignupSignin.resolve(%{session: session, post_signup_action: post_signup_action})
 
     {
       :ok,
@@ -38,7 +38,8 @@ defmodule Systems.Account.SignupPage do
         privacy_policy_accepted: false,
         privacy_policy_error: nil,
         changeset: changeset,
-        active_menu_item: nil
+        active_menu_item: nil,
+        locale: locale
       )
       |> update_menus()
     }
@@ -128,7 +129,7 @@ defmodule Systems.Account.SignupPage do
     {:noreply,
      socket
      |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
-     |> push_navigate(to: ~p"/user/await-confirmation")}
+     |> push_navigate(to: ~p"/user/await-confirmation?locale=#{socket.assigns.locale}")}
   end
 
   @impl true

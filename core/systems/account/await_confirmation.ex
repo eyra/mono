@@ -14,8 +14,11 @@ defmodule Systems.Account.AwaitConfirmation do
   alias Frameworks.Pixel.Text
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     require_feature(:password_sign_in)
+
+    locale = params["locale"]
+    if locale, do: Gettext.put_locale(CoreWeb.Gettext, locale)
 
     {
       :ok,

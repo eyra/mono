@@ -23,6 +23,11 @@ defmodule Systems.Manual.Public do
     Repo.get_by(Manual.ToolModel, manual_id: manual.id)
   end
 
+  def get_assignment_for_manual(%Manual.Model{id: manual_id}) do
+    Manual.Queries.assignment_for_manual(manual_id)
+    |> Repo.one()
+  end
+
   @doc """
   Gets a manual by its id.
   """

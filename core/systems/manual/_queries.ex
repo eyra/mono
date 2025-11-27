@@ -2,6 +2,8 @@ defmodule Systems.Manual.Queries do
   import Ecto.Query
 
   alias Systems.Manual
+  alias Systems.Assignment
+  alias Systems.Workflow
 
   def get_by_id(id) do
     from(m in Manual.Model,
@@ -61,6 +63,22 @@ defmodule Systems.Manual.Queries do
       where: p.order < ^userflow_step.order,
       order_by: [desc: p.order],
       limit: 1
+    )
+  end
+
+  def assignment_for_manual(manual_id) do
+    from(m in Manual.Model,
+      join: mt in Manual.ToolModel,
+      on: mt.manual_id == m.id,
+      join: tr in Workflow.ToolRefModel,
+      on: tr.manual_tool_id == mt.id,
+      join: wi in Workflow.ItemModel,
+      on: wi.tool_ref_id == tr.id,
+      join: a in Assignment.Model,
+      on: a.workflow_id == wi.workflow_id,
+      where: m.id == ^manual_id,
+      preload: ^[info: []],
+      select: a
     )
   end
 end

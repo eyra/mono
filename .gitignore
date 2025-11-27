@@ -1,6 +1,6 @@
 /db/
 plts/
-postgres-data
+postgres_data
 .netrc
 *.key
 *.pub
