@@ -11,11 +11,11 @@ defmodule Systems.Userflow.ModelTest do
 
     test "returns true when all steps have progress for the user" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.insert(:userflow)
-      steps = Userflow.Factory.insert_list(3, :step, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      steps = Userflow.Factories.insert_list(3, :step, %{userflow: userflow})
 
       for step <- steps do
-        Userflow.Factory.insert(:progress, %{user: user, step: step})
+        Userflow.Factories.insert(:progress, %{user: user, step: step})
       end
 
       userflow =
@@ -27,19 +27,19 @@ defmodule Systems.Userflow.ModelTest do
 
     test "returns false when not all steps have progress" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow_started(user)
+      userflow = Userflow.Factories.userflow_started(user)
       userflow = Repo.preload(userflow, steps: [:progress])
       refute Userflow.Model.finished?(userflow, user.id)
     end
 
     test "returns false when some steps have progress" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       userflow = Repo.preload(userflow, :steps)
       [first_step | _] = Enum.sort_by(userflow.steps, & &1.order)
 
       # Add progress only to the first step
-      Userflow.Factory.insert(:progress, %{
+      Userflow.Factories.insert(:progress, %{
         step: first_step,
         user: user
       })
@@ -52,13 +52,13 @@ defmodule Systems.Userflow.ModelTest do
   describe "next_step/2" do
     test "returns nil when all steps are completed" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow_finished(user)
+      userflow = Userflow.Factories.userflow_finished(user)
       assert nil == Userflow.Model.next_step(userflow, user.id)
     end
 
     test "returns the first step when no progress exists" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       userflow = Repo.preload(userflow, steps: [:progress])
       [first_step | _] = Enum.sort_by(userflow.steps, & &1.order)
 
@@ -67,11 +67,11 @@ defmodule Systems.Userflow.ModelTest do
 
     test "returns the next incomplete step" do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       [first_step, second_step | _] = Enum.sort_by(userflow.steps, & &1.order)
 
       # Complete first step
-      Userflow.Factory.insert(
+      Userflow.Factories.insert(
         :progress,
         %{
           user: user,
@@ -86,7 +86,7 @@ defmodule Systems.Userflow.ModelTest do
 
   describe "steps_by_group/1" do
     test "groups steps by their group attribute" do
-      userflow = Userflow.Factory.userflow_finished()
+      userflow = Userflow.Factories.userflow_finished()
       userflow = Repo.preload(userflow, steps: :userflow)
       groups = Userflow.Model.steps_by_group(userflow)
 
@@ -99,14 +99,14 @@ defmodule Systems.Userflow.ModelTest do
     end
 
     test "returns empty map when userflow has no steps" do
-      userflow = Userflow.Factory.insert(:userflow)
+      userflow = Userflow.Factories.insert(:userflow)
       userflow = %{userflow | steps: []}
 
       assert %{} == Userflow.Model.steps_by_group(userflow)
     end
 
     test "maintains step order within groups" do
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       groups = Userflow.Model.steps_by_group(userflow)
 
       for {_group, steps} <- groups do

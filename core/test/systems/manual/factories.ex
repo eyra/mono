@@ -1,4 +1,4 @@
-defmodule Systems.Manual.Factory do
+defmodule Systems.Manual.Factories do
   use ExMachina.Ecto, repo: Core.Repo
 
   alias Systems.Manual
@@ -25,19 +25,25 @@ defmodule Systems.Manual.Factory do
     }
   end
 
+  def manual_tool_factory do
+    %Manual.ToolModel{
+      director: :assignment
+    }
+  end
+
   def create_manual(chapter_count \\ 1, page_count \\ 1) do
-    manual_userflow = Userflow.Factory.insert(:userflow)
+    manual_userflow = Userflow.Factories.insert(:userflow)
     manual = insert(:manual, %{userflow: manual_userflow})
 
     chapters =
       Enum.map(Range.new(1, chapter_count, 1), fn chapter_index ->
         chapter_step =
-          Userflow.Factory.insert(:step, %{
+          Userflow.Factories.insert(:step, %{
             userflow: manual_userflow,
             group: "group-chapter-#{div(chapter_index, 2)}"
           })
 
-        chapter_userflow = Userflow.Factory.insert(:userflow)
+        chapter_userflow = Userflow.Factories.insert(:userflow)
 
         chapter =
           insert(:chapter,
@@ -49,7 +55,7 @@ defmodule Systems.Manual.Factory do
         pages =
           Enum.map(Range.new(1, page_count, 1), fn page_index ->
             page_step =
-              Userflow.Factory.insert(:step, %{
+              Userflow.Factories.insert(:step, %{
                 userflow: chapter_userflow,
                 group: "group-page-#{div(page_index, 2)}"
               })
@@ -62,5 +68,11 @@ defmodule Systems.Manual.Factory do
       end)
 
     %{manual | chapters: chapters}
+  end
+
+  def create_manual_tool(chapter_count \\ 1, page_count \\ 1, auth_node \\ insert(:auth_node)) do
+    manual = create_manual(chapter_count, page_count)
+    manual_tool = insert(:manual_tool, %{manual: manual, auth_node: auth_node})
+    manual_tool
   end
 end

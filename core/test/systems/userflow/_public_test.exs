@@ -2,11 +2,10 @@ defmodule Systems.Userflow.PublicTest do
   use Core.DataCase, async: true
 
   alias Systems.Userflow
-  alias Systems.Userflow
 
   describe "get_userflow!/1" do
     test "returns userflow when it exists" do
-      userflow = Userflow.Factory.insert(:userflow)
+      userflow = Userflow.Factories.insert(:userflow)
       found = Userflow.Public.get_userflow!(userflow.id)
       assert found.id == userflow.id
     end
@@ -20,7 +19,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "add_step/4" do
     setup do
-      {:ok, userflow: Userflow.Factory.insert(:userflow)}
+      {:ok, userflow: Userflow.Factories.insert(:userflow)}
     end
 
     test "adds step to userflow", %{userflow: userflow} do
@@ -46,7 +45,7 @@ defmodule Systems.Userflow.PublicTest do
   describe "mark_visited/2" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.insert(:userflow)
+      userflow = Userflow.Factories.insert(:userflow)
       {:ok, step} = Userflow.Public.add_step(userflow, "group-1")
       {:ok, user: user, step: step}
     end
@@ -61,7 +60,7 @@ defmodule Systems.Userflow.PublicTest do
   describe "next_step/2" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       {:ok, user: user, userflow: userflow}
     end
 
@@ -72,7 +71,7 @@ defmodule Systems.Userflow.PublicTest do
     end
 
     test "returns nil when all steps completed", %{user: user} do
-      userflow = Userflow.Factory.userflow_finished(user)
+      userflow = Userflow.Factories.userflow_finished(user)
       assert nil == Userflow.Public.next_step(userflow, user.id)
     end
   end
@@ -80,7 +79,7 @@ defmodule Systems.Userflow.PublicTest do
   describe "finished?/2" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       {:ok, user: user, userflow: userflow}
     end
 
@@ -89,14 +88,14 @@ defmodule Systems.Userflow.PublicTest do
     end
 
     test "returns true when all steps completed", %{user: user} do
-      userflow = Userflow.Factory.userflow_finished(user)
+      userflow = Userflow.Factories.userflow_finished(user)
       assert Userflow.Public.finished?(userflow, user.id)
     end
   end
 
   describe "steps_by_group/1" do
     test "returns steps grouped by group field" do
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
       groups = Userflow.Public.steps_by_group(userflow)
 
       assert Enum.all?(Map.keys(groups), &(&1 =~ ~r/group-\d+/))
@@ -113,7 +112,7 @@ defmodule Systems.Userflow.PublicTest do
   describe "get_progress/2" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.userflow_finished(user)
+      userflow = Userflow.Factories.userflow_finished(user)
       {:ok, user: user, userflow: userflow}
     end
 
@@ -135,7 +134,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "move_step/2" do
     setup do
-      userflow = Userflow.Factory.userflow()
+      userflow = Userflow.Factories.userflow()
 
       {:ok, userflow: userflow}
     end

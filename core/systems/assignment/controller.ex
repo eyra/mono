@@ -6,7 +6,7 @@ defmodule Systems.Assignment.Controller do
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
-  import Systems.Assignment.Private, only: [task_identifier: 3, declined_consent?: 2]
+  import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
   alias Plug.Conn
   alias CoreWeb.UI.Timestamp
@@ -31,6 +31,9 @@ defmodule Systems.Assignment.Controller do
     |> then(&task_identifier(assignment, item, &1))
     |> then(&Crew.Public.get_task(crew, &1))
     |> Crew.Public.complete_task!()
+
+    # Small delay to allow modal to close before redirect completes
+    Process.sleep(100)
 
     conn
     |> redirect(to: ~p"/assignment/#{id}")
@@ -218,7 +221,7 @@ defmodule Systems.Assignment.Controller do
       signature? ->
         @progress_yes
 
-      declined_consent?(assignment, user_id) ->
+      no_consent?(assignment, user_id) ->
         @progress_no
 
       true ->

@@ -1,23 +1,40 @@
 defmodule Systems.Assignment.CrewPageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Assignment,
-    Crew,
-    Workflow,
-    Consent,
-    Account,
-    Affiliate
-  }
+  alias Frameworks.Concept.LiveContext
+  alias Systems.Account
+  alias Systems.Assignment
+  alias Systems.Consent
+  alias Systems.Crew
+  alias Systems.Workflow
 
-  def view_model(%{crew: crew} = assignment, %{current_user: user} = assigns) do
+  def view_model(%{crew: crew, id: assignment_id} = assignment, %{current_user: user} = assigns) do
     apply_language(assignment)
 
+    # Get user_state from assigns (provided by UserState hook)
+    user_state = Map.get(assigns, :user_state, %{})
+
+    # Create context that will be passed to all child views
+    live_context =
+      LiveContext.new(%{
+        assignment_id: assignment_id,
+        user_id: user.id,
+        current_user: user,
+        timezone: Map.get(assigns, :timezone),
+        panel_info: Map.get(assigns, :panel_info),
+        user_state: user_state,
+        user_state_namespace: [:assignment, assignment_id, :crew, crew.id]
+      })
+
+    # Add live_context to assigns for child view builders
+    assigns_with_context = Map.put(assigns, :live_context, live_context)
+
     %{
-      view: current_view(assignment, assigns),
+      view: current_view(assignment, assigns_with_context),
       info: assignment.info,
       crew: crew,
       crew_member: Crew.Public.get_member_unsafe(crew, user),
+      user_state: user_state,
       footer: %{
         privacy_text: dgettext("eyra-ui", "privacy.link"),
         terms_text: dgettext("eyra-ui", "terms.link")
@@ -31,44 +48,84 @@ defmodule Systems.Assignment.CrewPageBuilder do
     |> CoreWeb.Live.Hook.Locale.put_locale()
   end
 
-  # State machine - determines which view to show based on current state
+  # State machine - determines which view to show based on current state and action
   defp current_view(%{status: status} = assignment, %{current_user: user} = assigns) do
     tester? = Assignment.Public.tester?(assignment, user)
     previous_view = extract_previous_view_module(assigns)
+    action = Map.get(assigns, :action)
+    user_state = Map.get(assigns, :user_state)
 
-    if tester? or status == :online do
-      cond do
-        # If returning from finished view and consent declined, show consent again
-        previous_view == Assignment.FinishedView and declined_consent?(assignment, user) ->
-          consent_view(assignment, assigns, tester?)
+    context = %{
+      tester?: tester?,
+      previous_view: previous_view,
+      action: action,
+      user_state: user_state
+    }
 
-        tasks_finished?(assignment, user) ->
-          finished_view(assignment, assigns)
+    cond do
+      not (tester? or status == :online) ->
+        nil
 
-        declined_consent?(assignment, user) ->
-          finished_view(assignment, assigns)
+      is_nil(action) ->
+        initial_view(assignment, assigns, context)
 
-        not consent_signed?(assignment, user, tester?) ->
-          consent_view(assignment, assigns, tester?)
-
-        not intro_visited?(assignment, user) ->
-          intro_view(assignment, assigns)
-
-        true ->
-          work_view(assignment, assigns, tester?)
-      end
-    else
-      # Assignment not online and user is not a tester - no view
-      nil
+      true ->
+        next_view(assignment, assigns, context)
     end
   end
 
-  # State checks
-  defp declined_consent?(assignment, user) do
-    Assignment.Private.declined_consent?(assignment, user.id)
+  defp next_view(assignment, assigns, %{action: action, tester?: tester?})
+       when not is_nil(action) do
+    case action do
+      :onboarding_continue ->
+        consent_or_work_view(assignment, assigns)
+
+      :accept ->
+        work_view(assignment, assigns)
+
+      :decline ->
+        finished_view(assignment, assigns)
+
+      :retry ->
+        consent_or_work_view(assignment, assigns, tester?)
+
+      :work_done ->
+        finished_view(assignment, assigns)
+    end
   end
 
-  defp tasks_finished?(assignment, user) do
+  defp initial_view(assignment, assigns, %{user_state: user_state, tester?: tester?}) do
+    %{current_user: user} = assigns
+
+    cond do
+      not intro_visited?(assignment, user) ->
+        intro_view(assignment, assigns)
+
+      not consent_signed?(assignment, user, tester?) ->
+        consent_view(assignment, assigns)
+
+      tasks_finished?(assignment, assigns) ->
+        finished_view(assignment, assigns)
+
+      not is_nil(user_state) ->
+        work_view(assignment, assigns)
+
+      true ->
+        nil
+    end
+  end
+
+  defp consent_or_work_view(assignment, assigns, tester? \\ false) do
+    %{current_user: user} = assigns
+
+    if consent_signed?(assignment, user, tester?) do
+      work_view(assignment, assigns)
+    else
+      consent_view(assignment, assigns)
+    end
+  end
+
+  defp tasks_finished?(assignment, %{current_user: user}) do
     work_items = work_items(assignment, %{current_user: user})
     work_items_finished?(work_items)
   end
@@ -96,186 +153,43 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp intro_visited?(%{id: assignment_id, page_refs: page_refs}, user) do
     intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
 
+    # Reload user to get fresh visited_pages from database
+    fresh_user = Account.Public.get!(user.id)
+
     is_nil(intro_page_ref) or
-      Account.Public.visited?(user, {:assignment_information, assignment_id})
+      Account.Public.visited?(fresh_user, {:assignment_information, assignment_id})
   end
 
-  defp intro_view(
-         %{page_refs: page_refs},
-         %{current_user: user, fabric: fabric}
-       ) do
-    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
-
-    Fabric.prepare_child(fabric, :current_view, Assignment.OnboardingView, %{
-      page_ref: intro_page_ref,
-      title: dgettext("eyra-assignment", "onboarding.intro.title"),
-      user: user
-    })
-  end
-
-  defp consent_view(
-         %{consent_agreement: consent_agreement},
-         %{current_user: user, fabric: fabric},
-         _tester?
-       ) do
-    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
-
-    Fabric.prepare_child(
-      fabric,
-      :current_view,
-      Assignment.OnboardingConsentView,
-      %{
-        revision: revision,
-        user: user
-      }
+  defp intro_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
+    LiveNest.Element.prepare_live_view(
+      "onboarding_view_#{assignment_id}",
+      Assignment.OnboardingView,
+      live_context: context
     )
   end
 
-  defp work_view(
-         %{
-           privacy_doc: privacy_doc,
-           consent_agreement: consent_agreement,
-           page_refs: page_refs,
-           crew: crew
-         } = assignment,
-         %{
-           fabric: fabric,
-           current_user: user,
-           timezone: timezone,
-           session: session
-         } = assigns,
-         tester?
-       ) do
-    panel_info = Map.get(session, "panel_info")
-    work_items = work_items(assignment, assigns)
-    context_menu_items = context_menu_items(assignment, assigns)
-
-    intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
-    support_page_ref = Enum.find(page_refs, &(&1.key == :assignment_helpdesk))
-
-    Fabric.prepare_child(fabric, :current_view, Assignment.CrewWorkView, %{
-      work_items: work_items,
-      privacy_doc: privacy_doc,
-      consent_agreement: consent_agreement,
-      context_menu_items: context_menu_items,
-      intro_page_ref: intro_page_ref,
-      support_page_ref: support_page_ref,
-      crew: crew,
-      user: user,
-      timezone: timezone,
-      panel_info: panel_info,
-      tester?: tester?
-    })
+  defp consent_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
+    LiveNest.Element.prepare_live_view(
+      "onboarding_consent_view_#{assignment_id}",
+      Assignment.OnboardingConsentView,
+      live_context: context
+    )
   end
 
-  defp finished_view(
-         %{affiliate: affiliate} = assignment,
-         %{fabric: fabric, current_user: user}
-       ) do
-    declined? = Assignment.Private.declined_consent?(assignment, user.id)
-
-    redirect_url =
-      case Affiliate.Public.redirect_url(affiliate, user) do
-        {:ok, url} -> url
-        {:error, _} -> nil
-      end
-
-    title =
-      if declined? do
-        dgettext("eyra-assignment", "finished_view.title.declined")
-      else
-        dgettext("eyra-assignment", "finished_view.title")
-      end
-
-    body =
-      cond do
-        declined? and redirect_url ->
-          dgettext("eyra-assignment", "finished_view.body.declined.redirect")
-
-        declined? ->
-          dgettext("eyra-assignment", "finished_view.body.declined")
-
-        redirect_url ->
-          dgettext("eyra-assignment", "finished_view.body.redirect")
-
-        true ->
-          dgettext("eyra-assignment", "finished_view.body")
-      end
-
-    show_illustration = not declined? and is_nil(redirect_url)
-
-    retry_button = %{
-      action: %{type: :send, event: "retry"},
-      face: %{
-        type: :plain,
-        icon: :back,
-        icon_align: :left,
-        label: dgettext("eyra-assignment", "back.button")
-      }
-    }
-
-    redirect_button =
-      if redirect_url do
-        %{
-          action: %{type: :http_get, to: redirect_url},
-          face: %{
-            type: :primary,
-            label: dgettext("eyra-assignment", "redirect.button")
-          }
-        }
-      else
-        nil
-      end
-
-    Fabric.prepare_child(fabric, :current_view, Assignment.FinishedView, %{
-      title: title,
-      body: body,
-      show_illustration: show_illustration,
-      retry_button: retry_button,
-      redirect_button: redirect_button
-    })
+  defp work_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
+    LiveNest.Element.prepare_live_view(
+      "crew_work_view_#{assignment_id}",
+      Assignment.CrewWorkView,
+      live_context: context
+    )
   end
 
-  defp context_menu_items(assignment, _assigns) do
-    [:assignment_information, :privacy, :consent, :assignment_helpdesk]
-    |> Enum.map(&context_menu_item(&1, assignment))
-    |> Enum.filter(&(not is_nil(&1)))
-  end
-
-  defp context_menu_item(:privacy = key, %{privacy_doc: privacy_doc}) do
-    if privacy_doc do
-      %{
-        id: key,
-        label: dgettext("eyra-assignment", "context.menu.privacy.title"),
-        url: privacy_doc.ref
-      }
-    else
-      nil
-    end
-  end
-
-  defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do
-    if consent_agreement do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.consent.title")}
-    else
-      nil
-    end
-  end
-
-  defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
-    else
-      nil
-    end
-  end
-
-  defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == key)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
-    else
-      nil
-    end
+  defp finished_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
+    LiveNest.Element.prepare_live_view(
+      "finished_view_#{assignment_id}",
+      Assignment.FinishedView,
+      live_context: context
+    )
   end
 
   defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
@@ -319,12 +233,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  # Extract previous view module using pattern matching
-  defp extract_previous_view_module(%{
-         vm: %{view: %Fabric.LiveComponent.Model{ref: %{module: module}}}
-       }),
-       do: module
-
-  defp extract_previous_view_module(%{vm: %{view: %{module: module}}}), do: module
+  # Extract previous view module from vm.view (which becomes previous during round trip)
+  defp extract_previous_view_module(%{vm: %{view: %{implementation: module}}}), do: module
   defp extract_previous_view_module(_assigns), do: nil
 end

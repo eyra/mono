@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.CrewPageBuilderTest do
   use Core.DataCase
+  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
   alias Systems.Crew
@@ -17,12 +18,11 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assignment = Assignment.Factories.add_participant(assignment, user)
       mark_intro_visited(assignment, user)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
-      assert view.ref.module == Assignment.CrewWorkView
+      assert view.implementation == Assignment.CrewWorkView
     end
 
     test "shows intro view when not visited", %{assignment: assignment, user: user} do
@@ -40,24 +40,22 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
 
       assignment = Repo.preload(assignment, [:page_refs], force: true)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
-      assert view.ref.module == Assignment.OnboardingView
+      assert view.implementation == Assignment.OnboardingView
     end
 
     test "shows consent view when consent not signed", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
-      assert view.ref.module == Assignment.OnboardingConsentView
+      assert view.implementation == Assignment.OnboardingConsentView
     end
 
     test "shows finished view when tasks finished", %{assignment: assignment, user: user} do
@@ -67,27 +65,28 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       # Create and finish all tasks
       finish_all_tasks(assignment, user)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
-      assert view.ref.module == Assignment.FinishedView
+      assert view.implementation == Assignment.FinishedView
     end
 
     test "shows finished view when consent declined", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      # Decline consent
+      # First render - show consent view
+      assigns = build_assigns(user)
+      %{view: consent_view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+      assert consent_view.implementation == Assignment.OnboardingConsentView
+
+      # User declines - simulate round trip with action and vm.view from previous render
       Assignment.Public.decline_member(assignment, user)
+      assigns_with_action = build_assigns(user, %{view: consent_view, action: :decline})
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns_with_action)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
-
-      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
-
-      assert view.ref.module == Assignment.FinishedView
+      assert view.implementation == Assignment.FinishedView
     end
 
     test "shows consent view when returning from finished with declined consent", %{user: user} do
@@ -97,17 +96,14 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       # Decline consent
       Assignment.Public.decline_member(assignment, user)
 
-      fabric = build_fabric()
-
       # Simulate retry from finished view by including previous view in assigns
-      previous_view = %{module: Assignment.FinishedView}
-      vm_with_finished = %{view: previous_view}
-      assigns = build_assigns(user, fabric, vm_with_finished)
+      previous_view = %{implementation: Assignment.FinishedView}
+      assigns = build_assigns(user, %{view: previous_view})
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
       # Should show consent view again to allow retry
-      assert view.ref.module == Assignment.OnboardingConsentView
+      assert view.implementation == Assignment.OnboardingConsentView
     end
 
     test "shows nil view when assignment offline and user not tester", %{
@@ -120,8 +116,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
         |> Ecto.Changeset.change(status: :offline)
         |> Repo.update!()
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
@@ -135,10 +130,9 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      fabric = build_fabric()
-      assigns = build_assigns(user, fabric)
+      assigns = build_assigns(user)
 
-      %{user: user, assignment: assignment, fabric: fabric, assigns: assigns}
+      %{user: user, assignment: assignment, assigns: assigns}
     end
 
     test "builds correct data for completed assignment without redirect", %{
@@ -151,25 +145,38 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
-      assert view.ref.module == Assignment.FinishedView
-      assert view.params.show_illustration == true
-      assert view.params.retry_button != nil
-      assert view.params.retry_button.face.label == "back.button"
-      assert view.params.redirect_button == nil
+      assert view.implementation == Assignment.FinishedView
+      assert view.options[:live_context].data[:assignment_id] == assignment.id
+
+      # Test FinishedViewBuilder separately
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+      assert vm.illustration == "/images/illustrations/finished.svg"
+      assert vm.back_button.face.label == dgettext("eyra-assignment", "back.button")
+      assert vm.continue_button == nil
     end
 
-    test "builds correct data for declined consent", %{user: user, fabric: fabric} do
+    test "builds correct data for declined consent", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
+
+      # First render - show consent view
+      assigns = build_assigns(user)
+      %{view: consent_view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      # User declines - simulate round trip with action and vm.view from previous render
       Assignment.Public.decline_member(assignment, user)
+      assigns_with_action = build_assigns(user, %{view: consent_view, action: :decline})
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns_with_action)
 
-      assigns = build_assigns(user, fabric)
-      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+      # After declining, finished view is shown
+      assert view.implementation == Assignment.FinishedView
+      assert view.options[:live_context].data[:assignment_id] == assignment.id
 
-      assert view.ref.module == Assignment.FinishedView
-      assert view.params.show_illustration == false
-      assert view.params.retry_button != nil
-      assert view.params.redirect_button == nil
+      # Test FinishedViewBuilder separately
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns_with_action)
+      assert vm.illustration == nil
+      assert vm.back_button.face.label == dgettext("eyra-assignment", "back.button")
+      assert vm.continue_button == nil
     end
   end
 
@@ -186,23 +193,22 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     Crew.Public.complete_task!(task)
   end
 
-  defp build_fabric do
-    # Create a minimal Fabric.Model structure
-    %Fabric.Model{parent: nil, self: nil, children: []}
-  end
-
-  defp build_assigns(user, fabric, vm \\ nil) do
+  defp build_assigns(user, opts \\ %{}) do
     base = %{
       current_user: user,
-      fabric: fabric,
-      timezone: "UTC",
-      session: %{}
+      user_state: %{},
+      live_context: nil,
+      panel_info: nil
     }
 
-    if vm do
-      Map.put(base, :vm, vm)
-    else
-      base
-    end
+    base
+    |> maybe_add_vm(opts)
+    |> maybe_add_action(opts)
   end
+
+  defp maybe_add_vm(assigns, %{view: view}), do: Map.put(assigns, :vm, %{view: view})
+  defp maybe_add_vm(assigns, _opts), do: assigns
+
+  defp maybe_add_action(assigns, %{action: action}), do: Map.put(assigns, :action, action)
+  defp maybe_add_action(assigns, _opts), do: assigns
 end

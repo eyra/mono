@@ -6,11 +6,15 @@ defmodule Systems.Manual.ChapterListView do
   alias Systems.Manual
 
   @impl true
-  def update(%{manual: manual, title: title, selected_chapter_id: selected_chapter_id}, socket) do
+  def update(
+        %{id: id, manual: manual, title: title, selected_chapter_id: selected_chapter_id},
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
+        id: id,
         manual: manual,
         title: title,
         selected_chapter_id: selected_chapter_id
@@ -48,16 +52,18 @@ defmodule Systems.Manual.ChapterListView do
     }
   end
 
-  def handle_event("select_chapter", %{"item" => chapter_id}, socket) do
+  def handle_event("select_chapter", %{"item" => chapter_id}, %{assigns: %{id: id}} = socket) do
+    chapter_id_int = String.to_integer(chapter_id)
+    source = %{id: id, module: __MODULE__}
+
     {:noreply,
-     socket
-     |> send_event(:parent, "select_chapter", %{chapter_id: chapter_id |> String.to_integer()})}
+     publish_event(socket, {:select_chapter, %{chapter_id: chapter_id_int, source: source}})}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4" data-testid="chapter-list-view">
       <div class="font-title7 text-title7 text-grey2">
           <%= dgettext("eyra-manual", "chapter.overview") %>
       </div>

@@ -1,56 +1,48 @@
 defmodule Systems.Assignment.FinishedView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
+  use CoreWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
-  @impl true
-  def update(
-        %{
-          title: title,
-          body: body,
-          show_illustration: show_illustration,
-          retry_button: retry_button,
-          redirect_button: redirect_button
-        },
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(
-        title: title,
-        body: body,
-        show_illustration: show_illustration,
-        retry_button: retry_button,
-        redirect_button: redirect_button
-      )
-    }
+  alias Systems.Assignment
+
+  def dependencies(), do: [:assignment_id, :current_user]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
+    Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
   end
 
+  @impl true
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
+  end
+
+  @impl true
   def handle_event("retry", _, socket) do
-    {:noreply, socket |> send_event(:parent, "retry")}
+    {:noreply, socket |> publish_event(:retry)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="flex flex-row w-full h-full">
+      <div class="flex flex-row w-full h-full" data-testid="finished-view">
         <div class="flex-grow" />
         <div class="flex flex-col gap-4 sm:gap-8 items-center w-full h-full px-6">
           <div class="flex-grow" />
-          <Text.title1 margin=""><%= @title %></Text.title1>
+          <Text.title1 margin="" data-testid="finished-title"><%= @vm.title %></Text.title1>
           <div>
-            <Text.body_large align="text-center">
-              <%= @body %>
+            <Text.body_large align="text-center" data-testid="finished-body">
+              <%= @vm.body %>
             </Text.body_large>
-            <div :if={@show_illustration} class="flex flex-col items-center w-full pt-4">
-              <img class="block w-[220px] h-[220px] object-cover" src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
+            <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
+              <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
             </div>
           </div>
 
-          <div class="flex flex-row items-center gap-6">
-            <Button.dynamic :if={@retry_button} {@retry_button} />
-            <Button.dynamic :if={@redirect_button} {@redirect_button} />
+          <div class="flex flex-row items-center gap-6" data-testid="finished-buttons">
+            <Button.dynamic :if={@vm.back_button} {@vm.back_button} data-testid="back-button" />
+            <Button.dynamic :if={@vm.continue_button} {@vm.continue_button} data-testid="continue-button" />
           </div>
           <div class="flex-grow" />
         </div>

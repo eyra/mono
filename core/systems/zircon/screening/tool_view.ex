@@ -1,77 +1,70 @@
 defmodule Systems.Zircon.Screening.ToolView do
-  use CoreWeb, :live_component
-  use Gettext, backend: CoreWeb.Gettext
+  use CoreWeb, :modal_live_view
+  use Frameworks.Pixel
 
   alias Systems.Paper
+  alias Systems.Workflow
   alias Systems.Zircon
 
-  def update(%{tool: tool, user: user}, socket) do
-    session = Zircon.Public.obtain_screening_session!(tool, user)
+  def dependencies(), do: [:tool_ref]
 
-    {
-      :ok,
-      socket
-      |> assign(tool: tool, user: user, session: session)
-      |> assign_next_paper_id()
-      |> assign_next_paper()
-      |> assign_next_button()
-    }
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
+    Workflow.ToolRefModel.tool(tool_ref)
   end
 
-  defp assign_next_button(socket) do
-    next_button = %{
-      action: %{type: :send, event: "next"},
-      face: %{type: :primary, label: dgettext("eyra-zircon", "tool_view.button.next")}
-    }
-
-    socket |> assign(next_button: next_button)
+  @impl true
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
   end
 
-  defp assign_next_paper_id(
-         %{assigns: %{session: %{agent_state: agent_state} = session}} = socket
+  @impl true
+  def handle_event("next", _params, %{assigns: %{vm: vm}} = socket) do
+    socket = mark_current_paper_as_screened_and_advance(socket, vm)
+    {:noreply, socket}
+  end
+
+  defp mark_current_paper_as_screened_and_advance(
+         socket,
+         %{session: session, agent_state: agent_state, paper_id: paper_id}
        ) do
-    {:ok, {agent_state, paper_id}} =
-      Zircon.Config.screening_agent_module().next_paper(agent_state)
-
-    {:ok, session} = Zircon.Public.update_screening_session(session, agent_state)
-    socket |> assign(session: session, paper_id: paper_id)
-  end
-
-  defp assign_next_paper(%{assigns: %{paper_id: paper_id}} = socket) do
-    paper = Paper.Public.get!(paper_id)
-    socket |> assign(paper: paper)
-  end
-
-  defp mark_current_paper_as_screened(
-         %{assigns: %{session: %{agent_state: agent_state} = session, paper_id: paper_id}} =
-           socket
-       ) do
-    {:ok, agent_state} =
+    # Mark current paper as screened
+    {:ok, updated_agent_state} =
       Zircon.Config.screening_agent_module().update_paper(agent_state, paper_id, nil, nil)
 
-    {:ok, session} = Zircon.Public.update_screening_session(session, agent_state)
-    socket |> assign(session: session)
+    {:ok, updated_session} = Zircon.Public.update_screening_session(session, updated_agent_state)
+
+    # Get next paper
+    {:ok, {new_agent_state, new_paper_id}} =
+      Zircon.Config.screening_agent_module().next_paper(updated_agent_state)
+
+    {:ok, final_session} =
+      Zircon.Public.update_screening_session(updated_session, new_agent_state)
+
+    new_paper = Paper.Public.get!(new_paper_id)
+
+    # Update view model with new state
+    socket
+    |> assign(
+      vm: %{
+        socket.assigns.vm
+        | session: final_session,
+          agent_state: new_agent_state,
+          paper_id: new_paper_id,
+          paper: new_paper
+      }
+    )
   end
 
-  def handle_event("next", _params, socket) do
-    {
-      :noreply,
-      socket
-      |> mark_current_paper_as_screened()
-      |> assign_next_paper_id()
-      |> assign_next_paper()
-    }
-  end
-
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
-      <div>Paper Screening {inspect(@session.identifier)}</div>
-      <div :if={@session.invalidated_at}>Session is invalidated</div>
-      <div>{@paper.title}</div>
-      <div>{@paper.abstract}</div>
+      <div>Paper Screening {inspect(@vm.session.identifier)}</div>
+      <div :if={@vm.session.invalidated_at}>Session is invalidated</div>
+      <div>{@vm.paper.title}</div>
+      <div>{@vm.paper.abstract}</div>
       <div class="flex flex-row">
-        <Button.dynamic {@next_button} />
+        <Button.dynamic {@vm.next_button} />
       </div>
     </div>
     """

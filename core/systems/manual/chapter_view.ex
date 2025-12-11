@@ -4,33 +4,30 @@ defmodule Systems.Manual.ChapterView do
   """
 
   use CoreWeb, :live_component
+  use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
   import Core.ImageHelpers, only: [decode_image_info: 1]
 
-  alias Frameworks.Utility.UserState
   alias Systems.Userflow
 
   @impl true
   def update(
-        %{manual_id: manual_id, chapter: chapter, user: user, user_state_data: user_state_data},
+        %{id: id, manual_id: manual_id, chapter: chapter, user: user, page_id: page_id},
         socket
       ) do
-    user_state_key =
-      UserState.key(user, %{manual: manual_id, chapter: chapter.id}, "selected-page")
-
-    user_state_value = UserState.integer_value(user_state_data, user_state_key)
-    selected_page_id = Map.get(socket.assigns, :selected_page_id, user_state_value)
+    # Use page_id from params, fallback to current assign
+    page_id = page_id || Map.get(socket.assigns, :page_id)
 
     {
       :ok,
       socket
       |> assign(
+        id: id,
         manual_id: manual_id,
         chapter: chapter,
         user: user,
-        selected_page_id: selected_page_id,
-        user_state_key: user_state_key
+        page_id: page_id
       )
       |> mark_chapter_visited()
       |> update_ui()
@@ -45,10 +42,6 @@ defmodule Systems.Manual.ChapterView do
     |> update_selected_page()
     |> mark_selected_page_visited()
     |> update_indicator()
-    |> update_mobile_close_button()
-    |> update_desktop_close_button()
-    |> update_left_button()
-    |> update_right_button()
     |> update_fullscreen_button()
   end
 
@@ -97,11 +90,9 @@ defmodule Systems.Manual.ChapterView do
     socket
   end
 
-  def update_selected_page(
-        %{assigns: %{selected_page_id: selected_page_id, pages: pages}} = socket
-      ) do
+  def update_selected_page(%{assigns: %{page_id: page_id, pages: pages}} = socket) do
     selected_page =
-      case Enum.find(pages, fn page -> page.id == selected_page_id end) do
+      case Enum.find(pages, fn page -> page.id == page_id end) do
         nil ->
           pages |> List.first()
 
@@ -109,72 +100,7 @@ defmodule Systems.Manual.ChapterView do
           page
       end
 
-    socket |> assign(selected_page: selected_page, selected_page_id: selected_page.id)
-  end
-
-  defp update_mobile_close_button(socket) do
-    mobile_close_button = %{
-      action: %{type: :send, event: "close"},
-      face: %{type: :icon, icon: :close}
-    }
-
-    socket
-    |> assign(mobile_close_button: mobile_close_button)
-  end
-
-  defp update_desktop_close_button(socket) do
-    desktop_close_button = %{
-      action: %{type: :send, event: "close"},
-      face: %{
-        type: :plain,
-        icon: :close,
-        label: dgettext("eyra-pixel", "modal.back.button"),
-        icon_align: :left
-      }
-    }
-
-    socket
-    |> assign(desktop_close_button: desktop_close_button)
-  end
-
-  defp update_right_button(%{assigns: %{pages: pages, selected_page: selected_page}} = socket) do
-    right_button =
-      if last_page?(selected_page, pages) do
-        %{
-          action: %{type: :send, event: "done"},
-          face: %{
-            type: :plain,
-            label: dgettext("eyra-manual", "chapter.done.button"),
-            icon: :done
-          }
-        }
-      else
-        %{
-          action: %{type: :send, event: "next_page"},
-          face: %{
-            type: :plain,
-            label: dgettext("eyra-manual", "chapter.next.button"),
-            icon: :forward
-          }
-        }
-      end
-
-    socket
-    |> assign(right_button: right_button)
-  end
-
-  defp update_left_button(socket) do
-    left_button = %{
-      action: %{type: :send, event: "previous_page"},
-      face: %{
-        type: :plain,
-        label: dgettext("eyra-manual", "chapter.previous.button"),
-        icon: :back,
-        icon_align: :left
-      }
-    }
-
-    socket |> assign(left_button: left_button)
+    socket |> assign(selected_page: selected_page, page_id: selected_page.id)
   end
 
   defp update_fullscreen_button(socket) do
@@ -192,57 +118,9 @@ defmodule Systems.Manual.ChapterView do
     socket |> assign(fullscreen_button: fullscreen_button)
   end
 
-  def handle_event("close", _, socket) do
-    {
-      :noreply,
-      socket |> send_event(:parent, "close")
-    }
-  end
-
-  def handle_event("next_page", _, socket) do
-    {
-      :noreply,
-      socket |> go_to_next_page()
-    }
-  end
-
-  def handle_event(
-        "previous_page",
-        _,
-        %{assigns: %{selected_page: selected_page, pages: pages}} = socket
-      ) do
-    socket =
-      if first_page?(selected_page, pages) do
-        socket |> send_event(:parent, "back")
-      else
-        socket |> go_to_previous_page()
-      end
-
-    {
-      :noreply,
-      socket
-    }
-  end
-
   def handle_event("select_page", %{"item" => item_id}, socket) do
     page_id = String.to_integer(item_id)
-
-    {
-      :noreply,
-      socket
-      |> assign(selected_page_id: page_id)
-      |> update_selected_page()
-      |> update_ui()
-    }
-  end
-
-  def handle_event("done", _, socket) do
-    {
-      :noreply,
-      socket
-      |> send_event(:parent, "done")
-      |> send_event(:parent, "back")
-    }
+    {:noreply, publish_event(socket, {:page_changed, %{page_id: page_id}})}
   end
 
   def handle_event("fullscreen", _, socket) do
@@ -258,73 +136,22 @@ defmodule Systems.Manual.ChapterView do
   end
 
   defp mark_selected_page_visited(
-         %{assigns: %{chapter: %{pages: pages}, selected_page_id: selected_page_id, user: user}} =
+         %{assigns: %{chapter: %{pages: pages}, page_id: page_id, user: user}} =
            socket
        ) do
-    %{userflow_step: userflow_step} = current_page(pages, selected_page_id)
+    %{userflow_step: userflow_step} = current_page(pages, page_id)
     Userflow.Public.mark_visited(userflow_step, user)
     socket
   end
 
-  defp first_page?(%{number: number}, _pages) do
-    number == 1
-  end
-
-  defp last_page?(%{number: number}, pages) do
-    number == Enum.count(pages)
-  end
-
-  defp current_page(pages, selected_page_id) do
-    Enum.find(pages, &(&1.id == selected_page_id))
-  end
-
-  defp next_page(pages, selected_page_id) do
-    selected_page_index = Enum.find_index(pages, &(&1.id == selected_page_id))
-    next_page_index = selected_page_index + 1
-
-    if Enum.count(pages) > next_page_index do
-      pages |> Enum.at(next_page_index)
-    else
-      pages |> List.first()
-    end
-  end
-
-  defp previous_page(pages, selected_page_id) do
-    selected_page_index = Enum.find_index(pages, &(&1.id == selected_page_id))
-    previous_page_index = selected_page_index - 1
-
-    if previous_page_index >= 0 do
-      pages |> Enum.at(previous_page_index)
-    else
-      pages |> List.last()
-    end
-  end
-
-  defp go_to_next_page(%{assigns: %{pages: pages, selected_page_id: selected_page_id}} = socket) do
-    next_page = next_page(pages, selected_page_id)
-
-    socket
-    |> assign(selected_page_id: next_page.id)
-    |> update_selected_page()
-    |> mark_selected_page_visited()
-    |> update_ui()
-  end
-
-  defp go_to_previous_page(
-         %{assigns: %{pages: pages, selected_page_id: selected_page_id}} = socket
-       ) do
-    previous_page = previous_page(pages, selected_page_id)
-
-    socket
-    |> assign(selected_page_id: previous_page.id)
-    |> update_selected_page()
-    |> update_ui()
+  defp current_page(pages, page_id) do
+    Enum.find(pages, &(&1.id == page_id))
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div id="manual_chapter_view" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_page_id} >
+    <div id="manual_chapter_view" data-testid="chapter-view">
       <div class="hidden lg:block">
         <.chapter_desktop
           id={@chapter.id}
@@ -332,9 +159,6 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           pages={@pages}
           selected_page={@selected_page}
-          close_button={@desktop_close_button}
-          left_button={@left_button}
-          right_button={@right_button}
           fullscreen_button={@fullscreen_button}
           select_page_event="select_page"
           select_page_target={@myself}
@@ -347,9 +171,6 @@ defmodule Systems.Manual.ChapterView do
           label={@label}
           indicator={@indicator}
           selected_page={@selected_page}
-          close_button={@mobile_close_button}
-          left_button={@left_button}
-          right_button={@right_button}
           fullscreen_button={@fullscreen_button}
         />
       </div>

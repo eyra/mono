@@ -385,10 +385,6 @@ msgid "progress.yes"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "retry.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -470,4 +466,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "landing.description.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
 msgstr ""

@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.Presenter do
-  @behaviour Frameworks.Concept.Presenter
+  use Frameworks.Concept.Presenter
 
   alias Systems.{
     Assignment,
@@ -12,11 +12,17 @@ defmodule Systems.Assignment.Presenter do
   end
 
   @impl true
+  def view_model(Assignment.CrewTaskSingleView, %Systems.Crew.Model{} = crew, assigns) do
+    Assignment.CrewTaskSingleViewBuilder.view_model(crew, assigns)
+  end
+
+  @impl true
+  def view_model(Assignment.CrewTaskListView, %Systems.Crew.Model{} = crew, assigns) do
+    Assignment.CrewTaskListViewBuilder.view_model(crew, assigns)
+  end
+
+  @impl true
   def view_model(page, %Assignment.Model{} = assignment, assigns) do
     builder(page).view_model(assignment, assigns)
   end
-
-  def builder(Assignment.CrewPage), do: Assignment.CrewPageBuilder
-  def builder(Assignment.ContentPage), do: Assignment.ContentPageBuilder
-  def builder(Assignment.LandingPage), do: Assignment.LandingPageBuilder
 end

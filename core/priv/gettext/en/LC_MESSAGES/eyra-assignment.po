@@ -385,10 +385,6 @@ msgid "progress.yes"
 msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "retry.button"
-msgstr "Back"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
 msgstr "Screening based on title and abstract"
 
@@ -471,3 +467,7 @@ msgstr "Continue"
 #, elixir-autogen, elixir-format
 msgid "landing.description.default"
 msgstr "Welcome! Click continue to start participating in this assignment."
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr "Back"
