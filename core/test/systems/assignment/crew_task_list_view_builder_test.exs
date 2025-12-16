@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.CrewTaskListViewBuilderTest do
   use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
   alias Systems.Assignment
@@ -19,9 +18,6 @@ defmodule Systems.Assignment.CrewTaskListViewBuilderTest do
       assigns = build_assigns(user, %{task: nil})
 
       vm = Assignment.CrewTaskListViewBuilder.view_model(assignment, assigns)
-
-      # Should have title
-      assert vm.title == dgettext("eyra-assignment", "work.list.title")
 
       # Should have work_items
       assert length(vm.work_items) == 2

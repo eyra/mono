@@ -17,7 +17,6 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
     tool_modal = build_tool_modal(work_item, context)
 
     %{
-      title: dgettext("eyra-assignment", "work.list.title"),
       work_list: %{
         items: Enum.map(work_items, &map_item/1),
         selected_item_id: nil

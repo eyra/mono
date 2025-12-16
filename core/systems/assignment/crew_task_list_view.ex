@@ -179,7 +179,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   def render(assigns) do
     ~H"""
       <div data-testid="crew-task-list-view" class="w-full h-full overflow-y-auto">
-        <.task_list title={@vm.title}>
+        <.task_list>
           <.live_component module={Workflow.WorkListView} id="work_list" work_list={@vm.work_list} />
         </.task_list>
       </div>

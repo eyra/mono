@@ -45,4 +45,4 @@ msgstr "Task title"
 
 #, elixir-autogen, elixir-format
 msgid "work_list.done.button"
-msgstr "Done"
+msgstr "Continue, I'm done"

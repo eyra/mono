@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.CrewTaskListViewTest do
   use CoreWeb.ConnCase, async: false
-  use Gettext, backend: CoreWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
@@ -16,7 +15,7 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
   end
 
   describe "basic rendering" do
-    test "renders task list view with title", %{conn: conn, user: user} do
+    test "renders task list view", %{conn: conn, user: user} do
       assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
@@ -38,9 +37,6 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
 
       # Should render task list view
       assert html =~ "data-testid=\"crew-task-list-view\""
-
-      # Should render title
-      assert html =~ dgettext("eyra-assignment", "work.list.title")
     end
   end
 

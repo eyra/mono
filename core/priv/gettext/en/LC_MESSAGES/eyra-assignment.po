@@ -450,11 +450,11 @@ msgstr "The default language for Panl studies is dutch"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.declined"
-msgstr "You declined to participate. Thank you for your time. You can now close this window."
+msgstr "You chose not to participate. Your choice has been recorded. You can now close this window."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.declined.redirect"
-msgstr "You declined to participate. Thank you for your time. Click Continue to return."
+msgstr "You chose not to participate. Your choice has been recorded. Click Continue to proceed."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title.declined"
@@ -474,8 +474,8 @@ msgstr "Back"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.declined.redirect.platform"
-msgstr "You declined to participate. Thank you for your time. Click Continue to return to %{platform}."
+msgstr "You chose not to participate. Your choice has been recorded. Click Continue to proceed to %{platform}."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect.platform"
-msgstr "Thank you. You have completed this part. Click Continue to return to %{platform}."
+msgstr "Thank you. You have completed this part. Click Continue to proceed to %{platform}."

@@ -18,9 +18,7 @@ defmodule Systems.Workflow.WorkListView do
         done_button: %{
           action: %{type: :send, event: "done"},
           face: %{
-            type: :plain,
-            icon: :forward,
-            icon_align: :right,
+            type: :secondary,
             label: dgettext("eyra-workflow", "work_list.done.button")
           }
         }
@@ -55,11 +53,9 @@ defmodule Systems.Workflow.WorkListView do
           <.work_list_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
       </div>
-      <.spacing value="M" />
-      <div class="flex flex-row">
-        <div class="flex-grow" />
+      <.spacing value="XS" />
+      <div class="w-full px-4">
         <Button.dynamic {@done_button} />
-        <div class="flex-grow" />
       </div>
     </div>
     """
