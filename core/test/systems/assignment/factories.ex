@@ -126,8 +126,9 @@ defmodule Systems.Assignment.Factories do
     assignment |> Core.Repo.preload([:crew], force: true)
   end
 
-  def create_assignment_with_affiliate(redirect_url \\ nil) do
-    affiliate = Factories.insert!(:affiliate, %{redirect_url: redirect_url})
+  def create_assignment_with_affiliate(redirect_url \\ nil, platform_name \\ nil) do
+    affiliate =
+      Factories.insert!(:affiliate, %{redirect_url: redirect_url, platform_name: platform_name})
 
     auth_node = Factories.insert!(:auth_node)
     tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
@@ -153,8 +154,10 @@ defmodule Systems.Assignment.Factories do
     assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
 
-  def create_assignment_with_consent_and_affiliate(redirect_url \\ nil) do
-    affiliate = Factories.insert!(:affiliate, %{redirect_url: redirect_url})
+  def create_assignment_with_consent_and_affiliate(redirect_url \\ nil, platform_name \\ nil) do
+    affiliate =
+      Factories.insert!(:affiliate, %{redirect_url: redirect_url, platform_name: platform_name})
+
     consent_agreement = Factories.insert!(:consent_agreement)
     _revision = Factories.insert!(:consent_revision, %{agreement: consent_agreement})
 

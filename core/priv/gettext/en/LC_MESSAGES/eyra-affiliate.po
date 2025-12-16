@@ -58,3 +58,15 @@ msgstr "The URL looks good and is reachable"
 #, elixir-autogen, elixir-format
 msgid "invalid_url.unreachable"
 msgstr "Please check the URL - it is not reachable"
+
+#, elixir-autogen, elixir-format
+msgid "platform_name.label"
+msgstr "Destination"
+
+#, elixir-autogen, elixir-format
+msgid "platform_name.placeholder"
+msgstr "Your company or platform"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "platform_name.body"
+msgstr "Enter the name of your company or platform as participant destination. This name will be used at the end of the workflow just before redirecting the participant."

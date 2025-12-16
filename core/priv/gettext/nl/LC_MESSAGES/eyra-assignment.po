@@ -471,3 +471,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "back.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect.platform"
+msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."

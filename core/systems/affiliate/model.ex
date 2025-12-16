@@ -8,11 +8,12 @@ defmodule Systems.Affiliate.Model do
   schema "affiliate" do
     field(:callback_url, :string)
     field(:redirect_url, :string)
+    field(:platform_name, :string)
 
     timestamps()
   end
 
-  @fields ~w(callback_url redirect_url)a
+  @fields ~w(callback_url redirect_url platform_name)a
 
   def changeset(affiliate, attrs) do
     cast(affiliate, attrs, @fields)

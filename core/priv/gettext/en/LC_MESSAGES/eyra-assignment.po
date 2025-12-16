@@ -471,3 +471,11 @@ msgstr "Welcome! Click continue to start participating in this assignment."
 #, elixir-autogen, elixir-format
 msgid "back.button"
 msgstr "Back"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "You declined to participate. Thank you for your time. Click Continue to return to %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.redirect.platform"
+msgstr "Thank you. You have completed this part. Click Continue to return to %{platform}."
