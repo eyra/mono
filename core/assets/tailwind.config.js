@@ -175,27 +175,32 @@ module.exports = {
         "1px": "px",
       },
       fontFamily: {
-        title0: ["Finador-Black", "sans-serif"],
-        title1: ["Finador-Black", "sans-serif"],
-        title2: ["Finador-Black", "sans-serif"],
-        title3: ["Finador-Black", "sans-serif"],
-        title4: ["Finador-Black", "sans-serif"],
-        title5: ["Finador-Bold", "sans-serif"],
-        title6: ["Finador-Bold", "sans-serif"],
-        title7: ["Finador-Bold", "sans-serif"],
-        caption: ["Finador-Medium", "sans-serif"],
-        link: ["Finador-Medium", "sans-serif"],
-        subhead: ["Finador-Medium", "sans-serif"],
-        button: ["Finador-Bold", "sans-serif"],
-        footnote: ["Finador-Medium", "sans-serif"],
-        intro: ["Finador-Medium", "sans-serif"],
-        label: ["Finador-Bold", "sans-serif"],
-        body: ["Finador-Light", "sans-serif"],
-        hint: ["Finador-LightOblique", "sans-serif"],
-        tablehead: ["Finador-Bold", "sans-serif"],
-        tablerow: ["Finador-Regular", "sans-serif"],
-        bold: ["Finador-Bold", "sans-serif"],
-        quote: ["Finador-Bold", "sans-serif"],
+        // Nunito (> 20px sizes)
+        title0: ["Nunito", "sans-serif"],
+        title1: ["Nunito", "sans-serif"],
+        title2: ["Nunito", "sans-serif"],
+        title3: ["Nunito", "sans-serif"],
+        title4: ["Nunito", "sans-serif"],
+        title5: ["Nunito", "sans-serif"],
+        bodylarge: ["Nunito", "sans-serif"],
+        introdesktop: ["Nunito", "sans-serif"],
+        quote: ["Nunito", "sans-serif"],
+        // Nunito Sans (≤ 20px sizes)
+        title6: ["Nunito Sans", "sans-serif"],
+        title7: ["Nunito Sans", "sans-serif"],
+        caption: ["Nunito Sans", "sans-serif"],
+        link: ["Nunito Sans", "sans-serif"],
+        subhead: ["Nunito Sans", "sans-serif"],
+        button: ["Nunito Sans", "sans-serif"],
+        footnote: ["Nunito Sans", "sans-serif"],
+        intro: ["Nunito Sans", "sans-serif"],
+        label: ["Nunito Sans", "sans-serif"],
+        body: ["Nunito Sans", "sans-serif"],
+        hint: ["Nunito Sans", "sans-serif"],
+        tablehead: ["Nunito Sans", "sans-serif"],
+        tablerow: ["Nunito Sans", "sans-serif"],
+        bold: ["Nunito Sans", "sans-serif"],
+        mono: ["Nunito Sans", "sans-serif"],
       },
       fontSize: {
         title0: ["64px", "68px"],
@@ -256,8 +261,8 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(function ({ addUtilities }) {
-      const newUtilities = {
+    plugin(function ({ addUtilities, addComponents }) {
+      addUtilities({
         ".h-viewport": {
           height: "calc(var(--vh, 1vh) * 100)",
         },
@@ -284,8 +289,110 @@ module.exports = {
         ".scrollbar-hidden::-webkit-scrollbar": {
           display: "none" /* Chrome, Safari and Opera */,
         },
-      };
-      addUtilities(newUtilities);
+      });
+
+      /* Font weight overrides for Nunito/Nunito Sans variable fonts */
+      addComponents({
+        /* Nunito (> 20px sizes) */
+        ".font-title0": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "900",
+        },
+        ".font-title1": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "900",
+        },
+        ".font-title2": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "900",
+        },
+        ".font-title3": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "900",
+        },
+        ".font-title4": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "900",
+        },
+        ".font-title5": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-bodylarge": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "300",
+        },
+        ".font-introdesktop": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-quote": {
+          "font-family": "Nunito, sans-serif",
+          "font-weight": "700",
+        },
+        /* Nunito Sans (≤ 20px sizes) */
+        ".font-title6": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-title7": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-caption": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-link": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-subhead": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-button": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-footnote": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-intro": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "500",
+        },
+        ".font-label": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-body": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "300",
+        },
+        ".font-hint": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "300",
+          "font-style": "italic",
+        },
+        ".font-tablehead": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-tablerow": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "400",
+        },
+        ".font-bold": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "700",
+        },
+        ".font-mono": {
+          "font-family": "Nunito Sans, sans-serif",
+          "font-weight": "300",
+        },
+      });
     }),
   ],
 };
