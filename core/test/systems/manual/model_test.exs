@@ -58,8 +58,8 @@ defmodule Systems.Manual.ModelTest do
 
   describe "associations" do
     test "belongs to userflow" do
-      userflow = Userflow.Factory.insert(:userflow)
-      manual = Systems.Manual.Factory.insert(:manual, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      manual = Systems.Manual.Factories.insert(:manual, %{userflow: userflow})
 
       manual = Repo.preload(manual, :userflow)
       assert manual.userflow.id == userflow.id

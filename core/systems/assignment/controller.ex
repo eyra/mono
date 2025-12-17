@@ -6,7 +6,7 @@ defmodule Systems.Assignment.Controller do
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
-  import Systems.Assignment.Private, only: [task_identifier: 3, declined_consent?: 2]
+  import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
   alias Plug.Conn
   alias CoreWeb.UI.Timestamp
@@ -32,6 +32,9 @@ defmodule Systems.Assignment.Controller do
     |> then(&Crew.Public.get_task(crew, &1))
     |> Crew.Public.complete_task!()
 
+    # Small delay to allow modal to close before redirect completes
+    Process.sleep(100)
+
     conn
     |> redirect(to: ~p"/assignment/#{id}")
   end
@@ -49,6 +52,30 @@ defmodule Systems.Assignment.Controller do
   end
 
   def apply(conn, %{"id" => id}) do
+    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
+      if offline?(assignment) do
+        service_unavailable(conn)
+      else
+        start_participant(conn, assignment)
+      end
+    else
+      service_unavailable(conn)
+    end
+  end
+
+  def preview(%{assigns: %{current_user: user}} = conn, %{"id" => id}) do
+    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
+      if Assignment.Public.tester?(assignment, user) do
+        start_preview(conn, assignment)
+      else
+        forbidden(conn)
+      end
+    else
+      service_unavailable(conn)
+    end
+  end
+
+  def join(conn, %{"id" => id}) do
     if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
       if offline?(assignment) do
         service_unavailable(conn)
@@ -194,7 +221,7 @@ defmodule Systems.Assignment.Controller do
       signature? ->
         @progress_yes
 
-      declined_consent?(assignment, user_id) ->
+      no_consent?(assignment, user_id) ->
         @progress_no
 
       true ->
@@ -228,10 +255,24 @@ defmodule Systems.Assignment.Controller do
     |> render(:"503")
   end
 
+  defp forbidden(conn) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"403")
+  end
+
   defp start_participant(conn, %{id: id} = assignment) do
     conn
     |> authorize_user(assignment)
     |> add_panel_info(assignment)
+    |> redirect(to: ~p"/assignment/#{id}")
+  end
+
+  defp start_preview(conn, %{id: id} = assignment) do
+    conn
+    |> authorize_user(assignment)
+    |> add_preview_panel_info(assignment)
     |> redirect(to: ~p"/assignment/#{id}")
   end
 
@@ -242,6 +283,16 @@ defmodule Systems.Assignment.Controller do
       panel: :next,
       redirect?: false,
       participant: participant
+    }
+
+    conn |> put_session(:panel_info, panel_info)
+  end
+
+  defp add_preview_panel_info(%{assigns: %{current_user: user}} = conn, _assignment) do
+    panel_info = %{
+      panel: :preview,
+      redirect?: false,
+      participant: "preview_#{user.id}"
     }
 
     conn |> put_session(:panel_info, panel_info)

@@ -113,4 +113,4 @@ msgstr "Weiter"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tool.description"
-msgstr "Sie sind dabei, einen Fragebogen in einem neuen Tab zu starten. Wenn Sie fertig sind, kehren Sie automatisch auf diese Seite zurück."
+msgstr ""

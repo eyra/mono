@@ -58,3 +58,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "invalid_url.unreachable"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platform_name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platform_name.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platform_name.body"
+msgstr ""

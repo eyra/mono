@@ -152,7 +152,7 @@ defmodule Systems.Assignment.ControllerTest do
 
       assert [
                "Participant,Consent,Task 1,Task 2\r\n",
-               "777,n/a,rejected,started\r\n",
+               "777,no,rejected,started\r\n",
                "external_id,yes,accepted,finished\r\n",
                "779,no,n/a,n/a\r\n"
              ] = csv_data
@@ -260,7 +260,7 @@ defmodule Systems.Assignment.ControllerTest do
         |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
-      assert response.resp_body =~ "affiliate_id_1,n/a,rejected,started\r\n"
+      assert response.resp_body =~ "affiliate_id_1,no,rejected,started\r\n"
       assert response.resp_body =~ "affiliate_id_2,yes,accepted,finished\r\n"
       assert response.resp_body =~ "affiliate_id_3,no,n/a,n/a\r\n"
     end
@@ -361,7 +361,7 @@ defmodule Systems.Assignment.ControllerTest do
         |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
-      assert response.resp_body =~ "external_id_1,n/a,rejected,started\r\n"
+      assert response.resp_body =~ "external_id_1,no,rejected,started\r\n"
       assert response.resp_body =~ "external_id_2,yes,accepted,finished\r\n"
       assert response.resp_body =~ "external_id_3,no,n/a,n/a\r\n"
     end

@@ -31,10 +31,6 @@ msgid "genders.woman"
 msgstr "Woman"
 
 #, elixir-autogen, elixir-format
-msgid "genders.x"
-msgstr "Other"
-
-#, elixir-autogen, elixir-format
 msgid "genders.non_binary"
 msgstr "Non-binary"
 

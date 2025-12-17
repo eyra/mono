@@ -70,7 +70,7 @@ defmodule Frameworks.Pixel.SearchBar do
   end
 
   defp send_to_parent(socket, %{} = message) do
-    socket |> publish_event("search_query", message)
+    socket |> publish_event({:search_query, message})
   end
 
   @impl true

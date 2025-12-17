@@ -1,76 +1,46 @@
 defmodule Systems.Alliance.ToolView do
-  use CoreWeb, :live_component
+  use CoreWeb, :modal_live_view
+  use Frameworks.Pixel
 
-  alias Frameworks.Pixel.Align
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.Text
+  alias Systems.Workflow
 
-  alias Systems.Alliance
+  def dependencies(), do: [:title, :description, :url, :tool_ref]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
+    Workflow.ToolRefModel.tool(tool_ref)
+  end
 
   @impl true
-  def update(%{title: title, tool: tool, participant: participant}, socket) do
-    {
-      :ok,
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("start_tool", _params, %{assigns: %{vm: %{url: url}}} = socket) do
+    socket =
       socket
-      |> assign(
-        tool: tool,
-        title: title,
-        description: dgettext("eyra-alliance", "tool.description"),
-        participant: participant
-      )
-      |> update_participant_url()
-      |> update_button()
-    }
-  end
+      |> publish_event({:close_modal, %{modal_id: "tool_modal"}})
+      |> push_event("open_url", %{url: url})
 
-  defp update_participant_url(%{assigns: %{tool: tool, participant: participant}} = socket) do
-    participant_str = if is_binary(participant), do: participant, else: to_string(participant)
-
-    participant_url =
-      tool
-      |> Alliance.ToolModel.safe_uri()
-      |> URI.append_query(URI.encode_query(participant: participant_str))
-      |> URI.to_string()
-
-    assign(socket, participant_url: participant_url)
-  end
-
-  defp update_button(%{assigns: %{participant_url: participant_url, myself: myself}} = socket) do
-    button = %{
-      action: %{
-        type: :http_get,
-        to: participant_url,
-        target: "_blank",
-        phx_event: "tool_started",
-        phx_target: myself
-      },
-      face: %{type: :primary, label: dgettext("eyra-alliance", "tool.button")}
-    }
-
-    assign(socket, button: button)
-  end
-
-  def handle_event("tool_started", _params, socket) do
-    # Close the modal directly after the tool is started
-    {:noreply, socket |> send_event(:parent, "close")}
+    {:noreply, socket}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-        <div class="w-full h-full">
-        <Align.horizontal_center>
+    <div class="w-full h-full">
+      <Align.horizontal_center>
         <Area.sheet>
           <div class="flex flex-col gap-8 items-center px-8">
-            <Text.title2 align="text-center" margin=""><%= @title %></Text.title2>
-            <Text.body align="text-center"><%= @description %></Text.body>
+            <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
+            <Text.body align="text-center"><%= @vm.description %></Text.body>
             <.wrap>
-              <Button.dynamic {@button} />
+              <Button.dynamic {@vm.button} />
             </.wrap>
           </div>
         </Area.sheet>
-        </Align.horizontal_center>
-      </div>
+      </Align.horizontal_center>
+    </div>
     """
   end
 end

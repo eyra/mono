@@ -94,12 +94,12 @@ defmodule Systems.Onyx.BrowserView do
     {event, payload} =
       case Enum.find(history_cards, &(&1.id == item_id)) do
         %{model: {module, id}} ->
-          {"back_to_model", %{module: module, id: id}}
+          {:back_to_model, %{module: module, id: id}}
 
         _ ->
           case Enum.find(cards, &(&1.id == item_id)) do
             %{model: {module, id}} ->
-              {"show_model", %{module: module, id: id}}
+              {:show_model, %{module: module, id: id}}
 
             nil ->
               raise "Card not found: #{item_id}"
@@ -109,13 +109,13 @@ defmodule Systems.Onyx.BrowserView do
     {
       :noreply,
       socket
-      |> publish_event(event, payload)
+      |> publish_event({event, payload})
     }
   end
 
   @impl true
   def consume_event(
-        %{name: "search_query", payload: %{query: query, query_string: query_string}},
+        %{name: :search_query, payload: %{query: query, query_string: query_string}},
         socket
       ) do
     {

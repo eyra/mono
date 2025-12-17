@@ -25,6 +25,7 @@ defmodule Core.Factories do
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Lab
+  alias Systems.Manual
   alias Systems.Monitor
   alias Systems.Notification
   alias Systems.Ontology
@@ -162,6 +163,22 @@ defmodule Core.Factories do
 
   def build(:lab_tool) do
     build(:lab_tool, %{})
+  end
+
+  def build(:manual_tool) do
+    build(:manual_tool, %{})
+  end
+
+  def build(:manual) do
+    build(:manual, %{})
+  end
+
+  def build(:manual_chapter) do
+    build(:chapter, %{})
+  end
+
+  def build(:manual_page) do
+    build(:page, %{})
   end
 
   def build(:time_slot) do
@@ -330,6 +347,12 @@ defmodule Core.Factories do
       ref: "http://example.com/test_#{System.unique_integer([:positive])}.ris",
       name: "test_#{System.unique_integer([:positive])}.ris"
     }
+  end
+
+  def build(:content_page) do
+    build(:content_page, %{
+      body: "Test page content"
+    })
   end
 
   def build(:zircon_screening_tool) do
@@ -664,6 +687,17 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:assignment_page_ref, %{} = attributes) do
+    {assignment, attributes} = Map.pop(attributes, :assignment, build(:assignment))
+    {page, attributes} = Map.pop(attributes, :page, build(:content_page))
+
+    %Assignment.PageRefModel{
+      assignment: assignment,
+      page: page
+    }
+    |> struct!(attributes)
+  end
+
   def build(:workflow, %{} = attributes) do
     %Workflow.Model{}
     |> struct!(attributes)
@@ -844,6 +878,17 @@ defmodule Core.Factories do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
 
     %Lab.ToolModel{
+      auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:manual_tool, %{} = attributes) do
+    {manual, attributes} = Map.pop(attributes, :manual, build(:manual))
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Manual.ToolModel{
+      manual: manual,
       auth_node: auth_node
     }
     |> struct!(attributes)
@@ -1034,6 +1079,15 @@ defmodule Core.Factories do
 
   def build(:content_file, %{} = attributes) do
     %Content.FileModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:content_page, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
+
+    %Content.PageModel{
+      auth_node: auth_node
+    }
     |> struct!(attributes)
   end
 

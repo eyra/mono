@@ -5,112 +5,38 @@ defmodule Frameworks.Pixel.ModalView do
   require Logger
 
   import LiveNest.HTML
-  import Frameworks.Pixel.Toolbar
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Toolbar
 
   defmacro __using__(_) do
     quote do
       alias Frameworks.Pixel.ModalView
 
-      import Frameworks.Pixel.ModalView, only: [modal_id: 1]
+      import ModalView, only: [update_modal_buttons: 3]
 
-      @impl true
-      def handle_event("prepare_modal", modal, socket) do
-        Map.get(socket.assigns, :modals)
+      # Handle toolbar action events from the Toolbar LiveComponent
+      def consume_event(
+            %{name: :toolbar_action, payload: %{action: action}},
+            socket
+          ) do
+        # Forward to the source that published the buttons
+        source = Map.get(socket.assigns, :modal_button_source)
 
-        {
-          :noreply,
-          socket |> upsert_modal(modal |> Map.put(:prepared, true))
-        }
-      end
-
-      @impl true
-      def handle_event("show_modal", modal, socket) do
-        modals = Map.get(socket.assigns, :modals)
-
-        {
-          :noreply,
-          socket |> upsert_modal(modal |> Map.put(:prepared, false))
-        }
-      end
-
-      @impl true
-      def handle_event("hide_modal", modal, socket) do
-        {:noreply, socket |> delete_modal(modal)}
-      end
-
-      @impl true
-      def handle_event("hide_modals", _, socket) do
-        {
-          :noreply,
-          socket |> assign(modals: [])
-        }
-      end
-
-      @impl true
-      def handle_event("close_modal", %{"item" => modal_id}, socket) do
-        modal =
-          socket
-          |> modals()
-          |> Enum.find(&(modal_id(&1) == modal_id))
-          |> tap(
-            &if &1 == nil do
-              Logger.warning("Modal not found with ref: #{modal_id}")
-            end
-          )
-
-        {
-          :noreply,
-          socket |> close_modal(modal)
-        }
-      end
-
-      def close_modal(socket, %{live_component: %{ref: ref}} = modal) do
-        socket
-        |> delete_modal(modal)
-        |> Fabric.handle_modal_closed(ref)
-      end
-
-      def upsert_modal(socket, modal) do
-        if modal_exists?(socket, modal) do
-          update_modal(socket, modal)
-        else
-          insert_modal(socket, modal)
+        if source do
+          Frameworks.Pixel.ModalView.forward_toolbar_action(source, action)
         end
+
+        {:stop, socket}
       end
 
-      def show_modal(socket, modal) do
-        if modal_exists?(socket, modal) do
-          update_modal(socket, modal)
-        else
-          insert_modal(socket, modal)
-        end
+      def consume_event(
+            %{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}},
+            socket
+          ) do
+        {:stop, Frameworks.Pixel.ModalView.update_modal_buttons(socket, source, buttons)}
       end
-
-      def update_modal(socket, modal) do
-        socket
-        |> delete_modal(modal)
-        |> insert_modal(modal)
-      end
-
-      def insert_modal(%{assigns: %{modals: modals}} = socket, modal) do
-        socket |> assign(modals: modals ++ [modal])
-      end
-
-      def delete_modal(%{assigns: %{modals: modals}} = socket, modal) do
-        assign(socket, modals: Enum.reject(modals, &(modal_id(&1) == modal_id(modal))))
-      end
-
-      def modal_exists?(socket, modal) do
-        socket
-        |> modals()
-        |> Enum.find(&(modal_id(&1) == modal_id(modal))) != nil
-      end
-
-      def modals(%{assigns: %{modals: modals}} = socket), do: modals
-      def modals(_socket), do: []
     end
   end
 
@@ -119,11 +45,16 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
+
+  def dynamic(%{modal: nil} = assigns) do
+    ~H""
+  end
 
   def dynamic(assigns) do
     ~H"""
       <.background visible={@modal.visible} >
-        <.content modal={@modal} socket={@socket} />
+        <.content modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
       </.background>
     """
   end
@@ -143,12 +74,13 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:toolbar_buttons, :list, default: [])
 
   def content(assigns) do
     ~H"""
       <div class={"w-full h-full #{if @modal.visible do "block" else "hidden" end}"} >
         <div class="flex flex-row items-center justify-center w-full h-full">
-          <.frame modal={@modal} socket={@socket} />
+          <.frame modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
         </div>
       </div>
     """
@@ -156,6 +88,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:toolbar_buttons, :list, default: [])
 
   def frame(%{modal: %{style: style}} = assigns) do
     unless style in @allowed_styles do
@@ -168,10 +101,10 @@ defmodule Frameworks.Pixel.ModalView do
         <.max modal={@modal} socket={@socket} />
       <% end %>
       <%= if @modal.style == :full do %>
-        <.full modal={@modal} socket={@socket} />
+        <.full modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
       <% end %>
       <%= if @modal.style == :page do %>
-        <.page modal={@modal} socket={@socket} />
+        <.page modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
       <% end %>
       <%= if @modal.style == :sheet do %>
         <.sheet modal={@modal} socket={@socket} />
@@ -200,7 +133,7 @@ defmodule Frameworks.Pixel.ModalView do
             </div>
           </div>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll scrollbar-hidden px-8">
+          <div class="h-ftesull overflow-y-scroll scrollbar-hidden px-8">
             <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>
@@ -211,6 +144,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:toolbar_buttons, :list, default: [])
 
   def full(assigns) do
     ~H"""
@@ -226,12 +160,18 @@ defmodule Frameworks.Pixel.ModalView do
             <.spacing value="XS" />
           </div>
           <%!-- BODY --%>
-          <div class="h-full overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
+          <div class="relative flex-1 overflow-y-scroll px-4 sm:px-8 overscroll-contain overflow-visible">
             <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
           <%!-- TOOLBAR --%>
           <div class="flex-shrink-0">
-            <.toolbar close_button={close_icon_label_button(@modal)} />
+            <.live_component
+              module={Toolbar}
+              id="modal_toolbar"
+              close_button={close_icon_label_button(@modal)}
+              mobile_close_button={close_icon_button(@modal)}
+              buttons={@toolbar_buttons}
+            />
           </div>
         </div>
       </div>
@@ -241,6 +181,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:toolbar_buttons, :list, default: [])
 
   def page(assigns) do
     ~H"""
@@ -252,7 +193,13 @@ defmodule Frameworks.Pixel.ModalView do
           </div>
            <%!-- TOOLBAR --%>
            <div class="flex-shrink-0">
-            <.toolbar close_button={close_icon_label_button(@modal)} />
+            <.live_component
+              module={Toolbar}
+              id="modal_toolbar"
+              close_button={close_icon_label_button(@modal)}
+              mobile_close_button={close_icon_button(@modal)}
+              buttons={@toolbar_buttons}
+            />
           </div>
         </div>
       </div>
@@ -327,7 +274,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   defp close_icon_label_button(%LiveNest.Modal{element: %{id: element_id}}) do
     %{
-      action: %{type: :send, event: "close_modal", item: element_id},
+      action: %{type: :send, event: "close_modal", item: element_id, target: nil},
       face: %{
         type: :plain,
         icon: :close,
@@ -339,8 +286,27 @@ defmodule Frameworks.Pixel.ModalView do
 
   defp close_icon_button(%LiveNest.Modal{element: %{id: element_id}}) do
     %{
-      action: %{type: :send, event: "close_modal", item: element_id},
+      action: %{type: :send, event: "close_modal", item: element_id, target: nil},
       face: %{type: :icon, icon: :close}
     }
+  end
+
+  @doc """
+  Updates modal toolbar buttons in socket assigns.
+  Called when embedded view publishes :update_modal_buttons event.
+  Stores source for event forwarding and buttons for the Toolbar LiveComponent.
+  """
+  def update_modal_buttons(socket, source, buttons) when is_list(buttons) do
+    socket
+    |> Phoenix.Component.assign(:modal_toolbar_buttons, buttons)
+    |> Phoenix.Component.assign(:modal_button_source, source)
+  end
+
+  @doc """
+  Forwards a toolbar action to the target LiveView process.
+  Source is a tuple {pid, element_id} from LiveNest.Event.
+  """
+  def forward_toolbar_action({pid, _element_id}, action) when is_pid(pid) and is_atom(action) do
+    send(pid, {:toolbar_action, action})
   end
 end

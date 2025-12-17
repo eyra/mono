@@ -178,6 +178,33 @@ Benefits of Block Architecture:
 - **Signal** - Inter-system communication bus
 - **Utility** - Common helper modules
 
+##### Pixel Component Testing Convention
+All Pixel components (Button, Text, etc.) should support the `data-testid` attribute for testing purposes:
+
+**Button.dynamic:**
+```elixir
+<Button.dynamic {@button} data-testid="my-button" />
+```
+
+**Text components:**
+```elixir
+<Text.title1 data-testid="my-title">Content</Text.title1>
+<Text.body data-testid="my-body">Content</Text.body>
+```
+
+**Button Implementation rule:** The `data-testid` attribute must be applied at the **Action** level (in `button_action.ex`), not at the Button.dynamic level. This ensures:
+- The testid is on the actual interactive element (`<a>`, `<button>`, or clickable `<div>`)
+- Disabled buttons have the testid on their wrapper
+- Each action type (send, http_get, redirect, etc.) correctly handles testids according to its HTML semantics
+
+**Text Implementation rule:** The `data-testid` attribute is applied to the outermost `<div>` wrapper of each text component.
+
+**When adding new components or action types:**
+1. Always include: `attr(:"data-testid", :string, default: nil)`
+2. Apply to the outermost element: `<div ... data-testid={@"data-testid"}>`
+3. For conditional rendering, apply to both branches
+4. Document the convention in the component's `@moduledoc`
+
 #### LiveNest Framework
 - **LiveNest** - Modern replacement for Fabric framework
 - Internally created Elixir dependency for LiveView utilities

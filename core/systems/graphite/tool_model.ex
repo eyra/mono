@@ -125,15 +125,6 @@ defmodule Systems.Graphite.ToolModel do
     def ready?(_), do: true
     def form(_, _), do: Graphite.ToolForm
 
-    def launcher(tool) do
-      %{
-        module: Graphite.ToolView,
-        params: %{
-          tool: tool
-        }
-      }
-    end
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-graphite", "pending.label"),
