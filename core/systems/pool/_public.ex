@@ -190,6 +190,14 @@ defmodule Systems.Pool.Public do
     end
   end
 
+  def panl_participant?(%Account.User{} = user) do
+    if pool = get_panl() do
+      participant?(pool, user)
+    else
+      false
+    end
+  end
+
   def remove_participant(pool, user) do
     auth_module().remove_role!(user, pool, :participant)
   end

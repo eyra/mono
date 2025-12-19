@@ -54,13 +54,6 @@ defmodule Systems.Manual.ToolModel do
     def ready?(tool), do: Manual.ToolModel.ready?(tool)
     def form(_, _), do: Manual.Builder.ToolForm
 
-    def launcher(%{manual: manual}) do
-      %{
-        module: Manual.ToolView,
-        params: %{manual: manual}
-      }
-    end
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-manual", "pending.label"),

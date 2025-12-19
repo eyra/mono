@@ -41,11 +41,6 @@ defmodule Systems.Assignment.ContentPage do
     update_view_model(socket)
   end
 
-  def notify_modal_controller(socket, modal_id) do
-    Logger.warning("notify_modal_controller #{modal_id}")
-    socket
-  end
-
   @impl true
   def render(assigns) do
     ~H"""

@@ -87,13 +87,14 @@ defmodule Fabric.ModalPresenter do
 
       def map_live_nest_modal(
             %{live_component: %{ref: %{id: id, module: module}, params: params}, style: style} =
-              modal,
+              _modal,
             visible
           ) do
         %LiveNest.Modal{
           style: style,
           visible: visible,
-          modal_controller_pid: nil,
+          # Set controller_pid to self() so LiveNest can send :modal_closed event
+          controller_pid: self(),
           options: [],
           element: %LiveNest.Element{
             id: id,

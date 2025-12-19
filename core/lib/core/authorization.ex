@@ -46,6 +46,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Assignment.ContentPage, [:owner])
   grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
+  grant_access(Systems.Assignment.LandingPage, [:participant, :tester])
   grant_access(Systems.Budget.FundingPage, [:admin, :creator])
   grant_access(Systems.Desktop.Page, [:creator])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])

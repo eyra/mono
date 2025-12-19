@@ -58,3 +58,7 @@ msgstr "Sta per completare alcuni passaggi per donare i suoi dati. Prima della d
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Continua"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

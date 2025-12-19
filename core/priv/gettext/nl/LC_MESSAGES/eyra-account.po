@@ -67,14 +67,6 @@ msgid "features.description"
 msgstr "Een aantal studies heeft specifieke geschiktheidseisen. Door de optionele kenmerken hieronder te selecteren, kun je deelnemen aan studies die jouw kenmerken als vereisten specificeren."
 
 #, elixir-autogen, elixir-format
-msgid "features.birthyear.title"
-msgstr "Geboortejaar"
-
-#, elixir-autogen, elixir-format
-msgid "features.dominanthand.title"
-msgstr "Dominante hand"
-
-#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Geslacht"
 
@@ -161,6 +153,10 @@ msgstr "Weet u zeker dat u uzelf wilt verwijderen van dit project?"
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.birthyear.title"
+msgstr "Geboortejaar"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"

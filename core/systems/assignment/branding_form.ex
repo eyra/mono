@@ -111,7 +111,7 @@ defmodule Systems.Assignment.BrandingForm do
       :noreply,
       socket
       |> compose_child(:image_picker)
-      |> show_modal(:image_picker, :compact)
+      |> show_modal(:image_picker, :full)
     }
   end
 

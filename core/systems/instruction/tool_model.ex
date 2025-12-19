@@ -52,14 +52,6 @@ defmodule Systems.Instruction.ToolModel do
     def form(_, :download_instruction), do: Instruction.DownloadForm
     def form(_, :general_instruction), do: Instruction.GeneralForm
 
-    def launcher(tool),
-      do: %{
-        module: Instruction.ToolView,
-        params: %{
-          tool: tool
-        }
-      }
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-instruction", "pending.label"),

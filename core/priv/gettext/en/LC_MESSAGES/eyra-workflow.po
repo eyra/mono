@@ -42,3 +42,7 @@ msgstr "Use the arrows to order the tasks"
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Task title"
+
+#, elixir-autogen, elixir-format
+msgid "work_list.done.button"
+msgstr "Continue, I'm done"
