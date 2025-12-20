@@ -296,23 +296,23 @@ module.exports = {
         /* Nunito (> 20px sizes) */
         ".font-title0": {
           "font-family": "Nunito, sans-serif",
-          "font-weight": "900",
+          "font-weight": "800",
         },
         ".font-title1": {
           "font-family": "Nunito, sans-serif",
-          "font-weight": "900",
+          "font-weight": "800",
         },
         ".font-title2": {
           "font-family": "Nunito, sans-serif",
-          "font-weight": "900",
+          "font-weight": "800",
         },
         ".font-title3": {
           "font-family": "Nunito, sans-serif",
-          "font-weight": "900",
+          "font-weight": "800",
         },
         ".font-title4": {
           "font-family": "Nunito, sans-serif",
-          "font-weight": "900",
+          "font-weight": "800",
         },
         ".font-title5": {
           "font-family": "Nunito, sans-serif",
@@ -349,7 +349,7 @@ module.exports = {
         },
         ".font-subhead": {
           "font-family": "Nunito Sans, sans-serif",
-          "font-weight": "500",
+          "font-weight": "600",
         },
         ".font-button": {
           "font-family": "Nunito Sans, sans-serif",
