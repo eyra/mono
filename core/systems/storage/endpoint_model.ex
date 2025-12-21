@@ -12,7 +12,8 @@ defmodule Systems.Storage.EndpointModel do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
-  alias Frameworks.Utility.Assets
+  alias Frameworks.Pixel.Icon
+  alias Frameworks.Pixel.Logo
 
   alias Systems.Storage
   alias Systems.Monitor
@@ -64,8 +65,10 @@ defmodule Systems.Storage.EndpointModel do
     asset_image_src(special_field(endpoint), type)
   end
 
-  def asset_image_src(:builtin, type), do: Assets.image_src("next", type)
-  def asset_image_src(special, type), do: Assets.image_src("#{special}", type)
+  def asset_image_src(:builtin, :icon), do: Icon.path("next")
+  def asset_image_src(:builtin, {:logo, type}), do: Logo.path(:next, type)
+  def asset_image_src(special, :icon), do: Icon.path("#{special}")
+  def asset_image_src(special, {:logo, type}), do: Logo.path(:"#{special}", type)
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
     def id(endpoint), do: endpoint.auth_node_id
