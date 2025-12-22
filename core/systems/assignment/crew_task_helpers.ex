@@ -8,7 +8,7 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   @callback handle_tool_initialized(socket()) :: socket()
 
   def map_item({%{id: id, title: title, group: group, description: description}, task}) do
-    %{id: id, title: title, description: description, icon: group, status: task_status(task)}
+    %{id: id, title: title, description: description, group: group, status: task_status(task)}
   end
 
   def task_status(%{status: status}), do: status
