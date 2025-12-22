@@ -15,7 +15,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
     %{
       tool: tool,
       title: title,
-      icon: icon,
+      icon: normalize_icon(icon),
       description: dgettext("eyra-feldspar", "tool.description"),
       button: build_button(loading),
       app_view: app_view,
@@ -47,4 +47,8 @@ defmodule Systems.Feldspar.ToolViewBuilder do
        locale: Gettext.get_locale(CoreWeb.Gettext)
      ), nil}
   end
+
+  defp normalize_icon(nil), do: nil
+  defp normalize_icon(icon) when is_binary(icon), do: String.downcase(icon)
+  defp normalize_icon(icon) when is_atom(icon), do: icon |> Atom.to_string() |> String.downcase()
 end

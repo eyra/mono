@@ -128,7 +128,7 @@ defmodule Systems.Feldspar.ToolView do
             <div class="flex flex-col gap-8 items-center px-8">
               <div>
                 <%= if @vm.icon do %>
-                  <img class="w-24 h-24" src={~p"/images/icons/#{"#{String.downcase(@vm.icon)}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@vm.icon}>
+                  <img class="w-24 h-24" src={~p"/images/icons/#{"#{@vm.icon}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@vm.icon}>
                 <% end %>
               </div>
               <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
