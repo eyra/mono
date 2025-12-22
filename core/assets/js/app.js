@@ -30,7 +30,7 @@ import { Sticky } from "./sticky";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { Blurhash } from "./blurhash";
-import { UserState } from "./user_state";
+import { UserState, getAllUserState } from "./user_state";
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 // Force the active state on iOS touch devices by adding a touchstart
@@ -121,7 +121,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
       width: window.innerWidth,
       height: window.innerHeight,
     },
-    user_state: Object.assign({}, window.localStorage),
+    user_state: getAllUserState(),
   },
   hooks: Hooks,
 });
