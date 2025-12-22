@@ -17,7 +17,7 @@ defmodule Systems.Assignment.CrewWorkView do
     Assignment.Public.get!(assignment_id, [
       :privacy_doc,
       :consent_agreement,
-      :page_refs,
+      page_refs: [:page],
       workflow: [:items]
     ])
   end
@@ -86,8 +86,10 @@ defmodule Systems.Assignment.CrewWorkView do
       LiveNest.Modal.prepare_live_component(
         "privacy_page",
         Document.PDFView,
-        key: "privacy_doc_view",
-        url: ref,
+        params: [
+          key: "privacy_doc_view",
+          url: ref
+        ],
         title: dgettext("eyra-assignment", "privacy.title"),
         style: :page
       )
@@ -102,8 +104,10 @@ defmodule Systems.Assignment.CrewWorkView do
       LiveNest.Modal.prepare_live_component(
         "consent_page",
         Consent.SignatureView,
-        title: dgettext("eyra-consent", "signature.view.title"),
-        signature: Consent.Public.get_signature(consent_agreement, user),
+        params: [
+          title: dgettext("eyra-consent", "signature.view.title"),
+          signature: Consent.Public.get_signature(consent_agreement, user)
+        ],
         style: :page
       )
 
@@ -117,8 +121,10 @@ defmodule Systems.Assignment.CrewWorkView do
       LiveNest.Modal.prepare_live_component(
         "intro_page",
         Content.PageView,
-        title: dgettext("eyra-assignment", "intro.page.title"),
-        page: page,
+        params: [
+          title: dgettext("eyra-assignment", "intro.page.title"),
+          page: page
+        ],
         style: :page
       )
 
@@ -132,8 +138,10 @@ defmodule Systems.Assignment.CrewWorkView do
       LiveNest.Modal.prepare_live_component(
         "support_page",
         Content.PageView,
-        title: dgettext("eyra-assignment", "support.page.title"),
-        page: page,
+        params: [
+          title: dgettext("eyra-assignment", "support.page.title"),
+          page: page
+        ],
         style: :page
       )
 
