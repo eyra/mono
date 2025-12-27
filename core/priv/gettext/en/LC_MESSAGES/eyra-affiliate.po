@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.body"
-msgstr "Option to automate participant progress tracking by providing a webhook URL to receive real-time status updates."
+msgstr "Optionally provide a webhook URL to receive real-time participant progress updates."
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.placeholder"
-msgstr "https://your-domain.com/study?s=progress"
+msgstr "https://panel-company.com/study?s=progress"
 
 #, elixir-autogen, elixir-format
 msgid "callback_url.title"
@@ -25,11 +25,11 @@ msgstr "Progress"
 
 #, elixir-autogen, elixir-format
 msgid "redirect_url.placeholder"
-msgstr "https://your-domain.com/study?s=done"
+msgstr "https://panel-company.com/study?s=done"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.body"
-msgstr "Option to provide a redirect URL to which participants will be forwarded after completing the workflow."
+msgstr "Optionally provide a redirect URL to forward participants to another platform or organisation after completing the workflow."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.title"
@@ -65,8 +65,8 @@ msgstr "Destination"
 
 #, elixir-autogen, elixir-format
 msgid "platform_name.placeholder"
-msgstr "Your company or platform"
+msgstr "Panel Platform"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platform_name.body"
-msgstr "Enter the name of your company or platform as participant destination. This name will be used at the end of the workflow just before redirecting the participant."
+msgstr "If a redirect URL is provided, you may enter the name of the destination organisation or platform. This name will be shown to participants at the end of the workflow, just before they are redirected."
