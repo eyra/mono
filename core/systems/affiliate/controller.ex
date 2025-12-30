@@ -41,12 +41,8 @@ defmodule Systems.Affiliate.Controller do
       Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
 
     if tester?(assignment, conn) do
-      if invalid_id?(params) do
-        Logger.error("Access denied invalid id params=#{inspect(params)}")
-        forbidden(conn)
-      else
-        start_tester(conn, params, assignment)
-      end
+      # Testers can access regardless of participant ID (preview mode)
+      start_tester(conn, params, assignment)
     else
       cond do
         invalid_id?(params) ->
@@ -109,7 +105,7 @@ defmodule Systems.Affiliate.Controller do
 
     conn
     |> obtain_instance(assignment)
-    |> add_panel_info(params, redirect_url)
+    |> add_panel_info(get_participant(params), redirect_url)
     |> redirect(to: path(assignment))
   end
 
@@ -165,19 +161,20 @@ defmodule Systems.Affiliate.Controller do
     conn
   end
 
-  defp add_panel_info(conn, params, redirect_url) do
+  defp add_panel_info(conn, participant, redirect_url) do
     panel_info = %{
       panel: :affiliate,
       redirect_url: redirect_url,
-      participant: get_participant(params)
+      participant: participant
     }
 
     conn |> put_session(:panel_info, panel_info)
   end
 
   defp add_panel_info_for_participant(conn, params, affiliate, affiliate_user) do
+    participant = get_participant(params)
     redirect_url = get_merged_redirect_url(affiliate, affiliate_user)
-    add_panel_info(conn, params, redirect_url)
+    add_panel_info(conn, participant, redirect_url)
   end
 
   defp get_merged_redirect_url(affiliate, affiliate_user) do

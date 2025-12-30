@@ -1,6 +1,4 @@
 defmodule Systems.Assignment.Controller do
-  alias Hex.Solver.Assignment
-
   use CoreWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
@@ -57,18 +55,6 @@ defmodule Systems.Assignment.Controller do
         service_unavailable(conn)
       else
         start_participant(conn, assignment)
-      end
-    else
-      service_unavailable(conn)
-    end
-  end
-
-  def preview(%{assigns: %{current_user: user}} = conn, %{"id" => id}) do
-    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if Assignment.Public.tester?(assignment, user) do
-        start_preview(conn, assignment)
-      else
-        forbidden(conn)
       end
     else
       service_unavailable(conn)
@@ -255,24 +241,10 @@ defmodule Systems.Assignment.Controller do
     |> render(:"503")
   end
 
-  defp forbidden(conn) do
-    conn
-    |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
-    |> render(:"403")
-  end
-
   defp start_participant(conn, %{id: id} = assignment) do
     conn
     |> authorize_user(assignment)
     |> add_panel_info(assignment)
-    |> redirect(to: ~p"/assignment/#{id}")
-  end
-
-  defp start_preview(conn, %{id: id} = assignment) do
-    conn
-    |> authorize_user(assignment)
-    |> add_preview_panel_info(assignment)
     |> redirect(to: ~p"/assignment/#{id}")
   end
 
@@ -281,18 +253,8 @@ defmodule Systems.Assignment.Controller do
 
     panel_info = %{
       panel: :next,
-      redirect?: false,
+      redirect_url: nil,
       participant: participant
-    }
-
-    conn |> put_session(:panel_info, panel_info)
-  end
-
-  defp add_preview_panel_info(%{assigns: %{current_user: user}} = conn, _assignment) do
-    panel_info = %{
-      panel: :preview,
-      redirect?: false,
-      participant: "preview_#{user.id}"
     }
 
     conn |> put_session(:panel_info, panel_info)
