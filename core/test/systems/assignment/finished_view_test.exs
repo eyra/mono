@@ -84,8 +84,10 @@ defmodule Systems.Assignment.FinishedViewTest do
       conn: conn,
       user: user
     } do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate("https://example.com/return")
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url)
         |> Assignment.Factories.add_affiliate_user(user)
 
       conn = conn |> Map.put(:request_path, "/assignment/finished")
@@ -93,7 +95,8 @@ defmodule Systems.Assignment.FinishedViewTest do
       live_context =
         Frameworks.Concept.LiveContext.new(%{
           assignment_id: assignment.id,
-          current_user: user
+          current_user: user,
+          panel_info: %{redirect_url: redirect_url}
         })
 
       session = %{
@@ -172,10 +175,10 @@ defmodule Systems.Assignment.FinishedViewTest do
       conn: conn,
       user: user
     } do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_consent_and_affiliate(
-          "https://example.com/return"
-        )
+        Assignment.Factories.create_assignment_with_consent_and_affiliate(redirect_url)
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
@@ -186,7 +189,8 @@ defmodule Systems.Assignment.FinishedViewTest do
       live_context =
         Frameworks.Concept.LiveContext.new(%{
           assignment_id: assignment.id,
-          current_user: user
+          current_user: user,
+          panel_info: %{redirect_url: redirect_url}
         })
 
       session = %{

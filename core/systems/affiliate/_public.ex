@@ -47,6 +47,11 @@ defmodule Systems.Affiliate.Public do
     Affiliate.Sqids.decode!(id)
   end
 
+  def get_redirect_url(nil), do: nil
+  def get_redirect_url(%{redirect_url: nil}), do: nil
+  def get_redirect_url(%{redirect_url: ""}), do: nil
+  def get_redirect_url(%{redirect_url: url}), do: url
+
   def redirect_url(_affiliate, nil), do: {:error, :user_missing}
 
   def redirect_url(affiliate, %Account.User{} = user) do

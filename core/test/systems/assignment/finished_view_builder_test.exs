@@ -31,11 +31,13 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
 
     test "builds correct VM with redirect URL", %{user: user} do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate("https://example.com/return")
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url)
         |> Assignment.Factories.add_affiliate_user(user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should NOT have illustration
@@ -76,16 +78,16 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
 
     test "builds correct VM for declined consent with redirect", %{user: user} do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_consent_and_affiliate(
-          "https://example.com/return"
-        )
+        Assignment.Factories.create_assignment_with_consent_and_affiliate(redirect_url)
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
       Assignment.Public.decline_member(assignment, user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should NOT have illustration (declined + redirect)
@@ -106,15 +108,13 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
     test "builds correct VM with redirect URL and platform_name", %{user: user} do
       platform_name = "Acme Research Panel"
+      redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(
-          "https://example.com/return",
-          platform_name
-        )
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, platform_name)
         |> Assignment.Factories.add_affiliate_user(user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should NOT have illustration
@@ -137,10 +137,11 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
     test "builds correct VM for declined consent with redirect and platform_name", %{user: user} do
       platform_name = "Acme Research Panel"
+      redirect_url = "https://example.com/return"
 
       assignment =
         Assignment.Factories.create_assignment_with_consent_and_affiliate(
-          "https://example.com/return",
+          redirect_url,
           platform_name
         )
         |> Assignment.Factories.add_affiliate_user(user)
@@ -148,7 +149,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
       Assignment.Public.decline_member(assignment, user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should NOT have illustration (declined + redirect)
@@ -175,14 +176,13 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
 
     test "uses non-platform body when platform_name is empty string", %{user: user} do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(
-          "https://example.com/return",
-          ""
-        )
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, "")
         |> Assignment.Factories.add_affiliate_user(user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should use regular redirect body (not platform-specific)
@@ -190,14 +190,13 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
 
     test "uses non-platform body when platform_name is nil", %{user: user} do
+      redirect_url = "https://example.com/return"
+
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(
-          "https://example.com/return",
-          nil
-        )
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, nil)
         |> Assignment.Factories.add_affiliate_user(user)
 
-      assigns = build_assigns(user)
+      assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       # Should use regular redirect body (not platform-specific)
@@ -206,10 +205,11 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
   end
 
   # Helper functions
-  defp build_assigns(user) do
+  defp build_assigns(user, redirect_url \\ nil) do
     %{
       current_user: user,
-      timezone: "UTC"
+      timezone: "UTC",
+      live_context: %{data: %{panel_info: %{redirect_url: redirect_url}}}
     }
   end
 end
