@@ -113,4 +113,4 @@ msgstr "Continua"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tool.description"
-msgstr ""
+msgstr "Jūs ketinate pradėti pildyti anketą naujame lange. Baigę pildyti anketą, būsite automatiškai nukreipti atgal į šį puslapį."
