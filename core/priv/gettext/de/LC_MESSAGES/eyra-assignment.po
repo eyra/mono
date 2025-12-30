@@ -451,11 +451,11 @@ msgstr "Die Standardsprache für Panl-Studien ist Niederländisch."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined"
-msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+msgstr "Sie haben sich entschieden, nicht teilzunehmen. Ihre Entscheidung wurde gespeichert. Sie können dieses Fenster jetzt schließen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect"
-msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+msgstr "Sie haben sich entschieden, nicht teilzunehmen. Ihre Entscheidung wurde gespeichert. Sie können dieses Fenster jetzt schließen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.title.declined"
@@ -475,8 +475,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"
-msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+msgstr "Sie haben sich entschieden, nicht teilzunehmen. Ihre Entscheidung wurde gespeichert. Klicken Sie auf Weiter, um zu %{platform} fortzufahren."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
-msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um fortzufahren."
+msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um zu %{platform} fortzufahren."

@@ -451,11 +451,11 @@ msgstr "La lingua predefinita per gli studi Panl è l'olandese."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined"
-msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+msgstr "Ha scelto di non partecipare. La sua scelta è stata registrata. Ora può chiudere questa finestra."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect"
-msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+msgstr "Ha scelto di non partecipare. La sua scelta è stata registrata. Ora può chiudere questa finestra."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.title.declined"
@@ -475,8 +475,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"
-msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+msgstr "Ha scelto di non partecipare. La sua scelta è stata registrata. Clicchi su Continua per proseguire verso %{platform}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
-msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
+msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire verso %{platform}."
