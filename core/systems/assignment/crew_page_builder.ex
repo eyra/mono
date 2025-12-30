@@ -9,12 +9,14 @@ defmodule Systems.Assignment.CrewPageBuilder do
   alias Systems.Workflow
 
   def view_model(%{crew: crew, id: assignment_id} = assignment, %{current_user: user} = assigns) do
-    apply_language(assignment)
+    language = Assignment.Model.language(assignment)
+    apply_language(language)
 
     # Get user_state from assigns (provided by UserState hook)
     user_state = Map.get(assigns, :user_state, %{})
 
     # Create context that will be passed to all child views
+    # Include language so child views can apply it in their processes
     live_context =
       LiveContext.new(%{
         assignment_id: assignment_id,
@@ -23,7 +25,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
         timezone: Map.get(assigns, :timezone),
         panel_info: Map.get(assigns, :panel_info),
         user_state: user_state,
-        user_state_namespace: [:assignment, assignment_id, :crew, crew.id]
+        user_state_namespace: [:assignment, assignment_id, :crew, crew.id],
+        language: language
       })
 
     # Add live_context to assigns for child view builders
@@ -42,10 +45,8 @@ defmodule Systems.Assignment.CrewPageBuilder do
     }
   end
 
-  defp apply_language(assignment) do
-    assignment
-    |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
+  defp apply_language(language) do
+    CoreWeb.Live.Hook.Locale.put_locale(language)
   end
 
   # State machine - determines which view to show based on current state and action
