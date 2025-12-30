@@ -471,7 +471,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "back.button"
-msgstr ""
+msgstr "Zurück"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"

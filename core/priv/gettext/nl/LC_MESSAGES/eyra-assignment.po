@@ -470,7 +470,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "back.button"
-msgstr ""
+msgstr "Terug"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"
