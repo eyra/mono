@@ -1,455 +1,413 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "ticket.title"
-msgstr ""
+msgstr "Jūsų dalyvio ID"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "earned.label"
-msgstr ""
+msgstr "%{amount} uždirbta"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "%{amount} laukia"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "togo.label"
-msgstr ""
+msgstr "%{amount} eiti"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "pool.target"
-msgstr ""
+msgstr "%{target} reikalingi kreditai"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "close.button"
-msgstr ""
+msgstr "Baigti"
 
-#, elixir-autogen, elixir-format
 msgid "open.button"
-msgstr ""
+msgstr "Atidaryti"
 
-#, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
+msgstr "Peržiūra"
 
-#, elixir-autogen, elixir-format
 msgid "publish.button"
-msgstr ""
+msgstr "Paskelbti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "retract.button"
-msgstr ""
+msgstr "Pereiti į neprisijungusį režimą"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Tęsti"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Sutikimas"
 
-#, elixir-autogen, elixir-format
 msgid "connect.button"
-msgstr ""
+msgstr "Nustatymai"
 
-#, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
-msgstr ""
+msgstr "Atšaukti"
 
-#, elixir-autogen, elixir-format
 msgid "connector.connect.button"
-msgstr ""
+msgstr "Prisijungti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "connector.storage.text"
-msgstr ""
+msgstr "Pasirinkite saugojimo tipą, kurį norite naudoti dalyvių duomenims saugoti."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "connector.storage.title"
-msgstr ""
+msgstr "Nustatyti duomenų saugojimą"
 
-#, elixir-autogen, elixir-format
 msgid "disconnect.button"
-msgstr ""
+msgstr "Atsijungti"
 
-#, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr ""
+msgstr "Praleisti"
 
-#, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr ""
+msgstr "Rodyti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.consent.body"
-msgstr ""
+msgstr "Naudokite žemiau esantį tekstinį lauką, kad parašytumėte sutikimo formą savo dalyviams. Ar jūsų dalyviai jau davė sutikimą kitu būdu? Pasirinkite „Pereiti“."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.consent.title"
-msgstr ""
+msgstr "Sutikimo forma"
 
-#, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr ""
+msgstr "Subtitrai"
 
-#, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr ""
+msgstr "Pavadinimas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.image.title"
-msgstr ""
+msgstr "Pagrindinis paveikslėlis"
 
-#, elixir-autogen, elixir-format
 msgid "search.different.image.button"
-msgstr ""
+msgstr "Keisti vaizdą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "choose.logo.file"
-msgstr ""
+msgstr "Įkelti logotipą"
 
-#, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr ""
+msgstr "Keisti logotipą"
 
-#, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr ""
+msgstr "Logotipas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.branding.text"
-msgstr ""
+msgstr "Naudokite žemiau esančius laukelius, kad pritaikytumėte dalyvių darbo eigos antraštę. Norite pamatyti, kaip tai atrodys dalyviams? Spustelėkite „Peržiūrėti“ viršutiniame dešiniajame kampe, kad tai patikrintumėte."
 
-#, elixir-autogen, elixir-format
 msgid "settings.branding.title"
-msgstr ""
+msgstr "Brendas"
 
-#, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Apžvalga"
 
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Informacija"
 
-#, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
-msgstr ""
+msgstr "Praleisti"
 
-#, elixir-autogen, elixir-format
 msgid "intro_form.on.label"
-msgstr ""
+msgstr "Rodyti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.intro.body"
-msgstr ""
+msgstr "Pridėkite informacijos apie puslapį, kad galėtumėte informuoti dalyvius, arba pasirinkite „Pereiti“."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.intro.title"
-msgstr ""
+msgstr "Apie puslapį"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Apie"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.support.body"
-msgstr ""
+msgstr "Naudokite žemiau esantį tekstinį lauką, kad informuotumėte dalyvius, kaip gauti pagalbą, kai jos prireiks. Šis puslapis bus rodomas, kai dalyviai spustels dešinėje apačioje esantį simbolį „i“. Norėdami pamatyti, kaip tai atrodys, spustelėkite „Peržiūrėti“. Jei neplanuojate teikti pagalbos, pasirinkite „Pereiti“."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.support.title"
-msgstr ""
+msgstr "Pagalbos tarnybos puslapis"
 
-#, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "Klausimų?"
 
-#, elixir-autogen, elixir-format
 msgid "support_form.off.label"
-msgstr ""
+msgstr "Praleisti"
 
-#, elixir-autogen, elixir-format
 msgid "support_form.on.label"
-msgstr ""
+msgstr "Rodyti"
 
-#, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Jūs pasirinkote nedalyvauti. Galite uždaryti naršyklę. Jei norite tęsti dalyvavimą, uždarykite šį langą ir tęskite."
 
-#, elixir-autogen, elixir-format
 msgid "declined_view.title"
-msgstr ""
+msgstr "Sutikimas atmestas"
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Ačiū. Dalyvavimas baigtas. Galite uždaryti langą."
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Atlikta"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.placeholder"
-msgstr ""
+msgstr "Įkelkite privatumo pareiškimą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.replace.button"
-msgstr ""
+msgstr "Pakeisti PDF"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.select.button"
-msgstr ""
+msgstr "Pasirinkite PDF"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.privacy.body"
-msgstr ""
+msgstr "Privatumo pareiškimą pridėti yra neprivaloma. Kai PDF failas bus įkeltas, jis bus rodomas kaip atskiras privatumo puslapis. Privatumo informaciją galite pridėti į informacijos puslapio arba sutikimo formos tekstinius laukelius be PDF failo įkėlimo arba naudoti privatumo pareiškimo URL adresą, kuris bus prieinamas po įkėlimo, kad galėtumėte nurodyti įkeltą privatumo pareiškimą."
 
-#, elixir-autogen, elixir-format
 msgid "settings.privacy.title"
-msgstr ""
+msgstr "Privatumo politika"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.annotation"
-msgstr ""
+msgstr "<h1>Privatumo politikos URL</h1> Naudokite žemiau pateiktą URL adresą, kad galėtumėte peržiūrėti įkeltą privatumo pareiškimą. Atkreipkite dėmesį, kad įkėlus naują PDF failą, URL adresas bus atnaujintas.<br>"
 
-#, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr ""
+msgstr "Privatumas"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
-msgstr ""
+msgstr "Atvaizdavimas"
 
-#, elixir-autogen, elixir-format
 msgid "finished.participants"
-msgstr ""
+msgstr "Baigta"
 
-#, elixir-autogen, elixir-format
 msgid "started.participants"
-msgstr ""
+msgstr "Pradėti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "declined.participants"
-msgstr ""
+msgstr "Atsisakytas sutikimas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.language.label"
-msgstr ""
+msgstr "Dalyvių kalbos nustatymas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.subject_count.label"
-msgstr ""
+msgstr "Numatomas dalyvių skaičius"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
-msgstr ""
+msgstr "Dalyviai"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.donate.description"
-msgstr ""
+msgstr "Leidžia dalyviams paaukoti duomenis."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.download.description"
-msgstr ""
+msgstr "Įkelkite PDF formatu instrukciją, kurioje pateikiami nurodymai, kaip atsisiųsti skaitmeninius trasos duomenis. Pastaba: nepritaikyta mobiliesiems įrenginiams."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.questionnaire.description"
-msgstr ""
+msgstr "Peradresuoja dalyvius į internetinę anketą."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.request.description"
-msgstr ""
+msgstr "Įkelkite PDF formatu parengtą vadovą su instrukcijomis, kaip prašyti skaitmeninių trasos duomenų. Pastaba: nepritaikytas mobiliesiems įrenginiams."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.download_instruction.description"
-msgstr ""
+msgstr "Leidžia dalyviams atsisiųsti jūsų dalyvių duomenų zip failą."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.fork_instruction.description"
-msgstr ""
+msgstr "Dalyviams pateikite savo šablono GitHub saugyklos nuorodą, kurios jiems reikia, kad galėtų parengti savo metodą pateikimui."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.submit.description"
-msgstr ""
+msgstr "Leidžia dalyviams pateikti savo metodą iššūkiui su GitHub saugyklos patvirtinimo nuoroda."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "invite.panel.annotation"
-msgstr ""
+msgstr "Naudokite žemiau pateiktą URL adresą, kad pakviestumėte dalyvius. Dalyviai turi prisijungti arba susikurti paskyrą, kad galėtų dalyvauti."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "invite.panel.title"
-msgstr ""
+msgstr "Dalyvio kvietimo nuoroda"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.general_instruction.description"
-msgstr ""
+msgstr "Pateikite dalyviams instrukcijas."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.onsite_experiment.description"
-msgstr ""
+msgstr "Leidžia dalyviams užsisakyti laiko tarpsnį jūsų vietoje atliekamam tyrimui."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.body"
-msgstr ""
+msgstr "Ši reklama bus naudojama jūsų tyrimui reklamuoti „Panl“ dalyviams ir leis jiems dalyvauti jūsų tyrime."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.create.button"
-msgstr ""
+msgstr "Sukurti reklamą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.goto.button"
-msgstr ""
+msgstr "Eiti į skelbimą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.title"
-msgstr ""
+msgstr "Panl reklama"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Sutikimas"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Apie"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "Klausimų?"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Privatumas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.create.button"
-msgstr ""
+msgstr "Prijunkite saugyklą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.goto.button"
-msgstr ""
+msgstr "Eiti į failus"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.not_available.warning"
-msgstr ""
+msgstr "Prašome nustatyti ryšį su duomenų saugykla"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "1 participant"
 msgid_plural "* participants"
-msgstr[0] ""
+msgstr[0] "1 dalyvis"
 msgstr[1] ""
 msgstr[2] ""
 
-#, elixir-autogen, elixir-format
 msgid "leaf.tag"
-msgstr ""
+msgstr "Paskyrimas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr ""
+msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas, taip pat ir susijęs įrašas apie tai, kas davė sutikimą."
 
-#, elixir-autogen
+#, fuzzy
 msgid "export.progress.button"
-msgstr ""
+msgstr "Pažangos ataskaita"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "monitor.description"
-msgstr ""
+msgstr "Šis įvykių stebėjimo įrankis seka vartotojų sąveikos įvykius, kad būtų galima įvertinti, ar jūsų paskelbtas darbo srautas veikia kaip tikėtasi. Jis neturėtų būti naudojamas dalyvių stebėjimui. Jei norite sužinoti kiekvieno dalyvio pažangą, eksportuokite pažangos ataskaitą, esančią dešiniame viršutiniame kampe."
 
-#, elixir-autogen, elixir-format
 msgid "progress.header.consent"
-msgstr ""
+msgstr "Sutikimas"
 
-#, elixir-autogen, elixir-format
 msgid "progress.header.participant"
-msgstr ""
+msgstr "Dalyvis"
 
-#, elixir-autogen, elixir-format
 msgid "progress.no"
-msgstr ""
+msgstr "ne"
 
-#, elixir-autogen, elixir-format
 msgid "progress.not.applicable"
-msgstr ""
+msgstr "nėra"
 
-#, elixir-autogen, elixir-format
 msgid "progress.yes"
-msgstr ""
+msgstr "taip"
 
-#, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr ""
+msgstr "Atgal"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.paper_screening.description"
-msgstr ""
+msgstr "Atranka pagal pavadinimą ir santrauką"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.reviewers"
-msgstr ""
+msgstr "Recenzentai"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
-msgstr ""
+msgstr "Nustatymai"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow"
-msgstr ""
+msgstr "Eiga"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.criteria"
-msgstr ""
+msgstr "Kriterijus"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.import"
-msgstr ""
+msgstr "Dokumentai"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.manual.description"
-msgstr ""
+msgstr "Sukurkite mobiliems įrenginiams pritaikytą vadovą, kuriame pateikite instrukcijas, kaip prašyti ar atsisiųsti skaitmeninius sekimo duomenis."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "affiliate.body"
-msgstr ""
+msgstr "Jei norite prijungti dalyvio darbo eigą prie išorinės sistemos, galite nustatyti žemiau nurodytus URL adresus. Visi dalyvio kvietimo nuorodoje esantys individualūs dalyvio parametrai automatiškai perduodami tiek pažangos webhook, tiek darbo eigos pabaigos nukreipimo URL adresui."
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"
-msgstr ""
+msgstr "Integracija"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "affiliate.panel.annotation"
-msgstr ""
+msgstr "Naudokite žemiau pateiktą nuorodą, kad pakviestumėte dalyvius. Registruotis nereikia. Pakeiskite „participant_id“ kiekvieno dalyvio unikaliu identifikatoriumi. Jei norite, galite pridėti pasirinktinius parametrus prie nuorodos (pvz., &d=abc123). Jie bus automatiškai persiųsti į bet kurią išorinę sistemą, prijungtą per skirtuką „Integracija“."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "affiliate.panel.title"
-msgstr ""
+msgstr "Kvietimo nuoroda"
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect"
-msgstr ""
+msgstr "Ačiū. Šią dalį baigėte. Pasirinkite „Tęsti“, kad galėtumėte tęsti."
 
-#, elixir-autogen, elixir-format
 msgid "redirect.button"
-msgstr ""
+msgstr "Tęsti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "external.panel.annotation"
-msgstr ""
+msgstr "Naudokite žemiau esančią nuorodą, kad pakviestumėte dalyvius. Registruotis nereikia. Pakeiskite „participant_id“ kiekvieno dalyvio unikaliu identifikatoriumi."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "external.panel.title"
-msgstr ""
+msgstr "Kvietimo nuoroda"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.language.fixed_nl_message"
-msgstr ""
+msgstr "Panl studijų numatytoji kalba yra olandų."

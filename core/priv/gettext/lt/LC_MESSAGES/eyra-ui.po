@@ -1,212 +1,192 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
 msgid "error.flash"
-msgstr ""
+msgstr "Kažkas nepavyko"
 
-#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
-msgstr ""
+msgstr "Išsaugota"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr ""
+msgstr "Paskyra"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
-msgstr ""
+msgstr "Prisijungti"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr ""
+msgstr "Atsijungti"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
-msgstr ""
+msgstr "Meniu"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
-msgstr ""
+msgstr "To-do"
 
-#, elixir-autogen, elixir-format
 msgid "todo.title"
-msgstr ""
+msgstr "To-do"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.features"
-msgstr ""
+msgstr "Charakteristikos"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.student"
-msgstr ""
+msgstr "Studijų programa"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "menu.item.helpdesk"
-msgstr ""
+msgstr "Pagalbos tarnyba"
 
-#, elixir-autogen, elixir-format
 msgid "cancel.button"
-msgstr ""
+msgstr "Atšaukti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "delete.confirm.text"
-msgstr ""
+msgstr "Tai %{item} bus visam laikui ištrinta."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "delete.confirm.title"
-msgstr ""
+msgstr "Ištrinti %{item}?"
 
-#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
-msgstr ""
+msgstr "Ištrinti"
 
-#, elixir-autogen, elixir-format
 msgid "ok.button"
-msgstr ""
+msgstr "Gerai"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.support"
-msgstr ""
+msgstr "Palaikymas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.today"
-msgstr ""
+msgstr "šiandien %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.yesterday"
-msgstr ""
+msgstr "vakar %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "authentication.required.message"
-msgstr ""
+msgstr "Pirmiausia prisijunkite"
 
-#, elixir-autogen, elixir-format
 msgid "duplicate.button"
-msgstr ""
+msgstr "Dubliuoti"
 
-#, elixir-autogen, elixir-format
 msgid "share.button"
-msgstr ""
+msgstr "Žmonės"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
-msgstr ""
+msgstr "Meniu"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "persister.error.flash"
-msgstr ""
+msgstr "Nesauge, prašome perkrauti ir bandyti dar kartą"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
-msgstr ""
+msgstr "Susisiekti"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "notify.all"
-msgstr ""
+msgstr "Siųsti pranešimą"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
-msgstr ""
+msgstr "Administratorius"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.projects"
-msgstr ""
+msgstr "Projektai"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "start.page.projects"
-msgstr ""
+msgstr "Eiti į darbalaukį"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "start.page.home"
-msgstr ""
+msgstr "Eiti į darbalaukį"
 
-#, elixir-autogen, elixir-format
 msgid "collapse.button"
-msgstr ""
+msgstr "Suskleisti"
 
-#, elixir-autogen, elixir-format
 msgid "expand.button"
-msgstr ""
+msgstr "Išskleisti"
 
-#, elixir-autogen, elixir-format
 msgid "privacy.link"
-msgstr ""
+msgstr "Privatumas"
 
-#, elixir-autogen, elixir-format
 msgid "terms.link"
-msgstr ""
+msgstr "Sąlygos"
 
-#, elixir-autogen, elixir-format
 msgid "edit.button"
-msgstr ""
+msgstr "Redaguoti"
 
-#, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
-msgstr ""
+msgstr "Kopijuoti"
 
-#, elixir-autogen, elixir-format
 msgid "submit.button"
-msgstr ""
+msgstr "Išsaugoti"
 
-#, elixir-autogen, elixir-format
 msgid "done.button"
-msgstr ""
+msgstr "Atlikta"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.date"
-msgstr ""
+msgstr "%{weekday}, %{month} %{day_of_month}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.datetime"
-msgstr ""
+msgstr "%{weekday}, %{month} %{day_of_month} adresu %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.yesterweek"
-msgstr ""
+msgstr "paskutinis %{weekday} prie %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.tomorrow"
-msgstr ""
+msgstr "rytoj %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.nextweek"
-msgstr ""
+msgstr "kitas %{weekday} prie %{time}"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.desktop"
-msgstr ""
+msgstr "Kompiuteris"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "menu.item.workspace"
-msgstr ""
+msgstr "Mano darbo vieta"
 
-#, elixir-autogen, elixir-format
 msgid "confirm.button"
-msgstr ""
+msgstr "Patvirtinti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "confirmation_modal.body"
-msgstr ""
+msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "confirmation_modal.title"
-msgstr ""
+msgstr "Pereiti šį puslapį?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.forward"
-msgstr ""
+msgstr "Eiti į %{to}"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.onyx"
-msgstr ""
+msgstr "Onyx"

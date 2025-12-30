@@ -1,116 +1,113 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "config.url.label"
-msgstr ""
+msgstr "Link către chestionar"
 
-#, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
-msgstr ""
+msgstr "Recompensă"
 
-#, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Participă la loterie"
 
-#, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Continuă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "redirect.description"
-msgstr ""
+msgstr "Pentru a redirecționa participanții înapoi la Următorul la sfârșitul chestionarului, copiați adresa URL de redirecționare de mai jos și lipiți-o ca „Adresă URL a site-ului web” în Qualtrics ca %{link}."
 
-#, elixir-autogen, elixir-format
 msgid "redirect.title"
-msgstr ""
+msgstr "URL redirectare"
 
-#, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "În așteptare"
 
-#, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Campanie"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "nextid.description"
-msgstr ""
+msgstr "Next adaugă automat ID-ul participantului la adresa URL Qualtrics. Pentru a utiliza acest ID în Qualtrics, adăugați un câmp de element de date încorporat cu numele „participant”, ca %{link} în „PARTEA 2”."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "nextid.title"
-msgstr ""
+msgstr "ID participant"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "setup.title"
-msgstr ""
+msgstr "Cum să configurați chestionarul pe Qualtrics?"
 
-#, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
-msgstr ""
+msgstr "Copiază"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "link.description"
-msgstr ""
+msgstr "Pentru a obține linkul către chestionarul Qualtrics, urmați %{link}. Lipiți linkul în câmpul „Link către chestionar” din formularul de mai jos."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "link.title"
-msgstr ""
+msgstr "Link către chestionar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "nextid.instructions.link"
-msgstr ""
+msgstr "explicat aici"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "redirect.instructions.link"
-msgstr ""
+msgstr "instruit aici"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "study.instructions.link"
-msgstr ""
+msgstr "aceste instrucțiuni"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "duration.highlight.text"
-msgstr ""
+msgstr "%{duration} minute"
 
-#, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
-msgstr ""
+msgstr "Durata"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "status.closed.highlight.text"
-msgstr ""
+msgstr "Închis pentru participare"
 
-#, elixir-autogen, elixir-format
 msgid "status.highlight.title"
-msgstr ""
+msgstr "Stare"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "status.open.highlight.text"
-msgstr ""
+msgstr "Deschis pentru participare"
 
-#, elixir-autogen, elixir-format
 msgid "language.highlight.title"
-msgstr ""
+msgstr "Limbă"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "participated.label"
-msgstr ""
+msgstr "A participat"
 
-#, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Continuă"
 
-#, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Sunteți pe cale să începeți un chestionar într-o filă nouă. După ce îl veți finaliza, veți fi redirecționat automat către această pagină."

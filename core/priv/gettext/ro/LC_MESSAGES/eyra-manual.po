@@ -1,124 +1,118 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "apply.cta.title"
-msgstr ""
+msgstr "aplică.cta.titlu"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.title.label"
-msgstr ""
+msgstr "Titlu"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "open.cta.title"
-msgstr ""
+msgstr "titlu.cta.deschis"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "participated.label"
-msgstr ""
+msgstr "participat.etichetă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "în așteptare.etichetă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "create.manual.button"
-msgstr ""
+msgstr "Creați manualul"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "open.manual.button"
-msgstr ""
+msgstr "Editați manualul"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "setup.annotation"
-msgstr ""
+msgstr "<div><h1>Cum se configurează instrucțiunile pentru participanți?</h1><ul><li>Creați <strong>secțiuni</strong>, astfel încât participanții să poată naviga la secțiunea relevantă.</li><li>Utilizați <strong>etichete</strong> de secțiune pentru a specifica cazuri de utilizare, cum ar fi <i>iPhone</i> sau <i>Android</i>.</li><li>Furnizați mai multe <strong>instrucțiuni</strong> succinte în fiecare secțiune, inclusiv <b>capturi de ecran</b> relevante pentru mai multă claritate.</li></ul></div>"
 
-#, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"
-msgstr ""
+msgstr "Secțiuni"
 
-#, elixir-autogen, elixir-format
 msgid "create.chapter.button"
-msgstr ""
+msgstr "Adaugă capitol"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "chapter.title.default"
-msgstr ""
+msgstr "Secțiune nouă"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.group.label"
-msgstr ""
+msgstr "Etichetă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "create.page.button"
-msgstr ""
+msgstr "Adăugați instrucțiuni"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "page.title.default"
-msgstr ""
+msgstr "Instrucțiuni noi"
 
-#, elixir-autogen, elixir-format
 msgid "page.title.label"
-msgstr ""
+msgstr "Titlu"
 
-#, elixir-autogen, elixir-format
 msgid "page.text.label"
-msgstr ""
+msgstr "Descriere"
 
-#, elixir-autogen, elixir-format
 msgid "choose.image.file"
-msgstr ""
+msgstr "Selectați imaginea"
 
-#, elixir-autogen, elixir-format
 msgid "choose.other.image.file"
-msgstr ""
+msgstr "Schimbati imaginea"
 
-#, elixir-autogen, elixir-format
 msgid "builder.pages.list.title"
-msgstr ""
+msgstr "Instrucțiuni"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "chapter.label.first"
-msgstr ""
+msgstr "Etichetă secțiune"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "chapter.title.first"
-msgstr ""
+msgstr "Prima secțiune"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "page.title.first"
-msgstr ""
+msgstr "Prima instrucțiune"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.next.button"
-msgstr ""
+msgstr "Următor"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.page.indicator"
-msgstr ""
+msgstr "%{current}/%{count}"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
-msgstr ""
+msgstr "Anterior"
 
-#, elixir-autogen, elixir-format
 msgid "image.fullscreen.button"
-msgstr ""
+msgstr "Mărește"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.done.button"
-msgstr ""
+msgstr "Terminat"
 
-#, elixir-autogen, elixir-format
 msgid "chapter.overview"
-msgstr ""
+msgstr "Prezentare"

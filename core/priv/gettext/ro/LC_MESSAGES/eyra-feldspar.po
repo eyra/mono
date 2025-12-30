@@ -1,60 +1,66 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "apply.cta.title"
-msgstr ""
+msgstr "aplică.cta.titlu"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "content.title"
-msgstr ""
+msgstr "titlul conținutului"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "open.cta.title"
-msgstr ""
+msgstr "titlu.cta.deschis"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "participated.label"
-msgstr ""
+msgstr "participat.etichetă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "în așteptare.etichetă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "zip-replace-file-button"
-msgstr ""
+msgstr "Înlocuiți fișierul"
 
-#, elixir-autogen, elixir-format
 msgid "zip-select-file-button"
-msgstr ""
+msgstr "Selectați fisiere"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "zip-select-label"
-msgstr ""
+msgstr "Aplicație Flow"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "zip-select-placeholder"
-msgstr ""
+msgstr "Selectați un fișier zip"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "zip-too-large"
-msgstr ""
+msgstr "Fișierul selectat este prea mare (max. 20 MB)"
 
-#, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr ""
+msgstr "Urmează să parcurgeți câțiva pași pentru a dona datele dvs. Înainte de a dona, puteți vizualiza datele dvs. și apoi vă puteți da consimțământul pentru a le partaja. Pagina poate dura câteva momente pentru a se încărca — vă mulțumim pentru răbdare."
 
-#, elixir-autogen, elixir-format
 msgid "tool.button"
-msgstr ""
+msgstr "Continuă"

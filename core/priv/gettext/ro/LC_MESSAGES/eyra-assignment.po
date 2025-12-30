@@ -1,455 +1,408 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "ticket.title"
-msgstr ""
+msgstr "ID-ul dvs. de participant"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "earned.label"
-msgstr ""
+msgstr "%{amount} câștigat"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "%{amount} în așteptare"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "togo.label"
-msgstr ""
+msgstr "%{amount} pentru a merge"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "pool.target"
-msgstr ""
+msgstr "%{target} credite necesare"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "close.button"
-msgstr ""
+msgstr "Termină"
 
-#, elixir-autogen, elixir-format
 msgid "open.button"
-msgstr ""
+msgstr "Deschis"
 
-#, elixir-autogen, elixir-format
 msgid "preview.button"
-msgstr ""
+msgstr "Previzualizare"
 
-#, elixir-autogen, elixir-format
 msgid "publish.button"
-msgstr ""
+msgstr "Publică"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "retract.button"
-msgstr ""
+msgstr "Dezactivează conexiunea la internet"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continuă"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.consent.title"
-msgstr ""
+msgstr "Consimțământ"
 
-#, elixir-autogen, elixir-format
 msgid "connect.button"
-msgstr ""
+msgstr "Configurare"
 
-#, elixir-autogen, elixir-format
 msgid "connector.cancel.button"
-msgstr ""
+msgstr "Anulează"
 
-#, elixir-autogen, elixir-format
 msgid "connector.connect.button"
-msgstr ""
+msgstr "Conecteaza"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "connector.storage.text"
-msgstr ""
+msgstr "Selectați tipul de stocare pe care doriți să îl utilizați pentru a stoca datele participanților."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "connector.storage.title"
-msgstr ""
+msgstr "Configurarea stocării datelor"
 
-#, elixir-autogen, elixir-format
 msgid "disconnect.button"
-msgstr ""
+msgstr "Deconectare"
 
-#, elixir-autogen, elixir-format
 msgid "gdpr_form.off.label"
-msgstr ""
+msgstr "Sari peste"
 
-#, elixir-autogen, elixir-format
 msgid "gdpr_form.on.label"
-msgstr ""
+msgstr "Arată"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.consent.body"
-msgstr ""
+msgstr "Utilizați câmpul de text de mai jos pentru a scrie un formular de consimțământ pentru participanții dvs. Participanții dvs. au dat deja consimțământul în alt mod? Alegeți „Săriți”."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.consent.title"
-msgstr ""
+msgstr "Formular de consimțământ"
 
-#, elixir-autogen, elixir-format
 msgid "settings.subtitle.label"
-msgstr ""
+msgstr "Subtitlu"
 
-#, elixir-autogen, elixir-format
 msgid "settings.title.label"
-msgstr ""
+msgstr "Titlu"
 
-#, elixir-autogen, elixir-format
 msgid "settings.image.title"
-msgstr ""
+msgstr "Imagine de antet"
 
-#, elixir-autogen, elixir-format
 msgid "search.different.image.button"
-msgstr ""
+msgstr "Schimbati imaginea"
 
-#, elixir-autogen, elixir-format
 msgid "choose.logo.file"
-msgstr ""
+msgstr "Incarca logo"
 
-#, elixir-autogen, elixir-format
 msgid "choose.other.logo.file"
-msgstr ""
+msgstr "Schimbarea logo-ul"
 
-#, elixir-autogen, elixir-format
 msgid "settings.logo.title"
-msgstr ""
+msgstr "Logo"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.branding.text"
-msgstr ""
+msgstr "Utilizați câmpurile de mai jos pentru a personaliza antetul fluxului de lucru al participanților. Sunteți curios să vedeți cum va arăta acesta pentru participanți? Faceți clic pe „Previzualizare” în partea dreaptă sus pentru a-l verifica."
 
-#, elixir-autogen, elixir-format
 msgid "settings.branding.title"
-msgstr ""
+msgstr "Branding"
 
-#, elixir-autogen, elixir-format
 msgid "work.list.title"
-msgstr ""
+msgstr "Prezentare generală"
 
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
-msgstr ""
+msgstr "Informații"
 
-#, elixir-autogen, elixir-format
 msgid "intro_form.off.label"
-msgstr ""
+msgstr "Sari peste"
 
-#, elixir-autogen, elixir-format
 msgid "intro_form.on.label"
-msgstr ""
+msgstr "Arată"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.intro.body"
-msgstr ""
+msgstr "Adăugați o pagină „Despre” pentru a informa participanții sau selectați „Săriți”."
 
-#, elixir-autogen, elixir-format
 msgid "settings.intro.title"
-msgstr ""
+msgstr "Pagina Despre"
 
-#, elixir-autogen, elixir-format
 msgid "onboarding.intro.title"
-msgstr ""
+msgstr "Despre"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.support.body"
-msgstr ""
+msgstr "Utilizați câmpul de text de mai jos pentru a informa participanții despre cum pot obține asistență atunci când au nevoie. Această pagină va fi afișată atunci când participanții fac clic pe litera „i” din partea dreaptă jos. Verificați „Previzualizare” pentru a vedea cum va arăta. Alegeți „Ignorați” dacă nu intenționați să oferiți asistență."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.support.title"
-msgstr ""
+msgstr "Pagina de asistență tehnică"
 
-#, elixir-autogen, elixir-format
 msgid "support.page.title"
-msgstr ""
+msgstr "Întrebări?"
 
-#, elixir-autogen, elixir-format
 msgid "support_form.off.label"
-msgstr ""
+msgstr "Sari peste"
 
-#, elixir-autogen, elixir-format
 msgid "support_form.on.label"
-msgstr ""
+msgstr "Arată"
 
-#, elixir-autogen, elixir-format
 msgid "declined_view.body"
-msgstr ""
+msgstr "Ați ales să nu participați. Puteți închide browserul. Dacă doriți să reluați participarea, închideți această fereastră pentru a continua."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "declined_view.title"
-msgstr ""
+msgstr "Consimțământul refuzat"
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr ""
+msgstr "Vă mulțumim. Participarea a fost finalizată. Puteți închide fereastra."
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.title"
-msgstr ""
+msgstr "Terminat"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.placeholder"
-msgstr ""
+msgstr "Încărcați o declarație de confidențialitate"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.replace.button"
-msgstr ""
+msgstr "Înlocuiți PDF"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.select.button"
-msgstr ""
+msgstr "Selectați PDF"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.privacy.body"
-msgstr ""
+msgstr "Adăugarea unei declarații de confidențialitate este opțională. Când se încarcă un fișier PDF, acesta va fi afișat ca o pagină separată de confidențialitate. Puteți adăuga informații de confidențialitate în câmpurile de text ale paginii de informații sau ale formularului de consimțământ fără a încărca un fișier PDF sau puteți utiliza adresa URL a declarației de confidențialitate disponibilă după încărcare pentru a face referire la declarația de confidențialitate încărcată."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.privacy.title"
-msgstr ""
+msgstr "Pagina de confidențialitate"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "privacy_doc.annotation"
-msgstr ""
+msgstr "<h1>URL-ul declarației de confidențialitate</h1> Utilizați adresa URL de mai jos pentru a consulta declarația de confidențialitate încărcată. Vă rugăm să rețineți că, atunci când se încarcă un nou fișier PDF, adresa URL va fi actualizată.<br>"
 
-#, elixir-autogen, elixir-format
 msgid "privacy.title"
-msgstr ""
+msgstr "Confidențialitate"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"
-msgstr ""
+msgstr "Monitor"
 
-#, elixir-autogen, elixir-format
 msgid "finished.participants"
-msgstr ""
+msgstr "Finalizat"
 
-#, elixir-autogen, elixir-format
 msgid "started.participants"
-msgstr ""
+msgstr "Început"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "declined.participants"
-msgstr ""
+msgstr "Consimțământ refuzat"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.language.label"
-msgstr ""
+msgstr "Setarea limbii pentru participanți"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "settings.subject_count.label"
-msgstr ""
+msgstr "Numărul estimat de participanți"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
-msgstr ""
+msgstr "Participanţii"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.donate.description"
-msgstr ""
+msgstr "Permite participanților să doneze date."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.download.description"
-msgstr ""
+msgstr "Încărcați un manual în format PDF cu instrucțiuni pentru descărcarea datelor digitale de urmărire. Notă: Nu este compatibil cu dispozitivele mobile."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.questionnaire.description"
-msgstr ""
+msgstr "Redirecționează participanții către un chestionar online."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.request.description"
-msgstr ""
+msgstr "Încărcați un manual în format PDF cu instrucțiuni pentru solicitarea datelor digitale de urmărire. Notă: Nu este compatibil cu dispozitivele mobile."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.download_instruction.description"
-msgstr ""
+msgstr "Permite participanților să descarce fișierul zip cu datele participanților."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.fork_instruction.description"
-msgstr ""
+msgstr "Oferă participanților linkul către depozitul GitHub cu șablonul de care au nevoie pentru a-și pregăti metoda pentru trimitere."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.submit.description"
-msgstr ""
+msgstr "Permite participanților să își trimită metoda pentru provocare cu un link de commit către un depozit GitHub."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "invite.panel.annotation"
-msgstr ""
+msgstr "Utilizați adresa URL de mai jos pentru a invita participanții. Participanții trebuie să se autentifice sau să creeze un cont pentru a participa."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "invite.panel.title"
-msgstr ""
+msgstr "Link de invitație pentru participanți"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.general_instruction.description"
-msgstr ""
+msgstr "Oferiți instrucțiuni participanților."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.onsite_experiment.description"
-msgstr ""
+msgstr "Permite participanților să rezerve un interval de timp pentru studiul dvs. la fața locului."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.body"
-msgstr ""
+msgstr "Această reclamă va fi utilizată pentru a promova studiul dumneavoastră în rândul participanților la Panl și le va permite acestora să participe la studiul dumneavoastră."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.create.button"
-msgstr ""
+msgstr "Creați reclamă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.goto.button"
-msgstr ""
+msgstr "Accesați reclama"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "advert.title"
-msgstr ""
+msgstr "Reclamă Panl"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
-msgstr ""
+msgstr "Consimțământ"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.information.title"
-msgstr ""
+msgstr "Despre"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.support.title"
-msgstr ""
+msgstr "Întrebări?"
 
-#, elixir-autogen, elixir-format
 msgid "context.menu.privacy.title"
-msgstr ""
+msgstr "Protecția datelor"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.create.button"
-msgstr ""
+msgstr "Conectați spațiul de stocare"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.goto.button"
-msgstr ""
+msgstr "Accesați fișierele"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "storage.not_available.warning"
-msgstr ""
+msgstr "Vă rugăm să configurați conexiunea la un spațiu de stocare a datelor."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "1 participant"
 msgid_plural "* participants"
-msgstr[0] ""
+msgstr[0] "1 participant"
 msgstr[1] ""
 msgstr[2] ""
 
-#, elixir-autogen, elixir-format
 msgid "leaf.tag"
-msgstr ""
+msgstr "Temă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr ""
+msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters, precum și înregistrarea asociată cu persoanele care și-au dat consimțământul."
 
-#, elixir-autogen
+#, fuzzy
 msgid "export.progress.button"
-msgstr ""
+msgstr "Raport privind progresele înregistrate"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "monitor.description"
-msgstr ""
+msgstr "Acest monitor de evenimente urmărește evenimentele de interacțiune ale utilizatorilor pentru a afla dacă fluxul de lucru publicat funcționează conform așteptărilor. Nu trebuie utilizat pentru urmărirea fiecărui participant în parte. Dacă doriți să aflați progresul fiecărui participant, exportați raportul de progres din colțul din dreapta sus."
 
-#, elixir-autogen, elixir-format
 msgid "progress.header.consent"
-msgstr ""
+msgstr "Consimțământ"
 
-#, elixir-autogen, elixir-format
 msgid "progress.header.participant"
-msgstr ""
+msgstr "Participant"
 
-#, elixir-autogen, elixir-format
 msgid "progress.no"
-msgstr ""
+msgstr "nu"
 
-#, elixir-autogen, elixir-format
 msgid "progress.not.applicable"
-msgstr ""
+msgstr "n/a"
 
-#, elixir-autogen, elixir-format
 msgid "progress.yes"
-msgstr ""
+msgstr "da"
 
-#, elixir-autogen, elixir-format
 msgid "retry.button"
-msgstr ""
+msgstr "Înapoi"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.paper_screening.description"
-msgstr ""
+msgstr "Selecție pe baza titlului și a rezumatului"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.reviewers"
-msgstr ""
+msgstr "Recenzori"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.settings"
-msgstr ""
+msgstr "Setări"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.workflow"
-msgstr ""
+msgstr "Flux de lucru"
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.criteria"
-msgstr ""
+msgstr "Criterii"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.import"
-msgstr ""
+msgstr "Lucrări"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "workflow_item.manual.description"
-msgstr ""
+msgstr "Furnizați instrucțiuni privind modul de solicitare sau descărcare a datelor digitale de urmărire, creând un manual adaptat pentru dispozitive mobile."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "affiliate.body"
-msgstr ""
+msgstr "Dacă doriți să conectați fluxul de lucru al participanților la un sistem extern, puteți seta adresele URL de mai jos. Orice parametri personalizați specifici participanților incluși în linkul de invitație al participanților sunt redirecționați automat atât către webhook-ul de progres, cât și către adresa URL de redirecționare de la sfârșitul fluxului de lucru."
 
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"
-msgstr ""
+msgstr "Integrare"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "affiliate.panel.annotation"
-msgstr ""
+msgstr "Utilizați linkul de mai jos pentru a invita participanții. Nu este necesară autentificarea. Înlocuiți „participant_id” cu un identificator unic pentru fiecare participant. Opțional, puteți adăuga parametri personalizați la link (de exemplu, &d=abc123). Aceștia vor fi redirecționați automat către orice sistem extern conectat prin fila Integrare."
 
-#, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
-msgstr ""
+msgstr "Link invitatie"
 
-#, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect"
-msgstr ""
+msgstr "Vă mulțumim. Ați finalizat această parte. Continuați pentru a merge mai departe."
 
-#, elixir-autogen, elixir-format
 msgid "redirect.button"
-msgstr ""
+msgstr "Continuă"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "external.panel.annotation"
-msgstr ""
+msgstr "Utilizați linkul de mai jos pentru a invita participanții. Nu este necesară autentificarea. Înlocuiți „participant_id” cu un identificator unic pentru fiecare participant."
 
-#, elixir-autogen, elixir-format
 msgid "external.panel.title"
-msgstr ""
+msgstr "Link invitatie"
 
-#, elixir-autogen, elixir-format
 msgid "settings.language.fixed_nl_message"
-msgstr ""
+msgstr "Limba implicită pentru studiile Panl este olandeza"

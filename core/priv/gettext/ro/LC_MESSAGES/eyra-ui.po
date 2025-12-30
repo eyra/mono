@@ -1,208 +1,187 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
 msgid "error.flash"
-msgstr ""
+msgstr "Ceva n-a mers bine"
 
-#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
-msgstr ""
+msgstr "Salvat"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
-msgstr ""
+msgstr "Cont"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
-msgstr ""
+msgstr "Autentificare"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
-msgstr ""
+msgstr "Deconectare"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
-msgstr ""
+msgstr "Meniu"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
-msgstr ""
+msgstr "De făcut"
 
-#, elixir-autogen, elixir-format
 msgid "todo.title"
-msgstr ""
+msgstr "De făcut"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.student"
-msgstr ""
+msgstr "Program de studiu"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
-msgstr ""
+msgstr "Suport"
 
-#, elixir-autogen, elixir-format
 msgid "cancel.button"
-msgstr ""
+msgstr "Anulează"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "delete.confirm.text"
-msgstr ""
+msgstr "Acest %{item} va fi șters definitiv."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "delete.confirm.title"
-msgstr ""
+msgstr "Ștergeți %{item}?"
 
-#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
-msgstr ""
+msgstr "Șterge"
 
-#, elixir-autogen, elixir-format
 msgid "ok.button"
-msgstr ""
+msgstr "OK"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.support"
-msgstr ""
+msgstr "Suport"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.today"
-msgstr ""
+msgstr "astăzi la %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.yesterday"
-msgstr ""
+msgstr "ieri la %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "authentication.required.message"
-msgstr ""
+msgstr "Vă rugăm să vă autentificați mai întâi"
 
-#, elixir-autogen, elixir-format
 msgid "duplicate.button"
-msgstr ""
+msgstr "Duplicare"
 
-#, elixir-autogen, elixir-format
 msgid "share.button"
-msgstr ""
+msgstr "Persoane"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
-msgstr ""
+msgstr "Meniu"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy
 msgid "persister.error.flash"
-msgstr ""
+msgstr "Nu a fost salvat, reîncărcați și încercați din nou"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
-msgstr ""
+msgstr "Ia legătura"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
-msgstr ""
+msgstr "Trimite notificare"
 
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
-msgstr ""
+msgstr "Administrator"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.projects"
-msgstr ""
+msgstr "Proiecte"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "start.page.projects"
-msgstr ""
+msgstr "Mergi la desktop"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "start.page.home"
-msgstr ""
+msgstr "Mergi la desktop"
 
-#, elixir-autogen, elixir-format
 msgid "collapse.button"
-msgstr ""
+msgstr "Restrânge"
 
-#, elixir-autogen, elixir-format
 msgid "expand.button"
-msgstr ""
+msgstr "Mărește"
 
-#, elixir-autogen, elixir-format
 msgid "privacy.link"
-msgstr ""
+msgstr "Protecția datelor"
 
-#, elixir-autogen, elixir-format
 msgid "terms.link"
-msgstr ""
+msgstr "Termeni"
 
-#, elixir-autogen, elixir-format
 msgid "edit.button"
-msgstr ""
+msgstr "Editeaza"
 
-#, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
-msgstr ""
+msgstr "Copiază"
 
-#, elixir-autogen, elixir-format
 msgid "submit.button"
-msgstr ""
+msgstr "Salvează"
 
-#, elixir-autogen, elixir-format
 msgid "done.button"
-msgstr ""
+msgstr "Terminat"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.date"
-msgstr ""
+msgstr "%{weekday}, %{month} %{day_of_month}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.datetime"
-msgstr ""
+msgstr "%{weekday}, %{month} %{day_of_month} la %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.yesterweek"
-msgstr ""
+msgstr "ultimul %{weekday} la %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.tomorrow"
-msgstr ""
+msgstr "mâine la %{time}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "timestamp.nextweek"
-msgstr ""
+msgstr "următorul %{weekday} la %{time}"
 
-#, elixir-autogen, elixir-format
 msgid "menu.item.desktop"
-msgstr ""
+msgstr "Desktop"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "menu.item.workspace"
-msgstr ""
+msgstr "Spațiul meu de lucru"
 
-#, elixir-autogen, elixir-format
 msgid "confirm.button"
-msgstr ""
+msgstr "Confirmați"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "confirmation_modal.body"
-msgstr ""
+msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "confirmation_modal.title"
-msgstr ""
+msgstr "Săriți peste această pagină?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "tabbar.item.forward"
-msgstr ""
+msgstr "Mergi la %{to}"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "menu.item.onyx"
-msgstr ""
+msgstr "Onix"
