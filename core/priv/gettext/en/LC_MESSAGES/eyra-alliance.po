@@ -112,4 +112,4 @@ msgstr "Continue"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "You are about to leave the Next platform to participate in a questionnaire. After completing the questionnaire, you will be redirected back to Next."
+msgstr "You are about to start a questionnaire in a new tab. Once you have finished, you will be automatically redirected back to this page."
