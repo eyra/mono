@@ -1,0 +1,413 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "ticket.title"
+msgstr "Jūsų dalyvio ID"
+
+#, fuzzy
+msgid "earned.label"
+msgstr "%{amount} uždirbta"
+
+#, fuzzy
+msgid "pending.label"
+msgstr "%{amount} laukia"
+
+#, fuzzy
+msgid "togo.label"
+msgstr "%{amount} eiti"
+
+#, fuzzy
+msgid "pool.target"
+msgstr "%{target} reikalingi kreditai"
+
+#, fuzzy
+msgid "close.button"
+msgstr "Baigti"
+
+msgid "open.button"
+msgstr "Atidaryti"
+
+msgid "preview.button"
+msgstr "Peržiūra"
+
+msgid "publish.button"
+msgstr "Paskelbti"
+
+#, fuzzy
+msgid "retract.button"
+msgstr "Pereiti į neprisijungusį režimą"
+
+msgid "onboarding.continue.button"
+msgstr "Tęsti"
+
+msgid "onboarding.consent.title"
+msgstr "Sutikimas"
+
+msgid "connect.button"
+msgstr "Nustatymai"
+
+msgid "connector.cancel.button"
+msgstr "Atšaukti"
+
+msgid "connector.connect.button"
+msgstr "Prisijungti"
+
+#, fuzzy
+msgid "connector.storage.text"
+msgstr "Pasirinkite saugojimo tipą, kurį norite naudoti dalyvių duomenims saugoti."
+
+#, fuzzy
+msgid "connector.storage.title"
+msgstr "Nustatyti duomenų saugojimą"
+
+msgid "disconnect.button"
+msgstr "Atsijungti"
+
+msgid "gdpr_form.off.label"
+msgstr "Praleisti"
+
+msgid "gdpr_form.on.label"
+msgstr "Rodyti"
+
+#, fuzzy
+msgid "settings.consent.body"
+msgstr "Naudokite žemiau esantį tekstinį lauką, kad parašytumėte sutikimo formą savo dalyviams. Ar jūsų dalyviai jau davė sutikimą kitu būdu? Pasirinkite „Pereiti“."
+
+#, fuzzy
+msgid "settings.consent.title"
+msgstr "Sutikimo forma"
+
+msgid "settings.subtitle.label"
+msgstr "Subtitrai"
+
+msgid "settings.title.label"
+msgstr "Pavadinimas"
+
+#, fuzzy
+msgid "settings.image.title"
+msgstr "Pagrindinis paveikslėlis"
+
+msgid "search.different.image.button"
+msgstr "Keisti vaizdą"
+
+#, fuzzy
+msgid "choose.logo.file"
+msgstr "Įkelti logotipą"
+
+msgid "choose.other.logo.file"
+msgstr "Keisti logotipą"
+
+msgid "settings.logo.title"
+msgstr "Logotipas"
+
+#, fuzzy
+msgid "settings.branding.text"
+msgstr "Naudokite žemiau esančius laukelius, kad pritaikytumėte dalyvių darbo eigos antraštę. Norite pamatyti, kaip tai atrodys dalyviams? Spustelėkite „Peržiūrėti“ viršutiniame dešiniajame kampe, kad tai patikrintumėte."
+
+msgid "settings.branding.title"
+msgstr "Brendas"
+
+msgid "work.list.title"
+msgstr "Apžvalga"
+
+msgid "intro.page.title"
+msgstr "Informacija"
+
+msgid "intro_form.off.label"
+msgstr "Praleisti"
+
+msgid "intro_form.on.label"
+msgstr "Rodyti"
+
+#, fuzzy
+msgid "settings.intro.body"
+msgstr "Pridėkite informacijos apie puslapį, kad galėtumėte informuoti dalyvius, arba pasirinkite „Pereiti“."
+
+#, fuzzy
+msgid "settings.intro.title"
+msgstr "Apie puslapį"
+
+msgid "onboarding.intro.title"
+msgstr "Apie"
+
+#, fuzzy
+msgid "settings.support.body"
+msgstr "Naudokite žemiau esantį tekstinį lauką, kad informuotumėte dalyvius, kaip gauti pagalbą, kai jos prireiks. Šis puslapis bus rodomas, kai dalyviai spustels dešinėje apačioje esantį simbolį „i“. Norėdami pamatyti, kaip tai atrodys, spustelėkite „Peržiūrėti“. Jei neplanuojate teikti pagalbos, pasirinkite „Pereiti“."
+
+#, fuzzy
+msgid "settings.support.title"
+msgstr "Pagalbos tarnybos puslapis"
+
+msgid "support.page.title"
+msgstr "Klausimų?"
+
+msgid "support_form.off.label"
+msgstr "Praleisti"
+
+msgid "support_form.on.label"
+msgstr "Rodyti"
+
+msgid "declined_view.body"
+msgstr "Jūs pasirinkote nedalyvauti. Galite uždaryti naršyklę. Jei norite tęsti dalyvavimą, uždarykite šį langą ir tęskite."
+
+msgid "declined_view.title"
+msgstr "Sutikimas atmestas"
+
+msgid "finished_view.body"
+msgstr "Ačiū. Dalyvavimas baigtas. Galite uždaryti langą."
+
+msgid "finished_view.title"
+msgstr "Atlikta"
+
+#, fuzzy
+msgid "privacy_doc.placeholder"
+msgstr "Įkelkite privatumo pareiškimą"
+
+#, fuzzy
+msgid "privacy_doc.replace.button"
+msgstr "Pakeisti PDF"
+
+#, fuzzy
+msgid "privacy_doc.select.button"
+msgstr "Pasirinkite PDF"
+
+#, fuzzy
+msgid "settings.privacy.body"
+msgstr "Privatumo pareiškimą pridėti yra neprivaloma. Kai PDF failas bus įkeltas, jis bus rodomas kaip atskiras privatumo puslapis. Privatumo informaciją galite pridėti į informacijos puslapio arba sutikimo formos tekstinius laukelius be PDF failo įkėlimo arba naudoti privatumo pareiškimo URL adresą, kuris bus prieinamas po įkėlimo, kad galėtumėte nurodyti įkeltą privatumo pareiškimą."
+
+msgid "settings.privacy.title"
+msgstr "Privatumo politika"
+
+#, fuzzy
+msgid "privacy_doc.annotation"
+msgstr "<h1>Privatumo politikos URL</h1> Naudokite žemiau pateiktą URL adresą, kad galėtumėte peržiūrėti įkeltą privatumo pareiškimą. Atkreipkite dėmesį, kad įkėlus naują PDF failą, URL adresas bus atnaujintas.<br>"
+
+msgid "privacy.title"
+msgstr "Privatumas"
+
+msgid "tabbar.item.monitor"
+msgstr "Atvaizdavimas"
+
+msgid "finished.participants"
+msgstr "Baigta"
+
+msgid "started.participants"
+msgstr "Pradėti"
+
+#, fuzzy
+msgid "declined.participants"
+msgstr "Atsisakytas sutikimas"
+
+#, fuzzy
+msgid "settings.language.label"
+msgstr "Dalyvių kalbos nustatymas"
+
+#, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Numatomas dalyvių skaičius"
+
+msgid "tabbar.item.participants"
+msgstr "Dalyviai"
+
+#, fuzzy
+msgid "workflow_item.donate.description"
+msgstr "Leidžia dalyviams paaukoti duomenis."
+
+#, fuzzy
+msgid "workflow_item.download.description"
+msgstr "Įkelkite PDF formatu instrukciją, kurioje pateikiami nurodymai, kaip atsisiųsti skaitmeninius trasos duomenis. Pastaba: nepritaikyta mobiliesiems įrenginiams."
+
+#, fuzzy
+msgid "workflow_item.questionnaire.description"
+msgstr "Peradresuoja dalyvius į internetinę anketą."
+
+#, fuzzy
+msgid "workflow_item.request.description"
+msgstr "Įkelkite PDF formatu parengtą vadovą su instrukcijomis, kaip prašyti skaitmeninių trasos duomenų. Pastaba: nepritaikytas mobiliesiems įrenginiams."
+
+#, fuzzy
+msgid "workflow_item.download_instruction.description"
+msgstr "Leidžia dalyviams atsisiųsti jūsų dalyvių duomenų zip failą."
+
+#, fuzzy
+msgid "workflow_item.fork_instruction.description"
+msgstr "Dalyviams pateikite savo šablono GitHub saugyklos nuorodą, kurios jiems reikia, kad galėtų parengti savo metodą pateikimui."
+
+#, fuzzy
+msgid "workflow_item.submit.description"
+msgstr "Leidžia dalyviams pateikti savo metodą iššūkiui su GitHub saugyklos patvirtinimo nuoroda."
+
+#, fuzzy
+msgid "invite.panel.annotation"
+msgstr "Naudokite žemiau pateiktą URL adresą, kad pakviestumėte dalyvius. Dalyviai turi prisijungti arba susikurti paskyrą, kad galėtų dalyvauti."
+
+#, fuzzy
+msgid "invite.panel.title"
+msgstr "Dalyvio kvietimo nuoroda"
+
+#, fuzzy
+msgid "workflow_item.general_instruction.description"
+msgstr "Pateikite dalyviams instrukcijas."
+
+#, fuzzy
+msgid "workflow_item.onsite_experiment.description"
+msgstr "Leidžia dalyviams užsisakyti laiko tarpsnį jūsų vietoje atliekamam tyrimui."
+
+#, fuzzy
+msgid "advert.body"
+msgstr "Ši reklama bus naudojama jūsų tyrimui reklamuoti „Panl“ dalyviams ir leis jiems dalyvauti jūsų tyrime."
+
+#, fuzzy
+msgid "advert.create.button"
+msgstr "Sukurti reklamą"
+
+#, fuzzy
+msgid "advert.goto.button"
+msgstr "Eiti į skelbimą"
+
+#, fuzzy
+msgid "advert.title"
+msgstr "Panl reklama"
+
+#, fuzzy
+msgid "context.menu.consent.title"
+msgstr "Sutikimas"
+
+msgid "context.menu.information.title"
+msgstr "Apie"
+
+msgid "context.menu.support.title"
+msgstr "Klausimų?"
+
+msgid "context.menu.privacy.title"
+msgstr "Privatumas"
+
+#, fuzzy
+msgid "storage.create.button"
+msgstr "Prijunkite saugyklą"
+
+#, fuzzy
+msgid "storage.goto.button"
+msgstr "Eiti į failus"
+
+#, fuzzy
+msgid "storage.not_available.warning"
+msgstr "Prašome nustatyti ryšį su duomenų saugykla"
+
+#, fuzzy
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] "1 dalyvis"
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "leaf.tag"
+msgstr "Paskyrimas"
+
+#, fuzzy
+msgid "gdpr_form.confirmation_modal.body"
+msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas, taip pat ir susijęs įrašas apie tai, kas davė sutikimą."
+
+#, fuzzy
+msgid "export.progress.button"
+msgstr "Pažangos ataskaita"
+
+#, fuzzy
+msgid "monitor.description"
+msgstr "Šis įvykių stebėjimo įrankis seka vartotojų sąveikos įvykius, kad būtų galima įvertinti, ar jūsų paskelbtas darbo srautas veikia kaip tikėtasi. Jis neturėtų būti naudojamas dalyvių stebėjimui. Jei norite sužinoti kiekvieno dalyvio pažangą, eksportuokite pažangos ataskaitą, esančią dešiniame viršutiniame kampe."
+
+msgid "progress.header.consent"
+msgstr "Sutikimas"
+
+msgid "progress.header.participant"
+msgstr "Dalyvis"
+
+msgid "progress.no"
+msgstr "ne"
+
+msgid "progress.not.applicable"
+msgstr "nėra"
+
+msgid "progress.yes"
+msgstr "taip"
+
+msgid "retry.button"
+msgstr "Atgal"
+
+#, fuzzy
+msgid "workflow_item.paper_screening.description"
+msgstr "Atranka pagal pavadinimą ir santrauką"
+
+#, fuzzy
+msgid "tabbar.item.reviewers"
+msgstr "Recenzentai"
+
+msgid "tabbar.item.settings"
+msgstr "Nustatymai"
+
+msgid "tabbar.item.workflow"
+msgstr "Eiga"
+
+msgid "tabbar.item.criteria"
+msgstr "Kriterijus"
+
+#, fuzzy
+msgid "tabbar.item.import"
+msgstr "Dokumentai"
+
+#, fuzzy
+msgid "workflow_item.manual.description"
+msgstr "Sukurkite mobiliems įrenginiams pritaikytą vadovą, kuriame pateikite instrukcijas, kaip prašyti ar atsisiųsti skaitmeninius sekimo duomenis."
+
+#, fuzzy
+msgid "affiliate.body"
+msgstr "Jei norite prijungti dalyvio darbo eigą prie išorinės sistemos, galite nustatyti žemiau nurodytus URL adresus. Visi dalyvio kvietimo nuorodoje esantys individualūs dalyvio parametrai automatiškai perduodami tiek pažangos webhook, tiek darbo eigos pabaigos nukreipimo URL adresui."
+
+msgid "tabbar.item.affiliate"
+msgstr "Integracija"
+
+#, fuzzy
+msgid "affiliate.panel.annotation"
+msgstr "Naudokite žemiau pateiktą nuorodą, kad pakviestumėte dalyvius. Registruotis nereikia. Pakeiskite „participant_id“ kiekvieno dalyvio unikaliu identifikatoriumi. Jei norite, galite pridėti pasirinktinius parametrus prie nuorodos (pvz., &d=abc123). Jie bus automatiškai persiųsti į bet kurią išorinę sistemą, prijungtą per skirtuką „Integracija“."
+
+#, fuzzy
+msgid "affiliate.panel.title"
+msgstr "Kvietimo nuoroda"
+
+msgid "finished_view.body.redirect"
+msgstr "Ačiū. Šią dalį baigėte. Pasirinkite „Tęsti“, kad galėtumėte tęsti."
+
+msgid "redirect.button"
+msgstr "Tęsti"
+
+#, fuzzy
+msgid "external.panel.annotation"
+msgstr "Naudokite žemiau esančią nuorodą, kad pakviestumėte dalyvius. Registruotis nereikia. Pakeiskite „participant_id“ kiekvieno dalyvio unikaliu identifikatoriumi."
+
+#, fuzzy
+msgid "external.panel.title"
+msgstr "Kvietimo nuoroda"
+
+#, fuzzy
+msgid "settings.language.fixed_nl_message"
+msgstr "Panl studijų numatytoji kalba yra olandų."
