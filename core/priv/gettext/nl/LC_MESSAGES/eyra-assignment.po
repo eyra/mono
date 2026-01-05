@@ -450,11 +450,11 @@ msgstr "De standaardtaal voor Panl-studies is het Nederlands."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.title.declined"
@@ -470,12 +470,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "back.button"
-msgstr ""
+msgstr "Terug"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. Klik op Doorgaan om verder te gaan naar %{platform}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."

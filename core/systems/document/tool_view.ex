@@ -23,7 +23,7 @@ defmodule Systems.Document.ToolView do
   end
 
   @impl true
-  def handle_event("tool_initialized", _payload, socket) do
+  def handle_event("pdf_ready", _payload, socket) do
     {:noreply, assign(socket, initialized: true)}
   end
 

@@ -37,6 +37,30 @@ defmodule Systems.Feldspar.ToolViewTest do
       assert html =~ "Test Feldspar App"
     end
 
+    test "normalizes icon name to lowercase for image path", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
+      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+
+      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+
+      # Use mixed case icon name (as might be stored in database)
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          title: "Test App",
+          icon: "TikTok",
+          tool_ref: tool_ref
+        })
+
+      session = %{"live_context" => live_context}
+
+      {:ok, _view, html} = live_isolated(conn, Feldspar.ToolView, session: session)
+
+      # Icon path should be normalized to lowercase
+      assert html =~ "tiktok_square.svg"
+      refute html =~ "TikTok_square.svg"
+    end
+
     test "renders start button before tool is started", %{conn: conn} do
       tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
       tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})

@@ -16,10 +16,10 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
 
       vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
 
-      # Should have tool, title, and icon
+      # Should have tool, title, and icon (icon normalized to lowercase string)
       assert vm.tool.id == tool.id
       assert vm.title == "Test App"
-      assert vm.icon == :custom_icon
+      assert vm.icon == "custom_icon"
 
       # Should have description
       assert vm.description == dgettext("eyra-feldspar", "tool.description")
@@ -46,21 +46,27 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       assert vm.app_view.options[:url] == "#{tool.archive_ref}/index.html"
     end
 
-    test "handles different icon types", %{tool: tool} do
-      # Test with atom icon
-      assigns = build_assigns("Title", :home)
-      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
-      assert vm.icon == :home
-
-      # Test with string icon
-      assigns = build_assigns("Title", "settings")
-      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
-      assert vm.icon == "settings"
-
-      # Test with nil icon
+    test "handles nil icon", %{tool: tool} do
       assigns = build_assigns("Title", nil)
       vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
       assert vm.icon == nil
+    end
+
+    test "normalizes string icon to lowercase", %{tool: tool} do
+      # Mixed case icon (as might be stored in database)
+      assigns = build_assigns("Title", "TikTok")
+      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
+      assert vm.icon == "tiktok"
+
+      # Already lowercase
+      assigns = build_assigns("Title", "apple")
+      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
+      assert vm.icon == "apple"
+
+      # All uppercase
+      assigns = build_assigns("Title", "INSTAGRAM")
+      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
+      assert vm.icon == "instagram"
     end
   end
 

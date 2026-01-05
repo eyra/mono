@@ -414,7 +414,7 @@ msgstr "Provide instructions on how to request or download digital trace data by
 
 #, elixir-autogen, elixir-format
 msgid "affiliate.body"
-msgstr "If you would like to connect your participant workflow to an external system you can set the URLs below. Any custom participant-specific parameters included in the participant invite link are automatically forwarded to both the progress webhook and the end-of-workflow redirect URL."
+msgstr "Connect your participant workflow to an external system by providing the URLs below. Any participant-specific parameters included in the invite link will automatically be forwarded to the end-of-workflow redirect URL and the progress webhook, if configured."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"

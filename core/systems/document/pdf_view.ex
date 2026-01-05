@@ -4,11 +4,12 @@ defmodule Systems.Document.PDFView do
   @impl true
   def update(%{key: key, url: url} = params, socket) do
     visible = Map.get(params, :visible, true)
+    notify_ready = Map.get(params, :notify_ready, false)
 
     {
       :ok,
       socket
-      |> assign(key: key, url: url, visible: visible)
+      |> assign(key: key, url: url, visible: visible, notify_ready: notify_ready)
       |> update_state()
     }
   end
@@ -34,7 +35,8 @@ defmodule Systems.Document.PDFView do
           phx-hook="PDFViewer"
           phx-update="ignore"
           data-src={"#{@url}"}
-          data-state={@state} />
+          data-state={@state}
+          data-notify-ready={"#{@notify_ready}"} />
       </div>
     """
   end

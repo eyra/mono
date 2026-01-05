@@ -24,7 +24,8 @@ defmodule Systems.Document.ToolViewBuilder do
       id: "pdf_view_#{id}",
       key: "pdf_view_#{id}",
       url: ref,
-      visible: true
+      visible: true,
+      notify_ready: true
     }
   end
 

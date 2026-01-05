@@ -132,9 +132,10 @@ defmodule Systems.Assignment.Private do
     "assignment=#{id}"
   end
 
-  def get_preview_url(%Assignment.Model{id: id}) do
-    # Preview uses internal controller, not affiliate system
-    ~p"/assignment/#{id}/preview"
+  def get_preview_url(%Assignment.Model{} = assignment) do
+    # Preview uses the same affiliate URL as participants with a default participant ID
+    # The affiliate controller detects the logged-in user is a tester and handles accordingly
+    Systems.Affiliate.Public.url_for_resource(assignment) <> "?p=preview"
   end
 
   def page_title_default(:assignment_information),

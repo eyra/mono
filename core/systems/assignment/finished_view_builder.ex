@@ -1,12 +1,15 @@
 defmodule Systems.Assignment.FinishedViewBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{Assignment, Affiliate}
+  alias Systems.Assignment
 
-  def view_model(%{affiliate: affiliate} = assignment, %{current_user: user}) do
+  def view_model(
+        %{affiliate: affiliate} = assignment,
+        %{current_user: user, live_context: %{data: %{panel_info: panel_info}}}
+      ) do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
-    redirect_url = get_redirect_url(affiliate, user)
+    redirect_url = get_redirect_url(panel_info)
 
     %{
       title: build_title(declined?),
@@ -17,12 +20,13 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     }
   end
 
-  defp get_redirect_url(affiliate, user) do
-    case Affiliate.Public.redirect_url(affiliate, user) do
-      {:ok, url} -> url
-      {:error, _} -> nil
-    end
+  # Fallback when no panel_info (direct access without affiliate flow)
+  def view_model(%{} = assignment, %{current_user: _user} = assigns) do
+    view_model(assignment, Map.put(assigns, :live_context, %{data: %{panel_info: nil}}))
   end
+
+  defp get_redirect_url(%{redirect_url: redirect_url}), do: redirect_url
+  defp get_redirect_url(_), do: nil
 
   defp build_title(true = _declined?),
     do: dgettext("eyra-assignment", "finished_view.title.declined")

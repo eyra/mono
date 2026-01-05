@@ -6,10 +6,19 @@ defmodule Systems.Account.UserForm do
 
   alias Frameworks.Pixel.AlertBanner
 
+  # Helper function to create a clickable policy link
+  defp policy_link(url, text_key) do
+    link_text = Gettext.dgettext(CoreWeb.Gettext, "eyra-account", text_key)
+
+    "<a href='#{url}' target='_blank' rel='noopener noreferrer' class='text-semibold text-primary underline hover:opacity-80' onclick='event.stopPropagation();'>#{link_text}</a>"
+  end
+
   attr(:changeset, :map, required: true)
-  attr(:privacy_policy_visible, :boolean, default: false)
-  attr(:privacy_policy_accepted, :boolean, default: false)
-  attr(:privacy_policy_error, :string, default: nil)
+  attr(:panl_privacy_policy_visible, :boolean, default: false)
+  attr(:panl_privacy_policy_accepted, :boolean, default: false)
+  attr(:next_privacy_policy_accepted, :boolean, default: false)
+  attr(:next_privacy_policy_error, :string, default: nil)
+  attr(:panl_privacy_policy_error, :string, default: nil)
 
   def password_signup(assigns) do
     ~H"""
@@ -18,25 +27,53 @@ defmodule Systems.Account.UserForm do
         <.spacing value="S" />
         <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
         <.spacing value="S" />
-        <%= if @privacy_policy_visible do %>
-          <.spacing value="S" />
-          <.live_component
+        <.live_component
             module={Frameworks.Pixel.Selector}
-            id="privacy_policy_selector"
+            id="next_privacy_policy_selector"
             items={[
               %{
-                id: :privacy_policy_accepted,
-                value: dgettext("eyra-account", "privacy.policy.label"),
-                active: @privacy_policy_accepted,
+                id: :next_privacy_policy_accepted,
+                value: dgettext("eyra-account", "privacy.next-policy.label",
+                  terms_link: policy_link("https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c", "privacy.link.terms"),
+                  privacy_link: policy_link("https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752", "privacy.link.privacy")
+                ),
+                active: @next_privacy_policy_accepted
               }
             ]}
             type={:checkbox}
-            optional?={false}
+            optional?={true}
+            raw?={true}
           />
 
-          <%= if @privacy_policy_error do %>
+        <%= if @next_privacy_policy_error do %>
+          <div class="text-warning text-sm mt-1">
+            <%= @next_privacy_policy_error %>
+          </div>
+        <% end %>
+
+        <%= if @panl_privacy_policy_visible do %>
+          <.spacing value="S" />
+          <.live_component
+            module={Frameworks.Pixel.Selector}
+            id="panl_panl_privacy_policy_selector"
+            items={[
+              %{
+                id: :panl_privacy_policy_accepted,
+                value: dgettext("eyra-account", "panl.privacy.policy.label",
+                  terms_link: policy_link("https://panl.nl/terms", "privacy.link.terms"),
+                  privacy_link: policy_link("https://panl.nl/privacy", "privacy.link.privacy")
+                ),
+                active: @panl_privacy_policy_accepted
+              }
+            ]}
+            type={:checkbox}
+            optional?={true}
+            raw?={true}
+          />
+
+          <%= if @panl_privacy_policy_error do %>
             <div class="text-warning text-sm mt-1">
-              <%= @privacy_policy_error %>
+              <%= @panl_privacy_policy_error %>
             </div>
           <% end %>
         <% end %>
