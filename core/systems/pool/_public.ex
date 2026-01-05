@@ -284,6 +284,7 @@ defmodule Systems.Pool.Public do
     |> Multi.update(:criteria, changeset)
     |> Multi.run(:dispatch, fn _, %{criteria: criteria} ->
       Signal.Public.dispatch!({:criteria, :updated}, %{criteria: criteria})
+      {:ok, true}
     end)
     |> Repo.commit()
   end
@@ -305,7 +306,9 @@ defmodule Systems.Pool.Public do
 
   def count_eligitable_users(
         %Pool.CriteriaModel{
-          genders: genders
+          genders: genders,
+          min_birth_year: min_birth_year,
+          max_birth_year: max_birth_year
         },
         include,
         exclude
@@ -314,6 +317,7 @@ defmodule Systems.Pool.Public do
 
     query_count_users(include, exclude)
     |> optional_where(:gender, genders)
+    |> optional_where_birth_year(min_birth_year, max_birth_year)
     |> Repo.one()
   end
 
@@ -337,6 +341,24 @@ defmodule Systems.Pool.Public do
 
   defp optional_where(query, field_name, values) do
     where(query, [user, features], field(features, ^field_name) in ^values)
+  end
+
+  defp optional_where_birth_year(query, nil, nil), do: query
+
+  defp optional_where_birth_year(query, min_year, nil) do
+    where(query, [user, features], field(features, :birth_year) >= ^min_year)
+  end
+
+  defp optional_where_birth_year(query, nil, max_year) do
+    where(query, [user, features], field(features, :birth_year) <= ^max_year)
+  end
+
+  defp optional_where_birth_year(query, min_year, max_year) do
+    where(
+      query,
+      [user, features],
+      field(features, :birth_year) >= ^min_year and field(features, :birth_year) <= ^max_year
+    )
   end
 
   def target_achieved?(
