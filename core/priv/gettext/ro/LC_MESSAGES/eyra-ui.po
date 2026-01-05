@@ -1,0 +1,187 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "error.flash"
+msgstr "Ceva n-a mers bine"
+
+msgid "persister.saved.flash"
+msgstr "Salvat"
+
+msgid "menu.item.profile"
+msgstr "Cont"
+
+msgid "menu.item.signin"
+msgstr "Autentificare"
+
+msgid "menu.item.signout"
+msgstr "Deconectare"
+
+msgid "menu.item.menu"
+msgstr "Meniu"
+
+msgid "menu.item.todo"
+msgstr "De făcut"
+
+msgid "todo.title"
+msgstr "De făcut"
+
+#, fuzzy
+msgid "tabbar.item.student"
+msgstr "Program de studiu"
+
+msgid "menu.item.helpdesk"
+msgstr "Suport"
+
+msgid "cancel.button"
+msgstr "Anulează"
+
+#, fuzzy
+msgid "delete.confirm.text"
+msgstr "Acest %{item} va fi șters definitiv."
+
+#, fuzzy
+msgid "delete.confirm.title"
+msgstr "Ștergeți %{item}?"
+
+msgid "delete.confirm.label"
+msgstr "Șterge"
+
+msgid "ok.button"
+msgstr "OK"
+
+msgid "menu.item.support"
+msgstr "Suport"
+
+#, fuzzy
+msgid "timestamp.today"
+msgstr "astăzi la %{time}"
+
+#, fuzzy
+msgid "timestamp.yesterday"
+msgstr "ieri la %{time}"
+
+#, fuzzy
+msgid "authentication.required.message"
+msgstr "Vă rugăm să vă autentificați mai întâi"
+
+msgid "duplicate.button"
+msgstr "Duplicare"
+
+msgid "share.button"
+msgstr "Persoane"
+
+msgid "menu.item.payments"
+msgstr "Meniu"
+
+#, fuzzy
+msgid "persister.error.flash"
+msgstr "Nu a fost salvat, reîncărcați și încercați din nou"
+
+msgid "mailto.button"
+msgstr "Ia legătura"
+
+msgid "notify.all"
+msgstr "Trimite notificare"
+
+msgid "menu.item.admin"
+msgstr "Administrator"
+
+msgid "menu.item.projects"
+msgstr "Proiecte"
+
+#, fuzzy
+msgid "start.page.projects"
+msgstr "Mergi la desktop"
+
+#, fuzzy
+msgid "start.page.home"
+msgstr "Mergi la desktop"
+
+msgid "collapse.button"
+msgstr "Restrânge"
+
+msgid "expand.button"
+msgstr "Mărește"
+
+msgid "privacy.link"
+msgstr "Protecția datelor"
+
+msgid "terms.link"
+msgstr "Termeni"
+
+msgid "edit.button"
+msgstr "Editeaza"
+
+msgid "copy.clipboard.button"
+msgstr "Copiază"
+
+msgid "submit.button"
+msgstr "Salvează"
+
+msgid "done.button"
+msgstr "Terminat"
+
+#, fuzzy
+msgid "timestamp.date"
+msgstr "%{weekday}, %{month} %{day_of_month}"
+
+#, fuzzy
+msgid "timestamp.datetime"
+msgstr "%{weekday}, %{month} %{day_of_month} la %{time}"
+
+#, fuzzy
+msgid "timestamp.yesterweek"
+msgstr "ultimul %{weekday} la %{time}"
+
+#, fuzzy
+msgid "timestamp.tomorrow"
+msgstr "mâine la %{time}"
+
+#, fuzzy
+msgid "timestamp.nextweek"
+msgstr "următorul %{weekday} la %{time}"
+
+msgid "menu.item.desktop"
+msgstr "Desktop"
+
+#, fuzzy
+msgid "menu.item.workspace"
+msgstr "Spațiul meu de lucru"
+
+msgid "confirm.button"
+msgstr "Confirmați"
+
+#, fuzzy
+msgid "confirmation_modal.body"
+msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters."
+
+#, fuzzy
+msgid "confirmation_modal.title"
+msgstr "Săriți peste această pagină?"
+
+#, fuzzy
+msgid "tabbar.item.forward"
+msgstr "Mergi la %{to}"
+
+#, fuzzy
+msgid "menu.item.onyx"
+msgstr "Onix"

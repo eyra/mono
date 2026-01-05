@@ -7,6 +7,7 @@ defmodule Systems.Admin.Routes do
         live("/login", LoginPage)
         live("/config", ConfigPage)
         live("/import/rewards", ImportRewardsPage)
+        live("/typography", TypographyPage)
       end
     end
   end

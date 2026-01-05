@@ -7,6 +7,7 @@ defmodule Systems.Assignment.ParticipantsView do
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
+  alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
   alias Systems.Pool
@@ -192,7 +193,7 @@ defmodule Systems.Assignment.ParticipantsView do
                     <Button.dynamic_bar buttons={[@advert_button]} />
                   </div>
                   <div>
-                    <img src={~p"/images/panl-standing.svg"} alt="Panl logo" />
+                    <Logo.product name={:panl} variant={:standing} />
                   </div>
                 </div>
               </div>

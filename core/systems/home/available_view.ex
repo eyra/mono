@@ -2,6 +2,7 @@ defmodule Systems.Home.AdvertsView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Grid
+  alias Frameworks.Pixel.Logo
   alias Systems.Advert
 
   @impl true
@@ -37,7 +38,7 @@ defmodule Systems.Home.AdvertsView do
           </Text.title2>
           <div class="flex-grow" />
           <div>
-            <img class="h-12" src="/images/panl-wide.svg" />
+            <Logo.product name={:panl} variant={:wide} class="h-12" />
           </div>
         </div>
         <.spacing value="S" />

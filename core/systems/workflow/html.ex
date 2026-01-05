@@ -2,13 +2,14 @@ defmodule Systems.Workflow.HTML do
   use CoreWeb, :html
 
   alias Frameworks.Pixel.Align
+  alias Frameworks.Pixel.Logo
 
   import CoreWeb.UI.StepIndicator
 
   attr(:id, :any, required: true)
   attr(:title, :map, required: true)
   attr(:description, :map, default: nil)
-  attr(:icon, :string, required: true)
+  attr(:group, :atom, default: nil)
   attr(:status, :atom, default: :pending)
   attr(:index, :integer, required: true)
   attr(:selected?, :boolean, default: true)
@@ -43,9 +44,9 @@ defmodule Systems.Workflow.HTML do
                 <% end %>
               </div>
             </div>
-            <%= if @icon do %>
+            <%= if @group do %>
               <div class="w-8 h-8 flex-shrink-0">
-                <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
+                <Logo.platform platform={@group} class="w-8 h-8" />
               </div>
             <% end %>
           </div>

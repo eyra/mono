@@ -4,6 +4,7 @@ postgres-data
 .netrc
 *.key
 *.pub
+*.mo
 
 # Local development settings
 dev.local.exs

@@ -1,0 +1,176 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "displayname.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fullname.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "password.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "profile.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signup.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signup.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "await.confirmation.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.token.resend_button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.profile.photo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.profile.photo.file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "professionaltitle.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "feature.study.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.gender.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.nativelanguage.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.content.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "login.google.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "login.surf.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signin.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "signin.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "await.confirmation.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.failed.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.failed.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.confirm.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activation.confirm.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.no_match.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.add.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.search.alread_added.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.cancel_remove.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.confirm_remove.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.confirm_remove.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "Account activated successfully."
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "features.birthyear.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.policy.must.be.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.profile.title"
+msgstr ""

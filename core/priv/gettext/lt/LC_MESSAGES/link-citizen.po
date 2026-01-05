@@ -1,0 +1,80 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "overview.plugin.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.create.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.currency.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.edit.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "citizen.tag.complete"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "citizens.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.citizens"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.icon.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.archive.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.restore.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.share.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.adverts"
+msgstr ""

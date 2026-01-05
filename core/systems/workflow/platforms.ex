@@ -1,9 +1,9 @@
 defmodule Systems.Workflow.Platforms do
   @moduledoc """
   Defines DDP platforms that are supported out of the box.
-  Make sure to add icons for each platform in the `priv/static/images/icons` directory:
-  * <platform>.svg
-  * <platform>_square.svg
+  Make sure to add logos for each platform in the `priv/static/images/logos/platforms` directory:
+  * <platform>.svg (circle variant)
+  * <platform>_square.svg (square variant)
   See Figma https://www.figma.com/design/RXKuvMFGz3Eln5MNPJ1q6a/Design-system?node-id=470-10741&t=XxCVZd4kNTsfcQP7-1 for reference.
   """
   use Core.Enums.Base,

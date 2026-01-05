@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.Icon
+  alias Frameworks.Pixel.Logo
 
   attr(:text, :string, required: true)
   attr(:font, :string, default: "text-link font-link")
@@ -212,7 +213,7 @@ defmodule Frameworks.Pixel.Button.Face do
     ~H"""
       <div class={"flex flex-row items-center justify-start rounded-full focus:outline-none h-12"}>
         <div class="flex flex-col items-center justify-center">
-          <Icon.menu_home name={@icon} size={@size} />
+          <Logo.menu_home name={@icon} size={@size} />
         </div>
       </div>
     """
@@ -272,8 +273,8 @@ defmodule Frameworks.Pixel.Button.Face do
           <div class="flex-grow" />
           <div>
             <div class="flex flex-col items-center justify-center">
-              <div class={"px-6px rounded-full #{@counter_color}"}>
-                <div class="text-captionsmall font-caption text-white mt-2px">
+              <div class={"w-5 h-5 flex items-center justify-center rounded-full #{@counter_color}"}>
+                <div class="text-captionsmall font-caption text-white">
                   <%= @counter %>
                 </div>
               </div>

@@ -1,0 +1,504 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "devices.desktop"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "devices.phone"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "devices.tablet"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "genders.man"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "genders.woman"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "genders.non_binary"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "genders.prefer_not_to_say"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.art"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.health"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.history"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.language"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.politics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.society"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.technology"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dominant_hands.left"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dominant_hands.right"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "native_languages.en"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "native_languages.nl"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket_types.bug"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket_types.question"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket_types.tip"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.accounting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.business"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.economics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.management"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.marketing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.organisation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "online_study_languages.en"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "online_study_languages.nl"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "native_languages.other"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.data_science"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.digital_innovation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.econometrics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.finance"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "themes.operations_analytics"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reject_catagories.attention_checks_failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reject_catagories.not_completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "reject_catagories.other"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.bk"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.iba"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.resit"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket_status.closed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ticket_status.open"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission_status.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission_status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission_status.idle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "submission_status.submitted"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_filters.active"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_filters.inactive"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_filters.passed"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.faculty"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.student_class"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.student_course"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.student_program"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.university"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_years.first"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "student_years.second"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.company"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "organisation_types.department"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.legal"
+msgstr ""
+
+#, elixir-autogen, elixir-format, ex-autogen
+msgid "currency_types.virtual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.man"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.woman"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criteria_filters.x"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.facebook"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.google"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.instagram"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.x"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.whatsapp"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.youtube"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "organisation_types.team"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.data_donation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.data_donation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.apple"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.samsung"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.tiktok"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.azure"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.yoda"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.aws"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.generic"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.ioresearch"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "external_panel_ids.liss"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.netflix"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage_service_ids.builtin"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.en"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.nl"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.benchmark_challenge"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.benchmark_challenge"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.donate"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.request_manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.submit"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.download_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.fork_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.private"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard_visibility.public"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.general_instruction"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.onsite_experiment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.creator"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.de"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "crew_task_status.rejected"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.snapchat"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.paper_screening"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "project_item_templates.paper_screening"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "templates.paper_screening"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.it"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.comparison"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.context"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.intervention"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.outcome"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.phenomenon_of_interest"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.population"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zircon_screening_categories.setting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_workflow_item_types.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "platforms.spotify"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_languages.es"
+msgstr ""

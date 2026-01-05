@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Navigation do
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Menu
   alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Breadcrumbs
@@ -202,7 +203,7 @@ defmodule Frameworks.Pixel.Navigation do
     <div class="pr-4 flex flex-row gap-4 items-center w-full">
       <%= if @logo do %>
         <div>
-          <img src={~p"/images/icons/#{"#{@logo}.svg"}"} alt={@logo} />
+          <Logo.product name={@logo} />
         </div>
       <% end %>
       <div class="flex-grow">

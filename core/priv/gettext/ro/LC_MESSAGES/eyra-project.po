@@ -1,0 +1,164 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+
+#, elixir-autogen, elixir-format
+msgid "delete.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.first.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "config.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "monitor.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.header.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.items.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.new.item.button.short"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.concept"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.idle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.offline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.online"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create.item.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "item.form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "default.name"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "add.first.item.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool_ref.tag.graphite"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool_ref.tag.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool_ref.tag.questionnaire"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.text"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "leaderboard.unspecified.deadline.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "create_item_popup.create.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.page.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "first.breadcrumb.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.create-storage-success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.data.empty.title"
+msgstr ""
