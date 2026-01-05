@@ -3,18 +3,11 @@ defmodule Frameworks.Pixel.AlertBanner do
 
   @types ~w(success warning error info)a
 
-  @bg_classes %{
-    success: "bg-successlight",
-    warning: "bg-warninglight",
-    error: "bg-errorlight",
-    info: "bg-primarylight"
-  }
-
-  @text_classes %{
-    success: "text-success",
-    warning: "text-warning",
-    error: "text-error",
-    info: "text-primary"
+  @prism_classes %{
+    success: "prism-alert-success",
+    warning: "prism-alert-warning",
+    error: "prism-alert-error",
+    info: "prism-alert-info"
   }
 
   attr(:type, :atom, default: :info, values: @types)
@@ -26,18 +19,10 @@ defmodule Frameworks.Pixel.AlertBanner do
     assigns =
       assigns
       |> assign_new(:message, fn -> nil end)
-      |> assign(:bg_class, Map.fetch!(@bg_classes, assigns.type))
-      |> assign(:text_class, Map.fetch!(@text_classes, assigns.type))
+      |> assign(:prism_class, Map.fetch!(@prism_classes, assigns.type))
 
     ~H"""
-    <div
-      class={[
-        "rounded flex justify-center items-center h-10 px-4 font-label text-label",
-        @bg_class,
-        @text_class,
-        @class
-      ]}
-    >
+    <div class={["prism-alert", @prism_class, @class]}>
       <%= if @message do %>
         <%= @message %>
       <% end %>

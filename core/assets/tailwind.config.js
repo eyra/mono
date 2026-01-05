@@ -1,6 +1,8 @@
 const plugin = require("tailwindcss/plugin");
+const prismPreset = require("@novasoftwarefoundation/prism/tailwind.preset");
 
 module.exports = {
+  presets: [prismPreset],
   content: [
     "../**/*.html.eex",
     "../**/*.html.leex",
