@@ -1,7 +1,10 @@
 defmodule Systems.Workflow.WorkListView do
   use CoreWeb, :live_component
+  use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Workflow.HTML, only: [work_list_item: 1]
+
+  alias Frameworks.Pixel.Button
 
   @impl true
   def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
@@ -11,7 +14,14 @@ defmodule Systems.Workflow.WorkListView do
       |> assign(
         id: id,
         items: items,
-        selected_item_id: selected_item_id
+        selected_item_id: selected_item_id,
+        done_button: %{
+          action: %{type: :send, event: "done"},
+          face: %{
+            type: :secondary,
+            label: dgettext("eyra-workflow", "work_list.done.button")
+          }
+        }
       )
     }
   end
@@ -25,8 +35,13 @@ defmodule Systems.Workflow.WorkListView do
     if String.to_integer(item_id) == selected_item_id do
       {:noreply, socket}
     else
-      {:noreply, socket |> send_event(:parent, "work_item_selected", payload)}
+      {:noreply, socket |> publish_event({:work_item_selected, payload})}
     end
+  end
+
+  @impl true
+  def handle_event("done", _payload, socket) do
+    {:noreply, socket |> publish_event(:work_done)}
   end
 
   @impl true
@@ -37,6 +52,10 @@ defmodule Systems.Workflow.WorkListView do
         <%= for {item, index} <- Enum.with_index(@items) do %>
           <.work_list_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
+      </div>
+      <.spacing value="XS" />
+      <div class="w-full px-4">
+        <Button.dynamic {@done_button} />
       </div>
     </div>
     """

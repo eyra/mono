@@ -58,3 +58,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

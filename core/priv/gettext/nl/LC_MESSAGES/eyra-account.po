@@ -67,14 +67,6 @@ msgid "features.description"
 msgstr "Een aantal studies heeft specifieke geschiktheidseisen. Door de optionele kenmerken hieronder te selecteren, kun je deelnemen aan studies die jouw kenmerken als vereisten specificeren."
 
 #, elixir-autogen, elixir-format
-msgid "features.birthyear.title"
-msgstr "Geboortejaar"
-
-#, elixir-autogen, elixir-format
-msgid "features.dominanthand.title"
-msgstr "Dominante hand"
-
-#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Geslacht"
 
@@ -163,12 +155,24 @@ msgid "Account activated successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.label"
-msgstr "Ik ga akkoord met het privacybeleid"
+msgid "features.birthyear.title"
+msgstr "Geboortejaar"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.must.be.accepted"
+msgid "panl.privacy.policy.label"
+msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link}"
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
 msgstr "U moet akkoord gaan met het privacybeleid om door te gaan"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link}"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr "U moet akkoord gaan met de voorwaarden en het privacybeleid om door te gaan"
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
@@ -177,3 +181,11 @@ msgstr "Mijn profiel"
 #, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
 msgstr "Panl"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "voorwaarden"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "privacybeleid"

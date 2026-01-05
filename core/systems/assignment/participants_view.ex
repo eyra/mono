@@ -140,15 +140,6 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, url: url)
   end
 
-  defp update_affiliate_url(
-         %{assigns: %{assignment: %{id: id, external_panel: external_panel}}} = socket
-       )
-       when not is_nil(external_panel) do
-    # backward compatibility using deprecated Assignment.external_panel field
-    url = get_base_url() <> ~p"/assignment/#{id}/participate?participant=participant_id"
-    assign(socket, affiliate_url: url)
-  end
-
   defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
     url = Affiliate.Public.url_for_resource(assignment) <> "?p=participant_id"
     assign(socket, affiliate_url: url)

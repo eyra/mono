@@ -385,10 +385,6 @@ msgid "progress.yes"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "retry.button"
-msgstr "Terug"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -451,3 +447,35 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "De standaardtaal voor Panl-studies is het Nederlands."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined"
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect"
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.title.declined"
+msgstr "Klaar"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr "Terug"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. Klik op Doorgaan om verder te gaan naar %{platform}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect.platform"
+msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."

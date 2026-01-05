@@ -42,3 +42,7 @@ msgstr "Pas de volgorde aan met de pijltjes"
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Taak titel"
+
+#, elixir-autogen, elixir-format
+msgid "work_list.done.button"
+msgstr "Volgende, ik ben klaar"

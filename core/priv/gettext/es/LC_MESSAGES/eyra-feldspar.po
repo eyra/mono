@@ -58,3 +58,7 @@ msgstr "Vas a seguir algunos pasos para donar tus datos. Antes de donar, puedes 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Continuar"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

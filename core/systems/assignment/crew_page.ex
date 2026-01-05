@@ -1,6 +1,8 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :routed_live_view
   use CoreWeb.Layouts.Stripped.Composer
+
+  import LiveNest.HTML
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
@@ -33,26 +35,16 @@ defmodule Systems.Assignment.CrewPage do
       |> assign(
         id: id,
         image_info: nil,
-        panel_form: nil
+        modal_toolbar_buttons: []
       )
       |> update_panel_info(session)
       |> update_image_info()
-      |> update_flow()
-    }
-  end
-
-  @impl true
-  def compose(:declined_view, _) do
-    %{
-      module: Assignment.DeclinedView,
-      params: %{}
     }
   end
 
   @impl true
   def handle_view_model_updated(socket) do
     socket
-    |> update_flow()
     |> update_image_info()
   end
 
@@ -86,69 +78,62 @@ defmodule Systems.Assignment.CrewPage do
     assign(socket, panel_info: nil)
   end
 
-  defp update_flow(%{assigns: %{vm: %{flow: flow}}} = socket) do
-    socket |> install_children(flow)
-  end
-
-  def handle_info({:complete_task, _}, socket) do
-    {:noreply, socket |> send_event(:flow, "complete_task")}
-  end
-
-  #
-  # Used in Systems.Storage.Centerdata.Backend to post data to Centerdata and handle the response in-browser.
-  # This is een temp solution before better integrating the donation protocol with Centerdata
-  #
-  def handle_info(%{storage_event: %{panel: _, form: form}}, socket) do
-    {:noreply, socket |> show_panel_form(form)}
-  end
-
-  @impl true
-  def handle_event("continue", %{source: source}, socket) do
-    {:noreply, socket |> show_next(source)}
-  end
-
-  @impl true
-  def handle_event(
-        "accept",
-        %{source: source},
-        %{assigns: %{model: model, current_user: user}} = socket
-      ) do
-    Assignment.Public.accept_member(model, user)
-    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
-    {:noreply, socket |> show_next(source)}
-  end
-
-  @impl true
-  def handle_event(
-        "decline",
-        _payload,
-        %{assigns: %{model: model, current_user: user}} =
-          socket
-      ) do
-    Assignment.Public.decline_member(model, user)
-    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
-
-    {
-      :noreply,
-      socket
-      |> compose_child(:declined_view)
-      |> Fabric.ModalController.show_modal(:declined_view, :compact)
-    }
-  end
-
   @impl true
   def handle_event("store", %{task: task, key: key, group: group, data: data}, socket) do
     {:noreply, socket |> store(task, key, group, data)}
   end
 
   @impl true
-  def handle_event(name, event, socket) do
-    Logger.debug("[CrewPage] Forwarding event to flow: #{name}")
+  def handle_event("close_modal", %{"item" => modal_id}, socket) do
+    {:noreply, socket |> handle_close_modal(modal_id)}
+  end
 
-    {
-      :noreply,
-      socket |> send_event(:flow, name, event)
-    }
+  @impl true
+  def consume_event(%{name: :onboarding_continue}, socket) do
+    {:stop, socket |> handle_action(:onboarding_continue)}
+  end
+
+  @impl true
+  def consume_event(%{name: :accept}, %{assigns: %{model: model, current_user: user}} = socket) do
+    Assignment.Public.accept_member(model, user)
+    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
+    {:stop, socket |> handle_action(:accept)}
+  end
+
+  @impl true
+  def consume_event(%{name: :decline}, %{assigns: %{model: model, current_user: user}} = socket) do
+    Assignment.Public.decline_member(model, user)
+    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
+    {:stop, socket |> handle_action(:decline)}
+  end
+
+  @impl true
+  def consume_event(%{name: :retry}, socket) do
+    {:stop, socket |> handle_action(:retry)}
+  end
+
+  @impl true
+  def consume_event(%{name: :task_completed}, socket) do
+    {:stop, socket}
+  end
+
+  @impl true
+  def consume_event(%{name: :work_done}, socket) do
+    {:stop, socket |> handle_action(:work_done)}
+  end
+
+  @impl true
+  def consume_event(
+        %{name: :store, payload: %{task: task, key: key, group: group, data: data}},
+        socket
+      ) do
+    {:stop, store(socket, task, key, group, data)}
+  end
+
+  defp handle_action(socket, action) do
+    socket
+    |> assign(action: action)
+    |> update_view_model()
   end
 
   def store(
@@ -190,11 +175,6 @@ defmodule Systems.Assignment.CrewPage do
     end
   end
 
-  defp show_panel_form(socket, %{module: module, params: params}) do
-    panel_form = prepare_child(socket, :panel_form, module, params)
-    socket |> assign(panel_form: Map.from_struct(panel_form))
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -207,19 +187,14 @@ defmodule Systems.Assignment.CrewPage do
           </div>
         </:header>
 
-        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
-
-        <%!-- hidden auto submit form --%>
-        <%= if @panel_form do %>
-          <div class="relative">
-            <div class="absolute hidden">
-              <.live_child {@panel_form} />
-            </div>
-          </div>
-        <% end %>
+        <ModalView.dynamic modal={@modal} toolbar_buttons={@modal_toolbar_buttons} socket={@socket} />
 
         <div id={:crew_page} class="w-full h-full flex flex-col" phx-hook="Viewport">
-          <.flow fabric={@fabric} />
+          <%= if @vm.view do %>
+            <div class="flex-1 min-h-0">
+              <.element socket={@socket} {Map.from_struct(@vm.view)} />
+            </div>
+          <% end %>
         </div>
       </.stripped>
     """

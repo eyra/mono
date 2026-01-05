@@ -90,7 +90,7 @@ defmodule Core.MixProject do
       {:kadabra, "== 0.6.1"},
       {:libcluster, "== 3.5.0"},
       {:logger_json, "== 7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "ccc85f40883576517f870d7a9a4ed2f47044e230"},
+      {:live_nest, github: "eyra/live_nest", ref: "5d855b79b9e3540a43661548ae492f61fa4bd7af"},
       {:mime, "== 2.0.7"},
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
@@ -138,7 +138,8 @@ defmodule Core.MixProject do
       {:ex_doc, "== 0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "== 4.1.0"},
       {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
-      {:browser, "== 0.5.5"}
+      {:browser, "== 0.5.5"},
+      {:tidewave, "~> 0.5", only: :dev}
     ]
   end
 

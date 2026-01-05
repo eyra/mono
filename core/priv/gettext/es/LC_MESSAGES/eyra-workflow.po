@@ -42,3 +42,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "work_list.done.button"
+msgstr "Continuar, he terminado"

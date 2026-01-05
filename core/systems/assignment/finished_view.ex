@@ -1,103 +1,48 @@
 defmodule Systems.Assignment.FinishedView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
+  use CoreWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.Button
 
-  alias Systems.Affiliate
+  alias Systems.Assignment
+
+  def dependencies(), do: [:assignment_id, :current_user]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
+    Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
+  end
 
   @impl true
-  def update(%{title: title, user: user, affiliate: affiliate}, socket) do
-    body_default = dgettext("eyra-assignment", "finished_view.body")
-    body_redirect = dgettext("eyra-assignment", "finished_view.body.redirect")
-
-    {
-      :ok,
-      socket
-      |> assign(
-        title: title,
-        body_default: body_default,
-        body_redirect: body_redirect,
-        affiliate: affiliate,
-        user: user
-      )
-      |> update_redirect_url()
-      |> update_redirect_button()
-      |> update_retry_button()
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
   end
 
-  defp update_redirect_url(%{assigns: %{affiliate: affiliate, user: user}} = socket) do
-    redirect_url =
-      case Affiliate.Public.redirect_url(affiliate, user) do
-        {:ok, redirect_url} ->
-          redirect_url
-
-        {:error, _} ->
-          nil
-      end
-
-    socket |> assign(redirect_url: redirect_url)
-  end
-
-  defp update_redirect_button(%{assigns: %{redirect_url: nil}} = socket) do
-    socket |> assign(redirect_button: nil)
-  end
-
-  defp update_redirect_button(%{assigns: %{redirect_url: redirect_url}} = socket) do
-    redirect_button = %{
-      action: %{type: :http_get, to: redirect_url},
-      face: %{
-        type: :primary,
-        label: dgettext("eyra-assignment", "redirect.button")
-      }
-    }
-
-    socket |> assign(redirect_button: redirect_button)
-  end
-
-  defp update_retry_button(socket) do
-    retry_button = %{
-      action: %{type: :send, event: "retry"},
-      face: %{
-        type: :plain,
-        icon: :back,
-        icon_align: :left,
-        label: dgettext("eyra-assignment", "retry.button")
-      }
-    }
-
-    assign(socket, retry_button: retry_button)
-  end
-
+  @impl true
   def handle_event("retry", _, socket) do
-    {:noreply, socket |> send_event(:parent, "retry")}
-  end
-
-  def handle_event("redirect", _, socket) do
-    {:noreply, socket |> send_event(:parent, "redirect")}
+    {:noreply, socket |> publish_event(:retry)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="flex flex-row w-full h-full">
+      <div class="flex flex-row w-full h-full" data-testid="finished-view">
         <div class="flex-grow" />
         <div class="flex flex-col gap-4 sm:gap-8 items-center w-full h-full px-6">
           <div class="flex-grow" />
-          <Text.title1 margin=""><%= @title %></Text.title1>
-          <div :if={@redirect_url == nil}>
-            <Text.body_large align="text-center"><%= @body_default %></Text.body_large>
-            <div :if={@redirect_url == nil} class="flex flex-col items-center w-full pt-4">
-              <img class="block w-[220px] h-[220px] object-cover" src={~p"/images/illustrations/finished.svg"} id="zero-todos" alt="All tasks done">
+          <Text.title1 margin="" data-testid="finished-title"><%= @vm.title %></Text.title1>
+          <div>
+            <Text.body_large align="text-center" data-testid="finished-body">
+              <%= @vm.body %>
+            </Text.body_large>
+            <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
+              <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
             </div>
           </div>
-          <div :if={@redirect_url}>
-            <Text.body_large align="text-center"><%= @body_redirect %></Text.body_large>
-          </div>
 
-          <div class="flex flex-row items-center gap-6">
-            <Button.dynamic :if={@retry_button} {@retry_button} />
-            <Button.dynamic :if={@redirect_button} {@redirect_button} />
+          <div class="flex flex-row items-center gap-6" data-testid="finished-buttons">
+            <Button.dynamic :if={@vm.back_button} {@vm.back_button} data-testid="back-button" />
+            <Button.dynamic :if={@vm.continue_button} {@vm.continue_button} data-testid="continue-button" />
           </div>
           <div class="flex-grow" />
         </div>

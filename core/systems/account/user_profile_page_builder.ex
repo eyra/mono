@@ -4,6 +4,11 @@ defmodule Systems.Account.UserProfilePageBuilder do
 
   alias Systems.Account
 
+  @tabs [
+    Systems.Account.ProfileTab,
+    Systems.Account.FeaturesTab
+  ]
+
   def view_model(%Account.User{} = user, %{fabric: fabric} = assigns) do
     %{
       title: dgettext("eyra-account", "profile.title"),
@@ -13,51 +18,18 @@ defmodule Systems.Account.UserProfilePageBuilder do
     }
   end
 
-  defp build_tabs(user, fabric, assigns) do
-    [
-      create_profile_tab(user, fabric, assigns),
-      create_features_tab(user, fabric, assigns)
-    ]
+  def build_tabs(user, fabric, _assigns) do
+    visible_tabs(user)
+    |> Enum.map(& &1.build(user, fabric))
   end
 
-  defp create_profile_tab(user, fabric, _assigns) do
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :profile,
-        Systems.Account.UserProfileForm,
-        %{
-          id: :profile_form,
-          user: user
-        }
-      )
-
-    %{
-      id: :profile,
-      title: dgettext("eyra-account", "profile.tab.profile.title"),
-      type: :fullpage,
-      child: child,
-      ready?: true
-    }
+  def tab_keys(user) do
+    visible_tabs(user)
+    |> Enum.map(& &1.key())
   end
 
-  defp create_features_tab(user, fabric, _assigns) do
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :features,
-        Systems.Account.FeaturesForm,
-        %{
-          user: user
-        }
-      )
-
-    %{
-      id: :features,
-      title: dgettext("eyra-account", "profile.tab.features.title"),
-      type: :fullpage,
-      child: child,
-      ready?: true
-    }
+  defp visible_tabs(user) do
+    @tabs
+    |> Enum.filter(& &1.visible?(user))
   end
 end

@@ -58,3 +58,7 @@ msgstr "U staat op het punt om een aantal stappen te doorlopen om uw gegevens te
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

@@ -97,17 +97,51 @@ defmodule CoreWeb do
     end
   end
 
+  # DEPRECATED: Use routed_live_view for LiveNest-based views.
+  # This version includes Fabric.ModalPresenter which is only needed for Fabric sub-components.
   def live_view do
     quote do
       use Phoenix.LiveView, layout: {unquote(CoreWeb.Layouts), :live}
       use LiveNest, :routed_live_view
       use LiveNest, :single_modal_presenter_strategy
+      # IMPORTANT: Fabric.LiveView must come before Fabric.ModalPresenter
+      # because LiveView defines a catch-all handle_event/3 with defoverridable,
+      # and ModalPresenter provides specific handlers for "show_modal", "hide_modal", etc.
       use Fabric.LiveView
       use Fabric.ModalPresenter
-      alias Frameworks.Pixel.ModalView
+      use Frameworks.Pixel.ModalView
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
+
+      # Hooks for routed LiveViews (User must come before UserState)
+      on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+      on_mount({Frameworks.UserState.LiveHook, __MODULE__})
+
+      unquote(pixel())
+      use Frameworks.Pixel
+
+      unquote(component_helpers())
+      unquote(verified_routes())
+      unquote(live_features())
+    end
+  end
+
+  # Routed LiveView for LiveNest-based views with embedded live views.
+  # Pure LiveNest setup without Fabric dependencies.
+  def routed_live_view do
+    quote do
+      use Phoenix.LiveView, layout: {unquote(CoreWeb.Layouts), :live}
+      use LiveNest, :routed_live_view
+      use LiveNest, :single_modal_presenter_strategy
+      use Frameworks.Pixel.ModalView
+
+      # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      import Phoenix.LiveView.Helpers
+
+      # Hooks for routed LiveViews (User must come before UserState)
+      on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+      on_mount({Frameworks.UserState.LiveHook, __MODULE__})
 
       unquote(pixel())
       use Frameworks.Pixel
@@ -123,14 +157,22 @@ defmodule CoreWeb do
       use Phoenix.LiveView
       use LiveNest, :embedded_live_view
       use Gettext, backend: CoreWeb.Gettext
-      use Systems.Observatory.LiveFeature
       use CoreWeb.UI
+
+      # UserState LiveFeature provides publish_user_state_change
+      use Frameworks.UserState.LiveFeature
+
+      # Observatory LiveFeature provides update_view_model and handle_view_model_updated
+      use Systems.Observatory.LiveFeature
 
       require Logger
 
       # Standard embedded LiveView hooks
       on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Timezone, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Context, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Language, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
@@ -141,10 +183,19 @@ defmodule CoreWeb do
     end
   end
 
+  def modal_live_view do
+    quote do
+      unquote(embedded_live_view())
+      # Modal support: enables publish_event to route to modal controller
+      use LiveNest.Modal, :live_view
+    end
+  end
+
   def live_features do
     quote do
       use Frameworks.GreenLight.LiveFeature
       use Systems.Observatory.LiveFeature
+      use Frameworks.UserState.LiveFeature
       use CoreWeb.Live.Feature.Viewport
       use CoreWeb.Live.Feature.Uri
       use CoreWeb.Live.Feature.Model

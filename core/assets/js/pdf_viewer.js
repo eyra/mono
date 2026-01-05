@@ -16,8 +16,10 @@ export const PDFViewer = {
 
     this.loadDocument().then((pdf) => {
       this.pdf = pdf;
-      console.log("[PDFViewer] Document loaded, push event 'tool_initialized'");
-      this.pushEvent("tool_initialized");
+      if (this.el.dataset.notifyReady !== "false") {
+        console.log("[PDFViewer] Document loaded, push event 'pdf_ready'");
+        this.pushEvent("pdf_ready");
+      }
       this.renderPagesIfNeeded();
       var throttledRenderPages = _.throttle(_.partial(renderPages, this), 10, {
         trailing: true,

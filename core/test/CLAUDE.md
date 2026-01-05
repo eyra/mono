@@ -160,6 +160,36 @@ conn = conn |> Map.put(:request_path, "/zircon/screening/import")
 {:ok, view, html} = live_isolated(conn, ImportView, session: %{})
 ```
 
+### Testing Event Handlers
+
+**Always send events directly instead of clicking elements:**
+
+```elixir
+# ✅ CORRECT: Send event directly to LiveView
+test "button triggers event", %{conn: conn} do
+  {:ok, view, _html} = live_isolated(conn, MyView, session: %{})
+
+  # Verify button exists
+  assert view |> has_element?("[data-testid='my-button']")
+
+  # Send event directly - avoids CSS selector issues
+  view |> render_click("my_event")
+
+  # Verify result
+  assert view |> has_element?("[data-testid='expected-result']")
+end
+
+# ❌ WRONG: Don't click on elements
+view |> element("[data-testid='my-button']") |> render_click()
+# This can cause "invalid css selector" errors in LiveView tests
+```
+
+**Why send events directly:**
+- Avoids CSS selector errors in LiveView test infrastructure
+- Cleaner and more direct - tests the event handler, not DOM manipulation
+- More reliable for isolated LiveView tests
+- Works consistently across different button/action types
+
 ### Testing Embedded LiveViews
 ```elixir
 # Parent view
