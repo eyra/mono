@@ -111,6 +111,6 @@ msgstr ""
 msgid "tool.button"
 msgstr "Weiter"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Sie sind dabei, einen Fragebogen in einem neuen Tab zu starten. Wenn Sie fertig sind, kehren Sie automatisch auf diese Seite zurück."
+msgstr "Sie sind dabei, einen Fragebogen in einem neuen Tab zu starten. Sobald Sie den Fragebogen abgeschlossen haben, werden Sie automatisch zu dieser Seite zurückgeleitet."

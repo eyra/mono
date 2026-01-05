@@ -1,4 +1,4 @@
-defmodule Systems.Userflow.Factory do
+defmodule Systems.Userflow.Factories do
   use ExMachina.Ecto, repo: Core.Repo
 
   alias Core.Repo

@@ -27,12 +27,10 @@ import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { Sticky } from "./sticky";
-import { TimeZone } from "./timezone";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { Blurhash } from "./blurhash";
-import { UserState } from "./user_state";
-import { UserStateObserver } from "./user_state_observer";
+import { UserState, getAllUserState } from "./user_state";
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 // Force the active state on iOS touch devices by adding a touchstart
@@ -53,9 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("phx:page-loading-stop", (info) => {
   if (info.detail.kind == "initial") {
-    TimeZone.sendToServer();
+    // Timezone is now passed via LiveSocket params
     Viewport.sendToServer();
   }
+});
+
+// Listen for open_url events from server to open URLs in new tab
+window.addEventListener("phx:open_url", (event) => {
+  const { url } = event.detail;
+  window.open(url, "_blank");
 });
 
 let csrfToken = document
@@ -97,12 +101,10 @@ let Hooks = {
   Wysiwyg,
   AutoSubmit,
   Sticky,
-  TimeZone,
   ResetScroll,
   FullscreenImage,
   Blurhash,
-  UserState,
-  UserStateObserver,
+  UserState, // Deprecated: Use new user_state architecture (LiveSocket params + event bubbling)
 };
 
 let liveSocket = new LiveSocket("/live", Socket, {
@@ -114,10 +116,12 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
   params: {
     _csrf_token: csrfToken,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     viewport: {
       width: window.innerWidth,
       height: window.innerHeight,
     },
+    user_state: getAllUserState(),
   },
   hooks: Hooks,
 });

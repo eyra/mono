@@ -5,7 +5,6 @@ defmodule Systems.Account.SignupPage do
   use CoreWeb, :live_view
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
@@ -20,6 +19,17 @@ defmodule Systems.Account.SignupPage do
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
+  @privacy_assignments %{
+    "next_privacy_policy_accepted" => %{
+      accepted_key: :next_privacy_policy_accepted,
+      error_key: :next_privacy_policy_error
+    },
+    "panl_privacy_policy_accepted" => %{
+      accepted_key: :panl_privacy_policy_accepted,
+      error_key: :panl_privacy_policy_error
+    }
+  }
+
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
@@ -33,8 +43,10 @@ defmodule Systems.Account.SignupPage do
       |> assign(
         creator?: creator?,
         post_signup_action: post_signup_action,
-        privacy_policy_accepted: false,
-        privacy_policy_error: nil,
+        next_privacy_policy_accepted: false,
+        next_privacy_policy_error: nil,
+        panl_privacy_policy_accepted: false,
+        panl_privacy_policy_error: nil,
         changeset: changeset,
         active_menu_item: nil
       )
@@ -51,26 +63,19 @@ defmodule Systems.Account.SignupPage do
   def handle_event(
         "signup",
         %{"user" => user_params},
-        %{
-          assigns: %{
-            post_signup_action: post_signup_action,
-            creator?: creator?,
-            privacy_policy_accepted: privacy_policy_accepted
-          }
-        } = socket
+        %{assigns: assigns} = socket
       ) do
-    user_params = Map.put(user_params, "creator", creator?)
+    user_params = Map.put(user_params, "creator", assigns.creator?)
 
-    with :ok <-
-           validate_privacy_policy(post_signup_action == "add_to_panl", privacy_policy_accepted),
+    with :ok <- validate_privacy_policies(assigns),
          {:ok, user} <- Account.Public.register_user(user_params) do
       handle_successful_registration(socket, user)
     else
-      {:error, :privacy_policy_not_accepted} ->
-        handle_privacy_policy_error(socket)
-
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, socket |> assign(changeset: changeset)}
+        {:noreply, assign(socket, changeset: changeset)}
+
+      {:error, error_type} ->
+        handle_privacy_error(socket, error_type)
     end
   end
 
@@ -80,32 +85,92 @@ defmodule Systems.Account.SignupPage do
 
     {:noreply,
      socket
-     |> assign(changeset: changeset, privacy_policy_error: nil)}
+     |> assign(
+       changeset: changeset,
+       next_privacy_policy_error: nil,
+       panl_privacy_policy_error: nil
+     )}
   end
 
   @impl true
-  def handle_info({"active_item_ids", %{active_item_ids: active_item_ids}}, socket) do
-    privacy_policy_accepted = :privacy_policy_accepted in active_item_ids
+  def handle_info(
+        {"active_item_ids", %{active_item_ids: active_item_ids} = payload},
+        socket
+      ) do
+    normalized_ids = normalize_ids(active_item_ids)
+    component_id = component_id_from_payload(payload)
 
-    {:noreply,
-     socket
-     |> assign(privacy_policy_accepted: privacy_policy_accepted, privacy_policy_error: nil)}
+    socket = maybe_assign_privacy_component(socket, component_id, normalized_ids)
+
+    {:noreply, socket}
   end
 
-  defp validate_privacy_policy(show_privacy_policy?, privacy_policy_accepted) do
-    if show_privacy_policy? and not privacy_policy_accepted do
-      {:error, :privacy_policy_not_accepted}
-    else
-      :ok
+  defp normalize_ids(ids) do
+    ids
+    |> List.wrap()
+    |> Enum.map(&normalize_active_item_id/1)
+  end
+
+  defp normalize_active_item_id(id) when is_atom(id), do: Atom.to_string(id)
+  defp normalize_active_item_id(id) when is_binary(id), do: id
+  defp normalize_active_item_id(id), do: to_string(id)
+
+  defp component_id_from_payload(payload) do
+    payload
+    |> Map.get(:current_items, [])
+    |> List.wrap()
+    |> Enum.find_value(&extract_component_id/1)
+  end
+
+  defp extract_component_id(%{id: id}) when not is_nil(id), do: normalize_active_item_id(id)
+  defp extract_component_id(_), do: nil
+
+  defp maybe_assign_privacy_component(socket, nil, _normalized_ids), do: socket
+
+  defp maybe_assign_privacy_component(socket, component_id, normalized_ids) do
+    case Map.fetch(@privacy_assignments, component_id) do
+      {:ok, %{accepted_key: accepted_key, error_key: error_key}} ->
+        accepted? = component_id in normalized_ids
+
+        socket
+        |> assign(accepted_key, accepted?)
+        |> assign(error_key, nil)
+
+      :error ->
+        socket
     end
   end
 
-  defp handle_privacy_policy_error(socket) do
+  defp validate_privacy_policies(%{
+         post_signup_action: post_signup_action,
+         panl_privacy_policy_accepted: panl_privacy_policy_accepted,
+         next_privacy_policy_accepted: next_privacy_policy_accepted
+       }) do
+    cond do
+      post_signup_action == "add_to_panl" and not panl_privacy_policy_accepted ->
+        {:error, :panl_privacy_policy_not_accepted}
+
+      not next_privacy_policy_accepted ->
+        {:error, :next_privacy_policy_not_accepted}
+
+      true ->
+        :ok
+    end
+  end
+
+  defp handle_privacy_error(socket, :next_privacy_policy_not_accepted) do
     {:noreply,
-     socket
-     |> assign(
-       privacy_policy_accepted: false,
-       privacy_policy_error: dgettext("eyra-account", "privacy.policy.must.be.accepted")
+     assign(socket,
+       next_privacy_policy_accepted: false,
+       next_privacy_policy_error: dgettext("eyra-account", "privacy.next-policy.required")
+     )}
+  end
+
+  defp handle_privacy_error(socket, :panl_privacy_policy_not_accepted) do
+    {:noreply,
+     assign(socket,
+       panl_privacy_policy_accepted: false,
+       panl_privacy_policy_error: dgettext("eyra-account", "panl.privacy.policy.required")
      )}
   end
 
@@ -140,9 +205,11 @@ defmodule Systems.Account.SignupPage do
           <Text.title2><%= dgettext("eyra-account", "signup.title") %></Text.title2>
           <UserForm.password_signup
             changeset={@changeset}
-            privacy_policy_visible={@post_signup_action == "add_to_panl"}
-            privacy_policy_accepted={@privacy_policy_accepted}
-            privacy_policy_error={@privacy_policy_error}
+            next_privacy_policy_accepted={@next_privacy_policy_accepted}
+            next_privacy_policy_error={@next_privacy_policy_error}
+            panl_privacy_policy_visible={@post_signup_action == "add_to_panl"}
+            panl_privacy_policy_accepted={@panl_privacy_policy_accepted}
+            panl_privacy_policy_error={@panl_privacy_policy_error}
           />
         </Area.form>
         </Area.content>

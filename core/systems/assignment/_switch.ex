@@ -44,6 +44,7 @@ defmodule Systems.Assignment.Switch do
     update_content_page(assignment, from_pid)
     # update only the page for the user that changed
     update_crew_page(assignment, from_pid, user)
+    update_assignment_embedded_views(assignment, from_pid)
 
     :ok
   end
@@ -123,6 +124,9 @@ defmodule Systems.Assignment.Switch do
           update_content_page(assignment, from_pid)
           # Only update the crew page if event is not related to userflow tracking
           update_crew_page(assignment, from_pid)
+          update_assignment_embedded_views(assignment, from_pid)
+          # Update crew task views when workflow changes (items added/removed/reordered)
+          update_crew_task_views(assignment, from_pid)
       end
     end
 
@@ -176,6 +180,7 @@ defmodule Systems.Assignment.Switch do
       update_content_page(assignment, from_pid)
       # update only the page for the crew_member that changed
       update_crew_page(assignment, from_pid, crew_member)
+      update_assignment_embedded_views(assignment, from_pid)
     end
 
     :ok
@@ -227,6 +232,7 @@ defmodule Systems.Assignment.Switch do
       update_content_page(assignment, from_pid)
       # update only the page for the user that accepted the consent
       update_crew_page(assignment, from_pid, user.id)
+      update_assignment_embedded_views(assignment, from_pid)
     end
 
     :ok
@@ -262,6 +268,9 @@ defmodule Systems.Assignment.Switch do
       update_content_page(assignment, from_pid)
       # update only the page for the crew_member that is the owner of the crew_task
       update_crew_page(assignment, from_pid, crew_task)
+      update_assignment_embedded_views(assignment, from_pid)
+      # Update embedded task views
+      update_crew_task_views(assignment, from_pid)
     end)
 
     :ok
@@ -312,6 +321,8 @@ defmodule Systems.Assignment.Switch do
     update_content_page(assignment, from_pid)
     # update all crew pages for the assignment
     update_crew_page(assignment, from_pid)
+    # update all assignment embedded views
+    update_assignment_embedded_views(assignment, from_pid)
   end
 
   defp delete_crew_tasks(%{
@@ -357,6 +368,46 @@ defmodule Systems.Assignment.Switch do
 
   defp update_crew_page(model, from_pid) do
     dispatch!({:page, Assignment.CrewPage}, %{id: model.id, model: model, from_pid: from_pid})
+  end
+
+  defp update_crew_task_views(assignment, from_pid) do
+    dispatch!({:embedded_live_view, Assignment.CrewTaskSingleView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
+
+    dispatch!({:embedded_live_view, Assignment.CrewTaskListView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
+  end
+
+  defp update_assignment_embedded_views(assignment, from_pid) do
+    dispatch!({:embedded_live_view, Assignment.OnboardingView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
+
+    dispatch!({:embedded_live_view, Assignment.OnboardingConsentView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
+
+    dispatch!({:embedded_live_view, Assignment.CrewWorkView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
+
+    dispatch!({:embedded_live_view, Assignment.FinishedView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
   end
 
   defp update_crew_task_next_action(%{id: assignment_id}, %{

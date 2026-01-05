@@ -1,121 +1,83 @@
 defmodule Systems.Assignment.CrewTaskSingleView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
   use Systems.Assignment.CrewTaskHelpers
 
   alias Systems.Assignment
+  alias Systems.Crew
 
-  # Make sure this name is unique, see: Systems.Assignment.CrewTaskListView
-  @tool_ref_view_name :tool_ref_view_single
+  def dependencies(), do: [:assignment_id, :current_user, :panel_info]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
+    Assignment.Public.get!(assignment_id, [
+      :crew,
+      workflow: [items: [tool_ref: Systems.Workflow.ToolRefModel.preload_graph(:down)]]
+    ])
+  end
 
   @impl true
-  def update(
-        %{
-          work_item: work_item,
-          crew: crew,
-          user: user,
-          timezone: timezone,
-          panel_info: panel_info,
-          user_state_data: user_state_data
-        },
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(
-        work_items: [work_item],
-        selected_item: work_item,
-        crew: crew,
-        user: user,
-        timezone: timezone,
-        panel_info: panel_info,
-        user_state_data: user_state_data,
-        tool_ref_view_name: @tool_ref_view_name
-      )
-      |> update_participant()
-      |> update_launcher()
-      |> compose_child(@tool_ref_view_name)
-      |> start_task()
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket |> update_participant() |> maybe_start_task()}
   end
 
-  def start_task(%{assigns: %{selected_item: {_, %{started_at: nil} = task}}} = socket) do
-    Assignment.Public.start_task(task)
+  defp maybe_start_task(%{assigns: %{vm: %{work_item: {_, task} = work_item}}} = socket) do
+    if is_nil(task.started_at) do
+      Assignment.Public.start_task(task)
+    end
+
+    socket |> assign(work_item: work_item)
+  end
+
+  defp maybe_start_task(socket), do: socket
+
+  @impl true
+  def handle_view_model_updated(socket) do
     socket
-  end
-
-  def start_task(socket), do: socket
-
-  defp update_launcher(%{assigns: %{selected_item: selected_item}} = socket) do
-    launcher = launcher(selected_item)
-    socket |> assign(launcher: launcher)
   end
 
   # Behaviours
 
   @impl true
-  def handle_tool_exited(socket) do
-    socket |> handle_task_completed()
+  def handle_tool_completed(socket) do
+    socket |> complete_task()
   end
 
   @impl true
   def handle_tool_initialized(socket) do
-    socket |> send_event(@tool_ref_view_name, "tool_initialized")
-  end
-
-  # Compose
-
-  @impl true
-  def compose(
-        @tool_ref_view_name,
-        %{
-          user: user,
-          participant: participant,
-          timezone: timezone,
-          user_state_data: user_state_data,
-          selected_item: {%{title: title, tool_ref: tool_ref}, task} = selected_item
-        }
-      ) do
-    icon = get_icon(selected_item)
-
-    %{
-      module: Workflow.ToolRefView,
-      params: %{
-        title: title,
-        icon: icon,
-        tool_ref: tool_ref,
-        task: task,
-        visible: true,
-        user: user,
-        participant: participant,
-        timezone: timezone,
-        user_state_data: user_state_data,
-        modal_id: nil
-      }
-    }
-  end
-
-  def compose(@tool_ref_view_name, _) do
-    nil
+    # Tool initialized - no action needed
+    socket
   end
 
   # Events
 
-  def handle_event("tool_initialized", payload, socket) do
-    {:noreply, socket |> send_event(@tool_ref_view_name, "tool_initialized", payload)}
+  @impl true
+  def handle_event("complete_task", _, socket) do
+    {:noreply, socket |> complete_task()}
   end
 
-  def handle_event("complete_task", _, socket) do
-    {:noreply, socket |> handle_task_completed()}
+  @impl true
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
   end
 
   # Private
 
+  defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket)
+       when not is_nil(task) do
+    {:ok, _} = Crew.Public.complete_task(task)
+
+    socket
+    |> publish_event(:work_done)
+  end
+
+  defp complete_task(socket), do: socket
+
   @impl true
   def render(assigns) do
     ~H"""
-      <div id="crew_task_single_view" class="w-full h-full p-4 sm:p-8" >
-        <.child name={@tool_ref_view_name} fabric={@fabric} />
+      <div data-testid="crew-task-single-view" class="w-full h-full flex flex-col px-4 pt-4 sm:px-8 sm:pt-8">
+        <%= if @vm.tool_view do %>
+          <.element {Map.from_struct(@vm.tool_view)} socket={@socket} />
+        <% end %>
       </div>
     """
   end

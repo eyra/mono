@@ -68,10 +68,6 @@ msgid "features.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "features.dominanthand.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr ""
 
@@ -158,3 +154,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Account activated successfully."
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "features.birthyear.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr "Acepto los %{terms_link} y la %{privacy_link}"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr "Debe aceptar los términos, condiciones y la política de privacidad para continuar"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "términos y condiciones"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "política de privacidad"

@@ -34,7 +34,7 @@ defmodule Systems.Onyx.LandingPage do
 
   @impl true
   def consume_event(
-        %{name: "show_model", payload: %{module: module, id: id}},
+        %{name: :show_model, payload: %{module: module, id: id}},
         %{assigns: %{history: history}} = socket
       ) do
     model =
@@ -53,7 +53,7 @@ defmodule Systems.Onyx.LandingPage do
   end
 
   def consume_event(
-        %{name: "back_to_model", payload: %{module: module, id: id}},
+        %{name: :back_to_model, payload: %{module: module, id: id}},
         %{assigns: %{history: history}} = socket
       ) do
     model = get_model(module, id)
@@ -101,11 +101,6 @@ defmodule Systems.Onyx.LandingPage do
       )
 
     assign(socket, :browser_view, browser_view)
-  end
-
-  def notify_modal_controller(socket, modal_id) do
-    Logger.warning("notify_modal_controller #{modal_id}")
-    socket
   end
 
   defp get_browser_view_id(%module{id: id}) do

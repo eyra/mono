@@ -26,6 +26,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "crew_member declined", %{user: user, crew: crew, crew_member: crew_member} do
@@ -38,6 +44,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "crew_member finished_tasks", %{user: user, crew: crew, crew_member: crew_member} do
@@ -50,6 +62,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
   end
 
@@ -85,6 +103,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "crew_task completed", %{user: user, crew: crew, crew_task: crew_task} do
@@ -97,6 +121,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "crew_task accepted", %{user: user, crew: crew, crew_task: crew_task} do
@@ -112,6 +142,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "crew_task rejected", %{user: user, crew: crew, crew_task: crew_task} do
@@ -121,6 +157,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert message.user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
   end
 
@@ -138,6 +180,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       refute Map.has_key?(message, :user_id)
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
     test "monitor_event", %{assignment: assignment} do
@@ -145,6 +193,8 @@ defmodule Systems.Assignment.SwitchTest do
       assert :ok = Switch.intercept({:assignment, :monitor_event}, message)
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       refute_signal_dispatched({:page, Systems.Assignment.CrewPage})
+      # monitor_event does not update embedded views
+      refute_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
     end
   end
 
@@ -190,6 +240,12 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
       assert %{user_id: user_id} = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
       assert user_id == user.id
+
+      # Verify embedded views are updated
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
   end
 end

@@ -9,7 +9,8 @@ defmodule Frameworks.Pixel.Selector do
     background: :light,
     optional?: true,
     grid_options: "",
-    opts: ""
+    opts: "",
+    raw?: false
   ]
 
   defp grid_options(_, grid_options) when grid_options != "", do: grid_options
@@ -227,7 +228,8 @@ defmodule Frameworks.Pixel.Selector do
             props={%{
               item: item,
               multiselect?: multiselect?(@type),
-              background: @background
+              background: @background,
+              raw?: @raw?
             }}
           />
         </div>
@@ -244,6 +246,7 @@ defmodule Frameworks.Pixel.Selector.Item do
   attr(:item, :map, required: true)
   attr(:multiselect?, :boolean, default: true)
   attr(:background, :atom, default: :light)
+  attr(:raw?, :boolean, default: false)
 
   def radio(%{item: %{value: value}, background: background} = assigns) do
     label_color =
@@ -287,7 +290,11 @@ defmodule Frameworks.Pixel.Selector.Item do
         />
       </div>
       <div class={"#{@label_color} text-label font-label select-none mt-1"}>
-        <%= @value %>
+        <%= if @raw? do %>
+          <%= Phoenix.HTML.raw(@value) %>
+        <% else %>
+          <%= @value %>
+        <% end %>
       </div>
     </button>
     """
@@ -334,6 +341,7 @@ defmodule Frameworks.Pixel.Selector.Item do
   attr(:item, :map, required: true)
   attr(:multiselect?, :boolean, default: true)
   attr(:background, :atom, default: :light)
+  attr(:raw?, :boolean, default: false)
 
   def checkbox(%{item: %{value: value} = item, multiselect?: multiselect?} = assigns) do
     accent = Map.get(item, :accent)
@@ -392,7 +400,11 @@ defmodule Frameworks.Pixel.Selector.Item do
         />
       </div>
       <div class={" select-none mt-1 #{@font} #{@text_color} leading-5"}>
-        <%= @value %>
+        <%= if @raw? do %>
+          <%= Phoenix.HTML.raw(@value) %>
+        <% else %>
+          <%= @value %>
+        <% end %>
       </div>
     </div>
     """

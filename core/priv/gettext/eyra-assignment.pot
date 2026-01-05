@@ -385,10 +385,6 @@ msgid "progress.yes"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "retry.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -450,4 +446,36 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.language.fixed_nl_message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title.declined"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect.platform"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.redirect.platform"
 msgstr ""

@@ -87,7 +87,6 @@ defmodule CoreWeb.Routes do
         pipe_through(:api)
 
         post("/api/apns-token", APNSDeviceTokenController, :create)
-        post("/api/timezone", TimezoneController, :put_session)
         post("/api/viewport", ViewportController, :put_session)
       end
     end

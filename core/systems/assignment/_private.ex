@@ -5,6 +5,8 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
+  import Ecto.Query, only: [where: 3]
+
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
@@ -13,6 +15,7 @@ defmodule Systems.Assignment.Private do
   alias Systems.Account
   alias Systems.Affiliate
   alias Systems.Assignment
+  alias Systems.Consent
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
@@ -49,9 +52,18 @@ defmodule Systems.Assignment.Private do
   def get_template(:questionnaire),
     do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 
-  def declined_consent?(assignment, user_ref) do
-    Monitor.Public.event({assignment, :declined, user_ref})
-    |> Monitor.Public.exists?()
+  def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
+
+  def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
+    # If assignment requires consent but user hasn't signed, there's no consent
+    not consent?(consent_agreement, user_ref)
+  end
+
+  defp consent?(consent_agreement, user_ref) do
+    consent_agreement
+    |> Consent.Queries.signature_query()
+    |> where([signature: s], s.user_id == ^user_ref)
+    |> Repo.exists?()
   end
 
   def send_progress_event(
@@ -120,17 +132,10 @@ defmodule Systems.Assignment.Private do
     "assignment=#{id}"
   end
 
-  def get_preview_url(%Assignment.Model{id: id, external_panel: external_panel}) do
-    case external_panel do
-      :liss ->
-        ~p"/assignment/#{id}/liss?respondent=preview&quest=quest&varname1=varname1&token=token&page=page"
-
-      :ioresearch ->
-        ~p"/assignment/#{id}/ioresearch?participant=preview"
-
-      _ ->
-        ~p"/assignment/#{id}/participate?participant=preview"
-    end
+  def get_preview_url(%Assignment.Model{} = assignment) do
+    # Preview uses the same affiliate URL as participants with a default participant ID
+    # The affiliate controller detects the logged-in user is a tester and handles accordingly
+    Systems.Affiliate.Public.url_for_resource(assignment) <> "?p=preview"
   end
 
   def page_title_default(:assignment_information),

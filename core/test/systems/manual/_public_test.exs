@@ -1,13 +1,13 @@
 defmodule Systems.Manual.PublicTest do
   use Core.DataCase
 
+  alias Systems.Manual
   alias Systems.Manual.Public
-  alias Systems.Manual.Factory
   alias Systems.Userflow
 
   describe "get!/1" do
     test "gets a manual by id" do
-      manual = Factory.create_manual()
+      manual = Manual.Factories.create_manual()
       fetched = Public.get_manual!(manual.id)
       assert fetched.id == manual.id
       # Preloaded
@@ -23,7 +23,7 @@ defmodule Systems.Manual.PublicTest do
 
   describe "add_chapter/4" do
     test "adds a chapter to a manual" do
-      manual = Factory.create_manual(1, 0)
+      manual = Manual.Factories.create_manual(1, 0)
 
       assert {:ok, %{manual_chapter: chapter}} = Public.add_chapter(manual)
       assert chapter.title == "New section"
@@ -34,7 +34,7 @@ defmodule Systems.Manual.PublicTest do
 
   describe "get_chapters/1" do
     test "gets all chapters in a manual" do
-      manual = Factory.create_manual(3, 1)
+      manual = Manual.Factories.create_manual(3, 1)
 
       fetched_chapters = Public.get_chapters(manual)
       assert length(fetched_chapters) == 3
@@ -42,15 +42,15 @@ defmodule Systems.Manual.PublicTest do
     end
 
     test "returns empty list when no chapters" do
-      userflow = Userflow.Factory.insert(:userflow)
-      manual = Factory.insert(:manual, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      manual = Manual.Factories.insert(:manual, %{userflow: userflow})
       assert Public.get_chapters(manual) == []
     end
   end
 
   describe "add_page/4" do
     test "adds a page to a chapter" do
-      %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
+      %{chapters: [chapter | _]} = Manual.Factories.create_manual(2, 2)
 
       assert {:ok, %{manual_page: page}} = Public.add_page(chapter)
       assert page.title == "New instruction"
@@ -61,14 +61,14 @@ defmodule Systems.Manual.PublicTest do
   describe "next_chapter/2" do
     test "gets next unvisited chapter for user" do
       user = Core.Factories.insert!(:member)
-      manual = %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
+      manual = %{chapters: [chapter | _]} = Manual.Factories.create_manual(2, 2)
       next = Public.next_chapter(manual, user)
       assert next.id == chapter.id
     end
 
     test "returns nil when all chapters visited" do
       user = Core.Factories.insert!(:member)
-      manual = Factory.create_manual(2, 2)
+      manual = Manual.Factories.create_manual(2, 2)
 
       # Mark all chapters as visited
       Enum.each(Public.get_chapters(manual), fn chapter ->
@@ -82,7 +82,7 @@ defmodule Systems.Manual.PublicTest do
   describe "finished_chapters?/2" do
     test "returns true when all chapters are visited" do
       user = Core.Factories.insert!(:member)
-      manual = Factory.create_manual(2, 2)
+      manual = Manual.Factories.create_manual(2, 2)
       chapters = Public.get_chapters(manual)
 
       # Mark all chapters as visited
@@ -95,7 +95,7 @@ defmodule Systems.Manual.PublicTest do
 
     test "returns false when not all chapters are visited" do
       user = Core.Factories.insert!(:member)
-      manual = Factory.create_manual(2, 2)
+      manual = Manual.Factories.create_manual(2, 2)
       refute Public.finished_chapters?(manual, user.id)
     end
   end
@@ -104,7 +104,7 @@ defmodule Systems.Manual.PublicTest do
     test "groups chapters by their group field" do
       ExMachina.Sequence.reset()
 
-      manual = Factory.create_manual(3, 3)
+      manual = Manual.Factories.create_manual(3, 3)
 
       groups = Public.chapters_by_group(manual)
       assert map_size(groups) == 2
@@ -116,7 +116,7 @@ defmodule Systems.Manual.PublicTest do
   describe "get_chapter_progress/2" do
     test "gets progress for user in manual chapters" do
       user = Core.Factories.insert!(:member)
-      manual = %{chapters: [chapter | _]} = Factory.create_manual(2, 2)
+      manual = %{chapters: [chapter | _]} = Manual.Factories.create_manual(2, 2)
 
       # Mark first chapter as visited
       Public.mark_visited(chapter, user)
@@ -129,7 +129,7 @@ defmodule Systems.Manual.PublicTest do
 
   describe "page/2" do
     test "updates a page's content" do
-      %{chapters: [%{pages: [page | _]} | _]} = Factory.create_manual(1, 1)
+      %{chapters: [%{pages: [page | _]} | _]} = Manual.Factories.create_manual(1, 1)
 
       attrs = %{title: "Updated Title"}
       assert {:ok, updated} = Public.update_page(page, attrs)

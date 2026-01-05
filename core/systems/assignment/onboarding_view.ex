@@ -1,61 +1,46 @@
 defmodule Systems.Assignment.OnboardingView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
+  use CoreWeb, :verified_routes
 
-  alias Systems.Assignment
-  alias Systems.Content
-  alias Systems.Account
+  alias Frameworks.Pixel.Button
+  alias CoreWeb.UI.Area
+  alias CoreWeb.UI.Margin
 
-  @impl true
-  def update(%{user: user, page_ref: page_ref, title: title}, socket) do
-    {
-      :ok,
-      socket
-      |> assign(
-        page_ref: page_ref,
-        title: title,
-        user: user
-      )
-      |> compose_child(:content_page)
-      |> compose_element(:continue_button)
-    }
+  alias Systems.{Account, Assignment}
+
+  def dependencies(), do: [:assignment_id, :current_user]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
+    Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
   end
 
   @impl true
-  def compose(:content_page, %{page_ref: nil}), do: nil
-
-  @impl true
-  def compose(:content_page, %{title: title, page_ref: %Assignment.PageRefModel{page: page}}) do
-    %{
-      module: Content.PageView,
-      params: %{
-        title: title,
-        page: page
-      }
-    }
-  end
-
-  def compose(:continue_button, %{myself: myself}) do
-    %{
-      action: %{type: :send, event: "continue", target: myself},
-      face: %{
-        type: :primary,
-        label: dgettext("eyra-assignment", "onboarding.continue.button")
-      }
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
   end
 
   @impl true
   def handle_event(
         "continue",
         _payload,
-        %{assigns: %{user: user, page_ref: %{key: key, assignment_id: assignment_id}}} = socket
+        %{
+          assigns: %{
+            current_user: user,
+            vm: %{page_ref: %{key: key, assignment_id: assignment_id}}
+          }
+        } = socket
       ) do
     Account.Public.mark_as_visited(user, {key, assignment_id})
 
     {
       :noreply,
-      socket |> send_event(:parent, "continue")
+      socket |> publish_event(:onboarding_continue)
     }
+  end
+
+  @impl true
+  def handle_info({:signal_test, _}, socket) do
+    {:noreply, socket}
   end
 
   @impl true
@@ -64,10 +49,12 @@ defmodule Systems.Assignment.OnboardingView do
       <div>
         <Area.content>
           <Margin.y id={:page_top} />
-          <.child name={:content_page} fabric={@fabric} />
+          <%= if @vm.content_page do %>
+            <.live_component {@vm.content_page} />
+          <% end %>
           <.spacing value="M" />
           <.wrap>
-            <Button.dynamic {@continue_button} />
+            <Button.dynamic {@vm.continue_button} />
           </.wrap>
         </Area.content>
       </div>

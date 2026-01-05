@@ -3,6 +3,7 @@ defmodule Systems.Consent.ClickWrapView do
   # clicking a simple button to accept the agreement.
 
   use CoreWeb.LiveForm
+  import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   alias Systems.{
     Consent
@@ -86,11 +87,11 @@ defmodule Systems.Consent.ClickWrapView do
   end
 
   def handle_accept(%{assigns: %{signature: %{id: _}}} = socket) do
-    socket |> send_event(:parent, "accept")
+    socket |> publish_event(:accept)
   end
 
   def handle_decline(socket) do
-    socket |> send_event(:parent, "decline")
+    socket |> publish_event(:decline)
   end
 
   @impl true

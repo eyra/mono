@@ -1,156 +1,169 @@
 defmodule Systems.Manual.View do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
+  use Frameworks.Pixel
+  use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Utility.UserState
+  alias Frameworks.Pixel.Toolbar
   alias Systems.Manual
 
-  @impl true
-  def update(
-        %{
-          manual: %{id: manual_id} = manual,
-          title: title,
-          user: user,
-          user_state_data: user_state_data
-        },
-        socket
-      ) do
-    user_state_key = UserState.key(user, %{manual: manual_id}, "selected-chapter")
-    user_state_value = UserState.integer_value(user_state_data, user_state_key)
-    selected_chapter_id = Map.get(socket.assigns, :selected_chapter_id, user_state_value)
+  def dependencies(),
+    do: [:manual_id, :title, :current_user, :presentation, {:user_state, [:chapter, :page]}]
 
-    {
-      :ok,
-      socket
-      |> assign(
-        manual: manual,
-        title: title,
-        user: user,
-        selected_chapter_id: selected_chapter_id,
-        user_state_key: user_state_key,
-        user_state_data: user_state_data
-      )
-      |> update_chapters()
-      |> update_selected_chapter()
-      |> compose_child(:chapter_list)
-      |> compose_child(:chapter)
-    }
-  end
-
-  def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
-    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
-  end
-
-  def update_chapters(socket) do
-    socket |> assign(chapters: [])
-  end
-
-  def update_selected_chapter(%{assigns: %{chapters: []}} = socket) do
-    # If there are no chapters, we don't have a selected chapter
-    socket
-    |> assign(selected_chapter_id: nil, selected_chapter: nil)
-  end
-
-  def update_selected_chapter(%{assigns: %{selected_chapter_id: nil}} = socket) do
-    socket
-    |> assign(selected_chapter: nil)
-  end
-
-  def update_selected_chapter(
-        %{assigns: %{chapters: chapters, selected_chapter_id: selected_chapter_id}} =
-          socket
-      ) do
-    selected_chapter =
-      case Enum.find(chapters, fn chapter -> chapter.id == selected_chapter_id end) do
-        nil ->
-          chapters |> List.first()
-
-        chapter ->
-          chapter
-      end
-
-    socket
-    |> assign(selected_chapter_id: selected_chapter.id, selected_chapter: selected_chapter)
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{manual_id: manual_id}}) do
+    Manual.Public.get_manual!(manual_id, Manual.Model.preload_graph(:down))
   end
 
   @impl true
-  def compose(:chapter_list, %{
-        manual: manual,
-        title: title,
-        selected_chapter_id: selected_chapter_id
-      }) do
-    %{
-      module: Manual.ChapterListView,
-      params: %{
-        manual: manual,
-        title: title,
-        selected_chapter_id: selected_chapter_id
-      }
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket |> publish_toolbar_buttons()}
   end
 
-  def compose(:chapter, %{selected_chapter: nil}) do
-    nil
+  @impl true
+  def handle_view_model_updated(socket) do
+    socket
+    |> publish_toolbar_buttons()
   end
 
-  def compose(:chapter, %{
-        selected_chapter: selected_chapter,
-        user: user,
-        manual: manual,
-        user_state_data: user_state_data
-      }) do
-    %{
-      module: Manual.ChapterView,
-      params: %{
-        manual_id: manual.id,
-        chapter: selected_chapter,
-        user: user,
-        user_state_data: user_state_data
-      }
-    }
+  # Modal presentation: publish buttons to parent modal
+  defp publish_toolbar_buttons(
+         %{assigns: %{presentation: :modal, vm: %{buttons: buttons}}} = socket
+       ) do
+    publish_event(socket, {:update_modal_buttons, %{buttons: buttons}})
   end
 
-  def handle_event("select_chapter", %{chapter_id: chapter_id}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(selected_chapter_id: chapter_id)
-      |> update_selected_chapter()
-      |> compose_child(:chapter)
-    }
+  # Embedded presentation: buttons are rendered locally via vm.toolbar
+  defp publish_toolbar_buttons(socket) do
+    socket
   end
 
-  def handle_event("back", _, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(selected_chapter_id: nil, selected_chapter: nil)
-      |> hide_child(:chapter)
-      |> update_child(:chapter_list)
-    }
+  # Handle toolbar actions (forwarded from modal)
+  @impl true
+  def handle_info({:toolbar_action, action}, socket) do
+    {:noreply, handle_toolbar_action(action, socket)}
   end
 
-  def handle_event("close", _, socket) do
-    {
-      :noreply,
-      socket |> send_event(:parent, "close")
-    }
+  defp handle_toolbar_action(:back, socket) do
+    clear_selected_chapter(socket)
   end
 
-  def handle_event("done", _, socket) do
-    {
-      :noreply,
-      socket |> send_event(:parent, "done")
-    }
+  defp handle_toolbar_action(:done, socket) do
+    socket
+    |> clear_selected_chapter()
+    |> publish_event(:done)
+  end
+
+  defp handle_toolbar_action(:next_page, %{assigns: %{vm: vm, user_state: user_state}} = socket) do
+    page_id = user_state[:page]
+    pages = get_sorted_pages(vm.selected_chapter)
+    next_page_id = next_page_id(pages, page_id)
+    select_page(socket, next_page_id)
+  end
+
+  defp handle_toolbar_action(
+         :previous_page,
+         %{assigns: %{vm: vm, user_state: user_state}} = socket
+       ) do
+    page_id = user_state[:page]
+    pages = get_sorted_pages(vm.selected_chapter)
+    previous_page_id = previous_page_id(pages, page_id)
+    select_page(socket, previous_page_id)
+  end
+
+  defp get_sorted_pages(%{pages: [_ | _] = pages}),
+    do: Enum.sort_by(pages, & &1.userflow_step.order)
+
+  defp get_sorted_pages(_), do: []
+
+  defp next_page_id(pages, current_page_id) do
+    current_index = Enum.find_index(pages, &(&1.id == current_page_id)) || 0
+    next_index = min(current_index + 1, length(pages) - 1)
+    Enum.at(pages, next_index).id
+  end
+
+  defp previous_page_id(pages, current_page_id) do
+    current_index = Enum.find_index(pages, &(&1.id == current_page_id)) || 0
+    previous_index = max(current_index - 1, 0)
+    Enum.at(pages, previous_index).id
+  end
+
+  # Handle events from child components (upstream)
+  @impl true
+  def consume_event(%{name: :select_chapter, payload: %{chapter_id: chapter_id}}, socket) do
+    {:stop, select_chapter(socket, chapter_id)}
+  end
+
+  def consume_event(%{name: :back}, socket) do
+    {:stop, clear_selected_chapter(socket)}
+  end
+
+  def consume_event(%{name: :close}, socket) do
+    {:continue, socket}
+  end
+
+  def consume_event(%{name: :done}, socket) do
+    {:continue, socket}
+  end
+
+  def consume_event(%{name: :page_changed, payload: %{page_id: page_id}}, socket) do
+    {:stop, select_page(socket, page_id)}
+  end
+
+  # Handle toolbar actions from local Toolbar (embedded presentation)
+  def consume_event(%{name: :toolbar_action, payload: %{action: action}}, socket) do
+    {:stop, handle_toolbar_action(action, socket)}
+  end
+
+  # State management
+  defp select_chapter(socket, chapter_id) do
+    socket
+    |> update_user_state(%{chapter: chapter_id, page: nil})
+    |> update_view_model()
+    |> publish_toolbar_buttons()
+    |> publish_user_state_change(:chapter, chapter_id)
+    |> publish_user_state_change(:page, nil)
+  end
+
+  defp clear_selected_chapter(socket) do
+    socket
+    |> update_user_state(%{chapter: nil, page: nil})
+    |> update_view_model()
+    |> publish_toolbar_buttons()
+    |> publish_user_state_change(:chapter, nil)
+    |> publish_user_state_change(:page, nil)
+  end
+
+  defp select_page(socket, page_id) do
+    socket
+    |> update_user_state(%{page: page_id})
+    |> update_view_model()
+    |> publish_toolbar_buttons()
+    |> publish_user_state_change(:page, page_id)
+  end
+
+  defp update_user_state(socket, updates) do
+    current = Map.get(socket.assigns, :user_state, %{})
+    assign(socket, :user_state, Map.merge(current, updates))
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div id="manual_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@selected_chapter_id} >
-      <%= if Fabric.exists?(@fabric, :chapter) do %>
-        <.child name={:chapter} fabric={@fabric} />
-      <% else %>
-        <.child name={:chapter_list} fabric={@fabric} />
+    <div data-testid="manual-view" class="flex flex-col min-h-0 h-full">
+      <div class="flex-1 min-h-0 overflow-y-auto">
+        <%= if @vm.chapter_view do %>
+          <.element {Map.from_struct(@vm.chapter_view)} socket={@socket} />
+        <% else %>
+          <.element {Map.from_struct(@vm.chapter_list_view)} socket={@socket} />
+        <% end %>
+      </div>
+      <%= if @vm.toolbar do %>
+        <div class="flex-shrink-0">
+          <.live_component
+            module={Toolbar}
+            id="manual_toolbar"
+            buttons={@vm.toolbar.buttons}
+          />
+        </div>
       <% end %>
     </div>
     """

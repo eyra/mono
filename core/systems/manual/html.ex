@@ -4,7 +4,6 @@ defmodule Systems.Manual.Html do
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.NumberIcon
   import Frameworks.Pixel.Line
-  import Frameworks.Pixel.Toolbar
   import Frameworks.Pixel.Image, only: [blurhash: 1]
 
   attr(:items, :list, required: true)
@@ -62,9 +61,6 @@ defmodule Systems.Manual.Html do
   attr(:label, :string, default: nil)
   attr(:pages, :list, required: true)
   attr(:selected_page, :map, required: true)
-  attr(:close_button, :map, required: true)
-  attr(:left_button, :map, default: nil)
-  attr(:right_button, :map, default: nil)
   attr(:fullscreen_button, :map, default: nil)
   attr(:select_page_event, :string, required: true)
   attr(:select_page_target, :any, required: true)
@@ -94,9 +90,6 @@ defmodule Systems.Manual.Html do
           <.page id={"desktop-page-#{@id}"} page={@selected_page} fullscreen_button={@fullscreen_button} padding="pb-4" />
         </div>
       </div>
-      <div class="absolute bottom-0 left-0 right-0 bg-white">
-        <.toolbar close_button={@close_button} left_button={@left_button} right_button={@right_button} />
-      </div>
     </div>
     """
   end
@@ -106,29 +99,21 @@ defmodule Systems.Manual.Html do
   attr(:label, :string, default: nil)
   attr(:indicator, :string, default: nil)
   attr(:selected_page, :map, required: true)
-  attr(:close_button, :map, required: true)
-  attr(:left_button, :map, default: nil)
-  attr(:right_button, :map, default: nil)
   attr(:fullscreen_button, :map, default: nil)
 
   def chapter_mobile(assigns) do
     ~H"""
     <div id={"manual-mobile-chapter-#{@id}-page-#{@selected_page.id}"} phx-hook="ResetScroll" class="w-full h-full">
       <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-4">
-          <div class="flex gap-x-4 gap-y-2">
-            <Text.title7 color="text-grey2"><%= @title %></Text.title7>
-            <div class="flex-grow" />
-            <%= if @label do %>
-              <.tag text={@label} />
-            <% end %>
-          </div>
+        <div class="flex gap-x-4 gap-y-2">
+          <Text.title7 color="text-grey2"><%= @title %></Text.title7>
+          <div class="flex-grow" />
+          <%= if @label do %>
+            <.tag text={@label} />
+          <% end %>
         </div>
-        <.page id={"mobile-page-#{@selected_page.id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
       </div>
-      <div class="absolute bottom-0 left-0 right-0 bg-white">
-        <.toolbar close_button={@close_button} left_button={@left_button} right_button={@right_button} />
-      </div>
+      <.page id={"mobile-page-#{@selected_page.id}"} page={@selected_page} indicator={@indicator} fullscreen_button={@fullscreen_button} padding="pb-4" />
     </div>
     """
   end

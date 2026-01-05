@@ -385,10 +385,6 @@ msgid "progress.yes"
 msgstr "yes"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "retry.button"
-msgstr "Back"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
 msgstr "Screening based on title and abstract"
 
@@ -418,7 +414,7 @@ msgstr "Provide instructions on how to request or download digital trace data by
 
 #, elixir-autogen, elixir-format
 msgid "affiliate.body"
-msgstr "If you would like to connect your participant workflow to an external system you can set the URLs below. Any custom participant-specific parameters included in the participant invite link are automatically forwarded to both the progress webhook and the end-of-workflow redirect URL."
+msgstr "Connect your participant workflow to an external system by providing the URLs below. Any participant-specific parameters included in the invite link will automatically be forwarded to the end-of-workflow redirect URL and the progress webhook, if configured."
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.affiliate"
@@ -451,3 +447,35 @@ msgstr "Invite link"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "The default language for Panl studies is dutch"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined"
+msgstr "You chose not to participate. Your choice has been recorded. You can now close this window."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect"
+msgstr "You chose not to participate. Your choice has been recorded. Click Continue to proceed."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title.declined"
+msgstr "Consent Declined"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr "Welcome! Click continue to start participating in this assignment."
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr "Back"
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "You chose not to participate. Your choice has been recorded. Click Continue to proceed to %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.redirect.platform"
+msgstr "Thank you. You have completed this part. Click Continue to proceed to %{platform}."
