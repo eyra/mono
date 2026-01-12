@@ -1,160 +1,183 @@
-## "msgid"s in this file come from POT (.pot) files.
-###
-### Do not add, change, or remove "msgid"s manually here as
-### they're tied to the ones in the corresponding POT file
-### (with the same domain).
-###
-### Use "mix gettext.extract --merge" or "mix gettext.merge"
-### to merge POT files into PO files.
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
 
-#, elixir-autogen, elixir-format
 msgid "displayname.label"
-msgstr ""
+msgstr "Rodomas vardas"
 
-#, elixir-autogen, elixir-format
 msgid "email.label"
-msgstr ""
+msgstr "El. paštas"
 
-#, elixir-autogen, elixir-format
 msgid "fullname.label"
-msgstr ""
+msgstr "Pilnas vardas"
 
-#, elixir-autogen, elixir-format
 msgid "password.label"
-msgstr ""
+msgstr "Slaptažodis"
 
-#, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr ""
+msgstr "Mano profilis"
 
-#, elixir-autogen, elixir-format
 msgid "signup.button"
-msgstr ""
+msgstr "Registruotis"
 
-#, elixir-autogen, elixir-format
 msgid "signup.title"
-msgstr ""
+msgstr "Sukurti paskyrą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "await.confirmation.title"
-msgstr ""
+msgstr "Aktyvuokite savo paskyrą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "confirm.token.resend_button"
-msgstr ""
+msgstr "Pakartotinai išsiųsti aktyvacijos nuorodą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "choose.profile.photo.file"
-msgstr ""
+msgstr "Pasirinkite nuotrauką"
 
-#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
-msgstr ""
+msgstr "Pakeisti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "professionaltitle.label"
-msgstr ""
+msgstr "Profesinis pavadinimas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "feature.study.description"
-msgstr ""
+msgstr "Norėdami gauti kreditų už dalyvavimą moksliniuose tyrimuose (OP / RPR) verslo vadybos (BK) arba tarptautinės verslo vadybos (IBA) srityje, pasirinkite vieną ar kelis žemiau pateiktus kursus. Jei praėjusiais metais nebaigėte kurso, būtinai pasirinkite ir tą kursą."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "features.description"
-msgstr ""
+msgstr "Keletas tyrimų naudoja konkrečius tinkamumo reikalavimus. Pasirinkdami žemiau pateiktas pasirinktines charakteristikas, galėsite dalyvauti tyrimuose, kuriuose jūsų charakteristikos yra nurodomos kaip reikalavimai."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "features.dominanthand.title"
-msgstr ""
+msgstr "funkcijos.dominuojanti ranka.pavadinimas"
 
-#, elixir-autogen, elixir-format
 msgid "features.gender.title"
-msgstr ""
+msgstr "Lytis"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "features.nativelanguage.title"
-msgstr ""
+msgstr "Pirmoji kalba"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "features.title"
-msgstr ""
+msgstr "Įtrauktis"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "features.content.description"
-msgstr ""
+msgstr "Pasirinkite tyrimo įtraukimo kriterijus. Jei nieko nepasirinksite, dalyvauti galės visi duomenų bazėje esantys asmenys."
 
-#, elixir-autogen, elixir-format
 msgid "login.google.button"
-msgstr ""
+msgstr "Jungtis su Gmail"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "login.surf.button"
-msgstr ""
+msgstr "Prisijunkite naudodami SURFconext"
 
-#, elixir-autogen, elixir-format
 msgid "signin.button"
-msgstr ""
+msgstr "Prisijungti"
 
-#, elixir-autogen, elixir-format
 msgid "signin.title"
-msgstr ""
+msgstr "Prisijungti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "await.confirmation.description"
-msgstr ""
+msgstr "Jūsų paskyra buvo sukurta. Jums išsiuntėme aktyvinimo laišką. Norėdami aktyvuoti savo paskyrą, spustelėkite laiške esančią nuorodą."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "activation.failed.body"
-msgstr ""
+msgstr "Jūsų paskyra jau gali būti aktyvuota arba aktyvacijos nuoroda nebegalioja. Spauskite „Prisijungti“ viršutiniame dešiniajame kampe, kad pabandytumėte prisijungti naudodami savo paskyros duomenis. Jei jūsų paskyra nėra aktyvuota, įveskite savo el. pašto adresą žemiau, kad gautumėte naują aktyvacijos nuorodą."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "activation.failed.title"
-msgstr ""
+msgstr "Sąskaitos aktyvinimas"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "activation.confirm.body"
-msgstr ""
+msgstr "Spustelėkite žemiau esantį mygtuką, kad aktyvuotumėte savo paskyrą. Jūs būsite nukreipti į prisijungimo puslapį."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "activation.confirm.title"
-msgstr ""
+msgstr "Sąskaitos aktyvinimas"
 
-#, elixir-autogen, elixir-format
 msgid "confirm.button"
-msgstr ""
+msgstr "Aktyvuoti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.search.no_match.message"
-msgstr ""
+msgstr "Niekas nerastas su šiuo elektroninio pašto adresu."
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.search.placeholder"
-msgstr ""
+msgstr "Ieškoti pagal el. pašto adresą"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.add.title"
-msgstr ""
+msgstr "Ką norite pridėti?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.search.alread_added.message"
-msgstr ""
+msgstr "Jau pridėta"
 
-#, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
-msgstr ""
+msgstr "Atšaukti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.confirm_remove.label"
-msgstr ""
+msgstr "Aš esu įsitikinęs"
 
-#, elixir-autogen, elixir-format
+#, fuzzy
 msgid "people.confirm_remove.text"
+msgstr "Ar tikrai norite pasitraukti iš šio projekto?"
+
+#, fuzzy
+msgid "Account activated successfully."
+msgstr "Sąskaita sėkmingai aktyvuota."
+
+msgid "features.birthyear.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "Account activated successfully."
+msgid "panl.privacy.policy.label"
 msgstr ""
+
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+msgid "privacy.link.privacy"
+msgstr ""
+
+msgid "privacy.link.terms"
+msgstr ""
+
+msgid "privacy.next-policy.label"
+msgstr ""
+
+msgid "privacy.next-policy.required"
+msgstr ""
+
+msgid "profile.tab.features.title"
+msgstr ""
+
+msgid "profile.tab.profile.title"
+msgstr ""
+
