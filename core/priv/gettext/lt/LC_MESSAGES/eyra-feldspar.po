@@ -64,3 +64,7 @@ msgstr "Jūs ketinate atlikti keletą veiksmų, kad paaukotumėte savo duomenis.
 
 msgid "tool.button"
 msgstr "Tęsti"
+
+msgid "tool.archive.not.configured"
+msgstr ""
+

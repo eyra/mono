@@ -406,3 +406,27 @@ msgstr "Link invitatie"
 
 msgid "settings.language.fixed_nl_message"
 msgstr "Limba implicită pentru studiile Panl este olandeza"
+
+msgid "back.button"
+msgstr "Înapoi"
+
+msgid "finished_view.body.declined"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Acum puteți închide această fereastră."
+
+msgid "finished_view.body.declined.redirect"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Faceți clic pe Continuă pentru a merge mai departe."
+
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Faceți clic pe Continuă pentru a continua către %{platform}."
+
+msgid "finished_view.body.redirect.platform"
+msgstr "Vă mulțumim. Ați finalizat această parte. Faceți clic pe Continuă pentru a continua către %{platform}."
+
+msgid "finished_view.title.declined"
+msgstr "Consimțământ refuzat"
+
+msgid "landing.continue.button"
+msgstr "Continuă"
+
+msgid "landing.description.default"
+msgstr "Bine ați venit! Faceți clic pe Continuă pentru a începe participarea la această sarcină."

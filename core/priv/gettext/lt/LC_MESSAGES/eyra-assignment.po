@@ -411,3 +411,27 @@ msgstr "Kvietimo nuoroda"
 #, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "Panl studijų numatytoji kalba yra olandų."
+
+msgid "back.button"
+msgstr "Atgal"
+
+msgid "finished_view.body.declined"
+msgstr "Pasirinkote nedalyvauti. Jūsų pasirinkimas užregistruotas. Dabar galite uždaryti šį langą."
+
+msgid "finished_view.body.declined.redirect"
+msgstr "Pasirinkote nedalyvauti. Jūsų pasirinkimas užregistruotas. Spustelėkite Tęsti, kad galėtumėte tęsti."
+
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "Pasirinkote nedalyvauti. Jūsų pasirinkimas užregistruotas. Spustelėkite Tęsti, kad galėtumėte tęsti į %{platform}."
+
+msgid "finished_view.body.redirect.platform"
+msgstr "Ačiū. Užbaigėte šią dalį. Spustelėkite Tęsti, kad galėtumėte tęsti į %{platform}."
+
+msgid "finished_view.title.declined"
+msgstr "Sutikimas atmestas"
+
+msgid "landing.continue.button"
+msgstr "Tęsti"
+
+msgid "landing.description.default"
+msgstr "Sveiki! Spustelėkite Tęsti, kad pradėtumėte dalyvauti šioje užduotyje."
