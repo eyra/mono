@@ -12,7 +12,9 @@ defmodule Systems.Admin.ConfigPage do
   @impl true
   def mount(params, _session, %{assigns: %{current_user: user}} = socket) do
     # Non-admin users with a single org should go directly to the org content page
-    if not Admin.Public.admin?(user) do
+    if Admin.Public.admin?(user) do
+      mount_with_tabs(params, socket)
+    else
       case Org.Public.list_orgs(user) do
         [%{id: org_id}] ->
           {:ok, push_navigate(socket, to: ~p"/org/node/#{org_id}")}
@@ -20,8 +22,6 @@ defmodule Systems.Admin.ConfigPage do
         _ ->
           mount_with_tabs(params, socket)
       end
-    else
-      mount_with_tabs(params, socket)
     end
   end
 
