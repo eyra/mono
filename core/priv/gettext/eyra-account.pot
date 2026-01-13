@@ -159,17 +159,29 @@ msgid "features.birthyear.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "privacy.policy.must.be.accepted"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.add.button"
 msgstr ""

@@ -39,7 +39,7 @@ defmodule Frameworks.Pixel.UserListItem do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <tbody>
       <tr class="h-12">
         <td class="w-[44px]">
           <img
@@ -68,7 +68,6 @@ defmodule Frameworks.Pixel.UserListItem do
           </td>
         <% end %>
       </tr>
-
       <%= if @confirm_row_visible? do %>
         <tr class="h-12 text-white bg-primary">
           <%= if @confirm_row_text do %>
@@ -86,7 +85,7 @@ defmodule Frameworks.Pixel.UserListItem do
           <% end %>
         </tr>
       <% end %>
-    </div>
+    </tbody>
     """
   end
 end

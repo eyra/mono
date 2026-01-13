@@ -1,6 +1,7 @@
 defmodule Systems.Org.ItemView do
   use CoreWeb, :html
-  alias Frameworks.Pixel.Panel
+
+  import Frameworks.Pixel.ClickableCard
   import Frameworks.Pixel.Tag
 
   attr(:title, :string, required: true)
@@ -8,25 +9,24 @@ defmodule Systems.Org.ItemView do
   attr(:tags, :list, default: [])
   attr(:title_color, :string, default: "text-grey1")
   attr(:description_color, :string, default: "text-grey1")
-  attr(:event, :string, default: "handle_item_click")
-  attr(:item, :string, required: true)
-  attr(:target, :string, default: "")
+  attr(:item, :any, required: true)
+  attr(:left_actions, :list, default: [])
+  attr(:right_actions, :list, default: [])
 
   def item_view(assigns) do
     ~H"""
-    <Panel.clickable
-      size="w-full h-full"
-      bg_color="bg-grey5"
-      event={@event}
-      item={@item}
-      target={@target}
+    <.clickable_card
+      id={@item}
+      bg_color="grey5"
+      left_actions={@left_actions}
+      right_actions={@right_actions}
     >
       <:title>
-        <div class={"text-title3 font-title3 #{@title_color}"}>
+        <div class={"text-title5 font-title5 lg:text-title3 lg:font-title3 #{@title_color}"}>
           <%= @title %>
         </div>
       </:title>
-      <.spacing value="M" />
+
       <div class={"text-subhead font-subhead #{@description_color}"}>
         <span class="whitespace-pre-wrap"><%= @description %></span>
       </div>
@@ -36,7 +36,7 @@ defmodule Systems.Org.ItemView do
           <.tag text={tag} />
         <% end %>
       </div>
-    </Panel.clickable>
+    </.clickable_card>
     """
   end
 end

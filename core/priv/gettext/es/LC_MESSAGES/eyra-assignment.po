@@ -136,10 +136,6 @@ msgid "settings.branding.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr "Resumen"
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr "Información"
 

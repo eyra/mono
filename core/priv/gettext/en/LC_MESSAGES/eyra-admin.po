@@ -89,3 +89,29 @@ msgstr "Users"
 #, elixir-autogen, elixir-format
 msgid "search.placeholder"
 msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "archived.org.content.title"
+msgstr "Organisations"
+
+#, elixir-autogen, elixir-format
+msgid "restore.button"
+msgstr "Unarchive"
+
+#, elixir-autogen, elixir-format
+msgid "show.archived.button"
+msgid_plural "show.archived.button.plural"
+msgstr[0] "Show %{count} archived"
+msgstr[1] "Show %{count} archived"
+
+#, elixir-autogen, elixir-format
+msgid "archived.context"
+msgstr "Archive"
+
+#, elixir-autogen, elixir-format
+msgid "admins.button"
+msgstr "Admins"
+
+#, elixir-autogen, elixir-format
+msgid "org.admins.title"
+msgstr "Admins"

@@ -1,8 +1,43 @@
 defmodule Systems.Account.PeopleView do
+  @moduledoc """
+  DEPRECATED: Use `Systems.Account.PeopleEditorComponent` instead.
+
+  This component uses the legacy Fabric framework. New code should use
+  `PeopleEditorComponent` (LiveComponent) which works with LiveNest.
+
+  ## Migration Guide
+
+  1. Replace `PeopleView` with `PeopleEditorComponent` in your view:
+
+      <.live_component
+        module={Account.PeopleEditorComponent}
+        id="people_editor"
+        title={@vm.title}
+        people={@vm.people}
+        users={@vm.users}
+        current_user={@current_user}
+      />
+
+  2. Handle events in parent LiveView:
+
+      def handle_info({:add_user, %{user: user}}, socket) do
+        # Persist the addition
+        {:noreply, update_view_model(socket)}
+      end
+
+      def handle_info({:remove_user, %{user: user}}, socket) do
+        # Persist the removal
+        {:noreply, update_view_model(socket)}
+      end
+
+  3. For modal usage, see `Systems.Account.PeopleEditorModalView`.
+  """
   use CoreWeb.LiveForm
 
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.{SearchBar, UserListItem}
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.UserListItem
   alias Systems.Account
 
   @impl true
@@ -260,15 +295,16 @@ defmodule Systems.Account.PeopleView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-10 h-full">
-      <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
+    <div class="flex flex-col h-full">
+      <Text.title2><%= @title %> <span class="text-primary"><%= Enum.count(@people) %></span></Text.title2>
+      <div class="flex flex-col gap-8">
+        <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
         <table class="w-full">
           <%= for people_item <- @people_items do %>
             <.live_component module={UserListItem} id={people_item.email} people_item={people_item} />
           <% end %>
         </table>
       </div>
-
       <div>
         <Text.title5 align="text-left">
           <%= dgettext("eyra-account", "people.add.title") %>
@@ -295,8 +331,8 @@ defmodule Systems.Account.PeopleView do
         <% else %>
           <.spacing value="XS" />
         <% end %>
+        </div>
       </div>
-
       <div class="flex-grow" />
     </div>
     """

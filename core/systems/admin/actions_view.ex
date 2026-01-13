@@ -1,77 +1,27 @@
 defmodule Systems.Admin.ActionsView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
   use Core.FeatureFlags
 
   alias CoreWeb.UI.Timestamp
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 
   alias Systems.Advert
   alias Systems.Assignment
+  alias Systems.Observatory
+
+  def dependencies(), do: []
+
+  def get_model(:not_mounted_at_router, _session, _assigns) do
+    Observatory.SingletonModel.instance()
+  end
 
   @impl true
-  def update(%{id: id}, socket) do
+  def mount(:not_mounted_at_router, _session, socket) do
     {
       :ok,
       socket
-      |> assign(id: id)
-      |> create_buttons()
     }
-  end
-
-  def create_buttons(socket) do
-    expire_force_button = %{
-      action: %{
-        type: :send,
-        event: "expire_force"
-      },
-      face: %{
-        type: :primary,
-        bg_color: "bg-delete",
-        label: "Mark all pending tasks expired"
-      }
-    }
-
-    expire_button = %{
-      action: %{
-        type: :send,
-        event: "expire"
-      },
-      face: %{
-        type: :primary,
-        label: "Mark expired tasks"
-      }
-    }
-
-    rollback_expired_deposits_button = %{
-      action: %{
-        type: :send,
-        event: "rollback_expired_deposits"
-      },
-      face: %{
-        type: :primary,
-        label: "Rollback expired deposits"
-      }
-    }
-
-    crash_button = %{
-      action: %{
-        type: :send,
-        event: "crash"
-      },
-      face: %{
-        type: :primary,
-        bg_color: "bg-delete",
-        label: "Raise a test exception"
-      }
-    }
-
-    socket
-    |> assign(
-      rollback_expired_deposits_button: rollback_expired_deposits_button,
-      expire_button: expire_button,
-      expire_force_button: expire_force_button,
-      crash_button: crash_button
-    )
   end
 
   @impl true
@@ -107,35 +57,28 @@ defmodule Systems.Admin.ActionsView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="actions-view">
       <Area.content>
       <Margin.y id={:page_top} />
-      <Text.title2><%= dgettext("eyra-admin", "actions.title") %></Text.title2>
+      <Text.title2 data-testid="actions-title"><%= @vm.title %></Text.title2>
 
-      <Text.title3 margin="">Book keeping & Finance</Text.title3>
-      <.spacing value="S" />
-      <.wrap>
-        <Button.dynamic {@rollback_expired_deposits_button} />
-        <.spacing value="S" />
-      </.wrap>
-      <.spacing value="XL" />
-      <Text.title3 margin="">Assignments</Text.title3>
-      <.spacing value="S" />
-      <.wrap>
-        <Button.dynamic {@expire_button} />
-        <.spacing value="S" />
-      </.wrap>
-      <.spacing value="XL" />
-      <Text.title3 margin="">Monitoring</Text.title3>
-      <.spacing value="S" />
-      <.wrap>
-        <Button.dynamic {@crash_button} />
-        <.spacing value="S" />
-      </.wrap>
+      <%= for {section, index} <- Enum.with_index(@vm.sections) do %>
+        <div data-testid={"section-#{index}"}>
+          <Text.title3 margin=""><%= section.title %></Text.title3>
+          <.spacing value="S" />
+          <%= for button <- section.buttons do %>
+            <.wrap>
+              <Button.dynamic {button} />
+              <.spacing value="S" />
+            </.wrap>
+          <% end %>
+          <.spacing value="XL" />
+        </div>
+      <% end %>
 
       <%= if feature_enabled?(:debug_expire_force) do %>
         <.wrap>
-          <Button.dynamic {@expire_force_button} />
+          <Button.dynamic {@vm.expire_force_button} data-testid="expire-force-button" />
         </.wrap>
       <% end %>
       </Area.content>

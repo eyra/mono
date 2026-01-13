@@ -3,6 +3,7 @@ defmodule Systems.Account.UserProfilePageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
+  alias Systems.Content.Adaptable
 
   @tabs [
     Systems.Account.ProfileTab,
@@ -12,15 +13,22 @@ defmodule Systems.Account.UserProfilePageBuilder do
   def view_model(%Account.User{} = user, %{fabric: fabric} = assigns) do
     %{
       title: dgettext("eyra-account", "profile.title"),
-      tabs: build_tabs(user, fabric, assigns),
+      items: build_items(user, fabric, assigns),
       user: user,
       active_menu_item: :profile
     }
   end
 
-  def build_tabs(user, fabric, _assigns) do
+  def build_items(user, fabric, _assigns) do
     visible_tabs(user)
-    |> Enum.map(& &1.build(user, fabric))
+    |> Enum.map(&tab_to_item(&1.build(user, fabric)))
+  end
+
+  defp tab_to_item(%{id: id, title: title} = tab) do
+    Adaptable.Item.new(id, :profile, title,
+      element: Map.get(tab, :element),
+      child: Map.get(tab, :child)
+    )
   end
 
   def tab_keys(user) do
