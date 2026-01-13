@@ -32,6 +32,7 @@ defmodule Systems.Account.PeopleEditorComponent do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem
+  alias Systems.Account.PeopleHelpers
 
   @impl true
   def update(%{search_query: %{query_string: query_string}}, socket) do
@@ -182,36 +183,19 @@ defmodule Systems.Account.PeopleEditorComponent do
   defp build_person_item(user, me, people_count, confirm_ids, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
+    base_item = %{
+      photo_url: photo_url,
+      name: user.displayname,
+      email: user.email
+    }
+
     if user.id == me.id and MapSet.member?(confirm_ids, user.id) do
       # Show confirmation row for self-removal
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: [],
-        confirm_row_visible?: true,
-        confirm_row_text: dgettext("eyra-account", "people.confirm_remove.text"),
-        confirm_row_action_buttons: [
-          %{
-            action: %{type: :send, event: "remove", item: user.id, target: target},
-            face: %{
-              type: :primary,
-              label: dgettext("eyra-account", "people.confirm_remove.label")
-            }
-          },
-          %{
-            action: %{type: :send, event: "cancel_remove", item: user.id, target: target},
-            face: %{type: :primary, label: dgettext("eyra-account", "people.cancel_remove.label")}
-          }
-        ]
-      }
+      base_item
+      |> Map.put(:action_buttons, [])
+      |> Map.merge(PeopleHelpers.build_confirm_row(user.id, target))
     else
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: build_remove_buttons(user, people_count, target)
-      }
+      Map.put(base_item, :action_buttons, build_remove_buttons(user, people_count, target))
     end
   end
 

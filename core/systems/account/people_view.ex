@@ -39,6 +39,7 @@ defmodule Systems.Account.PeopleView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem
   alias Systems.Account
+  alias Systems.Account.PeopleHelpers
 
   @impl true
   def update(%{users: users, people: people, title: title, current_user: current_user}, socket) do
@@ -224,35 +225,18 @@ defmodule Systems.Account.PeopleView do
   defp build_user_display_data(_type, %Account.User{} = user, me, _count, ids, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
+    base_item = %{
+      photo_url: photo_url,
+      name: user.displayname,
+      email: user.email
+    }
+
     if user.id == me.id and MapSet.member?(ids, user.id) do
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: [],
-        confirm_row_visible?: true,
-        confirm_row_text: dgettext("eyra-account", "people.confirm_remove.text"),
-        confirm_row_action_buttons: [
-          %{
-            action: %{type: :send, event: "remove", item: user.id, target: target},
-            face: %{
-              type: :primary,
-              label: dgettext("eyra-account", "people.confirm_remove.label")
-            }
-          },
-          %{
-            action: %{type: :send, event: "cancel_remove", item: user.id, target: target},
-            face: %{type: :primary, label: dgettext("eyra-account", "people.cancel_remove.label")}
-          }
-        ]
-      }
+      base_item
+      |> Map.put(:action_buttons, [])
+      |> Map.merge(PeopleHelpers.build_confirm_row(user.id, target))
     else
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: user_action_buttons(:people, user, me, 999, target)
-      }
+      Map.put(base_item, :action_buttons, user_action_buttons(:people, user, me, 999, target))
     end
   end
 
