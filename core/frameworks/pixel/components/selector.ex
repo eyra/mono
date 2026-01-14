@@ -105,8 +105,11 @@ defmodule Frameworks.Pixel.Selector do
       # Use Fabric's send_event
       socket |> send_event(:parent, event_name, payload)
     else
-      # Use LiveNest's publish_event for proper event routing
-      socket |> publish_event({String.to_atom(event_name), payload})
+      # Fallback to standard Phoenix LiveView messaging
+      # Send message to parent PID if available, otherwise to self (the LiveView)
+      target_pid = socket.parent_pid || self()
+      send(target_pid, {event_name, payload})
+      socket
     end
   end
 
