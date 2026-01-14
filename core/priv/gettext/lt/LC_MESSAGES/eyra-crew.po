@@ -1,0 +1,117 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "task.completed.message.part1"
+msgstr "Jūsų indėlis bus peržiūrėtas šio tyrimo autoriaus ir priimtas arba atmestas."
+
+#, fuzzy
+msgid "task.completed.message.part2"
+msgstr "Apsilankykite savo konsolėje, kad peržiūrėtumėte savo įnašo būseną."
+
+#, fuzzy
+msgid "task.completed.title"
+msgstr "Dėkojame už dalyvavimą"
+
+#, fuzzy
+msgid "task.expired.subtitle"
+msgstr "Deja, jūsų sesija baigėsi"
+
+#, fuzzy
+msgid "task.expired.text"
+msgstr "Jei tyrimas vis dar vyksta, galite dalyvauti dar kartą. Tyrimas baigtas? Apsilankykite rinkoje ir pažiūrėkite, ar yra kitų tyrimų."
+
+#, fuzzy
+msgid "tester.completed.subtitle"
+msgstr "✅ Kelionė į abi puses patvirtinta"
+
+#, fuzzy
+msgid "tester.completed.text"
+msgstr "Jei šio puslapio pavadinimas atitinka jūsų kampanijos pavadinimą, tai reiškia, kad kelionė iš „Next“ į „Qualtrics“ ir atgal buvo sėkminga."
+
+msgid "progress.finished.label"
+msgstr "Baigta"
+
+#, fuzzy
+msgid "progress.remaining.label"
+msgstr "Tikėtina"
+
+msgid "progress.started.label"
+msgstr "Pradėti"
+
+msgid "home.intro.description"
+msgstr "„Next“ platforma siūlo atvirojo kodo, lengvai naudojamas programinės įrangos paslaugas, skirtas padėti jums efektyviai vykdyti tyrimus. Jas kuria „Eyra“ – mokslininkams ir kartu su jais – ir jos nuolat tobulinamos. Pasirengę pradėti? Žemiau rasite viską, ko jums reikia."
+
+#, fuzzy
+msgid "home.intro.image_alt"
+msgstr "Abstraktus vaizdas, simbolizuojantis bendradarbiavimą ir mokslinius tyrimus"
+
+msgid "home.intro.learn_more_button"
+msgstr "Kurkime kartu"
+
+msgid "home.intro.title"
+msgstr "„Next“ platforma"
+
+msgid "home.services.button"
+msgstr "Atraskite paslaugas"
+
+msgid "home.services.description"
+msgstr "Norite sužinoti, kokias programinės įrangos paslaugas galite naudoti „Next“ platformoje? Pasirinkite žemiau esantį mygtuką, kad peržiūrėtumėte siūlomas paslaugas ir jų kainas. „Next“ platforma yra be reklamų ir veikia pagal sąžiningą kainodaros modelį, skirtą ilgalaikiam tvarumui užtikrinti. Įsigydami paslaugą, tiesiogiai prisidedate prie atviros ekosistemos, kuri leidžia išlaikyti platformą prieinamą tokiems tyrėjams kaip jūs."
+
+#, fuzzy
+msgid "home.services.image_alt"
+msgstr "Vaizdas, atspindintis bendradarbiavimą ir mokslinius tyrimus"
+
+msgid "home.services.title"
+msgstr "Paslaugos & kainos"
+
+msgid "home.steps.step1.button"
+msgstr "Užsiregistruoti"
+
+msgid "home.steps.step1.description"
+msgstr "Sukurkite nemokamą paskyrą ir gaukite prieigą prie „Next“ platformos lengvai prieinamų programinės įrangos paslaugų."
+
+msgid "home.steps.step1.title"
+msgstr "Prisijunkite prie platformos"
+
+msgid "home.steps.step2.description"
+msgstr "Pradėkite savo pirmąjį projektą ir pasirinkite programinės įrangos paslaugą. Pamatysite, kaip lengva ją nustatyti ir pritaikyti."
+
+msgid "home.steps.step2.title"
+msgstr "Sukurti projektą"
+
+msgid "home.steps.step3.description"
+msgstr "Nemokamai peržiūrėkite ir dalinkitės savo projektu su bendradarbiais. Paslaugos mokestis taikomas tik tada, kai skelbiate arba pradedate naudoti paslaugą savo tyrimams."
+
+# UI style: use “&” when present in the English title.
+msgid "home.steps.step3.title"
+msgstr "Peržiūrėti & dalytis"
+
+msgid "home.steps.title"
+msgstr "Pasirengę pradėti naudotis platforma?"
+
+# Make sure that “”Next”” is not translated it is a name.
+msgid "home.video.preview_title"
+msgstr "„Next“ platformos peržiūra"
+
+msgid "home.video.title"
+msgstr "„Next“ platforma iš pirmo žvilgsnio"

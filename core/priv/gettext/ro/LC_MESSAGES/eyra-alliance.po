@@ -1,0 +1,113 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "config.url.label"
+msgstr "Link către chestionar"
+
+msgid "reward.highlight.title"
+msgstr "Recompensă"
+
+msgid "apply.cta.title"
+msgstr "Participă la loterie"
+
+msgid "open.cta.title"
+msgstr "Continuă"
+
+#, fuzzy
+msgid "redirect.description"
+msgstr "Pentru a redirecționa participanții înapoi la Următorul la sfârșitul chestionarului, copiați adresa URL de redirecționare de mai jos și lipiți-o ca „Adresă URL a site-ului web” în Qualtrics ca %{link}."
+
+msgid "redirect.title"
+msgstr "URL redirectare"
+
+msgid "pending.label"
+msgstr "În așteptare"
+
+msgid "content.title"
+msgstr "Campanie"
+
+#, fuzzy
+msgid "nextid.description"
+msgstr "Next adaugă automat ID-ul participantului la adresa URL Qualtrics. Pentru a utiliza acest ID în Qualtrics, adăugați un câmp de element de date încorporat cu numele „participant”, ca %{link} în „PARTEA 2”."
+
+#, fuzzy
+msgid "nextid.title"
+msgstr "ID participant"
+
+#, fuzzy
+msgid "setup.title"
+msgstr "Cum să configurați chestionarul pe Qualtrics?"
+
+msgid "redirect.copy.button"
+msgstr "Copiază"
+
+#, fuzzy
+msgid "link.description"
+msgstr "Pentru a obține linkul către chestionarul Qualtrics, urmați %{link}. Lipiți linkul în câmpul „Link către chestionar” din formularul de mai jos."
+
+#, fuzzy
+msgid "link.title"
+msgstr "Link către chestionar"
+
+#, fuzzy
+msgid "nextid.instructions.link"
+msgstr "explicat aici"
+
+#, fuzzy
+msgid "redirect.instructions.link"
+msgstr "instruit aici"
+
+#, fuzzy
+msgid "study.instructions.link"
+msgstr "aceste instrucțiuni"
+
+#, fuzzy
+msgid "duration.highlight.text"
+msgstr "%{duration} minute"
+
+msgid "duration.highlight.title"
+msgstr "Durata"
+
+#, fuzzy
+msgid "status.closed.highlight.text"
+msgstr "Închis pentru participare"
+
+msgid "status.highlight.title"
+msgstr "Stare"
+
+#, fuzzy
+msgid "status.open.highlight.text"
+msgstr "Deschis pentru participare"
+
+msgid "language.highlight.title"
+msgstr "Limbă"
+
+#, fuzzy
+msgid "participated.label"
+msgstr "A participat"
+
+msgid "tool.button"
+msgstr "Continuă"
+
+msgid "tool.description"
+msgstr "Sunteți pe cale să începeți un chestionar într-o filă nouă. După ce îl veți finaliza, veți fi redirecționat automat către această pagină."

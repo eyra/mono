@@ -1,0 +1,77 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "callback_url.body"
+msgstr "Opțional, furnizați o adresă URL webhook pentru a primi actualizări în timp real privind progresul participanților."
+
+#, fuzzy
+msgid "callback_url.placeholder"
+msgstr "https://panel-company.com/study?s=progress"
+
+msgid "callback_url.title"
+msgstr "Progres"
+
+#, fuzzy
+msgid "redirect_url.placeholder"
+msgstr "https://panel-company.com/study?s=done"
+
+#, fuzzy
+msgid "redirect_url.body"
+msgstr "Opțional, furnizați o adresă URL de redirecționare pentru a redirecționa participanții către o altă platformă sau organizație după finalizarea fluxului de lucru."
+
+#, fuzzy
+msgid "redirect_url.title"
+msgstr "Sfârșitul fluxului de lucru"
+
+msgid "invalid_url.invalid_parts"
+msgstr "Te rugăm să introduci o adresă URL validă"
+
+#, fuzzy
+msgid "invalid_url.missing_host"
+msgstr "Vă rugăm să includeți un domeniu"
+
+#, fuzzy
+msgid "invalid_url.missing_scheme"
+msgstr "Vă rugăm să utilizați un prefix precum https://"
+
+#, fuzzy
+msgid "invalid_url.no_spaces_allowed"
+msgstr "Vă rugăm să eliminați toate spațiile din adresa URL."
+
+#, fuzzy
+msgid "test.success"
+msgstr "Adresa URL arată bine și este accesibilă."
+
+#, fuzzy
+msgid "invalid_url.unreachable"
+msgstr "Vă rugăm să verificați adresa URL - nu este accesibilă."
+
+msgid "platform_name.body"
+msgstr ""
+
+msgid "platform_name.label"
+msgstr ""
+
+msgid "platform_name.placeholder"
+msgstr ""
+

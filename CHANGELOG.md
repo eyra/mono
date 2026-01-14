@@ -9,6 +9,25 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#20 2026-01-14
+* Added - Romanian (RO) and Lithuanian (LT) language support
+* Changed - Font from Finador to Nunito / Nunito Sans
+* Added - Prism UI framework integration
+* Changed - Restructured icons and logos folders
+
+## \#19 2026-01-03
+* Added - Privacy policy acceptance with clickable links during signup (Next platform)
+* Added - UserState framework for managing client-side state (timezone, language)
+* Added - LiveContext framework for passing context through LiveView hierarchy
+* Added - Custom end-of-workflow screen text for panel integration
+* Added - Hide Panl tab for non-Panl participants
+* Added - State machine support in Crew Page
+* Added - Multi-language translations (EN, NL, DE, ES, IT) for panel integration workflow
+* Changed - Complete refactor of CrewPage hierarchy to LiveNest
+* Changed - Improved participant copy and translations
+* Changed - Updated modal view component
+* Changed - Enhanced toolbar component
+
 ## \#18 2025-10-22
 * Added: Annotation Recipes (WIP)
 * Added:Ontology + Annotation + Criteria Live View (WIP)

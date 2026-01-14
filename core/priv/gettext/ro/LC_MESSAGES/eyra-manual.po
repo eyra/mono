@@ -1,0 +1,118 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "apply.cta.title"
+msgstr "aplică.cta.titlu"
+
+msgid "chapter.title.label"
+msgstr "Titlu"
+
+#, fuzzy
+msgid "open.cta.title"
+msgstr "titlu.cta.deschis"
+
+#, fuzzy
+msgid "participated.label"
+msgstr "participat.etichetă"
+
+#, fuzzy
+msgid "pending.label"
+msgstr "în așteptare.etichetă"
+
+#, fuzzy
+msgid "create.manual.button"
+msgstr "Creați manualul"
+
+#, fuzzy
+msgid "open.manual.button"
+msgstr "Editați manualul"
+
+#, fuzzy
+msgid "setup.annotation"
+msgstr "<div><h1>Cum se configurează instrucțiunile pentru participanți?</h1><ul><li>Creați <strong>secțiuni</strong>, astfel încât participanții să poată naviga la secțiunea relevantă.</li><li>Utilizați <strong>etichete</strong> de secțiune pentru a specifica cazuri de utilizare, cum ar fi <i>iPhone</i> sau <i>Android</i>.</li><li>Furnizați mai multe <strong>instrucțiuni</strong> succinte în fiecare secțiune, inclusiv <b>capturi de ecran</b> relevante pentru mai multă claritate.</li></ul></div>"
+
+msgid "builder.chapter.overview"
+msgstr "Secțiuni"
+
+msgid "create.chapter.button"
+msgstr "Adaugă capitol"
+
+#, fuzzy
+msgid "chapter.title.default"
+msgstr "Secțiune nouă"
+
+msgid "chapter.group.label"
+msgstr "Etichetă"
+
+#, fuzzy
+msgid "create.page.button"
+msgstr "Adăugați instrucțiuni"
+
+#, fuzzy
+msgid "page.title.default"
+msgstr "Instrucțiuni noi"
+
+msgid "page.title.label"
+msgstr "Titlu"
+
+msgid "page.text.label"
+msgstr "Descriere"
+
+msgid "choose.image.file"
+msgstr "Selectați imaginea"
+
+msgid "choose.other.image.file"
+msgstr "Schimbati imaginea"
+
+msgid "builder.pages.list.title"
+msgstr "Instrucțiuni"
+
+#, fuzzy
+msgid "chapter.label.first"
+msgstr "Etichetă secțiune"
+
+#, fuzzy
+msgid "chapter.title.first"
+msgstr "Prima secțiune"
+
+#, fuzzy
+msgid "page.title.first"
+msgstr "Prima instrucțiune"
+
+msgid "chapter.next.button"
+msgstr "Următor"
+
+msgid "chapter.page.indicator"
+msgstr "%{current}/%{count}"
+
+msgid "chapter.previous.button"
+msgstr "Anterior"
+
+msgid "image.fullscreen.button"
+msgstr "Mărește"
+
+msgid "chapter.done.button"
+msgstr "Terminat"
+
+msgid "chapter.overview"
+msgstr "Prezentare"
