@@ -8,4 +8,5 @@ defmodule Systems.Storage.Backend do
   @callback list_files(endpoint :: map()) :: {:ok, list()} | {:error, atom()}
   @callback delete_files(endpoint :: map()) :: :ok | {:error, atom()}
   @callback connected?(endpoint :: map()) :: boolean()
+  @callback filename(meta_data :: map()) :: String.t()
 end

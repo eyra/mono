@@ -54,7 +54,8 @@ defmodule Systems.Storage.Azure.Backend do
     false
   end
 
-  defp filename(%{"identifier" => identifier}) do
+  @impl true
+  def filename(%{"identifier" => identifier}) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
     |> then(&"#{&1}.json")

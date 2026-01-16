@@ -36,7 +36,7 @@ defmodule Systems.Storage.Delivery do
 
   # New path: fetch blob from database using blob_id
   defp deliver_with_blob(%{"blob_id" => blob_id} = args) do
-    case Repo.get(Storage.PendingBlobModel, blob_id) do
+    case Repo.get(Storage.JobDataModel, blob_id) do
       nil ->
         # Blob already deleted (duplicate delivery?) - discard job
         {:discard, "Blob #{blob_id} not found - already processed or expired"}
@@ -45,10 +45,10 @@ defmodule Systems.Storage.Delivery do
         # Deliver the data
         result = deliver_data(args, data)
 
-        # On success, delete the blob
+        # On success, mark blob as finished (cleanup worker will purge later)
         case result do
           :ok ->
-            Repo.delete(blob)
+            Repo.update(Storage.JobDataModel.mark_finished(blob))
             :ok
 
           error ->

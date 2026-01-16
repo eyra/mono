@@ -80,8 +80,8 @@ config :core, Oban,
     {Oban.Plugins.Cron,
      crontab: [
        {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-       # Clean up orphaned storage blobs every hour
-       {"0 * * * *", Systems.Storage.BlobCleanupWorker}
+       # Clean up finished storage job data every hour
+       {"0 * * * *", Systems.Storage.JobDataCleanupWorker}
      ]}
   ]
 

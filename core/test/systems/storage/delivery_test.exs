@@ -6,7 +6,7 @@ defmodule Systems.Storage.DeliveryTest do
   import Frameworks.Signal.TestHelper
 
   alias Systems.Storage.Delivery
-  alias Systems.Storage.PendingBlobModel
+  alias Systems.Storage.JobDataModel
   alias Systems.Storage.BuiltIn.Backend
   alias Systems.Storage.BuiltIn.MockSpecial
 
@@ -31,12 +31,12 @@ defmodule Systems.Storage.DeliveryTest do
   end
 
   describe "perform/1 with blob_id" do
-    test "fetches blob, delivers, and deletes blob on success" do
+    test "fetches blob, delivers, and marks as finished on success" do
       # Create blob
       data = "test donation data"
 
       {:ok, blob} =
-        PendingBlobModel.prepare(data)
+        JobDataModel.prepare(data)
         |> Repo.insert()
 
       # Mock successful delivery
@@ -57,16 +57,18 @@ defmodule Systems.Storage.DeliveryTest do
       # Perform job
       assert :ok = perform_job(Delivery, args)
 
-      # Blob should be deleted after successful delivery
-      assert Repo.get(PendingBlobModel, blob.id) == nil
+      # Job data should be marked as finished (not deleted)
+      updated_blob = Repo.get(JobDataModel, blob.id)
+      assert updated_blob != nil
+      assert updated_blob.status == :finished
     end
 
-    test "keeps blob on delivery failure for retry" do
+    test "keeps blob pending on delivery failure for retry" do
       # Create blob
       data = "test data for retry"
 
       {:ok, blob} =
-        PendingBlobModel.prepare(data)
+        JobDataModel.prepare(data)
         |> Repo.insert()
 
       # Mock failed delivery
@@ -85,8 +87,10 @@ defmodule Systems.Storage.DeliveryTest do
       # Job should return error
       assert {:error, _} = perform_job(Delivery, args)
 
-      # Blob should still exist for retry
-      assert Repo.get(PendingBlobModel, blob.id) != nil
+      # Blob should still exist and remain pending for retry
+      updated_blob = Repo.get(JobDataModel, blob.id)
+      assert updated_blob != nil
+      assert updated_blob.status == :pending
     end
 
     test "discards job if blob not found" do
