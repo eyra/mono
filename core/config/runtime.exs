@@ -60,6 +60,8 @@ if config_env() == :prod do
           "advert_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
 
+          # Cleans up orphaned blobs from storage_pending_blobs table (24h+ old)
+          # Add "blob_cleanup" to ENABLED_OBAN_PLUGINS to enable
           "blob_cleanup" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Storage.BlobCleanupWorker}]}
 
