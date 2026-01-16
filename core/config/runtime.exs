@@ -60,6 +60,9 @@ if config_env() == :prod do
           "advert_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
 
+          "blob_cleanup" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Storage.BlobCleanupWorker}]}
+
           _ ->
             nil
         end
