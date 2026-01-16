@@ -119,15 +119,10 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:socket, :map, required: true)
   attr(:bar_id, :string, required: true)
   attr(:tabs, :list, required: true)
-  attr(:include_top_margin, :boolean, default: true)
 
   def content(assigns) do
     ~H"""
     <div id={"#{@bar_id}-tab_content"} phx-hook="TabContent">
-      <%= if @include_top_margin do %>
-        <div class="hidden md:block h-navbar-height" />
-        <div class="h-navbar-height" />
-      <% end %>
       <%= for tab <- @tabs do %>
         <.panel tab_id={tab.id} bar_id={@bar_id}>
           <%= if Map.has_key?(tab, :element) do %>

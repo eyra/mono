@@ -49,13 +49,11 @@ defmodule Systems.Student.PublicTest do
 
     class_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_class,
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_course,
         identifier: ["course", ":year1", ":2001"]
       })
 
@@ -117,13 +115,11 @@ defmodule Systems.Student.PublicTest do
 
     class_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_class,
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_course,
         identifier: ["course", ":year1", ":2001"]
       })
 
@@ -191,14 +187,12 @@ defmodule Systems.Student.PublicTest do
                name: ^name
              },
              org: %{
-               identifier: ^identifier,
-               type: :student_course
+               identifier: ^identifier
              },
              target: 100
            } = Pool.Public.get_by_name(name, [:org, :currency])
 
     assert %{
-             type: :student_course,
              identifier: ^identifier,
              full_name_bundle: %{
                items: [
@@ -239,7 +233,6 @@ defmodule Systems.Student.PublicTest do
              ])
 
     assert %{
-             type: :student_class,
              identifier: ["vu", "sbe", "bk", ":year1", ":2024"],
              full_name_bundle: %{
                items: [
@@ -271,7 +264,6 @@ defmodule Systems.Student.PublicTest do
              },
              links: [
                %{
-                 type: :student_course,
                  identifier: ["vu", "sbe", "rpr", ":year1", ":2024"]
                }
              ],
@@ -285,7 +277,6 @@ defmodule Systems.Student.PublicTest do
              ])
 
     assert %{
-             type: :student_class,
              identifier: ["vu", "sbe", "iba", ":year1", ":2024"],
              full_name_bundle: %{
                items: [
@@ -317,7 +308,6 @@ defmodule Systems.Student.PublicTest do
              },
              links: [
                %{
-                 type: :student_course,
                  identifier: ["vu", "sbe", "rpr", ":year1", ":2024"]
                }
              ],

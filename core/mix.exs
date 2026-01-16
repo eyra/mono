@@ -37,6 +37,13 @@ defmodule Core.MixProject do
           # :race_conditions,
           :no_opaque
         ]
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -131,6 +138,7 @@ defmodule Core.MixProject do
       {:bypass, "== 2.1.0", only: :test},
       {:lazy_html, "== 0.1.8", only: :test},
       {:mox, "== 1.2.0", only: :test},
+      {:excoveralls, "== 0.18.5", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
       {:phoenix_live_reload, "== 1.6.1", only: :dev},

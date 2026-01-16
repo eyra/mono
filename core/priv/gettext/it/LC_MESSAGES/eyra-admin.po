@@ -90,3 +90,29 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "search.placeholder"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "archived.org.content.title"
+msgstr "Organizzazioni"
+
+#, elixir-autogen, elixir-format
+msgid "restore.button"
+msgstr "Ripristina"
+
+#, elixir-autogen, elixir-format
+msgid "show.archived.button"
+msgid_plural "show.archived.button.plural"
+msgstr[0] "Mostra %{count} archiviata"
+msgstr[1] "Mostra %{count} archiviate"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "archived.context"
+msgstr "Organizzazioni"
+
+#, elixir-autogen, elixir-format
+msgid "admins.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "org.admins.title"
+msgstr ""

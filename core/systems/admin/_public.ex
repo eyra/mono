@@ -1,6 +1,38 @@
 defmodule Systems.Admin.Public do
   use Core, :public
 
+  alias Systems.Org
+
+  # Governable entity checkers - each returns true if user owns entities of that type
+  # Add new entity types here as they become governable
+  @governable_entity_checkers [
+    &Org.Public.owns_any?/1
+    # Future: &Pool.Public.owns_any?/1
+  ]
+
+  @doc """
+  Checks if a user has access to admin features.
+
+  A user has admin access if they are either:
+  - A system admin (matches admin email patterns)
+  - An owner of at least one governable entity (org, pool, etc.)
+  """
+  def admin_access?(user) do
+    admin?(user) or has_governable_entities?(user)
+  end
+
+  @doc """
+  Checks if a user owns any governable entities.
+
+  Uses the configured list of entity checkers to determine if the user
+  owns at least one entity of any governable type.
+  """
+  def has_governable_entities?(nil), do: false
+
+  def has_governable_entities?(user) do
+    Enum.any?(@governable_entity_checkers, fn checker -> checker.(user) end)
+  end
+
   def compile(patterns) do
     combined =
       Enum.map_join(patterns, "|", fn pattern ->

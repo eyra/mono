@@ -70,7 +70,107 @@ defmodule Frameworks.Pixel.ModalView do
     """
   end
 
-  @allowed_styles [:max, :full, :page, :sheet, :compact]
+  # Legacy style names (deprecated, use aspects instead)
+  @allowed_styles [:max, :full, :page, :compact]
+
+  # Modal presets - common aspect combinations
+  # Note: :max and :full both use full width but different padding/controls
+  # :max = minimal padding (p-4 lg:p-8), close button only
+  # :full = large padding (p-4 xl:p-20), toolbar
+  @presets %{
+    max: [controls: :close, width: :max, height: :full],
+    full: [controls: :tools, width: :full, height: :full],
+    page: [controls: :tools, width: :wide, height: :full],
+    sheet: [controls: :close, width: :wide, height: :tall, scrollable: true, context: true],
+    compact: [controls: :close, width: :narrow]
+  }
+
+  # Default aspect values
+  @defaults [
+    controls: :none,
+    width: :medium,
+    height: :auto,
+    scrollable: false,
+    context: false
+  ]
+
+  @doc """
+  Resolves modal aspects from style (legacy), preset, or explicit options.
+  Returns a keyword list of resolved aspects.
+  """
+  def resolve_aspects(style_or_preset, overrides \\ [])
+
+  def resolve_aspects(style, overrides) when is_atom(style) do
+    base =
+      if Map.has_key?(@presets, style) do
+        @presets[style]
+      else
+        # Legacy style - map to aspects
+        legacy_to_aspects(style)
+      end
+
+    @defaults
+    |> Keyword.merge(base)
+    |> Keyword.merge(overrides)
+  end
+
+  def resolve_aspects(opts, _overrides) when is_list(opts) do
+    @defaults
+    |> Keyword.merge(opts)
+  end
+
+  # Legacy style to aspects mapping
+  @legacy_aspects %{
+    max: [controls: :close, width: :max, height: :full],
+    full: [controls: :tools, width: :full, height: :full],
+    page: [controls: :tools, width: :wide, height: :full],
+    sheet: [controls: :close, width: :medium, scrollable: true],
+    compact: [controls: :close, width: :narrow]
+  }
+
+  # Width classes
+  # :max = truly full width with minimal padding (p-4 lg:p-8)
+  # :full = full width with larger padding (p-4 xl:p-20)
+  # others = max-width with full width fallback for small screens
+  @width_classes %{
+    narrow: "w-full max-w-[500px]",
+    medium: "w-full max-w-[700px]",
+    wide: "w-full max-w-[960px]",
+    full: "w-full",
+    max: "w-full"
+  }
+
+  # Height classes for outer wrapper
+  @height_classes %{
+    auto: "",
+    tall: "",
+    full: "h-full"
+  }
+
+  # Height classes for inner modal box
+  @inner_height_classes %{
+    auto: "",
+    tall: "max-h-[80vh]",
+    full: "h-full"
+  }
+
+  # Padding classes per width type
+  # :max = minimal padding for maximum content area
+  # :full = larger padding for comfortable viewing
+  # others = standard padding
+  @padding_classes %{
+    max: "p-4 lg:p-8",
+    full: "p-4 xl:p-20",
+    wide: "p-4 sm:px-10 sm:py-20",
+    medium: "p-4 sm:px-10 sm:py-20",
+    narrow: "px-4 sm:px-10"
+  }
+
+  defp legacy_to_aspects(style), do: Map.get(@legacy_aspects, style, [])
+  defp width_class(width), do: Map.get(@width_classes, width, "")
+  defp height_class(height), do: Map.get(@height_classes, height, "")
+  defp inner_height_class(height), do: Map.get(@inner_height_classes, height, "")
+  defp padding_class(width), do: Map.get(@padding_classes, width, "p-4 sm:px-10 sm:py-20")
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
@@ -90,28 +190,117 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:modal, :map, required: true)
   attr(:toolbar_buttons, :list, default: [])
 
-  def frame(%{modal: %{style: style}} = assigns) do
-    unless style in @allowed_styles do
-      raise ArgumentError,
-            "Invalid style: #{style}. Allowed styles are: #{Enum.join(@allowed_styles, ", ")}"
+  def frame(%{modal: %{style: style}} = assigns) when is_atom(style) do
+    if style in @allowed_styles do
+      render_legacy_frame(assigns)
+    else
+      assigns
+      |> assign(:frame, build_frame(resolve_aspects(style), assigns.modal))
+      |> render_frame()
     end
+  end
 
+  def frame(%{modal: %{style: opts}} = assigns) when is_list(opts) do
+    assigns
+    |> assign(:frame, build_frame(resolve_aspects(opts), assigns.modal))
+    |> render_frame()
+  end
+
+  defp build_frame(aspects, modal) do
+    width_key = aspects[:width]
+    height_key = aspects[:height]
+
+    %{
+      width_class: width_class(width_key),
+      height_class: height_class(height_key),
+      inner_height_class: inner_height_class(height_key),
+      padding_class: padding_class(width_key),
+      controls: aspects[:controls],
+      scrollable: aspects[:scrollable],
+      header: build_header(aspects, modal)
+    }
+  end
+
+  defp render_legacy_frame(assigns) do
     ~H"""
-      <%= if @modal.style == :max do %>
-        <.max modal={@modal} socket={@socket} />
+      <%= case @modal.style do %>
+        <% :max -> %>
+          <.max modal={@modal} socket={@socket} />
+        <% :full -> %>
+          <.full modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
+        <% :page -> %>
+          <.page modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
+        <% :sheet -> %>
+          <.sheet modal={@modal} socket={@socket} />
+        <% :compact -> %>
+          <.compact modal={@modal} socket={@socket} />
       <% end %>
-      <%= if @modal.style == :full do %>
-        <.full modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
-      <% end %>
-      <%= if @modal.style == :page do %>
-        <.page modal={@modal} socket={@socket} toolbar_buttons={@toolbar_buttons} />
-      <% end %>
-      <%= if @modal.style == :sheet do %>
-        <.sheet modal={@modal} socket={@socket} />
-      <% end %>
-      <%= if @modal.style == :compact do %>
-        <.compact modal={@modal} socket={@socket} />
-      <% end %>
+    """
+  end
+
+  defp render_frame(assigns) do
+    ~H"""
+    <div class={"modal-dynamic #{@frame.width_class} #{@frame.height_class} #{@frame.padding_class}"}>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating #{@frame.inner_height_class} pt-8 pb-8"}>
+        <.header {@frame.header} modal={@modal} />
+
+        <div class={"flex-1 px-8 #{if @frame.scrollable do "overflow-y-scroll" else "" end}"}>
+          <.element {Map.from_struct(@modal.element)} socket={@socket} />
+        </div>
+
+        <div :if={@frame.controls == :tools} class="flex-shrink-0">
+          <.live_component
+            module={Toolbar}
+            id="modal_toolbar"
+            close_button={close_icon_label_button(@modal)}
+            mobile_close_button={close_icon_button(@modal)}
+            buttons={@toolbar_buttons}
+          />
+        </div>
+
+        <div :if={@frame.controls == :actions} class="flex-shrink-0 px-8 pt-6">
+          <div class="flex flex-row justify-center gap-4">
+            <Button.dynamic_bar buttons={@toolbar_buttons} />
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp build_header(aspects, modal) do
+    show_context = aspects[:context]
+    show_close = aspects[:controls] == :close
+
+    # Check both modal.options (LiveNest) and modal.element.options (Fabric)
+    context =
+      Keyword.get(modal.options, :context) ||
+        Keyword.get(modal.element.options, :context)
+
+    %{
+      visible: show_context || show_close,
+      context: if(show_context, do: context),
+      show_close: show_close
+    }
+  end
+
+  attr(:visible, :boolean, required: true)
+  attr(:context, :string, default: nil)
+  attr(:show_close, :boolean, required: true)
+  attr(:modal, :map, required: true)
+
+  defp header(%{visible: false} = assigns), do: ~H""
+
+  defp header(assigns) do
+    ~H"""
+    <div class="flex-shrink-0 px-8 pb-4">
+      <div class="flex flex-row items-start">
+        <div class="flex-grow">
+          <Text.title6 :if={@context} color="text-grey2"><%= @context %></Text.title6>
+        </div>
+        <Button.dynamic :if={@show_close} {close_icon_button(@modal)} />
+      </div>
+    </div>
     """
   end
 
@@ -210,17 +399,19 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:modal, :map, required: true)
 
   def sheet(assigns) do
+    context = Keyword.get(assigns.modal.element.options, :context)
+    assigns = assign(assigns, :context, context)
+
     ~H"""
       <div class={"modal-sheet w-[960px] p-4 sm:px-10 sm:py-20"}>
-        <div class={"flex flex-col w-full bg-white rounded shadow-floating pt-8 pb-8"}>
-          <%!-- HEADER --%>
-          <div class="shrink-0 px-8">
-            <div class="flex flex-row">
-              <div class="flex-grow">
-                <.title2 modal={@modal} centered?={true}/>
-              </div>
-              <Button.dynamic {close_icon_button(@modal)} />
-            </div>
+        <div class={"relative flex flex-col w-full bg-white rounded shadow-floating pt-8 pb-8"}>
+          <%!-- Header with optional context --%>
+          <div :if={@context} class="px-8 pb-4">
+            <Text.title6 color="text-grey2"><%= @context %></Text.title6>
+          </div>
+          <%!-- Close button --%>
+          <div class="absolute z-30 top-8 right-8">
+            <Button.dynamic {close_icon_button(@modal)} />
           </div>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">

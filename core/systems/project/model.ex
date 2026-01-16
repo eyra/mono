@@ -63,7 +63,7 @@ defmodule Systems.Project.Model do
 
       people = %{
         action: %{type: :send, event: "setup_people", item: id},
-        face: %{type: :label, label: "People", wrap: true}
+        face: %{type: :label, label: "Admins", wrap: true}
       }
 
       rename = %{

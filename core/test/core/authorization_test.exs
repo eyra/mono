@@ -10,16 +10,16 @@ defmodule AuthorizationTest do
     assert Principal.roles(nil) == MapSet.new([:visitor])
   end
 
-  test "principal returns `member` for regular users" do
+  test "principal returns `user` for regular users" do
     member = Factories.insert!(:member)
 
     assert Principal.id(member) == member.id
-    assert Principal.roles(member) == MapSet.new([:member])
+    assert Principal.roles(member) == MapSet.new([:user])
   end
 
-  test "principal returns `member` and `researcher` for users marked as such" do
+  test "principal returns `user` and `creator` for users marked as such" do
     researcher = Factories.insert!(:creator)
-    assert Principal.roles(researcher) == MapSet.new([:member, :creator])
+    assert Principal.roles(researcher) == MapSet.new([:user, :creator])
   end
 
   test "can create authorization node" do

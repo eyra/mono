@@ -28,7 +28,7 @@ msgstr "Password"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "My profile"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -159,6 +159,14 @@ msgid "features.birthyear.title"
 msgstr "Birth year"
 
 #, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr "Panl"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.profile.title"
+msgstr "My profile"
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "I agree to the %{terms_link} and %{privacy_link}"
 
@@ -175,17 +183,5 @@ msgid "privacy.next-policy.required"
 msgstr "You must accept the terms, conditions and privacy policy to continue"
 
 #, elixir-autogen, elixir-format
-msgid "profile.tab.profile.title"
-msgstr "My profile"
-
-#, elixir-autogen, elixir-format
-msgid "profile.tab.features.title"
-msgstr "Panl"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "terms and conditions"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "privacy policy"
+msgid "people.add.button"
+msgstr "Add"

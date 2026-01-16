@@ -36,10 +36,6 @@ msgid "short.name.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "type.selector.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "domains.label"
 msgstr ""
 
@@ -53,4 +49,62 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "owners.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "owners.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "filter.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "filter.root"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "filter.nested"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.banner.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.banner.title.singular"
+msgid_plural "domain.match.banner.title.plural"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.nba.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.nba.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.nba.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "domain.match.next_action.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "domain.match.next_action.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "domain.match.next_action.title"
 msgstr ""

@@ -4,16 +4,16 @@ defmodule Core.GreenLight.PrincipalTest do
   alias Systems.Account.User
 
   describe "roles/1" do
-    test "user gets the member role" do
-      assert Principal.roles(%User{}) == MapSet.new([:member])
+    test "user gets the user role" do
+      assert Principal.roles(%User{}) == MapSet.new([:user])
     end
 
     test "creator gets additional creator role" do
-      assert Principal.roles(%User{creator: true}) == MapSet.new([:member, :creator])
+      assert Principal.roles(%User{creator: true}) == MapSet.new([:user, :creator])
     end
 
-    test "member gets no additional roles" do
-      assert Principal.roles(%User{creator: false}) == MapSet.new([:member])
+    test "user gets no additional roles" do
+      assert Principal.roles(%User{creator: false}) == MapSet.new([:user])
     end
 
     test "user gets admin when listed in the config" do
@@ -31,10 +31,10 @@ defmodule Core.GreenLight.PrincipalTest do
         Systems.Admin.Public.compile(["admin@example.org"])
       )
 
-      # Regular member
-      assert Principal.roles(%User{email: "regular@example.org"}) == MapSet.new([:member])
+      # Regular user
+      assert Principal.roles(%User{email: "regular@example.org"}) == MapSet.new([:user])
       # Admin user
-      assert Principal.roles(%User{email: "admin@example.org"}) == MapSet.new([:member, :admin])
+      assert Principal.roles(%User{email: "admin@example.org"}) == MapSet.new([:user, :admin])
     end
   end
 end

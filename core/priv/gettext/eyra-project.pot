@@ -136,10 +136,6 @@ msgid "create_item_popup.create.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "people.page.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr ""
 
@@ -161,4 +157,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "node.data.empty.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admins.title"
 msgstr ""

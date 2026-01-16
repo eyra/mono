@@ -8,7 +8,7 @@ defimpl Frameworks.GreenLight.Principal, for: Systems.Account.User do
   def id(user), do: user.id
 
   def roles(user) do
-    MapSet.new([:member])
+    MapSet.new([:user])
     |> add_role_when(:creator, user.creator)
     |> add_role_when(:admin, Systems.Admin.Public.admin?(user))
   end

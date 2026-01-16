@@ -1,162 +1,107 @@
 defmodule Systems.Admin.SystemView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
 
-  alias Systems.Budget
-  alias Systems.Citizen
+  alias Systems.Admin.SystemViewBuilder
+  alias Systems.Observatory
 
-  # Initial update
-  @impl true
-  def update(
-        %{
-          id: id,
-          user: user,
-          locale: locale,
-          bank_accounts: bank_accounts,
-          bank_account_items: bank_account_items,
-          citizen_pools: citizen_pools,
-          citizen_pool_items: citizen_pool_items
-        },
-        socket
-      ) do
-    {
-      :ok,
-      socket
-      |> assign(
-        id: id,
-        user: user,
-        locale: locale,
-        bank_accounts: bank_accounts,
-        bank_account_items: bank_account_items,
-        citizen_pools: citizen_pools,
-        citizen_pool_items: citizen_pool_items
-      )
-    }
+  def dependencies(),
+    do: [
+      :current_user,
+      :locale,
+      :bank_accounts,
+      :bank_account_items,
+      :citizen_pools,
+      :citizen_pool_items
+    ]
+
+  def get_model(:not_mounted_at_router, _session, _assigns) do
+    Observatory.SingletonModel.instance()
   end
 
   @impl true
-  def compose(:pool_form, %{user: user, locale: locale, active_pool: pool}) do
-    %{
-      module: Citizen.Pool.Form,
-      params: %{
-        title: dgettext("eyra-admin", "system.citizen.pools.new.title"),
-        pool: pool,
-        user: user,
-        locale: locale
-      }
-    }
-  end
-
-  @impl true
-  def compose(:bank_account_form, %{user: user, locale: locale, active_bank_account: bank_account}) do
-    %{
-      module: Budget.BankAccountForm,
-      params: %{
-        title: dgettext("eyra-admin", "system.bank.accounts.new.title"),
-        bank_account: bank_account,
-        user: user,
-        locale: locale
-      }
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
   end
 
   @impl true
   def handle_event(
         "edit_bank_account",
         %{"item" => item},
-        %{assigns: %{bank_accounts: bank_accounts}} = socket
+        %{assigns: %{current_user: user, vm: %{bank_accounts: bank_accounts}}} = socket
       ) do
     bank_account = Enum.find(bank_accounts, &(&1.id == String.to_integer(item)))
+    modal = SystemViewBuilder.build_bank_account_modal(bank_account, user)
 
-    {
-      :noreply,
-      socket
-      |> assign(active_bank_account: bank_account)
-      |> compose_child(:bank_account_form)
-      |> show_modal(:bank_account_form, :compact)
-    }
+    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
-  def handle_event("create_bank_account", _, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(active_bank_account: nil)
-      |> compose_child(:bank_account_form)
-      |> show_modal(:bank_account_form, :compact)
-    }
+  def handle_event(
+        "create_bank_account",
+        _,
+        %{assigns: %{current_user: user}} = socket
+      ) do
+    modal = SystemViewBuilder.build_bank_account_modal(nil, user)
+
+    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
   def handle_event(
         "edit_citizen_pool",
         %{"item" => item},
-        %{assigns: %{citizen_pools: citizen_pools}} = socket
+        %{assigns: %{current_user: user, locale: locale, vm: %{citizen_pools: citizen_pools}}} =
+          socket
       ) do
     pool = Enum.find(citizen_pools, &(&1.id == String.to_integer(item)))
+    modal = SystemViewBuilder.build_citizen_pool_modal(pool, user, locale)
 
-    {
-      :noreply,
-      socket
-      |> assign(active_pool: pool)
-      |> compose_child(:pool_form)
-      |> show_modal(:pool_form, :compact)
-    }
+    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
-  def handle_event("create_citizen_pool", _, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(active_pool: nil)
-      |> compose_child(:pool_form)
-      |> show_modal(:pool_form, :compact)
-    }
-  end
+  def handle_event(
+        "create_citizen_pool",
+        _,
+        %{assigns: %{current_user: user, locale: locale}} = socket
+      ) do
+    modal = SystemViewBuilder.build_citizen_pool_modal(nil, user, locale)
 
-  @impl true
-  def handle_event("saved", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_modal(popup)}
-  end
-
-  @impl true
-  def handle_event("cancelled", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_modal(popup)}
+    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="system-view">
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-admin", "system.bank.accounts.title") %> <span class="text-primary"><%= Enum.count(@bank_account_items) %></span></Text.title2>
+        <Text.title2><%= @vm.bank_accounts_title %> <span class="text-primary"><%= @vm.bank_account_count %></span></Text.title2>
         <Square.container>
           <Square.item
             state={:transparent}
-            title={dgettext("eyra-admin", "system.bank.accounts.new.title")}
+            title={@vm.bank_accounts_new_title}
             icon={{:static, "add_tertiary"}}
-            action={%{type: :send, event: "create_bank_account", item: "first", target: @myself}}
+            action={%{type: :send, event: "create_bank_account", item: "first"}}
           />
-          <%= for bank_account_item <- @bank_account_items do %>
+          <%= for bank_account_item <- @vm.bank_account_items do %>
             <Square.item {bank_account_item} />
           <% end %>
         </Square.container>
         <.spacing value="XL" />
 
-        <Text.title2><%= dgettext("eyra-admin", "system.citizen.pools.title") %> <span class="text-primary"><%= Enum.count(@citizen_pool_items) %></span></Text.title2>
+        <Text.title2><%= @vm.citizen_pools_title %> <span class="text-primary"><%= @vm.citizen_pool_count %></span></Text.title2>
         <Square.container>
           <Square.item
             state={:transparent}
-            title={dgettext("eyra-admin", "system.citizen.pools.new.title")}
+            title={@vm.citizen_pools_new_title}
             icon={{:static, "add_tertiary"}}
-            action={%{type: :send, event: "create_citizen_pool", item: "first", target: @myself}}
+            action={%{type: :send, event: "create_citizen_pool", item: "first"}}
           />
-          <%= for citizen_pool_item <- @citizen_pool_items do %>
+          <%= for citizen_pool_item <- @vm.citizen_pool_items do %>
             <Square.item {citizen_pool_item} />
           <% end %>
         </Square.container>
