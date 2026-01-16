@@ -14,11 +14,9 @@ defmodule Core.Repo.Migrations.RenameStudentPool do
   end
 
   def update(table, field, new_value, old_value) do
-    execute(
-    """
+    execute("""
     UPDATE #{table} SET #{field} = '#{new_value}' WHERE #{field} = '#{old_value}';
-    """
-    )
+    """)
   end
 
   def rename_table(from: from_table_name, to: to_table_name) do

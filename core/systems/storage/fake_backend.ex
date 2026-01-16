@@ -21,4 +21,11 @@ defmodule Systems.Storage.FakeBackend do
   def connected?(_endpoint) do
     false
   end
+
+  @impl true
+  def filename(%{"identifier" => identifier}) do
+    identifier
+    |> Enum.map_join("_", fn [key, value] -> "#{key}=#{value}" end)
+    |> then(&"#{&1}.json")
+  end
 end

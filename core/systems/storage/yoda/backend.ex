@@ -5,6 +5,7 @@ defmodule Systems.Storage.Yoda.Backend do
 
   require Logger
 
+  @impl true
   def store(
         %{
           "user" => username,
@@ -20,16 +21,19 @@ defmodule Systems.Storage.Yoda.Backend do
     {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
   end
 
+  @impl true
   def list_files(_endpoint) do
     Logger.error("Not yet implemented: list_files/1")
     {:error, :not_implemented}
   end
 
+  @impl true
   def delete_files(_endpoint) do
     Logger.error("Not yet implemented: delete_files/1")
     {:error, :not_implemented}
   end
 
+  @impl true
   def connected?(%{user: user, password: _, url: _}) when user == nil or user == "", do: false
 
   def connected?(%{user: _, password: password, url: _}) when password == nil or password == "",
@@ -58,7 +62,8 @@ defmodule Systems.Storage.Yoda.Backend do
 
   def connected?(_), do: false
 
-  defp filename(%{"identifier" => identifier}) do
+  @impl true
+  def filename(%{"identifier" => identifier}) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
     |> then(&"#{&1}.json")

@@ -79,7 +79,9 @@ config :core, Oban,
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
     {Oban.Plugins.Cron,
      crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
+       {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+       # Clean up finished storage job data every hour
+       {"0 * * * *", Systems.Storage.JobDataCleanupWorker}
      ]}
   ]
 

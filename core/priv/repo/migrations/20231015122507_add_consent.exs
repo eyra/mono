@@ -37,5 +37,4 @@ defmodule Core.Repo.Migrations.AddConsent do
     drop(table(:consent_revisions))
     drop(table(:consent_agreements))
   end
-
 end

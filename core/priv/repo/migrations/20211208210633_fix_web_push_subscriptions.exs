@@ -3,7 +3,7 @@ defmodule Core.Repo.Migrations.FixWebPushSubscriptions do
 
   def change do
     alter table(:web_push_subscriptions) do
-      modify :endpoint, :text
+      modify(:endpoint, :text)
     end
   end
 end

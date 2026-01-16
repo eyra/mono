@@ -60,7 +60,13 @@ defmodule Systems.Storage.Public do
     # raises error when request is denied
     Rate.Public.request_permission(key, remote_ip, packet_size)
 
+    # Create human-readable description for debugging (uses same format as filename)
+    description = backend.filename(meta_data)
+
+    # Insert job data first, then create job with job_data_id (instead of full data)
+    # This avoids memory spikes from storing large data in Oban job args
     Multi.new()
+    |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, description))
     |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
     |> Monitor.Public.multi_log({endpoint, :files})
     |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
@@ -68,17 +74,18 @@ defmodule Systems.Storage.Public do
         storage_endpoint: endpoint
       }
     )
+    |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}} ->
+      %{
+        endpoint_id: endpoint_id,
+        backend: backend,
+        special: special,
+        blob_id: blob_id,
+        meta_data: meta_data
+      }
+      |> Storage.Delivery.new()
+      |> Oban.insert()
+    end)
     |> Repo.commit()
-
-    %{
-      endpoint_id: endpoint_id,
-      backend: backend,
-      special: special,
-      data: data,
-      meta_data: meta_data
-    }
-    |> Storage.Delivery.new()
-    |> Oban.insert()
   end
 
   def list_files(endpoint) do

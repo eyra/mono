@@ -23,6 +23,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
   end
 
   defp migrate_study_program_codes(_, _, nil), do: nil
+
   defp migrate_study_program_codes([id, study_program_codes], table, new_study_program_codes) do
     if study_program_codes != new_study_program_codes do
       new_study_program_codes = new_study_program_codes |> array_to_db_string()
@@ -57,7 +58,6 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
   defp translate(code), do: code
 
   def down do
-
   end
 
   defp query_all(table, fields) do
@@ -67,12 +67,10 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
     rows
   end
 
-  defp update(table, id, field, value) when is_binary(value)do
-    execute(
-    """
+  defp update(table, id, field, value) when is_binary(value) do
+    execute("""
     UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
-    """
-    )
+    """)
   end
 
   defp array_to_db_string(nil), do: nil
@@ -84,5 +82,4 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
 
     "{#{result}}"
   end
-
 end

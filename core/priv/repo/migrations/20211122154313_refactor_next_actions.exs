@@ -2,8 +2,8 @@ defmodule Core.Repo.Migrations.RefactorNextActions do
   use Ecto.Migration
 
   def up do
-    drop index(:next_actions, [:user_id, :action])
-    drop index(:next_actions, [:user_id, :content_node_id, :action])
+    drop(index(:next_actions, [:user_id, :action]))
+    drop(index(:next_actions, [:user_id, :content_node_id, :action]))
 
     alter table(:next_actions) do
       remove(:content_node_id)
@@ -15,8 +15,8 @@ defmodule Core.Repo.Migrations.RefactorNextActions do
   end
 
   def down do
-    drop index(:next_actions, [:user_id, :action])
-    drop index(:next_actions, [:user_id, :action, :key])
+    drop(index(:next_actions, [:user_id, :action]))
+    drop(index(:next_actions, [:user_id, :action, :key]))
 
     alter table(:next_actions) do
       add(:content_node_id, references(:content_nodes), null: true)

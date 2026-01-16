@@ -2,7 +2,6 @@ defmodule Core.Repo.Migrations.PortDemo do
   use Ecto.Migration
 
   def change do
-
     # CONTENT_NODE
     create table(:content_nodes) do
       add(:ready, :boolean)
@@ -75,7 +74,5 @@ defmodule Core.Repo.Migrations.PortDemo do
     end
 
     create(unique_index(:data_donation_participants, [:tool_id, :user_id]))
-
-
   end
 end

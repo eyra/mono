@@ -60,6 +60,11 @@ if config_env() == :prod do
           "advert_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
 
+          # Cleans up finished job data from storage_job_data table (2 weeks+ old)
+          # Add "job_data_cleanup" to ENABLED_OBAN_PLUGINS to enable
+          "job_data_cleanup" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Storage.JobDataCleanupWorker}]}
+
           _ ->
             nil
         end
