@@ -1,0 +1,53 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "add.to.button"
+msgstr "Pridėti"
+
+#, fuzzy
+msgid "item.description.label"
+msgstr "Užduoties aprašymas"
+
+msgid "item.group.label"
+msgstr "Duomenų šaltinis"
+
+#, fuzzy
+msgid "item.library.description"
+msgstr "Pasirinkite, kurias užduotis pridėti prie darbo eigos."
+
+msgid "item.library.title"
+msgstr "Biblioteka"
+
+#, fuzzy
+msgid "item.list.description"
+msgstr "Pridėkite užduotis iš bibliotekos, kad sukurtumėte dalyviams pritaikytą darbo eigą."
+
+#, fuzzy
+msgid "item.list.hint"
+msgstr "Naudokite rodykles, kad užduotis būtų išdėstytos eilės tvarka"
+
+#, fuzzy
+msgid "item.title.label"
+msgstr "Užduoties pavadinimas"
+
+msgid "work_list.done.button"
+msgstr "Tęsti, baigiau"

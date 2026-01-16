@@ -73,7 +73,7 @@ defmodule Systems.Assignment.StorageView do
 
   defp update_logo(%{assigns: %{storage_endpoint: storage_endpoint}} = socket)
        when not is_nil(storage_endpoint) do
-    logo = Storage.EndpointModel.asset_image_src(storage_endpoint, :logo)
+    logo = Storage.EndpointModel.asset_image_src(storage_endpoint, {:logo, {:product, :wide}})
     assign(socket, logo: logo)
   end
 

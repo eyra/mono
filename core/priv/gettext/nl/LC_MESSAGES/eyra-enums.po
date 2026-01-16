@@ -501,3 +501,11 @@ msgstr "X"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.es"
 msgstr "Engels"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.lt"
+msgstr "Litouws"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "assignment_languages.ro"
+msgstr "Roemeens"

@@ -9,6 +9,12 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#20 2026-01-14
+* Added - Romanian (RO) and Lithuanian (LT) language support
+* Changed - Font from Finador to Nunito / Nunito Sans
+* Added - Prism UI framework integration
+* Changed - Restructured icons and logos folders
+
 ## \#19 2026-01-03
 * Added - Privacy policy acceptance with clickable links during signup (Next platform)
 * Added - UserState framework for managing client-side state (timezone, language)

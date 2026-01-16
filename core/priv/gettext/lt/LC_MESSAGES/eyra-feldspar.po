@@ -1,0 +1,70 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "apply.cta.title"
+msgstr "taikyti.cta.title"
+
+#, fuzzy
+msgid "content.title"
+msgstr "turinio pavadinimas"
+
+#, fuzzy
+msgid "open.cta.title"
+msgstr "atidaryti.cta.title"
+
+#, fuzzy
+msgid "participated.label"
+msgstr "dalyvavo.žymė"
+
+#, fuzzy
+msgid "pending.label"
+msgstr "laukiama.etiketė"
+
+#, fuzzy
+msgid "zip-replace-file-button"
+msgstr "Pakeisti failą"
+
+msgid "zip-select-file-button"
+msgstr "Pasirinkite failą"
+
+#, fuzzy
+msgid "zip-select-label"
+msgstr "Srauto taikymas"
+
+#, fuzzy
+msgid "zip-select-placeholder"
+msgstr "Pasirinkite zip failą"
+
+#, fuzzy
+msgid "zip-too-large"
+msgstr "Pasirinkta byla yra per didelė (maks. 20 MB)"
+
+msgid "tool.description"
+msgstr "Jūs ketinate atlikti keletą veiksmų, kad paaukotumėte savo duomenis. Prieš tai galite peržiūrėti savo duomenis ir duoti sutikimą jais dalytis. Puslapio įkėlimas gali šiek tiek užtrukti – dėkojame už kantrybę."
+
+msgid "tool.button"
+msgstr "Tęsti"
+
+msgid "tool.archive.not.configured"
+msgstr ""
+

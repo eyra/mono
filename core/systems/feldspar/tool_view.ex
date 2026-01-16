@@ -3,6 +3,7 @@ defmodule Systems.Feldspar.ToolView do
   use CoreWeb, :verified_routes
   use Frameworks.Pixel
 
+  alias Frameworks.Pixel.Logo
   alias Systems.Workflow
 
   def dependencies(), do: [:title, :icon, :tool_ref]
@@ -128,7 +129,7 @@ defmodule Systems.Feldspar.ToolView do
             <div class="flex flex-col gap-8 items-center px-8">
               <div>
                 <%= if @vm.icon do %>
-                  <img class="w-24 h-24" src={~p"/images/icons/#{"#{@vm.icon}_square.svg"}"} onerror="this.src='/images/icons/placeholder_square.svg';" alt={@vm.icon}>
+                  <Logo.platform platform={@vm.icon} variant={:square} class="w-24 h-24" />
                 <% end %>
               </div>
               <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>

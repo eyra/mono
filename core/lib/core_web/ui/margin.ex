@@ -13,6 +13,7 @@ defmodule CoreWeb.UI.Margin do
           :page_footer_top -> "mt-12 lg:mt-16"
           :title2_bottom -> "mb-6 md:mb-8 lg:mb-10"
           :tabbar_footer_top -> "mt-12 lg:mt-16"
+          :tabbar_content_top -> "mt-6 md:mt-8 lg:mt-10"
           :actionbar -> "mt-navbar-height"
           :button_bar_top -> "mt-8"
           _ -> ""

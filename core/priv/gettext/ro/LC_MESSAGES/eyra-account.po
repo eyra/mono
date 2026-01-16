@@ -1,0 +1,184 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "displayname.label"
+msgstr "Nume afișat"
+
+msgid "email.label"
+msgstr "E-mail"
+
+msgid "fullname.label"
+msgstr "Nume complet"
+
+msgid "password.label"
+msgstr "Parola"
+
+msgid "profile.title"
+msgstr "Profilul meu"
+
+msgid "signup.button"
+msgstr "Înregistrare"
+
+msgid "signup.title"
+msgstr "Creează cont"
+
+msgid "await.confirmation.title"
+msgstr "Activează-ți contul"
+
+msgid "confirm.token.resend_button"
+msgstr "Retrimi legătura de activare"
+
+#, fuzzy
+msgid "choose.profile.photo.file"
+msgstr "Selectați imaginea"
+
+msgid "choose.other.profile.photo.file"
+msgstr "Schimbă"
+
+msgid "professionaltitle.label"
+msgstr "Denumire post"
+
+#, fuzzy
+msgid "feature.study.description"
+msgstr "Pentru a obține credite pentru participarea la cercetare (OP / RPR) pentru bedrijfskunde (BK) sau administrarea afacerilor internaționale (IBA), selectați unul sau mai multe cursuri de mai jos. Dacă nu ați terminat un curs anul trecut, asigurați-vă că selectați și acel curs."
+
+#, fuzzy
+msgid "features.description"
+msgstr "Câteva studii utilizează cerințe specifice de eligibilitate. Selectând caracteristicile opționale de mai jos, puteți participa la studii care specifică caracteristicile dvs. ca cerințe."
+
+msgid "features.gender.title"
+msgstr "Sex"
+
+#, fuzzy
+msgid "features.nativelanguage.title"
+msgstr "Limba maternă"
+
+#, fuzzy
+msgid "features.title"
+msgstr "Incluziune"
+
+#, fuzzy
+msgid "features.content.description"
+msgstr "Selectați criteriile de includere pentru studiul dvs. Dacă nu este selectat nimic, toate persoanele din grup sunt eligibile pentru participare."
+
+msgid "login.google.button"
+msgstr "Autentificare prin Google"
+
+#, fuzzy
+msgid "login.surf.button"
+msgstr "Conectați-vă cu SURFconext"
+
+msgid "signin.button"
+msgstr "Autentificare"
+
+msgid "signin.title"
+msgstr "Autentificare"
+
+#, fuzzy
+msgid "await.confirmation.description"
+msgstr "Contul dvs. a fost creat. V-am trimis un e-mail de activare. Vă rugăm să faceți clic pe linkul din e-mail pentru a vă activa contul."
+
+#, fuzzy
+msgid "activation.failed.body"
+msgstr "Este posibil ca contul dvs. să fi fost deja activat sau linkul de activare să fi expirat. Faceți clic pe „Conectare” în partea dreaptă sus pentru a încerca să vă conectați cu informațiile contului dvs. Dacă contul dvs. nu este activat, introduceți adresa de e-mail mai jos pentru a primi un nou link de activare."
+
+msgid "activation.failed.title"
+msgstr "Activare cont"
+
+#, fuzzy
+msgid "activation.confirm.body"
+msgstr "Faceți clic pe butonul de mai jos pentru a vă activa contul. Veți fi redirecționat către pagina de conectare."
+
+msgid "activation.confirm.title"
+msgstr "Activare cont"
+
+msgid "confirm.button"
+msgstr "Activează"
+
+#, fuzzy
+msgid "people.search.no_match.message"
+msgstr "Nu s-a găsit nimeni cu această adresă de e-mail."
+
+#, fuzzy
+msgid "people.search.placeholder"
+msgstr "Căutare după adresa de e-mail"
+
+#, fuzzy
+msgid "people.add.title"
+msgstr "Pe cine doriți să adăugați?"
+
+#, fuzzy
+msgid "people.search.alread_added.message"
+msgstr "Deja adăugat"
+
+msgid "people.cancel_remove.label"
+msgstr "Anulează"
+
+#, fuzzy
+msgid "people.confirm_remove.label"
+msgstr "Sunt sigur"
+
+#, fuzzy
+msgid "people.confirm_remove.text"
+msgstr "Ești sigur că vrei să te retragi din acest proiect?"
+
+#, fuzzy
+msgid "Account activated successfully."
+msgstr "Contul a fost activat cu succes."
+
+#, fuzzy
+msgid "features.birthyear.title"
+msgstr "Anul nașterii"
+
+#, fuzzy
+msgid "privacy.policy.label"
+msgstr "etichetă-politică-de-confidențialitate"
+
+#, fuzzy
+msgid "privacy.policy.must.be.accepted"
+msgstr "politica.de.confidențialitate.trebuie.acceptată"
+
+#, fuzzy
+msgid "profile.tab.features.title"
+msgstr "Panl"
+
+msgid "profile.tab.profile.title"
+msgstr "Profilul meu"
+
+msgid "panl.privacy.policy.label"
+msgstr ""
+
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+msgid "privacy.link.privacy"
+msgstr ""
+
+msgid "privacy.link.terms"
+msgstr ""
+
+msgid "privacy.next-policy.label"
+msgstr ""
+
+msgid "privacy.next-policy.required"
+msgstr ""
+

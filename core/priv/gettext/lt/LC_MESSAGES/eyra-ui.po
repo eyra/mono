@@ -1,0 +1,192 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "error.flash"
+msgstr "Kažkas nepavyko"
+
+msgid "persister.saved.flash"
+msgstr "Išsaugota"
+
+msgid "menu.item.profile"
+msgstr "Paskyra"
+
+msgid "menu.item.signin"
+msgstr "Prisijungti"
+
+msgid "menu.item.signout"
+msgstr "Atsijungti"
+
+msgid "menu.item.menu"
+msgstr "Meniu"
+
+msgid "menu.item.todo"
+msgstr "To-do"
+
+msgid "todo.title"
+msgstr "To-do"
+
+#, fuzzy
+msgid "tabbar.item.features"
+msgstr "Charakteristikos"
+
+#, fuzzy
+msgid "tabbar.item.student"
+msgstr "Studijų programa"
+
+#, fuzzy
+msgid "menu.item.helpdesk"
+msgstr "Pagalbos tarnyba"
+
+msgid "cancel.button"
+msgstr "Atšaukti"
+
+#, fuzzy
+msgid "delete.confirm.text"
+msgstr "Tai %{item} bus visam laikui ištrinta."
+
+#, fuzzy
+msgid "delete.confirm.title"
+msgstr "Ištrinti %{item}?"
+
+msgid "delete.confirm.label"
+msgstr "Ištrinti"
+
+msgid "ok.button"
+msgstr "Gerai"
+
+msgid "menu.item.support"
+msgstr "Palaikymas"
+
+#, fuzzy
+msgid "timestamp.today"
+msgstr "šiandien %{time}"
+
+#, fuzzy
+msgid "timestamp.yesterday"
+msgstr "vakar %{time}"
+
+#, fuzzy
+msgid "authentication.required.message"
+msgstr "Pirmiausia prisijunkite"
+
+msgid "duplicate.button"
+msgstr "Dubliuoti"
+
+msgid "share.button"
+msgstr "Žmonės"
+
+msgid "menu.item.payments"
+msgstr "Meniu"
+
+#, fuzzy
+msgid "persister.error.flash"
+msgstr "Nesauge, prašome perkrauti ir bandyti dar kartą"
+
+msgid "mailto.button"
+msgstr "Susisiekti"
+
+#, fuzzy
+msgid "notify.all"
+msgstr "Siųsti pranešimą"
+
+msgid "menu.item.admin"
+msgstr "Administratorius"
+
+msgid "menu.item.projects"
+msgstr "Projektai"
+
+#, fuzzy
+msgid "start.page.projects"
+msgstr "Eiti į darbalaukį"
+
+#, fuzzy
+msgid "start.page.home"
+msgstr "Eiti į darbalaukį"
+
+msgid "collapse.button"
+msgstr "Suskleisti"
+
+msgid "expand.button"
+msgstr "Išskleisti"
+
+msgid "privacy.link"
+msgstr "Privatumas"
+
+msgid "terms.link"
+msgstr "Sąlygos"
+
+msgid "edit.button"
+msgstr "Redaguoti"
+
+msgid "copy.clipboard.button"
+msgstr "Kopijuoti"
+
+msgid "submit.button"
+msgstr "Išsaugoti"
+
+msgid "done.button"
+msgstr "Atlikta"
+
+#, fuzzy
+msgid "timestamp.date"
+msgstr "%{weekday}, %{month} %{day_of_month}"
+
+#, fuzzy
+msgid "timestamp.datetime"
+msgstr "%{weekday}, %{month} %{day_of_month} adresu %{time}"
+
+#, fuzzy
+msgid "timestamp.yesterweek"
+msgstr "paskutinis %{weekday} prie %{time}"
+
+#, fuzzy
+msgid "timestamp.tomorrow"
+msgstr "rytoj %{time}"
+
+#, fuzzy
+msgid "timestamp.nextweek"
+msgstr "kitas %{weekday} prie %{time}"
+
+msgid "menu.item.desktop"
+msgstr "Kompiuteris"
+
+#, fuzzy
+msgid "menu.item.workspace"
+msgstr "Mano darbo vieta"
+
+msgid "confirm.button"
+msgstr "Patvirtinti"
+
+#, fuzzy
+msgid "confirmation_modal.body"
+msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas."
+
+#, fuzzy
+msgid "confirmation_modal.title"
+msgstr "Pereiti šį puslapį?"
+
+#, fuzzy
+msgid "tabbar.item.forward"
+msgstr "Eiti į %{to}"
+
+msgid "menu.item.onyx"
+msgstr "Onyx"

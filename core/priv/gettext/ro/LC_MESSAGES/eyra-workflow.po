@@ -1,0 +1,52 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "add.to.button"
+msgstr "Adaugă"
+
+#, fuzzy
+msgid "item.description.label"
+msgstr "Descrierea sarcinii"
+
+msgid "item.group.label"
+msgstr "Sursa datelor"
+
+#, fuzzy
+msgid "item.library.description"
+msgstr "Alegeți sarcinile pe care doriți să le adăugați la fluxul de lucru."
+
+msgid "item.library.title"
+msgstr "Bibliotecă"
+
+#, fuzzy
+msgid "item.list.description"
+msgstr "Adăugați sarcini din bibliotecă pentru a crea un flux de lucru personalizat pentru participanți."
+
+#, fuzzy
+msgid "item.list.hint"
+msgstr "Folosiți săgețile pentru a ordona sarcinile"
+
+msgid "item.title.label"
+msgstr "Titlul sarcinii"
+
+msgid "work_list.done.button"
+msgstr "Continuă, am terminat"

@@ -1,0 +1,432 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, fuzzy
+msgid "ticket.title"
+msgstr "ID-ul dvs. de participant"
+
+#, fuzzy
+msgid "earned.label"
+msgstr "%{amount} câștigat"
+
+#, fuzzy
+msgid "pending.label"
+msgstr "%{amount} în așteptare"
+
+#, fuzzy
+msgid "togo.label"
+msgstr "%{amount} pentru a merge"
+
+#, fuzzy
+msgid "pool.target"
+msgstr "%{target} credite necesare"
+
+#, fuzzy
+msgid "close.button"
+msgstr "Termină"
+
+msgid "open.button"
+msgstr "Deschis"
+
+msgid "preview.button"
+msgstr "Previzualizare"
+
+msgid "publish.button"
+msgstr "Publică"
+
+#, fuzzy
+msgid "retract.button"
+msgstr "Dezactivează conexiunea la internet"
+
+msgid "onboarding.continue.button"
+msgstr "Continuă"
+
+msgid "onboarding.consent.title"
+msgstr "Consimțământ"
+
+msgid "connect.button"
+msgstr "Configurare"
+
+msgid "connector.cancel.button"
+msgstr "Anulează"
+
+msgid "connector.connect.button"
+msgstr "Conecteaza"
+
+#, fuzzy
+msgid "connector.storage.text"
+msgstr "Selectați tipul de stocare pe care doriți să îl utilizați pentru a stoca datele participanților."
+
+#, fuzzy
+msgid "connector.storage.title"
+msgstr "Configurarea stocării datelor"
+
+msgid "disconnect.button"
+msgstr "Deconectare"
+
+msgid "gdpr_form.off.label"
+msgstr "Sari peste"
+
+msgid "gdpr_form.on.label"
+msgstr "Arată"
+
+#, fuzzy
+msgid "settings.consent.body"
+msgstr "Utilizați câmpul de text de mai jos pentru a scrie un formular de consimțământ pentru participanții dvs. Participanții dvs. au dat deja consimțământul în alt mod? Alegeți „Săriți”."
+
+#, fuzzy
+msgid "settings.consent.title"
+msgstr "Formular de consimțământ"
+
+msgid "settings.subtitle.label"
+msgstr "Subtitlu"
+
+msgid "settings.title.label"
+msgstr "Titlu"
+
+msgid "settings.image.title"
+msgstr "Imagine de antet"
+
+msgid "search.different.image.button"
+msgstr "Schimbati imaginea"
+
+msgid "choose.logo.file"
+msgstr "Incarca logo"
+
+msgid "choose.other.logo.file"
+msgstr "Schimbarea logo-ul"
+
+msgid "settings.logo.title"
+msgstr "Logo"
+
+#, fuzzy
+msgid "settings.branding.text"
+msgstr "Utilizați câmpurile de mai jos pentru a personaliza antetul fluxului de lucru al participanților. Sunteți curios să vedeți cum va arăta acesta pentru participanți? Faceți clic pe „Previzualizare” în partea dreaptă sus pentru a-l verifica."
+
+msgid "settings.branding.title"
+msgstr "Branding"
+
+msgid "work.list.title"
+msgstr "Prezentare generală"
+
+msgid "intro.page.title"
+msgstr "Informații"
+
+msgid "intro_form.off.label"
+msgstr "Sari peste"
+
+msgid "intro_form.on.label"
+msgstr "Arată"
+
+#, fuzzy
+msgid "settings.intro.body"
+msgstr "Adăugați o pagină „Despre” pentru a informa participanții sau selectați „Săriți”."
+
+msgid "settings.intro.title"
+msgstr "Pagina Despre"
+
+msgid "onboarding.intro.title"
+msgstr "Despre"
+
+#, fuzzy
+msgid "settings.support.body"
+msgstr "Utilizați câmpul de text de mai jos pentru a informa participanții despre cum pot obține asistență atunci când au nevoie. Această pagină va fi afișată atunci când participanții fac clic pe litera „i” din partea dreaptă jos. Verificați „Previzualizare” pentru a vedea cum va arăta. Alegeți „Ignorați” dacă nu intenționați să oferiți asistență."
+
+#, fuzzy
+msgid "settings.support.title"
+msgstr "Pagina de asistență tehnică"
+
+msgid "support.page.title"
+msgstr "Întrebări?"
+
+msgid "support_form.off.label"
+msgstr "Sari peste"
+
+msgid "support_form.on.label"
+msgstr "Arată"
+
+msgid "declined_view.body"
+msgstr "Ați ales să nu participați. Puteți închide browserul. Dacă doriți să reluați participarea, închideți această fereastră pentru a continua."
+
+#, fuzzy
+msgid "declined_view.title"
+msgstr "Consimțământul refuzat"
+
+msgid "finished_view.body"
+msgstr "Vă mulțumim. Participarea a fost finalizată. Puteți închide fereastra."
+
+msgid "finished_view.title"
+msgstr "Terminat"
+
+#, fuzzy
+msgid "privacy_doc.placeholder"
+msgstr "Încărcați o declarație de confidențialitate"
+
+#, fuzzy
+msgid "privacy_doc.replace.button"
+msgstr "Înlocuiți PDF"
+
+#, fuzzy
+msgid "privacy_doc.select.button"
+msgstr "Selectați PDF"
+
+#, fuzzy
+msgid "settings.privacy.body"
+msgstr "Adăugarea unei declarații de confidențialitate este opțională. Când se încarcă un fișier PDF, acesta va fi afișat ca o pagină separată de confidențialitate. Puteți adăuga informații de confidențialitate în câmpurile de text ale paginii de informații sau ale formularului de consimțământ fără a încărca un fișier PDF sau puteți utiliza adresa URL a declarației de confidențialitate disponibilă după încărcare pentru a face referire la declarația de confidențialitate încărcată."
+
+#, fuzzy
+msgid "settings.privacy.title"
+msgstr "Pagina de confidențialitate"
+
+#, fuzzy
+msgid "privacy_doc.annotation"
+msgstr "<h1>URL-ul declarației de confidențialitate</h1> Utilizați adresa URL de mai jos pentru a consulta declarația de confidențialitate încărcată. Vă rugăm să rețineți că, atunci când se încarcă un nou fișier PDF, adresa URL va fi actualizată.<br>"
+
+msgid "privacy.title"
+msgstr "Confidențialitate"
+
+msgid "tabbar.item.monitor"
+msgstr "Monitor"
+
+msgid "finished.participants"
+msgstr "Finalizat"
+
+msgid "started.participants"
+msgstr "Început"
+
+#, fuzzy
+msgid "declined.participants"
+msgstr "Consimțământ refuzat"
+
+#, fuzzy
+msgid "settings.language.label"
+msgstr "Setarea limbii pentru participanți"
+
+#, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Numărul estimat de participanți"
+
+msgid "tabbar.item.participants"
+msgstr "Participanţii"
+
+#, fuzzy
+msgid "workflow_item.donate.description"
+msgstr "Permite participanților să doneze date."
+
+#, fuzzy
+msgid "workflow_item.download.description"
+msgstr "Încărcați un manual în format PDF cu instrucțiuni pentru descărcarea datelor digitale de urmărire. Notă: Nu este compatibil cu dispozitivele mobile."
+
+#, fuzzy
+msgid "workflow_item.questionnaire.description"
+msgstr "Redirecționează participanții către un chestionar online."
+
+#, fuzzy
+msgid "workflow_item.request.description"
+msgstr "Încărcați un manual în format PDF cu instrucțiuni pentru solicitarea datelor digitale de urmărire. Notă: Nu este compatibil cu dispozitivele mobile."
+
+#, fuzzy
+msgid "workflow_item.download_instruction.description"
+msgstr "Permite participanților să descarce fișierul zip cu datele participanților."
+
+#, fuzzy
+msgid "workflow_item.fork_instruction.description"
+msgstr "Oferă participanților linkul către depozitul GitHub cu șablonul de care au nevoie pentru a-și pregăti metoda pentru trimitere."
+
+#, fuzzy
+msgid "workflow_item.submit.description"
+msgstr "Permite participanților să își trimită metoda pentru provocare cu un link de commit către un depozit GitHub."
+
+#, fuzzy
+msgid "invite.panel.annotation"
+msgstr "Utilizați adresa URL de mai jos pentru a invita participanții. Participanții trebuie să se autentifice sau să creeze un cont pentru a participa."
+
+#, fuzzy
+msgid "invite.panel.title"
+msgstr "Link de invitație pentru participanți"
+
+#, fuzzy
+msgid "workflow_item.general_instruction.description"
+msgstr "Oferiți instrucțiuni participanților."
+
+#, fuzzy
+msgid "workflow_item.onsite_experiment.description"
+msgstr "Permite participanților să rezerve un interval de timp pentru studiul dvs. la fața locului."
+
+#, fuzzy
+msgid "advert.body"
+msgstr "Această reclamă va fi utilizată pentru a promova studiul dumneavoastră în rândul participanților la Panl și le va permite acestora să participe la studiul dumneavoastră."
+
+#, fuzzy
+msgid "advert.create.button"
+msgstr "Creați reclamă"
+
+#, fuzzy
+msgid "advert.goto.button"
+msgstr "Accesați reclama"
+
+#, fuzzy
+msgid "advert.title"
+msgstr "Reclamă Panl"
+
+msgid "context.menu.consent.title"
+msgstr "Consimțământ"
+
+msgid "context.menu.information.title"
+msgstr "Despre"
+
+msgid "context.menu.support.title"
+msgstr "Întrebări?"
+
+msgid "context.menu.privacy.title"
+msgstr "Protecția datelor"
+
+#, fuzzy
+msgid "storage.create.button"
+msgstr "Conectați spațiul de stocare"
+
+#, fuzzy
+msgid "storage.goto.button"
+msgstr "Accesați fișierele"
+
+#, fuzzy
+msgid "storage.not_available.warning"
+msgstr "Vă rugăm să configurați conexiunea la un spațiu de stocare a datelor."
+
+#, fuzzy
+msgid "1 participant"
+msgid_plural "* participants"
+msgstr[0] "1 participant"
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "leaf.tag"
+msgstr "Temă"
+
+#, fuzzy
+msgid "gdpr_form.confirmation_modal.body"
+msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters, precum și înregistrarea asociată cu persoanele care și-au dat consimțământul."
+
+#, fuzzy
+msgid "export.progress.button"
+msgstr "Raport privind progresele înregistrate"
+
+#, fuzzy
+msgid "monitor.description"
+msgstr "Acest monitor de evenimente urmărește evenimentele de interacțiune ale utilizatorilor pentru a afla dacă fluxul de lucru publicat funcționează conform așteptărilor. Nu trebuie utilizat pentru urmărirea fiecărui participant în parte. Dacă doriți să aflați progresul fiecărui participant, exportați raportul de progres din colțul din dreapta sus."
+
+msgid "progress.header.consent"
+msgstr "Consimțământ"
+
+msgid "progress.header.participant"
+msgstr "Participant"
+
+msgid "progress.no"
+msgstr "nu"
+
+msgid "progress.not.applicable"
+msgstr "n/a"
+
+msgid "progress.yes"
+msgstr "da"
+
+msgid "retry.button"
+msgstr "Înapoi"
+
+#, fuzzy
+msgid "workflow_item.paper_screening.description"
+msgstr "Selecție pe baza titlului și a rezumatului"
+
+#, fuzzy
+msgid "tabbar.item.reviewers"
+msgstr "Recenzori"
+
+msgid "tabbar.item.settings"
+msgstr "Setări"
+
+msgid "tabbar.item.workflow"
+msgstr "Flux de lucru"
+
+msgid "tabbar.item.criteria"
+msgstr "Criterii"
+
+#, fuzzy
+msgid "tabbar.item.import"
+msgstr "Lucrări"
+
+#, fuzzy
+msgid "workflow_item.manual.description"
+msgstr "Furnizați instrucțiuni privind modul de solicitare sau descărcare a datelor digitale de urmărire, creând un manual adaptat pentru dispozitive mobile."
+
+#, fuzzy
+msgid "affiliate.body"
+msgstr "Dacă doriți să conectați fluxul de lucru al participanților la un sistem extern, puteți seta adresele URL de mai jos. Orice parametri personalizați specifici participanților incluși în linkul de invitație al participanților sunt redirecționați automat atât către webhook-ul de progres, cât și către adresa URL de redirecționare de la sfârșitul fluxului de lucru."
+
+msgid "tabbar.item.affiliate"
+msgstr "Integrare"
+
+#, fuzzy
+msgid "affiliate.panel.annotation"
+msgstr "Utilizați linkul de mai jos pentru a invita participanții. Nu este necesară autentificarea. Înlocuiți „participant_id” cu un identificator unic pentru fiecare participant. Opțional, puteți adăuga parametri personalizați la link (de exemplu, &d=abc123). Aceștia vor fi redirecționați automat către orice sistem extern conectat prin fila Integrare."
+
+msgid "affiliate.panel.title"
+msgstr "Link invitatie"
+
+msgid "finished_view.body.redirect"
+msgstr "Vă mulțumim. Ați finalizat această parte. Continuați pentru a merge mai departe."
+
+msgid "redirect.button"
+msgstr "Continuă"
+
+#, fuzzy
+msgid "external.panel.annotation"
+msgstr "Utilizați linkul de mai jos pentru a invita participanții. Nu este necesară autentificarea. Înlocuiți „participant_id” cu un identificator unic pentru fiecare participant."
+
+msgid "external.panel.title"
+msgstr "Link invitatie"
+
+msgid "settings.language.fixed_nl_message"
+msgstr "Limba implicită pentru studiile Panl este olandeza"
+
+msgid "back.button"
+msgstr "Înapoi"
+
+msgid "finished_view.body.declined"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Acum puteți închide această fereastră."
+
+msgid "finished_view.body.declined.redirect"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Faceți clic pe Continuă pentru a merge mai departe."
+
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "Ați ales să nu participați. Alegerea dvs. a fost înregistrată. Faceți clic pe Continuă pentru a continua către %{platform}."
+
+msgid "finished_view.body.redirect.platform"
+msgstr "Vă mulțumim. Ați finalizat această parte. Faceți clic pe Continuă pentru a continua către %{platform}."
+
+msgid "finished_view.title.declined"
+msgstr "Consimțământ refuzat"
+
+msgid "landing.continue.button"
+msgstr "Continuă"
+
+msgid "landing.description.default"
+msgstr "Bine ați venit! Faceți clic pe Continuă pentru a începe participarea la această sarcină."

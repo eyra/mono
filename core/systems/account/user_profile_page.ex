@@ -40,7 +40,7 @@ defmodule Systems.Account.UserProfilePage do
         <div class="flex justify-center">
           <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} preserve_tab_in_url={true} />
         </div>
-        <div class="h-navbar-height" />
+        <Margin.y id={:tabbar_content_top} />
         <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@vm.tabs} include_top_margin={false} />
       </Area.content>
     </.live_workspace>
