@@ -130,6 +130,11 @@ defmodule Systems.Assignment.CrewPage do
     {:stop, store(socket, task, key, group, data)}
   end
 
+  @impl true
+  def consume_event(%{name: :donate, payload: %{key: key, data: data}}, socket) do
+    {:stop, store(socket, "", key, "feldspar", data)}
+  end
+
   defp handle_action(socket, action) do
     socket
     |> assign(action: action)
