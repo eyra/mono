@@ -130,7 +130,6 @@ defmodule Systems.Assignment.CrewPage do
     {:stop, store(socket, task, key, group, data)}
   end
 
-
   defp handle_action(socket, action) do
     socket
     |> assign(action: action)
