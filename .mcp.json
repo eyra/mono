@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "flux": {
+      "type": "http",
+      "url": "https://eyra-flux.fly.dev/mcp"
+    }
+  }
+}
