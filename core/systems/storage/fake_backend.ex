@@ -23,7 +23,7 @@ defmodule Systems.Storage.FakeBackend do
   end
 
   @impl true
-  def filename(%{"identifier" => identifier}) do
+  def filename(identifier) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}=#{value}" end)
     |> then(&"#{&1}.json")

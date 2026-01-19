@@ -13,9 +13,9 @@ defmodule Systems.Storage.Yoda.Backend do
           "url" => yoda_url
         } = _endpoint,
         data,
-        meta_data
+        %{"identifier" => identifier}
       ) do
-    filename = filename(meta_data)
+    filename = filename(identifier)
     file_url = url([yoda_url, filename])
 
     {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
@@ -63,7 +63,7 @@ defmodule Systems.Storage.Yoda.Backend do
   def connected?(_), do: false
 
   @impl true
-  def filename(%{"identifier" => identifier}) do
+  def filename(identifier) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
     |> then(&"#{&1}.json")

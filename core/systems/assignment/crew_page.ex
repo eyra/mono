@@ -74,7 +74,7 @@ defmodule Systems.Assignment.CrewPage do
     assign(socket, panel_info: panel_info)
   end
 
-  defp update_panel_info(socket, _) do
+  defp update_panel_info(socket, _session) do
     assign(socket, panel_info: nil)
   end
 

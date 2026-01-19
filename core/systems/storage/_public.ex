@@ -61,7 +61,7 @@ defmodule Systems.Storage.Public do
     Rate.Public.request_permission(key, remote_ip, packet_size)
 
     # Create human-readable description for debugging (uses same format as filename)
-    description = backend.filename(meta_data)
+    description = backend.filename(meta_data.identifier)
 
     # Insert job data first, then create job with job_data_id (instead of full data)
     # This avoids memory spikes from storing large data in Oban job args

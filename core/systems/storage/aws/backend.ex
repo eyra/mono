@@ -8,10 +8,10 @@ defmodule Systems.Storage.AWS.Backend do
   def store(
         %{"s3_bucket_name" => bucket} = _endpoint,
         data,
-        meta_data
+        %{"identifier" => identifier}
       ) do
     [data]
-    |> S3.upload(bucket, filename(meta_data))
+    |> S3.upload(bucket, filename(identifier))
     |> ExAws.request()
   end
 
@@ -34,7 +34,7 @@ defmodule Systems.Storage.AWS.Backend do
   end
 
   @impl true
-  def filename(%{"identifier" => identifier}) do
+  def filename(identifier) do
     identifier
     |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
     |> then(&"#{&1}.json")
