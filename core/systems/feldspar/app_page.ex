@@ -66,11 +66,6 @@ defmodule Systems.Feldspar.AppPage do
     }
   end
 
-  defp handle(socket, "CommandSystemDonate", event) do
-    Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemDonate " <> event)
-    socket
-  end
-
   defp handle(socket, "CommandSystemExit", event) do
     Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemExit " <> event)
     socket

@@ -49,91 +49,111 @@ defmodule Systems.Storage.Public do
     |> Storage.Azure.EndpointModel.changeset(attrs)
   end
 
+  @doc """
+  Stores raw data as a blob without delivery to a storage endpoint.
+  Returns {:ok, blob} with the blob id for later reference.
+
+  Options:
+  - user: The user who uploaded the data
+  - meta_data: Map containing delivery context (assignment_id, task, participant, etc.)
+  """
+  def store_blob(data, user \\ nil, meta_data \\ nil) when is_binary(data) do
+    Storage.JobDataModel.prepare(data, user, meta_data)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Schedules delivery of an existing blob to a storage endpoint.
+  Used when data was uploaded via HTTP and needs to be delivered asynchronously.
+  """
+  def deliver_blob(
+        %Storage.EndpointModel{id: endpoint_id} = endpoint,
+        %{backend: backend, special: special},
+        blob_id,
+        meta_data
+      ) do
+    result =
+      Multi.new()
+      |> Monitor.Public.multi_log({endpoint, :bytes}, value: get_blob_size(blob_id))
+      |> Monitor.Public.multi_log({endpoint, :files})
+      |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
+        message: %{
+          storage_endpoint: endpoint
+        }
+      )
+      |> Multi.run(:oban_job, fn _repo, _ ->
+        %{
+          endpoint_id: endpoint_id,
+          backend: backend,
+          special: special,
+          blob_id: blob_id,
+          meta_data: meta_data
+        }
+        |> Storage.Delivery.new()
+        |> Oban.insert()
+      end)
+      |> Repo.commit()
+
+    case result do
+      {:ok, _} ->
+        :ok
+
+      {:error, step, reason, _} ->
+        Logger.error("[Storage.Public.deliver_blob] FAILED at #{step}: #{inspect(reason)}")
+    end
+
+    result
+  end
+
+  defp get_blob_size(blob_id) do
+    case Repo.get(Storage.JobDataModel, blob_id) do
+      %{data: data} -> byte_size(data)
+      nil -> 0
+    end
+  end
+
   def store(
         %Storage.EndpointModel{id: endpoint_id} = endpoint,
         %{key: key, backend: backend, special: special},
         data,
         %{remote_ip: remote_ip} = meta_data
       ) do
-    store_start = System.monotonic_time(:millisecond)
     packet_size = byte_size(data)
 
-    Logger.warning(
-      "[Storage.Public.store] START endpoint=#{endpoint_id} size=#{packet_size} bytes (#{Float.round(packet_size / 1_000_000, 2)} MB)"
-    )
-
     # raises error when request is denied
-    rate_start = System.monotonic_time(:millisecond)
     Rate.Public.request_permission(key, remote_ip, packet_size)
-    rate_elapsed = System.monotonic_time(:millisecond) - rate_start
-    Logger.warning("[Storage.Public.store] rate_check took #{rate_elapsed}ms")
-
-    # Create human-readable description for debugging (uses same format as filename)
-    description = backend.filename(meta_data.identifier)
 
     # Insert job data first, then create job with job_data_id (instead of full data)
     # This avoids memory spikes from storing large data in Oban job args
-    multi_start = System.monotonic_time(:millisecond)
-
     result =
       Multi.new()
-      |> Multi.run(:timing_start, fn _repo, _changes ->
-        {:ok, System.monotonic_time(:millisecond)}
-      end)
-      |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, description))
-      |> Multi.run(:timing_after_insert, fn _repo, %{timing_start: start} ->
-        elapsed = System.monotonic_time(:millisecond) - start
-        Logger.warning("[Storage.Public.store] DB insert took #{elapsed}ms")
-        {:ok, System.monotonic_time(:millisecond)}
-      end)
+      |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, nil, meta_data))
       |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
       |> Monitor.Public.multi_log({endpoint, :files})
-      |> Multi.run(:timing_after_monitor, fn _repo, %{timing_after_insert: start} ->
-        elapsed = System.monotonic_time(:millisecond) - start
-        Logger.warning("[Storage.Public.store] monitor_log took #{elapsed}ms")
-        {:ok, System.monotonic_time(:millisecond)}
-      end)
       |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
         message: %{
           storage_endpoint: endpoint
         }
       )
-      |> Multi.run(:timing_after_signal, fn _repo, %{timing_after_monitor: start} ->
-        elapsed = System.monotonic_time(:millisecond) - start
-        Logger.warning("[Storage.Public.store] signal_dispatch took #{elapsed}ms")
-        {:ok, System.monotonic_time(:millisecond)}
-      end)
-      |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}, timing_after_signal: start} ->
-        result =
-          %{
-            endpoint_id: endpoint_id,
-            backend: backend,
-            special: special,
-            blob_id: blob_id,
-            meta_data: meta_data
-          }
-          |> Storage.Delivery.new()
-          |> Oban.insert()
-
-        elapsed = System.monotonic_time(:millisecond) - start
-        Logger.warning("[Storage.Public.store] oban_insert took #{elapsed}ms")
-        result
+      |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}} ->
+        %{
+          endpoint_id: endpoint_id,
+          backend: backend,
+          special: special,
+          blob_id: blob_id,
+          meta_data: meta_data
+        }
+        |> Storage.Delivery.new()
+        |> Oban.insert()
       end)
       |> Repo.commit()
 
-    multi_elapsed = System.monotonic_time(:millisecond) - multi_start
-    total_elapsed = System.monotonic_time(:millisecond) - store_start
-
     case result do
       {:ok, _} ->
-        Logger.warning(
-          "[Storage.Public.store] SUCCESS multi=#{multi_elapsed}ms total=#{total_elapsed}ms"
-        )
+        :ok
 
       {:error, step, reason, _} ->
-        Logger.error(
-          "[Storage.Public.store] FAILED at #{step}: #{inspect(reason)} multi=#{multi_elapsed}ms total=#{total_elapsed}ms"
-        )
+        Logger.error("[Storage.Public.store] FAILED at #{step}: #{inspect(reason)}")
     end
 
     result

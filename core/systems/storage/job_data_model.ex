@@ -4,13 +4,16 @@ defmodule Systems.Storage.JobDataModel do
 
   import Ecto.Changeset
 
-  @fields ~w(data status description)a
+  alias Systems.Account
+
+  @fields ~w(data status meta_data)a
   @required_fields ~w(data)a
 
   schema "storage_job_data" do
     field(:data, :binary)
     field(:status, Ecto.Enum, values: [:pending, :finished], default: :pending)
-    field(:description, :string)
+    field(:meta_data, :map)
+    belongs_to(:user, Account.User)
     timestamps()
   end
 
@@ -24,11 +27,15 @@ defmodule Systems.Storage.JobDataModel do
     |> validate_required(@required_fields)
   end
 
-  def prepare(data, description \\ nil) when is_binary(data) do
+  def prepare(data, user \\ nil, meta_data \\ nil) when is_binary(data) do
     %__MODULE__{}
-    |> changeset(%{data: data, description: description})
+    |> changeset(%{data: data, meta_data: meta_data})
+    |> maybe_put_user(user)
     |> validate()
   end
+
+  defp maybe_put_user(changeset, nil), do: changeset
+  defp maybe_put_user(changeset, user), do: put_assoc(changeset, :user, user)
 
   def mark_finished(blob) do
     blob

@@ -36,20 +36,20 @@ defmodule Systems.Storage.JobDataModelTest do
       refute Map.has_key?(changeset.changes, :status)
     end
 
-    test "accepts optional description" do
+    test "accepts optional user and meta_data" do
       data = "test data"
-      description = "assignment=1_participant=abc.json"
-      changeset = JobDataModel.prepare(data, description)
+      meta_data = %{remote_ip: "127.0.0.1", identifier: [[:key, "test"]]}
+      changeset = JobDataModel.prepare(data, nil, meta_data)
 
       assert changeset.valid?
-      assert changeset.changes.description == description
+      assert changeset.changes.meta_data == meta_data
     end
 
-    test "description defaults to nil" do
+    test "meta_data defaults to nil" do
       data = "test data"
       changeset = JobDataModel.prepare(data)
 
-      refute Map.has_key?(changeset.changes, :description)
+      refute Map.has_key?(changeset.changes, :meta_data)
     end
   end
 

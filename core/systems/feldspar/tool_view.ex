@@ -3,10 +3,13 @@ defmodule Systems.Feldspar.ToolView do
   use CoreWeb, :verified_routes
   use Frameworks.Pixel
 
+  require Logger
+
   alias Frameworks.Pixel.Logo
   alias Systems.Workflow
 
-  def dependencies(), do: [:title, :icon, :tool_ref]
+  def dependencies(),
+    do: [:title, :icon, :tool_ref, :assignment_id, :participant, :workflow_item_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     Workflow.ToolRefModel.tool(tool_ref)
@@ -76,19 +79,6 @@ defmodule Systems.Feldspar.ToolView do
         "Application stopped unexpectedly [#{code}]: #{info}"
       )
     end
-  end
-
-  defp handle_feldspar_event(
-         socket,
-         %{
-           "__type__" => "CommandSystemDonate",
-           "key" => key,
-           "json_string" => json_string
-         }
-       ) do
-    socket
-    |> publish_event({:donate, %{key: key, data: json_string}})
-    |> Frameworks.Pixel.Flash.put_info("Donated")
   end
 
   defp handle_feldspar_event(socket, %{

@@ -70,7 +70,9 @@ defmodule CoreWeb.Endpoint do
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Phoenix.json_library()
+    json_decoder: Phoenix.json_library(),
+    # Allow large multipart uploads for data donation (up to 200MB)
+    length: 200_000_000
   )
 
   plug(Plug.MethodOverride)

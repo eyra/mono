@@ -97,6 +97,18 @@ defmodule Systems.Assignment.CrewTaskHelpers do
         {:continue,
          socket |> publish_event({:store, %{task: task, key: key, group: group, data: data}})}
       end
+
+      # HTTP upload complete - blob stored, forward for delivery scheduling
+      def consume_event(
+            %{name: :blob_stored, payload: %{key: key, blob_id: blob_id}},
+            %{assigns: %{work_item: {%{id: task, group: group}, _}}} = socket
+          ) do
+        {:stop,
+         socket
+         |> publish_event(
+           {:deliver_blob, %{task: task, key: key, group: group, blob_id: blob_id}}
+         )}
+      end
     end
   end
 end

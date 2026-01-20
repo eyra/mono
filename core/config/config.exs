@@ -109,7 +109,8 @@ config :core, :rate,
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local]
+    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
+    [service: :feldspar_data_donation, limit: 10, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]

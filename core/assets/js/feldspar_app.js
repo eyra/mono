@@ -55,7 +55,31 @@ export const FeldsparApp = {
     ]);
   },
 
-  handleMessage(e) {
-    this.pushEvent("feldspar_event", e.data);
+  async handleMessage(e) {
+    const type = e.data.__type__;
+
+    if (type === "CommandSystemDonate") {
+      // handle large data donations via HTTP POST instead of WebSocket
+      await this.donate_via_api(e.data);
+    } else {
+      // All other events (including CommandSystemExit) pass through to LiveView
+      this.pushEvent("feldspar_event", e.data);
+    }
+  },
+
+  async donate_via_api(data) {
+    const formData = new FormData();
+    formData.append("key", data.key);
+    formData.append("context", this.el.dataset.uploadContext || "{}");
+    formData.append(
+      "data",
+      new Blob([data.json_string], { type: "application/json" }),
+      "data.json"
+    );
+
+    await fetch("/api/feldspar/donate", {
+      method: "POST",
+      body: formData,
+    });
   },
 };
