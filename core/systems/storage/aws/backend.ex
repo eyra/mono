@@ -10,9 +10,12 @@ defmodule Systems.Storage.AWS.Backend do
         data,
         %{"identifier" => identifier}
       ) do
-    [data]
-    |> S3.upload(bucket, filename(identifier))
-    |> ExAws.request()
+    case [data]
+         |> S3.upload(bucket, filename(identifier))
+         |> ExAws.request() do
+      {:ok, _response} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @impl true

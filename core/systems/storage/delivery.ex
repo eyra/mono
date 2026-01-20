@@ -20,7 +20,7 @@ defmodule Systems.Storage.Delivery do
   def perform(%Oban.Job{args: args}) do
     case deliver_with_blob(args) do
       {:error, error} ->
-        Logger.error("[Storage.Delivery] delivery error: #{error}")
+        Logger.error("[Storage.Delivery] delivery error: #{inspect(error)}")
         {:error, error}
 
       :ok ->
@@ -43,11 +43,9 @@ defmodule Systems.Storage.Delivery do
 
       %{data: data} = blob ->
         # Deliver the data
-        result = deliver_data(args, data)
-
-        # On success, mark blob as finished (cleanup worker will purge later)
-        case result do
+        case deliver_data(args, data) do
           :ok ->
+            # Mark blob as finished (cleanup worker will purge later)
             Repo.update(Storage.JobDataModel.mark_finished(blob))
             :ok
 

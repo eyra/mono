@@ -7,7 +7,11 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     folder_path = get_full_path(folder)
     File.mkdir(folder_path)
     file_path = Path.join(folder_path, filename)
-    File.write!(file_path, data)
+
+    case File.write(file_path, data) do
+      :ok -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @impl true

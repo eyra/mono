@@ -18,7 +18,10 @@ defmodule Systems.Storage.Yoda.Backend do
     filename = filename(identifier)
     file_url = url([yoda_url, filename])
 
-    {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
+    case Yoda.Client.upload_file(username, password, file_url, data) do
+      {:ok, _} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @impl true

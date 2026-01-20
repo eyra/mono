@@ -12,7 +12,7 @@ defmodule Systems.Storage.Backend do
               endpoint :: map(),
               data :: binary(),
               meta_data :: map()
-            ) :: any()
+            ) :: :ok | {:error, term()}
 
   @callback list_files(endpoint :: map()) :: {:ok, list()} | {:error, atom()}
   @callback delete_files(endpoint :: map()) :: :ok | {:error, atom()}
