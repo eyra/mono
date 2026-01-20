@@ -182,7 +182,9 @@ defmodule Core.MixProject do
         "esbuild default --minify",
         "phx.digest"
       ],
-      run: "phx.server"
+      run: "phx.server",
+      release:
+        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\""
     ]
   end
 end
