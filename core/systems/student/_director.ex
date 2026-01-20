@@ -27,7 +27,7 @@ defmodule Systems.Student.Director do
 
   @impl true
   def inclusion_criteria() do
-    [:genders, :native_languages]
+    [:genders]
   end
 
   @impl true
