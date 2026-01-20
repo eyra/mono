@@ -135,13 +135,20 @@ defmodule Systems.Feldspar.DataDonationController do
 
   defp schedule_delivery_for_assignment(blob_id, meta_data, assignment_id) do
     with {:ok, assignment} <- get_assignment(assignment_id),
-         {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment) do
+         {:ok, storage_endpoint} <- get_storage_endpoint(assignment) do
       storage_info = Storage.Private.storage_info(storage_endpoint)
 
       case Storage.Public.deliver_blob(storage_endpoint, storage_info, blob_id, meta_data) do
         {:ok, _} -> :ok
         error -> error
       end
+    end
+  end
+
+  defp get_storage_endpoint(assignment) do
+    case Project.Public.get_storage_endpoint_by(assignment) do
+      {:ok, endpoint} -> {:ok, endpoint}
+      {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
     end
   end
 
