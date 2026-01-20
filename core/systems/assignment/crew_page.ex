@@ -149,6 +149,13 @@ defmodule Systems.Assignment.CrewPage do
         group,
         data
       ) do
+    store_start = System.monotonic_time(:millisecond)
+    data_size = byte_size(data)
+
+    Logger.warning(
+      "[CrewPage.store] START assignment=#{assignment.id} task=#{task} key=#{key} group=#{group} size=#{data_size} bytes"
+    )
+
     participant = Map.get(panel_info, :participant, "")
 
     meta_data = %{
@@ -163,14 +170,26 @@ defmodule Systems.Assignment.CrewPage do
       ]
     }
 
-    with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-         storage_info <- Storage.Private.storage_info(storage_endpoint) do
-      Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
-      socket
-    else
+    result =
+      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
+           storage_info <- Storage.Private.storage_info(storage_endpoint) do
+        Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
+      end
+
+    elapsed = System.monotonic_time(:millisecond) - store_start
+
+    case result do
+      {:ok, _} ->
+        Logger.warning("[CrewPage.store] SUCCESS in #{elapsed}ms")
+        socket
+
+      {:error, step, reason, _} ->
+        Logger.error("[CrewPage.store] FAILED at #{step}: #{inspect(reason)} in #{elapsed}ms")
+        socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
+
       _ ->
         message = dgettext("eyra-assignment", "storage.not_available.warning")
-        Logger.error(message)
+        Logger.error("[CrewPage.store] #{message} in #{elapsed}ms")
         socket |> put_flash(:error, message)
     end
   end

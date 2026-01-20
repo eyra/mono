@@ -55,37 +55,88 @@ defmodule Systems.Storage.Public do
         data,
         %{remote_ip: remote_ip} = meta_data
       ) do
+    store_start = System.monotonic_time(:millisecond)
     packet_size = byte_size(data)
 
+    Logger.warning(
+      "[Storage.Public.store] START endpoint=#{endpoint_id} size=#{packet_size} bytes (#{Float.round(packet_size / 1_000_000, 2)} MB)"
+    )
+
     # raises error when request is denied
+    rate_start = System.monotonic_time(:millisecond)
     Rate.Public.request_permission(key, remote_ip, packet_size)
+    rate_elapsed = System.monotonic_time(:millisecond) - rate_start
+    Logger.warning("[Storage.Public.store] rate_check took #{rate_elapsed}ms")
 
     # Create human-readable description for debugging (uses same format as filename)
     description = backend.filename(meta_data.identifier)
 
     # Insert job data first, then create job with job_data_id (instead of full data)
     # This avoids memory spikes from storing large data in Oban job args
-    Multi.new()
-    |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, description))
-    |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
-    |> Monitor.Public.multi_log({endpoint, :files})
-    |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
-      message: %{
-        storage_endpoint: endpoint
-      }
-    )
-    |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}} ->
-      %{
-        endpoint_id: endpoint_id,
-        backend: backend,
-        special: special,
-        blob_id: blob_id,
-        meta_data: meta_data
-      }
-      |> Storage.Delivery.new()
-      |> Oban.insert()
-    end)
-    |> Repo.commit()
+    multi_start = System.monotonic_time(:millisecond)
+
+    result =
+      Multi.new()
+      |> Multi.run(:timing_start, fn _repo, _changes ->
+        {:ok, System.monotonic_time(:millisecond)}
+      end)
+      |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, description))
+      |> Multi.run(:timing_after_insert, fn _repo, %{timing_start: start} ->
+        elapsed = System.monotonic_time(:millisecond) - start
+        Logger.warning("[Storage.Public.store] DB insert took #{elapsed}ms")
+        {:ok, System.monotonic_time(:millisecond)}
+      end)
+      |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
+      |> Monitor.Public.multi_log({endpoint, :files})
+      |> Multi.run(:timing_after_monitor, fn _repo, %{timing_after_insert: start} ->
+        elapsed = System.monotonic_time(:millisecond) - start
+        Logger.warning("[Storage.Public.store] monitor_log took #{elapsed}ms")
+        {:ok, System.monotonic_time(:millisecond)}
+      end)
+      |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
+        message: %{
+          storage_endpoint: endpoint
+        }
+      )
+      |> Multi.run(:timing_after_signal, fn _repo, %{timing_after_monitor: start} ->
+        elapsed = System.monotonic_time(:millisecond) - start
+        Logger.warning("[Storage.Public.store] signal_dispatch took #{elapsed}ms")
+        {:ok, System.monotonic_time(:millisecond)}
+      end)
+      |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}, timing_after_signal: start} ->
+        result =
+          %{
+            endpoint_id: endpoint_id,
+            backend: backend,
+            special: special,
+            blob_id: blob_id,
+            meta_data: meta_data
+          }
+          |> Storage.Delivery.new()
+          |> Oban.insert()
+
+        elapsed = System.monotonic_time(:millisecond) - start
+        Logger.warning("[Storage.Public.store] oban_insert took #{elapsed}ms")
+        result
+      end)
+      |> Repo.commit()
+
+    multi_elapsed = System.monotonic_time(:millisecond) - multi_start
+    total_elapsed = System.monotonic_time(:millisecond) - store_start
+
+    case result do
+      {:ok, _} ->
+        Logger.warning(
+          "[Storage.Public.store] SUCCESS multi=#{multi_elapsed}ms total=#{total_elapsed}ms"
+        )
+
+      {:error, step, reason, _} ->
+        Logger.error(
+          "[Storage.Public.store] FAILED at #{step}: #{inspect(reason)} multi=#{multi_elapsed}ms total=#{total_elapsed}ms"
+        )
+    end
+
+    result
   end
 
   def list_files(endpoint) do
