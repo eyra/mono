@@ -67,12 +67,18 @@ defmodule CoreWeb.Endpoint do
   plug(Plug.RequestId)
   plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
 
+  @http_body_max_size Application.compile_env(
+                        :core,
+                        [CoreWeb.Endpoint, :http_body_max_size],
+                        200_000_000
+                      )
+
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library(),
-    # Allow large multipart uploads for data donation (up to 200MB)
-    length: 200_000_000
+    # Allow large uploads for data donation (configurable via HTTP_BODY_MAX_SIZE env var)
+    length: @http_body_max_size
   )
 
   plug(Plug.MethodOverride)

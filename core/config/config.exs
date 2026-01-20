@@ -74,6 +74,9 @@ config :core, :signal,
 
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
+# Maximum HTTP body size for uploads (Plug.Parsers)
+config :core, CoreWeb.Endpoint, http_body_max_size: 200_000_000
+
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,

@@ -42,6 +42,10 @@ if config_env() == :prod do
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
+  # HTTP BODY MAX SIZE (for data donation uploads via Plug.Parsers)
+  config :core, CoreWeb.Endpoint,
+    http_body_max_size: System.get_env("HTTP_BODY_MAX_SIZE", "200000000") |> String.to_integer()
+
   # OBAN
   oban_plugins =
     System.get_env("ENABLED_OBAN_PLUGINS", "")
