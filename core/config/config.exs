@@ -218,4 +218,7 @@ config :core, :paper,
   # Chunk size for streaming RIS files (default 64KB)
   ris_stream_chunk_size: 65_536
 
+# Temp file store for Storage system (stores data donations before delivery)
+config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
+
 import_config "#{config_env()}.exs"

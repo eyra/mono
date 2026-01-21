@@ -82,8 +82,6 @@ config :core, :feldspar_data_donation,
   path: "/tmp/data_donations_test",
   retention_hours: 336
 
-config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
-
 try do
   import_config "test.secret.exs"
 rescue
