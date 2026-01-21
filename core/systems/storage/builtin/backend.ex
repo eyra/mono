@@ -33,11 +33,7 @@ defmodule Systems.Storage.BuiltIn.Backend do
   end
 
   @impl true
-  def filename(identifier) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}=#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp settings do
     Application.fetch_env!(:core, Systems.Storage.BuiltIn)

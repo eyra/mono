@@ -10,15 +10,16 @@ defmodule Systems.Feldspar.DataDonationController do
 
   require Logger
 
-  alias Systems.Storage
-  alias Systems.Project
   alias Systems.Assignment
+  alias Systems.Feldspar
+  alias Systems.Project
   alias Systems.Rate
+  alias Systems.Storage
 
   @rate_limit_service :feldspar_data_donation
 
   @doc """
-  Accepts a data donation, stores it as a blob, and schedules delivery.
+  Accepts a data donation, stores it as a file, and schedules delivery.
 
   Expects multipart/form-data with:
   - key: Identifier key for the data
@@ -26,7 +27,7 @@ defmodule Systems.Feldspar.DataDonationController do
   - data: File upload containing the data
 
   Returns:
-  - 200 with {blob_id, status: "ok"} on success
+  - 200 with {status: "ok"} on success
   - 401 if user not authenticated
   - 422 if storage/delivery fails
   - 429 if rate limited
@@ -35,17 +36,19 @@ defmodule Systems.Feldspar.DataDonationController do
     Logger.info("[Feldspar.DataDonationController] Donation request for key=#{key}")
 
     with {:ok, context} <- parse_context(context),
-         {:ok, user} <- get_current_user(conn),
+         {:ok, _user} <- get_current_user(conn),
          {:ok, data} <- read_upload(upload),
          meta_data <- build_meta_data(conn, key, context),
          :ok <- check_rate_limit(meta_data.remote_ip, byte_size(data)),
-         {:ok, blob} <- Storage.Public.store_blob(data, user, meta_data),
-         :ok <- schedule_delivery(context, blob.id, meta_data) do
+         {:ok, storage_endpoint} <- get_storage_endpoint(context),
+         file_id <- Feldspar.DataDonationFolder.filename(context),
+         {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
+         :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
       Logger.info(
-        "[Feldspar.DataDonationController] Donation stored and delivery scheduled, key=#{key}, blob_id=#{blob.id}"
+        "[Feldspar.DataDonationController] Donation stored and delivery scheduled, key=#{key}, file_id=#{file_id}"
       )
 
-      json(conn, %{blob_id: blob.id, status: "ok"})
+      json(conn, %{status: "ok"})
     else
       {:error, :not_authenticated} ->
         conn
@@ -119,36 +122,25 @@ defmodule Systems.Feldspar.DataDonationController do
       {:error, :rate_limited, e.message}
   end
 
-  defp schedule_delivery(context, blob_id, meta_data) do
+  defp get_storage_endpoint(context) do
     assignment_id = context["assignment_id"]
 
     if assignment_id && assignment_id != "" do
-      schedule_delivery_for_assignment(blob_id, meta_data, assignment_id)
-    else
-      Logger.error(
-        "[Feldspar.DataDonationController] Missing assignment context, blob_id=#{blob_id} stored without delivery"
-      )
-
-      :ok
-    end
-  end
-
-  defp schedule_delivery_for_assignment(blob_id, meta_data, assignment_id) do
-    with {:ok, assignment} <- get_assignment(assignment_id),
-         {:ok, storage_endpoint} <- get_storage_endpoint(assignment) do
-      storage_info = Storage.Private.storage_info(storage_endpoint)
-
-      case Storage.Public.deliver_blob(storage_endpoint, storage_info, blob_id, meta_data) do
-        {:ok, _} -> :ok
-        error -> error
+      with {:ok, assignment} <- get_assignment(assignment_id) do
+        case Project.Public.get_storage_endpoint_by(assignment) do
+          {:ok, endpoint} -> {:ok, endpoint}
+          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
+        end
       end
+    else
+      {:error, :no_storage_endpoint}
     end
   end
 
-  defp get_storage_endpoint(assignment) do
-    case Project.Public.get_storage_endpoint_by(assignment) do
-      {:ok, endpoint} -> {:ok, endpoint}
-      {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
+  defp schedule_delivery(storage_endpoint, file_id, meta_data) do
+    case Storage.Public.deliver_file(storage_endpoint, file_id, meta_data) do
+      {:ok, _} -> :ok
+      error -> error
     end
   end
 

@@ -90,10 +90,10 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
                })
     end
 
-    test "folder + participant + meta key + source=nil" do
+    test "folder + participant + meta key + source=nil is filtered out" do
       expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert "participant=1_session=1_source=.json" = filename
+        assert "participant=1_session=1.json" = filename
         :ok
       end)
 

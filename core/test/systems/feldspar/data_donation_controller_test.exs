@@ -171,7 +171,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
   describe "create/2 - success" do
     setup :login_as_member
 
-    test "returns 200 and stores blob when all inputs are valid", %{conn: conn, user: user} do
+    test "returns 200 when all inputs are valid", %{conn: conn, user: _user} do
       assignment = create_assignment_with_storage()
 
       upload = %Plug.Upload{
@@ -198,16 +198,9 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
       response = json_response(conn, 200)
       assert response["status"] == "ok"
-      assert is_integer(response["blob_id"])
-
-      blob = Core.Repo.get(Storage.JobDataModel, response["blob_id"])
-      assert blob != nil
-      assert blob.status == :pending
-      assert blob.user_id == user.id
-      assert blob.data == "{\"test\": \"data\"}"
     end
 
-    test "stores blob even without assignment_id in context", %{conn: conn} do
+    test "returns 422 without assignment_id in context", %{conn: conn} do
       upload = %Plug.Upload{
         path: create_temp_file("{\"test\": \"data\"}"),
         filename: "data.json",
@@ -229,9 +222,8 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           "context" => context
         })
 
-      response = json_response(conn, 200)
-      assert response["status"] == "ok"
-      assert is_integer(response["blob_id"])
+      response = json_response(conn, 422)
+      assert response["error"] == "No storage endpoint configured"
     end
   end
 

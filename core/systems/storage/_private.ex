@@ -24,10 +24,4 @@ defmodule Systems.Storage.Private do
   def special_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
   def special_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
   def special_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
-
-  def storage_info(storage_endpoint) do
-    special = Storage.EndpointModel.special(storage_endpoint)
-    {key, backend} = special_info(special)
-    %{key: key, special: special, backend: backend}
-  end
 end

@@ -66,11 +66,7 @@ defmodule Systems.Storage.Yoda.Backend do
   def connected?(_), do: false
 
   @impl true
-  def filename(identifier) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp url(components) do
     Enum.join(components, "/")

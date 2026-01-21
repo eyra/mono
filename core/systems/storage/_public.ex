@@ -50,31 +50,19 @@ defmodule Systems.Storage.Public do
   end
 
   @doc """
-  Stores raw data as a blob without delivery to a storage endpoint.
-  Returns {:ok, blob} with the blob id for later reference.
-
-  Options:
-  - user: The user who uploaded the data
-  - meta_data: Map containing delivery context (assignment_id, task, participant, etc.)
+  Schedules delivery of a file to a storage endpoint.
+  The file_id refers to a file in the configured temp file store.
   """
-  def store_blob(data, user \\ nil, meta_data \\ nil) when is_binary(data) do
-    Storage.JobDataModel.prepare(data, user, meta_data)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Schedules delivery of an existing blob to a storage endpoint.
-  Used when data was uploaded via HTTP and needs to be delivered asynchronously.
-  """
-  def deliver_blob(
+  def deliver_file(
         %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        %{backend: backend, special: special},
-        blob_id,
+        file_id,
         meta_data
       ) do
+    %{backend: backend, special: special} = storage_info(endpoint)
+
     result =
       Multi.new()
-      |> Monitor.Public.multi_log({endpoint, :bytes}, value: get_blob_size(blob_id))
+      |> Monitor.Public.multi_log({endpoint, :bytes}, value: temp_file_store().size(file_id))
       |> Monitor.Public.multi_log({endpoint, :files})
       |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
         message: %{
@@ -86,7 +74,7 @@ defmodule Systems.Storage.Public do
           endpoint_id: endpoint_id,
           backend: backend,
           special: special,
-          blob_id: blob_id,
+          file_id: file_id,
           meta_data: meta_data
         }
         |> Storage.Delivery.new()
@@ -99,64 +87,68 @@ defmodule Systems.Storage.Public do
         :ok
 
       {:error, step, reason, _} ->
-        Logger.error("[Storage.Public.deliver_blob] FAILED at #{step}: #{inspect(reason)}")
+        Logger.error("[Storage.Public.deliver_file] FAILED at #{step}: #{inspect(reason)}")
     end
 
     result
-  end
-
-  defp get_blob_size(blob_id) do
-    case Repo.get(Storage.JobDataModel, blob_id) do
-      %{data: data} -> byte_size(data)
-      nil -> 0
-    end
   end
 
   def store(
         %Storage.EndpointModel{id: endpoint_id} = endpoint,
         %{key: key, backend: backend, special: special},
         data,
-        %{remote_ip: remote_ip} = meta_data
+        %{remote_ip: remote_ip, identifier: identifier} = meta_data
       ) do
     packet_size = byte_size(data)
 
     # raises error when request is denied
     Rate.Public.request_permission(key, remote_ip, packet_size)
 
-    # Insert job data first, then create job with job_data_id (instead of full data)
-    # This avoids memory spikes from storing large data in Oban job args
-    result =
-      Multi.new()
-      |> Multi.insert(:job_data, Storage.JobDataModel.prepare(data, nil, meta_data))
-      |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
-      |> Monitor.Public.multi_log({endpoint, :files})
-      |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
-        message: %{
-          storage_endpoint: endpoint
-        }
-      )
-      |> Multi.run(:oban_job, fn _repo, %{job_data: %{id: blob_id}} ->
-        %{
-          endpoint_id: endpoint_id,
-          backend: backend,
-          special: special,
-          blob_id: blob_id,
-          meta_data: meta_data
-        }
-        |> Storage.Delivery.new()
-        |> Oban.insert()
-      end)
-      |> Repo.commit()
+    # Generate filename using the backend's filename function (same as S3 destination)
+    file_id = backend.filename(identifier)
 
-    case result do
-      {:ok, _} ->
-        :ok
+    # Store data as file first, then create Oban job with file_id
+    # This avoids memory spikes from storing large data in Oban job args or database
+    case temp_file_store().store(data, file_id) do
+      {:ok, %{id: ^file_id}} ->
+        result =
+          Multi.new()
+          |> Monitor.Public.multi_log({endpoint, :bytes}, value: packet_size)
+          |> Monitor.Public.multi_log({endpoint, :files})
+          |> Signal.Public.multi_dispatch({:storage_endpoint, {:monitor, :files}},
+            message: %{
+              storage_endpoint: endpoint
+            }
+          )
+          |> Multi.run(:oban_job, fn _repo, _ ->
+            %{
+              endpoint_id: endpoint_id,
+              backend: backend,
+              special: special,
+              file_id: file_id,
+              meta_data: meta_data
+            }
+            |> Storage.Delivery.new()
+            |> Oban.insert()
+          end)
+          |> Repo.commit()
 
-      {:error, step, reason, _} ->
-        Logger.error("[Storage.Public.store] FAILED at #{step}: #{inspect(reason)}")
+        case result do
+          {:ok, _} ->
+            :ok
+
+          {:error, step, reason, _} ->
+            Logger.error("[Storage.Public.store] FAILED at #{step}: #{inspect(reason)}")
+            # Clean up the file if the transaction failed
+            temp_file_store().delete(file_id)
+        end
+
+        result
+
+      {:error, reason} ->
+        Logger.error("[Storage.Public.store] FAILED to store file: #{inspect(reason)}")
+        {:error, :file_storage, reason, %{}}
     end
-
-    result
   end
 
   def list_files(endpoint) do
@@ -202,6 +194,19 @@ defmodule Systems.Storage.Public do
 
   def file_count(endpoint) do
     list_files(endpoint) |> Enum.count()
+  end
+
+  defp temp_file_store do
+    Application.get_env(:core, :temp_file_store)[:module]
+  end
+
+  @doc """
+  Returns storage info for an endpoint, including the backend module and special config.
+  """
+  def storage_info(storage_endpoint) do
+    special = Storage.EndpointModel.special(storage_endpoint)
+    {key, backend} = Storage.Private.special_info(special)
+    %{key: key, special: special, backend: backend}
   end
 end
 

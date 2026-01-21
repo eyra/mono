@@ -77,6 +77,13 @@ config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
+# Feldspar data donation file storage for tests
+config :core, :feldspar_data_donation,
+  path: "/tmp/data_donations_test",
+  retention_hours: 336
+
+config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
+
 try do
   import_config "test.secret.exs"
 rescue

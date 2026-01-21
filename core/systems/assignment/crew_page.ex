@@ -190,7 +190,7 @@ defmodule Systems.Assignment.CrewPage do
 
     result =
       with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-           storage_info <- Storage.Private.storage_info(storage_endpoint) do
+           storage_info <- Storage.Public.storage_info(storage_endpoint) do
         Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
       end
 
@@ -219,9 +219,8 @@ defmodule Systems.Assignment.CrewPage do
     }
 
     result =
-      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-           storage_info <- Storage.Private.storage_info(storage_endpoint) do
-        Storage.Public.deliver_blob(storage_endpoint, storage_info, blob_id, meta_data)
+      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment) do
+        Storage.Public.deliver_file(storage_endpoint, blob_id, meta_data)
       end
 
     case result do
@@ -229,12 +228,12 @@ defmodule Systems.Assignment.CrewPage do
         socket
 
       {:error, step, reason, _} ->
-        Logger.error("[CrewPage.deliver_blob] FAILED at #{step}: #{inspect(reason)}")
+        Logger.error("[CrewPage.deliver_file] FAILED at #{step}: #{inspect(reason)}")
         socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
 
       _ ->
         message = dgettext("eyra-assignment", "storage.not_available.warning")
-        Logger.error("[CrewPage.deliver_blob] #{message}")
+        Logger.error("[CrewPage.deliver_file] #{message}")
         socket |> put_flash(:error, message)
     end
   end

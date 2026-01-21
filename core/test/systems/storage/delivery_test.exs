@@ -6,7 +6,7 @@ defmodule Systems.Storage.DeliveryTest do
   import Frameworks.Signal.TestHelper
 
   alias Systems.Storage.Delivery
-  alias Systems.Storage.JobDataModel
+  alias Systems.Feldspar.DataDonationFolder
   alias Systems.Storage.BuiltIn.Backend
   alias Systems.Storage.BuiltIn.MockSpecial
 
@@ -23,21 +23,27 @@ defmodule Systems.Storage.DeliveryTest do
     initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
     Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
 
+    # Clean up test data donation directory
+    data_donation_path = Application.get_env(:core, :feldspar_data_donation)[:path]
+    File.rm_rf(data_donation_path)
+
     on_exit(fn ->
       Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      File.rm_rf(data_donation_path)
     end)
 
     :ok
   end
 
-  describe "perform/1 with blob_id" do
-    test "fetches blob, delivers, and marks as finished on success" do
-      # Create blob
+  describe "perform/1 with file_id" do
+    test "fetches file and delivers on success" do
+      # Create data donation file with explicit file_id (matching S3 filename format)
       data = "test donation data"
+      file_id = "participant=1_key=test.json"
+      {:ok, %{id: ^file_id}} = DataDonationFolder.store(data, file_id)
 
-      {:ok, blob} =
-        JobDataModel.prepare(data)
-        |> Repo.insert()
+      # Verify file exists
+      assert {:ok, ^data} = DataDonationFolder.read(file_id)
 
       # Mock successful delivery
       expect(MockSpecial, :store, fn _folder, _filename, received_data ->
@@ -45,9 +51,9 @@ defmodule Systems.Storage.DeliveryTest do
         :ok
       end)
 
-      # Create job args with blob_id
+      # Create job args with file_id
       args = %{
-        "blob_id" => blob.id,
+        "file_id" => file_id,
         "endpoint_id" => 1,
         "backend" => "Elixir.Systems.Storage.BuiltIn.Backend",
         "special" => %{"key" => "assignment=1"},
@@ -57,19 +63,15 @@ defmodule Systems.Storage.DeliveryTest do
       # Perform job
       assert :ok = perform_job(Delivery, args)
 
-      # Job data should be marked as finished (not deleted)
-      updated_blob = Repo.get(JobDataModel, blob.id)
-      assert updated_blob != nil
-      assert updated_blob.status == :finished
+      # File remains for cleanup worker to handle later
+      assert {:ok, ^data} = DataDonationFolder.read(file_id)
     end
 
-    test "keeps blob pending on delivery failure for retry" do
-      # Create blob
+    test "returns error on delivery failure" do
+      # Create data donation file
       data = "test data for retry"
-
-      {:ok, blob} =
-        JobDataModel.prepare(data)
-        |> Repo.insert()
+      file_id = "participant=2_key=retry.json"
+      {:ok, %{id: ^file_id}} = DataDonationFolder.store(data, file_id)
 
       # Mock failed delivery
       expect(MockSpecial, :store, fn _folder, _filename, _data ->
@@ -77,26 +79,21 @@ defmodule Systems.Storage.DeliveryTest do
       end)
 
       args = %{
-        "blob_id" => blob.id,
+        "file_id" => file_id,
         "endpoint_id" => 1,
         "backend" => "Elixir.Systems.Storage.BuiltIn.Backend",
         "special" => %{"key" => "assignment=1"},
         "meta_data" => %{"identifier" => []}
       }
 
-      # Job should return error
+      # Job should return error for retry
       assert {:error, _} = perform_job(Delivery, args)
-
-      # Blob should still exist and remain pending for retry
-      updated_blob = Repo.get(JobDataModel, blob.id)
-      assert updated_blob != nil
-      assert updated_blob.status == :pending
     end
 
-    test "discards job if blob not found" do
-      # Non-existent blob ID
+    test "discards job if file not found" do
+      # Non-existent file ID
       args = %{
-        "blob_id" => 999_999_999,
+        "file_id" => "nonexistent_file_id",
         "endpoint_id" => 1,
         "backend" => "Elixir.Systems.Storage.BuiltIn.Backend",
         "special" => %{"key" => "assignment=1"},
@@ -119,7 +116,7 @@ defmodule Systems.Storage.DeliveryTest do
         :ok
       end)
 
-      # Legacy job args with data field instead of blob_id
+      # Legacy job args with data field instead of file_id
       args = %{
         "endpoint_id" => 1,
         "backend" => "Elixir.Systems.Storage.BuiltIn.Backend",

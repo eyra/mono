@@ -12,13 +12,11 @@ defmodule Systems.Storage.Delivery do
 
   require Logger
 
-  alias Core.Repo
   alias Frameworks.Signal
-  alias Systems.Storage
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
-    case deliver_with_blob(args) do
+    case deliver_from_file(args) do
       {:error, error} ->
         Logger.error("[Storage.Delivery] delivery error: #{inspect(error)}")
         {:error, error}
@@ -34,30 +32,25 @@ defmodule Systems.Storage.Delivery do
     end
   end
 
-  # New path: fetch blob from database using blob_id
-  defp deliver_with_blob(%{"blob_id" => blob_id} = args) do
-    case Repo.get(Storage.JobDataModel, blob_id) do
-      nil ->
-        # Blob already deleted (duplicate delivery?) - discard job
-        {:discard, "Blob #{blob_id} not found - already processed or expired"}
+  # Read data from filesystem using file_id
+  defp deliver_from_file(%{"file_id" => file_id} = args) do
+    case temp_file_store().read(file_id) do
+      {:error, :not_found} ->
+        # File already deleted (duplicate delivery?) - discard job
+        {:discard, "File #{file_id} not found - already processed or expired"}
 
-      %{data: data} = blob ->
-        # Deliver the data
-        case deliver_data(args, data) do
-          :ok ->
-            # Mark blob as finished (cleanup worker will purge later)
-            Repo.update(Storage.JobDataModel.mark_finished(blob))
-            :ok
+      {:ok, data} ->
+        # Deliver the data, cleanup worker handles file deletion
+        deliver_data(args, data)
 
-          error ->
-            # Keep blob for retry
-            error
-        end
+      {:error, reason} ->
+        Logger.error("[Storage.Delivery] Failed to read file #{file_id}: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
   # Legacy path: support jobs that have data directly (for rolling deployment)
-  defp deliver_with_blob(%{"data" => data} = args) do
+  defp deliver_from_file(%{"data" => data} = args) do
     deliver_data(args, data)
   end
 
@@ -96,5 +89,9 @@ defmodule Systems.Storage.Delivery do
       [_, value] -> String.replace(string, value, "************")
       _ -> string
     end
+  end
+
+  defp temp_file_store do
+    Application.get_env(:core, :temp_file_store)[:module]
   end
 end
