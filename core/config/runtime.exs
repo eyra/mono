@@ -244,7 +244,7 @@ if config_env() == :prod do
       System.get_env("FELDSPAR_DATA_DONATION_RETENTION", "336") |> String.to_integer()
 
   # Configure temp file store for Storage system (uses Feldspar's DataDonationFolder)
-  config :core, Systems.Storage.TempFileStore, module: Systems.Feldspar.DataDonationFolder
+  config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
 
   config :core,
          :dist_hosts,
