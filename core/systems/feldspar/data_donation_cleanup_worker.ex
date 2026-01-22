@@ -7,8 +7,9 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
 
   Can also be triggered manually via the admin Actions tab.
   """
+  # Queue is set dynamically via Storage.Private.storage_delivery_queue() in cron config (runtime.exs)
+  # This ensures cleanup runs on the node that has the local files
   use Oban.Worker,
-    queue: :maintenance,
     priority: 3,
     max_attempts: 1
 

@@ -4,8 +4,9 @@ defmodule Systems.Storage.Delivery do
     defexception [:message]
   end
 
+  # Queue is set dynamically via Storage.Private.storage_delivery_queue() when inserting jobs
+  # This ensures jobs run on the node that has the local file
   use Oban.Worker,
-    queue: :storage_delivery,
     priority: 1,
     max_attempts: 3,
     unique: [period: 30]

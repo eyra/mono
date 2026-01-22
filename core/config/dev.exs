@@ -84,7 +84,19 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+# Node-local queue for storage delivery (data donation files are on local filesystem)
+# IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
+# This duplication is required because config runs before modules are loaded.
+storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+
 config :core, Oban,
+  queues: [
+    {storage_delivery_queue, 1},
+    default: 5,
+    email_dispatchers: 1,
+    email_delivery: 1,
+    ris_import: 1
+  ],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60},
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},

@@ -93,13 +93,7 @@ config :phoenix_inline_svg,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [
-    default: 5,
-    email_dispatchers: 1,
-    email_delivery: 1,
-    storage_delivery: 1,
-    ris_import: 1
-  ]
+  queues: false
 
 config :packmatic, Packmatic.Source.URL,
   hackney: [

@@ -77,7 +77,7 @@ defmodule Systems.Storage.Public do
           file_id: file_id,
           meta_data: meta_data
         }
-        |> Storage.Delivery.new()
+        |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
         |> Oban.insert()
       end)
       |> Repo.commit()
@@ -128,7 +128,7 @@ defmodule Systems.Storage.Public do
               file_id: file_id,
               meta_data: meta_data
             }
-            |> Storage.Delivery.new()
+            |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
             |> Oban.insert()
           end)
           |> Repo.commit()

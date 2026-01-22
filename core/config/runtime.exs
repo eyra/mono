@@ -43,11 +43,23 @@ if config_env() == :prod do
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
   # OBAN
+  # Node-local queue for storage delivery (data donation files are on local filesystem)
+  # IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
+  # This duplication is required because config runs before modules are loaded.
+  storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+
   oban_plugins =
     System.get_env("ENABLED_OBAN_PLUGINS", "")
     |> String.split(~r"\s*,\s*")
 
   config :core, Oban,
+    queues: [
+      {storage_delivery_queue, 1},
+      default: 5,
+      email_dispatchers: 1,
+      email_delivery: 1,
+      ris_import: 1
+    ],
     plugins:
       Enum.map(oban_plugins, fn plugin ->
         case plugin do
@@ -64,7 +76,10 @@ if config_env() == :prod do
           # Add "data_donation_cleanup" to ENABLED_OBAN_PLUGINS to enable
           "data_donation_cleanup" ->
             {Oban.Plugins.Cron,
-             crontab: [{"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}]}
+             crontab: [
+               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
+                queue: storage_delivery_queue}
+             ]}
 
           _ ->
             nil
