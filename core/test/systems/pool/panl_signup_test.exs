@@ -39,22 +39,13 @@ defmodule Systems.Pool.PanlSignupTest do
       })
     end
 
-    defp get_panl_pool_or_fail do
-      case Pool.Public.get_panl() do
-        %Pool.Model{} = pool -> pool
-        nil -> flunk("PANL pool not found")
-      end
-    end
-
     test "signup pages load correctly with add_to_panl parameter", %{conn: conn} do
       # Both participant and creator signup pages should load (restriction is server-side)
       assert_signup_page_loads(conn, "participant")
       assert_signup_page_loads(conn, "creator")
     end
 
-    test "signin behavior with add_to_panl parameter", %{conn: conn} do
-      pool = get_panl_pool_or_fail()
-
+    test "signin behavior with add_to_panl parameter", %{conn: conn, panl_pool: pool} do
       {participant, participant_password} =
         create_confirmed_user("participant@example.com", false)
 
@@ -79,8 +70,7 @@ defmodule Systems.Pool.PanlSignupTest do
       refute Pool.Public.participant?(pool, creator)
     end
 
-    test "signin edge cases", %{conn: conn} do
-      pool = get_panl_pool_or_fail()
+    test "signin edge cases", %{conn: conn, panl_pool: pool} do
       {user, user_password} = create_confirmed_user("test@example.com", false)
 
       refute Pool.Public.participant?(pool, user)

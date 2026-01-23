@@ -5,7 +5,7 @@ if config_env() == :prod do
   app_domain = System.fetch_env!("APP_DOMAIN")
   app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
   app_mail_noreply = "no-reply@#{app_mail_domain}"
-  upload_path = System.fetch_env!("STATIC_PATH")
+  upload_path = System.fetch_env!("UPLOAD_PATH")
 
   scheme = "https"
   base_url = "#{scheme}://#{app_domain}"
@@ -43,11 +43,23 @@ if config_env() == :prod do
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
   # OBAN
+  # Node-local queue for storage delivery (data donation files are on local filesystem)
+  # IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
+  # This duplication is required because config runs before modules are loaded.
+  storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+
   oban_plugins =
     System.get_env("ENABLED_OBAN_PLUGINS", "")
     |> String.split(~r"\s*,\s*")
 
   config :core, Oban,
+    queues: [
+      {storage_delivery_queue, 1},
+      default: 5,
+      email_dispatchers: 1,
+      email_delivery: 1,
+      ris_import: 1
+    ],
     plugins:
       Enum.map(oban_plugins, fn plugin ->
         case plugin do
@@ -59,6 +71,15 @@ if config_env() == :prod do
 
           "advert_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
+
+          # Cleans up old data donation files from filesystem (2 weeks+ old by default)
+          # Add "data_donation_cleanup" to ENABLED_OBAN_PLUGINS to enable
+          "data_donation_cleanup" ->
+            {Oban.Plugins.Cron,
+             crontab: [
+               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
+                queue: storage_delivery_queue}
+             ]}
 
           _ ->
             nil
@@ -228,6 +249,14 @@ if config_env() == :prod do
     # Larger chunks (128KB-1MB): Better for fast networks, reduces overhead for large files
     ris_stream_chunk_size:
       System.get_env("PAPER_RIS_STREAM_CHUNK_SIZE", "65536") |> String.to_integer()
+
+  # Data donation temporary file storage
+  # Files are stored here before being delivered to the final storage endpoint
+  # Default retention is 2 weeks (336 hours), configurable via FELDSPAR_DATA_DONATION_RETENTION
+  config :core, :feldspar_data_donation,
+    path: System.fetch_env!("FELDSPAR_DATA_DONATION_PATH"),
+    retention_hours:
+      System.get_env("FELDSPAR_DATA_DONATION_RETENTION", "336") |> String.to_integer()
 
   config :core,
          :dist_hosts,

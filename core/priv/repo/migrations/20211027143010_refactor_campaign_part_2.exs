@@ -10,7 +10,6 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
   end
 
   def down do
-
   end
 
   defp migrate_tools(tool_type) do
@@ -28,7 +27,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
 
   defp migrate_tools([], _), do: :noop
 
-  defp migrate_tools([h|t], tool_type) do
+  defp migrate_tools([h | t], tool_type) do
     migrate_tool(h, tool_type)
     migrate_tools(t, tool_type)
   end
@@ -64,18 +63,16 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
 
   defp create_assignment(tool_id, campaign_id, tool_type) do
     if not exist?(:assignments, "assignable_#{tool_type}_id", tool_id) do
-      execute(
-        """
-        INSERT INTO assignments (assignable_#{tool_type}_id, director, auth_node_id, inserted_at, updated_at)
-        VALUES (#{tool_id}, 'campaign', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
-        """
-      )
-      execute(
-        """
-        INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
-        VALUES (#{campaign_id}, '#{now()}', '#{now()}');
-        """
-      )
+      execute("""
+      INSERT INTO assignments (assignable_#{tool_type}_id, director, auth_node_id, inserted_at, updated_at)
+      VALUES (#{tool_id}, 'campaign', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
+      """)
+
+      execute("""
+      INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
+      VALUES (#{campaign_id}, '#{now()}', '#{now()}');
+      """)
+
       flush()
     end
 
@@ -86,18 +83,16 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
 
   defp create_crew(assignment_id, campaign_id) do
     if not exist?(:crews, "reference_type = 'campaign' AND reference_id = #{campaign_id}") do
-      execute(
-        """
-        INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
-        VALUES (#{assignment_id}, '#{now()}', '#{now()}');
-        """
-      )
-      execute(
-        """
-        INSERT INTO crews (reference_type, reference_id, auth_node_id, inserted_at, updated_at)
-        VALUES ('campaign', #{campaign_id}, CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
-        """
-      )
+      execute("""
+      INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
+      VALUES (#{assignment_id}, '#{now()}', '#{now()}');
+      """)
+
+      execute("""
+      INSERT INTO crews (reference_type, reference_id, auth_node_id, inserted_at, updated_at)
+      VALUES ('campaign', #{campaign_id}, CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
+      """)
+
       flush()
     end
 
@@ -134,20 +129,16 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
     end
   end
 
-  defp update(table, id, field, value) when is_number(value)do
-      execute(
-      """
-      UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
-      """
-      )
+  defp update(table, id, field, value) when is_number(value) do
+    execute("""
+    UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
+    """)
   end
 
   defp update(table, id, field, value) do
-    execute(
-    """
+    execute("""
     UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
-    """
-    )
+    """)
   end
 
   defp exist?(table, field, value) do
@@ -155,7 +146,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
   end
 
   defp exist?(table, where) do
-    {:ok, %{ rows: [[count]] }} =
+    {:ok, %{rows: [[count]]}} =
       query(Core.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
 
     count > 0
@@ -166,7 +157,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
   end
 
   defp query_field(table, field, where) do
-    {:ok, %{rows: [[id]|_]}} =
+    {:ok, %{rows: [[id] | _]}} =
       query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     id
@@ -176,5 +167,4 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
     DateTime.now!("Etc/UTC")
     |> DateTime.to_naive()
   end
-
 end

@@ -27,7 +27,7 @@ defmodule Systems.Rate.Server do
       Keyword.get(args, :quotas, [])
       |> Enum.map(&Quota.init(&1))
 
-    Logger.notice("[Rate] quotas: #{inspect(quotas)}")
+    Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
     {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
   end
@@ -54,5 +54,19 @@ defmodule Systems.Rate.Server do
     end
 
     state
+  end
+
+  defp format_quotas(quotas) do
+    Enum.map_join(quotas, "\n", &format_quota/1)
+  end
+
+  defp format_quota(%Quota{
+         service: service,
+         limit: limit,
+         unit: unit,
+         window: window,
+         scope: scope
+       }) do
+    "  - #{service}: #{limit} #{unit}/#{window} (#{scope})"
   end
 end

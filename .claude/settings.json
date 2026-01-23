@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mix compile:*)",
+      "Bash(mix test:*)",
+      "Bash(mix format:*)",
+      "Bash(mix credo:*)",
+      "Bash(mix deps.get:*)",
+      "Bash(mix ecto.gen.migration:*)",
+      "Bash(MIX_ENV=test mix ecto.reset:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(pre-commit run:*)",
+      "Bash(gh:*)",
+      "Bash(brew install:*)",
+      "WebFetch(domain:github.com)",
+      "mcp__flux__dev_get_issue",
+      "mcp__flux__dev_add_comment"
+    ]
+  }
+}

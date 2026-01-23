@@ -11,8 +11,10 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
   end
 
   defp migrate_submissions() do
-    tools = query(Core.Repo,
-    "
+    tools =
+      query(
+        Core.Repo,
+        "
     SELECT ps.id, ps.status, cr.id
     FROM pool_submissions as ps
     INNER JOIN campaigns as c ON c.promotion_id = ps.promotion_id
@@ -22,7 +24,8 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
     GROUP BY ps.id, ps.status, cr.id
     ORDER BY ps.id;
     "
-    )
+      )
+
     migrate_submissions(tools)
   end
 
@@ -36,13 +39,14 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
 
   defp migrate_submissions([]), do: :noop
 
-  defp migrate_submissions([h|t]) do
+  defp migrate_submissions([h | t]) do
     migrate_submission(h)
     migrate_submissions(t)
   end
 
   defp migrate_submission([id, "idle", crew_id]) do
-    {:ok, %{rows: [[count]]}} = query(Core.Repo,"SELECT count(*) FROM crew_tasks where crew_id = #{crew_id};")
+    {:ok, %{rows: [[count]]}} =
+      query(Core.Repo, "SELECT count(*) FROM crew_tasks where crew_id = #{crew_id};")
 
     if count > 0 do
       update(:pool_submissions, id, :submitted_at, now())
@@ -65,16 +69,13 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
   end
 
   def update(table, id, field, value) do
-    execute(
-    """
+    execute("""
     UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
-    """
-    )
+    """)
   end
 
   def now() do
     DateTime.now!("Etc/UTC")
     |> DateTime.to_naive()
   end
-
 end

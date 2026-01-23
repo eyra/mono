@@ -9,7 +9,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   - assigns: Contains title and icon from CrewTaskContext
   """
   def view_model(tool, %{title: title, icon: icon} = assigns) do
-    {app_view, error} = build_app_view(tool)
+    {app_view, error} = build_app_view(tool, assigns)
     loading = Map.get(assigns, :loading, false)
 
     %{
@@ -34,18 +34,29 @@ defmodule Systems.Feldspar.ToolViewBuilder do
     }
   end
 
-  defp build_app_view(%{archive_ref: nil}) do
+  defp build_app_view(%{archive_ref: nil}, _assigns) do
     {nil, dgettext("eyra-feldspar", "tool.archive.not.configured")}
   end
 
-  defp build_app_view(%{id: id, archive_ref: archive_ref}) do
+  defp build_app_view(%{id: id, archive_ref: archive_ref}, assigns) do
     {LiveNest.Element.prepare_live_component(
        "feldspar_app_view_#{id}",
        Systems.Feldspar.AppView,
        key: "feldspar_tool_#{id}",
        url: archive_ref <> "/index.html",
-       locale: Gettext.get_locale(CoreWeb.Gettext)
+       locale: Gettext.get_locale(CoreWeb.Gettext),
+       upload_context: build_upload_context(assigns)
      ), nil}
+  end
+
+  defp build_upload_context(assigns) do
+    %{
+      assignment_id: Map.get(assigns, :assignment_id),
+      task: Map.get(assigns, :workflow_item_id),
+      participant: Map.get(assigns, :participant),
+      group: normalize_icon(Map.get(assigns, :icon)),
+      panel_info: Map.get(assigns, :panel_info)
+    }
   end
 
   defp normalize_icon(nil), do: nil

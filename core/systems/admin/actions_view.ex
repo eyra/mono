@@ -7,6 +7,7 @@ defmodule Systems.Admin.ActionsView do
 
   alias Systems.Advert
   alias Systems.Assignment
+  alias Systems.Feldspar
 
   @impl true
   def update(%{id: id}, socket) do
@@ -15,6 +16,7 @@ defmodule Systems.Admin.ActionsView do
       socket
       |> assign(id: id)
       |> create_buttons()
+      |> update_data_donation_stats()
     }
   end
 
@@ -65,14 +67,45 @@ defmodule Systems.Admin.ActionsView do
       }
     }
 
+    data_donation_cleanup_button = %{
+      action: %{
+        type: :send,
+        event: "data_donation_cleanup"
+      },
+      face: %{
+        type: :primary,
+        label: "Run data donation cleanup"
+      }
+    }
+
     socket
     |> assign(
       rollback_expired_deposits_button: rollback_expired_deposits_button,
       expire_button: expire_button,
       expire_force_button: expire_force_button,
-      crash_button: crash_button
+      crash_button: crash_button,
+      data_donation_cleanup_button: data_donation_cleanup_button
     )
   end
+
+  defp update_data_donation_stats(socket) do
+    stats = Feldspar.DataDonationFolder.stats()
+    retention_hours = Application.get_env(:core, :feldspar_data_donation)[:retention_hours] || 336
+
+    assign(socket,
+      data_donation_file_count: stats.file_count,
+      data_donation_total_size: format_bytes(stats.total_size),
+      data_donation_retention_hours: retention_hours
+    )
+  end
+
+  defp format_bytes(bytes) when bytes < 1024, do: "#{bytes} B"
+  defp format_bytes(bytes) when bytes < 1024 * 1024, do: "#{Float.round(bytes / 1024, 1)} KB"
+
+  defp format_bytes(bytes) when bytes < 1024 * 1024 * 1024,
+    do: "#{Float.round(bytes / (1024 * 1024), 1)} MB"
+
+  defp format_bytes(bytes), do: "#{Float.round(bytes / (1024 * 1024 * 1024), 2)} GB"
 
   @impl true
   def handle_event("rollback_expired_deposits", _, socket) do
@@ -105,6 +138,19 @@ defmodule Systems.Admin.ActionsView do
   end
 
   @impl true
+  def handle_event("data_donation_cleanup", _, socket) do
+    %{}
+    |> Feldspar.DataDonationCleanupWorker.new()
+    |> Oban.insert()
+
+    {
+      :noreply,
+      socket
+      |> update_data_donation_stats()
+    }
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div>
@@ -130,6 +176,18 @@ defmodule Systems.Admin.ActionsView do
       <.spacing value="S" />
       <.wrap>
         <Button.dynamic {@crash_button} />
+        <.spacing value="S" />
+      </.wrap>
+      <.spacing value="XL" />
+      <Text.title3 margin="">Data Donations</Text.title3>
+      <.spacing value="S" />
+      <Text.body>
+        Files: <%= @data_donation_file_count %> (<%= @data_donation_total_size %>)<br/>
+        Retention: <%= @data_donation_retention_hours %> hours
+      </Text.body>
+      <.spacing value="S" />
+      <.wrap>
+        <Button.dynamic {@data_donation_cleanup_button} />
         <.spacing value="S" />
       </.wrap>
 

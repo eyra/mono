@@ -20,29 +20,25 @@ defmodule Frameworks.Pixel.Logo do
 
   # Path functions for use outside of components
 
-  def path(name, {:product, variant}), do: product_path(name, variant)
-  def path(name, {:product}), do: product_path(name)
-  def path(name, :product), do: product_path(name)
-  def path(name, {:platform, variant}), do: platform_path(name, variant)
-  def path(name, {:platform}), do: platform_path(name)
-  def path(name, :platform), do: platform_path(name)
+  def path(name, {:product, variant}), do: build_path(:products, name, variant)
+  def path(name, {:product}), do: build_path(:products, name, :default)
+  def path(name, :product), do: build_path(:products, name, :default)
+  def path(name, {:platform, variant}), do: build_path(:platforms, name, variant)
+  def path(name, {:platform}), do: build_path(:platforms, name, :default)
+  def path(name, :platform), do: build_path(:platforms, name, :default)
 
-  defp product_path(name, variant \\ :default) do
-    file = product_file(name, variant)
-    "/images/logos/products/#{file}.svg"
+  defp build_path(type, name, variant) do
+    name
+    |> to_string()
+    |> String.downcase()
+    |> file_with_variant(variant)
+    |> then(&"/images/logos/#{type}/#{&1}.svg")
   end
 
-  defp platform_path(name, variant \\ :default) do
-    file = platform_file(name, variant)
-    "/images/logos/platforms/#{file}.svg"
-  end
-
-  defp product_file(name, :wide), do: "#{name}_wide"
-  defp product_file(name, :standing), do: "#{name}_standing"
-  defp product_file(name, _), do: "#{name}"
-
-  defp platform_file(name, :square), do: "#{name}_square"
-  defp platform_file(name, _), do: "#{name}"
+  defp file_with_variant(name, :wide), do: "#{name}_wide"
+  defp file_with_variant(name, :standing), do: "#{name}_standing"
+  defp file_with_variant(name, :square), do: "#{name}_square"
+  defp file_with_variant(name, _), do: name
 
   # Components
 
@@ -51,7 +47,7 @@ defmodule Frameworks.Pixel.Logo do
   attr(:class, :string, default: "")
 
   def product(assigns) do
-    assigns = assign(assigns, :src, product_path(assigns.name, assigns.variant))
+    assigns = assign(assigns, :src, build_path(:products, assigns.name, assigns.variant))
 
     ~H"""
     <img class={@class} src={@src} alt={"#{@name} logo"} />
@@ -74,7 +70,7 @@ defmodule Frameworks.Pixel.Logo do
   attr(:class, :string, default: "")
 
   def platform(assigns) do
-    assigns = assign(assigns, :src, platform_path(assigns.platform, assigns.variant))
+    assigns = assign(assigns, :src, build_path(:platforms, assigns.platform, assigns.variant))
 
     ~H"""
     <img class={@class} src={@src} alt={"#{@platform}"} />

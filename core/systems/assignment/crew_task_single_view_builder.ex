@@ -4,10 +4,20 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
-  def view_model(assignment, %{current_user: user, live_context: context}) do
+  def view_model(assignment, %{current_user: user, live_context: context} = assigns) do
     work_items = build_work_items(assignment, user)
     # Single view: get the first (and only) work item
     work_item = List.first(work_items)
+
+    # Pass assignment_id and participant through context for HTTP upload
+    assignment_id = Map.get(assigns, :assignment_id)
+    participant = Map.get(assigns, :participant)
+
+    context =
+      LiveContext.extend(context, %{
+        assignment_id: assignment_id,
+        participant: participant
+      })
 
     %{
       work_item: work_item,

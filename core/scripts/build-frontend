@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 # DEPRECATED: the use of this script is no longer recommended.
 set -e
 set -x
