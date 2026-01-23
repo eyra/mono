@@ -69,8 +69,10 @@ git branch --show-current
 ```
 
 If branch matches `milestone/<version>` pattern (e.g., `milestone/20.1`):
+- Extract the version number (e.g., `20.1`)
 - Use `mcp__flux__dev_list_milestones` to list active milestones
-- Find the milestone matching the version (e.g., "Milestone 20.1" or "20.1")
+- Match by version number only, ignoring labels like "Release", "Hotfix", "Milestone"
+- Examples: branch `milestone/20.1` matches "Hotfix 20.1 - Data Donation" or "Release 20.1"
 - If found, use that milestone
 
 If branch is `develop` or no matching milestone found:
