@@ -24,6 +24,15 @@ defmodule Systems.Project.NodePageEmptyDataView do
            dgettext("eyra-project", "node.data.empty.create-storage-success")
          )}
 
+      {:error, _step, _changeset, _partial_changes} ->
+        # Ecto.Multi returns 4-tuple errors: {:error, step, changeset, partial_changes}
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           dgettext("eyra-project", "node.data.empty.create-storage-failed")
+         )}
+
       {:error, _reason} ->
         {:noreply,
          put_flash(
