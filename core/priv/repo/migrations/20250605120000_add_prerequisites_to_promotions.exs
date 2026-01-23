@@ -3,7 +3,7 @@ defmodule Core.Repo.Migrations.AddPrerequisitesToPromotions do
 
   def change do
     alter table(:promotions) do
-      add :prerequisites, :text
+      add(:prerequisites, :text)
     end
   end
 end

@@ -68,6 +68,10 @@ defmodule Systems.Project.Public do
     |> get_storage_endpoint_by()
   end
 
+  def get_storage_endpoint_by(nil) do
+    {:error, {:storage_endpoint, :not_available}}
+  end
+
   def get_storage_endpoint_by(%Project.ItemModel{} = project_item) do
     project_item
     |> Project.Public.get_node_by_item!([:auth_node])

@@ -6,7 +6,6 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
   def up do
     [:survey_tool, :lab_tool, :data_donation_tool]
     |> Enum.each(&migrate(&1))
-
   end
 
   def down do
@@ -27,7 +26,7 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
 
   defp migrate_tools([], _), do: :noop
 
-  defp migrate_tools([h|t], tool_type) do
+  defp migrate_tools([h | t], tool_type) do
     migrate_tool(h, tool_type)
     migrate_tools(t, tool_type)
   end
@@ -41,10 +40,8 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
   end
 
   defp update(table, id, field, value) do
-    execute(
-    """
+    execute("""
     UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
-    """
-    )
+    """)
   end
 end

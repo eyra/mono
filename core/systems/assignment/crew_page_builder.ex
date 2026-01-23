@@ -15,6 +15,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
     # Get user_state from assigns (provided by UserState hook)
     user_state = Map.get(assigns, :user_state, %{})
 
+    # Get or generate session_id (persisted across view model updates)
+    session_id = Map.get(assigns, :session_id) || generate_session_id()
+
     # Create context that will be passed to all child views
     # Include language so child views can apply it in their processes
     live_context =
@@ -26,13 +29,15 @@ defmodule Systems.Assignment.CrewPageBuilder do
         panel_info: Map.get(assigns, :panel_info),
         user_state: user_state,
         user_state_namespace: [:assignment, assignment_id, :crew, crew.id],
-        language: language
+        language: language,
+        session_id: session_id
       })
 
     # Add live_context to assigns for child view builders
     assigns_with_context = Map.put(assigns, :live_context, live_context)
 
     %{
+      session_id: session_id,
       view: current_view(assignment, assigns_with_context),
       info: assignment.info,
       crew: crew,
@@ -43,6 +48,10 @@ defmodule Systems.Assignment.CrewPageBuilder do
         terms_text: dgettext("eyra-ui", "terms.link")
       }
     }
+  end
+
+  defp generate_session_id do
+    DateTime.utc_now() |> DateTime.to_unix(:millisecond) |> Integer.to_string()
   end
 
   defp apply_language(language) do

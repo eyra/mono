@@ -2,6 +2,7 @@ _build/
 tmp/
 priv/static/content
 priv/static/uploads
+priv/static/donations
 priv/cldr
 .bundle
 deps/

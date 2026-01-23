@@ -34,6 +34,5 @@ defmodule Core.Repo.Migrations.SplitSurveyPromotion do
 
     create(index(:survey_tool_tasks, [:tool_id]))
     create(unique_index(:survey_tool_tasks, [:user_id, :tool_id]))
-
   end
 end

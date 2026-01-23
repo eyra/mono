@@ -6,8 +6,8 @@ defmodule Systems.Storage.BuiltIn.Backend do
   alias Systems.Storage.BuiltIn
 
   @impl true
-  def store(%{"key" => folder}, data, meta_data) do
-    filename = filename(meta_data)
+  def store(%{"key" => folder}, data, %{"identifier" => identifier}) do
+    filename = filename(identifier)
     special().store(folder, filename, data)
   end
 
@@ -32,11 +32,8 @@ defmodule Systems.Storage.BuiltIn.Backend do
     true
   end
 
-  defp filename(%{"identifier" => identifier}) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}=#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  @impl true
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp settings do
     Application.fetch_env!(:core, Systems.Storage.BuiltIn)

@@ -18,7 +18,7 @@ defmodule Core.Repo.Migrations.AlterSubmission do
   end
 
   def down do
-    drop constraint(:pool_submissions, :reward_value_can_not_be_negative)
+    drop(constraint(:pool_submissions, :reward_value_can_not_be_negative))
 
     alter table(:pool_submissions) do
       remove(:reward_value)

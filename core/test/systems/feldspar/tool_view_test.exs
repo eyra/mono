@@ -26,7 +26,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test Feldspar App",
           icon: "test_icon",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -49,7 +52,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "TikTok",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -72,7 +78,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -100,7 +109,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -134,7 +146,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -165,7 +180,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -196,7 +214,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -228,7 +249,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -259,7 +283,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -286,7 +313,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}
@@ -322,7 +352,10 @@ defmodule Systems.Feldspar.ToolViewTest do
         Frameworks.Concept.LiveContext.new(%{
           title: "Test App",
           icon: "test",
-          tool_ref: tool_ref
+          tool_ref: tool_ref,
+          assignment_id: 1,
+          participant: "test_participant",
+          workflow_item_id: 1
         })
 
       session = %{"live_context" => live_context}

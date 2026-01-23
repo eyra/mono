@@ -8,11 +8,14 @@ defmodule Systems.Storage.AWS.Backend do
   def store(
         %{"s3_bucket_name" => bucket} = _endpoint,
         data,
-        meta_data
+        %{"identifier" => identifier}
       ) do
-    [data]
-    |> S3.upload(bucket, filename(meta_data))
-    |> ExAws.request()
+    case [data]
+         |> S3.upload(bucket, filename(identifier))
+         |> ExAws.request() do
+      {:ok, _response} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @impl true
@@ -33,9 +36,6 @@ defmodule Systems.Storage.AWS.Backend do
     false
   end
 
-  defp filename(%{"identifier" => identifier}) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  @impl true
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 end

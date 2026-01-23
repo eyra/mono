@@ -6,14 +6,28 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
-  def view_model(assignment, %{
-        current_user: user,
-        user_state: user_state,
-        live_context: context
-      }) do
+  def view_model(
+        assignment,
+        %{
+          current_user: user,
+          user_state: user_state,
+          live_context: context
+        } = assigns
+      ) do
     work_items = build_work_items(assignment, user)
     work_item_id = user_state[:task]
     work_item = find_work_item(work_items, work_item_id)
+
+    # Pass assignment_id and participant through context for HTTP upload
+    assignment_id = Map.get(assigns, :assignment_id)
+    participant = Map.get(assigns, :participant)
+
+    context =
+      LiveContext.extend(context, %{
+        assignment_id: assignment_id,
+        participant: participant
+      })
+
     tool_modal = build_tool_modal(work_item, context)
 
     %{

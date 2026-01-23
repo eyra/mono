@@ -1,7 +1,6 @@
 defmodule Core.Repo.Migrations.ExtendStudySurveyToolData do
   use Ecto.Migration
 
-
   def up do
     alter table(:survey_tools) do
       add(:themes, {:array, :string})
