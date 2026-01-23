@@ -133,6 +133,7 @@ defmodule Core.MixProject do
       {:mox, "== 1.2.0", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
+      {:wallaby, "== 0.30.9", only: :test, runtime: false},
       {:phoenix_live_reload, "== 1.6.1", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.4", only: [:dev, :test], runtime: false},

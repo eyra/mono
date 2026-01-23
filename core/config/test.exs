@@ -55,7 +55,18 @@ config :core, :paper,
 config :core, CoreWeb.Endpoint,
   http: [port: 4002],
   force_ssl: false,
-  server: false
+  server: true
+
+# Wallaby configuration
+config :wallaby,
+  otp_app: :core,
+  base_url: "http://localhost:4002",
+  driver: Wallaby.Chrome,
+  screenshot_dir: "tmp/wallaby_screenshots",
+  screenshot_on_failure: true,
+  chromedriver: [
+    headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
+  ]
 
 config :core, :features,
   sign_in_with_apple: true,

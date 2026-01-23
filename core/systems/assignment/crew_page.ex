@@ -43,9 +43,8 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def handle_view_model_updated(%{assigns: %{vm: %{session_id: session_id}}} = socket) do
+  def handle_view_model_updated(socket) do
     socket
-    |> assign(session_id: session_id)
     |> update_image_info()
   end
 
@@ -160,7 +159,7 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   defp onboarding_identifier(%{
-         assigns: %{model: assignment, panel_info: panel_info, session_id: session_id}
+         assigns: %{model: assignment, panel_info: panel_info, vm: %{session_id: session_id}}
        }) do
     [
       [:assignment, assignment.id],
