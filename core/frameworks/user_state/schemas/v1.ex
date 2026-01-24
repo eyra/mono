@@ -31,8 +31,8 @@ defmodule Frameworks.UserState.Schemas.V1 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
-      field :task, :integer
+      field(:id, :integer)
+      field(:task, :integer)
     end
 
     def changeset(struct, attrs) do
@@ -52,11 +52,11 @@ defmodule Frameworks.UserState.Schemas.V1 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
+      field(:id, :integer)
       # Legacy: stored value directly (e.g., crew_id)
-      field :value, :integer
+      field(:value, :integer)
       # V1 also supported nested crews (partial V2 compatibility)
-      embeds_many :crews, Crew, on_replace: :delete
+      embeds_many(:crews, Crew, on_replace: :delete)
     end
 
     def changeset(struct, attrs) do
@@ -75,9 +75,9 @@ defmodule Frameworks.UserState.Schemas.V1 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
-      field :chapter, :integer
-      field :page, :integer
+      field(:id, :integer)
+      field(:chapter, :integer)
+      field(:page, :integer)
     end
 
     def changeset(struct, attrs) do
@@ -98,8 +98,8 @@ defmodule Frameworks.UserState.Schemas.V1 do
 
   @primary_key false
   embedded_schema do
-    embeds_many :assignments, Assignment, on_replace: :delete
-    embeds_many :manuals, Manual, on_replace: :delete
+    embeds_many(:assignments, Assignment, on_replace: :delete)
+    embeds_many(:manuals, Manual, on_replace: :delete)
   end
 
   @doc """

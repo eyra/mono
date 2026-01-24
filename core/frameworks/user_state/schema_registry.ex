@@ -84,7 +84,10 @@ defmodule Frameworks.UserState.SchemaRegistry do
         climb_up(validated, ladder, schema_index)
 
       {:error, :no_matching_schema} ->
-        Logger.warning("[UserState.SchemaRegistry] No matching schema for attrs: #{inspect(attrs)}")
+        Logger.warning(
+          "[UserState.SchemaRegistry] No matching schema for attrs: #{inspect(attrs)}"
+        )
+
         {:error, :invalid_user_state}
     end
   end
@@ -98,8 +101,11 @@ defmodule Frameworks.UserState.SchemaRegistry do
     case schema.validate(attrs) do
       {:ok, validated} ->
         if index > 0 do
-          Logger.info("[UserState.SchemaRegistry] Matched schema #{schema.version()} (will migrate)")
+          Logger.info(
+            "[UserState.SchemaRegistry] Matched schema #{schema.version()} (will migrate)"
+          )
         end
+
         {:ok, validated, index}
 
       {:error, _changeset} ->
@@ -133,9 +139,7 @@ defmodule Frameworks.UserState.SchemaRegistry do
   defp log_conflicts([]), do: :ok
 
   defp log_conflicts(conflicts) do
-    Logger.warning(
-      "[UserState.SchemaRegistry] Dropped conflicting paths: #{inspect(conflicts)}"
-    )
+    Logger.warning("[UserState.SchemaRegistry] Dropped conflicting paths: #{inspect(conflicts)}")
   end
 
   @doc """
@@ -162,6 +166,7 @@ defmodule Frameworks.UserState.SchemaRegistry do
 
   defp build_attrs_for_path([:assignment, aid, :crew, cid], key, value) do
     crew = %{id: cid} |> Map.put(key, value)
+
     %{
       assignments: [%{id: aid, crews: [crew]}],
       manuals: []
@@ -170,6 +175,7 @@ defmodule Frameworks.UserState.SchemaRegistry do
 
   defp build_attrs_for_path([:manual, mid], key, value) do
     manual = %{id: mid} |> Map.put(key, value)
+
     %{
       assignments: [],
       manuals: [manual]
@@ -182,7 +188,8 @@ defmodule Frameworks.UserState.SchemaRegistry do
   end
 
   defp handle_invalid_write(path, value, changeset) do
-    message = "[UserState.SchemaRegistry] Invalid write to #{inspect(path)} with value #{inspect(value)}: #{inspect(changeset.errors)}"
+    message =
+      "[UserState.SchemaRegistry] Invalid write to #{inspect(path)} with value #{inspect(value)}: #{inspect(changeset.errors)}"
 
     if raise_on_invalid_write?() do
       raise ArgumentError, message

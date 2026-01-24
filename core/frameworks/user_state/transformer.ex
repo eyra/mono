@@ -76,8 +76,15 @@ defmodule Frameworks.UserState.Transformer do
     manual_entries =
       Enum.flat_map(manuals, fn %{id: mid, chapter: chapter, page: page} ->
         entries = []
-        entries = if chapter, do: [{"#{prefix}manual/#{mid}/chapter", to_string(chapter)} | entries], else: entries
-        entries = if page, do: [{"#{prefix}manual/#{mid}/page", to_string(page)} | entries], else: entries
+
+        entries =
+          if chapter,
+            do: [{"#{prefix}manual/#{mid}/chapter", to_string(chapter)} | entries],
+            else: entries
+
+        entries =
+          if page, do: [{"#{prefix}manual/#{mid}/page", to_string(page)} | entries], else: entries
+
         entries
       end)
 
@@ -89,7 +96,9 @@ defmodule Frameworks.UserState.Transformer do
     {attrs, conflicts} =
       Enum.reduce(entries, {empty_attrs(), []}, fn {path, value}, {acc, conflicts} ->
         case insert_at_path(acc, path, value) do
-          {:ok, updated} -> {updated, conflicts}
+          {:ok, updated} ->
+            {updated, conflicts}
+
           {:conflict, reason} ->
             Logger.warning("[UserState.Transformer] Conflict at #{inspect(path)}: #{reason}")
             {acc, [{path, value} | conflicts]}
@@ -106,7 +115,8 @@ defmodule Frameworks.UserState.Transformer do
     {:ok, update_assignment_crew(attrs, aid, cid, key, value)}
   end
 
-  defp insert_at_path(attrs, [:assignment, aid, key], value) when is_atom(key) and is_integer(value) do
+  defp insert_at_path(attrs, [:assignment, aid, key], value)
+       when is_atom(key) and is_integer(value) do
     # V1 pattern: leaf value at assignment level
     # Store it as a special "value" field for migration
     {:ok, update_assignment_value(attrs, aid, key, value)}

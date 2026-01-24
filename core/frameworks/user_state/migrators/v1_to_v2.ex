@@ -45,9 +45,7 @@ defmodule Frameworks.UserState.Migrators.V1ToV2 do
 
       {:error, changeset} ->
         # This shouldn't happen if migration logic is correct
-        Logger.error(
-          "[V1ToV2] Migration produced invalid V2 state: #{inspect(changeset.errors)}"
-        )
+        Logger.error("[V1ToV2] Migration produced invalid V2 state: #{inspect(changeset.errors)}")
 
         # Return empty valid state as fallback
         {:ok, empty_state} = V2.validate(%{assignments: [], manuals: []})
@@ -96,9 +94,7 @@ defmodule Frameworks.UserState.Migrators.V1ToV2 do
   defp log_dropped_values([]), do: :ok
 
   defp log_dropped_values(dropped) do
-    Logger.warning(
-      "[V1ToV2] Dropped legacy values during migration: #{format_dropped(dropped)}"
-    )
+    Logger.warning("[V1ToV2] Dropped legacy values during migration: #{format_dropped(dropped)}")
   end
 
   defp format_dropped(dropped) do

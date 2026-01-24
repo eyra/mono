@@ -30,8 +30,8 @@ defmodule Frameworks.UserState.Schemas.V2 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
-      field :task, :integer
+      field(:id, :integer)
+      field(:task, :integer)
     end
 
     def changeset(struct, attrs) do
@@ -51,8 +51,8 @@ defmodule Frameworks.UserState.Schemas.V2 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
-      embeds_many :crews, Crew, on_replace: :delete
+      field(:id, :integer)
+      embeds_many(:crews, Crew, on_replace: :delete)
     end
 
     def changeset(struct, attrs) do
@@ -71,9 +71,9 @@ defmodule Frameworks.UserState.Schemas.V2 do
 
     @primary_key false
     embedded_schema do
-      field :id, :integer
-      field :chapter, :integer
-      field :page, :integer
+      field(:id, :integer)
+      field(:chapter, :integer)
+      field(:page, :integer)
     end
 
     def changeset(struct, attrs) do
@@ -95,8 +95,8 @@ defmodule Frameworks.UserState.Schemas.V2 do
 
   @primary_key false
   embedded_schema do
-    embeds_many :assignments, Assignment, on_replace: :delete
-    embeds_many :manuals, Manual, on_replace: :delete
+    embeds_many(:assignments, Assignment, on_replace: :delete)
+    embeds_many(:manuals, Manual, on_replace: :delete)
   end
 
   @doc """
