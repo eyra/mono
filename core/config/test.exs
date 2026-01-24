@@ -3,7 +3,8 @@ import Config
 config :core,
   name: "Next [test]",
   base_url: "http://localhost:4000",
-  upload_path: "/tmp"
+  upload_path: "/tmp",
+  user_state_raise_on_invalid_write: true
 
 # Selectical test configuration
 config :core,

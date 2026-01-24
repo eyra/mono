@@ -20,15 +20,28 @@ defmodule Frameworks.UserState do
       next://user-{user_id}@{domain}/{path}/{name}
 
   Example: `next://user-2@localhost/assignment/5/crew/5/task`
+
+  ## Schema Validation
+
+  User state is validated against versioned Ecto schemas. When loading state
+  from localStorage:
+
+  1. Parse flat localStorage format to nested attrs
+  2. Validate against schema ladder (newest to oldest)
+  3. Apply migrators to upgrade old formats
+
+  This ensures stale data from previous versions is properly handled.
   """
 
   alias Frameworks.Concept.LiveContext
+  alias Frameworks.UserState.SchemaRegistry
   alias Frameworks.UserState.Storage
 
   @doc """
   Saves a key/value pair to storage using the configured backend.
 
   Accepts a namespace and key, builds the full storage key, and delegates to the backend.
+  Validates the write against the current schema in dev/test environments.
 
   ## Examples
 
@@ -36,6 +49,7 @@ defmodule Frameworks.UserState do
       # Saves to "next://user-2@localhost/manual/123/chapter" with value 5
   """
   def save(socket, user, namespace, key, value) when is_atom(key) do
+    SchemaRegistry.validate_write!(namespace, key, value)
     path = namespace ++ [key]
     storage_key = build_storage_key(user, path)
     Storage.save(socket, storage_key, value)
@@ -114,6 +128,9 @@ defmodule Frameworks.UserState do
   @doc """
   Parses flat localStorage map with URI keys into nested structure.
 
+  Validates against the schema ladder, migrating old formats to current version.
+  Returns a nested map structure for use by the application.
+
   Filters by user_id and converts keys like:
       "next://user-10@localhost/assignment/5/crew/5/task" => "4"
 
@@ -122,10 +139,30 @@ defmodule Frameworks.UserState do
 
   ## Examples
 
-      iex> parse_user_state(%{"next://user-10@localhost/assignment/5/task" => "4"}, 10)
-      %{assignment: %{5 => %{task: 4}}}
+      iex> parse_user_state(%{"next://user-10@localhost/assignment/5/crew/3/task" => "4"}, 10)
+      %{assignment: %{5 => %{crew: %{3 => %{task: 4}}}}}
   """
   def parse_user_state(flat_state, user_id) when is_map(flat_state) do
+    case SchemaRegistry.parse(flat_state, user_id) do
+      {:ok, validated_state} ->
+        # Convert validated schema struct to nested map format used by application
+        SchemaRegistry.current_schema().to_nested_map(validated_state)
+
+      {:error, _reason} ->
+        # Fall back to empty state on validation failure
+        %{}
+    end
+  end
+
+  def parse_user_state(_, _), do: %{}
+
+  @doc """
+  Legacy parser that doesn't validate against schemas.
+
+  Use `parse_user_state/2` instead for validated parsing.
+  This is kept for backwards compatibility during migration.
+  """
+  def parse_user_state_legacy(flat_state, user_id) when is_map(flat_state) do
     prefix = "next://user-#{user_id}@#{domain()}/"
 
     flat_state
@@ -136,7 +173,7 @@ defmodule Frameworks.UserState do
     end)
   end
 
-  def parse_user_state(_, _), do: %{}
+  def parse_user_state_legacy(_, _), do: %{}
 
   defp parse_storage_key(key) do
     # Extract path from "next://user-10@localhost/assignment/5/crew/5/task"

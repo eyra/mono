@@ -25,7 +25,8 @@ config :core,
   domain: "localhost",
   name: "Next [local]",
   base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
-  upload_path: upload_path
+  upload_path: upload_path,
+  user_state_raise_on_invalid_write: true
 
 config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
