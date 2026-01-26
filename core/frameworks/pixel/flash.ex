@@ -77,15 +77,21 @@ defmodule Frameworks.Pixel.Flash do
     quote do
       alias Frameworks.Pixel.Flash
 
-      def handle_info(:hide_flash, socket) do
-        {:noreply, socket |> Flash.hide()}
-      end
+      # Only define handlers if not already defined (idempotent)
+      # This allows both embedded_live_view and use Frameworks.Pixel without conflicts
+      unless Module.has_attribute?(__MODULE__, :__pixel_flash_defined__) do
+        Module.put_attribute(__MODULE__, :__pixel_flash_defined__, true)
 
-      def handle_info(
-            {:show_flash, %{type: type, message: message, auto_hide: auto_hide}} = params,
-            socket
-          ) do
-        {:noreply, socket |> Flash.put(type, message, auto_hide)}
+        def handle_info(:hide_flash, socket) do
+          {:noreply, socket |> Flash.hide()}
+        end
+
+        def handle_info(
+              {:show_flash, %{type: type, message: message, auto_hide: auto_hide}},
+              socket
+            ) do
+          {:noreply, socket |> Flash.put(type, message, auto_hide)}
+        end
       end
     end
   end
