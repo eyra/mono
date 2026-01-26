@@ -42,6 +42,11 @@ defmodule Systems.Manual.View do
     {:noreply, handle_toolbar_action(action, socket)}
   end
 
+  # Catch-all for unhandled messages (signals during tests, etc.)
+  def handle_info(_message, socket) do
+    {:noreply, socket}
+  end
+
   defp handle_toolbar_action(:back, socket) do
     clear_selected_chapter(socket)
   end

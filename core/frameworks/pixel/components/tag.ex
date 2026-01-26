@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Tag do
   @moduledoc """
-  A colored button with white text
+  A colored tag/badge component.
   """
   use CoreWeb, :pixel
 
@@ -11,13 +11,11 @@ defmodule Frameworks.Pixel.Tag do
 
   def tag(assigns) do
     ~H"""
-    <div class="bg-white rounded">
-      <div class={"flex flex-col justify-center rounded items-center #{@bg_color} #{@bg_opacity}"}>
-        <div class={"text-label font-label py-[6px] ml-3 mr-3 #{@text_color}"}>
-          <%= @text %>
-        </div>
-      </div>
-    </div>
+    <span class="prism-tag">
+      <span class={"prism-tag-inner #{@bg_color} #{@bg_opacity} #{@text_color}"}>
+        <%= @text %>
+      </span>
+    </span>
     """
   end
 end

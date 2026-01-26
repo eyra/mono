@@ -1,22 +1,17 @@
 defmodule Frameworks.Pixel.NumberIcon do
   use CoreWeb, :pixel
 
-  def center_correction_for_number(1), do: "mr-1px"
-  def center_correction_for_number(4), do: "mr-1px"
-  def center_correction_for_number(_), do: ""
-
-  def style(true), do: "bg-primary text-white"
-  def style(false), do: "bg-grey5 text-grey2"
+  defp prism_class(true), do: "prism-number-icon-active"
+  defp prism_class(false), do: "prism-number-icon-inactive"
 
   attr(:number, :integer, required: true)
   attr(:active, :boolean, default: false)
 
   def number_icon(assigns) do
+    assigns = assign(assigns, :prism_class, prism_class(assigns.active))
+
     ~H"""
-      <div class={"flex-shrink-0 icon w-6 h-6 font-caption text-caption rounded-full flex items-center #{style(@active)}"}
-      >
-        <span class={"text-center w-full mt-1px #{center_correction_for_number(@number)}"}><%= @number %></span>
-      </div>
+    <span class={"prism-number-icon #{@prism_class}"}><%= @number %></span>
     """
   end
 end
