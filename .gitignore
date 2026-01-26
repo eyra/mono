@@ -48,6 +48,7 @@ node_modules/
 /.devcontainer/devcontainer.env
 logfile
 .env
+.mcp.json
 .DS_Store
 /mix_home/
 /core/config/dev.secret.exs
