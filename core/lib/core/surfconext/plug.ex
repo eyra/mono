@@ -81,10 +81,7 @@ defmodule Core.SurfConext.CallbackController do
           log_in_user(config, conn, surfconext_user.user, true)
 
         {:error, changeset} ->
-          Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
-            put_flash(conn, :error, message)
-          end)
-          |> redirect(to: ~p"/user/signin")
+          Core.SSOHelpers.handle_registration_error(conn, changeset)
       end
     end
   end

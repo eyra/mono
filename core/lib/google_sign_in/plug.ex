@@ -60,23 +60,29 @@ defmodule GoogleSignIn.CallbackPlug do
       throw("Google login is disabled")
     end
 
-    {user, first_time?} =
-      if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
-        {user, false}
-      else
-        {register_user(google_user, creator?), true}
-      end
-
-    if post_action do
-      Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: post_action})
+    if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
+      dispatch_post_signin_action(user, post_action)
+      log_in_user(config, conn, user, false)
+    else
+      register_new_user(conn, config, google_user, creator?, post_action)
     end
-
-    log_in_user(config, conn, user, first_time?)
   end
 
-  defp register_user(info, creator?) do
-    {:ok, google_sign_in_user} = GoogleSignIn.register_user(info, creator?)
-    google_sign_in_user.user
+  defp register_new_user(conn, config, google_user, creator?, post_action) do
+    case GoogleSignIn.register_user(google_user, creator?) do
+      {:ok, google_sign_in_user} ->
+        dispatch_post_signin_action(google_sign_in_user.user, post_action)
+        log_in_user(config, conn, google_sign_in_user.user, true)
+
+      {:error, changeset} ->
+        Core.SSOHelpers.handle_registration_error(conn, changeset)
+    end
+  end
+
+  defp dispatch_post_signin_action(_user, nil), do: :ok
+
+  defp dispatch_post_signin_action(user, action) do
+    Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: action})
   end
 
   defp admin?(%{"email" => email}), do: Systems.Admin.Public.admin?(email)

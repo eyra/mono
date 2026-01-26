@@ -4,16 +4,21 @@ defmodule ExternalSignIn do
   import Ecto.Query, warn: false
 
   def sign_in(conn, organisation, external_id) do
-    user =
-      if user = get_user_by_external_id(external_id) do
-        user
-      else
-        register_user(organisation, external_id)
-      end
+    if user = get_user_by_external_id(external_id) do
+      conn
+      |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+      |> Plug.Conn.assign(:current_user, user)
+    else
+      case register_user(organisation, external_id) do
+        {:ok, user} ->
+          conn
+          |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+          |> Plug.Conn.assign(:current_user, user)
 
-    conn
-    |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
-    |> Plug.Conn.assign(:current_user, user)
+        {:error, changeset} ->
+          Core.SSOHelpers.handle_registration_error(conn, changeset)
+      end
+    end
   end
 
   def get_user_by_external_id(nil), do: nil
@@ -52,11 +57,11 @@ defmodule ExternalSignIn do
         organisation: organisation
       })
 
-    {:ok, result} =
-      external_user
-      |> Ecto.Changeset.put_assoc(:user, user)
-      |> Repo.insert()
-
-    result.user
+    case external_user
+         |> Ecto.Changeset.put_assoc(:user, user)
+         |> Repo.insert() do
+      {:ok, result} -> {:ok, result.user}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 end
