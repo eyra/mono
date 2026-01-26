@@ -3,13 +3,6 @@
     "flux": {
       "type": "http",
       "url": "https://eyra-flux.fly.dev/mcp"
-    },
-    "appsignal": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "APPSIGNAL_API_KEY", "appsignal/mcp"],
-      "env": {
-        "APPSIGNAL_API_KEY": "mcp-7d0b3c5c-eb69-4ac8-a393-1be02e5206f1"
-      }
     }
   }
 }
