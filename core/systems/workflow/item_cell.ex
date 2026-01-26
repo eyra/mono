@@ -114,7 +114,7 @@ defmodule Systems.Workflow.ItemCell do
     }
 
     delete_button = %{
-      action: %{type: :send, event: "delete"},
+      action: %{type: :send, event: "delete", debounce: "500"},
       face: %{type: :icon, icon: :delete_red}
     }
 
