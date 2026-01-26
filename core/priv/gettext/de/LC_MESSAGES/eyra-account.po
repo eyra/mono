@@ -160,6 +160,22 @@ msgid "features.birthyear.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "profile.tab.profile.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Ich stimme den %{terms_link} und der %{privacy_link} zu"
 
@@ -168,9 +184,9 @@ msgid "privacy.next-policy.required"
 msgstr "Sie müssen den Geschäftsbedingungen und der Datenschutzerklärung zustimmen, um fortzufahren"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Geschäftsbedingungen"
+msgid "sso.error.generic"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Datenschutzerklärung"
+msgid "sso.error.session_expired"
+msgstr ""

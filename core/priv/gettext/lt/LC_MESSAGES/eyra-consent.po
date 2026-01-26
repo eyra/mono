@@ -20,26 +20,30 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "default.consent.text"
 msgstr "<div>Pridėkite sąlygas, su kuriomis dalyviai turi sutikti.</div>"
 
+#, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
 msgstr "Ar sutinkate su aukščiau išdėstytais terminais ir sąlygomis?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "locked.error.message"
 msgstr "Atkreipkite dėmesį, kad šią sutikimo teksto versiją jau pasirašė dalyviai. Jei norite toliau keisti tekstą, atnaujinkite puslapį."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "out_of_sync.error.message"
 msgstr "Sutikimo tekstas buvo pakeistas. Norėdami tęsti, atnaujinkite puslapį."
 
+#, elixir-autogen, elixir-format
 msgid "signature.view.title"
 msgstr "Sutikimas"
 
+#, elixir-autogen, elixir-format
 msgid "click_wrap.accept.button"
 msgstr "Taip, sutinku"
 
+#, elixir-autogen, elixir-format
 msgid "click_wrap.decline.button"
 msgstr "Ne"

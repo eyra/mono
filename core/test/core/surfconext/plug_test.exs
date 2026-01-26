@@ -108,7 +108,9 @@ defmodule Core.SurfConext.CallbackController.Test do
 
     Application.put_env(:core, Core.SurfConext, test_conf)
 
-    conn = CoreWeb.ConnCase.build_conn()
+    conn =
+      CoreWeb.ConnCase.build_conn()
+      |> init_test_session(%{surfconext: %{state: "test-state"}})
 
     {:ok, conn: conn, conf: test_conf}
   end
@@ -245,6 +247,24 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       assert redirected_to(conn) == "/user/signin"
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "already been taken"
+    end
+
+    test "redirects to signin and logs error when session is missing" do
+      import ExUnit.CaptureLog
+
+      log =
+        capture_log([level: :error], fn ->
+          conn =
+            CoreWeb.ConnCase.build_conn()
+            |> init_test_session(%{})
+            |> get("/surfconext/auth?code=abc&state=xyz")
+
+          assert redirected_to(conn) == "/user/signin"
+          assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Sign-in could not be completed"
+        end)
+
+      assert log =~ "[error]"
+      assert log =~ "[SurfConext] OAuth callback without session state"
     end
   end
 end

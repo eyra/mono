@@ -20,34 +20,38 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "add.to.button"
 msgstr "Pridėti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.description.label"
 msgstr "Užduoties aprašymas"
 
+#, elixir-autogen, elixir-format
 msgid "item.group.label"
 msgstr "Duomenų šaltinis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.description"
 msgstr "Pasirinkite, kurias užduotis pridėti prie darbo eigos."
 
+#, elixir-autogen, elixir-format
 msgid "item.library.title"
 msgstr "Biblioteka"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.description"
 msgstr "Pridėkite užduotis iš bibliotekos, kad sukurtumėte dalyviams pritaikytą darbo eigą."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.hint"
 msgstr "Naudokite rodykles, kad užduotis būtų išdėstytos eilės tvarka"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.title.label"
 msgstr "Užduoties pavadinimas"
 
+#, elixir-autogen, elixir-format
 msgid "work_list.done.button"
 msgstr "Tęsti, baigiau"

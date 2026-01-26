@@ -8,6 +8,7 @@ defmodule Core.SSOHelpers do
   """
 
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
+  use Gettext, backend: CoreWeb.Gettext
   use CoreWeb, :verified_routes
 
   @doc """
@@ -36,6 +37,20 @@ defmodule Core.SSOHelpers do
       put_flash(conn, :error, message)
     end)
     |> redirect(to: ~p"/user/signin")
+  end
+
+  @doc """
+  Returns a user-friendly error message for predefined error codes.
+
+  Used for SSO-related errors that occur before changeset validation,
+  such as missing authentication state.
+  """
+  def error_message("session_not_found") do
+    dgettext("eyra-account", "sso.error.session_not_found")
+  end
+
+  def error_message(_) do
+    dgettext("eyra-account", "sso.error.generic")
   end
 
   @doc """

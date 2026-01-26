@@ -40,6 +40,9 @@ end
 defmodule GoogleSignIn.CallbackPlug do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
+  require Logger
+  use Phoenix.Controller, formats: [:html]
+  use CoreWeb, :verified_routes
   use Core.FeatureFlags
 
   alias Frameworks.Utility.Params
@@ -49,8 +52,32 @@ defmodule GoogleSignIn.CallbackPlug do
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
-    creator? = Params.parse_creator(session_params || %{})
-    post_action = Params.parse_string_param(session_params || %{}, "post_signin_action")
+
+    if is_nil(session_params) do
+      log_session_not_found(conn)
+      redirect_with_error(conn, "session_not_found")
+    else
+      authenticate(conn, otp_app, session_params)
+    end
+  end
+
+  defp log_session_not_found(conn) do
+    Logger.error("[GoogleSignIn] OAuth callback without session state",
+      request_path: conn.request_path,
+      query_string: conn.query_string,
+      user_agent: get_req_header(conn, "user-agent") |> List.first()
+    )
+  end
+
+  defp redirect_with_error(conn, error) do
+    conn
+    |> put_flash(:error, Core.SSOHelpers.error_message(error))
+    |> redirect(to: ~p"/user/signin")
+  end
+
+  defp authenticate(conn, otp_app, session_params) do
+    creator? = Params.parse_creator(session_params)
+    post_action = Params.parse_string_param(session_params, "post_signin_action")
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 

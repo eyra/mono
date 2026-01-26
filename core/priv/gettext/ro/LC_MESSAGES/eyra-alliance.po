@@ -20,94 +20,106 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "config.url.label"
 msgstr "Link către chestionar"
 
+#, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
 msgstr "Recompensă"
 
+#, elixir-autogen, elixir-format
 msgid "apply.cta.title"
 msgstr "Participă la loterie"
 
+#, elixir-autogen, elixir-format
 msgid "open.cta.title"
 msgstr "Continuă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.description"
 msgstr "Pentru a redirecționa participanții înapoi la Următorul la sfârșitul chestionarului, copiați adresa URL de redirecționare de mai jos și lipiți-o ca „Adresă URL a site-ului web” în Qualtrics ca %{link}."
 
+#, elixir-autogen, elixir-format
 msgid "redirect.title"
 msgstr "URL redirectare"
 
+#, elixir-autogen, elixir-format
 msgid "pending.label"
 msgstr "În așteptare"
 
+#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Campanie"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "nextid.description"
 msgstr "Next adaugă automat ID-ul participantului la adresa URL Qualtrics. Pentru a utiliza acest ID în Qualtrics, adăugați un câmp de element de date încorporat cu numele „participant”, ca %{link} în „PARTEA 2”."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "nextid.title"
 msgstr "ID participant"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "setup.title"
 msgstr "Cum să configurați chestionarul pe Qualtrics?"
 
+#, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
 msgstr "Copiază"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "link.description"
 msgstr "Pentru a obține linkul către chestionarul Qualtrics, urmați %{link}. Lipiți linkul în câmpul „Link către chestionar” din formularul de mai jos."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "link.title"
 msgstr "Link către chestionar"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "nextid.instructions.link"
 msgstr "explicat aici"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.instructions.link"
 msgstr "instruit aici"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "study.instructions.link"
 msgstr "aceste instrucțiuni"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "duration.highlight.text"
 msgstr "%{duration} minute"
 
+#, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
 msgstr "Durata"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "status.closed.highlight.text"
 msgstr "Închis pentru participare"
 
+#, elixir-autogen, elixir-format
 msgid "status.highlight.title"
 msgstr "Stare"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "status.open.highlight.text"
 msgstr "Deschis pentru participare"
 
+#, elixir-autogen, elixir-format
 msgid "language.highlight.title"
 msgstr "Limbă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "A participat"
 
+#, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Continuă"
 
+#, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Sunteți pe cale să începeți un chestionar într-o filă nouă. După ce îl veți finaliza, veți fi redirecționat automat către această pagină."

@@ -20,58 +20,62 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.body"
 msgstr "Opțional, furnizați o adresă URL webhook pentru a primi actualizări în timp real privind progresul participanților."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.placeholder"
 msgstr "https://panel-company.com/study?s=progress"
 
+#, elixir-autogen, elixir-format
 msgid "callback_url.title"
 msgstr "Progres"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.placeholder"
 msgstr "https://panel-company.com/study?s=done"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.body"
 msgstr "Opțional, furnizați o adresă URL de redirecționare pentru a redirecționa participanții către o altă platformă sau organizație după finalizarea fluxului de lucru."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.title"
 msgstr "Sfârșitul fluxului de lucru"
 
+#, elixir-autogen, elixir-format
 msgid "invalid_url.invalid_parts"
 msgstr "Te rugăm să introduci o adresă URL validă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_host"
 msgstr "Vă rugăm să includeți un domeniu"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_scheme"
 msgstr "Vă rugăm să utilizați un prefix precum https://"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.no_spaces_allowed"
 msgstr "Vă rugăm să eliminați toate spațiile din adresa URL."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "test.success"
 msgstr "Adresa URL arată bine și este accesibilă."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.unreachable"
 msgstr "Vă rugăm să verificați adresa URL - nu este accesibilă."
 
-msgid "platform_name.body"
-msgstr ""
-
+#, elixir-autogen, elixir-format
 msgid "platform_name.label"
 msgstr ""
 
+#, elixir-autogen, elixir-format
 msgid "platform_name.placeholder"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "platform_name.body"
+msgstr ""

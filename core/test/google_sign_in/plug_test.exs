@@ -79,6 +79,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
   use ExUnit.Case, async: false
   use Core.DataCase
   import Plug.Test
+  import ExUnit.CaptureLog
   use Core.FeatureFlags.Test
   alias GoogleSignIn.CallbackPlug
 
@@ -107,7 +108,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
     test "creates a user" do
       user =
         conn(:get, "/google")
-        |> init_test_session(%{})
+        |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
         |> CallbackPlug.call(:test)
 
       assert user.id
@@ -135,7 +136,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
 
       user =
         conn(:get, "/google")
-        |> init_test_session(%{})
+        |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
         |> CallbackPlug.call(:test)
 
       assert user.creator == true
@@ -147,7 +148,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
 
       assert catch_throw(
                conn(:get, "/google")
-               |> init_test_session(%{})
+               |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
                |> CallbackPlug.call(:test)
              ) == "Google login is disabled"
     end
@@ -163,10 +164,31 @@ defmodule GoogleSignIn.CallbackPlug.Test do
 
       user =
         conn(:get, "/google")
-        |> init_test_session(%{})
+        |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
         |> CallbackPlug.call(:test)
 
       assert user.email == GoogleSignIn.FakeGoogle.email()
+    end
+
+    test "redirects to signin and logs error when session is missing" do
+      log =
+        capture_log([level: :error], fn ->
+          conn =
+            conn(:get, "/google?code=abc&state=xyz")
+            |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
+            |> init_test_session(%{})
+            |> Plug.Conn.fetch_query_params()
+            |> Phoenix.Controller.fetch_flash([])
+            |> CallbackPlug.call(:test)
+
+          assert conn.status == 302
+          [location] = Plug.Conn.get_resp_header(conn, "location")
+          assert location == "/user/signin"
+          assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Sign-in could not be completed"
+        end)
+
+      assert log =~ "[error]"
+      assert log =~ "[GoogleSignIn] OAuth callback without session state"
     end
   end
 end

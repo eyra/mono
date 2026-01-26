@@ -20,51 +20,54 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "taikyti.cta.title"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
 msgstr "turinio pavadinimas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "atidaryti.cta.title"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "dalyvavo.žymė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "laukiama.etiketė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-replace-file-button"
 msgstr "Pakeisti failą"
 
+#, elixir-autogen, elixir-format
 msgid "zip-select-file-button"
 msgstr "Pasirinkite failą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-label"
 msgstr "Srauto taikymas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-placeholder"
 msgstr "Pasirinkite zip failą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-too-large"
 msgstr "Pasirinkta byla yra per didelė (maks. 20 MB)"
 
+#, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Jūs ketinate atlikti keletą veiksmų, kad paaukotumėte savo duomenis. Prieš tai galite peržiūrėti savo duomenis ir duoti sutikimą jais dalytis. Puslapio įkėlimas gali šiek tiek užtrukti – dėkojame už kantrybę."
 
+#, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Tęsti"
 
+#, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr ""
-
