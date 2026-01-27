@@ -26,9 +26,17 @@ defmodule Systems.Assignment.CrewTaskHelpers do
 
   @doc """
   Get participant from panel_info (external panel) or crew member's public_id.
+
+  Looks for panel_info in multiple locations:
+  1. Directly in assigns[:panel_info]
+  2. In the live_context.data[:panel_info]
   """
   def get_participant(crew, user, assigns) do
-    case get_in(assigns, [:panel_info, :participant]) do
+    panel_info =
+      assigns[:panel_info] ||
+        get_in(assigns, [:live_context, Access.key(:data, %{}), :panel_info])
+
+    case panel_info[:participant] do
       nil ->
         case Crew.Public.member(crew, user) do
           %{public_id: public_id} -> public_id

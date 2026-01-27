@@ -18,6 +18,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
     # Get or generate session_id (persisted across view model updates)
     session_id = Map.get(assigns, :session_id) || generate_session_id()
 
+    # Get panel_info from session (Observatory puts session in assigns)
+    panel_info = get_in(assigns, [:session, "panel_info"])
+
     # Create context that will be passed to all child views
     # Include language so child views can apply it in their processes
     live_context =
@@ -26,7 +29,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
         user_id: user.id,
         current_user: user,
         timezone: Map.get(assigns, :timezone),
-        panel_info: Map.get(assigns, :panel_info),
+        panel_info: panel_info,
         user_state: user_state,
         user_state_namespace: [:assignment, assignment_id, :crew, crew.id],
         language: language,
