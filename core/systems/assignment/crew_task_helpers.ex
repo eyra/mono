@@ -25,6 +25,22 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   end
 
   @doc """
+  Get participant from panel_info (external panel) or crew member's public_id.
+  """
+  def get_participant(crew, user, assigns) do
+    case get_in(assigns, [:panel_info, :participant]) do
+      nil ->
+        case Crew.Public.member(crew, user) do
+          %{public_id: public_id} -> public_id
+          nil -> nil
+        end
+
+      participant ->
+        participant
+    end
+  end
+
+  @doc """
   Builds work_items list from assignment for the given user.
   Each work_item is a tuple {workflow_item, task}.
   """
@@ -66,19 +82,6 @@ defmodule Systems.Assignment.CrewTaskHelpers do
       alias Systems.Workflow
 
       import Frameworks.Pixel.Line
-
-      def update_participant(%{assigns: %{model: %{crew: crew}, current_user: user}} = socket) do
-        # In case of an external panel, the participant id given by the panel should be forwarded to external systems
-        participant =
-          if participant = get_in(socket.assigns, [:panel_info, :participant]) do
-            participant
-          else
-            %{public_id: participant} = Crew.Public.member(crew, user)
-            participant
-          end
-
-        assign(socket, participant: participant)
-      end
 
       # Consume :tool_completed event published by all ToolViews
       # (Feldspar, Manual, Instruction, Document, Graphite)
