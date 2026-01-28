@@ -1,162 +1,171 @@
 defmodule Systems.Admin.ConfigPageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Concept.LiveContext
   alias Systems.Admin
   alias Systems.Budget
   alias Systems.Citizen
+  alias Systems.Org
   alias Systems.Pool
 
-  def view_model(%{id: :singleton}, assigns) do
+  def view_model(%{id: :singleton}, %{current_user: user} = assigns) do
+    locale = Map.get(assigns, :locale, :en)
+    is_admin? = Admin.Public.admin?(user)
+    governable_orgs = Org.Public.list_orgs(user, Org.NodeModel.preload_graph(:full))
+
+    # Sync NextActions as fallback when opening admin page
+    Org.Public.sync_all_domain_match_next_actions(user)
+
+    live_context =
+      LiveContext.new(%{
+        current_user: user,
+        locale: locale,
+        is_admin?: is_admin?,
+        governable_orgs: governable_orgs
+      })
+
+    assigns_with_context =
+      assigns
+      |> Map.put(:live_context, live_context)
+      |> Map.put(:locale, locale)
+      |> Map.put(:is_admin?, is_admin?)
+      |> Map.put(:governable_orgs, governable_orgs)
+
     %{
       tabbar_id: "admin_config",
-      title: dgettext("eyra-admin", "config.title"),
+      title: get_title(is_admin?, governable_orgs),
       active_menu_item: :admin,
-      show_errors: false
+      show_errors: false,
+      tabs: create_tabs(assigns_with_context)
     }
-    |> put_tabs(assigns)
   end
 
-  defp put_tabs(vm, assigns) do
-    Map.put(vm, :tabs, create_tabs(false, assigns))
-  end
+  # Page title is always "Admin" (matches menu item)
+  defp get_title(_, _), do: dgettext("eyra-admin", "config.title")
 
-  defp create_tabs(show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, show_errors, assigns))
-  end
-
-  defp get_tab_keys() do
+  # System admins see all tabs
+  defp create_tabs(%{is_admin?: true} = assigns) do
     [:system, :account, :org, :actions]
+    |> Enum.map(&create_admin_tab(&1, assigns))
   end
 
-  defp create_tab(
-         :system,
-         show_errors,
-         %{fabric: fabric, locale: locale, current_user: user} = assigns
-       ) do
-    ready? = false
+  # Org admins see group tabs (e.g., Organisations)
+  # Currently only Organisations group exists for non-admins
+  defp create_tabs(%{governable_orgs: orgs} = assigns) when length(orgs) > 0 do
+    # Show the Organisations group tab (same as admin :org tab)
+    [create_admin_tab(:org, assigns)]
+  end
 
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :system,
+  # No access - return empty tabs
+  defp create_tabs(_assigns), do: []
+
+  # Admin tabs (system, account, org list, actions)
+
+  defp create_admin_tab(:system, %{live_context: context} = assigns) do
+    child_context =
+      LiveContext.extend(context, %{
+        bank_accounts: get_bank_accounts(),
+        bank_account_items: get_bank_account_items(assigns),
+        citizen_pools: get_citizen_pools(),
+        citizen_pool_items: get_citizen_pool_items(assigns)
+      })
+
+    element =
+      LiveNest.Element.prepare_live_view(
+        "admin_system_view",
         Admin.SystemView,
-        %{
-          locale: locale,
-          user: user
-        }
-        |> put_bank_accounts()
-        |> put_bank_account_items(assigns)
-        |> put_citizen_pools()
-        |> put_citizen_pool_items(assigns)
+        live_context: child_context
       )
 
     %{
       id: :system,
-      ready: ready?,
-      show_errors: show_errors,
+      ready: false,
+      show_errors: false,
       title: dgettext("eyra-admin", "system.title"),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
-  defp create_tab(
-         :account,
-         show_errors,
-         %{fabric: fabric, current_user: user}
-       ) do
-    ready? = false
-
+  defp create_admin_tab(:account, %{live_context: context}) do
     creators = Systems.Account.Public.list_creators()
 
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :account,
+    child_context =
+      LiveContext.extend(context, %{
+        creators: creators
+      })
+
+    element =
+      LiveNest.Element.prepare_live_view(
+        "admin_account_view",
         Admin.AccountView,
-        %{
-          user: user,
-          creators: creators
-        }
+        live_context: child_context
       )
 
     %{
       id: :account,
-      ready: ready?,
-      show_errors: show_errors,
+      ready: false,
+      show_errors: false,
       title: dgettext("eyra-admin", "account.title"),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
-  defp create_tab(
-         :org,
-         show_errors,
-         %{fabric: fabric, locale: locale}
-       ) do
-    ready? = false
-
-    child =
-      Fabric.prepare_child(fabric, :org, Admin.OrgView, %{
-        locale: locale
-      })
+  defp create_admin_tab(:org, %{live_context: context}) do
+    element =
+      LiveNest.Element.prepare_live_view(
+        "admin_org_view",
+        Admin.OrgView,
+        live_context: context
+      )
 
     %{
       id: :org,
-      ready: ready?,
-      show_errors: show_errors,
+      ready: false,
+      show_errors: false,
       title: dgettext("eyra-admin", "org.content.title"),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
-  defp create_tab(
-         :actions,
-         show_errors,
-         %{fabric: fabric}
-       ) do
-    ready? = false
-
-    child =
-      Fabric.prepare_child(fabric, :org, Admin.ActionsView, %{
-        tickets: []
-      })
+  defp create_admin_tab(:actions, %{live_context: context}) do
+    element =
+      LiveNest.Element.prepare_live_view(
+        "admin_actions_view",
+        Admin.ActionsView,
+        live_context: context
+      )
 
     %{
       id: :actions,
-      ready: ready?,
-      show_errors: show_errors,
+      ready: false,
+      show_errors: false,
       title: dgettext("eyra-admin", "actions.title"),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
-  defp put_bank_accounts(vm) do
-    Map.put(
-      vm,
-      :bank_accounts,
-      Budget.Public.list_bank_accounts(Budget.BankAccountModel.preload_graph(:full))
-    )
+  # Helper functions
+
+  defp get_bank_accounts do
+    Budget.Public.list_bank_accounts(Budget.BankAccountModel.preload_graph(:full))
   end
 
-  defp put_bank_account_items(%{bank_accounts: bank_accounts} = vm, %{locale: locale}) do
-    Map.put(vm, :bank_account_items, Enum.map(bank_accounts, &to_view_model(&1, locale)))
+  defp get_bank_account_items(%{locale: locale}) do
+    get_bank_accounts()
+    |> Enum.map(&to_view_model(&1, locale))
   end
 
-  defp put_citizen_pools(vm) do
-    Map.put(
-      vm,
-      :citizen_pools,
-      Citizen.Public.list_pools(currency: Budget.CurrencyModel.preload_graph(:full))
-    )
+  defp get_citizen_pools do
+    Citizen.Public.list_pools(currency: Budget.CurrencyModel.preload_graph(:full))
   end
 
-  defp put_citizen_pool_items(%{citizen_pools: citizen_pools} = vm, %{locale: locale}) do
-    Map.put(vm, :citizen_pool_items, Enum.map(citizen_pools, &to_view_model(&1, locale)))
+  defp get_citizen_pool_items(%{locale: locale}) do
+    get_citizen_pools()
+    |> Enum.map(&to_view_model(&1, locale))
   end
 
   defp to_view_model(

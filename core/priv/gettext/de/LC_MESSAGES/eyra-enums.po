@@ -212,39 +212,11 @@ msgid "student_filters.passed"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.faculty"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_class"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_course"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_program"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.university"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.first"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.second"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.company"
-msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.department"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
@@ -289,10 +261,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "platforms.youtube"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "organisation_types.team"
 msgstr ""
 
 #, elixir-autogen, elixir-format

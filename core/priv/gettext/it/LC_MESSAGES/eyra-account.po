@@ -160,6 +160,22 @@ msgid "features.birthyear.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "profile.tab.profile.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Accetto i %{terms_link} e la %{privacy_link}"
 
@@ -167,10 +183,6 @@ msgstr "Accetto i %{terms_link} e la %{privacy_link}"
 msgid "privacy.next-policy.required"
 msgstr "È necessario accettare i termini, le condizioni e l'informativa sulla privacy per continuare"
 
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "termini e condizioni"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "informativa sulla privacy"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "people.add.button"
+msgstr ""

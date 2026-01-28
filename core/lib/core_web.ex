@@ -183,6 +183,7 @@ defmodule CoreWeb do
       import CoreWeb.Live.Feature.Stack
 
       unquote(utility())
+      unquote(verified_routes())
     end
   end
 

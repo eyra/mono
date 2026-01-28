@@ -82,7 +82,7 @@ defmodule Systems.Account.UserProfileForm do
     changeset = Account.UserProfileEditModel.changeset(entity, type, attrs)
 
     socket
-    |> auto_save(changeset)
+    |> save(changeset)
   end
 
   attr(:user, :map, required: true)
@@ -92,6 +92,7 @@ defmodule Systems.Account.UserProfileForm do
     ~H"""
     <div>
       <Area.form>
+        <Margin.y id={:page_top} />
         <Text.title2><%= dgettext("eyra-account", "profile.tab.profile.title")  %></Text.title2>
         <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
           <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >

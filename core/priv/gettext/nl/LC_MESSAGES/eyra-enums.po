@@ -211,40 +211,12 @@ msgid "student_filters.passed"
 msgstr "Geslaagd"
 
 #, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.faculty"
-msgstr "Faculteit"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_class"
-msgstr "Studie jaar"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_course"
-msgstr "Studie cursus"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.student_program"
-msgstr "Studie programma"
-
-#, elixir-autogen, elixir-format, ex-autogen
-msgid "organisation_types.university"
-msgstr "Universiteit"
-
-#, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.first"
 msgstr ""
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.second"
 msgstr ""
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "organisation_types.company"
-msgstr "Bedrijf"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "organisation_types.department"
-msgstr "Afdeling"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "currency_types.legal"
@@ -289,10 +261,6 @@ msgstr "WhatsApp"
 #, elixir-autogen, elixir-format
 msgid "platforms.youtube"
 msgstr "YouTube"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "organisation_types.team"
-msgstr "Afdeling"
 
 #, elixir-autogen, elixir-format
 msgid "project_item_templates.data_donation"

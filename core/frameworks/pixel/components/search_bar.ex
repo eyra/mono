@@ -9,7 +9,7 @@ defmodule Frameworks.Pixel.SearchBar do
           query_string: query_string,
           placeholder: placeholder,
           debounce: debounce
-        },
+        } = assigns,
         socket
       ) do
     {
@@ -19,7 +19,8 @@ defmodule Frameworks.Pixel.SearchBar do
         id: id,
         query_string: query_string,
         placeholder: placeholder,
-        debounce: debounce
+        debounce: debounce,
+        target: Map.get(assigns, :target)
       )
     }
   end
@@ -67,6 +68,11 @@ defmodule Frameworks.Pixel.SearchBar do
   defp send_to_parent(%{assigns: %{fabric: %{}}} = socket, %{} = message) do
     socket
     |> send_event(:parent, "search_query", message)
+  end
+
+  defp send_to_parent(%{assigns: %{target: {module, id}}} = socket, %{} = message) do
+    send_update(module, id: id, search_query: message)
+    socket
   end
 
   defp send_to_parent(socket, %{} = message) do

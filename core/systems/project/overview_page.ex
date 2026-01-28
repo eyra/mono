@@ -34,23 +34,23 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def compose(:people_page, %{active_project: project_id, current_user: current_user} = _) do
-    owners =
+    project =
       project_id
       |> String.to_integer()
       |> Project.Public.get!()
-      |> Project.Public.list_owners([:profile])
 
+    owners = Project.Public.list_owners(project, [:profile])
     owner_ids = Enum.map(owners, & &1.id)
 
     creators =
       Account.Public.list_creators([:profile])
-      # filter existing owners
       |> Enum.reject(&Enum.member?(owner_ids, &1.id))
 
     %{
       module: Account.PeopleView,
       params: %{
-        title: dgettext("eyra-project", "people.page.title"),
+        context: project.name,
+        title: dgettext("eyra-project", "admins.title"),
         people: owners,
         users: creators,
         current_user: current_user
@@ -147,7 +147,7 @@ defmodule Systems.Project.OverviewPage do
       socket
       |> assign(active_project: project_id)
       |> compose_child(:people_page)
-      |> Fabric.ModalController.show_modal(:people_page, :page)
+      |> Fabric.ModalController.show_modal(:people_page, :sheet)
     }
   end
 

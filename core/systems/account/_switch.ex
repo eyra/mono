@@ -4,7 +4,8 @@ defmodule Systems.Account.Switch do
 
   alias Systems.{
     Email,
-    NextAction
+    NextAction,
+    Org
   }
 
   alias Systems.Account.NextActions.{CompleteProfile, PromotePushStudent}
@@ -49,6 +50,9 @@ defmodule Systems.Account.Switch do
   def intercept({:user, :created}, %{user: user}) do
     Email.Factory.account_created(user)
     |> Email.Public.deliver_later()
+
+    # Sync NextActions for org owners whose domains match this new user
+    Org.Public.sync_next_actions_for_new_user(user)
 
     :ok
   end
