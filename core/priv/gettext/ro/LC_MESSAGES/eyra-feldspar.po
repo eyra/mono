@@ -20,51 +20,54 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "aplică.cta.titlu"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
 msgstr "titlul conținutului"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "titlu.cta.deschis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "participat.etichetă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "în așteptare.etichetă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-replace-file-button"
 msgstr "Înlocuiți fișierul"
 
+#, elixir-autogen, elixir-format
 msgid "zip-select-file-button"
 msgstr "Selectați fisiere"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-label"
 msgstr "Aplicație Flow"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-placeholder"
 msgstr "Selectați un fișier zip"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-too-large"
 msgstr "Fișierul selectat este prea mare (max. 20 MB)"
 
+#, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Urmează să parcurgeți câțiva pași pentru a dona datele dvs. Înainte de a dona, puteți vizualiza datele dvs. și apoi vă puteți da consimțământul pentru a le partaja. Pagina poate dura câteva momente pentru a se încărca — vă mulțumim pentru răbdare."
 
+#, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Continuă"
 
+#, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr ""
-

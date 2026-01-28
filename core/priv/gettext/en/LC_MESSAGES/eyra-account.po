@@ -159,6 +159,14 @@ msgid "features.birthyear.title"
 msgstr "Birth year"
 
 #, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr "Panl"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.profile.title"
+msgstr "My profile"
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "I agree to the %{terms_link} and %{privacy_link}"
 
@@ -175,17 +183,9 @@ msgid "privacy.next-policy.required"
 msgstr "You must accept the terms, conditions and privacy policy to continue"
 
 #, elixir-autogen, elixir-format
-msgid "profile.tab.profile.title"
-msgstr "My profile"
+msgid "sso.error.generic"
+msgstr "An error occurred during sign-in. Please try again."
 
 #, elixir-autogen, elixir-format
-msgid "profile.tab.features.title"
-msgstr "Panl"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "terms and conditions"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "privacy policy"
+msgid "sso.error.session_not_found"
+msgstr "Sign-in could not be completed. Please click the sign-in button to start again."

@@ -25,7 +25,7 @@ defmodule Systems.Assignment.ControllerTest do
 
     test "assignment not existing", %{conn: conn} do
       conn = get(conn, "/assignment/1/invite")
-      html_response(conn, 503)
+      assert redirected_to(conn) == "/not_found"
     end
   end
 

@@ -33,13 +33,14 @@ defmodule Core.SurfConext.FakeOIDC do
 
   defp base_user(config) do
     sub = Keyword.get(config, :sub, "test")
+    email = Keyword.get(config, :email, Faker.Internet.email())
 
     first_name = Faker.Person.first_name()
     last_name = Faker.Person.last_name()
 
     %{
       "sub" => sub,
-      "email" => Faker.Internet.email(),
+      "email" => email,
       "email_verified" => true,
       "preferred_username" => "#{first_name} #{last_name}",
       "given_name" => first_name,
@@ -107,7 +108,9 @@ defmodule Core.SurfConext.CallbackController.Test do
 
     Application.put_env(:core, Core.SurfConext, test_conf)
 
-    conn = CoreWeb.ConnCase.build_conn()
+    conn =
+      CoreWeb.ConnCase.build_conn()
+      |> init_test_session(%{surfconext: %{state: "test-state"}})
 
     {:ok, conn: conn, conf: test_conf}
   end
@@ -224,6 +227,44 @@ defmodule Core.SurfConext.CallbackController.Test do
       assert surfconext_user.schac_personal_unique_code == [
                "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"
              ]
+    end
+
+    test "handles duplicate email gracefully", %{conn: conn, conf: conf} do
+      # Create an existing user with a specific email
+      existing_email = "duplicate@example.com"
+      Core.Factories.insert!(:member, %{email: existing_email})
+
+      # Configure FakeOIDC to return a new SUB but with the same email
+      conf =
+        conf
+        |> Keyword.put(:sub, "new-sso-user-different-sub")
+        |> Keyword.put(:email, existing_email)
+
+      Application.put_env(:core, Core.SurfConext, conf)
+
+      # Attempt SSO login - should redirect to signin with error, not crash
+      conn = conn |> get("/surfconext/auth")
+
+      assert redirected_to(conn) == "/user/signin"
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "already been taken"
+    end
+
+    test "redirects to signin and logs error when session is missing" do
+      import ExUnit.CaptureLog
+
+      log =
+        capture_log([level: :error], fn ->
+          conn =
+            CoreWeb.ConnCase.build_conn()
+            |> init_test_session(%{})
+            |> get("/surfconext/auth?code=abc&state=xyz")
+
+          assert redirected_to(conn) == "/user/signin"
+          assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Sign-in could not be completed"
+        end)
+
+      assert log =~ "[error]"
+      assert log =~ "[SurfConext] OAuth callback without session state"
     end
   end
 end

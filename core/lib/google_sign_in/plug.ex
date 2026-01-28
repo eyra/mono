@@ -40,6 +40,9 @@ end
 defmodule GoogleSignIn.CallbackPlug do
   import Plug.Conn
   import GoogleSignIn.PlugUtils
+  require Logger
+  use Phoenix.Controller, formats: [:html]
+  use CoreWeb, :verified_routes
   use Core.FeatureFlags
 
   alias Frameworks.Utility.Params
@@ -49,8 +52,32 @@ defmodule GoogleSignIn.CallbackPlug do
 
   def call(conn, otp_app) do
     session_params = get_session(conn, :google_sign_in)
-    creator? = Params.parse_creator(session_params || %{})
-    post_action = Params.parse_string_param(session_params || %{}, "post_signin_action")
+
+    if is_nil(session_params) do
+      log_session_not_found(conn)
+      redirect_with_error(conn, "session_not_found")
+    else
+      authenticate(conn, otp_app, session_params)
+    end
+  end
+
+  defp log_session_not_found(conn) do
+    Logger.error("[GoogleSignIn] OAuth callback without session state",
+      request_path: conn.request_path,
+      query_string: conn.query_string,
+      user_agent: get_req_header(conn, "user-agent") |> List.first()
+    )
+  end
+
+  defp redirect_with_error(conn, error) do
+    conn
+    |> put_flash(:error, Core.SSOHelpers.error_message(error))
+    |> redirect(to: ~p"/user/signin")
+  end
+
+  defp authenticate(conn, otp_app, session_params) do
+    creator? = Params.parse_creator(session_params)
+    post_action = Params.parse_string_param(session_params, "post_signin_action")
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
 
@@ -60,23 +87,29 @@ defmodule GoogleSignIn.CallbackPlug do
       throw("Google login is disabled")
     end
 
-    {user, first_time?} =
-      if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
-        {user, false}
-      else
-        {register_user(google_user, creator?), true}
-      end
-
-    if post_action do
-      Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: post_action})
+    if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
+      dispatch_post_signin_action(user, post_action)
+      log_in_user(config, conn, user, false)
+    else
+      register_new_user(conn, config, google_user, creator?, post_action)
     end
-
-    log_in_user(config, conn, user, first_time?)
   end
 
-  defp register_user(info, creator?) do
-    {:ok, google_sign_in_user} = GoogleSignIn.register_user(info, creator?)
-    google_sign_in_user.user
+  defp register_new_user(conn, config, google_user, creator?, post_action) do
+    case GoogleSignIn.register_user(google_user, creator?) do
+      {:ok, google_sign_in_user} ->
+        dispatch_post_signin_action(google_sign_in_user.user, post_action)
+        log_in_user(config, conn, google_sign_in_user.user, true)
+
+      {:error, changeset} ->
+        Core.SSOHelpers.handle_registration_error(conn, changeset)
+    end
+  end
+
+  defp dispatch_post_signin_action(_user, nil), do: :ok
+
+  defp dispatch_post_signin_action(user, action) do
+    Signal.Public.dispatch({:account, :post_signin}, %{user: user, action: action})
   end
 
   defp admin?(%{"email" => email}), do: Systems.Admin.Public.admin?(email)

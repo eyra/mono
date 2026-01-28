@@ -20,17 +20,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "member.title"
 msgstr "Servicii software"
 
+#, elixir-autogen, elixir-format
 msgid "participated.title"
 msgstr "Contribuții"
 
+#, elixir-autogen, elixir-format
 msgid "available.member.title"
 msgstr "Studii Panl"
 
+#, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr "Studii Panl"
 
+#, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Dezvoltat pentru și împreună cu cercetătorii"

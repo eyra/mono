@@ -81,6 +81,7 @@ defmodule CoreWeb.Routes do
       scope "/", CoreWeb do
         pipe_through(:browser_unprotected)
         get("/access_denied", ErrorController, :access_denied)
+        get("/not_found", ErrorController, :not_found)
       end
 
       scope "/", CoreWeb do

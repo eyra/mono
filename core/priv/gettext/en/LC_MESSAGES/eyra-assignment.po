@@ -135,10 +135,6 @@ msgid "settings.branding.title"
 msgstr "Branding"
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr "Overview"
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr "Information"
 
@@ -479,3 +475,7 @@ msgstr "You chose not to participate. Your choice has been recorded. Click Conti
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect.platform"
 msgstr "Thank you. You have completed this part. Click Continue to proceed to %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
