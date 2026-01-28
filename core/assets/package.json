@@ -8,7 +8,7 @@
     "lodash": "4.17.23",
     "pdfjs-dist": "5.4.296",
     "pinch-zoom-js": "2.3.5",
-    "@novasoftwarefoundation/prism": "^0.1.5",
+    "@novasoftwarefoundation/prism": "0.1.5",
     "trix": "2.1.16"
   },
   "devDependencies": {
