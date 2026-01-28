@@ -25,7 +25,7 @@ jobs:
       POSTGRES_PASS: supersecret
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -39,7 +39,7 @@ jobs:
         run: make deps
 
       # Setup caching (mostly for Dialyzer)
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         id: cache
         with:
           path: core/priv/plts

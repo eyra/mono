@@ -10,7 +10,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def link(assigns) do
     ~H"""
-    <div class="text-primary underline cursor-pointer zfocus:outline-none">
+    <div class="prism-btn prism-btn-link">
       <%= @text %>
     </div>
     """
@@ -110,16 +110,8 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px w-full rounded bg-opacity-0 focus:outline-none cursor-pointer">
-      <div class="flex items-center w-full">
-        <div class="focus:outline-none w-full overflow-ellipsis">
-          <div class="flex flex-col justify-center w-full h-full items-center">
-            <div class={"flex-wrap text-button font-button #{@text_color}"}>
-              <span class="whitespace-pre-wrap"><%= @label %></span>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class={"prism-btn prism-btn-plain w-full #{@text_color}"}>
+      <span class="whitespace-pre-wrap"><%= @label %></span>
     </div>
     """
   end
@@ -155,35 +147,27 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def primary(assigns) do
     ~H"""
-    <div class="relative">
-      <div class={"flex flex-col items-center leading-none font-button text-button rounded cursor-pointer active:shadow-top4px #{@bg_color} #{@text_color}"}>
-        <div class={"pt-15px pb-15px pr-4 pl-4 active:pt-4 active:pb-14px #{if @loading do "opacity-0" else "" end}"}>
-          <%= @label %>
-        </div>
-      </div>
-      <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
-          <Spinner.static color="white" />
-        </div>
+    <div class={"prism-btn prism-btn-primary #{if @loading, do: "prism-btn-loading"} #{@bg_color} #{@text_color}"}>
+      <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
+      <%= if @loading do %>
+        <Spinner.static color="white" />
+      <% end %>
     </div>
     """
   end
 
   attr(:label, :string, required: true)
-  attr(:border_color, :string, default: "bg-primary")
+  attr(:border_color, :string, default: "border-primary")
   attr(:text_color, :string, default: "text-primary")
   attr(:loading, :boolean, default: false)
 
   def secondary(assigns) do
     ~H"""
-    <div class="relative">
-      <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
-        <div class={" #{if @loading do "opacity-0" else "" end}"}>
-          <%= @label %>
-        </div>
-      </div>
-      <div class={"absolute z-100 top-0 h-full w-full flex flex-col justify-center items-center #{if @loading do "block" else "hidden" end}"}>
+    <div class={"prism-btn prism-btn-secondary #{if @loading, do: "prism-btn-loading"} #{@border_color} #{@text_color}"}>
+      <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
+      <%= if @loading do %>
         <Spinner.static color="primary" />
-      </div>
+      <% end %>
     </div>
     """
   end

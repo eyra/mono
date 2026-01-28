@@ -16,7 +16,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> update_participant() |> maybe_start_task()}
+    {:ok, socket |> maybe_start_task()}
   end
 
   defp maybe_start_task(%{assigns: %{vm: %{work_item: {_, task} = work_item}}} = socket) do

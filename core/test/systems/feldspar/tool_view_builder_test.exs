@@ -70,11 +70,42 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
     end
   end
 
+  describe "upload_context participant" do
+    setup do
+      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+      %{tool: tool}
+    end
+
+    test "participant is included in upload_context when provided", %{tool: tool} do
+      # participant is a declared dependency of Feldspar.ToolView
+      # CrewTaskListViewBuilder computes it and passes through context
+      assigns = %{
+        title: "Test App",
+        icon: :tiktok,
+        assignment_id: 123,
+        workflow_item_id: 456,
+        participant: "user_public_id_abc123"
+      }
+
+      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
+
+      upload_context = vm.app_view.options[:upload_context]
+      assert upload_context.participant == "user_public_id_abc123"
+
+      filename = Feldspar.DataDonationFolder.filename(stringify_keys(upload_context))
+      assert filename =~ "participant=user_public_id_abc123"
+    end
+  end
+
   # Helper functions
   defp build_assigns(title, icon) do
     %{
       title: title,
       icon: icon
     }
+  end
+
+  defp stringify_keys(map) do
+    Map.new(map, fn {k, v} -> {to_string(k), v} end)
   end
 end

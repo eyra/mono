@@ -7,6 +7,11 @@ defmodule CoreWeb.UploadedFileController do
 
   def get(conn, %{"filename" => name}) do
     path = get_upload_path(name)
-    send_file(conn, 200, path)
+
+    if File.exists?(path) do
+      send_file(conn, 200, path)
+    else
+      send_resp(conn, 404, "Not found")
+    end
   end
 end

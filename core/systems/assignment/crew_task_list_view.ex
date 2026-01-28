@@ -19,86 +19,43 @@ defmodule Systems.Assignment.CrewTaskListView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> update_participant() |> init_work_item() |> maybe_present_tool_modal()}
+    {:ok, socket |> handle_view_model_updated()}
   end
 
-  # Initialize work_item from vm when restoring from user_state
-  defp init_work_item(%{assigns: %{vm: %{work_item_id: work_item_id}}} = socket)
-       when not is_nil(work_item_id) do
+  @impl true
+  def handle_view_model_updated(
+        %{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket
+      )
+      when id == current_id do
+    # Same modal already presented, do nothing
     socket
-    |> assign(work_item_id: work_item_id)
-    |> update_work_item()
   end
 
-  defp init_work_item(socket), do: socket
-
-  defp maybe_present_tool_modal(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
-       when not is_nil(tool_modal) do
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
+      when not is_nil(tool_modal) do
     socket
     |> assign(tool_modal: tool_modal)
     |> present_modal(tool_modal)
   end
 
-  defp maybe_present_tool_modal(socket), do: assign(socket, tool_modal: nil)
-
-  defp update_work_item(
-         %{assigns: %{work_item_id: work_item_id, vm: %{work_items: work_items}}} = socket
-       )
-       when not is_nil(work_item_id) do
-    work_item =
-      Enum.find(work_items, fn {%{id: id}, _} -> id == work_item_id end)
-
-    socket |> assign(work_item: work_item)
-  end
-
-  defp update_work_item(socket) do
-    socket |> assign(work_item: nil)
-  end
-
-  defp maybe_show_tool_modal(
-         %{
-           assigns: %{
-             work_item: {workflow_item, _task},
-             live_context: context,
-             participant: participant
-           }
-         } = socket
-       ) do
-    %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item
-
-    task_context =
-      Frameworks.Concept.LiveContext.extend(context, %{
-        workflow_item_id: workflow_item_id,
-        participant: participant,
-        title: title,
-        icon: icon,
-        tool_ref: tool_ref
-      })
-
-    modal = Assignment.ToolViewFactory.prepare_modal(tool_ref, task_context, "tool_modal")
-
-    socket
-    |> assign(tool_modal: modal)
-    |> present_modal(modal)
-  end
-
-  defp maybe_show_tool_modal(socket), do: socket
+  def handle_view_model_updated(socket), do: assign(socket, tool_modal: nil)
 
   # Behaviours
 
   @impl true
-  def handle_tool_completed(%{assigns: %{tool_modal: tool_modal, work_item: {_, task}}} = socket)
+  def handle_tool_completed(
+        %{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket
+      )
       when not is_nil(tool_modal) do
     # First hide the modal, then complete task (which triggers signals that may kill this process)
     socket
-    |> assign(work_item_id: nil, tool_modal: nil)
-    |> update_work_item()
     |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
     |> clear_task()
     |> complete_task(task)
   end
 
-  def handle_tool_completed(%{assigns: %{work_item: {_, task}}} = socket) do
+  def handle_tool_completed(%{assigns: %{vm: %{work_item: {_, task}}}} = socket) do
     socket
     |> close_tool_modal()
     |> complete_task(task)
@@ -123,25 +80,21 @@ defmodule Systems.Assignment.CrewTaskListView do
 
   # Called by LiveNest Modal Presenter when modal is closed
   def consume_event(%{name: :modal_closed, payload: %{modal_id: _modal_id}}, socket) do
-    {:stop,
-     socket
-     |> assign(work_item_id: nil)
-     |> update_work_item()
-     |> clear_task()}
+    {:stop, socket |> clear_task()}
   end
 
   # Private
 
-  defp start_item(socket, item_id) do
+  defp start_item(%{assigns: %{user_state: user_state}} = socket, item_id) do
     socket
-    |> assign(work_item_id: item_id)
-    |> update_work_item()
-    |> maybe_show_tool_modal()
+    |> assign(user_state: Map.put(user_state, :task, item_id))
+    |> update_view_model()
+    |> handle_view_model_updated()
     |> start_task()
     |> publish_user_state_change(:task, item_id)
   end
 
-  defp start_task(%{assigns: %{work_item: {_, task}}} = socket) do
+  defp start_task(%{assigns: %{vm: %{work_item: {_, task}}}} = socket) do
     Assignment.Public.start_task(task)
     socket
   end
@@ -156,22 +109,20 @@ defmodule Systems.Assignment.CrewTaskListView do
   defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
        when not is_nil(tool_modal) do
     socket
-    |> assign(work_item_id: nil, tool_modal: nil)
-    |> update_work_item()
     |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
     |> clear_task()
   end
 
   defp close_tool_modal(socket) do
-    socket
-    |> assign(work_item_id: nil)
-    |> update_work_item()
-    |> clear_task()
+    socket |> clear_task()
   end
 
   defp clear_task(%{assigns: %{user_state: user_state}} = socket) do
     socket
     |> assign(user_state: Map.put(user_state, :task, nil))
+    |> update_view_model()
+    |> handle_view_model_updated()
     |> publish_user_state_change(:task, nil)
   end
 
