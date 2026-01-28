@@ -40,21 +40,23 @@ defmodule Systems.Affiliate.Controller do
     assignment =
       Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
 
-    if tester?(assignment, conn) do
-      # Testers can access regardless of participant ID (preview mode)
-      start_tester(conn, params, assignment)
-    else
-      cond do
-        invalid_id?(params) ->
-          Logger.error("Access denied invalid id #{inspect(params)}")
-          forbidden(conn)
+    cond do
+      # Preview mode: tester with ?p=preview from CMS
+      preview?(params) and tester?(assignment, conn) ->
+        start_tester(conn, params, assignment)
 
-        offline?(assignment) ->
+      # Valid participant ID -> start as participant
+      valid_id?(get_participant(params)) ->
+        if offline?(assignment) do
           service_unavailable(conn)
-
-        true ->
+        else
           start_participant(conn, params, assignment)
-      end
+        end
+
+      # Invalid ID and not a tester -> forbidden
+      true ->
+        Logger.error("Access denied invalid id #{inspect(params)}")
+        forbidden(conn)
     end
   end
 
@@ -80,17 +82,10 @@ defmodule Systems.Affiliate.Controller do
 
   defp tester?(_, _), do: false
 
+  defp preview?(params), do: get_participant(params) == "preview"
+
   defp offline?(%{status: status}) do
     status != :online
-  end
-
-  defp invalid_id?(%{} = params) do
-    id = get_participant(params)
-    invalid_id?(id)
-  end
-
-  defp invalid_id?(id) do
-    not valid_id?(id)
   end
 
   def valid_id?(nil), do: false

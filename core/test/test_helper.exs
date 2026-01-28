@@ -1,5 +1,8 @@
 require Promox
 
+# Start Wallaby for feature tests
+{:ok, _} = Application.ensure_all_started(:wallaby)
+
 Promox.defmock(for: Frameworks.Concept.Branch)
 
 # Ensure test signal handlers are compiled and loaded

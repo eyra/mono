@@ -38,7 +38,9 @@ defmodule Core.Repo.Migrations.AddInstructionTool do
     drop(constraint(:tool_refs, :must_have_at_least_one_tool))
 
     alter table(:tool_refs) do
-      add(:instruction_tool_id, references(:instruction_tools, on_delete: :delete_all), null: true)
+      add(:instruction_tool_id, references(:instruction_tools, on_delete: :delete_all),
+        null: true
+      )
     end
 
     create(

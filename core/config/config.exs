@@ -74,6 +74,9 @@ config :core, :signal,
 
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
+# Maximum HTTP body size for uploads (Plug.Parsers)
+config :core, CoreWeb.Endpoint, http_body_max_size: 200_000_000
+
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
@@ -90,13 +93,7 @@ config :phoenix_inline_svg,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [
-    default: 5,
-    email_dispatchers: 1,
-    email_delivery: 1,
-    storage_delivery: 1,
-    ris_import: 1
-  ]
+  queues: false
 
 config :packmatic, Packmatic.Source.URL,
   hackney: [
@@ -109,7 +106,8 @@ config :core, :rate,
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local]
+    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
+    [service: :feldspar_data_donation, limit: 10, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]
@@ -213,5 +211,8 @@ config :core, :paper,
   ris_max_file_size: 157_286_400,
   # Chunk size for streaming RIS files (default 64KB)
   ris_stream_chunk_size: 65_536
+
+# Temp file store for Storage system (stores data donations before delivery)
+config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
 
 import_config "#{config_env()}.exs"

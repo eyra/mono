@@ -172,7 +172,14 @@ defmodule Frameworks.UserState do
   end
 
   defp put_in_path(map, [key | rest], value) do
-    nested = Map.get(map, key, %{})
+    nested =
+      case Map.get(map, key) do
+        existing when is_map(existing) -> existing
+        # If existing value is not a map (e.g., integer from a leaf value),
+        # start fresh with an empty map to allow nesting
+        _ -> %{}
+      end
+
     Map.put(map, key, put_in_path(nested, rest, value))
   end
 end

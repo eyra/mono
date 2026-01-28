@@ -7,9 +7,9 @@ defmodule Systems.Storage.Azure.Backend do
   def store(
         endpoint,
         data,
-        meta_data
+        %{"identifier" => identifier}
       ) do
-    filename = filename(meta_data)
+    filename = filename(identifier)
 
     headers = [
       {"Content-Type", "text/plain"},
@@ -54,11 +54,8 @@ defmodule Systems.Storage.Azure.Backend do
     false
   end
 
-  defp filename(%{"identifier" => identifier}) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  @impl true
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp url(
          %{

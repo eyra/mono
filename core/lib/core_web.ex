@@ -159,6 +159,9 @@ defmodule CoreWeb do
       use Gettext, backend: CoreWeb.Gettext
       use CoreWeb.UI
 
+      # Flash support for embedded views (handles :show_flash and :hide_flash messages)
+      use Frameworks.Pixel.Flash
+
       # UserState LiveFeature provides publish_user_state_change
       use Frameworks.UserState.LiveFeature
 

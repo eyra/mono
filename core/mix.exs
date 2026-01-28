@@ -97,7 +97,7 @@ defmodule Core.MixProject do
       {:kadabra, "== 0.6.1"},
       {:libcluster, "== 3.5.0"},
       {:logger_json, "== 7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "5d855b79b9e3540a43661548ae492f61fa4bd7af"},
+      {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
       {:mime, "== 2.0.7"},
       {:nimble_parsec, "== 1.4.2"},
       {:nimble_options, "== 1.1.1"},
@@ -141,6 +141,7 @@ defmodule Core.MixProject do
       {:excoveralls, "== 0.18.5", only: :test},
       {:promox, "== 0.1.4", only: :test},
       {:mock, "== 0.3.9", only: :test},
+      {:wallaby, "== 0.30.9", only: :test, runtime: false},
       {:phoenix_live_reload, "== 1.6.1", only: :dev},
       {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.38.4", only: [:dev, :test], runtime: false},
@@ -190,7 +191,10 @@ defmodule Core.MixProject do
         "esbuild default --minify",
         "phx.digest"
       ],
-      run: "phx.server"
+      run: "phx.server",
+      github_release:
+        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
+      precommit: "cmd cd .. && pre-commit run --all-files"
     ]
   end
 end

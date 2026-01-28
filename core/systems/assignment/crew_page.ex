@@ -74,13 +74,13 @@ defmodule Systems.Assignment.CrewPage do
     assign(socket, panel_info: panel_info)
   end
 
-  defp update_panel_info(socket, _) do
+  defp update_panel_info(socket, _session) do
     assign(socket, panel_info: nil)
   end
 
   @impl true
   def handle_event("store", %{task: task, key: key, group: group, data: data}, socket) do
-    {:noreply, socket |> store(task, key, group, data)}
+    {:noreply, socket |> store(task_identifier(socket, task, group, key), data)}
   end
 
   @impl true
@@ -94,16 +94,22 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def consume_event(%{name: :accept}, %{assigns: %{model: model, current_user: user}} = socket) do
+  def consume_event(
+        %{name: :accept},
+        %{assigns: %{model: model, current_user: user}} = socket
+      ) do
     Assignment.Public.accept_member(model, user)
-    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent accepted\"}")
+    socket = store(socket, onboarding_identifier(socket), "{\"status\":\"consent accepted\"}")
     {:stop, socket |> handle_action(:accept)}
   end
 
   @impl true
-  def consume_event(%{name: :decline}, %{assigns: %{model: model, current_user: user}} = socket) do
+  def consume_event(
+        %{name: :decline},
+        %{assigns: %{model: model, current_user: user}} = socket
+      ) do
     Assignment.Public.decline_member(model, user)
-    socket = store(socket, "", "", "onboarding", "{\"status\":\"consent declined\"}")
+    socket = store(socket, onboarding_identifier(socket), "{\"status\":\"consent declined\"}")
     {:stop, socket |> handle_action(:decline)}
   end
 
@@ -127,7 +133,23 @@ defmodule Systems.Assignment.CrewPage do
         %{name: :store, payload: %{task: task, key: key, group: group, data: data}},
         socket
       ) do
-    {:stop, store(socket, task, key, group, data)}
+    {:stop, store(socket, task_identifier(socket, task, group, key), data)}
+  end
+
+  # HTTP upload complete - blob stored via HTTP endpoint, schedule delivery
+  @impl true
+  def consume_event(
+        %{
+          name: :deliver_blob,
+          payload: %{task: task, key: key, group: group, blob_id: blob_id}
+        },
+        socket
+      ) do
+    Logger.info(
+      "[CrewPage] Blob stored, scheduling delivery: task=#{task} key=#{key} group=#{group} blob_id=#{blob_id}"
+    )
+
+    {:stop, deliver_blob(socket, task_identifier(socket, task, group, key), blob_id)}
   end
 
   defp handle_action(socket, action) do
@@ -136,41 +158,81 @@ defmodule Systems.Assignment.CrewPage do
     |> update_view_model()
   end
 
-  def store(
-        %{
-          assigns: %{
-            panel_info: panel_info,
-            model: assignment,
-            remote_ip: remote_ip
-          }
-        } = socket,
-        task,
-        key,
-        group,
-        data
-      ) do
-    participant = Map.get(panel_info, :participant, "")
+  defp onboarding_identifier(%{
+         assigns: %{model: assignment, panel_info: panel_info, vm: %{session_id: session_id}}
+       }) do
+    [
+      [:assignment, assignment.id],
+      [:participant, Map.get(panel_info, :participant, "")],
+      [:key, "#{session_id}-onboarding"]
+    ]
+  end
+
+  defp task_identifier(%{assigns: %{model: assignment, panel_info: panel_info}}, task, group, key) do
+    [
+      [:assignment, assignment.id],
+      [:participant, Map.get(panel_info, :participant, "")],
+      [:task, task],
+      [:source, group],
+      [:key, key]
+    ]
+  end
+
+  defp store(socket, identifier, data) do
+    %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket
 
     meta_data = %{
       remote_ip: remote_ip,
       panel_info: panel_info,
-      identifier: [
-        [:assignment, assignment.id],
-        [:task, task],
-        [:participant, participant],
-        [:source, group],
-        [:key, key]
-      ]
+      identifier: identifier
     }
 
-    with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-         storage_info <- Storage.Private.storage_info(storage_endpoint) do
-      Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
-      socket
-    else
+    result =
+      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
+           storage_info <- Storage.Public.storage_info(storage_endpoint) do
+        Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
+      end
+
+    case result do
+      {:ok, _} ->
+        socket
+
+      {:error, step, reason, _} ->
+        Logger.error("[CrewPage.store] FAILED at #{step}: #{inspect(reason)}")
+        socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
+
       _ ->
         message = dgettext("eyra-assignment", "storage.not_available.warning")
-        Logger.error(message)
+        Logger.error("[CrewPage.store] #{message}")
+        socket |> put_flash(:error, message)
+    end
+  end
+
+  defp deliver_blob(socket, identifier, blob_id) do
+    %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket
+
+    meta_data = %{
+      remote_ip: remote_ip,
+      panel_info: panel_info,
+      identifier: identifier
+    }
+
+    result =
+      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment) do
+        Storage.Public.deliver_file(storage_endpoint, blob_id, meta_data)
+      end
+
+    case result do
+      {:ok, _} ->
+        socket
+
+      {:error, step, reason, _} ->
+        Logger.error("[CrewPage.deliver_file] FAILED at #{step}: #{inspect(reason)}")
+        socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
+
+      _ ->
+        message = dgettext("eyra-assignment", "storage.not_available.warning")
+        Logger.error("[CrewPage.deliver_file] #{message}")
         socket |> put_flash(:error, message)
     end
   end

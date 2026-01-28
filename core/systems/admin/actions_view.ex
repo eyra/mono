@@ -8,6 +8,7 @@ defmodule Systems.Admin.ActionsView do
 
   alias Systems.Advert
   alias Systems.Assignment
+  alias Systems.Feldspar
   alias Systems.Observatory
 
   def dependencies(), do: []
@@ -52,6 +53,18 @@ defmodule Systems.Admin.ActionsView do
   def handle_event("crash", _, socket) do
     raise "Test exception"
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("data_donation_cleanup", _, socket) do
+    %{}
+    |> Feldspar.DataDonationCleanupWorker.new()
+    |> Oban.insert()
+
+    {
+      :noreply,
+      socket
+    }
   end
 
   @impl true

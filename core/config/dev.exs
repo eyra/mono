@@ -7,6 +7,13 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+feldspar_data_donation_path =
+  File.cwd!()
+  |> Path.join("priv")
+  |> Path.join("static")
+  |> Path.join("donations")
+  |> tap(&File.mkdir_p!/1)
+
 config :phoenix, :plug_init_mode, :runtime
 
 config :phoenix_live_view,
@@ -19,6 +26,10 @@ config :core,
   name: "Next [local]",
   base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   upload_path: upload_path
+
+config :core, :feldspar_data_donation,
+  path: feldspar_data_donation_path,
+  retention_hours: 336
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
@@ -73,13 +84,27 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+# Node-local queue for storage delivery (data donation files are on local filesystem)
+# IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
+# This duplication is required because config runs before modules are loaded.
+storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+
 config :core, Oban,
+  queues: [
+    {storage_delivery_queue, 1},
+    default: 5,
+    email_dispatchers: 1,
+    email_delivery: 1,
+    ris_import: 1
+  ],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60},
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
     {Oban.Plugins.Cron,
      crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker}
+       {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+       # Clean up old data donation files every hour
+       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}
      ]}
   ]
 
@@ -93,7 +118,8 @@ config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
-    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
+    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
+    [service: "feldspar_data_donation", limit: 10, unit: "call", window: "minute", scope: "local"]
   ]
 
 config :core, Core.ImageCatalog.Unsplash,
