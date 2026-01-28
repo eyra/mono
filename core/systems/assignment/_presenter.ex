@@ -12,13 +12,13 @@ defmodule Systems.Assignment.Presenter do
   end
 
   @impl true
-  def view_model(Assignment.CrewTaskSingleView, %Systems.Crew.Model{} = crew, assigns) do
-    Assignment.CrewTaskSingleViewBuilder.view_model(crew, assigns)
+  def view_model(Assignment.CrewTaskSingleView, %Assignment.Model{} = assignment, assigns) do
+    Assignment.CrewTaskSingleViewBuilder.view_model(assignment, assigns)
   end
 
   @impl true
-  def view_model(Assignment.CrewTaskListView, %Systems.Crew.Model{} = crew, assigns) do
-    Assignment.CrewTaskListViewBuilder.view_model(crew, assigns)
+  def view_model(Assignment.CrewTaskListView, %Assignment.Model{} = assignment, assigns) do
+    Assignment.CrewTaskListViewBuilder.view_model(assignment, assigns)
   end
 
   @impl true

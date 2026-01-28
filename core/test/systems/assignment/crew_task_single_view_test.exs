@@ -72,6 +72,65 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
     end
   end
 
+  describe "handle_info messages" do
+    test "handles :show_flash message without crashing", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      conn = conn |> Map.put(:request_path, "/assignment/task")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user,
+          panel_info: nil
+        })
+
+      session = %{
+        "live_context" => live_context
+      }
+
+      {:ok, view, _html} = live_isolated(conn, Assignment.CrewTaskSingleView, session: session)
+
+      # Send the :show_flash message that was causing FunctionClauseError
+      flash_message =
+        {:show_flash, %{auto_hide: false, message: "Test error message", type: :error}}
+
+      send(view.pid, flash_message)
+
+      # View should still be alive and functioning after receiving the message
+      html = render(view)
+      assert html =~ "data-testid=\"crew-task-single-view\""
+    end
+
+    test "handles :hide_flash message without crashing", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      conn = conn |> Map.put(:request_path, "/assignment/task")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user,
+          panel_info: nil
+        })
+
+      session = %{
+        "live_context" => live_context
+      }
+
+      {:ok, view, _html} = live_isolated(conn, Assignment.CrewTaskSingleView, session: session)
+
+      # Send the :hide_flash message
+      send(view.pid, :hide_flash)
+
+      # View should still be alive and functioning after receiving the message
+      html = render(view)
+      assert html =~ "data-testid=\"crew-task-single-view\""
+    end
+  end
+
   describe "task auto-start behavior" do
     test "starts task on mount when task not started", %{conn: conn, user: user} do
       assignment = Assignment.Factories.create_base_assignment()

@@ -259,4 +259,65 @@ defmodule Systems.Assignment.Factories do
 
     assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
+
+  def create_assignment_with_feldspar_tool do
+    auth_node = Factories.insert!(:auth_node)
+    tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
+
+    feldspar_tool =
+      Factories.insert!(:feldspar_tool, %{
+        archive_ref: "https://example.com/feldspar-app",
+        auth_node: tool_auth_node
+      })
+
+    tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: feldspar_tool})
+    workflow = create_workflow()
+    create_workflow_item(workflow, tool_ref, "Feldspar Task", 0)
+
+    info = create_info("10", 100)
+
+    assignment =
+      create_assignment(
+        info,
+        nil,
+        workflow,
+        auth_node,
+        :online
+      )
+
+    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+  end
+
+  def create_feldspar_assignment_with_affiliate do
+    affiliate = Factories.insert!(:affiliate, %{redirect_url: nil, platform_name: nil})
+
+    auth_node = Factories.insert!(:auth_node)
+    tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
+
+    feldspar_tool =
+      Factories.insert!(:feldspar_tool, %{
+        archive_ref: "https://example.com/feldspar-app",
+        auth_node: tool_auth_node
+      })
+
+    tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: feldspar_tool})
+    workflow = create_workflow()
+    create_workflow_item(workflow, tool_ref, "Feldspar Task", 0)
+
+    info = create_info("10", 100)
+    crew = Factories.insert!(:crew)
+
+    assignment =
+      Factories.insert!(:assignment, %{
+        info: info,
+        consent_agreement: nil,
+        workflow: workflow,
+        crew: crew,
+        auth_node: auth_node,
+        affiliate: affiliate,
+        status: :online
+      })
+
+    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+  end
 end

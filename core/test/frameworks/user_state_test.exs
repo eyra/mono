@@ -197,6 +197,22 @@ defmodule Frameworks.UserStateTest do
       assert UserState.parse_user_state(nil, 10) == %{}
       assert UserState.parse_user_state("invalid", 10) == %{}
     end
+
+    test "handles conflicting paths where intermediate value is not a map" do
+      # This can happen when localStorage has:
+      # - assignment/5 => 103 (leaf value)
+      # - assignment/5/crew/3/task => "done" (nested path through same key)
+      flat_state = %{
+        "next://user-10@localhost/assignment/5" => "103",
+        "next://user-10@localhost/assignment/5/crew/3/task" => "done"
+      }
+
+      # Should not raise BadMapError
+      result = UserState.parse_user_state(flat_state, 10)
+
+      # The nested path should work (overwrites the leaf value)
+      assert result == %{assignment: %{5 => %{crew: %{3 => %{task: "done"}}}}}
+    end
   end
 
   describe "string_value/2" do
