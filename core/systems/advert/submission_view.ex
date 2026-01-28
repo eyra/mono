@@ -1,7 +1,7 @@
 defmodule Systems.Advert.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.{Genders, NativeLanguages}
+  alias Core.Enums.Genders
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Frameworks.Concept.Directable
@@ -12,8 +12,7 @@ defmodule Systems.Advert.SubmissionView do
   alias Systems.Pool
 
   @enums_mapping %{
-    genders: Genders,
-    native_languages: NativeLanguages
+    genders: Genders
   }
 
   # Update adverts only
@@ -184,9 +183,6 @@ defmodule Systems.Advert.SubmissionView do
 
   defp inclusion_title(:genders), do: dgettext("eyra-account", "features.gender.title")
 
-  defp inclusion_title(:native_languages),
-    do: dgettext("eyra-account", "features.nativelanguage.title")
-
   @impl true
   def handle_event(
         "active_item_ids",
@@ -221,7 +217,7 @@ defmodule Systems.Advert.SubmissionView do
         },
         %{assigns: %{entity: criteria}} = socket
       )
-      when criteria_field in [:genders, :native_languages, :dominant_hands] do
+      when criteria_field in [:genders] do
     attrs = %{criteria_field => selected_values}
 
     socket =
