@@ -9,6 +9,15 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#20.2 2026-01-27
+* Fixed - FunctionClauseError in embedded LiveViews for flash messages
+* Fixed - File upload controller to handle invalid filenames and missing files
+* Fixed - Ecto.NoResultsError in GreenLight authorization context
+* Fixed - BadMapError in UserState when parsing conflicting paths
+* Fixed - Files donated without participant identifier due to timing bug
+* Fixed - Panel info retrieval for external panel participant IDs
+* Changed - Update Prism UI to 0.1.5 with spinner centering fix
+
 ## \#20 2026-01-14
 * Added - Romanian (RO) and Lithuanian (LT) language support
 * Changed - Font from Finador to Nunito / Nunito Sans
