@@ -18,20 +18,12 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
         creator: true
       })
 
-    # Login as researcher
-    # Scope selectors to creator tab panel to avoid matching duplicate inputs in participant tab
+    # Login as researcher - use tab=creator param to avoid JS tab switching race conditions
     session
-    |> visit("/user/signin")
-    |> assert_has(Query.css("[data-testid='signin-tab-creator']"))
-    |> click(Query.css("[data-testid='signin-tab-creator']"))
-    |> fill_in(Query.css("#account_signin-tab_panel_creator [data-testid='signin-email-input']"),
-      with: researcher.email
-    )
-    |> fill_in(
-      Query.css("#account_signin-tab_panel_creator [data-testid='signin-password-input']"),
-      with: password
-    )
-    |> click(Query.css("#account_signin-tab_panel_creator [data-testid='signin-submit-button']"))
+    |> visit("/user/signin?tab=creator")
+    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
+    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
+    |> click(Query.css("[data-testid='signin-submit-button']"))
 
     # Create project
     session
