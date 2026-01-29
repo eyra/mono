@@ -21,6 +21,14 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
     # Login as researcher - use tab=creator param to avoid JS tab switching race conditions
     session
     |> visit("/user/signin?tab=creator")
+
+    # Debug: log full HTML to CI output
+    html = Wallaby.Browser.page_source(session)
+    IO.puts("\n=== DEBUG: FULL HTML ===")
+    IO.puts(html)
+    IO.puts("=== END DEBUG ===\n")
+
+    session
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
