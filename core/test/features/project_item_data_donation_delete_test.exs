@@ -29,7 +29,9 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     # Step 1: Researcher logs in
     researcher
     |> visit("/user/signin")
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> click(Query.css("[data-testid='signin-tab-creator']"))
+    |> assert_has(Query.css("#account_signin-tab_panel_creator:not(.hidden)"))
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher_user.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
