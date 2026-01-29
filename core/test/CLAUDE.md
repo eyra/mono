@@ -396,3 +396,24 @@ defmodule CoreWeb.Features.MyFeatureTest do
   end
 end
 ```
+
+## Pre-commit Hook Rules
+
+### Never Use --no-verify to Skip Failing Tests
+
+**Critical**: Never use `git commit --no-verify` to bypass pre-commit hooks when tests fail.
+
+If a test fails during pre-commit:
+1. **Investigate the failure** - even if it seems unrelated to your changes
+2. **Fix the test** - if it's flaky, fix the flakiness
+3. **Only then commit** your changes
+
+**Why this matters**:
+- A failing test indicates something is broken
+- "Unrelated" test failures may actually be caused by your changes
+- Pushing broken code to CI wastes time and resources
+- CI will fail anyway if the test is actually broken
+
+**Flaky tests must be fixed**: If a test passes on retry but failed before, it's flaky. Flaky tests must be fixed - not ignored. Run with the same seed to reproduce: `mix test path/to/test.exs --seed <seed>`
+
+**The only acceptable use of --no-verify**: When the pre-commit hook itself is broken (not the tests).
