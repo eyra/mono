@@ -38,14 +38,11 @@ defmodule CoreWeb.FeatureCase do
     end
   end
 
-  setup do
-    # Note: Wallaby.Feature handles Ecto sandbox checkout automatically
-    # We only need to start the session with sandbox metadata
-    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Core.Repo, self())
-    {:ok, session} = Wallaby.start_session(metadata: metadata)
-
-    {:ok, session: session}
-  end
+  # Note: We do NOT add a manual setup block here.
+  # Wallaby.Feature handles session creation automatically, including:
+  # - Single session via `%{session: session}` in feature tests
+  # - Multiple sessions via `@sessions N` and `%{sessions: [s1, s2, ...]}` in feature tests
+  # - Ecto sandbox checkout for database isolation
 
   @doc """
   Signs in a user through the browser login form.

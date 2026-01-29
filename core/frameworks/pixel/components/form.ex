@@ -126,6 +126,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
   attr(:value, :any, default: nil)
   attr(:maxlength, :string, default: "1000")
+  attr(:testid, :string, default: nil)
 
   def input(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
@@ -184,6 +185,7 @@ defmodule Frameworks.Pixel.Form do
           phx-target={@target}
           phx-debounce={@debounce}
           class={[@input_static_class, @input_dynamic_class]}
+          data-testid={@testid}
           __eyra_field_id={@field_id}
           __eyra_field_has_errors={@has_errors}
           __eyra_field_static_class={@input_static_class}
@@ -227,6 +229,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:debounce, :string, default: "1000")
   attr(:maxlength, :string, default: "1000")
   attr(:disabled, :boolean, default: false)
+  attr(:testid, :string, default: nil)
 
   def text_input(assigns) do
     ~H"""
@@ -240,6 +243,7 @@ defmodule Frameworks.Pixel.Form do
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
       maxlength={@maxlength}
+      testid={@testid}
       type="text"
       disabled={@disabled}
     />
@@ -310,6 +314,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
+  attr(:testid, :string, default: nil)
 
   def password_input(assigns) do
     ~H"""
@@ -321,6 +326,7 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
+      testid={@testid}
       type="password"
     />
     """
@@ -380,6 +386,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
+  attr(:testid, :string, default: nil)
 
   def email_input(assigns) do
     ~H"""
@@ -390,6 +397,7 @@ defmodule Frameworks.Pixel.Form do
       label_color={@label_color}
       background={@background}
       reserve_error_space={@reserve_error_space}
+      testid={@testid}
       type="email"
     />
     """

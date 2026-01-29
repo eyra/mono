@@ -30,12 +30,19 @@ defmodule CoreWeb.ResourceExistsPlug do
 
     case apply(module, function, [id]) do
       nil ->
-        conn
-        |> Phoenix.Controller.redirect(to: ~p"/not_found")
-        |> halt()
+        redirect_not_found(conn)
+
+      %{status: :idle} ->
+        redirect_not_found(conn)
 
       _resource ->
         conn
     end
+  end
+
+  defp redirect_not_found(conn) do
+    conn
+    |> Phoenix.Controller.redirect(to: ~p"/not_found")
+    |> halt()
   end
 end

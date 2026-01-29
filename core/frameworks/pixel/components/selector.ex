@@ -220,6 +220,7 @@ defmodule Frameworks.Pixel.Selector do
       <%= for {item, _} <- Enum.with_index(@current_items) do %>
         <div
           data-selector-item={"#{item.id}"}
+          data-testid={"selector-item-#{item.id}"}
           class="cursor-pointer select-none"
           phx-click={toggle_item_js(item.id, @type, @optional?) |> JS.push("toggle", value: %{item: item.id}, target: @myself)}
         >

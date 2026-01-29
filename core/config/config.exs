@@ -173,6 +173,9 @@ config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 
 config :core, :storage, services: ~w(builtin yoda)
 
+# Default built-in storage backend (can be overridden in runtime.exs for production)
+config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
 config :core, BankingClient,
   host: "localhost",
   port: 5555,

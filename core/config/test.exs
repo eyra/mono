@@ -2,7 +2,7 @@ import Config
 
 config :core,
   name: "Next [test]",
-  base_url: "http://localhost:4000",
+  base_url: "http://localhost:4002",
   upload_path: "/tmp"
 
 # Selectical test configuration

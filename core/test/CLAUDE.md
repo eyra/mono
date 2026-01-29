@@ -284,3 +284,115 @@ end
 - Tests with signals often need `async: false`
 - Database isolation still works with `async: false`
 - Use `async: true` when not testing signals for better performance
+
+## Wallaby Feature Testing
+
+### Multi-Session Tests
+Use `@sessions N` to create multiple browser sessions:
+```elixir
+@sessions 2
+@tag :feature
+feature "two users interact", %{sessions: [researcher, participant]} do
+  # researcher and participant are separate browser sessions
+end
+```
+
+### data-testid Naming Convention
+Use this convention to avoid CSS selector collisions:
+
+- **Main elements**: `{element}_{id}` → `card_7`
+- **Actions/buttons**: `{event}__action__{element}_{id}` → `delete__action__card_7`
+
+**Separators**:
+- `_` for words within a segment (e.g., `create_first_item`)
+- `__` for hierarchy levels (e.g., `delete__action__card_7`)
+
+**Why**: CSS prefix selectors like `[data-testid^='card_']` only match main cards, not action buttons.
+
+```elixir
+# In clickable_card.ex
+data-testid={"card_#{@id}"}                           # Main card
+data-testid={"show_more__action__card_#{@card_id}"}   # Show more button
+data-testid={"delete__action__card_#{@card_id}"}      # Delete action
+```
+
+### Waiting for LiveView to be Ready (Stale Reference Prevention)
+After navigation, LiveView may still be connecting or morphing the DOM. Wait for the `.phx-connected` class:
+
+```elixir
+# ❌ WRONG: Element becomes stale during LiveView DOM morphing
+researcher |> click(Query.css(@card_selector))
+researcher |> assert_has(Query.css("[data-testid='my-button']"))
+researcher |> click(Query.css("[data-testid='my-button']"))  # StaleReferenceError!
+
+# ✅ CORRECT: Wait for LiveView WebSocket connection to be established
+researcher |> click(Query.css(@card_selector))
+researcher |> assert_has(Query.css("[data-phx-main].phx-connected"))  # Wait for LiveView ready
+researcher |> assert_has(Query.css("[data-testid='my-button']"))
+researcher |> click(Query.css("[data-testid='my-button']"))
+```
+
+**Why this works**: Phoenix LiveView adds `.phx-connected` class to the main container (`[data-phx-main]`)
+when the WebSocket connection is established and the view is ready. Before this, the DOM may be morphing
+and elements can become stale between `find` and interaction.
+
+### Debugging Wallaby Tests
+When a selector doesn't match, **add logging** to see what's actually on the page:
+
+```elixir
+# Log all data-testids on the page
+html = Wallaby.Browser.page_source(session)
+testids = Regex.scan(~r/data-testid="([^"]+)"/, html) |> Enum.map(&List.last/1)
+IO.puts("\n=== ALL DATA-TESTIDS ===")
+testids |> Enum.each(&IO.puts/1)
+IO.puts("=== END ===\n")
+```
+
+**Key principle**: Don't assume bugs in Wallaby. Always log and verify what's actually rendered.
+
+### Getting Element Attributes
+```elixir
+# Find element and get attribute
+element = session |> find(Query.css("[data-testid^='card_']"))
+testid = Wallaby.Element.attr(element, "data-testid")
+# Extract ID: "card_7" -> "7"
+card_id = testid |> String.replace("card_", "")
+```
+
+### CSS Attribute Selectors
+- `^=` starts with: `[data-testid^='card_']` matches `card_7`
+- `$=` ends with: `[data-testid$='_button']` matches `submit_button`
+- `*=` contains: `[data-testid*='action']` matches `delete__action__card_7`
+- `=` exact match: `[data-testid='card_7']` matches only `card_7`
+
+### Feature Test File Template
+```elixir
+defmodule CoreWeb.Features.MyFeatureTest do
+  use CoreWeb.FeatureCase
+
+  @card_selector "[data-testid^='card_']"
+
+  @sessions 2
+  @tag :feature
+  feature "description", %{sessions: [user1, user2]} do
+    # Setup users
+    password = Factories.valid_user_password()
+    user = Factories.insert!(:member, %{
+      password: password,
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+      verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+      creator: true
+    })
+
+    # Login
+    user1
+    |> visit("/user/signin")
+    |> click(Query.css("[data-testid='signin-tab-creator']"))
+    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: user.email)
+    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
+    |> click(Query.css("[data-testid='signin-submit-button']"))
+
+    # Test actions...
+  end
+end
+```

@@ -266,6 +266,7 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:count, :integer, default: nil)
   attr(:index, :integer, default: nil)
   attr(:opts, :string, default: "")
+  attr(:testid, :string, default: nil)
 
   def tab(assigns) do
     ~H"""
@@ -277,6 +278,7 @@ defmodule Frameworks.Pixel.Tabbed do
       class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
       idle-class={idle_shape(@size, @type, @ready, @show_errors)}
       active-class={active_shape(@size, @type)}
+      data-testid={@testid}
     >
       <%= if @index do %>
         <div

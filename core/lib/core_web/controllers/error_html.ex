@@ -18,6 +18,12 @@ defmodule CoreWeb.ErrorHTML do
 
   defp status(template), do: Phoenix.Controller.status_message_from_template(template)
 
+  defp error_code("403.html"), do: "403"
+  defp error_code("404.html"), do: "404"
+  defp error_code("500.html"), do: "500"
+  defp error_code("503.html"), do: "503"
+  defp error_code(_), do: "unknown"
+
   def render(template, assigns) do
     status = status(template)
     menus = build_menus(stripped_menus_config(), nil, nil)
@@ -27,7 +33,8 @@ defmodule CoreWeb.ErrorHTML do
         status: status,
         menus: menus,
         body: body(template, status),
-        image: image(template)
+        image: image(template),
+        error_code: error_code(template)
       })
 
     ~H"""
@@ -36,6 +43,7 @@ defmodule CoreWeb.ErrorHTML do
       menus={@menus}
       body={@body}
       image={@image}
+      error_code={@error_code}
     />
     """
   end
@@ -44,13 +52,14 @@ defmodule CoreWeb.ErrorHTML do
   attr(:body, :string, required: true)
   attr(:image, :string, default: nil)
   attr(:menus, :map, required: true)
+  attr(:error_code, :string, required: true)
 
   def error(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
         <Area.content>
             <Margin.y id={:page_top} />
-            <div class="flex flex-col md:flex-row gap-10 items-center md:items-start">
+            <div class="flex flex-col md:flex-row gap-10 items-center md:items-start" data-testid={"error-#{@error_code}"}>
                 <div>
                     <div class="text-title3 font-title3 sm:text-title2 lg:text-title1 lg:font-title1 text-grey1"><%= dgettext("eyra-error","page.title") %></div>
                     <div class="mb-6 md:mb-8"></div>
