@@ -396,3 +396,29 @@ defmodule CoreWeb.Features.MyFeatureTest do
   end
 end
 ```
+
+## CI Requirements for Wallaby Tests
+
+### CSS Assets Must Be Built
+
+**Critical**: Wallaby feature tests require compiled CSS assets to work correctly.
+
+The `priv/static/assets/` directory is gitignored, so CI must build assets before running tests:
+
+```yaml
+- name: Build assets
+  run: |
+    cd core/assets && npm install
+    cd .. && mix assets.build
+```
+
+**Why this matters**: Tailwind CSS classes like `hidden` (which sets `display: none`) only work when the CSS is compiled. Without compiled assets:
+- The `hidden` class is just a class name with no effect
+- Elements that should be hidden remain visible
+- Wallaby finds multiple "visible" elements when it expects one
+- Tests fail with errors like "Expected 1 visible element, found 2"
+
+**Symptoms of missing assets**:
+- Tests pass locally but fail on CI
+- Wallaby finds more visible elements than expected
+- Tab panels or modals that should be hidden are visible
