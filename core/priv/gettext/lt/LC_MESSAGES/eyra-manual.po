@@ -20,99 +20,114 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "taikyti.cta.title"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.title.label"
 msgstr "Pavadinimas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "atidaryti.cta.title"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "dalyvavo.žymė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "laukiama.etiketė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.manual.button"
 msgstr "Sukurti vadovą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
 msgstr "Redaguoti vadovą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "setup.annotation"
 msgstr "<div><h1>Kaip nustatyti dalyvių instrukcijas?</h1><ul><li>Sukurkite <strong>skyrius</strong>, kad dalyviai galėtų pereiti į atitinkamą skyrių.</li><li>Naudokite skirsnių <strong>pavadinimus</strong>, kad nurodytumėte naudojimo atvejus, pvz., <i>„iPhone“</i> ar <i>„Android</i>“.</li><li>Kiekvienoje sekcijoje pateikite keletą trumpų <strong>instrukcijų</strong>, įskaitant atitinkamus <b>ekrano vaizdus</b>, kad būtų aiškiau.</li></ul></div>"
 
+#, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"
 msgstr "Skyriai"
 
+#, elixir-autogen, elixir-format
 msgid "create.chapter.button"
 msgstr "Pridėti skyrių"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.default"
 msgstr "Naujas skyrius"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.group.label"
 msgstr "Etiketė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.page.button"
 msgstr "Pridėti instrukciją"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.default"
 msgstr "Naujos instrukcijos"
 
+#, elixir-autogen, elixir-format
 msgid "page.title.label"
 msgstr "Pavadinimas"
 
+#, elixir-autogen, elixir-format
 msgid "page.text.label"
 msgstr "Aprašymas"
 
+#, elixir-autogen, elixir-format
 msgid "choose.image.file"
 msgstr "Pasirinkite paveiksliuką"
 
+#, elixir-autogen, elixir-format
 msgid "choose.other.image.file"
 msgstr "Keisti vaizdą"
 
+#, elixir-autogen, elixir-format
 msgid "builder.pages.list.title"
 msgstr "Nurodymai"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.label.first"
 msgstr "Skyriaus pavadinimas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.first"
 msgstr "Pirmasis skyrius"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
 msgstr "Pirmasis nurodymas"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.next.button"
 msgstr "Kitas"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.page.indicator"
 msgstr "%{current}/%{count}"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
 msgstr "Ankstesnis"
 
+#, elixir-autogen, elixir-format
 msgid "image.fullscreen.button"
 msgstr "Padidinti"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.done.button"
 msgstr "Atlikta"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.overview"
 msgstr "Apžvalga"

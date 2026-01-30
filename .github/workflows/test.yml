@@ -59,6 +59,11 @@ jobs:
       - name: Compile
         run: make compile
 
+      - name: Build assets
+        run: |
+          cd core/assets && npm install
+          cd .. && mix assets.build
+
       - name: Test
         run: make test
 

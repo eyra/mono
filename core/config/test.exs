@@ -2,7 +2,7 @@ import Config
 
 config :core,
   name: "Next [test]",
-  base_url: "http://localhost:4000",
+  base_url: "http://localhost:4002",
   upload_path: "/tmp"
 
 # Selectical test configuration
@@ -64,6 +64,8 @@ config :wallaby,
   driver: Wallaby.Chrome,
   screenshot_dir: "tmp/wallaby_screenshots",
   screenshot_on_failure: true,
+  # Increase wait time for slow CI environments where JS takes longer to execute
+  max_wait_time: String.to_integer(System.get_env("WALLABY_MAX_WAIT_TIME", "5000")),
   chromedriver: [
     headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
   ]

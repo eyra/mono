@@ -39,7 +39,7 @@ config :tailwind,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [:request_id, :request_path, :query_string, :user_agent]
 
 config :plug, :statuses, %{
   403 => "Access Denied",
@@ -172,6 +172,9 @@ config :core, :version, System.get_env("VERSION", "dev")
 config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 
 config :core, :storage, services: ~w(builtin yoda)
+
+# Default built-in storage backend (can be overridden in runtime.exs for production)
+config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
 config :core, BankingClient,
   host: "localhost",

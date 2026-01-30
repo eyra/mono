@@ -20,93 +20,114 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part1"
 msgstr "Contribuția dumneavoastră va fi analizată de autorul acestui studiu și va fi acceptată sau respinsă."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part2"
 msgstr "Accesați consola pentru a vizualiza starea contribuției dvs."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.title"
 msgstr "Vă mulțumim pentru participare."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.subtitle"
 msgstr "Din păcate, sesiunea dvs. a expirat."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.text"
 msgstr "Dacă studiul este încă deschis, puteți participa din nou. Studiul este închis? Vizitați piața pentru a verifica dacă există alte studii."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.subtitle"
 msgstr "✅ Călătorie dus-întors confirmată"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.text"
 msgstr "Dacă titlul acestei pagini corespunde cu titlul campaniei dvs., transferul de la Next la Qualtrics și înapoi a fost realizat cu succes."
 
+#, elixir-autogen, elixir-format
 msgid "progress.finished.label"
 msgstr "Finalizat"
 
+#, elixir-autogen, elixir-format
 msgid "progress.remaining.label"
 msgstr "Introduceți data preconizată de închidere"
 
+#, elixir-autogen, elixir-format
 msgid "progress.started.label"
 msgstr "Început"
 
+#, elixir-autogen, elixir-format
 msgid "home.intro.description"
 msgstr "Platforma Next oferă servicii software open-source, ușor accesibile, concepute pentru a vă ajuta să vă desfășurați cercetarea în mod eficient. Acestea sunt dezvoltate de Eyra, pentru și împreună cu cercetătorii, și sunt îmbunătățite continuu. Sunteți gata să începeți? Mai jos veți găsi tot ce aveți nevoie."
 
+#, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
 msgstr "Imagine abstractă reprezentând colaborarea și cercetarea"
 
+#, elixir-autogen, elixir-format
 msgid "home.intro.learn_more_button"
 msgstr "Creați împreună cu noi"
 
+#, elixir-autogen, elixir-format
 msgid "home.intro.title"
 msgstr "Platforma Next"
 
+#, elixir-autogen, elixir-format
 msgid "home.services.button"
 msgstr "Explorați serviciile"
 
+#, elixir-autogen, elixir-format
 msgid "home.services.description"
 msgstr "Sunteți curios să aflați ce servicii software puteți utiliza pe platformă? Faceți clic pe butonul de mai jos pentru a explora serviciile disponibile și prețurile acestora. Platforma Next nu conține reclame și funcționează pe baza unui model de prețuri echitabile, pentru a susține sustenabilitatea pe termen lung. Achiziționând un serviciu, contribuiți direct la ecosistemul deschis care menține platforma disponibilă pentru cercetători ca dumneavoastră."
 
+#, elixir-autogen, elixir-format
 msgid "home.services.image_alt"
 msgstr "Imagine care ilustrează colaborarea și cercetarea"
 
+#, elixir-autogen, elixir-format
 msgid "home.services.title"
 msgstr "Servicii și prețuri"
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step1.button"
 msgstr "Înregistrare"
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step1.description"
 msgstr "Creați-vă contul gratuit și obțineți acces la serviciile software disponibile imediat pe platforma Next."
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step1.title"
 msgstr "Alăturați-vă platformei"
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step2.description"
 msgstr "Începeți primul proiect și selectați un serviciu software. Descoperiți cât de ușor este să îl configurați și să îl personalizați."
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step2.title"
 msgstr "Creați un proiect"
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step3.description"
 msgstr "Previzualizați și partajați proiectul dvs. cu colaboratorii în mod gratuit. Se aplică o taxă de serviciu numai atunci când publicați sau începeți să utilizați un serviciu pentru cercetarea dvs."
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.step3.title"
 msgstr "Previzualizare & partajare"
 
+#, elixir-autogen, elixir-format
 msgid "home.steps.title"
 msgstr "Sunteți gata să începeți să utilizați platforma?"
 
+#, elixir-autogen, elixir-format
 msgid "home.video.preview_title"
 msgstr "Previzualizare platforma Next"
 
+#, elixir-autogen, elixir-format
 msgid "home.video.title"
 msgstr "Platforma Next pe scurt"

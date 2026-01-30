@@ -100,21 +100,21 @@ defmodule Systems.Account.UserForm do
     assigns = assign(assigns, :signup_url, signup_url)
 
     ~H"""
-    <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} >
+    <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} data-testid="signin-form" >
       <%= if @status == "account_activated_successfully" do %>
         <AlertBanner.success>
           <%= dgettext("eyra-account", "Account activated successfully.") %>
         </AlertBanner.success>
         <.spacing value="M" />
       <% end %>
-      <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} reserve_error_space={false} />
+      <.email_input form={form} field={:email} label_text={dgettext("eyra-account", "email.label")} reserve_error_space={false} testid="signin-email-input" />
       <.spacing value="S" />
-      <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} />
+      <.password_input form={form} field={:password} label_text={dgettext("eyra-account", "password.label")} reserve_error_space={false} testid="signin-password-input" />
       <.spacing value="S" />
       <%= if form[:post_signin_action] do %>
         <.hidden_input form={form} field={:post_signin_action} />
       <% end %>
-      <Button.submit_wide label={dgettext("eyra-account", "signin.button")} bg_color="bg-grey1" />
+      <Button.submit_wide label={dgettext("eyra-account", "signin.button")} bg_color="bg-grey1" testid="signin-submit-button" />
       <.spacing value="S" />
 
       <div class="flex flex-row" >

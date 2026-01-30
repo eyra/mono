@@ -20,164 +20,182 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "displayname.label"
 msgstr "Rodomas vardas"
 
+#, elixir-autogen, elixir-format
 msgid "email.label"
 msgstr "El. paštas"
 
+#, elixir-autogen, elixir-format
 msgid "fullname.label"
 msgstr "Pilnas vardas"
 
+#, elixir-autogen, elixir-format
 msgid "password.label"
 msgstr "Slaptažodis"
 
+#, elixir-autogen, elixir-format
 msgid "profile.title"
 msgstr "Mano profilis"
 
+#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Registruotis"
 
+#, elixir-autogen, elixir-format
 msgid "signup.title"
 msgstr "Sukurti paskyrą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.title"
 msgstr "Aktyvuokite savo paskyrą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.resend_button"
 msgstr "Pakartotinai išsiųsti aktyvacijos nuorodą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.profile.photo.file"
 msgstr "Pasirinkite nuotrauką"
 
+#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
 msgstr "Pakeisti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "professionaltitle.label"
 msgstr "Profesinis pavadinimas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "feature.study.description"
 msgstr "Norėdami gauti kreditų už dalyvavimą moksliniuose tyrimuose (OP / RPR) verslo vadybos (BK) arba tarptautinės verslo vadybos (IBA) srityje, pasirinkite vieną ar kelis žemiau pateiktus kursus. Jei praėjusiais metais nebaigėte kurso, būtinai pasirinkite ir tą kursą."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.description"
 msgstr "Keletas tyrimų naudoja konkrečius tinkamumo reikalavimus. Pasirinkdami žemiau pateiktas pasirinktines charakteristikas, galėsite dalyvauti tyrimuose, kuriuose jūsų charakteristikos yra nurodomos kaip reikalavimai."
 
-#, fuzzy
-msgid "features.dominanthand.title"
-msgstr "funkcijos.dominuojanti ranka.pavadinimas"
-
+#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Lytis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.nativelanguage.title"
 msgstr "Pirmoji kalba"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.title"
 msgstr "Įtrauktis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.content.description"
 msgstr "Pasirinkite tyrimo įtraukimo kriterijus. Jei nieko nepasirinksite, dalyvauti galės visi duomenų bazėje esantys asmenys."
 
+#, elixir-autogen, elixir-format
 msgid "login.google.button"
 msgstr "Jungtis su Gmail"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "login.surf.button"
 msgstr "Prisijunkite naudodami SURFconext"
 
+#, elixir-autogen, elixir-format
 msgid "signin.button"
 msgstr "Prisijungti"
 
+#, elixir-autogen, elixir-format
 msgid "signin.title"
 msgstr "Prisijungti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Jūsų paskyra buvo sukurta. Jums išsiuntėme aktyvinimo laišką. Norėdami aktyvuoti savo paskyrą, spustelėkite laiške esančią nuorodą."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.failed.body"
 msgstr "Jūsų paskyra jau gali būti aktyvuota arba aktyvacijos nuoroda nebegalioja. Spauskite „Prisijungti“ viršutiniame dešiniajame kampe, kad pabandytumėte prisijungti naudodami savo paskyros duomenis. Jei jūsų paskyra nėra aktyvuota, įveskite savo el. pašto adresą žemiau, kad gautumėte naują aktyvacijos nuorodą."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.failed.title"
 msgstr "Sąskaitos aktyvinimas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.body"
 msgstr "Spustelėkite žemiau esantį mygtuką, kad aktyvuotumėte savo paskyrą. Jūs būsite nukreipti į prisijungimo puslapį."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.title"
 msgstr "Sąskaitos aktyvinimas"
 
+#, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr "Aktyvuoti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.no_match.message"
 msgstr "Niekas nerastas su šiuo elektroninio pašto adresu."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.placeholder"
 msgstr "Ieškoti pagal el. pašto adresą"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
 msgstr "Ką norite pridėti?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.alread_added.message"
 msgstr "Jau pridėta"
 
+#, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
 msgstr "Atšaukti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.label"
 msgstr "Aš esu įsitikinęs"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.text"
 msgstr "Ar tikrai norite pasitraukti iš šio projekto?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Account activated successfully."
 msgstr "Sąskaita sėkmingai aktyvuota."
 
+#, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
 msgstr ""
 
-msgid "panl.privacy.policy.label"
-msgstr ""
-
-msgid "panl.privacy.policy.required"
-msgstr ""
-
-msgid "privacy.link.privacy"
-msgstr ""
-
-msgid "privacy.link.terms"
-msgstr ""
-
-msgid "privacy.next-policy.label"
-msgstr ""
-
-msgid "privacy.next-policy.required"
-msgstr ""
-
+#, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
 msgstr ""
 
+#, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "sso.error.generic"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "sso.error.session_expired"
+msgstr ""

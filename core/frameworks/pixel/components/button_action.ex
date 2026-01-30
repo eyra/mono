@@ -67,6 +67,7 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:item, :string, default: "")
   attr(:target, :string, default: "")
   attr(:enabled?, :boolean, default: true)
+  attr(:debounce, :string, default: nil)
   slot(:inner_block, required: true)
   attr(:"data-testid", :string, default: nil)
 
@@ -77,6 +78,7 @@ defmodule Frameworks.Pixel.Button.Action do
         phx-click={@event}
         phx-value-item={@item}
         phx-target={@target}
+        phx-debounce={@debounce}
         class="touchstart-sensitive cursor-pointer focus:outline-none"
         data-testid={assigns[:"data-testid"]}
       >

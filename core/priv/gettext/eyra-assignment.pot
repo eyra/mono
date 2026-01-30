@@ -135,10 +135,6 @@ msgid "settings.branding.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr ""
 
@@ -478,4 +474,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.redirect.platform"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
 msgstr ""

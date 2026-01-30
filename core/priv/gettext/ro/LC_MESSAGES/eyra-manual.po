@@ -20,99 +20,114 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "aplică.cta.titlu"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.title.label"
 msgstr "Titlu"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "titlu.cta.deschis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "participat.etichetă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "în așteptare.etichetă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.manual.button"
 msgstr "Creați manualul"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
 msgstr "Editați manualul"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "setup.annotation"
 msgstr "<div><h1>Cum se configurează instrucțiunile pentru participanți?</h1><ul><li>Creați <strong>secțiuni</strong>, astfel încât participanții să poată naviga la secțiunea relevantă.</li><li>Utilizați <strong>etichete</strong> de secțiune pentru a specifica cazuri de utilizare, cum ar fi <i>iPhone</i> sau <i>Android</i>.</li><li>Furnizați mai multe <strong>instrucțiuni</strong> succinte în fiecare secțiune, inclusiv <b>capturi de ecran</b> relevante pentru mai multă claritate.</li></ul></div>"
 
+#, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"
 msgstr "Secțiuni"
 
+#, elixir-autogen, elixir-format
 msgid "create.chapter.button"
 msgstr "Adaugă capitol"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.default"
 msgstr "Secțiune nouă"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.group.label"
 msgstr "Etichetă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.page.button"
 msgstr "Adăugați instrucțiuni"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.default"
 msgstr "Instrucțiuni noi"
 
+#, elixir-autogen, elixir-format
 msgid "page.title.label"
 msgstr "Titlu"
 
+#, elixir-autogen, elixir-format
 msgid "page.text.label"
 msgstr "Descriere"
 
+#, elixir-autogen, elixir-format
 msgid "choose.image.file"
 msgstr "Selectați imaginea"
 
+#, elixir-autogen, elixir-format
 msgid "choose.other.image.file"
 msgstr "Schimbati imaginea"
 
+#, elixir-autogen, elixir-format
 msgid "builder.pages.list.title"
 msgstr "Instrucțiuni"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.label.first"
 msgstr "Etichetă secțiune"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.first"
 msgstr "Prima secțiune"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
 msgstr "Prima instrucțiune"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.next.button"
 msgstr "Următor"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.page.indicator"
 msgstr "%{current}/%{count}"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.previous.button"
 msgstr "Anterior"
 
+#, elixir-autogen, elixir-format
 msgid "image.fullscreen.button"
 msgstr "Mărește"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.done.button"
 msgstr "Terminat"
 
+#, elixir-autogen, elixir-format
 msgid "chapter.overview"
 msgstr "Prezentare"

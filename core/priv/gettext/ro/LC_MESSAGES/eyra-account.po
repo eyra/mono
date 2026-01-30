@@ -20,165 +20,182 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "displayname.label"
 msgstr "Nume afișat"
 
+#, elixir-autogen, elixir-format
 msgid "email.label"
 msgstr "E-mail"
 
+#, elixir-autogen, elixir-format
 msgid "fullname.label"
 msgstr "Nume complet"
 
+#, elixir-autogen, elixir-format
 msgid "password.label"
 msgstr "Parola"
 
+#, elixir-autogen, elixir-format
 msgid "profile.title"
 msgstr "Profilul meu"
 
+#, elixir-autogen, elixir-format
 msgid "signup.button"
 msgstr "Înregistrare"
 
+#, elixir-autogen, elixir-format
 msgid "signup.title"
 msgstr "Creează cont"
 
+#, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
 msgstr "Activează-ți contul"
 
+#, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
 msgstr "Retrimi legătura de activare"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.profile.photo.file"
 msgstr "Selectați imaginea"
 
+#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
 msgstr "Schimbă"
 
+#, elixir-autogen, elixir-format
 msgid "professionaltitle.label"
 msgstr "Denumire post"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "feature.study.description"
 msgstr "Pentru a obține credite pentru participarea la cercetare (OP / RPR) pentru bedrijfskunde (BK) sau administrarea afacerilor internaționale (IBA), selectați unul sau mai multe cursuri de mai jos. Dacă nu ați terminat un curs anul trecut, asigurați-vă că selectați și acel curs."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.description"
 msgstr "Câteva studii utilizează cerințe specifice de eligibilitate. Selectând caracteristicile opționale de mai jos, puteți participa la studii care specifică caracteristicile dvs. ca cerințe."
 
+#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Sex"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.nativelanguage.title"
 msgstr "Limba maternă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.title"
 msgstr "Incluziune"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.content.description"
 msgstr "Selectați criteriile de includere pentru studiul dvs. Dacă nu este selectat nimic, toate persoanele din grup sunt eligibile pentru participare."
 
+#, elixir-autogen, elixir-format
 msgid "login.google.button"
 msgstr "Autentificare prin Google"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "login.surf.button"
 msgstr "Conectați-vă cu SURFconext"
 
+#, elixir-autogen, elixir-format
 msgid "signin.button"
 msgstr "Autentificare"
 
+#, elixir-autogen, elixir-format
 msgid "signin.title"
 msgstr "Autentificare"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Contul dvs. a fost creat. V-am trimis un e-mail de activare. Vă rugăm să faceți clic pe linkul din e-mail pentru a vă activa contul."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.failed.body"
 msgstr "Este posibil ca contul dvs. să fi fost deja activat sau linkul de activare să fi expirat. Faceți clic pe „Conectare” în partea dreaptă sus pentru a încerca să vă conectați cu informațiile contului dvs. Dacă contul dvs. nu este activat, introduceți adresa de e-mail mai jos pentru a primi un nou link de activare."
 
+#, elixir-autogen, elixir-format
 msgid "activation.failed.title"
 msgstr "Activare cont"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.body"
 msgstr "Faceți clic pe butonul de mai jos pentru a vă activa contul. Veți fi redirecționat către pagina de conectare."
 
+#, elixir-autogen, elixir-format
 msgid "activation.confirm.title"
 msgstr "Activare cont"
 
+#, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr "Activează"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.no_match.message"
 msgstr "Nu s-a găsit nimeni cu această adresă de e-mail."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.placeholder"
 msgstr "Căutare după adresa de e-mail"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
 msgstr "Pe cine doriți să adăugați?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.alread_added.message"
 msgstr "Deja adăugat"
 
+#, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
 msgstr "Anulează"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.label"
 msgstr "Sunt sigur"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.text"
 msgstr "Ești sigur că vrei să te retragi din acest proiect?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Account activated successfully."
 msgstr "Contul a fost activat cu succes."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.birthyear.title"
 msgstr "Anul nașterii"
 
-#, fuzzy
-msgid "privacy.policy.label"
-msgstr "etichetă-politică-de-confidențialitate"
-
-#, fuzzy
-msgid "privacy.policy.must.be.accepted"
-msgstr "politica.de.confidențialitate.trebuie.acceptată"
-
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.features.title"
 msgstr "Panl"
 
+#, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
 msgstr "Profilul meu"
 
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr ""
 
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
-msgid "privacy.link.privacy"
-msgstr ""
-
-msgid "privacy.link.terms"
-msgstr ""
-
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr ""
 
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "sso.error.generic"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "sso.error.session_expired"
+msgstr ""

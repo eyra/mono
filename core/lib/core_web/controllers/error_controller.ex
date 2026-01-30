@@ -9,4 +9,11 @@ defmodule CoreWeb.ErrorController do
     |> put_view(CoreWeb.ErrorHTML)
     |> render(:"403")
   end
+
+  def not_found(conn, _params) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(CoreWeb.ErrorHTML)
+    |> render(:"404")
+  end
 end

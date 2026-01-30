@@ -136,10 +136,6 @@ msgid "settings.branding.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr "Übersicht"
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr "Informationen"
 
@@ -480,3 +476,7 @@ msgstr "Sie haben sich entschieden, nicht teilzunehmen. Ihre Entscheidung wurde 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
 msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um zu %{platform} fortzufahren."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""

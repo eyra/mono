@@ -160,7 +160,8 @@ defmodule Systems.Project.NodePageGridView do
                 illustration="cards"
                 button={%{
                   action: %{type: :send, event: "create_item"},
-                  face: %{type: :primary, label: dgettext("eyra-project", "add.first.item.button")}
+                  face: %{type: :primary, label: dgettext("eyra-project", "add.first.item.button")},
+                  "data-testid": "create-first-item-button"
                 }}
               />
             </div>
