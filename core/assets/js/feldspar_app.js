@@ -67,6 +67,10 @@ export const FeldsparApp = {
     }
   },
 
+  // Donate response contract (sent via MessageChannel to Feldspar app):
+  // - DonateSuccess: { __type__: "DonateSuccess", key: string, status: number }
+  // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
+  //   Note: status=0 indicates a network error (offline, timeout, CORS, etc.)
   async donate_via_api(data) {
     const formData = new FormData();
     formData.append("key", data.key);
