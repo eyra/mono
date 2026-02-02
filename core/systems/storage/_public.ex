@@ -139,8 +139,7 @@ defmodule Systems.Storage.Public do
 
           {:error, step, reason, _} ->
             Logger.error("[Storage.Public.store] FAILED at #{step}: #{inspect(reason)}")
-            # Clean up the file if the transaction failed
-            temp_file_store().delete(file_id)
+            # File remains on disk - cleanup worker will handle it after retention period
         end
 
         result

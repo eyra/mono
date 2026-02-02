@@ -63,7 +63,7 @@ defmodule Systems.Feldspar.DataDonationFolder do
   end
 
   @doc """
-  Deletes a data donation file after successful delivery.
+  Deletes a data donation file. Only used by the cleanup worker.
   """
   def delete(file_id) do
     path = file_path(file_id)
