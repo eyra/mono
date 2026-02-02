@@ -63,7 +63,14 @@ export const FeldsparApp = {
       await this.donate_via_api(e.data);
     } else {
       // All other events (including CommandSystemExit) pass through to LiveView
-      this.pushEvent("feldspar_event", e.data);
+      try {
+        this.pushEvent("feldspar_event", e.data);
+      } catch (error) {
+        console.warn(
+          "[Feldspar] Could not push event (LiveView disconnected):",
+          type
+        );
+      }
     }
   },
 
