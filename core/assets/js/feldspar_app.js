@@ -77,9 +77,54 @@ export const FeldsparApp = {
       "data.json"
     );
 
-    await fetch("/api/feldspar/donate", {
-      method: "POST",
-      body: formData,
-    });
+    let response;
+    try {
+      response = await fetch("/api/feldspar/donate", {
+        method: "POST",
+        body: formData,
+      });
+    } catch (error) {
+      // Network error (offline, timeout, etc.)
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: 0,
+        error: `Network error: ${error.message}`,
+      });
+      return;
+    }
+
+    try {
+      const result = await response.json();
+
+      if (response.ok) {
+        this.sendDonateResponse({
+          __type__: "DonateSuccess",
+          key: data.key,
+          status: response.status,
+        });
+      } else {
+        this.sendDonateResponse({
+          __type__: "DonateError",
+          key: data.key,
+          status: response.status,
+          error: result.error || "Unknown error",
+        });
+      }
+    } catch (error) {
+      // JSON parse error
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: response.status,
+        error: "Invalid response from server",
+      });
+    }
+  },
+
+  sendDonateResponse(message) {
+    if (this.channel && this.channel.port1) {
+      this.channel.port1.postMessage(message);
+    }
   },
 };
