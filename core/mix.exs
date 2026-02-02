@@ -186,7 +186,13 @@ defmodule Core.MixProject do
       run: "phx.server",
       github_release:
         "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
-      precommit: "cmd cd .. && pre-commit run --all-files"
+      precommit: "cmd cd .. && pre-commit run --all-files",
+      "test.e2e":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",
+      "test.e2e.debug":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
+      "test.e2e.headed":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
   end
 end
