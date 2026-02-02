@@ -89,6 +89,7 @@ export const FeldsparApp = {
       });
     } catch (error) {
       // Network error (offline, timeout, etc.)
+      console.error("[Feldspar] Donate network error:", error.message);
       this.sendDonateResponse({
         __type__: "DonateError",
         key: data.key,
@@ -108,6 +109,11 @@ export const FeldsparApp = {
           status: response.status,
         });
       } else {
+        console.error(
+          "[Feldspar] Donate failed:",
+          response.status,
+          result.error
+        );
         this.sendDonateResponse({
           __type__: "DonateError",
           key: data.key,
@@ -117,6 +123,7 @@ export const FeldsparApp = {
       }
     } catch (error) {
       // JSON parse error
+      console.error("[Feldspar] Donate response parse error:", error.message);
       this.sendDonateResponse({
         __type__: "DonateError",
         key: data.key,
