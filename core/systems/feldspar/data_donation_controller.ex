@@ -86,6 +86,15 @@ defmodule Systems.Feldspar.DataDonationController do
         |> put_status(:unprocessable_entity)
         |> json(%{error: "No storage endpoint configured"})
 
+      {:error, {:scheduling_failed, step, reason}} ->
+        Logger.error(
+          "[Feldspar.DataDonationController] Scheduling failed at step=#{step}: #{inspect(reason)}"
+        )
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "Scheduling failed"})
+
       {:error, reason} ->
         Logger.error("[Feldspar.DataDonationController] Storage failed: #{inspect(reason)}")
 

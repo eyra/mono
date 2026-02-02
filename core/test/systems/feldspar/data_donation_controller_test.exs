@@ -314,9 +314,9 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           "context" => context
         })
 
-      # Should return 422 with "Storage failed", not crash with 500
+      # Should return 422 with "Scheduling failed", not crash with 500
       response = json_response(conn, 422)
-      assert response["error"] == "Storage failed"
+      assert response["error"] == "Scheduling failed"
     end
   end
 
