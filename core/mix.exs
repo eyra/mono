@@ -153,12 +153,14 @@ defmodule Core.MixProject do
   defp aliases do
     [
       setup: [
+        "lfs.pull",
         "deps.get",
         "ecto.setup",
         "assets.setup",
         "assets.install",
         "assets.build"
       ],
+      "lfs.pull": "cmd git lfs pull",
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
