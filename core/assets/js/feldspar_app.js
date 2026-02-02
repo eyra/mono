@@ -82,10 +82,17 @@ export const FeldsparApp = {
     );
 
     let response;
+    const dataSize = data.json_string ? data.json_string.length : 0;
+    console.log("[Feldspar] Donate starting:", { key: data.key, dataSize });
+
     try {
       response = await fetch("/api/feldspar/donate", {
         method: "POST",
         body: formData,
+      });
+      console.log("[Feldspar] Donate fetch completed:", {
+        key: data.key,
+        status: response.status,
       });
     } catch (error) {
       // Network error (offline, timeout, etc.)
@@ -103,6 +110,10 @@ export const FeldsparApp = {
       const result = await response.json();
 
       if (response.ok) {
+        console.log("[Feldspar] Donate success:", {
+          key: data.key,
+          status: response.status,
+        });
         this.sendDonateResponse({
           __type__: "DonateSuccess",
           key: data.key,
