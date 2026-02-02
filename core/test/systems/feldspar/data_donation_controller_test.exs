@@ -20,7 +20,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         conn
         |> post("/api/feldspar/donate", %{"data" => upload, "context" => context})
 
-      assert json_response(conn, 400) == %{"error" => "Missing required fields: key, data"}
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: key"}
     end
 
     test "returns 400 when data is missing", %{conn: conn} do
@@ -30,7 +30,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         conn
         |> post("/api/feldspar/donate", %{"key" => "test-key", "context" => context})
 
-      assert json_response(conn, 400) == %{"error" => "Missing required fields: key, data"}
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: data"}
     end
 
     test "returns 400 when both key and data are missing", %{conn: conn} do
@@ -38,7 +38,9 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         conn
         |> post("/api/feldspar/donate", %{})
 
-      assert json_response(conn, 400) == %{"error" => "Missing required fields: key, data"}
+      assert json_response(conn, 400) == %{
+               "error" => "Missing required fields: key, data, context"
+             }
     end
   end
 
@@ -56,7 +58,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         conn
         |> post("/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
 
-      assert json_response(conn, 400) == %{"error" => "Missing required fields: key, data"}
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: context"}
     end
 
     test "returns 400 when context is empty string", %{conn: conn} do

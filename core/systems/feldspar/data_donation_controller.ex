@@ -28,6 +28,7 @@ defmodule Systems.Feldspar.DataDonationController do
 
   Returns:
   - 200 with {status: "ok"} on success
+  - 400 if missing required fields (key, data, context) or invalid context
   - 401 if user not authenticated
   - 422 if storage/delivery fails
   - 429 if rate limited
@@ -94,10 +95,17 @@ defmodule Systems.Feldspar.DataDonationController do
     end
   end
 
-  def create(conn, _params) do
+  def create(conn, params) do
+    missing =
+      ["key", "data", "context"]
+      |> Enum.reject(&Map.has_key?(params, &1))
+      |> Enum.join(", ")
+
+    Logger.error("[Feldspar.DataDonationController] Missing required fields: #{missing}")
+
     conn
     |> put_status(:bad_request)
-    |> json(%{error: "Missing required fields: key, data"})
+    |> json(%{error: "Missing required fields: #{missing}"})
   end
 
   defp get_current_user(conn) do
