@@ -78,7 +78,7 @@ defmodule Systems.Storage.Public do
           meta_data: meta_data
         }
         |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
-        |> Oban.insert()
+        |> Storage.JobScheduler.insert()
       end)
       |> Repo.commit()
 
@@ -129,7 +129,7 @@ defmodule Systems.Storage.Public do
               meta_data: meta_data
             }
             |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
-            |> Oban.insert()
+            |> Storage.JobScheduler.insert()
           end)
           |> Repo.commit()
 

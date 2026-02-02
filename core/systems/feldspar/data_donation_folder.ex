@@ -6,6 +6,8 @@ defmodule Systems.Feldspar.DataDonationFolder do
   This avoids memory pressure from large uploads by storing data on the filesystem.
   """
 
+  @behaviour Systems.Storage.TempFileStore
+
   require Logger
 
   @doc """

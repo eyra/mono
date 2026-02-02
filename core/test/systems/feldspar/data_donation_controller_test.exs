@@ -259,6 +259,67 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
+  describe "create/2 - scheduling failure" do
+    setup :login_as_member
+
+    setup do
+      # Save original config
+      original_storage_config = Application.get_env(:core, :storage)
+
+      on_exit(fn ->
+        Application.put_env(:core, :storage, original_storage_config)
+      end)
+
+      :ok
+    end
+
+    test "returns 422 when job scheduling fails", %{conn: conn} do
+      import Mox
+
+      assignment = create_assignment_with_storage()
+
+      upload = %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          assignment_id: assignment.id,
+          task: "1",
+          participant: "test_participant",
+          group: "test"
+        })
+
+      # Configure mock job scheduler
+      storage_config = Application.get_env(:core, :storage)
+
+      Application.put_env(
+        :core,
+        :storage,
+        Keyword.put(storage_config, :job_scheduler, Systems.Storage.MockJobScheduler)
+      )
+
+      # Mock insert to return an error - this causes the Multi to fail with 4-tuple
+      expect(Systems.Storage.MockJobScheduler, :insert, fn _changeset ->
+        {:error, %Ecto.Changeset{valid?: false, errors: [queue: {"invalid", []}]}}
+      end)
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      # Should return 422 with "Storage failed", not crash with 500
+      response = json_response(conn, 422)
+      assert response["error"] == "Storage failed"
+    end
+  end
+
   defp create_temp_file(content) do
     path = Path.join(System.tmp_dir!(), "test_upload_#{:erlang.unique_integer()}.json")
     File.write!(path, content)

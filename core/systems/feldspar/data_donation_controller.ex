@@ -148,7 +148,7 @@ defmodule Systems.Feldspar.DataDonationController do
   defp schedule_delivery(storage_endpoint, file_id, meta_data) do
     case Storage.Public.deliver_file(storage_endpoint, file_id, meta_data) do
       {:ok, _} -> :ok
-      error -> error
+      {:error, step, reason, _} -> {:error, {:scheduling_failed, step, reason}}
     end
   end
 
