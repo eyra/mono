@@ -33,7 +33,8 @@ defmodule Core.Release do
             now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
             hashed_password = Bcrypt.hash_pwd_salt(password)
 
-            {:ok, user} = %Account.User{}
+            {:ok, user} =
+              %Account.User{}
               |> Ecto.Changeset.change(%{
                 email: email,
                 hashed_password: hashed_password,
