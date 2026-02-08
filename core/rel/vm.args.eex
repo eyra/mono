@@ -7,3 +7,6 @@
 ## Tweak GC to run more often
 ##-env ERL_FULLSWEEP_AFTER 10
 -kernel inet_dist_listen_min 4370 inet_dist_listen_max 4500
+
+## Fly.io IPv6 DNS resolution - prefer inet6 for lookups
+-kernel inet_default inet6

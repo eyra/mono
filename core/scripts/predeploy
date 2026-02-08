@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+echo "Running database migrations..."
+/opt/app/bin/core eval Core.Release.migrate
+echo "Migrations complete."
