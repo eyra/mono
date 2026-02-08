@@ -1,0 +1,5 @@
+%% Erlang inet configuration for Fly.io
+%% This enables IPv6 DNS resolution for .internal domains
+
+{lookup, [native, file, dns]}.
+{inet6, true}.
