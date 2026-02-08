@@ -43,10 +43,14 @@ RUN scripts/build-release
 
 FROM debian:bookworm-slim
 ARG VERSION
+ARG GIT_COMMIT
 ENV VERSION=$VERSION
+ENV GIT_COMMIT=$GIT_COMMIT
 ENV MIX_ENV=prod
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+
+LABEL org.opencontainers.image.revision=$GIT_COMMIT
 
 RUN apt-get update && apt-get install -y \
     inotify-tools \
