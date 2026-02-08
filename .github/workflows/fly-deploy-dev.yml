@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - infra/fly-dev  # TODO: remove after testing
 
 jobs:
   deploy:
