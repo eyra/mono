@@ -19,6 +19,7 @@ defmodule Systems.Workflow.HTML do
   def work_list_item(assigns) do
     ~H"""
     <div
+      data-testid={"work-list-item-#{@index}"}
       class={"touchstart-sensitive w-full rounded-lg cursor-pointer p-4 border #{if @selected? do "bg-grey6 border-grey4" else "hover:bg-grey6 border-white" end} "}
       phx-click={@event}
       phx-value-item={@id}
