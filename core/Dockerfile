@@ -26,9 +26,13 @@ RUN apt-get update && apt-get install -y \
 
 ARG BUNDLE
 ARG VERSION
+ARG PLATFORM=fly
+ARG FORCE_SSL=true
 
 ENV BUNDLE=$BUNDLE
 ENV VERSION=$VERSION
+ENV PLATFORM=$PLATFORM
+ENV FORCE_SSL=$FORCE_SSL
 
 COPY mix.exs .
 RUN mix deps.get
@@ -41,13 +45,22 @@ FROM debian:bookworm-slim
 ARG VERSION
 ENV VERSION=$VERSION
 ENV MIX_ENV=prod
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
-RUN apt-get update && apt-get install -y inotify-tools libssl-dev
+RUN apt-get update && apt-get install -y \
+    inotify-tools \
+    libssl-dev \
+    locales \
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+    && locale-gen
 
 EXPOSE 8000
 
 COPY --from=builder /workspace/$VERSION /opt/app
 
-COPY ./scripts/migrate-and-start /opt/app/bin
+COPY ./scripts/predeploy /opt/app/bin
+COPY ./scripts/docker-start-app /opt/app/bin
 
-CMD ["/opt/app/bin/migrate-and-start"]
+CMD ["/opt/app/bin/docker-start-app"]

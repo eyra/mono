@@ -1,0 +1,77 @@
+# Fly.io configuration for Next Platform (dev environment)
+# See https://fly.io/docs/reference/configuration/ for all options
+
+app = 'eyra-next-dev'
+primary_region = 'ams'
+org = 'eyra'
+
+[build]
+  dockerfile = 'Dockerfile'
+  [build.args]
+    # VERSION and PLATFORM are passed from GitHub Actions workflow
+    BUNDLE = 'next'
+    FORCE_SSL = 'false'
+
+[env]
+  # Phoenix configuration
+  HTTP_PORT = '8000'
+  PHX_HOST = 'eyra-next-dev.fly.dev'
+
+  # Fly.io IPv6 networking (required for .internal DNS resolution)
+  ECTO_IPV6 = 'true'
+
+  # App configuration
+  APP_NAME = 'Next [dev]'
+  APP_DOMAIN = 'eyra-next-dev.fly.dev'
+  APP_MAIL_DOMAIN = 'eyra.dev'
+  APP_ADMINS = '*@eyra.co'
+
+  # Storage paths (using Fly volume mounted at /app/data)
+  UPLOAD_PATH = '/app/data/uploads'
+  STATIC_PATH = '/app/data/uploads'
+  FELDSPAR_DATA_DONATION_PATH = '/app/data/datadonation'
+  FELDSPAR_DATA_DONATION_RETENTION = '336'
+
+  # Oban plugins
+  ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
+
+  # Storage services (S3/Tigris)
+  STORAGE_SERVICES = 'builtin'
+  STORAGE_S3_PREFIX = 'storage'
+  CONTENT_S3_PREFIX = 'content'
+  FELDSPAR_S3_PREFIX = 'feldspar'
+  PUBLIC_S3_URL = 'https://fly.storage.tigris.dev/eyra-next-dev-storage'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'suspend'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '30s'
+    method = 'GET'
+    path = '/.status/health'
+
+[[vm]]
+  memory = '2gb'
+  cpu_kind = 'shared'
+  cpus = 2
+
+[mounts]
+  source = 'data'
+  destination = '/app/data'
+  initial_size = '1gb'
+
+[deploy]
+  strategy = 'rolling'
+  release_command = '/opt/app/bin/predeploy'

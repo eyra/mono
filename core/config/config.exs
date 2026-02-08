@@ -144,7 +144,7 @@ config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   server: true,
-  force_ssl: [],
+  force_ssl: false,
   render_errors: [
     formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
     layout: [html: {CoreWeb.Layouts, :error}]
