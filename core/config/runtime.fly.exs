@@ -4,9 +4,13 @@
 import Config
 
 if config_env() == :prod do
-  app_name = System.fetch_env!("APP_NAME")
-  app_domain = System.fetch_env!("APP_DOMAIN")
-  app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
+  # FLY_APP_NAME is set automatically by Fly.io (e.g., "eyra-next-test1")
+  fly_app_name = System.fetch_env!("FLY_APP_NAME")
+
+  # Derive defaults from FLY_APP_NAME, allow overrides via env vars
+  app_domain = System.get_env("APP_DOMAIN") || "#{fly_app_name}.fly.dev"
+  app_name = System.get_env("APP_NAME") || fly_app_name
+  app_mail_domain = System.get_env("APP_MAIL_DOMAIN") || "eyra.dev"
   app_mail_noreply = "no-reply@#{app_mail_domain}"
   upload_path = System.fetch_env!("UPLOAD_PATH")
 
