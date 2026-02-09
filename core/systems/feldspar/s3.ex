@@ -50,18 +50,9 @@ defmodule Systems.Feldspar.S3 do
         Access.fetch!(settings, :bucket),
         "#{object_key(target)}/#{name}",
         data,
-        upload_opts(settings, name)
+        content_type: content_type(name)
       )
       |> backend().request!()
-    end
-  end
-
-  defp upload_opts(settings, name) do
-    opts = [content_type: content_type(name)]
-
-    case Access.get(settings, :acl) do
-      nil -> opts
-      acl -> Keyword.put(opts, :acl, acl)
     end
   end
 

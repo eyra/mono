@@ -206,8 +206,7 @@ if config_env() == :prod do
       backend: Systems.Feldspar.S3,
       bucket: System.get_env("BUCKET_NAME"),
       public_url: System.get_env("PUBLIC_S3_URL"),
-      prefix: feldspar_s3_prefix,
-      acl: :public_read
+      prefix: feldspar_s3_prefix
   else
     config :core, :feldspar, backend: Systems.Feldspar.LocalFS
   end
