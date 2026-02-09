@@ -22,6 +22,7 @@ defmodule CoreWeb.Router do
   scope "/", CoreWeb do
     pipe_through([:browser_base])
     get("/.status/health", HealthController, :get)
+    get("/.status/wakeup", WakeupController, :get)
   end
 
   scope "/", CoreWeb do
