@@ -78,9 +78,11 @@ if config_env() == :prod do
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
 
           "data_donation_cleanup" ->
+            cleanup_schedule = System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *")
+
             {Oban.Plugins.Cron,
              crontab: [
-               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
+               {cleanup_schedule, Systems.Feldspar.DataDonationCleanupWorker,
                 queue: storage_delivery_queue}
              ]}
 

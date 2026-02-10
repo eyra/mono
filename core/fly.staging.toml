@@ -1,0 +1,79 @@
+# Fly.io configuration for Next Platform (staging environment)
+# Mirrors production setup with HA (2 machines)
+# Deploy with: flyctl deploy -c fly.staging.toml
+# See https://fly.io/docs/reference/configuration/ for all options
+
+app = 'eyra-next-staging'
+primary_region = 'ams'
+org = 'eyra'
+
+[build]
+  dockerfile = 'Dockerfile'
+  [build.args]
+    BUNDLE = 'next'
+    VERSION = 'release'
+    FORCE_SSL = 'false'
+
+[env]
+  # Phoenix configuration
+  HTTP_PORT = '8000'
+  PHX_HOST = 'eyra-next-staging.fly.dev'
+
+  # Fly.io IPv6 networking (required for .internal DNS resolution)
+  ECTO_IPV6 = 'true'
+
+  # App configuration
+  APP_NAME = 'Next [staging]'
+  APP_DOMAIN = 'eyra-next-staging.fly.dev'
+  APP_MAIL_DOMAIN = 'eyra.dev'
+  APP_ADMINS = '*@eyra.co'
+
+  # Storage paths (using Fly volume mounted at /app/data)
+  UPLOAD_PATH = '/app/data/uploads'
+  STATIC_PATH = '/app/data/uploads'
+  FELDSPAR_DATA_DONATION_PATH = '/app/data/datadonation'
+  FELDSPAR_DATA_DONATION_RETENTION = '336'
+
+  # Oban plugins
+  ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
+
+  # Storage services (S3/Tigris)
+  STORAGE_SERVICES = 'builtin'
+  STORAGE_S3_PREFIX = 'storage'
+  CONTENT_S3_PREFIX = 'content'
+  FELDSPAR_S3_PREFIX = 'feldspar'
+  PUBLIC_S3_URL = 'https://fly.storage.tigris.dev/eyra-next-staging-storage'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'suspend'
+  auto_start_machines = true
+  min_machines_running = 2
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '30s'
+    method = 'GET'
+    path = '/.status/health'
+
+[[vm]]
+  memory = '4gb'
+  cpu_kind = 'shared'
+  cpus = 2
+
+[mounts]
+  source = 'data'
+  destination = '/app/data'
+  initial_size = '20gb'
+
+[deploy]
+  strategy = 'rolling'
+  release_command = '/opt/app/bin/predeploy'

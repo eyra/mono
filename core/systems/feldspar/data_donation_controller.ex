@@ -142,14 +142,29 @@ defmodule Systems.Feldspar.DataDonationController do
   defp get_storage_endpoint(context) do
     assignment_id = context["assignment_id"]
 
+    Logger.info(
+      "[Feldspar.DataDonationController] Looking up storage endpoint for assignment_id=#{inspect(assignment_id)}"
+    )
+
     if assignment_id && assignment_id != "" do
       with {:ok, assignment} <- get_assignment(assignment_id) do
+        Logger.info("[Feldspar.DataDonationController] Found assignment id=#{assignment.id}")
+
         case Project.Public.get_storage_endpoint_by(assignment) do
-          {:ok, endpoint} -> {:ok, endpoint}
-          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
+          {:ok, endpoint} ->
+            Logger.info("[Feldspar.DataDonationController] Found storage endpoint")
+            {:ok, endpoint}
+
+          {:error, {:storage_endpoint, :not_available}} ->
+            Logger.error(
+              "[Feldspar.DataDonationController] Storage endpoint not available for assignment"
+            )
+
+            {:error, :no_storage_endpoint}
         end
       end
     else
+      Logger.error("[Feldspar.DataDonationController] No assignment_id in context")
       {:error, :no_storage_endpoint}
     end
   end
@@ -162,9 +177,24 @@ defmodule Systems.Feldspar.DataDonationController do
   end
 
   defp get_assignment(assignment_id) do
+    Logger.info(
+      "[Feldspar.DataDonationController] Fetching assignment id=#{inspect(assignment_id)}"
+    )
+
     case Assignment.Public.get(assignment_id, Assignment.Model.preload_graph(:down)) do
-      nil -> {:error, :assignment_not_found}
-      assignment -> {:ok, assignment}
+      nil ->
+        Logger.error(
+          "[Feldspar.DataDonationController] Assignment not found id=#{inspect(assignment_id)}"
+        )
+
+        {:error, :assignment_not_found}
+
+      assignment ->
+        Logger.info(
+          "[Feldspar.DataDonationController] Assignment found, has workflow=#{assignment.workflow != nil}"
+        )
+
+        {:ok, assignment}
     end
   end
 
