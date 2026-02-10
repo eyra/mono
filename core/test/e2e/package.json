@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "wake": "./wake-machines.sh eyra-next-staging --wait",
     "e2e": "npx playwright test --project=chromium",
     "e2e:headed": "npx playwright test --project=chromium --headed",
+    "e2e:staging": "npm run wake && BASE_URL=https://eyra-next-staging.fly.dev npx playwright test --project=chromium",
     "e2e:load": "npx playwright test --config=playwright.load.config.ts --project=chromium"
   },
   "keywords": [],
