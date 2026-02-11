@@ -1,30 +1,52 @@
 #!/bin/bash
 # Load test script that runs Artillery and verifies files landed on the server(s)
 #
+# Service user credentials:
+#   EMAIL: loadtest@eyra.service
+#   PASSWORD: LoadTest123! (dev only - prod has different password)
+#   SERVICE_KEY: (check SERVICE_LOGIN_KEY env var on target server)
+#
+# IMPORTANT: Password contains "!" which bash interprets as history expansion.
+# Use $'...' syntax to preserve literal characters:
+#   export SERVICE_PASSWORD=$'LoadTest123!'
+#
+# To generate a password hash for a new service user:
+#   cd core
+#   mix run --no-start -e 'Application.ensure_all_started(:bcrypt_elixir); IO.puts(Bcrypt.hash_pwd_salt("YourPassword!"))'
+#
+# Then set it in the database:
+#   ssh bastion.eyra.co
+#   ssh ec2-web-<env>-01
+#   PGPASSWORD=<db_pass> psql -h <db_host> -U <db_user> -d <db_name> \
+#     -c "UPDATE users SET password_hash = '<hash>' WHERE email = 'loadtest@eyra.service'"
+#
 # Usage for Fly:
 #   export BASE_URL=https://eyra-next-staging.fly.dev
-#   export SERVICE_EMAIL=loadtest@service.local
-#   export SERVICE_PASSWORD=...
+#   export SERVICE_EMAIL=loadtest@eyra.service
+#   export SERVICE_PASSWORD=$'LoadTest123!'
+#   export SERVICE_KEY=<from fly secrets>
 #   export ASSIGNMENT_ID=1
 #   export PLATFORM=fly
 #   export FLY_APP=eyra-next-staging
-#   ./run-and-verify.sh [quick|volume|large|xlarge]
+#   ./run-load-and-verify.sh [quick|volume|large|xlarge]
 #
 # Usage for AWS (dev - hosts auto-discovered from bastion):
 #   export BASE_URL=https://next.dev.eyra.co
-#   export SERVICE_EMAIL=service-loadtest@eyra.local
-#   export SERVICE_PASSWORD=...
+#   export SERVICE_EMAIL=loadtest@eyra.service
+#   export SERVICE_PASSWORD=$'LoadTest123!'
+#   export SERVICE_KEY='4q9GgiQw+nB9WDe6vqpUf3a7xLYkGOYCMHWJeq0YzHs='
 #   export ASSIGNMENT_ID=458
 #   export PLATFORM=aws
-#   ./run-and-verify.sh [quick|volume|large|xlarge]
+#   ./run-load-and-verify.sh [quick|volume|large|xlarge]
 #
 # Usage for AWS (prod - hosts auto-discovered from bastion):
 #   export BASE_URL=https://next.eyra.co
-#   export SERVICE_EMAIL=service-loadtest@eyra.local
-#   export SERVICE_PASSWORD=...
+#   export SERVICE_EMAIL=loadtest@eyra.service
+#   export SERVICE_PASSWORD=$'LoadTest123!'
+#   export SERVICE_KEY=<from prod server>
 #   export ASSIGNMENT_ID=...
 #   export PLATFORM=aws
-#   ./run-and-verify.sh [quick|volume|large|xlarge]
+#   ./run-load-and-verify.sh [quick|volume|large|xlarge]
 #
 # Note: AWS hosts are fetched from bastion via 'get_web_servers <env>'
 # You can override with: export SSH_HOSTS="host1 host2"
