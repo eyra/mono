@@ -399,12 +399,20 @@ defmodule Systems.Crew.Public do
       %Crew.MemberModel{}
       |> Crew.MemberModel.changeset(attrs)
       |> Ecto.Changeset.put_assoc(:crew, crew)
-      |> Ecto.Changeset.put_assoc(:user, user)
+      |> Ecto.Changeset.put_assoc(:user, user),
+      on_conflict: :nothing,
+      conflict_target: [:user_id, :crew_id]
     )
   end
 
   defp insert(multi, :role_assignment = name, crew, %User{} = user, role) do
-    Multi.insert(multi, name, auth_module().build_role_assignment(user, crew, role))
+    Multi.insert(
+      multi,
+      name,
+      auth_module().build_role_assignment(user, crew, role),
+      on_conflict: :nothing,
+      conflict_target: [:principal_id, :role, :node_id]
+    )
   end
 
   defp insert(multi, :crew_task = name, crew, %User{} = user, attrs) do
