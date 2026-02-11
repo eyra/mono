@@ -17,6 +17,7 @@
 
 config:
   target: "{{ $processEnvironment.BASE_URL }}"
+  processor: "./functions.js"
   http:
     timeout: 300  # 5 min for large uploads
   phases:
@@ -48,9 +49,9 @@ config:
     # Large file test: 50 x 100MB
     large:
       phases:
-        - duration: 50
-          arrivalRate: 1
-          name: "50 large uploads (1/sec)"
+        - duration: 150
+          arrivalCount: 50
+          name: "50 large uploads (1 per 3 sec)"
     # Max size test: 10 x 200MB (Phoenix max)
     xlarge:
       phases:
@@ -79,6 +80,8 @@ before:
 scenarios:
   - name: "Donate file"
     flow:
+      - function: "incrementCounter"
+      - log: "[{{ uploadNumber }}] Starting upload {{ $uuid }} ({{ $processEnvironment.FILE_SIZE_MB }}MB)"
       - post:
           url: "/api/feldspar/donate"
           timeout: 300
@@ -92,3 +95,4 @@ scenarios:
               contentType: application/octet-stream
           expect:
             - statusCode: 200
+      - log: "[{{ uploadNumber }}] Completed upload {{ $uuid }}"

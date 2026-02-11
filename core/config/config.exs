@@ -146,7 +146,7 @@ config :core, CoreWeb.Endpoint,
   server: true,
   force_ssl: false,
   render_errors: [
-    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
+    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorJSON],
     layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
