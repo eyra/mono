@@ -39,7 +39,7 @@ defmodule Systems.Account.ServiceLoginController do
   end
 
   defp verify_service_key(conn) do
-    expected_key = Application.get_env(:core, :service_login)[:key]
+    expected_key = Application.get_env(:core, :service_login, [])[:key]
     provided_key = get_req_header(conn, "x-service-key") |> List.first()
 
     cond do
@@ -64,15 +64,15 @@ defmodule Systems.Account.ServiceLoginController do
 
   defp authenticate(conn, email, password) do
     case Account.Public.get_user_by_email_and_password(email, password) do
-      nil ->
-        conn
-        |> put_status(401)
-        |> json(%{error: "Invalid credentials"})
-
-      user ->
+      %Account.User{} = user ->
         conn
         |> Account.UserAuth.log_in_user_without_redirect(user)
         |> json(%{status: "ok"})
+
+      _ ->
+        conn
+        |> put_status(401)
+        |> json(%{error: "Invalid credentials"})
     end
   end
 end
