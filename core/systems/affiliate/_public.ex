@@ -117,24 +117,9 @@ defmodule Systems.Affiliate.Public do
   end
 
   def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
-    Multi.new()
-    |> Multi.run(:affiliate_user, fn _, _ ->
-      case get_user(affiliate, identifier, [:user]) do
-        nil ->
-          register_user(identifier, affiliate)
-
-        user ->
-          {:ok, user}
-      end
-    end)
-    |> Repo.commit()
-    |> case do
-      {:ok, %{affiliate_user: affiliate_user}} ->
-        {:ok, affiliate_user}
-
-      error ->
-        error
-    end
+    # Use upsert pattern directly - no check-then-insert
+    # This handles race conditions properly via on_conflict: :nothing
+    register_user(identifier, affiliate)
   end
 
   def get_user(%Account.User{} = user) do
