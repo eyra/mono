@@ -3,8 +3,9 @@
 # Usage:
 #   1. Set environment variables:
 #      export BASE_URL=https://eyra-staging.fly.dev
-#      export SERVICE_EMAIL=service-loadtest@eyra.local
+#      export SERVICE_EMAIL=loadtest@eyra.service
 #      export SERVICE_PASSWORD=your_password
+#      export SERVICE_KEY=your_service_key  # X-Service-Key header
 #      export ASSIGNMENT_ID=4
 #      export FILE_SIZE_MB=1   # Options: 1, 10, 100, 200
 #
@@ -66,6 +67,8 @@ before:
   flow:
     - post:
         url: "/api/service/login"
+        headers:
+          X-Service-Key: "{{ $processEnvironment.SERVICE_KEY }}"
         json:
           email: "{{ $processEnvironment.SERVICE_EMAIL }}"
           password: "{{ $processEnvironment.SERVICE_PASSWORD }}"

@@ -13,16 +13,19 @@ This generates random binary files (1MB, 10MB, 100MB, 200MB) for upload testing.
 
 ## Prerequisites
 
-1. Create a service user on the target server (e.g., `service-loadtest@eyra.local`)
+1. Create a service user with `@eyra.service` domain (e.g., `loadtest@eyra.service`)
+   - Must be verified by an admin (the domain doesn't exist, so email verification won't work)
 2. Set a strong password for the service user
-3. Ensure assignment 1 has a storage endpoint configured
+3. Get the SERVICE_KEY for your environment (ask admin or check vault/fly secrets)
+4. Ensure the target assignment has a storage endpoint configured
 
 ## Running Tests
 
 ```bash
 export BASE_URL=https://eyra-staging.fly.dev
-export SERVICE_EMAIL=service-loadtest@eyra.local
+export SERVICE_EMAIL=loadtest@eyra.service
 export SERVICE_PASSWORD=your_password
+export SERVICE_KEY=your_service_key
 export ASSIGNMENT_ID=4
 
 # Quick test: 2 uploads
@@ -37,7 +40,10 @@ npm run test:full
 
 ## How It Works
 
-1. Artillery logs in via `POST /api/service/login` with email/password
+1. Artillery logs in via `POST /api/service/login` with:
+   - `X-Service-Key` header (must match server's SERVICE_LOGIN_KEY)
+   - Email (must end with `@eyra.service`)
+   - Password
 2. Captures the session cookie from the response
 3. Uses the cookie for all subsequent upload requests to `/api/feldspar/donate`
 
