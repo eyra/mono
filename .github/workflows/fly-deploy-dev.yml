@@ -1,0 +1,33 @@
+name: Deploy to Fly.io (dev)
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: Deploy to Fly.io (dev)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set VERSION
+        run: |
+          VERSION="next_$(date +%F)_${{ github.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: |
+          flyctl deploy --remote-only -c fly.dev.toml \
+            --build-arg VERSION=${{ env.VERSION }} \
+            --build-arg PLATFORM=fly \
+            --build-arg GIT_COMMIT=${{ github.sha }}
+        working-directory: core
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_DEV }}

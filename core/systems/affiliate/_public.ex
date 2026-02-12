@@ -117,24 +117,9 @@ defmodule Systems.Affiliate.Public do
   end
 
   def obtain_user(identifier, %Affiliate.Model{} = affiliate) do
-    Multi.new()
-    |> Multi.run(:affiliate_user, fn _, _ ->
-      case get_user(affiliate, identifier, [:user]) do
-        nil ->
-          register_user(identifier, affiliate)
-
-        user ->
-          {:ok, user}
-      end
-    end)
-    |> Repo.commit()
-    |> case do
-      {:ok, %{affiliate_user: affiliate_user}} ->
-        {:ok, affiliate_user}
-
-      error ->
-        error
-    end
+    # Use upsert pattern directly - no check-then-insert
+    # This handles race conditions properly via on_conflict: :nothing
+    register_user(identifier, affiliate)
   end
 
   def get_user(%Account.User{} = user) do
@@ -183,18 +168,37 @@ defmodule Systems.Affiliate.Public do
 
   defp register_user(identifier, affiliate) do
     Multi.new()
-    |> Multi.run(:user_count, fn _, _ ->
-      {:ok, count_users(affiliate)}
+    |> Multi.insert(:user, prepare_user(affiliate, identifier),
+      on_conflict: :nothing,
+      conflict_target: :email
+    )
+    |> Multi.run(:resolved_user, fn repo, %{user: user} ->
+      # If user.id is nil, a conflict occurred - fetch the existing user
+      if user.id do
+        {:ok, user}
+      else
+        {:ok, repo.get_by!(Account.User, email: user.email)}
+      end
     end)
-    |> Multi.insert(:user, fn %{user_count: user_count} ->
-      prepare_user(affiliate, user_count + 1, identifier)
-    end)
-    |> Multi.insert(:affiliate_user, fn %{user: user} ->
-      prepare_affiliate_user(affiliate, user, identifier)
+    |> Multi.insert(
+      :affiliate_user,
+      fn %{resolved_user: user} ->
+        prepare_affiliate_user(affiliate, user, identifier)
+      end,
+      on_conflict: :nothing,
+      conflict_target: [:affiliate_id, :identifier]
+    )
+    |> Multi.run(:resolved_affiliate_user, fn repo, %{affiliate_user: affiliate_user} ->
+      # If affiliate_user.id is nil, it already existed - fetch it
+      if affiliate_user.id do
+        {:ok, repo.preload(affiliate_user, [:user])}
+      else
+        {:ok, get_user(affiliate, identifier, [:user])}
+      end
     end)
     |> Repo.commit()
     |> case do
-      {:ok, %{affiliate_user: affiliate_user}} ->
+      {:ok, %{resolved_affiliate_user: affiliate_user}} ->
         {:ok, affiliate_user}
 
       error ->
@@ -209,8 +213,8 @@ defmodule Systems.Affiliate.Public do
     |> Repo.aggregate(:count, :id)
   end
 
-  def prepare_user(%Affiliate.Model{id: affiliate_id}, user_id, identifier) do
-    email = "affiliate_#{affiliate_id}_user_#{user_id}@next.eyra.co"
+  def prepare_user(%Affiliate.Model{id: affiliate_id}, identifier) do
+    email = "affiliate_#{affiliate_id}_#{identifier}@next.eyra.co"
     name = "Affiliate User #{identifier}"
 
     Account.User.sso_changeset(%Account.User{}, %{

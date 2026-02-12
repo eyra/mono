@@ -78,7 +78,7 @@ defmodule Systems.Storage.Public do
           meta_data: meta_data
         }
         |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
-        |> Oban.insert()
+        |> Storage.JobScheduler.insert()
       end)
       |> Repo.commit()
 
@@ -129,7 +129,7 @@ defmodule Systems.Storage.Public do
               meta_data: meta_data
             }
             |> Storage.Delivery.new(queue: Storage.Private.storage_delivery_queue())
-            |> Oban.insert()
+            |> Storage.JobScheduler.insert()
           end)
           |> Repo.commit()
 
@@ -139,8 +139,7 @@ defmodule Systems.Storage.Public do
 
           {:error, step, reason, _} ->
             Logger.error("[Storage.Public.store] FAILED at #{step}: #{inspect(reason)}")
-            # Clean up the file if the transaction failed
-            temp_file_store().delete(file_id)
+            # File remains on disk - cleanup worker will handle it after retention period
         end
 
         result

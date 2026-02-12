@@ -10,7 +10,7 @@ Code.ensure_loaded!(Frameworks.Signal.TestRecorder)
 Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
 Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
 
-ExUnit.start()
+ExUnit.start(exclude: [:slow])
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
@@ -42,3 +42,5 @@ Application.put_env(:core, BankingClient, client: BankingClient.MockClient)
 
 Mox.defmock(Systems.Storage.MockBackend, for: Systems.Storage.Backend)
 Mox.defmock(Systems.Storage.BuiltIn.MockSpecial, for: Systems.Storage.BuiltIn.Special)
+Mox.defmock(Systems.Storage.MockTempFileStore, for: Systems.Storage.TempFileStore)
+Mox.defmock(Systems.Storage.MockJobScheduler, for: Systems.Storage.JobScheduler)

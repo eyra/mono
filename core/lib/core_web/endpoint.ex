@@ -70,7 +70,7 @@ defmodule CoreWeb.Endpoint do
   @http_body_max_size Application.compile_env(
                         :core,
                         [CoreWeb.Endpoint, :http_body_max_size],
-                        200_000_000
+                        210_000_000
                       )
 
   plug(Plug.Parsers,

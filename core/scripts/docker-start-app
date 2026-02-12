@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+# Set UTF-8 locale
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Create directories for persistent storage (inside mounted volume)
+if [ -n "$UPLOAD_PATH" ]; then
+  mkdir -p "$UPLOAD_PATH"
+fi
+
+if [ -n "$FELDSPAR_DATA_DONATION_PATH" ]; then
+  mkdir -p "$FELDSPAR_DATA_DONATION_PATH"
+fi
+
+# Start the application (migrations handled by predeploy)
+exec /opt/app/bin/core start

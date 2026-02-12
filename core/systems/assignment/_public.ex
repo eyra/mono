@@ -411,9 +411,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def add_participant!(%Assignment.Model{crew: crew}, user) do
-    if not Crew.Public.member?(crew, user) do
-      {:ok, _} = Crew.Public.apply_member_with_role(crew, user, :participant)
-    end
+    # Use upsert pattern - no check-then-insert to avoid race conditions
+    Crew.Public.apply_member_with_role(crew, user, :participant)
   end
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
