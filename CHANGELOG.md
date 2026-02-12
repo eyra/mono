@@ -9,6 +9,15 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#20.3 2026-02-12
+* Fixed - Race condition in affiliate user creation
+* Fixed - Race condition in crew member and role assignment creation
+* Added - Service login API endpoint with SERVICE_LOGIN_KEY security
+* Added - E2E tests (Playwright) and load tests (Artillery) infrastructure
+* Added - Fly.io deployment infrastructure with auto-suspend support
+* Added - JSON error responses for API endpoints
+* Changed - Increase HTTP body limit from 200MB to 210MB for data donations
+
 ## \#20.2 2026-01-27
 * Fixed - FunctionClauseError in embedded LiveViews for flash messages
 * Fixed - File upload controller to handle invalid filenames and missing files

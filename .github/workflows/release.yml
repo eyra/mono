@@ -53,6 +53,7 @@ jobs:
             -e MIX_ENV=$MIX_ENV \
             -e BUNDLE=${{ inputs.bundle || 'next' }} \
             -e VERSION=${{ env.VERSION }} \
+            -e PLATFORM=aws \
             -v ${{ github.workspace }}:/app \
             next-platform:latest \
             bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"

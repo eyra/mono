@@ -75,7 +75,7 @@ config :core, :signal,
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 # Maximum HTTP body size for uploads (Plug.Parsers)
-config :core, CoreWeb.Endpoint, http_body_max_size: 200_000_000
+config :core, CoreWeb.Endpoint, http_body_max_size: 210_000_000
 
 config :core,
   greenlight_auth_module: Core.Authorization,
@@ -146,7 +146,7 @@ config :core, CoreWeb.Endpoint,
   server: true,
   force_ssl: false,
   render_errors: [
-    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
+    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorJSON],
     layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
@@ -171,7 +171,9 @@ config :core, :version, System.get_env("VERSION", "dev")
 
 config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 
-config :core, :storage, services: ~w(builtin yoda)
+config :core, :storage,
+  services: ~w(builtin yoda),
+  job_scheduler: Systems.Storage.JobScheduler.Oban
 
 config :core, BankingClient,
   host: "localhost",

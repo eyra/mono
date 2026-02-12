@@ -178,6 +178,7 @@ defmodule Systems.Account.User do
     |> cast(attrs, [:email, :displayname, :creator, :verified_at])
     |> cast_assoc(:profile)
     |> put_change(:hashed_password, "no-password-set")
+    |> unique_constraint(:email)
   end
 
   @doc """

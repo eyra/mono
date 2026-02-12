@@ -1,0 +1,60 @@
+name: E2E Tests
+
+on:
+  workflow_call:
+    inputs:
+      app_name:
+        description: 'Fly.io app name'
+        required: true
+        type: string
+      assignment_path:
+        description: 'Assignment path for tests'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'Fly.io app name'
+        required: true
+        default: 'eyra-next-dev'
+      assignment_path:
+        description: 'Assignment path for tests'
+        required: true
+        default: '/a/nWPk4K'
+
+jobs:
+  e2e:
+    name: E2E Tests (${{ inputs.app_name }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: core/test/e2e
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: core/test/e2e
+        run: npx playwright install chromium
+
+      - name: Run E2E tests
+        working-directory: core/test/e2e
+        env:
+          BASE_URL: https://${{ inputs.app_name }}.fly.dev
+          ASSIGNMENT_PATH: ${{ inputs.assignment_path }}
+        run: npm run e2e
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ inputs.app_name }}
+          path: core/test/e2e/test-results/
+          retention-days: 7

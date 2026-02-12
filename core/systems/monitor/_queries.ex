@@ -61,6 +61,7 @@ defmodule Systems.Monitor.Queries do
 
     case result do
       nil -> 0
+      %Decimal{} = value -> Decimal.to_integer(value)
       value -> value
     end
   end

@@ -135,6 +135,9 @@ config :core, Systems.Email.Mailer,
 
 config :core, :apns_backend, Core.APNS.LoggingBackend
 
+# Service login for load testing
+config :core, :service_login, key: "dev-test-key"
+
 # #  For Minio (local S3)
 # config :ex_aws,
 #   scheme: "http://",

@@ -72,6 +72,32 @@ defmodule Systems.Monitor.PublicTest do
                }
              ] = from(Monitor.EventModel) |> Repo.all()
     end
+
+    test "reset/1 with values exceeding 32-bit integer range" do
+      # Simulate ~4.7GB of file storage (the actual bug scenario)
+      # 32-bit signed integer max is 2,147,483,647
+      large_value = 4_776_318_715
+
+      Monitor.Public.log(["storage=2", "topic=bytes"], value: large_value)
+
+      assert Monitor.Public.sum(["storage=2", "topic=bytes"]) == large_value
+
+      Monitor.Public.reset(["storage=2", "topic=bytes"])
+
+      assert Monitor.Public.count(["storage=2", "topic=bytes"]) == 2
+      assert Monitor.Public.sum(["storage=2", "topic=bytes"]) == 0
+
+      assert [
+               %Systems.Monitor.EventModel{
+                 identifier: ["storage=2", "topic=bytes"],
+                 value: ^large_value
+               },
+               %Systems.Monitor.EventModel{
+                 identifier: ["storage=2", "topic=bytes", "action=reset"],
+                 value: -4_776_318_715
+               }
+             ] = from(Monitor.EventModel) |> Repo.all()
+    end
   end
 
   describe "Monitor metrics" do

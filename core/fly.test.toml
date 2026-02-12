@@ -8,6 +8,7 @@ primary_region = 'ams'
   dockerfile = 'Dockerfile'
   [build.args]
     BUNDLE = 'next'
+    VERSION = 'release'
     FORCE_SSL = 'false'
 
 [env]

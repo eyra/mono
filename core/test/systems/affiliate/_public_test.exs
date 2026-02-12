@@ -102,17 +102,17 @@ defmodule Systems.Affiliate.PublicTest do
       user = Affiliate.Public.obtain_user!("test_user", affiliate)
 
       assert user.id != nil
-      assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
+      assert user.user.email == "affiliate_#{affiliate.id}_test_user@next.eyra.co"
     end
 
-    test "obtain2 existing user" do
+    test "obtain two different users" do
       affiliate = Factories.insert!(:affiliate)
       user = Affiliate.Public.obtain_user!("test_user1", affiliate)
       user_2 = Affiliate.Public.obtain_user!("test_user2", affiliate)
 
       assert user.id != user_2.id
-      assert user.user.email == "affiliate_#{affiliate.id}_user_1@next.eyra.co"
-      assert user_2.user.email == "affiliate_#{affiliate.id}_user_2@next.eyra.co"
+      assert user.user.email == "affiliate_#{affiliate.id}_test_user1@next.eyra.co"
+      assert user_2.user.email == "affiliate_#{affiliate.id}_test_user2@next.eyra.co"
     end
 
     test "obtain existing user" do
@@ -134,6 +134,25 @@ defmodule Systems.Affiliate.PublicTest do
       user_2_b = Affiliate.Public.obtain_user!("test_user", affiliate2)
 
       assert user_2_a.id == user_2_b.id
+    end
+
+    test "handles pre-existing user with same email gracefully" do
+      affiliate = Factories.insert!(:affiliate)
+      identifier = "test-user-123"
+
+      # Pre-create a user with the email that would be generated
+      # This simulates what happens after a race: another request already created the user
+      email = "affiliate_#{affiliate.id}_#{identifier}@next.eyra.co"
+      _existing_user = Factories.insert!(:member, %{email: email})
+
+      # obtain_user should handle this gracefully by using the existing user
+      result = Affiliate.Public.obtain_user(identifier, affiliate)
+
+      assert {:ok, affiliate_user} = result
+      assert affiliate_user.user.email == email
+
+      # Only one affiliate_user should exist
+      assert Affiliate.Public.count_users(affiliate) == 1
     end
   end
 end
