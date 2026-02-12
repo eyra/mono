@@ -71,7 +71,7 @@ defmodule Core.MixProject do
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
        github: "eyra/bamboo_phoenix", ref: "59d3961228cb8bd315403cfbf48415aae19f25f1"},
-      {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
+      {:bamboo_ses, github: "eyra/bamboo_ses", ref: "0f08fd0dd7f743a4c2b91fa9638a09b5774b7ae2"},
       {:bamboo, "2.5.0"},
       {:bcrypt_elixir, "3.3.2"},
       {:cldr_utils, "2.28.3", override: true},
