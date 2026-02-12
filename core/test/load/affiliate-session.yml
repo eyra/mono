@@ -1,0 +1,29 @@
+config:
+  target: "{{ $processEnvironment.BASE_URL }}"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      pause: 2
+      name: "Affiliate session test - sequential"
+    - duration: 1
+      arrivalRate: 1
+      pause: 2
+    - duration: 1
+      arrivalRate: 1
+      pause: 2
+    - duration: 1
+      arrivalRate: 1
+      pause: 2
+    - duration: 1
+      arrivalRate: 1
+  processor: "./affiliate-functions.js"
+
+scenarios:
+  - name: "Verify session after affiliate redirect"
+    flow:
+      - function: "generateSqid"
+      - get:
+          url: "/a/{{ sqid }}?p=session_test_{{ $uuid }}"
+          followRedirect: true
+          expect:
+            - statusCode: 200

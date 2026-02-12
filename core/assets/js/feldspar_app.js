@@ -63,10 +63,21 @@ export const FeldsparApp = {
       await this.donate_via_api(e.data);
     } else {
       // All other events (including CommandSystemExit) pass through to LiveView
-      this.pushEvent("feldspar_event", e.data);
+      try {
+        this.pushEvent("feldspar_event", e.data);
+      } catch (error) {
+        console.warn(
+          "[Feldspar] Could not push event (LiveView disconnected):",
+          type
+        );
+      }
     }
   },
 
+  // Donate response contract (sent via MessageChannel to Feldspar app):
+  // - DonateSuccess: { __type__: "DonateSuccess", key: string, status: number }
+  // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
+  //   Note: status=0 indicates a network error (offline, timeout, CORS, etc.)
   async donate_via_api(data) {
     const formData = new FormData();
     formData.append("key", data.key);
@@ -77,9 +88,72 @@ export const FeldsparApp = {
       "data.json"
     );
 
-    await fetch("/api/feldspar/donate", {
-      method: "POST",
-      body: formData,
-    });
+    let response;
+    const dataSize = data.json_string ? data.json_string.length : 0;
+    console.log("[Feldspar] Donate starting:", { key: data.key, dataSize });
+
+    try {
+      response = await fetch("/api/feldspar/donate", {
+        method: "POST",
+        body: formData,
+      });
+      console.log("[Feldspar] Donate fetch completed:", {
+        key: data.key,
+        status: response.status,
+      });
+    } catch (error) {
+      // Network error (offline, timeout, etc.)
+      console.error("[Feldspar] Donate network error:", error.message);
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: 0,
+        error: `Network error: ${error.message}`,
+      });
+      return;
+    }
+
+    try {
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("[Feldspar] Donate success:", {
+          key: data.key,
+          status: response.status,
+        });
+        this.sendDonateResponse({
+          __type__: "DonateSuccess",
+          key: data.key,
+          status: response.status,
+        });
+      } else {
+        console.error(
+          "[Feldspar] Donate failed:",
+          response.status,
+          result.error
+        );
+        this.sendDonateResponse({
+          __type__: "DonateError",
+          key: data.key,
+          status: response.status,
+          error: result.error || "Unknown error",
+        });
+      }
+    } catch (error) {
+      // JSON parse error
+      console.error("[Feldspar] Donate response parse error:", error.message);
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: response.status,
+        error: "Invalid response from server",
+      });
+    }
+  },
+
+  sendDonateResponse(message) {
+    if (this.channel && this.channel.port1) {
+      this.channel.port1.postMessage(message);
+    }
   },
 };

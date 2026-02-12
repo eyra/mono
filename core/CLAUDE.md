@@ -58,6 +58,159 @@ Always investigate first, understand second, fix third.
 - `mix i18n` - Extract translation strings
 - **IMPORTANT**: When introducing new `dgettext` keys, always run `mix gettext.extract --merge` and add English translations to the appropriate `.po` files in `priv/gettext/en/LC_MESSAGES/`
 
+## Tigris Object Storage (S3) Configuration
+
+### Public Bucket Setup
+1. **Enable public access**: `fly storage update <bucket-name> --public --yes`
+2. **Verify status**: `fly storage status <bucket-name>` should show `Public = True`
+
+### Public URL Format - CRITICAL
+**ALWAYS use `t3.storage.dev` domain for public URLs, NOT `fly.storage.tigris.dev`**
+
+- ✅ Correct: `https://<bucket-name>.t3.storage.dev/<key>`
+- ❌ Wrong: `https://fly.storage.tigris.dev/<bucket-name>/<key>` (hyphens in domain cause issues)
+- ❌ Wrong: `https://<bucket-name>.fly.storage.tigris.dev/<key>` (hyphens in domain cause issues)
+
+The `PUBLIC_S3_URL` secret should be set to: `https://<bucket-name>.t3.storage.dev`
+
+### Feldspar App Storage
+- Feldspar apps are uploaded to `feldspar/<uuid>/` prefix in the bucket
+- The public URL is constructed as `{PUBLIC_S3_URL}/feldspar/{uuid}/index.html`
+- If Feldspar iframe shows blank/errors, check:
+  1. Bucket is public (`fly storage status <bucket>`)
+  2. `PUBLIC_S3_URL` uses `t3.storage.dev` domain
+  3. App was actually uploaded (check S3 contents)
+
+## Fly.io New Environment Setup Checklist
+
+When setting up a new Fly.io environment (e.g., `eyra-next-production`), follow these steps:
+
+### 1. Create the Fly App
+```bash
+fly apps create <app-name> --org eyra
+```
+
+### 2. Create Tigris Storage Bucket
+```bash
+fly storage create --name <app-name>-storage --org eyra --yes
+```
+
+### 3. Enable Public Access on Bucket
+```bash
+fly storage update <app-name>-storage --public --yes
+```
+Verify with: `fly storage status <app-name>-storage` → should show `Public = True`
+
+### 4. Set Required Secrets
+```bash
+# Database
+fly secrets set DATABASE_URL="postgres://..." -a <app-name>
+
+# App secrets
+fly secrets set SECRET_KEY_BASE="$(mix phx.gen.secret)" -a <app-name>
+
+# CRITICAL: Use t3.storage.dev domain (no hyphens)
+fly secrets set PUBLIC_S3_URL="https://<app-name>-storage.t3.storage.dev" -a <app-name>
+
+# Other required secrets
+fly secrets set APP_ADMINS="admin@example.com" -a <app-name>
+fly secrets set ENABLED_APP_FEATURES="..." -a <app-name>
+```
+
+### 5. Attach Tigris Storage to App
+The `fly storage create` command should auto-attach, but verify these env vars are set:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_ENDPOINT_URL_S3=https://fly.storage.tigris.dev`
+- `BUCKET_NAME=<app-name>-storage`
+
+### 6. Deploy the App
+```bash
+fly deploy -a <app-name> -c fly.<env>.toml
+```
+
+### 7. Upload Feldspar Apps
+Upload required Feldspar apps through the admin interface. They will be stored in the Tigris bucket under `feldspar/<uuid>/`.
+
+### Common Issues
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Feldspar iframe blank/403 | Bucket not public | `fly storage update <bucket> --public` |
+| Feldspar iframe blank/403 | Wrong PUBLIC_S3_URL domain | Use `t3.storage.dev` not `fly.storage.tigris.dev` |
+| Feldspar iframe CORS errors | Wrong domain format | Use virtual-hosted style: `<bucket>.t3.storage.dev` |
+
+## Load Testing
+
+Artillery-based load tests for the data donation API are located in `core/test/load/`.
+
+### Prerequisites
+
+1. **Create a service user** on the target environment:
+   - Email: e.g., `service-loadtest@eyra.local`
+   - Set a strong password
+   - The service user authenticates via `/api/service/login`
+
+2. **Ensure assignment has storage endpoint**: The target assignment must have a storage endpoint configured for data donations.
+
+3. **Setup load test environment**:
+```bash
+cd core/test/load
+npm run setup  # Installs deps and auto-generates test data files (1MB, 10MB, 100MB, 200MB)
+```
+Test data files are gitignored and auto-generated as random binary data.
+
+### Running Load Tests
+
+```bash
+cd core/test/load
+
+# Set required environment variables
+export BASE_URL=https://eyra-next-staging.fly.dev
+export SERVICE_EMAIL=service-loadtest@eyra.local
+export SERVICE_PASSWORD=your_password
+export ASSIGNMENT_ID=4
+export FILE_SIZE_MB=1  # Options: 1, 10, 100, 200
+
+# Test configurations
+npm run test:quick   # 2 uploads (sanity check)
+npm run test:volume  # 320 uploads, use FILE_SIZE_MB=1 or 10
+npm run test:large   # 50 uploads x 100MB
+npm run test:xlarge  # 10 uploads x 200MB (Phoenix max)
+```
+
+### Verification Script
+
+Use the verification script to count files on Fly machines before/after:
+```bash
+./run-and-verify.sh quick   # Runs test and counts files on all machines
+./run-and-verify.sh volume
+```
+
+### Test Configurations
+
+| Environment | Uploads | Duration | File Size | Use Case |
+|-------------|---------|----------|-----------|----------|
+| quick       | 2       | 60s      | any       | Sanity check |
+| volume      | 320     | ~2min    | 1-10MB    | Concurrent load |
+| large       | 50      | 50s      | 100MB     | Large file handling |
+| xlarge      | 10      | 20s      | 200MB     | Max size stress test |
+
+### How It Works
+
+1. Artillery authenticates via `POST /api/service/login` with service user credentials
+2. Captures the session cookie from the response
+3. Uses the cookie for upload requests to `POST /api/feldspar/donate`
+4. Files are stored in the configured storage backend (Tigris or local)
+
+### Troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| 401 Unauthorized | Invalid service credentials | Verify service user exists and password is correct |
+| 413 Payload Too Large | File exceeds Phoenix limit | Use FILE_SIZE_MB=100 or less, check `STORAGE_UPLOAD_MAX_SIZE` |
+| Timeout errors | Slow network/processing | Increase timeout in `donate.yml` (default 300s) |
+| Files not appearing | Wrong assignment ID | Verify ASSIGNMENT_ID has storage endpoint configured |
+
 ## Architecture Overview
 
 This is an Elixir Phoenix LiveView application using a **Systems-based architecture** where functionality is organized into autonomous systems rather than traditional MVC layers.

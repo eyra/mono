@@ -28,6 +28,7 @@ defmodule Systems.Feldspar.DataDonationController do
 
   Returns:
   - 200 with {status: "ok"} on success
+  - 400 if missing required fields (key, data, context) or invalid context
   - 401 if user not authenticated
   - 422 if storage/delivery fails
   - 429 if rate limited
@@ -85,6 +86,15 @@ defmodule Systems.Feldspar.DataDonationController do
         |> put_status(:unprocessable_entity)
         |> json(%{error: "No storage endpoint configured"})
 
+      {:error, {:scheduling_failed, step, reason}} ->
+        Logger.error(
+          "[Feldspar.DataDonationController] Scheduling failed at step=#{step}: #{inspect(reason)}"
+        )
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "Scheduling failed"})
+
       {:error, reason} ->
         Logger.error("[Feldspar.DataDonationController] Storage failed: #{inspect(reason)}")
 
@@ -94,10 +104,17 @@ defmodule Systems.Feldspar.DataDonationController do
     end
   end
 
-  def create(conn, _params) do
+  def create(conn, params) do
+    missing =
+      ["key", "data", "context"]
+      |> Enum.reject(&Map.has_key?(params, &1))
+      |> Enum.join(", ")
+
+    Logger.error("[Feldspar.DataDonationController] Missing required fields: #{missing}")
+
     conn
     |> put_status(:bad_request)
-    |> json(%{error: "Missing required fields: key, data"})
+    |> json(%{error: "Missing required fields: #{missing}"})
   end
 
   defp get_current_user(conn) do
@@ -125,14 +142,29 @@ defmodule Systems.Feldspar.DataDonationController do
   defp get_storage_endpoint(context) do
     assignment_id = context["assignment_id"]
 
+    Logger.info(
+      "[Feldspar.DataDonationController] Looking up storage endpoint for assignment_id=#{inspect(assignment_id)}"
+    )
+
     if assignment_id && assignment_id != "" do
       with {:ok, assignment} <- get_assignment(assignment_id) do
+        Logger.info("[Feldspar.DataDonationController] Found assignment id=#{assignment.id}")
+
         case Project.Public.get_storage_endpoint_by(assignment) do
-          {:ok, endpoint} -> {:ok, endpoint}
-          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
+          {:ok, endpoint} ->
+            Logger.info("[Feldspar.DataDonationController] Found storage endpoint")
+            {:ok, endpoint}
+
+          {:error, {:storage_endpoint, :not_available}} ->
+            Logger.error(
+              "[Feldspar.DataDonationController] Storage endpoint not available for assignment"
+            )
+
+            {:error, :no_storage_endpoint}
         end
       end
     else
+      Logger.error("[Feldspar.DataDonationController] No assignment_id in context")
       {:error, :no_storage_endpoint}
     end
   end
@@ -140,14 +172,29 @@ defmodule Systems.Feldspar.DataDonationController do
   defp schedule_delivery(storage_endpoint, file_id, meta_data) do
     case Storage.Public.deliver_file(storage_endpoint, file_id, meta_data) do
       {:ok, _} -> :ok
-      error -> error
+      {:error, step, reason, _} -> {:error, {:scheduling_failed, step, reason}}
     end
   end
 
   defp get_assignment(assignment_id) do
+    Logger.info(
+      "[Feldspar.DataDonationController] Fetching assignment id=#{inspect(assignment_id)}"
+    )
+
     case Assignment.Public.get(assignment_id, Assignment.Model.preload_graph(:down)) do
-      nil -> {:error, :assignment_not_found}
-      assignment -> {:ok, assignment}
+      nil ->
+        Logger.error(
+          "[Feldspar.DataDonationController] Assignment not found id=#{inspect(assignment_id)}"
+        )
+
+        {:error, :assignment_not_found}
+
+      assignment ->
+        Logger.info(
+          "[Feldspar.DataDonationController] Assignment found, has workflow=#{assignment.workflow != nil}"
+        )
+
+        {:ok, assignment}
     end
   end
 

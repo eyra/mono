@@ -1,0 +1,17 @@
+{
+  "name": "eyra-load-tests",
+  "version": "1.0.0",
+  "description": "Artillery load tests for Eyra data donation API",
+  "scripts": {
+    "setup": "npm install && npm run generate-testdata",
+    "generate-testdata": "dd if=/dev/urandom of=testdata_1MB.bin bs=1000000 count=1 2>/dev/null && dd if=/dev/urandom of=testdata_10MB.bin bs=1000000 count=10 2>/dev/null && dd if=/dev/urandom of=testdata_100MB.bin bs=1000000 count=100 2>/dev/null && dd if=/dev/urandom of=testdata_200MB.bin bs=1000000 count=200 2>/dev/null && echo 'Test data files generated'",
+    "test": "artillery run donate.yml",
+    "test:quick": "artillery run donate.yml -e quick",
+    "test:volume": "artillery run donate.yml -e volume",
+    "test:large": "artillery run donate.yml -e large",
+    "test:xlarge": "artillery run donate.yml -e xlarge"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0"
+  }
+}

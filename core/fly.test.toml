@@ -1,0 +1,64 @@
+# Fly.io configuration for Next Platform (test environments)
+# Deploy with: flyctl deploy -c fly.test.toml --app <app-name>
+# See https://fly.io/docs/reference/configuration/ for all options
+
+primary_region = 'ams'
+
+[build]
+  dockerfile = 'Dockerfile'
+  [build.args]
+    BUNDLE = 'next'
+    VERSION = 'release'
+    FORCE_SSL = 'false'
+
+[env]
+  HTTP_PORT = '8000'
+  ECTO_IPV6 = 'true'
+  APP_MAIL_DOMAIN = 'eyra.dev'
+  APP_ADMINS = '*@eyra.co'
+
+  # Storage paths (using Fly volume mounted at /app/data)
+  UPLOAD_PATH = '/app/data/uploads'
+  STATIC_PATH = '/app/data/uploads'
+  FELDSPAR_DATA_DONATION_PATH = '/app/data/datadonation'
+  FELDSPAR_DATA_DONATION_RETENTION = '336'
+
+  # Oban plugins
+  ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
+
+  # Storage services - use builtin (local filesystem) for test environments
+  STORAGE_SERVICES = 'builtin'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'suspend'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '30s'
+    method = 'GET'
+    path = '/.status/health'
+
+[[vm]]
+  memory = '2gb'
+  cpu_kind = 'shared'
+  cpus = 2
+
+[mounts]
+  source = 'data'
+  destination = '/app/data'
+  initial_size = '1gb'
+
+[deploy]
+  strategy = 'rolling'
+  release_command = '/opt/app/bin/predeploy'
