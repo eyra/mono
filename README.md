@@ -35,6 +35,32 @@ Customizable bundle that can be used to run Core on one of your own servers.
 See [SELFHOSTING.md](SELFHOSTING.md) for detailed instructions.
 
 
+## Testing
+
+### Unit Tests
+```bash
+cd core
+mix test --warnings-as-errors
+```
+
+### E2E Tests (Playwright)
+Browser-based end-to-end tests for user flows.
+```bash
+cd core/test/e2e
+npm install
+npx playwright test
+```
+See [core/test/e2e/README.md](core/test/e2e/README.md) for configuration options.
+
+### Load Tests (Artillery)
+Performance and stress testing for the data donation API.
+```bash
+cd core/test/load
+npm run setup  # Install deps + generate test data files
+npm run test:quick  # Quick sanity check
+```
+See [core/test/load/README.md](core/test/load/README.md) for all test configurations.
+
 ## Banking Proxy
 
 Project implementing a proxy server used in Banking (core/systems/banking). It allows for a limited and secure interaction with a banking account.

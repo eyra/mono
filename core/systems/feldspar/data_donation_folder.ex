@@ -6,6 +6,8 @@ defmodule Systems.Feldspar.DataDonationFolder do
   This avoids memory pressure from large uploads by storing data on the filesystem.
   """
 
+  @behaviour Systems.Storage.TempFileStore
+
   require Logger
 
   @doc """
@@ -63,7 +65,7 @@ defmodule Systems.Feldspar.DataDonationFolder do
   end
 
   @doc """
-  Deletes a data donation file after successful delivery.
+  Deletes a data donation file. Only used by the cleanup worker.
   """
   def delete(file_id) do
     path = file_path(file_id)

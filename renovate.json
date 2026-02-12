@@ -6,8 +6,6 @@
     "group:allNonMajor"
   ],
   "timezone": "Europe/Amsterdam",
-  "prConcurrentLimit": 1,
-  "branchConcurrentLimit": 1,
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],

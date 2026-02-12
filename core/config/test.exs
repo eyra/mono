@@ -95,6 +95,12 @@ config :core, :feldspar_data_donation,
   path: "/tmp/data_donations_test",
   retention_hours: 336
 
+# Higher rate limit for concurrent upload tests
+config :core, :rate,
+  quotas: [
+    [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local]
+  ]
+
 try do
   import_config "test.secret.exs"
 rescue

@@ -15,6 +15,14 @@ fi
 
 cd $(dirname "$0")/..
 
+# Copy platform-specific runtime config
+if [ -f "config/runtime.${PLATFORM}.exs" ]; then
+  echo "Using runtime config for platform: ${PLATFORM}"
+  cp "config/runtime.${PLATFORM}.exs" config/runtime.exs
+else
+  echo "WARNING: No runtime config found for platform: ${PLATFORM}"
+fi
+
 mix deps.get
 mix assets.setup
 mix assets.deploy

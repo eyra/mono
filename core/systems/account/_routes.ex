@@ -32,6 +32,12 @@ defmodule CoreWeb.Live.User.Routes do
           :confirm_email
         )
       end
+
+      scope "/api/service", Systems.Account do
+        pipe_through([:api])
+
+        post("/login", ServiceLoginController, :create)
+      end
     end
   end
 end

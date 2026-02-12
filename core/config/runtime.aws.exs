@@ -267,4 +267,10 @@ if config_env() == :prod do
          |> Enum.reject(&(&1 == ""))
          |> Enum.map(&"core@#{&1}")
          |> Enum.map(&String.to_atom/1)
+
+  # SERVICE LOGIN API
+  # Required for /api/service/login endpoint (load testing, integrations)
+  if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
+    config :core, :service_login, key: service_login_key
+  end
 end
