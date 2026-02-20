@@ -7,6 +7,9 @@ defmodule Systems.Account.ProfileTab do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Concept.LiveContext
+  alias Systems.Account
+
   @impl true
   def key, do: :profile
 
@@ -14,19 +17,27 @@ defmodule Systems.Account.ProfileTab do
   def visible?(_user), do: true
 
   @impl true
-  def build(user, fabric) do
-    child =
-      Fabric.prepare_child(fabric, :profile, Systems.Account.UserProfileForm, %{
-        id: :profile_form,
-        user: user
-      })
+  def build(_user, live_context) do
+    profile_context =
+      LiveContext.extend(live_context, %{show_signout_button: false, show_email: true})
+
+    element =
+      LiveNest.Element.prepare_live_view(
+        :profile_view,
+        Account.ProfileView,
+        live_context: profile_context
+      )
 
     %{
       id: :profile,
       title: dgettext("eyra-account", "profile.tab.profile.title"),
       type: :fullpage,
-      child: child,
+      element: element,
       ready?: true
     }
+  end
+
+  def build_live_context(user) do
+    LiveContext.new(%{user_id: user.id})
   end
 end

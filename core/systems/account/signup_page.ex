@@ -6,6 +6,7 @@ defmodule Systems.Account.SignupPage do
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
 
@@ -16,6 +17,7 @@ defmodule Systems.Account.SignupPage do
   alias Systems.Account
   alias Systems.Account.UserForm
   alias Systems.Account.User
+  alias Systems.Rate
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
@@ -67,10 +69,16 @@ defmodule Systems.Account.SignupPage do
       ) do
     user_params = Map.put(user_params, "creator", assigns.creator?)
 
-    with :ok <- validate_privacy_policies(assigns),
+    with :ok <- check_rate_limit(assigns),
+         :ok <- validate_privacy_policies(assigns),
          {:ok, user} <- Account.Public.register_user(user_params) do
       handle_successful_registration(socket, user)
     else
+      {:error, :rate_limited} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, dgettext("eyra-account", "signup.rate_limited"))}
+
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
 
@@ -141,6 +149,13 @@ defmodule Systems.Account.SignupPage do
     end
   end
 
+  defp check_rate_limit(%{remote_ip: remote_ip}) do
+    Rate.Public.request_permission(:signup, remote_ip, 1)
+    :ok
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
   defp validate_privacy_policies(%{
          post_signup_action: post_signup_action,
          panl_privacy_policy_accepted: panl_privacy_policy_accepted,
@@ -188,10 +203,22 @@ defmodule Systems.Account.SignupPage do
         &url(socket, ~p"/user/confirm/#{&1}")
       )
 
+    redirect_path = onboarding_redirect_path(socket.assigns.post_signup_action, user)
+
     {:noreply,
      socket
      |> put_flash(:info, dgettext("eyra-user", "account.created.successfully"))
-     |> push_navigate(to: ~p"/user/await-confirmation")}
+     |> redirect(to: redirect_path)}
+  end
+
+  defp onboarding_redirect_path("add_to_panl", user) do
+    token = Account.OnboardingController.generate_token(user)
+    locale = Gettext.get_locale()
+    ~p"/user/onboarding/start?token=#{token}&locale=#{locale}"
+  end
+
+  defp onboarding_redirect_path(_, _user) do
+    ~p"/user/await-confirmation"
   end
 
   @impl true

@@ -8,6 +8,8 @@ defmodule Systems.Content.Html do
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Breadcrumbs
 
+  import Frameworks.Pixel.Line
+
   attr(:items, :list, required: true)
   attr(:target, :any, default: "")
 
@@ -148,21 +150,22 @@ defmodule Systems.Content.Html do
     ~H"""
       <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
         <%= if Enum.count(@tabs) > 0 do %>
-          <div class="flex flex-row items-center justify-between w-full h-navbar-height">
+          <%= if Enum.count(@breadcrumbs || []) > 0 do %>
             <Area.content>
-              <div class="flex flex-col gap-y-4 mt-4 sm:mt-0 sm:flex-row w-full justify-between">
-                  <div>
-                    <%= if Enum.count(@breadcrumbs || []) > 0 do %>
-                      <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
-                    <% end %>
-                  </div>
-                  <div class="flex justify-center">
-                    <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
-                  </div>
-                  <div class=""></div>
+              <div class="flex flex-row items-center h-[64px]">
+                <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
               </div>
             </Area.content>
-          </div>
+            <.line />
+          <% end %>
+          <Area.content>
+            <div class="flex flex-row items-center justify-center w-full h-navbar-height">
+              <div class="flex-shrink-0">
+                <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+              </div>
+            </div>
+          </Area.content>
+          <.line />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
               <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} bar_id={@tabbar_id} />
           </div>
@@ -195,7 +198,7 @@ defmodule Systems.Content.Html do
           </:top_bar>
 
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} include_breadcrumb_margin={true} />
           </div>
           <Tabbed.footer bar_id={@tabbar_id} tabs={@tabs} />
         </.live_workspace>

@@ -153,6 +153,17 @@ defmodule Systems.Account.Public do
     not (external? or affiliate?)
   end
 
+  def confirmed?(nil), do: false
+  def confirmed?(%User{confirmed_at: confirmed_at}), do: not is_nil(confirmed_at)
+
+  def activated?(%User{id: user_id}), do: activated?(user_id)
+
+  def activated?(user_id) when is_integer(user_id) do
+    get!(user_id) |> confirmed?()
+  end
+
+  def show_profile_menu_item?(user), do: internal?(user) and confirmed?(user)
+
   ## Database getters
 
   @doc """
@@ -404,10 +415,10 @@ defmodule Systems.Account.Public do
 
   ## Examples
 
-      iex> deliver_user_confirmation_instructions(user, &url(conn, ~p"/user/settings/confirm-email/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(user, &url(conn, ~p"/user/settings/activate-account/\#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
-      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~p"/user/settings/confirm-email/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~p"/user/settings/activate-account/\#{&1}"))
       {:error, :already_confirmed}
 
   """

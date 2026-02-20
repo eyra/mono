@@ -490,3 +490,27 @@ msgstr "Vă mulțumim. Ați finalizat această parte. Faceți clic pe Continuă 
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Pentru a participa la acest studiu, vă rugăm să vă activați mai întâi contul. Faceți clic pe linkul de activare din e-mailul pe care l-am trimis la %{email}."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Continuă"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Contul dvs. nu a fost încă activat. Vă rugăm să verificați căsuța de e-mail."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "Retrimite e-mail"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "E-mail de activare trimis!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Activați-vă contul"

@@ -53,9 +53,9 @@ defmodule CoreWeb.FeatureCase do
 
     session
     |> visit("/user/signin")
-    |> fill_in(text_field("Email"), with: user.email)
-    |> fill_in(text_field("Password"), with: password)
-    |> click(button("Sign in"))
+    |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
+    |> fill_in(css("[data-testid='signin-password-input']"), with: password)
+    |> click(css("[data-testid='signin-submit-button']"))
   end
 
   @doc """
@@ -66,7 +66,10 @@ defmodule CoreWeb.FeatureCase do
     password = Core.Factories.valid_user_password()
 
     user =
-      Core.Factories.insert!(:member, %{password: password, confirmed_at: DateTime.utc_now()})
+      Core.Factories.insert!(:member, %{
+        password: password,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
 
     session = sign_in(session, user, password)
 
@@ -82,7 +85,7 @@ defmodule CoreWeb.FeatureCase do
     Core.Factories.insert!(:member, %{
       email: email,
       password: password,
-      confirmed_at: DateTime.utc_now(),
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       creator: creator
     })
   end

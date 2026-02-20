@@ -38,7 +38,7 @@ msgstr "Slaptažodis"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "Mano profilis"
+msgstr "Paskyra"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -79,10 +79,6 @@ msgstr "Keletas tyrimų naudoja konkrečius tinkamumo reikalavimus. Pasirinkdami
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Lytis"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "features.nativelanguage.title"
-msgstr "Pirmoji kalba"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "features.title"
@@ -177,6 +173,18 @@ msgid "profile.tab.profile.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr ""
 
@@ -196,6 +204,22 @@ msgstr ""
 msgid "sso.error.generic"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "sso.error.session_expired"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "sso.error.session_not_found"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signup.rate_limited"
+msgstr "Sukurti paskyrą"

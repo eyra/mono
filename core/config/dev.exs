@@ -117,7 +117,7 @@ config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
-    [service: "feldspar_data_donation", limit: 10, unit: "call", window: "minute", scope: "local"]
+    [service: "feldspar_data_donation", limit: 1, unit: "byte", window: "day", scope: "local"]
   ]
 
 config :core, Core.ImageCatalog.Unsplash,

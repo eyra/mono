@@ -479,3 +479,27 @@ msgstr "Thank you. You have completed this part. Click Continue to proceed to %{
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "To participate in this study, please activate your account first. Click the activation link in the email we sent to %{email}."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Your account has not been activated yet. Please check your inbox."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "Resend email"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "Activation email sent!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Activate your account"

@@ -106,9 +106,9 @@ defmodule Frameworks.Pixel.Selector do
       socket |> send_event(:parent, event_name, payload)
     else
       # Fallback to standard Phoenix LiveView messaging
-      # Send message to parent PID if available, otherwise to self (the LiveView)
-      target_pid = socket.parent_pid || self()
-      send(target_pid, {event_name, payload})
+      # LiveComponents run in the same process as their parent LiveView,
+      # so self() is the correct target (the hosting LiveView process)
+      send(self(), {event_name, payload})
       socket
     end
   end

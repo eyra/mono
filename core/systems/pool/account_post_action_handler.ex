@@ -8,19 +8,12 @@ defmodule Systems.Pool.AccountPostActionHandler do
   alias Systems.Pool
   alias Systems.Account
 
-  @allowed_post_actions ~w(add_to_panl)
-
   def handle(%Account.User{creator: true}, _action), do: :ok
 
-  def handle(%Account.User{} = user, action) when action in @allowed_post_actions do
-    case action do
-      "add_to_panl" ->
-        # Add participant to PANL pool when available; ignore if not configured
-        case Pool.Public.add_user_to_panl_pool(user) do
-          :ok -> :ok
-          _ -> :ok
-        end
-    end
+  def handle(%Account.User{} = user, "add_to_panl") do
+    # Add participant to PANL pool when available; ignore if not configured
+    Pool.Public.add_user_to_panl_pool(user)
+    :ok
   end
 
   def handle(%Account.User{id: user_id}, action) do

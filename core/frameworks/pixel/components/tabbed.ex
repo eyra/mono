@@ -120,13 +120,17 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:bar_id, :string, required: true)
   attr(:tabs, :list, required: true)
   attr(:include_top_margin, :boolean, default: true)
+  attr(:include_breadcrumb_margin, :boolean, default: false)
 
   def content(assigns) do
     ~H"""
     <div id={"#{@bar_id}-tab_content"} phx-hook="TabContent">
       <%= if @include_top_margin do %>
-        <div class="hidden md:block h-navbar-height" />
+        <%= if @include_breadcrumb_margin do %>
+          <div class="hidden md:block h-[64px]" />
+        <% end %>
         <div class="h-navbar-height" />
+        <Margin.y id={:page_top} />
       <% end %>
       <%= for tab <- @tabs do %>
         <.panel tab_id={tab.id} bar_id={@bar_id}>

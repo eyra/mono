@@ -29,7 +29,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr ""
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -69,10 +69,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -168,6 +164,18 @@ msgid "profile.tab.profile.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr ""
 
@@ -189,4 +197,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signup.rate_limited"
 msgstr ""

@@ -28,7 +28,7 @@ msgstr "Password"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "My profile"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -69,10 +69,6 @@ msgstr "A few studies use specific eligibility requirements. Selecting the optio
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Gender"
-
-#, elixir-autogen, elixir-format
-msgid "features.nativelanguage.title"
-msgstr "First language"
 
 #, elixir-autogen, elixir-format
 msgid "features.title"
@@ -167,6 +163,18 @@ msgid "profile.tab.profile.title"
 msgstr "My profile"
 
 #, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Onboarding"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "I agree to the %{terms_link} and %{privacy_link}"
 
@@ -189,3 +197,19 @@ msgstr "An error occurred during sign-in. Please try again."
 #, elixir-autogen, elixir-format
 msgid "sso.error.session_not_found"
 msgstr "Sign-in could not be completed. Please click the sign-in button to start again."
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.body"
+msgstr "We sent a confirmation email to %{email}. Click the link to activate your account. You can already browse studies in the meantime."
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.continue.button"
+msgstr "Start browsing"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.title"
+msgstr "Check your email"
+
+#, elixir-autogen, elixir-format
+msgid "signup.rate_limited"
+msgstr "Too many signup attempts. Please try again later."

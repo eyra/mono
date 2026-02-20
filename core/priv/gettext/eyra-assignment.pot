@@ -479,3 +479,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr ""

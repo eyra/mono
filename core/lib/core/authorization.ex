@@ -36,6 +36,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.SignupPage, [:visitor])
   grant_access(Systems.Account.UserProfilePage, [:member])
+  grant_access(Systems.Account.OnboardingPage, [:member])
   grant_access(Systems.Account.UserSecuritySettings, [:member])
   grant_access(Systems.Account.UserSettings, [:member])
   grant_access(Systems.Account.UserSignin, [:visitor])

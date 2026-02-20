@@ -490,3 +490,27 @@ msgstr "Ačiū. Užbaigėte šią dalį. Spustelėkite Tęsti, kad galėtumėte 
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Norėdami dalyvauti šiame tyrime, pirmiausia aktyvuokite savo paskyrą. Spustelėkite aktyvavimo nuorodą el. laiške, kurį išsiuntėme adresu %{email}."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Tęsti"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Jūsų paskyra dar neaktyvuota. Patikrinkite savo el. pašto dėžutę."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "Persiųsti el. laišką"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "Aktyvavimo el. laiškas išsiųstas!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Aktyvuokite savo paskyrą"

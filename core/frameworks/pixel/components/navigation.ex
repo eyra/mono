@@ -66,12 +66,17 @@ defmodule Frameworks.Pixel.Navigation do
   attr(:right_bar_buttons, :list, default: [])
   attr(:more_buttons, :list, default: [])
   attr(:hide_seperator, :boolean, default: true)
+  attr(:align, :atom, default: :left)
   slot(:inner_block, required: true)
 
-  def action_bar(%{right_bar_buttons: right_bar_buttons} = assigns) do
+  def action_bar(
+        %{right_bar_buttons: right_bar_buttons, breadcrumbs: breadcrumbs, align: align} = assigns
+      ) do
     assigns =
       assign(assigns, %{
-        has_right_bar_buttons: not Enum.empty?(right_bar_buttons)
+        has_right_bar_buttons: not Enum.empty?(right_bar_buttons),
+        has_breadcrumbs: not Enum.empty?(breadcrumbs),
+        justify: action_bar_justify(align)
       })
 
     ~H"""
@@ -80,25 +85,26 @@ defmodule Frameworks.Pixel.Navigation do
         <.action_menu buttons={@more_buttons} />
       </div>
       <div class="absolute top-0 left-0 w-full">
-        <div class="hidden md:block">
-          <div class="bg-white">
-            <Area.content>
-              <div class=" h-navbar-height">
-                <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
-              </div>
-            </Area.content>
+        <%= if @has_breadcrumbs do %>
+          <div class="hidden md:block">
+            <div class="bg-white">
+              <Area.content>
+                <div class="flex items-center h-[64px]">
+                  <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
+                </div>
+              </Area.content>
+            </div>
+            <.line />
           </div>
-          <.line />
-        </div>
+        <% end %>
         <Area.content>
           <div class="overflow-scroll scrollbar-hidden w-full">
-            <div class="flex flex-row items-center w-full h-navbar-height">
-              <div class="flex-grow">
+            <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height"}>
+              <div class="flex-shrink-0">
                 <%= render_slot(@inner_block) %> <!-- tabbar -->
               </div>
               <%= if @has_right_bar_buttons do %>
-                <div class="flex-grow" />
-                <div>
+                <div class="absolute right-0 top-0 h-full flex items-center">
                   <Button.dynamic_bar buttons={@right_bar_buttons} />
                 </div>
               <% end %>
@@ -110,6 +116,9 @@ defmodule Frameworks.Pixel.Navigation do
     </div>
     """
   end
+
+  defp action_bar_justify(:center), do: "justify-center"
+  defp action_bar_justify(_), do: "justify-start"
 
   attr(:buttons, :list, required: true)
 

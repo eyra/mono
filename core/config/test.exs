@@ -75,7 +75,8 @@ config :core, :features,
   member_google_sign_in: true,
   password_sign_in: true,
   notification_mails: true,
-  debug_expire_force: true
+  debug_expire_force: true,
+  panl: true
 
 config :core, Oban, queues: false, plugins: false
 
@@ -98,7 +99,8 @@ config :core, :feldspar_data_donation,
 # Higher rate limit for concurrent upload tests
 config :core, :rate,
   quotas: [
-    [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local]
+    [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
+    [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local]
   ]
 
 try do

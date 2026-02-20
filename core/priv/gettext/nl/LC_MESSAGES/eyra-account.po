@@ -71,10 +71,6 @@ msgid "features.gender.title"
 msgstr "Geslacht"
 
 #, elixir-autogen, elixir-format
-msgid "features.nativelanguage.title"
-msgstr "Eerste taal"
-
-#, elixir-autogen, elixir-format
 msgid "features.title"
 msgstr "Inclusie"
 
@@ -167,6 +163,18 @@ msgid "profile.tab.profile.title"
 msgstr "Mijn profiel"
 
 #, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Onboarding"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link}"
 
@@ -189,3 +197,19 @@ msgstr "Er is een fout opgetreden bij het inloggen. Probeer het opnieuw."
 #, elixir-autogen, elixir-format
 msgid "sso.error.session_not_found"
 msgstr "Inloggen kon niet worden voltooid. Klik op de inlogknop om opnieuw te beginnen."
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.continue.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.title"
+msgstr "Onboarding"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signup.rate_limited"
+msgstr "Maak een account aan"

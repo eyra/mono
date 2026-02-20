@@ -7,25 +7,35 @@ defmodule Systems.Account.FeaturesTab do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Concept.LiveContext
+  alias Systems.Account
+  alias Systems.Pool
+
   @impl true
   def key, do: :features
 
   @impl true
-  def visible?(user), do: Systems.Pool.Public.panl_participant?(user)
+  def visible?(user), do: Pool.Public.panl_participant?(user)
 
   @impl true
-  def build(user, fabric) do
-    child =
-      Fabric.prepare_child(fabric, :features, Systems.Account.FeaturesForm, %{
-        user: user
-      })
+  def build(_user, live_context) do
+    element =
+      LiveNest.Element.prepare_live_view(
+        :features_view,
+        Account.FeaturesView,
+        live_context: live_context
+      )
 
     %{
       id: :features,
       title: dgettext("eyra-account", "profile.tab.features.title"),
       type: :fullpage,
-      child: child,
+      element: element,
       ready?: true
     }
+  end
+
+  def build_live_context(user) do
+    LiveContext.new(%{user_id: user.id})
   end
 end
