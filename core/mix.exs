@@ -96,7 +96,7 @@ defmodule Core.MixProject do
       {:nimble_options, "1.1.1"},
       {:oban, "2.20.1"},
       # Fork supports elixir 1.18.4
-      {:packmatic, github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
+      {:packmatic, github: "eyra/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
       {:phoenix_ecto, "4.6.5"},
       {:phoenix_html, "4.3.0"},
       {:phoenix_html_helpers, "1.0.1"},
