@@ -135,7 +135,7 @@ defmodule Systems.Project.NodePageGridView do
               <div class="flex-grow">
               </div>
               <div class="h-full pt-2px lg:pt-1">
-                <Button.Action.send event="create_item">
+                <Button.Action.send event="create_item" data-testid="add-item-button">
                   <div class="sm:hidden">
                     <Button.Face.plain_icon label={dgettext("eyra-project", "add.new.item.button.short")} icon={:forward} />
                   </div>

@@ -1,3 +1,14 @@
+// Send logs to server for AppSignal
+function sendLog(level, message, context = {}) {
+  fetch("/api/feldspar/log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ level, message, context }),
+  }).catch(() => {
+    // Silently fail - don't let logging errors break the app
+  });
+}
+
 export const FeldsparApp = {
   mounted() {
     const iframe = this.el.querySelector("iframe");
@@ -74,6 +85,14 @@ export const FeldsparApp = {
     }
   },
 
+  getLogContext() {
+    try {
+      return JSON.parse(this.el.dataset.uploadContext || "{}");
+    } catch {
+      return {};
+    }
+  },
+
   // Donate response contract (sent via MessageChannel to Feldspar app):
   // - DonateSuccess: { __type__: "DonateSuccess", key: string, status: number }
   // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
@@ -90,7 +109,10 @@ export const FeldsparApp = {
 
     let response;
     const dataSize = data.json_string ? data.json_string.length : 0;
+    const logContext = { ...this.getLogContext(), key: data.key, dataSize };
+
     console.log("[Feldspar] Donate starting:", { key: data.key, dataSize });
+    sendLog("info", "Donate starting", logContext);
 
     try {
       response = await fetch("/api/feldspar/donate", {
@@ -104,6 +126,7 @@ export const FeldsparApp = {
     } catch (error) {
       // Network error (offline, timeout, etc.)
       console.error("[Feldspar] Donate network error:", error.message);
+      sendLog("error", `Donate network error: ${error.message}`, logContext);
       this.sendDonateResponse({
         __type__: "DonateError",
         key: data.key,
@@ -121,6 +144,10 @@ export const FeldsparApp = {
           key: data.key,
           status: response.status,
         });
+        sendLog("info", "Donate success", {
+          ...logContext,
+          status: response.status,
+        });
         this.sendDonateResponse({
           __type__: "DonateSuccess",
           key: data.key,
@@ -132,6 +159,10 @@ export const FeldsparApp = {
           response.status,
           result.error
         );
+        sendLog("error", `Donate failed: ${result.error}`, {
+          ...logContext,
+          status: response.status,
+        });
         this.sendDonateResponse({
           __type__: "DonateError",
           key: data.key,
@@ -142,6 +173,10 @@ export const FeldsparApp = {
     } catch (error) {
       // JSON parse error
       console.error("[Feldspar] Donate response parse error:", error.message);
+      sendLog("error", `Donate response parse error: ${error.message}`, {
+        ...logContext,
+        status: response.status,
+      });
       this.sendDonateResponse({
         __type__: "DonateError",
         key: data.key,

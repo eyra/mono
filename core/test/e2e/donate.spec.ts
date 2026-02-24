@@ -2,8 +2,13 @@ import { test, expect } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
 
-const ASSIGNMENT_PATH = process.env.ASSIGNMENT_PATH || '/a/GAyz7L';
-const DATA_SOURCE = process.env.DATA_SOURCE || 'tiktok';
+// Configure via Infisical per environment
+const ASSIGNMENT_PATH = process.env.E2E_DONATE_ASSIGNMENT_PATH;
+const DATA_SOURCE = process.env.E2E_DONATE_DATA_SOURCE || 'tiktok';
+
+if (!ASSIGNMENT_PATH) {
+  throw new Error('Missing E2E_DONATE_ASSIGNMENT_PATH environment variable');
+}
 
 // Map data source to test files
 const TEST_FILES: Record<string, string> = {

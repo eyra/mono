@@ -1,6 +1,6 @@
 import { chromium } from '@playwright/test';
 
-const BASE_URL = process.env.BASE_URL || 'https://eyra-next-test1.fly.dev';
+const BASE_URL = process.env.E2E_BASE_URL || 'https://eyra-next-test1.fly.dev';
 
 export default async function globalSetup() {
   console.log(`[GLOBAL SETUP] Warming up server at ${BASE_URL}...`);

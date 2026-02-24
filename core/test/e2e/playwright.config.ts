@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 180000,
   globalSetup: './global-setup.ts',
   use: {
-    baseURL: process.env.BASE_URL || 'https://eyra-next-test1.fly.dev',
+    baseURL: process.env.E2E_BASE_URL || 'https://eyra-next-test1.fly.dev',
     viewport: { width: 1280, height: 720 },
     video: 'on-first-retry',
   },
