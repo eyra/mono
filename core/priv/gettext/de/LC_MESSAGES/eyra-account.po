@@ -177,15 +177,23 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
-msgstr ""
+msgstr "Ich stimme den PaNL %{terms_link} und der %{privacy_link} zu"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Datenschutzerklärung"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Allgemeine Geschäftsbedingungen"
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Ich stimme den %{terms_link} und der %{privacy_link} zu"
+msgstr "Ich stimme den Eyra %{terms_link} und der %{privacy_link} zu"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"

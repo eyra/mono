@@ -186,15 +186,23 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
-msgstr ""
+msgstr "Sunt de acord cu %{terms_link} și %{privacy_link} PaNL"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Politica de Confidențialitate"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Termeni și Condiții"
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr ""
+msgstr "Sunt de acord cu %{terms_link} și %{privacy_link} Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"

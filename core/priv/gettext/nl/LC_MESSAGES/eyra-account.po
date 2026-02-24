@@ -176,15 +176,23 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
-msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link}"
+msgstr "Ik ga akkoord met de PaNL %{terms_link} en het %{privacy_link}"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr "U moet akkoord gaan met het privacybeleid om door te gaan"
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Algemene Voorwaarden"
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link}"
+msgstr "Ik ga akkoord met de Eyra %{terms_link} en het %{privacy_link}"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"
