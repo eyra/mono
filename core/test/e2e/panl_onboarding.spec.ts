@@ -85,17 +85,21 @@ test.describe('PaNL Onboarding Flow', () => {
     console.log('[TEST] Step 9: Continue to activate account...');
     await page.locator('[data-testid="onboarding-continue"]').click();
 
-    // Step 10: Finish onboarding
-    console.log('[TEST] Step 10: Finish onboarding...');
-    await page.locator('[data-testid="onboarding-continue"]').click();
+    // Step 10: Wait for activate account view to appear
+    console.log('[TEST] Step 10: Waiting for activate account view...');
+    await expect(page.locator('[data-testid="activate-account-view"]')).toBeVisible({ timeout: 3000 });
 
-    // Step 11: Wait for home page
-    console.log('[TEST] Step 11: Waiting for home page...');
-    await page.waitForURL('**/', { timeout: 3000 });
+    // Step 11: Finish onboarding - click and wait for navigation together
+    console.log('[TEST] Step 11: Finish onboarding...');
+    await Promise.all([
+      page.waitForURL('**/', { timeout: 5000 }),
+      page.locator('[data-testid="onboarding-continue"]').click()
+    ]);
+    console.log('[TEST] Step 12: On home page...');
     console.log(`[TEST] On home page: ${page.url()}`);
 
-    // Step 12: Verify PaNL advert card
-    console.log('[TEST] Step 12: Checking for PaNL advert...');
+    // Step 13: Verify PaNL advert card
+    console.log('[TEST] Step 13: Checking for PaNL advert...');
     await expect(page.locator('[data-testid^="card_"]').first()).toBeVisible({ timeout: 3000 });
 
     console.log('[TEST] Success!');

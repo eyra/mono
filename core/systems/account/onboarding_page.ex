@@ -80,7 +80,7 @@ defmodule Systems.Account.OnboardingPage do
           <.element {Map.from_struct(@vm.step_view)} socket={@socket} />
         <% end %>
         <%= if @vm.step_title do %>
-          <div class="flex flex-col items-center">
+          <div class="flex flex-col items-center" data-testid="activate-account-view">
             <Text.title2>{@vm.step_title}</Text.title2>
             <.spacing value="S" />
             <Text.body align="text-center">{@vm.step_body}</Text.body>
