@@ -47,19 +47,32 @@ test('data_donation', async ({ page }, testInfo) => {
   await page.goto(`${ASSIGNMENT_PATH}?p=${participantId}`);
 
   await page.waitForTimeout(2000);
-  console.log(`[TEST] Clicking Continue...`);
-  await page.getByText('Continue').click();
+  console.log(`[TEST] Current URL: ${page.url()}`);
 
-  await page.waitForTimeout(2000);
-  console.log(`[TEST] Clicking Yes, I agree...`);
-  await page.getByText('Yes, I agree').click();
+  // Check if we're on an intro/consent page or directly on work items
+  const continueButton = page.getByText('Continue').first();
+  const yesAgreeButton = page.getByText('Yes, I agree');
+  const workItems = page.locator('[data-testid^="work-list-item-"]');
 
-  // Wait for work items to appear and find one matching the data source
+  // Handle intro page if present (has Continue button but no work items yet)
+  if (await continueButton.isVisible() && !(await workItems.first().isVisible({ timeout: 1000 }).catch(() => false))) {
+    console.log(`[TEST] Clicking Continue on intro page...`);
+    await continueButton.click();
+    await page.waitForTimeout(2000);
+  }
+
+  // Handle consent page if present
+  if (await yesAgreeButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    console.log(`[TEST] Clicking Yes, I agree on consent page...`);
+    await yesAgreeButton.click();
+    await page.waitForTimeout(2000);
+  }
+
+  // Wait for work items to appear
   console.log(`[TEST] Waiting for work items...`);
   await page.waitForSelector('[data-testid^="work-list-item-"]', { timeout: 10000 });
 
   console.log(`[TEST] Looking for work item with '${dataSource}'...`);
-  const workItems = page.locator('[data-testid^="work-list-item-"]');
   const count = await workItems.count();
   console.log(`[TEST] Found ${count} work items`);
 

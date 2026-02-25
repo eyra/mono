@@ -90,7 +90,7 @@ defmodule Systems.Account.OnboardingPage do
         <.spacing value="L" />
 
         <div class="flex flex-row gap-4 justify-center">
-          <Button.dynamic {@vm.continue_button} />
+          <Button.dynamic {@vm.continue_button} data-testid="onboarding-continue" />
         </div>
       </Area.content>
     </.stripped>
