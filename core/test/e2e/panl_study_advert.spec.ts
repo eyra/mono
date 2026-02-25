@@ -18,12 +18,9 @@ import { test, expect } from '@playwright/test';
  */
 
 // Test researcher account - configure via Infisical per environment
-const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL;
-const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD;
-
-if (!RESEARCHER_EMAIL || !RESEARCHER_PASSWORD) {
-  throw new Error('Missing E2E_RESEARCHER_EMAIL or E2E_RESEARCHER_PASSWORD environment variables');
-}
+// Defaults match seeds.exs for localhost development
+const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL || 'researcher@eyra.co';
+const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD || 'asdf;lkjASDF0987';
 const SUBJECT_COUNT = '100';
 
 // Selectors
