@@ -17,17 +17,17 @@ describe("FeldsparApp", () => {
     vi.restoreAllMocks();
   });
 
-  describe("handleMonitorMessage", () => {
-    it("routes monitor:log to /api/feldspar/log endpoint", () => {
+  describe("handleLogCommand", () => {
+    it("sends log to /api/feldspar/log endpoint", () => {
       const data = {
-        __type__: "monitor:log",
+        __type__: "CommandSystemLog",
         json_string: JSON.stringify({
           level: "info",
           message: "Test message",
         }),
       };
 
-      FeldsparApp.handleMonitorMessage(data);
+      FeldsparApp.handleLogCommand(data);
 
       expect(mockFetch).toHaveBeenCalledWith("/api/feldspar/log", {
         method: "POST",
@@ -42,7 +42,7 @@ describe("FeldsparApp", () => {
 
     it("includes context from payload", () => {
       const data = {
-        __type__: "monitor:log",
+        __type__: "CommandSystemLog",
         json_string: JSON.stringify({
           level: "error",
           message: "Error occurred",
@@ -51,7 +51,7 @@ describe("FeldsparApp", () => {
         }),
       };
 
-      FeldsparApp.handleMonitorMessage(data);
+      FeldsparApp.handleLogCommand(data);
 
       expect(mockFetch).toHaveBeenCalledWith("/api/feldspar/log", {
         method: "POST",
@@ -71,11 +71,11 @@ describe("FeldsparApp", () => {
         mockFetch.mockClear();
 
         const data = {
-          __type__: "monitor:log",
+          __type__: "CommandSystemLog",
           json_string: JSON.stringify({ level, message: `${level} message` }),
         };
 
-        FeldsparApp.handleMonitorMessage(data);
+        FeldsparApp.handleLogCommand(data);
 
         expect(mockFetch).toHaveBeenCalledTimes(1);
         const body = JSON.parse(mockFetch.mock.calls[0][1].body);
@@ -85,35 +85,20 @@ describe("FeldsparApp", () => {
 
     it("handles invalid JSON gracefully", () => {
       const data = {
-        __type__: "monitor:log",
+        __type__: "CommandSystemLog",
         json_string: "not valid json",
       };
 
       // Should not throw
-      expect(() => FeldsparApp.handleMonitorMessage(data)).not.toThrow();
+      expect(() => FeldsparApp.handleLogCommand(data)).not.toThrow();
 
       // Should not call fetch
       expect(mockFetch).not.toHaveBeenCalled();
 
       // Should warn
       expect(console.warn).toHaveBeenCalledWith(
-        "[Feldspar] Invalid monitor:log payload:",
+        "[Feldspar] Invalid CommandSystemLog payload:",
         expect.any(String)
-      );
-    });
-
-    it("warns on unknown monitor subtypes", () => {
-      const data = {
-        __type__: "monitor:unknown",
-        json_string: "{}",
-      };
-
-      FeldsparApp.handleMonitorMessage(data);
-
-      expect(mockFetch).not.toHaveBeenCalled();
-      expect(console.warn).toHaveBeenCalledWith(
-        "[Feldspar] Unknown monitor type:",
-        "unknown"
       );
     });
   });
@@ -126,12 +111,12 @@ describe("FeldsparApp", () => {
       FeldsparApp.pushEvent = mockPushEvent;
     });
 
-    it("routes monitor:* messages to handleMonitorMessage", async () => {
-      const spy = vi.spyOn(FeldsparApp, "handleMonitorMessage");
+    it("routes CommandSystemLog to handleLogCommand", async () => {
+      const spy = vi.spyOn(FeldsparApp, "handleLogCommand");
 
       const event = {
         data: {
-          __type__: "monitor:log",
+          __type__: "CommandSystemLog",
           json_string: JSON.stringify({ level: "info", message: "test" }),
         },
       };

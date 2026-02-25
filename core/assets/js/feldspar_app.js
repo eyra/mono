@@ -69,11 +69,11 @@ export const FeldsparApp = {
   async handleMessage(e) {
     const type = e.data.__type__;
 
-    if (type && type.startsWith("monitor:")) {
-      // handle monitoring messages (logs, metrics, traces)
-      this.handleMonitorMessage(e.data);
+    if (type === "CommandSystemLog") {
+      // Handle log messages via HTTP POST to AppSignal
+      this.handleLogCommand(e.data);
     } else if (type === "CommandSystemDonate") {
-      // handle large data donations via HTTP POST instead of WebSocket
+      // Handle large data donations via HTTP POST instead of WebSocket
       await this.donate_via_api(e.data);
     } else {
       // All other events (including CommandSystemExit) pass through to LiveView
@@ -88,21 +88,16 @@ export const FeldsparApp = {
     }
   },
 
-  handleMonitorMessage(data) {
-    const type = data.__type__;
-    const subtype = type.substring(8); // Remove "monitor:" prefix
-
-    if (subtype === "log") {
-      try {
-        const payload = JSON.parse(data.json_string);
-        const { level, message, ...context } = payload;
-        sendLog(level, message, context);
-      } catch (error) {
-        console.warn("[Feldspar] Invalid monitor:log payload:", error.message);
-      }
-    } else {
-      // Future: handle monitor:metric, monitor:trace, etc.
-      console.warn("[Feldspar] Unknown monitor type:", subtype);
+  handleLogCommand(data) {
+    try {
+      const payload = JSON.parse(data.json_string);
+      const { level, message, ...context } = payload;
+      sendLog(level, message, context);
+    } catch (error) {
+      console.warn(
+        "[Feldspar] Invalid CommandSystemLog payload:",
+        error.message
+      );
     }
   },
 
