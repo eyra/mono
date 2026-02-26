@@ -192,7 +192,7 @@ msgstr "Algemene Voorwaarden"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Ik ga akkoord met de Eyra %{terms_link} en het %{privacy_link}"
+msgstr "Ik ga akkoord met de Next %{terms_link} en het %{privacy_link}"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"

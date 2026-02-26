@@ -202,7 +202,7 @@ msgstr "Termeni și Condiții"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Sunt de acord cu %{terms_link} și %{privacy_link} Eyra"
+msgstr "Sunt de acord cu %{terms_link} și %{privacy_link} Next"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"

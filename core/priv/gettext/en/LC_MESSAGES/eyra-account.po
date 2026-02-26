@@ -192,7 +192,7 @@ msgstr "Terms and Conditions"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "I agree to the Eyra %{terms_link} and %{privacy_link}"
+msgstr "I agree to the Next %{terms_link} and %{privacy_link}"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"
