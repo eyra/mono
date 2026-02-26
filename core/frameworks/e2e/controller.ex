@@ -402,11 +402,12 @@ defmodule Frameworks.E2E.Controller do
   defp download_file(url, dest_path) do
     Logger.info("[E2E] Downloading #{url}")
 
-    case Req.get(url, into: File.stream!(dest_path), follow_redirects: true) do
-      {:ok, %{status: 200}} ->
+    case HTTPoison.get(url, [], follow_redirect: true, max_redirect: 5) do
+      {:ok, %{status_code: 200, body: body}} ->
+        File.write!(dest_path, body)
         :ok
 
-      {:ok, %{status: status}} ->
+      {:ok, %{status_code: status}} ->
         {:error, "HTTP #{status}"}
 
       {:error, reason} ->
