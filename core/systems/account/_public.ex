@@ -162,7 +162,7 @@ defmodule Systems.Account.Public do
     get!(user_id) |> confirmed?()
   end
 
-  def show_profile_menu_item?(user), do: internal?(user) and confirmed?(user)
+  def show_profile_menu_item?(user), do: internal?(user)
 
   ## Database getters
 
