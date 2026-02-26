@@ -3,6 +3,8 @@ defmodule Systems.Pool.AccountPostActionHandler do
   Handles post account actions intercepted by the Pool switch.
   """
 
+  use Core.FeatureFlags
+
   require Logger
 
   alias Systems.Pool
@@ -11,8 +13,12 @@ defmodule Systems.Pool.AccountPostActionHandler do
   def handle(%Account.User{creator: true}, _action), do: :ok
 
   def handle(%Account.User{} = user, "add_to_panl") do
-    # Add participant to PANL pool when available; ignore if not configured
-    Pool.Public.add_user_to_panl_pool(user)
+    if feature_enabled?(:panl) do
+      Pool.Public.add_user_to_panl_pool(user)
+    else
+      Logger.info("Ignoring add_to_panl action: panl feature is disabled")
+    end
+
     :ok
   end
 

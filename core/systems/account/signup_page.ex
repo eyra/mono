@@ -36,7 +36,7 @@ defmodule Systems.Account.SignupPage do
   def mount(%{"user_type" => user_type} = params, _session, socket) do
     require_feature(:password_sign_in)
     creator? = user_type == "creator"
-    post_signup_action = Params.parse_string_param(params, "post_signup_action")
+    post_signup_action = parse_post_signup_action(params)
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -219,6 +219,13 @@ defmodule Systems.Account.SignupPage do
 
   defp onboarding_redirect_path(_, _user) do
     ~p"/user/await-confirmation"
+  end
+
+  defp parse_post_signup_action(params) do
+    case Params.parse_string_param(params, "post_signup_action") do
+      "add_to_panl" -> if feature_enabled?(:panl), do: "add_to_panl", else: nil
+      other -> other
+    end
   end
 
   @impl true
