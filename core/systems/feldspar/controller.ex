@@ -291,13 +291,14 @@ defmodule Systems.Feldspar.Controller do
 
   defp log_client_message(level, message, context) do
     formatted_context = format_log_context(context)
-    full_message = "[Feldspar.Client] #{message}#{formatted_context}"
+    base_message = "[Feldspar.Client] #{message}#{formatted_context}"
 
     case level do
-      "debug" -> Logger.debug(full_message)
-      "info" -> Logger.info(full_message)
-      "warn" -> Logger.warning(full_message)
-      "error" -> Logger.error(full_message)
+      # Route client debug to info with [DEBUG] flag so it appears in production logs
+      "debug" -> Logger.info("[DEBUG] #{base_message}")
+      "info" -> Logger.info(base_message)
+      "warn" -> Logger.warning(base_message)
+      "error" -> Logger.error(base_message)
     end
   end
 
