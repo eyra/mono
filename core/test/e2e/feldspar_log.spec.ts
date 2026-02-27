@@ -27,9 +27,10 @@ test.describe('Feldspar Log Endpoint', () => {
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     // Fill in login form (participant tab is default)
-    await page.locator("[data-testid='signin-email-input']").fill(PARTICIPANT_EMAIL);
-    await page.locator("[data-testid='signin-password-input']").fill(PARTICIPANT_PASSWORD);
-    await page.locator("[data-testid='signin-submit-button']").click();
+    const participantPanel = '#account_signin-tab_panel_participant';
+    await page.locator(`${participantPanel} [data-testid='signin-email-input']`).fill(PARTICIPANT_EMAIL);
+    await page.locator(`${participantPanel} [data-testid='signin-password-input']`).fill(PARTICIPANT_PASSWORD);
+    await page.locator(`${participantPanel} [data-testid='signin-submit-button']`).click();
 
     // Wait for redirect after successful login
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
@@ -114,9 +115,10 @@ test.describe('Feldspar Log Endpoint', () => {
     // Login first
     await page.goto('/user/signin');
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.locator("[data-testid='signin-email-input']").fill(PARTICIPANT_EMAIL);
-    await page.locator("[data-testid='signin-password-input']").fill(PARTICIPANT_PASSWORD);
-    await page.locator("[data-testid='signin-submit-button']").click();
+    const participantPanel = '#account_signin-tab_panel_participant';
+    await page.locator(`${participantPanel} [data-testid='signin-email-input']`).fill(PARTICIPANT_EMAIL);
+    await page.locator(`${participantPanel} [data-testid='signin-password-input']`).fill(PARTICIPANT_PASSWORD);
+    await page.locator(`${participantPanel} [data-testid='signin-submit-button']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
 
     // Send invalid level
