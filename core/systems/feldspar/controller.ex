@@ -37,70 +37,15 @@ defmodule Systems.Feldspar.Controller do
   - 422 if storage/delivery fails
   - 429 if rate limited
   """
-  def donate(conn, %{"key" => key, "data" => %Plug.Upload{} = upload, "context" => context}) do
-    Logger.info("[Feldspar] Donation request for key=#{key}")
-
-    with {:ok, context} <- parse_context(context),
-         {:ok, _user} <- get_current_user(conn),
-         {:ok, data} <- read_upload(upload),
-         meta_data <- build_meta_data(conn, key, context),
-         :ok <- check_rate_limit(:feldspar_data_donation, meta_data.remote_ip, byte_size(data)),
-         {:ok, storage_endpoint} <- get_storage_endpoint(context),
-         file_id <- Feldspar.DataDonationFolder.filename(context),
-         {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
-         :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
-      Logger.info(
-        "[Feldspar] Donation stored and delivery scheduled, key=#{key}, file_id=#{file_id}"
-      )
-
-      json(conn, %{status: "ok"})
-    else
-      {:error, :not_authenticated} ->
-        conn
-        |> put_status(:unauthorized)
-        |> json(%{error: "Not authenticated"})
-
-      {:error, :file_read_error, reason} ->
-        Logger.error("[Feldspar] Failed to read upload: #{inspect(reason)}")
-
-        conn
-        |> put_status(:unprocessable_entity)
-        |> json(%{error: "Failed to read upload"})
-
-      {:error, :rate_limited, reason} ->
-        Logger.warning("[Feldspar] Rate limited: #{reason}")
-
-        conn
-        |> put_status(:too_many_requests)
-        |> json(%{error: "Rate limited: #{reason}"})
+  def donate(conn, %{"key" => key, "data" => %Plug.Upload{} = upload, "context" => context_json}) do
+    case parse_context(context_json) do
+      {:ok, context} ->
+        do_donate(conn, key, upload, context)
 
       {:error, :invalid_context} ->
-        Logger.error("[Feldspar] Missing or invalid context")
-
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Missing or invalid context"})
-
-      {:error, :no_storage_endpoint} ->
-        Logger.error("[Feldspar] No storage endpoint configured")
-
-        conn
-        |> put_status(:unprocessable_entity)
-        |> json(%{error: "No storage endpoint configured"})
-
-      {:error, {:scheduling_failed, step, reason}} ->
-        Logger.error("[Feldspar] Scheduling failed at step=#{step}: #{inspect(reason)}")
-
-        conn
-        |> put_status(:unprocessable_entity)
-        |> json(%{error: "Scheduling failed"})
-
-      {:error, reason} ->
-        Logger.error("[Feldspar] Storage failed: #{inspect(reason)}")
-
-        conn
-        |> put_status(:unprocessable_entity)
-        |> json(%{error: "Storage failed"})
     end
   end
 
@@ -110,11 +55,71 @@ defmodule Systems.Feldspar.Controller do
       |> Enum.reject(&Map.has_key?(params, &1))
       |> Enum.join(", ")
 
-    Logger.error("[Feldspar] Missing required fields: #{missing}")
-
     conn
     |> put_status(:bad_request)
     |> json(%{error: "Missing required fields: #{missing}"})
+  end
+
+  defp do_donate(conn, key, upload, context) do
+    log_message("Server", "info", "Donation request, key=#{key}", context)
+
+    with {:ok, _user} <- get_current_user(conn),
+         {:ok, data} <- read_upload(upload),
+         meta_data <- build_meta_data(conn, key, context),
+         :ok <- check_rate_limit(:feldspar_data_donation, meta_data.remote_ip, byte_size(data)),
+         {:ok, storage_endpoint} <- get_storage_endpoint(context),
+         file_id <- Feldspar.DataDonationFolder.filename(context),
+         {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
+         :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
+      log_message("Server", "info", "Donation stored, key=#{key}, file_id=#{file_id}", context)
+
+      json(conn, %{status: "ok"})
+    else
+      {:error, :not_authenticated} ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: "Not authenticated"})
+
+      {:error, :file_read_error, reason} ->
+        log_message("Server", "error", "Failed to read upload: #{inspect(reason)}", context)
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "Failed to read upload"})
+
+      {:error, :rate_limited, reason} ->
+        log_message("Server", "warn", "Rate limited: #{reason}", context)
+
+        conn
+        |> put_status(:too_many_requests)
+        |> json(%{error: "Rate limited: #{reason}"})
+
+      {:error, :no_storage_endpoint} ->
+        log_message("Server", "error", "No storage endpoint configured", context)
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "No storage endpoint configured"})
+
+      {:error, {:scheduling_failed, step, reason}} ->
+        log_message(
+          "Server",
+          "error",
+          "Scheduling failed at step=#{step}: #{inspect(reason)}",
+          context
+        )
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "Scheduling failed"})
+
+      {:error, reason} ->
+        log_message("Server", "error", "Storage failed: #{inspect(reason)}", context)
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: "Storage failed"})
+    end
   end
 
   # ============================================================================
@@ -141,7 +146,7 @@ defmodule Systems.Feldspar.Controller do
     with {:ok, _user} <- get_current_user(conn),
          :ok <- validate_log_level(level),
          :ok <- check_rate_limit(:feldspar_log, get_remote_ip(conn), 1) do
-      log_client_message(level, message, context)
+      log_message("Client", level, message, context)
       json(conn, %{status: "ok"})
     else
       {:error, :not_authenticated} ->
@@ -211,26 +216,14 @@ defmodule Systems.Feldspar.Controller do
   defp get_storage_endpoint(context) do
     assignment_id = context["assignment_id"]
 
-    Logger.info(
-      "[Feldspar] Looking up storage endpoint for assignment_id=#{inspect(assignment_id)}"
-    )
-
     if assignment_id && assignment_id != "" do
       with {:ok, assignment} <- get_assignment(assignment_id) do
-        Logger.info("[Feldspar] Found assignment id=#{assignment.id}")
-
         case Project.Public.get_storage_endpoint_by(assignment) do
-          {:ok, endpoint} ->
-            Logger.info("[Feldspar] Found storage endpoint")
-            {:ok, endpoint}
-
-          {:error, {:storage_endpoint, :not_available}} ->
-            Logger.error("[Feldspar] Storage endpoint not available for assignment")
-            {:error, :no_storage_endpoint}
+          {:ok, endpoint} -> {:ok, endpoint}
+          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
         end
       end
     else
-      Logger.error("[Feldspar] No assignment_id in context")
       {:error, :no_storage_endpoint}
     end
   end
@@ -243,22 +236,14 @@ defmodule Systems.Feldspar.Controller do
   end
 
   defp get_assignment(assignment_id) do
-    Logger.info("[Feldspar] Fetching assignment id=#{inspect(assignment_id)}")
-
     case Assignment.Public.get(assignment_id, Assignment.Model.preload_graph(:down)) do
-      nil ->
-        Logger.error("[Feldspar] Assignment not found id=#{inspect(assignment_id)}")
-        {:error, :assignment_not_found}
-
-      assignment ->
-        Logger.info("[Feldspar] Assignment found, has workflow=#{assignment.workflow != nil}")
-        {:ok, assignment}
+      nil -> {:error, :assignment_not_found}
+      assignment -> {:ok, assignment}
     end
   end
 
   defp parse_context(nil), do: {:error, :invalid_context}
   defp parse_context(""), do: {:error, :invalid_context}
-  defp parse_context("{}"), do: {:error, :invalid_context}
 
   defp parse_context(json) when is_binary(json) do
     case Jason.decode(json) do
@@ -289,9 +274,9 @@ defmodule Systems.Feldspar.Controller do
   defp validate_log_level(level) when level in @valid_log_levels, do: :ok
   defp validate_log_level(_), do: {:error, :invalid_level}
 
-  defp log_client_message(level, message, context) do
+  defp log_message(source, level, message, context) do
     formatted_context = format_log_context(context)
-    base_message = "[Feldspar.Client] #{message}#{formatted_context}"
+    base_message = "[Feldspar.#{source}] #{message}#{formatted_context}"
 
     case level do
       # Route client debug to info with [DEBUG] flag so it appears in production logs
