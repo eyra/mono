@@ -13,9 +13,14 @@ import { test, expect } from '@playwright/test';
  * 7. Navigate to the advert and publish it
  *
  * Prerequisites:
- * - PaNL feature flag must be enabled on the environment
+ * - PaNL feature flag must be enabled on the environment (E2E_PANL_ENABLED=true)
  * - A researcher/creator account must exist
  */
+
+// Skip all tests in this file if PaNL feature is not enabled
+// Reads from ENABLED_APP_FEATURES (comma-separated list, same as server config)
+const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
+const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
 
 // Test researcher account - configure via Infisical per environment
 // Defaults match seeds.exs for localhost development
@@ -28,6 +33,7 @@ const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 
 test.describe('PaNL Study & Advert Creation', () => {
+  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set E2E_PANL_ENABLED=true)');
   test('researcher can create study, set subject count, create and publish advert', async ({ page }) => {
     console.log('[TEST] Starting PaNL Study & Advert creation test');
 

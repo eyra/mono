@@ -10,9 +10,14 @@ import { waitForLiveView, waitForNavigation, debugLiveViewState } from './lib/li
  * 3. Verify PaNL advert is visible on home page
  *
  * Prerequisites:
- * - PaNL feature flag must be enabled on the environment
+ * - PaNL feature flag must be enabled on the environment (E2E_PANL_ENABLED=true)
  * - At least one published PaNL study with advert must exist
  */
+
+// Skip all tests in this file if PaNL feature is not enabled
+// Reads from ENABLED_APP_FEATURES (comma-separated list, same as server config)
+const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
+const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
 
 function generateTestEmail(): string {
   const timestamp = Date.now();
@@ -23,6 +28,7 @@ function generateTestEmail(): string {
 const TEST_PASSWORD = 'TestPassword123!';
 
 test.describe('PaNL Onboarding Flow', () => {
+  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set E2E_PANL_ENABLED=true)');
   test('new participant can sign up, complete onboarding, and see PaNL advert', async ({ page }) => {
     const testEmail = generateTestEmail();
     console.log(`[TEST] Starting with email: ${testEmail}`);

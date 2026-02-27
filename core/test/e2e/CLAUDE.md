@@ -70,6 +70,38 @@ core/test/e2e/
 
 Most tests only need to wait for static render. Use `waitForLiveView()` from `lib/liveview.ts` when you need connection.
 
+## Infisical Configuration
+
+E2E tests use Infisical for environment-specific secrets. The workspace is configured in `.infisical.json`.
+
+### Required secrets per environment
+
+| Secret | Description |
+|--------|-------------|
+| `E2E_BASE_URL` | Target server URL (e.g., `https://eyra-next-staging.fly.dev`) |
+| `E2E_RESEARCHER_EMAIL` | Test researcher account email |
+| `E2E_RESEARCHER_PASSWORD` | Test researcher account password |
+| `E2E_PARTICIPANT_EMAIL` | Test participant account email |
+| `E2E_PARTICIPANT_PASSWORD` | Test participant account password |
+| `E2E_DONATE_ASSIGNMENT_PATH` | Assignment path for donate tests (e.g., `/a/nWPk4K`) |
+| `SERVICE_LOGIN_KEY` | Must match the Fly secret for E2E bootstrap |
+| `ENABLED_APP_FEATURES` | Must mirror the Fly secret - controls which feature tests run |
+
+### IMPORTANT: Keep ENABLED_APP_FEATURES in sync
+
+When you change `ENABLED_APP_FEATURES` on Fly, **also update it in Infisical**:
+
+```bash
+# Check what's on Fly
+fly secrets list -a eyra-next-staging | grep ENABLED
+
+# Update Infisical to match (from core/test/e2e directory)
+cd core/test/e2e
+infisical secrets set ENABLED_APP_FEATURES="feature1,feature2,..." --env=staging
+```
+
+Feature-specific tests (e.g., PaNL tests) check `ENABLED_APP_FEATURES` and skip if their feature isn't enabled.
+
 ## Running Tests
 
 ```bash
@@ -77,13 +109,16 @@ Most tests only need to wait for static render. Use `waitForLiveView()` from `li
 E2E_BASE_URL=http://localhost:4000 npx playwright test --project=chromium
 
 # Against test environment (uses Infisical for secrets)
-npx playwright test --project=chromium
+infisical run --env=test1 -- npx playwright test --project=chromium
+
+# Against staging
+infisical run --env=staging -- npx playwright test --project=chromium
 
 # Single test file
-npx playwright test panl_onboarding --project=chromium
+infisical run --env=staging -- npx playwright test donate.spec.ts --project=chromium
 
 # Headed mode (see browser)
-npx playwright test panl_onboarding --project=chromium --headed
+infisical run --env=staging -- npx playwright test donate.spec.ts --project=chromium --headed
 ```
 
 ## Timeout Guidelines
