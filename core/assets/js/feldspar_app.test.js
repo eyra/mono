@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { FeldsparApp } from "./feldspar_app";
+import { WaitGroup } from "./wait_group";
 
 describe("FeldsparApp", () => {
   let mockFetch;
@@ -157,6 +158,67 @@ describe("FeldsparApp", () => {
 
       expect(spy).toHaveBeenCalledWith(event.data);
       expect(mockPushEvent).not.toHaveBeenCalled();
+    });
+
+    it("routes CommandSystemExit to waitForDonationsAndExit", async () => {
+      const spy = vi
+        .spyOn(FeldsparApp, "waitForDonationsAndExit")
+        .mockResolvedValue(undefined);
+
+      const event = {
+        data: {
+          __type__: "CommandSystemExit",
+        },
+      };
+
+      await FeldsparApp.handleMessage(event);
+
+      expect(spy).toHaveBeenCalledWith(event.data);
+      expect(mockPushEvent).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("waitForDonationsAndExit", () => {
+    let mockPushEvent;
+
+    beforeEach(() => {
+      mockPushEvent = vi.fn();
+      FeldsparApp.pushEvent = mockPushEvent;
+      FeldsparApp.donations = new WaitGroup();
+      FeldsparApp.el = { dataset: { uploadContext: "{}" } };
+    });
+
+    it("pushes exit event immediately when no pending donations", async () => {
+      const data = { __type__: "CommandSystemExit" };
+
+      await FeldsparApp.waitForDonationsAndExit(data);
+
+      expect(mockPushEvent).toHaveBeenCalledWith("feldspar_event", data);
+    });
+
+    it("waits for pending donations before pushing exit event", async () => {
+      const data = { __type__: "CommandSystemExit" };
+      const order = [];
+
+      FeldsparApp.donations.add();
+
+      const exitPromise = FeldsparApp.waitForDonationsAndExit(data).then(() =>
+        order.push("exit")
+      );
+
+      // Exit should not have been called yet
+      expect(mockPushEvent).not.toHaveBeenCalled();
+
+      // Simulate donation completing
+      setTimeout(() => {
+        order.push("donation_done");
+        FeldsparApp.donations.done();
+      }, 10);
+
+      await exitPromise;
+
+      expect(order).toEqual(["donation_done", "exit"]);
+      expect(mockPushEvent).toHaveBeenCalledWith("feldspar_event", data);
     });
   });
 });

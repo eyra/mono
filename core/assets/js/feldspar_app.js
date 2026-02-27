@@ -1,3 +1,5 @@
+import { WaitGroup } from "./wait_group";
+
 // Send logs to server for AppSignal
 function sendLog(level, message, context = {}) {
   fetch("/api/feldspar/log", {
@@ -11,6 +13,7 @@ function sendLog(level, message, context = {}) {
 
 export const FeldsparApp = {
   mounted() {
+    this.donations = new WaitGroup();
     const iframe = this.el.querySelector("iframe");
 
     // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
@@ -75,8 +78,11 @@ export const FeldsparApp = {
     } else if (type === "CommandSystemDonate") {
       // Handle large data donations via HTTP POST instead of WebSocket
       await this.donate_via_api(e.data);
+    } else if (type === "CommandSystemExit") {
+      // Wait for pending donations before exiting
+      await this.waitForDonationsAndExit(e.data);
     } else {
-      // All other events (including CommandSystemExit) pass through to LiveView
+      // All other events pass through to LiveView
       try {
         this.pushEvent("feldspar_event", e.data);
       } catch (error) {
@@ -85,6 +91,29 @@ export const FeldsparApp = {
           type
         );
       }
+    }
+  },
+
+  async waitForDonationsAndExit(data) {
+    if (this.donations.count > 0) {
+      console.log(
+        `[Feldspar] Exit requested, waiting for ${this.donations.count} pending donations...`
+      );
+      sendLog(
+        "info",
+        `Exit waiting for ${this.donations.count} donations`,
+        this.getLogContext()
+      );
+
+      await this.donations.wait();
+
+      console.log("[Feldspar] All donations completed, proceeding with exit");
+    }
+
+    try {
+      this.pushEvent("feldspar_event", data);
+    } catch (error) {
+      console.warn("[Feldspar] Could not push exit event:", error.message);
     }
   },
 
@@ -115,6 +144,16 @@ export const FeldsparApp = {
   // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
   //   Note: status=0 indicates a network error (offline, timeout, CORS, etc.)
   async donate_via_api(data) {
+    this.donations.add();
+
+    try {
+      await this._performDonation(data);
+    } finally {
+      this.donations.done();
+    }
+  },
+
+  async _performDonation(data) {
     const formData = new FormData();
     formData.append("key", data.key);
     formData.append("context", this.el.dataset.uploadContext || "{}");
