@@ -92,7 +92,8 @@ export const FeldsparApp = {
     try {
       const payload = JSON.parse(data.json_string);
       const { level, message, ...context } = payload;
-      sendLog(level, message, context);
+      // Merge uploadContext (assignment_id, task, participant, etc.) with log context
+      sendLog(level, message, { ...this.getLogContext(), ...context });
     } catch (error) {
       console.warn(
         "[Feldspar] Invalid CommandSystemLog payload:",
