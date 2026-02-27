@@ -8,14 +8,16 @@ const SERVICE_PASSWORD = process.env.E2E_SERVICE_PASSWORD || 'E2EServicePassword
 const SERVICE_KEY = process.env.SERVICE_LOGIN_KEY || 'dev-test-key';
 
 // Store fixtures globally for tests to access
+interface E2EFixtures {
+  researcher_email: string;
+  researcher_password: string;
+  participant_email: string;
+  participant_password: string;
+  donate_assignment_path: string;
+}
+
 declare global {
-  var e2eFixtures: {
-    researcher_email: string;
-    researcher_password: string;
-    participant_email: string;
-    participant_password: string;
-    donate_assignment_path: string;
-  } | null;
+  var e2eFixtures: E2EFixtures | null;
 }
 
 export default async function globalSetup() {
@@ -106,7 +108,7 @@ export default async function globalSetup() {
   console.log(`[GLOBAL SETUP] Server ready`);
 }
 
-async function setupE2EFixtures(baseUrl: string) {
+async function setupE2EFixtures(baseUrl: string): Promise<E2EFixtures> {
   // Step 1: Bootstrap - create service user if needed (no auth required)
   console.log(`[GLOBAL SETUP] Bootstrapping service user...`);
   const bootstrapResponse = await fetch(`${baseUrl}/api/e2e/bootstrap`, {
@@ -159,5 +161,5 @@ async function setupE2EFixtures(baseUrl: string) {
     throw new Error(`E2E setup failed: ${setupResponse.status} - ${body}`);
   }
 
-  return await setupResponse.json();
+  return await setupResponse.json() as E2EFixtures;
 }

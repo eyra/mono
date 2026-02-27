@@ -21,8 +21,7 @@ if config_env() == :prod do
     domain: app_domain,
     name: app_name,
     base_url: base_url,
-    upload_path: upload_path,
-    prod_env: System.get_env("PROD_ENV") == "true"
+    upload_path: upload_path
 
   # Allow enabling of features from an environment variable
   config :core,

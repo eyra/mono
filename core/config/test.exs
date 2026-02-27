@@ -76,7 +76,8 @@ config :core, :features,
   password_sign_in: true,
   notification_mails: true,
   debug_expire_force: true,
-  panl: true
+  panl: true,
+  e2e: true
 
 config :core, Oban, queues: false, plugins: false
 

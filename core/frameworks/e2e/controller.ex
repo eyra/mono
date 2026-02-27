@@ -3,7 +3,7 @@ defmodule Frameworks.E2E.Controller do
   API endpoint for E2E test fixture setup.
 
   Creates test users and assignments needed for E2E tests.
-  Only available when prod_env: false (localhost, dev, test, staging).
+  Only available when the :e2e feature is enabled via ENABLED_APP_FEATURES.
 
   POST /api/e2e/setup
   Requires authenticated service account session.
@@ -18,6 +18,7 @@ defmodule Frameworks.E2E.Controller do
   }
   """
   use CoreWeb, {:controller, [formats: [:json]]}
+  use Core.FeatureFlags
 
   require Logger
 
@@ -40,15 +41,11 @@ defmodule Frameworks.E2E.Controller do
 
   @doc """
   Bootstrap endpoint - creates the E2E service user.
-  No authentication required, but only works on non-prod.
+  No authentication required, but only works when :e2e feature is enabled.
   Call this once before running E2E tests.
   """
   def bootstrap(conn, _params) do
-    if Application.get_env(:core, :prod_env) do
-      conn
-      |> put_status(403)
-      |> json(%{error: "E2E bootstrap not available in production"})
-    else
+    if feature_enabled?(:e2e) do
       service_user = get_or_create_service_user()
 
       json(conn, %{
@@ -57,15 +54,15 @@ defmodule Frameworks.E2E.Controller do
         message:
           "Service user ready. Use /api/service/login to authenticate, then call /api/e2e/setup"
       })
+    else
+      conn
+      |> put_status(403)
+      |> json(%{error: "E2E bootstrap not available (enable :e2e feature)"})
     end
   end
 
   def setup(conn, _params) do
-    if Application.get_env(:core, :prod_env) do
-      conn
-      |> put_status(403)
-      |> json(%{error: "E2E setup not available in production"})
-    else
+    if feature_enabled?(:e2e) do
       case setup_fixtures() do
         {:ok, fixtures} ->
           json(conn, fixtures)
@@ -75,6 +72,10 @@ defmodule Frameworks.E2E.Controller do
           |> put_status(500)
           |> json(%{error: "Failed to setup fixtures: #{inspect(reason)}"})
       end
+    else
+      conn
+      |> put_status(403)
+      |> json(%{error: "E2E setup not available (enable :e2e feature)"})
     end
   end
 

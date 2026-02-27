@@ -81,10 +81,7 @@ config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
-  tool_directors: [:assignment],
-  # prod_env: true is set only on AWS production
-  # Used to disable dev/test features like /api/e2e/setup
-  prod_env: false
+  tool_directors: [:assignment]
 
 config :gettext, default_locale: "en"
 
