@@ -377,4 +377,28 @@ defmodule Systems.Workflow.PublicTest do
              ]
            } = result
   end
+
+  test "delete/1 handles already-deleted item gracefully (race condition)" do
+    tool = Factories.create_tool()
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
+    workflow = Factories.create_workflow()
+
+    %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
+    %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)
+    item_c = Factories.create_item(workflow, tool_ref, 2)
+
+    # First delete succeeds
+    {:ok, _} = Workflow.Public.delete(item_c)
+
+    # Second delete should not raise StaleEntryError (simulates double-click)
+    {:ok, result} = Workflow.Public.delete(item_c)
+
+    # The remaining items should still be correctly rearranged
+    assert %{
+             items: [
+               %Systems.Workflow.ItemModel{id: ^id_a, position: 0},
+               %Systems.Workflow.ItemModel{id: ^id_b, position: 1}
+             ]
+           } = result
+  end
 end

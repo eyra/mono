@@ -1,10 +1,14 @@
-defmodule Systems.Feldspar.DataDonationControllerTest do
+defmodule Systems.Feldspar.ControllerTest do
   use CoreWeb.ConnCase, async: false
 
   alias Systems.Assignment
   alias Systems.Storage
 
-  describe "create/2 - missing required fields" do
+  # ============================================================================
+  # Donate endpoint tests
+  # ============================================================================
+
+  describe "donate/2 - missing required fields" do
     setup :login_as_member
 
     test "returns 400 when key is missing", %{conn: conn} do
@@ -44,7 +48,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - invalid context" do
+  describe "donate/2 - invalid context" do
     setup :login_as_member
 
     test "returns 400 when context is nil", %{conn: conn} do
@@ -116,7 +120,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - authentication" do
+  describe "donate/2 - authentication" do
     test "returns 401 when user is not authenticated", %{conn: conn} do
       upload = %Plug.Upload{
         path: create_temp_file("test data"),
@@ -138,7 +142,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - no storage endpoint" do
+  describe "donate/2 - no storage endpoint" do
     setup :login_as_member
 
     test "returns 422 when assignment has no storage endpoint", %{conn: conn} do
@@ -170,7 +174,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - success" do
+  describe "donate/2 - success" do
     setup :login_as_member
 
     test "returns 200 when all inputs are valid", %{conn: conn, user: _user} do
@@ -229,7 +233,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - file read error" do
+  describe "donate/2 - file read error" do
     setup :login_as_member
 
     test "returns 422 when file cannot be read", %{conn: conn} do
@@ -259,7 +263,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  describe "create/2 - scheduling failure" do
+  describe "donate/2 - scheduling failure" do
     setup :login_as_member
 
     setup do
@@ -320,23 +324,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     end
   end
 
-  defp create_temp_file(content) do
-    path = Path.join(System.tmp_dir!(), "test_upload_#{:erlang.unique_integer()}.json")
-    File.write!(path, content)
-    on_exit(fn -> File.rm(path) end)
-    path
-  end
-
-  defp create_large_json_content(line_count) do
-    entries =
-      Enum.map_join(1..line_count, ",\n", fn i ->
-        ~s({"id":#{i},"data":"entry_#{i}_with_some_padding_to_increase_size"})
-      end)
-
-    "[#{entries}]"
-  end
-
-  describe "create/2 - concurrent uploads" do
+  describe "donate/2 - concurrent uploads" do
     setup :login_as_member
 
     @tag timeout: 120_000
@@ -417,6 +405,214 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
       assert length(successes) == num_requests,
              "Expected #{num_requests} successes, got #{length(successes)}. Failures: #{inspect(failures)}"
     end
+  end
+
+  # ============================================================================
+  # Log endpoint tests
+  # ============================================================================
+
+  describe "log/2 - missing required fields" do
+    setup :login_as_member
+
+    test "returns 400 when level is missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"message" => "test message"})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: level"}
+    end
+
+    test "returns 400 when message is missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info"})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: message"}
+    end
+
+    test "returns 400 when both level and message are missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: level, message"}
+    end
+  end
+
+  describe "log/2 - invalid level" do
+    setup :login_as_member
+
+    test "returns 400 for invalid level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "invalid", "message" => "test"})
+
+      assert json_response(conn, 400) == %{
+               "error" => "Invalid level. Must be one of: debug, info, warn, error"
+             }
+    end
+
+    test "returns 400 for empty level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "", "message" => "test"})
+
+      assert json_response(conn, 400) == %{
+               "error" => "Invalid level. Must be one of: debug, info, warn, error"
+             }
+    end
+  end
+
+  describe "log/2 - authentication" do
+    test "returns 401 when user is not authenticated", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "test"})
+
+      assert json_response(conn, 401) == %{"error" => "Not authenticated"}
+    end
+  end
+
+  describe "log/2 - success cases" do
+    setup :login_as_member
+
+    test "accepts debug level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "debug", "message" => "debug message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts info level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "info message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts warn level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "warn", "message" => "warning message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts error level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "error", "message" => "error message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts optional context", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with context",
+          "context" => %{
+            "assignment_id" => 123,
+            "participant" => "p1",
+            "key" => "test-key"
+          }
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "works without context", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message without context"
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "handles empty message", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => ""})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+  end
+
+  describe "log/2 - rate limiting" do
+    @describetag :rate_limit_test
+
+    setup :login_as_member
+
+    setup do
+      # Set very low limit and restart Rate.Server with new config
+      low_limit_config = [
+        prune_interval: 60 * 60 * 1000,
+        quotas: [
+          [service: :feldspar_log, limit: 1, unit: :call, window: :minute, scope: :local]
+        ]
+      ]
+
+      # Stop, delete, and re-add with new config
+      Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
+      Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
+      Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, low_limit_config})
+
+      on_exit(fn ->
+        # Restore original config
+        original_config = Application.get_env(:core, :rate)
+        Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
+        Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
+        Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, original_config})
+      end)
+
+      :ok
+    end
+
+    test "returns 429 when rate limit exceeded", %{conn: conn} do
+      # Use unique IP to avoid interference from other tests
+      unique_ip = {10, 0, 0, :erlang.unique_integer([:positive]) |> rem(255)}
+
+      # First request should succeed
+      assert conn
+             |> Map.put(:remote_ip, unique_ip)
+             |> post("/api/feldspar/log", %{"level" => "info", "message" => "first"})
+             |> json_response(200) == %{"status" => "ok"}
+
+      # Second request should be rate limited
+      response =
+        conn
+        |> Map.put(:remote_ip, unique_ip)
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "second"})
+        |> json_response(429)
+
+      assert response["error"] =~ "Rate limited"
+    end
+  end
+
+  # ============================================================================
+  # Helper functions
+  # ============================================================================
+
+  defp create_temp_file(content) do
+    path = Path.join(System.tmp_dir!(), "test_upload_#{:erlang.unique_integer()}.json")
+    File.write!(path, content)
+    on_exit(fn -> File.rm(path) end)
+    path
+  end
+
+  defp create_large_json_content(line_count) do
+    entries =
+      Enum.map_join(1..line_count, ",\n", fn i ->
+        ~s({"id":#{i},"data":"entry_#{i}_with_some_padding_to_increase_size"})
+      end)
+
+    "[#{entries}]"
   end
 
   defp create_assignment_with_storage do

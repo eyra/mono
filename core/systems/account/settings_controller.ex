@@ -20,7 +20,7 @@ defmodule Systems.Account.SettingsController do
         Account.Public.deliver_update_email_instructions(
           applied_user,
           email,
-          &url(conn, ~p"/user/settings/confirm-email/#{&1}")
+          &url(conn, ~p"/user/settings/activate-account/#{&1}")
         )
 
         conn
@@ -51,7 +51,7 @@ defmodule Systems.Account.SettingsController do
     end
   end
 
-  def confirm_email(conn, %{"token" => token}) do
+  def activate_account(conn, %{"token" => token}) do
     case Account.Public.update_user_email(conn.assigns.current_user, token) do
       :ok ->
         conn

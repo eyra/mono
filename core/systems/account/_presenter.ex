@@ -9,4 +9,7 @@ defmodule Systems.Account.Presenter do
   end
 
   defp builder(Account.UserProfilePage), do: Account.UserProfilePageBuilder
+  defp builder(Account.FeaturesView), do: Account.FeaturesViewBuilder
+  defp builder(Account.ProfileView), do: Account.ProfileViewBuilder
+  defp builder(Account.OnboardingPage), do: Account.OnboardingPageBuilder
 end

@@ -176,7 +176,8 @@ defmodule Systems.Advert.ContentPageBuilder do
             type: :primary,
             label: dgettext("eyra-advert", "publish.button"),
             bg_color: "bg-success"
-          }
+          },
+          "data-testid": "advert-publish-button"
         },
         icon: %{
           action: publish_action,

@@ -9,6 +9,30 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#21 2026-02-28
+* Fixed - Google Sign In callback to show error message instead of 500
+* Fixed - SSO duplicate email handling across all providers
+* Fixed - OAuth2 missing session state handling in SSO callbacks
+* Fixed - Race condition in workflow item deletion causing StaleEntryError
+* Fixed - File upload controller to handle invalid filenames and missing files
+* Fixed - GreenLight authorization NoResultsError
+* Fixed - Show 404 for deleted assignments instead of Access Denied
+* Fixed - CaseClauseError in NodePageEmptyDataView for Ecto.Multi errors
+* Fixed - Invalidate participant URL when data donation item is deleted
+* Fixed - Trix editor disconnect when modal appears
+* Fixed - Double spacing issue in tabbed navigation
+* Added - Onboard-first signup flow for PaNL participants
+* Added - Auto-confirmation for affiliate users
+* Added - Panl feature flags to guard PaNL-specific functionality
+* Added - Profile menu visibility for unconfirmed internal users
+* Added - Missing translations for sign up screen terms and privacy
+* Added - WaitGroup to ensure data donations complete before exit
+* Added - Feldspar client debug logging for production visibility
+* Added - Fly.io deployment infrastructure
+* Added - Staging option for Fly.io deployment workflow
+* Changed - Branding from "Eyra" to "Next" in terms/privacy agreement text
+* Changed - Improved Feldspar controller logging with uploadContext
+
 ## \#20.3 2026-02-12
 * Fixed - Race condition in affiliate user creation
 * Fixed - Race condition in crew member and role assignment creation

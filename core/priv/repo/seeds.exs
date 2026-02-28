@@ -100,6 +100,13 @@ Systems.NextAction.Public.create_next_action(
   Systems.Account.NextActions.CompleteProfile
 )
 
+# E2E service account for test fixture setup
+_e2e_service =
+  Core.Factories.insert!(:member, %{
+    email: "e2e@eyra.service",
+    password: "E2EServicePassword123!"
+  })
+
 # for advert_data <- adverts do
 #   {tool_type, advert_data} = Map.pop!(advert_data, :type)
 #   {tool_data, advert_data} = Map.pop!(advert_data, tool_type)

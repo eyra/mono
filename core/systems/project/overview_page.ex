@@ -240,7 +240,8 @@ defmodule Systems.Project.OverviewPage do
             illustration="cards"
             button={%{
               action: %{type: :send, event: "create_project"},
-              face: %{type: :primary, label: dgettext("eyra-project", "add.first.button")}
+              face: %{type: :primary, label: dgettext("eyra-project", "add.first.button")},
+              "data-testid": "create-first-project-button"
             }}
           />
         <% end %>

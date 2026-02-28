@@ -20,168 +20,198 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "error.flash"
 msgstr "Ceva n-a mers bine"
 
+#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
 msgstr "Salvat"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "Cont"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Autentificare"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
 msgstr "Deconectare"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
 msgstr "Meniu"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "De făcut"
 
+#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr "De făcut"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.student"
 msgstr "Program de studiu"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.helpdesk"
 msgstr "Suport"
 
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Anulează"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.text"
 msgstr "Acest %{item} va fi șters definitiv."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.title"
 msgstr "Ștergeți %{item}?"
 
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
 msgstr "Șterge"
 
+#, elixir-autogen, elixir-format
 msgid "ok.button"
 msgstr "OK"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr "Suport"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.today"
 msgstr "astăzi la %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterday"
 msgstr "ieri la %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "authentication.required.message"
 msgstr "Vă rugăm să vă autentificați mai întâi"
 
+#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr "Duplicare"
 
+#, elixir-autogen, elixir-format
 msgid "share.button"
 msgstr "Persoane"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr "Meniu"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
 msgstr "Nu a fost salvat, reîncărcați și încercați din nou"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Ia legătura"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "notify.all"
 msgstr "Trimite notificare"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
 msgstr "Administrator"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.projects"
 msgstr "Proiecte"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Mergi la desktop"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Mergi la desktop"
 
+#, elixir-autogen, elixir-format
 msgid "collapse.button"
 msgstr "Restrânge"
 
+#, elixir-autogen, elixir-format
 msgid "expand.button"
 msgstr "Mărește"
 
+#, elixir-autogen, elixir-format
 msgid "privacy.link"
 msgstr "Protecția datelor"
 
+#, elixir-autogen, elixir-format
 msgid "terms.link"
 msgstr "Termeni"
 
+#, elixir-autogen, elixir-format
 msgid "edit.button"
 msgstr "Editeaza"
 
+#, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
 msgstr "Copiază"
 
+#, elixir-autogen, elixir-format
 msgid "submit.button"
 msgstr "Salvează"
 
+#, elixir-autogen, elixir-format
 msgid "done.button"
 msgstr "Terminat"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.date"
 msgstr "%{weekday}, %{month} %{day_of_month}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.datetime"
 msgstr "%{weekday}, %{month} %{day_of_month} la %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterweek"
 msgstr "ultimul %{weekday} la %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.tomorrow"
 msgstr "mâine la %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.nextweek"
 msgstr "următorul %{weekday} la %{time}"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.desktop"
 msgstr "Desktop"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "Spațiul meu de lucru"
 
+#, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr "Confirmați"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.body"
 msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.title"
 msgstr "Săriți peste această pagină?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.forward"
 msgstr "Mergi la %{to}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.onyx"
 msgstr "Onix"

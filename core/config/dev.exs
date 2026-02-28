@@ -113,13 +113,18 @@ config :core,
     "*@eyra.co"
   ]
 
-config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
-
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
-    [service: "feldspar_data_donation", limit: 10, unit: "call", window: "minute", scope: "local"]
+    # Higher limit for E2E testing - 100MB per hour
+    [
+      service: "feldspar_data_donation",
+      limit: 100_000_000,
+      unit: "byte",
+      window: "hour",
+      scope: "local"
+    ]
   ]
 
 config :core, Core.ImageCatalog.Unsplash,

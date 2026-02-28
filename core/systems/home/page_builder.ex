@@ -63,7 +63,8 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action, :available_adverts]
+    [:next_best_action]
+    |> append_if(:available_adverts, feature_enabled?(:panl))
     |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
   end
 

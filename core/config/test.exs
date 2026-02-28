@@ -2,7 +2,7 @@ import Config
 
 config :core,
   name: "Next [test]",
-  base_url: "http://localhost:4000",
+  base_url: "http://localhost:4002",
   upload_path: "/tmp"
 
 # Selectical test configuration
@@ -64,6 +64,8 @@ config :wallaby,
   driver: Wallaby.Chrome,
   screenshot_dir: "tmp/wallaby_screenshots",
   screenshot_on_failure: true,
+  # Increase wait time for slow CI environments where JS takes longer to execute
+  max_wait_time: String.to_integer(System.get_env("WALLABY_MAX_WAIT_TIME", "5000")),
   chromedriver: [
     headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
   ]
@@ -73,7 +75,9 @@ config :core, :features,
   member_google_sign_in: true,
   password_sign_in: true,
   notification_mails: true,
-  debug_expire_force: true
+  debug_expire_force: true,
+  panl: true,
+  e2e: true
 
 config :core, Oban, queues: false, plugins: false
 
@@ -96,7 +100,9 @@ config :core, :feldspar_data_donation,
 # Higher rate limit for concurrent upload tests
 config :core, :rate,
   quotas: [
-    [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local]
+    [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
+    [service: :feldspar_log, limit: 100, unit: :call, window: :minute, scope: :local],
+    [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local]
   ]
 
 try do

@@ -136,10 +136,6 @@ msgid "settings.branding.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr "Panoramica"
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr "Informazioni"
 
@@ -480,3 +476,31 @@ msgstr "Ha scelto di non partecipare. La sua scelta è stata registrata. Clicchi
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
 msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire verso %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Per partecipare a questo studio, attiva prima il tuo account. Clicca sul link di attivazione nell'e-mail che abbiamo inviato a %{email}."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Continua"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Il tuo account non è ancora stato attivato. Controlla la tua casella di posta."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "Reinvia e-mail"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "E-mail di attivazione inviata!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Attiva il tuo account"

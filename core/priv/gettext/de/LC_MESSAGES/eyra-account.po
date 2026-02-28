@@ -29,7 +29,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr ""
+msgstr "Konto"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -69,10 +69,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "features.nativelanguage.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -160,17 +156,69 @@ msgid "features.birthyear.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "profile.tab.features.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "profile.tab.profile.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr "Ich stimme den PaNL %{terms_link} und der %{privacy_link} zu"
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Datenschutzerklärung"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Allgemeine Geschäftsbedingungen"
+
+#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "Ich stimme den %{terms_link} und der %{privacy_link} zu"
+msgstr "Ich stimme den Next %{terms_link} und der %{privacy_link} zu"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"
 msgstr "Sie müssen den Geschäftsbedingungen und der Datenschutzerklärung zustimmen, um fortzufahren"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Geschäftsbedingungen"
+msgid "sso.error.generic"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "sso.error.session_not_found"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Datenschutzerklärung"
+msgid "onboarding.activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "onboarding.activate_account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "signup.rate_limited"
+msgstr ""

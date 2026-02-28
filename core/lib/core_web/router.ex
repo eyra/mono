@@ -5,6 +5,7 @@ defmodule CoreWeb.Router do
   require Core.SurfConext
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
+  require Frameworks.E2E.Routes
 
   Core.BundleOverrides.routes()
 
@@ -18,6 +19,7 @@ defmodule CoreWeb.Router do
 
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
+  Frameworks.E2E.Routes.routes()
 
   scope "/", CoreWeb do
     pipe_through([:browser_base])
