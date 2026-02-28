@@ -38,14 +38,11 @@ defmodule CoreWeb.FeatureCase do
     end
   end
 
-  setup do
-    # Note: Wallaby.Feature handles Ecto sandbox checkout automatically
-    # We only need to start the session with sandbox metadata
-    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Core.Repo, self())
-    {:ok, session} = Wallaby.start_session(metadata: metadata)
-
-    {:ok, session: session}
-  end
+  # Note: We do NOT add a manual setup block here.
+  # Wallaby.Feature handles session creation automatically, including:
+  # - Single session via `%{session: session}` in feature tests
+  # - Multiple sessions via `@sessions N` and `%{sessions: [s1, s2, ...]}` in feature tests
+  # - Ecto sandbox checkout for database isolation
 
   @doc """
   Signs in a user through the browser login form.
@@ -56,9 +53,9 @@ defmodule CoreWeb.FeatureCase do
 
     session
     |> visit("/user/signin")
-    |> fill_in(text_field("Email"), with: user.email)
-    |> fill_in(text_field("Password"), with: password)
-    |> click(button("Sign in"))
+    |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
+    |> fill_in(css("[data-testid='signin-password-input']"), with: password)
+    |> click(css("[data-testid='signin-submit-button']"))
   end
 
   @doc """
@@ -69,7 +66,10 @@ defmodule CoreWeb.FeatureCase do
     password = Core.Factories.valid_user_password()
 
     user =
-      Core.Factories.insert!(:member, %{password: password, confirmed_at: DateTime.utc_now()})
+      Core.Factories.insert!(:member, %{
+        password: password,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
 
     session = sign_in(session, user, password)
 
@@ -85,7 +85,7 @@ defmodule CoreWeb.FeatureCase do
     Core.Factories.insert!(:member, %{
       email: email,
       password: password,
-      confirmed_at: DateTime.utc_now(),
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       creator: creator
     })
   end

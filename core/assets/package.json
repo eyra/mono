@@ -2,7 +2,10 @@
   "repository": {},
   "description": " ",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
     "blurhash": "2.0.5",
     "lodash": "4.17.23",
@@ -12,6 +15,8 @@
     "trix": "2.1.16"
   },
   "devDependencies": {
-    "prettier": "3.6.2"
+    "jsdom": "^26.0.0",
+    "prettier": "3.6.2",
+    "vitest": "^3.0.0"
   }
 }

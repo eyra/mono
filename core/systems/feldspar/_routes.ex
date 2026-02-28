@@ -8,7 +8,8 @@ defmodule Systems.Feldspar.Routes do
 
       scope "/api/feldspar", Systems.Feldspar do
         pipe_through([:api])
-        post("/donate", DataDonationController, :create)
+        post("/donate", Controller, :donate)
+        post("/log", Controller, :log)
       end
     end
   end

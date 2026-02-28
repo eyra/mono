@@ -20,95 +20,106 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "config.url.label"
 msgstr "Anketos nuoroda"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "reward.highlight.title"
 msgstr "Atlygis"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "Dalyvauti"
 
+#, elixir-autogen, elixir-format
 msgid "open.cta.title"
 msgstr "Vykdyti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.description"
 msgstr "Norėdami nukreipti dalyvius atgal į „Toliau“ klausimyno pabaigoje, nukopijuokite žemiau pateiktą nukreipimo URL adresą ir įklijuokite jį kaip „Svetainės URL adresą“ Qualtrics kaip %{link}."
 
+#, elixir-autogen, elixir-format
 msgid "redirect.title"
 msgstr "Peradresavimo nuoroda"
 
+#, elixir-autogen, elixir-format
 msgid "pending.label"
 msgstr "Laukiama"
 
+#, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Kampanija"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "nextid.description"
 msgstr "Next automatiškai įtraukia dalyvio ID į jūsų Qualtrics URL. Norėdami naudoti šį ID Qualtrics, pridėkite įterptą duomenų elemento lauką su pavadinimu „dalyvis“, kaip %{link} „2 DALIS“."
 
+#, elixir-autogen, elixir-format
 msgid "nextid.title"
 msgstr "Dalyvio ID"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "setup.title"
 msgstr "Kaip sukurti klausimyną „Qualtrics“?"
 
+#, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
 msgstr "Kopijuoti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "link.description"
 msgstr "Norėdami gauti nuorodą į savo Qualtrics klausimyną, sekite %{link}. Įklijuokite nuorodą į laukelį „Klausimyno nuoroda“ žemiau esančioje formoje."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "link.title"
 msgstr "Klausimynas Nuoroda"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "nextid.instructions.link"
 msgstr "paaiškinta čia"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.instructions.link"
 msgstr "nurodyta čia"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "study.instructions.link"
 msgstr "šios instrukcijos"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "duration.highlight.text"
 msgstr "%{duration} minutės"
 
+#, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
 msgstr "Trukmė"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "status.closed.highlight.text"
 msgstr "Uždaryta dalyvavimui"
 
+#, elixir-autogen, elixir-format
 msgid "status.highlight.title"
 msgstr "Būsena"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "status.open.highlight.text"
 msgstr "Atviras dalyvavimui"
 
+#, elixir-autogen, elixir-format
 msgid "language.highlight.title"
 msgstr "Kalba"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "participated.label"
 msgstr "Dalyvavo"
 
+#, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Tęsti"
 
+#, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Jūs ketinate pradėti pildyti anketą naujame lange. Baigę pildyti anketą, būsite automatiškai nukreipti atgal į šį puslapį."

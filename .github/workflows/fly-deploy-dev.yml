@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - infra/fly-dev  # TODO: remove after testing
 
 jobs:
   deploy:
@@ -28,7 +27,7 @@ jobs:
           flyctl deploy --remote-only -c fly.dev.toml \
             --build-arg VERSION=${{ env.VERSION }} \
             --build-arg PLATFORM=fly \
-            --release-notes "Commit: ${{ github.sha }}"
+            --build-arg GIT_COMMIT=${{ github.sha }}
         working-directory: core
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_DEV }}

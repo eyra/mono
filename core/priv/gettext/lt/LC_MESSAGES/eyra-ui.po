@@ -20,173 +20,198 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "error.flash"
 msgstr "Kažkas nepavyko"
 
+#, elixir-autogen, elixir-format
 msgid "persister.saved.flash"
 msgstr "Išsaugota"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.profile"
 msgstr "Paskyra"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.signin"
 msgstr "Prisijungti"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.signout"
 msgstr "Atsijungti"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.menu"
 msgstr "Meniu"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.todo"
 msgstr "To-do"
 
+#, elixir-autogen, elixir-format
 msgid "todo.title"
 msgstr "To-do"
 
-#, fuzzy
-msgid "tabbar.item.features"
-msgstr "Charakteristikos"
-
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.student"
 msgstr "Studijų programa"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.helpdesk"
 msgstr "Pagalbos tarnyba"
 
+#, elixir-autogen, elixir-format
 msgid "cancel.button"
 msgstr "Atšaukti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.text"
 msgstr "Tai %{item} bus visam laikui ištrinta."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.title"
 msgstr "Ištrinti %{item}?"
 
+#, elixir-autogen, elixir-format
 msgid "delete.confirm.label"
 msgstr "Ištrinti"
 
+#, elixir-autogen, elixir-format
 msgid "ok.button"
 msgstr "Gerai"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.support"
 msgstr "Palaikymas"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.today"
 msgstr "šiandien %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterday"
 msgstr "vakar %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "authentication.required.message"
 msgstr "Pirmiausia prisijunkite"
 
+#, elixir-autogen, elixir-format
 msgid "duplicate.button"
 msgstr "Dubliuoti"
 
+#, elixir-autogen, elixir-format
 msgid "share.button"
 msgstr "Žmonės"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.payments"
 msgstr "Meniu"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
 msgstr "Nesauge, prašome perkrauti ir bandyti dar kartą"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"
 msgstr "Susisiekti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "notify.all"
 msgstr "Siųsti pranešimą"
 
+#, elixir-autogen, elixir-format, ex-autogen
 msgid "menu.item.admin"
 msgstr "Administratorius"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.projects"
 msgstr "Projektai"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Eiti į darbalaukį"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Eiti į darbalaukį"
 
+#, elixir-autogen, elixir-format
 msgid "collapse.button"
 msgstr "Suskleisti"
 
+#, elixir-autogen, elixir-format
 msgid "expand.button"
 msgstr "Išskleisti"
 
+#, elixir-autogen, elixir-format
 msgid "privacy.link"
 msgstr "Privatumas"
 
+#, elixir-autogen, elixir-format
 msgid "terms.link"
 msgstr "Sąlygos"
 
+#, elixir-autogen, elixir-format
 msgid "edit.button"
 msgstr "Redaguoti"
 
+#, elixir-autogen, elixir-format
 msgid "copy.clipboard.button"
 msgstr "Kopijuoti"
 
+#, elixir-autogen, elixir-format
 msgid "submit.button"
 msgstr "Išsaugoti"
 
+#, elixir-autogen, elixir-format
 msgid "done.button"
 msgstr "Atlikta"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.date"
 msgstr "%{weekday}, %{month} %{day_of_month}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.datetime"
 msgstr "%{weekday}, %{month} %{day_of_month} adresu %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterweek"
 msgstr "paskutinis %{weekday} prie %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.tomorrow"
 msgstr "rytoj %{time}"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.nextweek"
 msgstr "kitas %{weekday} prie %{time}"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.desktop"
 msgstr "Kompiuteris"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "Mano darbo vieta"
 
+#, elixir-autogen, elixir-format
 msgid "confirm.button"
 msgstr "Patvirtinti"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.body"
 msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.title"
 msgstr "Pereiti šį puslapį?"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.forward"
 msgstr "Eiti į %{to}"
 
+#, elixir-autogen, elixir-format
 msgid "menu.item.onyx"
 msgstr "Onyx"

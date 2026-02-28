@@ -20,7 +20,8 @@ config :core, :features,
   debug_expire_force: false,
   leaderboard: true,
   panl: false,
-  onyx: false
+  onyx: false,
+  e2e: false
 
 config :core, :meta,
   bundle_title: "Next",

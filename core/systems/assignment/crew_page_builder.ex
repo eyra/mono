@@ -94,13 +94,16 @@ defmodule Systems.Assignment.CrewPageBuilder do
         consent_or_work_view(assignment, assigns)
 
       :accept ->
-        work_view(assignment, assigns)
+        email_or_work_view(assignment, assigns, tester?)
 
       :decline ->
         finished_view(assignment, assigns)
 
       :retry ->
         consent_or_work_view(assignment, assigns, tester?)
+
+      :email_confirmed ->
+        work_view(assignment, assigns)
 
       :work_done ->
         finished_view(assignment, assigns)
@@ -117,6 +120,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
       not consent_signed?(assignment, user, tester?) ->
         consent_view(assignment, assigns)
 
+      not tester? and not Account.Public.activated?(user.id) ->
+        activate_account_view(assignment, assigns)
+
       tasks_finished?(assignment, assigns) ->
         finished_view(assignment, assigns)
 
@@ -131,10 +137,25 @@ defmodule Systems.Assignment.CrewPageBuilder do
   defp consent_or_work_view(assignment, assigns, tester? \\ false) do
     %{current_user: user} = assigns
 
-    if consent_signed?(assignment, user, tester?) do
-      work_view(assignment, assigns)
+    cond do
+      not consent_signed?(assignment, user, tester?) ->
+        consent_view(assignment, assigns)
+
+      not tester? and not Account.Public.activated?(user.id) ->
+        activate_account_view(assignment, assigns)
+
+      true ->
+        work_view(assignment, assigns)
+    end
+  end
+
+  defp email_or_work_view(assignment, assigns, tester?) do
+    %{current_user: user} = assigns
+
+    if not tester? and not Account.Public.activated?(user.id) do
+      activate_account_view(assignment, assigns)
     else
-      consent_view(assignment, assigns)
+      work_view(assignment, assigns)
     end
   end
 
@@ -185,6 +206,17 @@ defmodule Systems.Assignment.CrewPageBuilder do
     LiveNest.Element.prepare_live_view(
       "onboarding_consent_view_#{assignment_id}",
       Assignment.OnboardingConsentView,
+      live_context: context
+    )
+  end
+
+  defp activate_account_view(
+         %{id: assignment_id} = _assignment,
+         %{live_context: context} = _assigns
+       ) do
+    LiveNest.Element.prepare_live_view(
+      "activate_account_view_#{assignment_id}",
+      Assignment.ActivateAccountView,
       live_context: context
     )
   end

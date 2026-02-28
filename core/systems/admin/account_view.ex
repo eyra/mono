@@ -209,7 +209,7 @@ defmodule Systems.Admin.AccountView do
   def handle_event("activate_user", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{creator: true, confirmed_at: NaiveDateTime.utc_now()})
+      socket |> save(user_id_string, %{confirmed_at: NaiveDateTime.utc_now()})
     }
   end
 

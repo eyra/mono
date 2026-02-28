@@ -20,9 +20,5 @@ msgid "request.verification.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "file.error.not_found"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "file.error.fetch_failed"
 msgstr ""

@@ -106,9 +106,9 @@ defmodule Frameworks.Pixel.Selector do
       socket |> send_event(:parent, event_name, payload)
     else
       # Fallback to standard Phoenix LiveView messaging
-      # Send message to parent PID if available, otherwise to self (the LiveView)
-      target_pid = socket.parent_pid || self()
-      send(target_pid, {event_name, payload})
+      # LiveComponents run in the same process as their parent LiveView,
+      # so self() is the correct target (the hosting LiveView process)
+      send(self(), {event_name, payload})
       socket
     end
   end
@@ -220,6 +220,7 @@ defmodule Frameworks.Pixel.Selector do
       <%= for {item, _} <- Enum.with_index(@current_items) do %>
         <div
           data-selector-item={"#{item.id}"}
+          data-testid={"selector-item-#{item.id}"}
           class="cursor-pointer select-none"
           phx-click={toggle_item_js(item.id, @type, @optional?) |> JS.push("toggle", value: %{item: item.id}, target: @myself)}
         >

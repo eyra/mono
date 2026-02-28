@@ -119,6 +119,50 @@ defmodule Systems.Account.PublicTest do
     end
   end
 
+  describe "sso_changeset/2" do
+    test "returns error changeset when email already exists" do
+      # Create existing user with email
+      existing_email = Faker.Internet.email()
+      Factories.insert!(:member, %{email: existing_email})
+
+      # Try to create SSO user with same email
+      sso_attrs = %{
+        email: existing_email,
+        displayname: "Test User",
+        profile: %{fullname: "Test User"},
+        creator: true,
+        verified_at: NaiveDateTime.utc_now()
+      }
+
+      changeset = User.sso_changeset(%User{}, sso_attrs)
+
+      # Should be valid before insert (constraint is checked at DB level)
+      assert changeset.valid?
+
+      # Insert should fail gracefully with changeset error, not crash
+      assert {:error, failed_changeset} = Repo.insert(changeset)
+      assert {"has already been taken", _} = failed_changeset.errors[:email]
+    end
+
+    test "successfully creates user when email is unique" do
+      sso_attrs = %{
+        email: Faker.Internet.email(),
+        displayname: "SSO Test User",
+        profile: %{fullname: "SSO Test User"},
+        creator: true,
+        verified_at: NaiveDateTime.utc_now()
+      }
+
+      changeset = User.sso_changeset(%User{}, sso_attrs)
+      assert changeset.valid?
+
+      assert {:ok, user} = Repo.insert(changeset)
+      assert user.email == sso_attrs.email
+      assert user.displayname == "SSO Test User"
+      assert user.hashed_password == "no-password-set"
+    end
+  end
+
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Account.Public.change_user_registration(%User{})

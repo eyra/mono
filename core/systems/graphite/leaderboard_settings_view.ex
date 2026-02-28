@@ -43,6 +43,7 @@ defmodule Systems.Graphite.LeaderboardSettingsView do
     ~H"""
     <div>
       <Area.content>
+        <Margin.y id={:page_top} />
         <.child name={:settings} fabric={@fabric} />
       </Area.content>
     </div>

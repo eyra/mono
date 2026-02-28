@@ -30,7 +30,7 @@ defmodule Systems.Affiliate.Html do
                   <Text.body_large color="text-white"><span class="break-all"><%= @url %></span></Text.body_large>
             </div>
             <div class="flex-wrap flex-shrink-0 mt-1">
-               <div id="copy-assignment-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@url}>
+               <div id="copy-assignment-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@url} data-testid="copy-affiliate-url-button">
                   <Button.Face.label_icon
                      label={dgettext("eyra-ui", "copy.clipboard.button")}
                      icon={:clipboard_tertiary}
