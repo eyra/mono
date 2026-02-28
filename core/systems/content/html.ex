@@ -64,7 +64,9 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      <div id="live_workspace_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.workspace>
@@ -88,7 +90,9 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      <div id="live_website_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.website>
@@ -105,7 +109,9 @@ defmodule Systems.Content.Html do
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      <div id="live_stripped_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+      </div>
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
