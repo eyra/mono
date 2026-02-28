@@ -19,7 +19,11 @@ defmodule Systems.Account.ProfileTab do
   @impl true
   def build(_user, live_context) do
     profile_context =
-      LiveContext.extend(live_context, %{show_signout_button: false, show_email: true})
+      LiveContext.extend(live_context, %{
+        show_signout_button: false,
+        show_email: true,
+        show_top_margin: true
+      })
 
     element =
       LiveNest.Element.prepare_live_view(

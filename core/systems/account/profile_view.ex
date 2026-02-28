@@ -12,7 +12,7 @@ defmodule Systems.Account.ProfileView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  def dependencies(), do: [:user_id, :show_signout_button, :show_email]
+  def dependencies(), do: [:user_id, :show_signout_button, :show_email, :show_top_margin]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     user = Account.Public.get_user!(user_id)
@@ -76,6 +76,9 @@ defmodule Systems.Account.ProfileView do
     ~H"""
     <div data-testid="profile-view">
       <Area.form>
+        <%= if @vm.show_top_margin do %>
+          <Margin.y id={:page_top} />
+        <% end %>
         <Text.title2><%= @vm.title %></Text.title2>
         <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
           <.form id="main_form" :let={form} for={@vm.changeset} phx-submit="save" phx-change="save">

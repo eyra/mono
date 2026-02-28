@@ -12,6 +12,7 @@ defmodule Systems.Account.ProfileViewBuilder do
     changeset = Account.UserProfileEditModel.changeset(entity, :mount, %{})
     show_signout_button = Map.get(assigns, :show_signout_button, true)
     show_email = Map.get(assigns, :show_email, true)
+    show_top_margin = Map.get(assigns, :show_top_margin, false)
 
     signout_button =
       if show_signout_button do
@@ -35,6 +36,7 @@ defmodule Systems.Account.ProfileViewBuilder do
       user: user,
       signout_button: signout_button,
       show_email: show_email,
+      show_top_margin: show_top_margin,
       photo_url: entity.photo_url,
       fullname_label: dgettext("eyra-account", "fullname.label"),
       displayname_label: dgettext("eyra-account", "displayname.label"),

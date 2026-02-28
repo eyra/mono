@@ -23,7 +23,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}
@@ -51,7 +52,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}
@@ -71,7 +73,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}
@@ -93,7 +96,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}
@@ -120,7 +124,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: creator.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}
@@ -138,7 +143,8 @@ defmodule Systems.Account.ProfileViewTest do
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
-          show_email: true
+          show_email: true,
+          show_top_margin: false
         })
 
       session = %{"live_context" => live_context}

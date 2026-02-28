@@ -66,7 +66,11 @@ defmodule Systems.Account.OnboardingPageBuilder do
 
   defp build_step_view(:profile, _user, live_context) do
     profile_context =
-      LiveContext.extend(live_context, %{show_signout_button: false, show_email: false})
+      LiveContext.extend(live_context, %{
+        show_signout_button: false,
+        show_email: false,
+        show_top_margin: false
+      })
 
     LiveNest.Element.prepare_live_view(
       :profile_view,
