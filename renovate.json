@@ -6,6 +6,11 @@
     "group:allNonMajor"
   ],
   "timezone": "Europe/Amsterdam",
+  "ignoreDeps": [
+    "bamboo_phoenix",
+    "bamboo_ses",
+    "live_nest"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
