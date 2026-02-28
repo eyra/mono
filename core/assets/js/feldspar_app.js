@@ -112,8 +112,15 @@ export const FeldsparApp = {
 
     try {
       this.pushEvent("feldspar_event", data);
+      console.log("[Feldspar] Exit event sent");
+      sendLog("info", "Exit event sent", this.getLogContext());
     } catch (error) {
       console.warn("[Feldspar] Could not push exit event:", error.message);
+      sendLog(
+        "error",
+        `Could not push exit event: ${error.message}`,
+        this.getLogContext()
+      );
     }
   },
 
