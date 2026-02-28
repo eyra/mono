@@ -80,39 +80,37 @@ defmodule Frameworks.Pixel.Navigation do
       })
 
     ~H"""
-    <div class="relative">
+    <div>
       <div id="action_menu" class="hidden z-50 absolute right-14px -mt-6 top-navbar-height">
         <.action_menu buttons={@more_buttons} />
       </div>
-      <div class="absolute top-0 left-0 w-full">
-        <%= if @has_breadcrumbs do %>
-          <div class="hidden md:block">
-            <div class="bg-white">
-              <Area.content>
-                <div class="flex items-center h-[64px]">
-                  <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
-                </div>
-              </Area.content>
-            </div>
-            <.line />
-          </div>
-        <% end %>
-        <Area.content>
-          <div class="overflow-scroll scrollbar-hidden w-full">
-            <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height"}>
-              <div class="flex-shrink-0">
-                <%= render_slot(@inner_block) %> <!-- tabbar -->
+      <%= if @has_breadcrumbs do %>
+        <div class="hidden md:block">
+          <div class="bg-white">
+            <Area.content>
+              <div class="flex items-center h-[64px]">
+                <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
               </div>
-              <%= if @has_right_bar_buttons do %>
-                <div class="absolute right-0 top-0 h-full flex items-center">
-                  <Button.dynamic_bar buttons={@right_bar_buttons} />
-                </div>
-              <% end %>
-            </div>
+            </Area.content>
           </div>
-        </Area.content>
-        <.line />
-      </div>
+          <.line />
+        </div>
+      <% end %>
+      <Area.content>
+        <div class="overflow-scroll scrollbar-hidden w-full">
+          <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height"}>
+            <div class="flex-shrink-0">
+              <%= render_slot(@inner_block) %>
+            </div>
+            <%= if @has_right_bar_buttons do %>
+              <div class="absolute right-0 top-0 h-full flex items-center">
+                <Button.dynamic_bar buttons={@right_bar_buttons} />
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </Area.content>
+      <.line />
     </div>
     """
   end

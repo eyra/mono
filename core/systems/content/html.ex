@@ -129,7 +129,7 @@ defmodule Systems.Content.Html do
           </Navigation.tabbar>
 
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} bar_id={@tabbar_id} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
@@ -167,7 +167,7 @@ defmodule Systems.Content.Html do
           </Area.content>
           <.line />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-              <Tabbed.content socket={@socket} tabs={@tabs} include_top_margin={false} bar_id={@tabbar_id} />
+              <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
@@ -198,7 +198,7 @@ defmodule Systems.Content.Html do
           </:top_bar>
 
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} include_breadcrumb_margin={true} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
           <Tabbed.footer bar_id={@tabbar_id} tabs={@tabs} />
         </.live_workspace>
