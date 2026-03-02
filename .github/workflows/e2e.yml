@@ -47,7 +47,7 @@ jobs:
       - name: Run E2E tests
         working-directory: core/test/e2e
         env:
-          BASE_URL: https://${{ inputs.app_name }}.fly.dev
+          E2E_BASE_URL: https://${{ inputs.app_name }}.fly.dev
           ASSIGNMENT_PATH: ${{ inputs.assignment_path }}
         run: npm run e2e
 
