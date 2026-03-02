@@ -9,7 +9,8 @@
   "ignoreDeps": [
     "bamboo_phoenix",
     "bamboo_ses",
-    "live_nest"
+    "live_nest",
+    "certifi"
   ],
   "packageRules": [
     {
