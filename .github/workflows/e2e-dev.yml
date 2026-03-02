@@ -13,5 +13,4 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       app_name: eyra-next-dev
-      assignment_path: /a/nWPk4K
     secrets: inherit
