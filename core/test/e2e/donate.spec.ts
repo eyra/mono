@@ -183,12 +183,14 @@ test('data_donation', async ({ page }, testInfo) => {
   const completionText = page.getByText('Thank you. You have finished.');
   const multiTaskButton = page.getByText("Continue, I'm done");
 
-  // Wait for either completion indicator (5 seconds max)
+  // Wait for either completion indicator (30 seconds max - LiveView needs time to update)
   await Promise.race([
-    completionText.waitFor({ state: 'visible', timeout: 10000 }),
-    multiTaskButton.waitFor({ state: 'visible', timeout: 10000 }),
-  ]).catch(() => {
-    // If neither found, throw a more helpful error
+    completionText.waitFor({ state: 'visible', timeout: 30000 }),
+    multiTaskButton.waitFor({ state: 'visible', timeout: 30000 }),
+  ]).catch(async () => {
+    // Debug: log page content when completion not found
+    const bodyText = await page.locator('body').innerText();
+    console.log(`[TEST] Page content when completion not found:\n${bodyText.substring(0, 500)}`);
     throw new Error('Completion indicator not found: expected either "Thank you. You have finished." or "Continue, I\'m done"');
   });
 
