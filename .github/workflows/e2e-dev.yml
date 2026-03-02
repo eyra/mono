@@ -13,3 +13,4 @@ jobs:
     with:
       app_name: eyra-next-dev
       assignment_path: /a/nWPk4K
+    secrets: inherit

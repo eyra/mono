@@ -11,6 +11,10 @@ on:
         description: 'Assignment path for tests'
         required: true
         type: string
+    secrets:
+      SERVICE_LOGIN_KEY:
+        description: 'Service login key for E2E fixture setup'
+        required: true
   workflow_dispatch:
     inputs:
       app_name:
@@ -48,7 +52,8 @@ jobs:
         working-directory: core/test/e2e
         env:
           E2E_BASE_URL: https://${{ inputs.app_name }}.fly.dev
-          ASSIGNMENT_PATH: ${{ inputs.assignment_path }}
+          E2E_DONATE_ASSIGNMENT_PATH: ${{ inputs.assignment_path }}
+          SERVICE_LOGIN_KEY: ${{ secrets.SERVICE_LOGIN_KEY }}
         run: npm run e2e
 
       - name: Upload test results
