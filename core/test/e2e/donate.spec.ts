@@ -4,7 +4,7 @@ import fs from 'fs';
 
 // Configure via Infisical per environment
 const ASSIGNMENT_PATH = process.env.E2E_DONATE_ASSIGNMENT_PATH;
-const DATA_SOURCE = process.env.E2E_DONATE_DATA_SOURCE || 'tiktok';
+const DATA_SOURCE = process.env.E2E_DONATE_DATA_SOURCE || 'many_files';
 
 if (!ASSIGNMENT_PATH) {
   throw new Error('Missing E2E_DONATE_ASSIGNMENT_PATH environment variable');
@@ -14,6 +14,7 @@ if (!ASSIGNMENT_PATH) {
 const TEST_FILES: Record<string, string> = {
   'tiktok': 'tiktok_19MB.zip',
   'youtube': 'youtube_111MB.zip',
+  'many_files': 'many_files_1000.zip',
 };
 
 function getTestFile(dataSource: string): string {
