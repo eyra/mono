@@ -162,49 +162,7 @@ test('data_donation', async ({ page }, testInfo) => {
   console.log(`[TEST] Clicking Continue in iframe...`);
   await feldsparFrame.getByRole('button', { name: 'Continue' }).click();
 
-  console.log(`[TEST] Waiting for Donate button to appear...`);
-
-  // Debug: Check what's visible in the iframe every 5 seconds
-  const donateButton = feldsparFrame.getByRole('button', { name: 'Donate' });
-  let attempts = 0;
-  const maxAttempts = 12; // 60 seconds max
-
-  while (attempts < maxAttempts) {
-    const isVisible = await donateButton.isVisible().catch(() => false);
-    if (isVisible) {
-      console.log(`[TEST] Donate button found after ${attempts * 5} seconds`);
-      break;
-    }
-
-    // Log what buttons ARE visible
-    const allButtons = await feldsparFrame.locator('button').all();
-    const buttonTexts = await Promise.all(allButtons.map(async (btn) => {
-      const text = await btn.textContent().catch(() => '');
-      const visible = await btn.isVisible().catch(() => false);
-      return `"${text?.trim()}" (visible: ${visible})`;
-    }));
-    console.log(`[TEST] Attempt ${attempts + 1}: Donate not visible. Buttons found: ${buttonTexts.join(', ') || 'none'}`);
-
-    // Also log any error messages
-    const errorText = await feldsparFrame.locator('.error, [class*="error"], [role="alert"]').textContent().catch(() => null);
-    if (errorText) {
-      console.log(`[TEST] Error message found: ${errorText}`);
-    }
-
-    await page.waitForTimeout(5000);
-    attempts++;
-  }
-
-  if (attempts >= maxAttempts) {
-    // Take a screenshot before failing
-    await page.screenshot({ path: 'test-results/donate-timeout-debug.png', fullPage: true });
-    console.log(`[TEST] Screenshot saved to test-results/donate-timeout-debug.png`);
-
-    // Log the iframe HTML
-    const iframeHtml = await feldsparFrame.locator('body').innerHTML().catch(() => 'Could not get HTML');
-    console.log(`[TEST] Iframe body HTML:\n${iframeHtml.substring(0, 2000)}`);
-  }
-
+  await page.waitForTimeout(2000);
   console.log(`[TEST] Clicking Donate...`);
 
   const donateResponsePromise = page.waitForResponse(
