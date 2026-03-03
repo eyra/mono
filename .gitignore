@@ -54,3 +54,4 @@ logfile
 /core/docker.env
 /core/playground.exs
 core/.elixir_ls/*
+.dir-locals.el

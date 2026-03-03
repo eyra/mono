@@ -50,12 +50,7 @@ config :core, Core.Repo,
   username: "postgres",
   password: "postgres",
   database: "next_dev",
-  hostname: "db",
-  ssl: [
-    cacertfile: cacertfile,
-    verify: :verify_peer,
-    server_name_indication: to_charlist("db")
-  ],
+  hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
