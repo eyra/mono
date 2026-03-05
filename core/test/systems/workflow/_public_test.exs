@@ -2,9 +2,10 @@ defmodule Systems.Workflow.PublicTest do
   use Core.DataCase
 
   alias Ecto.Multi
-
+  alias Systems.Graphite.ToolModel
   alias Systems.Workflow
   alias Systems.Workflow.Factories
+  alias Systems.Workflow.ItemModel
 
   describe "list_tools/2 " do
     test "no matching tool" do
@@ -25,7 +26,7 @@ defmodule Systems.Workflow.PublicTest do
       Factories.create_item(workflow, tool_ref, 0)
 
       assert [
-               %Systems.Graphite.ToolModel{}
+               %ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 
@@ -49,8 +50,8 @@ defmodule Systems.Workflow.PublicTest do
       Factories.create_item(workflow, tool_ref4, 3)
 
       assert [
-               %Systems.Graphite.ToolModel{},
-               %Systems.Graphite.ToolModel{}
+               %ToolModel{},
+               %ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 
@@ -70,24 +71,22 @@ defmodule Systems.Workflow.PublicTest do
     %{id: id_c} = item_c = Factories.create_item(workflow, tool_ref, 2)
     %{id: id_d} = item_d = Factories.create_item(workflow, tool_ref, 3)
 
-    result =
-      [item_a, item_b, item_c, item_d]
-      |> Workflow.Public.rearrange(3, 0)
+    result = Workflow.Public.rearrange([item_a, item_b, item_c, item_d], 3, 0)
 
     assert [
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_d,
                position: 0
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_a,
                position: 1
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_b,
                position: 2
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_c,
                position: 3
              }
@@ -104,24 +103,22 @@ defmodule Systems.Workflow.PublicTest do
     %{id: id_c} = item_c = Factories.create_item(workflow, tool_ref, 2)
     %{id: id_d} = item_d = Factories.create_item(workflow, tool_ref, 3)
 
-    result =
-      [item_a, item_b, item_c, item_d]
-      |> Workflow.Public.rearrange(0, 3)
+    result = Workflow.Public.rearrange([item_a, item_b, item_c, item_d], 0, 3)
 
     assert [
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_b,
                position: 0
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_c,
                position: 1
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_d,
                position: 2
              },
-             ok: %Systems.Workflow.ItemModel{
+             ok: %ItemModel{
                id: ^id_a,
                position: 3
              }
@@ -144,37 +141,37 @@ defmodule Systems.Workflow.PublicTest do
              validate_new_position: true,
              validate_old_position: true,
              items: [
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_b,
                  position: 1
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_c,
                  position: 2
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_d,
                  position: 3
                }
              ],
              order_and_update: [
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_b,
                  position: 0
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_c,
                  position: 1
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_d,
                  position: 2
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_a,
                  position: 3
                }
@@ -198,37 +195,37 @@ defmodule Systems.Workflow.PublicTest do
              validate_new_position: true,
              validate_old_position: true,
              items: [
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_b,
                  position: 1
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_c,
                  position: 2
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_d,
                  position: 3
                }
              ],
              order_and_update: [
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_d,
                  position: 1
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_b,
                  position: 2
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_c,
                  position: 3
                }
@@ -250,19 +247,19 @@ defmodule Systems.Workflow.PublicTest do
 
     assert %{
              items: [
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_b,
                  position: 1
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_c,
                  position: 2
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_d,
                  position: 3
                }
@@ -309,8 +306,8 @@ defmodule Systems.Workflow.PublicTest do
     item_d = Factories.create_item(workflow, tool_ref, 3)
 
     Multi.new()
-    |> Multi.update(:item_c, Workflow.ItemModel.changeset(item_c, %{position: 3}))
-    |> Multi.update(:item_d, Workflow.ItemModel.changeset(item_d, %{position: 2}))
+    |> Multi.update(:item_c, ItemModel.changeset(item_c, %{position: 3}))
+    |> Multi.update(:item_d, ItemModel.changeset(item_d, %{position: 2}))
     |> Repo.commit()
 
     {:error, :validate_old_position, :out_of_sync, _} = Workflow.Public.update_position(item_d, 1)
@@ -348,29 +345,29 @@ defmodule Systems.Workflow.PublicTest do
 
     assert %{
              items: [
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_b,
                  position: 1
                },
-               %Systems.Workflow.ItemModel{
+               %ItemModel{
                  id: ^id_d,
                  position: 3
                }
              ],
              order_and_update: [
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_a,
                  position: 0
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_b,
                  position: 1
                },
-               ok: %Systems.Workflow.ItemModel{
+               ok: %ItemModel{
                  id: ^id_d,
                  position: 2
                }

@@ -1,13 +1,13 @@
 defmodule Systems.Assignment.TemplateQuestionnaire do
+  @moduledoc false
+  alias Frameworks.Builder
   alias Systems.Assignment
   alias Systems.Workflow
-  alias Frameworks.Builder
 
   defstruct [:id]
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
-    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -66,8 +66,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
               id: :general_instruction,
               type: :instruction_tool,
               title: Assignment.WorkflowItemSpecials.translate(:general_instruction),
-              description:
-                dgettext("eyra-assignment", "workflow_item.general_instruction.description")
+              description: dgettext("eyra-assignment", "workflow_item.general_instruction.description")
             },
             %Builder.LibraryItemModel{
               id: :questionnaire,
@@ -79,8 +78,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
               id: :onsite_experiment,
               type: :lab_tool,
               title: Assignment.WorkflowItemSpecials.translate(:onsite_experiment),
-              description:
-                dgettext("eyra-assignment", "workflow_item.onsite_experiment.description")
+              description: dgettext("eyra-assignment", "workflow_item.onsite_experiment.description")
             }
           ]
         },

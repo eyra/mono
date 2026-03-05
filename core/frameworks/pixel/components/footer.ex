@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Footer do
+  @moduledoc false
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Text
@@ -35,18 +36,11 @@ defmodule CoreWeb.UI.Footer do
     terms_url = "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c"
     eyra_url = "https://eyra.co"
 
-    left_elements =
-      [
-        {privacy_text, privacy_url},
-        {terms_text, terms_url}
-      ]
-      |> Enum.map(&to_link/1)
+    left_elements = Enum.map([{privacy_text, privacy_url}, {terms_text, terms_url}], &to_link/1)
 
     eyra_element = "Powered by #{to_link({"Eyra", eyra_url})}"
 
-    content =
-      (left_elements ++ [eyra_element])
-      |> Enum.join("<span class=\"whitespace-pre-wrap\">  |  </span>")
+    content = Enum.join(left_elements ++ [eyra_element], "<span class=\"whitespace-pre-wrap\">  |  </span>")
 
     assigns = assign(assigns, content: content)
 

@@ -1,17 +1,19 @@
 defmodule Frameworks.Pixel.WysiwygAreaHelpers do
-  alias Frameworks.Pixel.TrixPostProcessor
-
+  @moduledoc false
   import Phoenix.Component, only: [assign: 3]
   import Phoenix.HTML, only: [raw: 1]
 
-  @callback handle_wysiwyg_update(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
+  alias Frameworks.Pixel.TrixPostProcessor
+  alias Phoenix.LiveView.Socket
+
+  @callback handle_wysiwyg_update(Socket.t()) :: Socket.t()
 
   defmacro __using__(_opts) do
     quote do
       @behaviour Frameworks.Pixel.WysiwygAreaHelpers
 
-      import Frameworks.Pixel.WysiwygAreaHelpers, only: [post_process: 1]
       import Frameworks.Pixel.Form
+      import Frameworks.Pixel.WysiwygAreaHelpers, only: [post_process: 1]
 
       @impl true
       def handle_event("save_wysiwyg", %{"_target" => [input_name]} = params, socket) do
@@ -21,7 +23,8 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
           |> post_process()
 
         field_name =
-          String.replace_suffix(input_name, "_input", "")
+          input_name
+          |> String.replace_suffix("_input", "")
           |> String.to_existing_atom()
 
         {

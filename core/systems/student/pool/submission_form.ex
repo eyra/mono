@@ -1,21 +1,17 @@
 defmodule Systems.Student.Pool.SubmissionForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-
-  alias Systems.{
-    Pool,
-    Student
-  }
+  alias Systems.Pool
+  alias Systems.Student
 
   @impl true
-  def update(
-        %{id: id, entity: %{pool: active_pool} = submission, user: user},
-        socket
-      ) do
+  def update(%{id: id, entity: %{pool: active_pool} = submission, user: user}, socket) do
     pool_labels =
-      Student.Public.course_patterns(user)
+      user
+      |> Student.Public.course_patterns()
       |> Student.Public.list_courses()
       |> Enum.map(&Student.Course.pool_name(&1))
       |> Enum.map(&Pool.Public.get_by_name(&1, Pool.Model.preload_graph([:org])))
@@ -49,8 +45,7 @@ defmodule Systems.Student.Pool.SubmissionForm do
   def save(socket, %Pool.SubmissionModel{} = entity, pool_id) do
     changeset = Pool.SubmissionModel.changeset(entity, pool_id)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true
@@ -67,8 +62,7 @@ defmodule Systems.Student.Pool.SubmissionForm do
 
     {
       :noreply,
-      socket
-      |> save(submission, pool_id)
+      save(socket, submission, pool_id)
     }
   end
 

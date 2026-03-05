@@ -1,5 +1,7 @@
 defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
   use Core.DataCase
+
+  alias Systems.Annotation.Pattern.Parameter
   alias Systems.Zircon.Screening.CriteriaViewBuilder
 
   setup do
@@ -27,7 +29,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
 
     test "filters annotations by parameter type", %{entity: _entity} do
       # Create annotations with different types
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Parameter.type_phrase()}
       other_type = %{phrase: "other_type"}
 
       annotations = [
@@ -45,12 +47,12 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
       assert length(result.criteria_list) == 2
 
       assert Enum.all?(result.criteria_list, fn ann ->
-               ann.type.phrase == Systems.Annotation.Pattern.Parameter.type_phrase()
+               ann.type.phrase == Parameter.type_phrase()
              end)
     end
 
     test "sorts criteria by insertion time ascending", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Parameter.type_phrase()}
 
       annotations = [
         %{type: parameter_type, inserted_at: ~N[2024-01-03 10:00:00], id: 3},
@@ -82,9 +84,9 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
       # Each library item should have the expected structure
       Enum.each(result.library_items, fn item ->
         assert %Frameworks.Builder.LibraryItemModel{} = item
-        assert item.id != nil
+        assert item.id
         assert item.type == "Research Dimension"
-        assert item.title != nil
+        assert item.title
         assert is_list(item.tags)
       end)
     end
@@ -158,7 +160,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
 
   describe "integration with annotations" do
     test "processes real annotation data correctly", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Parameter.type_phrase()}
 
       # Create more realistic annotation data
       annotations = [
@@ -192,7 +194,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
     end
 
     test "handles mixed annotation types correctly", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Parameter.type_phrase()}
       tag_type = %{phrase: "tag"}
       category_type = %{phrase: "category"}
 
@@ -238,7 +240,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
     end
 
     test "preserves all annotation fields", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Parameter.type_phrase()}
 
       annotation = %{
         id: 123,

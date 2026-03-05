@@ -1,19 +1,16 @@
 defmodule Systems.Budget.BankAccountForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  alias Ecto.Changeset
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Utility.EctoHelper
-  alias Frameworks.Pixel.Text
+  import Systems.Content.TextBundleInput
 
-  alias Systems.{
-    Budget,
-    Content
-  }
-
-  import Content.TextBundleInput
   alias Budget.BankAccountModel, as: Model
+  alias Ecto.Changeset
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Utility.EctoHelper
+  alias Systems.Budget
+  alias Systems.Content
 
   # Successive update
 
@@ -50,10 +47,7 @@ defmodule Systems.Budget.BankAccountForm do
 
   # Initial edit update
   @impl true
-  def update(
-        %{id: id, bank_account: bank_account, user: user},
-        socket
-      ) do
+  def update(%{id: id, bank_account: bank_account, user: user}, socket) do
     title = dgettext("eyra-budget", "bank.account.edit.title")
     changeset = Model.prepare(bank_account)
 
@@ -73,8 +67,7 @@ defmodule Systems.Budget.BankAccountForm do
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
         %{
           action: %{type: :submit, target: myself},
@@ -92,57 +85,42 @@ defmodule Systems.Budget.BankAccountForm do
   def handle_event("change", %{"bank_account_model" => attrs}, socket) do
     {
       :noreply,
-      socket |> change(attrs)
+      change(socket, attrs)
     }
   end
 
   @impl true
   def handle_event("submit", %{"bank_account_model" => attrs}, socket) do
-    {:noreply, socket |> handle_submit(attrs)}
+    {:noreply, handle_submit(socket, attrs)}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
+    {:noreply, send_event(socket, :parent, "cancelled")}
   end
 
-  defp change(
-         %{assigns: %{bank_account: bank_account, validate_changeset?: validate_changeset?}} =
-           socket,
-         attrs
-       ) do
-    socket
-    |> apply_change(
-      bank_account
-      |> Model.change(attrs)
-      |> Model.validate(validate_changeset?)
-    )
+  defp change(%{assigns: %{bank_account: bank_account, validate_changeset?: validate_changeset?}} = socket, attrs) do
+    apply_change(socket, bank_account |> Model.change(attrs) |> Model.validate(validate_changeset?))
   end
 
   defp apply_change(socket, changeset) do
     case Changeset.apply_action(changeset, :change) do
-      {:ok, _bank_account} -> socket |> assign(changeset: changeset)
-      {:error, changeset} -> socket |> assign(changeset: changeset)
+      {:ok, _bank_account} -> assign(socket, changeset: changeset)
+      {:error, changeset} -> assign(socket, changeset: changeset)
     end
   end
 
   defp handle_submit(%{assigns: %{bank_account: bank_account}} = socket, attrs) do
-    socket
-    |> apply_submit(
-      bank_account
-      |> Model.change(attrs)
-      |> Model.validate()
-      |> Model.submit()
-    )
+    apply_submit(socket, bank_account |> Model.change(attrs) |> Model.validate() |> Model.submit())
   end
 
   defp apply_submit(socket, changeset) do
     case EctoHelper.upsert_and_dispatch(changeset, :bank_account) do
       {:ok, _bank_account} ->
-        socket |> send_event(:parent, "saved")
+        send_event(socket, :parent, "saved")
 
       {:error, changeset} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

@@ -2,30 +2,21 @@ defmodule Systems.Lab.TaskView do
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Navigation, only: [button_bar: 1]
-  alias Frameworks.Utility.LiveCommand
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.DropdownSelector
 
+  alias CoreWeb.UI.Timestamp
+  alias Frameworks.Pixel.DropdownSelector
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Utility.LiveCommand
   alias Systems.Lab
 
   # Realtime updates
   @impl true
   def update(%{model: new_model}, %{assigns: %{lock_ui: true}} = socket) do
-    {:ok, socket |> assign(new_model: new_model)}
+    {:ok, assign(socket, new_model: new_model)}
   end
 
   @impl true
-  def update(
-        %{
-          model: %{
-            lab_tool: lab_tool,
-            status: status,
-            actions: actions,
-            reservation: reservation
-          }
-        },
-        socket
-      ) do
+  def update(%{model: %{lab_tool: lab_tool, status: status, actions: actions, reservation: reservation}}, socket) do
     selected_timeslot = Map.get(socket.assigns, :selected_timeslot, nil)
 
     {
@@ -91,10 +82,7 @@ defmodule Systems.Lab.TaskView do
     }
   end
 
-  def compose(:timeslot_selector, %{
-        options: options,
-        selected_timeslot: %{id: selected_timeslot_id}
-      }) do
+  def compose(:timeslot_selector, %{options: options, selected_timeslot: %{id: selected_timeslot_id}}) do
     selected_option_index = Enum.find_index(options, &(&1.id == selected_timeslot_id))
 
     %{
@@ -110,12 +98,12 @@ defmodule Systems.Lab.TaskView do
 
   defp update_options(%{assigns: %{timeslots: timeslots}} = socket) do
     options = Enum.map(timeslots, &to_option(&1))
-    socket |> assign(options: options)
+    assign(socket, options: options)
   end
 
   defp update_timeslots(%{assigns: %{lab_tool: %{id: id}}} = socket) do
     timeslots = Lab.Public.get_available_time_slots(id)
-    socket |> assign(timeslots: timeslots)
+    assign(socket, timeslots: timeslots)
   end
 
   defp to_option(%Lab.TimeSlotModel{id: id} = time_slot) do
@@ -125,13 +113,11 @@ defmodule Systems.Lab.TaskView do
 
     %{
       id: id,
-      value: "#{date}  |  #{time}  |  #{location}" |> Macro.camelize()
+      value: Macro.camelize("#{date}  |  #{time}  |  #{location}")
     }
   end
 
-  defp handle_delayed_update(
-         %{assigns: %{new_model: %{lab_tool: lab_tool, reservation: reservation}}} = socket
-       ) do
+  defp handle_delayed_update(%{assigns: %{new_model: %{lab_tool: lab_tool, reservation: reservation}}} = socket) do
     socket
     |> assign(
       lab_tool: lab_tool,
@@ -146,13 +132,12 @@ defmodule Systems.Lab.TaskView do
 
   defp date(%Lab.TimeSlotModel{start_time: start_time}) do
     start_time
-    |> CoreWeb.UI.Timestamp.to_date()
-    |> CoreWeb.UI.Timestamp.humanize_date()
+    |> Timestamp.to_date()
+    |> Timestamp.humanize_date()
   end
 
   defp time(%Lab.TimeSlotModel{start_time: start_time}) do
-    start_time
-    |> CoreWeb.UI.Timestamp.humanize_time()
+    Timestamp.humanize_time(start_time)
   end
 
   defp location(%Lab.TimeSlotModel{location: location}), do: location
@@ -196,12 +181,8 @@ defmodule Systems.Lab.TaskView do
   end
 
   @impl true
-  def handle_event(
-        "dropdown_selected",
-        %{option: %{id: id}},
-        %{assigns: %{timeslots: timeslots}} = socket
-      ) do
-    selected_timeslot = timeslots |> Enum.find(&(&1.id == id))
+  def handle_event("dropdown_selected", %{option: %{id: id}}, %{assigns: %{timeslots: timeslots}} = socket) do
+    selected_timeslot = Enum.find(timeslots, &(&1.id == id))
 
     {
       :noreply,

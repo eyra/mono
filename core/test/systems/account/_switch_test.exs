@@ -1,6 +1,7 @@
 defmodule Systems.Account.SwitchTest do
   use ExUnit.Case, async: true
   use Bamboo.Test
+
   alias Core.Factories
   alias Systems.Account
 

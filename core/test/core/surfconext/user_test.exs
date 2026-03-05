@@ -1,5 +1,6 @@
 defmodule Core.SurfConext.UserTest do
   use ExUnit.Case, async: false
+
   alias Core.SurfConext.User
 
   describe "changeset/2" do

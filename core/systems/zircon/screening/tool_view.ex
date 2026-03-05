@@ -6,7 +6,7 @@ defmodule Systems.Zircon.Screening.ToolView do
   alias Systems.Workflow
   alias Systems.Zircon
 
-  def dependencies(), do: [:tool_ref]
+  def dependencies, do: [:tool_ref]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     Workflow.ToolRefModel.tool(tool_ref)
@@ -23,10 +23,11 @@ defmodule Systems.Zircon.Screening.ToolView do
     {:noreply, socket}
   end
 
-  defp mark_current_paper_as_screened_and_advance(
-         socket,
-         %{session: session, agent_state: agent_state, paper_id: paper_id}
-       ) do
+  defp mark_current_paper_as_screened_and_advance(socket, %{
+         session: session,
+         agent_state: agent_state,
+         paper_id: paper_id
+       }) do
     # Mark current paper as screened
     {:ok, updated_agent_state} =
       Zircon.Config.screening_agent_module().update_paper(agent_state, paper_id, nil, nil)
@@ -43,8 +44,7 @@ defmodule Systems.Zircon.Screening.ToolView do
     new_paper = Paper.Public.get!(new_paper_id)
 
     # Update view model with new state
-    socket
-    |> assign(
+    assign(socket,
       vm: %{
         socket.assigns.vm
         | session: final_session,

@@ -4,10 +4,12 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
   import Ecto.Query, only: [from: 1]
   import Systems.Annotation.Pattern
 
-  alias Core.Repo
-  alias Core.Factories
   alias Core.Authentication
+  alias Core.Factories
+  alias Core.Repo
   alias Systems.Annotation
+  alias Systems.Annotation.Pattern.MissingFieldError
+  alias Systems.Annotation.Pattern.Parameter
   alias Systems.Ontology
 
   describe "obtain/1" do
@@ -27,7 +29,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: %{id: entity_id} = entity,
       dimension: %{id: dimension_id} = dimension
     } do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity
@@ -87,7 +89,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
       assert 1 = from(Annotation.Model) |> Repo.all() |> Enum.count()
 
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: statement,
         dimension: dimension,
         entity: entity
@@ -104,7 +106,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: entity,
       dimension: dimension
     } do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity
@@ -122,7 +124,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: entity,
       dimension: dimension
     } do
-      pattern_1 = %Annotation.Pattern.Parameter{
+      pattern_1 = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity
@@ -130,7 +132,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
 
       assert {:ok, annotation_1} = Annotation.Pattern.obtain(pattern_1)
 
-      pattern_2 = %Annotation.Pattern.Parameter{
+      pattern_2 = %Parameter{
         statement: "This is another parameter",
         dimension: dimension,
         entity: entity
@@ -147,7 +149,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: entity,
       dimension: dimension
     } do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity
@@ -161,7 +163,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
           entity: entity
         })
 
-      pattern_2 = %Annotation.Pattern.Parameter{
+      pattern_2 = %Parameter{
         statement: "This is a parameter",
         dimension: dimension_2,
         entity: entity
@@ -177,7 +179,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: entity,
       dimension: dimension
     } do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity
@@ -192,7 +194,7 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
           identifier: "Systems.Account.User:#{user_2.id}"
         })
 
-      pattern_2 = %Annotation.Pattern.Parameter{
+      pattern_2 = %Parameter{
         statement: "This is a parameter",
         dimension: dimension,
         entity: entity_2
@@ -208,34 +210,34 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
       entity: entity,
       dimension: dimension
     } do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         dimension: dimension,
         entity: entity
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         obtain(pattern)
       end
     end
 
     test "should raise an error if the dimension is not provided", %{entity: entity} do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         entity: entity
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         obtain(pattern)
       end
     end
 
     test "should raise an error if the entity is not provided", %{dimension: dimension} do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter",
         dimension: dimension
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         obtain(pattern)
       end
     end
@@ -269,21 +271,21 @@ defmodule Systems.Annotation.Pattern.ParameterTest do
     end
 
     test "should find the one annotation", %{annotation: %{id: annotation_id}} do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is a parameter"
       }
 
       assert {:ok, query} = query(pattern)
-      assert %{id: ^annotation_id} = query |> Repo.one()
+      assert %{id: ^annotation_id} = Repo.one(query)
     end
 
     test "should not find any annotation" do
-      pattern = %Annotation.Pattern.Parameter{
+      pattern = %Parameter{
         statement: "This is another parameter"
       }
 
       assert {:ok, query} = query(pattern)
-      refute query |> Repo.exists?()
+      refute Repo.exists?(query)
     end
   end
 end

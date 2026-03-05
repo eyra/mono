@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.Module do
+  @moduledoc false
   def optional_apply(module, function, params, default \\ nil)
       when is_atom(module) and is_atom(function) and is_list(params) do
     if function_exported?(module, function, Enum.count(params)) do
@@ -12,14 +13,12 @@ defmodule Frameworks.Utility.Module do
 
   def get(nil, _name), do: nil
 
-  def get(system, name) when is_atom(system),
-    do: get(Atom.to_string(system), name)
+  def get(system, name) when is_atom(system), do: get(Atom.to_string(system), name)
 
   def get(system, name) when is_binary(system) do
     system = Macro.camelize(system)
 
-    "Elixir.Systems.#{system}.#{name}"
-    |> String.to_atom()
+    String.to_atom("Elixir.Systems.#{system}.#{name}")
   end
 
   def to_system(module) when is_atom(module) do

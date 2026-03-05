@@ -1,16 +1,15 @@
 defmodule Systems.Student.Overview do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.SearchBar
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Selector
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Empty
 
-  alias Systems.{
-    Student,
-    Pool
-  }
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
+  alias Systems.Pool
+  alias Systems.Student
 
   # Handle Search Bar Update
   @impl true
@@ -39,10 +38,7 @@ defmodule Systems.Student.Overview do
 
   # Initial update
   @impl true
-  def update(
-        %{id: id, students: students, pool: pool} = _params,
-        %{assigns: %{myself: target}} = socket
-      ) do
+  def update(%{id: id, students: students, pool: pool} = _params, %{assigns: %{myself: target}} = socket) do
     filter_labels = Student.CriteriaFilters.labels([]) ++ Student.Filters.labels([])
 
     email_button = %{
@@ -94,8 +90,8 @@ defmodule Systems.Student.Overview do
   defp filter(students, [], _), do: students
 
   defp filter(students, filters, pool) do
-    students
-    |> Enum.filter(
+    Enum.filter(
+      students,
       &(Student.CriteriaFilters.include?(&1.features.study_program_codes, filters) and
           Student.Filters.include?(&1, filters, pool))
     )
@@ -105,8 +101,7 @@ defmodule Systems.Student.Overview do
   defp query(students, []), do: students
 
   defp query(students, query) when is_list(query) do
-    students
-    |> Enum.filter(&include?(&1, query))
+    Enum.filter(students, &include?(&1, query))
   end
 
   defp include?(_student, []), do: true
@@ -124,35 +119,22 @@ defmodule Systems.Student.Overview do
   defp include?(student, word) when is_binary(word) do
     word = String.downcase(word)
 
-    String.contains?(student.profile.fullname |> String.downcase(), word) or
-      String.contains?(student.email |> String.downcase(), word) or
+    student.profile.fullname |> String.downcase() |> String.contains?(word) or
+      student.email |> String.downcase() |> String.contains?(word) or
       Student.Codes.contains_study_program?(student.features.study_program_codes, word)
   end
 
   defp prepare_students(
-         %{
-           assigns: %{
-             students: students,
-             pool: pool,
-             active_filters: active_filters,
-             query: query
-           }
-         } = socket
+         %{assigns: %{students: students, pool: pool, active_filters: active_filters, query: query}} = socket
        ) do
     filtered_students =
       students
       |> filter(active_filters, pool)
       |> query(query)
 
-    filtered_student_items =
-      filtered_students
-      |> Enum.map(&Pool.ParticipantItemBuilder.view_model(&1, socket))
+    filtered_student_items = Enum.map(filtered_students, &Pool.ParticipantItemBuilder.view_model(&1, socket))
 
-    socket
-    |> assign(
-      filtered_students: filtered_students,
-      filtered_student_items: filtered_student_items
-    )
+    assign(socket, filtered_students: filtered_students, filtered_student_items: filtered_student_items)
   end
 
   @impl true
@@ -162,11 +144,7 @@ defmodule Systems.Student.Overview do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :student_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :student_filters}}, socket) do
     {
       :noreply,
       socket

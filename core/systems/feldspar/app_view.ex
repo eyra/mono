@@ -5,14 +5,7 @@ defmodule Systems.Feldspar.AppView do
   def update(%{key: key, url: url, locale: locale} = params, socket) do
     upload_context = Map.get(params, :upload_context, %{})
 
-    {:ok,
-     socket
-     |> assign(
-       key: key,
-       url: url,
-       locale: locale,
-       upload_context: upload_context
-     )}
+    {:ok, assign(socket, key: key, url: url, locale: locale, upload_context: upload_context)}
   end
 
   @impl true

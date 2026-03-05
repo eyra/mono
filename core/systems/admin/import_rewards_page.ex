@@ -1,28 +1,23 @@
 defmodule Systems.Admin.ImportRewardsPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
   use CoreWeb.FileUploader, accept: ~w(.csv)
 
   import Frameworks.Pixel.Form
+
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Selector
-
   alias Systems.Account
-  alias Systems.Advert
   alias Systems.Admin
-  alias Systems.Student
+  alias Systems.Advert
   alias Systems.Org
+  alias Systems.Student
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{path: path, original_filename: original_filename}
-      ) do
-    changeset =
-      entity
-      |> Admin.ImportRewardsModel.changeset(%{session_key: Path.rootname(original_filename)})
+  def process_file(%{assigns: %{entity: entity}} = socket, %{path: path, original_filename: original_filename}) do
+    changeset = Admin.ImportRewardsModel.changeset(entity, %{session_key: Path.rootname(original_filename)})
 
-    socket
-    |> assign(
+    assign(socket,
       changeset: changeset,
       lines_error: [],
       lines_unknown: [],
@@ -42,9 +37,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   def mount(%{"back" => back}, _session, socket) do
     entity = %Admin.ImportRewardsModel{}
 
-    changeset =
-      entity
-      |> Admin.ImportRewardsModel.changeset(%{})
+    changeset = Admin.ImportRewardsModel.changeset(entity, %{})
 
     process_button = %{
       action: %{
@@ -71,7 +64,8 @@ defmodule Systems.Admin.ImportRewardsPage do
     }
 
     currency_labels =
-      Org.Public.list_nodes(:student_course, ["vu", ":2021"])
+      :student_course
+      |> Org.Public.list_nodes(["vu", ":2021"])
       |> Enum.map(&Student.Course.currency(&1.identifier))
       |> Enum.map(&%{id: &1, value: &1, active: false})
 
@@ -127,13 +121,13 @@ defmodule Systems.Admin.ImportRewardsPage do
   def validate(%{"email" => email, "student_id" => student_id} = line, socket) do
     if user = Core.SurfConext.get_user_by_student_id(student_id) do
       IO.puts("User found by student_id! #{user.id}")
-      line |> validate(user, socket)
+      validate(line, user, socket)
     else
       if user = Account.Public.get_user_by_email(email) do
         IO.puts("User found by email! #{user.id}")
-        line |> validate(user, socket)
+        validate(line, user, socket)
       else
-        line |> Map.put(:status, :unknown)
+        Map.put(line, :status, :unknown)
       end
     end
   end
@@ -189,20 +183,11 @@ defmodule Systems.Admin.ImportRewardsPage do
       |> Enum.map(&map(&1))
       |> Enum.map(&validate(&1, socket))
 
-    lines_valid =
-      lines_ok
-      |> Enum.filter(&filter_valid(&1))
+    lines_valid = Enum.filter(lines_ok, &filter_valid(&1))
 
-    lines_unknown =
-      lines_ok
-      |> Enum.filter(&filter_unknown(&1))
+    lines_unknown = Enum.filter(lines_ok, &filter_unknown(&1))
 
-    socket
-    |> assign(
-      lines_error: lines_error,
-      lines_unknown: lines_unknown,
-      lines_valid: lines_valid
-    )
+    assign(socket, lines_error: lines_error, lines_unknown: lines_unknown, lines_valid: lines_valid)
   end
 
   defp import_all(%{assigns: %{lines_valid: lines_valid}} = socket) do
@@ -210,13 +195,11 @@ defmodule Systems.Admin.ImportRewardsPage do
     |> Enum.filter(&(&1.status == :ready_to_import))
     |> Enum.each(&import_single(socket, &1))
 
-    socket
-    |> process()
+    process(socket)
   end
 
-  defp import_single(%{assigns: %{lines_valid: lines_valid}} = socket, index)
-       when is_integer(index) do
-    line = lines_valid |> Enum.at(index)
+  defp import_single(%{assigns: %{lines_valid: lines_valid}} = socket, index) when is_integer(index) do
+    line = Enum.at(lines_valid, index)
 
     socket
     |> import_single(line)
@@ -235,15 +218,14 @@ defmodule Systems.Admin.ImportRewardsPage do
 
   @impl true
   def handle_event("active_item_id", %{active_item_id: currency}, socket) do
-    {:noreply, socket |> assign(currency: currency)}
+    {:noreply, assign(socket, currency: currency)}
   end
 
   @impl true
   def handle_event("import_all", _params, socket) do
     {
       :noreply,
-      socket
-      |> import_all()
+      import_all(socket)
     }
   end
 
@@ -251,8 +233,7 @@ defmodule Systems.Admin.ImportRewardsPage do
   def handle_event("import_single", %{"item" => index} = _params, socket) do
     {
       :noreply,
-      socket
-      |> import_single(index |> String.to_integer())
+      import_single(socket, String.to_integer(index))
     }
   end
 
@@ -266,7 +247,7 @@ defmodule Systems.Admin.ImportRewardsPage do
           |> process()
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset)
+          assign(socket, changeset: changeset)
       end
 
     {:noreply, socket}
@@ -278,15 +259,15 @@ defmodule Systems.Admin.ImportRewardsPage do
         %{"import_rewards_model" => %{"session_key" => session_key}},
         %{assigns: %{entity: entity}} = socket
       ) do
-    changeset = entity |> Admin.ImportRewardsModel.changeset(%{session_key: session_key})
+    changeset = Admin.ImportRewardsModel.changeset(entity, %{session_key: session_key})
 
     socket =
       case Ecto.Changeset.apply_action(changeset, :update) do
         {:ok, entity} ->
-          socket |> assign(changeset: changeset, entity: entity)
+          assign(socket, changeset: changeset, entity: entity)
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset)
+          assign(socket, changeset: changeset)
       end
 
     {:noreply, socket}

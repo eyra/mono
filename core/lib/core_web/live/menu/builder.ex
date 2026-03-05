@@ -1,4 +1,8 @@
 defmodule CoreWeb.Menu.Builder do
+  @moduledoc false
+  alias Systems.Account
+  alias Systems.Admin
+
   @type type :: atom()
   @type socket :: map()
   @type active_item :: atom()
@@ -9,9 +13,6 @@ defmodule CoreWeb.Menu.Builder do
 
   @callback build_menu(type, active_item, user, uri) :: menu
   @callback include_map(user) :: map()
-
-  alias Systems.Admin
-  alias Systems.Account
 
   def include_map(user) do
     %{
@@ -27,6 +28,7 @@ defmodule CoreWeb.Menu.Builder do
   defmacro __using__(home: home) do
     quote do
       @behaviour unquote(__MODULE__)
+
       import CoreWeb.Menu.Helpers
 
       @impl true

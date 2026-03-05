@@ -1,4 +1,5 @@
 defmodule Systems.Manual.ViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Manual
@@ -8,12 +9,7 @@ defmodule Systems.Manual.ViewBuilder do
   Always builds chapter_list, conditionally builds chapter based on selection.
   Receives chapter and page directly from {:user_state, [:chapter, :page]} dependency.
   """
-  def view_model(manual, %{
-        title: title,
-        current_user: user,
-        presentation: presentation,
-        user_state: user_state
-      }) do
+  def view_model(manual, %{title: title, current_user: user, presentation: presentation, user_state: user_state}) do
     chapter_id = user_state[:chapter]
     page_id = user_state[:page]
     chapters = get_chapters(manual)
@@ -36,7 +32,7 @@ defmodule Systems.Manual.ViewBuilder do
   end
 
   defp get_chapters(%{chapters: [_ | _] = chapters}) do
-    chapters |> Enum.sort_by(& &1.userflow_step.order)
+    Enum.sort_by(chapters, & &1.userflow_step.order)
   end
 
   defp get_chapters(_), do: []
@@ -98,7 +94,7 @@ defmodule Systems.Manual.ViewBuilder do
   end
 
   defp get_pages(%{pages: [_ | _] = pages}) do
-    pages |> Enum.sort_by(& &1.userflow_step.order)
+    Enum.sort_by(pages, & &1.userflow_step.order)
   end
 
   defp get_pages(_), do: []

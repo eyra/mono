@@ -1,4 +1,5 @@
 defmodule CoreWeb.LiveDefaults do
+  @moduledoc false
   def update_defaults(%{assigns: assigns} = socket, props, defaults) do
     assigns =
       Enum.reduce(defaults, assigns, fn {key, default}, acc ->

@@ -8,12 +8,10 @@ defmodule Frameworks.Pixel.UserListItem do
   alias Frameworks.Pixel.Text
 
   @impl true
-  def update(%{people_item: people_item} = assigns, socket),
-    do: update_assigns_for_item(assigns, people_item, socket)
+  def update(%{people_item: people_item} = assigns, socket), do: update_assigns_for_item(assigns, people_item, socket)
 
   @impl true
-  def update(%{user_item: user_item} = assigns, socket),
-    do: update_assigns_for_item(assigns, user_item, socket)
+  def update(%{user_item: user_item} = assigns, socket), do: update_assigns_for_item(assigns, user_item, socket)
 
   defp update_assigns_for_item(_, item, socket) do
     socket =

@@ -1,31 +1,31 @@
 defmodule Systems.Account.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Account.User
   alias Systems.Account.FeaturesModel
+  alias Systems.Account.User
   alias Systems.Account.UserProfileModel
   alias Systems.Affiliate
 
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
   # User
 
-  def users() do
+  def users do
     user_query()
   end
 
   def users_by_pattern(field, pattern) when is_atom(field) and is_binary(pattern) do
-    users()
-    |> where([user: u], like(field(u, ^field), ^pattern))
+    where(users(), [user: u], like(field(u, ^field), ^pattern))
   end
 
   def users_by_prefix(field, prefix) when is_atom(field) and is_binary(prefix) do
     users_by_pattern(field, "#{prefix}-%")
   end
 
-  def user_query() do
+  def user_query do
     from(User, as: :user)
   end
 
@@ -61,8 +61,7 @@ defmodule Systems.Account.Queries do
   end
 
   def user_query_by_email(email_fragment) do
-    user_query()
-    |> where([user: u], like(u.email, ^email_fragment))
+    where(user_query(), [user: u], like(u.email, ^email_fragment))
   end
 
   # Features
@@ -74,8 +73,7 @@ defmodule Systems.Account.Queries do
   def features_by_users(%Ecto.Query{} = users) do
     user_ids = select(users, [user: u], u.id)
 
-    features()
-    |> where([features: f], f.user_id in subquery(user_ids))
+    where(features(), [features: f], f.user_id in subquery(user_ids))
   end
 
   # Profile
@@ -87,7 +85,6 @@ defmodule Systems.Account.Queries do
   def profiles_by_users(%Ecto.Query{} = users) do
     user_ids = select(users, [user: u], u.id)
 
-    profiles()
-    |> where([profile: p], p.user_id in subquery(user_ids))
+    where(profiles(), [profile: p], p.user_id in subquery(user_ids))
   end
 end

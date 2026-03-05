@@ -29,17 +29,13 @@ defmodule Systems.Alliance.Public do
   on all screens.
   """
   use Core, :public
+
   import Ecto.Query, warn: false
-  alias Ecto.Multi
+
   alias Core.Repo
-
-  alias Frameworks.{
-    Signal
-  }
-
-  alias Systems.{
-    Alliance
-  }
+  alias Ecto.Multi
+  alias Frameworks.Signal
+  alias Systems.Alliance
 
   @doc """
   Returns the list of alliance_tools.
@@ -99,11 +95,7 @@ defmodule Systems.Alliance.Public do
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking alliance_tool changes.
   """
-  def change_tool(
-        %Alliance.ToolModel{} = alliance_tool,
-        type,
-        attrs \\ %{}
-      ) do
+  def change_tool(%Alliance.ToolModel{} = alliance_tool, type, attrs \\ %{}) do
     Alliance.ToolModel.changeset(alliance_tool, type, attrs)
   end
 
@@ -115,9 +107,7 @@ defmodule Systems.Alliance.Public do
   end
 
   def ready?(%Alliance.ToolModel{} = alliance_tool) do
-    changeset =
-      %Alliance.ToolModel{}
-      |> Alliance.ToolModel.operational_changeset(Map.from_struct(alliance_tool))
+    changeset = Alliance.ToolModel.operational_changeset(%Alliance.ToolModel{}, Map.from_struct(alliance_tool))
 
     changeset.valid?
   end

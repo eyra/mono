@@ -1,14 +1,15 @@
 defmodule Systems.Instruction.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Instruction
   alias Systems.Content
+  alias Systems.Instruction
 
-  def tool_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def tool_query do
     from(Instruction.ToolModel, as: :tool)
   end
 

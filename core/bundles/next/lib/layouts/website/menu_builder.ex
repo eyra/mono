@@ -1,4 +1,7 @@
 defmodule Next.Layouts.Website.MenuBuilder do
+  @moduledoc false
+  use CoreWeb.Menu.Builder, home: :next
+
   @home_flags [
     desktop_navbar: [:wide],
     mobile_navbar: [:narrow],
@@ -19,17 +22,9 @@ defmodule Next.Layouts.Website.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :next
-
   @impl true
 
-  def include_map(nil),
-    do: %{
-      workspace: false
-    }
+  def include_map(nil), do: %{workspace: false}
 
-  def include_map(user),
-    do: %{
-      workspace: Systems.Admin.Public.admin?(user) or user.creator
-    }
+  def include_map(user), do: %{workspace: Systems.Admin.Public.admin?(user) or user.creator}
 end

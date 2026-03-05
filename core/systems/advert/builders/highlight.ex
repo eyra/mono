@@ -1,11 +1,10 @@
 defmodule Systems.Advert.Builders.Highlight do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Assignment,
-    Pool,
-    Budget
-  }
+  alias Systems.Assignment
+  alias Systems.Budget
+  alias Systems.Pool
 
   defp vm(%Budget.CurrencyModel{} = currency, amount, :reward) do
     reward_title = dgettext("eyra-alliance", "reward.highlight.title")
@@ -14,10 +13,7 @@ defmodule Systems.Advert.Builders.Highlight do
     %{title: reward_title, text: reward_text}
   end
 
-  def view_model(
-        %Pool.SubmissionModel{pool: %{currency: currency}, reward_value: amount},
-        :reward
-      ) do
+  def view_model(%Pool.SubmissionModel{pool: %{currency: currency}, reward_value: amount}, :reward) do
     vm(currency, amount, :reward)
   end
 

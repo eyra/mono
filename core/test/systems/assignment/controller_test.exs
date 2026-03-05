@@ -2,8 +2,8 @@ defmodule Systems.Assignment.ControllerTest do
   use CoreWeb.ConnCase, async: true
 
   alias Systems.Assignment
-  alias Systems.Workflow
   alias Systems.Monitor
+  alias Systems.Workflow
 
   describe "invite member" do
     setup :login_as_member
@@ -71,8 +71,7 @@ defmodule Systems.Assignment.ControllerTest do
       workflow = Workflow.Factories.create_workflow()
 
       workflow_items =
-        ["Task 1", "Task 2"]
-        |> Enum.map(&Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
+        Enum.map(["Task 1", "Task 2"], &Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
 
       assert [
                "Participant",
@@ -88,8 +87,7 @@ defmodule Systems.Assignment.ControllerTest do
 
       workflow_items =
         [%{id: item_1_id}, %{id: item_2_id}] =
-        ["Task 1", "Task 2"]
-        |> Enum.map(&Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
+        Enum.map(["Task 1", "Task 2"], &Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
 
       participants = [
         %{user_id: 1, member_id: 1, public_id: 777, external_id: nil},
@@ -208,8 +206,7 @@ defmodule Systems.Assignment.ControllerTest do
         })
 
       [%{id: item_1_id}, %{id: item_2_id}] =
-        ["Task 1", "Task 2"]
-        |> Enum.map(&Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
+        Enum.map(["Task 1", "Task 2"], &Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
 
       member_1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
       member_2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})
@@ -309,8 +306,7 @@ defmodule Systems.Assignment.ControllerTest do
         })
 
       [%{id: item_1_id}, %{id: item_2_id}] =
-        ["Task 1", "Task 2"]
-        |> Enum.map(&Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
+        Enum.map(["Task 1", "Task 2"], &Factories.insert!(:workflow_item, %{workflow: workflow, title: &1}))
 
       member_1 = Factories.insert!(:crew_member, %{crew: crew, user: user1})
       member_2 = Factories.insert!(:crew_member, %{crew: crew, user: user2})

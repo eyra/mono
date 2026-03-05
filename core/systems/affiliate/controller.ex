@@ -2,13 +2,12 @@ defmodule Systems.Affiliate.Controller do
   use Systems.Affiliate.Constants
 
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
-  alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Assignment
 
   require Logger
 
@@ -143,9 +142,7 @@ defmodule Systems.Affiliate.Controller do
     info = strip_query_string(params)
     user_info = Affiliate.Public.obtain_user_info!(affiliate_user, info)
 
-    Logger.debug(
-      "Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}"
-    )
+    Logger.debug("Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}")
 
     conn
   end
@@ -163,7 +160,7 @@ defmodule Systems.Affiliate.Controller do
       participant: participant
     }
 
-    conn |> put_session(:panel_info, panel_info)
+    put_session(conn, :panel_info, panel_info)
   end
 
   defp add_panel_info_for_participant(conn, params, affiliate, affiliate_user) do
@@ -186,7 +183,6 @@ defmodule Systems.Affiliate.Controller do
   defp get_participant(_), do: nil
 
   defp strip_query_string(params) do
-    params
-    |> Map.delete("sqid")
+    Map.delete(params, "sqid")
   end
 end

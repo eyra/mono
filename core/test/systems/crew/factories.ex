@@ -1,5 +1,7 @@
 defmodule Systems.Crew.Factories do
+  @moduledoc false
   use Core, :auth
+
   alias CoreWeb.UI.Timestamp
 
   def create_member(crew, user, attrs \\ %{}) do

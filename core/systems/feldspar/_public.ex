@@ -1,17 +1,15 @@
 defmodule Systems.Feldspar.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
+  import Systems.Feldspar.Private, only: [get_backend: 0]
+
   alias Core.Repo
-
-  alias Systems.{
-    Feldspar
-  }
-
-  import Feldspar.Private, only: [get_backend: 0]
+  alias Systems.Feldspar
 
   def get_tool!(id, preload \\ []) do
-    from(tool in Feldspar.ToolModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(tool in Feldspar.ToolModel, preload: ^preload), id)
   end
 
   def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do

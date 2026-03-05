@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.ScoresParser do
+  @moduledoc false
   alias Systems.Graphite
 
   require Logger
@@ -35,12 +36,14 @@ defmodule Systems.Graphite.ScoresParser do
   end
 
   defp parse(records, "error" = status, leaderboard) do
-    filter_on_status(records, status)
+    records
+    |> filter_on_status(status)
     |> parse("base", leaderboard)
   end
 
   defp parse(records, "success" = status, leaderboard) do
-    filter_on_status(records, status)
+    records
+    |> filter_on_status(status)
     |> Stream.map(fn record -> check_fields(record, leaderboard.metrics, :missing_metric) end)
     |> Stream.map(fn record -> convert_floats(record, leaderboard.metrics) end)
     |> parse("base", leaderboard)
@@ -48,7 +51,8 @@ defmodule Systems.Graphite.ScoresParser do
 
   defp parse(records, "base", leaderboard) do
     submission_map =
-      Graphite.Public.get_submissions(leaderboard.tool)
+      leaderboard.tool
+      |> Graphite.Public.get_submissions()
       |> Enum.reduce(%{}, fn submission, acc ->
         {url, ref} = Graphite.SubmissionModel.repo_url_and_ref(submission)
         Map.put(acc, submission.id, {url, ref})
@@ -123,8 +127,8 @@ defmodule Systems.Graphite.ScoresParser do
 
   def convert_ints({line_nr, line, errors}, fields) do
     updated =
-      fields
-      |> Enum.reduce(
+      Enum.reduce(
+        fields,
         line,
         fn field, acc ->
           Map.update!(acc, field, fn value -> String.to_integer(value) end)
@@ -138,8 +142,8 @@ defmodule Systems.Graphite.ScoresParser do
 
   def convert_floats({line_nr, line, errors}, fields) do
     updated =
-      fields
-      |> Enum.reduce(
+      Enum.reduce(
+        fields,
         line,
         fn field, acc ->
           Map.update(acc, field, 0.0, fn value -> convert_float(value) end)

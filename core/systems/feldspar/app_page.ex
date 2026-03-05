@@ -1,18 +1,20 @@
 defmodule Systems.Feldspar.AppPage do
+  @moduledoc false
   use CoreWeb, :live_view
+
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+
+  alias Frameworks.Pixel.Flash
+  alias Systems.Feldspar
+
+  require Logger
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  require Logger
-
-  alias Systems.Feldspar
 
   @impl true
   def mount(%{"id" => app_id}, _session, socket) do
@@ -54,7 +56,7 @@ defmodule Systems.Feldspar.AppPage do
   def handle_event("feldspar_event", %{"__type__" => type, "json_string" => event}, socket) do
     {
       :noreply,
-      socket |> handle(type, event)
+      handle(socket, type, event)
     }
   end
 
@@ -62,17 +64,17 @@ defmodule Systems.Feldspar.AppPage do
   def handle_event("feldspar_event", event, socket) do
     {
       :noreply,
-      socket |> handle(nil, inspect(event))
+      handle(socket, nil, inspect(event))
     }
   end
 
   defp handle(socket, "CommandSystemExit", event) do
-    Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemExit " <> event)
+    Flash.put_error(socket, "Unsupported CommandSystemExit " <> event)
     socket
   end
 
   defp handle(socket, _, event) do
-    Frameworks.Pixel.Flash.put_error(socket, "Unsupported " <> event)
+    Flash.put_error(socket, "Unsupported " <> event)
   end
 
   @impl true

@@ -29,6 +29,7 @@ end
 
 defimpl Frameworks.Concept.ToolModel, for: Ecto.Changeset do
   alias Frameworks.Concept.ToolModel
+
   def key(%{data: tool}), do: ToolModel.key(tool)
   def auth_tree(%{data: tool}), do: ToolModel.auth_tree(tool)
   def apply_label(%{data: tool}), do: ToolModel.apply_label(tool)

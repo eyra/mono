@@ -1,4 +1,5 @@
 defmodule CoreWeb.Validator.Integer do
+  @moduledoc false
   def valid_integer?(value) when is_integer(value), do: :ok
 
   def valid_integer?(value) when is_binary(value) do

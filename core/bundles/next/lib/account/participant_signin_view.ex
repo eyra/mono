@@ -23,9 +23,7 @@ defmodule Next.Account.ParticipantSigninView do
     }
   end
 
-  defp update_password_form(
-         %{assigns: %{email: email, post_signin_action: post_signin_action}} = socket
-       ) do
+  defp update_password_form(%{assigns: %{email: email, post_signin_action: post_signin_action}} = socket) do
     attrs =
       if User.valid_email?(email) do
         %{"email" => email}
@@ -35,12 +33,12 @@ defmodule Next.Account.ParticipantSigninView do
 
     form =
       if post_signin_action do
-        Map.put(attrs, "post_signin_action", post_signin_action) |> to_form()
+        attrs |> Map.put("post_signin_action", post_signin_action) |> to_form()
       else
         to_form(attrs)
       end
 
-    socket |> assign(:password_form, form)
+    assign(socket, :password_form, form)
   end
 
   @impl true

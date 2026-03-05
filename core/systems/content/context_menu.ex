@@ -1,18 +1,19 @@
 defmodule Systems.Content.ContextMenu do
+  @moduledoc false
   use CoreWeb, :live_component
 
   @impl true
   def update(%{items: items}, %{assigns: %{}} = socket) do
     {
       :ok,
-      socket |> assign(items: items)
+      assign(socket, items: items)
     }
   end
 
   @impl true
   def handle_event("click", %{"item" => item_id}, socket) do
     item_id = String.to_existing_atom(item_id)
-    {:noreply, socket |> send_event(:parent, "show", %{page: item_id})}
+    {:noreply, send_event(socket, :parent, "show", %{page: item_id})}
   end
 
   @impl true

@@ -16,9 +16,7 @@ defmodule Frameworks.Pixel.Paginator do
     """
   end
 
-  def paginator(
-        %{active_page: active_page, page_count: page_count, window_size: window_size} = assigns
-      ) do
+  def paginator(%{active_page: active_page, page_count: page_count, window_size: window_size} = assigns) do
     window_start = max(0, active_page - div(window_size, 2))
     window_end = min(page_count - 1, window_start + window_size - 1)
 

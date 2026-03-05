@@ -1,8 +1,10 @@
 defmodule Systems.Paper.RISModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
   alias Systems.Paper
 
   schema "paper_ris" do

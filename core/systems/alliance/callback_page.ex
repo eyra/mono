@@ -4,14 +4,11 @@ defmodule Systems.Alliance.CallbackPage do
   """
   use Systems.Content.Composer, :live_workspace
 
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
   alias Frameworks.Concept.Directable
-
-  alias Systems.{
-    Assignment,
-    Alliance
-  }
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
+  alias Systems.Alliance
+  alias Systems.Assignment
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, %{assigns: %{current_user: user}}) do
@@ -34,9 +31,7 @@ defmodule Systems.Alliance.CallbackPage do
     }
   end
 
-  defp activate_participant_task(
-         %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
-       ) do
+  defp activate_participant_task(%{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket) do
     Assignment.Public.complete_task(model, user)
     socket
   end
@@ -44,15 +39,7 @@ defmodule Systems.Alliance.CallbackPage do
   defp activate_participant_task(socket), do: socket
 
   @impl true
-  def handle_event(
-        "call-to-action",
-        _params,
-        %{
-          assigns: %{
-            vm: %{call_to_action: %{handle: handle}}
-          }
-        } = socket
-      ) do
+  def handle_event("call-to-action", _params, %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket) do
     {:noreply, handle.(socket)}
   end
 

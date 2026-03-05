@@ -1,15 +1,15 @@
 defmodule GoogleSignIn do
-  alias Systems.Account.User
-  alias Core.Repo
-  alias Frameworks.Signal
+  @moduledoc false
   import Ecto.Query, warn: false
 
+  alias Core.Repo
+  alias Frameworks.Signal
+  alias Systems.Account.User
+
   def get_user_by_sub(sub) do
-    from(u in User,
-      where:
-        u.id in subquery(from(sc in GoogleSignIn.User, where: sc.sub == ^sub, select: sc.user_id))
+    Repo.one(
+      from(u in User, where: u.id in subquery(from(sc in GoogleSignIn.User, where: sc.sub == ^sub, select: sc.user_id)))
     )
-    |> Repo.one()
   end
 
   def register_user(attrs, creator?) do

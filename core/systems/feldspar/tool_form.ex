@@ -1,28 +1,18 @@
 defmodule Systems.Feldspar.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, store: Systems.Feldspar.Public, accept: ~w(.zip)
 
-  alias Systems.{
-    Feldspar
-  }
+  alias Frameworks.Pixel.Flash
+  alias Systems.Feldspar
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{public_url: public_url, original_filename: original_filename}
-      ) do
-    socket
-    |> save(entity, %{archive_ref: public_url, archive_name: original_filename})
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url, original_filename: original_filename}) do
+    save(socket, entity, %{archive_ref: public_url, archive_name: original_filename})
   end
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity}, socket) do
     label = dgettext("eyra-feldspar", "zip-select-label")
     placeholder = dgettext("eyra-feldspar", "zip-select-placeholder")
     select_button = dgettext("eyra-feldspar", "zip-select-file-button")
@@ -47,17 +37,16 @@ defmodule Systems.Feldspar.ToolForm do
   def handle_event("change", _params, socket) do
     {
       :noreply,
-      socket
-      |> handle_upload_error()
+      handle_upload_error(socket)
     }
   end
 
   defp handle_upload_error(socket) do
     if has_upload_error(socket) do
       if has_upload_error(socket, :too_large) do
-        Frameworks.Pixel.Flash.push_error(socket, dgettext("eyra-feldspar", "zip-too-large"))
+        Flash.push_error(socket, dgettext("eyra-feldspar", "zip-too-large"))
       else
-        Frameworks.Pixel.Flash.push_error(socket)
+        Flash.push_error(socket)
       end
     end
 
@@ -75,8 +64,7 @@ defmodule Systems.Feldspar.ToolForm do
   def save(socket, %Feldspar.ToolModel{} = entity, attrs) do
     changeset = Feldspar.ToolModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

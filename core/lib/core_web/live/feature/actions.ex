@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Feature.Actions do
+  @moduledoc false
   alias CoreWeb.UI.Responsive.Breakpoint
 
   def create_actions(%{assigns: %{breakpoint: {:unknown, _}}} = _socket), do: []

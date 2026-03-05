@@ -1,19 +1,21 @@
 defmodule Systems.Paper.RISImportPrepareJob do
+  @moduledoc false
   use Oban.Worker, queue: :ris_import
   use Gettext, backend: CoreWeb.Gettext
-
-  require Logger
 
   alias Core.Repo
   alias Ecto.Multi
   alias Systems.Paper
   alias Systems.Paper.RISEntry
 
+  require Logger
+
   @impl true
   def perform(%Oban.Job{args: %{"session_id" => session_id}}) do
     # Get the import session with all needed associations
     session =
-      Repo.get!(Paper.RISImportSessionModel, session_id)
+      Paper.RISImportSessionModel
+      |> Repo.get!(session_id)
       |> Repo.preload([:paper_set, reference_file: :file])
 
     # Don't process if session is already failed or aborted
@@ -37,9 +39,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     # Always use streaming for consistent behavior and memory efficiency
 
     # Transition to parsing phase
-    {:ok, %{paper_ris_import_session: session}} =
-      session
-      |> Paper.RISImportSessionModel.advance_phase_with_signal(:parsing)
+    {:ok, %{paper_ris_import_session: session}} = Paper.RISImportSessionModel.advance_phase_with_signal(session, :parsing)
 
     # Get stream from fetcher using configured backend
     case Systems.Paper.RISFetcherBackendStream.fetch_content(reference_file) do
@@ -56,8 +56,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
 
     # Transition to processing phase
     {:ok, %{paper_ris_import_session: session}} =
-      session
-      |> Paper.RISImportSessionModel.advance_phase_with_signal(:processing)
+      Paper.RISImportSessionModel.advance_phase_with_signal(session, :processing)
 
     # First, collect all parsed entries to know the total count
     parsed_entries =
@@ -93,7 +92,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
             end
 
           # Convert error to entry map format
-          error_entry = RISEntry.error(error) |> RISEntry.to_map()
+          error_entry = error |> RISEntry.error() |> RISEntry.to_map()
           {[error_entry | entries], index, validation_error}
       end)
 
@@ -124,8 +123,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
         {:ok, updated_session} ->
           # Move to prompting phase
           {:ok, %{paper_ris_import_session: _final_session}} =
-            updated_session
-            |> Paper.RISImportSessionModel.advance_phase_with_signal(:prompting)
+            Paper.RISImportSessionModel.advance_phase_with_signal(updated_session, :prompting)
 
           :ok
 
@@ -146,11 +144,11 @@ defmodule Systems.Paper.RISImportPrepareJob do
   end
 
   defp reference_to_entry_map({:new, attrs}) do
-    RISEntry.new_paper(attrs) |> RISEntry.to_map()
+    attrs |> RISEntry.new_paper() |> RISEntry.to_map()
   end
 
   defp reference_to_entry_map({:existing, attrs, paper_id}) do
-    RISEntry.existing_paper(attrs, paper_id) |> RISEntry.to_map()
+    attrs |> RISEntry.existing_paper(paper_id) |> RISEntry.to_map()
   end
 
   defp handle_database_error(changeset) do
@@ -200,16 +198,14 @@ defmodule Systems.Paper.RISImportPrepareJob do
 
   defp has_validation_errors?(changeset) do
     # Check if the changeset has validation errors (as opposed to database constraint errors)
-    changeset.errors
-    |> Enum.any?(fn {_field, {_message, metadata}} ->
+    Enum.any?(changeset.errors, fn {_field, {_message, metadata}} ->
       # Validation errors typically have validation: true in metadata
       Keyword.get(metadata, :validation, false)
     end)
   end
 
   defp format_changeset_errors(changeset) do
-    changeset.errors
-    |> Enum.map_join(", ", fn {field, {message, _}} -> "#{field}: #{message}" end)
+    Enum.map_join(changeset.errors, ", ", fn {field, {message, _}} -> "#{field}: #{message}" end)
   end
 
   defp handle_fetch_error(%{errors: errors, reference_file: reference_file} = session, error) do
@@ -239,7 +235,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     })
 
     # Get reference file and mark it as failed
-    reference_file = Core.Repo.get!(Paper.ReferenceFileModel, session.reference_file_id)
+    reference_file = Repo.get!(Paper.ReferenceFileModel, session.reference_file_id)
     ris_error = %Paper.RISError{message: error_message}
     Paper.Public.mark_as_failed!(reference_file, ris_error)
 

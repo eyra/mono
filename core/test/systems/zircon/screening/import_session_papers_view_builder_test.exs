@@ -1,5 +1,6 @@
 defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
   use ExUnit.Case
+
   alias Systems.Zircon.Screening.ImportSessionPapersViewBuilder
 
   describe "view_model/2" do
@@ -292,7 +293,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
           assigns
         )
 
-      assert result.search_bar != nil
+      assert result.search_bar
       assert result.search_bar.implementation == Frameworks.Pixel.SearchBar
       assert result.search_bar.options[:id] == "papers_search_bar"
       assert result.search_bar.options[:debounce] == "200"

@@ -1,4 +1,5 @@
 defmodule Frameworks.Builder.LibraryItemModel do
+  @moduledoc false
   @type t :: %__MODULE__{
           id: atom() | binary(),
           type: atom() | tuple(),

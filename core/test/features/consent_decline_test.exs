@@ -15,8 +15,8 @@ defmodule CoreWeb.Features.ConsentDeclineTest do
   """
   use CoreWeb.FeatureCase
 
-  alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Assignment
 
   # Skip all tests in this module until the CI environment issues are resolved
   @moduletag :skip
@@ -31,8 +31,7 @@ defmodule CoreWeb.Features.ConsentDeclineTest do
   end
 
   defp decline_consent(session) do
-    session
-    |> click(Query.css("[phx-click='decline']"))
+    click(session, Query.css("[phx-click='decline']"))
   end
 
   @tag :feature

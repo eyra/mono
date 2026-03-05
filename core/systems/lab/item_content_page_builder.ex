@@ -1,7 +1,6 @@
 defmodule Systems.Lab.ItemContentPageBuilder do
-  alias Systems.{
-    Lab
-  }
+  @moduledoc false
+  alias Systems.Lab
 
   def view_model(%Lab.ToolModel{} = _tool, _assigns) do
     %{}

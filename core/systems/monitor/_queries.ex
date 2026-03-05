@@ -1,5 +1,6 @@
 defmodule Systems.Monitor.Queries do
   # import Frameworks.Utility.Query, only: [build: 3]
+  @moduledoc false
   import Ecto.Query
 
   alias Core.Repo
@@ -32,30 +33,32 @@ defmodule Systems.Monitor.Queries do
     |> Repo.delete_all()
   end
 
-  def event_query() do
+  def event_query do
     from(Monitor.EventModel, as: :event)
   end
 
   def event_query([_ | _] = event_template) do
-    event_query()
-    |> where([event: event], fragment("?::text[] @> ?", event.identifier, ^event_template))
+    where(event_query(), [event: event], fragment("?::text[] @> ?", event.identifier, ^event_template))
   end
 
   def count(event_template) do
-    event_query(event_template)
+    event_template
+    |> event_query()
     |> select([event: event], count(event.id))
     |> Repo.one()
   end
 
   def unique([_ | _] = event_template) do
-    event_query(event_template)
+    event_template
+    |> event_query()
     |> select([event: event], count(event.identifier, :distinct))
     |> Repo.one()
   end
 
   def sum([_ | _] = event_template) do
     result =
-      event_query(event_template)
+      event_template
+      |> event_query()
       |> select([event: event], sum(event.value))
       |> Repo.one()
 

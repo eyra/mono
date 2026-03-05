@@ -1,19 +1,15 @@
 defmodule Systems.Onyx.ConceptTab do
+  @moduledoc false
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
   use CoreWeb.UI
   use Frameworks.Pixel
 
   alias Frameworks.Pixel.Grid
-
   alias Systems.Onyx
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"title" => title, "concepts" => concepts, "user" => user, "depth" => depth},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"title" => title, "concepts" => concepts, "user" => user, "depth" => depth}, socket) do
     {
       :ok,
       socket
@@ -28,16 +24,12 @@ defmodule Systems.Onyx.ConceptTab do
   end
 
   defp update_cards(%{assigns: %{concepts: concepts, depth: depth}} = socket) do
-    cards = concepts |> Enum.map(&Onyx.Private.map_to_card(&1, "concept_tab-#{depth}"))
+    cards = Enum.map(concepts, &Onyx.Private.map_to_card(&1, "concept_tab-#{depth}"))
     assign(socket, :cards, cards)
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => id},
-        %{assigns: %{user: user, depth: depth}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => id}, %{assigns: %{user: user, depth: depth}} = socket) do
     concept_id = id |> String.split("-") |> List.last() |> String.to_integer()
 
     modal =
@@ -48,7 +40,7 @@ defmodule Systems.Onyx.ConceptTab do
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true

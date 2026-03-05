@@ -101,7 +101,7 @@ defmodule Systems.Affiliate.PublicTest do
       affiliate = Factories.insert!(:affiliate)
       user = Affiliate.Public.obtain_user!("test_user", affiliate)
 
-      assert user.id != nil
+      assert user.id
       assert user.user.email == "affiliate_#{affiliate.id}_test_user@next.eyra.co"
     end
 

@@ -1,15 +1,16 @@
 defmodule Systems.Citizen.Pool.Form do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  require Logger
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Utility.EctoHelper
+
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
-
+  alias Frameworks.Utility.EctoHelper
   alias Systems.Budget
   alias Systems.Pool
+
+  require Logger
 
   @default_values %{"director" => "citizen", "target" => 0}
 
@@ -85,7 +86,7 @@ defmodule Systems.Citizen.Pool.Form do
 
   defp update_currencies(socket) do
     currencies = Budget.Public.list_currencies_by_type(:legal)
-    socket |> assign(currencies: currencies)
+    assign(socket, currencies: currencies)
   end
 
   defp update_options(%{assigns: %{currencies: currencies, locale: locale}} = socket) do
@@ -97,31 +98,25 @@ defmodule Systems.Citizen.Pool.Form do
         }
       end)
 
-    socket |> assign(options: options)
+    assign(socket, options: options)
   end
 
-  defp update_selected_currency(
-         %{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket
-       ) do
-    socket |> assign(selected_currency: currency)
+  defp update_selected_currency(%{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket) do
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(%{assigns: %{currencies: [currency | _]}} = socket) do
-    socket |> assign(selected_currency: currency)
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(socket) do
-    socket |> assign(selected_currency: nil)
+    assign(socket, selected_currency: nil)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
-        %{
-          action: %{type: :submit},
-          face: %{type: :primary, label: dgettext("link-citizen", "pool.submit.button")}
-        },
+        %{action: %{type: :submit}, face: %{type: :primary, label: dgettext("link-citizen", "pool.submit.button")}},
         %{
           action: %{type: :send, event: "cancel", target: myself},
           face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
@@ -136,62 +131,46 @@ defmodule Systems.Citizen.Pool.Form do
 
     {
       :noreply,
-      socket |> handle_submit(attrs)
+      handle_submit(socket, attrs)
     }
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
+    {:noreply, send_event(socket, :parent, "cancelled")}
   end
 
   @impl true
-  def handle_event(
-        "dropdown_selected",
-        %{option: %{id: id}},
-        %{assigns: %{currencies: currencies}} = socket
-      ) do
-    selected_currency = currencies |> Enum.find(&(&1.id == id))
-    {:noreply, socket |> assign(selected_currency: selected_currency)}
+  def handle_event("dropdown_selected", %{option: %{id: id}}, %{assigns: %{currencies: currencies}} = socket) do
+    selected_currency = Enum.find(currencies, &(&1.id == id))
+    {:noreply, assign(socket, selected_currency: selected_currency)}
   end
 
   @impl true
   def handle_event("dropdown_toggle", _payload, socket) do
-    {:noreply, socket |> assign(currency_error: nil)}
+    {:noreply, assign(socket, currency_error: nil)}
   end
 
   defp handle_submit(%{assigns: %{pool: %{currency: %{id: _id}} = pool}} = socket, attrs) do
     # Edit modus
-    socket
-    |> apply_submit(
-      pool
-      |> Pool.Model.change(attrs)
-      |> Pool.Model.validate()
-      |> Pool.Model.submit()
-    )
+    apply_submit(socket, pool |> Pool.Model.change(attrs) |> Pool.Model.validate() |> Pool.Model.submit())
   end
 
-  defp handle_submit(
-         %{assigns: %{pool: pool, user: user, selected_currency: selected_currency}} = socket,
-         attrs
-       ) do
+  defp handle_submit(%{assigns: %{pool: pool, user: user, selected_currency: selected_currency}} = socket, attrs) do
     # Create modus
-    socket
-    |> apply_submit(
-      pool
-      |> Pool.Model.change(attrs)
-      |> Pool.Model.validate()
-      |> Pool.Model.submit(user, selected_currency)
+    apply_submit(
+      socket,
+      pool |> Pool.Model.change(attrs) |> Pool.Model.validate() |> Pool.Model.submit(user, selected_currency)
     )
   end
 
   defp apply_submit(socket, changeset) do
     case EctoHelper.upsert_and_dispatch(changeset, :pool) do
       {:ok, _pool} ->
-        socket |> send_event(:parent, "saved")
+        send_event(socket, :parent, "saved")
 
       {:error, changeset} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

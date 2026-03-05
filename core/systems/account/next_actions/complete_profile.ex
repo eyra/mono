@@ -1,7 +1,8 @@
 defmodule Systems.Account.NextActions.CompleteProfile do
+  @moduledoc false
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
 
+  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   @impl Systems.NextAction.ViewModel

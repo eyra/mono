@@ -1,14 +1,13 @@
 defmodule Systems.Budget.CurrencyModel do
+  @moduledoc false
   use Frameworks.Utility.Schema
-  require Systems.Budget.CurrencyTypes
 
-  alias Ecto.Changeset
   alias CoreWeb.Cldr
+  alias Ecto.Changeset
+  alias Systems.Budget
+  alias Systems.Content
 
-  alias Systems.{
-    Budget,
-    Content
-  }
+  require Systems.Budget.CurrencyTypes
 
   schema "currencies" do
     field(:name, :string)
@@ -39,8 +38,7 @@ defmodule Systems.Budget.CurrencyModel do
   end
 
   def prepare(%{label_bundle: %{id: _id}} = currency) do
-    currency
-    |> Changeset.change()
+    Changeset.change(currency)
   end
 
   def prepare(currency) do
@@ -67,11 +65,9 @@ defmodule Systems.Budget.CurrencyModel do
 
   def preload_graph(:full), do: preload_graph([:label_bundle, :bank_account])
 
-  def preload_graph(:label_bundle),
-    do: [label_bundle: Content.TextBundleModel.preload_graph(:full)]
+  def preload_graph(:label_bundle), do: [label_bundle: Content.TextBundleModel.preload_graph(:full)]
 
-  def preload_graph(:bank_account),
-    do: [bank_account: [:account]]
+  def preload_graph(:bank_account), do: [bank_account: [:account]]
 
   def title(%{name: name, type: :legal, label_bundle: label_bundle}, locale) do
     Content.TextBundleModel.text(label_bundle, locale, name, name)

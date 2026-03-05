@@ -1,14 +1,15 @@
 defmodule Systems.Manual.SwitchTest do
   use Core.DataCase
+
   import Frameworks.Signal.TestHelper
 
   alias Systems.Manual
-  alias Systems.Userflow
   alias Systems.Manual.Switch
+  alias Systems.Userflow
 
   describe "manual_tool events" do
     setup do
-      isolate_signals(except: [Systems.Manual.Switch])
+      isolate_signals(except: [Switch])
 
       userflow = Repo.insert!(%Userflow.Model{})
       manual = Repo.insert!(%Manual.Model{userflow_id: userflow.id})
@@ -37,7 +38,7 @@ defmodule Systems.Manual.SwitchTest do
 
   describe "manual events" do
     setup do
-      isolate_signals(except: [Systems.Manual.Switch])
+      isolate_signals(except: [Switch])
 
       userflow = Repo.insert!(%Userflow.Model{})
       manual = Repo.insert!(%Manual.Model{userflow_id: userflow.id})

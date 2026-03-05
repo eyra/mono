@@ -1,5 +1,6 @@
 defmodule Systems.Banking.DummyTest do
   use ExUnit.Case, async: true
+
   alias Systems.Banking.Dummy
 
   setup do

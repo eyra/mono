@@ -5,9 +5,7 @@ defmodule Frameworks.Pixel.ImagePreview do
   attr(:image_url, :string)
   attr(:placeholder, :string, required: true)
 
-  attr(:shape, :string,
-    default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded"
-  )
+  attr(:shape, :string, default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded")
 
   def image_preview(assigns) do
     ~H"""

@@ -4,17 +4,16 @@ defmodule Systems.Promotion.LandingPage do
   """
   use Systems.Content.Composer, :live_website
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-
-  import Systems.Promotion.BannerView
   import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
+  import Systems.Promotion.BannerView
 
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
-
+  alias Frameworks.Pixel.Hero
   alias Systems.Promotion
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -22,11 +21,7 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   @impl true
-  def mount(
-        _params,
-        _session,
-        %{assigns: %{current_user: user, model: promotion}} = socket
-      ) do
+  def mount(_params, _session, %{assigns: %{current_user: user, model: promotion}} = socket) do
     if Phoenix.LiveView.connected?(socket) do
       Promotion.Private.log_performance_event(promotion, :views)
     end
@@ -64,9 +59,7 @@ defmodule Systems.Promotion.LandingPage do
     update_image_info(socket)
   end
 
-  defp update_image_info(
-         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket
-       ) do
+  defp update_image_info(%{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket) do
     assign(socket, image_info: ImageHelpers.get_image_info(image_id, viewport_width, 720))
   end
 
@@ -95,11 +88,7 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   @impl true
-  def handle_event(
-        "call-to-action",
-        _params,
-        %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket
-      ) do
+  def handle_event("call-to-action", _params, %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket) do
     {:noreply, handle.(socket)}
   end
 
@@ -110,7 +99,7 @@ defmodule Systems.Promotion.LandingPage do
 
   @impl true
   def handle_event("inform_ok", _params, socket) do
-    {:noreply, socket |> assign(dialog: nil)}
+    {:noreply, assign(socket, dialog: nil)}
   end
 
   def handle_info({:signal_test, _}, socket) do

@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.LandingPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

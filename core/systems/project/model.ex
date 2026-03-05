@@ -1,8 +1,10 @@
 defmodule Systems.Project.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
   alias Systems.Project
 
   schema "projects" do
@@ -22,12 +24,7 @@ defmodule Systems.Project.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :root,
-        :auth_node
-      ])
+  def preload_graph(:down), do: preload_graph([:root, :auth_node])
 
   def preload_graph(:root), do: [root: Project.NodeModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
@@ -47,18 +44,7 @@ defmodule Systems.Project.Model do
       vm(project, page, user)
     end
 
-    defp vm(
-           %{
-             id: id,
-             name: name,
-             root: %{
-               id: root_node_id,
-               items: items
-             }
-           },
-           {Project.OverviewPage, :card},
-           _user
-         ) do
+    defp vm(%{id: id, name: name, root: %{id: root_node_id, items: items}}, {Project.OverviewPage, :card}, _user) do
       path = ~p"/project/node/#{root_node_id}"
 
       people = %{
@@ -100,8 +86,6 @@ defmodule Systems.Project.Model do
     defp tag(item) do
       if template = Project.Assembly.template(item) do
         Project.ItemTemplates.translate(template)
-      else
-        nil
       end
     end
 

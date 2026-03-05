@@ -2,7 +2,8 @@ defmodule Systems.Instruction.ToolViewBuilderTest do
   use Core.DataCase
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{Instruction, Content}
+  alias Systems.Content
+  alias Systems.Instruction
 
   describe "view_model/2" do
     setup do

@@ -1,12 +1,11 @@
 defmodule BankingClientTest do
   use ExUnit.Case, async: true
+
   import Mox
-  alias BankingClient
 
   describe "list_payments/1" do
     test "can call list payments" do
-      BankingClient.MockClient
-      |> expect(:send_message, fn %{call: :list_payments} ->
+      expect(BankingClient.MockClient, :send_message, fn %{call: :list_payments} ->
         %{}
       end)
 
@@ -15,8 +14,7 @@ defmodule BankingClientTest do
     end
 
     test "can list payments" do
-      BankingClient.MockClient
-      |> expect(:send_message, fn %{call: :list_payments} ->
+      expect(BankingClient.MockClient, :send_message, fn %{call: :list_payments} ->
         %{
           "cursor" => "some-cursor",
           "has_more?" => false,
@@ -55,8 +53,7 @@ defmodule BankingClientTest do
     end
 
     test "can list payments from cursor" do
-      BankingClient.MockClient
-      |> expect(:send_message, fn %{call: :list_payments, cursor: "some-cursor"} ->
+      expect(BankingClient.MockClient, :send_message, fn %{call: :list_payments, cursor: "some-cursor"} ->
         %{
           "cursor" => "some-cursor",
           "has_more?" => false,

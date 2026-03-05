@@ -1,15 +1,12 @@
 defmodule Systems.Storage.EndpointDataView do
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Spinner
   alias Systems.Storage
 
   @impl true
-  def update(
-        %{endpoint: endpoint, branch_name: branch_name, timezone: timezone},
-        %{assigns: %{}} = socket
-      ) do
+  def update(%{endpoint: endpoint, branch_name: branch_name, timezone: timezone}, %{assigns: %{}} = socket) do
     total_count = Map.get(socket.assigns, :total_count, nil)
     visible_count = Map.get(socket.assigns, :visible_count, nil)
     query = Map.get(socket.assigns, :query, nil)
@@ -123,12 +120,12 @@ defmodule Systems.Storage.EndpointDataView do
 
   @impl true
   def handle_event("files", %{visible_count: visible_count, total_count: total_count}, socket) do
-    {:noreply, socket |> assign(visible_count: visible_count, total_count: total_count)}
+    {:noreply, assign(socket, visible_count: visible_count, total_count: total_count)}
   end
 
   @impl true
   def handle_event("update_files", _payload, socket) do
-    {:noreply, socket |> send_event(:files_view, "start_loading")}
+    {:noreply, send_event(socket, :files_view, "start_loading")}
   end
 
   @impl true

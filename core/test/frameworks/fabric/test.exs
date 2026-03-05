@@ -3,13 +3,15 @@ defmodule Fabric.Test do
 
   import Fabric.Factories
 
+  alias Fabric.LiveComponent.Model
+  alias Fabric.LiveComponent.RefModel
+  alias Phoenix.LiveView.Socket
+
   describe "new_fabric/1" do
     test "socket" do
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Fabric.new_fabric()
+      socket = Fabric.new_fabric(%Socket{})
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  __changed__: %{fabric: true},
                  fabric: %Fabric.Model{parent: nil, self: nil, children: nil}
@@ -30,12 +32,12 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: nil}
 
       child =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.prepare_child(:child, Fabric.LiveComponentMock, %{})
 
-      assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{
+      assert %Model{
+               ref: %RefModel{
                  id: :child,
                  name: :child,
                  module: Fabric.LiveComponentMock
@@ -43,7 +45,7 @@ defmodule Fabric.Test do
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
-                   self: %Fabric.LiveComponent.RefModel{
+                   self: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
@@ -58,8 +60,8 @@ defmodule Fabric.Test do
 
       child = Fabric.prepare_child(fabric, :child, Fabric.LiveComponentMock, %{})
 
-      assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{
+      assert %Model{
+               ref: %RefModel{
                  id: :child,
                  name: :child,
                  module: Fabric.LiveComponentMock
@@ -67,7 +69,7 @@ defmodule Fabric.Test do
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
-                   self: %Fabric.LiveComponent.RefModel{
+                   self: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
@@ -84,12 +86,12 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: [child]}
 
       child =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.get_child(:child)
 
-      assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{
+      assert %Model{
+               ref: %RefModel{
                  id: :child,
                  name: :child,
                  module: Fabric.LiveComponentMock
@@ -97,7 +99,7 @@ defmodule Fabric.Test do
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
-                   self: %Fabric.LiveComponent.RefModel{
+                   self: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
@@ -108,12 +110,10 @@ defmodule Fabric.Test do
     end
 
     test "fabric" do
-      child =
-        %Fabric.Model{parent: nil, children: [create_child(:child)]}
-        |> Fabric.get_child(:child)
+      child = Fabric.get_child(%Fabric.Model{parent: nil, children: [create_child(:child)]}, :child)
 
-      assert %Fabric.LiveComponent.Model{
-               ref: %Fabric.LiveComponent.RefModel{
+      assert %Model{
+               ref: %RefModel{
                  id: :child,
                  name: :child,
                  module: Fabric.LiveComponentMock
@@ -121,7 +121,7 @@ defmodule Fabric.Test do
                params: %{
                  fabric: %Fabric.Model{
                    parent: nil,
-                   self: %Fabric.LiveComponent.RefModel{
+                   self: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
@@ -138,25 +138,25 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: nil}
 
       socket =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.show_child(child)
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  fabric: %Fabric.Model{
                    parent: nil,
                    self: nil,
                    children: [
-                     %Fabric.LiveComponent.Model{
-                       ref: %Fabric.LiveComponent.RefModel{
+                     %Model{
+                       ref: %RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
                        params: %{
                          fabric: %Fabric.Model{
                            parent: nil,
-                           self: %Fabric.LiveComponent.RefModel{
+                           self: %RefModel{
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
@@ -175,21 +175,19 @@ defmodule Fabric.Test do
     test "socket" do
       child = create_child(:child)
 
-      fabric =
-        %Fabric.Model{parent: nil, children: nil}
-        |> Fabric.add_child(child)
+      fabric = Fabric.add_child(%Fabric.Model{parent: nil, children: nil}, child)
 
       assert %Fabric.Model{
                children: [
-                 %Fabric.LiveComponent.Model{
-                   ref: %Fabric.LiveComponent.RefModel{
+                 %Model{
+                   ref: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
                    params: %{
                      fabric: %Fabric.Model{
                        parent: nil,
-                       self: %Fabric.LiveComponent.RefModel{
+                       self: %RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
@@ -211,15 +209,15 @@ defmodule Fabric.Test do
 
       assert %Fabric.Model{
                children: [
-                 %Fabric.LiveComponent.Model{
-                   ref: %Fabric.LiveComponent.RefModel{
+                 %Model{
+                   ref: %RefModel{
                      id: :child,
                      module: Fabric.LiveComponentMock
                    },
                    params: %{
                      fabric: %Fabric.Model{
                        parent: nil,
-                       self: %Fabric.LiveComponent.RefModel{
+                       self: %RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
@@ -240,18 +238,18 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: [child_1]}
 
       socket =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.replace_child(child_2)
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  fabric: %Fabric.Model{
                    parent: nil,
                    self: nil,
                    children: [
-                     %Fabric.LiveComponent.Model{
-                       ref: %Fabric.LiveComponent.RefModel{
+                     %Model{
+                       ref: %RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
@@ -259,7 +257,7 @@ defmodule Fabric.Test do
                          another: :thing,
                          fabric: %Fabric.Model{
                            parent: nil,
-                           self: %Fabric.LiveComponent.RefModel{
+                           self: %RefModel{
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
@@ -281,11 +279,11 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: [child]}
 
       socket =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.hide_child(:child)
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -301,9 +299,7 @@ defmodule Fabric.Test do
     test "socket" do
       child = create_child(:child, Fabric.LiveComponentMock)
 
-      fabric =
-        %Fabric.Model{parent: nil, children: [child]}
-        |> Fabric.remove_child(:child)
+      fabric = Fabric.remove_child(%Fabric.Model{parent: nil, children: [child]}, :child)
 
       assert %Fabric.Model{
                parent: nil,
@@ -316,18 +312,18 @@ defmodule Fabric.Test do
   describe "show_modal/2" do
     test "socket" do
       socket =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, create_fabric())
         |> Fabric.ModalController.show_modal(create_child(:child), :compact)
 
       assert_received %{
         fabric_event: %{
           name: "show_modal",
-          payload: %Fabric.LiveComponent.Model{
+          payload: %Model{
             params: %{
               fabric: %Fabric.Model{
                 parent: nil,
-                self: %Fabric.LiveComponent.RefModel{
+                self: %RefModel{
                   id: :child,
                   name: :child,
                   module: Fabric.LiveComponentMock
@@ -335,7 +331,7 @@ defmodule Fabric.Test do
                 children: nil
               }
             },
-            ref: %Fabric.LiveComponent.RefModel{
+            ref: %RefModel{
               id: :child,
               name: :child,
               module: Fabric.LiveComponentMock
@@ -346,21 +342,21 @@ defmodule Fabric.Test do
 
       self = self()
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  fabric: %Fabric.Model{
                    parent: nil,
                    self: %Fabric.LiveView.RefModel{pid: ^self},
                    children: [
-                     %Fabric.LiveComponent.Model{
-                       ref: %Fabric.LiveComponent.RefModel{
+                     %Model{
+                       ref: %RefModel{
                          id: :child,
                          module: Fabric.LiveComponentMock
                        },
                        params: %{
                          fabric: %Fabric.Model{
                            parent: nil,
-                           self: %Fabric.LiveComponent.RefModel{
+                           self: %RefModel{
                              id: :child,
                              module: Fabric.LiveComponentMock
                            },
@@ -382,13 +378,13 @@ defmodule Fabric.Test do
       fabric = %Fabric.Model{parent: nil, children: [child]}
 
       socket =
-        %Phoenix.LiveView.Socket{}
+        %Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
         |> Fabric.ModalController.hide_modal(:child)
 
       assert_received %{fabric_event: %{name: "hide_modal", payload: %{}}}
 
-      assert %Phoenix.LiveView.Socket{
+      assert %Socket{
                assigns: %{
                  fabric: %Fabric.Model{
                    parent: nil,
@@ -402,9 +398,7 @@ defmodule Fabric.Test do
 
   describe "send_event/2" do
     test "parent -> child" do
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, create_fabric())
+      socket = Phoenix.Component.assign(%Socket{}, :fabric, create_fabric())
 
       child = Fabric.prepare_child(socket, :child, Fabric.LiveComponentMock, %{})
       socket = Fabric.show_child(socket, child)
@@ -428,9 +422,7 @@ defmodule Fabric.Test do
     end
 
     test "child -> parent (child)" do
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, create_fabric())
+      socket = Phoenix.Component.assign(%Socket{}, :fabric, create_fabric())
 
       child1 = Fabric.prepare_child(socket, :child1, Fabric.LiveComponentMock, %{})
       child2 = Fabric.prepare_child(child1.params.fabric, :child2, Fabric.LiveComponentMock, %{})
@@ -447,7 +439,7 @@ defmodule Fabric.Test do
               name: "event",
               payload: %{
                 some: :message,
-                source: %Fabric.LiveComponent.RefModel{
+                source: %RefModel{
                   id: :child2,
                   module: Fabric.LiveComponentMock
                 }
@@ -460,9 +452,7 @@ defmodule Fabric.Test do
     end
 
     test "child -> root" do
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, create_fabric())
+      socket = Phoenix.Component.assign(%Socket{}, :fabric, create_fabric())
 
       child1 = Fabric.prepare_child(socket, :child1, Fabric.LiveComponentMock, %{})
       child2 = Fabric.prepare_child(child1.params.fabric, :child2, Fabric.LiveComponentMock, %{})
@@ -473,9 +463,7 @@ defmodule Fabric.Test do
     end
 
     test "child -> parent (root)" do
-      socket =
-        %Phoenix.LiveView.Socket{}
-        |> Phoenix.Component.assign(:fabric, create_fabric())
+      socket = Phoenix.Component.assign(%Socket{}, :fabric, create_fabric())
 
       child = Fabric.prepare_child(socket, :child, Fabric.LiveComponentMock, %{})
 

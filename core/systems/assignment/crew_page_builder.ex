@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.CrewPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
@@ -87,8 +88,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp next_view(assignment, assigns, %{action: action, tester?: tester?})
-       when not is_nil(action) do
+  defp next_view(assignment, assigns, %{action: action, tester?: tester?}) when not is_nil(action) do
     case action do
       :onboarding_continue ->
         consent_or_work_view(assignment, assigns)

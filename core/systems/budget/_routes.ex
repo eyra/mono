@@ -1,4 +1,5 @@
 defmodule Systems.Budget.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Budget do

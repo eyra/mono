@@ -8,13 +8,13 @@ defmodule Systems.Feldspar.DataDonationController do
   """
   use CoreWeb, {:controller, [formats: [:json]]}
 
-  require Logger
-
   alias Systems.Assignment
   alias Systems.Feldspar
   alias Systems.Project
   alias Systems.Rate
   alias Systems.Storage
+
+  require Logger
 
   @rate_limit_service :feldspar_data_donation
 
@@ -39,10 +39,10 @@ defmodule Systems.Feldspar.DataDonationController do
     with {:ok, context} <- parse_context(context),
          {:ok, _user} <- get_current_user(conn),
          {:ok, data} <- read_upload(upload),
-         meta_data <- build_meta_data(conn, key, context),
+         meta_data = build_meta_data(conn, key, context),
          :ok <- check_rate_limit(meta_data.remote_ip, byte_size(data)),
          {:ok, storage_endpoint} <- get_storage_endpoint(context),
-         file_id <- Feldspar.DataDonationFolder.filename(context),
+         file_id = Feldspar.DataDonationFolder.filename(context),
          {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
          :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
       Logger.info(
@@ -57,9 +57,7 @@ defmodule Systems.Feldspar.DataDonationController do
         |> json(%{error: "Not authenticated"})
 
       {:error, :file_read_error, reason} ->
-        Logger.error(
-          "[Feldspar.DataDonationController] Failed to read upload: #{inspect(reason)}"
-        )
+        Logger.error("[Feldspar.DataDonationController] Failed to read upload: #{inspect(reason)}")
 
         conn
         |> put_status(:unprocessable_entity)
@@ -87,9 +85,7 @@ defmodule Systems.Feldspar.DataDonationController do
         |> json(%{error: "No storage endpoint configured"})
 
       {:error, {:scheduling_failed, step, reason}} ->
-        Logger.error(
-          "[Feldspar.DataDonationController] Scheduling failed at step=#{step}: #{inspect(reason)}"
-        )
+        Logger.error("[Feldspar.DataDonationController] Scheduling failed at step=#{step}: #{inspect(reason)}")
 
         conn
         |> put_status(:unprocessable_entity)
@@ -156,9 +152,7 @@ defmodule Systems.Feldspar.DataDonationController do
             {:ok, endpoint}
 
           {:error, {:storage_endpoint, :not_available}} ->
-            Logger.error(
-              "[Feldspar.DataDonationController] Storage endpoint not available for assignment"
-            )
+            Logger.error("[Feldspar.DataDonationController] Storage endpoint not available for assignment")
 
             {:error, :no_storage_endpoint}
         end
@@ -177,22 +171,16 @@ defmodule Systems.Feldspar.DataDonationController do
   end
 
   defp get_assignment(assignment_id) do
-    Logger.info(
-      "[Feldspar.DataDonationController] Fetching assignment id=#{inspect(assignment_id)}"
-    )
+    Logger.info("[Feldspar.DataDonationController] Fetching assignment id=#{inspect(assignment_id)}")
 
     case Assignment.Public.get(assignment_id, Assignment.Model.preload_graph(:down)) do
       nil ->
-        Logger.error(
-          "[Feldspar.DataDonationController] Assignment not found id=#{inspect(assignment_id)}"
-        )
+        Logger.error("[Feldspar.DataDonationController] Assignment not found id=#{inspect(assignment_id)}")
 
         {:error, :assignment_not_found}
 
       assignment ->
-        Logger.info(
-          "[Feldspar.DataDonationController] Assignment found, has workflow=#{assignment.workflow != nil}"
-        )
+        Logger.info("[Feldspar.DataDonationController] Assignment found, has workflow=#{assignment.workflow != nil}")
 
         {:ok, assignment}
     end

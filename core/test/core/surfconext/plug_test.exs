@@ -1,4 +1,5 @@
 defmodule Core.SurfConext.FakeOIDC do
+  @moduledoc false
   def callback(config, _params) do
     sub = Keyword.get(config, :sub, "test")
     token = Keyword.get(config, :token, "test-token")
@@ -56,8 +57,10 @@ end
 
 defmodule Core.SurfConext.AuthorizePlug.Test do
   use ExUnit.Case, async: false
-  import Plug.Test
+
   import Plug.Conn
+  import Plug.Test
+
   alias Core.SurfConext.AuthorizePlug
 
   describe "call/1" do
@@ -73,7 +76,8 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
       )
 
       conn =
-        conn(:get, "/surfconext/auth")
+        :get
+        |> conn("/surfconext/auth")
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
 
@@ -114,7 +118,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
   describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/project"
     end
 
@@ -125,7 +129,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         Keyword.put(conf, :limit_schac_home_organization, "my-org")
       )
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/user/signin"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "not allowed to authenticate"
@@ -140,7 +144,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "preferred_username" => Faker.Person.name()
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/project"
     end
 
@@ -154,7 +158,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "eduperson_affiliation" => ["employee"]
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/project"
     end
 
@@ -168,7 +172,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "eduperson_affiliation" => ["student"]
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/project"
     end
 
@@ -180,7 +184,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       # no onboarding yet for researchers
       assert redirected_to(conn) == "/project"
     end
@@ -193,7 +197,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
       assert redirected_to(conn) == "/project"
     end
 
@@ -214,7 +218,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
+      conn = get(conn, "/surfconext/auth")
 
       user = Core.SurfConext.get_user_by_sub("student")
       surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)

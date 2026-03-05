@@ -1,6 +1,9 @@
 defmodule Fabric.ModalController do
   import Fabric, only: [send_event: 4, get_child: 2, add_child: 2, remove_child: 2]
 
+  alias Fabric.LiveComponent.Model
+  alias Phoenix.LiveView.Socket
+
   require Logger
 
   def prepared_modal?(context, child_name) do
@@ -16,8 +19,7 @@ defmodule Fabric.ModalController do
     context
   end
 
-  def prepare_modal(context, child_name, modal_style)
-      when is_atom(child_name) or is_binary(child_name) do
+  def prepare_modal(context, child_name, modal_style) when is_atom(child_name) or is_binary(child_name) do
     if child = get_child(context, child_name) do
       prepared_modal_style = Map.get(child, :prepared_modal_style)
 
@@ -25,7 +27,7 @@ defmodule Fabric.ModalController do
         Logger.debug("already prepared modal style #{prepared_modal_style} for #{child_name}")
         context
       else
-        child |> Map.put(child, prepared_modal_style: modal_style)
+        Map.put(child, child, prepared_modal_style: modal_style)
         prepare_modal(context, child, modal_style)
       end
     else
@@ -34,25 +36,16 @@ defmodule Fabric.ModalController do
     end
   end
 
-  def prepare_modal(
-        %Phoenix.LiveView.Socket{assigns: assigns} = socket,
-        %Fabric.LiveComponent.Model{} = child,
-        modal_style
-      ) do
-    %Phoenix.LiveView.Socket{socket | assigns: prepare_modal(assigns, child, modal_style)}
+  def prepare_modal(%Socket{assigns: assigns} = socket, %Model{} = child, modal_style) do
+    %{socket | assigns: prepare_modal(assigns, child, modal_style)}
   end
 
-  def prepare_modal(
-        %{fabric: fabric} = assigns,
-        %Fabric.LiveComponent.Model{} = child,
-        modal_style
-      ) do
+  def prepare_modal(%{fabric: fabric} = assigns, %Model{} = child, modal_style) do
     send_event(fabric, :root, "prepare_modal", %{live_component: child, style: modal_style})
     Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
   end
 
-  def show_modal(context, child_name, modal_style)
-      when is_atom(child_name) or is_binary(child_name) do
+  def show_modal(context, child_name, modal_style) when is_atom(child_name) or is_binary(child_name) do
     if child = get_child(context, child_name) do
       show_modal(context, child, modal_style)
     else
@@ -61,21 +54,17 @@ defmodule Fabric.ModalController do
     end
   end
 
-  def show_modal(
-        %Phoenix.LiveView.Socket{assigns: assigns} = socket,
-        %Fabric.LiveComponent.Model{} = child,
-        modal_style
-      ) do
-    %Phoenix.LiveView.Socket{socket | assigns: show_modal(assigns, child, modal_style)}
+  def show_modal(%Socket{assigns: assigns} = socket, %Model{} = child, modal_style) do
+    %{socket | assigns: show_modal(assigns, child, modal_style)}
   end
 
-  def show_modal(%{fabric: fabric} = assigns, %Fabric.LiveComponent.Model{} = child, modal_style) do
+  def show_modal(%{fabric: fabric} = assigns, %Model{} = child, modal_style) do
     send_event(fabric, :root, "show_modal", %{live_component: child, style: modal_style})
     Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
   end
 
-  def hide_modal(%Phoenix.LiveView.Socket{assigns: assigns} = socket, child_name) do
-    %Phoenix.LiveView.Socket{socket | assigns: hide_modal(assigns, child_name)}
+  def hide_modal(%Socket{assigns: assigns} = socket, child_name) do
+    %{socket | assigns: hide_modal(assigns, child_name)}
   end
 
   def hide_modal(%{fabric: fabric} = assigns, child_name) do

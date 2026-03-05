@@ -3,8 +3,9 @@ defmodule CoreWeb.UI.Timestamp do
     Helper functions for displaying timestamps
   """
   use Timex
-  require Logger
   use Gettext, backend: CoreWeb.Gettext
+
+  require Logger
 
   def convert(datetime, timezone \\ "Etc/UTC") do
     case Timex.Timezone.convert(datetime, timezone) do
@@ -26,7 +27,7 @@ defmodule CoreWeb.UI.Timestamp do
   end
 
   def from_date_and_time(%Date{} = date, time) when is_integer(time) do
-    hour = (time / 100) |> trunc()
+    hour = trunc(time / 100)
     minute = rem(time, 100)
 
     from_date_and_time(date, Time.new!(hour, minute, 0))
@@ -41,16 +42,18 @@ defmodule CoreWeb.UI.Timestamp do
   end
 
   def tomorrow(timezone \\ "Etc/UTC") do
-    DateTime.now!(timezone)
+    timezone
+    |> DateTime.now!()
     |> shift_days(1)
   end
 
   def yesterday(timezone \\ "Etc/UTC") do
-    DateTime.now!(timezone)
+    timezone
+    |> DateTime.now!()
     |> shift_days(-1)
   end
 
-  def naive_now() do
+  def naive_now do
     now()
     |> DateTime.to_naive()
     |> NaiveDateTime.truncate(:second)
@@ -72,15 +75,15 @@ defmodule CoreWeb.UI.Timestamp do
   end
 
   def one_week_after(date) do
-    date |> Timex.shift(days: 7)
+    Timex.shift(date, days: 7)
   end
 
   def shift_minutes(date, minutes) do
-    date |> Timex.shift(minutes: minutes)
+    Timex.shift(date, minutes: minutes)
   end
 
   def shift_days(date, days) do
-    date |> Timex.shift(days: days)
+    Timex.shift(date, days: days)
   end
 
   def max(d1, nil), do: d1
@@ -114,15 +117,15 @@ defmodule CoreWeb.UI.Timestamp do
   end
 
   def after?(%Date{} = date1, %DateTime{} = date2) do
-    Date.compare(date1, to_date(date2)) == :gt
+    Date.after?(date1, to_date(date2))
   end
 
   def after?(%DateTime{} = date1, %DateTime{} = date2) do
-    DateTime.compare(date1, date2) == :gt
+    DateTime.after?(date1, date2)
   end
 
   def after?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
-    NaiveDateTime.compare(date1, date2) == :gt
+    NaiveDateTime.after?(date1, date2)
   end
 
   def before?(date1, date2) when is_binary(date1) and is_binary(date2) do
@@ -133,15 +136,15 @@ defmodule CoreWeb.UI.Timestamp do
   end
 
   def before?(%Date{} = date1, %DateTime{} = date2) do
-    Date.compare(date1, to_date(date2)) == :lt
+    Date.before?(date1, to_date(date2))
   end
 
   def before?(%DateTime{} = date1, %DateTime{} = date2) do
-    DateTime.compare(date1, date2) == :lt
+    DateTime.before?(date1, date2)
   end
 
   def before?(%NaiveDateTime{} = date1, %NaiveDateTime{} = date2) do
-    NaiveDateTime.compare(date1, date2) == :lt
+    NaiveDateTime.before?(date1, date2)
   end
 
   def parse_user_input_date(input, timezone \\ "Etc/UTC")
@@ -309,7 +312,8 @@ defmodule CoreWeb.UI.Timestamp do
   # FIXME: Replace hard coded Timezone with user settings
   def apply_timezone(%NaiveDateTime{} = timestamp, timezone \\ "Europe/Amsterdam") do
     tz_offset =
-      Timex.timezone(timezone, timestamp)
+      timezone
+      |> Timex.timezone(timestamp)
       |> Timex.Timezone.total_offset()
 
     Timex.shift(timestamp, seconds: tz_offset)

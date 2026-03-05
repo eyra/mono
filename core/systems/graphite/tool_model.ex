@@ -4,13 +4,13 @@ defmodule Systems.Graphite.ToolModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
+  import Ecto.Changeset
+
+  alias CoreWeb.UI.Timestamp
   alias Systems.Graphite
   alias Systems.Workflow
-  alias CoreWeb.UI.Timestamp
 
   schema "graphite_tools" do
     field(:deadline, :utc_datetime)
@@ -29,8 +29,7 @@ defmodule Systems.Graphite.ToolModel do
   @required_fields @fields
 
   def changeset(tool, params) do
-    tool
-    |> cast(params, @fields)
+    cast(tool, params, @fields)
   end
 
   def changeset(tool, params, nil) do
@@ -48,8 +47,7 @@ defmodule Systems.Graphite.ToolModel do
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   defp prepare_deadline_string(_, timezone \\ "Etc/UTC")
@@ -80,25 +78,18 @@ defmodule Systems.Graphite.ToolModel do
     end
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :leaderboard,
-        :submissions,
-        :auth_node
-      ])
+  def preload_graph(:down), do: preload_graph([:leaderboard, :submissions, :auth_node])
 
   def preload_graph(:auth_node), do: [auth_node: []]
 
-  def preload_graph(:submissions),
-    do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
+  def preload_graph(:submissions), do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
 
-  def preload_graph(:leaderboard),
-    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
+  def preload_graph(:leaderboard), do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
   def ready?(tool) do
     changeset =
-      changeset(tool, %{})
+      tool
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -117,7 +108,6 @@ defmodule Systems.Graphite.ToolModel do
   defimpl Frameworks.Concept.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
 
-    alias Systems.Graphite
     def key(_), do: :graphite
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: ""

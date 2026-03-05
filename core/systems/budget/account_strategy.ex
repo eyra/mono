@@ -1,20 +1,19 @@
 defmodule Systems.Budget.AccountStrategy do
+  @moduledoc false
   @behaviour Systems.Bookkeeping.AccountStrategy
 
-  require Logger
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
-  alias Systems.{
-    Bookkeeping,
-    Budget
-  }
+  require Logger
 
   @accounts %{
     fund: "F",
     wallet: "W"
   }
-  @account_map Enum.map(@accounts, fn {k, v} -> {v, k} end) |> Enum.into(%{})
+  @account_map Map.new(@accounts, fn {k, v} -> {v, k} end)
 
-  @account_patterns Map.keys(@account_map) |> Enum.join("|")
+  @account_patterns @account_map |> Map.keys() |> Enum.join("|")
   @description_re Regex.compile!("(#{@account_patterns})\\s*(\\d+)\\s*\\/\\s*(\\w+)")
 
   def encode(account) do
@@ -44,8 +43,7 @@ defmodule Systems.Budget.AccountStrategy do
     end
   end
 
-  defp map_to_account(type, currency, id, checksum)
-       when is_binary(type) and is_atom(currency) and is_binary(id) do
+  defp map_to_account(type, currency, id, checksum) when is_binary(type) and is_atom(currency) and is_binary(id) do
     identifier =
       Bookkeeping.Public.to_identifier({
         Map.fetch!(@account_map, type),

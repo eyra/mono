@@ -5,25 +5,25 @@ defmodule CoreWeb.Ui.TimestampTest do
 
   describe "humanize/1" do
     test "future" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 7)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: 7)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "#{weekday},"
     end
 
     test "next week (end)" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 6)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: 6)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "next #{weekday} at"
     end
 
     test "next week (begin)" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 2)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: 2)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "next #{weekday} at"
     end
 
     test "tomorrow" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: 1)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: 1)
       assert Timestamp.humanize(date) =~ "tomorrow at"
     end
 
@@ -33,24 +33,24 @@ defmodule CoreWeb.Ui.TimestampTest do
     end
 
     test "yesterday" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -1)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: -1)
       assert Timestamp.humanize(date) =~ "yesterday at"
     end
 
     test "weekday (begin)" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -2)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: -2)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "last #{weekday} at"
     end
 
     test "weekday (end)" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -6)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: -6)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "last #{weekday} at"
     end
 
     test "past" do
-      date = DateTime.now!("Etc/UTC") |> Timex.shift(days: -7)
+      date = "Etc/UTC" |> DateTime.now!() |> Timex.shift(days: -7)
       weekday = Timex.format!(date, "%A", :strftime)
       assert Timestamp.humanize(date) =~ "#{weekday},"
     end

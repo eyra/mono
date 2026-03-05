@@ -1,55 +1,60 @@
 defmodule Systems.Email.Factory do
+  @moduledoc false
   use Bamboo.Phoenix, template: Systems.Email.EmailHTML
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Email
 
   def mail_user(emails) when is_list(emails) do
-    Email.Public.base_email() |> to(emails)
+    to(Email.Public.base_email(), emails)
   end
 
   def mail_user(email) when is_binary(email) do
-    Email.Public.base_email() |> to(email)
+    to(Email.Public.base_email(), email)
   end
 
   def mail_user(%{email: email} = user) do
-    mail_user(email) |> assign(:user, user)
+    email |> mail_user() |> assign(:user, user)
   end
 
   def account_confirmation_instructions(user, url) do
-    mail_user(user)
+    user
+    |> mail_user()
     |> subject("Activate your account")
     |> render(:account_confirmation_instructions, url: url)
   end
 
   def reset_password_instructions(user, url) do
-    mail_user(user)
+    user
+    |> mail_user()
     |> subject("Password reset")
     |> render(:reset_password_instructions, url: url)
   end
 
   def update_email_instructions(user, url) do
-    mail_user(user)
+    user
+    |> mail_user()
     |> subject("Update email")
     |> render(:update_email_instructions, url: url)
   end
 
   def already_activated_notification(user, url) do
-    mail_user(user)
+    user
+    |> mail_user()
     |> subject("Already activated")
     |> render(:already_activated_notification, url: url)
   end
 
   def account_created(user) do
-    mail_user(user)
+    user
+    |> mail_user()
     |> assign(:email_header_image, "notification")
     |> subject("Welcome")
     |> render(:account_created)
   end
 
   def debug(subject, message, from_user, to_user) do
-    mail_user(to_user)
+    to_user
+    |> mail_user()
     |> from(from_user.email)
     |> subject(subject)
     |> render(:debug_message, body: message, from_user: from_user, to_user: to_user)
@@ -57,9 +62,10 @@ defmodule Systems.Email.Factory do
 
   def notification(title, byline, message, to) do
     text_message = message
-    html_message = message |> to_html()
+    html_message = to_html(message)
 
-    mail_user(to)
+    to
+    |> mail_user()
     |> subject("Next notification")
     |> render(:notification,
       title: title,

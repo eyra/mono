@@ -1,7 +1,6 @@
 defmodule Self.Account.SessionController do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   use Gettext, backend: CoreWeb.Gettext
 

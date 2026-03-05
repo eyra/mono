@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.ConnectionViewStorage do
+  @moduledoc false
   use CoreWeb, :live_component
 
   alias Systems.Assignment
@@ -13,8 +14,7 @@ defmodule Systems.Assignment.ConnectionViewStorage do
   def update(%{assignment: assignment}, socket) do
     {
       :ok,
-      socket
-      |> assign(assignment: assignment)
+      assign(socket, assignment: assignment)
     }
   end
 

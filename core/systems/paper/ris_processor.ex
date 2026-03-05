@@ -8,9 +8,11 @@ defmodule Systems.Paper.RISProcessor do
   - Categorizing references as new/existing/error
   """
 
-  require Logger
   use Gettext, backend: CoreWeb.Gettext
+
   alias Systems.Paper
+
+  require Logger
 
   @doc """
   Process parsed RIS references and categorize them.
@@ -239,8 +241,9 @@ defmodule Systems.Paper.RISProcessor do
     # Create a new version for the paper
     version = Systems.Version.Public.prepare_first()
 
-    Paper.Public.prepare_paper(
-      Map.get(ref, :doi),
+    ref
+    |> Map.get(:doi)
+    |> Paper.Public.prepare_paper(
       Map.get(ref, :title),
       Map.get(ref, :subtitle),
       Map.get(ref, :year),

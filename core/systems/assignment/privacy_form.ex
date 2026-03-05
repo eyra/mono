@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.PrivacyForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.pdf)
 
@@ -9,9 +10,7 @@ defmodule Systems.Assignment.PrivacyForm do
 
   @impl true
   def process_file(socket, %{public_url: public_url, original_filename: original_filename}) do
-    privacy_doc =
-      %Content.FileModel{}
-      |> Content.FileModel.changeset(%{name: original_filename, ref: public_url})
+    privacy_doc = Content.FileModel.changeset(%Content.FileModel{}, %{name: original_filename, ref: public_url})
 
     socket
     |> assign(
@@ -22,10 +21,7 @@ defmodule Systems.Assignment.PrivacyForm do
   end
 
   @impl true
-  def update(
-        %{id: id, entity: %{privacy_doc: privacy_doc} = entity},
-        socket
-      ) do
+  def update(%{id: id, entity: %{privacy_doc: privacy_doc} = entity}, socket) do
     {
       :ok,
       socket
@@ -67,7 +63,8 @@ defmodule Systems.Assignment.PrivacyForm do
   # Saving
   def save(%{assigns: %{entity: entity, privacy_doc: privacy_doc}} = socket) do
     changeset =
-      Assignment.Model.changeset(entity, %{})
+      entity
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:privacy_doc, privacy_doc)
 
     save(socket, changeset)

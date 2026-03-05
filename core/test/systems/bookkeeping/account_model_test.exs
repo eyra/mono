@@ -1,5 +1,6 @@
 defmodule Systems.Bookkeeping.AccountModelTest do
   use Core.DataCase, async: true
+
   alias Systems.Bookkeeping.AccountModel
 
   describe "checksum/1" do

@@ -17,8 +17,7 @@ defmodule CoreWeb do
   and import those modules here.
   """
 
-  def static_paths,
-    do: ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
+  def static_paths, do: ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
 
   def utility do
     quote do
@@ -30,16 +29,15 @@ defmodule CoreWeb do
     quote do
       use Core, :auth
       use Phoenix.Controller, unquote(opts)
-
-      unquote(utility())
-
-      import Plug.Conn
       use Gettext, backend: CoreWeb.Gettext
+
       import Core.FeatureFlags
+      import Phoenix.LiveView.Controller
+      import Plug.Conn
 
       alias CoreWeb.Loaders
 
-      import Phoenix.LiveView.Controller
+      unquote(utility())
 
       plug(Systems.Project.BranchPlug)
 
@@ -50,15 +48,14 @@ defmodule CoreWeb do
   def ui do
     quote do
       use Phoenix.Component
+      use Gettext, backend: CoreWeb.Gettext
 
       # Use base HTML functionality
       import Phoenix.HTML, only: [raw: 1]
       import Phoenix.HTML.Form
+      import PhoenixHTMLHelpers.Form
       import PhoenixHTMLHelpers.Link, only: [link: 2]
       import PhoenixHTMLHelpers.Tag, only: [csrf_meta_tag: 0]
-      import PhoenixHTMLHelpers.Form
-
-      use Gettext, backend: CoreWeb.Gettext
 
       unquote(verified_routes())
       unquote(utility())
@@ -67,21 +64,23 @@ defmodule CoreWeb do
 
   def pixel do
     quote do
-      unquote(ui())
       use CoreWeb.UI
+
+      unquote(ui())
     end
   end
 
   def html do
     quote do
-      unquote(pixel())
       use Frameworks.Pixel
 
+      import Phoenix.Controller,
+        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
+
+      unquote(pixel())
       unquote(component_helpers())
 
       # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
     end
   end
 
@@ -89,10 +88,9 @@ defmodule CoreWeb do
     quote do
       use Fabric.LiveComponent
       use LiveNest, :live_component
-
-      unquote(pixel())
       use Frameworks.Pixel
 
+      unquote(pixel())
       unquote(component_helpers())
     end
   end
@@ -110,6 +108,7 @@ defmodule CoreWeb do
       use Fabric.LiveView
       use Fabric.ModalPresenter
       use Frameworks.Pixel.ModalView
+      use Frameworks.Pixel
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
@@ -119,8 +118,6 @@ defmodule CoreWeb do
       on_mount({Frameworks.UserState.LiveHook, __MODULE__})
 
       unquote(pixel())
-      use Frameworks.Pixel
-
       unquote(component_helpers())
       unquote(verified_routes())
       unquote(live_features())
@@ -135,6 +132,7 @@ defmodule CoreWeb do
       use LiveNest, :routed_live_view
       use LiveNest, :single_modal_presenter_strategy
       use Frameworks.Pixel.ModalView
+      use Frameworks.Pixel
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
@@ -144,8 +142,6 @@ defmodule CoreWeb do
       on_mount({Frameworks.UserState.LiveHook, __MODULE__})
 
       unquote(pixel())
-      use Frameworks.Pixel
-
       unquote(component_helpers())
       unquote(verified_routes())
       unquote(live_features())
@@ -168,6 +164,8 @@ defmodule CoreWeb do
       # Observatory LiveFeature provides update_view_model and handle_view_model_updated
       use Systems.Observatory.LiveFeature
 
+      import CoreWeb.Live.Feature.Stack
+
       require Logger
 
       # Standard embedded LiveView hooks
@@ -180,17 +178,16 @@ defmodule CoreWeb do
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
       # Include stack helpers for block-based architecture
-      import CoreWeb.Live.Feature.Stack
-
       unquote(utility())
     end
   end
 
   def modal_live_view do
     quote do
+      use LiveNest.Modal, :live_view
+
       unquote(embedded_live_view())
       # Modal support: enables publish_event to route to modal controller
-      use LiveNest.Modal, :live_view
     end
   end
 
@@ -228,9 +225,10 @@ defmodule CoreWeb do
   defp component_helpers do
     quote do
       use Core, :auth
+      use Gettext, backend: CoreWeb.Gettext
+
       import Core.FeatureFlags
 
-      use Gettext, backend: CoreWeb.Gettext
       alias CoreWeb.Meta
       alias Frameworks.Utility.ViewModelBuilder
 
@@ -244,9 +242,9 @@ defmodule CoreWeb do
     quote do
       use Phoenix.Router
 
-      import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
+      import Plug.Conn
     end
   end
 

@@ -1,4 +1,5 @@
 defmodule Systems.Project.OverviewPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import Frameworks.Pixel.Empty
@@ -6,7 +7,6 @@ defmodule Systems.Project.OverviewPage do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
-
   alias Systems.Account
   alias Systems.Project
 
@@ -18,7 +18,7 @@ defmodule Systems.Project.OverviewPage do
     {:ok, socket}
   end
 
-  def handle_view_model_updated(socket), do: socket |> update_child(:people_page)
+  def handle_view_model_updated(socket), do: update_child(socket, :people_page)
 
   @impl true
   def compose(:project_form, %{active_project: project_id, vm: %{projects: projects}}) do
@@ -33,7 +33,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def compose(:people_page, %{active_project: project_id, current_user: current_user} = _) do
+  def compose(:people_page, %{active_project: project_id, current_user: current_user}) do
     owners =
       project_id
       |> String.to_integer()
@@ -43,7 +43,8 @@ defmodule Systems.Project.OverviewPage do
     owner_ids = Enum.map(owners, & &1.id)
 
     creators =
-      Account.Public.list_creators([:profile])
+      [:profile]
+      |> Account.Public.list_creators()
       # filter existing owners
       |> Enum.reject(&Enum.member?(owner_ids, &1.id))
 
@@ -77,22 +78,14 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{vm: %{cards: cards}}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{vm: %{cards: cards}}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true
-  def handle_event(
-        "rename",
-        %{"item" => project_id},
-        socket
-      ) do
+  def handle_event("rename", %{"item" => project_id}, socket) do
     {
       :noreply,
       socket
@@ -159,8 +152,7 @@ defmodule Systems.Project.OverviewPage do
 
     {
       :noreply,
-      socket
-      |> update_view_model()
+      update_view_model(socket)
     }
   end
 
@@ -178,11 +170,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event(
-        "remove_user",
-        %{user: user},
-        %{assigns: %{active_project: project_id}} = socket
-      ) do
+  def handle_event("remove_user", %{user: user}, %{assigns: %{active_project: project_id}} = socket) do
     case project_id
          |> Project.Public.get!()
          |> Project.Public.remove_owner!(user) do
@@ -196,7 +184,7 @@ defmodule Systems.Project.OverviewPage do
 
   @impl true
   def handle_event("finish", %{source: %{name: modal_view}}, socket) do
-    {:noreply, socket |> Fabric.ModalController.hide_modal(modal_view)}
+    {:noreply, Fabric.ModalController.hide_modal(socket, modal_view)}
   end
 
   @impl true

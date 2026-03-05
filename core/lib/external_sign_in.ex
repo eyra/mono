@@ -1,7 +1,9 @@
 defmodule ExternalSignIn do
-  alias Systems.Account
-  alias Core.Repo
+  @moduledoc false
   import Ecto.Query, warn: false
+
+  alias Core.Repo
+  alias Systems.Account
 
   def sign_in(conn, organisation, external_id) do
     user =
@@ -25,8 +27,7 @@ defmodule ExternalSignIn do
         select: ex.user_id
       )
 
-    from(u in Account.User, where: u.id in subquery(external_user_query))
-    |> Repo.one()
+    Repo.one(from(u in Account.User, where: u.id in subquery(external_user_query)))
   end
 
   def register_user(organisation, external_id) when is_atom(organisation) do

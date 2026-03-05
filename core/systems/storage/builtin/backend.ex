@@ -1,9 +1,10 @@
 defmodule Systems.Storage.BuiltIn.Backend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
-  require Logger
-
   alias Systems.Storage.BuiltIn
+
+  require Logger
 
   @impl true
   def store(%{"key" => folder}, data, %{"identifier" => identifier}) do
@@ -36,7 +37,7 @@ defmodule Systems.Storage.BuiltIn.Backend do
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp settings do
-    Application.fetch_env!(:core, Systems.Storage.BuiltIn)
+    Application.fetch_env!(:core, BuiltIn)
   end
 
   defp special do

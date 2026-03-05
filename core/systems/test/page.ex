@@ -4,11 +4,11 @@ defmodule Systems.Test.Page do
   """
   use CoreWeb, :live_view
 
+  alias Systems.Test
+
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
-
-  alias Systems.Test
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -19,16 +19,12 @@ defmodule Systems.Test.Page do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
-      |> assign(
-        view_model_updated: 0,
-        active_menu_item: nil
-      )
+      assign(socket, view_model_updated: 0, active_menu_item: nil)
     }
   end
 
   def handle_view_model_updated(%{assigns: %{view_model_updated: view_model_updated}} = socket) do
-    socket |> assign(view_model_updated: "#{view_model_updated + 1}")
+    assign(socket, view_model_updated: "#{view_model_updated + 1}")
   end
 
   # data(model, :map)

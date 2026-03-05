@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.OnboardingConsentViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Consent

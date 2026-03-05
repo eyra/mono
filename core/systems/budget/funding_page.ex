@@ -1,15 +1,17 @@
 defmodule Systems.Budget.FundingPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Line
   import Systems.Budget.BalanceView
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
-  alias Systems.Budget
-  alias Systems.Bookkeeping
+  alias Frameworks.Pixel.Text
   alias Systems.Advert
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Budget.Form
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
@@ -33,7 +35,7 @@ defmodule Systems.Budget.FundingPage do
   @impl true
   def compose(:create_budget_form, %{user: user, locale: locale}) do
     %{
-      module: Systems.Budget.Form,
+      module: Form,
       params: %{
         budget: nil,
         user: user,
@@ -45,7 +47,7 @@ defmodule Systems.Budget.FundingPage do
   @impl true
   def compose(:edit_budget_form, %{selected_budget: selected_budget, user: user, locale: locale}) do
     %{
-      module: Systems.Budget.Form,
+      module: Form,
       params: %{
         budget: selected_budget,
         user: user,
@@ -63,7 +65,7 @@ defmodule Systems.Budget.FundingPage do
   end
 
   defp update_adverts(%{assigns: %{selected_budget: nil}} = socket) do
-    socket |> assign(advert_items: [])
+    assign(socket, advert_items: [])
   end
 
   defp update_adverts(%{assigns: %{selected_budget: selected_budget} = assigns} = socket) do
@@ -72,7 +74,7 @@ defmodule Systems.Budget.FundingPage do
       |> Advert.Public.list_by_budget(Advert.Model.preload_graph(:down))
       |> Enum.map(&to_content_list_item(&1, assigns))
 
-    socket |> assign(advert_items: advert_items)
+    assign(socket, advert_items: advert_items)
   end
 
   defp to_content_list_item(advert, assigns) do
@@ -81,35 +83,32 @@ defmodule Systems.Budget.FundingPage do
 
   defp update_budgets(%{assigns: %{current_user: user}} = socket) do
     budgets =
-      Budget.Public.list_owned(user, [
+      user
+      |> Budget.Public.list_owned([
         :fund,
         :reserve,
         currency: Budget.CurrencyModel.preload_graph(:full)
       ])
       |> Enum.filter(&(&1.currency.type == :legal))
 
-    socket |> assign(budgets: budgets)
+    assign(socket, budgets: budgets)
   end
 
   defp update_selected_budget(%{assigns: %{budgets: budgets, selected_budget: nil}} = socket) do
     budget = List.first(budgets)
-    socket |> assign(selected_budget: budget)
+    assign(socket, selected_budget: budget)
   end
 
-  defp update_selected_budget(
-         %{assigns: %{budgets: budgets, selected_budget: %{id: selected_id}}} = socket
-       ) do
+  defp update_selected_budget(%{assigns: %{budgets: budgets, selected_budget: %{id: selected_id}}} = socket) do
     budget = Enum.find(budgets, &(&1.id == selected_id))
-    socket |> assign(selected_budget: budget)
+    assign(socket, selected_budget: budget)
   end
 
   defp update_balance(%{assigns: %{selected_budget: nil}} = socket) do
-    socket |> assign(balance: nil)
+    assign(socket, balance: nil)
   end
 
-  defp update_balance(
-         %{assigns: %{selected_budget: %{currency: currency} = budget, locale: locale}} = socket
-       ) do
+  defp update_balance(%{assigns: %{selected_budget: %{currency: currency} = budget, locale: locale}} = socket) do
     available = Budget.Model.amount_available(budget)
     reserved = Budget.Model.amount_reserved(budget)
     spend = Budget.Model.amount_spend(budget)
@@ -133,14 +132,11 @@ defmodule Systems.Budget.FundingPage do
       }
     }
 
-    socket |> assign(balance: balance)
+    assign(socket, balance: balance)
   end
 
-  defp update_squares(
-         %{assigns: %{budgets: budgets, selected_budget: selected_budget, locale: locale}} =
-           socket
-       ) do
-    socket |> assign(squares: Enum.map(budgets, &to_square(&1, selected_budget, locale)))
+  defp update_squares(%{assigns: %{budgets: budgets, selected_budget: selected_budget, locale: locale}} = socket) do
+    assign(socket, squares: Enum.map(budgets, &to_square(&1, selected_budget, locale)))
   end
 
   defp to_square(
@@ -200,12 +196,8 @@ defmodule Systems.Budget.FundingPage do
   end
 
   @impl true
-  def handle_event(
-        "select_budget",
-        %{"item" => budget_id},
-        %{assigns: %{budgets: budgets}} = socket
-      ) do
-    selected_budget = budgets |> Enum.find(&(&1.id == String.to_integer(budget_id)))
+  def handle_event("select_budget", %{"item" => budget_id}, %{assigns: %{budgets: budgets}} = socket) do
+    selected_budget = Enum.find(budgets, &(&1.id == String.to_integer(budget_id)))
 
     {
       :noreply,
@@ -231,11 +223,7 @@ defmodule Systems.Budget.FundingPage do
   end
 
   @impl true
-  def handle_event(
-        "budget_saved",
-        %{source: %{name: modal_id, module: Systems.Budget.Form}},
-        socket
-      ) do
+  def handle_event("budget_saved", %{source: %{name: modal_id, module: Form}}, socket) do
     {
       :noreply,
       socket
@@ -251,14 +239,13 @@ defmodule Systems.Budget.FundingPage do
   def handle_event("budget_cancelled", %{source: %{name: modal_id}}, socket) do
     {
       :noreply,
-      socket
-      |> Fabric.ModalController.hide_modal(modal_id)
+      Fabric.ModalController.hide_modal(socket, modal_id)
     }
   end
 
   @impl true
   def handle_event("deposit_cancelled", %{source: %{name: modal_id}}, socket) do
-    {:noreply, socket |> Fabric.ModalController.hide_modal(modal_id)}
+    {:noreply, Fabric.ModalController.hide_modal(socket, modal_id)}
   end
 
   @impl true

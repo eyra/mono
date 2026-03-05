@@ -1,4 +1,5 @@
 defmodule Systems.Consent.RevisionForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
@@ -10,13 +11,7 @@ defmodule Systems.Consent.RevisionForm do
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: entity,
-        visible: true,
-        form: form
-      )
+      assign(socket, id: id, entity: entity, visible: true, form: form)
     }
   end
 
@@ -26,13 +21,7 @@ defmodule Systems.Consent.RevisionForm do
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: nil,
-        visible: false,
-        form: form
-      )
+      assign(socket, id: id, entity: nil, visible: false, form: form)
     }
   end
 
@@ -52,15 +41,13 @@ defmodule Systems.Consent.RevisionForm do
         |> flash_persister_saved()
 
       {:error, changeset} ->
-        socket
-        |> handle_save_errors(changeset)
+        handle_save_errors(socket, changeset)
     end
   end
 
   @impl true
   def handle_wysiwyg_update(%{assigns: %{source: source, entity: entity}} = socket) do
-    socket
-    |> save(entity, %{source: source})
+    save(socket, entity, %{source: source})
   end
 
   defp handle_save_errors(socket, %{errors: errors}) do
@@ -68,11 +55,11 @@ defmodule Systems.Consent.RevisionForm do
   end
 
   defp handle_save_errors(socket, [{_, {message, _}} | _]) do
-    socket |> flash_persister_error(message)
+    flash_persister_error(socket, message)
   end
 
   defp handle_save_errors(socket, _) do
-    socket |> flash_persister_error()
+    flash_persister_error(socket)
   end
 
   @impl true

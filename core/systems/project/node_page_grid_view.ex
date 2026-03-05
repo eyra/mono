@@ -2,11 +2,10 @@ defmodule Systems.Project.NodePageGridView do
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Empty
-  alias Frameworks.Pixel.Grid
-  alias Systems.Project
 
-  alias Frameworks.Utility.ViewModelBuilder
   alias Frameworks.Concept
+  alias Frameworks.Pixel.Grid
+  alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Project
 
   @impl true
@@ -20,8 +19,7 @@ defmodule Systems.Project.NodePageGridView do
   end
 
   def view_model(%{assigns: %{node: %{id: id, name: name, items: node_items}} = assigns} = socket) do
-    socket
-    |> assign(%{
+    assign(socket, %{
       id: id,
       title: name,
       breadcrumbs: breadcrumbs(id),
@@ -50,10 +48,7 @@ defmodule Systems.Project.NodePageGridView do
   defp item_feature_enabled?(_), do: true
 
   @impl true
-  def compose(
-        :create_item_view,
-        %{node: node, user: user}
-      ) do
+  def compose(:create_item_view, %{node: node, user: user}) do
     %{
       module: Project.CreateItemView,
       params: %{node: node, user: user}
@@ -103,11 +98,7 @@ defmodule Systems.Project.NodePageGridView do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{item_cards: item_cards}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{item_cards: item_cards}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(item_cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}
@@ -115,7 +106,7 @@ defmodule Systems.Project.NodePageGridView do
 
   @impl true
   def handle_event("saved", %{source: %{name: modal_view}}, socket) do
-    {:noreply, socket |> hide_modal(modal_view)}
+    {:noreply, hide_modal(socket, modal_view)}
   end
 
   @impl true

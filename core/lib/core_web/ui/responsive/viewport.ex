@@ -1,6 +1,7 @@
 defmodule CoreWeb.UI.Responsive.Viewport do
-  import Phoenix.Component, only: [assign: 2]
+  @moduledoc false
   import CoreWeb.UI.Responsive.Breakpoint, only: [breakpoint: 1]
+  import Phoenix.Component, only: [assign: 2]
 
   def assign_viewport(%{private: %{connect_params: %{"viewport" => viewport}}} = socket) do
     assign(socket, viewport: viewport)

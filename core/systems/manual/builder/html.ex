@@ -1,8 +1,9 @@
 defmodule Systems.Manual.Builder.Html do
+  @moduledoc false
   use CoreWeb, :html
 
-  import Frameworks.Pixel.Tag
   import Frameworks.Pixel.NumberIcon
+  import Frameworks.Pixel.Tag
 
   attr(:chapters, :list, required: true)
   attr(:selected_chapter_id, :integer, default: nil)

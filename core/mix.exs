@@ -52,11 +52,9 @@ defmodule Core.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test),
-    do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
+  defp elixirc_paths(:test), do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
-  defp elixirc_paths(:dev),
-    do: ["bundles", "apps", "systems", "frameworks", "lib"]
+  defp elixirc_paths(:dev), do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
   defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
@@ -69,8 +67,7 @@ defmodule Core.MixProject do
       {:appsignal_phoenix, "2.7.0"},
       {:assent, "0.3.1"},
       # Fork supports Phoenix 1.8
-      {:bamboo_phoenix,
-       github: "eyra/bamboo_phoenix", ref: "59d3961228cb8bd315403cfbf48415aae19f25f1"},
+      {:bamboo_phoenix, github: "eyra/bamboo_phoenix", ref: "59d3961228cb8bd315403cfbf48415aae19f25f1"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "2.5.0"},
       {:bcrypt_elixir, "3.3.2"},
@@ -110,6 +107,7 @@ defmodule Core.MixProject do
       {:slugify, "1.3.1"},
       {:sqids, "0.2.1"},
       {:statistics, "0.6.3"},
+      {:styler, "~> 1.11", only: [:dev, :test], runtime: false},
       {:tailwind, "0.4.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "1.1.0"},
       {:telemetry_poller, "1.3.0"},
@@ -187,14 +185,11 @@ defmodule Core.MixProject do
       ],
       run: "phx.server",
       github_release:
-        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
+        ~s{cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo "Build tag: next_$(date +%F)_$NUM" && echo "URL: $URL"},
       precommit: "cmd cd .. && pre-commit run --all-files",
-      "test.e2e":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",
-      "test.e2e.debug":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
-      "test.e2e.headed":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
+      "test.e2e": "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",
+      "test.e2e.debug": "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
+      "test.e2e.headed": "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
   end
 end

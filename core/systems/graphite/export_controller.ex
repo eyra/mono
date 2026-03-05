@@ -1,15 +1,13 @@
 defmodule Systems.Graphite.ExportController do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   def submissions(conn, %{"id" => id}) do
     submissions =
-      Graphite.Public.get_leaderboard!(id)
+      id
+      |> Graphite.Public.get_leaderboard!()
       |> Graphite.Public.list_submissions()
 
     csv_data = export(submissions)

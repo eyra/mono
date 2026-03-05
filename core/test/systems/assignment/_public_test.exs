@@ -1,27 +1,28 @@
 defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
+
   import Systems.NextAction.TestHelper
 
-  alias Systems.Assignment
-  alias Systems.Crew
-  alias Systems.Budget
-  alias Systems.Monitor
-
   alias Core.Factories
+  alias Systems.Assignment
+  alias Systems.Assignment.Model
+  alias Systems.Budget
+  alias Systems.Crew
+  alias Systems.Monitor
 
   describe "assignment instances" do
     test "obtain_instance!/3 inserts an instance and inserts external panel info" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       Assignment.Public.obtain_instance!(assignment, user)
 
-      assert Assignment.Public.get_instance(assignment, user) != nil
+      assert Assignment.Public.get_instance(assignment, user)
     end
 
     test "obtain_instance!/3 updates instance" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       instance = Assignment.Public.obtain_instance!(assignment, user)
       instance_2 = Assignment.Public.obtain_instance!(assignment, user)
@@ -31,14 +32,14 @@ defmodule Systems.Assignment.PublicTest do
 
     test "get_instance/2 returns nil if no instance exists" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       assert Assignment.Public.get_instance(assignment, user) == nil
     end
 
     test "get_instance/2 returns instance if it exists" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
 
@@ -47,9 +48,9 @@ defmodule Systems.Assignment.PublicTest do
 
     test "list_instances/1 returns all instances" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
-      %{user: user_2} = Factories.build(:affiliate_user) |> Repo.insert!()
-      %{user: user_3} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
+      %{user: user_2} = :affiliate_user |> Factories.build() |> Repo.insert!()
+      %{user: user_3} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
       %{id: instance_id_2} = Assignment.Public.obtain_instance!(assignment, user_2)
@@ -179,7 +180,7 @@ defmodule Systems.Assignment.PublicTest do
     end
 
     test "list_participants?/1 with 1 affiliate user" do
-      affiliate = Factories.build(:affiliate) |> Repo.insert!()
+      affiliate = :affiliate |> Factories.build() |> Repo.insert!()
 
       affiliate_user =
         %{identifier: identifier, user: %{id: user_id}} =
@@ -501,9 +502,7 @@ defmodule Systems.Assignment.PublicTest do
       member = Crew.Factories.create_member(crew, user)
 
       %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"], minutes_ago: 10)
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
 
@@ -516,9 +515,7 @@ defmodule Systems.Assignment.PublicTest do
       member = Crew.Factories.create_member(crew, user)
 
       %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
+        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"], minutes_ago: 10)
 
       Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
       Crew.Public.accept_task(task_id)
@@ -533,11 +530,11 @@ defmodule Systems.Assignment.PublicTest do
       Assignment.Public.exclude(assignment1, assignment2)
 
       assert %{
-               excluded: [%Systems.Assignment.Model{id: ^id2}]
+               excluded: [%Model{id: ^id2}]
              } = Assignment.Public.get!(assignment1.id, [:excluded])
 
       assert %{
-               excluded: [%Systems.Assignment.Model{id: ^id1}]
+               excluded: [%Model{id: ^id1}]
              } = Assignment.Public.get!(assignment2.id, [:excluded])
     end
 

@@ -1,4 +1,5 @@
 defmodule Systems.Bookkeeping.EntryModel do
+  @moduledoc false
   use Ecto.Schema
 
   schema "book_entries" do

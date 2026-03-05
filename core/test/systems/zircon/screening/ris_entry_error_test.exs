@@ -8,8 +8,7 @@ defmodule Systems.Zircon.Screening.RISEntryErrorTest do
       # This is the actual error structure from the production error
       error_data = %{
         "line_number" => 12,
-        "message" =>
-          "Unsupported reference type 'BOOK'. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
+        "message" => "Unsupported reference type 'BOOK'. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
         "type" => "validation_error"
       }
 

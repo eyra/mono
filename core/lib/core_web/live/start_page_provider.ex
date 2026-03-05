@@ -1,10 +1,11 @@
 defmodule CoreWeb.StartPageProvider do
+  @moduledoc false
   @type page() :: map()
   @callback values() :: map()
 
   defp start_pages, do: Application.fetch_env!(:core, :start_pages)
 
-  def pages(), do: start_pages().values()
+  def pages, do: start_pages().values()
   def page(%{creator: true}), do: pages()[:creator]
   def page(_), do: pages()[:member]
 

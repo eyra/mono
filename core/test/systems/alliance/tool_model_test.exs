@@ -1,9 +1,7 @@
 defmodule Systems.Alliance.ToolModelTest do
   use Core.DataCase, async: true
 
-  alias Systems.{
-    Alliance
-  }
+  alias Systems.Alliance
 
   describe "validate_url" do
     for url <-

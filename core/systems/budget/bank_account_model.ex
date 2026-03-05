@@ -1,14 +1,14 @@
 defmodule Systems.Budget.BankAccountModel do
+  @moduledoc false
   use Frameworks.Utility.Schema
-  require Systems.Budget.CurrencyTypes
 
-  alias Ecto.Changeset
   import Frameworks.Utility.EctoHelper
 
-  alias Systems.{
-    Budget,
-    Bookkeeping
-  }
+  alias Ecto.Changeset
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+
+  require Systems.Budget.CurrencyTypes
 
   @icon_type :emoji
   @account_type :bank
@@ -47,9 +47,7 @@ defmodule Systems.Budget.BankAccountModel do
   end
 
   def prepare(bank_account) do
-    currency_changeset =
-      %Budget.CurrencyModel{}
-      |> Budget.CurrencyModel.prepare()
+    currency_changeset = Budget.CurrencyModel.prepare(%Budget.CurrencyModel{})
 
     bank_account
     |> prepare_virtual_icon()
@@ -76,8 +74,7 @@ defmodule Systems.Budget.BankAccountModel do
   end
 
   defp validate_currency(%{changes: %{currency: currency_changeset}} = changeset) do
-    changeset
-    |> Changeset.put_assoc(:currency, Budget.CurrencyModel.validate(currency_changeset))
+    Changeset.put_assoc(changeset, :currency, Budget.CurrencyModel.validate(currency_changeset))
   end
 
   defp validate_currency(changeset), do: changeset
@@ -89,8 +86,7 @@ defmodule Systems.Budget.BankAccountModel do
   def submit(%Changeset{} = changeset) do
     uuid = Ecto.UUID.generate()
 
-    changeset
-    |> Changeset.put_assoc(:account, Bookkeeping.AccountModel.create({:bank, uuid}))
+    Changeset.put_assoc(changeset, :account, Bookkeeping.AccountModel.create({:bank, uuid}))
   end
 
   def to_identifier(name) do

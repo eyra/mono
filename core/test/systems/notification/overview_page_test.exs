@@ -1,7 +1,9 @@
 defmodule Systems.Notification.OverviewPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
+
   alias Systems.Notification.Public
 
   setup [:login_as_creator]

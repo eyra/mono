@@ -1,11 +1,10 @@
 defmodule Systems.Promotion.Test do
   use Core.DataCase, async: true
-  import Frameworks.Signal.TestHelper
-  alias Core.Factories
 
-  alias Systems.{
-    Pool
-  }
+  import Frameworks.Signal.TestHelper
+
+  alias Core.Factories
+  alias Systems.Pool
 
   describe "update/1" do
     setup do

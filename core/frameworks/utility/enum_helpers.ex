@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.EnumHelpers do
+  @moduledoc false
   defmacro match_id(value) do
     quote do
       &(&1.id ==

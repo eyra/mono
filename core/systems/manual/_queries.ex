@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Queries do
+  @moduledoc false
   import Ecto.Query
 
   alias Systems.Manual
@@ -11,11 +12,7 @@ defmodule Systems.Manual.Queries do
   end
 
   def get_by_id!(id) do
-    from(m in Manual.Model,
-      where: m.id == ^id,
-      preload: ^Manual.Model.preload_graph(:down)
-    )
-    |> Core.Repo.one!()
+    Core.Repo.one!(from(m in Manual.Model, where: m.id == ^id, preload: ^Manual.Model.preload_graph(:down)))
   end
 
   def get_chapters(manual_id) do

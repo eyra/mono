@@ -1,11 +1,12 @@
 defmodule Systems.Support.HelpdeskForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Form
 
-  alias Systems.Support
   alias Core.Enums
   alias Frameworks.Pixel.Selector
+  alias Systems.Support
 
   @impl true
   def update(%{id: id, user: user}, socket) do
@@ -32,8 +33,7 @@ defmodule Systems.Support.HelpdeskForm do
     # Create a changeset with empty values to ensure form fields are reset
     empty_attrs = %{title: "", description: "", type: type}
 
-    socket
-    |> assign(
+    assign(socket,
       changeset: Support.Public.prepare_ticket(empty_attrs),
       type: type,
       type_labels: Enums.TicketTypes.labels(type)
@@ -57,17 +57,13 @@ defmodule Systems.Support.HelpdeskForm do
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"ticket_model" => data},
-        %{assigns: %{user: user, type: type}} = socket
-      ) do
-    data = data |> Map.put("type", type)
+  def handle_event("submit", %{"ticket_model" => data}, %{assigns: %{user: user, type: type}} = socket) do
+    data = Map.put(data, "type", type)
 
     socket =
       case Support.Public.create_ticket(user, data) do
         {:ok, _} ->
-          socket |> send_event(:parent, "ticket_created")
+          send_event(socket, :parent, "ticket_created")
 
         {:error, changeset} ->
           assign(socket, :changeset, changeset)

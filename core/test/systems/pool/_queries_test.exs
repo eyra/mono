@@ -2,6 +2,7 @@ defmodule Systems.Pool.QueriesTest do
   use Core.DataCase, async: true
 
   import Systems.Pool.Queries
+
   alias Core.Repo
   alias Systems.Pool
 

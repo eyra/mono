@@ -1,6 +1,7 @@
 defmodule Frameworks.GreenLight.PermissionMapTest do
-  alias Frameworks.GreenLight.PermissionMap
   use ExUnit.Case, async: true
+
+  alias Frameworks.GreenLight.PermissionMap
 
   test "grant and new create the same structure" do
     a = PermissionMap.new(%{view: [:visitor, :member], edit: [:owner, :admin]})
@@ -26,9 +27,7 @@ defmodule Frameworks.GreenLight.PermissionMapTest do
   end
 
   test "grant multiple roles at once" do
-    permission_map =
-      PermissionMap.new()
-      |> PermissionMap.grant(:read_stuff, [:owner, :participant])
+    permission_map = PermissionMap.grant(PermissionMap.new(), :read_stuff, [:owner, :participant])
 
     assert PermissionMap.roles(permission_map, :read_stuff) ==
              MapSet.new([:owner, :participant])

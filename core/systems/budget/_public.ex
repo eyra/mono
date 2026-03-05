@@ -1,24 +1,21 @@
 defmodule Systems.Budget.Public do
+  @moduledoc false
   use Core, :public
-  import Ecto.Query, warn: false
-  import Ecto.Changeset
 
+  import Ecto.Changeset
+  import Ecto.Query, warn: false
   import Systems.Budget.Queries
 
-  require Logger
-
-  alias Ecto.Multi
   alias Core.Repo
-
+  alias Ecto.Multi
   alias Frameworks.Utility.Identifier
-
   alias Systems.Account
+  alias Systems.Account.User
+  alias Systems.Banking
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
-  alias Systems.{
-    Budget,
-    Bookkeeping,
-    Banking
-  }
+  require Logger
 
   defmodule BudgetError do
     @moduledoc false
@@ -26,40 +23,33 @@ defmodule Systems.Budget.Public do
   end
 
   def list(preload \\ []) do
-    Repo.all(Budget.Model) |> Repo.preload(preload)
+    Budget.Model |> Repo.all() |> Repo.preload(preload)
   end
 
-  def list_owned(%Account.User{} = user, preload \\ []) do
+  def list_owned(%User{} = user, preload \\ []) do
     node_ids =
       auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
 
-    from(b in Budget.Model,
-      where: b.auth_node_id in subquery(node_ids),
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(b in Budget.Model, where: b.auth_node_id in subquery(node_ids), preload: ^preload))
   end
 
-  def list_owned_by_currency(
-        %Account.User{} = user,
-        %Budget.CurrencyModel{id: currency_id},
-        preload \\ []
-      ) do
+  def list_owned_by_currency(%User{} = user, %Budget.CurrencyModel{id: currency_id}, preload \\ []) do
     node_ids =
       auth_module().query_node_ids(
         role: :owner,
         principal: user
       )
 
-    from(b in Budget.Model,
-      where: b.auth_node_id in subquery(node_ids),
-      where: b.currency_id == ^currency_id,
-      preload: ^preload
+    Repo.all(
+      from(b in Budget.Model,
+        where: b.auth_node_id in subquery(node_ids),
+        where: b.currency_id == ^currency_id,
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def list_currencies(preload \\ []) do
@@ -69,16 +59,17 @@ defmodule Systems.Budget.Public do
   end
 
   def list_currencies_by_type(type, preload \\ []) do
-    currency_query(type)
+    type
+    |> currency_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_bank_accounts(preload \\ []) do
-    Repo.all(Budget.BankAccountModel) |> Repo.preload(preload)
+    Budget.BankAccountModel |> Repo.all() |> Repo.preload(preload)
   end
 
-  def list_wallets(%Account.User{id: user_id}) do
+  def list_wallets(%User{id: user_id}) do
     Bookkeeping.Public.list_accounts(["wallet", "#{user_id}"])
   end
 
@@ -88,133 +79,105 @@ defmodule Systems.Budget.Public do
     Bookkeeping.Public.list_accounts(["wallet", "#{name}"])
   end
 
-  def list_rewards(%Account.User{id: user_id}, preload \\ []) do
-    from(reward in Budget.RewardModel,
-      where: reward.user_id == ^user_id,
-      preload: ^preload
-    )
-    |> Repo.all()
+  def list_rewards(%User{id: user_id}, preload \\ []) do
+    Repo.all(from(reward in Budget.RewardModel, where: reward.user_id == ^user_id, preload: ^preload))
   end
 
   def get!(id, preload \\ [:fund, :reserve]) when is_integer(id) do
-    from(budget in Budget.Model, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(budget in Budget.Model, preload: ^preload), id)
   end
 
   def get_by_currency!(%Budget.CurrencyModel{id: currency_id}, preload \\ []) do
-    Repo.get_by!(Budget.Model, currency_id: currency_id)
+    Budget.Model
+    |> Repo.get_by!(currency_id: currency_id)
     |> Repo.preload(preload)
   end
 
   def get_by_name(name, preload \\ []) when is_binary(name) do
-    Repo.get_by(Budget.Model, name: name)
+    Budget.Model
+    |> Repo.get_by(name: name)
     |> Repo.preload(preload)
   end
 
   def get_bank_account!(id, preload \\ []) when is_integer(id) do
-    from(bank_account in Budget.BankAccountModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(bank_account in Budget.BankAccountModel, preload: ^preload), id)
   end
 
   def get_currency!(id, preload \\ []) when is_integer(id) do
-    from(currency in Budget.CurrencyModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(currency in Budget.CurrencyModel, preload: ^preload), id)
   end
 
   def get_currency_by_name(name, preload \\ []) when is_binary(name) do
-    Repo.get_by(Budget.CurrencyModel, name: name)
+    Budget.CurrencyModel
+    |> Repo.get_by(name: name)
     |> Repo.preload(preload)
   end
 
   def get_reward!(id, preload \\ [:budget, :deposit, :payment, :user]) do
-    from(reward in Budget.RewardModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(reward in Budget.RewardModel, preload: ^preload), id)
   end
 
   def get_reward(idempotence_key, preload) when is_binary(idempotence_key) do
-    from(reward in Budget.RewardModel,
-      where: reward.idempotence_key == ^idempotence_key,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(reward in Budget.RewardModel, where: reward.idempotence_key == ^idempotence_key, preload: ^preload))
   end
 
-  def get_reward(%Budget.Model{id: budget_id}, %Account.User{id: user_id}, preload \\ []) do
-    from(reward in Budget.RewardModel,
-      where: reward.user_id == ^user_id,
-      where: reward.budget_id == ^budget_id,
-      where: not (is_nil(reward.deposit_id) and is_nil(reward.payment_id)),
-      preload: ^preload
+  def get_reward(%Budget.Model{id: budget_id}, %User{id: user_id}, preload \\ []) do
+    Repo.one(
+      from(reward in Budget.RewardModel,
+        where: reward.user_id == ^user_id,
+        where: reward.budget_id == ^budget_id,
+        where: not (is_nil(reward.deposit_id) and is_nil(reward.payment_id)),
+        preload: ^preload
+      )
     )
-    |> Repo.one()
   end
 
-  def get_wallet_identifier(%Systems.Account.User{} = user, %Budget.CurrencyModel{
-        name: currency_name
-      }),
-      do: get_wallet_identifier(user, currency_name)
+  def get_wallet_identifier(%User{} = user, %Budget.CurrencyModel{name: currency_name}),
+    do: get_wallet_identifier(user, currency_name)
 
-  def get_wallet_identifier(%Systems.Account.User{id: user_id}, currency_name)
-      when is_binary(currency_name) do
+  def get_wallet_identifier(%User{id: user_id}, currency_name) when is_binary(currency_name) do
     {:wallet, currency_name, user_id}
   end
 
   def create_bank_account(name, icon, type, decimal_scale, label_bundle) do
-    Budget.BankAccountModel.create(name, icon, type, decimal_scale, label_bundle)
+    name
+    |> Budget.BankAccountModel.create(icon, type, decimal_scale, label_bundle)
     |> Repo.insert!()
   end
 
   def create_budget(%Budget.CurrencyModel{} = currency, name, icon) do
-    Budget.Model.create(currency, name, icon)
+    currency
+    |> Budget.Model.create(name, icon)
     |> Repo.insert!()
   end
 
-  def create_budget(%Budget.CurrencyModel{} = currency, name, icon, %Account.User{} = owner) do
-    Budget.Model.create(currency, name, icon, owner)
+  def create_budget(%Budget.CurrencyModel{} = currency, name, icon, %User{} = owner) do
+    currency
+    |> Budget.Model.create(name, icon, owner)
     |> Repo.insert!()
   end
 
   def create_currency_and_budget(name, icon, type, decimal_scale, label) do
-    Budget.Model.create(name, icon, type, decimal_scale, label)
+    name
+    |> Budget.Model.create(icon, type, decimal_scale, label)
     |> Repo.insert!()
   end
 
-  def move_wallet_balance(
-        [_ | _] = from,
-        [_ | _] = to,
-        idempotence_key,
-        limit
-      )
-      when is_integer(limit) do
-    Bookkeeping.Public.get_account(from)
+  def move_wallet_balance([_ | _] = from, [_ | _] = to, idempotence_key, limit) when is_integer(limit) do
+    from
+    |> Bookkeeping.Public.get_account()
     |> move_wallet_balance(to, idempotence_key, limit)
   end
 
-  def move_wallet_balance(
-        nil,
-        [_ | _] = _to,
-        idempotence_key,
-        _limit
-      ),
-      do: raise("Unable to move balance: #{idempotence_key}")
+  def move_wallet_balance(nil, [_ | _] = _to, idempotence_key, _limit),
+    do: raise("Unable to move balance: #{idempotence_key}")
 
-  def move_wallet_balance(
-        %{} = from_account,
-        [_ | _] = to,
-        idempotence_key,
-        limit
-      ) do
+  def move_wallet_balance(%{} = from_account, [_ | _] = to, idempotence_key, limit) do
     amount = Bookkeeping.AccountModel.balance(from_account)
     move_wallet_balance(from_account, to, idempotence_key, limit, amount)
   end
 
-  def move_wallet_balance(
-        %{identifier: from},
-        [_ | _] = to,
-        idempotence_key,
-        limit,
-        amount
-      )
+  def move_wallet_balance(%{identifier: from}, [_ | _] = to, idempotence_key, limit, amount)
       when amount > 0 and amount < limit do
     journal_message =
       "Moved #{amount} from account #{Identifier.to_string(from)} to account #{Identifier.to_string(to)}"
@@ -223,16 +186,10 @@ defmodule Systems.Budget.Public do
   end
 
   def move_wallet_balance(_, _, idempotence_key, limit, amount) do
-    Logger.info(
-      "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
-    )
+    Logger.info("Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}")
   end
 
-  def wallet_is_passive?(%{
-        identifier: ["wallet", _, _],
-        balance_credit: balance_credit,
-        balance_debit: balance_debit
-      }) do
+  def wallet_is_passive?(%{identifier: ["wallet", _, _], balance_credit: balance_credit, balance_debit: balance_debit}) do
     balance_credit > 0 and balance_credit == balance_debit
   end
 
@@ -247,13 +204,7 @@ defmodule Systems.Budget.Public do
     |> Repo.commit()
   end
 
-  def create_reward(
-        multi,
-        %Budget.Model{} = budget,
-        amount,
-        user,
-        idempotence_key
-      )
+  def create_reward(multi, %Budget.Model{} = budget, amount, user, idempotence_key)
       when is_integer(amount) and is_binary(idempotence_key) do
     multi
     |> guard_budget_balance(budget, amount)
@@ -261,14 +212,8 @@ defmodule Systems.Budget.Public do
     |> make_deposit()
   end
 
-  defp guard_budget_balance(
-         multi,
-         %Budget.Model{currency: %{type: :legal}} = budget,
-         amount
-       )
-       when is_integer(amount) do
-    multi
-    |> Multi.run(:budget_balance, fn _, _ ->
+  defp guard_budget_balance(multi, %Budget.Model{currency: %{type: :legal}} = budget, amount) when is_integer(amount) do
+    Multi.run(multi, :budget_balance, fn _, _ ->
       if Budget.Model.amount_available(budget) >= amount do
         {:ok, true}
       else
@@ -300,23 +245,22 @@ defmodule Systems.Budget.Public do
   end
 
   def multiply_rewards(%Budget.Model{} = budget, multiplier) when multiplier > 1 do
-    Budget.Public.list_wallets(budget)
+    budget
+    |> Budget.Public.list_wallets()
     |> Enum.map(&multiply_reward(&1, budget, multiplier))
   end
 
   def multiply_rewards(_, multiplier), do: raise("Attempt to multiply rewards by #{multiplier}")
 
   defp multiply_reward(
-         %Bookkeeping.AccountModel{
-           balance_credit: balance_credit,
-           identifier: ["wallet", currency_name, user_id]
-         },
+         %Bookkeeping.AccountModel{balance_credit: balance_credit, identifier: ["wallet", currency_name, user_id]},
          %Budget.Model{} = budget,
          multiplier
        )
        when multiplier > 1 do
     user =
-      String.to_integer(user_id)
+      user_id
+      |> String.to_integer()
       |> Systems.Account.Public.get_user!()
 
     reward_amount = balance_credit * (multiplier - 1)
@@ -326,16 +270,8 @@ defmodule Systems.Budget.Public do
     Budget.Public.payout_reward(idempotence_key)
   end
 
-  defp upsert_reward(
-         multi,
-         %Budget.Model{} = budget,
-         amount,
-         %Account.User{} = user,
-         idempotence_key
-       )
-       when is_integer(amount) do
-    multi
-    |> Multi.run(:reward, fn _, _ ->
+  defp upsert_reward(multi, %Budget.Model{} = budget, amount, %User{} = user, idempotence_key) when is_integer(amount) do
+    Multi.run(multi, :reward, fn _, _ ->
       case Budget.Public.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
         nil -> insert_reward(budget, amount, user, idempotence_key)
         reward -> update_reward(reward, %{amount: amount})
@@ -343,13 +279,7 @@ defmodule Systems.Budget.Public do
     end)
   end
 
-  defp insert_reward(
-         %Budget.Model{} = budget,
-         amount,
-         %Account.User{} = user,
-         idempotence_key
-       )
-       when is_integer(amount) do
+  defp insert_reward(%Budget.Model{} = budget, amount, %User{} = user, idempotence_key) when is_integer(amount) do
     %Budget.RewardModel{}
     |> Budget.RewardModel.changeset(%{
       idempotence_key: idempotence_key,
@@ -369,12 +299,13 @@ defmodule Systems.Budget.Public do
   end
 
   def reward_has_outstanding_deposit?(idempotence_key) do
-    from(reward in Budget.RewardModel,
-      where: reward.idempotence_key == ^idempotence_key,
-      where: not is_nil(reward.deposit_id),
-      where: is_nil(reward.payment_id)
+    Repo.exists?(
+      from(reward in Budget.RewardModel,
+        where: reward.idempotence_key == ^idempotence_key,
+        where: not is_nil(reward.deposit_id),
+        where: is_nil(reward.payment_id)
+      )
     )
-    |> Repo.exists?()
   end
 
   def rollback_deposit(idempotence_key) when is_binary(idempotence_key) do
@@ -406,8 +337,8 @@ defmodule Systems.Budget.Public do
   defp reset_reward(multi, %Budget.RewardModel{attempt: attempt} = reward) do
     next_attempt = attempt + 1
 
-    multi
-    |> Multi.update_all(
+    Multi.update_all(
+      multi,
       :reset_reward,
       fn _ ->
         from(r in Budget.RewardModel,
@@ -422,15 +353,7 @@ defmodule Systems.Budget.Public do
   def make_test_deposit(
         %Budget.Model{
           id: budget_id,
-          currency: %{
-            name: currency_name,
-            bank_account: %{
-              id: bank_account_id,
-              account: %{
-                identifier: bank_account
-              }
-            }
-          },
+          currency: %{name: currency_name, bank_account: %{id: bank_account_id, account: %{identifier: bank_account}}},
           fund: %{identifier: fund}
         },
         %Budget.DepositModel{amount: amount, reference: reference}
@@ -443,8 +366,7 @@ defmodule Systems.Budget.Public do
     amount = String.to_integer(amount)
 
     transaction = %{
-      idempotence_key:
-        "bank_account=#{bank_account_id},budget=#{budget_id},reference=#{reference}",
+      idempotence_key: "bank_account=#{bank_account_id},budget=#{budget_id},reference=#{reference}",
       journal_message: "Transfer #{amount} from #{bank_account} to #{fund}",
       lines: [
         %{
@@ -462,8 +384,7 @@ defmodule Systems.Budget.Public do
   end
 
   def make_deposit(%Multi{} = multi) do
-    multi
-    |> Multi.run(:deposit, fn _, %{reward: reward} ->
+    Multi.run(multi, :deposit, fn _, %{reward: reward} ->
       {:ok, deposit: deposit} = create_deposit_transaction(reward)
       link_deposit_transaction(reward, deposit)
     end)
@@ -495,10 +416,8 @@ defmodule Systems.Budget.Public do
   end
 
   defp create_deposit_transaction(
-         %Budget.RewardModel{
-           amount: amount,
-           budget: %{id: budget_id, name: budget_name, currency: currency} = budget
-         } = reward
+         %Budget.RewardModel{amount: amount, budget: %{id: budget_id, name: budget_name, currency: currency} = budget} =
+           reward
        ) do
     amount_label = Budget.CurrencyModel.label(currency, :en, amount)
     journal_message = "Reserved #{amount_label} on budget #{budget_name} ##{budget_id}"
@@ -512,31 +431,16 @@ defmodule Systems.Budget.Public do
   end
 
   defp create_payment_transaction(%{amount: amount, payment: %{idempotence_key: idempotence_key}}) do
-    Logger.warning(
-      "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-    )
+    Logger.warning("Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}")
 
     {:error, :payment_already_available}
   end
 
-  defp create_payment_transaction(
-         %{
-           deposit: nil,
-           budget: %{
-             fund: %{identifier: fund_id}
-           }
-         } = reward
-       ) do
+  defp create_payment_transaction(%{deposit: nil, budget: %{fund: %{identifier: fund_id}}} = reward) do
     create_payment_transaction(reward, fund_id)
   end
 
-  defp create_payment_transaction(
-         %{
-           budget: %{
-             reserve: %{identifier: reserve_id}
-           }
-         } = reward
-       ) do
+  defp create_payment_transaction(%{budget: %{reserve: %{identifier: reserve_id}}} = reward) do
     create_payment_transaction(reward, reserve_id)
   end
 
@@ -545,11 +449,7 @@ defmodule Systems.Budget.Public do
            idempotence_key: idempotence_key,
            amount: amount,
            user: user,
-           budget: %{
-             id: budget_id,
-             name: budget_name,
-             currency: currency
-           }
+           budget: %{id: budget_id, name: budget_name, currency: currency}
          },
          from_id
        ) do
@@ -581,9 +481,7 @@ defmodule Systems.Budget.Public do
     }
 
     if Bookkeeping.Public.exists?(idempotence_key) do
-      Logger.warning(
-        "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-      )
+      Logger.warning("Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}")
 
       {:error, :payment_already_available}
     else
@@ -597,28 +495,20 @@ defmodule Systems.Budget.Public do
   end
 
   defp revert_deposit(multi, reward) do
-    multi
-    |> Multi.run(:revert_deposit, fn _, _ ->
+    Multi.run(multi, :revert_deposit, fn _, _ ->
       revert_deposit(reward)
     end)
   end
 
   defp revert_deposit(%{deposit: nil}), do: {:error, :deposit_not_available}
 
-  defp revert_deposit(%{payment: payment}) when not is_nil(payment),
-    do: {:error, :payment_already_available}
+  defp revert_deposit(%{payment: payment}) when not is_nil(payment), do: {:error, :payment_already_available}
 
   defp revert_deposit(%{deposit: deposit}), do: revert_deposit(deposit)
 
-  defp revert_deposit(%{
-         lines: lines,
-         idempotence_key: idempotence_key,
-         journal_message: journal_message
-       })
+  defp revert_deposit(%{lines: lines, idempotence_key: idempotence_key, journal_message: journal_message})
        when is_list(lines) do
-    lines =
-      lines
-      |> Enum.map(&revert_deposit_line(&1))
+    lines = Enum.map(lines, &revert_deposit_line(&1))
 
     rollback_entry = %{
       idempotence_key: "[REVERT] #{idempotence_key}",
@@ -629,9 +519,7 @@ defmodule Systems.Budget.Public do
     Bookkeeping.Public.enter(rollback_entry)
   end
 
-  defp revert_deposit_line(
-         %{account: %{identifier: account_id}, debit: debit, credit: credit} = _line
-       ) do
+  defp revert_deposit_line(%{account: %{identifier: account_id}, debit: debit, credit: credit} = _line) do
     %{
       account: account_id,
       debit: credit,
@@ -683,7 +571,7 @@ defmodule Systems.Budget.Public do
       on: b.id == r.budget_id,
       inner_join: c in Budget.CurrencyModel,
       on: c.id == b.currency_id,
-      inner_join: u in Account.User,
+      inner_join: u in User,
       on: u.id == r.user_id,
       where: c.name == ^currency_name and not is_nil(r.deposit_id) and is_nil(r.payment_id),
       select: sum(r.amount)

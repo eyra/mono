@@ -3,51 +3,37 @@ defmodule Systems.Bookkeeping.Public do
   The bookkeeping system.
   """
   use Core, :public
-  alias Core.Repo
-  alias Systems.Bookkeeping.{AccountModel, EntryModel, LineModel}
-  import Ecto.Query
+
   import Ecto.Changeset
+  import Ecto.Query
+
+  alias Core.Repo
   alias Ecto.Multi
+  alias Systems.Bookkeeping.AccountModel
+  alias Systems.Bookkeeping.EntryModel
+  alias Systems.Bookkeeping.LineModel
 
   defdelegate valid_checksum?(identifier, checksum), to: AccountModel
   defdelegate to_identifier(term), to: AccountModel
 
   def exists?(idempotence_key) do
-    from(entry in EntryModel,
-      where: entry.idempotence_key == ^idempotence_key
-    )
-    |> Repo.exists?()
+    Repo.exists?(from(entry in EntryModel, where: entry.idempotence_key == ^idempotence_key))
   end
 
   def account_exists?([_ | _] = identifier) do
-    from(account in AccountModel,
-      where: account.identifier == ^identifier
-    )
-    |> Repo.exists?()
+    Repo.exists?(from(account in AccountModel, where: account.identifier == ^identifier))
   end
 
   def get_account!([_ | _] = identifier, preload \\ []) do
-    from(account in AccountModel,
-      where: account.identifier == ^identifier,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload))
   end
 
   def get_account([_ | _] = identifier, preload \\ []) do
-    from(account in AccountModel,
-      where: account.identifier == ^identifier,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload))
   end
 
   def get_entry(idempotence_key, preload \\ [:lines]) do
-    from(entry in EntryModel,
-      where: entry.idempotence_key == ^idempotence_key,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(entry in EntryModel, where: entry.idempotence_key == ^idempotence_key, preload: ^preload))
   end
 
   def enter(%Multi{} = multi, %{} = entry) do
@@ -101,19 +87,11 @@ defmodule Systems.Bookkeeping.Public do
   end
 
   def list_accounts(account_template) do
-    from(account in AccountModel,
-      where: fragment("?::text[] @> ?", account.identifier, ^account_template)
-    )
-    |> Repo.all()
+    Repo.all(from(account in AccountModel, where: fragment("?::text[] @> ?", account.identifier, ^account_template)))
   end
 
   def create_account!(account) do
-    %AccountModel{
-      identifier: AccountModel.to_identifier(account),
-      balance_debit: 0,
-      balance_credit: 0
-    }
-    |> Repo.insert!()
+    Repo.insert!(%AccountModel{identifier: AccountModel.to_identifier(account), balance_debit: 0, balance_credit: 0})
   end
 
   defp update_records(multi, %{lines: lines} = entry) do
@@ -125,28 +103,23 @@ defmodule Systems.Bookkeeping.Public do
   end
 
   defp validate(multi, lines) when is_list(lines) do
-    multi
-    |> Multi.run(:validate, fn _, _ ->
+    Multi.run(multi, :validate, fn _, _ ->
       with :ok <- validate_entry_balance(lines),
            :ok <- validate_either_credit_or_debit_is_used(lines) do
         {:ok, true}
-      else
-        error -> error
       end
     end)
   end
 
   defp insert_line(multi, %{account: account} = line) do
-    line_name = "line-#{AccountModel.to_identifier(account) |> Enum.join("-")}"
+    line_name = "line-#{account |> AccountModel.to_identifier() |> Enum.join("-")}"
 
-    multi
-    |> Multi.run(line_name, fn repo, %{entry: entry} = changes ->
-      repo.insert(
-        %LineModel{}
-        |> cast(line, [:debit, :credit])
-        |> put_assoc(:account, Map.fetch!(changes, account))
-        |> put_assoc(:entry, entry)
-      )
+    Multi.run(multi, line_name, fn repo, %{entry: entry} = changes ->
+      %LineModel{}
+      |> cast(line, [:debit, :credit])
+      |> put_assoc(:account, Map.fetch!(changes, account))
+      |> put_assoc(:entry, entry)
+      |> repo.insert()
     end)
   end
 
@@ -157,8 +130,8 @@ defmodule Systems.Bookkeeping.Public do
   end
 
   defp insert_entry(multi, entry) do
-    multi
-    |> Multi.insert(
+    Multi.insert(
+      multi,
       :entry,
       %EntryModel{}
       |> cast(entry, [:idempotence_key, :journal_message])
@@ -167,8 +140,7 @@ defmodule Systems.Bookkeeping.Public do
     )
   end
 
-  defp handle_validation_error(%{errors: [idempotence_key: _]}),
-    do: {:error, :idempotence_key_conflict}
+  defp handle_validation_error(%{errors: [idempotence_key: _]}), do: {:error, :idempotence_key_conflict}
 
   defp handle_validation_error(error) when is_atom(error), do: {:error, error}
   defp handle_validation_error(_), do: {:error, :unexpected_entity_error}
@@ -183,14 +155,10 @@ defmodule Systems.Bookkeeping.Public do
     debit = debit(line)
     credit = credit(line)
 
-    multi
-    |> Multi.insert(
+    Multi.insert(
+      multi,
       account,
-      %AccountModel{
-        identifier: AccountModel.to_identifier(account),
-        balance_debit: debit,
-        balance_credit: credit
-      },
+      %AccountModel{identifier: AccountModel.to_identifier(account), balance_debit: debit, balance_credit: credit},
       conflict_target: :identifier,
       on_conflict: [inc: [balance_debit: debit, balance_credit: credit]]
     )

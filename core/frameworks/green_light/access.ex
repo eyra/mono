@@ -5,6 +5,6 @@ defmodule Frameworks.GreenLight.Access do
   alias Frameworks.GreenLight.PermissionMap
 
   def can?(permission_map, roles, permission) do
-    permission_map |> PermissionMap.allowed?(permission, roles)
+    PermissionMap.allowed?(permission_map, permission, roles)
   end
 end

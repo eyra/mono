@@ -3,14 +3,17 @@ defmodule Core.WebPush do
   The WebPush context.
   """
 
-  require Logger
-  import Ecto.Query, warn: false
   import Ecto.Changeset
+  import Ecto.Query, warn: false
+
   alias Core.Repo
-  alias Systems.Account.User
   alias Core.WebPush.PushSubscription
+  alias Systems.Account.User
+
+  require Logger
 
   defmodule Keys do
+    @moduledoc false
     use Ecto.Schema
 
     embedded_schema do
@@ -26,6 +29,7 @@ defmodule Core.WebPush do
   end
 
   defmodule Subscription do
+    @moduledoc false
     use Ecto.Schema
 
     embedded_schema do
@@ -54,16 +58,18 @@ defmodule Core.WebPush do
   end
 
   def register(%User{} = user, subscription) do
-    with changeset <- Subscription.changeset(subscription),
-         {:ok, sub} <- apply_action(changeset, :update),
-         changeset <-
-           PushSubscription.changeset(%PushSubscription{}, %{
-             user: user,
-             endpoint: sub.endpoint,
-             expiration_time: sub.expirationTime,
-             auth: sub.keys.auth,
-             p256dh: sub.keys.p256dh
-           }) do
+    changeset = Subscription.changeset(subscription)
+
+    with {:ok, sub} <- apply_action(changeset, :update) do
+      changeset =
+        PushSubscription.changeset(%PushSubscription{}, %{
+          user: user,
+          endpoint: sub.endpoint,
+          expiration_time: sub.expirationTime,
+          auth: sub.keys.auth,
+          p256dh: sub.keys.p256dh
+        })
+
       Repo.insert(changeset,
         on_conflict: :replace_all,
         conflict_target: :endpoint

@@ -1,7 +1,6 @@
 defmodule CoreWeb.APNSDeviceTokenController do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias Core.APNS
 
@@ -9,7 +8,7 @@ defmodule CoreWeb.APNSDeviceTokenController do
 
   def create(%{assigns: %{current_user: user}} = conn, %{"device_token" => device_token}) do
     with {:ok, _} <- APNS.register(user, device_token) do
-      conn |> resp(:ok, "")
+      resp(conn, :ok, "")
     end
   end
 end

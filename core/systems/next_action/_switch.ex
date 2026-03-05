@@ -1,20 +1,15 @@
 defmodule Systems.NextAction.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
-  alias Systems.{
-    NextAction
-  }
+  alias Systems.NextAction
 
   def intercept({:next_action, :created}, %{user: user, action: _action, from_pid: from_pid}) do
     update(NextAction.OverviewPage, user, from_pid)
     :ok
   end
 
-  def intercept({:next_action, :cleared}, %{
-        user: user,
-        action_type: _action_type,
-        from_pid: from_pid
-      }) do
+  def intercept({:next_action, :cleared}, %{user: user, action_type: _action_type, from_pid: from_pid}) do
     update(NextAction.OverviewPage, user, from_pid)
     :ok
   end

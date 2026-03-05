@@ -4,20 +4,20 @@ defmodule Systems.Account.SignupPage do
   """
   use CoreWeb, :live_view
 
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+
+  alias Frameworks.Signal
+  alias Frameworks.Utility.Params
+  alias Systems.Account
+  alias Systems.Account.User
+  alias Systems.Account.UserForm
+
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  alias Systems.Account
-  alias Systems.Account.UserForm
-  alias Systems.Account.User
-  alias Frameworks.Utility.Params
-  alias Frameworks.Signal
 
   @privacy_assignments %{
     "next_privacy_policy_accepted" => %{
@@ -60,11 +60,7 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_event(
-        "signup",
-        %{"user" => user_params},
-        %{assigns: assigns} = socket
-      ) do
+  def handle_event("signup", %{"user" => user_params}, %{assigns: assigns} = socket) do
     user_params = Map.put(user_params, "creator", assigns.creator?)
 
     with :ok <- validate_privacy_policies(assigns),
@@ -83,20 +79,11 @@ defmodule Systems.Account.SignupPage do
   def handle_event("form_change", %{"user" => attrs}, socket) do
     changeset = Account.Public.change_user_registration(%User{}, attrs)
 
-    {:noreply,
-     socket
-     |> assign(
-       changeset: changeset,
-       next_privacy_policy_error: nil,
-       panl_privacy_policy_error: nil
-     )}
+    {:noreply, assign(socket, changeset: changeset, next_privacy_policy_error: nil, panl_privacy_policy_error: nil)}
   end
 
   @impl true
-  def handle_info(
-        {"active_item_ids", %{active_item_ids: active_item_ids} = payload},
-        socket
-      ) do
+  def handle_info({"active_item_ids", %{active_item_ids: active_item_ids} = payload}, socket) do
     normalized_ids = normalize_ids(active_item_ids)
     component_id = component_id_from_payload(payload)
 

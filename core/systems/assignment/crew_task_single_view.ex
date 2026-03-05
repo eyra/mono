@@ -5,7 +5,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
   alias Systems.Assignment
   alias Systems.Crew
 
-  def dependencies(), do: [:assignment_id, :current_user, :panel_info]
+  def dependencies, do: [:assignment_id, :current_user, :panel_info]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, [
@@ -16,7 +16,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> maybe_start_task()}
+    {:ok, maybe_start_task(socket)}
   end
 
   defp maybe_start_task(%{assigns: %{vm: %{work_item: {_, task} = work_item}}} = socket) do
@@ -24,7 +24,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
       Assignment.Public.start_task(task)
     end
 
-    socket |> assign(work_item: work_item)
+    assign(socket, work_item: work_item)
   end
 
   defp maybe_start_task(socket), do: socket
@@ -38,7 +38,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   @impl true
   def handle_tool_completed(socket) do
-    socket |> complete_task()
+    complete_task(socket)
   end
 
   @impl true
@@ -51,7 +51,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   @impl true
   def handle_event("complete_task", _, socket) do
-    {:noreply, socket |> complete_task()}
+    {:noreply, complete_task(socket)}
   end
 
   @impl true
@@ -61,12 +61,10 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   # Private
 
-  defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket)
-       when not is_nil(task) do
+  defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket) when not is_nil(task) do
     {:ok, _} = Crew.Public.complete_task(task)
 
-    socket
-    |> publish_event(:work_done)
+    publish_event(socket, :work_done)
   end
 
   defp complete_task(socket), do: socket

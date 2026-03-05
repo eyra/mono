@@ -3,22 +3,19 @@ defmodule Systems.Promotion.Public do
 
   """
   use Core, :public
+
   import Ecto.Query, warn: false
 
   alias Core.Repo
-  alias Systems.Promotion
   alias Systems.Pool
+  alias Systems.Promotion
 
   def list do
     Repo.all(Promotion.Model)
   end
 
   def get!(id, preload \\ []) do
-    from(c in Promotion.Model,
-      where: c.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(c in Promotion.Model, where: c.id == ^id, preload: ^preload))
   end
 
   def get(id), do: Repo.get(Promotion, id)
@@ -46,24 +43,19 @@ defmodule Systems.Promotion.Public do
   end
 
   def ready?(%Promotion.Model{} = promotion) do
-    changeset =
-      %Promotion.Model{}
-      |> Promotion.Model.operational_changeset(Map.from_struct(promotion))
+    changeset = Promotion.Model.operational_changeset(%Promotion.Model{}, Map.from_struct(promotion))
 
     changeset.valid?
   end
 
   def has_submission?(promotion_id, pool_id) do
-    from(s in Pool.SubmissionModel,
-      where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id
-    )
-    |> Repo.exists?()
+    Repo.exists?(from(s in Pool.SubmissionModel, where: s.promotion_id == ^promotion_id and s.pool_id == ^pool_id))
   end
 end
 
 defimpl Core.Persister, for: Systems.Promotion.Model do
-  alias Frameworks.Signal
   alias Core.Repo
+  alias Frameworks.Signal
 
   def save(_promotion, changeset) do
     case Repo.update(changeset) do

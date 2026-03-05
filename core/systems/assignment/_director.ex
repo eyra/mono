@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.Director do
+  @moduledoc false
   @behaviour Frameworks.Concept.ToolDirector
 
   alias Systems.Assignment
@@ -31,7 +32,8 @@ defmodule Systems.Assignment.Director do
     assignment = Assignment.Public.get_by_tool(tool)
 
     task =
-      Assignment.Private.task_identifier(assignment, item, member)
+      assignment
+      |> Assignment.Private.task_identifier(item, member)
       |> then(&Assignment.Public.get_task(tool, &1))
 
     task

@@ -1,4 +1,5 @@
 defmodule Systems.Admin.ConfigPage do
+  @moduledoc false
   use Systems.Content.Composer, :tabbar_page
 
   @impl true
@@ -9,7 +10,7 @@ defmodule Systems.Admin.ConfigPage do
   @impl true
   def mount(params, _session, socket) do
     initial_tab = Map.get(params, "tab")
-    {:ok, socket |> assign(initial_tab: initial_tab)}
+    {:ok, assign(socket, initial_tab: initial_tab)}
   end
 
   @impl true

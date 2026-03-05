@@ -1,13 +1,12 @@
 defmodule Next.Account.SessionController do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Account
-  alias Frameworks.Utility.Params
   alias Frameworks.Signal
+  alias Frameworks.Utility.Params
+  alias Systems.Account
 
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 

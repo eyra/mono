@@ -1,9 +1,10 @@
 defmodule Frameworks.Pixel.FileSelector do
+  @moduledoc false
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.LoadingSpinner
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.LoadingSpinner
+  alias Frameworks.Pixel.Text
 
   attr(:id, :string, required: true)
   attr(:filename, :string, default: nil)

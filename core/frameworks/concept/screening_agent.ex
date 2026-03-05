@@ -1,6 +1,7 @@
 defmodule Frameworks.Concept.ScreeningAgent do
-  alias Systems.Ontology
+  @moduledoc false
   alias Systems.Annotation
+  alias Systems.Ontology
   alias Systems.Paper
 
   @type internal_id :: String.t()

@@ -1,5 +1,6 @@
 defmodule CoreWeb.Live.User.SignupPage.Test do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

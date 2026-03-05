@@ -14,7 +14,7 @@ defmodule CoreWeb.FileUploader do
   @optional_callbacks file_upload_start: 2, file_upload_progress: 2, pre_process_file: 1
 
   def get_upload_path(filename) do
-    unless Regex.match?(@allowed_filename_pattern, filename) do
+    if !Regex.match?(@allowed_filename_pattern, filename) do
       throw(:invalid_filename)
     end
 
@@ -33,8 +33,7 @@ defmodule CoreWeb.FileUploader do
       def init_file_uploader(%{assigns: %{uploads: _uploads}} = socket, _key), do: socket
 
       def init_file_uploader(socket, key) do
-        socket
-        |> allow_upload(key,
+        allow_upload(socket, key,
           accept: unquote(accept),
           progress: &handle_progress/3,
           max_file_size: get_max_file_size(),
@@ -42,26 +41,24 @@ defmodule CoreWeb.FileUploader do
         )
       end
 
-      def get_max_file_size() do
+      def get_max_file_size do
         config = Application.fetch_env!(:core, CoreWeb.FileUploader)
         Keyword.fetch!(config, :max_file_size)
       end
 
-      def handle_progress(
-            _key,
-            %{uuid: upload_entry_id, progress: progress, client_name: client_name} = entry,
-            socket
-          ) do
+      def handle_progress(_key, %{uuid: upload_entry_id, progress: progress, client_name: client_name} = entry, socket) do
         socket =
-          if upload_entry_id != Map.get(socket.assigns, :upload_entry_id) do
-            if function_exported?(__MODULE__, :file_upload_start, 2) do
-              apply(__MODULE__, :file_upload_start, [socket, {client_name, progress}])
-            else
-              socket
-            end
-            |> assign(upload_entry_id: upload_entry_id)
-          else
+          if upload_entry_id == Map.get(socket.assigns, :upload_entry_id) do
             socket
+          else
+            if_result =
+              if function_exported?(__MODULE__, :file_upload_start, 2) do
+                apply(__MODULE__, :file_upload_start, [socket, {client_name, progress}])
+              else
+                socket
+              end
+
+            assign(if_result, upload_entry_id: upload_entry_id)
           end
 
         socket =
@@ -74,7 +71,7 @@ defmodule CoreWeb.FileUploader do
         socket =
           if entry.done? do
             upload_result = consume_file(socket, entry)
-            socket |> process_file(upload_result)
+            process_file(socket, upload_result)
           else
             socket
           end

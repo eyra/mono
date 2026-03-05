@@ -1,23 +1,23 @@
 defmodule Systems.Workflow.ToolRefModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
-  require Logger
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Concept
+  import Ecto.Changeset
 
-  alias Systems.Workflow
-  alias Systems.Document
+  alias Frameworks.Concept
   alias Systems.Alliance
-  alias Systems.Lab
-  alias Systems.Manual
+  alias Systems.Document
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Lab
+  alias Systems.Manual
+  alias Systems.Workflow
   alias Systems.Zircon
+
+  require Logger
 
   @tools [
     :alliance_tool,
@@ -57,8 +57,7 @@ defmodule Systems.Workflow.ToolRefModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do: preload_graph(@tools)
+  def preload_graph(:down), do: preload_graph(@tools)
 
   def preload_graph(tool_id_field) when is_atom(tool_id_field) do
     if Enum.member?(@tools, tool_id_field) do
@@ -101,8 +100,7 @@ defmodule Systems.Workflow.ToolRefModel do
   def tool_id_field(tool), do: String.to_existing_atom("#{Concept.ToolModel.key(tool)}_tool_id")
 
   def tool(tool_ref) do
-    @tools
-    |> Enum.reduce(nil, fn tool, acc ->
+    Enum.reduce(@tools, nil, fn tool, acc ->
       tool = Map.get(tool_ref, tool)
 
       case tool do
@@ -112,11 +110,9 @@ defmodule Systems.Workflow.ToolRefModel do
     end)
   end
 
-  def tag(%Workflow.ToolRefModel{special: :questionnaire}),
-    do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
+  def tag(%Workflow.ToolRefModel{special: :questionnaire}), do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
 
-  def tag(%Workflow.ToolRefModel{special: :graphite}),
-    do: dgettext("eyra-project", "tool_ref.tag.graphite")
+  def tag(%Workflow.ToolRefModel{special: :graphite}), do: dgettext("eyra-project", "tool_ref.tag.graphite")
 
   def tag(%Workflow.ToolRefModel{special: _special}) do
     dgettext("eyra-project", "tool_ref.tag.default")

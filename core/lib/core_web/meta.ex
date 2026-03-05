@@ -1,4 +1,5 @@
 defmodule CoreWeb.Meta do
+  @moduledoc false
   import Plug.Conn
 
   def fetch_meta_info(conn, _opts) do

@@ -1,9 +1,11 @@
 defmodule AuthorizationTest do
+  use Core.DataCase
+
   alias Core.Authorization
   alias Core.Factories
-  use Core.DataCase
-  alias Systems.Account.User
   alias Frameworks.GreenLight.Principal
+  alias Systems.Account.User
+  alias Systems.Alliance.CallbackPage
 
   test "principal returns `visitor` for nil users" do
     assert Principal.id(nil) == nil
@@ -91,13 +93,13 @@ defmodule AuthorizationTest do
   end
 
   test "can_access?/3 fail for entity == nil" do
-    assert Authorization.can_access?(%User{id: 1}, nil, Systems.Alliance.CallbackPage) == false
+    assert Authorization.can_access?(%User{id: 1}, nil, CallbackPage) == false
   end
 
   test "can_access?/3 fail for entity without roles" do
     {:ok, node_id} = Authorization.create_node()
 
-    assert Authorization.can_access?(%User{id: 1}, node_id, Systems.Alliance.CallbackPage) ==
+    assert Authorization.can_access?(%User{id: 1}, node_id, CallbackPage) ==
              false
   end
 
@@ -105,7 +107,7 @@ defmodule AuthorizationTest do
     principal = %User{id: 1}
     {:ok, node_id} = Authorization.create_node()
     Authorization.assign_role(principal, node_id, :owner)
-    assert Authorization.can_access?(principal, node_id, Systems.Alliance.CallbackPage) == true
+    assert Authorization.can_access?(principal, node_id, CallbackPage) == true
   end
 
   test "link/1 succeeds tuple with parent/child" do
@@ -120,7 +122,7 @@ defmodule AuthorizationTest do
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Authorization.Node, child.id) |> Repo.preload(:parent)
+           } = Authorization.Node |> Repo.get!(child.id) |> Repo.preload(:parent)
   end
 
   test "link/1 succeeds tuple with parent/childs" do
@@ -136,7 +138,7 @@ defmodule AuthorizationTest do
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Authorization.Node, child1.id) |> Repo.preload(:parent)
+           } = Authorization.Node |> Repo.get!(child1.id) |> Repo.preload(:parent)
 
     assert %Authorization.Node{
              id: ^child_id2,
@@ -144,7 +146,7 @@ defmodule AuthorizationTest do
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Authorization.Node, child2.id) |> Repo.preload(:parent)
+           } = Authorization.Node |> Repo.get!(child2.id) |> Repo.preload(:parent)
   end
 
   test "link/1 succeeds tuple with parent/tuple-list" do
@@ -164,7 +166,7 @@ defmodule AuthorizationTest do
                  parent_id: nil
                }
              }
-           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Authorization.Node |> Repo.get!(child_a_a.id) |> Repo.preload(parent: [:parent])
 
     assert %Authorization.Node{
              id: ^child_id_a_b,
@@ -175,7 +177,7 @@ defmodule AuthorizationTest do
                  parent_id: nil
                }
              }
-           } = Repo.get!(Authorization.Node, child_a_b.id) |> Repo.preload(parent: [:parent])
+           } = Authorization.Node |> Repo.get!(child_a_b.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-list with nil value" do
@@ -194,7 +196,7 @@ defmodule AuthorizationTest do
                  parent_id: nil
                }
              }
-           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Authorization.Node |> Repo.get!(child_a_a.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-item" do
@@ -213,7 +215,7 @@ defmodule AuthorizationTest do
                  parent_id: nil
                }
              }
-           } = Repo.get!(Authorization.Node, child_a_a.id) |> Repo.preload(parent: [:parent])
+           } = Authorization.Node |> Repo.get!(child_a_a.id) |> Repo.preload(parent: [:parent])
   end
 
   test "link/1 succeeds tuple with parent/tuple-item with nil value" do
@@ -228,6 +230,6 @@ defmodule AuthorizationTest do
                id: ^parent_id,
                parent_id: nil
              }
-           } = Repo.get!(Authorization.Node, child_a.id) |> Repo.preload(parent: [:parent])
+           } = Authorization.Node |> Repo.get!(child_a.id) |> Repo.preload(parent: [:parent])
   end
 end

@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Private do
+  @moduledoc false
   require Logger
 
   def merge(_redirect_url, _user_info, extra_query \\ %{})
@@ -6,8 +7,7 @@ defmodule Systems.Affiliate.Private do
   def merge("", _user_info, _extra_query), do: {:error, :redirect_url_missing}
   def merge(redirect_url, %{info: info}, extra_query), do: merge(redirect_url, info, extra_query)
 
-  def merge(redirect_url, info, extra_query)
-      when is_binary(redirect_url) and (is_binary(info) or is_nil(info)) do
+  def merge(redirect_url, info, extra_query) when is_binary(redirect_url) and (is_binary(info) or is_nil(info)) do
     url =
       redirect_url
       |> URI.parse()
@@ -19,11 +19,11 @@ defmodule Systems.Affiliate.Private do
   end
 
   def merge_query(%URI{query: nil} = url, %{} = query) do
-    merge_query(%URI{url | query: ""}, query)
+    merge_query(%{url | query: ""}, query)
   end
 
   def merge_query(%URI{query: old_query} = url, %{} = query) do
-    %URI{
+    %{
       url
       | query:
           old_query
@@ -39,8 +39,7 @@ defmodule Systems.Affiliate.Private do
     Jason.decode!(json_string)
   end
 
-  def callback(%{affiliate: affiliate}, user_info, event),
-    do: callback(affiliate, user_info, event)
+  def callback(%{affiliate: affiliate}, user_info, event), do: callback(affiliate, user_info, event)
 
   def callback(%{callback_url: nil}, _user_info, _event), do: {:error, :callback_url_missing}
   def callback(%{callback_url: ""}, _user_info, _event), do: {:error, :callback_url_missing}

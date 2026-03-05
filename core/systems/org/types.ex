@@ -19,6 +19,6 @@ defmodule Systems.Org.Types do
   def filter(organisations, []), do: organisations
 
   def filter(organisations, filters) do
-    organisations |> Enum.filter(&(&1.type in filters))
+    Enum.filter(organisations, &(&1.type in filters))
   end
 end

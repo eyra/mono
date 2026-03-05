@@ -1,14 +1,18 @@
 defmodule Systems.Support.TicketModel do
+  @moduledoc false
   use Ecto.Schema
+  use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Changeset
-  require Core.Enums.TicketTypes
+
+  alias Core.Enums.TicketTypes
   alias Systems.Account.User
 
-  use Gettext, backend: CoreWeb.Gettext
+  require TicketTypes
 
   schema "helpdesk_tickets" do
     belongs_to(:user, User)
-    field(:type, Ecto.Enum, values: Core.Enums.TicketTypes.schema_values())
+    field(:type, Ecto.Enum, values: TicketTypes.schema_values())
     field(:description, :string)
     field(:title, :string)
     field(:completed_at, :utc_datetime)
@@ -21,12 +25,11 @@ defmodule Systems.Support.TicketModel do
   end
 
   def change_type(%Ecto.Changeset{} = changeset, type) when is_binary(type) do
-    changeset |> put_change(:type, type)
+    put_change(changeset, :type, type)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required([:title, :description, :type])
+    validate_required(changeset, [:title, :description, :type])
   end
 
   def tag(ticket) do

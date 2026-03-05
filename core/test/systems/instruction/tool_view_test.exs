@@ -1,10 +1,12 @@
 defmodule Systems.Instruction.ToolViewTest do
   use CoreWeb.ConnCase, async: false
   use Gettext, backend: CoreWeb.Gettext
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Instruction
   alias Systems.Workflow
 
@@ -23,9 +25,9 @@ defmodule Systems.Instruction.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{instruction_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/instruction/tool")
+      conn = Map.put(conn, :request_path, "/instruction/tool")
 
-      live_context = Frameworks.Concept.LiveContext.new(%{tool_ref: tool_ref})
+      live_context = LiveContext.new(%{tool_ref: tool_ref})
 
       session = %{"live_context" => live_context}
 
@@ -51,9 +53,9 @@ defmodule Systems.Instruction.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{instruction_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/instruction/tool")
+      conn = Map.put(conn, :request_path, "/instruction/tool")
 
-      live_context = Frameworks.Concept.LiveContext.new(%{tool_ref: tool_ref})
+      live_context = LiveContext.new(%{tool_ref: tool_ref})
 
       session = %{"live_context" => live_context}
 
@@ -77,16 +79,16 @@ defmodule Systems.Instruction.ToolViewTest do
     end
 
     test "handles done event", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/instruction/tool")
+      conn = Map.put(conn, :request_path, "/instruction/tool")
 
-      live_context = Frameworks.Concept.LiveContext.new(%{tool_ref: tool_ref})
+      live_context = LiveContext.new(%{tool_ref: tool_ref})
 
       session = %{"live_context" => live_context}
 
       {:ok, view, _html} = live_isolated(conn, Instruction.ToolView, session: session)
 
       # Send done event
-      html = view |> render_click("done")
+      html = render_click(view, "done")
 
       # Verify view still renders (event was handled)
       assert html =~ dgettext("eyra-ui", "done.button")

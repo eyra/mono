@@ -1,7 +1,9 @@
 defmodule Systems.Org.ItemView do
   use CoreWeb, :html
-  alias Frameworks.Pixel.Panel
+
   import Frameworks.Pixel.Tag
+
+  alias Frameworks.Pixel.Panel
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)

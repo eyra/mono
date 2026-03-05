@@ -1,10 +1,12 @@
 defmodule Systems.Rate.Server do
+  @moduledoc false
   use GenServer
-  require Logger
 
-  alias Systems.Rate.Quota, as: Quota
-  alias Systems.Rate.LeakyBucketState, as: State
   alias Systems.Rate.LeakyBucketAlgorithm, as: Algorithm
+  alias Systems.Rate.LeakyBucketState, as: State
+  alias Systems.Rate.Quota, as: Quota
+
+  require Logger
 
   # PUBLIC API
 
@@ -24,12 +26,13 @@ defmodule Systems.Rate.Server do
     prune_interval = Keyword.get(args, :prune_interval, 60 * 60 * 1000)
 
     quotas =
-      Keyword.get(args, :quotas, [])
+      args
+      |> Keyword.get(:quotas, [])
       |> Enum.map(&Quota.init(&1))
 
     Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
-    {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
+    {:ok, prune_interval |> State.init(quotas) |> schedule_prune()}
   end
 
   @impl true
@@ -60,13 +63,7 @@ defmodule Systems.Rate.Server do
     Enum.map_join(quotas, "\n", &format_quota/1)
   end
 
-  defp format_quota(%Quota{
-         service: service,
-         limit: limit,
-         unit: unit,
-         window: window,
-         scope: scope
-       }) do
+  defp format_quota(%Quota{service: service, limit: limit, unit: unit, window: window, scope: scope}) do
     "  - #{service}: #{limit} #{unit}/#{window} (#{scope})"
   end
 end

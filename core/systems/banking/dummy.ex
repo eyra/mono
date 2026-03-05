@@ -1,6 +1,9 @@
 defmodule Systems.Banking.Dummy do
-  use GenServer
+  @moduledoc false
   @behaviour Systems.Banking.Backend
+
+  use GenServer
+
   @payment_batch_size 8
 
   def start_link(account) do
@@ -36,7 +39,7 @@ defmodule Systems.Banking.Dummy do
 
     payments = GenServer.call(__MODULE__, :get_payments)
 
-    batch = payments |> Enum.slice(payment_offset, @payment_batch_size)
+    batch = Enum.slice(payments, payment_offset, @payment_batch_size)
 
     %{
       has_more?: Enum.count(payments) > payment_offset + @payment_batch_size,

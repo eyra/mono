@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.DeclinedView do
   use CoreWeb, :live_component
-
   use Gettext, backend: CoreWeb.Gettext
 
   @impl true
@@ -10,7 +9,7 @@ defmodule Systems.Assignment.DeclinedView do
 
     {
       :ok,
-      socket |> assign(body: body, title: title)
+      assign(socket, body: body, title: title)
     }
   end
 

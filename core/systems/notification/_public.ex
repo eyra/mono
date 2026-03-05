@@ -8,10 +8,14 @@ defmodule Systems.Notification.Public do
 
   """
   use Core, :public
+
   import Ecto.Query, warn: false
+
   alias Core.Repo
-  alias Systems.Notification.{Box, Model, Log}
   alias Frameworks.Signal
+  alias Systems.Notification.Box
+  alias Systems.Notification.Log
+  alias Systems.Notification.Model
 
   def notify(%Box{id: box_id} = box, %{} = notification_data) do
     with {:ok, _} <-
@@ -54,7 +58,8 @@ defmodule Systems.Notification.Public do
   end
 
   def list(user) do
-    owned_notifications(user)
+    user
+    |> owned_notifications()
     |> where([n], n.status != :archived)
     |> select([n], %{id: n.id, title: n.title, status: n.status})
     |> order_by([n], desc: n.id)
@@ -78,11 +83,9 @@ defmodule Systems.Notification.Public do
   end
 
   def marked_as_notified?(%{__struct__: type, id: id}, signal) do
-    from(l in Log,
-      where:
-        l.item_type == ^to_string(type) and l.item_id == ^id and l.signal == ^to_string(signal)
+    Repo.exists?(
+      from(l in Log, where: l.item_type == ^to_string(type) and l.item_id == ^id and l.signal == ^to_string(signal))
     )
-    |> Repo.exists?()
   end
 
   def get_or_create_box(user) do

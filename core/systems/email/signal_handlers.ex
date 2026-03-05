@@ -1,8 +1,11 @@
 defmodule Core.Mailer.SignalHandlers do
+  @moduledoc false
   use Core, :auth
   use Frameworks.Signal.Handler
   use Bamboo.Phoenix, template: Systems.Email.EmailHTML
+
   import Core.FeatureFlags
+
   alias Systems.Email
   alias Systems.Notification.Box
 

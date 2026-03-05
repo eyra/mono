@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Separator do
+  @moduledoc false
   use CoreWeb, :html
 
   attr(:type, :atom, required: true)

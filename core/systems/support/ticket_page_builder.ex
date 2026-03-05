@@ -1,5 +1,8 @@
 defmodule Systems.Support.TicketPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
+
+  alias CoreWeb.UI.Timestamp
   alias Systems.Support
 
   def view_model(ticket, _assigns) do
@@ -39,28 +42,18 @@ defmodule Systems.Support.TicketPageBuilder do
 
   defp get_timestamp(%{updated_at: updated_at}) do
     updated_at
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
+    |> Timestamp.apply_timezone()
+    |> Timestamp.humanize()
   end
 
   defp to_member(%{
          id: id,
          title: title,
-         user: %{
-           email: email,
-           creator: creator,
-           profile: %{
-             fullname: fullname,
-             photo_url: photo_url
-           },
-           features: features
-         }
+         user: %{email: email, creator: creator, profile: %{fullname: fullname, photo_url: photo_url}, features: features}
        }) do
     role =
       if creator do
         dgettext("eyra-admin", "role.creator")
-      else
-        nil
       end
 
     action = %{type: :http_get, to: "mailto:#{email}?subject=Re: [##{id}] #{title}"}

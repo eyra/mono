@@ -2,12 +2,13 @@ defmodule Systems.Desktop.View do
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Content
+
   alias Frameworks.Pixel.Text
   alias Systems.NextAction
 
   @impl true
   def update(%{vm: vm}, socket) do
-    {:ok, socket |> assign(vm: vm)}
+    {:ok, assign(socket, vm: vm)}
   end
 
   @impl true

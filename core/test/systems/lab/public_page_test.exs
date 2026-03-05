@@ -1,5 +1,6 @@
 defmodule Systems.Lab.PublicPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -11,7 +12,7 @@ defmodule Systems.Lab.PublicPageTest do
          time_slots: [
            %{
              location: Faker.Lorem.sentence(),
-             start_time: Faker.DateTime.forward(50) |> DateTime.truncate(:second)
+             start_time: 50 |> Faker.DateTime.forward() |> DateTime.truncate(:second)
            }
          ]
        })}

@@ -1,3 +1,5 @@
+alias Core.WebPush.MockBackend
+
 require Promox
 
 # Start Wallaby for feature tests
@@ -15,8 +17,8 @@ Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
 
-Mox.defmock(Core.WebPush.MockBackend, for: Core.WebPush.Backend)
-Application.put_env(:core, :web_push_backend, Core.WebPush.MockBackend)
+Mox.defmock(MockBackend, for: Core.WebPush.Backend)
+Application.put_env(:core, :web_push_backend, MockBackend)
 
 Mox.defmock(Core.APNS.MockBackend, for: Core.APNS.Backend)
 Application.put_env(:core, :apns_backend, Core.APNS.MockBackend)

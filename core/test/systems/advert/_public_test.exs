@@ -2,13 +2,12 @@ defmodule Systems.Advert.PublicTest do
   use Core.DataCase
 
   describe "assignments" do
+    alias Core.Factories
+    alias CoreWeb.UI.Timestamp
     alias Systems.Advert
-    alias Systems.Crew
     alias Systems.Bookkeeping
     alias Systems.Budget
-
-    alias CoreWeb.UI.Timestamp
-    alias Core.Factories
+    alias Systems.Crew
 
     setup do
       currency = Budget.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -47,7 +46,7 @@ defmodule Systems.Advert.PublicTest do
       budget: budget,
       user: user
     } do
-      schedule_end = yesterday() |> Timestamp.format_user_input_date()
+      schedule_end = Timestamp.format_user_input_date(yesterday())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(user, :accepted, 1, budget, nil, schedule_end)
@@ -63,8 +62,8 @@ defmodule Systems.Advert.PublicTest do
       budget: budget,
       user: user
     } do
-      schedule_start = tomorrow() |> Timestamp.format_user_input_date()
-      schedule_end = next_week() |> Timestamp.format_user_input_date()
+      schedule_start = Timestamp.format_user_input_date(tomorrow())
+      schedule_end = Timestamp.format_user_input_date(next_week())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(
@@ -100,7 +99,7 @@ defmodule Systems.Advert.PublicTest do
       budget: budget,
       user: user
     } do
-      schedule_end = yesterday() |> Timestamp.format_user_input_date()
+      schedule_end = Timestamp.format_user_input_date(yesterday())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(user, :accepted, 1, budget, nil, schedule_end)
@@ -116,8 +115,8 @@ defmodule Systems.Advert.PublicTest do
       budget: budget,
       user: user
     } do
-      schedule_start = tomorrow() |> Timestamp.format_user_input_date()
-      schedule_end = next_week() |> Timestamp.format_user_input_date()
+      schedule_start = Timestamp.format_user_input_date(tomorrow())
+      schedule_end = Timestamp.format_user_input_date(next_week())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(
@@ -150,9 +149,7 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
@@ -184,9 +181,7 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 2
@@ -228,14 +223,10 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})) ==
                2
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 4
@@ -267,9 +258,7 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
@@ -297,9 +286,7 @@ defmodule Systems.Advert.PublicTest do
 
       assert Enum.empty?(Bookkeeping.Public.list_accounts(["wallet"]))
 
-      assert Enum.empty?(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             )
+      assert Enum.empty?(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id}))
     end
 
     test "payout_participant/2 Multiple transactions of two participants (via signals)", %{
@@ -333,14 +320,10 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})) ==
                2
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 3
@@ -354,15 +337,15 @@ defmodule Systems.Advert.PublicTest do
                Bookkeeping.Public.balance({:wallet, "fake_currency", participant2.id})
     end
 
-    defp yesterday() do
+    defp yesterday do
       Advert.Factories.timestamp(-24 * 60)
     end
 
-    defp tomorrow() do
+    defp tomorrow do
       Advert.Factories.timestamp(24 * 60)
     end
 
-    defp next_week() do
+    defp next_week do
       Advert.Factories.timestamp(7 * 24 * 60)
     end
   end

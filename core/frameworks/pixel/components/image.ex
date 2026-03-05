@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Image do
+  @moduledoc false
   use CoreWeb, :pixel
 
   attr(:id, :any, required: true)
@@ -8,8 +9,7 @@ defmodule Frameworks.Pixel.Image do
   @doc """
   An image with fancy features like blur-hash.
   """
-  def blurhash(%{image: %{height: height, width: width}} = assigns)
-      when not is_nil(height) and not is_nil(width) do
+  def blurhash(%{image: %{height: height, width: width}} = assigns) when not is_nil(height) and not is_nil(width) do
     src = Map.get(assigns.image, :url, "")
     srcset = Map.get(assigns.image, :srcset, "")
     blur_hash = Map.get(assigns.image, :blur_hash, "")
@@ -73,9 +73,7 @@ defmodule Frameworks.Pixel.Image do
   attr(:image_url, :string)
   attr(:placeholder, :string, required: true)
 
-  attr(:shape, :string,
-    default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded"
-  )
+  attr(:shape, :string, default: "w-image-preview sm:w-image-preview-sm h-image-preview sm:h-image-preview-sm rounded")
 
   def preview(assigns) do
     ~H"""

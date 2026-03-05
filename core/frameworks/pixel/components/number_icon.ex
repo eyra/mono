@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.NumberIcon do
+  @moduledoc false
   use CoreWeb, :pixel
 
   defp prism_class(true), do: "prism-number-icon-active"

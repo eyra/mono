@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Breadcrumbs do
+  @moduledoc false
   use CoreWeb, :live_component
 
   @impl true
@@ -21,8 +22,9 @@ defmodule Frameworks.Pixel.Breadcrumbs do
     blocks =
       elements
       |> Enum.with_index()
-      |> Enum.map(fn {element, index} -> map_to_block(element, index + 1 == count) end)
-      |> Enum.intersperse({:separator, %{type: :forward}})
+      |> Enum.map_intersperse({:separator, %{type: :forward}}, fn {element, index} ->
+        map_to_block(element, index + 1 == count)
+      end)
 
     assign(socket, blocks: blocks)
   end
@@ -48,7 +50,7 @@ defmodule Frameworks.Pixel.Breadcrumbs do
 
   @impl true
   def handle_event("handle_click", %{"item" => path}, socket) do
-    {:noreply, socket |> push_navigate(to: path)}
+    {:noreply, push_navigate(socket, to: path)}
   end
 
   @impl true

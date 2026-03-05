@@ -1,4 +1,5 @@
 defmodule Core.WebPush.Worker do
+  @moduledoc false
   use Oban.Worker,
     queue: :default,
     priority: 1,
@@ -26,14 +27,14 @@ defmodule Core.WebPush.Worker do
       }
     }
 
-    backend.send_web_push(message, sub)
+    message
+    |> backend.send_web_push(sub)
     |> process_web_push_response(subscription)
   end
 
   defp process_web_push_response({:ok, %{status_code: 201}}, _), do: :ok
   # not found / subscription gone
-  defp process_web_push_response({:ok, %{status_code: status}}, subscription)
-       when status in [404, 410] do
+  defp process_web_push_response({:ok, %{status_code: status}}, subscription) when status in [404, 410] do
     Repo.delete(subscription)
   end
 

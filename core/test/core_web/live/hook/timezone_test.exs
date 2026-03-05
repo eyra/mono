@@ -1,5 +1,6 @@
 defmodule CoreWeb.Live.Hook.TimezoneTest do
   use CoreWeb.ConnCase, async: true
+
   import Phoenix.LiveViewTest
 
   alias CoreWeb.Live.Hook.Timezone

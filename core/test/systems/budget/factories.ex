@@ -1,7 +1,6 @@
 defmodule Systems.Budget.Factories do
-  alias Systems.{
-    Budget
-  }
+  @moduledoc false
+  alias Systems.Budget
 
   def create_currency(name, type, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
@@ -84,21 +83,11 @@ defmodule Systems.Budget.Factories do
 
   def create_wallet(user, currency, balance_credit \\ 0, balance_debit \\ 0)
 
-  def create_wallet(
-        %Systems.Account.User{id: user_id},
-        %Budget.CurrencyModel{} = currency,
-        balance_credit,
-        balance_debit
-      ) do
+  def create_wallet(%Systems.Account.User{id: user_id}, %Budget.CurrencyModel{} = currency, balance_credit, balance_debit) do
     create_wallet(user_id, currency, balance_credit, balance_debit)
   end
 
-  def create_wallet(
-        user_id,
-        %Budget.CurrencyModel{name: currency_name},
-        balance_credit,
-        balance_debit
-      ) do
+  def create_wallet(user_id, %Budget.CurrencyModel{name: currency_name}, balance_credit, balance_debit) do
     Core.Factories.insert!(:book_account, %{
       identifier: ["wallet", currency_name, "#{user_id}"],
       balance_credit: balance_credit,

@@ -1,16 +1,12 @@
 defmodule Systems.Project.Form do
+  @moduledoc false
   use CoreWeb.LiveForm
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   # Handle initial update
   @impl true
-  def update(
-        %{id: id, project: project},
-        socket
-      ) do
+  def update(%{id: id, project: project}, socket) do
     changeset = Project.Model.changeset(project, %{})
 
     {
@@ -48,18 +44,18 @@ defmodule Systems.Project.Form do
 
     {
       :noreply,
-      socket |> assign(changeset: changeset)
+      assign(socket, changeset: changeset)
     }
   end
 
   @impl true
   def handle_event("submit", _, socket) do
-    {:noreply, socket |> submit_form()}
+    {:noreply, submit_form(socket)}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> finish()}
+    {:noreply, finish(socket)}
   end
 
   # Submit
@@ -67,7 +63,7 @@ defmodule Systems.Project.Form do
   defp submit_form(%{assigns: %{project: project, changeset: changeset}} = socket) do
     case Core.Persister.save(project, changeset) do
       {:ok, _} ->
-        socket |> finish()
+        finish(socket)
 
       {:error, changeset} ->
         socket
@@ -77,7 +73,7 @@ defmodule Systems.Project.Form do
   end
 
   defp finish(socket) do
-    socket |> send_event(:parent, "finish")
+    send_event(socket, :parent, "finish")
   end
 
   @impl true

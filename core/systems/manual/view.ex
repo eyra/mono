@@ -6,8 +6,7 @@ defmodule Systems.Manual.View do
   alias Frameworks.Pixel.Toolbar
   alias Systems.Manual
 
-  def dependencies(),
-    do: [:manual_id, :title, :current_user, :presentation, {:user_state, [:chapter, :page]}]
+  def dependencies, do: [:manual_id, :title, :current_user, :presentation, {:user_state, [:chapter, :page]}]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{manual_id: manual_id}}) do
     Manual.Public.get_manual!(manual_id, Manual.Model.preload_graph(:down))
@@ -15,19 +14,16 @@ defmodule Systems.Manual.View do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> publish_toolbar_buttons()}
+    {:ok, publish_toolbar_buttons(socket)}
   end
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket
-    |> publish_toolbar_buttons()
+    publish_toolbar_buttons(socket)
   end
 
   # Modal presentation: publish buttons to parent modal
-  defp publish_toolbar_buttons(
-         %{assigns: %{presentation: :modal, vm: %{buttons: buttons}}} = socket
-       ) do
+  defp publish_toolbar_buttons(%{assigns: %{presentation: :modal, vm: %{buttons: buttons}}} = socket) do
     publish_event(socket, {:update_modal_buttons, %{buttons: buttons}})
   end
 
@@ -64,18 +60,14 @@ defmodule Systems.Manual.View do
     select_page(socket, next_page_id)
   end
 
-  defp handle_toolbar_action(
-         :previous_page,
-         %{assigns: %{vm: vm, user_state: user_state}} = socket
-       ) do
+  defp handle_toolbar_action(:previous_page, %{assigns: %{vm: vm, user_state: user_state}} = socket) do
     page_id = user_state[:page]
     pages = get_sorted_pages(vm.selected_chapter)
     previous_page_id = previous_page_id(pages, page_id)
     select_page(socket, previous_page_id)
   end
 
-  defp get_sorted_pages(%{pages: [_ | _] = pages}),
-    do: Enum.sort_by(pages, & &1.userflow_step.order)
+  defp get_sorted_pages(%{pages: [_ | _] = pages}), do: Enum.sort_by(pages, & &1.userflow_step.order)
 
   defp get_sorted_pages(_), do: []
 

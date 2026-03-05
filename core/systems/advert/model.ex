@@ -4,19 +4,19 @@ defmodule Systems.Advert.Model do
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Changeset
 
   alias Frameworks.Concept
-
+  alias Frameworks.Concept.Leaf.Status
   alias Systems.Advert
-  alias Systems.Promotion
   alias Systems.Assignment
   alias Systems.Pool
+  alias Systems.Promotion
 
   schema "adverts" do
-    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Status.values(), default: :concept)
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:submission, Pool.SubmissionModel)
@@ -42,7 +42,7 @@ defmodule Systems.Advert.Model do
       [pool_name]
     end
 
-    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
+    def status(%{status: status}), do: %Status{value: status}
   end
 
   @doc false

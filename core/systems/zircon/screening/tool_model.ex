@@ -1,13 +1,14 @@
 defmodule Systems.Zircon.Screening.ToolModel do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
-
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
+  alias Systems.Annotation
   alias Systems.Paper
   alias Systems.Zircon.Screening
-  alias Systems.Annotation
 
   @tool_directors Application.compile_env(:core, :tool_directors)
 
@@ -44,11 +45,9 @@ defmodule Systems.Zircon.Screening.ToolModel do
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
-  def preload_graph(:reference_files),
-    do: [reference_files: Paper.ReferenceFileModel.preload_graph(:down)]
+  def preload_graph(:reference_files), do: [reference_files: Paper.ReferenceFileModel.preload_graph(:down)]
 
-  def preload_graph(:annotations),
-    do: [annotations: Screening.ToolAnnotationAssoc.preload_graph(:down)]
+  def preload_graph(:annotations), do: [annotations: Screening.ToolAnnotationAssoc.preload_graph(:down)]
 
   def ready?(%{name: nil}), do: false
   def ready?(%{image_id: nil}), do: false
@@ -58,6 +57,7 @@ defmodule Systems.Zircon.Screening.ToolModel do
 
   defimpl Frameworks.Concept.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
+
     alias Systems.Zircon
 
     def key(_), do: :zircon_screening
@@ -80,12 +80,14 @@ defmodule Systems.Zircon.Screening.ToolModel do
 
   defimpl Frameworks.Concept.Leaf do
     use Gettext, backend: CoreWeb.Gettext
+
     alias Frameworks.Concept
+
     def resource_id(%{id: id}), do: "zircon/#{id}"
     def tag(_), do: dgettext("eyra-zircon", "leaf.tag")
 
     def info(%{papers: papers}, _timezone) do
-      paper_count = papers |> length()
+      paper_count = length(papers)
       [dngettext("eyra-zircon", "1 paper", "* papers", paper_count)]
     end
 

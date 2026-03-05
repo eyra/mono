@@ -5,10 +5,12 @@ defmodule Systems.Zircon.Screening.SessionModel do
 
   use Ecto.Schema
   use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
-  alias Systems.Zircon
   alias Systems.Account
+  alias Systems.Zircon
+  alias Systems.Zircon.Screening.ToolModel
 
   schema "zircon_screening_session" do
     field(:identifier, :string)
@@ -18,7 +20,7 @@ defmodule Systems.Zircon.Screening.SessionModel do
     field(:invalidated_at, :naive_datetime)
 
     belongs_to(:user, Account.User)
-    belongs_to(:tool, Zircon.Screening.ToolModel)
+    belongs_to(:tool, ToolModel)
 
     timestamps()
   end
@@ -31,14 +33,13 @@ defmodule Systems.Zircon.Screening.SessionModel do
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def preload_graph(:down), do: preload_graph([:user, :tool])
 
   def preload_graph(:up), do: []
 
-  def preload_graph(:tool), do: [tool: Zircon.Screening.ToolModel.preload_graph(:down)]
+  def preload_graph(:tool), do: [tool: ToolModel.preload_graph(:down)]
   def preload_graph(:user), do: [user: []]
 end

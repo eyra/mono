@@ -1,11 +1,12 @@
 defmodule Systems.Assignment.InstanceModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.Assignment
   alias Systems.Account
+  alias Systems.Assignment
 
   schema "assignment_instance" do
     belongs_to(:user, Account.User)
@@ -18,8 +19,7 @@ defmodule Systems.Assignment.InstanceModel do
   @required_fields ~w(panel_info)a
 
   def changeset(instance, attrs) do
-    instance
-    |> cast(attrs, @fields)
+    cast(instance, attrs, @fields)
   end
 
   def validate(changeset) do
@@ -30,11 +30,7 @@ defmodule Systems.Assignment.InstanceModel do
 
   def preload_graph(:up), do: []
 
-  def preload_graph(:down),
-    do: [
-      assignment: preload_graph(:assignment),
-      user: preload_graph(:user)
-    ]
+  def preload_graph(:down), do: [assignment: preload_graph(:assignment), user: preload_graph(:user)]
 
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
   def preload_graph(:user), do: [user: []]

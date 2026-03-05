@@ -1,15 +1,15 @@
 defmodule Systems.Advert.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias Core.Enums.{Genders, NativeLanguages}
+  alias Core.Enums.Genders
+  alias Core.Enums.NativeLanguages
+  alias Frameworks.Concept.Directable
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-  alias Frameworks.Concept.Directable
-
   alias Systems.Advert
-  alias Systems.Project
   alias Systems.Assignment
   alias Systems.Pool
+  alias Systems.Project
 
   @enums_mapping %{
     genders: Genders,
@@ -18,10 +18,7 @@ defmodule Systems.Advert.SubmissionView do
 
   # Update adverts only
   @impl true
-  def update(
-        _,
-        %{assigns: %{entity: _}} = socket
-      ) do
+  def update(_, %{assigns: %{entity: _}} = socket) do
     {
       :ok,
       socket
@@ -33,14 +30,7 @@ defmodule Systems.Advert.SubmissionView do
 
   # Initial update
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: %{criteria: criteria} = submission,
-          user: user
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: %{criteria: criteria} = submission, user: user}, socket) do
     {
       :ok,
       socket
@@ -89,12 +79,11 @@ defmodule Systems.Advert.SubmissionView do
     %{id: advert_id, assignment: %{excluded: excluded_assignments} = assignment} =
       Advert.Public.get_by_submission(submission, assignment: [:excluded])
 
-    excluded_assignment_ids =
-      excluded_assignments
-      |> Enum.map(& &1.id)
+    excluded_assignment_ids = Enum.map(excluded_assignments, & &1.id)
 
     advert_labels =
-      Project.Public.list_owned_projects(user, preload: Project.Model.preload_graph(:down))
+      user
+      |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
       |> Enum.flat_map(& &1.root.items)
       |> Enum.reject(&(&1.advert == nil))
       |> Enum.map(& &1.advert)
@@ -109,15 +98,8 @@ defmodule Systems.Advert.SubmissionView do
     |> assign(excluded_user_ids: excluded_user_ids)
   end
 
-  defp to_label(
-         %Advert.Model{
-           id: id,
-           promotion: %{title: title},
-           assignment_id: assignment_id
-         },
-         excluded_assignment_ids
-       ) do
-    excluded = excluded_assignment_ids |> Enum.member?(assignment_id)
+  defp to_label(%Advert.Model{id: id, promotion: %{title: title}, assignment_id: assignment_id}, excluded_assignment_ids) do
+    excluded = Enum.member?(excluded_assignment_ids, assignment_id)
     %{id: id, value: title, active: excluded}
   end
 
@@ -129,18 +111,10 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   defp update_ui(
-         %{
-           assigns: %{
-             submission: %{pool: %{name: pool_name} = pool},
-             excluded_user_ids: excluded_user_ids
-           }
-         } = socket,
+         %{assigns: %{submission: %{pool: %{name: pool_name} = pool}, excluded_user_ids: excluded_user_ids}} = socket,
          criteria
        ) do
-    inclusion_labels =
-      Directable.director(pool).inclusion_criteria()
-      |> Enum.map(&get_inclusion_labels(&1, criteria))
-      |> Map.new()
+    inclusion_labels = Map.new(Directable.director(pool).inclusion_criteria(), &get_inclusion_labels(&1, criteria))
 
     included_user_ids =
       pool
@@ -153,8 +127,7 @@ defmodule Systems.Advert.SubmissionView do
     sample_size =
       Pool.Public.count_eligitable_users(criteria, included_user_ids, excluded_user_ids)
 
-    socket
-    |> assign(
+    assign(socket,
       inclusion_labels: inclusion_labels,
       sample_size: sample_size,
       pool_size: pool_size,
@@ -184,17 +157,12 @@ defmodule Systems.Advert.SubmissionView do
 
   defp inclusion_title(:genders), do: dgettext("eyra-account", "features.gender.title")
 
-  defp inclusion_title(:native_languages),
-    do: dgettext("eyra-account", "features.nativelanguage.title")
+  defp inclusion_title(:native_languages), do: dgettext("eyra-account", "features.nativelanguage.title")
 
   @impl true
   def handle_event(
         "active_item_ids",
-        %{
-          active_item_ids: excluded_advert_ids,
-          source: %{name: :exclude_adverts},
-          current_items: current_items
-        },
+        %{active_item_ids: excluded_advert_ids, source: %{name: :exclude_adverts}, current_items: current_items},
         %{assigns: %{assignment: assignment}} = socket
       ) do
     socket =
@@ -215,10 +183,7 @@ defmodule Systems.Advert.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{
-          active_item_ids: selected_values,
-          source: %{name: criteria_field}
-        },
+        %{active_item_ids: selected_values, source: %{name: criteria_field}},
         %{assigns: %{entity: criteria}} = socket
       )
       when criteria_field in [:genders, :native_languages, :dominant_hands] do

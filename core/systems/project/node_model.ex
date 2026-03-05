@@ -1,12 +1,12 @@
 defmodule Systems.Project.NodeModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Project
-  }
+  alias Ecto.Association.NotLoaded
+  alias Systems.Project
 
   schema "project_nodes" do
     field(:name, :string)
@@ -29,23 +29,17 @@ defmodule Systems.Project.NodeModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :children,
-        :items,
-        :auth_node
-      ])
+  def preload_graph(:down), do: preload_graph([:children, :items, :auth_node])
 
   def preload_graph(:children), do: [children: [:children, :items, :auth_node]]
   def preload_graph(:items), do: [items: Project.ItemModel.preload_graph(:down)]
   def preload_graph(:auth_node), do: [auth_node: []]
 
-  def auth_tree(%Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node) do
+  def auth_tree(%Project.NodeModel{children: %NotLoaded{}} = node) do
     auth_tree(Repo.preload(node, :children))
   end
 
-  def auth_tree(%Project.NodeModel{items: %Ecto.Association.NotLoaded{}} = node) do
+  def auth_tree(%Project.NodeModel{items: %NotLoaded{}} = node) do
     auth_tree(Repo.preload(node, :items))
   end
 
@@ -68,14 +62,7 @@ defmodule Systems.Project.NodeModel do
       vm(node, page, user)
     end
 
-    defp vm(
-           %{
-             id: id,
-             name: name
-           },
-           {Project.NodePage, :node_card},
-           _user
-         ) do
+    defp vm(%{id: id, name: name}, {Project.NodePage, :node_card}, _user) do
       path = ~p"/project/node/#{id}"
 
       %{

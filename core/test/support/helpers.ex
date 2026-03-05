@@ -3,6 +3,7 @@ defmodule Core.Authorization.TestEntity do
   An entity that is only used for test purposes.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "test_entities" do
@@ -30,9 +31,10 @@ defmodule Core.AuthTestHelpers do
   Helper functions to make testing authorization convenient.
   """
   alias Core.Factories
+  alias Systems.Account.Public
 
   def login(user, %{conn: conn}) do
-    token = Systems.Account.Public.generate_user_session_token(user)
+    token = Public.generate_user_session_token(user)
 
     conn =
       conn
@@ -46,19 +48,19 @@ defmodule Core.AuthTestHelpers do
 
   def login_as_member(ctx) do
     password = Factories.valid_user_password()
-    {:ok, ctx} = Factories.insert!(:member, %{password: password}) |> login(ctx)
+    {:ok, ctx} = :member |> Factories.insert!(%{password: password}) |> login(ctx)
     {:ok, Keyword.put(ctx, :password, password)}
   end
 
   def login_as_creator(ctx) do
-    Factories.insert!(:creator) |> login(ctx)
+    :creator |> Factories.insert!() |> login(ctx)
   end
 
   def login_as_admin(ctx) do
     email = "admin1@example.org"
 
     user =
-      if user = Systems.Account.Public.get_user_by_email(email) do
+      if user = Public.get_user_by_email(email) do
         user
       else
         Factories.insert!(:admin, %{email: email})

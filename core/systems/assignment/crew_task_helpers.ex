@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.CrewTaskHelpers do
+  @moduledoc false
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
@@ -82,6 +83,7 @@ defmodule Systems.Assignment.CrewTaskHelpers do
     quote do
       @behaviour Systems.Assignment.CrewTaskHelpers
 
+      import Frameworks.Pixel.Line
       import Systems.Assignment.CrewTaskHelpers
       import Systems.Assignment.Html
 
@@ -89,24 +91,21 @@ defmodule Systems.Assignment.CrewTaskHelpers do
       alias Systems.Crew
       alias Systems.Workflow
 
-      import Frameworks.Pixel.Line
-
       # Consume :tool_completed event published by all ToolViews
       # (Feldspar, Manual, Instruction, Document, Graphite)
       def consume_event(%{name: :tool_completed}, socket) do
-        {:stop, socket |> handle_tool_completed()}
+        {:stop, handle_tool_completed(socket)}
       end
 
       def consume_event(%{name: :tool_initialized}, socket) do
-        {:stop, socket |> handle_tool_initialized()}
+        {:stop, handle_tool_initialized(socket)}
       end
 
       def consume_event(
             %{name: :donate, payload: %{key: key, data: data}},
             %{assigns: %{work_item: {%{id: task, group: group}, _}}} = socket
           ) do
-        {:continue,
-         socket |> publish_event({:store, %{task: task, key: key, group: group, data: data}})}
+        {:continue, publish_event(socket, {:store, %{task: task, key: key, group: group, data: data}})}
       end
 
       # HTTP upload complete - blob stored, forward for delivery scheduling
@@ -114,11 +113,7 @@ defmodule Systems.Assignment.CrewTaskHelpers do
             %{name: :blob_stored, payload: %{key: key, blob_id: blob_id}},
             %{assigns: %{work_item: {%{id: task, group: group}, _}}} = socket
           ) do
-        {:stop,
-         socket
-         |> publish_event(
-           {:deliver_blob, %{task: task, key: key, group: group, blob_id: blob_id}}
-         )}
+        {:stop, publish_event(socket, {:deliver_blob, %{task: task, key: key, group: group, blob_id: blob_id}})}
       end
     end
   end

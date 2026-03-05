@@ -1,6 +1,9 @@
 defmodule Core.WebPush.PushSubscription do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias Systems.Account.User
 
   schema "web_push_subscriptions" do

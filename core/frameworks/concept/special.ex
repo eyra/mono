@@ -1,19 +1,16 @@
 defmodule Frameworks.Concept.Special do
+  @moduledoc false
   import Ecto.Changeset
 
   def field_value(model, special_fields) do
     if field = field(model, special_fields) do
       Map.get(model, field)
-    else
-      nil
     end
   end
 
   def field_id(model, special_fields) do
     if field = field(model, special_fields) do
       map_to_field_id(field)
-    else
-      nil
     end
   end
 
@@ -21,10 +18,10 @@ defmodule Frameworks.Concept.Special do
     Enum.reduce(special_fields, nil, fn field, acc ->
       field_id = map_to_field_id(field)
 
-      if Map.get(model, field_id) != nil do
-        field
-      else
+      if Map.get(model, field_id) == nil do
         acc
+      else
+        field
       end
     end)
   end
@@ -36,17 +33,10 @@ defmodule Frameworks.Concept.Special do
         &{&1,
          if &1 == special_field do
            special
-         else
-           nil
          end}
       )
 
-    changeset
-    |> then(
-      &Enum.reduce(specials, &1, fn {field, value}, changeset ->
-        put_assoc(changeset, field, value)
-      end)
-    )
+    then(changeset, &Enum.reduce(specials, &1, fn {field, value}, changeset -> put_assoc(changeset, field, value) end))
   end
 
   defp map_to_field_id(field), do: String.to_existing_atom("#{field}_id")

@@ -1,7 +1,9 @@
 defmodule Frameworks.Pixel.Widget do
+  @moduledoc false
   use CoreWeb, :pixel
 
   import CoreWeb.UI.ProgressBar
+
   alias Frameworks.Pixel.Text
 
   attr(:integer, :integer, required: true)
@@ -10,10 +12,7 @@ defmodule Frameworks.Pixel.Widget do
   attr(:target, :any, default: nil)
   attr(:target_direction, :atom, default: nil)
 
-  def number(
-        %{metric: metric, target: target, target_direction: target_direction, color: color} =
-          assigns
-      ) do
+  def number(%{metric: metric, target: target, target_direction: target_direction, color: color} = assigns) do
     number_color =
       case {metric, target, target_direction, color} do
         {metric, target, :up, _} when metric < target -> "text-warning"
@@ -46,10 +45,7 @@ defmodule Frameworks.Pixel.Widget do
   attr(:pending_label, :string, required: true)
   attr(:target_label, :string, required: true)
 
-  def progress(
-        %{target_amount: target_amount, done_amount: done_amount, pending_amount: pending_amount} =
-          assigns
-      ) do
+  def progress(%{target_amount: target_amount, done_amount: done_amount, pending_amount: pending_amount} = assigns) do
     left_over_amount = target_amount - (done_amount + pending_amount)
     size = max(target_amount, done_amount + pending_amount)
 
@@ -105,7 +101,8 @@ defmodule Frameworks.Pixel.Widget do
     count = Integer.floor_div(max, scale)
 
     value_count_list =
-      Enum.to_list(0..count)
+      0..count
+      |> Enum.to_list()
       |> Enum.map(fn index ->
         from = index * scale
         to = (index + 1) * scale
@@ -171,9 +168,7 @@ defmodule Frameworks.Pixel.Widget do
   attr(:height, :integer, required: true)
   attr(:range_label, :string, required: true)
 
-  def value_distribution_bar(
-        %{value_count: value_count, height: height, range_label: range_label} = assigns
-      ) do
+  def value_distribution_bar(%{value_count: value_count, height: height, range_label: range_label} = assigns) do
     bar_height =
       if value_count == 0 do
         0

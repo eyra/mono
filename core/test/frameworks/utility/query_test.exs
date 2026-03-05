@@ -1,12 +1,16 @@
 defmodule Frameworks.Utility.QueryTest do
   use Core.DataCase
 
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
-  alias Frameworks.Utility.Query
-  alias Systems.Crew
   alias Core.Factories
+  alias Ecto.Query.BooleanExpr
+  alias Ecto.Query.JoinExpr
+  alias Frameworks.Utility.Query
+  alias Systems.Account.User
+  alias Systems.Crew
+  alias Systems.Crew.MemberModel
+
+  require Ecto.Query
+  require Query
 
   describe "compile_clauses/1" do
     test "join: 1" do
@@ -50,70 +54,41 @@ defmodule Frameworks.Utility.QueryTest do
       role = :participant
 
       query =
-        Ecto.Query.from(m in Crew.MemberModel, as: :member)
-        |> Query.build(:member,
-          crew: [
-            id == ^crew_id,
-            auth_node: [
-              role_assignments: [
-                role == ^role
-              ]
-            ]
-          ],
+        Query.build(Ecto.Query.from(m in MemberModel, as: :member), :member,
+          crew: [id == ^crew_id, auth_node: [role_assignments: [role == ^role]]],
           user: [id == ^user_id]
         )
 
       assert %{
                aliases: %{member: 0, crew: 1, auth_node: 2, role_assignments: 3},
-               from: %Ecto.Query.FromExpr{
-                 source: {"crew_members", Systems.Crew.MemberModel},
-                 as: :member
-               },
+               from: %Ecto.Query.FromExpr{source: {"crew_members", MemberModel}, as: :member},
                joins: [
-                 %Ecto.Query.JoinExpr{
-                   qual: :inner,
-                   assoc: {0, :crew},
-                   as: :crew
-                 },
-                 %Ecto.Query.JoinExpr{
-                   qual: :inner,
-                   source: nil,
-                   assoc: {1, :auth_node},
-                   as: :auth_node
-                 },
-                 %Ecto.Query.JoinExpr{
-                   qual: :inner,
-                   source: nil,
-                   assoc: {2, :role_assignments},
-                   as: :role_assignments
-                 },
-                 %Ecto.Query.JoinExpr{
-                   qual: :inner,
-                   assoc: {0, :user},
-                   as: :user
-                 }
+                 %JoinExpr{qual: :inner, assoc: {0, :crew}, as: :crew},
+                 %JoinExpr{qual: :inner, source: nil, assoc: {1, :auth_node}, as: :auth_node},
+                 %JoinExpr{qual: :inner, source: nil, assoc: {2, :role_assignments}, as: :role_assignments},
+                 %JoinExpr{qual: :inner, assoc: {0, :user}, as: :user}
                ],
                wheres: [
-                 %Ecto.Query.BooleanExpr{
+                 %BooleanExpr{
                    op: :and,
                    expr: {:==, [], [{{:., [], [{:&, [], [1]}, :id]}, [], []}, {:^, [], [0]}]},
                    params: [{^crew_id, {1, :id}}],
                    subqueries: []
                  },
-                 %Ecto.Query.BooleanExpr{
+                 %BooleanExpr{
                    op: :and,
                    expr: {:==, [], [{{:., [], [{:&, [], [3]}, :role]}, [], []}, {:^, [], [0]}]},
                    params: [participant: {3, :role}]
                  },
-                 %Ecto.Query.BooleanExpr{
+                 %BooleanExpr{
                    op: :and,
                    expr: {:==, [], [{{:., [], [{:&, [], [4]}, :id]}, [], []}, {:^, [], [0]}]},
                    params: [{^user_id, {4, :id}}]
                  }
                ]
-             } = query |> Map.from_struct()
+             } = Map.from_struct(query)
 
-      assert %Systems.Crew.MemberModel{
+      assert %MemberModel{
                user_id: ^user_id
              } = Core.Repo.one(query)
     end
@@ -121,19 +96,12 @@ defmodule Frameworks.Utility.QueryTest do
     test "is_nil with result" do
       %{id: user_id} = Factories.insert!(:member)
 
-      query =
-        Ecto.Query.from(u in Systems.Account.User, as: :user)
-        |> Query.build(:user, profile: [title == nil])
+      query = Query.build(Ecto.Query.from(u in User, as: :user), :user, profile: [title == nil])
 
-      assert %{
-               wheres: [
-                 %Ecto.Query.BooleanExpr{
-                   expr: {:is_nil, [], [{{:., [], [{:&, [], [1]}, :title]}, [], []}]}
-                 }
-               ]
-             } = query |> Map.from_struct()
+      assert %{wheres: [%BooleanExpr{expr: {:is_nil, [], [{{:., [], [{:&, [], [1]}, :title]}, [], []}]}}]} =
+               Map.from_struct(query)
 
-      assert %Systems.Account.User{
+      assert %User{
                id: ^user_id
              } = Core.Repo.one(query)
     end
@@ -142,17 +110,10 @@ defmodule Frameworks.Utility.QueryTest do
   test "is_nil without result" do
     Factories.insert!(:member)
 
-    query =
-      Ecto.Query.from(u in Systems.Account.User, as: :user)
-      |> Query.build(:user, [id == nil])
+    query = Query.build(Ecto.Query.from(u in User, as: :user), :user, [id == nil])
 
-    assert %{
-             wheres: [
-               %Ecto.Query.BooleanExpr{
-                 expr: {:is_nil, [], [{{:., [], [{:&, [], [0]}, :id]}, [], []}]}
-               }
-             ]
-           } = query |> Map.from_struct()
+    assert %{wheres: [%BooleanExpr{expr: {:is_nil, [], [{{:., [], [{:&, [], [0]}, :id]}, [], []}]}}]} =
+             Map.from_struct(query)
 
     assert nil == Core.Repo.one(query)
   end

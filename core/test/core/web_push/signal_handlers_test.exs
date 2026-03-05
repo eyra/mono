@@ -1,6 +1,7 @@
 defmodule Core.WebPush.SignalHandler.Test do
   use Core.DataCase, async: true
   use Oban.Testing, repo: Core.Repo
+
   alias Core.Factories
   alias Core.WebPush.SignalHandlers
   alias Core.WebPush.Worker

@@ -1,4 +1,5 @@
 defmodule Systems.Test.RoutedLiveViewBuilder do
+  @moduledoc false
   alias Frameworks.Concept.LiveContext
   alias Systems.Test
 

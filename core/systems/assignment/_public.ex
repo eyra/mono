@@ -3,50 +3,48 @@ defmodule Systems.Assignment.Public do
   The assignment context.
   """
   use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
 
-  require Logger
-
-  alias Ecto.Multi
   alias Core.Repo
   alias CoreWeb.UI.Timestamp
-  alias Systems.Account.User
-  alias Frameworks.Utility.EctoHelper
+  alias Ecto.Multi
   alias Frameworks.Concept
   alias Frameworks.Signal
-
+  alias Frameworks.Utility.EctoHelper
+  alias Systems.Account
+  alias Systems.Account.User
   alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Account
-  alias Systems.Content
-  alias Systems.Consent
   alias Systems.Budget
-  alias Systems.Workflow
+  alias Systems.Consent
+  alias Systems.Content
   alias Systems.Crew
   alias Systems.Storage
+  alias Systems.Workflow
+
+  require Logger
 
   @min_expiration_timeout 30
 
   def get!(id, preload \\ []) do
-    from(a in Assignment.Model, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(a in Assignment.Model, preload: ^preload), id)
   end
 
   def get(id, preload \\ []) do
-    from(a in Assignment.Model, preload: ^preload)
-    |> Repo.get(id)
+    Repo.get(from(a in Assignment.Model, preload: ^preload), id)
   end
 
   def get_by_content_page(%Content.PageModel{} = page, preload \\ []) do
-    assignment_query(page)
+    page
+    |> assignment_query()
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
   def get_workflow!(id, preload \\ []) do
-    from(a in Workflow.Model, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(a in Workflow.Model, preload: ^preload), id)
   end
 
   def list_by_crew(crew, preload \\ [])
@@ -54,12 +52,12 @@ defmodule Systems.Assignment.Public do
   def list_by_crew(%{id: crew_id}, preload), do: list_by_crew(crew_id, preload)
 
   def list_by_crew(crew_id, preload) when is_number(crew_id) do
-    from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload)
-    |> Repo.all()
+    Repo.all(from(a in Assignment.Model, where: a.crew_id == ^crew_id, preload: ^preload))
   end
 
-  def list_by_participant(%Account.User{} = user, preload \\ []) do
-    assignment_query(user, :participant)
+  def list_by_participant(%User{} = user, preload \\ []) do
+    user
+    |> assignment_query(:participant)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -72,18 +70,17 @@ defmodule Systems.Assignment.Public do
 
   def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)
 
-  def get_by(%Storage.EndpointModel{id: id}, preload),
-    do: get_by(:storage_endpoint_id, id, preload)
+  def get_by(%Storage.EndpointModel{id: id}, preload), do: get_by(:storage_endpoint_id, id, preload)
 
-  def get_by(%Consent.AgreementModel{id: id}, preload),
-    do: get_by(:consent_agreement_id, id, preload)
+  def get_by(%Consent.AgreementModel{id: id}, preload), do: get_by(:consent_agreement_id, id, preload)
 
   def get_by(%Workflow.Model{id: id}, preload), do: get_by(:workflow_id, id, preload)
 
   def get_by(%Crew.Model{id: id}, preload), do: get_by(:crew_id, id, preload)
 
   def get_by(field_name, id, preload) when is_atom(field_name) do
-    Repo.get_by(Assignment.Model, [{field_name, id}])
+    Assignment.Model
+    |> Repo.get_by([{field_name, id}])
     |> Repo.preload(preload)
   end
 
@@ -97,7 +94,8 @@ defmodule Systems.Assignment.Public do
   def get_by_tool_ref(%Workflow.ToolRefModel{id: id}, preload), do: get_by_tool_ref(id, preload)
 
   def get_by_tool_ref(tool_ref_id, preload) do
-    query_by_tool_ref(tool_ref_id, preload)
+    tool_ref_id
+    |> query_by_tool_ref(preload)
     |> Repo.one()
   end
 
@@ -106,7 +104,8 @@ defmodule Systems.Assignment.Public do
   def get_by_tool(%{id: id} = tool, preload) do
     field_name = Workflow.ToolRefModel.tool_id_field(tool)
 
-    query_by_tool(field_name, id, preload)
+    field_name
+    |> query_by_tool(id, preload)
     |> Repo.one()
   end
 
@@ -135,12 +134,12 @@ defmodule Systems.Assignment.Public do
     )
   end
 
-  def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
+  def obtain_instance!(%Assignment.Model{} = assignment, %User{} = user) do
     {:ok, instance} = obtain_instance(assignment, user)
     instance
   end
 
-  def obtain_instance(%Assignment.Model{} = assignment, %Account.User{} = user) do
+  def obtain_instance(%Assignment.Model{} = assignment, %User{} = user) do
     Multi.new()
     |> Multi.insert(
       :assignment_instance,
@@ -160,11 +159,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
-    from(i in Assignment.InstanceModel,
-      where: i.assignment_id == ^assignment.id,
-      where: i.user_id == ^user.id
-    )
-    |> Repo.one()
+    Repo.one(from(i in Assignment.InstanceModel, where: i.assignment_id == ^assignment.id, where: i.user_id == ^user.id))
   end
 
   def list_instances(%Assignment.Model{} = assignment, preload \\ []) do
@@ -177,28 +172,19 @@ defmodule Systems.Assignment.Public do
   end
 
   def list_user_ids(assignment_ids) when is_list(assignment_ids) do
-    from(u in User,
-      join: m in Crew.MemberModel,
-      on: m.user_id == u.id,
-      join: a in Assignment.Model,
-      on: a.crew_id == m.crew_id,
-      where: a.id in ^assignment_ids,
-      select: u.id
+    Repo.all(
+      from(u in User,
+        join: m in Crew.MemberModel,
+        on: m.user_id == u.id,
+        join: a in Assignment.Model,
+        on: a.crew_id == m.crew_id,
+        where: a.id in ^assignment_ids,
+        select: u.id
+      )
     )
-    |> Repo.all()
   end
 
-  def prepare(
-        %{} = attrs,
-        crew,
-        info,
-        affiliate,
-        page_refs,
-        workflow,
-        budget,
-        consent_agreement,
-        auth_node
-      ) do
+  def prepare(%{} = attrs, crew, info, affiliate, page_refs, workflow, budget, consent_agreement, auth_node) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:info, info)
@@ -219,8 +205,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def prepare_info(%{} = attrs) do
-    %Assignment.InfoModel{}
-    |> Assignment.InfoModel.changeset(:create, attrs)
+    Assignment.InfoModel.changeset(%Assignment.InfoModel{}, :create, attrs)
   end
 
   def prepare_workflow(special, [_ | _] = items, auth_node) do
@@ -271,7 +256,8 @@ defmodule Systems.Assignment.Public do
 
   def create_page_ref(%Assignment.Model{auth_node: auth_node} = assignment, key) do
     page_ref =
-      prepare_page_ref(auth_node, key)
+      auth_node
+      |> prepare_page_ref(key)
       |> Ecto.Changeset.put_assoc(:assignment, assignment)
 
     Multi.new()
@@ -280,9 +266,7 @@ defmodule Systems.Assignment.Public do
     |> Repo.commit()
   end
 
-  def delete_page_ref(
-        %Assignment.PageRefModel{assignment_id: assignment_id, page_id: page_id} = page_ref
-      ) do
+  def delete_page_ref(%Assignment.PageRefModel{assignment_id: assignment_id, page_id: page_id} = page_ref) do
     page_refs =
       from(pr in Assignment.PageRefModel,
         where: pr.assignment_id == ^assignment_id,
@@ -304,13 +288,15 @@ defmodule Systems.Assignment.Public do
   end
 
   def delete_storage_endpoint!(%{storage_endpoint: %Ecto.Association.NotLoaded{}} = assignment) do
-    Repo.preload(assignment, :storage_endpoint, Storage.EndpointModel.preload_graph(:down))
+    assignment
+    |> Repo.preload(:storage_endpoint, Storage.EndpointModel.preload_graph(:down))
     |> delete_storage_endpoint!()
   end
 
   def delete_storage_endpoint!(%{storage_endpoint: storage_endpoint} = assignment) do
     changeset =
-      Assignment.Model.changeset(assignment, %{})
+      assignment
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:storage_endpoint, nil)
 
     storage_endpoint_special = Storage.EndpointModel.special(storage_endpoint)
@@ -388,7 +374,8 @@ defmodule Systems.Assignment.Public do
 
   def update_budget(assignment, budget) do
     changeset =
-      Assignment.Model.changeset(assignment, %{})
+      assignment
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:budget, budget)
 
     Core.Persister.save(assignment, changeset)
@@ -396,7 +383,8 @@ defmodule Systems.Assignment.Public do
 
   def update_consent_agreement(assignment, consent_agreement) do
     changeset =
-      Assignment.Model.changeset(assignment, %{})
+      assignment
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
 
     Core.Persister.save(assignment, changeset)
@@ -404,7 +392,8 @@ defmodule Systems.Assignment.Public do
 
   def update_storage_endpoint(assignment, storage_endpoint) do
     changeset =
-      Assignment.Model.changeset(assignment, %{})
+      assignment
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
 
     Core.Persister.save(assignment, changeset)
@@ -456,7 +445,8 @@ defmodule Systems.Assignment.Public do
 
   def status(%{crew: crew}, user) do
     statuses =
-      Crew.Public.list_tasks_for_user(crew, user)
+      crew
+      |> Crew.Public.list_tasks_for_user(user)
       |> Enum.map(& &1.status)
 
     cond do
@@ -497,7 +487,8 @@ defmodule Systems.Assignment.Public do
   def tester?(_, _), do: false
 
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
-    get!(id, [:crew])
+    id
+    |> get!([:crew])
     |> apply_member(user, identifier, reward_amount)
   end
 
@@ -561,11 +552,7 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def reject_task(
-        %Assignment.Model{} = assignment,
-        %Crew.TaskModel{} = task,
-        rejection
-      ) do
+  def reject_task(%Assignment.Model{} = assignment, %Crew.TaskModel{} = task, rejection) do
     [user] = auth_module().users_with_role(assignment, :owner)
 
     Multi.new()
@@ -582,7 +569,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def cancel(id, user) do
-    get!(id) |> cancel(user)
+    id |> get!() |> cancel(user)
   end
 
   @doc """
@@ -594,7 +581,8 @@ defmodule Systems.Assignment.Public do
     * `member_id`
   """
   def list_participants(%Assignment.Model{} = assignment) do
-    participant_query(assignment)
+    assignment
+    |> participant_query()
     |> Repo.all()
   end
 
@@ -603,7 +591,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def list_signatures(%Assignment.Model{} = assignment) do
-    signature_query(assignment)
+    assignment
+    |> signature_query()
     |> Repo.all()
   end
 
@@ -648,11 +637,11 @@ defmodule Systems.Assignment.Public do
   #   complete_task(crew, identifier)
   # end
 
-  def complete_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
-    do: complete_task(crew, identifier)
+  def complete_task(%Assignment.Model{crew: crew}, [_ | _] = identifier), do: complete_task(crew, identifier)
 
   def complete_task(%Crew.Model{} = crew, [_ | _] = identifier) do
-    Crew.Public.get_task(crew, identifier)
+    crew
+    |> Crew.Public.get_task(identifier)
     |> Crew.Public.complete_task!()
   end
 
@@ -660,19 +649,20 @@ defmodule Systems.Assignment.Public do
     Is user excluded? from joining given assignment
   """
   def excluded?(%{id: to_id} = _assignment, %{id: user_id}) do
-    from(assignment in Assignment.Model,
-      join: exclude in Assignment.ExcludeModel,
-      on: exclude.to_id == ^to_id,
-      join: crew in Crew.Model,
-      on: crew.id == assignment.crew_id,
-      join: member in Crew.MemberModel,
-      on: member.user_id == ^user_id,
-      where: exclude.from_id == assignment.id,
-      where: crew.id == member.crew_id,
-      where: member.expired == false,
-      preload: [crew: [:members]]
+    Repo.exists?(
+      from(assignment in Assignment.Model,
+        join: exclude in Assignment.ExcludeModel,
+        on: exclude.to_id == ^to_id,
+        join: crew in Crew.Model,
+        on: crew.id == assignment.crew_id,
+        join: member in Crew.MemberModel,
+        on: member.user_id == ^user_id,
+        where: exclude.from_id == assignment.id,
+        where: crew.id == member.crew_id,
+        where: member.expired == false,
+        preload: [crew: [:members]]
+      )
     )
-    |> Repo.exists?()
   end
 
   def attention_list_enabled?(%{workflow: workflow}) do
@@ -716,16 +706,13 @@ defmodule Systems.Assignment.Public do
 
   # Crew
   def get_crew(%{crew_id: crew_id} = _assignment) do
-    from(
-      c in Crew.Model,
-      where: c.id == ^crew_id
-    )
-    |> Repo.one()
+    Repo.one(from(c in Crew.Model, where: c.id == ^crew_id))
   end
 
   def get_member_by_task(%Crew.TaskModel{} = task, preload \\ []) do
     member_id =
-      Assignment.Private.member_id(task)
+      task
+      |> Assignment.Private.member_id()
       |> String.to_integer()
 
     from(
@@ -761,17 +748,18 @@ defmodule Systems.Assignment.Public do
   def search_subject(nil, _), do: nil
 
   def expired_user_assignments(%NaiveDateTime{} = from) do
-    from(a in Assignment.Model,
-      inner_join: m in Crew.MemberModel,
-      on: m.crew_id == a.crew_id,
-      where: m.expired == true,
-      where: m.expire_at >= ^from,
-      select: {m.user_id, a.id}
+    Repo.all(
+      from(a in Assignment.Model,
+        inner_join: m in Crew.MemberModel,
+        on: m.crew_id == a.crew_id,
+        where: m.expired == true,
+        where: m.expire_at >= ^from,
+        select: {m.user_id, a.id}
+      )
     )
-    |> Repo.all()
   end
 
-  def rollback_expired_deposits() do
+  def rollback_expired_deposits do
     one_day = 60 * 24
     from_one_day_ago = Timestamp.naive_from_now(-one_day)
     rollback_expired_deposits(from_one_day_ago)
@@ -780,7 +768,8 @@ defmodule Systems.Assignment.Public do
   def rollback_expired_deposits(%NaiveDateTime{} = from) do
     Multi.new()
     |> Multi.run(:rollback, fn _, _ ->
-      expired_user_assignments(from)
+      from
+      |> expired_user_assignments()
       |> Enum.map(fn {user_id, assignment_id} ->
         idempotence_key(assignment_id, user_id)
       end)
@@ -795,16 +784,14 @@ defmodule Systems.Assignment.Public do
   def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
     idempotence_key = idempotence_key(assignment, user)
 
-    multi
-    |> Budget.Public.rollback_deposit(idempotence_key)
+    Budget.Public.rollback_deposit(multi, idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key(assignment_id, user_id)
   end
 
-  def idempotence_key(assignment_id, user_id)
-      when is_integer(assignment_id) and is_integer(user_id) do
+  def idempotence_key(assignment_id, user_id) when is_integer(assignment_id) and is_integer(user_id) do
     "assignment=#{assignment_id},user=#{user_id}"
   end
 

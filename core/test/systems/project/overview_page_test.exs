@@ -1,5 +1,6 @@
 defmodule Systems.Project.OverviewPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -14,7 +15,8 @@ defmodule Systems.Project.OverviewPageTest do
     end
 
     test "render 1 project", %{conn: conn, user: user} do
-      Factories.build(:project, %{
+      :project
+      |> Factories.build(%{
         name: "Appelmoes",
         auth_node:
           Factories.build(:auth_node, %{

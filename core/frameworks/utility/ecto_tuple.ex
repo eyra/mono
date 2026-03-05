@@ -1,5 +1,7 @@
 defmodule Frameworks.Utility.EctoTuple do
+  @moduledoc false
   use Ecto.Type
+
   def type, do: :list
 
   def cast({key, value} = tuple) when is_atom(key) and is_binary(value) do

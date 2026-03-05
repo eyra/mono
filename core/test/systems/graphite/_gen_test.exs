@@ -4,9 +4,14 @@ defmodule Systems.Graphite.GenTest do
   import Ecto.Query
   import Systems.Graphite.Gen
 
+  alias Core.Authorization.RoleAssignment
   alias Core.Repo
+  alias Systems.Account.FeaturesModel
+  alias Systems.Account.User
+  alias Systems.Account.UserProfileModel
   alias Systems.Graphite
   alias Systems.Graphite.Factories
+  alias Systems.Graphite.SubmissionModel
 
   describe "create_submissions/3" do
     test "create 2 submissions" do
@@ -14,24 +19,24 @@ defmodule Systems.Graphite.GenTest do
       create_submissions(leaderboard_id, 2, "aap")
 
       assert [
-               %Systems.Graphite.SubmissionModel{
+               %SubmissionModel{
                  description: "aap-1",
                  auth_node: %Core.Authorization.Node{
                    parent_id: nil,
                    role_assignments: [
-                     %Core.Authorization.RoleAssignment{
+                     %RoleAssignment{
                        principal_id: principal_1_id,
                        role: :owner
                      }
                    ]
                  }
                },
-               %Systems.Graphite.SubmissionModel{
+               %SubmissionModel{
                  description: "aap-2",
                  auth_node: %Core.Authorization.Node{
                    parent_id: nil,
                    role_assignments: [
-                     %Core.Authorization.RoleAssignment{
+                     %RoleAssignment{
                        principal_id: principal_2_id,
                        role: :owner
                      }
@@ -39,34 +44,28 @@ defmodule Systems.Graphite.GenTest do
                  }
                }
              ] =
-               from(Graphite.SubmissionModel)
+               from(SubmissionModel)
                |> Repo.all()
                |> Repo.preload(auth_node: [:role_assignments])
                |> Enum.sort_by(& &1.description)
 
       assert [
-               %Systems.Account.User{
+               %User{
                  id: ^principal_1_id,
                  displayname: "aap-1"
                },
-               %Systems.Account.User{
+               %User{
                  id: ^principal_2_id,
                  displayname: "aap-2"
                }
              ] =
-               from(Systems.Account.User)
+               from(User)
                |> Repo.all()
                |> Enum.sort_by(& &1.id)
 
-      assert [
-               %Systems.Account.FeaturesModel{},
-               %Systems.Account.FeaturesModel{}
-             ] = from(Systems.Account.FeaturesModel) |> Repo.all()
+      assert [%FeaturesModel{}, %FeaturesModel{}] = Repo.all(from(FeaturesModel))
 
-      assert [
-               %Systems.Account.UserProfileModel{},
-               %Systems.Account.UserProfileModel{}
-             ] = from(Systems.Account.UserProfileModel) |> Repo.all()
+      assert [%UserProfileModel{}, %UserProfileModel{}] = Repo.all(from(UserProfileModel))
     end
   end
 
@@ -76,11 +75,11 @@ defmodule Systems.Graphite.GenTest do
       create_submissions(leaderboard_id, 2, "aap")
       delete_submissions("aap")
 
-      assert [] = from(Graphite.ScoreModel) |> Repo.all()
-      assert [] = from(Graphite.SubmissionModel) |> Repo.all()
-      assert [] = from(Systems.Account.User) |> Repo.all()
-      assert [] = from(Systems.Account.FeaturesModel) |> Repo.all()
-      assert [] = from(Systems.Account.UserProfileModel) |> Repo.all()
+      assert [] = Repo.all(from(Graphite.ScoreModel))
+      assert [] = Repo.all(from(SubmissionModel))
+      assert [] = Repo.all(from(User))
+      assert [] = Repo.all(from(FeaturesModel))
+      assert [] = Repo.all(from(UserProfileModel))
     end
   end
 end

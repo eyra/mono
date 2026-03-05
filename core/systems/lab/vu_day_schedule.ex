@@ -1,9 +1,7 @@
 defmodule Systems.Lab.VUDaySchedule do
+  @moduledoc false
   alias CoreWeb.UI.Timestamp
-
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
   @time_slots [
     900,
@@ -35,8 +33,7 @@ defmodule Systems.Lab.VUDaySchedule do
   @default_disabled [1030, 1300, 1500, 1730, 1800, 1830, 1900, 1930]
 
   def entries(time_slots) do
-    entries()
-    |> Enum.map(&map_entry(&1, time_slots))
+    Enum.map(entries(), &map_entry(&1, time_slots))
   end
 
   def entries do
@@ -77,17 +74,11 @@ defmodule Systems.Lab.VUDaySchedule do
   defp number_of_reservations(nil), do: 0
 
   defp number_of_reservations(%Lab.TimeSlotModel{reservations: reservations}) do
-    reservations
-    |> Enum.count(&(&1.status != :cancelled))
+    Enum.count(reservations, &(&1.status != :cancelled))
   end
 
   def base_values(time_slots) do
-    time_slots
-    |> List.last(%{
-      start_time: Timestamp.now(),
-      location: "SBE Lab",
-      number_of_seats: 8
-    })
+    List.last(time_slots, %{start_time: Timestamp.now(), location: "SBE Lab", number_of_seats: 8})
   end
 
   defp time_as_integer(%DateTime{hour: hour, minute: minute}) do

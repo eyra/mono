@@ -23,34 +23,29 @@ defmodule Systems.Manual.Builder.View do
   end
 
   def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
-    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+    assign(socket, chapters: Enum.sort_by(chapters, & &1.userflow_step.order))
   end
 
   def update_chapters(socket) do
-    socket |> assign(chapters: [])
+    assign(socket, chapters: [])
   end
 
   def update_selected_chapter(%{assigns: %{chapters: []}} = socket) do
     # If there are no chapters, we don't have a selected chapter
-    socket
-    |> assign(selected_chapter_id: nil, selected_chapter: nil)
+    assign(socket, selected_chapter_id: nil, selected_chapter: nil)
   end
 
-  def update_selected_chapter(
-        %{assigns: %{selected_chapter_id: selected_chapter_id, chapters: chapters}} =
-          socket
-      ) do
+  def update_selected_chapter(%{assigns: %{selected_chapter_id: selected_chapter_id, chapters: chapters}} = socket) do
     selected_chapter =
       case Enum.find(chapters, fn chapter -> chapter.id == selected_chapter_id end) do
         nil ->
-          chapters |> List.first()
+          List.first(chapters)
 
         chapter ->
           chapter
       end
 
-    socket
-    |> assign(selected_chapter_id: selected_chapter.id, selected_chapter: selected_chapter)
+    assign(socket, selected_chapter_id: selected_chapter.id, selected_chapter: selected_chapter)
   end
 
   @impl true
@@ -89,7 +84,7 @@ defmodule Systems.Manual.Builder.View do
     {
       :noreply,
       socket
-      |> assign(selected_chapter_id: chapter_id |> String.to_integer())
+      |> assign(selected_chapter_id: String.to_integer(chapter_id))
       |> update_selected_chapter()
       |> compose_child(:chapter_list)
       |> compose_child(:chapter_form)

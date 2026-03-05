@@ -1,14 +1,12 @@
 defmodule Systems.Lab.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
-  alias Frameworks.Pixel.Text
 
+  alias Frameworks.Pixel.Text
   alias Systems.Lab
 
   @impl true
-  def update(
-        %{id: id, entity_id: entity_id, validate?: validate?},
-        %{assigns: %{myself: myself}} = socket
-      ) do
+  def update(%{id: id, entity_id: entity_id, validate?: validate?}, %{assigns: %{myself: myself}} = socket) do
     add_day_button = %{
       action: %{type: :send, event: "add_day", target: myself},
       face: %{type: :primary, label: dgettext("link-lab", "add.day.button")}
@@ -40,33 +38,29 @@ defmodule Systems.Lab.ToolForm do
   end
 
   defp get_day(day_list_items, index) when is_binary(index) do
-    get_day(day_list_items, index |> String.to_integer())
+    get_day(day_list_items, String.to_integer(index))
   end
 
   defp get_day(day_list_items, index) do
-    day_list_items |> Enum.at(index)
+    Enum.at(day_list_items, index)
   end
 
   defp update_entity(%{assigns: %{entity_id: entity_id}} = socket) do
     entity = Lab.Public.get_tool!(entity_id, [:time_slots])
     changeset = Lab.ToolModel.changeset(entity, :create, %{})
 
-    socket
-    |> assign(
-      entity: entity,
-      changeset: changeset
-    )
+    assign(socket, entity: entity, changeset: changeset)
   end
 
   defp update_day_list_items(%{assigns: %{entity: %{time_slots: time_slots}}} = socket) do
     day_list_items = Lab.DayListItemModel.parse(time_slots)
-    socket |> assign(day_list_items: day_list_items)
+    assign(socket, day_list_items: day_list_items)
   end
 
   defp update_byline(%{assigns: %{day_list_items: day_list_items}} = socket) do
     number_of_time_slots =
-      day_list_items
-      |> Enum.reduce(
+      Enum.reduce(
+        day_list_items,
         0,
         fn %{number_of_timeslots: number_of_timeslots}, acc ->
           acc + number_of_timeslots
@@ -84,12 +78,12 @@ defmodule Systems.Lab.ToolForm do
         seats: number_of_seats
       )
 
-    socket |> assign(byline: byline)
+    assign(socket, byline: byline)
   end
 
   @impl true
   def handle_event("day_view_hide", _payload, socket) do
-    {:noreply, socket |> hide_modal(:day_view)}
+    {:noreply, hide_modal(socket, :day_view)}
   end
 
   @impl true

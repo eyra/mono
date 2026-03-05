@@ -1,28 +1,18 @@
 defmodule Systems.Alliance.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   import CoreWeb.UI.StepIndicator
+  import Frameworks.Pixel.Form
 
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
-  import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Button
-
-  alias Systems.{
-    Alliance
-  }
+  alias Systems.Alliance
 
   # Handle initial update
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity,
-          callback_url: callback_url,
-          user: user
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity, callback_url: callback_url, user: user}, socket) do
     changeset = Alliance.ToolModel.changeset(entity, :create, %{})
 
     {
@@ -45,8 +35,7 @@ defmodule Systems.Alliance.ToolForm do
   def handle_event("save", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, :auto_save, attrs)
+      save(socket, entity, :auto_save, attrs)
     }
   end
 
@@ -72,28 +61,28 @@ defmodule Systems.Alliance.ToolForm do
 
   def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
-      Alliance.ToolModel.operational_changeset(entity, %{})
+      entity
+      |> Alliance.ToolModel.operational_changeset(%{})
       |> Map.put(:action, :validate_for_publish)
 
-    socket
-    |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
-  defp redirect_instructions_link() do
+  defp redirect_instructions_link do
     link_as_string(
       dgettext("eyra-alliance", "redirect.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/survey-module/survey-options/survey-termination/#RedirectingRespondentsToAUrl"
     )
   end
 
-  defp nextid_instructions_link() do
+  defp nextid_instructions_link do
     link_as_string(
       dgettext("eyra-alliance", "nextid.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/survey-module/survey-flow/standard-elements/passing-information-through-query-strings/?parent=p001135#PassingInformationIntoASurvey"
     )
   end
 
-  defp study_instructions_link() do
+  defp study_instructions_link do
     link_as_string(
       dgettext("eyra-alliance", "study.instructions.link"),
       "https://www.qualtrics.com/support/survey-platform/distributions-module/web-distribution/anonymous-link/#ObtainingTheAnonymousLink"

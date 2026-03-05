@@ -123,12 +123,10 @@ defmodule Systems.Assignment.Template.Flags do
         enabled_flags_set = MapSet.new(flags_to_enable)
 
         flags_with_boolean_values =
-          all_available_flags
-          |> Enum.map(fn flag_name ->
+          Map.new(all_available_flags, fn flag_name ->
             flag_enabled? = MapSet.member?(enabled_flags_set, flag_name)
             {flag_name, flag_enabled?}
           end)
-          |> Enum.into(%{})
 
         struct(__MODULE__, flags_with_boolean_values)
       end
@@ -138,13 +136,11 @@ defmodule Systems.Assignment.Template.Flags do
         disabled_flags_set = MapSet.new(flags_to_disable)
 
         flags_with_boolean_values =
-          all_available_flags
-          |> Enum.map(fn flag_name ->
+          Map.new(all_available_flags, fn flag_name ->
             flag_disabled? = MapSet.member?(disabled_flags_set, flag_name)
             flag_enabled? = not flag_disabled?
             {flag_name, flag_enabled?}
           end)
-          |> Enum.into(%{})
 
         struct(__MODULE__, flags_with_boolean_values)
       end
@@ -152,9 +148,7 @@ defmodule Systems.Assignment.Template.Flags do
       defp create_struct_with_all_flags_disabled(all_available_flags) do
         # Default behavior: all flags start as false (opt-in approach)
         flags_with_boolean_values =
-          all_available_flags
-          |> Enum.map(fn flag_name -> {flag_name, false} end)
-          |> Enum.into(%{})
+          Map.new(all_available_flags, fn flag_name -> {flag_name, false} end)
 
         struct(__MODULE__, flags_with_boolean_values)
       end

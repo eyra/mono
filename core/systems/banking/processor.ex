@@ -1,9 +1,8 @@
 defmodule Systems.Banking.Processor do
-  defstruct [:strategy, :currency]
+  @moduledoc false
+  alias Systems.Bookkeeping
 
-  alias Systems.{
-    Bookkeeping
-  }
+  defstruct [:strategy, :currency]
 
   @account_type :bank
 
@@ -17,13 +16,12 @@ defmodule Systems.Banking.Processor do
 
     lines = lines(bank_account, account, amount, type)
 
-    %{
+    Bookkeeping.Public.enter(%{
       idempotence_key: to_string(id),
       journal_message:
         "Bank transaction: #{id} at: #{date} for: #{amount} from: #{payment.from_iban} to: #{payment.to_iban}",
       lines: lines
-    }
-    |> Bookkeeping.Public.enter()
+    })
   end
 
   defp lines(bank_account, account, amount, :received) do

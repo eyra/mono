@@ -1,12 +1,13 @@
 defmodule Systems.Pool.ParticipantPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import CoreWeb.UI.Member
   import Frameworks.Pixel.Content
 
   alias Frameworks.Pixel.Text
-  alias Systems.Budget
   alias Systems.Account
+  alias Systems.Budget
 
   @impl true
   def get_model(%{"id" => user_id}, _session, _socket) do

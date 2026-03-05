@@ -1,8 +1,8 @@
 defmodule Systems.Account.UserAuthTest do
   use CoreWeb.ConnCase, async: true
 
-  alias Systems.Account.UserAuth
   alias Systems.Account
+  alias Systems.Account.UserAuth
 
   @remember_me_cookie "_core_web_user_remember_me"
 
@@ -12,10 +12,10 @@ defmodule Systems.Account.UserAuthTest do
       |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    conf = Application.get_env(:core, Systems.Account.UserAuth, [])
+    conf = Application.get_env(:core, UserAuth, [])
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Account.UserAuth, conf)
+      Application.put_env(:core, UserAuth, conf)
     end)
 
     %{user: Core.Factories.insert!(:member), conn: conn}
@@ -57,8 +57,8 @@ defmodule Systems.Account.UserAuthTest do
 
     test "creator first time redirects to project", %{conn: conn, user: user} do
       first_time? = true
-      user = user |> Map.put(:creator, first_time?)
-      conn = conn |> UserAuth.log_in_user(user, true, %{})
+      user = Map.put(user, :creator, first_time?)
+      conn = UserAuth.log_in_user(conn, user, true, %{})
 
       assert redirected_to(conn) == "/project"
     end

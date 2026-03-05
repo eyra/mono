@@ -1,18 +1,22 @@
 defmodule Systems.Crew.RejectModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
-  require Systems.Crew.RejectCategories
+
+  alias Systems.Crew.RejectCategories
+
+  require RejectCategories
 
   embedded_schema do
-    field(:category, Ecto.Enum, values: Systems.Crew.RejectCategories.schema_values())
+    field(:category, Ecto.Enum, values: RejectCategories.schema_values())
     field(:message, :string)
   end
 
   @fields ~w(category message)a
 
   def changeset(model, :init, params) do
-    model
-    |> cast(params, @fields)
+    cast(model, params, @fields)
   end
 
   def changeset(model, :submit, params) do

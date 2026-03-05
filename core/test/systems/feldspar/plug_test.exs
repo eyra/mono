@@ -1,24 +1,24 @@
 defmodule Systems.Feldspar.PlugTest do
   use ExUnit.Case
+
   import Plug.Test
 
-  require Systems.Feldspar.Plug
   alias Systems.Feldspar.Plug
+
+  require Plug
 
   setup do
     upload_path = Application.get_env(:core, :upload_path)
-    backend = Application.fetch_env!(:core, :feldspar) |> Access.fetch!(:backend)
+    backend = :core |> Application.fetch_env!(:feldspar) |> Access.fetch!(:backend)
 
     on_exit(fn ->
       Application.put_env(:core, :upload_path, upload_path)
       Application.put_env(:core, :feldspar, backend: backend)
     end)
 
-    folder_name = "temp_#{:crypto.strong_rand_bytes(16) |> Base.encode16()}"
+    folder_name = "temp_#{16 |> :crypto.strong_rand_bytes() |> Base.encode16()}"
 
-    tmp_dir =
-      System.tmp_dir()
-      |> Path.join(folder_name)
+    tmp_dir = Path.join(System.tmp_dir(), folder_name)
 
     File.mkdir!(tmp_dir)
 

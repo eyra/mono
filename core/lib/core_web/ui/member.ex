@@ -5,7 +5,6 @@ defmodule CoreWeb.UI.Member do
   use CoreWeb, :ui
 
   alias Core.ImageHelpers
-
   alias Frameworks.Pixel.Button
 
   attr(:title, :string, required: true)

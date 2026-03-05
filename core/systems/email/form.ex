@@ -1,12 +1,13 @@
 defmodule Systems.Email.Form do
+  @moduledoc false
   use CoreWeb, :live_component
-
-  alias CoreWeb.UI.Timestamp
-  import Frameworks.Pixel.Tag
-  import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Button
   use Bamboo.Phoenix, template: Systems.Email.EmailHTML
 
+  import Frameworks.Pixel.Form
+  import Frameworks.Pixel.Tag
+
+  alias CoreWeb.UI.Timestamp
+  alias Frameworks.Pixel.Button
   alias Systems.Account
   alias Systems.Email
 
@@ -20,7 +21,7 @@ defmodule Systems.Email.Form do
   @impl true
   def update(%{id: id, users: users, from_user: %{email: from_email} = from_user}, socket) do
     # send a copy to sender, append email to end of list
-    user_emails = users |> Enum.map(& &1.email)
+    user_emails = Enum.map(users, & &1.email)
     to = Enum.reverse([from_email | Enum.reverse(user_emails)])
 
     %{fullname: fullname} = Account.Public.get_profile(from_user)
@@ -32,24 +33,12 @@ defmodule Systems.Email.Form do
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        users: users,
-        from_user: from_user,
-        model: model,
-        changeset: changeset,
-        validate?: false
-      )
+      assign(socket, id: id, users: users, from_user: from_user, model: model, changeset: changeset, validate?: false)
     }
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"model" => form_data},
-        %{assigns: %{model: model, validate?: validate?}} = socket
-      ) do
+  def handle_event("update", %{"model" => form_data}, %{assigns: %{model: model, validate?: validate?}} = socket) do
     type =
       if validate? do
         :validate
@@ -63,31 +52,27 @@ defmodule Systems.Email.Form do
       case Ecto.Changeset.apply_action(changeset, :update) do
         {:ok, model} ->
           changeset = Email.Model.changeset(:init, model, %{})
-          socket |> assign(model: model, changeset: changeset)
+          assign(socket, model: model, changeset: changeset)
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset)
+          assign(socket, changeset: changeset)
       end
 
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event(
-        "send",
-        %{"model" => form_data},
-        %{assigns: %{model: model}} = socket
-      ) do
+  def handle_event("send", %{"model" => form_data}, %{assigns: %{model: model}} = socket) do
     changeset = Email.Model.changeset(:validate, model, form_data)
 
     socket =
       case Ecto.Changeset.apply_action(changeset, :update) do
         {:ok, model} ->
           send(self(), {:email_dialog, model})
-          socket |> assign(model: model)
+          assign(socket, model: model)
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset, validate?: true)
+          assign(socket, changeset: changeset, validate?: true)
       end
 
     {:noreply, socket}
@@ -98,8 +83,7 @@ defmodule Systems.Email.Form do
   defp username(%{displayname: displayname}), do: displayname
 
   defp tags(%{users: users}) when is_list(users) do
-    users
-    |> Enum.map(&username(&1))
+    Enum.map(users, &username(&1))
   end
 
   @impl true

@@ -1,5 +1,7 @@
 defmodule Systems.Storage.BuiltIn.S3 do
+  @moduledoc false
   @behaviour Systems.Storage.BuiltIn.Special
+
   alias ExAws.S3
 
   @impl true
@@ -9,7 +11,8 @@ defmodule Systems.Storage.BuiltIn.S3 do
     content_type = content_type(object_key)
     bucket = Access.fetch!(settings(), :bucket)
 
-    case S3.put_object(bucket, object_key, data, content_type: content_type)
+    case bucket
+         |> S3.put_object(object_key, data, content_type: content_type)
          |> backend().request() do
       {:ok, _response} -> :ok
       {:error, reason} -> {:error, reason}
@@ -21,7 +24,8 @@ defmodule Systems.Storage.BuiltIn.S3 do
     bucket = Access.fetch!(settings(), :bucket)
     prefix = object_key(folder) <> "/"
 
-    list_objects(bucket, prefix, nil)
+    bucket
+    |> list_objects(prefix, nil)
     |> Enum.map(fn %{key: key, size: size, last_modified: last_modified} ->
       {:ok, url} =
         :s3
@@ -48,10 +52,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
     objects ++ list_objects(bucket, prefix, continuation)
   end
 
-  defp list_objects(bucket, prefix, %{
-         is_truncated: "true",
-         next_continuation_token: continuation_token
-       }) do
+  defp list_objects(bucket, prefix, %{is_truncated: "true", next_continuation_token: continuation_token}) do
     {objects, continuation} =
       list_objects(bucket, prefix: prefix, continuation_token: continuation_token)
 
@@ -68,7 +69,8 @@ defmodule Systems.Storage.BuiltIn.S3 do
         next_continuation_token: next_continuation_token
       }
     } =
-      S3.list_objects_v2(bucket, opts)
+      bucket
+      |> S3.list_objects_v2(opts)
       |> backend().request!()
 
     {contents, %{is_truncated: is_truncated, next_continuation_token: next_continuation_token}}
@@ -80,12 +82,14 @@ defmodule Systems.Storage.BuiltIn.S3 do
     prefix = object_key(folder) <> "/"
 
     stream =
-      S3.list_objects(bucket, prefix: prefix)
+      bucket
+      |> S3.list_objects(prefix: prefix)
       |> backend().stream!()
       |> Stream.map(& &1.key)
 
     result =
-      S3.delete_all_objects(bucket, stream)
+      bucket
+      |> S3.delete_all_objects(stream)
       |> backend().request!()
 
     errors = Enum.reject(result, &{&1.status_code != 200})

@@ -1,14 +1,13 @@
 defmodule Systems.Assignment.Controller do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
-  alias Plug.Conn
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Concept
+  alias Plug.Conn
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
@@ -25,7 +24,8 @@ defmodule Systems.Assignment.Controller do
     %{id: id, crew: crew} =
       assignment = Assignment.Public.get_by(:workflow_id, workflow_id, [:crew])
 
-    Crew.Public.get_member(crew, user)
+    crew
+    |> Crew.Public.get_member(user)
     |> then(&task_identifier(assignment, item, &1))
     |> then(&Crew.Public.get_task(crew, &1))
     |> Crew.Public.complete_task!()
@@ -33,8 +33,7 @@ defmodule Systems.Assignment.Controller do
     # Small delay to allow modal to close before redirect completes
     Process.sleep(100)
 
-    conn
-    |> redirect(to: ~p"/assignment/#{id}")
+    redirect(conn, to: ~p"/assignment/#{id}")
   end
 
   def invite(conn, %{"id" => id}) do
@@ -79,7 +78,7 @@ defmodule Systems.Assignment.Controller do
            String.to_integer(id),
            Assignment.Model.preload_graph(:down)
          ) do
-      date = Timestamp.now() |> Timestamp.format_date_short!()
+      date = Timestamp.format_date_short!(Timestamp.now())
 
       branch_name =
         if branch do
@@ -126,14 +125,7 @@ defmodule Systems.Assignment.Controller do
     )
   end
 
-  def progress_csv_data(
-        assignment,
-        headers,
-        participants,
-        workflow_items,
-        signatures,
-        show_consent?
-      ) do
+  def progress_csv_data(assignment, headers, participants, workflow_items, signatures, show_consent?) do
     participants
     |> Enum.map(
       &participant_progress(
@@ -157,8 +149,7 @@ defmodule Systems.Assignment.Controller do
 
   defp show_consent?(_assignment, [_ | _] = _signatures), do: true
 
-  defp show_consent?(%Assignment.Model{consent_agreement_id: id}, _signatures) when is_number(id),
-    do: true
+  defp show_consent?(%Assignment.Model{consent_agreement_id: id}, _signatures) when is_number(id), do: true
 
   defp show_consent?(_, _), do: false
 
@@ -215,11 +206,7 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
-  defp task_status(
-         %Assignment.Model{crew: crew},
-         %Workflow.ItemModel{title: workflow_title},
-         task_identifier
-       ) do
+  defp task_status(%Assignment.Model{crew: crew}, %Workflow.ItemModel{title: workflow_title}, task_identifier) do
     status_value =
       case Crew.Public.get_task(crew, task_identifier) do
         %{started_at: nil} -> @progress_not_applicable
@@ -257,7 +244,7 @@ defmodule Systems.Assignment.Controller do
       participant: participant
     }
 
-    conn |> put_session(:panel_info, panel_info)
+    put_session(conn, :panel_info, panel_info)
   end
 
   defp authorize_user(%{assigns: %{current_user: user}} = conn, %Assignment.Model{} = assignment) do

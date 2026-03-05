@@ -1,4 +1,5 @@
 defmodule Systems.Workflow.Config do
+  @moduledoc false
   @type library :: Frameworks.Builder.LibraryModel.t()
   @type item :: atom()
 

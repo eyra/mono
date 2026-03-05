@@ -2,40 +2,34 @@ defmodule Frameworks.Pixel.ModalView do
   use CoreWeb, :pixel
   use Gettext, backend: CoreWeb.Gettext
 
-  require Logger
-
   import LiveNest.HTML
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Toolbar
 
+  require Logger
+
   defmacro __using__(_) do
     quote do
+      import Frameworks.Pixel.ModalView, only: [update_modal_buttons: 3]
+
       alias Frameworks.Pixel.ModalView
 
-      import ModalView, only: [update_modal_buttons: 3]
-
       # Handle toolbar action events from the Toolbar LiveComponent
-      def consume_event(
-            %{name: :toolbar_action, payload: %{action: action}},
-            socket
-          ) do
+      def consume_event(%{name: :toolbar_action, payload: %{action: action}}, socket) do
         # Forward to the source that published the buttons
         source = Map.get(socket.assigns, :modal_button_source)
 
         if source do
-          Frameworks.Pixel.ModalView.forward_toolbar_action(source, action)
+          ModalView.forward_toolbar_action(source, action)
         end
 
         {:stop, socket}
       end
 
-      def consume_event(
-            %{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}},
-            socket
-          ) do
-        {:stop, Frameworks.Pixel.ModalView.update_modal_buttons(socket, source, buttons)}
+      def consume_event(%{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}}, socket) do
+        {:stop, ModalView.update_modal_buttons(socket, source, buttons)}
       end
     end
   end
@@ -91,7 +85,7 @@ defmodule Frameworks.Pixel.ModalView do
   attr(:toolbar_buttons, :list, default: [])
 
   def frame(%{modal: %{style: style}} = assigns) do
-    unless style in @allowed_styles do
+    if style not in @allowed_styles do
       raise ArgumentError,
             "Invalid style: #{style}. Allowed styles are: #{Enum.join(@allowed_styles, ", ")}"
     end

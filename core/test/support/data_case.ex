@@ -16,26 +16,27 @@ defmodule Core.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
-      alias Core.Repo
+      use CoreWeb, :verified_routes
 
+      import Core.DataCase
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Core.DataCase
 
       alias Core.Factories
-
-      use CoreWeb, :verified_routes
+      alias Core.Repo
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Core.Repo)
+    :ok = Sandbox.checkout(Core.Repo)
 
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, {:shared, self()})
+    if !tags[:async] do
+      Sandbox.mode(Core.Repo, {:shared, self()})
     end
 
     :ok

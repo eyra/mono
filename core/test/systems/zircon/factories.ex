@@ -1,4 +1,5 @@
 defmodule Systems.Zircon.Factories do
+  @moduledoc false
   alias Core.Factories
 
   def setup_ontology do

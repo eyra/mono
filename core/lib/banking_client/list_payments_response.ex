@@ -1,7 +1,11 @@
 defmodule BankingClient.ListPaymentsResponse do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias BankingClient.Payment
+
   @primary_key false
 
   embedded_schema do
@@ -11,7 +15,8 @@ defmodule BankingClient.ListPaymentsResponse do
   end
 
   def conform(data) do
-    changeset(%__MODULE__{}, data)
+    %__MODULE__{}
+    |> changeset(data)
     |> apply_action!(:update)
   end
 
@@ -29,7 +34,6 @@ defmodule BankingClient.ListPaymentsResponse do
   end
 
   defp payment_alias_changeset(schema, params) do
-    schema
-    |> cast(params, [:iban, :name])
+    cast(schema, params, [:iban, :name])
   end
 end

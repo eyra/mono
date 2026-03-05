@@ -1,35 +1,31 @@
 defmodule Systems.Pool.Public do
+  @moduledoc false
   use Core, :public
   use Core.FeatureFlags
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Query, warn: false
   import Systems.Pool.Queries
 
-  alias Ecto.Multi
-  alias Ecto.Changeset
-  alias Frameworks.Signal
-  alias Frameworks.Concept.Directable
-
   alias Core.Repo
-
+  alias Ecto.Changeset
+  alias Ecto.Multi
+  alias Frameworks.Concept.Directable
+  alias Frameworks.Signal
   alias Systems.Account
-  alias Systems.Pool
   alias Systems.Bookkeeping
   alias Systems.NextAction
   alias Systems.Org
+  alias Systems.Pool
 
   def list(preload \\ []) do
-    Repo.all(Pool.Model) |> Repo.preload(preload)
+    Pool.Model |> Repo.all() |> Repo.preload(preload)
   end
 
   def list_active(preload \\ []) do
-    from(pool in Pool.Model,
-      where: pool.archived == false,
-      order_by: [asc: :director, asc: :name],
-      preload: ^preload
+    Repo.all(
+      from(pool in Pool.Model, where: pool.archived == false, order_by: [asc: :director, asc: :name], preload: ^preload)
     )
-    |> Repo.all()
   end
 
   def list_owned(user, preload \\ []) do
@@ -39,16 +35,18 @@ defmodule Systems.Pool.Public do
         principal: user
       )
 
-    from(p in Pool.Model,
-      where: p.auth_node_id in subquery(node_ids),
-      order_by: [desc: p.updated_at],
-      preload: ^preload
+    Repo.all(
+      from(p in Pool.Model,
+        where: p.auth_node_id in subquery(node_ids),
+        order_by: [desc: p.updated_at],
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def list_by_participant(%Account.User{} = user, preload \\ []) do
-    pool_query(user, :participant)
+    user
+    |> pool_query(:participant)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -62,32 +60,30 @@ defmodule Systems.Pool.Public do
   end
 
   def list_by_orgs([head | _] = orgs, preload) when is_integer(head) do
-    from(p in Pool.Model,
-      inner_join: o in Org.NodeModel,
-      on: o.id == p.org_id,
-      where: o.id in ^orgs,
-      order_by: [desc: p.inserted_at],
-      preload: ^preload
+    Repo.all(
+      from(p in Pool.Model,
+        inner_join: o in Org.NodeModel,
+        on: o.id == p.org_id,
+        where: o.id in ^orgs,
+        order_by: [desc: p.inserted_at],
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def list_by_org(org_identifier, preload \\ []) when is_list(org_identifier) do
-    from(p in Pool.Model,
-      inner_join: o in Org.NodeModel,
-      on: o.id == p.org_id,
-      where: o.identifier == ^org_identifier,
-      preload: ^preload
+    Repo.all(
+      from(p in Pool.Model,
+        inner_join: o in Org.NodeModel,
+        on: o.id == p.org_id,
+        where: o.identifier == ^org_identifier,
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def list_by_director(director, preload \\ []) do
-    from(pool in Pool.Model,
-      where: pool.director == ^director,
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(pool in Pool.Model, where: pool.director == ^director, preload: ^preload))
   end
 
   def list_submissions do
@@ -95,18 +91,14 @@ defmodule Systems.Pool.Public do
   end
 
   def list_submissions(status, preload \\ [:criteria]) do
-    from(submission in Pool.SubmissionModel,
-      where: submission.status == ^status,
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(submission in Pool.SubmissionModel, where: submission.status == ^status, preload: ^preload))
   end
 
   def submit(%Pool.SubmissionModel{id: id, pool: pool}) do
     Directable.director(pool).submit(id)
   end
 
-  def list_directors() do
+  def list_directors do
     from(p in Pool.Model,
       distinct: true,
       select: p.director
@@ -119,27 +111,23 @@ defmodule Systems.Pool.Public do
     auth_module().users_with_role(pool, :participant)
   end
 
-  def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
-  def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
+  def get!(id, preload \\ []), do: Pool.Model |> Repo.get!(id) |> Repo.preload(preload)
+  def get(id, preload \\ []), do: Pool.Model |> Repo.get(id) |> Repo.preload(preload)
 
   def get_by_name(name, preload \\ [])
 
-  def get_by_name(name, preload) when is_atom(name),
-    do: get_by_name(Atom.to_string(name), preload)
+  def get_by_name(name, preload) when is_atom(name), do: get_by_name(Atom.to_string(name), preload)
 
   def get_by_name(name, preload) do
-    Repo.get_by(Pool.Model, name: name)
+    Pool.Model
+    |> Repo.get_by(name: name)
     |> Repo.preload(preload)
   end
 
   def get_by_names(names, preload \\ []) do
     names = map_string(names)
 
-    from(p in Pool.Model,
-      where: p.name in ^names,
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(p in Pool.Model, where: p.name in ^names, preload: ^preload))
   end
 
   def get_panl(preload \\ []) do
@@ -153,13 +141,14 @@ defmodule Systems.Pool.Public do
   end
 
   def get_by_submission!(submission_id, preload) do
-    from(pool in Pool.Model,
-      inner_join: submission in Pool.SubmissionModel,
-      on: pool.id == submission.pool_id,
-      where: submission.id == ^submission_id,
-      preload: ^preload
+    Repo.one!(
+      from(pool in Pool.Model,
+        inner_join: submission in Pool.SubmissionModel,
+        on: pool.id == submission.pool_id,
+        where: submission.id == ^submission_id,
+        preload: ^preload
+      )
     )
-    |> Repo.one!()
   end
 
   defp map_string(term) when is_list(term), do: Enum.map(term, &map_string(&1))
@@ -167,7 +156,8 @@ defmodule Systems.Pool.Public do
   defp map_string(term) when is_binary(term), do: term
 
   def participant?(%Pool.Model{} = pool, %Account.User{} = user) do
-    pool_query(pool, user, [:participant, :tester])
+    pool
+    |> pool_query(user, [:participant, :tester])
     |> Repo.exists?()
   end
 
@@ -185,6 +175,7 @@ defmodule Systems.Pool.Public do
 
       nil ->
         require Logger
+
         Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
         :error
     end
@@ -205,8 +196,7 @@ defmodule Systems.Pool.Public do
   def get_submission!(term, preload \\ [:criteria])
 
   def get_submission!(id, preload) do
-    from(submission in Pool.SubmissionModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(submission in Pool.SubmissionModel, preload: ^preload), id)
   end
 
   def get_or_create_budget(%Pool.Model{currency: %{budget: %{id: _id} = budget}}) do
@@ -220,8 +210,8 @@ defmodule Systems.Pool.Public do
   def create!(name, target, currency, org, director) do
     %Pool.Model{}
     |> Pool.Model.change(%{name: name, target: target, director: director})
-    |> Ecto.Changeset.put_assoc(:currency, currency)
-    |> Ecto.Changeset.put_assoc(:org, org)
+    |> Changeset.put_assoc(:currency, currency)
+    |> Changeset.put_assoc(:org, org)
     |> Repo.insert!()
   end
 
@@ -232,14 +222,12 @@ defmodule Systems.Pool.Public do
   end
 
   def prepare_submission(%{} = attrs, pool) do
-    criteria =
-      %Pool.CriteriaModel{}
-      |> Pool.CriteriaModel.changeset(%{})
+    criteria = Pool.CriteriaModel.changeset(%Pool.CriteriaModel{}, %{})
 
     %Pool.SubmissionModel{}
     |> Pool.SubmissionModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:pool, pool)
-    |> Ecto.Changeset.put_assoc(:criteria, criteria)
+    |> Changeset.put_assoc(:pool, pool)
+    |> Changeset.put_assoc(:criteria, criteria)
   end
 
   def copy(%Pool.SubmissionModel{pool: pool, criteria: criteria} = submission) do
@@ -249,14 +237,12 @@ defmodule Systems.Pool.Public do
       |> Map.put(:status, :idle)
       |> Map.put(:reward_value, nil)
 
-    criteria_copy =
-      %Pool.CriteriaModel{}
-      |> Pool.CriteriaModel.changeset(Map.from_struct(criteria))
+    criteria_copy = Pool.CriteriaModel.changeset(%Pool.CriteriaModel{}, Map.from_struct(criteria))
 
     %Pool.SubmissionModel{}
     |> Pool.SubmissionModel.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:criteria, criteria_copy)
-    |> Ecto.Changeset.put_assoc(:pool, pool)
+    |> Changeset.put_assoc(:criteria, criteria_copy)
+    |> Changeset.put_assoc(:pool, pool)
     |> Repo.insert!()
   end
 
@@ -303,16 +289,11 @@ defmodule Systems.Pool.Public do
     Pool.CriteriaModel.eligitable?(submission_criteria, user_features)
   end
 
-  def count_eligitable_users(
-        %Pool.CriteriaModel{
-          genders: genders
-        },
-        include,
-        exclude
-      ) do
-    genders = genders |> to_string_list()
+  def count_eligitable_users(%Pool.CriteriaModel{genders: genders}, include, exclude) do
+    genders = to_string_list(genders)
 
-    query_count_users(include, exclude)
+    include
+    |> query_count_users(exclude)
     |> optional_where(:gender, genders)
     |> Repo.one()
   end
@@ -339,29 +320,22 @@ defmodule Systems.Pool.Public do
     where(query, [user, features], field(features, ^field_name) in ^values)
   end
 
-  def target_achieved?(
-        %Pool.Model{target: target},
-        %{balance_credit: balance_credit}
-      ) do
+  def target_achieved?(%Pool.Model{target: target}, %{balance_credit: balance_credit}) do
     balance_credit >= target
   end
 
   def target_achieved?(_, _), do: false
 
-  def wallet_related?(
-        %Pool.Model{currency: %{name: currency_name}},
-        %Bookkeeping.AccountModel{identifier: ["wallet", wallet_name, _]}
-      ) do
+  def wallet_related?(%Pool.Model{currency: %{name: currency_name}}, %Bookkeeping.AccountModel{
+        identifier: ["wallet", wallet_name, _]
+      }) do
     wallet_name == currency_name
   end
 
   def wallet_related?(_, _), do: false
 
-  defp notify_when_submitted(
-         %Pool.SubmissionModel{pool_id: pool_id} = submission,
-         %Ecto.Changeset{} = changeset
-       ) do
-    if Ecto.Changeset.get_change(changeset, :status) === :submitted do
+  defp notify_when_submitted(%Pool.SubmissionModel{pool_id: pool_id} = submission, %Changeset{} = changeset) do
+    if Changeset.get_change(changeset, :status) === :submitted do
       for user <- Account.Public.list_pool_admins() do
         NextAction.Public.create_next_action(user, Pool.ReviewSubmission,
           key: "#{pool_id}",
@@ -420,15 +394,11 @@ defmodule Systems.Pool.Public do
   def update_pool_participations(user, added_to_pools, deleted_from_pools) do
     Multi.new()
     |> Multi.run(:add, fn _, _ ->
-      added_to_pools
-      |> update_pools(user, :add)
-
+      update_pools(added_to_pools, user, :add)
       {:ok, true}
     end)
     |> Multi.run(:delete, fn _, _ ->
-      deleted_from_pools
-      |> update_pools(user, :delete)
-
+      update_pools(deleted_from_pools, user, :delete)
       {:ok, true}
     end)
     |> Repo.commit()

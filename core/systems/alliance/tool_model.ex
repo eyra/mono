@@ -5,14 +5,14 @@ defmodule Systems.Alliance.ToolModel do
   use Ecto.Schema
   use Frameworks.Utility.Model
   use Frameworks.Utility.Schema
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  require Core.Enums.Devices
+  import Ecto.Changeset
 
-  alias Systems.Workflow
   alias Systems.Alliance.VariableParser
+  alias Systems.Workflow
+
+  require Core.Enums.Devices
 
   @tool_directors Application.compile_env(:core, :tool_directors)
 
@@ -56,11 +56,7 @@ defmodule Systems.Alliance.ToolModel do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :auth_node
-      ])
+  def preload_graph(:down), do: preload_graph([:auth_node])
 
   def preload_graph(:auth_node), do: [auth_node: []]
 
@@ -78,26 +74,23 @@ defmodule Systems.Alliance.ToolModel do
   end
 
   def changeset(tool, params) do
-    tool
-    |> cast(params, @fields)
+    cast(tool, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@operational_fields)
+    validate_required(changeset, @operational_fields)
   end
 
   def validate(changeset, :roundtrip) do
-    changeset =
-      changeset
-      |> Ecto.Changeset.validate_required([:url])
+    changeset = Ecto.Changeset.validate_required(changeset, [:url])
 
     %{changeset | action: :validate_roundtrip}
   end
 
   def ready?(tool) do
     changeset =
-      changeset(tool, %{})
+      tool
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -105,7 +98,7 @@ defmodule Systems.Alliance.ToolModel do
 
   def validate_url(%Ecto.Changeset{} = changeset, field, _options \\ []) do
     validate_change(changeset, field, fn _, url ->
-      URI.parse(url).query |> validate_query_string(field)
+      validate_query_string(URI.parse(url).query, field)
     end)
   end
 
@@ -124,7 +117,8 @@ defmodule Systems.Alliance.ToolModel do
   end
 
   def prepare_url(url, replacements) when is_binary(url) and is_map(replacements) do
-    URI.parse(url)
+    url
+    |> URI.parse()
     |> Map.update!(:query, fn query ->
       query
       |> URI.query_decoder()
@@ -144,8 +138,7 @@ defmodule Systems.Alliance.ToolModel do
     |> to_string()
   end
 
-  def external_path(%{url: url}, next_id)
-      when not is_nil(url) do
+  def external_path(%{url: url}, next_id) when not is_nil(url) do
     url_components = URI.parse(url)
 
     query =
@@ -168,6 +161,7 @@ defmodule Systems.Alliance.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
 
     alias Systems.Alliance
+
     def key(_), do: :alliance
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("eyra-alliance", "apply.cta.title")

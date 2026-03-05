@@ -2,16 +2,12 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
   use CoreWeb, :embedded_live_view
   use Gettext, backend: CoreWeb.Gettext
 
-  import Systems.Zircon.HTML, only: [ris_entry_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
+  import Systems.Zircon.HTML, only: [ris_entry_table: 1]
 
   alias Frameworks.Pixel.Text
 
-  def get_model(
-        :not_mounted_at_router,
-        %{"session" => %{id: id} = session, "filter" => filter},
-        _socket
-      ) do
+  def get_model(:not_mounted_at_router, %{"session" => %{id: id} = session, "filter" => filter}, _socket) do
     %{
       id: id,
       session: session,
@@ -28,7 +24,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
     # Extract title and filter, handling both string and atom keys
     title = Map.get(session, "title")
     filter = Map.get(session, "filter")
-    {:ok, socket |> assign(title: title, page_index: 0, query: nil, filter: filter)}
+    {:ok, assign(socket, title: title, page_index: 0, query: nil, filter: filter)}
   end
 
   @impl true
@@ -38,10 +34,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
   end
 
   @impl true
-  def consume_event(
-        %{name: "search_query", payload: %{query: query, query_string: _query_string}},
-        socket
-      ) do
+  def consume_event(%{name: "search_query", payload: %{query: query, query_string: _query_string}}, socket) do
     {
       :stop,
       socket

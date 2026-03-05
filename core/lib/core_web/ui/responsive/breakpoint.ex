@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Responsive.Breakpoint do
+  @moduledoc false
   @breakpoints [
     min: 0,
     xs: 320,
@@ -44,8 +45,8 @@ defmodule CoreWeb.UI.Responsive.Breakpoint do
   end
 
   def value(current_bp, base_value, break_values) do
-    break_values
-    |> Enum.reduce(
+    Enum.reduce(
+      break_values,
       base_value,
       fn {break_value, value}, acc ->
         validate(current_bp, break_value, value, acc)
@@ -76,8 +77,7 @@ defmodule CoreWeb.UI.Responsive.Breakpoint do
   def value_for_percentage([] = _values, _percentage, acc), do: acc
 
   def value_for_percentage(values, percentage, acc) do
-    values
-    |> Enum.reduce(acc, fn {key, value}, acc ->
+    Enum.reduce(values, acc, fn {key, value}, acc ->
       if key <= percentage do
         value
       else
@@ -92,8 +92,7 @@ defmodule CoreWeb.UI.Responsive.Breakpoint do
       |> Map.keys()
       |> Enum.max()
 
-    values
-    |> Map.get(max)
+    Map.get(values, max)
   end
 
   def up_from?(current, marker) do
@@ -115,16 +114,16 @@ defmodule CoreWeb.UI.Responsive.Breakpoint do
   def remove_first([]), do: []
 
   def remove_first(enum) do
-    enum |> tl()
+    tl(enum)
   end
 
-  defp break_values() do
+  defp break_values do
     Keyword.keys(@breakpoints)
   end
 
   def zip_shift_left(break_values) do
     break_values1 = break_values
-    break_values2 = break_values |> remove_first()
+    break_values2 = remove_first(break_values)
     Enum.zip(break_values1, break_values2)
   end
 end

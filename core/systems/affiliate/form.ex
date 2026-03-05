@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Form do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Systems.Affiliate
@@ -24,11 +25,7 @@ defmodule Systems.Affiliate.Form do
     assign(socket, changeset: Affiliate.Model.changeset(entity, %{}))
   end
 
-  def handle_event(
-        "save",
-        %{"model" => attrs},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     changeset = Affiliate.Model.changeset(entity, attrs)
 
     {
@@ -69,7 +66,7 @@ defmodule Systems.Affiliate.Form do
           %{test | field => %{success: false, error: error}}
       end
 
-    socket |> assign(test: test)
+    assign(socket, test: test)
   end
 
   @impl true

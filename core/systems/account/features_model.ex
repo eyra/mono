@@ -3,15 +3,14 @@ defmodule Systems.Account.FeaturesModel do
   This schema contains features of members.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
-  alias Systems.Account.User
 
   alias Core.Enums.Genders
-  require Core.Enums.Genders
+  alias Systems.Account.User
+  alias Systems.Student
 
-  alias Systems.{
-    Student
-  }
+  require Genders
 
   schema "user_features" do
     field(:gender, Ecto.Enum, values: Genders.schema_values())
@@ -39,8 +38,7 @@ defmodule Systems.Account.FeaturesModel do
 
   @doc false
   def changeset(tool, :mount, params) do
-    tool
-    |> cast(params, @fields)
+    cast(tool, params, @fields)
   end
 
   def changeset(tool, :auto_save, params) do
@@ -55,8 +53,7 @@ defmodule Systems.Account.FeaturesModel do
   end
 
   defp validate_birth_year(changeset, min_year, max_year) do
-    changeset
-    |> validate_number(:birth_year,
+    validate_number(changeset, :birth_year,
       greater_than_or_equal_to: min_year,
       less_than_or_equal_to: max_year,
       message: "must be between #{min_year} and #{max_year}"

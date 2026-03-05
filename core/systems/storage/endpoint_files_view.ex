@@ -12,22 +12,12 @@ defmodule Systems.Storage.EndpointFilesView do
 
     {
       :ok,
-      socket
-      |> assign(
-        endpoint: endpoint,
-        query: query,
-        timezone: timezone,
-        filtered_files: filtered_files
-      )
+      assign(socket, endpoint: endpoint, query: query, timezone: timezone, filtered_files: filtered_files)
     }
   end
 
   @impl true
-  def handle_event(
-        "start_loading",
-        _payload,
-        %{assigns: %{endpoint: endpoint, timezone: timezone}} = socket
-      ) do
+  def handle_event("start_loading", _payload, %{assigns: %{endpoint: endpoint, timezone: timezone}} = socket) do
     files =
       endpoint
       |> Storage.Public.list_files()

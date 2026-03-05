@@ -1,18 +1,10 @@
 defmodule Systems.Graphite.LeaderboardSettingsView do
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: leaderboard
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: leaderboard}, socket) do
     {
       :ok,
       socket

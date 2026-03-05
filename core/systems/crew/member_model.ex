@@ -3,9 +3,11 @@ defmodule Systems.Crew.MemberModel do
   The schema for a participant.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
-  alias Systems.Crew
+
   alias Systems.Account.User
+  alias Systems.Crew
 
   schema "crew_members" do
     field(:public_id, :integer)
@@ -22,8 +24,7 @@ defmodule Systems.Crew.MemberModel do
 
   @doc false
   def changeset(member, attrs \\ %{}) do
-    member
-    |> cast(attrs, @fields)
+    cast(member, attrs, @fields)
   end
 
   def reset(member, expire_at) do

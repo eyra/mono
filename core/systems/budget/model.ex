@@ -4,15 +4,13 @@ defmodule Systems.Budget.Model do
   """
   use Core, :auth
   use Ecto.Schema
+
   import Frameworks.Utility.EctoHelper
 
-  alias Systems.Account.User
   alias Ecto.Changeset
-
-  alias Systems.{
-    Budget,
-    Bookkeeping
-  }
+  alias Systems.Account.User
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
   @icon_type :emoji
 
@@ -83,20 +81,15 @@ defmodule Systems.Budget.Model do
 
   def validate(changeset, condition \\ true) do
     if condition do
-      changeset
-      |> Changeset.validate_required(@required_fields)
+      Changeset.validate_required(changeset, @required_fields)
     else
       changeset
     end
   end
 
-  def submit(%Ecto.Changeset{} = changeset), do: changeset
+  def submit(%Changeset{} = changeset), do: changeset
 
-  def submit(
-        %Ecto.Changeset{} = changeset,
-        %User{} = user,
-        %Budget.CurrencyModel{} = currency
-      ) do
+  def submit(%Changeset{} = changeset, %User{} = user, %Budget.CurrencyModel{} = currency) do
     uuid = Ecto.UUID.generate()
 
     changeset

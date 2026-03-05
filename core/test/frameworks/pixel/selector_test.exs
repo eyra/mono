@@ -51,12 +51,12 @@ defmodule Frameworks.Pixel.SelectorTest.View do
 
   @impl true
   def handle_event("active_item_id", %{active_item_id: id}, socket) do
-    {:noreply, socket |> assign(:active_item_id, id)}
+    {:noreply, assign(socket, :active_item_id, id)}
   end
 
   @impl true
   def handle_event("active_item_ids", %{active_item_ids: ids}, socket) do
-    {:noreply, socket |> assign(:active_item_ids, ids)}
+    {:noreply, assign(socket, :active_item_ids, ids)}
   end
 
   @impl true
@@ -67,6 +67,7 @@ end
 
 defmodule Frameworks.Pixel.SelectorTest do
   use CoreWeb.ConnCase
+
   import Phoenix.LiveViewTest
 
   alias Frameworks.Pixel.SelectorTest.View
@@ -85,9 +86,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, _view, html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :radio, "optional?" => false}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :radio, "optional?" => false})
 
       assert html =~ "Option 1"
       assert html =~ "Option 2"
@@ -119,9 +118,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, _view, html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :segmented, "optional?" => false}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :segmented, "optional?" => false})
 
       assert html =~ "First"
       assert html =~ "Second"
@@ -136,9 +133,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, view, _html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :radio, "optional?" => false}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :radio, "optional?" => false})
 
       view
       |> element("[data-selector-item='option2']")
@@ -171,9 +166,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, view, _html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :radio, "optional?" => true}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :radio, "optional?" => true})
 
       view
       |> element("[data-selector-item='option1']")
@@ -209,8 +202,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       items = [
         %{
           id: :consent,
-          value:
-            "Accept <a href='https://example.com/privacy' target='_blank'>privacy policy</a>",
+          value: "Accept <a href='https://example.com/privacy' target='_blank'>privacy policy</a>",
           active: false
         }
       ]
@@ -233,9 +225,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, _view, html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :checkbox, "raw?" => false}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :checkbox, "raw?" => false})
 
       assert html =~ "Check 1"
       assert html =~ "I agree"
@@ -256,9 +246,7 @@ defmodule Frameworks.Pixel.SelectorTest do
       ]
 
       {:ok, _view, html} =
-        live_isolated(conn, View,
-          session: %{"items" => items, "type" => :checkbox, "raw?" => true}
-        )
+        live_isolated(conn, View, session: %{"items" => items, "type" => :checkbox, "raw?" => true})
 
       assert html =~ "I agree to the"
       assert html =~ "terms"

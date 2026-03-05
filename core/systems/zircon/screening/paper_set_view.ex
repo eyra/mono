@@ -5,8 +5,11 @@ defmodule Systems.Zircon.Screening.PaperSetView do
   use Systems.Observatory.LiveFeature
   use CoreWeb.UI
 
-  import Systems.Zircon.HTML, only: [paper_set_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
+  import Systems.Zircon.HTML, only: [paper_set_table: 1]
+
+  alias Frameworks.Pixel.Text
+  alias Systems.Paper
 
   require Logger
 
@@ -14,9 +17,6 @@ defmodule Systems.Zircon.Screening.PaperSetView do
   on_mount({CoreWeb.Live.Hook.User, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
-
-  alias Frameworks.Pixel.Text
-  alias Systems.Paper
 
   def get_model(:not_mounted_at_router, %{"paper_set_id" => paper_set_id}, _socket) do
     Paper.Public.get_paper_set!(paper_set_id, Paper.SetModel.preload_graph(:down))
@@ -63,10 +63,7 @@ defmodule Systems.Zircon.Screening.PaperSetView do
   end
 
   @impl true
-  def consume_event(
-        %{name: "search_query", payload: %{query: query, query_string: query_string}},
-        socket
-      ) do
+  def consume_event(%{name: "search_query", payload: %{query: query, query_string: query_string}}, socket) do
     {
       :stop,
       socket

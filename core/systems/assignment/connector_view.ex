@@ -1,21 +1,10 @@
 defmodule Systems.Assignment.ConnectorView do
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
-  def update(
-        %{
-          id: id,
-          type: type,
-          assignment: assignment,
-          connection: connection,
-          uri_origin: uri_origin
-        },
-        socket
-      ) do
+  def update(%{id: id, type: type, assignment: assignment, connection: connection, uri_origin: uri_origin}, socket) do
     {
       :ok,
       socket
@@ -46,12 +35,7 @@ defmodule Systems.Assignment.ConnectorView do
   end
 
   @impl true
-  def compose(:connection_view, %{
-        type: type,
-        connection: connection,
-        assignment: assignment,
-        uri_origin: uri_origin
-      }) do
+  def compose(:connection_view, %{type: type, connection: connection, assignment: assignment, uri_origin: uri_origin}) do
     %{
       module: Assignment.ConnectionView,
       params: %{
@@ -64,11 +48,7 @@ defmodule Systems.Assignment.ConnectorView do
   end
 
   @impl true
-  def handle_event(
-        "connect",
-        _payload,
-        %{assigns: %{type: type, assignment: assignment}} = socket
-      ) do
+  def handle_event("connect", _payload, %{assigns: %{type: type, assignment: assignment}} = socket) do
     module = Assignment.Private.connector_popup_module(type)
 
     child =
@@ -76,7 +56,7 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    {:noreply, socket |> show_modal(child, :compact)}
+    {:noreply, show_modal(socket, child, :compact)}
   end
 
   @impl true
@@ -88,21 +68,17 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    {:noreply, socket |> show_modal(child, :compact)}
+    {:noreply, show_modal(socket, child, :compact)}
   end
 
   @impl true
-  def handle_event(
-        "finish",
-        %{source: %{name: :connector_popup}, connection: _connection},
-        socket
-      ) do
-    {:noreply, socket |> hide_modal(:connector_popup)}
+  def handle_event("finish", %{source: %{name: :connector_popup}, connection: _connection}, socket) do
+    {:noreply, hide_modal(socket, :connector_popup)}
   end
 
   @impl true
   def handle_event("cancel", %{source: %{name: :connector_popup}}, socket) do
-    {:noreply, socket |> hide_modal(:connector_popup)}
+    {:noreply, hide_modal(socket, :connector_popup)}
   end
 
   @impl true

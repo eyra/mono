@@ -1,15 +1,16 @@
 defmodule Systems.Pool.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Pool
-  alias Systems.Budget
   alias Systems.Account
+  alias Systems.Budget
+  alias Systems.Pool
 
-  def pool_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def pool_query do
     from(Pool.Model, as: :pool)
   end
 
@@ -53,8 +54,7 @@ defmodule Systems.Pool.Queries do
     ])
   end
 
-  def pool_query(%Pool.Model{id: pool_id}, %Account.User{} = user, role)
-      when is_atom(role) or is_list(role) do
+  def pool_query(%Pool.Model{id: pool_id}, %Account.User{} = user, role) when is_atom(role) or is_list(role) do
     build(pool_query(user, role), :pool, [
       id == ^pool_id
     ])

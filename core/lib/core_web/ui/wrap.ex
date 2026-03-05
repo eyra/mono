@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Wrap do
+  @moduledoc false
   use CoreWeb, :ui
 
   slot(:inner_block, required: true)

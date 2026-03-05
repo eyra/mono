@@ -11,16 +11,12 @@ defmodule Systems.Home.AdvertsView do
 
     {
       :ok,
-      socket |> assign(title: title, cards: cards, sub_heading_text: sub_heading_text)
+      assign(socket, title: title, cards: cards, sub_heading_text: sub_heading_text)
     }
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{cards: cards}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{cards: cards}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}

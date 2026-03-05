@@ -1,8 +1,9 @@
 defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
   use CoreWeb.ConnCase, async: false
   use Oban.Testing, repo: Core.Repo
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Systems.Paper
   alias Systems.Zircon
@@ -66,7 +67,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
           }
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "UI Update Test",
@@ -78,7 +79,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
       # Verify initial state - prompting summary with Continue button
       assert initial_html =~ "prompting-summary-block"
 
-      assert view |> has_element?("[phx-click='commit_import']"),
+      assert has_element?(view, "[phx-click='commit_import']"),
              "Continue button should be visible initially"
 
       # Mock the import to take some time so we can check the intermediate state
@@ -86,7 +87,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
 
       # Click the Continue button
 
-      view |> render_click(:commit_import)
+      render_click(view, :commit_import)
 
       # IMMEDIATELY check the UI - should show importing state
       # Don't wait for completion, check right after the click
@@ -107,7 +108,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
              "Spinner should be visible during import"
 
       # 4. Should NOT show Continue button anymore
-      refute view |> has_element?("[phx-click='commit_import']"),
+      refute has_element?(view, "[phx-click='commit_import']"),
              "Continue button should be hidden during import"
 
       # 5. File selector should STILL be visible as an escape route
@@ -173,20 +174,18 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
           ]
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, view, _} =
-        live_isolated(conn, Screening.ImportView,
-          session: %{"title" => "Phase Test", "tool" => tool}
-        )
+        live_isolated(conn, Screening.ImportView, session: %{"title" => "Phase Test", "tool" => tool})
 
       # Phase 1: Prompting - should show Continue button
       prompting_html = render(view)
       assert prompting_html =~ "Add new papers"
-      assert view |> has_element?("[phx-click='commit_import']")
+      assert has_element?(view, "[phx-click='commit_import']")
 
       # Click Continue to trigger import
-      view |> render_click(:commit_import)
+      render_click(view, :commit_import)
 
       # For small imports (below threshold), NO progress UI should show
       # The import should complete quickly without intermediate UI
@@ -198,7 +197,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
 
       # The import continues but without visible progress indicators
 
-      refute view |> has_element?("[phx-click='commit_import']"),
+      refute has_element?(view, "[phx-click='commit_import']"),
              "Continue button should be removed during import"
 
       # Phase 3: Manually run the job to complete the import

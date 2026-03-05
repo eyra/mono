@@ -1,5 +1,7 @@
 defmodule Core.SurfConext.User do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "surfconext_users" do
@@ -40,12 +42,12 @@ defmodule Core.SurfConext.User do
   end
 
   def update_changeset(%Core.SurfConext.User{} = user, attrs) do
-    user
-    |> cast(attrs, [:schac_personal_unique_code])
+    cast(user, attrs, [:schac_personal_unique_code])
   end
 
   def get_limit_schac_home_organization do
-    Application.get_env(:core, Core.SurfConext, [])
+    :core
+    |> Application.get_env(Core.SurfConext, [])
     |> Keyword.get(:limit_schac_home_organization)
   end
 end

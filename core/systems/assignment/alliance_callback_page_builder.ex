@@ -1,21 +1,15 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
-
   use Core, :auth
+
   alias Phoenix.LiveView
-
   alias Systems.Account
+  alias Systems.Alliance
+  alias Systems.Assignment
+  alias Systems.Workflow
 
-  alias Systems.{
-    Assignment,
-    Workflow,
-    Alliance
-  }
-
-  def view_model(
-        %Alliance.ToolModel{id: id} = tool,
-        %{current_user: user} = _assigns
-      ) do
+  def view_model(%Alliance.ToolModel{id: id} = tool, %{current_user: user} = _assigns) do
     %{title: title} = Workflow.Public.get_item_by_tool!(:alliance_tool_id, tool.id)
     assignment = Assignment.Public.get_by_tool(tool)
 

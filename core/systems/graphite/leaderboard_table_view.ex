@@ -1,12 +1,11 @@
 defmodule Systems.Graphite.LeaderboardTableView do
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Selector
+  import Systems.Graphite.LeaderboardScoreHTML
+
   alias Frameworks.Pixel.Align
-
+  alias Frameworks.Pixel.Selector
   alias Systems.Graphite
-
-  import Graphite.LeaderboardScoreHTML
 
   @impl true
   def update(%{id: id, metrics: metrics, metric_scores: metric_scores}, socket) do
@@ -49,9 +48,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
     assign(socket, scores: [])
   end
 
-  defp update_scores(
-         %{assigns: %{active_metric: active_metric, metric_scores: metric_scores}} = socket
-       ) do
+  defp update_scores(%{assigns: %{active_metric: active_metric, metric_scores: metric_scores}} = socket) do
     assign(socket, scores: Map.get(metric_scores, active_metric, []))
   end
 
@@ -64,11 +61,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_id",
-        %{active_item_id: active_item_id, source: %{name: :metric_selector}},
-        socket
-      ) do
+  def handle_event("active_item_id", %{active_item_id: active_item_id, source: %{name: :metric_selector}}, socket) do
     {
       :noreply,
       socket

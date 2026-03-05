@@ -133,8 +133,8 @@ defmodule Systems.Email.IntegrationTest do
 
       for email <- emails do
         # All should have both HTML and text bodies
-        assert email.html_body != nil
-        assert email.text_body != nil
+        assert email.html_body
+        assert email.text_body
 
         # Both should be strings (not safe tuples)
         assert is_binary(email.html_body)
@@ -176,7 +176,7 @@ defmodule Systems.Email.IntegrationTest do
 
         # All should have proper email structure
         assert email.to == user.email
-        assert email.subject != nil
+        assert email.subject
         assert email.subject != ""
       end
     end

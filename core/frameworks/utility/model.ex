@@ -10,6 +10,7 @@ defmodule Frameworks.Utility.Model do
       @behaviour Frameworks.Utility.Model
 
       import Ecto.Changeset
+
       alias Core.Repo
 
       def operational_changeset(entity, attrs) do

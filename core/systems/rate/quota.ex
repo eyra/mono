@@ -1,4 +1,5 @@
 defmodule Systems.Rate.Quota do
+  @moduledoc false
   import Frameworks.Utility.ConfigHelpers
 
   @type t :: %__MODULE__{

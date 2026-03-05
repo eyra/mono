@@ -1,8 +1,10 @@
 defmodule Systems.Storage.Yoda.EndpointModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
   alias Systems.Storage.Yoda
 
   @fields ~w(url user password)a
@@ -19,18 +21,17 @@ defmodule Systems.Storage.Yoda.EndpointModel do
   end
 
   def changeset(endpoint, params) do
-    endpoint
-    |> cast(params, @fields)
+    cast(endpoint, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(endpoint) do
     changeset =
-      changeset(endpoint, %{})
+      endpoint
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -39,7 +40,6 @@ defmodule Systems.Storage.Yoda.EndpointModel do
   def preload_graph(:down), do: []
 
   defimpl Frameworks.Concept.ContentModel do
-    alias Systems.Storage.Yoda
     def form(_), do: Yoda.EndpointForm
     def ready?(endpoint), do: Yoda.EndpointModel.ready?(endpoint)
   end

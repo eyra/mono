@@ -5,6 +5,7 @@ defmodule Core.Repo do
     types: GreenLight.Postgres.Types
 
   import Ecto.Query, warn: false
+
   alias Ecto.Multi
   alias Systems.Observatory
 
@@ -29,8 +30,7 @@ defmodule Core.Repo do
   end
 
   defp up_to_date?(repo, %schema{id: id, updated_at: updated_at}) do
-    from(e in schema, where: e.id == ^id and e.updated_at == ^updated_at)
-    |> repo.exists?()
+    repo.exists?(from(e in schema, where: e.id == ^id and e.updated_at == ^updated_at))
   end
 
   @doc """
@@ -79,9 +79,7 @@ defmodule Core.Repo do
   defp find_belongs_to_fields(module, associations, module_under_inspection) do
     associations
     |> Enum.map(&module.__schema__(:association, &1))
-    |> Enum.filter(
-      &match?(%{__struct__: Ecto.Association.BelongsTo, related: ^module_under_inspection}, &1)
-    )
+    |> Enum.filter(&match?(%{__struct__: Ecto.Association.BelongsTo, related: ^module_under_inspection}, &1))
     |> Enum.map(fn %{field: field} ->
       field
     end)
@@ -99,8 +97,7 @@ defmodule Core.Repo do
     end)
   end
 
-  defp create_query(module, field, model_id)
-       when is_atom(module) and is_atom(field) and is_integer(model_id) do
+  defp create_query(module, field, model_id) when is_atom(module) and is_atom(field) and is_integer(model_id) do
     field_id = String.to_existing_atom("#{field}_id")
     from(e in module, where: field(e, ^field_id) == ^model_id)
   end
@@ -140,8 +137,8 @@ defmodule Core.Repo do
     - `{:ok, result}` - Transaction succeeded and updates were dispatched
     - `{:error, operation, failed_value, changes_so_far}` - Transaction failed
   """
-  @spec commit(Ecto.Multi.t(), Keyword.t()) ::
-          {:ok, any()} | {:error, any()} | Ecto.Multi.failure()
+  @spec commit(Multi.t(), Keyword.t()) ::
+          {:ok, any()} | {:error, any()} | Multi.failure()
   def commit(multi, opts \\ []) do
     # credo:disable-for-next-line Credo.Check.Warning.NoRepoTransaction
     case transaction(multi, opts) do

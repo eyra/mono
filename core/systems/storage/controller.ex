@@ -1,14 +1,11 @@
 defmodule Systems.Storage.Controller do
-  alias CoreWeb.UI.Timestamp
-
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
+  alias CoreWeb.UI.Timestamp
   alias Frameworks.Concept
-
-  alias Systems.Storage
   alias Systems.Rate
+  alias Systems.Storage
 
   def export(%{assigns: %{branch: branch}} = conn, %{"id" => id}) do
     if endpoint =
@@ -25,12 +22,8 @@ defmodule Systems.Storage.Controller do
     end
   end
 
-  def export(
-        %{remote_ip: remote_ip} = conn,
-        %Storage.BuiltIn.EndpointModel{} = builtin,
-        branch_name
-      ) do
-    date = Timestamp.now() |> Timestamp.format_date_short!()
+  def export(%{remote_ip: remote_ip} = conn, %Storage.BuiltIn.EndpointModel{} = builtin, branch_name) do
+    date = Timestamp.format_date_short!(Timestamp.now())
 
     export_name =
       [date, branch_name]

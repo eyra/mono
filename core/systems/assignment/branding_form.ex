@@ -1,30 +1,24 @@
 defmodule Systems.Assignment.BrandingForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
 
   import Core.ImageCatalog, only: [image_catalog: 0]
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Text
-  alias Core.ImageHelpers
-  alias Frameworks.Pixel.ImageCatalogPicker
-  alias Frameworks.Pixel.Image
 
+  alias Core.ImageHelpers
+  alias Frameworks.Pixel.Image
+  alias Frameworks.Pixel.ImageCatalogPicker
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{public_url: logo_url}
-      ) do
-    socket
-    |> save(entity, :auto_save, %{logo_url: logo_url})
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: logo_url}) do
+    save(socket, entity, :auto_save, %{logo_url: logo_url})
   end
 
   @impl true
-  def update(
-        %{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint},
-        socket
-      ) do
+  def update(%{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint}, socket) do
     changeset = Assignment.InfoModel.changeset(entity, :create, %{})
 
     {
@@ -69,12 +63,12 @@ defmodule Systems.Assignment.BrandingForm do
   end
 
   defp update_image_picker_state(socket) do
-    socket |> assign(image_picker_state: nil)
+    assign(socket, image_picker_state: nil)
   end
 
   defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
     image_info = ImageHelpers.get_image_info(image_id, 400, 300)
-    socket |> assign(image_info: image_info)
+    assign(socket, image_info: image_info)
   end
 
   defp update_image_picker_button(%{assigns: %{myself: myself}} = socket) do
@@ -87,7 +81,7 @@ defmodule Systems.Assignment.BrandingForm do
       }
     }
 
-    socket |> assign(image_picker_button: image_picker_button)
+    assign(socket, image_picker_button: image_picker_button)
   end
 
   # Handle Events
@@ -100,8 +94,7 @@ defmodule Systems.Assignment.BrandingForm do
       ) do
     {
       :noreply,
-      socket
-      |> save(entity, :auto_save, %{language: language})
+      save(socket, entity, :auto_save, %{language: language})
     }
   end
 
@@ -116,11 +109,7 @@ defmodule Systems.Assignment.BrandingForm do
   end
 
   @impl true
-  def handle_event(
-        "finish",
-        %{image_id: image_id, state: state},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("finish", %{image_id: image_id, state: state}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -133,15 +122,14 @@ defmodule Systems.Assignment.BrandingForm do
 
   @impl true
   def handle_event("finish", _, socket) do
-    {:noreply, socket |> hide_modal(:image_picker)}
+    {:noreply, hide_modal(socket, :image_picker)}
   end
 
   @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, :auto_save, attrs)
+      save(socket, entity, :auto_save, attrs)
     }
   end
 
@@ -150,8 +138,7 @@ defmodule Systems.Assignment.BrandingForm do
   def save(socket, entity, type, attrs) do
     changeset = Assignment.InfoModel.changeset(entity, type, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

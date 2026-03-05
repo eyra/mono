@@ -1,10 +1,10 @@
 defmodule Systems.Graphite.PublicTest do
   use Core.DataCase
 
+  alias CoreWeb.UI.Timestamp
   alias Systems.Graphite
   alias Systems.Graphite.Factories
-
-  alias CoreWeb.UI.Timestamp
+  alias Systems.Graphite.SubmissionModel
 
   describe "open_for_submissions?/1" do
     test "no deadline" do
@@ -21,17 +21,17 @@ defmodule Systems.Graphite.PublicTest do
     test "deadline yesterday" do
       deadline = DateTime.truncate(Timestamp.yesterday(), :second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
-      assert not Graphite.Public.open_for_submissions?(tool)
+      refute Graphite.Public.open_for_submissions?(tool)
     end
 
     test "deadline one minute ago" do
-      deadline = DateTime.truncate(Timestamp.now() |> Timestamp.shift_minutes(-1), :second)
+      deadline = Timestamp.now() |> Timestamp.shift_minutes(-1) |> DateTime.truncate(:second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
-      assert not Graphite.Public.open_for_submissions?(tool)
+      refute Graphite.Public.open_for_submissions?(tool)
     end
 
     test "deadline in one minute" do
-      deadline = DateTime.truncate(Timestamp.now() |> Timestamp.shift_minutes(1), :second)
+      deadline = Timestamp.now() |> Timestamp.shift_minutes(1) |> DateTime.truncate(:second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
       assert Graphite.Public.open_for_submissions?(tool)
     end
@@ -39,7 +39,7 @@ defmodule Systems.Graphite.PublicTest do
     test "deadline now" do
       deadline = DateTime.truncate(Timestamp.now(), :second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
-      assert not Graphite.Public.open_for_submissions?(tool)
+      refute Graphite.Public.open_for_submissions?(tool)
     end
   end
 
@@ -51,24 +51,24 @@ defmodule Systems.Graphite.PublicTest do
     end
 
     test "deadline in one minute" do
-      deadline = DateTime.truncate(Timestamp.now() |> Timestamp.shift_minutes(1), :second)
+      deadline = Timestamp.now() |> Timestamp.shift_minutes(1) |> DateTime.truncate(:second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
       submission = Factories.add_submission(tool)
       assert Graphite.Public.can_update?(submission)
     end
 
     test "deadline one minute ago" do
-      deadline = DateTime.truncate(Timestamp.now() |> Timestamp.shift_minutes(-1), :second)
+      deadline = Timestamp.now() |> Timestamp.shift_minutes(-1) |> DateTime.truncate(:second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
       submission = Factories.add_submission(tool)
-      assert not Graphite.Public.can_update?(submission)
+      refute Graphite.Public.can_update?(submission)
     end
 
     test "deadline now" do
       deadline = DateTime.truncate(Timestamp.now(), :second)
       tool = Core.Factories.insert!(:graphite_tool, %{deadline: deadline})
       submission = Factories.add_submission(tool)
-      assert not Graphite.Public.can_update?(submission)
+      refute Graphite.Public.can_update?(submission)
     end
   end
 
@@ -83,7 +83,7 @@ defmodule Systems.Graphite.PublicTest do
       %{id: submission_id} = Factories.add_submission(tool)
 
       assert [
-               %Systems.Graphite.SubmissionModel{id: ^submission_id, tool_id: ^tool_id}
+               %SubmissionModel{id: ^submission_id, tool_id: ^tool_id}
              ] = Graphite.Public.list_submissions(tool)
     end
 
@@ -94,9 +94,9 @@ defmodule Systems.Graphite.PublicTest do
       %{id: submission3_id} = Factories.add_submission(tool)
 
       assert [
-               %Systems.Graphite.SubmissionModel{id: ^submission1_id, tool_id: ^tool_id},
-               %Systems.Graphite.SubmissionModel{id: ^submission2_id, tool_id: ^tool_id},
-               %Systems.Graphite.SubmissionModel{id: ^submission3_id, tool_id: ^tool_id}
+               %SubmissionModel{id: ^submission1_id, tool_id: ^tool_id},
+               %SubmissionModel{id: ^submission2_id, tool_id: ^tool_id},
+               %SubmissionModel{id: ^submission3_id, tool_id: ^tool_id}
              ] = Graphite.Public.list_submissions(tool)
     end
   end

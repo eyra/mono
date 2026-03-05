@@ -4,7 +4,6 @@ defmodule Systems.Admin.ActionsView do
 
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
-
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Feldspar
@@ -78,8 +77,7 @@ defmodule Systems.Admin.ActionsView do
       }
     }
 
-    socket
-    |> assign(
+    assign(socket,
       rollback_expired_deposits_button: rollback_expired_deposits_button,
       expire_button: expire_button,
       expire_force_button: expire_force_button,
@@ -102,8 +100,7 @@ defmodule Systems.Admin.ActionsView do
   defp format_bytes(bytes) when bytes < 1024, do: "#{bytes} B"
   defp format_bytes(bytes) when bytes < 1024 * 1024, do: "#{Float.round(bytes / 1024, 1)} KB"
 
-  defp format_bytes(bytes) when bytes < 1024 * 1024 * 1024,
-    do: "#{Float.round(bytes / (1024 * 1024), 1)} MB"
+  defp format_bytes(bytes) when bytes < 1024 * 1024 * 1024, do: "#{Float.round(bytes / (1024 * 1024), 1)} MB"
 
   defp format_bytes(bytes), do: "#{Float.round(bytes / (1024 * 1024 * 1024), 2)} GB"
 
@@ -145,8 +142,7 @@ defmodule Systems.Admin.ActionsView do
 
     {
       :noreply,
-      socket
-      |> update_data_donation_stats()
+      update_data_donation_stats(socket)
     }
   end
 

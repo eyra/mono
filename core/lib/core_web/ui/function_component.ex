@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.FunctionComponent do
+  @moduledoc false
   use Phoenix.Component
 
   import Phoenix.LiveView.TagEngine, only: [component: 3]

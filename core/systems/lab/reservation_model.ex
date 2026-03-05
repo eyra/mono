@@ -1,9 +1,11 @@
 defmodule Systems.Lab.ReservationModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
-  alias Systems.Lab.TimeSlotModel
   alias Systems.Account.User
+  alias Systems.Lab.TimeSlotModel
 
   @primary_key false
   schema "lab_reservations" do

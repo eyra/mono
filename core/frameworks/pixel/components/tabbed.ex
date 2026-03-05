@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   import CoreWeb.UI.FunctionComponent
   import Frameworks.Pixel.Line
+
   alias Frameworks.Pixel.Button
 
   defp get_tab(:seperated, tab, index), do: Map.merge(tab, %{type: :seperated, index: index})
@@ -14,8 +15,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   defp shape(%{size: :wide, type: :segmented}), do: "rounded-full overflow-hidden h-10 bg-grey5"
 
-  defp shape(%{size: :full, type: :segmented}),
-    do: "rounded-full overflow-hidden h-10 w-full bg-grey5"
+  defp shape(%{size: :full, type: :segmented}), do: "rounded-full overflow-hidden h-10 w-full bg-grey5"
 
   defp shape(%{size: :narrow}), do: "w-full"
   defp shape(_), do: ""
@@ -187,7 +187,7 @@ defmodule Frameworks.Pixel.Tabbed do
   defp align(_), do: "justify-left"
 
   defp combine_shifted(tabs) do
-    tabs |> Enum.chunk_every(2, 1, [%{id: "fake_tab"}])
+    Enum.chunk_every(tabs, 2, 1, [%{id: "fake_tab"}])
   end
 
   attr(:bar_id, :string, required: true)

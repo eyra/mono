@@ -3,18 +3,19 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
 
   import Mox
 
+  alias Systems.Storage.BuiltIn
   alias Systems.Storage.BuiltIn.Backend
   alias Systems.Storage.BuiltIn.MockSpecial
 
   setup :verify_on_exit!
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
+    initial_config = Application.get_env(:core, BuiltIn)
 
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
+    Application.put_env(:core, BuiltIn, special: MockSpecial)
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:core, BuiltIn, initial_config)
     end)
 
     :ok

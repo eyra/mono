@@ -4,15 +4,15 @@ defmodule Systems.Zircon.Screening.ImportView do
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]
 
-  alias Frameworks.Pixel.Flash
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.LoadingSpinner
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
-
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Flash
+  alias Frameworks.Pixel.LoadingSpinner
+  alias Frameworks.Pixel.Text
   alias Systems.Paper
   alias Systems.Zircon
+  alias Systems.Zircon.Screening.ImportSessionPapersView
 
   @impl true
   def file_upload_start(socket, {original_filename, _}) do
@@ -24,10 +24,7 @@ defmodule Systems.Zircon.Screening.ImportView do
   end
 
   @impl true
-  def process_file(%{assigns: %{model: tool}} = socket, %{
-        public_url: url,
-        original_filename: filename
-      }) do
+  def process_file(%{assigns: %{model: tool}} = socket, %{public_url: url, original_filename: filename}) do
     Logger.info("File uploaded: #{filename} at #{url}")
 
     # Clean up any existing reference files (abort active imports and archive uploaded files)
@@ -46,11 +43,7 @@ defmodule Systems.Zircon.Screening.ImportView do
   end
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"title" => title},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"title" => title}, socket) do
     {
       :ok,
       socket
@@ -60,16 +53,11 @@ defmodule Systems.Zircon.Screening.ImportView do
     }
   end
 
-  defp update_file_selector(
-         %{assigns: %{vm: %{active_filename: filename, active_file_url: url}}} = socket
-       ) do
-    Logger.debug(
-      "ImportView.update_file_selector: filename=#{inspect(filename)}, url=#{inspect(url)}"
-    )
+  defp update_file_selector(%{assigns: %{vm: %{active_filename: filename, active_file_url: url}}} = socket) do
+    Logger.debug("ImportView.update_file_selector: filename=#{inspect(filename)}, url=#{inspect(url)}")
 
     # Get filename from view model - will be nil when no active file
-    socket
-    |> assign(filename: filename, url: url)
+    assign(socket, filename: filename, url: url)
   end
 
   def handle_view_model_updated(socket) do
@@ -93,19 +81,14 @@ defmodule Systems.Zircon.Screening.ImportView do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "prepare_import",
-        _params,
-        %{assigns: %{model: %{id: tool_id} = tool, filename: filename}} = socket
-      ) do
+  def handle_event("prepare_import", _params, %{assigns: %{model: %{id: tool_id} = tool, filename: filename}} = socket) do
     paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool_id)
 
     # Find the uploaded reference file (created during file upload)
     reference_files = Zircon.Public.list_reference_files(tool)
 
     reference_file =
-      reference_files
-      |> Enum.find(fn ref_file ->
+      Enum.find(reference_files, fn ref_file ->
         ref_file.status == :uploaded and
           ref_file.file.name == filename
       end)
@@ -126,11 +109,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "commit_import",
-        _params,
-        %{assigns: %{vm: %{prompting_session_id: session_id}}} = socket
-      ) do
+  def handle_event("commit_import", _params, %{assigns: %{vm: %{prompting_session_id: session_id}}} = socket) do
     session = Paper.Public.get_import_session!(session_id)
     _updated_session = Paper.Public.commit_import_session!(session)
 
@@ -140,8 +119,7 @@ defmodule Systems.Zircon.Screening.ImportView do
   def handle_event(
         "show_warnings",
         _params,
-        %{assigns: %{vm: %{prompting_session_id: session_id, modal_warnings_title: title}}} =
-          socket
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_warnings_title: title}}} = socket
       ) do
     # Load the full session object with preloads needed by the view
     session = Paper.Public.get_import_session!(session_id, reference_file: :file)
@@ -155,14 +133,13 @@ defmodule Systems.Zircon.Screening.ImportView do
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   def handle_event(
         "show_new_papers",
         _params,
-        %{assigns: %{vm: %{prompting_session_id: session_id, modal_new_papers_title: title}}} =
-          socket
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_new_papers_title: title}}} = socket
       ) do
     # Load the full session object with preloads needed by the view
     session = Paper.Public.get_import_session!(session_id, reference_file: :file)
@@ -171,19 +148,18 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-new-papers",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "new"],
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   def handle_event(
         "show_duplicates",
         _params,
-        %{assigns: %{vm: %{prompting_session_id: session_id, modal_duplicates_title: title}}} =
-          socket
+        %{assigns: %{vm: %{prompting_session_id: session_id, modal_duplicates_title: title}}} = socket
       ) do
     # Load the full session object with preloads needed by the view
     session = Paper.Public.get_import_session!(session_id, reference_file: :file)
@@ -192,12 +168,12 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-duplicates",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "duplicates"],
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true

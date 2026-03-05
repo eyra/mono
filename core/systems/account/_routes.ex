@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.User.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Account do

@@ -1,8 +1,11 @@
 defmodule Core.APNSTest do
   use Core.DataCase, async: true
-  import Mox
+
   import ExUnit.CaptureLog
+  import Mox
+
   alias Core.APNS
+  alias Core.APNS.MockBackend
   alias Core.Factories
 
   setup :verify_on_exit!
@@ -19,7 +22,7 @@ defmodule Core.APNSTest do
     test "returns a list of registered tokens", %{user: user} do
       {:ok, _} = APNS.register(user, "a")
       {:ok, _} = APNS.register(user, "b")
-      assert APNS.get_push_tokens(user) |> Enum.map(& &1.device_token) == ["a", "b"]
+      assert user |> APNS.get_push_tokens() |> Enum.map(& &1.device_token) == ["a", "b"]
     end
   end
 
@@ -32,22 +35,19 @@ defmodule Core.APNSTest do
       {:ok, _} = APNS.register(user, "a")
       {:ok, _} = APNS.register(user, "a")
       # there is still one registration
-      assert APNS.get_push_tokens(user) |> Enum.map(& &1.device_token) == ["a"]
+      assert user |> APNS.get_push_tokens() |> Enum.map(& &1.device_token) == ["a"]
     end
   end
 
   describe "send_notification/2" do
     test "send a notification", %{user: user} do
-      Core.APNS.MockBackend
-      |> expect(:send_notification, fn _notif -> :ok end)
-
+      expect(MockBackend, :send_notification, fn _notif -> :ok end)
       {:ok, _} = APNS.register(user, "a")
       assert APNS.send_notification(user, "Hello World") == :ok
     end
 
     test "device tokens are removed when they are invalid", %{user: user} do
-      Core.APNS.MockBackend
-      |> expect(:send_notification, fn _notif ->
+      expect(MockBackend, :send_notification, fn _notif ->
         %{device_token: "a", response: :bad_device_token}
       end)
 
@@ -58,8 +58,7 @@ defmodule Core.APNSTest do
     end
 
     test "log other errors", %{user: user} do
-      Core.APNS.MockBackend
-      |> expect(:send_notification, fn _notif ->
+      expect(MockBackend, :send_notification, fn _notif ->
         %{
           device_token: "a",
           response: :missing_device_token
@@ -72,7 +71,7 @@ defmodule Core.APNSTest do
                APNS.send_notification(user, "Hello World")
              end) =~ "Unexpected push error:"
 
-      assert APNS.get_push_tokens(user) |> Enum.map(& &1.device_token) == ["a"]
+      assert user |> APNS.get_push_tokens() |> Enum.map(& &1.device_token) == ["a"]
     end
   end
 end

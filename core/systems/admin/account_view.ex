@@ -1,28 +1,20 @@
 defmodule Systems.Admin.AccountView do
   use CoreWeb, :live_component
 
-  require Logger
-
   alias Core.ImageHelpers
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem
-
-  alias Systems.Admin
   alias Systems.Account
+  alias Systems.Admin
+
+  require Logger
 
   # Initial update
   @impl true
-  def update(
-        %{
-          id: id,
-          user: user,
-          creators: creators
-        },
-        socket
-      ) do
+  def update(%{id: id, user: user, creators: creators}, socket) do
     form = to_form(%{"query" => nil})
     active_filters = Map.get(socket.assigns, :active_filters, [:creator])
     query = Map.get(socket.assigns, :query, [])
@@ -72,7 +64,8 @@ defmodule Systems.Admin.AccountView do
 
   defp update_users(%{assigns: %{active_filters: filters, query: query, myself: myself}} = socket) do
     users =
-      Account.Public.list_internal_users([:profile])
+      [:profile]
+      |> Account.Public.list_internal_users()
       |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
       |> query(filters)
       |> query(query)
@@ -85,8 +78,7 @@ defmodule Systems.Admin.AccountView do
   defp query(users, []), do: users
 
   defp query(users, query) when is_list(query) do
-    users
-    |> Enum.filter(&include?(&1, query))
+    Enum.filter(users, &include?(&1, query))
   end
 
   defp include?(_, []), do: true
@@ -103,15 +95,14 @@ defmodule Systems.Admin.AccountView do
 
   defp include?(%Account.User{email: email, profile: profile}, word) when is_binary(word) do
     word = String.downcase(word)
-    String.contains?(email |> String.downcase(), word) or include?(profile, word)
+    email |> String.downcase() |> String.contains?(word) or include?(profile, word)
   end
 
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
   defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
 
-  defp include?(%Account.UserProfileModel{fullname: fullname}, word)
-       when not is_nil(fullname) and is_binary(word) do
-    String.contains?(fullname |> String.downcase(), word)
+  defp include?(%Account.UserProfileModel{fullname: fullname}, word) when not is_nil(fullname) and is_binary(word) do
+    fullname |> String.downcase() |> String.contains?(word)
   end
 
   defp include?(_, _), do: false
@@ -179,21 +170,21 @@ defmodule Systems.Admin.AccountView do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
     changeset = Account.User.admin_changeset(user, attrs)
     {:ok, _} = Core.Persister.save(user, changeset)
-    socket |> update_users()
+    update_users(socket)
   end
 
   # Events
 
   @impl true
   def handle_event("make_creator", %{"item" => user_id_string}, socket) do
-    {:noreply, socket |> save(user_id_string, %{creator: true})}
+    {:noreply, save(socket, user_id_string, %{creator: true})}
   end
 
   @impl true
   def handle_event("verify_creator", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
+      save(socket, user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
     }
   end
 
@@ -201,7 +192,7 @@ defmodule Systems.Admin.AccountView do
   def handle_event("unverify_creator", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{verified_at: nil})
+      save(socket, user_id_string, %{verified_at: nil})
     }
   end
 
@@ -209,21 +200,17 @@ defmodule Systems.Admin.AccountView do
   def handle_event("activate_user", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{creator: true, confirmed_at: NaiveDateTime.utc_now()})
+      save(socket, user_id_string, %{creator: true, confirmed_at: NaiveDateTime.utc_now()})
     }
   end
 
   @impl true
   def handle_event("deactivate_user", %{"item" => user_id_string}, socket) do
-    {:noreply, socket |> save(user_id_string, %{confirmed_at: nil})}
+    {:noreply, save(socket, user_id_string, %{confirmed_at: nil})}
   end
 
   @impl true
-  def handle_event(
-        "search_query",
-        %{query: query, query_string: query_string, source: %{name: :search_bar}},
-        socket
-      ) do
+  def handle_event("search_query", %{query: query, query_string: query_string, source: %{name: :search_bar}}, socket) do
     {
       :noreply,
       socket

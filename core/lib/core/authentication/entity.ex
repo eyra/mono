@@ -19,8 +19,7 @@ defmodule Core.Authentication.Entity do
   @required_fields @fields
 
   def change(entity, attrs \\ %{}) do
-    entity
-    |> Changeset.cast(attrs, @fields)
+    Changeset.cast(entity, attrs, @fields)
   end
 
   def validate(changeset) do

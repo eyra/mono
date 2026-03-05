@@ -1,9 +1,11 @@
 defmodule Core.APNS.SignalHandlers.Test do
   use Core.DataCase, async: true
+
   import Mox
-  alias Core.Factories
-  alias Core.APNS.SignalHandlers
+
   alias Core.APNS
+  alias Core.APNS.SignalHandlers
+  alias Core.Factories
 
   setup :verify_on_exit!
 
@@ -17,8 +19,7 @@ defmodule Core.APNS.SignalHandlers.Test do
     end
 
     test "send notification to user", %{box: box} do
-      Core.APNS.MockBackend
-      |> expect(:send_notification, fn _notif -> :ok end)
+      expect(Core.APNS.MockBackend, :send_notification, fn _notif -> :ok end)
 
       SignalHandlers.intercept(:new_notification, %{
         box: box,

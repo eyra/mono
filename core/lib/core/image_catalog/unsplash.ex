@@ -1,9 +1,11 @@
 defmodule Core.ImageCatalog.Unsplash.Client do
+  @moduledoc false
   @type response :: {:ok, any} | {:error, binary}
   @callback get(access_key :: binary, path :: binary, query :: keyword()) :: response
 end
 
 defmodule Core.ImageCatalog.Unsplash.HTTP do
+  @moduledoc false
   @behaviour Core.ImageCatalog.Unsplash.Client
 
   def get(access_key, path, query) when is_list(query) do
@@ -18,16 +20,14 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
     ]
 
     url =
-      URI.merge(
-        endpoint(),
-        %URI{
-          path: path,
-          query: query
-        }
-      )
+      endpoint()
+      |> URI.merge(%URI{
+        path: path,
+        query: query
+      })
       |> URI.to_string()
 
-    :hackney.request(:get, url, headers, "", []) |> parse_response()
+    :get |> :hackney.request(url, headers, "", []) |> parse_response()
   end
 
   defp parse_response({:ok, _, _, client_ref}) do
@@ -48,6 +48,9 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
 end
 
 defmodule Core.ImageCatalog.Unsplash do
+  @moduledoc false
+  alias Phoenix.HTML.Safe
+
   def search(query, page \\ 1, page_size \\ 10) do
     {:ok, json} =
       client().get(conf().access_key, "/search/photos",
@@ -57,8 +60,8 @@ defmodule Core.ImageCatalog.Unsplash do
       )
 
     images = json |> Map.get("results", []) |> Enum.map(&parse_result_item/1)
-    image_count = json |> Map.get("total")
-    page_count = json |> Map.get("total_pages")
+    image_count = Map.get(json, "total")
+    page_count = Map.get(json, "total_pages")
 
     %{
       images: images,
@@ -86,7 +89,7 @@ defmodule Core.ImageCatalog.Unsplash do
   def search_info(query, page, page_size, opts) do
     app_name = conf().app_name
     search_result = search(query, page, page_size)
-    %{search_result | images: search_result.images |> Enum.map(&info(app_name, &1, opts))}
+    %{search_result | images: Enum.map(search_result.images, &info(app_name, &1, opts))}
   end
 
   def info(image_id, opts) do
@@ -99,8 +102,8 @@ defmodule Core.ImageCatalog.Unsplash do
     %{"raw_url" => raw_url, "username" => username, "name" => name, "blur_hash" => blur_hash} =
       decoded_image_id
 
-    safe_username = Phoenix.HTML.Safe.to_iodata(username)
-    safe_name = Phoenix.HTML.Safe.to_iodata(name)
+    safe_username = Safe.to_iodata(username)
+    safe_name = Safe.to_iodata(name)
 
     requested_width = Keyword.get(opts, :width, 100)
     requested_height = Keyword.get(opts, :height, 100)
@@ -112,8 +115,7 @@ defmodule Core.ImageCatalog.Unsplash do
     %{
       id: image_id,
       url: image_url(raw_url, w: requested_width, h: requested_height),
-      srcset:
-        1..3 |> Enum.map_join(",", &srcset_item(raw_url, requested_width, requested_height, &1)),
+      srcset: Enum.map_join(1..3, ",", &srcset_item(raw_url, requested_width, requested_height, &1)),
       blur_hash: blur_hash,
       width: width,
       height: height,
@@ -142,7 +144,7 @@ defmodule Core.ImageCatalog.Unsplash do
     query_string
     |> URI.decode_query()
     |> Map.merge(%{auto: :compress, fit: :crop, crop: "faces,focalpoint"})
-    |> Map.merge(opts |> Map.new())
+    |> Map.merge(Map.new(opts))
     |> URI.encode_query()
   end
 
@@ -164,7 +166,7 @@ defmodule Core.ImageCatalog.Unsplash do
   end
 
   @spec conf() :: %{access_key: binary(), app_name: binary()}
-  defp conf, do: Application.fetch_env!(:core, __MODULE__) |> Enum.into(%{})
+  defp conf, do: :core |> Application.fetch_env!(__MODULE__) |> Map.new()
 
   defp client do
     Application.get_env(:core, :unsplash_client, Core.ImageCatalog.Unsplash.HTTP)

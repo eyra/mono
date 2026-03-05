@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       use CoreWeb.Live.Subroutes, [

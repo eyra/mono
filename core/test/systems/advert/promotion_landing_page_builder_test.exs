@@ -1,9 +1,9 @@
 defmodule Systems.Advert.PromotionLandingPageBuilderTest do
   use CoreWeb.ConnCase, async: true
-  import Phoenix.ConnTest
-  import Phoenix.LiveViewTest
 
   import ExUnit.Assertions
+  import Phoenix.ConnTest
+  import Phoenix.LiveViewTest
 
   alias Systems.Advert
   alias Systems.Pool

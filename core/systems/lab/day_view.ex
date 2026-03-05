@@ -1,16 +1,14 @@
 defmodule Systems.Lab.DayView do
   use CoreWeb, :live_component
+  use Gettext, backend: CoreWeb.Gettext
 
-  require Logger
+  import Frameworks.Pixel.Form
+  import Frameworks.Pixel.Line
 
   alias CoreWeb.UI.Timestamp
-
-  import Frameworks.Pixel.Line
-  import Frameworks.Pixel.Form
-
   alias Systems.Lab
 
-  use Gettext, backend: CoreWeb.Gettext
+  require Logger
 
   @impl true
   def update(%{id: id, day_model: day_model}, socket) do
@@ -49,12 +47,7 @@ defmodule Systems.Lab.DayView do
   end
 
   defp update_entries(
-         %{
-           assigns: %{
-             id: id,
-             day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model
-           }
-         } = socket
+         %{assigns: %{id: id, day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model}} = socket
        )
        when is_list(entries) do
     enabled_timeslots = Enum.filter(entries, &(&1.type == :time_slot and &1.enabled?))
@@ -65,13 +58,11 @@ defmodule Systems.Lab.DayView do
       |> Enum.map(&update_entry(:timeslot_number_of_seats, &1, number_of_seats))
       |> Enum.map(&update_entry(:timeslot_target, &1, id))
 
-    socket
-    |> assign(day_model: %{day_model | entries: entries})
+    assign(socket, day_model: %{day_model | entries: entries})
   end
 
   defp find_index(timeslot, timeslots) do
-    timeslots
-    |> Enum.find_index(&(&1.start_time == timeslot.start_time))
+    Enum.find_index(timeslots, &(&1.start_time == timeslot.start_time))
   end
 
   defp update_ui(socket) do
@@ -126,7 +117,7 @@ defmodule Systems.Lab.DayView do
   end
 
   defp enabled_time_slots(%{assigns: %{day_model: %{entries: entries}}}) do
-    entries |> Enum.filter(&(&1.type == :time_slot and &1.enabled?))
+    Enum.filter(entries, &(&1.type == :time_slot and &1.enabled?))
   end
 
   defp number_of_time_slots(socket) do
@@ -152,9 +143,7 @@ defmodule Systems.Lab.DayView do
     time_slots =
       tool_id
       |> Lab.Public.get_time_slots()
-      |> Enum.filter(
-        &(&1.location == location and CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
-      )
+      |> Enum.filter(&(&1.location == location and Timestamp.to_date(&1.start_time) == date))
 
     error =
       if Enum.empty?(time_slots) or
@@ -164,7 +153,7 @@ defmodule Systems.Lab.DayView do
         dgettext("link-lab", "date.location.error")
       end
 
-    socket |> assign(error: error)
+    assign(socket, error: error)
   end
 
   # Events
@@ -185,11 +174,7 @@ defmodule Systems.Lab.DayView do
     }
   end
 
-  def handle_event(
-        "update",
-        %{"day_model" => new_day_model},
-        %{assigns: %{day_model: day_model}} = socket
-      ) do
+  def handle_event("update", %{"day_model" => new_day_model}, %{assigns: %{day_model: day_model}} = socket) do
     changeset = Lab.DayModel.changeset(day_model, :submit, new_day_model)
 
     socket =
@@ -200,32 +185,21 @@ defmodule Systems.Lab.DayView do
           |> validate_unused_date()
 
         {:error, %Ecto.Changeset{} = changeset} ->
-          socket |> assign(changeset: changeset)
+          assign(socket, changeset: changeset)
       end
 
-    {:noreply, socket |> update_ui()}
+    {:noreply, update_ui(socket)}
   end
 
   @impl true
   def handle_event(
         "submit",
         _,
-        %{
-          assigns: %{
-            error: nil,
-            changeset: changeset,
-            og_day_model: og_day_model,
-            day_model: day_model
-          }
-        } = socket
+        %{assigns: %{error: nil, changeset: changeset, og_day_model: og_day_model, day_model: day_model}} = socket
       ) do
     socket =
       if changeset.valid? do
-        socket
-        |> send_event(:parent, "day_view_submit", %{
-          og_day_model: og_day_model,
-          day_model: day_model
-        })
+        send_event(socket, :parent, "day_view_submit", %{og_day_model: og_day_model, day_model: day_model})
       else
         socket
       end
@@ -240,7 +214,7 @@ defmodule Systems.Lab.DayView do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "day_view_hide")}
+    {:noreply, send_event(socket, :parent, "day_view_hide")}
   end
 
   defp buttons(%{myself: myself}) do

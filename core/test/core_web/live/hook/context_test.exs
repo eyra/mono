@@ -8,11 +8,12 @@ defmodule CoreWeb.Live.Hook.ContextTest do
 
   # Test view that declares dependencies
   defmodule TestViewWithDeps do
+    @moduledoc false
     use Phoenix.LiveView
 
     on_mount({Context, __MODULE__})
 
-    def dependencies(), do: [:user_id, :title]
+    def dependencies, do: [:user_id, :title]
 
     @impl true
     def mount(:not_mounted_at_router, _session, socket) do
@@ -37,6 +38,7 @@ defmodule CoreWeb.Live.Hook.ContextTest do
 
   # Test view without dependencies
   defmodule TestViewNoDeps do
+    @moduledoc false
     use Phoenix.LiveView
 
     on_mount({Context, __MODULE__})

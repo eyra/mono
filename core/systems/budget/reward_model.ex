@@ -3,14 +3,12 @@ defmodule Systems.Budget.RewardModel do
   The budget type.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Account
-
-  alias Systems.{
-    Budget,
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
   schema "budget_rewards" do
     field(:idempotence_key, :string)
@@ -46,15 +44,11 @@ defmodule Systems.Budget.RewardModel do
     ]
   end
 
-  def deposit_idempotence_key(%Budget.RewardModel{
-        idempotence_key: idempotence_key,
-        attempt: attempt
-      }),
-      do: "#{idempotence_key},type=deposit,attempt=#{attempt}"
+  def deposit_idempotence_key(%Budget.RewardModel{idempotence_key: idempotence_key, attempt: attempt}),
+    do: "#{idempotence_key},type=deposit,attempt=#{attempt}"
 
   def payment_idempotence_key(%Budget.RewardModel{idempotence_key: idempotence_key}),
     do: payment_idempotence_key(idempotence_key)
 
-  def payment_idempotence_key(reward_idempotence_key),
-    do: "#{reward_idempotence_key},type=payment"
+  def payment_idempotence_key(reward_idempotence_key), do: "#{reward_idempotence_key},type=payment"
 end

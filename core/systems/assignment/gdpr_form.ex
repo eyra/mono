@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.GdprForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel
@@ -21,7 +22,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   def update_status(%{assigns: %{confirming_status_off: true}} = socket) do
-    socket |> assign(status: :off)
+    assign(socket, status: :off)
   end
 
   def update_status(%{assigns: %{entity: %{consent_agreement: consent_agreement}}} = socket) do
@@ -32,7 +33,7 @@ defmodule Systems.Assignment.GdprForm do
         :off
       end
 
-    socket |> assign(status: status)
+    assign(socket, status: status)
   end
 
   @impl true
@@ -72,10 +73,10 @@ defmodule Systems.Assignment.GdprForm do
     signatures = Consent.Public.list_signatures(consent_agreement)
 
     assigns =
-      if signatures != [] do
-        Map.put(assigns, :body, dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"))
-      else
+      if signatures == [] do
         assigns
+      else
+        Map.put(assigns, :body, dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"))
       end
 
     %{
@@ -87,11 +88,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{status: :on},
-        %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
-      ) do
+  def handle_event("update", %{status: :on}, %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket) do
     consent_agreement = Consent.Public.prepare_agreement(auth_node)
     {:ok, _} = Assignment.Public.update_consent_agreement(assignment, consent_agreement)
 
@@ -102,18 +99,13 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{status: :off},
-        %{assigns: %{entity: assignment}} = socket
-      ) do
+  def handle_event("update", %{status: :off}, %{assigns: %{entity: assignment}} = socket) do
     revision = Consent.Public.latest_revision(assignment.consent_agreement)
     localized_default_text = dgettext("eyra-consent", "default.consent.text")
 
     {
       :noreply,
-      socket
-      |> handle_off_state(revision, revision.source == localized_default_text)
+      handle_off_state(socket, revision, revision.source == localized_default_text)
     }
   end
 
@@ -126,11 +118,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event(
-        "confirmed",
-        %{source: %{name: :confirmation_modal}},
-        %{assigns: %{entity: assignment}} = socket
-      ) do
+  def handle_event("confirmed", %{source: %{name: :confirmation_modal}}, %{assigns: %{entity: assignment}} = socket) do
     {:ok, _} = Assignment.Public.delete_consent_agreement(assignment)
 
     {

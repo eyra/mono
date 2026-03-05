@@ -1,12 +1,11 @@
 defmodule Systems.Graphite.ScoreModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   schema "graphite_scores" do
     field(:score, :float)
@@ -26,11 +25,7 @@ defmodule Systems.Graphite.ScoreModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :submission
-      ])
+  def preload_graph(:down), do: preload_graph([:submission])
 
   def preload_graph(:submission), do: [submission: Graphite.SubmissionModel.preload_graph(:down)]
 end

@@ -1,5 +1,6 @@
 defmodule Systems.Instruction.SwitchTest do
   use Core.DataCase
+
   import Frameworks.Signal.TestHelper
 
   alias Systems.Instruction
@@ -7,7 +8,7 @@ defmodule Systems.Instruction.SwitchTest do
 
   describe "instruction_tool events" do
     setup do
-      isolate_signals(except: [Systems.Instruction.Switch])
+      isolate_signals(except: [Switch])
 
       auth_node = Factories.insert!(:auth_node)
       tool = Repo.insert!(%Instruction.ToolModel{auth_node_id: auth_node.id})
@@ -43,7 +44,7 @@ defmodule Systems.Instruction.SwitchTest do
 
   describe "instruction_asset events" do
     setup do
-      isolate_signals(except: [Systems.Instruction.Switch])
+      isolate_signals(except: [Switch])
 
       auth_node = Factories.insert!(:auth_node)
       tool = Repo.insert!(%Instruction.ToolModel{auth_node_id: auth_node.id})
@@ -68,7 +69,7 @@ defmodule Systems.Instruction.SwitchTest do
 
   describe "content_page events" do
     setup do
-      isolate_signals(except: [Systems.Instruction.Switch])
+      isolate_signals(except: [Switch])
 
       auth_node = Factories.insert!(:auth_node)
       tool = Repo.insert!(%Instruction.ToolModel{auth_node_id: auth_node.id})

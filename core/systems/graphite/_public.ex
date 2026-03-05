@@ -1,15 +1,16 @@
 defmodule Systems.Graphite.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Graphite.Queries
 
-  alias Ecto.Multi
-  alias Ecto.Changeset
   alias Core.Repo
-
+  alias Ecto.Changeset
+  alias Ecto.Multi
   alias Frameworks.Signal
-  alias Systems.Graphite
   alias Systems.Assignment
+  alias Systems.Graphite
   alias Systems.Workflow
 
   def get_challenge(%Graphite.LeaderboardModel{tool: tool}, preload \\ []) do
@@ -17,46 +18,40 @@ defmodule Systems.Graphite.Public do
   end
 
   def get_leaderboard!(id, preload \\ []) do
-    from(leaderboard in Graphite.LeaderboardModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(leaderboard in Graphite.LeaderboardModel, preload: ^preload), id)
   end
 
   def get_leaderboard_by_tool(%Graphite.ToolModel{} = tool, preload \\ []) do
-    leaderboard_query(tool)
+    tool
+    |> leaderboard_query()
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
-  def list_leaderboards(
-        %Assignment.Model{special: :benchmark_challenge, workflow: workflow},
-        preload \\ []
-      ) do
-    Workflow.Public.list_tools(workflow, :submit)
+  def list_leaderboards(%Assignment.Model{special: :benchmark_challenge, workflow: workflow}, preload \\ []) do
+    workflow
+    |> Workflow.Public.list_tools(:submit)
     |> leaderboards_by_tools()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def get_tool!(id, preload \\ []) do
-    from(tool in Graphite.ToolModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(tool in Graphite.ToolModel, preload: ^preload), id)
   end
 
   def get_submission(id) do
-    from(submission in Graphite.SubmissionModel,
-      where: submission.id == ^id
-    )
-    |> Repo.one()
+    Repo.one(from(submission in Graphite.SubmissionModel, where: submission.id == ^id))
   end
 
   def get_submission!(id, preload \\ []) do
-    from(submission in Graphite.SubmissionModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(submission in Graphite.SubmissionModel, preload: ^preload), id)
   end
 
   def get_submission(tool, user, role, preload \\ []) do
     submissions =
-      submission_query({tool, user, role})
+      {tool, user, role}
+      |> submission_query()
       |> Repo.all()
       |> Repo.preload(preload)
 
@@ -64,12 +59,14 @@ defmodule Systems.Graphite.Public do
   end
 
   def get_submissions(%Graphite.ToolModel{} = tool) do
-    Graphite.Queries.submission_query(tool)
+    tool
+    |> Graphite.Queries.submission_query()
     |> Repo.all()
   end
 
   def get_submission_count(tool) do
-    Graphite.Queries.submission_query(tool)
+    tool
+    |> Graphite.Queries.submission_query()
     |> Repo.aggregate(:count)
   end
 
@@ -87,7 +84,8 @@ defmodule Systems.Graphite.Public do
   end
 
   def set_tool_status(id, status) do
-    get_tool!(id)
+    id
+    |> get_tool!()
     |> set_tool_status(status)
   end
 
@@ -147,7 +145,8 @@ defmodule Systems.Graphite.Public do
       end
     end)
     |> Multi.update(:graphite_submission, fn _ ->
-      Graphite.SubmissionModel.change(submission, attrs)
+      submission
+      |> Graphite.SubmissionModel.change(attrs)
       |> Graphite.SubmissionModel.validate()
     end)
     |> Signal.Public.multi_dispatch({:graphite_submission, :updated})
@@ -164,19 +163,18 @@ defmodule Systems.Graphite.Public do
   end
 
   def list_submissions(%Graphite.LeaderboardModel{} = leaderboard, preload) do
-    submission_query(leaderboard)
+    leaderboard
+    |> submission_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def import_scores(leaderboard, %Graphite.ScoresParseResult{success: {valid_records, _}}) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     scores_to_delete = score_query(leaderboard)
 
-    leaderboard_changeset =
-      leaderboard
-      |> Graphite.LeaderboardModel.changeset(%{generation_date: now})
+    leaderboard_changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{generation_date: now})
 
     Multi.new()
     |> Multi.delete_all(:delete_scores, scores_to_delete)
@@ -195,8 +193,7 @@ defmodule Systems.Graphite.Public do
   end
 
   defp create_scores(line, leaderboard, datetime) do
-    leaderboard.metrics
-    |> Enum.map(fn metric ->
+    Enum.map(leaderboard.metrics, fn metric ->
       %{
         metric: metric,
         score: line[metric],
@@ -221,7 +218,8 @@ defmodule Systems.Graphite.Public do
   end
 
   def open_for_submissions?(tool_id) do
-    Graphite.Public.get_tool!(tool_id)
+    tool_id
+    |> Graphite.Public.get_tool!()
     |> Graphite.ToolModel.open_for_submissions?()
   end
 end

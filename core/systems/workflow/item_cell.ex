@@ -1,4 +1,5 @@
 defmodule Systems.Workflow.ItemCell do
+  @moduledoc false
   use CoreWeb, :live_component
 
   alias Frameworks.Concept
@@ -67,7 +68,7 @@ defmodule Systems.Workflow.ItemCell do
 
   @impl true
   def handle_event(action, _params, %{assigns: %{item: item}} = socket) do
-    {:noreply, socket |> send_event(:parent, action, %{item: item})}
+    {:noreply, send_event(socket, :parent, action, %{item: item})}
   end
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
@@ -79,12 +80,13 @@ defmodule Systems.Workflow.ItemCell do
       }
     }
 
-    socket |> assign(item_view: item_view)
+    assign(socket, item_view: item_view)
   end
 
   defp update_item_form(%{assigns: %{id: id, item: %{tool_ref: tool_ref} = item}} = socket) do
     group_enabled? =
-      Workflow.ToolRefModel.flatten(tool_ref)
+      tool_ref
+      |> Workflow.ToolRefModel.flatten()
       |> Concept.ToolModel.group_enabled?()
 
     item_form = %{
@@ -94,7 +96,7 @@ defmodule Systems.Workflow.ItemCell do
       group_enabled?: group_enabled?
     }
 
-    socket |> assign(item_form: item_form)
+    assign(socket, item_form: item_form)
   end
 
   defp update_ready(%{assigns: %{item: item}} = socket) do

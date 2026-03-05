@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Builder.PageForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
@@ -22,27 +23,25 @@ defmodule Systems.Manual.Builder.PageForm do
 
   def update_image_url(%{assigns: %{entity: %{image: "{" <> _ = image}}} = socket) do
     %{"url" => image_url} = Jason.decode!(image)
-    socket |> assign(image_url: image_url)
+    assign(socket, image_url: image_url)
   end
 
   def update_image_url(%{assigns: %{entity: %{image: image_url}}} = socket) do
-    socket |> assign(image_url: image_url)
+    assign(socket, image_url: image_url)
   end
 
   @impl true
   def pre_process_file(%{tmp_path: tmp_path, public_url: image_url}) do
     encoded_image_info =
-      image_from_path!(tmp_path)
+      tmp_path
+      |> image_from_path!()
       |> encode_image_info(image_url)
 
     %{encoded_image_info: encoded_image_info}
   end
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{encoded_image_info: encoded_image_info}
-      ) do
+  def process_file(%{assigns: %{entity: entity}} = socket, %{encoded_image_info: encoded_image_info}) do
     changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket
@@ -53,33 +52,31 @@ defmodule Systems.Manual.Builder.PageForm do
 
   def update_changeset(%{assigns: %{entity: entity}} = socket) do
     changeset = Manual.PageModel.changeset(entity, %{})
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   def update_wysiwyg_form(%{assigns: %{entity: %{text: text}}} = socket) do
     wysiwyg_form = to_form(%{"text" => text})
-    socket |> assign(wysiwyg_form: wysiwyg_form)
+    assign(socket, wysiwyg_form: wysiwyg_form)
   end
 
   def update_wysiwyg_form(socket) do
     wysiwyg_form = to_form(%{"text" => nil})
-    socket |> assign(text_form: wysiwyg_form)
+    assign(socket, text_form: wysiwyg_form)
   end
 
   @impl true
   def handle_wysiwyg_update(%{assigns: %{entity: entity, text: text}} = socket) do
     changeset = Manual.PageModel.changeset(entity, %{text: text})
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true
   def handle_event("save", %{"_target" => ["image"]}, socket) do
     {
       :noreply,
-      socket
-      |> assign(upload_in_progress: true)
+      assign(socket, upload_in_progress: true)
     }
   end
 
@@ -89,8 +86,7 @@ defmodule Systems.Manual.Builder.PageForm do
 
     {
       :noreply,
-      socket
-      |> save(changeset)
+      save(socket, changeset)
     }
   end
 

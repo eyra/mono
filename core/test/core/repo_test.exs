@@ -1,13 +1,14 @@
 defmodule Core.RepoTest do
   use Core.DataCase
 
-  alias Core.Repo
   alias Core.Factories
+  alias Core.Repo
+  alias Systems.Annotation.Assoc
 
   describe "orphan?" do
     test "returns true if the entity is not referred to by any other entity" do
       annotation = Factories.insert!(:annotation, %{statement: "test"})
-      assert Repo.orphan?(annotation, ignore: [Systems.Annotation.Assoc])
+      assert Repo.orphan?(annotation, ignore: [Assoc])
     end
 
     test "returns false if the Systems.Annotation.Assoc association table is not ignored" do
@@ -22,7 +23,7 @@ defmodule Core.RepoTest do
       annotation2 =
         Factories.insert!(:annotation, %{statement: "test", references: [annotation_ref1]})
 
-      assert not Repo.orphan?(annotation2, ignore: [])
+      refute Repo.orphan?(annotation2, ignore: [])
     end
 
     test "returns false if the entity is referred to by another entity" do
@@ -37,9 +38,9 @@ defmodule Core.RepoTest do
       annotation3 =
         Factories.insert!(:annotation, %{statement: "test", references: [annotation_ref2]})
 
-      assert not Repo.orphan?(annotation1, ignore: [Systems.Annotation.Assoc])
-      assert not Repo.orphan?(annotation2, ignore: [Systems.Annotation.Assoc])
-      assert Repo.orphan?(annotation3, ignore: [Systems.Annotation.Assoc])
+      refute Repo.orphan?(annotation1, ignore: [Assoc])
+      refute Repo.orphan?(annotation2, ignore: [Assoc])
+      assert Repo.orphan?(annotation3, ignore: [Assoc])
     end
   end
 end

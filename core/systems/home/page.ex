@@ -1,8 +1,9 @@
 defmodule Systems.Home.Page do
+  @moduledoc false
   use Systems.Content.Composer, :live_website
 
-  alias Systems.Home
   alias Frameworks.Pixel.Hero
+  alias Systems.Home
 
   @impl true
   def get_model(_params, _session, _socket) do
@@ -13,8 +14,7 @@ defmodule Systems.Home.Page do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
-      |> compose_child(:home_view)
+      compose_child(socket, :home_view)
     }
   end
 
@@ -38,7 +38,7 @@ defmodule Systems.Home.Page do
   @impl true
   def handle_view_model_updated(socket) do
     # FIXME: consider to move updates of childs to Fabric.LiveHook
-    socket |> update_child(:home_view)
+    update_child(socket, :home_view)
   end
 
   @impl true

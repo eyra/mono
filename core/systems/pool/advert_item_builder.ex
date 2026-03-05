@@ -1,26 +1,19 @@
 defmodule Systems.Pool.AdvertItemBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Utility.Guards
 
   alias Core.ImageHelpers
-
-  alias Systems.Pool
+  alias CoreWeb.UI.Timestamp
   alias Systems.Assignment
+  alias Systems.Pool
 
   def view_model(%{
         submission: %{id: submission_id, updated_at: updated_at} = submission,
-        promotion: %{
-          title: title,
-          image_id: image_id
-        },
-        assignment:
-          %{
-            assignable_inquiry: %{
-              subject_count: target_subject_count
-            }
-          } = assignment
+        promotion: %{title: title, image_id: image_id},
+        assignment: %{assignable_inquiry: %{subject_count: target_subject_count}} = assignment
       }) do
     tag = tag(submission)
 
@@ -44,8 +37,8 @@ defmodule Systems.Pool.AdvertItemBuilder do
 
     quick_summery =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}

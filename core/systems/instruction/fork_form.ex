@@ -1,10 +1,10 @@
 defmodule Systems.Instruction.ForkForm do
+  @moduledoc false
   use CoreWeb.LiveForm
-
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Instruction
   alias Systems.Content
+  alias Systems.Instruction
 
   @impl true
   def update(%{id: id, entity: tool}, socket) do
@@ -23,30 +23,29 @@ defmodule Systems.Instruction.ForkForm do
 
   defp update_repository(%{assigns: %{tool: %{assets: [%{repository: repository} | _]}}} = socket)
        when not is_nil(repository) do
-    socket |> assign(repository: repository)
+    assign(socket, repository: repository)
   end
 
   defp update_repository(socket) do
-    socket |> assign(repository: %Content.RepositoryModel{})
+    assign(socket, repository: %Content.RepositoryModel{})
   end
 
   defp update_changeset(%{assigns: %{repository: repository}} = socket) do
     changeset = Content.RepositoryModel.changeset(repository)
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
-  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket)
-       when not is_nil(page) do
-    socket |> assign(page: page)
+  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket) when not is_nil(page) do
+    assign(socket, page: page)
   end
 
   defp update_page(socket) do
-    socket |> assign(page: nil)
+    assign(socket, page: nil)
   end
 
   @impl true
   def handle_event("save", %{"repository_model" => %{"url" => url}}, socket) do
-    {:noreply, socket |> handle_save(url)}
+    {:noreply, handle_save(socket, url)}
   end
 
   def handle_save(%{assigns: %{page: nil, tool: %{auth_node: auth_node} = tool}} = socket, url) do
@@ -59,31 +58,33 @@ defmodule Systems.Instruction.ForkForm do
       )
 
     result = Instruction.Public.add_repository_and_page(tool, repository, page)
-    socket |> handle_result(result)
+    handle_result(socket, result)
   end
 
   def handle_save(%{assigns: %{repository: repository, page: page, tool: tool}} = socket, url) do
     repository =
-      Content.RepositoryModel.changeset(repository, %{url: url})
+      repository
+      |> Content.RepositoryModel.changeset(%{url: url})
       |> Content.RepositoryModel.validate()
 
     page =
-      Content.PageModel.changeset(page, %{
+      page
+      |> Content.PageModel.changeset(%{
         body: dgettext("eyra-instruction", "fork_page.body", url: url)
       })
       |> Content.PageModel.validate()
 
     result = Instruction.Public.update_repository_and_page(tool, repository, page)
-    socket |> handle_result(result)
+    handle_result(socket, result)
   end
 
   defp handle_result(socket, result) do
     case result do
       {:ok, %{content_repository: repository, content_page: page}} ->
-        socket |> assign(repository: repository, page: page)
+        assign(socket, repository: repository, page: page)
 
       {:error, :content_repository, changeset, _} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

@@ -20,9 +20,7 @@ defmodule CoreWeb.Endpoint do
 
   plug(CoreWeb.WWWRedirect)
 
-  socket("/live", Phoenix.LiveView.Socket,
-    websocket: [connect_info: [:user_agent, session: @session_options]]
-  )
+  socket("/live", Phoenix.LiveView.Socket, websocket: [connect_info: [:user_agent, session: @session_options]])
 
   @bundle Application.compile_env(:core, :bundle)
 
@@ -31,8 +29,7 @@ defmodule CoreWeb.Endpoint do
       at: "/",
       from: {:core, "priv/bundles/#{to_string(@bundle)}"},
       gzip: false,
-      only_matching:
-        ~w(css assets fonts images js favicon icon apple-touch-icon robots manifest sw privacy-statement.pdf)
+      only_matching: ~w(css assets fonts images js favicon icon apple-touch-icon robots manifest sw privacy-statement.pdf)
     )
   end
 
@@ -47,8 +44,7 @@ defmodule CoreWeb.Endpoint do
     at: "/",
     from: :core,
     gzip: false,
-    only_matching:
-      ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
+    only_matching: ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
   )
 
   if Code.ensure_loaded?(Tidewave) do

@@ -1,4 +1,5 @@
 defmodule Systems.Budget.FundingPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   def view_model(user, _assigns) do

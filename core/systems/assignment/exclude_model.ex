@@ -1,14 +1,12 @@
 defmodule Systems.Assignment.ExcludeModel do
+  @moduledoc false
   use Ecto.Schema
 
   import Ecto.Changeset
   import Ecto.Query
 
   alias Ecto.Multi
-
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @primary_key false
   schema "assignment_excludes" do
@@ -20,8 +18,7 @@ defmodule Systems.Assignment.ExcludeModel do
   @fields ~w()a
 
   def changeset(model, params \\ %{}) do
-    model
-    |> cast(params, @fields)
+    cast(model, params, @fields)
   end
 
   def exclude(multi, %Assignment.Model{id: from_id}, %Assignment.Model{id: to_id}) do

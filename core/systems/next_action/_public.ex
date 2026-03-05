@@ -4,18 +4,18 @@ defmodule Systems.NextAction.Public do
   """
   # This is a macro that imports the Core module and the public macro from the Core module.
   use Core, :public
-  import Ecto.Query, warn: false
-  alias Core.Repo
-  alias Systems.Account.User
-  alias Frameworks.Signal
 
+  import Ecto.Query, warn: false
+
+  alias Core.Repo
+  alias Frameworks.Signal
+  alias Systems.Account.User
   alias Systems.NextAction
 
   @doc """
   """
   def count_next_actions(%User{} = user) do
-    from(na in NextAction.Model, where: na.user_id == ^user.id, select: count("*"))
-    |> Repo.one()
+    Repo.one(from(na in NextAction.Model, where: na.user_id == ^user.id, select: count("*")))
   end
 
   @doc """
@@ -37,7 +37,8 @@ defmodule Systems.NextAction.Public do
   @doc """
   """
   def next_best_action!(%User{} = user) do
-    list_next_actions(user)
+    user
+    |> list_next_actions()
     |> List.first()
   end
 
@@ -111,7 +112,8 @@ defmodule Systems.NextAction.Public do
   def to_view_model(%NextAction.Model{action: action, count: count, params: params}) do
     action_type = String.to_existing_atom(action)
 
-    action_type.to_view_model(count, params)
+    count
+    |> action_type.to_view_model(params)
     |> Map.put(:action_type, action_type)
   end
 end

@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.LoadingSpinner do
+  @moduledoc false
   use CoreWeb, :pixel
 
   attr(:size, :string, default: "w-6 h-6")

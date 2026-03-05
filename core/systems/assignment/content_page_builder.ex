@@ -1,8 +1,12 @@
 defmodule Systems.Assignment.ContentPageBuilder do
-  use CoreWeb, :verified_routes
-  require Logger
-  use Systems.Content.PageBuilder
+  @moduledoc """
+    Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
+    This builder module supports several specials with each a specific View Model.
+    For a full overview of the template feature see `Systems.Assignment.Template`.
+  """
 
+  use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
@@ -15,11 +19,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   alias Systems.Workflow
   alias Systems.Zircon
 
-  @moduledoc """
-    Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
-    This builder module supports several specials with each a specific View Model.
-    For a full overview of the template feature see `Systems.Assignment.Template`.
-  """
+  require Logger
 
   @doc """
     Returns a view model based on the templates defined in:
@@ -28,10 +28,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     * Data Donation: `Systems.Assignment.TemplateDataDonation`
     * Questionnaire: `Systems.Assignment.TemplateQuestionnaire`
   """
-  def view_model(
-        %{id: id} = assignment,
-        %{branch: branch} = assigns
-      ) do
+  def view_model(%{id: id} = assignment, %{branch: branch} = assigns) do
     show_errors = false
     template = Assignment.Private.get_template(assignment)
     breadcrumbs = Concept.Branch.hierarchy(branch)
@@ -142,26 +139,19 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
 
-  defp actions(%{status: :offline}, %{publish: publish, close: close}),
-    do: [publish: publish, close: close]
+  defp actions(%{status: :offline}, %{publish: publish, close: close}), do: [publish: publish, close: close]
 
   defp actions(%{status: :idle}, %{open: open}), do: [open: open]
 
-  defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
-    do: [publish: publish, preview: preview]
+  defp actions(%{status: _concept}, %{publish: publish, preview: preview}), do: [publish: publish, preview: preview]
 
   @impl true
   def set_status(%{assigns: %{model: assignment}} = socket, status) do
     {:ok, assignment} = Assignment.Public.update(assignment, %{status: status})
-    socket |> Phoenix.Component.assign(model: assignment)
+    Phoenix.Component.assign(socket, model: assignment)
   end
 
-  defp create_tabs(
-         assignment,
-         template,
-         show_errors,
-         %{uri_origin: _, viewport: _, breakpoint: _} = assigns
-       ) do
+  defp create_tabs(assignment, template, show_errors, %{uri_origin: _, viewport: _, breakpoint: _} = assigns) do
     workflow_config = Assignment.Template.workflow_config(template)
 
     template
@@ -184,8 +174,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-           _assigns
+         %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} = _assigns
        ) do
     ready? = false
 
@@ -202,8 +191,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
     storage_endpoint =
       if project_item do
         Map.get(project_item, :storage_endpoint)
-      else
-        nil
       end
 
     child =
@@ -233,19 +220,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
     raise "Workflow tab is not supported for singleton workflows. Please provide alternative tab(s) for manipulating the workflow. See :import and :criteria tabs for examples."
   end
 
-  defp create_tab(
-         :workflow,
-         %{workflow: workflow},
-         {title, content_flags},
-         workflow_config,
-         show_errors,
-         %{
-           fabric: fabric,
-           current_user: user,
-           uri_origin: uri_origin,
-           timezone: timezone
-         }
-       ) do
+  defp create_tab(:workflow, %{workflow: workflow}, {title, content_flags}, workflow_config, show_errors, %{
+         fabric: fabric,
+         current_user: user,
+         uri_origin: uri_origin,
+         timezone: timezone
+       }) do
     ready? = false
 
     child =
@@ -272,9 +252,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{
-         fabric: fabric
-       }) do
+  defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{fabric: fabric}) do
     ready? = false
 
     child =
@@ -297,11 +275,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :import,
-         %{
-           workflow: %{
-             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
-           }
-         },
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, _content_flags},
          _workflow_config,
          show_errors,
@@ -331,11 +305,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :criteria,
-         %{
-           workflow: %{
-             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
-           }
-         },
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, _content_flags},
          _workflow_config,
          show_errors,
@@ -366,14 +336,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
     raise "Criteria tab is only supported for singleton workflows with one Zircon tool"
   end
 
-  defp create_tab(
-         :participants,
-         assignment,
-         {title, content_flags},
-         _workflow_config,
-         show_errors,
-         %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
-       ) do
+  defp create_tab(:participants, assignment, {title, content_flags}, _workflow_config, show_errors, %{
+         fabric: fabric,
+         current_user: user,
+         viewport: viewport,
+         breakpoint: breakpoint
+       }) do
     child =
       Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
         assignment: assignment,
@@ -426,13 +394,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp number_widgets(assignment) do
-    [:started, :finished, :declined]
-    |> Enum.map(&number_widget(&1, assignment))
+    Enum.map([:started, :finished, :declined], &number_widget(&1, assignment))
   end
 
   defp number_widget(:started, assignment) do
     metric =
-      Monitor.Public.event({assignment, :started})
+      {assignment, :started}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     %{
@@ -444,7 +412,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:finished, assignment) do
     metric =
-      Monitor.Public.event({assignment, :finished})
+      {assignment, :finished}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     %{
@@ -456,7 +425,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:declined, assignment) do
     metric =
-      Monitor.Public.event({assignment, :declined})
+      {assignment, :declined}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     color =
@@ -474,7 +444,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp progress_widgets(%{workflow: workflow} = assignment) do
-    Workflow.Public.list_items(workflow)
+    workflow
+    |> Workflow.Public.list_items()
     |> Enum.map(&progress_widget(&1, assignment))
   end
 

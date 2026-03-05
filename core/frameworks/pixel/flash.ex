@@ -2,15 +2,16 @@ defmodule Frameworks.Pixel.Flash do
   @moduledoc """
   Provides support for flash messages.
   """
-  import Phoenix.Component
   use Gettext, backend: CoreWeb.Gettext
+
+  import Phoenix.Component
 
   alias Phoenix.LiveView
 
   @hide_message_delay 3
 
   def mount(socket) do
-    socket |> assign(hide_timer: nil)
+    assign(socket, hide_timer: nil)
   end
 
   def schedule_hide(socket), do: schedule_hide(socket, true)
@@ -19,8 +20,7 @@ defmodule Frameworks.Pixel.Flash do
   def schedule_hide(socket, true) do
     cancel_hide_timer(socket)
 
-    socket
-    |> assign(hide_timer: Process.send_after(self(), :hide_flash, @hide_message_delay * 1_000))
+    assign(socket, hide_timer: Process.send_after(self(), :hide_flash, @hide_message_delay * 1_000))
   end
 
   def hide(socket) do
@@ -29,7 +29,7 @@ defmodule Frameworks.Pixel.Flash do
     |> LiveView.clear_flash()
   end
 
-  defp default_error(), do: dgettext("eyra-ui", "error.flash")
+  defp default_error, do: dgettext("eyra-ui", "error.flash")
 
   def put_error(socket), do: put_error(socket, default_error())
   def put_error(socket, message), do: put(socket, :error, message, false)
@@ -43,11 +43,9 @@ defmodule Frameworks.Pixel.Flash do
 
   def push_error(socket), do: push_error(socket, default_error())
 
-  def push_error(socket, message),
-    do: push(socket, {:show_flash, %{type: :error, message: message, auto_hide: false}})
+  def push_error(socket, message), do: push(socket, {:show_flash, %{type: :error, message: message, auto_hide: false}})
 
-  def push_info(socket, message),
-    do: push(socket, {:show_flash, %{type: :info, message: message, auto_hide: true}})
+  def push_info(socket, message), do: push(socket, {:show_flash, %{type: :info, message: message, auto_hide: true}})
 
   def push_hide(socket), do: push(socket, :hide_flash)
 
@@ -65,8 +63,7 @@ defmodule Frameworks.Pixel.Flash do
     send(pid, payload)
   end
 
-  defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket)
-       when not is_nil(hide_timer) do
+  defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket) when not is_nil(hide_timer) do
     Process.cancel_timer(hide_timer)
     socket
   end
@@ -79,18 +76,15 @@ defmodule Frameworks.Pixel.Flash do
 
       # Only define handlers if not already defined (idempotent)
       # This allows both embedded_live_view and use Frameworks.Pixel without conflicts
-      unless Module.has_attribute?(__MODULE__, :__pixel_flash_defined__) do
+      if !Module.has_attribute?(__MODULE__, :__pixel_flash_defined__) do
         Module.put_attribute(__MODULE__, :__pixel_flash_defined__, true)
 
         def handle_info(:hide_flash, socket) do
-          {:noreply, socket |> Flash.hide()}
+          {:noreply, Flash.hide(socket)}
         end
 
-        def handle_info(
-              {:show_flash, %{type: type, message: message, auto_hide: auto_hide}},
-              socket
-            ) do
-          {:noreply, socket |> Flash.put(type, message, auto_hide)}
+        def handle_info({:show_flash, %{type: type, message: message, auto_hide: auto_hide}}, socket) do
+          {:noreply, Flash.put(socket, type, message, auto_hide)}
         end
       end
     end

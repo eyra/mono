@@ -4,7 +4,9 @@ defmodule Frameworks.GreenLight.Ecto.Query do
   """
 
   import Ecto.Query
-  alias Frameworks.GreenLight.{AuthorizationNode, Principal}
+
+  alias Frameworks.GreenLight.AuthorizationNode
+  alias Frameworks.GreenLight.Principal
 
   defp role_query(role_assignment_schema, principal, entity) do
     from(ra in role_assignment_schema,
@@ -15,33 +17,22 @@ defmodule Frameworks.GreenLight.Ecto.Query do
     )
   end
 
-  def list_roles(repo, role_assignment_schema, principal, entities)
-      when is_list(entities) do
+  def list_roles(repo, role_assignment_schema, principal, entities) when is_list(entities) do
     Enum.map(entities, &list_roles(repo, role_assignment_schema, principal, &1))
   end
 
-  def list_roles(
-        repo,
-        role_assignment_schema,
-        principal,
-        entity
-      ) do
+  def list_roles(repo, role_assignment_schema, principal, entity) do
     if is_nil(Principal.id(principal)) do
       MapSet.new()
     else
-      role_query(role_assignment_schema, principal, entity)
+      role_assignment_schema
+      |> role_query(principal, entity)
       |> repo.all()
       |> MapSet.new()
     end
   end
 
-  def assign_role(
-        repo,
-        role_assignment_schema,
-        principal,
-        entity,
-        role
-      ) do
+  def assign_role(repo, role_assignment_schema, principal, entity, role) do
     role_assignment_schema
     |> struct(%{
       principal_id: Principal.id(principal),
@@ -55,15 +46,9 @@ defmodule Frameworks.GreenLight.Ecto.Query do
     end
   end
 
-  def remove_role!(
-        repo,
-        role_assignment_schema,
-        principal,
-        entity,
-        role
-      ) do
-    query_role_assignments(
-      role_assignment_schema,
+  def remove_role!(repo, role_assignment_schema, principal, entity, role) do
+    role_assignment_schema
+    |> query_role_assignments(
       principal: principal,
       entity: entity,
       role: role
@@ -87,8 +72,7 @@ defmodule Frameworks.GreenLight.Ecto.Query do
 
   def query_role_assignments(role_assignment_schema, opts \\ []) do
     filters =
-      opts
-      |> Enum.reduce([], fn {option, value}, filters ->
+      Enum.reduce(opts, [], fn {option, value}, filters ->
         filter =
           case option do
             :role -> {:role, value}

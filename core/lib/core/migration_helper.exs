@@ -1,4 +1,5 @@
 defmodule Core.Repo.MigrationHelper do
+  @moduledoc false
   defp link(table, id, field, value) do
     if not exist?(table, field, value) do
       update(table, id, field, value)
@@ -27,8 +28,9 @@ defmodule Core.Repo.MigrationHelper do
     count > 0
   end
 
-  defp now() do
-    DateTime.now!("Etc/UTC")
+  defp now do
+    "Etc/UTC"
+    |> DateTime.now!()
     |> DateTime.to_naive()
   end
 

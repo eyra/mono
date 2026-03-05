@@ -1,10 +1,12 @@
 defmodule Systems.Account.Plug do
+  @moduledoc false
   @behaviour Plug
 
-  require Logger
-
   import Plug.Conn
+
   alias Systems.Account
+
+  require Logger
 
   @valid_participant_path ~r"^\/((assignment\/(callback\/)?\d.*)|(a\/.{6,}))$"
 

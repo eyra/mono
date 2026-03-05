@@ -2,14 +2,14 @@ defmodule Systems.Assignment.CrewWorkView do
   use CoreWeb, :embedded_live_view
   use CoreWeb, :verified_routes
 
-  require Logger
-
   alias Systems.Assignment
   alias Systems.Consent
   alias Systems.Content
   alias Systems.Document
 
-  def dependencies(), do: [:assignment_id, :current_user, :panel_info, :timezone, :user_state]
+  require Logger
+
+  def dependencies, do: [:assignment_id, :current_user, :panel_info, :timezone, :user_state]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     # Only fetch data needed for routing decision and context menu
@@ -30,33 +30,21 @@ defmodule Systems.Assignment.CrewWorkView do
   # Events
 
   @impl true
-  def handle_event(
-        "tool_initialized",
-        _,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("tool_initialized", _, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     # Forward to task_view component
     send_update(module, id: :task_view, tool_initialized: true)
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event(
-        "cancel_task",
-        _payload,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("cancel_task", _payload, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     # Forward to task_view component
     send_update(module, id: :task_view, cancel_task: true)
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event(
-        "feldspar_event",
-        event,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("feldspar_event", event, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     # Forward to task_view component
     send_update(module, id: :task_view, feldspar_event: event)
     {:noreply, socket}
@@ -68,15 +56,14 @@ defmodule Systems.Assignment.CrewWorkView do
 
     {
       :noreply,
-      socket
-      |> show_context_menu_item(item)
+      show_context_menu_item(socket, item)
     }
   end
 
   @impl true
   def handle_event("task_completed", _, socket) do
     # Notify parent (CrewPage) that task was completed so it can recalculate the view
-    {:noreply, socket |> publish_event(:task_completed)}
+    {:noreply, publish_event(socket, :task_completed)}
   end
 
   defp show_context_menu_item(socket, :privacy) do
@@ -94,7 +81,7 @@ defmodule Systems.Assignment.CrewWorkView do
         style: :page
       )
 
-    socket |> present_modal(modal)
+    present_modal(socket, modal)
   end
 
   defp show_context_menu_item(socket, :consent) do
@@ -111,7 +98,7 @@ defmodule Systems.Assignment.CrewWorkView do
         style: :page
       )
 
-    socket |> present_modal(modal)
+    present_modal(socket, modal)
   end
 
   defp show_context_menu_item(socket, :assignment_information) do
@@ -128,7 +115,7 @@ defmodule Systems.Assignment.CrewWorkView do
         style: :page
       )
 
-    socket |> present_modal(modal)
+    present_modal(socket, modal)
   end
 
   defp show_context_menu_item(socket, :assignment_helpdesk) do
@@ -145,7 +132,7 @@ defmodule Systems.Assignment.CrewWorkView do
         style: :page
       )
 
-    socket |> present_modal(modal)
+    present_modal(socket, modal)
   end
 
   @impl true

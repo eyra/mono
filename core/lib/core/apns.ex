@@ -4,15 +4,15 @@ defmodule Core.APNS do
   """
 
   import Ecto.Query, warn: false
-  require Logger
+
+  alias Core.APNS.DeviceToken
   alias Core.Repo
   alias Systems.Account.User
 
-  alias Core.APNS.DeviceToken
+  require Logger
 
   def get_push_tokens(%User{} = user) do
-    from(dt in DeviceToken, where: dt.user_id == ^user.id)
-    |> Repo.all()
+    Repo.all(from(dt in DeviceToken, where: dt.user_id == ^user.id))
   end
 
   def register(user, device_token) do
@@ -30,18 +30,18 @@ defmodule Core.APNS do
   end
 
   def send_notification(%DeviceToken{} = device_token, message) do
-    backend().send_notification(%{
+    %{
       device_token: device_token,
       message: message
-    })
+    }
+    |> backend().send_notification()
     |> handle_push_response()
   end
 
   defp handle_push_response(:ok), do: nil
 
   defp handle_push_response(%{response: :bad_device_token, device_token: device_token}) do
-    from(dt in DeviceToken, where: dt.device_token == ^device_token)
-    |> Repo.delete_all()
+    Repo.delete_all(from(dt in DeviceToken, where: dt.device_token == ^device_token))
   end
 
   defp handle_push_response(response) do

@@ -5,7 +5,6 @@ defmodule Systems.Account.UserProfilePage do
   use Systems.Content.Composer, :live_workspace
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Core
   alias Frameworks.Pixel.Tabbed
 
   @impl true
@@ -18,16 +17,13 @@ defmodule Systems.Account.UserProfilePage do
     tabbar_id = "user_profile"
 
     active_tab =
-      Map.get(params, "tab", "profile")
+      params
+      |> Map.get("tab", "profile")
       |> String.to_existing_atom()
 
     {
       :ok,
-      socket
-      |> assign(
-        tabbar_id: tabbar_id,
-        initial_tab: active_tab
-      )
+      assign(socket, tabbar_id: tabbar_id, initial_tab: active_tab)
     }
   end
 

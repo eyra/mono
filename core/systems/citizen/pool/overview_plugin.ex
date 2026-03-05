@@ -1,10 +1,9 @@
 defmodule Systems.Citizen.Pool.OverviewPlugin do
+  @moduledoc false
   use CoreWeb, :live_component
-
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Grid
-
   alias Systems.Pool
 
   # Initial update
@@ -23,15 +22,13 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
 
   defp update_pools(%{assigns: %{user: user, myself: myself}} = socket) do
     pools =
-      Pool.Public.list_by_director(
-        "citizen",
-        Pool.Model.preload_graph([:org, :submissions, :auth_node])
-      )
+      "citizen"
+      |> Pool.Public.list_by_director(Pool.Model.preload_graph([:org, :submissions, :auth_node]))
       |> Enum.filter(&owner?(&1, user))
 
     pool_items = Enum.map(pools, &to_view_model(&1, myself))
 
-    socket |> assign(pools: pools, pool_items: pool_items)
+    assign(socket, pools: pools, pool_items: pool_items)
   end
 
   defp get_pool(socket, pool_id) when is_binary(pool_id) do
@@ -52,7 +49,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     |> get_pool(pool_id)
     |> Pool.Public.update!(%{archived: true})
 
-    {:noreply, socket |> update_pools()}
+    {:noreply, update_pools(socket)}
   end
 
   @impl true
@@ -61,7 +58,7 @@ defmodule Systems.Citizen.Pool.OverviewPlugin do
     |> get_pool(pool_id)
     |> Pool.Public.update!(%{archived: false})
 
-    {:noreply, socket |> update_pools()}
+    {:noreply, update_pools(socket)}
   end
 
   defp to_view_model(%{id: id, name: name} = pool, target) do

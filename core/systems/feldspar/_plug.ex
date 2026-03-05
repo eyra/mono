@@ -1,5 +1,8 @@
 defmodule Systems.Feldspar.Plug do
+  @moduledoc false
   @behaviour Plug
+
+  alias Systems.Feldspar.LocalFS
 
   defmacro setup() do
     quote do
@@ -16,15 +19,12 @@ defmodule Systems.Feldspar.Plug do
   end
 
   @impl true
-  def call(
-        conn,
-        options
-      ) do
+  def call(conn, options) do
     call(Systems.Feldspar.Private.get_backend(), conn, options)
   end
 
-  def call(Systems.Feldspar.LocalFS, conn, options) do
-    root_path = Systems.Feldspar.LocalFS.get_root_path()
+  def call(LocalFS, conn, options) do
+    root_path = LocalFS.get_root_path()
     options = Map.put(options, :from, root_path)
     Plug.Static.call(conn, options)
   end

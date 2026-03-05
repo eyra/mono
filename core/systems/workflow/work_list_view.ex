@@ -10,17 +10,13 @@ defmodule Systems.Workflow.WorkListView do
   def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         items: items,
         selected_item_id: selected_item_id,
         done_button: %{
           action: %{type: :send, event: "done"},
-          face: %{
-            type: :secondary,
-            label: dgettext("eyra-workflow", "work_list.done.button")
-          }
+          face: %{type: :secondary, label: dgettext("eyra-workflow", "work_list.done.button")}
         }
       )
     }
@@ -35,13 +31,13 @@ defmodule Systems.Workflow.WorkListView do
     if String.to_integer(item_id) == selected_item_id do
       {:noreply, socket}
     else
-      {:noreply, socket |> publish_event({:work_item_selected, payload})}
+      {:noreply, publish_event(socket, {:work_item_selected, payload})}
     end
   end
 
   @impl true
   def handle_event("done", _payload, socket) do
-    {:noreply, socket |> publish_event(:work_done)}
+    {:noreply, publish_event(socket, :work_done)}
   end
 
   @impl true

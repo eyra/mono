@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Feature.Tabbed do
+  @moduledoc false
   defmacro __using__(_opts \\ nil) do
     quote do
       alias CoreWeb.UI.Responsive.Breakpoint
@@ -10,7 +11,7 @@ defmodule CoreWeb.Live.Feature.Tabbed do
 
       def update_tabbar_size(%{assigns: %{breakpoint: breakpoint}} = socket) do
         tabbar_size = tabbar_size(breakpoint)
-        socket |> assign(tabbar_size: tabbar_size)
+        assign(socket, tabbar_size: tabbar_size)
       end
     end
   end

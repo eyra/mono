@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.StepModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -20,8 +21,7 @@ defmodule Systems.Userflow.StepModel do
   @required_fields ~w(order)a
 
   def changeset(step, attrs \\ %{}) do
-    step
-    |> cast(attrs, @fields)
+    cast(step, attrs, @fields)
   end
 
   def validate(changeset) do

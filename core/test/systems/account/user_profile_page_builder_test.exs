@@ -1,7 +1,7 @@
 defmodule Systems.Account.UserProfilePageBuilderTest do
   use Core.DataCase
-  alias Core.Factories
 
+  alias Core.Factories
   alias Systems.Account
   alias Systems.Pool
 

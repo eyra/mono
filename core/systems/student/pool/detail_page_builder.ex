@@ -1,12 +1,13 @@
 defmodule Systems.Student.Pool.DetailPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   import CoreWeb.UI.Responsive.Breakpoint
 
-  alias Systems.Pool
   alias Systems.Advert
-  alias Systems.Budget
   alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Pool
   alias Systems.Student
 
   def view_model(pool, assigns) do
@@ -52,20 +53,15 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
   defp load_adverts(pool) do
     preload = Advert.Model.preload_graph(:down)
 
-    Advert.Public.list_submitted(pool, preload: preload)
+    pool
+    |> Advert.Public.list_submitted(preload: preload)
     |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
   end
 
   defp scale({:unknown, _}), do: 5
   defp scale(breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
 
-  defp load_dashboard(
-         %{breakpoint: breakpoint},
-         %Pool.Model{
-           target: target,
-           currency: currency
-         } = pool
-       ) do
+  defp load_dashboard(%{breakpoint: breakpoint}, %Pool.Model{target: target, currency: currency} = pool) do
     participants = Pool.Public.list_participants(pool)
     scale = scale(breakpoint)
 
@@ -79,13 +75,13 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     passed_credits = Enum.filter(credits, &(&1 >= target))
     passed_count = Enum.count(passed_credits)
 
-    total_count = participants |> Enum.count()
+    total_count = Enum.count(participants)
 
     inactive_count = total_count - (active_count + passed_count)
 
     truncated_credits =
-      credits
-      |> Enum.map(
+      Enum.map(
+        credits,
         &if &1 < target do
           &1
         else
@@ -93,7 +89,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
         end
       )
 
-    total_credits = Statistics.sum(truncated_credits) |> do_round()
+    total_credits = truncated_credits |> Statistics.sum() |> do_round()
     pending_credits = Budget.Public.pending_rewards(currency)
     target_credits = total_count * target
 
@@ -147,8 +143,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     }
   end
 
-  defp do_round(number) when is_float(number),
-    do: number |> Decimal.from_float() |> Decimal.round(2)
+  defp do_round(number) when is_float(number), do: number |> Decimal.from_float() |> Decimal.round(2)
 
   defp do_round(number), do: number
 end

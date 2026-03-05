@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.GeneralForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   import Frameworks.Pixel.Form
@@ -6,16 +7,7 @@ defmodule Systems.Assignment.GeneralForm do
   alias Systems.Assignment
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity,
-          viewport: viewport,
-          breakpoint: breakpoint,
-          content_flags: content_flags
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint, content_flags: content_flags}, socket) do
     changeset = Assignment.InfoModel.changeset(entity, :create, %{})
 
     {
@@ -33,14 +25,7 @@ defmodule Systems.Assignment.GeneralForm do
     }
   end
 
-  def update_language_items(
-        %{
-          assigns: %{
-            entity: %{language: language},
-            content_flags: content_flags
-          }
-        } = socket
-      ) do
+  def update_language_items(%{assigns: %{entity: %{language: language}, content_flags: content_flags}} = socket) do
     language_mode = determine_language_mode(content_flags)
     resolved_language = resolve_language(language, language_mode)
 
@@ -72,8 +57,7 @@ defmodule Systems.Assignment.GeneralForm do
       ) do
     {
       :noreply,
-      socket
-      |> save(entity, :auto_save, %{language: language})
+      save(socket, entity, :auto_save, %{language: language})
     }
   end
 
@@ -81,8 +65,7 @@ defmodule Systems.Assignment.GeneralForm do
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, :auto_save, attrs)
+      save(socket, entity, :auto_save, attrs)
     }
   end
 
@@ -91,8 +74,7 @@ defmodule Systems.Assignment.GeneralForm do
   def save(socket, entity, type, attrs) do
     changeset = Assignment.InfoModel.changeset(entity, type, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

@@ -3,7 +3,9 @@ defmodule Systems.Account.UserProfileModel do
   This schema contains profile related data for members.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias Systems.Account.User
 
   schema "user_profiles" do
@@ -30,7 +32,6 @@ defmodule Systems.Account.UserProfileModel do
 
   @doc false
   def changeset(profile, attrs) do
-    profile
-    |> cast(attrs, @fields)
+    cast(profile, attrs, @fields)
   end
 end

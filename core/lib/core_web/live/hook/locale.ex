@@ -5,7 +5,7 @@ defmodule CoreWeb.Live.Hook.Locale do
 
   @impl true
   def mount(_live_view_module, _params, _session, socket) do
-    {:cont, socket |> Phoenix.Component.assign(locale: CoreWeb.Live.Hook.Locale.get_locale())}
+    {:cont, Phoenix.Component.assign(socket, locale: CoreWeb.Live.Hook.Locale.get_locale())}
   end
 
   def put_locale(locale) when is_atom(locale), do: put_locale(Atom.to_string(locale))
@@ -17,7 +17,7 @@ defmodule CoreWeb.Live.Hook.Locale do
     Gettext.put_locale(Timex.Gettext, locale)
   end
 
-  def get_locale() do
+  def get_locale do
     Gettext.get_locale()
   end
 end

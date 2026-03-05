@@ -2,13 +2,13 @@ defmodule Frameworks.Pixel.Navigation do
   @moduledoc false
   use CoreWeb, :pixel
 
+  import Frameworks.Pixel.Line
+
+  alias Frameworks.Pixel.Align
+  alias Frameworks.Pixel.Breadcrumbs
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Menu
-  alias Frameworks.Pixel.Align
-  alias Frameworks.Pixel.Breadcrumbs
-
-  import Frameworks.Pixel.Line
 
   attr(:home, :map, default: nil)
   attr(:primary, :map, default: nil)

@@ -1,5 +1,6 @@
 defmodule CoreWeb.Live.User.ConfirmToken.Test do
   use CoreWeb.ConnCase, async: true
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -36,16 +37,12 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
       {:ok, view, _html} = live(conn, ~p"/user/confirm/#{token}")
 
-      {:error, {:redirect, %{to: _to}}} =
-        view
-        |> render_click("confirm")
+      {:error, {:redirect, %{to: _to}}} = render_click(view, "confirm")
 
       # The second time should not redirect
       {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
 
-      html =
-        view
-        |> render_click("confirm")
+      html = render_click(view, "confirm")
 
       assert html =~ "Account activation"
     end
@@ -54,18 +51,14 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
 
-      view
-      |> render_click("confirm")
-
+      render_click(view, "confirm")
       refute user.confirmed_at
     end
 
     test "an invalid token shows resend form", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
 
-      html =
-        view
-        |> render_click("confirm")
+      html = render_click(view, "confirm")
 
       assert html =~ "Account activation"
     end
@@ -73,8 +66,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     test "resend form validates the email field", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
-      view
-      |> render_click("confirm")
+      render_click(view, "confirm")
 
       html =
         view
@@ -88,8 +80,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     test "resend form fakes sending mail when user does not exist", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
-      view
-      |> render_click("confirm")
+      render_click(view, "confirm")
 
       html =
         view
@@ -104,8 +95,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
-      view
-      |> render_click("confirm")
+      render_click(view, "confirm")
 
       html =
         view
@@ -120,8 +110,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
       user = Factories.insert!(:member, %{confirmed_at: nil})
       {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
 
-      view
-      |> render_click("confirm")
+      render_click(view, "confirm")
 
       html =
         view

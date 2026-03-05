@@ -1,4 +1,5 @@
 defmodule Frameworks.Signal.Handler do
+  @moduledoc false
   @type signal :: atom | map | {:atom, signal}
   @type message :: any
   @type result :: :ok | {:error, atom()} | {:continue, atom(), any()}
@@ -7,9 +8,10 @@ defmodule Frameworks.Signal.Handler do
 
   defmacro __using__(_opts) do
     quote do
+      @behaviour Frameworks.Signal.Handler
+
       alias Frameworks.Signal
 
-      @behaviour Signal.Handler
       @before_compile Signal.Handler
 
       defp dispatch!(signal, message) do

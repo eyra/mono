@@ -1,11 +1,12 @@
 defmodule Systems.Instruction.PageModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.Instruction
   alias Systems.Content
+  alias Systems.Instruction
 
   schema "instruction_pages" do
     belongs_to(:tool, Instruction.ToolModel)

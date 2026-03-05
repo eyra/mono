@@ -1,13 +1,14 @@
 defmodule Systems.Paper.Queries do
+  @moduledoc false
   import Ecto.Query
-  require Frameworks.Utility.Query
-
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Paper
 
+  require Frameworks.Utility.Query
+
   # PAPER
-  def paper_query() do
+  def paper_query do
     from(p in Paper.Model, as: :paper)
   end
 
@@ -35,7 +36,7 @@ defmodule Systems.Paper.Queries do
   end
 
   # REFERENCE FILE
-  def reference_file_query() do
+  def reference_file_query do
     from(tf in Paper.ReferenceFileModel, as: :reference_file)
   end
 
@@ -43,22 +44,22 @@ defmodule Systems.Paper.Queries do
     where(query, [reference_file: rf], rf.status not in ^exclude)
   end
 
-  def reference_file_paper_query() do
+  def reference_file_paper_query do
     from(Paper.ReferenceFilePaperAssoc, as: :reference_file_paper)
   end
 
   # Paper set
-  def paper_set_query() do
+  def paper_set_query do
     from(s in Paper.SetModel, as: :set)
   end
 
   def paper_set_query(category) do
-    paper_set_query()
-    |> where([set: s], s.category == ^category)
+    where(paper_set_query(), [set: s], s.category == ^category)
   end
 
   def paper_set_query(category, identifier) do
-    paper_set_query(category)
+    category
+    |> paper_set_query()
     |> where([set: s], s.identifier == ^identifier)
   end
 end

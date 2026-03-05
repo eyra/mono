@@ -3,15 +3,15 @@ defmodule CoreWeb.Router do
 
   require Core.BundleOverrides
   require Core.SurfConext
-  require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
+  require CoreWeb.Routes
+  require GoogleSignIn
+  require SignInWithApple
 
   Core.BundleOverrides.routes()
 
-  require GoogleSignIn
   GoogleSignIn.routes(:core)
 
-  require SignInWithApple
   SignInWithApple.routes(:core)
 
   Core.SurfConext.routes(:core)

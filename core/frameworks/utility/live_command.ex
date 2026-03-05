@@ -1,7 +1,8 @@
 defmodule Frameworks.Utility.LiveCommand do
-  defstruct [:function, :args]
-
+  @moduledoc false
   require Logger
+
+  defstruct [:function, :args]
 
   def live_command(function, args) do
     %Frameworks.Utility.LiveCommand{function: function, args: args}
@@ -25,8 +26,8 @@ defmodule Frameworks.Utility.LiveCommand do
   end
 
   defp get_action(%{assigns: %{actions: actions}}, event) do
-    actions
-    |> Enum.reduce(
+    Enum.reduce(
+      actions,
       nil,
       &if action?(event, &1) do
         &1

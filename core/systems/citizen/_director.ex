@@ -1,20 +1,18 @@
 defmodule Systems.Citizen.Director do
+  @moduledoc false
+  @behaviour Frameworks.Concept.PoolDirector
+
+  use Gettext, backend: CoreWeb.Gettext
+
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Budget
+  alias Systems.Citizen
+  alias Systems.Pool
+
   defmodule Error do
     @moduledoc false
     defexception [:message]
   end
-
-  @behaviour Frameworks.Concept.PoolDirector
-
-  alias CoreWeb.UI.Timestamp
-
-  use Gettext, backend: CoreWeb.Gettext
-
-  alias Systems.{
-    Pool,
-    Budget,
-    Citizen
-  }
 
   @impl true
   def overview_plugin(user) do
@@ -28,7 +26,7 @@ defmodule Systems.Citizen.Director do
   def submission_plugin(_user), do: nil
 
   @impl true
-  def inclusion_criteria() do
+  def inclusion_criteria do
     [:genders]
   end
 

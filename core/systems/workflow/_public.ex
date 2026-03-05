@@ -1,43 +1,42 @@
 defmodule Systems.Workflow.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Workflow.Queries
 
-  alias Ecto.Multi
   alias Core.Repo
-
+  alias Ecto.Multi
   alias Frameworks.Signal
-
-  alias Systems.Workflow
-  alias Systems.Document
   alias Systems.Alliance
+  alias Systems.Document
   alias Systems.Feldspar
-  alias Systems.Lab
-  alias Systems.Manual
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Lab
+  alias Systems.Manual
+  alias Systems.Workflow
   alias Systems.Zircon
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
 
   def list_items(workflow_id, preload) do
-    from(item in Workflow.ItemModel,
-      where: item.workflow_id == ^workflow_id,
-      order_by: {:asc, :position},
-      preload: ^preload
+    Repo.all(
+      from(item in Workflow.ItemModel,
+        where: item.workflow_id == ^workflow_id,
+        order_by: {:asc, :position},
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def get!(id, preload \\ []) do
-    from(item in Workflow.Model, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(item in Workflow.Model, preload: ^preload), id)
   end
 
   def get_item!(id, preload \\ []) do
-    from(item in Workflow.ItemModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(item in Workflow.ItemModel, preload: ^preload), id)
   end
 
   def get_item_by_tool(%{id: id} = tool, preload \\ []) do
@@ -52,11 +51,7 @@ defmodule Systems.Workflow.Public do
   end
 
   def get_item_by_tool_ref(tool_ref_id, preload) do
-    from(item in Workflow.ItemModel,
-      where: item.tool_ref_id == ^tool_ref_id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(item in Workflow.ItemModel, where: item.tool_ref_id == ^tool_ref_id, preload: ^preload))
   end
 
   def get_item_by_tool!(field, tool_id, preload \\ [])
@@ -74,23 +69,20 @@ defmodule Systems.Workflow.Public do
         preload: ^preload
       )
 
-    Enum.reduce(tl, query, fn key, query ->
-      query |> or_where([tool_ref], field(tool_ref, ^key) == ^tool_id)
+    tl
+    |> Enum.reduce(query, fn key, query ->
+      or_where(query, [tool_ref], field(tool_ref, ^key) == ^tool_id)
     end)
     |> Repo.one!()
   end
 
   def add_item(workflow_id, %{} = item, director, user) when is_integer(workflow_id) do
-    get!(workflow_id)
+    workflow_id
+    |> get!()
     |> add_item(item, director, user)
   end
 
-  def add_item(
-        %Workflow.Model{auth_node: %Ecto.Association.NotLoaded{}} = workflow,
-        item,
-        director,
-        user
-      ) do
+  def add_item(%Workflow.Model{auth_node: %Ecto.Association.NotLoaded{}} = workflow, item, director, user) do
     add_item(Repo.preload(workflow, :auth_node), item, director, user)
   end
 
@@ -120,7 +112,8 @@ defmodule Systems.Workflow.Public do
   def list_tools(%Workflow.Model{} = workflow, special) do
     preload = Workflow.ItemModel.preload_graph(:down)
 
-    item_query(workflow, special)
+    workflow
+    |> item_query(special)
     |> Repo.all()
     |> Repo.preload(preload)
     |> Enum.map(& &1.tool_ref)
@@ -128,11 +121,7 @@ defmodule Systems.Workflow.Public do
   end
 
   def item_count(%Workflow.Model{id: workflow_id}) do
-    from(item in Workflow.ItemModel,
-      where: item.workflow_id == ^workflow_id,
-      select: count(item.id)
-    )
-    |> Repo.one()
+    Repo.one(from(item in Workflow.ItemModel, where: item.workflow_id == ^workflow_id, select: count(item.id)))
   end
 
   def prepare_item(%Workflow.Model{} = workflow, position, tool_ref) do
@@ -151,23 +140,17 @@ defmodule Systems.Workflow.Public do
   def prepare_tool(:zircon_screening_tool, %{} = attrs, auth_node, user),
     do: Zircon.Public.prepare_screening_tool(attrs, auth_node, user)
 
-  def prepare_tool(:alliance_tool, %{} = attrs, auth_node, _user),
-    do: Alliance.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:alliance_tool, %{} = attrs, auth_node, _user), do: Alliance.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:manual_tool, %{} = attrs, auth_node, _user),
-    do: Manual.Assembly.prepare_tool(attrs, auth_node)
+  def prepare_tool(:manual_tool, %{} = attrs, auth_node, _user), do: Manual.Assembly.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:document_tool, %{} = attrs, auth_node, _user),
-    do: Document.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:document_tool, %{} = attrs, auth_node, _user), do: Document.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:feldspar_tool, %{} = attrs, auth_node, _user),
-    do: Feldspar.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:feldspar_tool, %{} = attrs, auth_node, _user), do: Feldspar.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:lab_tool, %{} = attrs, auth_node, _user),
-    do: Lab.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:lab_tool, %{} = attrs, auth_node, _user), do: Lab.Public.prepare_tool(attrs, auth_node)
 
-  def prepare_tool(:graphite_tool, %{} = attrs, auth_node, _user),
-    do: Graphite.Public.prepare_tool(attrs, auth_node)
+  def prepare_tool(:graphite_tool, %{} = attrs, auth_node, _user), do: Graphite.Public.prepare_tool(attrs, auth_node)
 
   def prepare_tool(:instruction_tool, %{} = attrs, auth_node, _user),
     do: Instruction.Public.prepare_tool(attrs, auth_node)
@@ -185,9 +168,8 @@ defmodule Systems.Workflow.Public do
     |> Repo.commit()
   end
 
-  def update_position(%Workflow.ItemModel{workflow_id: workflow_id, position: old}, new)
-      when old == new,
-      do: {:ok, %{items: list_items(workflow_id)}}
+  def update_position(%Workflow.ItemModel{workflow_id: workflow_id, position: old}, new) when old == new,
+    do: {:ok, %{items: list_items(workflow_id)}}
 
   def update_position(%Workflow.ItemModel{id: id, workflow_id: workflow_id, position: old}, new) do
     Multi.new()
@@ -213,8 +195,7 @@ defmodule Systems.Workflow.Public do
     validate_old_position(items, id, pos, Enum.count(items))
   end
 
-  def validate_old_position([%{id: id_, position: pos_} | _], id, pos, count)
-      when id == id_ and pos == pos_ do
+  def validate_old_position([%{id: id_, position: pos_} | _], id, pos, count) when id == id_ and pos == pos_ do
     if pos >= 0 and pos < count do
       {:ok, true}
     else
@@ -224,8 +205,7 @@ defmodule Systems.Workflow.Public do
 
   def validate_old_position([%{id: id_} | _], id, _, _) when id == id_, do: {:error, :out_of_sync}
 
-  def validate_old_position([_ | tl], id, pos, count),
-    do: validate_old_position(tl, id, pos, count)
+  def validate_old_position([_ | tl], id, pos, count), do: validate_old_position(tl, id, pos, count)
 
   def validate_old_position([], _, _, _), do: {:error, :item_not_found}
 

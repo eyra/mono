@@ -1,19 +1,18 @@
 defmodule Systems.Content.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
 
   alias Core.Repo
   alias Ecto.Multi
-
   alias Frameworks.Signal
-
   alias Systems.Content
-  alias Systems.Content.TextItemModel, as: TextItem
   alias Systems.Content.TextBundleModel, as: TextBundle
+  alias Systems.Content.TextItemModel, as: TextItem
 
   def prepare_file(name, ref) do
-    %Content.FileModel{}
-    |> Content.FileModel.changeset(%{name: name, ref: ref})
+    Content.FileModel.changeset(%Content.FileModel{}, %{name: name, ref: ref})
   end
 
   def prepare_page(body, auth_node) do
@@ -30,7 +29,8 @@ defmodule Systems.Content.Public do
 
   def update_repository(repository, attrs) do
     repository =
-      Content.RepositoryModel.changeset(repository, attrs)
+      repository
+      |> Content.RepositoryModel.changeset(attrs)
       |> Content.RepositoryModel.validate()
 
     Multi.new()
@@ -48,13 +48,11 @@ defmodule Systems.Content.Public do
   end
 
   def get_text_item!(id, preload \\ []) do
-    from(t in TextItem, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(t in TextItem, preload: ^preload), id)
   end
 
   def get_text_bundle!(id, preload \\ []) do
-    from(t in TextBundle, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(t in TextBundle, preload: ^preload), id)
   end
 
   def create_text_item!(%{} = attrs, bundle) do
@@ -64,7 +62,7 @@ defmodule Systems.Content.Public do
     |> Repo.insert!()
   end
 
-  def create_text_bundle!() do
+  def create_text_bundle! do
     %TextBundle{}
     |> TextBundle.change(%{})
     |> Repo.insert!()
@@ -91,8 +89,7 @@ defmodule Systems.Content.Public do
 
   defp translate_item({locale, text}), do: %{locale: Atom.to_string(locale), text: text}
 
-  defp translate_item({locale, single, plural}),
-    do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
+  defp translate_item({locale, single, plural}), do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
 end
 
 defimpl Core.Persister, for: Systems.Content.PageModel do

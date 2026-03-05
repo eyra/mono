@@ -8,7 +8,6 @@ defprotocol Systems.Annotation.Pattern do
 
   # FIXME: Remove hard dependency on Ecto
   alias Ecto.Query
-
   alias Systems.Annotation
 
   @doc """

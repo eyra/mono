@@ -1,7 +1,8 @@
 defmodule Frameworks.Pixel.Table do
-  alias CoreWeb.UI.Timestamp
+  @moduledoc false
   use CoreWeb, :html
 
+  alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Spinner
 
   attr(:layout, :list, required: true)
@@ -123,9 +124,7 @@ defmodule Frameworks.Pixel.Table do
         layout
       end
 
-    padding =
-      [:top, :left, :right]
-      |> Enum.map_join(" ", &cell_padding(&1, assigns))
+    padding = Enum.map_join([:top, :left, :right], " ", &cell_padding(&1, assigns))
 
     assigns = assign(assigns, %{padding: padding, layout: layout})
 

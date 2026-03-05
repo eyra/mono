@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.CrewTaskListViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Assignment.CrewTaskHelpers,
@@ -9,11 +10,7 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
 
   def view_model(
         %{crew: crew} = assignment,
-        %{
-          current_user: user,
-          user_state: user_state,
-          live_context: context
-        } = assigns
+        %{current_user: user, user_state: user_state, live_context: context} = assigns
       ) do
     work_items = build_work_items(assignment, user)
     work_item_id = user_state[:task]

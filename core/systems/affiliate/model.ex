@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
   use Gettext, backend: CoreWeb.Gettext

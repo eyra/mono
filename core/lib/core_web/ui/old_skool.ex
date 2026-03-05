@@ -4,12 +4,12 @@ defimpl Browser.Ua, for: Phoenix.LiveView.Socket do
 end
 
 defmodule CoreWeb.UI.OldSkool do
-  import Phoenix.Component
-  import CoreWeb.UI.Footer
-
   @moduledoc """
   Conveniences for reusable UI components
   """
+
+  import CoreWeb.UI.Footer
+  import Phoenix.Component
 
   def native_web?(conn) do
     user_agent = Browser.Ua.to_ua(conn)

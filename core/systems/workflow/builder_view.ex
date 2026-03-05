@@ -1,12 +1,12 @@
 defmodule Systems.Workflow.BuilderView do
   use CoreWeb, :live_component
 
-  require Logger
-
-  import Frameworks.Pixel.SidePanel
   import Frameworks.Builder.HTML, only: [library: 1]
+  import Frameworks.Pixel.SidePanel
 
   alias Systems.Workflow
+
+  require Logger
 
   @impl true
   def update(
@@ -130,9 +130,7 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, ordered_items: Workflow.Model.ordered_items(workflow))
   end
 
-  defp get_title(%{tool_ref: %{special: special}}, %{
-         workflow_config: %{library: %{items: library_items}}
-       }) do
+  defp get_title(%{tool_ref: %{special: special}}, %{workflow_config: %{library: %{items: library_items}}}) do
     case Enum.find(library_items, &(&1.id == special)) do
       %{title: title} ->
         title
@@ -151,8 +149,7 @@ defmodule Systems.Workflow.BuilderView do
     get_library_item(socket, String.to_existing_atom(item_id))
   end
 
-  defp get_library_item(%{assigns: %{workflow_config: %{library: %{items: items}}}}, item_id)
-       when is_atom(item_id) do
+  defp get_library_item(%{assigns: %{workflow_config: %{library: %{items: items}}}}, item_id) when is_atom(item_id) do
     Enum.find(items, &(&1.id == item_id))
   end
 

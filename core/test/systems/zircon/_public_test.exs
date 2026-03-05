@@ -4,6 +4,7 @@ defmodule Systems.Zircon.PublicTest do
   alias Core.Factories
   alias Systems.Annotation
   alias Systems.Zircon
+  alias Systems.Zircon.Screening.ToolAnnotationAssoc
 
   describe "insert_screening_tool_criterion/3" do
     test "inserts a criterion into the screening tool" do
@@ -14,7 +15,7 @@ defmodule Systems.Zircon.PublicTest do
       Zircon.Public.insert_screening_tool_criterion(tool, dimension, user)
 
       assocs =
-        Zircon.Screening.ToolAnnotationAssoc
+        ToolAnnotationAssoc
         |> Repo.all()
         |> Repo.preload([:tool, annotation: [:type, references: [ontology_ref: [:concept]]]])
 
@@ -61,7 +62,7 @@ defmodule Systems.Zircon.PublicTest do
       Zircon.Public.insert_screening_tool_criterion(tool, intervention_dimension, user)
 
       assocs =
-        Zircon.Screening.ToolAnnotationAssoc
+        ToolAnnotationAssoc
         |> Repo.all()
         |> Repo.preload([:tool, annotation: [:type, references: [ontology_ref: [:concept]]]])
 
@@ -97,7 +98,7 @@ defmodule Systems.Zircon.PublicTest do
       assert id1 != id2
 
       assocs =
-        Zircon.Screening.ToolAnnotationAssoc
+        ToolAnnotationAssoc
         |> Repo.all()
         |> Repo.preload([:tool, annotation: [:type, references: [ontology_ref: [:concept]]]])
 
@@ -138,7 +139,7 @@ defmodule Systems.Zircon.PublicTest do
       {:ok, result} = Zircon.Public.delete_screening_tool_criterion(tool, annotation)
 
       assert %{orphan_delete_criterion: %Annotation.Model{id: ^annotation_id}} = result
-      assert Repo.all(Zircon.Screening.ToolAnnotationAssoc) == []
+      assert Repo.all(ToolAnnotationAssoc) == []
     end
 
     test "does not delete a criterion that is not orphaned" do
@@ -168,7 +169,7 @@ defmodule Systems.Zircon.PublicTest do
       {:ok, result} = Zircon.Public.delete_screening_tool_criterion(tool, annotation1)
 
       assert %{orphan_delete_criterion: "Criterion is not orphaned, skipping deletion"} = result
-      assert Repo.all(Zircon.Screening.ToolAnnotationAssoc) == []
+      assert Repo.all(ToolAnnotationAssoc) == []
     end
   end
 end

@@ -1,13 +1,13 @@
 defmodule Systems.Banking.FetcherTest do
   use Core.DataCase, async: true
+
   import Mox
 
-  alias Systems.Banking.{Processor, Fetcher}
-
-  alias Systems.{
-    Bookkeeping,
-    Budget
-  }
+  alias Systems.Banking.Fetcher
+  alias Systems.Banking.MockBackend
+  alias Systems.Banking.Processor
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
   setup :verify_on_exit!
 
@@ -35,7 +35,7 @@ defmodule Systems.Banking.FetcherTest do
     end
 
     test "don't update transaction marker without new payments", %{state: state} do
-      Systems.Banking.MockBackend
+      MockBackend
       |> expect(:list_payments, fn nil -> %{cursor: "tst", payments: []} end)
       |> expect(:list_payments, fn nil -> %{cursor: "tst", payments: []} end)
 
@@ -44,8 +44,7 @@ defmodule Systems.Banking.FetcherTest do
     end
 
     test "update transaction marker", %{state: state} do
-      Systems.Banking.MockBackend
-      |> expect(:list_payments, fn nil ->
+      expect(MockBackend, :list_payments, fn nil ->
         %{
           cursor: "first",
           payments: [
@@ -65,15 +64,12 @@ defmodule Systems.Banking.FetcherTest do
       Fetcher.fetch(state)
 
       # The transaction marker should now have been updated
-      Systems.Banking.MockBackend
-      |> expect(:list_payments, fn "first" -> %{cursor: "second", payments: []} end)
-
+      expect(MockBackend, :list_payments, fn "first" -> %{cursor: "second", payments: []} end)
       Fetcher.fetch(state)
     end
 
     test "process payments", %{state: state, bank_account: %{account: bank}} do
-      Systems.Banking.MockBackend
-      |> expect(:list_payments, fn nil ->
+      expect(MockBackend, :list_payments, fn nil ->
         %{
           cursor: "marker",
           payments: [

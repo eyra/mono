@@ -11,7 +11,7 @@ defmodule Frameworks.GreenLight.Ecto.RoleAssignment do
 
       field(:role, Ecto.Enum,
         primary_key: true,
-        values: unquote(roles) |> MapSet.to_list()
+        values: MapSet.to_list(unquote(roles))
       )
     end
   end
@@ -19,6 +19,7 @@ defmodule Frameworks.GreenLight.Ecto.RoleAssignment do
   defmacro __using__(_) do
     quote do
       import Ecto.Changeset
+      import unquote(__MODULE__), only: [green_light_role_assignment_fields: 1]
 
       @doc false
       def changeset(role_assignment, attrs) do
@@ -26,8 +27,6 @@ defmodule Frameworks.GreenLight.Ecto.RoleAssignment do
         |> cast(attrs, [:node_id, :role, :principal_id])
         |> validate_required([:node_id, :role, :principal_id])
       end
-
-      import unquote(__MODULE__), only: [green_light_role_assignment_fields: 1]
     end
   end
 end

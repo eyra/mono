@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.ConfirmationModal do
+  @moduledoc false
   use CoreWeb, :live_component
 
   @impl true
@@ -31,11 +32,11 @@ defmodule Frameworks.Pixel.ConfirmationModal do
   end
 
   def handle_event("confirm", _, socket) do
-    {:noreply, socket |> send_event(:parent, "confirmed")}
+    {:noreply, send_event(socket, :parent, "confirmed")}
   end
 
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
+    {:noreply, send_event(socket, :parent, "cancelled")}
   end
 
   @impl true

@@ -1,9 +1,8 @@
 defmodule Systems.Advert.Director do
+  @moduledoc false
   @behaviour Frameworks.Promotable.Director
 
-  alias Systems.{
-    Advert
-  }
+  alias Systems.Advert
 
   @impl true
   defdelegate reward_value(promotable), to: Advert.Public

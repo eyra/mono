@@ -4,20 +4,16 @@ defmodule Systems.Advert.FundingView do
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.Square
-
-  alias Systems.Budget
-  alias Systems.Bookkeeping
-  alias Systems.Pool
   alias Systems.Assignment
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Pool
 
   @minimal_reward_per_minute 10
 
   # Handle update from parent
   @impl true
-  def update(
-        %{assignment: assignment, submission: submission, budget: budget},
-        %{assigns: %{id: _id}} = socket
-      ) do
+  def update(%{assignment: assignment, submission: submission, budget: budget}, %{assigns: %{id: _id}} = socket) do
     {
       :ok,
       socket
@@ -37,15 +33,7 @@ defmodule Systems.Advert.FundingView do
 
   # Initial update
   @impl true
-  def update(
-        %{
-          id: id,
-          assignment: %{budget: budget} = assignment,
-          submission: submission,
-          user: user
-        },
-        socket
-      ) do
+  def update(%{id: id, assignment: %{budget: budget} = assignment, submission: submission, user: user}, socket) do
     changeset = Pool.SubmissionModel.changeset(submission, %{})
 
     {
@@ -72,11 +60,7 @@ defmodule Systems.Advert.FundingView do
 
   defp update_state(
          %{
-           assigns: %{
-             selected_budget: selected_budget,
-             assignment: assignment,
-             submission: %{reward_value: reward_value}
-           }
+           assigns: %{selected_budget: selected_budget, assignment: assignment, submission: %{reward_value: reward_value}}
          } = socket
        ) do
     reward_value = guard_number_nil(reward_value)
@@ -102,21 +86,16 @@ defmodule Systems.Advert.FundingView do
         end
       end
 
-    socket |> assign(state: state, count: count, open_spot_count: open_spot_count)
+    assign(socket, state: state, count: count, open_spot_count: open_spot_count)
   end
 
   defp update_reward(
-         %{
-           assigns: %{
-             submission: %{reward_value: reward_value, pool: %{currency: currency}},
-             locale: locale
-           }
-         } = socket
+         %{assigns: %{submission: %{reward_value: reward_value, pool: %{currency: currency}}, locale: locale}} = socket
        ) do
     reward_value = guard_number_nil(reward_value)
     reward_value_label = Budget.CurrencyModel.label(currency, locale, reward_value)
     reward_label = dgettext("eyra-advert", "funding.reward.label", amount: reward_value_label)
-    socket |> assign(reward_label: reward_label)
+    assign(socket, reward_label: reward_label)
   end
 
   defp update_shortage(
@@ -131,7 +110,7 @@ defmodule Systems.Advert.FundingView do
     reward_value = guard_number_nil(reward_value)
     shortage = open_spot_count * reward_value
     shortage_label = Budget.CurrencyModel.label(currency, locale, shortage)
-    socket |> assign(shortage_label: shortage_label)
+    assign(socket, shortage_label: shortage_label)
   end
 
   defp update_reward_description(
@@ -153,7 +132,7 @@ defmodule Systems.Advert.FundingView do
         duration: duration
       )
 
-    socket |> assign(reward_description: reward_description)
+    assign(socket, reward_description: reward_description)
   end
 
   defp update_fund_description(%{assigns: %{state: state, count: count}} = socket) do
@@ -169,34 +148,21 @@ defmodule Systems.Advert.FundingView do
           dgettext("eyra-advert", "funding.fund.description.error")
       end
 
-    socket |> assign(fund_description: fund_description)
+    assign(socket, fund_description: fund_description)
   end
 
-  defp update_budgets(
-         %{assigns: %{submission: %{pool: %{currency: %{id: _id} = currency}}, user: user}} =
-           socket
-       ) do
+  defp update_budgets(%{assigns: %{submission: %{pool: %{currency: %{id: _id} = currency}}, user: user}} = socket) do
     budgets =
       Budget.Public.list_owned_by_currency(user, currency, Budget.Model.preload_graph(:full))
 
-    socket |> assign(budgets: budgets)
+    assign(socket, budgets: budgets)
   end
 
   defp update_budget_items(
-         %{
-           assigns: %{
-             budgets: budgets,
-             selected_budget: selected_budget,
-             state: state,
-             locale: locale,
-             myself: myself
-           }
-         } = socket
+         %{assigns: %{budgets: budgets, selected_budget: selected_budget, state: state, locale: locale, myself: myself}} =
+           socket
        ) do
-    socket
-    |> assign(
-      budget_items: Enum.map(budgets, &to_item(&1, selected_budget, state, locale, myself))
-    )
+    assign(socket, budget_items: Enum.map(budgets, &to_item(&1, selected_budget, state, locale, myself)))
   end
 
   defp to_item(
@@ -229,10 +195,9 @@ defmodule Systems.Advert.FundingView do
   def handle_event(
         "select_budget",
         %{"item" => budget_id},
-        %{assigns: %{assignment: assignment, budgets: budgets, changeset: submission_changeset}} =
-          socket
+        %{assigns: %{assignment: assignment, budgets: budgets, changeset: submission_changeset}} = socket
       ) do
-    selected_budget = budgets |> Enum.find(&(&1.id == String.to_integer(budget_id)))
+    selected_budget = Enum.find(budgets, &(&1.id == String.to_integer(budget_id)))
     changeset = Assignment.Model.changeset(assignment, selected_budget)
 
     {
@@ -250,11 +215,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   @impl true
-  def handle_event(
-        "change_reward",
-        %{"submission_model" => attrs},
-        %{assigns: %{submission: submission}} = socket
-      ) do
+  def handle_event("change_reward", %{"submission_model" => attrs}, %{assigns: %{submission: submission}} = socket) do
     changeset = Pool.SubmissionModel.changeset(submission, attrs)
 
     {
@@ -272,7 +233,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp copy_entity(%{assigns: %{entity: entity}} = socket, field) do
-    socket |> assign(field, entity)
+    assign(socket, field, entity)
   end
 
   defp guard_number_nil(nil), do: 0

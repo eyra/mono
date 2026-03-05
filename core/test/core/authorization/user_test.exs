@@ -1,5 +1,6 @@
 defmodule Core.GreenLight.PrincipalTest do
   use ExUnit.Case, async: true
+
   alias Frameworks.GreenLight.Principal
   alias Systems.Account.User
 

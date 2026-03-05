@@ -22,7 +22,7 @@ defmodule Frameworks.Pixel.ErrorHelpers do
     form
     |> Map.get(:errors, [])
     |> Keyword.get_values(field)
-    |> length > 0
+    |> length() > 0
   end
 
   @doc """

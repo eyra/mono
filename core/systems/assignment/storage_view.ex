@@ -6,10 +6,7 @@ defmodule Systems.Assignment.StorageView do
   alias Systems.Storage
 
   @impl true
-  def update(
-        %{project_node: project_node, storage_endpoint: storage_endpoint, user: user},
-        socket
-      ) do
+  def update(%{project_node: project_node, storage_endpoint: storage_endpoint, user: user}, socket) do
     special_type = Map.get(socket, :special_type, :builtin)
 
     {
@@ -71,8 +68,7 @@ defmodule Systems.Assignment.StorageView do
     assign(socket, storage_button: storage_button)
   end
 
-  defp update_logo(%{assigns: %{storage_endpoint: storage_endpoint}} = socket)
-       when not is_nil(storage_endpoint) do
+  defp update_logo(%{assigns: %{storage_endpoint: storage_endpoint}} = socket) when not is_nil(storage_endpoint) do
     logo = Storage.EndpointModel.asset_image_src(storage_endpoint, {:logo, {:product, :wide}})
     assign(socket, logo: logo)
   end
@@ -81,8 +77,7 @@ defmodule Systems.Assignment.StorageView do
     assign(socket, logo: nil)
   end
 
-  defp update_body(%{assigns: %{storage_endpoint: storage_endpoint}} = socket)
-       when is_nil(storage_endpoint) do
+  defp update_body(%{assigns: %{storage_endpoint: storage_endpoint}} = socket) when is_nil(storage_endpoint) do
     assign(socket, body: dgettext("eyra-storage", "create.storage.body"))
   end
 
@@ -94,13 +89,8 @@ defmodule Systems.Assignment.StorageView do
   def handle_event(
         "create_storage",
         _payload,
-        %{
-          assigns: %{
-            special_type: special_type,
-            project_node: %{id: project_node_id} = project_node,
-            user: user
-          }
-        } = socket
+        %{assigns: %{special_type: special_type, project_node: %{id: project_node_id} = project_node, user: user}} =
+          socket
       ) do
     name = dgettext("eyra-storage", "default.name")
 
@@ -114,7 +104,7 @@ defmodule Systems.Assignment.StorageView do
         {:noreply, socket}
 
       {:error, _} ->
-        {:noreply, socket |> Frameworks.Pixel.Flash.push_error(socket)}
+        {:noreply, Frameworks.Pixel.Flash.push_error(socket, socket)}
     end
   end
 
@@ -122,8 +112,7 @@ defmodule Systems.Assignment.StorageView do
   def handle_event("update", %{source: %{name: :type_selector}, status: special_type}, socket) do
     {
       :noreply,
-      socket
-      |> assign(special_type: special_type)
+      assign(socket, special_type: special_type)
     }
   end
 

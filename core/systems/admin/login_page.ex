@@ -1,19 +1,20 @@
 defmodule Systems.Admin.LoginPage do
+  @moduledoc false
   use CoreWeb, :live_view
+
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+  import Ecto.Query
+
+  alias Core.Repo
+  alias Systems.Account.User
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.User, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  import Ecto.Query
-  alias Core.Repo
-  alias Systems.Account.User
 
   @impl true
   def mount(_params, _session, socket) do
@@ -32,8 +33,7 @@ defmodule Systems.Admin.LoginPage do
 
   # FIXME: Move this to Accounts
   defp list_users do
-    from(u in User, order_by: {:asc, :email})
-    |> Repo.all()
+    Repo.all(from(u in User, order_by: {:asc, :email}))
   end
 
   # data(users, :any)

@@ -1,25 +1,23 @@
 defmodule Systems.Lab.CheckInView do
   use CoreWeb, :live_component
   use Gettext, backend: CoreWeb.Gettext
-  require Logger
 
   import Frameworks.Pixel.Form
+  import Systems.Lab.CheckInItem
+
+  alias Frameworks.Concept.Directable
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text
-  alias Frameworks.Concept.Directable
-
   alias Systems.Account
   alias Systems.Lab
 
-  import Lab.CheckInItem
+  require Logger
 
   @max_search_results 5
 
   @impl true
   def update(%{id: id, tool: tool, parent: parent}, socket) do
-    changeset =
-      %Lab.CheckInModel{}
-      |> Lab.CheckInModel.changeset(:init, %{})
+    changeset = Lab.CheckInModel.changeset(%Lab.CheckInModel{}, :init, %{})
 
     {
       :ok,
@@ -40,11 +38,7 @@ defmodule Systems.Lab.CheckInView do
   end
 
   @impl true
-  def handle_event(
-        "accept",
-        %{"item" => _user_id},
-        %{assigns: %{tool: _tool, parent: _parent}} = _socket
-      ) do
+  def handle_event("accept", %{"item" => _user_id}, %{assigns: %{tool: _tool, parent: _parent}} = _socket) do
     # user =
     #   user_id
     #   |> String.to_integer()
@@ -55,27 +49,19 @@ defmodule Systems.Lab.CheckInView do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"check_in_model" => %{"query" => ""}},
-        socket
-      ) do
-    {:noreply, socket |> assign(query: nil, message: nil)}
+  def handle_event("update", %{"check_in_model" => %{"query" => ""}}, socket) do
+    {:noreply, assign(socket, query: nil, message: nil)}
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"check_in_model" => %{"query" => query}},
-        %{assigns: %{tool: tool}} = socket
-      ) do
+  def handle_event("update", %{"check_in_model" => %{"query" => query}}, %{assigns: %{tool: tool}} = socket) do
     {items, message} =
       case Integer.parse(query) do
         {public_id, ""} -> search(public_id, tool)
         _ -> search(query, tool)
       end
 
-    {:noreply, socket |> assign(query: query, items: items, message: message)}
+    {:noreply, assign(socket, query: query, items: items, message: message)}
   end
 
   @impl true
@@ -85,7 +71,8 @@ defmodule Systems.Lab.CheckInView do
 
   defp search(public_id, tool) when is_integer(public_id) do
     item =
-      Directable.director(tool).search_subject(tool, public_id)
+      tool
+      |> Directable.director(tool).search_subject(public_id)
       |> to_view_model(tool)
 
     case item do
@@ -96,7 +83,8 @@ defmodule Systems.Lab.CheckInView do
 
   defp search(query, tool) when is_binary(query) do
     items =
-      Account.Public.search(query)
+      query
+      |> Account.Public.search()
       |> Enum.map(&to_view_model(&1, tool))
 
     message =
@@ -114,7 +102,7 @@ defmodule Systems.Lab.CheckInView do
           dgettext("link-lab", "search.email.found", count: count)
       end
 
-    {items |> Enum.take(@max_search_results), message}
+    {Enum.take(items, @max_search_results), message}
   end
 
   @impl true
@@ -193,16 +181,7 @@ defmodule Systems.Lab.CheckInView do
     }
   end
 
-  defp to_view_model(
-         {
-           %{
-             user_id: user_id,
-             public_id: public_id
-           } = _member,
-           [%{completed_at: completed_at} = task]
-         },
-         tool
-       ) do
+  defp to_view_model({%{user_id: user_id, public_id: public_id} = _member, [%{completed_at: completed_at} = task]}, tool) do
     reservation = reservation(user_id, tool)
     time_slot = time_slot(reservation)
     status = item_status(task, reservation)

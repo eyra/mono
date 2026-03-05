@@ -1,4 +1,5 @@
 defmodule Systems.Onyx.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/" do

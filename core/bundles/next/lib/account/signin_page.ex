@@ -1,20 +1,20 @@
 defmodule Next.Account.SigninPage do
+  @moduledoc false
   use CoreWeb, :live_view
+
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+  import Frameworks.Pixel.Line
+
+  alias Frameworks.Pixel.Tabbed
+  alias Frameworks.Utility.Params
+  alias Next.Account.SigninPageBuilder
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  import Frameworks.Pixel.Line
-
-  alias Frameworks.Pixel.Tabbed
-  alias Next.Account.SigninPageBuilder
-  alias Frameworks.Utility.Params
 
   @impl true
   def mount(params, _session, socket) do

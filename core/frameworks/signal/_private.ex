@@ -1,4 +1,5 @@
 defmodule Frameworks.Signal.Private do
+  @moduledoc false
   import Frameworks.Utility.PrettyPrint
 
   require Logger
@@ -53,8 +54,7 @@ defmodule Frameworks.Signal.Private do
         override_handlers -> override_handlers
       end
 
-    handlers
-    |> Enum.map(fn module_name ->
+    Enum.map(handlers, fn module_name ->
       String.to_atom("Elixir.#{module_name}")
     end)
   end

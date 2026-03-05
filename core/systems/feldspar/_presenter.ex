@@ -1,4 +1,5 @@
 defmodule Systems.Feldspar.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   alias Systems.Feldspar

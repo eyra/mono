@@ -1,10 +1,11 @@
 defmodule Frameworks.Pixel.RadioGroup do
+  @moduledoc false
   use CoreWeb, :live_component
 
   @impl true
   def update(%{items: items}, socket) do
     value =
-      if active_item = items |> Enum.find(& &1.active) do
+      if active_item = Enum.find(items, & &1.active) do
         "#{active_item.id}"
       else
         ""
@@ -14,8 +15,7 @@ defmodule Frameworks.Pixel.RadioGroup do
 
     {
       :ok,
-      socket
-      |> assign(items: items, form: form)
+      assign(socket, items: items, form: form)
     }
   end
 
@@ -28,7 +28,7 @@ defmodule Frameworks.Pixel.RadioGroup do
       when current_status != status do
     {
       :noreply,
-      socket |> send_event(:parent, "update", %{status: String.to_existing_atom(status)})
+      send_event(socket, :parent, "update", %{status: String.to_existing_atom(status)})
     }
   end
 

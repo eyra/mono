@@ -1,24 +1,16 @@
 defmodule Systems.Advert.ContentPageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Systems.Content.PageBuilder
-
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept
-
-  alias Systems.Content
   alias Systems.Advert
-  alias Systems.Pool
+  alias Systems.Content
   alias Systems.Monitor
+  alias Systems.Pool
 
-  def view_model(
-        %{
-          id: advert_id,
-          submission: submission,
-          promotion: promotion
-        } = advert,
-        %{branch: branch} = assigns
-      ) do
+  def view_model(%{id: advert_id, submission: submission, promotion: promotion} = advert, %{branch: branch} = assigns) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     show_errors = submitted?
 
@@ -55,12 +47,7 @@ defmodule Systems.Advert.ContentPageBuilder do
     [:settings, :pool, :monitor]
   end
 
-  defp create_tab(
-         :settings,
-         advert,
-         show_errors,
-         %{fabric: fabric}
-       ) do
+  defp create_tab(:settings, advert, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :promotion_form, Advert.SettingsView, %{
         advert: advert
@@ -77,12 +64,7 @@ defmodule Systems.Advert.ContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :pool,
-         %{submission: submission},
-         show_errors,
-         %{fabric: fabric, current_user: user}
-       ) do
+  defp create_tab(:pool, %{submission: submission}, show_errors, %{fabric: fabric, current_user: user}) do
     child =
       Fabric.prepare_child(fabric, :submission_form, Advert.SubmissionView, %{
         entity: submission,
@@ -100,12 +82,10 @@ defmodule Systems.Advert.ContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :funding,
-         %{assignment: assignment, submission: submission},
-         show_errors,
-         %{fabric: fabric, current_user: user}
-       ) do
+  defp create_tab(:funding, %{assignment: assignment, submission: submission}, show_errors, %{
+         fabric: fabric,
+         current_user: user
+       }) do
     child =
       Fabric.prepare_child(fabric, :funding, Advert.FundingView, %{
         assignment: assignment,
@@ -125,12 +105,7 @@ defmodule Systems.Advert.ContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :monitor,
-         advert,
-         show_errors,
-         %{fabric: fabric}
-       ) do
+  defp create_tab(:monitor, advert, show_errors, %{fabric: fabric}) do
     child =
       Fabric.prepare_child(fabric, :monitor, Advert.MonitorView, %{
         number_widgets: number_widgets(advert)
@@ -237,28 +212,26 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
 
-  defp actions(%{status: :offline}, %{publish: publish, close: close}),
-    do: [publish: publish, close: close]
+  defp actions(%{status: :offline}, %{publish: publish, close: close}), do: [publish: publish, close: close]
 
   defp actions(%{status: :idle}, %{open: open}), do: [open: open]
 
-  defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
-    do: [publish: publish, preview: preview]
+  defp actions(%{status: _concept}, %{publish: publish, preview: preview}), do: [publish: publish, preview: preview]
 
   @impl true
   def set_status(%{assigns: %{model: advert}} = socket, status) do
     {:ok, advert} = Advert.Public.update(advert, %{status: status})
-    socket |> Phoenix.Component.assign(model: advert)
+    Phoenix.Component.assign(socket, model: advert)
   end
 
   defp number_widgets(advert) do
-    [:visited, :applied, :clickthrough_rate]
-    |> Enum.map(&number_widget(&1, advert))
+    Enum.map([:visited, :applied, :clickthrough_rate], &number_widget(&1, advert))
   end
 
   defp number_widget(:visited, %{promotion: promotion}) do
     metric =
-      Monitor.Public.event({promotion, :views})
+      {promotion, :views}
+      |> Monitor.Public.event()
       |> Monitor.Public.count()
 
     %{
@@ -270,7 +243,8 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   defp number_widget(:applied, %{promotion: promotion}) do
     metric =
-      Monitor.Public.event({promotion, :clicks})
+      {promotion, :clicks}
+      |> Monitor.Public.event()
       |> Monitor.Public.count()
 
     %{

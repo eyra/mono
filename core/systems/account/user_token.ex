@@ -1,6 +1,10 @@
 defmodule Systems.Account.UserTokenModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Query
+
+  alias Systems.Account.UserTokenModel
 
   @hash_algorithm :sha256
   @rand_size 32
@@ -28,7 +32,7 @@ defmodule Systems.Account.UserTokenModel do
   """
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {token, %Systems.Account.UserTokenModel{token: token, context: "session", user_id: user.id}}
+    {token, %UserTokenModel{token: token, context: "session", user_id: user.id}}
   end
 
   @doc """
@@ -64,7 +68,7 @@ defmodule Systems.Account.UserTokenModel do
     hashed_token = :crypto.hash(@hash_algorithm, token)
 
     {Base.url_encode64(token, padding: false),
-     %Systems.Account.UserTokenModel{
+     %UserTokenModel{
        token: hashed_token,
        context: context,
        sent_to: sent_to,
@@ -126,18 +130,18 @@ defmodule Systems.Account.UserTokenModel do
   Returns the given token with the given context.
   """
   def token_and_context_query(token, context) do
-    from(Systems.Account.UserTokenModel, where: [token: ^token, context: ^context])
+    from(UserTokenModel, where: [token: ^token, context: ^context])
   end
 
   @doc """
   Gets all tokens for the given user for the given contexts.
   """
   def user_and_contexts_query(user, :all) do
-    from(t in Systems.Account.UserTokenModel, where: t.user_id == ^user.id)
+    from(t in UserTokenModel, where: t.user_id == ^user.id)
   end
 
   def user_and_contexts_query(user, [_ | _] = contexts) do
-    from(t in Systems.Account.UserTokenModel,
+    from(t in UserTokenModel,
       where: t.user_id == ^user.id and t.context in ^contexts
     )
   end

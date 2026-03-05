@@ -1,5 +1,6 @@
 defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
   use ExUnit.Case
+
   alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
   describe "view_model/2" do
@@ -26,7 +27,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       assert length(result.errors) == 2
-      assert result.filtered_errors |> Enum.count() == 2
+      assert Enum.count(result.filtered_errors) == 2
       assert result.error_count == 2
       assert result.page_count == 1
       assert result.page_index == 0
@@ -115,7 +116,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
       assigns = %{query: ["author"]}
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
-      assert result.filtered_errors |> Enum.count() == 1
+      assert Enum.count(result.filtered_errors) == 1
       assert result.error_count == 1
       assert hd(result.filtered_errors).message =~ "author"
     end
@@ -150,7 +151,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
       # Only the first error has both "error" and "format" in the text
-      assert result.filtered_errors |> Enum.count() == 1
+      assert Enum.count(result.filtered_errors) == 1
       assert result.error_count == 1
     end
 
@@ -170,7 +171,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
       assigns = %{query: ["parse"]}
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
-      assert result.filtered_errors |> Enum.count() == 1
+      assert Enum.count(result.filtered_errors) == 1
     end
 
     test "handles empty query correctly" do
@@ -193,12 +194,12 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
       # Test with nil query
       assigns = %{query: nil}
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
-      assert result.filtered_errors |> Enum.count() == 2
+      assert Enum.count(result.filtered_errors) == 2
 
       # Test with empty list query
       assigns = %{query: []}
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
-      assert result.filtered_errors |> Enum.count() == 2
+      assert Enum.count(result.filtered_errors) == 2
     end
 
     test "includes search bar component" do
@@ -211,7 +212,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
 
       result = ImportSessionWarningsViewBuilder.view_model(session, assigns)
 
-      assert result.search_bar != nil
+      assert result.search_bar
       assert result.search_bar.implementation == Frameworks.Pixel.SearchBar
       assert result.search_bar.options[:id] == "errors_search_bar"
       assert result.search_bar.options[:debounce] == "200"

@@ -1,10 +1,10 @@
 defmodule Systems.Content.TextItemModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
-  alias Systems.{
-    Content
-  }
+  alias Systems.Content
 
   schema "text_items" do
     field(:locale, :string)
@@ -32,8 +32,7 @@ defmodule Systems.Content.TextItemModel do
   end
 
   def change(bundle, attrs) do
-    bundle
-    |> cast(attrs, @fields)
+    cast(bundle, attrs, @fields)
   end
 
   def text(%{text: text}, nil), do: text

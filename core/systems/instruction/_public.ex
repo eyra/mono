@@ -1,33 +1,30 @@
 defmodule Systems.Instruction.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Instruction.Queries
 
   alias Core.Repo
   alias Ecto.Multi
-
   alias Frameworks.Signal
-  alias Systems.Instruction
   alias Systems.Content
+  alias Systems.Instruction
 
   @spec get_tool!(any()) :: any()
   def get_tool!(id, preload \\ []) do
-    from(tool in Instruction.ToolModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(tool in Instruction.ToolModel, preload: ^preload), id)
   end
 
   def get_tool_by(%Content.PageModel{} = content_page, preload \\ []) do
-    tool_query(content_page)
+    content_page
+    |> tool_query()
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
   def get_asset_by(%Content.RepositoryModel{id: id}, preload \\ []) do
-    from(asset in Instruction.AssetModel,
-      where: asset.repository_id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(asset in Instruction.AssetModel, where: asset.repository_id == ^id, preload: ^preload))
   end
 
   def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do

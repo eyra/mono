@@ -1,21 +1,17 @@
 defmodule Systems.Advert.ListView do
   use CoreWeb, :live_component
 
-  import Frameworks.Pixel.Empty
   import Frameworks.Pixel.Content
+  import Frameworks.Pixel.Empty
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-
-  alias Systems.Pool
-  alias Systems.NextAction
   alias Systems.Account
+  alias Systems.NextAction
+  alias Systems.Pool
 
   @impl true
-  def update(
-        %{id: id, adverts: adverts} = _params,
-        socket
-      ) do
+  def update(%{id: id, adverts: adverts} = _params, socket) do
     clear_review_submission_next_action()
 
     filter_labels = []
@@ -55,24 +51,17 @@ defmodule Systems.Advert.ListView do
   defp filter(adverts, []), do: adverts
 
   defp filter(adverts, filters) do
-    adverts |> Enum.filter(&(&1.tag.id in filters))
+    Enum.filter(adverts, &(&1.tag.id in filters))
   end
 
   defp prepare_adverts(%{assigns: %{adverts: adverts, active_filters: active_filters}} = socket) do
-    filtered_adverts =
-      adverts
-      |> filter(active_filters)
+    filtered_adverts = filter(adverts, active_filters)
 
-    socket
-    |> assign(filtered_adverts: filtered_adverts)
+    assign(socket, filtered_adverts: filtered_adverts)
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :advert_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :advert_filters}}, socket) do
     {
       :noreply,
       socket

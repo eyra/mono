@@ -1,8 +1,9 @@
 defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Paper.RISEntry
   alias Frameworks.Utility.PaginationHelper
+  alias Systems.Paper.RISEntry
 
   def view_model(%{session: session, filter: filter}, assigns) do
     # Extract entries and filename from session
@@ -29,7 +30,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
       )
 
     # Only convert the current page entries to RISEntry structs
-    page_papers = pagination.page_items |> Enum.map(&RISEntry.from_map/1)
+    page_papers = Enum.map(pagination.page_items, &RISEntry.from_map/1)
 
     %{
       filter: filter,

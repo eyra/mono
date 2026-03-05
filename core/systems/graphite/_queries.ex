@@ -1,17 +1,18 @@
 defmodule Systems.Graphite.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Account.User
-  alias Systems.Graphite
   alias Systems.Assignment
+  alias Systems.Graphite
+
+  require Ecto.Query
+  require Frameworks.Utility.Query
 
   # Leaderboards
 
-  def leaderboard_query() do
+  def leaderboard_query do
     from(Graphite.LeaderboardModel, as: :leaderboard)
   end
 
@@ -30,7 +31,7 @@ defmodule Systems.Graphite.Queries do
   end
 
   # Scores
-  def score_query() do
+  def score_query do
     from(Graphite.ScoreModel, as: :score)
   end
 
@@ -46,19 +47,19 @@ defmodule Systems.Graphite.Queries do
       |> select([submission: s], s.id)
       |> distinct(true)
 
-    score_query()
-    |> where([score: s], s.submission_id in subquery(submission_ids))
+    where(score_query(), [score: s], s.submission_id in subquery(submission_ids))
   end
 
   def score_ids(selector) do
-    score_query(selector)
+    selector
+    |> score_query()
     |> select([score: s], s.id)
     |> distinct(true)
   end
 
   # Submissions
 
-  def submission_query() do
+  def submission_query do
     from(Graphite.SubmissionModel, as: :submission)
   end
 
@@ -101,8 +102,7 @@ defmodule Systems.Graphite.Queries do
   end
 
   def submissions_by_pattern(field, pattern) when is_atom(field) and is_binary(pattern) do
-    submission_query()
-    |> where([submission: s], like(field(s, ^field), ^pattern))
+    where(submission_query(), [submission: s], like(field(s, ^field), ^pattern))
   end
 
   def submissions_by_prefix(field, prefix) when is_atom(field) and is_binary(prefix) do
@@ -110,14 +110,15 @@ defmodule Systems.Graphite.Queries do
   end
 
   def submission_ids(selector) do
-    submission_query(selector)
+    selector
+    |> submission_query()
     |> select([submission: s], s.id)
     |> distinct(true)
   end
 
   # Tools
 
-  def tool_query() do
+  def tool_query do
     from(Graphite.ToolModel, as: :tool)
   end
 
@@ -136,20 +137,22 @@ defmodule Systems.Graphite.Queries do
   end
 
   def tool_ids(selector) do
-    tool_query(selector)
+    selector
+    |> tool_query()
     |> select([tool: t], t.id)
     |> distinct(true)
   end
 
   # Participants
 
-  def participant_query() do
+  def participant_query do
     from(User, as: :participant)
   end
 
   def participants_by_submissions(%Ecto.Query{} = submissions) do
     principal_ids =
-      build(submissions, :submission,
+      submissions
+      |> build(:submission,
         auth_node: [
           role_assignments: []
         ]

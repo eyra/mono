@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Hook.Timezone do
+  @moduledoc false
   use Frameworks.Concept.LiveHook
 
   @impl true

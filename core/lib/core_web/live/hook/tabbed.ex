@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Hook.Tabbed do
+  @moduledoc false
   use Frameworks.Concept.LiveHook
 
   @impl true
@@ -14,7 +15,7 @@ defmodule CoreWeb.Live.Hook.Tabbed do
   defp handle_viewport_updated(socket, live_view_module) do
     attach_hook(socket, :tabbar_viewport_updated, :handle_info, fn
       :viewport_updated, socket ->
-        {:cont, socket |> update_tabbar_size(live_view_module)}
+        {:cont, update_tabbar_size(socket, live_view_module)}
 
       _, socket ->
         {:cont, socket}

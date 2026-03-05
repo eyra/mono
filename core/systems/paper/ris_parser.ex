@@ -6,8 +6,9 @@ defmodule Systems.Paper.RISParser do
   Simply parses RIS format into structured data.
   """
 
-  require Logger
   use Gettext, backend: CoreWeb.Gettext
+
+  require Logger
 
   # Supported RIS reference types
   @supported_reference_types ["JOUR", "JFULL", "ABST", "INPR", "CPAPER", "THES"]
@@ -90,9 +91,7 @@ defmodule Systems.Paper.RISParser do
 
     # Log warning if we hit the line limit
     if length(lines) >= @max_lines do
-      Logger.warning(
-        "RIS file exceeded maximum line limit of #{@max_lines}. File may be truncated."
-      )
+      Logger.warning("RIS file exceeded maximum line limit of #{@max_lines}. File may be truncated.")
     end
 
     lines
@@ -136,8 +135,7 @@ defmodule Systems.Paper.RISParser do
   end
 
   defp extract_raw_text(ris_lines_with_numbers) do
-    ris_lines_with_numbers
-    |> Enum.map_join("\n", fn {line, _} -> line end)
+    Enum.map_join(ris_lines_with_numbers, "\n", fn {line, _} -> line end)
   end
 
   defp get_first_line_number(ris_lines_with_numbers) do
@@ -252,8 +250,7 @@ defmodule Systems.Paper.RISParser do
   defp validate_type_of_reference(_type) do
     supported_types = Enum.join(@supported_reference_types, ", ")
 
-    {:error,
-     dgettext("eyra-paper", "ris.error.unsupported_type", supported_types: supported_types)}
+    {:error, dgettext("eyra-paper", "ris.error.unsupported_type", supported_types: supported_types)}
   end
 
   defp parse_ris_line(line) do

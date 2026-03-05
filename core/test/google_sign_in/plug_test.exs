@@ -1,4 +1,5 @@
 defmodule GoogleSignIn.FakeGoogle do
+  @moduledoc false
   @sub Faker.UUID.v4()
   @email Faker.Internet.email()
 
@@ -32,8 +33,10 @@ end
 
 defmodule GoogleSignIn.AuthorizePlug.Test do
   use ExUnit.Case, async: true
-  import Plug.Test
+
   import Plug.Conn
+  import Plug.Test
+
   alias GoogleSignIn.AuthorizePlug
 
   describe "call/1" do
@@ -53,7 +56,8 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
 
     test "redirects to Google login page" do
       conn =
-        conn(:get, "/google")
+        :get
+        |> conn("/google")
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
 
@@ -65,7 +69,8 @@ defmodule GoogleSignIn.AuthorizePlug.Test do
 
     test "sets :user_return_to session var" do
       conn =
-        conn(:get, "/google?return_to=/test")
+        :get
+        |> conn("/google?return_to=/test")
         |> Plug.Conn.fetch_query_params()
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
@@ -78,8 +83,10 @@ end
 defmodule GoogleSignIn.CallbackPlug.Test do
   use ExUnit.Case, async: false
   use Core.DataCase
-  import Plug.Test
   use Core.FeatureFlags.Test
+
+  import Plug.Test
+
   alias GoogleSignIn.CallbackPlug
 
   setup do
@@ -106,7 +113,8 @@ defmodule GoogleSignIn.CallbackPlug.Test do
   describe "call/1" do
     test "creates a user" do
       user =
-        conn(:get, "/google")
+        :get
+        |> conn("/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(:test)
 
@@ -134,7 +142,8 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       )
 
       user =
-        conn(:get, "/google")
+        :get
+        |> conn("/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(:test)
 
@@ -145,11 +154,11 @@ defmodule GoogleSignIn.CallbackPlug.Test do
     test "deny member when member login is disabled" do
       set_feature_flag(:member_google_sign_in, false)
 
-      assert catch_throw(
-               conn(:get, "/google")
-               |> init_test_session(%{})
-               |> CallbackPlug.call(:test)
-             ) == "Google login is disabled"
+      assert :get
+             |> conn("/google")
+             |> init_test_session(%{})
+             |> CallbackPlug.call(:test)
+             |> catch_throw() == "Google login is disabled"
     end
 
     test "allow admin when member login is disabled" do
@@ -162,7 +171,8 @@ defmodule GoogleSignIn.CallbackPlug.Test do
       set_feature_flag(:member_google_sign_in, false)
 
       user =
-        conn(:get, "/google")
+        :get
+        |> conn("/google")
         |> init_test_session(%{})
         |> CallbackPlug.call(:test)
 

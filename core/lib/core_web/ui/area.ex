@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Area do
+  @moduledoc false
   use Phoenix.Component
 
   import Phoenix.Component, except: [form: 1]

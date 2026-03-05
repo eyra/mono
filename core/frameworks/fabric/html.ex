@@ -1,4 +1,5 @@
 defmodule Fabric.Html do
+  @moduledoc false
   use Phoenix.Component
 
   attr(:name, :any, required: true)

@@ -1,5 +1,7 @@
 defmodule Systems.Notification.Log do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "notification_center_logs" do

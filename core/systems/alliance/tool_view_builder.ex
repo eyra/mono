@@ -1,4 +1,5 @@
 defmodule Systems.Alliance.ToolViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   @doc """

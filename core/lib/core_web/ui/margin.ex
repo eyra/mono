@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Margin do
+  @moduledoc false
   use Phoenix.Component
 
   attr(:id, :atom, required: true)

@@ -1,11 +1,8 @@
 defmodule Frameworks.Pixel.Form.CheckboxHelpers do
+  @moduledoc false
   defmacro __using__(_opts) do
     quote do
-      def handle_event(
-            "toggle",
-            %{"checkbox" => checkbox},
-            %{assigns: %{entity: entity}} = socket
-          ) do
+      def handle_event("toggle", %{"checkbox" => checkbox}, %{assigns: %{entity: entity}} = socket) do
         field = String.to_atom(checkbox)
 
         new_value =
@@ -18,8 +15,7 @@ defmodule Frameworks.Pixel.Form.CheckboxHelpers do
 
         {
           :noreply,
-          socket
-          |> save(entity, :auto_save, attrs)
+          save(socket, entity, :auto_save, attrs)
         }
       end
     end

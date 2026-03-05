@@ -1,14 +1,14 @@
 defmodule Systems.Student.UserForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-
   alias Systems.Account
   alias Systems.Account.FeaturesModel
-  alias Systems.Student
   alias Systems.Budget
   alias Systems.Content
+  alias Systems.Student
 
   @impl true
   def update(%{id: id, user: user}, socket) do
@@ -49,24 +49,18 @@ defmodule Systems.Student.UserForm do
   end
 
   defp remove_finished(classes, current_year, courses_finised) do
-    classes
-    |> Enum.filter(&(not finished_last_year?(&1, current_year, courses_finised)))
+    Enum.filter(classes, &(not finished_last_year?(&1, current_year, courses_finised)))
   end
 
   defp finished_last_year?(class, current_year, [_ | _] = finished_courses) do
     course = Student.Class.get_course(class)
 
-    finished_courses
-    |> Enum.find(&successor?(&1, course, current_year)) != nil
+    Enum.find(finished_courses, &successor?(&1, course, current_year)) != nil
   end
 
   defp finished_last_year?(_, _, _), do: false
 
-  defp successor?(
-         %{identifier: finished_currency} = _finished_course,
-         %{identifier: currency} = _course,
-         current_year
-       ) do
+  defp successor?(%{identifier: finished_currency} = _finished_course, %{identifier: currency} = _course, current_year) do
     Student.Public.successor?(finished_currency, currency, current_year)
   end
 
@@ -76,8 +70,7 @@ defmodule Systems.Student.UserForm do
 
   defp year?(%{identifier: identifier}, year), do: year?(identifier, year)
 
-  defp year?(["wallet", currency_name, _], year),
-    do: String.ends_with?(currency_name, "_#{year}")
+  defp year?(["wallet", currency_name, _], year), do: String.ends_with?(currency_name, "_#{year}")
 
   defp classes(academic_year) do
     Student.Public.list_classes([":#{academic_year}"], [
@@ -103,14 +96,7 @@ defmodule Systems.Student.UserForm do
     }
   end
 
-  defp update_student_classes(
-         %{
-           assigns: %{
-             student_classes: student_classes,
-             user: user
-           }
-         } = socket
-       ) do
+  defp update_student_classes(%{assigns: %{student_classes: student_classes, user: user}} = socket) do
     active_classes = Student.Public.list_classes(user)
 
     active_codes =
@@ -121,8 +107,7 @@ defmodule Systems.Student.UserForm do
     locale = Gettext.get_locale(CoreWeb.Gettext)
     student_class_labels = Student.Class.selector_labels(student_classes, locale, active_codes)
 
-    socket
-    |> assign(student_class_labels: student_class_labels)
+    assign(socket, student_class_labels: student_class_labels)
   end
 
   defp active?(%{id: class_id}, [_ | _] = active_classes) do
@@ -131,7 +116,7 @@ defmodule Systems.Student.UserForm do
 
   defp active?(_, _), do: false
 
-  def save(socket, %Account.FeaturesModel{} = entity, type, attrs) do
+  def save(socket, %FeaturesModel{} = entity, type, attrs) do
     changeset = FeaturesModel.changeset(entity, type, attrs)
 
     socket
@@ -145,11 +130,9 @@ defmodule Systems.Student.UserForm do
         %{active_item_ids: active_item_ids, source: %{name: field}},
         %{assigns: %{entity: entity}} = socket
       ) do
-    active_item_ids =
-      active_item_ids
-      |> Enum.map(&String.to_atom(&1))
+    active_item_ids = Enum.map(active_item_ids, &String.to_atom(&1))
 
-    {:noreply, socket |> save(entity, :auto_save, %{field => active_item_ids})}
+    {:noreply, save(socket, entity, :auto_save, %{field => active_item_ids})}
   end
 
   attr(:user, :map, required: true)

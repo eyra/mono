@@ -1,12 +1,14 @@
 defmodule Systems.Onyx.LandingPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import LiveNest.HTML
-  require Logger
 
   alias Core.Repo
   alias Systems.Observatory
   alias Systems.Onyx
+
+  require Logger
 
   @impl true
   def get_authorization_context(params, session, socket) do
@@ -33,10 +35,7 @@ defmodule Systems.Onyx.LandingPage do
   end
 
   @impl true
-  def consume_event(
-        %{name: :show_model, payload: %{module: module, id: id}},
-        %{assigns: %{history: history}} = socket
-      ) do
+  def consume_event(%{name: :show_model, payload: %{module: module, id: id}}, %{assigns: %{history: history}} = socket) do
     model =
       module
       |> Repo.get!(id)
@@ -52,10 +51,7 @@ defmodule Systems.Onyx.LandingPage do
     }
   end
 
-  def consume_event(
-        %{name: :back_to_model, payload: %{module: module, id: id}},
-        %{assigns: %{history: history}} = socket
-      ) do
+  def consume_event(%{name: :back_to_model, payload: %{module: module, id: id}}, %{assigns: %{history: history}} = socket) do
     model = get_model(module, id)
     history = pop_history(history, id) ++ [model]
 
@@ -88,9 +84,7 @@ defmodule Systems.Onyx.LandingPage do
     |> Repo.preload(module.preload_graph(:down))
   end
 
-  def update_browser_view(
-        %{assigns: %{vm: %{entities: entities}, model: model, history: history}} = socket
-      ) do
+  def update_browser_view(%{assigns: %{vm: %{entities: entities}, model: model, history: history}} = socket) do
     browser_view =
       LiveNest.Element.prepare_live_view(
         get_browser_view_id(model),

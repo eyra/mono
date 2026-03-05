@@ -1,4 +1,5 @@
 defmodule Systems.Feldspar.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/feldspar", Systems.Feldspar do

@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.Query do
+  @moduledoc false
   require Ecto.Query
 
   defmacro or_where(exprs) do
@@ -27,8 +28,7 @@ defmodule Frameworks.Utility.Query do
     end
   end
 
-  def quote_clause([:join, parent, {association, aliaz}], query)
-      when is_atom(association) and is_atom(aliaz) do
+  def quote_clause([:join, parent, {association, aliaz}], query) when is_atom(association) and is_atom(aliaz) do
     quote do
       Ecto.Query.join(
         unquote(query),
@@ -99,8 +99,7 @@ defmodule Frameworks.Utility.Query do
     compile_clauses(assoc, parent) ++ compile_clauses(sub_graph, assoc)
   end
 
-  def compile_clauses({assoc, {aliaz, sub_graph}}, parent)
-      when is_atom(assoc) and is_list(sub_graph) do
+  def compile_clauses({assoc, {aliaz, sub_graph}}, parent) when is_atom(assoc) and is_list(sub_graph) do
     compile_clauses({assoc, aliaz}, parent) ++ compile_clauses(sub_graph, aliaz)
   end
 

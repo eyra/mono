@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.Html do
+  @moduledoc false
   use CoreWeb, :html
 
   slot(:inner_block, required: true)

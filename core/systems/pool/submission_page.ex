@@ -3,12 +3,13 @@ defmodule Systems.Pool.SubmissionPage do
    The submission page for a advert.
   """
   use Systems.Content.Composer, :live_workspace
-
   use Gettext, backend: CoreWeb.Gettext
-  import CoreWeb.UI.Member
-  import Frameworks.Pixel.Navigation, only: [button_bar: 1]
-  import Frameworks.Pixel.Content
 
+  import CoreWeb.UI.Member
+  import Frameworks.Pixel.Content
+  import Frameworks.Pixel.Navigation, only: [button_bar: 1]
+
+  alias CoreWeb.UI.Dialog.Plain
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
   alias Systems.Pool
@@ -28,7 +29,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def compose(:publish_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "publish_inform",
@@ -40,7 +41,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:publish_error, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "publish_error",
@@ -52,7 +53,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:retract_admin_success, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "retract_admin_success",
@@ -64,7 +65,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:complete_admin_success, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "complete_admin_success",
@@ -121,7 +122,8 @@ defmodule Systems.Pool.SubmissionPage do
 
   defp ready_for_publish?(submission) do
     changeset =
-      Pool.SubmissionModel.operational_changeset(submission, %{})
+      submission
+      |> Pool.SubmissionModel.operational_changeset(%{})
       |> Pool.SubmissionModel.operational_validation()
 
     changeset.valid?

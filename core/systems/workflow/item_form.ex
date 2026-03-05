@@ -1,17 +1,13 @@
 defmodule Systems.Workflow.ItemForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   import Frameworks.Pixel.Form
 
-  alias Systems.{
-    Workflow
-  }
+  alias Systems.Workflow
 
   @impl true
-  def update(
-        %{id: id, entity: entity, group_enabled?: group_enabled?},
-        socket
-      ) do
+  def update(%{id: id, entity: entity, group_enabled?: group_enabled?}, socket) do
     changeset = Workflow.ItemModel.changeset(entity, %{})
 
     {
@@ -52,8 +48,7 @@ defmodule Systems.Workflow.ItemForm do
   def handle_event("save", %{"item_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 
@@ -70,8 +65,7 @@ defmodule Systems.Workflow.ItemForm do
   def save(socket, %Workflow.ItemModel{} = entity, attrs) do
     changeset = Workflow.ItemModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

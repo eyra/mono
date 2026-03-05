@@ -1,5 +1,7 @@
 defmodule Systems.Lab.CheckInModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   embedded_schema do
@@ -9,8 +11,7 @@ defmodule Systems.Lab.CheckInModel do
   @fields ~w(query)a
 
   def changeset(model, :init, params) do
-    model
-    |> cast(params, @fields)
+    cast(model, params, @fields)
   end
 
   def changeset(model, :submit, params) do

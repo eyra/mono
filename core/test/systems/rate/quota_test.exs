@@ -1,10 +1,11 @@
 defmodule Systems.Rate.QuotaTest do
   use ExUnit.Case, async: true
+
   alias Systems.Rate.Quota
 
   describe "keyword init/1" do
     test "all atoms" do
-      assert %Systems.Rate.Quota{
+      assert %Quota{
                service: "storage_export",
                limit: 1,
                unit: :call,
@@ -21,7 +22,7 @@ defmodule Systems.Rate.QuotaTest do
     end
 
     test "all strings" do
-      assert %Systems.Rate.Quota{
+      assert %Quota{
                service: "storage_export",
                limit: 1,
                unit: :call,
@@ -76,7 +77,7 @@ defmodule Systems.Rate.QuotaTest do
 
   describe "map init/1" do
     test "all atoms" do
-      assert %Systems.Rate.Quota{
+      assert %Quota{
                service: "storage_export",
                limit: 1,
                unit: :call,
@@ -93,7 +94,7 @@ defmodule Systems.Rate.QuotaTest do
     end
 
     test "all strings" do
-      assert %Systems.Rate.Quota{
+      assert %Quota{
                service: "storage_export",
                limit: 1,
                unit: :call,
@@ -153,7 +154,7 @@ defmodule Systems.Rate.QuotaTest do
           {"service": "storage_export", "limit": "1", "unit": "call", "window": "minute", "scope": "local"}
         """)
 
-      assert %Systems.Rate.Quota{
+      assert %Quota{
                service: "storage_export",
                limit: 1,
                unit: :call,

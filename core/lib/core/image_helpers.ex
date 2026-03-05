@@ -1,4 +1,5 @@
 defmodule Core.ImageHelpers do
+  @moduledoc false
   @default_image_id "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1620121478247-ec786b9be2fa%3Fixid%3DM3w1MzYyOTF8MHwxfGFsbHx8fHx8fHx8fDE3MDE2NDIxNDl8%26ixlib%3Drb-4.0.3&username=ricvath&name=Richard%20Horvath&blur_hash=La3n%7Dpo_kObWi%3DZ~a2bKVXWFa%2Aoe"
 
   def catalog, do: Application.get_env(:core, :image_catalog)
@@ -27,8 +28,7 @@ defmodule Core.ImageHelpers do
 
   def get_photo_url(%{photo_url: nil, gender: :man}), do: "/images/profile_photo_default_male.svg"
 
-  def get_photo_url(%{photo_url: nil, gender: :woman}),
-    do: "/images/profile_photo_default_female.svg"
+  def get_photo_url(%{photo_url: nil, gender: :woman}), do: "/images/profile_photo_default_female.svg"
 
   def get_photo_url(%{photo_url: photo_url}) when not is_nil(photo_url), do: photo_url
   def get_photo_url(_), do: "/images/profile_photo_default.svg"
@@ -52,7 +52,8 @@ defmodule Core.ImageHelpers do
   end
 
   def encode_image_info(image, url) do
-    create_image_info(image, url)
+    image
+    |> create_image_info(url)
     |> Jason.encode!()
   end
 

@@ -19,19 +19,20 @@ defmodule Systems.Graphite.LeaderboardModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Changeset
 
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Concept
+  alias Frameworks.Concept.Leaf.Status
   alias Systems.Graphite
   alias Systems.Project
 
   schema "graphite_leaderboards" do
     field(:title, :string)
     field(:subtitle, :string)
-    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values())
+    field(:status, Ecto.Enum, values: Status.values())
     field(:metrics, {:array, :string})
     field(:visibility, Ecto.Enum, values: Graphite.LeaderboardVisibility.values())
     field(:open_date, :naive_datetime)
@@ -55,13 +56,7 @@ defmodule Systems.Graphite.LeaderboardModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :auth_node,
-        :scores,
-        :tool
-      ])
+  def preload_graph(:down), do: preload_graph([:auth_node, :scores, :tool])
 
   def preload_graph(:scores), do: [scores: Graphite.ScoreModel.preload_graph(:down)]
 
@@ -98,10 +93,9 @@ defmodule Systems.Graphite.LeaderboardModel do
       ]
     end
 
-    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
+    def status(%{status: status}), do: %Status{value: status}
 
-    defp format_datetime(nil, _timezone),
-      do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
+    defp format_datetime(nil, _timezone), do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
 
     defp format_datetime(_, nil), do: ""
 

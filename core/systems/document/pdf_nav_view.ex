@@ -1,5 +1,6 @@
 defmodule Systems.Document.PDFNavView do
   use CoreWeb, :live_component
+
   import Frameworks.Pixel.Line
 
   alias Systems.Document
@@ -45,8 +46,7 @@ defmodule Systems.Document.PDFNavView do
   def handle_event("tool_initialized", _payload, socket) do
     {
       :noreply,
-      socket
-      |> assign(initialized: true)
+      assign(socket, initialized: true)
     }
   end
 
@@ -54,8 +54,7 @@ defmodule Systems.Document.PDFNavView do
   def handle_event("complete", _payload, socket) do
     {
       :noreply,
-      socket
-      |> send_event(:parent, "complete_task_and_close")
+      send_event(socket, :parent, "complete_task_and_close")
     }
   end
 

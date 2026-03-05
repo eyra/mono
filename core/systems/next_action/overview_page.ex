@@ -15,8 +15,7 @@ defmodule Systems.NextAction.OverviewPage do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
-      |> refresh_next_actions()
+      refresh_next_actions(socket)
     }
   end
 

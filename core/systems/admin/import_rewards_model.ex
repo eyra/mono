@@ -1,5 +1,7 @@
 defmodule Systems.Admin.ImportRewardsModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   embedded_schema do

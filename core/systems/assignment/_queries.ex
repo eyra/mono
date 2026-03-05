@@ -1,19 +1,21 @@
 defmodule Systems.Assignment.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
+  alias Core.Authorization.RoleAssignment
   alias Systems.Account
   alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Content
   alias Systems.Consent
+  alias Systems.Content
   alias Systems.Crew
   alias Systems.Project
 
-  def assignment_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def assignment_query do
     from(Assignment.Model, as: :assignment)
   end
 
@@ -57,24 +59,23 @@ defmodule Systems.Assignment.Queries do
   end
 
   def assignment_ids(selector, term) do
-    assignment_query(selector, term)
+    selector
+    |> assignment_query(term)
     |> select([assignment: a], a.id)
     |> distinct(true)
   end
 
-  def participant_query() do
+  def participant_query do
     from(Crew.MemberModel, as: :member, order_by: [asc: :public_id])
   end
 
   # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
-  def participant_query(%Assignment.Model{
-        external_panel: external_panel,
-        crew: %{id: id, auth_node_id: auth_node_id}
-      })
+  def participant_query(%Assignment.Model{external_panel: external_panel, crew: %{id: id, auth_node_id: auth_node_id}})
       when not is_nil(external_panel) do
-    build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
+    participant_query()
+    |> build(:member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external_user)
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], ra in RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )
@@ -88,13 +89,11 @@ defmodule Systems.Assignment.Queries do
     })
   end
 
-  def participant_query(%Assignment.Model{
-        affiliate: %{id: affiliate_id},
-        crew: %{id: id, auth_node_id: auth_node_id}
-      }) do
-    build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
+  def participant_query(%Assignment.Model{affiliate: %{id: affiliate_id}, crew: %{id: id, auth_node_id: auth_node_id}}) do
+    participant_query()
+    |> build(:member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], au in Affiliate.User, on: u.id == au.user_id, as: :affiliate_user)
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], ra in RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )
@@ -109,11 +108,10 @@ defmodule Systems.Assignment.Queries do
     })
   end
 
-  def participant_query(%Assignment.Model{
-        crew: %{id: id, auth_node_id: auth_node_id}
-      }) do
-    build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+  def participant_query(%Assignment.Model{crew: %{id: id, auth_node_id: auth_node_id}}) do
+    participant_query()
+    |> build(:member, [crew_id == ^id, user: [id != nil]])
+    |> join(:inner, [user: u], ra in RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )
@@ -127,13 +125,14 @@ defmodule Systems.Assignment.Queries do
     })
   end
 
-  def signature_query() do
+  def signature_query do
     from(Consent.SignatureModel, as: :signature)
   end
 
   def signature_query(%Assignment.Model{consent_agreement_id: consent_agreement_id})
       when not is_nil(consent_agreement_id) do
-    build(signature_query(), :signature,
+    signature_query()
+    |> build(:signature,
       revision: [
         agreement: [
           id == ^consent_agreement_id

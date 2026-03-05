@@ -1,4 +1,5 @@
 defmodule Systems.Banking.MarkerModel do
+  @moduledoc false
   use Ecto.Schema
 
   schema "money_manager_transaction_marker" do

@@ -1,6 +1,4 @@
 defmodule Frameworks.Pixel.Logo do
-  use CoreWeb, :pixel
-
   @moduledoc """
   Logo component for product and platform logos.
 
@@ -17,6 +15,8 @@ defmodule Frameworks.Pixel.Logo do
   - {name}.svg - Circle variant (scalable, text-free)
   - {name}_square.svg - Square variant (scalable, text-free)
   """
+
+  use CoreWeb, :pixel
 
   # Path functions for use outside of components
 

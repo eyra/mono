@@ -1,6 +1,8 @@
 defmodule Core.WebPushTest do
   use Core.DataCase, async: true
+
   import Mox
+
   alias Core.Factories
   alias Core.WebPush
 
@@ -30,8 +32,7 @@ defmodule Core.WebPushTest do
         "expirationTime" => nil,
         "keys" => %{
           "auth" => "qlbEtiId4mHSgnXPB7pPTQ",
-          "p256dh" =>
-            "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
+          "p256dh" => "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
         }
       }
 
@@ -45,8 +46,7 @@ defmodule Core.WebPushTest do
           "expirationTime" => nil,
           "keys" => %{
             "auth" => key,
-            "p256dh" =>
-              "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
+            "p256dh" => "BKfP8PDm3qrDizHkeEh5lsHcD155JxsGBCQ9u6Evb2eWwy2jspyfTiWr6hA1-15lgrR1XxkQqPOupU50OOJ_5Fg"
           }
         }
 
@@ -68,9 +68,7 @@ defmodule Core.WebPushTest do
     end
 
     test "send a single ok message", %{subscription: subscription} do
-      Core.WebPush.MockBackend
-      |> expect(:send_web_push, fn _sub, _message -> {:ok, %{status_code: 201}} end)
-
+      expect(Core.WebPush.MockBackend, :send_web_push, fn _sub, _message -> {:ok, %{status_code: 201}} end)
       assert WebPush.send(subscription.user, "Hello") == :ok
       assert %{success: 1, failure: 0} = Oban.drain_queue(queue: :default)
     end

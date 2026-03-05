@@ -1,45 +1,35 @@
 defmodule Systems.Advert.Public do
-  use Core, :public
-
   @moduledoc """
   The Studies context.
   """
+  use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Advert.Queries
 
-  require Logger
   alias Core.Repo
-  alias Systems.Account.User
-
+  alias Frameworks.Concept.Directable
   alias Frameworks.GreenLight.Principal
   alias Frameworks.Signal
-  alias Frameworks.Concept.Directable
-
   alias Systems.Account
-
+  alias Systems.Account.User
   alias Systems.Advert
-  alias Systems.Promotion
-  alias Systems.Assignment
   alias Systems.Alliance
-  alias Systems.Crew
-  alias Systems.Budget
+  alias Systems.Assignment
   alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Crew
   alias Systems.Pool
+  alias Systems.Promotion
+
+  require Logger
 
   def get!(id, preload \\ []) do
-    from(c in Advert.Model,
-      where: c.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(c in Advert.Model, where: c.id == ^id, preload: ^preload))
   end
 
   def all(ids, preload \\ []) do
-    from(c in Advert.Model,
-      where: c.id in ^ids,
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(c in Advert.Model, where: c.id in ^ids, preload: ^preload))
   end
 
   def get_by_submission(submission, preload \\ [])
@@ -49,11 +39,7 @@ defmodule Systems.Advert.Public do
   end
 
   def get_by_submission(submission_id, preload) do
-    from(c in Advert.Model,
-      where: c.submission_id == ^submission_id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(c in Advert.Model, where: c.submission_id == ^submission_id, preload: ^preload))
   end
 
   def get_by_promotion(promotion, preload \\ [])
@@ -63,11 +49,7 @@ defmodule Systems.Advert.Public do
   end
 
   def get_by_promotion(promotion_id, preload) do
-    from(c in Advert.Model,
-      where: c.promotion_id == ^promotion_id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(c in Advert.Model, where: c.promotion_id == ^promotion_id, preload: ^preload))
   end
 
   def get_by_assignment(assignment, preload \\ [])
@@ -77,30 +59,19 @@ defmodule Systems.Advert.Public do
   end
 
   def get_by_assignment(assignment_id, preload) do
-    from(c in Advert.Model,
-      where: c.assignment_id == ^assignment_id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(c in Advert.Model, where: c.assignment_id == ^assignment_id, preload: ^preload))
   end
 
   def list(opts \\ []) do
-    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+    exclude = opts |> Keyword.get(:exclude, []) |> Enum.to_list()
 
-    from(s in Advert.Model,
-      where: s.id not in ^exclude
-    )
-    |> Repo.all()
+    Repo.all(from(s in Advert.Model, where: s.id not in ^exclude))
 
     # AUTH: Can be piped through auth filter.
   end
 
   def list_by_assignments(assignment_ids, preload) when is_list(assignment_ids) do
-    from(c in Advert.Model,
-      where: c.assignment_id in ^assignment_ids,
-      preload: ^preload
-    )
-    |> Repo.all()
+    Repo.all(from(c in Advert.Model, where: c.assignment_id in ^assignment_ids, preload: ^preload))
   end
 
   def list_by_pools_and_submission_status(pools, submission_status, opts \\ [])
@@ -108,31 +79,33 @@ defmodule Systems.Advert.Public do
     pool_ids = Enum.map(pools, & &1.id)
 
     preload = Keyword.get(opts, :preload, [])
-    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+    exclude = opts |> Keyword.get(:exclude, []) |> Enum.to_list()
 
-    from(c in Advert.Model,
-      inner_join: ps in Pool.SubmissionModel,
-      on: ps.id == c.submission_id,
-      where: c.id not in ^exclude,
-      where: ps.pool_id in ^pool_ids,
-      where: ps.status in ^submission_status,
-      preload: ^preload,
-      order_by: [desc: ps.updated_at],
-      select: c
+    Repo.all(
+      from(c in Advert.Model,
+        inner_join: ps in Pool.SubmissionModel,
+        on: ps.id == c.submission_id,
+        where: c.id not in ^exclude,
+        where: ps.pool_id in ^pool_ids,
+        where: ps.status in ^submission_status,
+        preload: ^preload,
+        order_by: [desc: ps.updated_at],
+        select: c
+      )
     )
-    |> Repo.all()
   end
 
   def list_by_budget(%Budget.Model{id: budget_id}, preload \\ []) do
-    from(c in Advert.Model,
-      inner_join: a in Assignment.Model,
-      on: c.assignment_id == a.id,
-      where: a.budget_id == ^budget_id,
-      preload: ^preload,
-      order_by: [desc: c.updated_at],
-      select: c
+    Repo.all(
+      from(c in Advert.Model,
+        inner_join: a in Assignment.Model,
+        on: c.assignment_id == a.id,
+        where: a.budget_id == ^budget_id,
+        preload: ^preload,
+        order_by: [desc: c.updated_at],
+        select: c
+      )
     )
-    |> Repo.all()
   end
 
   @doc """
@@ -140,19 +113,20 @@ defmodule Systems.Advert.Public do
   """
   def list_submitted(pool, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
-    exclude = Keyword.get(opts, :exclude, []) |> Enum.to_list()
+    exclude = opts |> Keyword.get(:exclude, []) |> Enum.to_list()
 
-    from(c in Advert.Model,
-      inner_join: ps in Pool.SubmissionModel,
-      on: ps.id == c.submission_id,
-      where: c.id not in ^exclude,
-      where: ps.pool_id == ^pool.id,
-      where: ps.status != :idle or not is_nil(ps.submitted_at),
-      preload: ^preload,
-      order_by: [desc: ps.updated_at],
-      select: c
+    Repo.all(
+      from(c in Advert.Model,
+        inner_join: ps in Pool.SubmissionModel,
+        on: ps.id == c.submission_id,
+        where: c.id not in ^exclude,
+        where: ps.pool_id == ^pool.id,
+        where: ps.status != :idle or not is_nil(ps.submitted_at),
+        preload: ^preload,
+        order_by: [desc: ps.updated_at],
+        select: c
+      )
     )
-    |> Repo.all()
   end
 
   @doc """
@@ -161,7 +135,8 @@ defmodule Systems.Advert.Public do
   def list_by_participant(user, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    advert_query(user, :participant)
+    user
+    |> advert_query(:participant)
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -169,23 +144,25 @@ defmodule Systems.Advert.Public do
   def list_by_status(status, opts \\ []) do
     preload = Keyword.get(opts, :preload, [])
 
-    advert_query(status)
+    status
+    |> advert_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_excluded_user_ids(advert_ids) when is_list(advert_ids) do
-    from(u in User,
-      join: m in Crew.MemberModel,
-      on: m.user_id == u.id,
-      join: a in Assignment.Model,
-      on: a.crew_id == m.crew_id,
-      join: c in Advert.Model,
-      on: c.assignment_id == a.id,
-      where: c.id in ^advert_ids,
-      select: u.id
+    Repo.all(
+      from(u in User,
+        join: m in Crew.MemberModel,
+        on: m.user_id == u.id,
+        join: a in Assignment.Model,
+        on: a.crew_id == m.crew_id,
+        join: c in Advert.Model,
+        on: c.assignment_id == a.id,
+        where: c.id in ^advert_ids,
+        select: u.id
+      )
     )
-    |> Repo.all()
   end
 
   def list_excluded_adverts(adverts, preload \\ []) when is_list(adverts) do
@@ -196,10 +173,8 @@ defmodule Systems.Advert.Public do
     |> list_by_assignments(preload)
   end
 
-  defp list_excluded_assignment_ids(%Advert.Model{assignment: %{excluded: excluded}})
-       when is_list(excluded) do
-    excluded
-    |> Enum.map(& &1.id)
+  defp list_excluded_assignment_ids(%Advert.Model{assignment: %{excluded: excluded}}) when is_list(excluded) do
+    Enum.map(excluded, & &1.id)
   end
 
   defp list_excluded_assignment_ids(_), do: []
@@ -211,17 +186,17 @@ defmodule Systems.Advert.Public do
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
       |> Enum.map(fn %{id: id} -> id end)
 
-    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
+    Repo.all(from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id))
     # AUTH: needs to be marked save. Current user is normally not allowed to
     # access other users.
   end
 
   def assign_owners(advert, users) do
     existing_owner_ids =
-      auth_module().list_principals(advert.auth_node_id)
+      advert.auth_node_id
+      |> auth_module().list_principals()
       |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
-      |> Enum.map(fn %{id: id} -> id end)
-      |> Enum.into(MapSet.new())
+      |> MapSet.new(fn %{id: id} -> id end)
 
     users
     |> Enum.filter(fn principal ->
@@ -229,10 +204,7 @@ defmodule Systems.Advert.Public do
     end)
     |> Enum.each(&auth_module().assign_role(&1, advert, :owner))
 
-    new_owner_ids =
-      users
-      |> Enum.map(&Principal.id/1)
-      |> Enum.into(MapSet.new())
+    new_owner_ids = MapSet.new(users, &Principal.id/1)
 
     existing_owner_ids
     |> Enum.filter(fn id -> not MapSet.member?(new_owner_ids, id) end)
@@ -250,8 +222,7 @@ defmodule Systems.Advert.Public do
   def open_spot_count(_advert), do: 0
 
   def get_changeset(attrs \\ %{}) do
-    %Advert.Model{}
-    |> Advert.Model.changeset(attrs)
+    Advert.Model.changeset(%Advert.Model{}, attrs)
   end
 
   @doc """
@@ -286,21 +257,18 @@ defmodule Systems.Advert.Public do
   """
 
   def update(%Ecto.Changeset{} = changeset) do
-    changeset
-    |> Repo.update()
+    Repo.update(changeset)
   end
 
   def update(%Advert.Model{} = advert, attrs) do
     advert
     |> Advert.Model.changeset(attrs)
-    |> update
+    |> update()
   end
 
   def submission_updated(%Advert.Model{
         assignment: assignment,
-        submission: %{
-          pool: %{id: pool_id, director: :student} = pool
-        }
+        submission: %{pool: %{id: pool_id, director: :student} = pool}
       }) do
     # FIXME: budget change after pool update should be handled in student submission form
     budget = Directable.director(pool).resolve_budget(pool_id, nil)
@@ -310,7 +278,8 @@ defmodule Systems.Advert.Public do
   def submission_updated(_), do: nil
 
   def delete(id) when is_number(id) do
-    get!(id, Advert.Model.preload_graph(:down))
+    id
+    |> get!(Advert.Model.preload_graph(:down))
     |> Advert.Assembly.delete()
   end
 
@@ -339,18 +308,15 @@ defmodule Systems.Advert.Public do
   end
 
   def list_tools(%Advert.Model{} = advert) do
-    from(s in Alliance.ToolModel, where: s.advert_id == ^advert.id)
-    |> Repo.all()
+    Repo.all(from(s in Alliance.ToolModel, where: s.advert_id == ^advert.id))
   end
 
   def list_tools(%Advert.Model{} = advert, schema) do
-    from(s in schema, where: s.advert_id == ^advert.id)
-    |> Repo.all()
+    Repo.all(from(s in schema, where: s.advert_id == ^advert.id))
   end
 
   def completed?(%Advert.Model{} = advert) do
-    advert
-    |> completed?()
+    completed?(advert)
   end
 
   def completed?(%{submission: submission}) do
@@ -373,7 +339,7 @@ defmodule Systems.Advert.Public do
   end
 
   def handle_exclusion(%Assignment.Model{} = assignment, items) when is_list(items) do
-    items |> Enum.each(&handle_exclusion(assignment, &1))
+    Enum.each(items, &handle_exclusion(assignment, &1))
     Signal.Public.dispatch!({:assignment, :updated}, %{assignment: assignment})
   end
 
@@ -381,11 +347,7 @@ defmodule Systems.Advert.Public do
     handle_exclusion(assignment, Advert.Public.get!(id, [:assignment]), active)
   end
 
-  defp handle_exclusion(
-         %Assignment.Model{} = assignment,
-         %Advert.Model{assignment: other},
-         active
-       ) do
+  defp handle_exclusion(%Assignment.Model{} = assignment, %Advert.Model{assignment: other}, active) do
     handle_exclusion(assignment, other, active)
   end
 
@@ -398,9 +360,7 @@ defmodule Systems.Advert.Public do
   end
 
   def reward_value(%Assignment.Model{} = assignment) do
-    %{submission: %{reward_value: reward_value}} =
-      assignment
-      |> Advert.Public.get_by_assignment([:submission])
+    %{submission: %{reward_value: reward_value}} = Advert.Public.get_by_assignment(assignment, [:submission])
 
     reward_value
   end
@@ -416,21 +376,15 @@ defmodule Systems.Advert.Public do
          :ok <- validate_exclusion(advert, user),
          :ok <- validate_eligitable(advert, user),
          :ok <- validate_open_spots(advert),
-         :ok <- validate_released(advert),
-         :ok <- validate_funded(advert) do
-      :ok
-    else
-      error -> error
+         :ok <- validate_released(advert) do
+      validate_funded(advert)
     end
   end
 
   def validate_open(%Advert.Model{} = advert) do
     with :ok <- validate_open_spots(advert),
-         :ok <- validate_released(advert),
-         :ok <- validate_funded(advert) do
-      :ok
-    else
-      error -> error
+         :ok <- validate_released(advert) do
+      validate_funded(advert)
     end
   end
 
@@ -531,24 +485,27 @@ defmodule Systems.Advert.Public do
   end
 
   def reward_amount(%Assignment.Model{id: assignment_id}) do
-    from(c in Advert.Model,
-      inner_join: s in Pool.SubmissionModel,
-      on: s.id == c.submission_id,
-      inner_join: ec in Pool.CriteriaModel,
-      on: ec.submission_id == s.id,
-      where: c.assignment_id == ^assignment_id,
-      select: s.reward_value
+    Repo.one!(
+      from(c in Advert.Model,
+        inner_join: s in Pool.SubmissionModel,
+        on: s.id == c.submission_id,
+        inner_join: ec in Pool.CriteriaModel,
+        on: ec.submission_id == s.id,
+        where: c.assignment_id == ^assignment_id,
+        select: s.reward_value
+      )
     )
-    |> Repo.one!()
   end
 
   def user_has_currency?(%User{} = user, currency) do
-    query_user_pools_by_currency(user, currency)
+    user
+    |> query_user_pools_by_currency(currency)
     |> Repo.exists?()
   end
 
   def get_user_pools_by_currency(%User{} = user, currency) do
-    query_user_pools_by_currency(user, currency)
+    user
+    |> query_user_pools_by_currency(currency)
     |> Repo.all()
   end
 
@@ -565,8 +522,7 @@ defmodule Systems.Advert.Public do
     )
   end
 
-  def import_participant_reward(participant_id, amount, session_key, currency)
-      when is_binary(currency) do
+  def import_participant_reward(participant_id, amount, session_key, currency) when is_binary(currency) do
     idempotence_key = import_idempotence_key(session_key, participant_id)
     participant = Systems.Account.Public.get_user!(participant_id)
 

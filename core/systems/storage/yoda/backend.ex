@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Yoda.Backend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
   alias Systems.Storage.Yoda
@@ -6,15 +7,9 @@ defmodule Systems.Storage.Yoda.Backend do
   require Logger
 
   @impl true
-  def store(
-        %{
-          "user" => username,
-          "password" => password,
-          "url" => yoda_url
-        } = _endpoint,
-        data,
-        %{"identifier" => identifier}
-      ) do
+  def store(%{"user" => username, "password" => password, "url" => yoda_url} = _endpoint, data, %{
+        "identifier" => identifier
+      }) do
     filename = filename(identifier)
     file_url = url([yoda_url, filename])
 
@@ -39,8 +34,7 @@ defmodule Systems.Storage.Yoda.Backend do
   @impl true
   def connected?(%{user: user, password: _, url: _}) when user == nil or user == "", do: false
 
-  def connected?(%{user: _, password: password, url: _}) when password == nil or password == "",
-    do: false
+  def connected?(%{user: _, password: password, url: _}) when password == nil or password == "", do: false
 
   def connected?(%{user: _, password: _, url: url}) when url == nil or url == "", do: false
 

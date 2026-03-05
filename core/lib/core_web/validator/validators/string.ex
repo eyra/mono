@@ -1,4 +1,5 @@
 defmodule CoreWeb.Validator.String do
+  @moduledoc false
   def valid_non_empty?(string) when is_binary(string) do
     if String.trim(string) == "" do
       {:error, "String cannot be empty"}

@@ -1,5 +1,7 @@
 defmodule Systems.Assignment.PageRefModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Assignment
@@ -17,7 +19,6 @@ defmodule Systems.Assignment.PageRefModel do
   end
 
   def changeset(page_ref, params) do
-    page_ref
-    |> cast(params, @fields)
+    cast(page_ref, params, @fields)
   end
 end

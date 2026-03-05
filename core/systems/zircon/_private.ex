@@ -1,14 +1,15 @@
 defmodule Systems.Zircon.Private do
+  @moduledoc false
   use Systems.Zircon.Constants
 
   alias Systems.Annotation
   alias Systems.Ontology
 
-  def list_research_dimensions() do
+  def list_research_dimensions do
     Ontology.Public.get_members_of_category(@research_dimension)
   end
 
-  def list_research_frameworks() do
+  def list_research_frameworks do
     Ontology.Public.get_members_of_category(@research_framework)
   end
 

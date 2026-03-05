@@ -1,19 +1,19 @@
 defmodule Systems.Affiliate.Public do
+  @moduledoc false
   use Systems.Affiliate.Constants
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
-  require Logger
-
-  import Ecto.Query, warn: true
   import Ecto.Changeset
+  import Ecto.Query, warn: true
 
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-
   alias Systems.Account
   alias Systems.Affiliate
+
+  require Logger
 
   @resource_map %{
     Systems.Assignment.Model => @annotation_resource_id
@@ -23,8 +23,7 @@ defmodule Systems.Affiliate.Public do
   def send_event(nil, _event, _user), do: {:error, :affiliate_url_missing}
   def send_event(_affiliate, nil, _user), do: {:error, :event_missing}
 
-  def send_event(_affiliate, event, _user) when not is_map(event),
-    do: {:error, :event_invalid_format}
+  def send_event(_affiliate, event, _user) when not is_map(event), do: {:error, :event_invalid_format}
 
   def send_event(_affiliate, _event, nil), do: {:error, :user_missing}
 
@@ -69,11 +68,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def prepare_affiliate(callback_url \\ nil, redirect_url \\ nil) do
-    %Affiliate.Model{}
-    |> Affiliate.Model.changeset(%{
-      callback_url: callback_url,
-      redirect_url: redirect_url
-    })
+    Affiliate.Model.changeset(%Affiliate.Model{}, %{callback_url: callback_url, redirect_url: redirect_url})
   end
 
   def obtain_user_info!(%Affiliate.User{} = user, info) do
@@ -150,10 +145,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def get_user_info(%Affiliate.User{} = user) do
-    from(aui in Affiliate.UserInfoModel,
-      where: aui.user_id == ^user.id
-    )
-    |> Repo.one()
+    Repo.one(from(aui in Affiliate.UserInfoModel, where: aui.user_id == ^user.id))
   end
 
   def register_user!(organisation, external_id) do
@@ -207,10 +199,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def count_users(%Affiliate.Model{id: affiliate_id}) do
-    from(au in Affiliate.User,
-      where: au.affiliate_id == ^affiliate_id
-    )
-    |> Repo.aggregate(:count, :id)
+    Repo.aggregate(from(au in Affiliate.User, where: au.affiliate_id == ^affiliate_id), :count, :id)
   end
 
   def prepare_user(%Affiliate.Model{id: affiliate_id}, identifier) do

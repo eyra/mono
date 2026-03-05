@@ -1,12 +1,15 @@
 defmodule Core.SurfConext do
-  alias Systems.Account.User
+  @moduledoc false
+  import Ecto.Query, warn: false
+
   alias Core.Repo
   alias Frameworks.Signal
-  import Ecto.Query, warn: false
+  alias Systems.Account.User
 
   require Logger
 
   defmodule SurfConextError do
+    @moduledoc false
     defexception [:message]
   end
 
@@ -19,23 +22,19 @@ defmodule Core.SurfConext do
         select: sc.user_id
       )
 
-    from(u in User, where: u.id in subquery(surfconext_query))
-    |> Repo.one()
+    Repo.one(from(u in User, where: u.id in subquery(surfconext_query)))
   end
 
   def get_user_by_sub(sub) do
-    from(u in User,
-      where:
-        u.id in subquery(
-          from(sc in Core.SurfConext.User, where: sc.sub == ^sub, select: sc.user_id)
-        )
+    Repo.one(
+      from(u in User,
+        where: u.id in subquery(from(sc in Core.SurfConext.User, where: sc.sub == ^sub, select: sc.user_id))
+      )
     )
-    |> Repo.one()
   end
 
   def get_surfconext_user_by_user(%User{id: id}) do
-    from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id)
-    |> Repo.one!()
+    Repo.one!(from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id))
   end
 
   def register_user(attrs) do
@@ -72,13 +71,14 @@ defmodule Core.SurfConext do
 
   defp get_email(attrs) do
     case Map.get(attrs, "email") do
-      nil -> raise SurfConextError, "No email found in user info #{attrs |> inspect()}"
+      nil -> raise SurfConextError, "No email found in user info #{inspect(attrs)}"
       email -> email
     end
   end
 
   def update_user(%User{} = user, attrs) do
-    get_surfconext_user_by_user(user)
+    user
+    |> get_surfconext_user_by_user()
     |> Core.SurfConext.User.update_changeset(attrs)
     |> Repo.update!()
   end

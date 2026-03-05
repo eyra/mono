@@ -1,12 +1,15 @@
 defmodule CoreWeb.Live.Feature.Viewport do
-  @callback handle_resize(socket :: Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
+  @moduledoc false
+  alias Phoenix.LiveView.Socket
+
+  @callback handle_resize(socket :: Socket.t()) :: Socket.t()
 
   defmacro __using__(_) do
     quote do
       @behaviour CoreWeb.Live.Feature.Viewport
 
-      alias CoreWeb.UI.Responsive.Viewport
       alias CoreWeb.UI.Responsive.Breakpoint
+      alias CoreWeb.UI.Responsive.Viewport
 
       # stubs, handled by Live Hook
       def handle_event("viewport_changed", _, socket), do: {:noreply, socket}

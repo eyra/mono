@@ -1,4 +1,5 @@
 defmodule Systems.Pool.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   @impl true

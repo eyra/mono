@@ -1,16 +1,15 @@
 defmodule Systems.Graphite.Assembly do
+  @moduledoc false
   use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
-
   alias Frameworks.Signal
-
+  alias Systems.Assignment
   alias Systems.Graphite
   alias Systems.Project
-  alias Systems.Assignment
 
   def create_leaderboard(%Graphite.ToolModel{} = tool, name) do
     if challenge = Assignment.Public.get_by_tool(tool) do
@@ -20,11 +19,7 @@ defmodule Systems.Graphite.Assembly do
     end
   end
 
-  def create_leaderboard(
-        %Assignment.Model{special: :benchmark_challenge} = challenge,
-        tool,
-        name
-      ) do
+  def create_leaderboard(%Assignment.Model{special: :benchmark_challenge} = challenge, tool, name) do
     project_node =
       challenge
       |> Project.Public.get_item_by()
@@ -60,8 +55,8 @@ defmodule Systems.Graphite.Assembly do
        ) do
     leaderboard_auth_node = auth_module().prepare_node(tool_auth_node)
 
-    Project.Public.prepare_item(
-      %{name: name, project_path: project_path ++ [project_node_id]},
+    %{name: name, project_path: project_path ++ [project_node_id]}
+    |> Project.Public.prepare_item(
       %{
         name: name,
         status: :concept,

@@ -1,4 +1,14 @@
 defmodule Systems.Storage.Delivery do
+  @moduledoc false
+  use Oban.Worker,
+    priority: 1,
+    max_attempts: 3,
+    unique: [period: 30]
+
+  alias Frameworks.Signal
+
+  require Logger
+
   defmodule DeliveryError do
     @moduledoc false
     defexception [:message]
@@ -6,15 +16,6 @@ defmodule Systems.Storage.Delivery do
 
   # Queue is set dynamically via Storage.Private.storage_delivery_queue() when inserting jobs
   # This ensures jobs run on the node that has the local file
-  use Oban.Worker,
-    priority: 1,
-    max_attempts: 3,
-    unique: [period: 30]
-
-  require Logger
-
-  alias Frameworks.Signal
-
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
     case deliver_from_file(args) do
@@ -55,14 +56,7 @@ defmodule Systems.Storage.Delivery do
     deliver_data(args, data)
   end
 
-  defp deliver_data(
-         %{
-           "backend" => backend,
-           "special" => special,
-           "meta_data" => meta_data
-         },
-         data
-       ) do
+  defp deliver_data(%{"backend" => backend, "special" => special, "meta_data" => meta_data}, data) do
     deliver(String.to_existing_atom(backend), special, data, meta_data)
   end
 
@@ -81,8 +75,7 @@ defmodule Systems.Storage.Delivery do
   end
 
   defp mask_sensitive_data(string) do
-    [:password, :user, :secret_access_key, :sas_token]
-    |> Enum.reduce(string, fn key, acc -> mask(key, acc) end)
+    Enum.reduce([:password, :user, :secret_access_key, :sas_token], string, fn key, acc -> mask(key, acc) end)
   end
 
   defp mask(key, string) do

@@ -1,11 +1,9 @@
 defmodule Systems.Lab.PublicTest do
   use Core.DataCase, async: true
+
   alias Core.Factories
   alias CoreWeb.UI.Timestamp
-
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
   setup do
     {:ok,
@@ -14,26 +12,22 @@ defmodule Systems.Lab.PublicTest do
        Factories.insert!(:lab_tool, %{
          time_slots: [
            %{
-             start_time:
-               Timestamp.yesterday() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.yesterday(), hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 2
            },
            %{
-             start_time:
-               Timestamp.yesterday() |> Timex.set(hour: 9, minute: 30, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.yesterday(), hour: 9, minute: 30, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 2
            },
            %{
-             start_time:
-               Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 0, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.tomorrow(), hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            },
            %{
-             start_time:
-               Timestamp.tomorrow() |> Timex.set(hour: 9, minute: 30, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.tomorrow(), hour: 9, minute: 30, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            }
@@ -117,11 +111,9 @@ defmodule Systems.Lab.PublicTest do
                entries: entries
              } = Lab.Public.new_day_model(lab_tool)
 
-      expected_date =
-        Timestamp.tomorrow()
-        |> Timestamp.to_date()
+      expected_date = Timestamp.to_date(Timestamp.tomorrow())
 
-      assert date |> Timestamp.to_date() == expected_date
+      assert Timestamp.to_date(date) == expected_date
 
       assert [
                %{enabled?: true, start_time: 900, type: :time_slot},
@@ -216,8 +208,7 @@ defmodule Systems.Lab.PublicTest do
     test "return time_slots with open spots for reservations", %{lab_tool: %{id: id} = _lab_tool} do
       [slot1, %{id: slot2_id}] = Lab.Public.get_available_time_slots(id)
 
-      0..slot1.number_of_seats
-      |> Enum.each(fn _ ->
+      Enum.each(0..slot1.number_of_seats, fn _ ->
         member = Factories.insert!(:member)
         Lab.Public.reserve_time_slot(slot1, member)
       end)
@@ -229,8 +220,7 @@ defmodule Systems.Lab.PublicTest do
       [%{id: slot1_id} = slot1, %{id: slot2_id}] = Lab.Public.get_available_time_slots(id)
 
       members =
-        1..slot1.number_of_seats
-        |> Enum.map(fn _ ->
+        Enum.map(1..slot1.number_of_seats, fn _ ->
           member = Factories.insert!(:member)
           {:ok, _} = Lab.Public.reserve_time_slot(slot1, member)
           member

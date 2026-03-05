@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   alias Systems.Storage

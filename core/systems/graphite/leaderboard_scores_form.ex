@@ -1,21 +1,13 @@
 defmodule Systems.Graphite.LeaderboardScoresForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.csv)
 
   alias Frameworks.Pixel.Text
-
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
-  def update(
-        %{
-          id: id,
-          leaderboard: leaderboard
-        },
-        socket
-      ) do
+  def update(%{id: id, leaderboard: leaderboard}, socket) do
     headers = ["submission-id", "url", "ref", "status", "error_message" | leaderboard.metrics]
 
     {
@@ -53,21 +45,17 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
   end
 
   @impl true
-  def process_file(
-        %{assigns: %{leaderboard: leaderboard}} = socket,
-        %{public_url: csv_url, original_filename: original_filename}
-      ) do
+  def process_file(%{assigns: %{leaderboard: leaderboard}} = socket, %{
+        public_url: csv_url,
+        original_filename: original_filename
+      }) do
     result = Graphite.ScoresParser.from_url(csv_url, leaderboard)
     assign(socket, csv_url: csv_url, csv_remote_file: original_filename, parsed_results: result)
   end
 
-  def handle_event(
-        "submit",
-        _params,
-        %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket
-      ) do
+  def handle_event("submit", _params, %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket) do
     Graphite.Public.import_scores(leaderboard, parsed_results)
-    {:noreply, socket |> assign(parsed_results: nil)}
+    {:noreply, assign(socket, parsed_results: nil)}
   end
 
   def handle_event("change", _params, socket) do

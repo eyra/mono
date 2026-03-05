@@ -1,7 +1,8 @@
 defmodule Systems.Graphite.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Pixel.Form
 
   alias Systems.Graphite
@@ -36,9 +37,7 @@ defmodule Systems.Graphite.ToolForm do
     assign(socket, leaderboard_button: leaderboard_button)
   end
 
-  def update_leaderboard_button(
-        %{assigns: %{entity: %{leaderboard: %{id: leaderboard_id}}}} = socket
-      ) do
+  def update_leaderboard_button(%{assigns: %{entity: %{leaderboard: %{id: leaderboard_id}}}} = socket) do
     leaderboard_button = %{
       action: %{type: :redirect, to: ~p"/graphite/leaderboard/#{leaderboard_id}/content"},
       face: %{
@@ -57,11 +56,7 @@ defmodule Systems.Graphite.ToolForm do
   end
 
   @impl true
-  def handle_event(
-        "create_leaderboard",
-        _payload,
-        %{assigns: %{entity: entity, title: title}} = socket
-      ) do
+  def handle_event("create_leaderboard", _payload, %{assigns: %{entity: entity, title: title}} = socket) do
     require_feature(:leaderboard)
     Graphite.Assembly.create_leaderboard(entity, title)
     {:noreply, socket}
@@ -69,7 +64,7 @@ defmodule Systems.Graphite.ToolForm do
 
   @impl true
   def handle_event("change", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
-    {:noreply, socket |> save(entity, attrs)}
+    {:noreply, save(socket, entity, attrs)}
   end
 
   def save(%{assigns: %{timezone: nil}} = socket, _entity, _attrs) do

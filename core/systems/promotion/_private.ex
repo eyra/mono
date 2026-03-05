@@ -1,10 +1,10 @@
 defmodule Systems.Promotion.Private do
-  alias Ecto.Multi
+  @moduledoc false
   alias Core.Repo
+  alias Ecto.Multi
   alias Frameworks.Signal
-
-  alias Systems.Promotion
   alias Systems.Monitor
+  alias Systems.Promotion
 
   def log_performance_event(%Promotion.Model{} = promotion, topic) do
     Multi.new()

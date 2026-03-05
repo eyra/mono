@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Factories do
+  @moduledoc false
   use ExMachina.Ecto, repo: Core.Repo
 
   alias Systems.Manual

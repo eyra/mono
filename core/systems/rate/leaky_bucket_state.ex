@@ -1,9 +1,10 @@
 defmodule Systems.Rate.LeakyBucketState do
-  require Logger
-
+  @moduledoc false
+  alias Systems.Rate.LeakyBucket, as: Bucket
   alias Systems.Rate.Private, as: Private
   alias Systems.Rate.Quota, as: Quota
-  alias Systems.Rate.LeakyBucket, as: Bucket
+
+  require Logger
 
   @type t :: %__MODULE__{
           prune_interval: integer,
@@ -38,6 +39,6 @@ defmodule Systems.Rate.LeakyBucketState do
     count_after = Enum.count(new_buckets)
     Logger.info("[#{__MODULE__}] Pruned #{count_before - count_after} of #{count_before} buckets")
 
-    state |> Map.put(:buckets, new_buckets)
+    Map.put(state, :buckets, new_buckets)
   end
 end

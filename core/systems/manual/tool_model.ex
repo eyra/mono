@@ -1,13 +1,14 @@
 defmodule Systems.Manual.ToolModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  import Ecto.Changeset
 
   alias Systems.Manual
+
+  @tool_directors Application.compile_env(:core, :tool_directors)
 
   schema "manual_tool" do
     field(:director, Ecto.Enum, values: @tool_directors)
@@ -21,18 +22,17 @@ defmodule Systems.Manual.ToolModel do
   @required_fields ~w()a
 
   def changeset(model, params) do
-    model
-    |> cast(params, @fields)
+    cast(model, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(tool) do
     changeset =
-      changeset(tool, %{})
+      tool
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -46,7 +46,6 @@ defmodule Systems.Manual.ToolModel do
   defimpl Frameworks.Concept.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
 
-    alias Systems.Manual
     def key(_), do: :manual
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("eyra-manual", "apply.cta.title")

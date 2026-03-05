@@ -1,13 +1,13 @@
 defmodule Systems.Banking.Fetcher do
+  @moduledoc false
   use GenServer
+
   import Ecto.Query
-  require Logger
 
   alias Core.Repo
+  alias Systems.Banking
 
-  alias Systems.{
-    Banking
-  }
+  require Logger
 
   def start_link(init_args) do
     currency = Keyword.get(init_args, :currency, :euro)
@@ -51,14 +51,12 @@ defmodule Systems.Banking.Fetcher do
   end
 
   def fetch(%{processor: processor}) do
-    %{cursor: new_cursor, payments: payments} =
-      last_cursor()
-      |> Banking.Public.list_payments()
+    %{cursor: new_cursor, payments: payments} = Banking.Public.list_payments(last_cursor())
 
     payment_count = Enum.count(payments)
     Logger.info("[#{__MODULE__}] Fetched #{payment_count} payments")
 
-    unless Enum.empty?(payments) do
+    if !Enum.empty?(payments) do
       Enum.each(payments, &Banking.Processor.next(processor, &1))
       update_cursor(new_cursor, payment_count)
     end
@@ -72,11 +70,6 @@ defmodule Systems.Banking.Fetcher do
   end
 
   def last_cursor do
-    from(mm in Banking.MarkerModel,
-      select: mm.marker,
-      order_by: [desc: mm.inserted_at],
-      limit: 1
-    )
-    |> Repo.one()
+    Repo.one(from(mm in Banking.MarkerModel, select: mm.marker, order_by: [desc: mm.inserted_at], limit: 1))
   end
 end

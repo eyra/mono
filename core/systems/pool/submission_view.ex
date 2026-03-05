@@ -1,10 +1,6 @@
 defmodule Systems.Pool.SubmissionView do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Selector
-  alias Frameworks.Pixel.Text
-  import Frameworks.Pixel.Form
-
   import CoreWeb.UI.Timestamp,
     only: [
       now: 0,
@@ -14,6 +10,10 @@ defmodule Systems.Pool.SubmissionView do
       before?: 2
     ]
 
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
   alias Systems.Pool
 
   defp determine_new_end(_, nil), do: nil
@@ -29,8 +29,7 @@ defmodule Systems.Pool.SubmissionView do
 
   # Handle update from parent after attempt to publish
   @impl true
-  def update(%{validate?: new}, %{assigns: %{validate?: current}} = socket)
-      when new != current do
+  def update(%{validate?: new}, %{assigns: %{validate?: current}} = socket) when new != current do
     {
       :ok,
       socket
@@ -44,11 +43,8 @@ defmodule Systems.Pool.SubmissionView do
         %{
           id: id,
           entity:
-            %{
-              schedule_start: schedule_start,
-              schedule_end: schedule_end,
-              pool: %{currency: %{type: currency_type}}
-            } = entity,
+            %{schedule_start: schedule_start, schedule_end: schedule_end, pool: %{currency: %{type: currency_type}}} =
+              entity,
           validate?: validate?
         },
         socket
@@ -117,26 +113,19 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
-  defp update_ui(
-         %{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} =
-           socket
-       ) do
-    socket
-    |> assign(
-      schedule_start_disabled: schedule_start == nil,
-      schedule_end_disabled: schedule_end == nil
-    )
+  defp update_ui(%{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} = socket) do
+    assign(socket, schedule_start_disabled: schedule_start == nil, schedule_end_disabled: schedule_end == nil)
   end
 
   # Validate
 
   def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
-      Pool.SubmissionModel.operational_changeset(entity, %{})
+      entity
+      |> Pool.SubmissionModel.operational_changeset(%{})
       |> Map.put(:action, :validate_for_publish)
 
-    socket
-    |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   # Events
@@ -149,8 +138,7 @@ defmodule Systems.Pool.SubmissionView do
       ) do
     {
       :noreply,
-      socket
-      |> save(entity, %{schedule_start: nil})
+      save(socket, entity, %{schedule_start: nil})
     }
   end
 
@@ -170,8 +158,7 @@ defmodule Systems.Pool.SubmissionView do
 
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 
@@ -183,8 +170,7 @@ defmodule Systems.Pool.SubmissionView do
       ) do
     {
       :noreply,
-      socket
-      |> save(entity, %{schedule_end: nil})
+      save(socket, entity, %{schedule_end: nil})
     }
   end
 
@@ -205,8 +191,7 @@ defmodule Systems.Pool.SubmissionView do
 
     {
       :ok,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 
@@ -216,8 +201,7 @@ defmodule Systems.Pool.SubmissionView do
   def handle_event("save", %{"submission_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 

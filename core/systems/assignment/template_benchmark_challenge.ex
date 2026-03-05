@@ -1,13 +1,13 @@
 defmodule Systems.Assignment.TemplateBenchmarkChallenge do
+  @moduledoc false
+  alias Frameworks.Builder
   alias Systems.Assignment
   alias Systems.Workflow
-  alias Frameworks.Builder
 
   defstruct [:id]
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
-    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -54,15 +54,13 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
               id: :fork_instruction,
               type: :instruction_tool,
               title: Assignment.WorkflowItemSpecials.translate(:fork_instruction),
-              description:
-                dgettext("eyra-assignment", "workflow_item.fork_instruction.description")
+              description: dgettext("eyra-assignment", "workflow_item.fork_instruction.description")
             },
             %Builder.LibraryItemModel{
               id: :download_instruction,
               type: :instruction_tool,
               title: Assignment.WorkflowItemSpecials.translate(:download_instruction),
-              description:
-                dgettext("eyra-assignment", "workflow_item.download_instruction.description")
+              description: dgettext("eyra-assignment", "workflow_item.download_instruction.description")
             },
             %Builder.LibraryItemModel{
               id: :submit,

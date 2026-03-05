@@ -46,7 +46,7 @@ defmodule Systems.Assignment.CrewTaskListViewBuilderTest do
       assert vm.work_item_id == work_item_id
 
       # Should have tool_modal since a work item is selected
-      assert vm.tool_modal != nil
+      assert vm.tool_modal
     end
 
     test "handles empty work items when user not participant", %{user: _user} do

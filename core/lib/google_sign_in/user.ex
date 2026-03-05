@@ -1,5 +1,7 @@
 defmodule GoogleSignIn.User do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "google_sign_in_users" do

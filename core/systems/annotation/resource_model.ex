@@ -27,8 +27,7 @@ defmodule Systems.Annotation.ResourceModel do
   @unique_fields ~w(value)a
 
   def changeset(resource, attrs) do
-    resource
-    |> cast(attrs, @fields)
+    cast(resource, attrs, @fields)
   end
 
   def validate(changeset) do

@@ -17,8 +17,9 @@ defmodule Systems.Ontology.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Ontology.Constants
       alias Systems.Ontology.Constants
+
+      require Constants
 
       @subsumes Constants.subsumes()
       @definition Constants.definition()

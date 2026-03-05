@@ -1,11 +1,10 @@
 defmodule Systems.Paper.Public do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  import Systems.Paper.Queries
-  require Ecto.Query
-  import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
-  require Logger
+  import Ecto.Query, warn: false
+  import Systems.Paper.Queries
 
   alias Core.Repo
   alias Ecto.Changeset
@@ -13,6 +12,9 @@ defmodule Systems.Paper.Public do
   alias Frameworks.Signal
   alias Systems.Content
   alias Systems.Paper
+
+  require Ecto.Query
+  require Logger
 
   # Reference File
 
@@ -25,14 +27,11 @@ defmodule Systems.Paper.Public do
   def update!(%Paper.ReferenceFileModel{file: file} = reference_file, ref) do
     reference_file
     |> Paper.ReferenceFileModel.changeset(%{})
-    |> put_assoc(:file, file |> Content.FileModel.changeset(%{ref: ref}))
+    |> put_assoc(:file, Content.FileModel.changeset(file, %{ref: ref}))
     |> Repo.update!()
   end
 
-  def mark_as_failed!(
-        %Paper.ReferenceFileModel{} = reference_file,
-        %Paper.RISError{message: message} = _error
-      ) do
+  def mark_as_failed!(%Paper.ReferenceFileModel{} = reference_file, %Paper.RISError{message: message} = _error) do
     Multi.new()
     |> Multi.update(:paper_reference_file, update_reference_file_status(reference_file, :failed))
     |> Multi.insert(
@@ -56,8 +55,7 @@ defmodule Systems.Paper.Public do
     |> put_assoc(:file, content_file)
   end
 
-  def prepare_reference_file(original_filename, url)
-      when is_binary(original_filename) and is_binary(url) do
+  def prepare_reference_file(original_filename, url) when is_binary(original_filename) and is_binary(url) do
     prepare_reference_file(Content.Public.prepare_file(original_filename, url))
   end
 
@@ -99,8 +97,7 @@ defmodule Systems.Paper.Public do
   Aborts active import sessions for multiple reference files.
   Returns the number of sessions aborted.
   """
-  def abort_active_imports_for_reference_files!(reference_file_ids)
-      when is_list(reference_file_ids) do
+  def abort_active_imports_for_reference_files!(reference_file_ids) when is_list(reference_file_ids) do
     aborted_count =
       reference_file_ids
       |> Enum.filter(&has_active_import_for_reference_file?/1)
@@ -137,16 +134,11 @@ defmodule Systems.Paper.Public do
     Logger.info("Archiving #{length(file_ids)} reference files: #{inspect(file_ids)}")
 
     multi =
-      Multi.new()
-      |> Multi.update_all(
-        :archive_files,
-        # Update all reference files to archived status in one query
-        from(rf in Paper.ReferenceFileModel,
-          where: rf.id in ^file_ids
-        ),
+      Multi.update_all(Multi.new(), :archive_files, from(rf in Paper.ReferenceFileModel, where: rf.id in ^file_ids),
         set: [status: :archived, updated_at: NaiveDateTime.utc_now()]
       )
 
+    # Update all reference files to archived status in one query
     file_ids
     |> Enum.reduce(multi, fn file_id, acc_multi ->
       # Add signal dispatch for each archived file
@@ -175,7 +167,8 @@ defmodule Systems.Paper.Public do
   end
 
   def prepare_import_session!(reference_file, paper_set) do
-    prepare_import_session(reference_file, paper_set)
+    reference_file
+    |> prepare_import_session(paper_set)
     |> case do
       {:ok, session} ->
         session
@@ -185,18 +178,16 @@ defmodule Systems.Paper.Public do
     end
   end
 
-  def prepare_import_session(
-        %Paper.ReferenceFileModel{} = reference_file,
-        %Paper.SetModel{} = paper_set
-      ) do
+  def prepare_import_session(%Paper.ReferenceFileModel{} = reference_file, %Paper.SetModel{} = paper_set) do
     # Create session, enqueue job, and dispatch signal atomically
     Multi.new()
     |> Multi.insert(
       :paper_ris_import_session,
-      Paper.RISImportSessionModel.create_changeset(%{
+      %{
         status: :activated,
         phase: :waiting
-      })
+      }
+      |> Paper.RISImportSessionModel.create_changeset()
       |> put_assoc(:reference_file, reference_file)
       |> put_assoc(:paper_set, paper_set)
     )
@@ -216,19 +207,19 @@ defmodule Systems.Paper.Public do
     end
   end
 
-  def get_active_import_session_for_reference_file(reference_file_id)
-      when is_integer(reference_file_id) do
-    Paper.RISImportSessionModel.active_for_reference_file_tool(reference_file_id)
+  def get_active_import_session_for_reference_file(reference_file_id) when is_integer(reference_file_id) do
+    reference_file_id
+    |> Paper.RISImportSessionModel.active_for_reference_file_tool()
     |> List.first()
   end
 
-  def has_active_import_for_reference_file?(reference_file_id)
-      when is_integer(reference_file_id) do
+  def has_active_import_for_reference_file?(reference_file_id) when is_integer(reference_file_id) do
     Paper.RISImportSessionModel.has_active_import_for_reference_file?(reference_file_id)
   end
 
   def get_import_session!(session_id, preload \\ []) do
-    Repo.get!(Paper.RISImportSessionModel, session_id)
+    Paper.RISImportSessionModel
+    |> Repo.get!(session_id)
     |> Repo.preload(preload)
   end
 
@@ -254,8 +245,7 @@ defmodule Systems.Paper.Public do
   def commit_import_session!(session) do
     # First, transition to importing phase with signal
     {:ok, %{paper_ris_import_session: updated_session}} =
-      session
-      |> Paper.RISImportSessionModel.advance_phase_with_signal(:importing)
+      Paper.RISImportSessionModel.advance_phase_with_signal(session, :importing)
 
     # Then enqueue async job for the actual import work
     %{"session_id" => updated_session.id}
@@ -271,16 +261,18 @@ defmodule Systems.Paper.Public do
   end
 
   def get_most_recent_import_session(paper_set_id) do
-    from(s in Paper.RISImportSessionModel,
-      where: s.paper_set_id == ^paper_set_id,
-      order_by: [desc: s.inserted_at],
-      limit: 1
+    Repo.one(
+      from(s in Paper.RISImportSessionModel,
+        where: s.paper_set_id == ^paper_set_id,
+        order_by: [desc: s.inserted_at],
+        limit: 1
+      )
     )
-    |> Repo.one()
   end
 
   def paper_ids_from_reference_file(%Paper.ReferenceFileModel{} = reference_file) do
-    paper_query(reference_file)
+    reference_file
+    |> paper_query()
     |> select([paper: p], p.id)
     |> Repo.all()
   end
@@ -327,27 +319,26 @@ defmodule Systems.Paper.Public do
   end
 
   def get_paper_set!(id, preload \\ []) when is_integer(id) do
-    from(Paper.SetModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(Paper.SetModel, preload: ^preload), id)
   end
 
   def get_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
-    paper_set_query(category, identifier)
+    category
+    |> paper_set_query(identifier)
     |> Repo.one()
   end
 
   def insert_paper_set!(category, identifier) when is_atom(category) and is_integer(identifier) do
-    prepare_paper_set(category, identifier)
+    category
+    |> prepare_paper_set(identifier)
     |> Repo.insert!()
   end
 
   def prepare_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
-    %Paper.SetModel{}
-    |> Paper.SetModel.changeset(%{category: category, identifier: identifier})
+    Paper.SetModel.changeset(%Paper.SetModel{}, %{category: category, identifier: identifier})
   end
 
-  def remove_paper_from_set!(paper_set_id, paper_id)
-      when is_integer(paper_set_id) and is_integer(paper_id) do
+  def remove_paper_from_set!(paper_set_id, paper_id) when is_integer(paper_set_id) and is_integer(paper_id) do
     Multi.new()
     |> Multi.delete_all(
       :delete_association,
@@ -375,19 +366,8 @@ defmodule Systems.Paper.Public do
     Creates a PaperModel without saving.
   """
   # credo:disable-for-next-line
-  def prepare_paper(
-        doi,
-        title,
-        subtitle,
-        year,
-        date,
-        abbreviated_journal,
-        authors,
-        abstract,
-        keywords
-      ) do
-    %Paper.Model{}
-    |> Paper.Model.changeset(%{
+  def prepare_paper(doi, title, subtitle, year, date, abbreviated_journal, authors, abstract, keywords) do
+    Paper.Model.changeset(%Paper.Model{}, %{
       doi: doi,
       title: title,
       subtitle: subtitle,
@@ -401,7 +381,8 @@ defmodule Systems.Paper.Public do
   end
 
   def get!(id, preloads \\ []) do
-    Repo.get!(Paper.Model, id)
+    Paper.Model
+    |> Repo.get!(id)
     |> Repo.preload(preloads)
   end
 
@@ -414,8 +395,7 @@ defmodule Systems.Paper.Public do
   # RIS
 
   def prepare_ris(raw) do
-    %Paper.RISModel{}
-    |> Paper.RISModel.changeset(%{raw: raw})
+    Paper.RISModel.changeset(%Paper.RISModel{}, %{raw: raw})
   end
 
   def finalize_ris(ris, %{paper: paper}) do

@@ -13,14 +13,16 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   # Helper function to show actions
   defp show_actions_js(card_id) do
-    JS.hide(to: "#card-#{card_id}-show-more")
+    [to: "#card-#{card_id}-show-more"]
+    |> JS.hide()
     |> JS.show(to: "#card-#{card_id}-hide-more")
     |> JS.show(to: ".card-#{card_id}-actions")
   end
 
   # Helper function to hide actions
   defp hide_actions_js(card_id) do
-    JS.show(to: "#card-#{card_id}-show-more")
+    [to: "#card-#{card_id}-show-more"]
+    |> JS.show()
     |> JS.hide(to: "#card-#{card_id}-hide-more")
     |> JS.hide(to: ".card-#{card_id}-actions")
   end

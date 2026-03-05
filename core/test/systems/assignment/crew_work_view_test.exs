@@ -1,9 +1,11 @@
 defmodule Systems.Assignment.CrewWorkViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
   setup do
@@ -20,7 +22,7 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       {_assignment, view, _html} = setup_and_mount_view(conn, user, user_state: %{})
 
       # Should render crew work view
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
     end
   end
 
@@ -29,7 +31,7 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       {_assignment, view, _html} = setup_and_mount_view(conn, user, user_state: %{})
 
       # Should render crew work view
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
 
       # Note: In a real scenario, assignment would be updated and Observatory would
       # trigger VM rebuild. In this isolated test, we verify the initial state renders correctly
@@ -51,10 +53,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       assignment: assignment,
       user: user
     } do
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -69,11 +71,11 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.CrewWorkView, session: session)
 
       # Send task_completed event directly
-      view |> render_click("task_completed")
+      render_click(view, "task_completed")
 
       # Event is published to parent, we can't easily assert on it in isolated test
       # but we verify no errors occurred
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
     end
   end
 
@@ -92,10 +94,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       assignment = Assignment.Factories.add_participant(assignment, user)
       assignment = Repo.preload(assignment, [:page_refs, :crew, :privacy_doc], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -120,10 +122,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -160,10 +162,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
 
       assignment = Repo.preload(assignment, [:page_refs, :crew], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -197,10 +199,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
 
       assignment = Repo.preload(assignment, [:page_refs, :crew], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -225,10 +227,10 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       assignment = Assignment.Factories.add_participant(assignment, user)
       assignment = Repo.preload(assignment, [:page_refs, :crew], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/work")
+      conn = Map.put(conn, :request_path, "/assignment/work")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: nil,
@@ -282,8 +284,8 @@ defmodule Systems.Assignment.CrewWorkViewTest do
 
       # Task view container is rendered but should not have tool_view inside
       # because build_work_items returns empty list when offline and not tester
-      assert view |> has_element?("[data-testid='crew-task-single-view']")
-      refute view |> has_element?("[id='tool_view']")
+      assert has_element?(view, "[data-testid='crew-task-single-view']")
+      refute has_element?(view, "[id='tool_view']")
     end
 
     test "shows work items when assignment is offline but user is tester", %{
@@ -304,14 +306,14 @@ defmodule Systems.Assignment.CrewWorkViewTest do
         setup_and_mount_view(conn, user, user_state: %{}, timezone: "Europe/Amsterdam")
 
       # Verify timezone is correctly passed through - check the rendered component has it
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
     end
 
     test "defaults to UTC when no timezone in context", %{conn: conn, user: user} do
       {_assignment, view, _html} = setup_and_mount_view(conn, user, user_state: %{})
 
       # Should default to UTC - verify view renders correctly
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
     end
   end
 
@@ -323,15 +325,15 @@ defmodule Systems.Assignment.CrewWorkViewTest do
         setup_and_mount_view(conn, user, user_state: %{}, panel_info: panel_info)
 
       # Verify panel_info is passed through - task view should be rendered with it
-      assert view |> has_element?("#crew_work_view")
-      assert view |> has_element?("[id^='crew_task_single_view_']")
+      assert has_element?(view, "#crew_work_view")
+      assert has_element?(view, "[id^='crew_task_single_view_']")
     end
 
     test "handles missing panel_info gracefully", %{conn: conn, user: user} do
       {_assignment, view, _html} = setup_and_mount_view(conn, user, user_state: %{})
 
       # Should handle nil panel_info gracefully - view should still render
-      assert view |> has_element?("#crew_work_view")
+      assert has_element?(view, "#crew_work_view")
     end
   end
 
@@ -360,20 +362,20 @@ defmodule Systems.Assignment.CrewWorkViewTest do
     assignment = Assignment.Factories.add_participant(assignment, user)
 
     assignment =
-      if status != :online do
+      if status == :online do
+        assignment
+      else
         assignment
         |> Ecto.Changeset.change(status: status)
         |> Repo.update!()
-      else
-        assignment
       end
 
     assignment = Repo.preload(assignment, [:page_refs, :crew], force: true)
 
-    conn = conn |> Map.put(:request_path, "/assignment/work")
+    conn = Map.put(conn, :request_path, "/assignment/work")
 
     live_context =
-      Frameworks.Concept.LiveContext.new(%{
+      LiveContext.new(%{
         assignment_id: assignment.id,
         current_user: user,
         user_state: user_state,

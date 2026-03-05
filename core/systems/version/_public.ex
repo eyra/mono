@@ -1,7 +1,8 @@
 defmodule Systems.Version.Public do
+  @moduledoc false
   alias Systems.Version
 
-  def prepare_first() do
+  def prepare_first do
     Version.Model.prepare_first()
   end
 

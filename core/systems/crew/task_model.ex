@@ -3,6 +3,7 @@ defmodule Systems.Crew.TaskModel do
   A task to be completed by a crew member.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Crew

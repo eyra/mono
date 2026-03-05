@@ -4,12 +4,12 @@ defmodule Systems.Advert.CardView do
   """
   use CoreWeb, :html
 
-  alias Frameworks.Pixel.Image
-  alias Frameworks.Pixel.Icon
-
-  import Frameworks.Pixel.Tag
-  alias Frameworks.Pixel.Card
   import Frameworks.Pixel.ClickableCard
+  import Frameworks.Pixel.Tag
+
+  alias Frameworks.Pixel.Card
+  alias Frameworks.Pixel.Icon
+  alias Frameworks.Pixel.Image
 
   attr(:card, :map, required: true)
   attr(:target, :any, required: true)

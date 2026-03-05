@@ -1,7 +1,9 @@
 defmodule Core.APNS.SignalHandlers do
+  @moduledoc false
   use Core, :auth
   use Frameworks.Signal.Handler
   use Bamboo.Phoenix, template: Systems.Email.EmailHTML
+
   import Core.APNS, only: [send_notification: 2]
 
   @impl true

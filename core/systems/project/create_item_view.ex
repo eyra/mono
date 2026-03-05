@@ -4,7 +4,6 @@ defmodule Systems.Project.CreateItemView do
   import CoreWeb.UI.Dialog
 
   alias Frameworks.Pixel.Selector
-
   alias Systems.Project
 
   # Initial Update
@@ -37,12 +36,10 @@ defmodule Systems.Project.CreateItemView do
   defp init_templates(socket) do
     selected_template = :empty
 
-    filter =
-      Systems.Project.ItemTemplates.values()
-      |> Enum.filter(&include?/1)
+    filter = Enum.filter(Systems.Project.ItemTemplates.values(), &include?/1)
 
     template_labels = Project.ItemTemplates.labels(selected_template, filter)
-    socket |> assign(template_labels: template_labels, selected_template: selected_template)
+    assign(socket, template_labels: template_labels, selected_template: selected_template)
   end
 
   defp include?(:questionnaire), do: feature_enabled?(:panl)
@@ -50,29 +47,21 @@ defmodule Systems.Project.CreateItemView do
   defp include?(_), do: true
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
         %{
           action: %{type: :send, event: "create_item", target: myself},
-          face: %{
-            type: :primary,
-            label: dgettext("eyra-project", "create_item_popup.create.button")
-          }
+          face: %{type: :primary, label: dgettext("eyra-project", "create_item_popup.create.button")}
         }
       ]
     )
   end
 
   @impl true
-  def handle_event(
-        "create_item",
-        _,
-        %{assigns: %{selected_template: selected_template}} = socket
-      ) do
+  def handle_event("create_item", _, %{assigns: %{selected_template: selected_template}} = socket) do
     create_item(socket, selected_template)
 
-    {:noreply, socket |> send_event(:parent, "saved")}
+    {:noreply, send_event(socket, :parent, "saved")}
   end
 
   @impl true
@@ -85,8 +74,7 @@ defmodule Systems.Project.CreateItemView do
 
     {
       :noreply,
-      socket
-      |> assign(selected_template: selected_template)
+      assign(socket, selected_template: selected_template)
     }
   end
 

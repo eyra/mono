@@ -1,14 +1,8 @@
 defmodule Systems.Test.EmbeddedLiveViewBuilder do
+  @moduledoc false
   alias Systems.Test
 
-  def view_model(
-        %Test.EmbeddedModel{
-          id: id,
-          title: title,
-          items: items
-        },
-        _assigns
-      ) do
+  def view_model(%Test.EmbeddedModel{id: id, title: title, items: items}, _assigns) do
     %{
       id: id,
       title: title,

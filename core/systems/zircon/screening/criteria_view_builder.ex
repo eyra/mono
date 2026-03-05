@@ -1,9 +1,9 @@
 defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
+  @moduledoc false
   import Systems.Zircon.Private, only: [list_research_dimensions: 0, list_research_frameworks: 0]
 
-  alias Frameworks.Builder
-
   alias Core.Authentication
+  alias Frameworks.Builder
   alias Systems.Annotation
   alias Systems.Ontology
 
@@ -35,14 +35,12 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
 
   defp get_library_map({dimension_list, framework_list}, entity) do
     Enum.reduce(dimension_list, %{}, fn dimension, acc ->
-      definition =
-        dimension
-        |> Annotation.Public.get_most_recent_definition(entity)
+      definition = Annotation.Public.get_most_recent_definition(dimension, entity)
 
       frameworks =
         dimension.phrase
         |> Ontology.Public.get_categories_for_member()
-        |> Enum.filter(fn framework -> framework_list |> Enum.member?(framework) end)
+        |> Enum.filter(fn framework -> Enum.member?(framework_list, framework) end)
         |> Enum.map(& &1.phrase)
 
       Map.put(acc, dimension, %{definition: definition, frameworks: frameworks})
@@ -50,8 +48,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
   end
 
   defp get_library_items(%{} = dimension_framework_map) do
-    dimension_framework_map
-    |> Enum.map(fn {dimension, %{definition: definition, frameworks: frameworks}} ->
+    Enum.map(dimension_framework_map, fn {dimension, %{definition: definition, frameworks: frameworks}} ->
       %Builder.LibraryItemModel{
         id: dimension.phrase,
         type: "Research Dimension",

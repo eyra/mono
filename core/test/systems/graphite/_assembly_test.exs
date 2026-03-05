@@ -2,14 +2,15 @@ defmodule Systems.Graphite.AssemblyTest do
   use Core.DataCase
 
   alias Core.Repo
-  alias Systems.Project
   alias Systems.Graphite.Assembly
   alias Systems.Graphite.Factories
+  alias Systems.Project
 
   describe "get_leaderboard_name/1" do
     test "without other leaderboard" do
       project_node =
-        Project.Factories.build_node(items: [])
+        [items: []]
+        |> Project.Factories.build_node()
         |> Repo.insert!()
 
       assert "Benchmark Leaderboard" = Assembly.get_leaderboard_name(nil, project_node)
@@ -32,9 +33,8 @@ defmodule Systems.Graphite.AssemblyTest do
       leaderboard_2_item = Project.Factories.build_item(leaderboard_2)
 
       project_node =
-        Project.Factories.build_node(
-          items: [challenge_1_item, challenge_2_item, leaderboard_1_item, leaderboard_2_item]
-        )
+        [items: [challenge_1_item, challenge_2_item, leaderboard_1_item, leaderboard_2_item]]
+        |> Project.Factories.build_node()
         |> Repo.insert!()
 
       assert "Benchmark Leaderboard (3)" = Assembly.get_leaderboard_name(nil, project_node)
@@ -57,7 +57,8 @@ defmodule Systems.Graphite.AssemblyTest do
       challenge_item = Project.Factories.build_item(challenge)
 
       %{root_id: project_root_id} =
-        Project.Factories.build_node(items: [challenge_item])
+        [items: [challenge_item]]
+        |> Project.Factories.build_node()
         |> Project.Factories.build_project()
         |> Repo.insert!()
 

@@ -1,13 +1,11 @@
 defmodule Systems.Account.UserFormDebug do
+  @moduledoc false
   use CoreWeb.LiveForm
 
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
   alias Systems.Account
   alias Systems.Account.UserProfileEditModel
-
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Selector
-
-  alias Systems.Account
 
   @impl true
   def update(%{id: id, user: user}, socket) do
@@ -68,8 +66,7 @@ defmodule Systems.Account.UserFormDebug do
         %{assigns: %{entity: entity}} = socket
       ) do
     attrs =
-      [:participant, :creator]
-      |> Enum.reduce(%{}, fn field, acc ->
+      Enum.reduce([:participant, :creator], %{}, fn field, acc ->
         Map.put(acc, field, field == active_item_id)
       end)
 
@@ -82,11 +79,7 @@ defmodule Systems.Account.UserFormDebug do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        %{"user_profile_edit" => attrs},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("save", %{"user_profile_edit" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
@@ -96,22 +89,17 @@ defmodule Systems.Account.UserFormDebug do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        _params,
-        socket
-      ) do
+  def handle_event("save", _params, socket) do
     {
       :noreply,
       socket
     }
   end
 
-  def save(socket, %Systems.Account.UserProfileEditModel{} = entity, type, attrs) do
+  def save(socket, %UserProfileEditModel{} = entity, type, attrs) do
     changeset = UserProfileEditModel.changeset(entity, type, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

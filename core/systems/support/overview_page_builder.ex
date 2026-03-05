@@ -1,5 +1,7 @@
 defmodule Systems.Support.OverviewPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
+
   alias Systems.Support
 
   require Systems.Support.TicketStatus
@@ -13,7 +15,7 @@ defmodule Systems.Support.OverviewPageBuilder do
     }
   end
 
-  defp create_tabs() do
+  defp create_tabs do
     Support.TicketStatus.values()
     |> Enum.map(&{&1, Support.Public.list_tickets(&1)})
     |> Enum.map(fn {status, tickets} ->

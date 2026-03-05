@@ -7,8 +7,7 @@ defmodule Systems.Org.UserView do
   def update(%{id: id, locale: _locale}, socket) do
     {
       :ok,
-      socket
-      |> assign(id: id)
+      assign(socket, id: id)
     }
   end
 

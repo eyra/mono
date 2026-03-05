@@ -1,7 +1,8 @@
 defmodule CoreWeb.ErrorHTML do
   use CoreWeb, :html
-  import CoreWeb.Layouts.Stripped.Html
+
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Menus
 
   defp body("403.html", status), do: dgettext("eyra-error", "403.body", status: status)

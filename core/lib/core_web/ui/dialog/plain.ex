@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Dialog.Plain do
+  @moduledoc false
   use CoreWeb, :live_component
   use Gettext, backend: CoreWeb.Gettext
 
@@ -7,11 +8,9 @@ defmodule CoreWeb.UI.Dialog.Plain do
   def update(%{type: type, title: title, text: text} = params, socket) do
     target = Map.get(params, :target, nil)
 
-    primary_button_label =
-      params |> Map.get(:primary_button_label, dgettext("eyra-ui", "ok.button"))
+    primary_button_label = Map.get(params, :primary_button_label, dgettext("eyra-ui", "ok.button"))
 
-    secondary_button_label =
-      params |> Map.get(:secondary_button_label, dgettext("eyra-ui", "cancel.button"))
+    secondary_button_label = Map.get(params, :secondary_button_label, dgettext("eyra-ui", "cancel.button"))
 
     {
       :ok,
@@ -49,12 +48,10 @@ defmodule CoreWeb.UI.Dialog.Plain do
       }
     ]
 
-    socket |> assign(buttons: buttons)
+    assign(socket, buttons: buttons)
   end
 
-  defp update_buttons(
-         %{assigns: %{type: :inform, primary_button_label: primary_button_label}} = socket
-       ) do
+  defp update_buttons(%{assigns: %{type: :inform, primary_button_label: primary_button_label}} = socket) do
     buttons = [
       %{
         action: %{type: :send, event: "inform_ok"},
@@ -62,7 +59,7 @@ defmodule CoreWeb.UI.Dialog.Plain do
       }
     ]
 
-    socket |> assign(buttons: buttons)
+    assign(socket, buttons: buttons)
   end
 
   def render(assigns) do

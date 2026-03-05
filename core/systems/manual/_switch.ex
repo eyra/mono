@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Systems.Manual
@@ -55,10 +56,7 @@ defmodule Systems.Manual.Switch do
   end
 
   defp update_pages(%Manual.Model{} = manual, from_pid) do
-    [
-      Manual.Builder.PublicPage
-    ]
-    |> Enum.each(&update_page(&1, manual, from_pid))
+    Enum.each([Manual.Builder.PublicPage], &update_page(&1, manual, from_pid))
   end
 
   defp update_page(page, model, from_pid) do

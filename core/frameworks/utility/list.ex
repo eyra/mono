@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.List do
+  @moduledoc false
   def append_if(list, term, true), do: append(list, term)
   def append_if(list, _element, _), do: list
   def append_if(list, nil), do: list

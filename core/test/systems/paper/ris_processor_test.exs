@@ -27,10 +27,7 @@ defmodule Systems.Paper.RISProcessorTest do
           sets: [paper_set]
         })
 
-      {:ok,
-       paper_set: paper_set,
-       existing_paper_doi: existing_paper_doi,
-       existing_paper_title: existing_paper_title}
+      {:ok, paper_set: paper_set, existing_paper_doi: existing_paper_doi, existing_paper_title: existing_paper_title}
     end
 
     test "processes new paper successfully", %{paper_set: paper_set} do

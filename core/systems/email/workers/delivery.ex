@@ -1,10 +1,10 @@
 defmodule Systems.Email.Delivery do
+  @moduledoc false
   use Oban.Worker, queue: :email_delivery
-  require Logger
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Email
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
@@ -19,13 +19,7 @@ defmodule Systems.Email.Delivery do
     end
   end
 
-  defp deliver(%{
-         "to" => to,
-         "from" => from,
-         "title" => title,
-         "byline" => byline,
-         "message" => message
-       }) do
+  defp deliver(%{"to" => to, "from" => from, "title" => title, "byline" => byline, "message" => message}) do
     deliver(%Email.Model{
       to: to,
       from: from,

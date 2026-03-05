@@ -2,7 +2,9 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
   use CoreWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
+
   alias Core.Factories
+  alias Systems.Paper.Public
   alias Systems.Zircon.Screening
 
   setup do
@@ -15,7 +17,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
   describe "Modal functionality for warnings, new papers, and existing papers" do
     test "clicking warning button opens modal with warnings view", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -44,7 +46,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",
@@ -62,7 +64,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
 
     test "clicking new papers button opens modal with new papers view", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -90,7 +92,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",
@@ -111,7 +113,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       tool: tool
     } do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -139,7 +141,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",
@@ -158,7 +160,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
     test "all three modals (warnings, new papers, duplicates) can be triggered from the same view",
          %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -195,7 +197,7 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",

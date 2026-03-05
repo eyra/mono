@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Core.Graphite.Gen.Submissions do
+  @shortdoc "Generate Graphite submissions"
   @moduledoc """
   Generate a number of submissions for a `leaderboard`.
 
@@ -15,7 +16,6 @@ defmodule Mix.Tasks.Core.Graphite.Gen.Submissions do
     aliases: [l: :leaderboard, n: :amount, p: :prefix]
   ]
 
-  @shortdoc "Generate Graphite submissions"
   def run(args) do
     Mix.Task.run("app.start")
 
@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Core.Graphite.Gen.Submissions do
     Graphite.Gen.create_submissions(leaderboard_id, amount, prefix)
   end
 
-  defp print_missing_arguments() do
+  defp print_missing_arguments do
     IO.puts(
       IO.ANSI.red() <>
         """

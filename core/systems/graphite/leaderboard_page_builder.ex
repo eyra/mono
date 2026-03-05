@@ -1,7 +1,7 @@
 defmodule Systems.Graphite.LeaderboardPageBuilder do
+  @moduledoc false
   use Core, :auth
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
 
   alias CoreWeb.UI.Timestamp
@@ -52,19 +52,13 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   end
 
   defp highlights(leaderboard) do
-    [
-      :submissions,
-      :generated_on,
-      :visibility
-    ]
-    |> Enum.map(&highlight(leaderboard, &1))
+    Enum.map([:submissions, :generated_on, :visibility], &highlight(leaderboard, &1))
   end
 
   defp highlight(%Graphite.LeaderboardModel{tool: %{submissions: submissions}}, :submissions) do
     %{
       title: dgettext("eyra-graphite", "highlight.submissions.title"),
-      text:
-        dgettext("eyra-graphite", "highlight.submissions.text", count: Enum.count(submissions))
+      text: dgettext("eyra-graphite", "highlight.submissions.text", count: Enum.count(submissions))
     }
   end
 
@@ -99,8 +93,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   end
 
   defp map_metrics_to_scores(
-         %Graphite.LeaderboardModel{metrics: metrics, scores: scores, visibility: visibility} =
-           leaderboard,
+         %Graphite.LeaderboardModel{metrics: metrics, scores: scores, visibility: visibility} = leaderboard,
          user,
          owner?
        ) do
@@ -139,9 +132,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
     }
   end
 
-  defp get_team(participants, %{
-         submission: %{auth_node: %{role_assignments: [%{principal_id: principal_id} | _]}}
-       }) do
+  defp get_team(participants, %{submission: %{auth_node: %{role_assignments: [%{principal_id: principal_id} | _]}}}) do
     Map.get(participants, principal_id, "Unknown")
   end
 
@@ -161,7 +152,8 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   defp anonymize(string, _), do: string
 
   defp participants(%Graphite.LeaderboardModel{} = leaderboard) do
-    Graphite.Public.get_participants(leaderboard)
+    leaderboard
+    |> Graphite.Public.get_participants()
     |> Enum.reduce(%{}, fn participant, acc ->
       Map.put(acc, participant.id, User.label(participant))
     end)

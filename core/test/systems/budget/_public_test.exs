@@ -1,12 +1,9 @@
 defmodule Systems.Budget.PublicTest do
   use Core.DataCase
 
-  alias Systems.{
-    Budget,
-    Bookkeeping
-  }
-
   alias Core.Factories
+  alias Systems.Bookkeeping
+  alias Systems.Budget
 
   setup do
     currency = Budget.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -352,14 +349,14 @@ defmodule Systems.Budget.PublicTest do
 
   test "move_wallet_balance/4 succeeded" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -385,14 +382,14 @@ defmodule Systems.Budget.PublicTest do
 
   test "move_wallet_balance/4 skipped: exceeding limit" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -418,7 +415,7 @@ defmodule Systems.Budget.PublicTest do
 
   test "move_wallet_balance/4 skipped: from account does not exist" do
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0

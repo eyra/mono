@@ -1,18 +1,10 @@
 defmodule Systems.Graphite.LeaderboardScoresView do
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: leaderboard
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: leaderboard}, socket) do
     {
       :ok,
       socket
@@ -25,9 +17,7 @@ defmodule Systems.Graphite.LeaderboardScoresView do
   end
 
   @impl true
-  def compose(:upload, %{
-        leaderboard: leaderboard
-      }) do
+  def compose(:upload, %{leaderboard: leaderboard}) do
     %{
       module: Graphite.LeaderboardScoresForm,
       params: %{

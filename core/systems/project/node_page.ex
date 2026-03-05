@@ -1,4 +1,5 @@
 defmodule Systems.Project.NodePage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   alias Systems.Project
@@ -17,14 +18,13 @@ defmodule Systems.Project.NodePage do
   def mount(%{"id" => id} = params, _session, socket) do
     initial_tab = Map.get(params, "tab")
     tabbar_id = "node_page/#{id}"
-    {:ok, socket |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)}
+    {:ok, assign(socket, initial_tab: initial_tab, tabbar_id: tabbar_id)}
   end
 
   def handle_event(:should_flash_message, %{status: status, message: message}, socket) do
     {
       :noreply,
-      socket
-      |> put_flash(status, message)
+      put_flash(socket, status, message)
     }
   end
 

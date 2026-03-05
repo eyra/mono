@@ -1,9 +1,10 @@
 defmodule Systems.Account.UserAuth do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
-  import Plug.Conn
-  import Phoenix.Controller
   use Gettext, backend: CoreWeb.Gettext
+
+  import Phoenix.Controller
+  import Plug.Conn
 
   alias Systems.Account
 
@@ -175,19 +176,17 @@ defmodule Systems.Account.UserAuth do
 
   defp onboarding_path(_), do: nil
 
-  defp signed_in_path(%{creator: false}),
-    do: path(:member_signed_in_page)
+  defp signed_in_path(%{creator: false}), do: path(:member_signed_in_page)
 
-  defp signed_in_path(%{creator: true}),
-    do: path(:creator_signed_in_page)
+  defp signed_in_path(%{creator: true}), do: path(:creator_signed_in_page)
 
-  defp signed_in_path(_user),
-    do: path(:member_signed_in_page)
+  defp signed_in_path(_user), do: path(:member_signed_in_page)
 
   defp path(key), do: auth_config(key)
 
   defp auth_config(key) when is_atom(key) do
-    Application.get_env(:core, Systems.Account.UserAuth, [])
+    :core
+    |> Application.get_env(Systems.Account.UserAuth, [])
     |> Keyword.get(key)
   end
 end

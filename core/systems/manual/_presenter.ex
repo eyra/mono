@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   alias Systems.Manual

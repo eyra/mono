@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Html do
+  @moduledoc false
   use CoreWeb, :html
 
   import Frameworks.Pixel.Table
@@ -19,8 +20,7 @@ defmodule Systems.Storage.Html do
     ]
 
     rows =
-      files
-      |> Enum.map(fn %{path: path, size: size, timestamp: timestamp} ->
+      Enum.map(files, fn %{path: path, size: size, timestamp: timestamp} ->
         [path, size, timestamp]
       end)
 

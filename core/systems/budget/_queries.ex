@@ -1,13 +1,14 @@
 defmodule Systems.Budget.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Budget
 
-  def currency_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def currency_query do
     from(Budget.CurrencyModel, as: :currency)
   end
 

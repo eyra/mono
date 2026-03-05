@@ -1,4 +1,5 @@
 defmodule Systems.Desktop.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Desktop do

@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.AlertBanner do
+  @moduledoc false
   use CoreWeb, :pixel
 
   @types ~w(success warning error info)a

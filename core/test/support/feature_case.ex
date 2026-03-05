@@ -30,8 +30,8 @@ defmodule CoreWeb.FeatureCase do
     quote do
       use Wallaby.Feature
 
-      import Wallaby.Query
       import CoreWeb.FeatureCase
+      import Wallaby.Query
 
       alias Core.Factories
       alias Core.Repo

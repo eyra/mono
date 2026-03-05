@@ -1,15 +1,13 @@
 defmodule Systems.Storage.AWS.Backend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
-  require Logger
   alias ExAws.S3
 
+  require Logger
+
   @impl true
-  def store(
-        %{"s3_bucket_name" => bucket} = _endpoint,
-        data,
-        %{"identifier" => identifier}
-      ) do
+  def store(%{"s3_bucket_name" => bucket} = _endpoint, data, %{"identifier" => identifier}) do
     case [data]
          |> S3.upload(bucket, filename(identifier))
          |> ExAws.request() do

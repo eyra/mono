@@ -1,12 +1,11 @@
 defmodule Systems.Consent.AgreementModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Consent
-  }
+  alias Systems.Consent
 
   schema "consent_agreements" do
     belongs_to(:auth_node, Core.Authorization.Node)
@@ -23,12 +22,10 @@ defmodule Systems.Consent.AgreementModel do
   def preload_graph(:auth_node), do: [auth_node: []]
 
   def changeset(agreement, attrs \\ %{}) do
-    agreement
-    |> cast(attrs, @fields)
+    cast(agreement, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 end

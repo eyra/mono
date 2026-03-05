@@ -4,8 +4,8 @@ defmodule Frameworks.Pixel.Card do
   """
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   attr(:bg_color, :string, default: "bg-grey6")
   attr(:size, :string, default: "h-full")

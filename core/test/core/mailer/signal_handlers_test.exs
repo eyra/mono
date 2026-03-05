@@ -1,6 +1,7 @@
 defmodule Core.Mailer.SignalHandlers.Test do
   use Core.DataCase, async: true
   use Bamboo.Test
+
   alias Core.Factories
   alias Core.Mailer.SignalHandlers
 

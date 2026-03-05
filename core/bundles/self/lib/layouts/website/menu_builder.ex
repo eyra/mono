@@ -1,4 +1,7 @@
 defmodule Self.Layouts.Website.MenuBuilder do
+  @moduledoc false
+  use CoreWeb.Menu.Builder, home: :self
+
   @home_flags [
     desktop_navbar: [:wide],
     mobile_menu: [:narrow]
@@ -17,8 +20,6 @@ defmodule Self.Layouts.Website.MenuBuilder do
     mobile_menu: [:profile, :signin],
     mobile_navbar: [:menu]
   ]
-
-  use CoreWeb.Menu.Builder, home: :self
 
   @impl true
   def include_map(_user), do: %{}

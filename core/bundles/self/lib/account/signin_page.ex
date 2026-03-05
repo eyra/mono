@@ -1,17 +1,18 @@
 defmodule Self.Account.SigninPage do
+  @moduledoc false
   use CoreWeb, :live_view
+
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+
+  alias Systems.Account.User
+  alias Systems.Account.UserForm
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  alias Systems.Account.User
-  alias Systems.Account.UserForm
 
   @impl true
   def mount(params, _session, socket) do

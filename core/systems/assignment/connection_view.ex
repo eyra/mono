@@ -2,22 +2,10 @@ defmodule Systems.Assignment.ConnectionView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Panel
-
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
-  def update(
-        %{
-          id: id,
-          type: type,
-          assignment: assignment,
-          connection: connection,
-          uri_origin: uri_origin
-        },
-        socket
-      ) do
+  def update(%{id: id, type: type, assignment: assignment, connection: connection, uri_origin: uri_origin}, socket) do
     {
       :ok,
       socket
@@ -66,15 +54,7 @@ defmodule Systems.Assignment.ConnectionView do
   end
 
   defp update_special_view(
-         %{
-           assigns: %{
-             id: id,
-             type: type,
-             assignment: assignment,
-             myself: myself,
-             uri_origin: uri_origin
-           }
-         } = socket
+         %{assigns: %{id: id, type: type, assignment: assignment, myself: myself, uri_origin: uri_origin}} = socket
        ) do
     special_view = %{
       id: "#{id}_connection_#{type}",
@@ -88,18 +68,14 @@ defmodule Systems.Assignment.ConnectionView do
   end
 
   @impl true
-  def handle_event(
-        "disconnect",
-        _payload,
-        %{assigns: %{special_view: %{id: id, module: module}}} = socket
-      ) do
+  def handle_event("disconnect", _payload, %{assigns: %{special_view: %{id: id, module: module}}} = socket) do
     send_update(module, id: id, event: :disconnect)
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("edit", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "edit")}
+    {:noreply, send_event(socket, :parent, "edit")}
   end
 
   @impl true

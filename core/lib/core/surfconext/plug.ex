@@ -1,4 +1,5 @@
 defmodule Core.SurfConext.PlugUtils do
+  @moduledoc false
   def config(otp_app) do
     Application.get_env(otp_app, Core.SurfConext)
   end
@@ -19,8 +20,8 @@ defmodule Core.SurfConext.AuthorizePlug do
 
   See this site for more info: https://sp.surfconext.nl/
   """
-  import Plug.Conn
   import Core.SurfConext.PlugUtils
+  import Plug.Conn
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
@@ -36,24 +37,23 @@ defmodule Core.SurfConext.AuthorizePlug do
 end
 
 defmodule Core.SurfConext.CallbackController do
-  require Logger
   use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
 
   import Core.SurfConext.PlugUtils
 
+  require Logger
+
   def authenticate(conn, params) do
     Logger.debug("SURFconext params: #{inspect(params)}")
     session_params = get_session(conn, :surfcontext)
 
-    config = config(:core) |> Keyword.put(:session_params, session_params)
+    config = :core |> config() |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
     Logger.debug("SURFconext user: #{inspect(surf_user)}")
 
-    Logger.debug(
-      "SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}"
-    )
+    Logger.debug("SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}")
 
     authenticate(config, conn, token, surf_user)
   end
@@ -81,7 +81,8 @@ defmodule Core.SurfConext.CallbackController do
           log_in_user(config, conn, surfconext_user.user, true)
 
         {:error, changeset} ->
-          Enum.reduce(changeset.errors, conn, fn {_, {message, _}}, conn ->
+          changeset.errors
+          |> Enum.reduce(conn, fn {_, {message, _}}, conn ->
             put_flash(conn, :error, message)
           end)
           |> redirect(to: ~p"/user/signin")

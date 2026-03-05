@@ -1,18 +1,16 @@
 defmodule Systems.Student.Director do
+  @moduledoc false
+  @behaviour Frameworks.Concept.PoolDirector
+
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Budget
+  alias Systems.Pool
+  alias Systems.Student
+
   defmodule Error do
     @moduledoc false
     defexception [:message]
   end
-
-  @behaviour Frameworks.Concept.PoolDirector
-
-  alias CoreWeb.UI.Timestamp
-
-  alias Systems.{
-    Student,
-    Pool,
-    Budget
-  }
 
   @impl true
   def overview_plugin(user) do
@@ -26,7 +24,7 @@ defmodule Systems.Student.Director do
   def submission_plugin(_user), do: nil
 
   @impl true
-  def inclusion_criteria() do
+  def inclusion_criteria do
     [:genders, :native_languages]
   end
 

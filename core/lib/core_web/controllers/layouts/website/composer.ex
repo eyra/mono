@@ -1,15 +1,10 @@
 defmodule CoreWeb.Layouts.Website.Composer do
+  @moduledoc false
   defmacro __using__(_) do
     quote do
-      def get_menus_config(),
-        do: {
-          :website_menu_builder,
-          [
-            :mobile_menu,
-            :mobile_navbar,
-            :desktop_navbar
-          ]
-        }
+      import CoreWeb.Layouts.Website.Html
+
+      def get_menus_config, do: {:website_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_navbar]}
 
       on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})
@@ -24,11 +19,9 @@ defmodule CoreWeb.Layouts.Website.Composer do
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
 
-      import CoreWeb.Layouts.Website.Html
-
       @impl true
       def handle_info({:handle_auto_save_done, _}, socket) do
-        {:noreply, socket |> update_menus()}
+        {:noreply, update_menus(socket)}
       end
     end
   end

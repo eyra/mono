@@ -5,6 +5,7 @@ defmodule Systems.Paper.ValidationOrderTest do
   """
 
   use Core.DataCase
+
   alias Systems.Paper.RISParserStream
 
   describe "validation order and messages" do
@@ -15,7 +16,7 @@ defmodule Systems.Paper.ValidationOrderTest do
 
       stream = Stream.map([png_content], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert [{:error, {error_map, _}}] = results
 
@@ -28,7 +29,7 @@ defmodule Systems.Paper.ValidationOrderTest do
       pdf_content = "%PDF-1.4\n" <> String.duplicate("Content", 100)
       stream = Stream.map([pdf_content], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert [{:error, {error_map, _}}] = results
 
@@ -42,7 +43,7 @@ defmodule Systems.Paper.ValidationOrderTest do
       invalid_utf8 = "HELLO" <> <<0xFF, 0xFE, 0xFD>> <> "Some text"
       stream = Stream.map([invalid_utf8], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert [{:error, {error_map, _}}] = results
 
@@ -56,7 +57,7 @@ defmodule Systems.Paper.ValidationOrderTest do
 
       stream = Stream.map([plain_text], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert [{:error, {error_map, _}}] = results
 
@@ -75,7 +76,7 @@ defmodule Systems.Paper.ValidationOrderTest do
 
       stream = Stream.map([valid_ris], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert [{:ok, {attrs, _}}] = results
       assert attrs.title == "Test Article"

@@ -6,18 +6,14 @@ defmodule Systems.Monitor.PublicTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Monitor
+  alias Systems.Monitor.EventModel
 
   describe "Monitor events" do
     test "log_performance_event/2 single log" do
       identifier = ["assignment=1", "topic=declined", "user=1"]
       Monitor.Public.log(identifier)
 
-      assert [
-               %Systems.Monitor.EventModel{
-                 identifier: ^identifier,
-                 value: 1
-               }
-             ] = from(Monitor.EventModel) |> Repo.all()
+      assert [%EventModel{identifier: ^identifier, value: 1}] = Repo.all(from(EventModel))
     end
 
     test "log_performance_event/2 multiple logs" do
@@ -26,16 +22,10 @@ defmodule Systems.Monitor.PublicTest do
       Monitor.Public.log(["assignment=1", "topic=declined", "user=1"])
 
       assert [
-               %Systems.Monitor.EventModel{
-                 identifier: ["assignment=1", "topic=declined", "user=1"]
-               },
-               %Systems.Monitor.EventModel{
-                 identifier: ["assignment=1", "topic=declined", "user=2"]
-               },
-               %Systems.Monitor.EventModel{
-                 identifier: ["assignment=1", "topic=declined", "user=1"]
-               }
-             ] = from(Monitor.EventModel) |> Repo.all()
+               %EventModel{identifier: ["assignment=1", "topic=declined", "user=1"]},
+               %EventModel{identifier: ["assignment=1", "topic=declined", "user=2"]},
+               %EventModel{identifier: ["assignment=1", "topic=declined", "user=1"]}
+             ] = Repo.all(from(EventModel))
     end
 
     test "clear/1 multiple logs" do
@@ -45,11 +35,7 @@ defmodule Systems.Monitor.PublicTest do
 
       Monitor.Public.clear(["assignment=1", "topic=declined", "user=1"])
 
-      assert [
-               %Systems.Monitor.EventModel{
-                 identifier: ["assignment=1", "topic=declined", "user=2"]
-               }
-             ] = from(Monitor.EventModel) |> Repo.all()
+      assert [%EventModel{identifier: ["assignment=1", "topic=declined", "user=2"]}] = Repo.all(from(EventModel))
     end
 
     test "reset/1 multiple logs" do
@@ -63,14 +49,11 @@ defmodule Systems.Monitor.PublicTest do
       assert Monitor.Public.sum(["storage=1", "topic=bytes"]) == 0
 
       assert [
-               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 10},
-               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 200},
-               %Systems.Monitor.EventModel{identifier: ["storage=1", "topic=bytes"], value: 3456},
-               %Systems.Monitor.EventModel{
-                 identifier: ["storage=1", "topic=bytes", "action=reset"],
-                 value: -3666
-               }
-             ] = from(Monitor.EventModel) |> Repo.all()
+               %EventModel{identifier: ["storage=1", "topic=bytes"], value: 10},
+               %EventModel{identifier: ["storage=1", "topic=bytes"], value: 200},
+               %EventModel{identifier: ["storage=1", "topic=bytes"], value: 3456},
+               %EventModel{identifier: ["storage=1", "topic=bytes", "action=reset"], value: -3666}
+             ] = Repo.all(from(EventModel))
     end
 
     test "reset/1 with values exceeding 32-bit integer range" do
@@ -88,15 +71,9 @@ defmodule Systems.Monitor.PublicTest do
       assert Monitor.Public.sum(["storage=2", "topic=bytes"]) == 0
 
       assert [
-               %Systems.Monitor.EventModel{
-                 identifier: ["storage=2", "topic=bytes"],
-                 value: ^large_value
-               },
-               %Systems.Monitor.EventModel{
-                 identifier: ["storage=2", "topic=bytes", "action=reset"],
-                 value: -4_776_318_715
-               }
-             ] = from(Monitor.EventModel) |> Repo.all()
+               %EventModel{identifier: ["storage=2", "topic=bytes"], value: ^large_value},
+               %EventModel{identifier: ["storage=2", "topic=bytes", "action=reset"], value: -4_776_318_715}
+             ] = Repo.all(from(EventModel))
     end
   end
 

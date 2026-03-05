@@ -13,8 +13,9 @@ defprotocol Frameworks.Concept.Leaf do
 end
 
 defmodule Frameworks.Concept.Leaf.Status do
+  @moduledoc false
   @type t :: %__MODULE__{value: :private | :concept | :online | :offline | :idle}
   defstruct [:value]
 
-  def values(), do: [:private, :concept, :online, :offline, :idle]
+  def values, do: [:private, :concept, :online, :offline, :idle]
 end

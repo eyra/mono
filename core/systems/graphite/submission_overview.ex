@@ -1,9 +1,9 @@
 defmodule Systems.Graphite.SubmissionOverview do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  alias Systems.{
-    Graphite
-  }
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Graphite
 
   @impl true
   def update(%{id: id, entity: %{id: tool_id}}, socket) do
@@ -51,8 +51,8 @@ defmodule Systems.Graphite.SubmissionOverview do
        }) do
     summary =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
       |> Macro.camelize()
 
     %{

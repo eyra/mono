@@ -1,18 +1,17 @@
 defmodule Systems.Advert.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
-  alias Systems.{
-    Advert,
-    Promotion,
-    Assignment,
-    Home
-  }
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Home
+  alias Systems.Promotion
 
   @impl true
   def intercept({:assignment, _} = signal, %{assignment: assignment} = message) do
     if advert = Advert.Public.get_by_assignment(assignment, Advert.Model.preload_graph(:down)) do
       handle(signal, message)
-      dispatch!({:advert, signal}, Map.merge(message, %{advert: advert}))
+      dispatch!({:advert, signal}, Map.put(message, :advert, advert))
     end
 
     :ok
@@ -21,7 +20,7 @@ defmodule Systems.Advert.Switch do
   @impl true
   def intercept({:promotion, _} = signal, %{promotion: promotion} = message) do
     if advert = Advert.Public.get_by_promotion(promotion, Advert.Model.preload_graph(:down)) do
-      dispatch!({:advert, signal}, Map.merge(message, %{advert: advert}))
+      dispatch!({:advert, signal}, Map.put(message, :advert, advert))
     end
 
     :ok
@@ -41,19 +40,11 @@ defmodule Systems.Advert.Switch do
 
   # HANDLE
 
-  defp handle(
-         {:advert, _},
-         %{
-           advert:
-             %Advert.Model{
-               id: id,
-               promotion_id: promotion_id,
-               promotion: promotion,
-               assignment_id: assignment_id
-             } = advert,
-           from_pid: from_pid
-         }
-       ) do
+  defp handle({:advert, _}, %{
+         advert:
+           %Advert.Model{id: id, promotion_id: promotion_id, promotion: promotion, assignment_id: assignment_id} = advert,
+         from_pid: from_pid
+       }) do
     update(Promotion.LandingPage, promotion_id, promotion, from_pid)
     update(Assignment.LandingPage, assignment_id, advert, from_pid)
     update(Advert.ContentPage, id, advert, from_pid)

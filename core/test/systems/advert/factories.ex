@@ -1,22 +1,13 @@
 defmodule Systems.Advert.Factories do
-  alias CoreWeb.UI.Timestamp
-
-  alias Systems.{
-    Assignment,
-    Crew
-  }
-
-  alias Core.Factories
+  @moduledoc false
   use Core, :auth
 
-  def create_advert(
-        researcher,
-        status,
-        subject_count \\ 1,
-        budget \\ nil,
-        schedule_start \\ nil,
-        schedule_end \\ nil
-      ) do
+  alias Core.Factories
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Assignment
+  alias Systems.Crew
+
+  def create_advert(researcher, status, subject_count \\ 1, budget \\ nil, schedule_start \\ nil, schedule_end \\ nil) do
     promotion = Factories.insert!(:promotion, %{director: :advert})
 
     pool = Factories.insert!(:pool, %{name: "test_pool", director: :citizen})
@@ -64,12 +55,11 @@ defmodule Systems.Advert.Factories do
   end
 
   def create_task(identifier, crew, status, expired, minutes_ago) when is_boolean(expired) do
-    user = Core.Factories.insert!(:member, %{creator: false})
+    user = Factories.insert!(:member, %{creator: false})
     create_task(identifier, user, crew, status, expired, minutes_ago)
   end
 
-  def create_task(identifier, user, crew, status, expired, minutes_ago)
-      when is_boolean(expired) do
+  def create_task(identifier, user, crew, status, expired, minutes_ago) when is_boolean(expired) do
     expire_at = naive_timestamp(-1)
 
     member = Crew.Factories.create_member(crew, user)
@@ -85,12 +75,12 @@ defmodule Systems.Advert.Factories do
   end
 
   def timestamp(shift_minutes) do
-    Timestamp.now()
-    |> Timestamp.shift_minutes(shift_minutes)
+    Timestamp.shift_minutes(Timestamp.now(), shift_minutes)
   end
 
   def naive_timestamp(shift_minutes) do
-    timestamp(shift_minutes)
+    shift_minutes
+    |> timestamp()
     |> DateTime.to_naive()
     |> NaiveDateTime.truncate(:second)
   end

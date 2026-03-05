@@ -2,7 +2,8 @@ defmodule Systems.Account.PeopleView do
   use CoreWeb.LiveForm
 
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.{SearchBar, UserListItem}
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.UserListItem
   alias Systems.Account
 
   @impl true
@@ -18,10 +19,7 @@ defmodule Systems.Account.PeopleView do
   @impl true
   def handle_event(
         "search_query",
-        %{
-          source: %Fabric.LiveComponent.RefModel{name: :search_bar},
-          query_string: raw_query_string
-        },
+        %{source: %Fabric.LiveComponent.RefModel{name: :search_bar}, query_string: raw_query_string},
         socket
       ) do
     query_string = String.trim(raw_query_string)
@@ -34,11 +32,7 @@ defmodule Systems.Account.PeopleView do
   end
 
   @impl true
-  def handle_event(
-        "add",
-        %{"item" => user_id},
-        %{assigns: %{users: users, people: people}} = socket
-      ) do
+  def handle_event("add", %{"item" => user_id}, %{assigns: %{users: users, people: people}} = socket) do
     user_id = String.to_integer(user_id)
 
     {:noreply,
@@ -62,11 +56,7 @@ defmodule Systems.Account.PeopleView do
   end
 
   @impl true
-  def handle_event(
-        "cancel_remove",
-        %{"item" => user_id},
-        %{assigns: %{confirm_removal_user_ids: ids}} = socket
-      ) do
+  def handle_event("cancel_remove", %{"item" => user_id}, %{assigns: %{confirm_removal_user_ids: ids}} = socket) do
     {:noreply,
      socket
      |> assign(:confirm_removal_user_ids, MapSet.delete(ids, String.to_integer(user_id)))
@@ -100,12 +90,9 @@ defmodule Systems.Account.PeopleView do
     )
   end
 
-  defp update_search_message(%{assigns: %{query_string: "", message: _}} = socket),
-    do: assign(socket, message: nil)
+  defp update_search_message(%{assigns: %{query_string: "", message: _}} = socket), do: assign(socket, message: nil)
 
-  defp update_search_message(
-         %{assigns: %{user_item: nil, people: people, query_string: qs}} = socket
-       )
+  defp update_search_message(%{assigns: %{user_item: nil, people: people, query_string: qs}} = socket)
        when qs not in [nil, ""] do
     message =
       if find_user_by_email(people, qs) do
@@ -117,18 +104,10 @@ defmodule Systems.Account.PeopleView do
     assign(socket, message: message)
   end
 
-  defp update_search_message(socket),
-    do: assign(socket, message: nil)
+  defp update_search_message(socket), do: assign(socket, message: nil)
 
   defp update_people_items(
-         %{
-           assigns: %{
-             people: people,
-             current_user: me,
-             confirm_removal_user_ids: ids,
-             myself: target
-           }
-         } = socket
+         %{assigns: %{people: people, current_user: me, confirm_removal_user_ids: ids, myself: target}} = socket
        ) do
     people_items =
       Enum.map(people, fn person ->
@@ -138,10 +117,7 @@ defmodule Systems.Account.PeopleView do
     assign(socket, people_items: people_items)
   end
 
-  defp remove_user(
-         user_id,
-         %{assigns: %{people: people, current_user: me, confirm_removal_user_ids: ids}} = socket
-       ) do
+  defp remove_user(user_id, %{assigns: %{people: people, current_user: me, confirm_removal_user_ids: ids}} = socket) do
     case Enum.find(people, &(&1.id == user_id)) do
       nil ->
         flash_error(socket)
@@ -172,15 +148,11 @@ defmodule Systems.Account.PeopleView do
     |> update_search_message()
   end
 
-  defp reset_search_fields(socket),
-    do: assign(socket, query_string: "", user_item: nil)
+  defp reset_search_fields(socket), do: assign(socket, query_string: "", user_item: nil)
 
-  defp find_user_by_email(users, email),
-    do: Enum.find(users, &(&1.email == String.trim(email)))
+  defp find_user_by_email(users, email), do: Enum.find(users, &(&1.email == String.trim(email)))
 
-  defp update_user(
-         %{assigns: %{query_string: qs, users: users, current_user: me, myself: target}} = socket
-       ) do
+  defp update_user(%{assigns: %{query_string: qs, users: users, current_user: me, myself: target}} = socket) do
     user = find_user_by_email(users, qs)
     user_item = build_user_display_data(:search, user, me, 1, target)
     assign(socket, user: user, user_item: user_item)

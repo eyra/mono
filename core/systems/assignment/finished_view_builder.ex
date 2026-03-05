@@ -1,12 +1,13 @@
 defmodule Systems.Assignment.FinishedViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
 
-  def view_model(
-        %{affiliate: affiliate} = assignment,
-        %{current_user: user, live_context: %{data: %{panel_info: panel_info}}}
-      ) do
+  def view_model(%{affiliate: affiliate} = assignment, %{
+        current_user: user,
+        live_context: %{data: %{panel_info: panel_info}}
+      }) do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
     redirect_url = get_redirect_url(panel_info)
@@ -28,11 +29,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   defp get_redirect_url(%{redirect_url: redirect_url}), do: redirect_url
   defp get_redirect_url(_), do: nil
 
-  defp build_title(true = _declined?),
-    do: dgettext("eyra-assignment", "finished_view.title.declined")
+  defp build_title(true = _declined?), do: dgettext("eyra-assignment", "finished_view.title.declined")
 
-  defp build_title(false = _declined?),
-    do: dgettext("eyra-assignment", "finished_view.title")
+  defp build_title(false = _declined?), do: dgettext("eyra-assignment", "finished_view.title")
 
   defp build_body(declined?, redirect_url, platform_name) do
     has_redirect? = not is_nil(redirect_url)
@@ -40,9 +39,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
     cond do
       declined? and has_redirect? and has_platform? ->
-        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform", platform: platform_name)
 
       declined? and has_redirect? ->
         dgettext("eyra-assignment", "finished_view.body.declined.redirect")
@@ -51,9 +48,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
         dgettext("eyra-assignment", "finished_view.body.declined")
 
       has_redirect? and has_platform? ->
-        dgettext("eyra-assignment", "finished_view.body.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.redirect.platform", platform: platform_name)
 
       has_redirect? ->
         dgettext("eyra-assignment", "finished_view.body.redirect")
@@ -63,8 +58,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     end
   end
 
-  defp build_illustration(false = _declined?, nil = _redirect_url),
-    do: "/images/illustrations/finished.svg"
+  defp build_illustration(false = _declined?, nil = _redirect_url), do: "/images/illustrations/finished.svg"
 
   defp build_illustration(_declined?, _redirect_url), do: nil
 

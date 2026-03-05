@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.HTTPClient do
+  @moduledoc false
   use HTTPoison.Base
 
   @impl HTTPoison.Base

@@ -1,4 +1,9 @@
 defmodule Self.Layouts.Workspace.MenuBuilder do
+  @moduledoc false
+  use CoreWeb.Menu.Builder, home: :self
+
+  alias Systems.Admin.Public
+
   @home_flags [
     desktop_menu: [:wide],
     tablet_menu: [:narrow],
@@ -32,12 +37,7 @@ defmodule Self.Layouts.Workspace.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :self
-
   @impl true
   def include_map(user),
-    do: %{
-      desktop: Systems.Admin.Public.admin?(user) or user.creator,
-      projects: Systems.Admin.Public.admin?(user) or user.creator
-    }
+    do: %{desktop: Public.admin?(user) or user.creator, projects: Public.admin?(user) or user.creator}
 end

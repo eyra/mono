@@ -1,25 +1,29 @@
 defmodule Systems.Crew.PublicTest do
   use Core, :auth
   use Core.DataCase
+
+  alias Core.Authorization.RoleAssignment
   alias CoreWeb.UI.Timestamp
   alias Frameworks.GreenLight
+  alias Systems.Crew.MemberModel
+  alias Systems.Crew.TaskModel
 
   describe "crews" do
     alias Systems.Crew
 
     test "list/0 returns all created crews with preloaded references" do
-      {:ok, crew1} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
-      {:ok, crew2} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
+      {:ok, crew1} = Core.Authorization.prepare_node() |> Crew.Public.prepare() |> Core.Repo.insert()
+      {:ok, crew2} = Core.Authorization.prepare_node() |> Crew.Public.prepare() |> Core.Repo.insert()
       list = Crew.Public.list()
-      assert list |> Enum.find(&(&1.id == crew1.id))
-      assert list |> Enum.find(&(&1.id == crew2.id))
+      assert Enum.any?(list, &(&1.id == crew1.id))
+      assert Enum.any?(list, &(&1.id == crew2.id))
 
       assert List.first(list).tasks == []
       assert List.first(list).members == []
     end
 
     test "get/1 returns crew with preloaded references" do
-      {:ok, crew} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
+      {:ok, crew} = Core.Authorization.prepare_node() |> Crew.Public.prepare() |> Core.Repo.insert()
       crew = Crew.Public.get!(crew.id)
 
       assert crew.tasks == []
@@ -28,8 +32,8 @@ defmodule Systems.Crew.PublicTest do
   end
 
   describe "members" do
-    alias Systems.Crew
     alias Core.Factories
+    alias Systems.Crew
 
     test "create_member/2 returns valid member" do
       user = Factories.insert!(:member)
@@ -76,7 +80,7 @@ defmodule Systems.Crew.PublicTest do
                completed_at: nil,
                auth_node: %Core.Authorization.Node{
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id,
                      role: :owner
                    }
@@ -97,7 +101,7 @@ defmodule Systems.Crew.PublicTest do
       assert Crew.Public.public_id(crew, user) == 1
 
       users = auth_module().users_with_role(crew, :participant)
-      assert users |> Enum.find(&(&1.id == user.id))
+      assert Enum.any?(users, &(&1.id == user.id))
     end
 
     test "apply_member/2 reuses expired member" do
@@ -126,10 +130,10 @@ defmodule Systems.Crew.PublicTest do
       list1 = Crew.Public.list_members(crew1)
       list2 = Crew.Public.list_members(crew2)
 
-      assert list1 |> Enum.find(&(&1.id == member1.id))
-      assert is_nil(list1 |> Enum.find(&(&1.id == member2.id)))
-      assert list2 |> Enum.find(&(&1.id == member2.id))
-      assert is_nil(list2 |> Enum.find(&(&1.id == member1.id)))
+      assert Enum.any?(list1, &(&1.id == member1.id))
+      assert is_nil(Enum.find(list1, &(&1.id == member2.id)))
+      assert Enum.any?(list2, &(&1.id == member2.id))
+      assert is_nil(Enum.find(list2, &(&1.id == member1.id)))
 
       assert Crew.Public.public_id(crew1, user) == 1
       assert Crew.Public.public_id(crew2, user) == 1
@@ -139,7 +143,7 @@ defmodule Systems.Crew.PublicTest do
       assert %{
                aliases: %{member: 0},
                from: %Ecto.Query.FromExpr{
-                 source: {"crew_members", Systems.Crew.MemberModel},
+                 source: {"crew_members", MemberModel},
                  as: :member
                }
              } = Map.from_struct(Crew.Queries.member_query())
@@ -151,7 +155,7 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: %{id: member_id}}} = Crew.Public.apply_member(crew, user, ["task"])
 
       assert [
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_id,
                  crew_id: ^crew_id,
                  user_id: ^user_id
@@ -167,17 +171,17 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: %{id: member_b_id}}} = Crew.Public.apply_member(crew, user_b, ["task_b"])
 
       assert [
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_a_id,
                  crew_id: ^crew_id,
                  user_id: ^user_a_id
                },
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_b_id,
                  crew_id: ^crew_id,
                  user_id: ^user_b_id
                }
-             ] = Repo.all(Crew.Queries.member_query()) |> Enum.sort_by(& &1.id)
+             ] = Crew.Queries.member_query() |> Repo.all() |> Enum.sort_by(& &1.id)
     end
 
     test "member_query/0 multi member multi crew" do
@@ -189,17 +193,17 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: %{id: member_b_id}}} = Crew.Public.apply_member(crew_b, user_b, ["task_b"])
 
       assert [
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_a_id,
                  crew_id: ^crew_a_id,
                  user_id: ^user_a_id
                },
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_b_id,
                  crew_id: ^crew_b_id,
                  user_id: ^user_b_id
                }
-             ] = Repo.all(Crew.Queries.member_query()) |> Enum.sort_by(& &1.id)
+             ] = Crew.Queries.member_query() |> Repo.all() |> Enum.sort_by(& &1.id)
     end
 
     test "member_query/2 multi member multi crew" do
@@ -211,7 +215,7 @@ defmodule Systems.Crew.PublicTest do
       {:ok, %{member: %{id: _member_b_id}}} = Crew.Public.apply_member(crew_b, user_b, ["task_b"])
 
       assert [
-               %Systems.Crew.MemberModel{
+               %MemberModel{
                  id: ^member_a_id,
                  crew_id: ^crew_a_id,
                  user_id: ^user_a_id
@@ -274,7 +278,7 @@ defmodule Systems.Crew.PublicTest do
       assert %{expired: true} = Crew.Public.get_member!(member.id)
       assert %{expired: true} = Crew.Public.get_task!(task.id)
 
-      assert not Crew.Public.member?(crew, user)
+      refute Crew.Public.member?(crew, user)
     end
 
     test "mark_expired/0 does expire member1" do
@@ -300,7 +304,7 @@ defmodule Systems.Crew.PublicTest do
       assert %{expired: false} = Crew.Public.get_member!(member2.id)
       assert %{expired: false} = Crew.Public.get_task!(task2.id)
 
-      assert not Crew.Public.member?(crew, user1)
+      refute Crew.Public.member?(crew, user1)
       assert Crew.Public.member?(crew, user2)
     end
 
@@ -319,7 +323,7 @@ defmodule Systems.Crew.PublicTest do
       assert %{expired: true} = Crew.Public.get_member!(member.id)
       assert %{expired: true} = Crew.Public.get_task!(task.id)
 
-      assert not Crew.Public.member?(crew, user)
+      refute Crew.Public.member?(crew, user)
       assert [] = Crew.Public.list_members(crew)
     end
 
@@ -343,8 +347,8 @@ defmodule Systems.Crew.PublicTest do
   end
 
   describe "tasks" do
-    alias Systems.Crew
     alias Core.Factories
+    alias Systems.Crew
 
     test "create_task/2 returns valid task" do
       %{id: user_id} = user = Factories.insert!(:member)
@@ -357,7 +361,7 @@ defmodule Systems.Crew.PublicTest do
                crew_id: ^crew_id,
                auth_node: %Core.Authorization.Node{
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id,
                      role: :owner
                    }
@@ -381,7 +385,7 @@ defmodule Systems.Crew.PublicTest do
       list = Crew.Public.list_tasks(crew)
 
       assert [
-               %Systems.Crew.TaskModel{
+               %TaskModel{
                  identifier: ["task1"],
                  status: :pending,
                  started_at: nil,
@@ -414,9 +418,9 @@ defmodule Systems.Crew.PublicTest do
       list = Crew.Public.list_tasks(crew)
 
       assert [
-               %Systems.Crew.TaskModel{identifier: ["task3"]},
-               %Systems.Crew.TaskModel{identifier: ["task2"]},
-               %Systems.Crew.TaskModel{identifier: ["task1"]}
+               %TaskModel{identifier: ["task3"]},
+               %TaskModel{identifier: ["task2"]},
+               %TaskModel{identifier: ["task1"]}
              ] = list
     end
 
@@ -434,13 +438,13 @@ defmodule Systems.Crew.PublicTest do
       {:ok, _} = Crew.Public.create_task(crew, [user2], ["task3"], nil)
 
       assert [
-               %Systems.Crew.TaskModel{identifier: ["task2"]},
-               %Systems.Crew.TaskModel{identifier: ["task1"]}
+               %TaskModel{identifier: ["task2"]},
+               %TaskModel{identifier: ["task1"]}
              ] = Crew.Public.list_tasks_for_user(crew, member1)
 
       assert [
-               %Systems.Crew.TaskModel{identifier: ["task3"]},
-               %Systems.Crew.TaskModel{identifier: ["task2"]}
+               %TaskModel{identifier: ["task3"]},
+               %TaskModel{identifier: ["task2"]}
              ] = Crew.Public.list_tasks_for_user(crew, member2)
     end
 
@@ -547,11 +551,11 @@ defmodule Systems.Crew.PublicTest do
                auth_node: %Core.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id1,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    }
@@ -578,11 +582,11 @@ defmodule Systems.Crew.PublicTest do
                auth_node: %Core.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id1,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    }
@@ -597,11 +601,11 @@ defmodule Systems.Crew.PublicTest do
                auth_node: %Core.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %RoleAssignment{
                      principal_id: ^user_id3,
                      role: :owner
                    }
@@ -741,7 +745,7 @@ defmodule Systems.Crew.PublicTest do
                 }
               }} = Crew.Public.accept_task(task)
 
-      assert accepted_at != nil
+      assert accepted_at
       assert Crew.Public.count_tasks(crew, [:accepted]) == 1
     end
 
@@ -776,7 +780,7 @@ defmodule Systems.Crew.PublicTest do
                 }
               }} = Crew.Public.reject_task(task, rejection)
 
-      assert rejected_at != nil
+      assert rejected_at
       assert Crew.Public.count_tasks(crew, [:rejected]) == 1
     end
 

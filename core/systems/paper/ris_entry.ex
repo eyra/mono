@@ -184,8 +184,7 @@ defmodule Systems.Paper.RISEntry do
   end
 
   defp atomize_keys(map) do
-    map
-    |> Enum.reduce(%{}, fn
+    Enum.reduce(map, %{}, fn
       {k, v}, acc when is_binary(k) ->
         # Convert string keys to atoms, skip unknown keys
         try do

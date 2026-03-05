@@ -1,4 +1,5 @@
 defmodule Core.Enums.Base do
+  @moduledoc false
   @callback values() :: list(atom())
 
   defmacro __using__({name, values}) do
@@ -14,8 +15,7 @@ defmodule Core.Enums.Base do
       def values(filter) when is_list(filter) do
         filter = convert_to_atoms(filter)
 
-        unquote(values)
-        |> Enum.filter(&Enum.member?(filter, &1))
+        Enum.filter(unquote(values), &Enum.member?(filter, &1))
       end
 
       def contains(atom) when is_atom(atom) do
@@ -43,7 +43,8 @@ defmodule Core.Enums.Base do
       def labels(active_values, filter) when is_list(active_values) do
         active_values = convert_to_atoms(active_values)
 
-        values(filter)
+        filter
+        |> values()
         |> Enum.map(&convert_to_label(&1, active_values))
       end
 
@@ -64,9 +65,7 @@ defmodule Core.Enums.Base do
           |> Atom.to_string()
           |> translate()
 
-        active =
-          active_values
-          |> Enum.member?(value)
+        active = Enum.member?(active_values, value)
 
         %{id: value, value: value_as_string, active: active}
       end

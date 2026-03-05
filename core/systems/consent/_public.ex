@@ -1,18 +1,20 @@
 defmodule Systems.Consent.Public do
+  @moduledoc false
   use Core, :public
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Query
   import Systems.Consent.Queries
 
-  alias Ecto.Multi
   alias Core.Repo
+  alias Ecto.Multi
   alias Frameworks.Signal
-
   alias Systems.Account
   alias Systems.Consent
 
   def create_agreement(auth_node) do
-    prepare_agreement(auth_node)
+    auth_node
+    |> prepare_agreement()
     |> Repo.insert()
   end
 
@@ -49,22 +51,24 @@ defmodule Systems.Consent.Public do
   end
 
   def create_revision(agreement, source) do
-    prepare_revision(agreement, source)
+    agreement
+    |> prepare_revision(source)
     |> Repo.insert()
   end
 
   def prepare_revision(nil) do
-    dgettext("eyra-consent", "default.consent.text")
+    "eyra-consent"
+    |> dgettext("default.consent.text")
     |> prepare_revision()
   end
 
   def prepare_revision(source) when is_binary(source) do
-    %Consent.RevisionModel{}
-    |> Consent.RevisionModel.changeset(%{source: source})
+    Consent.RevisionModel.changeset(%Consent.RevisionModel{}, %{source: source})
   end
 
   def prepare_revision(agreement, source) do
-    prepare_revision(source)
+    source
+    |> prepare_revision()
     |> Ecto.Changeset.put_assoc(:agreement, agreement)
   end
 
@@ -83,11 +87,11 @@ defmodule Systems.Consent.Public do
   end
 
   def get_agreement!(id, preload \\ []) do
-    Repo.get!(Consent.AgreementModel, id) |> Repo.preload(preload)
+    Consent.AgreementModel |> Repo.get!(id) |> Repo.preload(preload)
   end
 
   def get_revision!(id, preload \\ []) do
-    Repo.get!(Consent.RevisionModel, id) |> Repo.preload(preload)
+    Consent.RevisionModel |> Repo.get!(id) |> Repo.preload(preload)
   end
 
   def has_signature(context, user_ref) do
@@ -120,16 +124,12 @@ defmodule Systems.Consent.Public do
   end
 
   def list_agreements(preload \\ []) do
-    from(a in Consent.AgreementModel,
-      order_by: {:desc, :inserted_at},
-      preload: ^preload,
-      limit: 1
-    )
-    |> Repo.all()
+    Repo.all(from(a in Consent.AgreementModel, order_by: {:desc, :inserted_at}, preload: ^preload, limit: 1))
   end
 
   def latest_unlocked_revision(agreement, preload \\ []) do
-    query_unlocked_revisions(agreement, preload)
+    agreement
+    |> query_unlocked_revisions(preload)
     |> Repo.all()
     |> List.first()
   end
@@ -146,7 +146,8 @@ defmodule Systems.Consent.Public do
   end
 
   def latest_revision(agreement, preload \\ []) do
-    query_revisions(agreement, preload)
+    agreement
+    |> query_revisions(preload)
     |> Repo.all()
     |> List.first()
   end
@@ -165,9 +166,7 @@ defmodule Systems.Consent.Public do
     )
   end
 
-  def update_revision(
-        %Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset
-      ) do
+  def update_revision(%Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset) do
     Multi.new()
     |> Multi.run(:validate, fn _, _ ->
       %{updated_at: stored_updated_at, signatures: signatures} =
@@ -190,7 +189,8 @@ defmodule Systems.Consent.Public do
   end
 
   def list_signatures(%Consent.AgreementModel{} = consent_agreement) do
-    signature_query(consent_agreement)
+    consent_agreement
+    |> signature_query()
     |> Repo.all()
   end
 end
@@ -198,29 +198,26 @@ end
 defimpl Core.Persister, for: Systems.Consent.RevisionModel do
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Systems.Consent.Public
+
   def save(_revision, changeset) do
-    case Systems.Consent.Public.update_revision(changeset) do
+    case Public.update_revision(changeset) do
       {:ok, %{consent_revision: revision}} ->
         {:ok, revision}
 
       {:error, _, _, _} = error ->
-        {:error, changeset |> handle_error(error)}
+        {:error, handle_error(changeset, error)}
     end
   end
 
   defp handle_error(changeset, {:error, :validate, :locked, _}) do
-    Systems.Consent.Public.bump_revision_if_needed!(changeset.data.agreement_id)
+    Public.bump_revision_if_needed!(changeset.data.agreement_id)
 
-    changeset
-    |> Ecto.Changeset.add_error(:locked, dgettext("eyra-consent", "locked.error.message"))
+    Ecto.Changeset.add_error(changeset, :locked, dgettext("eyra-consent", "locked.error.message"))
   end
 
   defp handle_error(changeset, {:error, :validate, :out_of_sync, _}) do
-    changeset
-    |> Ecto.Changeset.add_error(
-      :out_of_sync,
-      dgettext("eyra-consent", "out_of_sync.error.message")
-    )
+    Ecto.Changeset.add_error(changeset, :out_of_sync, dgettext("eyra-consent", "out_of_sync.error.message"))
   end
 
   defp handle_error(changeset, _), do: changeset

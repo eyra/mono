@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -16,13 +17,11 @@ defmodule Systems.Userflow.Model do
   @required_fields @fields
 
   def changeset(userflow, attrs \\ %{}) do
-    userflow
-    |> cast(attrs, @fields)
+    cast(userflow, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def finished?(%__MODULE__{steps: steps}, user_id) when is_list(steps) do

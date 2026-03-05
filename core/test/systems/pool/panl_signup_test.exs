@@ -1,8 +1,8 @@
 defmodule Systems.Pool.PanlSignupTest do
   use CoreWeb.ConnCase, async: true
 
-  alias Systems.Pool
   alias Systems.Account
+  alias Systems.Pool
 
   describe "PANL pool signup integration" do
     setup do
@@ -18,7 +18,7 @@ defmodule Systems.Pool.PanlSignupTest do
           email: email,
           password: password,
           creator: creator,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       {user, password}
@@ -92,7 +92,7 @@ defmodule Systems.Pool.PanlSignupTest do
 
     test "PANL pool operations", %{panl_pool: panl_pool} do
       pool = Pool.Public.get_panl()
-      assert pool != nil
+      assert pool
       assert pool.name == "Panl"
 
       user = Core.Factories.insert!(:member)

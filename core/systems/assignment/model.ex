@@ -4,24 +4,24 @@ defmodule Systems.Assignment.Model do
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Concept
+  import Ecto.Changeset
 
+  alias Frameworks.Concept
+  alias Frameworks.Concept.Leaf.Status
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Budget
-  alias Systems.Content
   alias Systems.Consent
+  alias Systems.Content
   alias Systems.Project
   alias Systems.Workflow
 
   schema "assignments" do
     field(:special, Ecto.Atom)
-    field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
+    field(:status, Ecto.Enum, values: Status.values(), default: :concept)
     # external_panel is deprecated, use affiliate association instead
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
 
@@ -66,7 +66,7 @@ defmodule Systems.Assignment.Model do
       [dngettext("eyra-assignment", "1 participant", "* participants", subject_count)]
     end
 
-    def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
+    def status(%{status: status}), do: %Status{value: status}
   end
 
   def auth_tree(%Assignment.Model{auth_node: auth_node}), do: auth_node
@@ -74,13 +74,11 @@ defmodule Systems.Assignment.Model do
   def changeset(assignment, nil), do: changeset(assignment, %{})
 
   def changeset(assignment, %Budget.Model{id: budget_id}) do
-    assignment
-    |> cast(%{budget_id: budget_id}, [:budget_id])
+    cast(assignment, %{budget_id: budget_id}, [:budget_id])
   end
 
   def changeset(assignment, attrs) do
-    assignment
-    |> cast(attrs, @fields)
+    cast(assignment, attrs, @fields)
   end
 
   def language(%Assignment.Model{info: info}), do: language(info)

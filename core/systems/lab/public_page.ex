@@ -20,28 +20,20 @@ defmodule Systems.Lab.PublicPage do
   end
 
   @impl true
-  def handle_event(
-        "reserve-time-slot",
-        %{"time-slot-id" => time_slot_id},
-        %{assigns: %{current_user: user}} = socket
-      ) do
+  def handle_event("reserve-time-slot", %{"time-slot-id" => time_slot_id}, %{assigns: %{current_user: user}} = socket) do
     # FIXME: Add logic here to handle case when the time slot is in the past (show error message to the user)
     {:ok, reservation} =
       time_slot_id
       |> String.to_integer()
       |> Lab.Public.reserve_time_slot(user)
 
-    {:noreply, socket |> assign(:reservation, reservation)}
+    {:noreply, assign(socket, :reservation, reservation)}
   end
 
   @impl true
-  def handle_event(
-        "cancel-reservation",
-        _params,
-        %{assigns: %{current_user: user, tool: tool}} = socket
-      ) do
+  def handle_event("cancel-reservation", _params, %{assigns: %{current_user: user, tool: tool}} = socket) do
     Lab.Public.cancel_reservation(tool, user)
-    {:noreply, socket |> assign(:reservation, nil)}
+    {:noreply, assign(socket, :reservation, nil)}
   end
 
   def handle_info({:signal_test, _}, socket) do

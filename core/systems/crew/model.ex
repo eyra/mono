@@ -3,6 +3,7 @@ defmodule Systems.Crew.Model do
   The schema for a group of participants with (assigned) tasks
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Crew
@@ -25,7 +26,6 @@ defmodule Systems.Crew.Model do
 
   @doc false
   def changeset(crew, attrs \\ %{}) do
-    crew
-    |> cast(attrs, @fields)
+    cast(crew, attrs, @fields)
   end
 end

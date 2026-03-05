@@ -1,4 +1,5 @@
 defmodule Systems.Feldspar.S3 do
+  @moduledoc false
   alias ExAws.S3
 
   def store(zip_file, _original_filename) do
@@ -17,12 +18,14 @@ defmodule Systems.Feldspar.S3 do
     bucket = Access.fetch!(s3_settings(), :bucket)
 
     objects =
-      S3.list_objects_v2(bucket, prefix: object_key(id))
+      bucket
+      |> S3.list_objects_v2(prefix: object_key(id))
       |> backend().request!()
       |> get_in([:body, :contents])
       |> Enum.map(&Access.fetch!(&1, :key))
 
-    S3.delete_all_objects(bucket, objects)
+    bucket
+    |> S3.delete_all_objects(objects)
     |> backend().request!()
 
     :ok
@@ -46,8 +49,9 @@ defmodule Systems.Feldspar.S3 do
     if regular_file?(info) do
       {:ok, {_, data}} = :zip.zip_get(name, zip_handle)
 
-      S3.put_object(
-        Access.fetch!(settings, :bucket),
+      settings
+      |> Access.fetch!(:bucket)
+      |> S3.put_object(
         "#{object_key(target)}/#{name}",
         data,
         content_type: content_type(name)

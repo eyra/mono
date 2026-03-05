@@ -1,4 +1,5 @@
 defmodule Systems.Desktop.Page do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   alias Systems.Desktop
@@ -12,8 +13,7 @@ defmodule Systems.Desktop.Page do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
-      |> compose_child(:desktop_view)
+      compose_child(socket, :desktop_view)
     }
   end
 

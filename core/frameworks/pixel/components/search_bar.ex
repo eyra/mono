@@ -3,50 +3,26 @@ defmodule Frameworks.Pixel.SearchBar do
   use CoreWeb, :live_component
 
   @impl true
-  def update(
-        %{
-          id: id,
-          query_string: query_string,
-          placeholder: placeholder,
-          debounce: debounce
-        },
-        socket
-      ) do
+  def update(%{id: id, query_string: query_string, placeholder: placeholder, debounce: debounce}, socket) do
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        query_string: query_string,
-        placeholder: placeholder,
-        debounce: debounce
-      )
+      assign(socket, id: id, query_string: query_string, placeholder: placeholder, debounce: debounce)
     }
   end
 
   @impl true
-  def handle_event(
-        "change",
-        %{"query" => query},
-        socket
-      ) do
+  def handle_event("change", %{"query" => query}, socket) do
     {
       :noreply,
-      socket
-      |> send_to_parent(query)
+      send_to_parent(socket, query)
     }
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"query" => query},
-        socket
-      ) do
+  def handle_event("submit", %{"query" => query}, socket) do
     {
       :noreply,
-      socket
-      |> send_to_parent(query)
+      send_to_parent(socket, query)
     }
   end
 
@@ -65,12 +41,11 @@ defmodule Frameworks.Pixel.SearchBar do
   end
 
   defp send_to_parent(%{assigns: %{fabric: %{}}} = socket, %{} = message) do
-    socket
-    |> send_event(:parent, "search_query", message)
+    send_event(socket, :parent, "search_query", message)
   end
 
   defp send_to_parent(socket, %{} = message) do
-    socket |> publish_event({:search_query, message})
+    publish_event(socket, {:search_query, message})
   end
 
   @impl true

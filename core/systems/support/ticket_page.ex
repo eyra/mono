@@ -1,4 +1,5 @@
 defmodule Systems.Support.TicketPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import CoreWeb.UI.Member
@@ -16,8 +17,7 @@ defmodule Systems.Support.TicketPage do
   def mount(%{"id" => id}, _session, socket) do
     {
       :ok,
-      socket
-      |> assign(id: id)
+      assign(socket, id: id)
     }
   end
 

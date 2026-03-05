@@ -1,5 +1,10 @@
 defmodule Next.Layouts.Workspace.MenuBuilder do
+  @moduledoc false
+  use CoreWeb.Menu.Builder, home: :next
+
   import Core.FeatureFlags
+
+  alias Systems.Admin.Public
 
   @home_flags [
     desktop_menu: [:wide],
@@ -35,13 +40,11 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :next
-
   @impl true
   def include_map(user),
     do: %{
-      desktop: Systems.Admin.Public.admin?(user) or user.creator,
-      projects: Systems.Admin.Public.admin?(user) or user.creator,
-      onyx: Systems.Admin.Public.admin?(user) and feature_enabled?(:onyx)
+      desktop: Public.admin?(user) or user.creator,
+      projects: Public.admin?(user) or user.creator,
+      onyx: Public.admin?(user) and feature_enabled?(:onyx)
     }
 end

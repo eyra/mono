@@ -1,4 +1,5 @@
 defmodule Systems.Admin.Public do
+  @moduledoc false
   use Core, :public
 
   def compile(patterns) do

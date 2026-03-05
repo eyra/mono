@@ -1,16 +1,16 @@
 defmodule Systems.Pool.ParticipantItemBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
+
+  alias CoreWeb.UI.Timestamp
 
   def view_model(
         %{
           id: user_id,
           email: email,
           inserted_at: inserted_at,
-          profile: %{
-            fullname: fullname,
-            photo_url: photo_url
-          },
+          profile: %{fullname: fullname, photo_url: photo_url},
           features: features
         },
         _socket
@@ -23,8 +23,8 @@ defmodule Systems.Pool.ParticipantItemBuilder do
 
     quick_summery =
       inserted_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
 
     %{
       path: ~p"/pool/participant/#{user_id}",

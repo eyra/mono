@@ -1,4 +1,5 @@
 defmodule CoreWeb.ComponentTestLive do
+  @moduledoc false
   use CoreWeb, :live_view
 
   @impl true

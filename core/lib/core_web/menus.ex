@@ -1,4 +1,5 @@
 defmodule CoreWeb.Menus do
+  @moduledoc false
   def build_menus({menu_builder, menus, active_menu_item}, user, uri),
     do: build_menus(menu_builder, menus, active_menu_item, user, uri)
 

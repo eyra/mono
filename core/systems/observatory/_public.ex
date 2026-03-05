@@ -1,5 +1,7 @@
 defmodule Systems.Observatory.Public do
+  @moduledoc false
   use Core, :public
+
   alias CoreWeb.Endpoint
   alias Systems.Observatory.UpdateCollector
 
@@ -48,12 +50,7 @@ defmodule Systems.Observatory.Public do
     raise "No presenter available for #{page}"
   end
 
-  def get_view_model(
-        %{assigns: assigns} = _socket,
-        page,
-        model,
-        presenter
-      ) do
+  def get_view_model(%{assigns: assigns} = _socket, page, model, presenter) do
     presenter.view_model(page, model, assigns)
   end
 

@@ -1,4 +1,5 @@
 defmodule Systems.Advert.ExpirationWorker do
+  @moduledoc false
   use Oban.Worker
 
   require Logger

@@ -1,9 +1,9 @@
 defmodule Systems.Paper.RISLineTrackingTest do
   use Core.DataCase, async: true
 
+  alias Systems.Paper.RISEntry
   alias Systems.Paper.RISParser
   alias Systems.Paper.RISProcessor
-  alias Systems.Paper.RISEntry
 
   describe "line number tracking in parse errors" do
     test "tracks line number for invalid RIS line format" do
@@ -109,8 +109,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
       error_data = %{
         type: :parse_error,
         line_number: 5,
-        message:
-          "This file contains invalid formatting. Please upload a RIS bibliography file instead."
+        message: "This file contains invalid formatting. Please upload a RIS bibliography file instead."
       }
 
       entry = RISEntry.error(error_data)
@@ -205,8 +204,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
     test "processes mixed valid and error references with line numbers", %{paper_set: paper_set} do
       parsed_refs = [
         {:ok, {%{type: "JOUR", title: "Valid Paper", doi: "10.1234/valid"}, "raw1"}},
-        {:error,
-         {%{type: :validation_error, line_number: 5, message: "Missing TY field"}, "raw2"}},
+        {:error, {%{type: :validation_error, line_number: 5, message: "Missing TY field"}, "raw2"}},
         {:error, {%{type: :parse_error, line_number: 10, message: "Invalid line format"}, "raw3"}}
       ]
 

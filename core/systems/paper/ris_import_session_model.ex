@@ -1,4 +1,5 @@
 defmodule Systems.Paper.RISImportSessionModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -44,8 +45,7 @@ defmodule Systems.Paper.RISImportSessionModel do
   end
 
   def create_changeset(attrs) do
-    %__MODULE__{}
-    |> changeset(attrs)
+    changeset(%__MODULE__{}, attrs)
   end
 
   def update_changeset(session, attrs) do
@@ -64,17 +64,17 @@ defmodule Systems.Paper.RISImportSessionModel do
   end
 
   def mark_succeeded(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :succeeded})
+    attrs = Map.put(attrs, :status, :succeeded)
     update_changeset(session, attrs)
   end
 
   def mark_failed(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :failed})
+    attrs = Map.put(attrs, :status, :failed)
     update_changeset(session, attrs)
   end
 
   def mark_aborted(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :aborted})
+    attrs = Map.put(attrs, :status, :aborted)
     update_changeset(session, attrs)
   end
 
@@ -95,7 +95,8 @@ defmodule Systems.Paper.RISImportSessionModel do
   Advances phase and dispatches signal in a transaction
   """
   def advance_phase_with_signal(session, phase) do
-    update_with_signal(session, %{phase: phase})
+    session
+    |> update_with_signal(%{phase: phase})
     |> Repo.commit()
   end
 
@@ -108,9 +109,10 @@ defmodule Systems.Paper.RISImportSessionModel do
   Marks as succeeded and dispatches signal in a transaction
   """
   def mark_succeeded_with_signal(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :succeeded})
+    attrs = Map.put(attrs, :status, :succeeded)
 
-    update_with_signal(session, attrs)
+    session
+    |> update_with_signal(attrs)
     |> Repo.commit()
   end
 
@@ -123,9 +125,10 @@ defmodule Systems.Paper.RISImportSessionModel do
   Marks as failed and dispatches signal in a transaction
   """
   def mark_failed_with_signal(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :failed})
+    attrs = Map.put(attrs, :status, :failed)
 
-    update_with_signal(session, attrs)
+    session
+    |> update_with_signal(attrs)
     |> Repo.commit()
   end
 
@@ -138,9 +141,10 @@ defmodule Systems.Paper.RISImportSessionModel do
   Marks as aborted and dispatches signal in a transaction
   """
   def mark_aborted_with_signal(session, attrs \\ %{}) do
-    attrs = Map.merge(attrs, %{status: :aborted})
+    attrs = Map.put(attrs, :status, :aborted)
 
-    update_with_signal(session, attrs)
+    session
+    |> update_with_signal(attrs)
     |> Repo.commit()
   end
 
@@ -165,8 +169,7 @@ defmodule Systems.Paper.RISImportSessionModel do
   def preload_graph(:down), do: preload_graph([:paper_set, :reference_file])
   def preload_graph(:paper_set), do: [paper_set: Paper.SetModel.preload_graph(:down)]
 
-  def preload_graph(:reference_file),
-    do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
+  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
 
   # Queries
 
@@ -174,37 +177,40 @@ defmodule Systems.Paper.RISImportSessionModel do
   Get active import session for a reference file
   """
   def active_for_reference_file(reference_file_id) do
-    from(s in __MODULE__,
-      where: s.reference_file_id == ^reference_file_id,
-      where: s.status == :activated,
-      order_by: [desc: s.inserted_at],
-      limit: 1
+    Repo.one(
+      from(s in __MODULE__,
+        where: s.reference_file_id == ^reference_file_id,
+        where: s.status == :activated,
+        order_by: [desc: s.inserted_at],
+        limit: 1
+      )
     )
-    |> Repo.one()
   end
 
   @doc """
   Get active import sessions for a reference file
   """
   def active_for_reference_file_tool(reference_file_id) do
-    from(s in __MODULE__,
-      where: s.reference_file_id == ^reference_file_id,
-      where: s.status == :activated,
-      order_by: [desc: s.inserted_at]
+    Repo.all(
+      from(s in __MODULE__,
+        where: s.reference_file_id == ^reference_file_id,
+        where: s.status == :activated,
+        order_by: [desc: s.inserted_at]
+      )
     )
-    |> Repo.all()
   end
 
   @doc """
   Get recent sessions for a reference file (for history/debugging)
   """
   def recent_for_reference_file(reference_file_id, limit \\ 10) do
-    from(s in __MODULE__,
-      where: s.reference_file_id == ^reference_file_id,
-      order_by: [desc: s.inserted_at],
-      limit: ^limit
+    Repo.all(
+      from(s in __MODULE__,
+        where: s.reference_file_id == ^reference_file_id,
+        order_by: [desc: s.inserted_at],
+        limit: ^limit
+      )
     )
-    |> Repo.all()
   end
 
   @doc """

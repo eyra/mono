@@ -1,21 +1,23 @@
 defmodule Systems.Storage.BuiltIn.EndpointForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
-  require Logger
-
   alias Systems.Storage.BuiltIn.EndpointModel, as: Model
+
+  require Logger
 
   @impl true
   def update(%{model: model, key: key}, socket) do
     attrs =
-      if Map.get(model, :key) != nil do
-        %{}
-      else
+      if Map.get(model, :key) == nil do
         %{key: key}
+      else
+        %{}
       end
 
     changeset =
-      Model.changeset(model, attrs)
+      model
+      |> Model.changeset(attrs)
       |> Model.validate()
 
     changeset =
@@ -27,8 +29,7 @@ defmodule Systems.Storage.BuiltIn.EndpointForm do
 
     {
       :ok,
-      socket
-      |> send_event(:parent, "update", %{changeset: changeset})
+      send_event(socket, :parent, "update", %{changeset: changeset})
     }
   end
 

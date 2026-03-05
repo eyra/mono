@@ -1,4 +1,5 @@
 defmodule Systems.Storage.AWS.EndpointForm do
+  @moduledoc false
   use Systems.Storage.EndpointForm.Helper, Systems.Storage.AWS.EndpointModel
 
   @impl true

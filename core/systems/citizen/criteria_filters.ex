@@ -9,7 +9,7 @@ defmodule Systems.Citizen.CriteriaFilters do
   def include?(items, []) when is_list(items), do: true
 
   def include?(items, filters) when is_list(items) and is_list(filters) do
-    filters = filters |> Enum.filter(&Enum.member?(values(), &1))
+    filters = Enum.filter(filters, &Enum.member?(values(), &1))
     match_count = Enum.count(filters, &include?(items, &1))
     # have at least one match (OR)
     match_count > 0

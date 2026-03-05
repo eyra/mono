@@ -1,20 +1,15 @@
 defmodule Systems.Lab.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
-  alias CoreWeb.UI.Timestamp
-  alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
   alias Core.Repo
-
-  alias Frameworks.{
-    Signal
-  }
-
-  alias Systems.{
-    Lab
-  }
-
+  alias CoreWeb.UI.Timestamp
+  alias Frameworks.Signal
   alias Systems.Account.User
+  alias Systems.Lab
+  alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
   def get_tool!(id, preload \\ []) do
     from(lab_tool in Lab.ToolModel,
@@ -38,11 +33,7 @@ defmodule Systems.Lab.Public do
   end
 
   def get_time_slot(id, preload \\ []) do
-    from(ts in Lab.TimeSlotModel,
-      where: ts.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(ts in Lab.TimeSlotModel, where: ts.id == ^id, preload: ^preload))
   end
 
   def get_time_slots(id, preload \\ []) do
@@ -56,12 +47,13 @@ defmodule Systems.Lab.Public do
   end
 
   def get_available_time_slots(id) do
-    get_time_slots(id, [:reservations])
+    id
+    |> get_time_slots([:reservations])
     |> Enum.filter(fn time_slot ->
       reservation_count = Lab.TimeSlotModel.count_reservations(time_slot, [:reserved, :completed])
 
       time_slot.number_of_seats > reservation_count &&
-        not CoreWeb.UI.Timestamp.past?(time_slot.start_time)
+        not Timestamp.past?(time_slot.start_time)
     end)
   end
 
@@ -91,17 +83,16 @@ defmodule Systems.Lab.Public do
     base_values = DaySchedule.base_values(all_time_slots)
 
     time_slots =
-      all_time_slots
-      |> Enum.filter(
-        &(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq and
-            &1.location == location)
+      Enum.filter(
+        all_time_slots,
+        &(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq and &1.location == location)
       )
 
-    entries = time_slots |> DaySchedule.entries()
+    entries = DaySchedule.entries(time_slots)
 
     number_of_seats =
-      time_slots
-      |> Enum.reduce(
+      Enum.reduce(
+        time_slots,
         0,
         fn %{number_of_seats: number_of_seats}, acc ->
           if number_of_seats > acc do
@@ -131,17 +122,18 @@ defmodule Systems.Lab.Public do
 
   def edit_day_model(%Lab.ToolModel{id: id}, %{date: date, location: location}) do
     time_slots =
-      get_time_slots(id, [:reservations])
+      id
+      |> get_time_slots([:reservations])
       |> Enum.filter(
         &(Date.compare(Timestamp.to_date(&1.start_time), date) == :eq and
             &1.location == location)
       )
 
-    entries = time_slots |> DaySchedule.entries()
+    entries = DaySchedule.entries(time_slots)
 
     number_of_seats =
-      time_slots
-      |> Enum.reduce(
+      Enum.reduce(
+        time_slots,
         0,
         fn %{number_of_seats: number_of_seats}, acc ->
           if number_of_seats > acc do
@@ -163,31 +155,17 @@ defmodule Systems.Lab.Public do
     }
   end
 
-  def submit_day_model(
-        %Lab.ToolModel{} = tool,
-        %{
-          date: og_date,
-          location: og_location
-        },
-        %{
-          date: date,
-          location: location,
-          entries: entries
-        }
-      ) do
-    entries
-    |> Enum.each(&submit_day_entry(&1, tool, og_date, og_location, date, location))
-
+  def submit_day_model(%Lab.ToolModel{} = tool, %{date: og_date, location: og_location}, %{
+        date: date,
+        location: location,
+        entries: entries
+      }) do
+    Enum.each(entries, &submit_day_entry(&1, tool, og_date, og_location, date, location))
     Signal.Public.dispatch!(:lab_tool, tool)
   end
 
   defp submit_day_entry(
-         %{
-           type: :time_slot,
-           start_time: start_time,
-           number_of_seats: number_of_seats,
-           enabled?: enabled?
-         },
+         %{type: :time_slot, start_time: start_time, number_of_seats: number_of_seats, enabled?: enabled?},
          %Lab.ToolModel{} = tool,
          og_date,
          og_location,
@@ -223,7 +201,7 @@ defmodule Systems.Lab.Public do
 
   def remove_day(%Lab.ToolModel{} = tool, %{date: date, location: location}) do
     from = Timestamp.from_date_and_time(date, 0)
-    to = Timestamp.from_date_and_time(date, 0) |> Timestamp.shift_days(1)
+    to = date |> Timestamp.from_date_and_time(0) |> Timestamp.shift_days(1)
 
     with {count, nil} <-
            tool
@@ -241,8 +219,7 @@ defmodule Systems.Lab.Public do
     if Ecto.assoc_loaded?(tool.time_slots) do
       filtered_time_slots = filter_double_time_slots(tool.time_slots)
 
-      tool
-      |> Map.put(:time_slots, filtered_time_slots)
+      Map.put(tool, :time_slots, filtered_time_slots)
     else
       tool
     end
@@ -335,7 +312,8 @@ defmodule Systems.Lab.Public do
   end
 
   def reservation_for_user(%Lab.ToolModel{} = tool, %User{} = user) do
-    reservation_query(tool.id, user)
+    tool.id
+    |> reservation_query(user)
     |> Repo.one()
   end
 
@@ -354,7 +332,7 @@ defmodule Systems.Lab.Public do
         })
       end
 
-      unless update_count < 2 do
+      if !(update_count < 2) do
         throw(:more_than_one_reservation_should_not_happen)
       end
     end
@@ -373,9 +351,7 @@ defmodule Systems.Lab.Public do
   end
 
   def ready?(%Lab.ToolModel{} = lab_tool) do
-    changeset =
-      %Lab.ToolModel{}
-      |> Lab.ToolModel.operational_changeset(Map.from_struct(lab_tool))
+    changeset = Lab.ToolModel.operational_changeset(%Lab.ToolModel{}, Map.from_struct(lab_tool))
 
     changeset.valid?
   end

@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.ViewModel do
+  @moduledoc false
   def merge(vm_part1, vm_part2, resolve_type \\ :append) do
     Map.merge(vm_part1, vm_part2, &resolve(&1, &2, &3, resolve_type))
   end

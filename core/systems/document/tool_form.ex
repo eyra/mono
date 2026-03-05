@@ -1,28 +1,17 @@
 defmodule Systems.Document.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.pdf)
 
-  alias Systems.{
-    Document
-  }
+  alias Systems.Document
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{public_url: public_url, original_filename: original_filename}
-      ) do
-    socket
-    |> save(entity, %{ref: public_url, name: original_filename})
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url, original_filename: original_filename}) do
+    save(socket, entity, %{ref: public_url, name: original_filename})
   end
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity}, socket) do
     label = dgettext("eyra-document", "pdf-select-label")
     placeholder = dgettext("eyra-document", "pdf-select-placeholder")
     select_button = dgettext("eyra-document", "pdf-select-file-button")
@@ -52,8 +41,7 @@ defmodule Systems.Document.ToolForm do
   def save(socket, %Document.ToolModel{} = entity, attrs) do
     changeset = Document.ToolModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

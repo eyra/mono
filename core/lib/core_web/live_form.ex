@@ -1,13 +1,15 @@
 defmodule CoreWeb.LiveForm do
+  @moduledoc false
   defmacro __using__(_) do
     quote do
       use CoreWeb, :live_component
+
       unquote(flash_helpers())
       unquote(form_helpers())
     end
   end
 
-  def flash_helpers() do
+  def flash_helpers do
     quote do
       def hide_flash(socket) do
         Frameworks.Pixel.Flash.push_hide(socket)
@@ -30,8 +32,7 @@ defmodule CoreWeb.LiveForm do
       end
 
       def flash_persister_error(socket) do
-        socket
-        |> flash_persister_error(dgettext("eyra-ui", "persister.error.flash"))
+        flash_persister_error(socket, dgettext("eyra-ui", "persister.error.flash"))
       end
 
       def flash_persister_error(socket, message) do
@@ -47,13 +48,12 @@ defmodule CoreWeb.LiveForm do
     end
   end
 
-  def form_helpers() do
+  def form_helpers do
     quote do
       import Frameworks.Pixel.Form
 
       def save(socket, changeset) do
-        socket
-        |> save_closure(fn socket ->
+        save_closure(socket, fn socket ->
           case Ecto.Changeset.apply_action(changeset, :update) do
             {:ok, entity} ->
               handle_success(socket, changeset, entity)
@@ -77,8 +77,7 @@ defmodule CoreWeb.LiveForm do
       end
 
       defp handle_success(socket, changeset, entity) do
-        socket
-        |> auto_save(changeset)
+        auto_save(socket, changeset)
       end
 
       defp auto_save(socket, changeset) do

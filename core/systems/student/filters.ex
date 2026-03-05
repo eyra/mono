@@ -5,17 +5,15 @@ defmodule Systems.Student.Filters do
   use Core.Enums.Base,
       {:student_filters, [:inactive, :active, :passed]}
 
-  alias Systems.{
-    Budget,
-    Bookkeeping,
-    Pool
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Pool
 
   def include?(_student, nil), do: true
   def include?(_student, []), do: true
 
   def include?(student, filters, %Pool.Model{} = pool) when is_list(filters) do
-    filters = filters |> Enum.filter(&Enum.member?(values(), &1))
+    filters = Enum.filter(filters, &Enum.member?(values(), &1))
 
     filter_count = Enum.count(filters)
     match_count = Enum.count(filters, &include?(student, &1, pool))
@@ -26,7 +24,8 @@ defmodule Systems.Student.Filters do
   def include?(student, filter, %Pool.Model{} = pool), do: state(student, pool) == filter
 
   defp state(%Systems.Account.User{} = student, pool) do
-    Budget.Public.list_wallets(student)
+    student
+    |> Budget.Public.list_wallets()
     |> Enum.filter(&Pool.Public.wallet_related?(pool, &1))
     |> state(pool)
   end

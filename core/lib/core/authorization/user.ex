@@ -8,7 +8,8 @@ defimpl Frameworks.GreenLight.Principal, for: Systems.Account.User do
   def id(user), do: user.id
 
   def roles(user) do
-    MapSet.new([:member])
+    [:member]
+    |> MapSet.new()
     |> add_role_when(:creator, user.creator)
     |> add_role_when(:admin, Systems.Admin.Public.admin?(user))
   end
@@ -20,12 +21,14 @@ end
 
 defimpl Frameworks.GreenLight.Principal, for: Plug.Conn do
   alias Frameworks.GreenLight.Principal
+
   def id(%{assigns: %{current_user: user}}), do: Principal.id(user)
   def roles(%{assigns: %{current_user: user}}), do: Principal.roles(user)
 end
 
 defimpl Frameworks.GreenLight.Principal, for: Phoenix.LiveView.Socket do
   alias Frameworks.GreenLight.Principal
+
   def id(%{assigns: %{current_user: user}}), do: Principal.id(user)
   def id(_), do: Principal.id(nil)
   def roles(%{assigns: %{current_user: user}}), do: Principal.roles(user)

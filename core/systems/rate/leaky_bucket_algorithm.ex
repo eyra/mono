@@ -1,14 +1,15 @@
 defmodule Systems.Rate.LeakyBucketAlgorithm do
+  @moduledoc false
   @behaviour Systems.Rate.Algorithm
 
-  alias Systems.Rate.Private, as: Private
-  alias Systems.Rate.Quota, as: Quota
   alias Systems.Rate.LeakyBucket, as: Bucket
   alias Systems.Rate.LeakyBucketState, as: State
+  alias Systems.Rate.Private, as: Private
+  alias Systems.Rate.Quota, as: Quota
 
   @impl true
   def request_permission(%State{quotas: quotas} = state, service, client_id, packet_size) do
-    quotas = quotas |> Enum.filter(&(&1.service == service))
+    quotas = Enum.filter(quotas, &(&1.service == service))
     do_request_permission(state, quotas, {service, client_id, packet_size})
   end
 
@@ -21,51 +22,35 @@ defmodule Systems.Rate.LeakyBucketAlgorithm do
     end
   end
 
-  defp do_request_permission(
-         %Quota{} = quota,
-         request,
-         {:granted, %State{} = state}
-       ) do
+  defp do_request_permission(%Quota{} = quota, request, {:granted, %State{} = state}) do
     now = Private.datetime_now()
     key = bucket_key(quota, request)
     bucket = get_or_create_bucket(state, quota, request, now)
     new_drops = drops(quota, request)
     new_level = Bucket.level(bucket, now, new_drops)
 
-    case new_level <= bucket.capacity do
-      true ->
-        {:granted, State.update(state, key, Bucket.update(bucket, new_level, now))}
-
-      false ->
-        {:denied, "Bucket overflow, skip packet: level=#{new_level} limit=#{bucket.capacity}"}
+    if new_level <= bucket.capacity do
+      {:granted, State.update(state, key, Bucket.update(bucket, new_level, now))}
+    else
+      {:denied, "Bucket overflow, skip packet: level=#{new_level} limit=#{bucket.capacity}"}
     end
   end
 
   defp do_request_permission(_, _, {:denied, reason}), do: {:denied, reason}
 
   defp get_or_create_bucket(%State{buckets: buckets}, %Quota{} = quota, request, now) do
-    buckets
-    |> Map.get(
-      bucket_key(quota, request),
-      initial_bucket(quota, now)
-    )
+    Map.get(buckets, bucket_key(quota, request), initial_bucket(quota, now))
   end
 
   defp initial_bucket(%Quota{limit: limit} = quota, %DateTime{} = now) do
     %Bucket{level: 0, capacity: limit, drop_rate: drop_rate(quota), updated_at: now}
   end
 
-  defp bucket_key(
-         %Quota{scope: :local, window: window, unit: unit, limit: limit},
-         {service, client_id, _}
-       ),
-       do: "#{limit}:#{unit}/#{window}@#{service}=>#{client_id}"
+  defp bucket_key(%Quota{scope: :local, window: window, unit: unit, limit: limit}, {service, client_id, _}),
+    do: "#{limit}:#{unit}/#{window}@#{service}=>#{client_id}"
 
-  defp bucket_key(
-         %Quota{scope: :global, window: window, unit: unit, limit: limit},
-         {service, _, _}
-       ),
-       do: "#{limit}:#{unit}/#{window}@#{service}"
+  defp bucket_key(%Quota{scope: :global, window: window, unit: unit, limit: limit}, {service, _, _}),
+    do: "#{limit}:#{unit}/#{window}@#{service}"
 
   defp drops(%Quota{unit: :byte}, {_, _, packet_size}), do: packet_size
   defp drops(%Quota{unit: :call}, _), do: 1

@@ -1,9 +1,8 @@
 defmodule Systems.Admin.SystemView do
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
-
+  alias Frameworks.Pixel.Text
   alias Systems.Budget
   alias Systems.Citizen
 
@@ -23,8 +22,7 @@ defmodule Systems.Admin.SystemView do
       ) do
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         user: user,
         locale: locale,
@@ -63,11 +61,7 @@ defmodule Systems.Admin.SystemView do
   end
 
   @impl true
-  def handle_event(
-        "edit_bank_account",
-        %{"item" => item},
-        %{assigns: %{bank_accounts: bank_accounts}} = socket
-      ) do
+  def handle_event("edit_bank_account", %{"item" => item}, %{assigns: %{bank_accounts: bank_accounts}} = socket) do
     bank_account = Enum.find(bank_accounts, &(&1.id == String.to_integer(item)))
 
     {
@@ -91,11 +85,7 @@ defmodule Systems.Admin.SystemView do
   end
 
   @impl true
-  def handle_event(
-        "edit_citizen_pool",
-        %{"item" => item},
-        %{assigns: %{citizen_pools: citizen_pools}} = socket
-      ) do
+  def handle_event("edit_citizen_pool", %{"item" => item}, %{assigns: %{citizen_pools: citizen_pools}} = socket) do
     pool = Enum.find(citizen_pools, &(&1.id == String.to_integer(item)))
 
     {
@@ -120,12 +110,12 @@ defmodule Systems.Admin.SystemView do
 
   @impl true
   def handle_event("saved", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_modal(popup)}
+    {:noreply, hide_modal(socket, popup)}
   end
 
   @impl true
   def handle_event("cancelled", %{source: %{name: popup}}, socket) do
-    {:noreply, socket |> hide_modal(popup)}
+    {:noreply, hide_modal(socket, popup)}
   end
 
   @impl true

@@ -1,8 +1,10 @@
 defmodule Systems.Content.LocalFS do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   defmodule Error do
+    @moduledoc false
     defexception [:message]
 
     def file_not_found(full_path) do
@@ -86,7 +88,8 @@ defmodule Systems.Content.LocalFS do
   end
 
   defp get_stream_chunk_size do
-    Application.fetch_env!(:core, :paper)
+    :core
+    |> Application.fetch_env!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

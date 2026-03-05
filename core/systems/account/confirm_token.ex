@@ -1,13 +1,9 @@
 defmodule Systems.Account.ConfirmToken do
+  @moduledoc false
   use CoreWeb, :live_view
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
-  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
@@ -16,6 +12,11 @@ defmodule Systems.Account.ConfirmToken do
   alias Systems.Account.User
 
   require Logger
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
+  on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
 
   @impl true
   def mount(%{"token" => token}, _session, socket) do
@@ -61,8 +62,7 @@ defmodule Systems.Account.ConfirmToken do
   defp handle_succeeded(socket, %{email: email}) do
     Logger.notice("Confirm user: handle_succeeded #{email}")
 
-    socket
-    |> redirect(to: ~p"/user/signin?email=#{email}&status=account_activated_successfully")
+    redirect(socket, to: ~p"/user/signin?email=#{email}&status=account_activated_successfully")
   end
 
   defp handle_failed(socket) do

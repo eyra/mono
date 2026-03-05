@@ -1,4 +1,5 @@
 defmodule Systems.Org.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Org
@@ -15,8 +16,7 @@ defmodule Systems.Org.ContentPageBuilder do
   end
 
   defp create_tabs(node, assigns) do
-    [:node, :users]
-    |> Enum.map(&create_tab(&1, node, assigns))
+    Enum.map([:node, :users], &create_tab(&1, node, assigns))
   end
 
   defp create_tab(:node, node, %{fabric: fabric, locale: locale}) do

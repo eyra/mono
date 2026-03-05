@@ -1,4 +1,5 @@
 defmodule Systems.Notification.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Notification do

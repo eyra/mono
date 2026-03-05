@@ -1,16 +1,12 @@
 defmodule Systems.Annotation.Factories do
+  @moduledoc false
   alias Core.Factories
   alias Systems.Annotation
   alias Systems.Ontology
 
   def insert_annotation(type, value, author, target)
 
-  def insert_annotation(
-        %Ontology.ConceptModel{} = type,
-        value,
-        %{} = author,
-        %Annotation.Model{} = annotation
-      ) do
+  def insert_annotation(%Ontology.ConceptModel{} = type, value, %{} = author, %Annotation.Model{} = annotation) do
     reference = insert_annotation_ref(annotation)
 
     Factories.insert!(:annotation, %{
@@ -21,12 +17,7 @@ defmodule Systems.Annotation.Factories do
     })
   end
 
-  def insert_annotation(
-        %Ontology.ConceptModel{} = type,
-        value,
-        %{} = author,
-        %Ontology.ConceptModel{} = concept
-      ) do
+  def insert_annotation(%Ontology.ConceptModel{} = type, value, %{} = author, %Ontology.ConceptModel{} = concept) do
     ontology_ref = Ontology.Factories.insert_ref(concept)
     reference = insert_annotation_ref(ontology_ref)
 
@@ -38,12 +29,7 @@ defmodule Systems.Annotation.Factories do
     })
   end
 
-  def insert_annotation(
-        %Ontology.ConceptModel{} = type,
-        value,
-        %{} = author,
-        %Ontology.PredicateModel{} = predicate
-      ) do
+  def insert_annotation(%Ontology.ConceptModel{} = type, value, %{} = author, %Ontology.PredicateModel{} = predicate) do
     ontology_ref = Ontology.Factories.insert_ref(predicate)
     reference = insert_annotation_ref(ontology_ref)
 

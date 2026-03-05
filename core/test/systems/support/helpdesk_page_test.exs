@@ -1,7 +1,9 @@
 defmodule Systems.Support.HelpdeskPageTest do
   use CoreWeb.ConnCase, async: true
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
+
   alias Systems.Support
 
   setup [:login_as_member]
@@ -17,7 +19,7 @@ defmodule Systems.Support.HelpdeskPageTest do
       })
 
       assert %{description: "a ticket description"} =
-               Support.Public.list_tickets(:open) |> Enum.find(&(&1.title == "my ticket"))
+               :open |> Support.Public.list_tickets() |> Enum.find(&(&1.title == "my ticket"))
     end
   end
 end

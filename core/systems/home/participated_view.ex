@@ -7,7 +7,7 @@ defmodule Systems.Home.ParticipatedView do
   def update(%{content_items: content_items}, socket) do
     {
       :ok,
-      socket |> assign(content_items: content_items)
+      assign(socket, content_items: content_items)
     }
   end
 

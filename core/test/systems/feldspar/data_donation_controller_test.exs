@@ -3,6 +3,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
   alias Systems.Assignment
   alias Systems.Storage
+  alias Systems.Storage.MockJobScheduler
 
   describe "create/2 - missing required fields" do
     setup :login_as_member
@@ -16,9 +17,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"data" => upload, "context" => context})
+      conn = post(conn, "/api/feldspar/donate", %{"data" => upload, "context" => context})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: key"}
     end
@@ -26,17 +25,13 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
     test "returns 400 when data is missing", %{conn: conn} do
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"key" => "test-key", "context" => context})
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "context" => context})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: data"}
     end
 
     test "returns 400 when both key and data are missing", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{})
+      conn = post(conn, "/api/feldspar/donate", %{})
 
       assert json_response(conn, 400) == %{
                "error" => "Missing required fields: key, data, context"
@@ -54,9 +49,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         content_type: "application/json"
       }
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: context"}
     end
@@ -68,13 +61,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         content_type: "application/json"
       }
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => ""
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => ""})
 
       assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
     end
@@ -86,13 +73,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         content_type: "application/json"
       }
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => "{}"
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => "{}"})
 
       assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
     end
@@ -104,13 +85,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
         content_type: "application/json"
       }
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => "not valid json"
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => "not valid json"})
 
       assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
     end
@@ -126,13 +101,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       assert json_response(conn, 401) == %{"error" => "Not authenticated"}
     end
@@ -158,13 +127,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           group: "test"
         })
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       assert json_response(conn, 422) == %{"error" => "No storage endpoint configured"}
     end
@@ -177,7 +140,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
       assignment = create_assignment_with_storage()
 
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -190,13 +153,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           group: "tiktok"
         })
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       response = json_response(conn, 200)
       assert response["status"] == "ok"
@@ -204,7 +161,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
     test "returns 422 without assignment_id in context", %{conn: conn} do
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -216,13 +173,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           group: "tiktok"
         })
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       response = json_response(conn, 422)
       assert response["error"] == "No storage endpoint configured"
@@ -247,13 +198,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
           group: "test"
         })
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       assert json_response(conn, 422) == %{"error" => "Failed to read upload"}
     end
@@ -279,7 +224,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
       assignment = create_assignment_with_storage()
 
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -298,21 +243,15 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
       Application.put_env(
         :core,
         :storage,
-        Keyword.put(storage_config, :job_scheduler, Systems.Storage.MockJobScheduler)
+        Keyword.put(storage_config, :job_scheduler, MockJobScheduler)
       )
 
       # Mock insert to return an error - this causes the Multi to fail with 4-tuple
-      expect(Systems.Storage.MockJobScheduler, :insert, fn _changeset ->
+      expect(MockJobScheduler, :insert, fn _changeset ->
         {:error, %Ecto.Changeset{valid?: false, errors: [queue: {"invalid", []}]}}
       end)
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{
-          "key" => "test-key",
-          "data" => upload,
-          "context" => context
-        })
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload, "context" => context})
 
       # Should return 422 with "Scheduling failed", not crash with 500
       response = json_response(conn, 422)
@@ -383,12 +322,7 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
               })
 
             result =
-              conn
-              |> post("/api/feldspar/donate", %{
-                "key" => "test-key-#{i}",
-                "data" => upload,
-                "context" => context
-              })
+              post(conn, "/api/feldspar/donate", %{"key" => "test-key-#{i}", "data" => upload, "context" => context})
 
             status = result.status
             IO.puts("  Request #{i}: HTTP #{status}")
@@ -432,7 +366,8 @@ defmodule Systems.Feldspar.DataDonationControllerTest do
 
     # Create storage endpoint using Storage.Public.prepare_endpoint
     storage_endpoint =
-      Storage.Public.prepare_endpoint(:builtin, %{key: "test_key_#{:erlang.unique_integer()}"})
+      :builtin
+      |> Storage.Public.prepare_endpoint(%{key: "test_key_#{:erlang.unique_integer()}"})
       |> Core.Repo.insert!()
 
     # Create project_item linking assignment to the node

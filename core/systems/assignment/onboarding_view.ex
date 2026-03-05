@@ -2,13 +2,13 @@ defmodule Systems.Assignment.OnboardingView do
   use CoreWeb, :embedded_live_view
   use CoreWeb, :verified_routes
 
-  alias Frameworks.Pixel.Button
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
+  alias Frameworks.Pixel.Button
+  alias Systems.Account
+  alias Systems.Assignment
 
-  alias Systems.{Account, Assignment}
-
-  def dependencies(), do: [:assignment_id, :current_user]
+  def dependencies, do: [:assignment_id, :current_user]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
@@ -23,18 +23,13 @@ defmodule Systems.Assignment.OnboardingView do
   def handle_event(
         "continue",
         _payload,
-        %{
-          assigns: %{
-            current_user: user,
-            vm: %{page_ref: %{key: key, assignment_id: assignment_id}}
-          }
-        } = socket
+        %{assigns: %{current_user: user, vm: %{page_ref: %{key: key, assignment_id: assignment_id}}}} = socket
       ) do
     Account.Public.mark_as_visited(user, {key, assignment_id})
 
     {
       :noreply,
-      socket |> publish_event(:onboarding_continue)
+      publish_event(socket, :onboarding_continue)
     }
   end
 

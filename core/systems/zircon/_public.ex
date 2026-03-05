@@ -1,23 +1,30 @@
 defmodule Systems.Zircon.Public do
+  @moduledoc false
   use Core, :public
   use Systems.Zircon.Constants
   use Gettext, backend: CoreWeb.Gettext
 
-  require Ecto.Query
-  require Logger
-  import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
+  import Ecto.Query, warn: false
   import Systems.Zircon.Queries
 
-  alias Ecto.Multi
-  alias Core.Repo
   alias Core.Authentication
+  alias Core.Repo
+  alias Ecto.Multi
   alias Frameworks.Signal
-
   alias Systems.Annotation
+  alias Systems.Annotation.Pattern.Parameter
   alias Systems.Ontology
   alias Systems.Paper
+  alias Systems.Paper.Public
   alias Systems.Zircon
+  alias Systems.Zircon.Screening.SessionModel
+  alias Systems.Zircon.Screening.ToolAnnotationAssoc
+  alias Systems.Zircon.Screening.ToolModel
+  alias Systems.Zircon.Screening.ToolReferenceFileAssoc
+
+  require Ecto.Query
+  require Logger
 
   # Screening Tool
 
@@ -27,11 +34,9 @@ defmodule Systems.Zircon.Public do
     |> Repo.preload(preload)
   end
 
-  def get_screening_tool_by_reference_file!(
-        %Paper.ReferenceFileModel{} = reference_file,
-        preload \\ []
-      ) do
-    screening_tool_query(reference_file)
+  def get_screening_tool_by_reference_file!(%Paper.ReferenceFileModel{} = reference_file, preload \\ []) do
+    reference_file
+    |> screening_tool_query()
     |> Repo.one!()
     |> Repo.preload(preload)
   end
@@ -40,8 +45,8 @@ defmodule Systems.Zircon.Public do
     Creates a screening tool without saving.
   """
   def prepare_screening_tool(attrs, auth_node \\ auth_module().prepare_node(), user) do
-    %Zircon.Screening.ToolModel{}
-    |> Zircon.Screening.ToolModel.changeset(attrs)
+    %ToolModel{}
+    |> ToolModel.changeset(attrs)
     |> put_assoc(:annotations, obtain_screening_tool_annotations(user))
     |> put_assoc(:auth_node, auth_node)
   end
@@ -64,12 +69,11 @@ defmodule Systems.Zircon.Public do
   end
 
   def obtain_screening_tool_annotation(dimension, entity) do
-    %Annotation.Pattern.Parameter{
+    Annotation.Pattern.obtain(%Parameter{
       statement: dgettext("eyra-zircon", "statement.unspecified", dimension: dimension.phrase),
       dimension: dimension,
       entity: entity
-    }
-    |> Annotation.Pattern.obtain()
+    })
   end
 
   # ReferenceFile
@@ -79,8 +83,8 @@ defmodule Systems.Zircon.Public do
     the given url without saving.
   """
   def prepare_screening_tool_reference_file_assoc(tool, %{} = reference_file) do
-    %Zircon.Screening.ToolReferenceFileAssoc{}
-    |> Zircon.Screening.ToolReferenceFileAssoc.changeset(%{})
+    %ToolReferenceFileAssoc{}
+    |> ToolReferenceFileAssoc.changeset(%{})
     |> put_assoc(:tool, tool)
     |> put_assoc(:reference_file, reference_file)
   end
@@ -89,7 +93,8 @@ defmodule Systems.Zircon.Public do
     Inserts a new paper reference file associated with the given screening tool.
   """
   def insert_reference_file!(tool, original_filename) do
-    insert_reference_file(tool, original_filename)
+    tool
+    |> insert_reference_file(original_filename)
     |> case do
       {:ok, tool} ->
         tool
@@ -100,7 +105,8 @@ defmodule Systems.Zircon.Public do
   end
 
   def insert_reference_file!(tool, original_filename, url) when is_binary(url) do
-    insert_reference_file(tool, original_filename, url)
+    tool
+    |> insert_reference_file(original_filename, url)
     |> case do
       {:ok, tool} ->
         tool
@@ -113,11 +119,10 @@ defmodule Systems.Zircon.Public do
   def insert_reference_file(tool, original_filename) do
     Multi.new()
     |> Multi.put(:zircon_screening_tool, tool)
-    |> Multi.insert(:paper_reference_file, Paper.Public.prepare_reference_file(original_filename))
+    |> Multi.insert(:paper_reference_file, Public.prepare_reference_file(original_filename))
     |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
                                                                       zircon_screening_tool: tool,
-                                                                      paper_reference_file:
-                                                                        reference_file
+                                                                      paper_reference_file: reference_file
                                                                     } ->
       prepare_screening_tool_reference_file_assoc(tool, reference_file)
     end)
@@ -136,12 +141,11 @@ defmodule Systems.Zircon.Public do
     |> Multi.put(:zircon_screening_tool, tool)
     |> Multi.insert(
       :paper_reference_file,
-      Paper.Public.prepare_reference_file(original_filename, url)
+      Public.prepare_reference_file(original_filename, url)
     )
     |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
                                                                       zircon_screening_tool: tool,
-                                                                      paper_reference_file:
-                                                                        reference_file
+                                                                      paper_reference_file: reference_file
                                                                     } ->
       prepare_screening_tool_reference_file_assoc(tool, reference_file)
     end)
@@ -156,13 +160,15 @@ defmodule Systems.Zircon.Public do
   end
 
   def list_screening_tool_reference_files(tool) do
-    screening_tool_reference_file_query(tool)
+    tool
+    |> screening_tool_reference_file_query()
     |> Repo.all()
-    |> Repo.preload(Zircon.Screening.ToolReferenceFileAssoc.preload_graph(:down))
+    |> Repo.preload(ToolReferenceFileAssoc.preload_graph(:down))
   end
 
   def list_reference_files(tool) do
-    list_screening_tool_reference_files(tool)
+    tool
+    |> list_screening_tool_reference_files()
     |> Enum.map(& &1.reference_file)
   end
 
@@ -188,7 +194,7 @@ defmodule Systems.Zircon.Public do
 
       reference_file ->
         # Preload the file association and extract info
-        reference_file = reference_file |> Repo.preload(:file)
+        reference_file = Repo.preload(reference_file, :file)
         filename = reference_file.file && reference_file.file.name
         url = reference_file.file && reference_file.file.ref
 
@@ -222,7 +228,7 @@ defmodule Systems.Zircon.Public do
     all_ref_file_ids = Enum.map(reference_files, & &1.id)
 
     # Abort any active imports for all reference files
-    Systems.Paper.Public.abort_active_imports_for_reference_files!(all_ref_file_ids)
+    Public.abort_active_imports_for_reference_files!(all_ref_file_ids)
 
     # Get IDs of uploaded files to archive
     uploaded_file_ids =
@@ -232,7 +238,7 @@ defmodule Systems.Zircon.Public do
 
     # Archive all uploaded files
     if length(uploaded_file_ids) > 0 do
-      Systems.Paper.Public.archive_reference_files!(uploaded_file_ids)
+      Public.archive_reference_files!(uploaded_file_ids)
     end
   end
 
@@ -250,18 +256,18 @@ defmodule Systems.Zircon.Public do
       # Archive any uploaded reference file to clear it from file selector
       # This handles both files with active sessions and files waiting to be imported
       if ref_file.status == :uploaded do
-        Paper.Public.archive_reference_file!(ref_file.id)
+        Public.archive_reference_file!(ref_file.id)
       end
     end)
   end
 
   defp abort_session_if_active(ref_file) do
-    if Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
-      active_session = Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
+    if Public.has_active_import_for_reference_file?(ref_file.id) do
+      active_session = Public.get_active_import_session_for_reference_file(ref_file.id)
 
       if active_session do
         # Abort the import session
-        Paper.Public.abort_import_session!(active_session)
+        Public.abort_import_session!(active_session)
       end
     end
   end
@@ -280,7 +286,7 @@ defmodule Systems.Zircon.Public do
     |> Multi.update(
       :paper_reference_file,
       Paper.ReferenceFileModel.changeset(
-        Paper.Public.get_reference_file!(session.reference_file_id),
+        Public.get_reference_file!(session.reference_file_id),
         %{status: :archived}
       )
     )
@@ -303,24 +309,20 @@ defmodule Systems.Zircon.Public do
   end
 
   def list_papers(tool) do
-    list_reference_files(tool)
+    tool
+    |> list_reference_files()
     |> Enum.reduce([], fn %{papers: papers}, acc ->
       acc ++ papers
     end)
     |> Enum.uniq_by(& &1.id)
   end
 
-  def insert_screening_tool_criterion(
-        %Zircon.Screening.ToolModel{} = tool,
-        %Ontology.ConceptModel{} = dimension,
-        user
-      ) do
+  def insert_screening_tool_criterion(%ToolModel{} = tool, %Ontology.ConceptModel{} = dimension, user) do
     entity = Authentication.obtain_entity!(user)
 
     Multi.new()
     |> Multi.run(:validate_criterion_does_not_exist, fn _, _ ->
-      %{annotations: annotations} =
-        tool |> Repo.preload(annotations: Annotation.Model.preload_graph(:down))
+      %{annotations: annotations} = Repo.preload(tool, annotations: Annotation.Model.preload_graph(:down))
 
       if Annotation.Public.member?(annotations, dimension) do
         {:error, false}
@@ -329,16 +331,15 @@ defmodule Systems.Zircon.Public do
       end
     end)
     |> Multi.run(:annotation, fn _, _ ->
-      %Annotation.Pattern.Parameter{
+      Annotation.Pattern.obtain(%Parameter{
         statement: dgettext("eyra-zircon", "statement.unspecified", dimension: dimension.phrase),
         dimension: dimension,
         entity: entity
-      }
-      |> Annotation.Pattern.obtain()
+      })
     end)
     |> Multi.insert(:zircon_screening_tool_annotation_assoc, fn %{annotation: annotation} ->
-      %Zircon.Screening.ToolAnnotationAssoc{}
-      |> Zircon.Screening.ToolAnnotationAssoc.changeset(%{})
+      %ToolAnnotationAssoc{}
+      |> ToolAnnotationAssoc.changeset(%{})
       |> put_assoc(:tool, tool)
       |> put_assoc(:annotation, annotation)
     end)
@@ -346,10 +347,7 @@ defmodule Systems.Zircon.Public do
     |> Repo.commit()
   end
 
-  def delete_screening_tool_criterion(
-        %Zircon.Screening.ToolModel{} = tool,
-        %Annotation.Model{} = criterion
-      ) do
+  def delete_screening_tool_criterion(%ToolModel{} = tool, %Annotation.Model{} = criterion) do
     Multi.new()
     |> Multi.put(:zircon_screening_tool, tool)
     |> Multi.delete_all(
@@ -379,8 +377,8 @@ defmodule Systems.Zircon.Public do
   end
 
   def prepare_screening_session(identifier, agent_state, tool, user) do
-    %Zircon.Screening.SessionModel{}
-    |> Zircon.Screening.SessionModel.changeset(%{
+    %SessionModel{}
+    |> SessionModel.changeset(%{
       identifier: identifier,
       agent_state: agent_state
     })
@@ -405,7 +403,7 @@ defmodule Systems.Zircon.Public do
   end
 
   def get_screening_session(tool, user) do
-    screening_session_query(tool, user) |> Repo.one()
+    tool |> screening_session_query(user) |> Repo.one()
   end
 
   def start_screening_session!(tool, user) do
@@ -426,8 +424,7 @@ defmodule Systems.Zircon.Public do
     |> Multi.run(:zircon_screening_agent_state, fn _, _ ->
       papers = list_papers(tool)
 
-      %{annotations: criteria} =
-        tool |> Repo.preload(annotations: Annotation.Model.preload_graph(:down))
+      %{annotations: criteria} = Repo.preload(tool, annotations: Annotation.Model.preload_graph(:down))
 
       Zircon.Config.screening_agent_module().start(identifier, papers, criteria)
     end)
@@ -446,7 +443,7 @@ defmodule Systems.Zircon.Public do
 
   def update_screening_session(session, agent_state) do
     session
-    |> Zircon.Screening.SessionModel.changeset(%{agent_state: agent_state})
+    |> SessionModel.changeset(%{agent_state: agent_state})
     |> Repo.update()
   end
 end

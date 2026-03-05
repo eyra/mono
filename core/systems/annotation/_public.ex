@@ -1,17 +1,18 @@
 defmodule Systems.Annotation.Public do
+  @moduledoc false
   use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
-  import Ecto.Query, only: [from: 2, order_by: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
+  import Ecto.Query, only: [from: 2, order_by: 3]
   import Systems.Annotation.Queries
 
   import Systems.Ontology.Public,
     only: [upsert_ontology_ref: 3, obtain_concept!: 2, obtain_ontology_ref!: 1]
 
+  alias Core.Authentication
   alias Core.Repo
   alias Ecto.Multi
-  alias Core.Authentication
   alias Systems.Annotation
   alias Systems.Ontology
 
@@ -45,8 +46,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.preload(preloads)
   end
 
-  def list_annotations({%Annotation.Model{} = annotation, entities}, preloads)
-      when is_list(entities) do
+  def list_annotations({%Annotation.Model{} = annotation, entities}, preloads) when is_list(entities) do
     annotation_query()
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
@@ -56,8 +56,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.preload(preloads)
   end
 
-  def list_annotations({%Ontology.ConceptModel{} = concept, entities}, preloads)
-      when is_list(entities) do
+  def list_annotations({%Ontology.ConceptModel{} = concept, entities}, preloads) when is_list(entities) do
     annotation_query()
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
@@ -67,8 +66,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.preload(preloads)
   end
 
-  def list_annotations({%Ontology.PredicateModel{} = predicate, entities}, preloads)
-      when is_list(entities) do
+  def list_annotations({%Ontology.PredicateModel{} = predicate, entities}, preloads) when is_list(entities) do
     annotation_query()
     |> annotation_query_include(:entities, entities)
     |> annotation_query_join(:annotation_ref)
@@ -78,20 +76,14 @@ defmodule Systems.Annotation.Public do
     |> Repo.preload(preloads)
   end
 
-  def insert_annotation!(
-        type_phrase,
-        statement,
-        %Ontology.ConceptModel{} = concept,
-        %Authentication.Entity{} = entity
-      )
+  def insert_annotation!(type_phrase, statement, %Ontology.ConceptModel{} = concept, %Authentication.Entity{} = entity)
       when is_binary(type_phrase) and is_binary(statement) do
     type = obtain_concept!(type_phrase, entity)
     annotation_ref = obtain_annotation_ref!(concept)
     insert_annotation!(type, statement, entity, [annotation_ref])
   end
 
-  def insert_annotation!(type, statement, %Authentication.Entity{} = entity, references)
-      when is_list(references) do
+  def insert_annotation!(type, statement, %Authentication.Entity{} = entity, references) when is_list(references) do
     case insert_annotation(type, statement, entity, references) do
       {:ok, annotation} ->
         annotation
@@ -102,7 +94,8 @@ defmodule Systems.Annotation.Public do
   end
 
   def insert_annotation(type, statement, entity, references) when is_list(references) do
-    prepare_annotation(type, references, statement, entity)
+    type
+    |> prepare_annotation(references, statement, entity)
     |> Repo.insert()
   end
 
@@ -113,8 +106,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(type, statement, entity, resource)
-      when is_binary(resource) do
+  def insert_annotation(type, statement, entity, resource) when is_binary(resource) do
     Multi.new()
     |> upsert_resource(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
@@ -122,12 +114,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(
-        type,
-        statement,
-        entity,
-        %Annotation.ResourceModel{} = resource
-      ) do
+  def insert_annotation(type, statement, entity, %Annotation.ResourceModel{} = resource) do
     Multi.new()
     |> Multi.put(@annotation_resource, resource)
     |> upsert_annotation_ref(@annotation_ref, @annotation_resource)
@@ -151,12 +138,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(
-        type,
-        statement,
-        entity,
-        %Ontology.RefModel{} = ontology_ref
-      ) do
+  def insert_annotation(type, statement, entity, %Ontology.RefModel{} = ontology_ref) do
     Multi.new()
     |> Multi.put(@ontology_ref, ontology_ref)
     |> upsert_annotation_ref(@annotation_ref, @ontology_ref)
@@ -164,12 +146,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(
-        type,
-        statement,
-        entity,
-        %Ontology.ConceptModel{} = concept
-      ) do
+  def insert_annotation(type, statement, entity, %Ontology.ConceptModel{} = concept) do
     Multi.new()
     |> Multi.put(@ontology_concept, concept)
     |> upsert_ontology_ref(@ontology_ref, @ontology_concept)
@@ -178,12 +155,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(
-        type,
-        statement,
-        entity,
-        %Ontology.PredicateModel{} = predicate
-      ) do
+  def insert_annotation(type, statement, entity, %Ontology.PredicateModel{} = predicate) do
     Multi.new()
     |> Multi.put(@ontology_predicate, predicate)
     |> upsert_ontology_ref(@ontology_ref, @ontology_predicate)
@@ -192,14 +164,7 @@ defmodule Systems.Annotation.Public do
     |> Repo.commit()
   end
 
-  def insert_annotation(
-        %Multi{} = multi,
-        multi_name,
-        multi_child_name,
-        type,
-        statement,
-        entity
-      ) do
+  def insert_annotation(%Multi{} = multi, multi_name, multi_child_name, type, statement, entity) do
     Multi.insert(
       multi,
       multi_name,
@@ -210,13 +175,7 @@ defmodule Systems.Annotation.Public do
     )
   end
 
-  def prepare_annotation(
-        %Ontology.ConceptModel{} = type,
-        references,
-        statement,
-        entity
-      )
-      when is_list(references) do
+  def prepare_annotation(%Ontology.ConceptModel{} = type, references, statement, entity) when is_list(references) do
     %Annotation.Model{}
     |> Annotation.Model.changeset(%{
       statement: statement
@@ -309,30 +268,19 @@ defmodule Systems.Annotation.Public do
   end
 
   def prepare_resource(value) do
-    %Annotation.ResourceModel{}
-    |> Annotation.ResourceModel.changeset(%{value: value})
+    Annotation.ResourceModel.changeset(%Annotation.ResourceModel{}, %{value: value})
   end
 
   def obtain_annotation(pattern) do
     Systems.Annotation.Pattern.obtain(pattern)
   end
 
-  def summarize(%Annotation.RefModel{
-        ontology_ref: %Ontology.RefModel{concept: %Ontology.ConceptModel{phrase: phrase}}
-      }) do
+  def summarize(%Annotation.RefModel{ontology_ref: %Ontology.RefModel{concept: %Ontology.ConceptModel{phrase: phrase}}}) do
     phrase
   end
 
-  def get_most_recent_definition(
-        %Ontology.ConceptModel{} = concept,
-        %Authentication.Entity{} = entity
-      ) do
-    {:ok, query} =
-      %Annotation.Pattern.Definition{
-        subject: concept,
-        entity: entity
-      }
-      |> Annotation.Pattern.query()
+  def get_most_recent_definition(%Ontology.ConceptModel{} = concept, %Authentication.Entity{} = entity) do
+    {:ok, query} = Annotation.Pattern.query(%Annotation.Pattern.Definition{subject: concept, entity: entity})
 
     query
     |> Repo.all()
@@ -353,7 +301,8 @@ defmodule Systems.Annotation.Public do
   end
 
   def member?(%Annotation.Model{} = annotation, %Ontology.ConceptModel{} = concept) do
-    Ontology.Element.flatten(annotation)
+    annotation
+    |> Ontology.Element.flatten()
     |> Enum.filter(fn %module{} -> module == Ontology.ConceptModel end)
     |> Enum.any?(&(&1.phrase == concept.phrase))
   end

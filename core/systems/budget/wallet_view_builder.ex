@@ -1,19 +1,12 @@
 defmodule Systems.Budget.WalletViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Pool,
-    Budget,
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Pool
 
-  def view_model(
-        %Bookkeeping.AccountModel{
-          id: id,
-          identifier: ["wallet", currency, _user_id]
-        } = account,
-        user
-      ) do
+  def view_model(%Bookkeeping.AccountModel{id: id, identifier: ["wallet", currency, _user_id]} = account, user) do
     locale = Gettext.get_locale(CoreWeb.Gettext)
     currency = Budget.Public.get_currency_by_name(currency, label_bundle: [:items])
     title = Budget.CurrencyModel.title(currency, locale)
@@ -40,19 +33,13 @@ defmodule Systems.Budget.WalletViewBuilder do
       end
 
     earned_label =
-      dgettext("eyra-assignment", "earned.label",
-        amount: Budget.CurrencyModel.label(currency, locale, earned_amount)
-      )
+      dgettext("eyra-assignment", "earned.label", amount: Budget.CurrencyModel.label(currency, locale, earned_amount))
 
     pending_label =
-      dgettext("eyra-assignment", "pending.label",
-        amount: Budget.CurrencyModel.label(currency, locale, pending_amount)
-      )
+      dgettext("eyra-assignment", "pending.label", amount: Budget.CurrencyModel.label(currency, locale, pending_amount))
 
     togo_label =
-      dgettext("eyra-assignment", "togo.label",
-        amount: Budget.CurrencyModel.label(currency, locale, togo_amount)
-      )
+      dgettext("eyra-assignment", "togo.label", amount: Budget.CurrencyModel.label(currency, locale, togo_amount))
 
     %{
       id: id,
@@ -68,8 +55,7 @@ defmodule Systems.Budget.WalletViewBuilder do
     }
   end
 
-  defp target(%{identifier: [_ | [pool_name | _]]}),
-    do: target(Pool.Public.get_by_name(pool_name))
+  defp target(%{identifier: [_ | [pool_name | _]]}), do: target(Pool.Public.get_by_name(pool_name))
 
   defp target(%{target: target} = _pool), do: target
   defp target(_), do: nil

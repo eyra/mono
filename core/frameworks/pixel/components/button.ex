@@ -4,10 +4,10 @@ defmodule Frameworks.Pixel.Button do
   """
   use CoreWeb, :pixel
 
-  require Logger
-
   alias Frameworks.Pixel.Button.Action
   alias Frameworks.Pixel.Button.Face
+
+  require Logger
 
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)

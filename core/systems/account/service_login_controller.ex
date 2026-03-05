@@ -19,8 +19,7 @@ defmodule Systems.Account.ServiceLoginController do
 
   Returns 200 with session cookie on success, 401/403 on failure.
   """
-  def create(conn, %{"email" => email, "password" => password})
-      when is_binary(email) and is_binary(password) do
+  def create(conn, %{"email" => email, "password" => password}) when is_binary(email) and is_binary(password) do
     with :ok <- verify_service_key(conn),
          :ok <- verify_service_domain(email) do
       authenticate(conn, email, password)
@@ -40,7 +39,7 @@ defmodule Systems.Account.ServiceLoginController do
 
   defp verify_service_key(conn) do
     expected_key = Application.get_env(:core, :service_login, [])[:key]
-    provided_key = get_req_header(conn, "x-service-key") |> List.first()
+    provided_key = conn |> get_req_header("x-service-key") |> List.first()
 
     cond do
       is_nil(expected_key) or expected_key == "" ->

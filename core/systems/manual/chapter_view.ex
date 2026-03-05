@@ -6,16 +6,13 @@ defmodule Systems.Manual.ChapterView do
   use CoreWeb, :live_component
   use Gettext, backend: CoreWeb.Gettext
 
-  import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
   import Core.ImageHelpers, only: [decode_image_info: 1]
+  import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
 
   alias Systems.Userflow
 
   @impl true
-  def update(
-        %{id: id, manual_id: manual_id, chapter: chapter, user: user, page_id: page_id},
-        socket
-      ) do
+  def update(%{id: id, manual_id: manual_id, chapter: chapter, user: user, page_id: page_id}, socket) do
     # Use page_id from params, fallback to current assign
     page_id = page_id || Map.get(socket.assigns, :page_id)
 
@@ -46,21 +43,16 @@ defmodule Systems.Manual.ChapterView do
   end
 
   def update_title(%{assigns: %{chapter: %{title: title}}} = socket) do
-    socket |> assign(title: title)
+    assign(socket, title: title)
   end
 
   def update_label(%{assigns: %{chapter: %{userflow_step: %{group: group}}}} = socket) do
-    socket |> assign(label: group)
+    assign(socket, label: group)
   end
 
   def update_indicator(%{assigns: %{pages: pages, selected_page: %{number: number}}} = socket) do
-    socket
-    |> assign(
-      indicator:
-        dgettext("eyra-manual", "chapter.page.indicator",
-          count: Enum.count(pages),
-          current: number
-        )
+    assign(socket,
+      indicator: dgettext("eyra-manual", "chapter.page.indicator", count: Enum.count(pages), current: number)
     )
   end
 
@@ -79,11 +71,11 @@ defmodule Systems.Manual.ChapterView do
         }
       end)
 
-    socket |> assign(pages: pages)
+    assign(socket, pages: pages)
   end
 
   def update_pages(socket) do
-    socket |> assign(pages: [])
+    assign(socket, pages: [])
   end
 
   def update_selected_page(%{assigns: %{pages: []}} = socket) do
@@ -94,13 +86,13 @@ defmodule Systems.Manual.ChapterView do
     selected_page =
       case Enum.find(pages, fn page -> page.id == page_id end) do
         nil ->
-          pages |> List.first()
+          List.first(pages)
 
         page ->
           page
       end
 
-    socket |> assign(selected_page: selected_page, page_id: selected_page.id)
+    assign(socket, selected_page: selected_page, page_id: selected_page.id)
   end
 
   defp update_fullscreen_button(socket) do
@@ -115,7 +107,7 @@ defmodule Systems.Manual.ChapterView do
       }
     }
 
-    socket |> assign(fullscreen_button: fullscreen_button)
+    assign(socket, fullscreen_button: fullscreen_button)
   end
 
   def handle_event("select_page", %{"item" => item_id}, socket) do
@@ -128,17 +120,12 @@ defmodule Systems.Manual.ChapterView do
     {:noreply, socket}
   end
 
-  defp mark_chapter_visited(
-         %{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket
-       ) do
+  defp mark_chapter_visited(%{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket) do
     Userflow.Public.mark_visited(userflow_step, user)
     socket
   end
 
-  defp mark_selected_page_visited(
-         %{assigns: %{chapter: %{pages: pages}, page_id: page_id, user: user}} =
-           socket
-       ) do
+  defp mark_selected_page_visited(%{assigns: %{chapter: %{pages: pages}, page_id: page_id, user: user}} = socket) do
     %{userflow_step: userflow_step} = current_page(pages, page_id)
     Userflow.Public.mark_visited(userflow_step, user)
     socket

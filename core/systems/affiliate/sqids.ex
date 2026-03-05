@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Sqids do
+  @moduledoc false
   import Sqids.Hacks, only: [dialyzed_ctx: 1]
 
   @context Sqids.new!(

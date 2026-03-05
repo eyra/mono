@@ -1,27 +1,15 @@
 defmodule Systems.Annotation.Form do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Systems.Annotation
 
-  def update(
-        %{
-          id: id,
-          annotation: annotation,
-          user: user
-        },
-        socket
-      ) do
+  def update(%{id: id, annotation: annotation, user: user}, socket) do
     changeset = Annotation.Model.changeset(annotation, %{})
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: annotation,
-        changeset: changeset,
-        user: user
-      )
+      assign(socket, id: id, entity: annotation, changeset: changeset, user: user)
     }
   end
 
@@ -30,8 +18,7 @@ defmodule Systems.Annotation.Form do
 
     {
       :noreply,
-      socket
-      |> save(changeset)
+      save(socket, changeset)
     }
   end
 

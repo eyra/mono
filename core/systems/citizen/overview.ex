@@ -1,16 +1,15 @@
 defmodule Systems.Citizen.Overview do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.SearchBar
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Selector
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Empty
 
-  alias Systems.{
-    Citizen,
-    Pool
-  }
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
+  alias Systems.Citizen
+  alias Systems.Pool
 
   # Handle Search Bar Update
   @impl true
@@ -39,10 +38,7 @@ defmodule Systems.Citizen.Overview do
 
   # Initial update
   @impl true
-  def update(
-        %{id: id, props: %{citizens: citizens, pool: pool}} = _params,
-        %{assigns: %{myself: target}} = socket
-      ) do
+  def update(%{id: id, props: %{citizens: citizens, pool: pool}} = _params, %{assigns: %{myself: target}} = socket) do
     filter_labels = Citizen.CriteriaFilters.labels([])
 
     email_button = %{
@@ -94,16 +90,14 @@ defmodule Systems.Citizen.Overview do
   defp filter(citizens, []), do: citizens
 
   defp filter(citizens, filters) do
-    citizens
-    |> Enum.filter(&Citizen.CriteriaFilters.include?(&1.features.gender, filters))
+    Enum.filter(citizens, &Citizen.CriteriaFilters.include?(&1.features.gender, filters))
   end
 
   defp query(citizens, nil), do: citizens
   defp query(citizens, []), do: citizens
 
   defp query(citizens, query) when is_list(query) do
-    citizens
-    |> Enum.filter(&include?(&1, query))
+    Enum.filter(citizens, &include?(&1, query))
   end
 
   defp include?(_citizen, []), do: true
@@ -121,33 +115,19 @@ defmodule Systems.Citizen.Overview do
   defp include?(citizen, word) when is_binary(word) do
     word = String.downcase(word)
 
-    String.contains?(citizen.profile.fullname |> String.downcase(), word) or
-      String.contains?(citizen.email |> String.downcase(), word)
+    citizen.profile.fullname |> String.downcase() |> String.contains?(word) or
+      citizen.email |> String.downcase() |> String.contains?(word)
   end
 
-  defp prepare_citizens(
-         %{
-           assigns: %{
-             citizens: citizens,
-             active_filters: active_filters,
-             query: query
-           }
-         } = socket
-       ) do
+  defp prepare_citizens(%{assigns: %{citizens: citizens, active_filters: active_filters, query: query}} = socket) do
     filtered_citizens =
       citizens
       |> filter(active_filters)
       |> query(query)
 
-    filtered_citizen_items =
-      filtered_citizens
-      |> Enum.map(&Pool.ParticipantItemBuilder.view_model(&1, socket))
+    filtered_citizen_items = Enum.map(filtered_citizens, &Pool.ParticipantItemBuilder.view_model(&1, socket))
 
-    socket
-    |> assign(
-      filtered_citizens: filtered_citizens,
-      filtered_citizen_items: filtered_citizen_items
-    )
+    assign(socket, filtered_citizens: filtered_citizens, filtered_citizen_items: filtered_citizen_items)
   end
 
   # Events
@@ -159,11 +139,7 @@ defmodule Systems.Citizen.Overview do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :citizen_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :citizen_filters}}, socket) do
     {
       :noreply,
       socket

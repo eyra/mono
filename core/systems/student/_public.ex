@@ -1,25 +1,23 @@
 defmodule Systems.Student.Public do
+  @moduledoc false
   use Core, :public
-  require Logger
 
-  alias Ecto.Multi
   alias Core.Repo
-  alias Systems.Account.User
-
+  alias Ecto.Multi
   alias Frameworks.Utility.Identifier
+  alias Systems.Account.User
+  alias Systems.Bookkeeping
+  alias Systems.Budget
+  alias Systems.Org
+  alias Systems.Pool
+  alias Systems.Student
 
-  alias Systems.{
-    Org,
-    Budget,
-    Bookkeeping,
-    Pool,
-    Student
-  }
+  require Logger
 
   @pool_director_key "student"
 
-  def academic_year(), do: 2022
-  def default_pool(), do: :vu_sbe_rpr_year1_2022
+  def academic_year, do: 2022
+  def default_pool, do: :vu_sbe_rpr_year1_2022
 
   def course_patterns(_user) do
     # FIXME: determine which pools are for the current user
@@ -35,13 +33,9 @@ defmodule Systems.Student.Public do
   end
 
   def successor?([_ | _] = currency1, [_ | _] = currency2, current_year) do
-    identifier1 =
-      currency1
-      |> remove_academic_year(current_year - 1)
+    identifier1 = remove_academic_year(currency1, current_year - 1)
 
-    identifier2 =
-      currency2
-      |> remove_academic_year(current_year)
+    identifier2 = remove_academic_year(currency2, current_year)
 
     identifier1 == identifier2
   end
@@ -105,13 +99,9 @@ defmodule Systems.Student.Public do
     added_to_pools = new_pool_names -- old_pool_names
     deleted_from_pools = old_pool_names -- new_pool_names
 
-    added_to_classes =
-      (new_class_codes -- old_class_codes)
-      |> map_to_student_class_nodes()
+    added_to_classes = map_to_student_class_nodes(new_class_codes -- old_class_codes)
 
-    deleted_from_classes =
-      (old_class_codes -- new_class_codes)
-      |> map_to_student_class_nodes()
+    deleted_from_classes = map_to_student_class_nodes(old_class_codes -- new_class_codes)
 
     Multi.new()
     |> update_class_accociations(user, added_to_classes, deleted_from_classes)
@@ -121,8 +111,7 @@ defmodule Systems.Student.Public do
   end
 
   def migrate_wallets(multi, %User{} = user, added_to_pools) do
-    multi
-    |> Multi.run(:wallets, fn _, _ ->
+    Multi.run(multi, :wallets, fn _, _ ->
       migrate_wallets(user, added_to_pools)
       {:ok, true}
     end)
@@ -166,8 +155,6 @@ defmodule Systems.Student.Public do
 
     if Bookkeeping.Public.account_exists?(wallet) do
       wallet
-    else
-      nil
     end
   end
 
@@ -189,8 +176,7 @@ defmodule Systems.Student.Public do
   end
 
   def update_pool_participations(multi, %User{} = user, added_to_pools, deleted_from_pools) do
-    multi
-    |> Multi.run(:pool, fn _, _ ->
+    Multi.run(multi, :pool, fn _, _ ->
       update_pool_participations(user, added_to_pools, deleted_from_pools)
       {:ok, true}
     end)
@@ -203,15 +189,11 @@ defmodule Systems.Student.Public do
   def update_class_accociations(multi, %User{} = user, added_to_classes, deleted_from_classes) do
     multi
     |> Multi.run(:added_to_classes, fn _, _ ->
-      added_to_classes
-      |> update_classes(user, :add)
-
+      update_classes(added_to_classes, user, :add)
       {:ok, true}
     end)
     |> Multi.run(:deleted_from_classes, fn _, _ ->
-      deleted_from_classes
-      |> update_classes(user, :delete)
-
+      update_classes(deleted_from_classes, user, :delete)
       {:ok, true}
     end)
   end
@@ -290,8 +272,7 @@ defmodule Systems.Student.Public do
   end
 
   defp update_classes([_ | _] = class_nodes, user, command) do
-    class_nodes
-    |> Enum.map(&update_class(&1, user, command))
+    Enum.map(class_nodes, &update_class(&1, user, command))
   end
 
   defp update_classes(_, _, _), do: nil

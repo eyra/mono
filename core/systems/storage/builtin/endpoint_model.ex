@@ -1,4 +1,5 @@
 defmodule Systems.Storage.BuiltIn.EndpointModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -42,6 +43,7 @@ defmodule Systems.Storage.BuiltIn.EndpointModel do
 
   defimpl Frameworks.Concept.ContentModel do
     alias Systems.Storage.BuiltIn
+
     def form(_), do: BuiltIn.EndpointForm
     def ready?(endpoint), do: BuiltIn.EndpointModel.ready?(endpoint)
   end

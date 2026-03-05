@@ -8,7 +8,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   alias Systems.Crew
   alias Systems.Workflow
 
-  def dependencies(), do: [:assignment_id, :current_user, {:user_state, :task}, :panel_info]
+  def dependencies, do: [:assignment_id, :current_user, {:user_state, :task}, :panel_info]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, [
@@ -19,20 +19,17 @@ defmodule Systems.Assignment.CrewTaskListView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> handle_view_model_updated()}
+    {:ok, handle_view_model_updated(socket)}
   end
 
   @impl true
-  def handle_view_model_updated(
-        %{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket
-      )
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket)
       when id == current_id do
     # Same modal already presented, do nothing
     socket
   end
 
-  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
-      when not is_nil(tool_modal) do
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket) when not is_nil(tool_modal) do
     socket
     |> assign(tool_modal: tool_modal)
     |> present_modal(tool_modal)
@@ -43,9 +40,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   # Behaviours
 
   @impl true
-  def handle_tool_completed(
-        %{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket
-      )
+  def handle_tool_completed(%{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket)
       when not is_nil(tool_modal) do
     # First hide the modal, then complete task (which triggers signals that may kill this process)
     socket
@@ -70,17 +65,14 @@ defmodule Systems.Assignment.CrewTaskListView do
   # Events
 
   @impl true
-  def consume_event(
-        %{name: :work_item_selected, payload: %{"item" => item_id}},
-        socket
-      ) do
+  def consume_event(%{name: :work_item_selected, payload: %{"item" => item_id}}, socket) do
     item_id = String.to_integer(item_id)
-    {:stop, socket |> start_item(item_id)}
+    {:stop, start_item(socket, item_id)}
   end
 
   # Called by LiveNest Modal Presenter when modal is closed
   def consume_event(%{name: :modal_closed, payload: %{modal_id: _modal_id}}, socket) do
-    {:stop, socket |> clear_task()}
+    {:stop, clear_task(socket)}
   end
 
   # Private
@@ -102,12 +94,10 @@ defmodule Systems.Assignment.CrewTaskListView do
   defp complete_task(socket, task) do
     {:ok, _} = Crew.Public.complete_task(task)
 
-    socket
-    |> publish_event(:task_completed)
+    publish_event(socket, :task_completed)
   end
 
-  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
-       when not is_nil(tool_modal) do
+  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket) when not is_nil(tool_modal) do
     socket
     |> hide_modal(tool_modal)
     |> assign(tool_modal: nil)
@@ -115,7 +105,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   end
 
   defp close_tool_modal(socket) do
-    socket |> clear_task()
+    clear_task(socket)
   end
 
   defp clear_task(%{assigns: %{user_state: user_state}} = socket) do

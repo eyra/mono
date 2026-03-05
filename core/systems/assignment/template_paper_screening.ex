@@ -1,14 +1,15 @@
 defmodule Systems.Assignment.TemplatePaperScreening do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
+
+  alias Frameworks.Builder
   alias Systems.Assignment
   alias Systems.Workflow
-  alias Frameworks.Builder
 
   defstruct [:id]
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
-    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -45,8 +46,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
               id: :paper_screening,
               type: :zircon_screening_tool,
               title: Assignment.WorkflowItemSpecials.translate(:paper_screening),
-              description:
-                dgettext("eyra-assignment", "workflow_item.paper_screening.description")
+              description: dgettext("eyra-assignment", "workflow_item.paper_screening.description")
             }
           ]
         },

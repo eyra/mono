@@ -1,13 +1,16 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
+
   import Frameworks.Signal.TestHelper
 
   alias Core.Factories
+  alias Core.SurfConext.User
+  alias Systems.Account.Public
 
   describe "get_user_by_sub/1" do
     test "get a user by their subject id" do
       user = Factories.insert!(:member)
-      Repo.insert!(%Core.SurfConext.User{sub: "test", user: user})
+      Repo.insert!(%User{sub: "test", user: user})
 
       loaded_user = Core.SurfConext.get_user_by_sub("test")
 
@@ -18,7 +21,7 @@ defmodule Core.SurfConext.Test do
   describe "get_surfconext_user_by_user/1" do
     test "get a surf conext user by a core user reference" do
       core_user = Factories.insert!(:member)
-      surfconext_user = Repo.insert!(%Core.SurfConext.User{sub: "test", user: core_user})
+      surfconext_user = Repo.insert!(%User{sub: "test", user: core_user})
 
       loaded_surfconext_user = Core.SurfConext.get_surfconext_user_by_user(core_user)
 
@@ -153,8 +156,8 @@ defmodule Core.SurfConext.Test do
       }
 
       surf_user2 = Core.SurfConext.update_user(surf_user1.user, sso_info2)
-      core_user2 = Systems.Account.Public.get_user!(surf_user2.user_id)
-      profile2 = Systems.Account.Public.get_profile(core_user2)
+      core_user2 = Public.get_user!(surf_user2.user_id)
+      profile2 = Public.get_profile(core_user2)
 
       assert surf_user2.schac_personal_unique_code == sso_info2["schac_personal_unique_code"]
 

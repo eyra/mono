@@ -1,8 +1,10 @@
 defmodule Systems.Paper.ReferenceFileModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
   alias Systems.Content
   alias Systems.Paper
 
@@ -51,9 +53,7 @@ defmodule Systems.Paper.ReferenceFileModel do
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:file), do: [file: Content.FileModel.preload_graph(:down)]
 
-  def preload_graph(:papers),
-    do: [papers: Paper.Model.preload_graph(:down)]
+  def preload_graph(:papers), do: [papers: Paper.Model.preload_graph(:down)]
 
-  def preload_graph(:errors),
-    do: [errors: Paper.ReferenceFileErrorModel.preload_graph(:down)]
+  def preload_graph(:errors), do: [errors: Paper.ReferenceFileErrorModel.preload_graph(:down)]
 end

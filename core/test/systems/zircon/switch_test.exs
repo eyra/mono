@@ -1,8 +1,9 @@
 defmodule Systems.Zircon.SwitchTest do
   use Core.DataCase
 
-  alias Systems.Zircon.Switch
   alias Systems.Observatory.UpdateCollector
+  alias Systems.Zircon.Screening.ImportView
+  alias Systems.Zircon.Switch
 
   setup do
     # Clear any leftover updates from previous tests
@@ -62,7 +63,7 @@ defmodule Systems.Zircon.SwitchTest do
       [{target, args, collected_message}] = updates
 
       # Check target is correct
-      assert target == {:embedded_live_view, Systems.Zircon.Screening.ImportView}
+      assert target == {:embedded_live_view, ImportView}
 
       # Check args contains tool id
       assert args == [tool.id]
@@ -172,7 +173,7 @@ defmodule Systems.Zircon.SwitchTest do
       [{target, args, collected_message}] = updates
 
       # Check target is correct
-      assert target == {:embedded_live_view, Systems.Zircon.Screening.ImportView}
+      assert target == {:embedded_live_view, ImportView}
 
       # Check args contains tool id
       assert args == [tool.id]

@@ -29,8 +29,7 @@ defmodule Systems.Annotation.RefModel do
   @target_fields ~w(entity resource annotation ontology_ref)a
 
   def changeset(references, attrs) do
-    references
-    |> cast(attrs, @fields)
+    cast(references, attrs, @fields)
   end
 
   def validate(changeset) do
@@ -45,8 +44,7 @@ defmodule Systems.Annotation.RefModel do
   def preload_graph(:entity), do: [entity: []]
   def preload_graph(:resource), do: [resource: Annotation.ResourceModel.preload_graph(:down)]
 
-  def preload_graph(:annotation),
-    do: [annotation: [:entity, type: Ontology.ConceptModel.preload_graph(:down)]]
+  def preload_graph(:annotation), do: [annotation: [:entity, type: Ontology.ConceptModel.preload_graph(:down)]]
 
   def preload_graph(:ontology_ref), do: [ontology_ref: Ontology.RefModel.preload_graph(:down)]
 
@@ -66,9 +64,6 @@ defmodule Systems.Annotation.RefModel do
   end
 
   defimpl Systems.Ontology.Element do
-    alias Systems.Ontology
-    alias Systems.Annotation
-
     def flatten(annotation_ref) do
       [annotation_ref | Ontology.Element.flatten(Annotation.RefModel.get_target(annotation_ref))]
     end

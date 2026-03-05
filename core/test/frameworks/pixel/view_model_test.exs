@@ -1,8 +1,9 @@
 defmodule Frameworks.Pixel.ViewModel.Test do
   use ExUnit.Case, async: true
 
-  require Frameworks.Pixel.ViewModel
   import Frameworks.Pixel.ViewModel
+
+  require Frameworks.Pixel.ViewModel
 
   describe("test_defviewmodel/1") do
     test "handles default nil properly" do
@@ -54,6 +55,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles short path properly" do
       expr =
         defmodule DefGetterShortPath do
+          @moduledoc false
           defgetter([:prop], nil)
         end
 
@@ -65,6 +67,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles longer path properly" do
       expr =
         defmodule DefGetterLongerPath do
+          @moduledoc false
           defgetter([:parent, :child, :grandchild], nil)
         end
 
@@ -76,6 +79,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles short path boolean properly" do
       expr =
         defmodule DefGetterShortPathBoolean do
+          @moduledoc false
           defgetter([:prop?], true)
         end
 
@@ -89,6 +93,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles short path properly" do
       expr =
         defmodule DefHasShortPath do
+          @moduledoc false
           defhas([:prop])
         end
 
@@ -100,6 +105,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles longer path properly" do
       expr =
         defmodule DefHasLongerPath do
+          @moduledoc false
           defhas([:parent, :child, :grandchild])
         end
 
@@ -111,6 +117,7 @@ defmodule Frameworks.Pixel.ViewModel.Test do
     test "handles short path boolean properly" do
       expr =
         defmodule DefHasShortPathBoolean do
+          @moduledoc false
           defhas([:prop?])
         end
 

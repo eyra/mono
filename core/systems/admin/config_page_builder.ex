@@ -1,4 +1,5 @@
 defmodule Systems.Admin.ConfigPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Admin
@@ -7,13 +8,15 @@ defmodule Systems.Admin.ConfigPageBuilder do
   alias Systems.Pool
 
   def view_model(%{id: :singleton}, assigns) do
-    %{
-      tabbar_id: "admin_config",
-      title: dgettext("eyra-admin", "config.title"),
-      active_menu_item: :admin,
-      show_errors: false
-    }
-    |> put_tabs(assigns)
+    put_tabs(
+      %{
+        tabbar_id: "admin_config",
+        title: dgettext("eyra-admin", "config.title"),
+        active_menu_item: :admin,
+        show_errors: false
+      },
+      assigns
+    )
   end
 
   defp put_tabs(vm, assigns) do
@@ -21,19 +24,14 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp create_tabs(show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, show_errors, assigns))
+    Enum.map(get_tab_keys(), &create_tab(&1, show_errors, assigns))
   end
 
-  defp get_tab_keys() do
+  defp get_tab_keys do
     [:system, :account, :org, :actions]
   end
 
-  defp create_tab(
-         :system,
-         show_errors,
-         %{fabric: fabric, locale: locale, current_user: user} = assigns
-       ) do
+  defp create_tab(:system, show_errors, %{fabric: fabric, locale: locale, current_user: user} = assigns) do
     ready? = false
 
     child =
@@ -61,11 +59,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  defp create_tab(
-         :account,
-         show_errors,
-         %{fabric: fabric, current_user: user}
-       ) do
+  defp create_tab(:account, show_errors, %{fabric: fabric, current_user: user}) do
     ready? = false
 
     creators = Systems.Account.Public.list_creators()
@@ -91,11 +85,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  defp create_tab(
-         :org,
-         show_errors,
-         %{fabric: fabric, locale: locale}
-       ) do
+  defp create_tab(:org, show_errors, %{fabric: fabric, locale: locale}) do
     ready? = false
 
     child =
@@ -113,11 +103,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  defp create_tab(
-         :actions,
-         show_errors,
-         %{fabric: fabric}
-       ) do
+  defp create_tab(:actions, show_errors, %{fabric: fabric}) do
     ready? = false
 
     child =
@@ -159,10 +145,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     Map.put(vm, :citizen_pool_items, Enum.map(citizen_pools, &to_view_model(&1, locale)))
   end
 
-  defp to_view_model(
-         %Budget.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
+  defp to_view_model(%Budget.BankAccountModel{id: id, name: name, icon: icon, currency: currency}, locale) do
     subtitle = Budget.CurrencyModel.title(currency, locale)
 
     %{
@@ -173,10 +156,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  defp to_view_model(
-         %Pool.Model{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
+  defp to_view_model(%Pool.Model{id: id, name: name, icon: icon, currency: currency}, locale) do
     subtitle = Budget.CurrencyModel.title(currency, locale)
 
     %{

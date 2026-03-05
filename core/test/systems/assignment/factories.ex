@@ -1,7 +1,8 @@
 defmodule Systems.Assignment.Factories do
+  @moduledoc false
   alias Core.Factories
-
   alias Systems.Alliance
+  alias Systems.Assignment.Model
   alias Systems.Budget
 
   def create_info(duration, subject_count) do
@@ -30,7 +31,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_workflow() do
+  def create_workflow do
     Factories.insert!(:workflow, %{})
   end
 
@@ -56,8 +57,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, consent_agreement, workflow, auth_node, status)
-      when is_atom(status) do
+  def create_assignment(info, consent_agreement, workflow, auth_node, status) when is_atom(status) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
@@ -85,7 +85,7 @@ defmodule Systems.Assignment.Factories do
     create_assignment(info, consent_agreement, workflow, assignment_auth_node, status)
   end
 
-  def build_assignment() do
+  def build_assignment do
     Factories.insert!(:assignment, %{})
   end
 
@@ -118,12 +118,12 @@ defmodule Systems.Assignment.Factories do
         :online
       )
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 
   def add_participant(%{} = assignment, user) do
     Systems.Assignment.Public.add_participant!(assignment, user)
-    assignment |> Core.Repo.preload([:crew], force: true)
+    Core.Repo.preload(assignment, [:crew], force: true)
   end
 
   def create_assignment_with_affiliate(redirect_url \\ nil, platform_name \\ nil) do
@@ -151,7 +151,7 @@ defmodule Systems.Assignment.Factories do
         status: :online
       })
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 
   def create_assignment_with_consent_and_affiliate(redirect_url \\ nil, platform_name \\ nil) do
@@ -182,7 +182,7 @@ defmodule Systems.Assignment.Factories do
         status: :online
       })
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 
   def add_affiliate_user(%{affiliate: affiliate} = assignment, user, identifier \\ "test-123") do
@@ -197,7 +197,7 @@ defmodule Systems.Assignment.Factories do
 
   def add_tester(%{crew: crew} = assignment, user) do
     # Grant tester role on crew's auth_node to make user a tester
-    crew = crew |> Core.Repo.preload([:auth_node])
+    crew = Core.Repo.preload(crew, [:auth_node])
 
     Factories.insert!(:role_assignment, %{
       node: crew.auth_node,
@@ -209,15 +209,15 @@ defmodule Systems.Assignment.Factories do
   end
 
   def finish_all_tasks(%{crew: crew, workflow: workflow} = assignment, user) do
-    %{items: [item]} = workflow |> Core.Repo.preload([:items])
+    %{items: [item]} = Core.Repo.preload(workflow, [:items])
 
     # Get existing member or create new one, ensuring user is preloaded
-    crew = crew |> Core.Repo.preload([:members])
+    crew = Core.Repo.preload(crew, [:members])
 
     member =
       case Enum.find(crew.members, fn m -> m.user_id == user.id end) do
         nil -> Systems.Crew.Factories.create_member(crew, user)
-        existing_member -> existing_member |> Core.Repo.preload([:user])
+        existing_member -> Core.Repo.preload(existing_member, [:user])
       end
 
     # Build task identifier based on workflow item
@@ -257,7 +257,7 @@ defmodule Systems.Assignment.Factories do
         :online
       )
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 
   def create_assignment_with_feldspar_tool do
@@ -285,7 +285,7 @@ defmodule Systems.Assignment.Factories do
         :online
       )
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 
   def create_feldspar_assignment_with_affiliate do
@@ -318,6 +318,6 @@ defmodule Systems.Assignment.Factories do
         status: :online
       })
 
-    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+    Core.Repo.preload(assignment, Model.preload_graph(:down))
   end
 end

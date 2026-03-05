@@ -40,8 +40,8 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Should render the chapter list view
-      assert view |> has_element?("[data-testid='chapter-list-view']")
-      refute view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-list-view']")
+      refute has_element?(view, "[data-testid='chapter-view']")
     end
 
     test "renders chapter view when chapter is selected", %{
@@ -70,7 +70,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Should render the chapter view
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
     end
   end
 
@@ -110,7 +110,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Verify chapter view is shown
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
 
       # Send :back toolbar event to the LiveView
       send(view.pid, {:toolbar_action, :back})
@@ -119,8 +119,8 @@ defmodule Systems.Manual.ViewTest do
       _ = render(view)
 
       # Should now show chapter list
-      assert view |> has_element?("[data-testid='chapter-list-view']")
-      refute view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-list-view']")
+      refute has_element?(view, "[data-testid='chapter-view']")
     end
 
     test "next_page event navigates to next page in chapter", %{
@@ -150,7 +150,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Verify chapter view is shown with first page
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
       # The page indicator should show "1/3" for first of 3 pages
       assert html =~ "1/3"
 
@@ -172,7 +172,7 @@ defmodule Systems.Manual.ViewTest do
       manual: manual,
       chapter1: chapter1
     } do
-      [_page1, page2, _page3] = chapter1.pages |> Enum.sort_by(& &1.userflow_step.order)
+      [_page1, page2, _page3] = Enum.sort_by(chapter1.pages, & &1.userflow_step.order)
 
       # Start with chapter selected on second page
       context =
@@ -195,7 +195,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Verify chapter view is shown with second page
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
       assert html =~ "2/3"
 
       # Send :previous_page toolbar event
@@ -216,7 +216,7 @@ defmodule Systems.Manual.ViewTest do
       manual: manual,
       chapter1: chapter1
     } do
-      [page1, _page2, _page3] = chapter1.pages |> Enum.sort_by(& &1.userflow_step.order)
+      [page1, _page2, _page3] = Enum.sort_by(chapter1.pages, & &1.userflow_step.order)
 
       # Start with chapter selected on first page
       context =
@@ -239,7 +239,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Verify chapter view is shown
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
 
       # Send :previous_page toolbar event on first page - should trigger back
       send(view.pid, {:toolbar_action, :previous_page})
@@ -287,8 +287,8 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Should render the chapter list view without toolbar
-      assert view |> has_element?("[data-testid='chapter-list-view']")
-      refute view |> has_element?("[data-testid='toolbar']")
+      assert has_element?(view, "[data-testid='chapter-list-view']")
+      refute has_element?(view, "[data-testid='toolbar']")
     end
 
     test "renders local toolbar when chapter is selected", %{
@@ -317,8 +317,8 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Should render the chapter view with local toolbar
-      assert view |> has_element?("[data-testid='chapter-view']")
-      assert view |> has_element?("[data-testid='toolbar']")
+      assert has_element?(view, "[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='toolbar']")
     end
 
     test "toolbar next_page action navigates to next page", %{
@@ -372,7 +372,7 @@ defmodule Systems.Manual.ViewTest do
       manual: manual,
       chapter1: chapter1
     } do
-      [_page1, page2, _page3] = chapter1.pages |> Enum.sort_by(& &1.userflow_step.order)
+      [_page1, page2, _page3] = Enum.sort_by(chapter1.pages, & &1.userflow_step.order)
 
       context =
         LiveContext.new(%{
@@ -419,7 +419,7 @@ defmodule Systems.Manual.ViewTest do
       manual: manual,
       chapter1: chapter1
     } do
-      [page1, _page2, _page3] = chapter1.pages |> Enum.sort_by(& &1.userflow_step.order)
+      [page1, _page2, _page3] = Enum.sort_by(chapter1.pages, & &1.userflow_step.order)
 
       context =
         LiveContext.new(%{
@@ -441,7 +441,7 @@ defmodule Systems.Manual.ViewTest do
         )
 
       # Verify chapter view is shown
-      assert view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-view']")
 
       # Send toolbar_action event via LiveNest (back event on first page)
       event = %LiveNest.Event{
@@ -456,8 +456,8 @@ defmodule Systems.Manual.ViewTest do
       _ = render(view)
 
       # Should now show chapter list (chapter cleared)
-      assert view |> has_element?("[data-testid='chapter-list-view']")
-      refute view |> has_element?("[data-testid='chapter-view']")
+      assert has_element?(view, "[data-testid='chapter-list-view']")
+      refute has_element?(view, "[data-testid='chapter-view']")
     end
   end
 end

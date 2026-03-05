@@ -1,4 +1,5 @@
 defmodule Systems.Annotation.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -36,13 +37,11 @@ defmodule Systems.Annotation.Model do
   @required_fields @fields
 
   def changeset(annotation, attrs) do
-    annotation
-    |> cast(attrs, @fields)
+    cast(annotation, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def preload_graph(:down), do: preload_graph([:type, :entity, :references])

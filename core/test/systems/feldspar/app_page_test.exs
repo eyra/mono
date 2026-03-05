@@ -1,5 +1,6 @@
 defmodule Systems.Feldspar.AppPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

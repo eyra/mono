@@ -1,4 +1,5 @@
 defmodule Systems.Account.UserProfilePageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
@@ -19,17 +20,18 @@ defmodule Systems.Account.UserProfilePageBuilder do
   end
 
   def build_tabs(user, fabric, _assigns) do
-    visible_tabs(user)
+    user
+    |> visible_tabs()
     |> Enum.map(& &1.build(user, fabric))
   end
 
   def tab_keys(user) do
-    visible_tabs(user)
+    user
+    |> visible_tabs()
     |> Enum.map(& &1.key())
   end
 
   defp visible_tabs(user) do
-    @tabs
-    |> Enum.filter(& &1.visible?(user))
+    Enum.filter(@tabs, & &1.visible?(user))
   end
 end

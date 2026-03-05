@@ -1,4 +1,5 @@
 defmodule Frameworks.Concept.PoolDirector do
+  @moduledoc false
   @type user :: map
   @type budget :: map
   @type submission :: map

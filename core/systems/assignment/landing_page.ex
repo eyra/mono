@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.LandingPage do
+  @moduledoc false
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
 
@@ -19,14 +20,13 @@ defmodule Systems.Assignment.LandingPage do
   def mount(%{"id" => id}, _session, socket) do
     {
       :ok,
-      socket
-      |> assign(id: id)
+      assign(socket, id: id)
     }
   end
 
   @impl true
   def handle_event("continue", _params, %{assigns: %{id: id}} = socket) do
-    {:noreply, socket |> push_navigate(to: ~p"/assignment/#{id}/join")}
+    {:noreply, push_navigate(socket, to: ~p"/assignment/#{id}/join")}
   end
 
   @impl true

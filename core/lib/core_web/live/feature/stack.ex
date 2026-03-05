@@ -26,8 +26,7 @@ defmodule CoreWeb.Live.Feature.Stack do
       false
   """
   def has_block_in_stack?(stack, block_type) when is_list(stack) and is_atom(block_type) do
-    stack
-    |> Enum.any?(fn {type, _} -> type == block_type end)
+    Enum.any?(stack, fn {type, _} -> type == block_type end)
   end
 
   @doc """
@@ -79,7 +78,6 @@ defmodule CoreWeb.Live.Feature.Stack do
       2
   """
   def count_blocks_in_stack(stack, block_type) when is_list(stack) and is_atom(block_type) do
-    stack
-    |> Enum.count(fn {type, _} -> type == block_type end)
+    Enum.count(stack, fn {type, _} -> type == block_type end)
   end
 end

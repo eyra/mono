@@ -1,5 +1,6 @@
 defmodule CoreWeb.FileUploader.Test do
   use ExUnit.Case, async: true
+
   alias CoreWeb.FileUploader
 
   describe "get_upload_path/1" do

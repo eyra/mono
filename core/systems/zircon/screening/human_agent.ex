@@ -5,7 +5,9 @@ defmodule Systems.Zircon.Screening.HumanAgent do
 
   @behaviour Frameworks.Concept.ScreeningAgent
 
-  @impl Frameworks.Concept.ScreeningAgent
+  alias Frameworks.Concept.ScreeningAgent
+
+  @impl ScreeningAgent
   def start(session_id, papers, _criteria) do
     paper_ids = Enum.map(papers, & &1.id)
 
@@ -17,7 +19,7 @@ defmodule Systems.Zircon.Screening.HumanAgent do
      }}
   end
 
-  @impl Frameworks.Concept.ScreeningAgent
+  @impl ScreeningAgent
   def next_paper(%{"screened_papers" => screened_papers, "papers" => papers} = state) do
     next_paper_id =
       Enum.find(papers, fn paper_id -> not Enum.member?(screened_papers, paper_id) end)
@@ -25,13 +27,8 @@ defmodule Systems.Zircon.Screening.HumanAgent do
     {:ok, {state, next_paper_id}}
   end
 
-  @impl Frameworks.Concept.ScreeningAgent
-  def update_paper(
-        %{"screened_papers" => screened_papers} = state,
-        paper_id,
-        _criterion_id,
-        _label
-      ) do
+  @impl ScreeningAgent
+  def update_paper(%{"screened_papers" => screened_papers} = state, paper_id, _criterion_id, _label) do
     # We don't need to inform any AI about the decision, we just need to update the state
     if Enum.member?(screened_papers, paper_id) do
       {:error, :paper_already_screened}

@@ -1,20 +1,16 @@
 defmodule Systems.Admin.OrgView do
   use CoreWeb, :live_component
 
+  import Systems.Org.ItemView
+
   alias CoreWeb.UI.Timestamp
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Grid
-
-  alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Grid
+  alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
-
-  alias Systems.{
-    Org,
-    Content
-  }
-
-  import Org.ItemView
+  alias Frameworks.Pixel.Text
+  alias Systems.Content
+  alias Systems.Org
 
   @impl true
   def update(%{id: id, locale: locale}, socket) do
@@ -64,14 +60,8 @@ defmodule Systems.Admin.OrgView do
   end
 
   defp prepare_organisations(
-         %{
-           assigns: %{
-             organisations: organisations,
-             active_filters: active_filters,
-             query: query,
-             locale: locale
-           }
-         } = socket
+         %{assigns: %{organisations: organisations, active_filters: active_filters, query: query, locale: locale}} =
+           socket
        ) do
     filtered_organisations =
       organisations
@@ -79,16 +69,14 @@ defmodule Systems.Admin.OrgView do
       |> Enum.map(&view_model(&1, locale))
       |> query(query)
 
-    socket
-    |> assign(filtered_organisations: filtered_organisations)
+    assign(socket, filtered_organisations: filtered_organisations)
   end
 
   def query(organisations, nil), do: organisations
   def query(organisations, []), do: organisations
 
   def query(organisations, query) when is_list(query) do
-    organisations
-    |> Enum.filter(&include?(&1, query))
+    Enum.filter(organisations, &include?(&1, query))
   end
 
   def include?(_organisation, []), do: true
@@ -106,8 +94,8 @@ defmodule Systems.Admin.OrgView do
   def include?(organisation, word) when is_binary(word) do
     word = String.downcase(word)
 
-    String.contains?(organisation.title |> String.downcase(), word) or
-      String.contains?(organisation.description |> String.downcase(), word)
+    organisation.title |> String.downcase() |> String.contains?(word) or
+      organisation.description |> String.downcase() |> String.contains?(word)
   end
 
   defp view_model(%Org.NodeModel{id: id} = org, locale) do
@@ -150,7 +138,7 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("create_org", _, socket) do
-    timestamp = Timestamp.now() |> DateTime.to_unix()
+    timestamp = DateTime.to_unix(Timestamp.now())
 
     {:ok, %{org: %{id: org_id}}} =
       Org.Public.create_node(
@@ -162,17 +150,12 @@ defmodule Systems.Admin.OrgView do
 
     {
       :noreply,
-      socket
-      |> push_navigate(to: ~p"/org/node/#{org_id}")
+      push_navigate(socket, to: ~p"/org/node/#{org_id}")
     }
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :org_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :org_filters}}, socket) do
     {
       :noreply,
       socket
@@ -182,11 +165,7 @@ defmodule Systems.Admin.OrgView do
   end
 
   @impl true
-  def handle_event(
-        "search_query",
-        %{query: query, query_string: query_string, source: %{name: :org_search_bar}},
-        socket
-      ) do
+  def handle_event("search_query", %{query: query, query_string: query_string, source: %{name: :org_search_bar}}, socket) do
     {
       :noreply,
       socket

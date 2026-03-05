@@ -1,35 +1,35 @@
 defmodule Systems.Advert.ModelTest do
   use Core.DataCase
+
   import Frameworks.Signal.TestHelper
 
   alias Systems.Advert
 
   describe "adverts" do
-    alias Systems.Advert
     alias Core.Factories
 
     test "list/1 returns all adverts" do
       advert = Factories.insert!(:advert)
-      assert Advert.Public.list() |> Enum.find(&(&1.id == advert.id))
+      assert Enum.any?(Advert.Public.list(), &(&1.id == advert.id))
     end
 
     test "list/1 allows excluding a list of ids" do
-      adverts = 0..3 |> Enum.map(fn _ -> Factories.insert!(:advert) end)
+      adverts = Enum.map(0..3, fn _ -> Factories.insert!(:advert) end)
       {excluded_advert, expected_result} = List.pop_at(adverts, 1)
 
       advert_ids =
-        Advert.Public.list(exclude: [excluded_advert.id])
-        |> Enum.map(& &1.id)
-        |> MapSet.new()
+        [exclude: [excluded_advert.id]]
+        |> Advert.Public.list()
+        |> MapSet.new(& &1.id)
 
-      expected_ids = expected_result |> Enum.map(& &1.id) |> MapSet.new()
+      expected_ids = MapSet.new(expected_result, & &1.id)
 
       assert MapSet.subset?(expected_ids, advert_ids)
     end
 
     test "get!/1 returns the advert with given id" do
       advert = Factories.insert!(:advert)
-      assert Advert.Public.get!(advert.id) != nil
+      assert Advert.Public.get!(advert.id)
     end
 
     test "create/1 with valid data creates a advert" do

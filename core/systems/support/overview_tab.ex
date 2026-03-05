@@ -1,17 +1,17 @@
 defmodule Systems.Support.OverviewTab do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  alias Core.ImageHelpers
   import Frameworks.Pixel.Content
-  alias CoreWeb.UI.Area
 
+  alias Core.ImageHelpers
+  alias CoreWeb.UI.Area
+  alias CoreWeb.UI.Timestamp
   alias Systems.Support
 
   @impl true
   def update(%{id: id, tickets: tickets}, socket) do
-    items =
-      tickets
-      |> Enum.map(&to_view_model(&1, socket))
+    items = Enum.map(tickets, &to_view_model(&1, socket))
 
     {
       :ok,
@@ -25,13 +25,7 @@ defmodule Systems.Support.OverviewTab do
          %Support.TicketModel{
            updated_at: updated_at,
            title: title,
-           user: %{
-             profile: %{
-               fullname: subtitle,
-               photo_url: photo_url
-             },
-             features: features
-           }
+           user: %{profile: %{fullname: subtitle, photo_url: photo_url}, features: features}
          } = ticket,
          _socket
        ) do
@@ -39,8 +33,8 @@ defmodule Systems.Support.OverviewTab do
 
     quick_summery =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
 
     image = %{
       type: :avatar,

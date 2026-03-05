@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.ViewModel do
+  @moduledoc false
   defp sub_props(props) when is_list(props), do: props
   defp sub_props(_), do: nil
 

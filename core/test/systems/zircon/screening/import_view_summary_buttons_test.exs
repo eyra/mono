@@ -2,7 +2,9 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
   use CoreWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
+
   alias Core.Factories
+  alias Systems.Paper.Public
   alias Systems.Zircon.Screening
 
   setup do
@@ -15,7 +17,7 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
   describe "Summary buttons in prompting phase" do
     test "shows warning, new papers, and existing papers buttons", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -58,7 +60,7 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",
@@ -84,17 +86,17 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
       assert html =~ "1 duplicate"
 
       # Test clicking each button
-      view |> render_click(:show_warnings)
+      render_click(view, :show_warnings)
       refute render(view) =~ "phx-error"
-      view |> render_click(:show_new_papers)
+      render_click(view, :show_new_papers)
       refute render(view) =~ "phx-error"
-      view |> render_click(:show_duplicates)
+      render_click(view, :show_duplicates)
       refute render(view) =~ "phx-error"
     end
 
     test "buttons only show when there are items to display", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
         Systems.Zircon.Public.insert_reference_file!(
@@ -114,7 +116,7 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
           errors: []
         })
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Test Import",

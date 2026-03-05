@@ -1,5 +1,6 @@
 defmodule Systems.Home.GuestView do
   use CoreWeb, :live_component
+
   import Systems.Home.HTML
 
   @impl true

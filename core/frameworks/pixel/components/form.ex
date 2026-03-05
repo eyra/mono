@@ -2,18 +2,16 @@ defmodule Frameworks.Pixel.Form do
   @moduledoc false
   use CoreWeb, :pixel
 
+  import Frameworks.Pixel.ErrorHelpers, only: [translate_error: 1]
+  import Frameworks.Pixel.FormHelpers
   import Frameworks.Pixel.ImagePreview
-
   import Phoenix.HTML
   # , only: [input_id: 2, input_name: 2, input_value: 2]
   import Phoenix.HTML.Form
 
-  import Frameworks.Pixel.FormHelpers
-  import Frameworks.Pixel.ErrorHelpers, only: [translate_error: 1]
-
-  alias Phoenix.LiveView.JS
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
+  alias Phoenix.LiveView.JS
 
   @label "label"
   @input "input"
@@ -702,7 +700,8 @@ defmodule Frameworks.Pixel.Form do
     has_errors = Enum.count(errors) > 0
 
     js_click =
-      JS.focus(to: "##{field_id}")
+      [to: "##{field_id}"]
+      |> JS.focus()
       |> JS.toggle(to: "##{options_id}")
       |> JS.toggle(to: "##{options_id}-dropdown-img")
       |> JS.toggle(to: "##{options_id}-dropup-img")
@@ -773,14 +772,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:options_id, :string, required: true)
   attr(:target, :any, required: true)
 
-  def dropdown_option(
-        %{
-          option: option,
-          field_value: field_value,
-          options_id: options_id,
-          target: target
-        } = assigns
-      ) do
+  def dropdown_option(%{option: option, field_value: field_value, options_id: options_id, target: target} = assigns) do
     text_color =
       if option.value == field_value do
         "text-primary"
@@ -789,7 +781,8 @@ defmodule Frameworks.Pixel.Form do
       end
 
     js_click =
-      JS.hide(to: "##{options_id}")
+      [to: "##{options_id}"]
+      |> JS.hide()
       |> JS.toggle(to: "##{options_id}-dropdown-img")
       |> JS.toggle(to: "##{options_id}-dropup-img")
       |> JS.push("select-option", value: option, target: target)

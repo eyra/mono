@@ -1,10 +1,13 @@
 defmodule Systems.Zircon.Screening.CriteriaViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Ecto.Query
+  import Phoenix.LiveViewTest
 
   alias Systems.Zircon
   alias Systems.Zircon.Screening
+  alias Systems.Zircon.Screening.ToolAnnotationAssoc
+  alias Systems.Zircon.Screening.ToolModel
 
   setup do
     ontology = Zircon.Factories.setup_ontology()
@@ -37,7 +40,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
   describe "show criteria view" do
     test "Default", %{conn: conn, session: session} do
       # add bogus request path to prevent error:  * 1st argument: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/criteria")
+      conn = Map.put(conn, :request_path, "/zircon/screening/criteria")
       {:ok, _view, html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
       assert html =~ "Test Criteria View"
@@ -65,26 +68,24 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       tool: tool
     } do
       # add bogus request path to prevent error:  * 1st argument: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/criteria")
+      conn = Map.put(conn, :request_path, "/zircon/screening/criteria")
 
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
-      html =
-        view |> render_click(:add, %{"item" => "Dimension 1"})
+      html = render_click(view, :add, %{"item" => "Dimension 1"})
 
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
       assert [%{}] =
                Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+                 from(taa in ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
-               )
+               from(t in ToolModel, where: t.id == ^tool.id)
+               |> Core.Repo.all()
                |> Core.Repo.preload(:annotations)
     end
 
@@ -94,29 +95,26 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       tool: tool
     } do
       # add bogus request path to prevent error:  * 1st argument: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/criteria")
+      conn = Map.put(conn, :request_path, "/zircon/screening/criteria")
 
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
-      view |> render_click(:add, %{"item" => "Dimension 1"})
-
-      html =
-        view |> render_click(:add, %{"item" => "Dimension 1"})
+      render_click(view, :add, %{"item" => "Dimension 1"})
+      html = render_click(view, :add, %{"item" => "Dimension 1"})
 
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_1_statement\""
 
       assert [%{}] =
                Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+                 from(taa in ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
-               )
+               from(t in ToolModel, where: t.id == ^tool.id)
+               |> Core.Repo.all()
                |> Core.Repo.preload(:annotations)
     end
 
@@ -126,28 +124,26 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       tool: tool
     } do
       # add bogus request path to prevent error:  * 1st argument: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/criteria")
+      conn = Map.put(conn, :request_path, "/zircon/screening/criteria")
 
       {:ok, view, _html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
-      view |> render_click(:add, %{"item" => "Dimension 1"})
-      view |> render_click(:add, %{"item" => "Dimension 2"})
-
-      html = view |> render()
+      render_click(view, :add, %{"item" => "Dimension 1"})
+      render_click(view, :add, %{"item" => "Dimension 2"})
+      html = render(view)
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_1_statement\""
 
       assert [%{}, %{}] =
                Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+                 from(taa in ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}, %{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
-               )
+               from(t in ToolModel, where: t.id == ^tool.id)
+               |> Core.Repo.all()
                |> Core.Repo.preload(:annotations)
     end
 
@@ -157,29 +153,26 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       tool: tool
     } do
       # add bogus request path to prevent error:  * 1st argument: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/criteria")
+      conn = Map.put(conn, :request_path, "/zircon/screening/criteria")
 
       {:ok, view, html} = live_isolated(conn, Screening.CriteriaView, session: session)
 
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
-      view
-      |> render_click(:delete, %{"item" => "criterion_form_0"})
-
-      html = view |> render()
+      render_click(view, :delete, %{"item" => "criterion_form_0"})
+      html = render(view)
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
       assert [] =
                Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+                 from(taa in ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: []}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
-               )
+               from(t in ToolModel, where: t.id == ^tool.id)
+               |> Core.Repo.all()
                |> Core.Repo.preload(:annotations)
     end
   end

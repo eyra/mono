@@ -1,8 +1,10 @@
 defmodule Core.WebPush.SignalHandlers do
+  @moduledoc false
   use Core, :auth
   use Frameworks.Signal.Handler
-  alias Systems.Notification.Box
+
   alias Core.WebPush
+  alias Systems.Notification.Box
 
   @impl true
   def intercept(:new_notification, %{box: box, data: %{title: title}}) do

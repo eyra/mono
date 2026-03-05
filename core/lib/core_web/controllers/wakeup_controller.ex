@@ -6,8 +6,7 @@ defmodule CoreWeb.WakeupController do
   outside the connection pool, which triggers Fly to wake up the DB.
   """
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   def get(conn, _params) do
     conn = put_resp_header(conn, "content-type", "text/plain")

@@ -1,14 +1,15 @@
 defmodule Systems.Budget.Form do
+  @moduledoc false
   use CoreWeb, :live_component
 
-  require Logger
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Utility.EctoHelper
+
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
-
+  alias Frameworks.Utility.EctoHelper
   alias Systems.Budget
+
+  require Logger
 
   # Initial update create
   @impl true
@@ -74,26 +75,25 @@ defmodule Systems.Budget.Form do
     }
   end
 
-  defp update_selected_currency(
-         %{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket
-       ) do
-    socket |> assign(selected_currency: currency)
+  defp update_selected_currency(%{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket) do
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(%{assigns: %{currencies: [currency | _]}} = socket) do
-    socket |> assign(selected_currency: currency)
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(socket) do
-    socket |> assign(selected_currency: nil)
+    assign(socket, selected_currency: nil)
   end
 
   defp update_currencies(socket) do
     currencies =
-      Budget.Public.list_bank_accounts(currency: Budget.CurrencyModel.preload_graph(:full))
+      [currency: Budget.CurrencyModel.preload_graph(:full)]
+      |> Budget.Public.list_bank_accounts()
       |> Enum.map(& &1.currency)
 
-    socket |> assign(currencies: currencies)
+    assign(socket, currencies: currencies)
   end
 
   defp update_options(%{assigns: %{currencies: currencies, locale: locale}} = socket) do
@@ -105,17 +105,13 @@ defmodule Systems.Budget.Form do
         }
       end)
 
-    socket |> assign(options: options)
+    assign(socket, options: options)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
-        %{
-          action: %{type: :submit},
-          face: %{type: :primary, label: dgettext("eyra-budget", "budget.submit.button")}
-        },
+        %{action: %{type: :submit}, face: %{type: :primary, label: dgettext("eyra-budget", "budget.submit.button")}},
         %{
           action: %{type: :send, event: "cancel", target: myself},
           face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
@@ -128,86 +124,62 @@ defmodule Systems.Budget.Form do
   def handle_event("change", %{"model" => attrs}, socket) do
     {
       :noreply,
-      socket |> change(attrs)
+      change(socket, attrs)
     }
   end
 
   @impl true
   def handle_event("submit", %{"model" => attrs}, socket) do
-    {:noreply, socket |> handle_submit(attrs)}
+    {:noreply, handle_submit(socket, attrs)}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "budget_cancelled")}
+    {:noreply, send_event(socket, :parent, "budget_cancelled")}
   end
 
   @impl true
-  def handle_event(
-        "dropdown_selected",
-        %{option: %{id: id}},
-        %{assigns: %{currencies: currencies}} = socket
-      ) do
-    selected_currency = currencies |> Enum.find(&(&1.id == id))
-    {:noreply, socket |> assign(selected_currency: selected_currency)}
+  def handle_event("dropdown_selected", %{option: %{id: id}}, %{assigns: %{currencies: currencies}} = socket) do
+    selected_currency = Enum.find(currencies, &(&1.id == id))
+    {:noreply, assign(socket, selected_currency: selected_currency)}
   end
 
   @impl true
   def handle_event("dropdown_toggle", _payload, socket) do
-    {:noreply, socket |> assign(currency_error: nil)}
+    {:noreply, assign(socket, currency_error: nil)}
   end
 
-  defp change(
-         %{assigns: %{budget: budget, validate_changeset?: validate_changeset?}} = socket,
-         attrs
-       ) do
-    socket
-    |> apply_change(
-      budget
-      |> Budget.Model.change(attrs)
-      |> Budget.Model.validate(validate_changeset?)
-    )
+  defp change(%{assigns: %{budget: budget, validate_changeset?: validate_changeset?}} = socket, attrs) do
+    apply_change(socket, budget |> Budget.Model.change(attrs) |> Budget.Model.validate(validate_changeset?))
   end
 
   defp apply_change(socket, changeset) do
     case Ecto.Changeset.apply_action(changeset, :change) do
-      {:ok, _budget} -> socket |> assign(changeset: changeset)
-      {:error, changeset} -> socket |> assign(changeset: changeset)
+      {:ok, _budget} -> assign(socket, changeset: changeset)
+      {:error, changeset} -> assign(socket, changeset: changeset)
     end
   end
 
   defp handle_submit(%{assigns: %{budget: %{currency: %{id: _id}} = budget}} = socket, attrs) do
     # Edit modus
-    socket
-    |> apply_submit(
-      budget
-      |> Budget.Model.change(attrs)
-      |> Budget.Model.validate()
-      |> Budget.Model.submit()
-    )
+    apply_submit(socket, budget |> Budget.Model.change(attrs) |> Budget.Model.validate() |> Budget.Model.submit())
   end
 
-  defp handle_submit(
-         %{assigns: %{budget: budget, user: user, selected_currency: selected_currency}} = socket,
-         attrs
-       ) do
+  defp handle_submit(%{assigns: %{budget: budget, user: user, selected_currency: selected_currency}} = socket, attrs) do
     # Create modus
-    socket
-    |> apply_submit(
-      budget
-      |> Budget.Model.change(attrs)
-      |> Budget.Model.validate()
-      |> Budget.Model.submit(user, selected_currency)
+    apply_submit(
+      socket,
+      budget |> Budget.Model.change(attrs) |> Budget.Model.validate() |> Budget.Model.submit(user, selected_currency)
     )
   end
 
   defp apply_submit(socket, changeset) do
     case EctoHelper.upsert(changeset) do
       {:ok, _budget} ->
-        socket |> send_event(:parent, "budget_saved")
+        send_event(socket, :parent, "budget_saved")
 
       {:error, changeset} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

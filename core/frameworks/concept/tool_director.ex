@@ -1,4 +1,5 @@
 defmodule Frameworks.Concept.ToolDirector do
+  @moduledoc false
   @type user :: map()
   @type tool :: map()
   @type public_id :: binary()

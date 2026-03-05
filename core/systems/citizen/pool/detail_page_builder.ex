@@ -1,9 +1,10 @@
 defmodule Systems.Citizen.Pool.DetailPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Systems.Advert
   alias Systems.Citizen
   alias Systems.Pool
-  alias Systems.Advert
 
   def view_model(pool, assigns) do
     %{
@@ -39,7 +40,8 @@ defmodule Systems.Citizen.Pool.DetailPageBuilder do
   defp load_adverts(pool) do
     preload = Advert.Model.preload_graph(:down)
 
-    Advert.Public.list_submitted(pool, preload: preload)
+    pool
+    |> Advert.Public.list_submitted(preload: preload)
     |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
   end
 end

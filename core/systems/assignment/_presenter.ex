@@ -1,10 +1,9 @@
 defmodule Systems.Assignment.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
-  alias Systems.{
-    Assignment,
-    Alliance
-  }
+  alias Systems.Alliance
+  alias Systems.Assignment
 
   @impl true
   def view_model(Alliance.CallbackPage, %Alliance.ToolModel{} = tool, assigns) do

@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Azure.EndpointModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -18,18 +19,17 @@ defmodule Systems.Storage.Azure.EndpointModel do
   end
 
   def changeset(model, params) do
-    model
-    |> cast(params, @fields)
+    cast(model, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(tool) do
     changeset =
-      changeset(tool, %{})
+      tool
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -43,6 +43,7 @@ defmodule Systems.Storage.Azure.EndpointModel do
 
   defimpl Frameworks.Concept.ContentModel do
     alias Systems.Storage.Azure
+
     def form(_), do: Azure.EndpointForm
     def ready?(endpoint), do: Azure.EndpointModel.ready?(endpoint)
   end

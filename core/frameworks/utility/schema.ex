@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.Schema do
+  @moduledoc false
   @callback preload_graph(any()) :: list()
 
   defmacro __using__(_opts) do
@@ -8,6 +9,7 @@ defmodule Frameworks.Utility.Schema do
       use Ecto.Schema
 
       import Ecto.Changeset
+
       alias Core.Repo
 
       def preload_graph(fields) when is_list(fields) do

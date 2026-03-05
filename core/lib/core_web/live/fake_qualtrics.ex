@@ -3,14 +3,13 @@ defmodule CoreWeb.FakeQualtrics do
   The home screen.
   """
   use CoreWeb, :live_view
-  alias Frameworks.Pixel.Text
+
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   @impl true
   def mount(%{"re" => redirect_url}, _session, socket) do
-    socket =
-      socket
-      |> assign(redirect_url: redirect_url)
+    socket = assign(socket, redirect_url: redirect_url)
 
     {:ok, socket}
   end

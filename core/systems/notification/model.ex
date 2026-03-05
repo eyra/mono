@@ -3,6 +3,7 @@ defmodule Systems.Notification.Model do
   The notification type.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "notifications" do

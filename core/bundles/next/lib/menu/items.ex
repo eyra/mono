@@ -1,12 +1,14 @@
 defmodule Next.Menu.Items do
-  use CoreWeb, :verified_routes
+  @moduledoc false
   @behaviour CoreWeb.Menu.ItemsProvider
 
+  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
+
   alias Phoenix.LiveView.JS
 
   @impl true
-  def values() do
+  def values do
     %{
       next: %{action: %{type: :http_get, to: ~p"/"}, title: "Next"},
       desktop: %{
@@ -52,7 +54,7 @@ defmodule Next.Menu.Items do
       menu: %{
         action: %{
           type: :phoenix_js,
-          js: JS.toggle(to: "#mobile-menu") |> JS.toggle(to: "#mobile-menu-backdrop")
+          js: [to: "#mobile-menu"] |> JS.toggle() |> JS.toggle(to: "#mobile-menu-backdrop")
         },
         title: dgettext("eyra-ui", "menu.item.menu")
       },

@@ -1,8 +1,9 @@
 defmodule Next.Account.SigninPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
-  import Frameworks.Utility.List
 
   import Core.FeatureFlags
+  import Frameworks.Utility.List
 
   def view_model(_, assigns) do
     tabs = create_tabs(assigns)
@@ -14,7 +15,8 @@ defmodule Next.Account.SigninPageBuilder do
   end
 
   defp create_tabs(assigns) do
-    tab_keys(assigns)
+    assigns
+    |> tab_keys()
     |> Enum.map(&create_tab(&1, assigns))
   end
 

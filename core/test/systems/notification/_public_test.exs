@@ -1,8 +1,10 @@
 defmodule Systems.Notification.PublicTest do
   use Core.DataCase
+
   alias Core.Factories
   alias Systems.Notification.Public
-  doctest Systems.Notification.Public
+
+  doctest Public
 
   setup do
     %{user: Factories.insert!(:member)}
@@ -26,8 +28,8 @@ defmodule Systems.Notification.PublicTest do
 
       {:ok, _} = Public.notify([user, another_user], %{title: "Testing"})
 
-      assert Public.list(user) |> Enum.map(& &1.title) == ["Testing"]
-      assert Public.list(another_user) |> Enum.map(& &1.title) == ["Testing"]
+      assert user |> Public.list() |> Enum.map(& &1.title) == ["Testing"]
+      assert another_user |> Public.list() |> Enum.map(& &1.title) == ["Testing"]
     end
   end
 
@@ -39,42 +41,43 @@ defmodule Systems.Notification.PublicTest do
     test "a list of notifications is returned when they have been notifyed", %{user: user} do
       :ok = Public.notify(user, @notification)
 
-      assert Public.list(user) |> Enum.map(& &1.title) == ["Test"]
+      assert user |> Public.list() |> Enum.map(& &1.title) == ["Test"]
     end
 
     test "notifications are listed in reverse chronological order", %{user: user} do
-      expected =
+      for_result =
         for i <- 1..5 do
           title = "N#{i}"
 
           :ok =
             Public.notify(
               user,
-              Map.merge(@notification, %{title: title})
+              Map.put(@notification, :title, title)
             )
 
           title
         end
-        |> Enum.reverse()
 
-      assert Public.list(user) |> Enum.map(& &1.title) == expected
+      expected = Enum.reverse(for_result)
+
+      assert user |> Public.list() |> Enum.map(& &1.title) == expected
     end
 
     test "list notifications only matching the user they belong to" do
-      users = 1..3 |> Enum.map(fn _ -> Factories.insert!(:member) end)
+      users = Enum.map(1..3, fn _ -> Factories.insert!(:member) end)
 
       titles =
-        users
-        |> Enum.map(fn user ->
-          title = user.id |> Integer.to_string()
+        Enum.map(users, fn user ->
+          title = Integer.to_string(user.id)
           :ok = Public.notify(user, Map.put(@notification, :title, title))
           title
         end)
 
       :ok =
-        Enum.zip(titles, users)
+        titles
+        |> Enum.zip(users)
         |> Enum.each(fn {title, user} ->
-          assert Public.list(user) |> Enum.map(& &1.title) == [title]
+          assert user |> Public.list() |> Enum.map(& &1.title) == [title]
         end)
     end
 
@@ -119,7 +122,7 @@ defmodule Systems.Notification.PublicTest do
 
       {:ok, _} = Public.notify_users_with_role(box, :owner, %{title: "Testing"})
 
-      assert Public.list(user) |> Enum.map(& &1.title) == ["Testing"]
+      assert user |> Public.list() |> Enum.map(& &1.title) == ["Testing"]
     end
   end
 

@@ -1,17 +1,16 @@
 defmodule Systems.Assignment.TemplateMigrationTest do
   use ExUnit.Case, async: true
 
-  alias Systems.Assignment.{
-    TemplateBenchmarkChallenge,
-    TemplateQuestionnaire,
-    TemplatePaperScreening,
-    TemplateDataDonation
-  }
+  alias Systems.Assignment.Template
+  alias Systems.Assignment.TemplateBenchmarkChallenge
+  alias Systems.Assignment.TemplateDataDonation
+  alias Systems.Assignment.TemplatePaperScreening
+  alias Systems.Assignment.TemplateQuestionnaire
 
   describe "Migration from opt_out to opt_in verification" do
     test "BenchmarkChallenge template has correct opt-in flags" do
       template = %TemplateBenchmarkChallenge{id: :benchmark_challenge}
-      tabs = Systems.Assignment.Template.tabs(template)
+      tabs = Template.tabs(template)
 
       # Check settings flags
       {_title, settings_flags} = tabs[:settings]
@@ -36,7 +35,7 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
     test "Questionnaire template has correct opt-in flags" do
       template = %TemplateQuestionnaire{id: :questionnaire}
-      tabs = Systems.Assignment.Template.tabs(template)
+      tabs = Template.tabs(template)
 
       # Check settings flags - all should be enabled (was opt_out: [:panel, :storage])
       {_title, settings_flags} = tabs[:settings]
@@ -55,7 +54,7 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
     test "PaperScreening template has correct opt-in flags" do
       template = %TemplatePaperScreening{id: :paper_screening}
-      tabs = Systems.Assignment.Template.tabs(template)
+      tabs = Template.tabs(template)
 
       # Check participants flags
       {_title, participants_flags} = tabs[:participants]
@@ -68,7 +67,7 @@ defmodule Systems.Assignment.TemplateMigrationTest do
 
     test "DataDonation template has correct opt-in flags" do
       template = %TemplateDataDonation{id: :data_donation}
-      tabs = Systems.Assignment.Template.tabs(template)
+      tabs = Template.tabs(template)
 
       # Check settings flags - all should be enabled (was no opt_out)
       {_title, settings_flags} = tabs[:settings]

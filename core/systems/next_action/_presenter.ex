@@ -1,4 +1,5 @@
 defmodule Systems.NextAction.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   alias Systems.NextAction

@@ -1,9 +1,8 @@
 defmodule Systems.Content.FileCopyView do
   use CoreWeb, :live_component
 
-  alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
-
+  alias Frameworks.Pixel.Panel
   alias Systems.Content
 
   @impl true
@@ -24,13 +23,7 @@ defmodule Systems.Content.FileCopyView do
     assign(socket, url: nil)
   end
 
-  defp update_url(
-         %{
-           assigns: %{
-             file: %Content.FileModel{ref: ref}
-           }
-         } = socket
-       ) do
+  defp update_url(%{assigns: %{file: %Content.FileModel{ref: ref}}} = socket) do
     assign(socket, url: ref)
   end
 

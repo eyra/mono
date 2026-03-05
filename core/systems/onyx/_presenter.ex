@@ -1,4 +1,5 @@
 defmodule Systems.Onyx.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   @impl true

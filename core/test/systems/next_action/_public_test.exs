@@ -1,14 +1,17 @@
 defmodule Systems.NextAction.PublicTest do
   use Core.DataCase
-  alias Core.Factories
 
+  alias Core.Factories
   alias Systems.NextAction.Public
+  alias Systems.NextAction.ViewModel
 
   defmodule SomeAction do
-    @behaviour Systems.NextAction.ViewModel
+    @moduledoc false
+    @behaviour ViewModel
+
     use CoreWeb, :verified_routes
 
-    @impl Systems.NextAction.ViewModel
+    @impl ViewModel
     def to_view_model(count, _params) do
       %{
         title: "Test: #{count}",

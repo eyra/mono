@@ -1,17 +1,16 @@
 defmodule Systems.Assignment.ParticipantsView do
   use CoreWeb, :live_component
-
-  require Logger
-
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
   alias Frameworks.Pixel.Logo
-  alias Systems.Affiliate
+  alias Frameworks.Pixel.Panel
   alias Systems.Advert
-  alias Systems.Pool
+  alias Systems.Affiliate
   alias Systems.Assignment
+  alias Systems.Pool
+
+  require Logger
 
   @impl true
   def update(
@@ -75,9 +74,7 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, invite_title: invite_title)
   end
 
-  defp update_affiliate_title(
-         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
-       )
+  defp update_affiliate_title(%{assigns: %{assignment: %{external_panel: external_panel}}} = socket)
        when not is_nil(external_panel) do
     # backward compatibility using deprecated Assignment.external_panel field
     affiliate_title = dgettext("eyra-assignment", "external.panel.title")
@@ -121,9 +118,7 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, invite_annotation: annotation)
   end
 
-  defp update_affiliate_annotation(
-         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
-       )
+  defp update_affiliate_annotation(%{assigns: %{assignment: %{external_panel: external_panel}}} = socket)
        when not is_nil(external_panel) do
     # backward compatibility using deprecated Assignment.external_panel field
     annotation = dgettext("eyra-assignment", "external.panel.annotation")
@@ -151,11 +146,7 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   @impl true
-  def handle_event(
-        "create_advert",
-        _payload,
-        %{assigns: %{assignment: assignment, user: user}} = socket
-      ) do
+  def handle_event("create_advert", _payload, %{assigns: %{assignment: assignment, user: user}} = socket) do
     if pool = Pool.Public.get_panl() do
       Advert.Assembly.create(assignment, user, pool)
     else

@@ -1,12 +1,13 @@
 defmodule Systems.Crew.Selector do
+  @moduledoc false
   defmacro __using__({model, key}) do
     quote bind_quoted: [model: model, key: key] do
+      require Ecto.Query
+
       @enforce_keys [:query]
 
       @type t :: %__MODULE__{query: Ecto.Query.t()}
       defstruct [:query]
-
-      require Ecto.Query
 
       defmacro where(selector, binding \\ [], expr) do
         quote do
@@ -77,10 +78,10 @@ defmodule Systems.Crew.Selector do
       end
 
       def update(selector, %Ecto.Query{} = query) do
-        %__MODULE__{selector | query: query}
+        %{selector | query: query}
       end
 
-      def new() do
+      def new do
         %__MODULE__{query: Ecto.Query.from(x in unquote(model), as: unquote(key))}
       end
 
@@ -124,23 +125,23 @@ defmodule Systems.Crew.Selector do
 
         selector
         |> join(:inner, [{^binding, b}], _ in assoc(b, :auth_node), as: ^auth_node_binding)
-        |> join(:inner, [{^auth_node_binding, b}], _ in assoc(b, :role_assignments),
-          as: ^assignments_binding
-        )
+        |> join(:inner, [{^auth_node_binding, b}], _ in assoc(b, :role_assignments), as: ^assignments_binding)
         |> where([{^assignments_binding, b}], b.role in ^role_list)
       end
 
       def authorize(%__MODULE__{} = selector, binding, role, %{} = user_ids_queryable) do
         assignments_binding = String.to_atom("#{binding}_auth_node_role_assignments")
 
-        authorize(selector, binding, role)
+        selector
+        |> authorize(binding, role)
         |> where([{^assignments_binding, b}], b.principal_id in subquery(user_ids_queryable))
       end
 
       def authorize(%__MODULE__{} = selector, binding, role, user_ids) when is_list(user_ids) do
         assignments_binding = String.to_atom("#{binding}_auth_node_role_assignments")
 
-        authorize(selector, binding, role)
+        selector
+        |> authorize(binding, role)
         |> where([{^assignments_binding, b}], b.principal_id in ^user_ids)
       end
 

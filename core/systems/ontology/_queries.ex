@@ -1,14 +1,15 @@
 defmodule Systems.Ontology.Queries do
+  @moduledoc false
   import Ecto.Query
-  require Frameworks.Utility.Query
-
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Core.Authentication
   alias Systems.Ontology
 
+  require Frameworks.Utility.Query
+
   # CONCEPT
-  def concept_query() do
+  def concept_query do
     from(c in Ontology.ConceptModel, as: :concept)
   end
 
@@ -29,7 +30,7 @@ defmodule Systems.Ontology.Queries do
   end
 
   def concept_query_include(query, :entities, entities) do
-    entity_ids = entities |> Enum.map(& &1.id)
+    entity_ids = Enum.map(entities, & &1.id)
     build(query, :concept, entity: [id in ^entity_ids])
   end
 
@@ -40,12 +41,11 @@ defmodule Systems.Ontology.Queries do
 
   # PREDICATE
 
-  def predicate_query() do
+  def predicate_query do
     from(p in Ontology.PredicateModel, as: :predicate)
   end
 
-  def predicate_query(%{subject: subject, type: type})
-      when is_binary(subject) and is_binary(type) do
+  def predicate_query(%{subject: subject, type: type}) when is_binary(subject) and is_binary(type) do
     build(predicate_query(), :predicate,
       subject: [phrase == ^subject],
       type: [phrase == ^type]
@@ -81,23 +81,25 @@ defmodule Systems.Ontology.Queries do
   end
 
   def predicate_query_include(query, :entities, entities) do
-    entity_ids = entities |> Enum.map(& &1.id)
+    entity_ids = Enum.map(entities, & &1.id)
     build(query, :predicate, entity: [id in ^entity_ids])
   end
 
   # REF
 
-  def ref_query() do
+  def ref_query do
     from(r in Ontology.RefModel, as: :ref)
   end
 
   def ref_query(%Ontology.ConceptModel{} = concept) do
     concept_ids =
-      concept_query(concept.id)
+      concept.id
+      |> concept_query()
       |> select([concept: c], c.id)
 
     predicate_ids =
-      predicate_query(concept)
+      concept
+      |> predicate_query()
       |> select([predicate: p], p.id)
 
     build(

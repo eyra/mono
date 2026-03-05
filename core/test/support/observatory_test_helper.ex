@@ -7,6 +7,7 @@ defmodule Observatory.TestHelper do
   """
 
   import ExUnit.Assertions
+
   alias Systems.Observatory
 
   @doc """

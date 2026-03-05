@@ -1,5 +1,7 @@
 defmodule Systems.Storage.BuiltIn.LocalFS do
+  @moduledoc false
   @behaviour Systems.Storage.BuiltIn.Special
+
   use CoreWeb, :verified_routes
 
   @impl true
@@ -19,7 +21,8 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     folder_path = get_full_path(folder)
     File.mkdir(folder_path)
 
-    File.ls!(folder_path)
+    folder_path
+    |> File.ls!()
     |> Enum.map(fn filename ->
       file_path = Path.join(folder_path, filename)
       {:ok, %File.Stat{mtime: mtime, size: size}} = File.stat(file_path)

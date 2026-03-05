@@ -3,6 +3,7 @@ defmodule Systems.Notification.Box do
   The box type.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "notification_boxes" do

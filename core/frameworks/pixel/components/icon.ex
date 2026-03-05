@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Icon do
+  @moduledoc false
   use CoreWeb, :pixel
 
   # Path function for use outside of components

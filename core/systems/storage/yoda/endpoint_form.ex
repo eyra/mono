@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Yoda.EndpointForm do
+  @moduledoc false
   use Systems.Storage.EndpointForm.Helper, Systems.Storage.Yoda.EndpointModel
 
   import Systems.Storage.Html

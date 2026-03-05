@@ -1,17 +1,17 @@
 defmodule Systems.Assignment.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
-  require Logger
-
   use Core, :auth
 
   alias Frameworks.Signal
-
-  alias Systems.Project
   alias Systems.Account
   alias Systems.Assignment
-  alias Systems.Workflow
   alias Systems.Crew
   alias Systems.NextAction
+  alias Systems.Project
+  alias Systems.Workflow
+
+  require Logger
 
   @assignment_accepted_event :assignment_accepted
   @assignment_declined_event :assignment_declined
@@ -26,7 +26,7 @@ defmodule Systems.Assignment.Switch do
     if assignment = Assignment.Public.get_by(affiliate, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
+        Map.put(message, :assignment, assignment)
       )
     end
 
@@ -50,10 +50,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept(
-        {:content_page, _} = signal,
-        %{content_page: content_page} = message
-      ) do
+  def intercept({:content_page, _} = signal, %{content_page: content_page} = message) do
     if assignment =
          Assignment.Public.get_by_content_page(
            content_page,
@@ -61,7 +58,7 @@ defmodule Systems.Assignment.Switch do
          ) do
       dispatch!(
         {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
+        Map.put(message, :assignment, assignment)
       )
     end
 
@@ -77,17 +74,14 @@ defmodule Systems.Assignment.Switch do
 
     handle(
       {:assignment, signal},
-      Map.merge(message, %{assignment: assignment})
+      Map.put(message, :assignment, assignment)
     )
 
     :ok
   end
 
   @impl true
-  def intercept(
-        {:project_item, :inserted} = signal,
-        %{project_item: %{storage_endpoint: _} = project_item} = message
-      ) do
+  def intercept({:project_item, :inserted} = signal, %{project_item: %{storage_endpoint: _} = project_item} = message) do
     project_item
     |> Project.Public.get_node_by_item!()
     |> Project.Public.list_items(:assignment, Project.ItemModel.preload_graph(:down))
@@ -95,7 +89,7 @@ defmodule Systems.Assignment.Switch do
     |> Enum.each(fn assignment ->
       handle(
         {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
+        Map.put(message, :assignment, assignment)
       )
     end)
 
@@ -103,10 +97,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept(
-        {:workflow, event} = _signal,
-        %{workflow: workflow, from_pid: from_pid} = message
-      ) do
+  def intercept({:workflow, event} = _signal, %{workflow: workflow, from_pid: from_pid} = message) do
     if assignment = Assignment.Public.get_by(workflow, Assignment.Model.preload_graph(:down)) do
       with {:workflow_item, :deleted} <- event do
         delete_crew_tasks(message)
@@ -116,8 +107,7 @@ defmodule Systems.Assignment.Switch do
         {:workflow_item, {:manual_tool, {:manual, {:manual_chapter, {:userflow_step, :visited}}}}} ->
           update_content_page(assignment, from_pid)
 
-        {:workflow_item,
-         {:manual_tool, {:manual, {:manual_chapter, {:manual_page, {:userflow_step, :visited}}}}}} ->
+        {:workflow_item, {:manual_tool, {:manual, {:manual_chapter, {:manual_page, {:userflow_step, :visited}}}}}} ->
           update_content_page(assignment, from_pid)
 
         _ ->
@@ -134,10 +124,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept(
-        {:crew, event} = _signal,
-        %{crew: crew, crew_member: crew_member, from_pid: from_pid} = _message
-      ) do
+  def intercept({:crew, event} = _signal, %{crew: crew, crew_member: crew_member, from_pid: from_pid} = _message) do
     if assignment = Assignment.Public.get_by(crew, Assignment.Model.preload_graph(:down)) do
       case event do
         {:crew_member, :accepted} ->
@@ -191,7 +178,7 @@ defmodule Systems.Assignment.Switch do
     if assignment = Assignment.Public.get_by(info, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
+        Map.put(message, :assignment, assignment)
       )
     end
 
@@ -204,7 +191,7 @@ defmodule Systems.Assignment.Switch do
 
     dispatch!(
       {:assignment, signal},
-      Map.merge(message, %{assignment: assignment})
+      Map.put(message, :assignment, assignment)
     )
 
     :ok
@@ -218,11 +205,7 @@ defmodule Systems.Assignment.Switch do
 
   def intercept(
         {:consent_agreement, {:consent_signature, :created}} = _signal,
-        %{
-          consent_agreement: consent_agreement,
-          consent_signature: %{user: user},
-          from_pid: from_pid
-        } = _message
+        %{consent_agreement: consent_agreement, consent_signature: %{user: user}, from_pid: from_pid} = _message
       ) do
     if assignment =
          Assignment.Public.get_by(consent_agreement, Assignment.Model.preload_graph(:down)) do
@@ -242,7 +225,8 @@ defmodule Systems.Assignment.Switch do
         {:crew_task, event} = _signal,
         %{crew_task: %{crew_id: crew_id} = crew_task, from_pid: from_pid} = message
       ) do
-    Assignment.Public.list_by_crew(crew_id, Assignment.Model.preload_graph(:down))
+    crew_id
+    |> Assignment.Public.list_by_crew(Assignment.Model.preload_graph(:down))
     |> Enum.each(fn assignment ->
       case event do
         :started ->
@@ -253,7 +237,8 @@ defmodule Systems.Assignment.Switch do
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
           Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
 
-          Assignment.Public.get_member_by_task(crew_task)
+          crew_task
+          |> Assignment.Public.get_member_by_task()
           |> dispatch_finished_assignment()
 
         :accepted ->
@@ -297,7 +282,7 @@ defmodule Systems.Assignment.Switch do
     if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
-        Map.merge(message, %{assignment: assignment})
+        Map.put(message, :assignment, assignment)
       )
     end
 
@@ -309,10 +294,7 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
-  defp handle(
-         {:assignment, :monitor_event},
-         %{assignment: assignment, from_pid: from_pid} = _message
-       ) do
+  defp handle({:assignment, :monitor_event}, %{assignment: assignment, from_pid: from_pid} = _message) do
     # Don't update the crew page here
     update_content_page(assignment, from_pid)
   end
@@ -329,7 +311,8 @@ defmodule Systems.Assignment.Switch do
          assignment: %Assignment.Model{crew: crew} = assignment,
          workflow_item: %Workflow.ItemModel{} = workflow_item
        }) do
-    Assignment.Private.task_template(assignment, workflow_item)
+    assignment
+    |> Assignment.Private.task_template(workflow_item)
     |> then(&Crew.Public.list_tasks_by_template(crew, &1))
     |> delete_crew_tasks()
   end
@@ -411,10 +394,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp update_crew_task_next_action(%{id: assignment_id}, %{
-         changeset: %{
-           data: %{status: old_status, auth_node_id: auth_node_id},
-           changes: %{status: new_status}
-         }
+         changeset: %{data: %{status: old_status, auth_node_id: auth_node_id}, changes: %{status: new_status}}
        }) do
     users = auth_module().users_with_role(auth_node_id, :owner)
 

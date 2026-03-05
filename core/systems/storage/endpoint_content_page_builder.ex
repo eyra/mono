@@ -1,15 +1,14 @@
 defmodule Systems.Storage.EndpointContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Utility.List
 
   alias Frameworks.Concept
-  alias Systems.Storage
   alias Systems.Monitor
+  alias Systems.Storage
 
-  def view_model(
-        %{id: id} = endpoint,
-        %{branch: branch} = assigns
-      ) do
+  def view_model(%{id: id} = endpoint, %{branch: branch} = assigns) do
     show_errors = true
     breadcrumbs = Concept.Branch.hierarchy(branch)
     tabs = create_tabs(endpoint, show_errors, assigns)
@@ -35,21 +34,13 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     |> append(:monitor)
   end
 
-  defp create_tabs(
-         endpoint,
-         show_errors,
-         assigns
-       ) do
-    get_tab_keys(endpoint)
+  defp create_tabs(endpoint, show_errors, assigns) do
+    endpoint
+    |> get_tab_keys()
     |> Enum.map(&create_tab(&1, endpoint, show_errors, assigns))
   end
 
-  defp create_tab(
-         :settings,
-         endpoint,
-         show_errors,
-         %{fabric: fabric} = _assigns
-       ) do
+  defp create_tab(:settings, endpoint, show_errors, %{fabric: fabric} = _assigns) do
     ready? = true
 
     child =
@@ -68,12 +59,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :data,
-         endpoint,
-         show_errors,
-         %{branch: branch, fabric: fabric, timezone: timezone} = _assigns
-       ) do
+  defp create_tab(:data, endpoint, show_errors, %{branch: branch, fabric: fabric, timezone: timezone} = _assigns) do
     ready? = true
     branch_name = Concept.Branch.name(branch, :parent)
 
@@ -95,12 +81,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :monitor,
-         endpoint,
-         show_errors,
-         %{fabric: fabric} = _assigns
-       ) do
+  defp create_tab(:monitor, endpoint, show_errors, %{fabric: fabric} = _assigns) do
     ready? = true
 
     child =
@@ -120,13 +101,13 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   end
 
   defp number_widgets(endpoint) do
-    [:files, :bytes]
-    |> Enum.map(&number_widget(&1, endpoint))
+    Enum.map([:files, :bytes], &number_widget(&1, endpoint))
   end
 
   defp number_widget(:bytes, special) do
     sum =
-      Monitor.Public.event({special, :bytes})
+      {special, :bytes}
+      |> Monitor.Public.event()
       |> Monitor.Public.sum()
 
     {label, metric} =
@@ -159,7 +140,8 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
   defp number_widget(:files, endpoint) do
     metric =
-      Monitor.Public.event({endpoint, :files})
+      {endpoint, :files}
+      |> Monitor.Public.event()
       |> Monitor.Public.sum()
 
     %{

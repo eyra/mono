@@ -1,8 +1,11 @@
 defmodule Systems.Content.S3 do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
+
   alias ExAws.S3
 
   defmodule Error do
+    @moduledoc false
     defexception [:message]
 
     def failed_to_setup_stream(error) do
@@ -24,7 +27,8 @@ defmodule Systems.Content.S3 do
     bucket = Access.fetch!(s3_settings(), :bucket)
     object_key = "#{object_key(filename)}"
 
-    S3.delete_object(bucket, object_key)
+    bucket
+    |> S3.delete_object(object_key)
     |> backend().request!()
   end
 
@@ -38,8 +42,8 @@ defmodule Systems.Content.S3 do
     {:ok, data} = File.read(file)
     object_key = "#{object_key(filename)}"
 
-    S3.put_object(
-      bucket,
+    bucket
+    |> S3.put_object(
       object_key,
       data,
       content_type: content_type(filename)
@@ -89,7 +93,7 @@ defmodule Systems.Content.S3 do
 
     stream =
       bucket
-      |> ExAws.S3.download_file(object_key, :memory, chunk_size: chunk_size)
+      |> S3.download_file(object_key, :memory, chunk_size: chunk_size)
       |> ExAws.stream!()
       |> Stream.map(fn chunk -> chunk end)
 
@@ -100,7 +104,8 @@ defmodule Systems.Content.S3 do
   end
 
   defp get_stream_chunk_size do
-    Application.fetch_env!(:core, :paper)
+    :core
+    |> Application.fetch_env!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

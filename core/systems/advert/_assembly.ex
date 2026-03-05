@@ -1,18 +1,18 @@
 defmodule Systems.Advert.Assembly do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
-
   use Core, :auth
-  alias Core.Repo
-  alias Ecto.Multi
-  alias Ecto.Changeset
 
+  alias Core.Repo
+  alias Ecto.Changeset
+  alias Ecto.Multi
   alias Frameworks.Signal
+  alias Systems.Account
   alias Systems.Advert
   alias Systems.Assignment
-  alias Systems.Promotion
   alias Systems.Pool
   alias Systems.Project
-  alias Systems.Account
+  alias Systems.Promotion
 
   def delete(%Advert.Model{} = advert) do
     Multi.new()
@@ -20,13 +20,7 @@ defmodule Systems.Advert.Assembly do
     |> Repo.commit()
   end
 
-  def delete(
-        multi,
-        %Advert.Model{
-          auth_node: auth_node,
-          promotion: promotion
-        } = advert
-      ) do
+  def delete(multi, %Advert.Model{auth_node: auth_node, promotion: promotion} = advert) do
     multi
     |> Multi.delete(:advert, advert)
     |> Multi.delete(:advert_auth_node, auth_node)
@@ -39,18 +33,14 @@ defmodule Systems.Advert.Assembly do
     |> Multi.delete(:promotion_auth_node, auth_node)
   end
 
-  def create(
-        %Assignment.Model{info: %{image_id: image_id, title: title}} = assignment,
-        user,
-        pool
-      ) do
+  def create(%Assignment.Model{info: %{image_id: image_id, title: title}} = assignment, user, pool) do
     project_node =
       %{auth_node: project_auth_node} =
       assignment
       |> Project.Public.get_item_by()
       |> Project.Public.get_node_by_item!([:auth_node])
 
-    profile = user |> Account.Public.get_profile()
+    profile = Account.Public.get_profile(user)
 
     promotion_attrs = create_promotion_attrs(image_id, title, user, profile)
 
@@ -108,10 +98,8 @@ defmodule Systems.Advert.Assembly do
       |> Changeset.put_assoc(:submission, submission)
       |> Changeset.put_assoc(:promotion, promotion)
 
-    Project.Public.prepare_item(
-      %{name: name, project_path: project_path ++ [project_node_id]},
-      advert
-    )
+    %{name: name, project_path: project_path ++ [project_node_id]}
+    |> Project.Public.prepare_item(advert)
     |> Changeset.put_assoc(:node, project_node)
   end
 
@@ -134,17 +122,8 @@ defmodule Systems.Advert.Assembly do
         %Advert.Model{
           auth_node: advert_auth_node,
           submission: submission,
-          promotion:
-            %{
-              auth_node: promotion_auth_node
-            } = promotion,
-          assignment:
-            %{
-              budget: budget,
-              auth_node: assignment_auth_node,
-              info: info,
-              workflow: workflow
-            } = assignment
+          promotion: %{auth_node: promotion_auth_node} = promotion,
+          assignment: %{budget: budget, auth_node: assignment_auth_node, info: info, workflow: workflow} = assignment
         } = advert
       ) do
     advert_auth_node = auth_module().copy(advert_auth_node)

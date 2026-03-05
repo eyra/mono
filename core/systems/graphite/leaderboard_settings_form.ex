@@ -1,10 +1,10 @@
 defmodule Systems.Graphite.LeaderboardSettingsForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.Text
-
   alias Systems.Graphite
 
   @impl true
@@ -13,8 +13,7 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
 
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         leaderboard: leaderboard,
         changeset: changeset,
@@ -36,16 +35,14 @@ defmodule Systems.Graphite.LeaderboardSettingsForm do
 
     {
       :noreply,
-      socket
-      |> save(leaderboard, attrs)
+      save(socket, leaderboard, attrs)
     }
   end
 
   defp save(socket, entity, attrs) do
     changeset = Graphite.LeaderboardModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   defp metrics_to_string(nil), do: ""

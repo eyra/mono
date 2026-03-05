@@ -2,13 +2,12 @@ defmodule Systems.Assignment.OnboardingConsentView do
   use CoreWeb, :embedded_live_view
   use CoreWeb, :verified_routes
 
-  alias Frameworks.Pixel.Text
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
-
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment
 
-  def dependencies(), do: [:assignment_id, :current_user]
+  def dependencies, do: [:assignment_id, :current_user]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))

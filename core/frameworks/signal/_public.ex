@@ -1,10 +1,12 @@
 defmodule Frameworks.Signal.Public do
+  @moduledoc false
   use Core, :public
-  require Logger
 
   import Frameworks.Utility.PrettyPrint
 
   alias Frameworks.Signal.Private
+
+  require Logger
 
   def dispatch(signal, message) do
     message = Map.put_new(message, :from_pid, self())

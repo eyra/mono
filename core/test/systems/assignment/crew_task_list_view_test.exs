@@ -1,10 +1,13 @@
 defmodule Systems.Assignment.CrewTaskListViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
+  alias Systems.Workflow.Model
 
   setup do
     isolate_signals()
@@ -19,10 +22,10 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      conn = conn |> Map.put(:request_path, "/assignment/tasks")
+      conn = Map.put(conn, :request_path, "/assignment/tasks")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -47,7 +50,7 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       assignment = Repo.preload(assignment, [:crew, workflow: [:items]], force: true)
 
       # Get first workflow item id for testing
-      ordered_items = Systems.Workflow.Model.ordered_items(assignment.workflow)
+      ordered_items = Model.ordered_items(assignment.workflow)
       [first_item | _] = ordered_items
       work_item_id = first_item.id
 
@@ -60,11 +63,11 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       assignment: assignment,
       work_item_id: work_item_id
     } do
-      conn = conn |> Map.put(:request_path, "/assignment/tasks")
+      conn = Map.put(conn, :request_path, "/assignment/tasks")
 
       # Mount with a work_item_id in user_state to simulate an active task
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{task: work_item_id},
@@ -83,7 +86,7 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       # The modal_closed event is consumed internally by LiveNest
       # We can't easily trigger it in isolated tests, but the view should be properly initialized
       # The actual modal closing flow is tested through integration tests with CrewPage
-      assert view |> has_element?("[data-testid='crew-task-list-view']")
+      assert has_element?(view, "[data-testid='crew-task-list-view']")
     end
   end
 
@@ -95,7 +98,7 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       assignment = Repo.preload(assignment, [:crew, workflow: [items: [:tool_ref]]], force: true)
 
       # Get the workflow item id
-      ordered_items = Systems.Workflow.Model.ordered_items(assignment.workflow)
+      ordered_items = Model.ordered_items(assignment.workflow)
       [first_item | _] = ordered_items
       work_item_id = first_item.id
 
@@ -111,10 +114,10 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       # This test verifies vm.participant is computed by ViewBuilder.
       # The actual click-to-start flow is tested via integration tests.
 
-      conn = conn |> Map.put(:request_path, "/assignment/tasks")
+      conn = Map.put(conn, :request_path, "/assignment/tasks")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{},
@@ -143,11 +146,11 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
       #
       # The fix: participant is computed in ViewBuilder (not in mount).
 
-      conn = conn |> Map.put(:request_path, "/assignment/tasks")
+      conn = Map.put(conn, :request_path, "/assignment/tasks")
 
       # Mount with a work_item_id in user_state - this triggers the pre-built tool_modal
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           user_state: %{task: work_item_id},

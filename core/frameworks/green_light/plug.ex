@@ -3,15 +3,15 @@ defmodule Frameworks.GreenLight.Plug do
   This Plug validates the permissions before the request is allowed to proceed.
   """
   import Plug.Conn
+
   alias Frameworks.GreenLight
+
   require Logger
 
   def init(auth_module), do: auth_module
 
   def call(
-        %Plug.Conn{
-          private: %{phoenix_controller: phoenix_controller, phoenix_action: phoenix_action}
-        } = conn,
+        %Plug.Conn{private: %{phoenix_controller: phoenix_controller, phoenix_action: phoenix_action}} = conn,
         auth_module
       ) do
     # This code mandates a permission assignment for the current user and
@@ -28,7 +28,7 @@ defmodule Frameworks.GreenLight.Plug do
     case validate_permissions(conn, entities, entity_roles, auth_module) do
       {:error, {principal_roles, required_permission}} ->
         Logger.debug(
-          "Principal with roles: #{principal_roles |> Enum.join(", ")} is not allowed to: `#{required_permission}`."
+          "Principal with roles: #{Enum.join(principal_roles, ", ")} is not allowed to: `#{required_permission}`."
         )
 
         conn
@@ -36,8 +36,8 @@ defmodule Frameworks.GreenLight.Plug do
         |> halt()
 
       {:ok, conn} ->
-        conn
-        |> ensure_authorization(
+        ensure_authorization(
+          conn,
           GreenLight.Permissions.action_permission(phoenix_controller, phoenix_action),
           auth_module
         )
@@ -45,9 +45,10 @@ defmodule Frameworks.GreenLight.Plug do
   end
 
   defp validate_permissions(conn, entities, entity_roles, auth_module) do
-    Enum.zip(entities, entity_roles)
+    entities
+    |> Enum.zip(entity_roles)
     |> Enum.reduce_while({:ok, conn}, fn {entity, entity_roles}, {_, conn} ->
-      roles = entity_roles |> MapSet.union(conn.private.auth_principal_roles)
+      roles = MapSet.union(entity_roles, conn.private.auth_principal_roles)
       validate_permission(conn, entity, roles, auth_module)
     end)
   end
@@ -56,9 +57,7 @@ defmodule Frameworks.GreenLight.Plug do
     if is_nil(entity) do
       {:halt, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
     else
-      permission =
-        entity.__struct__
-        |> GreenLight.Permissions.access_permission()
+      permission = GreenLight.Permissions.access_permission(entity.__struct__)
 
       if auth_module.allowed?(roles, permission) do
         {:cont, {:ok, Plug.Conn.put_private(conn, :auth_principal_roles, roles)}}
@@ -68,11 +67,7 @@ defmodule Frameworks.GreenLight.Plug do
     end
   end
 
-  defp ensure_authorization(
-         %{private: %{auth_principal_roles: roles}} = conn,
-         permission,
-         auth_module
-       ) do
+  defp ensure_authorization(%{private: %{auth_principal_roles: roles}} = conn, permission, auth_module) do
     # Validate the entity with the current use against the permission map
     if auth_module.allowed?(roles, permission) do
       conn

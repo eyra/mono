@@ -1,10 +1,12 @@
 defmodule Systems.Graphite.SubmissionForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Form
 
   alias CoreWeb.UI.Timestamp
   alias Systems.Graphite
+  alias Systems.Graphite.Public
 
   # Handle initial update
   @impl true
@@ -31,8 +33,8 @@ defmodule Systems.Graphite.SubmissionForm do
   end
 
   defp update_submission(%{assigns: %{tool: tool, user: user}} = socket) do
-    submission = Graphite.Public.get_submission(tool, user, :owner)
-    socket |> assign(submission: submission)
+    submission = Public.get_submission(tool, user, :owner)
+    assign(socket, submission: submission)
   end
 
   defp update_humanized_deadline(%{assigns: %{timezone: nil}} = socket) do
@@ -45,9 +47,7 @@ defmodule Systems.Graphite.SubmissionForm do
     )
   end
 
-  defp update_humanized_deadline(
-         %{assigns: %{tool: %{deadline: deadline}, timezone: timezone}} = socket
-       ) do
+  defp update_humanized_deadline(%{assigns: %{tool: %{deadline: deadline}, timezone: timezone}} = socket) do
     humanized_deadline =
       deadline
       |> Timestamp.convert(timezone)
@@ -84,7 +84,7 @@ defmodule Systems.Graphite.SubmissionForm do
         Graphite.SubmissionModel.prepare(%Graphite.SubmissionModel{}, %{})
       end
 
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   defp update_submit_button(%{assigns: %{id: id, submission: submission}} = socket) do
@@ -114,8 +114,7 @@ defmodule Systems.Graphite.SubmissionForm do
   def handle_event("submit", %{"submission_model" => attrs}, socket) do
     {
       :noreply,
-      socket
-      |> handle_submit(attrs)
+      handle_submit(socket, attrs)
     }
   end
 
@@ -127,47 +126,47 @@ defmodule Systems.Graphite.SubmissionForm do
   # Submit
 
   defp handle_submit(%{assigns: %{tool: tool, submission: nil}} = socket, attrs) do
-    if Systems.Graphite.Public.open_for_submissions?(tool) do
-      socket |> add_submission(attrs)
+    if Public.open_for_submissions?(tool) do
+      add_submission(socket, attrs)
     else
-      socket |> notify_closed_for_submissions()
+      notify_closed_for_submissions(socket)
     end
   end
 
   defp handle_submit(%{assigns: %{tool: tool}} = socket, attrs) do
-    if Systems.Graphite.Public.open_for_submissions?(tool) do
-      socket |> update_submission(attrs)
+    if Public.open_for_submissions?(tool) do
+      update_submission(socket, attrs)
     else
-      socket |> notify_closed_for_submissions()
+      notify_closed_for_submissions(socket)
     end
   end
 
   defp notify_closed_for_submissions(socket) do
-    socket |> put_flash(:error, dgettext("eyra-graphite", "closed_for_submissions.error.message"))
+    put_flash(socket, :error, dgettext("eyra-graphite", "closed_for_submissions.error.message"))
   end
 
   defp add_submission(%{assigns: %{id: id, tool: tool, user: user}} = socket, attrs) do
-    case Graphite.Public.add_submission(tool, user, attrs) do
+    case Public.add_submission(tool, user, attrs) do
       {:ok, %{graphite_submission: submission}} ->
         socket
         |> assign(submission: submission)
         |> publish_event({:submitted, %{source: %{id: id, module: __MODULE__}}})
 
       {:error, :graphite_submission, changeset, _} ->
-        socket |> assign(show_errors: true, changeset: changeset)
+        assign(socket, show_errors: true, changeset: changeset)
 
       {:error, :graphite_tool, _changeset, _} ->
-        socket |> put_flash(:error, dgettext("eyra-graphite", "submit.failed.message"))
+        put_flash(socket, :error, dgettext("eyra-graphite", "submit.failed.message"))
     end
   end
 
   defp update_submission(%{assigns: %{id: id, submission: submission}} = socket, attrs) do
-    case Graphite.Public.update_submission(submission, attrs) do
+    case Public.update_submission(submission, attrs) do
       {:ok, %{graphite_submission: _submission}} ->
         publish_event(socket, {:submitted, %{source: %{id: id, module: __MODULE__}}})
 
       {:error, :graphite_submission, changeset, _} ->
-        socket |> assign(show_errors: true, changeset: changeset)
+        assign(socket, show_errors: true, changeset: changeset)
     end
   end
 

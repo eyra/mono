@@ -1,4 +1,5 @@
 defmodule Systems.Zircon.Screening.ToolForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
   @impl true

@@ -1,7 +1,8 @@
 defmodule Systems.Account.UserForm do
+  @moduledoc false
   use CoreWeb, :html
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.AlertBanner

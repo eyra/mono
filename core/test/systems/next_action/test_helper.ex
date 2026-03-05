@@ -1,4 +1,5 @@
 defmodule Systems.NextAction.TestHelper do
+  @moduledoc false
   import ExUnit.Assertions
 
   alias Systems.NextAction
@@ -6,14 +7,14 @@ defmodule Systems.NextAction.TestHelper do
   defmacro assert_next_action(user, url) do
     quote bind_quoted: [user: user, url: url] do
       next_actions = NextAction.Public.list_next_actions(user)
-      assert next_actions |> Enum.find_value(&(&1[:cta_action] == %{to: url, type: :redirect}))
+      assert Enum.find_value(next_actions, &(&1[:cta_action] == %{to: url, type: :redirect}))
     end
   end
 
   defmacro refute_next_action(user, url) do
     quote bind_quoted: [user: user, url: url] do
       next_actions = NextAction.Public.list_next_actions(user)
-      refute next_actions |> Enum.find_value(&(&1[:url] == url))
+      refute Enum.find_value(next_actions, &(&1[:url] == url))
     end
   end
 end

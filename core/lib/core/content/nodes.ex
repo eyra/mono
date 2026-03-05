@@ -2,8 +2,8 @@ defmodule Core.Content.Nodes do
   @moduledoc """
 
   """
-  alias Core.Repo
   alias Core.Content.Node
+  alias Core.Repo
 
   def list do
     Repo.all(Node)
@@ -14,8 +14,7 @@ defmodule Core.Content.Nodes do
   def ready?(%Node{} = node), do: ready?(node, node.parent_id)
   def ready?(%Node{} = node, nil), do: node.ready
 
-  def ready?(%Node{} = node, parent_id) when is_integer(parent_id),
-    do: node.ready && ready?(get(parent_id))
+  def ready?(%Node{} = node, parent_id) when is_integer(parent_id), do: node.ready && ready?(get(parent_id))
 
   def ready?(%Node{} = node, %Node{} = parent), do: node.ready && ready?(parent)
 
@@ -59,23 +58,22 @@ defmodule Core.Content.Nodes do
   end
 
   def update(changeset) do
-    changeset
-    |> Repo.update()
+    Repo.update(changeset)
   end
 
   def delete(%Node{} = node) do
     Repo.delete(node)
   end
 
-  def copy(%Core.Content.Node{} = content_node) do
-    %Core.Content.Node{}
-    |> Core.Content.Node.changeset(Map.from_struct(content_node))
+  def copy(%Node{} = content_node) do
+    %Node{}
+    |> Node.changeset(Map.from_struct(content_node))
     |> Repo.insert!()
   end
 
-  def copy(%Core.Content.Node{} = content_node, parent) do
-    %Core.Content.Node{}
-    |> Core.Content.Node.changeset(Map.from_struct(content_node))
+  def copy(%Node{} = content_node, parent) do
+    %Node{}
+    |> Node.changeset(Map.from_struct(content_node))
     |> Ecto.Changeset.put_assoc(:parent, parent)
     |> Repo.insert!()
   end

@@ -1,4 +1,5 @@
 defmodule Systems.Zircon.Screening.ImportViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
@@ -18,9 +19,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       end
 
     paper_set =
-      Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool_id) |> Repo.preload([:papers])
+      :zircon_screening_tool |> Paper.Public.obtain_paper_set!(tool_id) |> Repo.preload([:papers])
 
-    paper_count = paper_set.papers |> Enum.count()
+    paper_count = Enum.count(paper_set.papers)
     import_status = determine_import_status(tool)
 
     # Determine if we should show a flash error
@@ -29,9 +30,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     button_config = build_button_config(import_status)
 
     paper_set_view =
-      LiveNest.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView,
-        paper_set_id: paper_set.id
-      )
+      LiveNest.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView, paper_set_id: paper_set.id)
 
     import_session_view = build_import_session_view(import_status.active_session, nil)
 
@@ -95,10 +94,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       active_filename: active_file_info.filename,
       active_file_url: active_file_info.url,
       modal_warnings_title: dgettext("eyra-zircon", "import_session.prompting.warnings_title"),
-      modal_new_papers_title:
-        dgettext("eyra-zircon", "import_session.prompting.new_papers_title"),
-      modal_duplicates_title:
-        dgettext("eyra-zircon", "import_session.prompting.duplicates_title"),
+      modal_new_papers_title: dgettext("eyra-zircon", "import_session.prompting.new_papers_title"),
+      modal_duplicates_title: dgettext("eyra-zircon", "import_session.prompting.duplicates_title"),
       flash_error: flash_error
     }
 
@@ -258,12 +255,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
 
   defp session_has_errors_or_processing?(_), do: false
 
-  defp build_import_section_stack(
-         import_session_view,
-         show_file_selector,
-         show_import_buttons,
-         button_config
-       ) do
+  defp build_import_section_stack(import_session_view, show_file_selector, show_import_buttons, button_config) do
     file_selector_block =
       {:import_file_selector,
        %{
@@ -348,9 +340,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
          progress: progress,
          buttons: []
        }}
-    else
+
       # Don't show processing status for small operations
-      nil
     end
   end
 
@@ -370,8 +361,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     entries = Map.get(session, :entries, [])
 
     new_paper_count =
-      entries
-      |> Enum.count(fn entry ->
+      Enum.count(entries, fn entry ->
         case entry do
           %{"status" => "new"} -> true
           %{status: "new"} -> true
@@ -428,8 +418,6 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
 
       # Calculate percentage (0-100)
       round(processed / total * 100)
-    else
-      nil
     end
   end
 
@@ -449,8 +437,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
 
     # Count parsing errors (displayed as warnings in UI)
     warning_count =
-      entries
-      |> Enum.count(fn entry ->
+      Enum.count(entries, fn entry ->
         case entry do
           %{"status" => "error"} -> true
           %{status: "error"} -> true
@@ -459,8 +446,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
       end)
 
     new_paper_count =
-      entries
-      |> Enum.count(fn entry ->
+      Enum.count(entries, fn entry ->
         case entry do
           %{"status" => "new"} -> true
           %{status: "new"} -> true
@@ -470,8 +456,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
 
     # Count duplicates
     duplicate_count =
-      entries
-      |> Enum.count(fn entry ->
+      Enum.count(entries, fn entry ->
         case entry do
           %{"status" => "duplicate"} -> true
           %{status: "duplicate"} -> true
@@ -616,8 +601,6 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
         _ ->
           nil
       end
-    else
-      nil
     end
   end
 end

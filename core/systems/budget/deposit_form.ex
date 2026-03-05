@@ -1,14 +1,12 @@
 defmodule Systems.Budget.DepositForm do
+  @moduledoc false
   use CoreWeb, :live_component
 
   import Ecto.Changeset
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Budget
-  }
+  alias Frameworks.Pixel.Text
+  alias Systems.Budget
 
   # Initial update
   @impl true
@@ -27,21 +25,15 @@ defmodule Systems.Budget.DepositForm do
   end
 
   defp init_changeset(socket) do
-    changeset =
-      %Budget.DepositModel{}
-      |> Budget.DepositModel.changeset()
+    changeset = Budget.DepositModel.changeset(%Budget.DepositModel{})
 
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
-        %{
-          action: %{type: :submit},
-          face: %{type: :primary, label: dgettext("eyra-budget", "deposit.submit.button")}
-        },
+        %{action: %{type: :submit}, face: %{type: :primary, label: dgettext("eyra-budget", "deposit.submit.button")}},
         %{
           action: %{type: :send, event: "cancel", target: myself},
           face: %{type: :label, label: dgettext("eyra-ui", "cancel.button")}
@@ -52,15 +44,11 @@ defmodule Systems.Budget.DepositForm do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "deposit_cancelled")}
+    {:noreply, send_event(socket, :parent, "deposit_cancelled")}
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"deposit_model" => %{"amount" => amount, "reference" => reference}},
-        socket
-      ) do
+  def handle_event("submit", %{"deposit_model" => %{"amount" => amount, "reference" => reference}}, socket) do
     changeset = Budget.DepositModel.changeset(amount, reference)
 
     case apply_action(changeset, :submit) do
@@ -68,18 +56,18 @@ defmodule Systems.Budget.DepositForm do
         {:noreply, socket |> assign(changeset: changeset) |> make_deposit(deposit)}
 
       {:error, changeset} ->
-        {:noreply, socket |> assign(changeset: changeset)}
+        {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
   defp make_deposit(%{assigns: %{budget: budget}} = socket, deposit) do
     case Budget.Public.make_test_deposit(budget, deposit) do
       {:ok, _} ->
-        socket |> send_event(:parent, "deposit_saved")
+        send_event(socket, :parent, "deposit_saved")
         socket
 
       {:error, error} ->
-        socket |> assign(error: error)
+        assign(socket, error: error)
     end
   end
 

@@ -1,9 +1,10 @@
 defmodule Systems.Paper.RISImportCommitJobTest do
   use Core.DataCase
 
-  alias Systems.Paper
   import Ecto.Query
   import Frameworks.Signal.TestHelper
+
+  alias Systems.Paper
 
   describe "batch processing" do
     setup do
@@ -48,12 +49,9 @@ defmodule Systems.Paper.RISImportCommitJobTest do
 
       # Verify all papers were imported
       papers =
-        from(p in Paper.Model,
-          join: ps in Paper.SetAssoc,
-          on: ps.paper_id == p.id,
-          where: ps.set_id == ^paper_set.id
+        Repo.all(
+          from(p in Paper.Model, join: ps in Paper.SetAssoc, on: ps.paper_id == p.id, where: ps.set_id == ^paper_set.id)
         )
-        |> Repo.all()
 
       assert length(papers) == 250
 
@@ -119,12 +117,9 @@ defmodule Systems.Paper.RISImportCommitJobTest do
 
       # Verify correct number of papers
       papers =
-        from(p in Paper.Model,
-          join: ps in Paper.SetAssoc,
-          on: ps.paper_id == p.id,
-          where: ps.set_id == ^paper_set.id
+        Repo.all(
+          from(p in Paper.Model, join: ps in Paper.SetAssoc, on: ps.paper_id == p.id, where: ps.set_id == ^paper_set.id)
         )
-        |> Repo.all()
 
       # 50 existing + 100 new
       assert length(papers) == 150

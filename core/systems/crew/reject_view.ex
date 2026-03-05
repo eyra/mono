@@ -1,19 +1,19 @@
 defmodule Systems.Crew.RejectView do
   use CoreWeb, :live_component
 
-  require Logger
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Selector
 
+  alias Frameworks.Pixel.Selector
   alias Systems.Crew
+
+  require Logger
 
   @impl true
   def update(%{id: id}, socket) do
     title = dgettext("link-advert", "reject.title")
     text = dgettext("link-advert", "reject.text")
     note = dgettext("link-advert", "reject.note")
-    category = Crew.RejectCategories.values() |> List.first()
+    category = List.first(Crew.RejectCategories.values())
     categories = Crew.RejectCategories.labels(category)
 
     model = %Crew.RejectModel{category: category}
@@ -56,7 +56,7 @@ defmodule Systems.Crew.RejectView do
       ) do
     attrs = %{category: category, message: message}
     changeset = Crew.RejectModel.changeset(model, :submit, attrs)
-    {:noreply, socket |> assign(changeset: changeset)}
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
@@ -70,34 +70,29 @@ defmodule Systems.Crew.RejectView do
 
     case Ecto.Changeset.apply_action(changeset, :update) do
       {:ok, model} ->
-        {:noreply, socket |> send_event(:parent, "reject_submit", %{rejection: model})}
+        {:noreply, send_event(socket, :parent, "reject_submit", %{rejection: model})}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         Enum.each(changeset.errors, fn {key, {error, _}} ->
           Logger.warning("Reject failed: #{key} -> #{error}")
         end)
 
-        {:noreply, socket |> assign(changeset: changeset)}
+        {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
   @impl true
   def handle_event("cancel", _params, socket) do
-    {:noreply, socket |> send_event(:parent, "reject_cancel")}
+    {:noreply, send_event(socket, :parent, "reject_cancel")}
   end
 
   @impl true
-  def handle_event(
-        "active_item_id",
-        %{active_item_id: category, source: %{name: :category}},
-        socket
-      ) do
+  def handle_event("active_item_id", %{active_item_id: category, source: %{name: :category}}, socket) do
     categories = Crew.RejectCategories.labels(category)
 
     {
       :noreply,
-      socket
-      |> assign(category: category, categories: categories)
+      assign(socket, category: category, categories: categories)
     }
   end
 

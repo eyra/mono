@@ -1,15 +1,12 @@
 defmodule Systems.Org.NodeContentView do
   use CoreWeb.LiveForm
 
-  alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
+  import Systems.Content.TextBundleInput
 
-  alias Systems.{
-    Org,
-    Content
-  }
-
-  import Content.TextBundleInput
+  alias Frameworks.Pixel.Text
+  alias Systems.Content
+  alias Systems.Org
 
   # Successive update
 
@@ -42,19 +39,11 @@ defmodule Systems.Org.NodeContentView do
   defp update_dropdown(%{assigns: %{entity: %{type: type}}} = socket) do
     options = Org.Types.labels()
 
-    socket
-    |> assign(
-      options: options,
-      selected_option: type
-    )
+    assign(socket, options: options, selected_option: type)
   end
 
   @impl true
-  def handle_event(
-        "select-option",
-        %{"id" => type, "label" => type_string},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("select-option", %{"id" => type, "label" => type_string}, %{assigns: %{entity: entity}} = socket) do
     type = String.to_atom(type)
 
     {
@@ -69,16 +58,14 @@ defmodule Systems.Org.NodeContentView do
   def handle_event("save", %{"node_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 
   defp save(socket, entity, attrs) do
     changeset = Org.NodeModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

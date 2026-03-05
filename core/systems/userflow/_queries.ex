@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.Queries do
+  @moduledoc false
   import Ecto.Query
 
   alias Systems.Userflow

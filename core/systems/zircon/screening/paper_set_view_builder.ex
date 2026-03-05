@@ -1,9 +1,10 @@
 defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  @page_size 10
   alias Frameworks.Pixel
 
+  @page_size 10
   def view_model(paper_set, assigns) do
     query = Map.get(assigns, :query, nil)
     page_index = Map.get(assigns, :page_index, 0)
@@ -12,8 +13,8 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
     total_paper_count = Enum.count(paper_set.papers)
 
     papers = filter_papers(paper_set.papers, query)
-    paper_count = papers |> Enum.count()
-    page_count = if paper_count == 0, do: 0, else: Float.ceil(paper_count / @page_size) |> round()
+    paper_count = Enum.count(papers)
+    page_count = if paper_count == 0, do: 0, else: (paper_count / @page_size) |> Float.ceil() |> round()
 
     # Adjust page_index if it's out of bounds after deletion
     adjusted_page_index =
@@ -23,7 +24,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
         true -> page_index
       end
 
-    page = papers |> Enum.slice(adjusted_page_index * @page_size, @page_size)
+    page = Enum.slice(papers, adjusted_page_index * @page_size, @page_size)
 
     search_bar =
       LiveNest.Element.prepare_live_component(:search_bar, Pixel.SearchBar,
@@ -59,8 +60,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
     Enum.all?(query, fn phrase -> match_paper?(paper, phrase) end)
   end
 
-  defp match_paper?(%{title: title, authors: authors, doi: doi}, phrase)
-       when is_binary(phrase) do
+  defp match_paper?(%{title: title, authors: authors, doi: doi}, phrase) when is_binary(phrase) do
     # Only search in visible fields: title, authors, DOI
     # Handle nil authors by converting to empty list
     authors_list = authors || []
@@ -69,7 +69,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
     |> Enum.filter(&is_binary/1)
     |> Enum.map(&String.downcase/1)
     |> Enum.any?(fn field ->
-      field |> String.contains?(String.downcase(phrase))
+      String.contains?(field, String.downcase(phrase))
     end)
   end
 end

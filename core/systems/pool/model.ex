@@ -7,15 +7,12 @@ defmodule Systems.Pool.Model do
 
   import Frameworks.Utility.EctoHelper
 
-  alias Systems.Account.User
   alias Ecto.Changeset
-
-  alias Systems.{
-    Pool,
-    Budget,
-    Content,
-    Org
-  }
+  alias Systems.Account.User
+  alias Systems.Budget
+  alias Systems.Content
+  alias Systems.Org
+  alias Systems.Pool
 
   @icon_type :emoji
 
@@ -62,8 +59,7 @@ defmodule Systems.Pool.Model do
 
   def validate(changeset, condition \\ true) do
     if condition do
-      changeset
-      |> validate_required(@required_fields)
+      validate_required(changeset, @required_fields)
     else
       changeset
     end
@@ -77,14 +73,7 @@ defmodule Systems.Pool.Model do
     |> Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
   end
 
-  def preload_graph(:full),
-    do:
-      preload_graph([
-        :currency,
-        :org,
-        :submissions,
-        :auth_node
-      ])
+  def preload_graph(:full), do: preload_graph([:currency, :org, :submissions, :auth_node])
 
   def preload_graph(:currency), do: [currency: Budget.CurrencyModel.preload_graph(:full)]
   def preload_graph(:org), do: [org: Org.NodeModel.preload_graph(:full)]

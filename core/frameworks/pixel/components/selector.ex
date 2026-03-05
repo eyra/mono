@@ -3,6 +3,8 @@ defmodule Frameworks.Pixel.Selector do
   use CoreWeb, :live_component
 
   import CoreWeb.LiveDefaults
+
+  alias Frameworks.Pixel.Selector.Item
   alias Phoenix.LiveView.JS
 
   @defaults [
@@ -17,8 +19,7 @@ defmodule Frameworks.Pixel.Selector do
   defp grid_options(:radio, _), do: "flex flex-col gap-3"
   defp grid_options(:checkbox, _), do: "flex flex-row flex-wrap gap-x-8 gap-y-3 items-center"
 
-  defp grid_options(:segmented, _),
-    do: "flex flex-row flex-wrap gap-0 items-center rounded-full overflow-hidden"
+  defp grid_options(:segmented, _), do: "flex flex-row flex-wrap gap-0 items-center rounded-full overflow-hidden"
 
   defp grid_options(_, _), do: "flex flex-row flex-wrap gap-3 items-center"
 
@@ -30,8 +31,7 @@ defmodule Frameworks.Pixel.Selector do
   def update(%{reset: new_items}, socket) do
     {
       :ok,
-      socket
-      |> assign(current_items: new_items)
+      assign(socket, current_items: new_items)
     }
   end
 
@@ -39,20 +39,12 @@ defmodule Frameworks.Pixel.Selector do
   def update(%{items: new_items}, %{assigns: %{items: _items}} = socket) do
     {
       :ok,
-      socket
-      |> assign(current_items: new_items)
+      assign(socket, current_items: new_items)
     }
   end
 
   @impl true
-  def update(
-        %{
-          id: id,
-          items: items,
-          type: type
-        } = props,
-        socket
-      ) do
+  def update(%{id: id, items: items, type: type} = props, socket) do
     {
       :ok,
       socket
@@ -68,21 +60,14 @@ defmodule Frameworks.Pixel.Selector do
 
   @impl true
   def handle_event("toggle", %{"item" => item_id}, socket) do
-    socket =
-      socket
-      |> update_items(item_id)
+    socket = update_items(socket, item_id)
 
-    active_item_ids =
-      socket
-      |> get_active_item_ids()
+    active_item_ids = get_active_item_ids(socket)
 
-    {:noreply, socket |> send_to_parent(active_item_ids)}
+    {:noreply, send_to_parent(socket, active_item_ids)}
   end
 
-  defp send_to_parent(
-         %{assigns: %{type: type, current_items: current_items}} = socket,
-         active_item_ids
-       ) do
+  defp send_to_parent(%{assigns: %{type: type, current_items: current_items}} = socket, active_item_ids) do
     if multiselect?(type) do
       send_parent_event(socket, "active_item_ids", %{
         active_item_ids: active_item_ids,
@@ -103,7 +88,7 @@ defmodule Frameworks.Pixel.Selector do
     # Check if Fabric is available (fabric key exists in assigns)
     if Map.has_key?(socket.assigns, :fabric) do
       # Use Fabric's send_event
-      socket |> send_event(:parent, event_name, payload)
+      send_event(socket, :parent, event_name, payload)
     else
       # Fallback to standard Phoenix LiveView messaging
       # Send message to parent PID if available, otherwise to self (the LiveView)
@@ -120,20 +105,16 @@ defmodule Frameworks.Pixel.Selector do
   end
 
   defp active_count(items) do
-    items
-    |> Enum.count(& &1.active)
+    Enum.count(items, & &1.active)
   end
 
   defp update_items(%{assigns: %{current_items: items}} = socket, item_id_to_toggle) do
-    items =
-      items
-      |> Enum.map(&toggle(socket, &1, item_id_to_toggle))
+    items = Enum.map(items, &toggle(socket, &1, item_id_to_toggle))
 
-    socket |> assign(current_items: items)
+    assign(socket, current_items: items)
   end
 
-  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
-       when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id) when is_atom(item_id) do
     multiselect? = multiselect?(type)
     active_count = active_count(items)
 
@@ -167,10 +148,10 @@ defmodule Frameworks.Pixel.Selector do
     left == right
   end
 
-  defp item_component(:radio), do: &Frameworks.Pixel.Selector.Item.radio/1
-  defp item_component(:checkbox), do: &Frameworks.Pixel.Selector.Item.checkbox/1
-  defp item_component(:segmented), do: &Frameworks.Pixel.Selector.Item.segment/1
-  defp item_component(_), do: &Frameworks.Pixel.Selector.Item.label/1
+  defp item_component(:radio), do: &Item.radio/1
+  defp item_component(:checkbox), do: &Item.checkbox/1
+  defp item_component(:segmented), do: &Item.segment/1
+  defp item_component(_), do: &Item.label/1
 
   # Creates optimistic UI updates for selector items
   defp toggle_item_js(item_id, type, optional?) do

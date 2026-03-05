@@ -2,9 +2,9 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   use Core.DataCase
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Systems.Account
   alias Systems.Assignment
   alias Systems.Crew
-  alias Systems.Account
 
   describe "view_model/2 - state machine" do
     setup do
@@ -186,7 +186,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   end
 
   defp finish_all_tasks(%{crew: crew, workflow: workflow} = assignment, user) do
-    %{items: [item]} = workflow |> Repo.preload([:items])
+    %{items: [item]} = Repo.preload(workflow, [:items])
     member = Crew.Public.get_member(crew, user)
     identifier = Assignment.Private.task_identifier(assignment, item, member)
     task = Crew.Public.create_task!(crew, [user], identifier)

@@ -1,9 +1,10 @@
 defmodule Frameworks.Pixel.Button.Face do
+  @moduledoc false
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Logo
+  alias Frameworks.Pixel.Spinner
 
   attr(:text, :string, required: true)
   attr(:font, :string, default: "text-link font-link")

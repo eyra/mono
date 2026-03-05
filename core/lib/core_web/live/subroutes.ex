@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Subroutes do
+  @moduledoc false
   def normalize(sub) do
     sub
     |> Atom.to_string()
@@ -13,6 +14,7 @@ defmodule CoreWeb.Live.Subroutes do
 
       quote do
         require unquote(module)
+
         unquote(module).routes()
       end
     end

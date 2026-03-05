@@ -4,18 +4,10 @@ defmodule Systems.Student.Pool.DashboardView do
   alias Frameworks.Pixel.Widget
 
   @impl true
-  def update(
-        %{metrics: metrics, credits: credits, progress: progress} = _params,
-        socket
-      ) do
+  def update(%{metrics: metrics, credits: credits, progress: progress} = _params, socket) do
     {
       :ok,
-      socket
-      |> assign(
-        metrics: metrics,
-        credits: credits,
-        progress: progress
-      )
+      assign(socket, metrics: metrics, credits: credits, progress: progress)
     }
   end
 

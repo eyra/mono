@@ -1,7 +1,7 @@
 defmodule Systems.Pool.PublicTest do
   use Core.DataCase
-  alias Core.Factories
 
+  alias Core.Factories
   alias Systems.Pool.Public
 
   setup do

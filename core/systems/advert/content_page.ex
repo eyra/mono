@@ -23,8 +23,7 @@ defmodule Systems.Advert.ContentPage do
 
     {
       :ok,
-      socket
-      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
+      assign(socket, initial_tab: initial_tab, tabbar_id: tabbar_id)
     }
   end
 

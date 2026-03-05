@@ -1,4 +1,5 @@
 defmodule Systems.Paper.RISImportCommitJob do
+  @moduledoc false
   use Oban.Worker, queue: :ris_import
 
   alias Core.Repo
@@ -45,8 +46,7 @@ defmodule Systems.Paper.RISImportCommitJob do
     candidate_papers
     |> Enum.chunk_every(batch_size)
     |> Enum.with_index(1)
-    |> Enum.reduce_while({:ok, %{inserted: 0, skipped: 0, processed: 0}}, fn {batch, batch_num},
-                                                                             {:ok, totals} ->
+    |> Enum.reduce_while({:ok, %{inserted: 0, skipped: 0, processed: 0}}, fn {batch, batch_num}, {:ok, totals} ->
       papers_processed_so_far = totals.processed + length(batch)
 
       case execute_batch_transaction(
@@ -73,20 +73,10 @@ defmodule Systems.Paper.RISImportCommitJob do
     end)
   end
 
-  defp execute_batch_transaction(
-         batch,
-         session,
-         batch_num,
-         total_batches,
-         current_totals,
-         papers_processed,
-         total_papers
-       ) do
+  defp execute_batch_transaction(batch, session, batch_num, total_batches, current_totals, papers_processed, total_papers) do
     batch_timeout = Paper.Config.import_batch_timeout()
 
-    {multi, paper_keys} =
-      Multi.new()
-      |> build_paper_insertion_multi(batch, session.paper_set)
+    {multi, paper_keys} = build_paper_insertion_multi(Multi.new(), batch, session.paper_set)
 
     multi
     |> add_reference_file_associations(paper_keys, batch, session)
@@ -124,7 +114,8 @@ defmodule Systems.Paper.RISImportCommitJob do
   end
 
   defp build_paper_insertion_multi(multi, candidate_papers, paper_set) do
-    Enum.with_index(candidate_papers)
+    candidate_papers
+    |> Enum.with_index()
     |> Enum.reduce({multi, []}, fn {ref, index}, {multi, keys} ->
       paper_key = "check_and_insert_#{index}"
 
@@ -192,8 +183,7 @@ defmodule Systems.Paper.RISImportCommitJob do
 
   defp create_paper_association(paper, session) do
     assoc_changeset =
-      %Paper.ReferenceFilePaperAssoc{}
-      |> Ecto.Changeset.change(%{
+      Ecto.Changeset.change(%Paper.ReferenceFilePaperAssoc{}, %{
         reference_file_id: session.reference_file_id,
         paper_id: paper.id
       })
@@ -271,7 +261,8 @@ defmodule Systems.Paper.RISImportCommitJob do
   end
 
   defp format_changeset_errors(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn {msg, opts} ->
       Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
         opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
       end)

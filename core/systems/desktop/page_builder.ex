@@ -1,13 +1,15 @@
 defmodule Systems.Desktop.PageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
-  alias Systems.Project
+
   alias Systems.NextAction
+  alias Systems.Project
 
   def view_model(user, _assigns) do
     content_items =
-      Project.Public.list_owned_projects(user, preload: Project.Model.preload_graph(:down))
+      user
+      |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
       |> Enum.map(&map_project/1)
 
     next_best_action = NextAction.Public.next_best_action(user)
@@ -20,12 +22,7 @@ defmodule Systems.Desktop.PageBuilder do
     }
   end
 
-  def map_project(%{
-        name: name,
-        root: %{
-          id: root_node_id
-        }
-      }) do
+  def map_project(%{name: name, root: %{id: root_node_id}}) do
     %{
       path: ~p"/project/node/#{root_node_id}",
       title: name,

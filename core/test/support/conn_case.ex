@@ -17,29 +17,30 @@ defmodule CoreWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
+      use CoreWeb, :verified_routes
+      import Core.AuthTestHelpers
+      import Core.TestHelpers
+      import CoreWeb.ConnCase
+      import Phoenix.ConnTest
       # Import conveniences for testing with connections
       import Plug.Conn
-      import Phoenix.ConnTest
-      import CoreWeb.ConnCase
 
-      import Core.TestHelpers
       alias Core.Factories
 
       # The default endpoint for testing
       @endpoint CoreWeb.Endpoint
-      import Core.AuthTestHelpers
-
-      use CoreWeb, :verified_routes
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Core.Repo)
+    :ok = Sandbox.checkout(Core.Repo)
 
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, {:shared, self()})
+    if !tags[:async] do
+      Sandbox.mode(Core.Repo, {:shared, self()})
     end
 
     conn = CoreWeb.ConnCase.build_conn()
@@ -47,5 +48,5 @@ defmodule CoreWeb.ConnCase do
     {:ok, conn: conn}
   end
 
-  def build_conn(), do: Phoenix.ConnTest.build_conn(:get, "https://eyra.co", nil)
+  def build_conn, do: Phoenix.ConnTest.build_conn(:get, "https://eyra.co", nil)
 end

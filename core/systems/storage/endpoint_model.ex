@@ -1,29 +1,29 @@
 defmodule Systems.Storage.EndpointModel do
-  @fields ~w()a
-  @required_fields @fields
-  @special_fields ~w(builtin yoda aws azure)a
-
+  @moduledoc false
   use Ecto.Schema
-
   use Frameworks.Utility.Schema
+  @special_fields ~w(builtin yoda aws azure)a
   use Frameworks.Concept.Special, @special_fields
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
+  import Ecto.Changeset
+
   alias Frameworks.Concept
+  alias Frameworks.Concept.Leaf.Status
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Logo
-
-  alias Systems.Storage
   alias Systems.Monitor
+  alias Systems.Storage
+  alias Systems.Storage.BuiltIn.EndpointModel
 
   require Storage.ServiceIds
 
+  @fields ~w()a
+  @required_fields @fields
   schema "storage_endpoints" do
     belongs_to(:auth_node, Core.Authorization.Node)
 
-    belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
+    belongs_to(:builtin, EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
     belongs_to(:aws, Storage.AWS.EndpointModel, on_replace: :delete)
     belongs_to(:azure, Storage.Azure.EndpointModel, on_replace: :delete)
@@ -40,13 +40,11 @@ defmodule Systems.Storage.EndpointModel do
           :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
         ) :: Ecto.Changeset.t()
   def changeset(endpoint, params) do
-    endpoint
-    |> cast(params, @fields)
+    cast(endpoint, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def preload_graph(:down), do: @special_fields ++ [:auth_node]
@@ -75,7 +73,6 @@ defmodule Systems.Storage.EndpointModel do
   end
 
   defimpl Frameworks.Concept.ContentModel do
-    alias Systems.Storage
     def form(_), do: Storage.EndpointForm
     def ready?(endpoint), do: Storage.EndpointModel.ready?(endpoint)
   end
@@ -83,14 +80,13 @@ defmodule Systems.Storage.EndpointModel do
   defimpl Frameworks.Concept.Leaf do
     use Gettext, backend: CoreWeb.Gettext
 
-    alias Frameworks.Concept
-
     def resource_id(%{id: id}), do: "storage/endpoint/#{id}"
     def tag(_), do: dgettext("eyra-storage", "leaf.tag")
 
     def info(storage_endpoint, _timezone) do
       file_count =
-        Monitor.Public.event({storage_endpoint, :files})
+        {storage_endpoint, :files}
+        |> Monitor.Public.event()
         |> Monitor.Public.sum()
 
       [dngettext("eyra-storage", "1 file", "* files", file_count)]
@@ -100,7 +96,7 @@ defmodule Systems.Storage.EndpointModel do
       status(Storage.EndpointModel.special(endpoint))
     end
 
-    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
+    def status(%EndpointModel{}), do: %Status{value: :online}
 
     def status(special) do
       sum =
@@ -109,9 +105,9 @@ defmodule Systems.Storage.EndpointModel do
         |> Monitor.Public.sum()
 
       if sum <= 0 do
-        %Concept.Leaf.Status{value: :concept}
+        %Status{value: :concept}
       else
-        %Concept.Leaf.Status{value: :online}
+        %Status{value: :online}
       end
     end
   end

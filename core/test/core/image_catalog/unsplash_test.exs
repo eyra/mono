@@ -22,6 +22,7 @@ end
 
 defmodule Core.ImageCatalog.Unsplash.Test do
   use ExUnit.Case, async: true
+
   import Mox
 
   alias Core.ImageCatalog.Unsplash
@@ -36,8 +37,7 @@ defmodule Core.ImageCatalog.Unsplash.Test do
 
   describe "search/1" do
     test "returns ids", %{mock: mock} do
-      mock
-      |> expect(:get, fn _, "/search/photos", _ ->
+      expect(mock, :get, fn _, "/search/photos", _ ->
         {:ok,
          %{
            "results" => [
@@ -54,14 +54,13 @@ defmodule Core.ImageCatalog.Unsplash.Test do
 
       result = Unsplash.search("test", 1, 10)
 
-      assert result.images |> Enum.count() == 1
+      assert Enum.count(result.images) == 1
     end
   end
 
   describe "search_info/1" do
     test "returns image information", %{mock: mock} do
-      mock
-      |> expect(:get, fn _, "/search/photos", _ ->
+      expect(mock, :get, fn _, "/search/photos", _ ->
         {:ok,
          %{
            "results" => [
@@ -80,7 +79,7 @@ defmodule Core.ImageCatalog.Unsplash.Test do
 
       assert info.attribution ==
                {:safe,
-                "Photo by <a href=\"https://unsplash.com/@tester=Core&utm_medium=referral\">Miss Test</a> on <a href=\"https://unsplash.com/?utm_source=Core&utm_medium=referral\">Unsplash</a>"}
+                ~s(Photo by <a href="https://unsplash.com/@tester=Core&utm_medium=referral">Miss Test</a> on <a href="https://unsplash.com/?utm_source=Core&utm_medium=referral">Unsplash</a>)}
 
       assert info.url =~ "example.org"
       assert info.srcset =~ " 2x,"

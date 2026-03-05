@@ -1,4 +1,5 @@
 defmodule SignInWithApple.FakeBackend do
+  @moduledoc false
   def callback(_config, _token) do
     {:ok,
      %{
@@ -14,7 +15,9 @@ end
 defmodule SignInWithApple.CallbackPlug.Test do
   use ExUnit.Case, async: true
   use Core.DataCase
+
   import Plug.Test
+
   alias SignInWithApple.CallbackPlug
 
   setup do
@@ -38,7 +41,8 @@ defmodule SignInWithApple.CallbackPlug.Test do
         })
 
       user =
-        conn(:post, "/apple/auth")
+        :post
+        |> conn("/apple/auth")
         |> Map.put(:body_params, %{
           "id_token" => "whatever",
           "user" => user_data
@@ -62,7 +66,8 @@ defmodule SignInWithApple.CallbackPlug.Test do
       })
 
       user =
-        conn(:post, "/apple/auth")
+        :post
+        |> conn("/apple/auth")
         |> Map.put(:body_params, %{
           "id_token" => "whatever"
         })

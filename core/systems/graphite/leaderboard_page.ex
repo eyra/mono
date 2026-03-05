@@ -1,16 +1,16 @@
 defmodule Systems.Graphite.LeaderboardPage do
+  @moduledoc false
   use CoreWeb, :live_view
   use CoreWeb.Layouts.Stripped.Composer
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-
   alias Core.ImageHelpers
+  alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Card
   alias Frameworks.Pixel.Hero
-  alias Frameworks.Pixel.Align
-
   alias Systems.Graphite
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   @impl true
   def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do
@@ -41,8 +41,7 @@ defmodule Systems.Graphite.LeaderboardPage do
 
   @impl true
   def handle_resize(socket) do
-    socket
-    |> update_image_info()
+    update_image_info(socket)
   end
 
   @impl true
@@ -53,15 +52,13 @@ defmodule Systems.Graphite.LeaderboardPage do
   end
 
   defp update_image_info(
-         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
-           socket
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} = socket
        ) do
     image_width = viewport_width
     image_height = 360
     image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
 
-    socket
-    |> assign(image_info: image_info)
+    assign(socket, image_info: image_info)
   end
 
   defp update_image_info(socket) do

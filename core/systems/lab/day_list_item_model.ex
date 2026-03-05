@@ -1,4 +1,5 @@
 defmodule Systems.Lab.DayListItemModel do
+  @moduledoc false
   use Ecto.Schema
 
   alias CoreWeb.UI.Timestamp
@@ -24,9 +25,7 @@ defmodule Systems.Lab.DayListItemModel do
   defp create_day_list_item(%{date: date, location: location, time_slots: time_slots}) do
     number_of_timeslots = Enum.count(time_slots)
 
-    number_of_seats =
-      time_slots
-      |> Enum.reduce(0, &(&2 + &1.number_of_seats))
+    number_of_seats = Enum.reduce(time_slots, 0, &(&2 + &1.number_of_seats))
 
     enabled? = not Timestamp.past?(date)
 
@@ -90,7 +89,7 @@ defmodule Systems.Lab.DayListItemModel do
   defp find_day([], _, _), do: nil
 
   defp find_day([_ | _] = days, date, location) do
-    days |> Enum.find_value(&is_day?(&1, date, location))
+    Enum.find_value(days, &is_day?(&1, date, location))
   end
 
   # credo:disable-for-next-line

@@ -18,6 +18,7 @@ defmodule Systems.Annotation.Pattern.Connection do
 
   defimpl Systems.Annotation.Pattern do
     use Systems.Annotation.Pattern.Helpers
+
     import Ecto.Query, warn: true
 
     @connection "Connection"
@@ -27,12 +28,7 @@ defmodule Systems.Annotation.Pattern.Connection do
     def obtain(%{object: nil}), do: raise(MissingFieldError, :object)
     def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
 
-    def obtain(%{
-          subject: subject,
-          statement: statement,
-          object: object,
-          entity: entity
-        }) do
+    def obtain(%{subject: subject, statement: statement, object: object, entity: entity}) do
       if annotation = get(subject: subject, statement: statement, object: object, entity: entity) do
         {:ok, annotation}
       else
@@ -49,13 +45,15 @@ defmodule Systems.Annotation.Pattern.Connection do
     end
 
     defp query(subject, statement, object, entity) do
-      query_annotation(@connection, statement, entity)
+      @connection
+      |> query_annotation(statement, entity)
       |> where([annotation: a, annotation_ref: ar], a.id in [^subject.id, ^object.id])
       |> having([annotation_ref: ar], count(ar.id) == 2)
     end
 
     defp get(subject: subject, statement: statement, object: object, entity: entity) do
-      query(subject, statement, object, entity)
+      subject
+      |> query(statement, object, entity)
       |> Repo.one()
     end
   end

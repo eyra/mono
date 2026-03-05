@@ -1,5 +1,7 @@
 defmodule Systems.Project.Branch do
+  @moduledoc false
   use Ecto.Schema
+
   @primary_key false
 
   embedded_schema do
@@ -11,7 +13,9 @@ end
 defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Utility.List
+
   alias Frameworks.Concept
   alias Systems.Project
 
@@ -31,11 +35,11 @@ defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
 
   def hierarchy(%Project.Branch{node_id: node_id, item_id: item_id}) do
     node_breadcrumb = fn ->
-      Project.Public.get_node!(node_id) |> breadcrumb()
+      node_id |> Project.Public.get_node!() |> breadcrumb()
     end
 
     item_breadcrumb = fn ->
-      Project.Public.get_item!(item_id, Project.ItemModel.preload_graph(:down)) |> breadcrumb()
+      item_id |> Project.Public.get_item!(Project.ItemModel.preload_graph(:down)) |> breadcrumb()
     end
 
     [root_breadcrumb()]
@@ -52,7 +56,7 @@ defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
     %{label: name, path: "/project/node/#{node.id}"}
   end
 
-  defp root_breadcrumb() do
+  defp root_breadcrumb do
     %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~p"/project"}
   end
 end

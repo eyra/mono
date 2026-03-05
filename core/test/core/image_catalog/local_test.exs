@@ -1,5 +1,6 @@
 defmodule Core.ImageCatalog.Local.Test do
   use ExUnit.Case, async: true
+
   alias Core.ImageCatalog.Local
 
   describe "search/1" do

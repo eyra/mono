@@ -6,9 +6,7 @@ defmodule Systems.NextAction.View do
   attr(:cta_label, :string, required: true)
   attr(:cta_action, :string, required: true)
 
-  attr(:title_css, :string,
-    default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1"
-  )
+  attr(:title_css, :string, default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1")
 
   attr(:subtitle_css, :string, default: "text-bodysmall md:text-bodymedium font-body text-grey1")
 
@@ -24,9 +22,7 @@ defmodule Systems.NextAction.View do
   attr(:cta_action, :string, required: true)
   attr(:style, :string, default: nil)
 
-  attr(:title_css, :string,
-    default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1"
-  )
+  attr(:title_css, :string, default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1")
 
   attr(:subtitle_css, :string, default: "text-bodysmall md:text-bodymedium font-body text-grey1")
 

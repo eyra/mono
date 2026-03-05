@@ -1,14 +1,11 @@
 defmodule Systems.Project.OverviewPageBuilder do
-  alias Frameworks.Utility.ViewModelBuilder
-
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Project
 
-  def view_model(
-        user,
-        assigns
-      ) do
+  def view_model(user, assigns) do
     projects = projects(user)
     cards = cards(projects, assigns)
 

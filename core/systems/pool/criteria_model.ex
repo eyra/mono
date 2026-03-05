@@ -3,12 +3,13 @@ defmodule Systems.Pool.CriteriaModel do
   This schema contains features of members.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
+  alias Core.Enums.Genders
   alias Systems.Pool.SubmissionModel
 
-  alias Core.Enums.Genders
-  require Core.Enums.Genders
+  require Genders
 
   schema "eligibility_criteria" do
     field(:genders, {:array, Ecto.Enum}, values: Genders.schema_values())
@@ -22,8 +23,7 @@ defmodule Systems.Pool.CriteriaModel do
 
   @doc false
   def changeset(profile, attrs) do
-    profile
-    |> cast(attrs, @fields)
+    cast(profile, attrs, @fields)
   end
 
   def eligitable?(nil, nil), do: true

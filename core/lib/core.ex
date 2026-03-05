@@ -9,7 +9,7 @@ defmodule Core do
 
   def auth do
     quote do
-      def auth_module() do
+      def auth_module do
         Application.get_env(:core, :greenlight_auth_module)
       end
 

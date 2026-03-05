@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.CrewWorkViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
@@ -44,32 +45,28 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
         label: dgettext("eyra-assignment", "context.menu.privacy.title"),
         url: privacy_doc.ref
       }
-    else
-      nil
     end
   end
 
   defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do
     if consent_agreement do
       %{id: key, label: dgettext("eyra-assignment", "context.menu.consent.title")}
-    else
-      nil
     end
   end
 
   defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
-    else
+    if Enum.find(page_refs, &(&1.key == :assignment_information)) == nil do
       nil
+    else
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
     end
   end
 
   defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == key)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
-    else
+    if Enum.find(page_refs, &(&1.key == key)) == nil do
       nil
+    else
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
     end
   end
 

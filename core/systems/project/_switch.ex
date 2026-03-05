@@ -1,4 +1,5 @@
 defmodule Systems.Project.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Frameworks.Signal
@@ -11,7 +12,7 @@ defmodule Systems.Project.Switch do
 
     dispatch!(
       {:project_node, signal},
-      Map.merge(message, %{project_node: project_node})
+      Map.put(message, :project_node, project_node)
     )
 
     :ok
@@ -25,7 +26,7 @@ defmodule Systems.Project.Switch do
     if project = Project.Public.get_by_root(project_node) do
       dispatch!(
         {:project, signal},
-        Map.merge(message, %{project: project})
+        Map.put(message, :project, project)
       )
     end
 
@@ -40,12 +41,12 @@ defmodule Systems.Project.Switch do
   end
 
   defp update_pages(%Project.NodeModel{} = node, from_pid) do
-    [Project.NodePage]
-    |> Enum.each(&update_page(&1, node, from_pid))
+    Enum.each([Project.NodePage], &update_page(&1, node, from_pid))
   end
 
   defp update_pages(%Project.Model{} = project, from_pid) do
-    Project.Public.list_owners(project)
+    project
+    |> Project.Public.list_owners()
     |> Enum.each(fn user ->
       update_page(Project.OverviewPage, user, from_pid)
     end)

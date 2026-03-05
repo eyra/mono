@@ -1,14 +1,17 @@
 defmodule CoreWeb.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
-      require CoreWeb.Live.Routes
-
-      require CoreWeb.Cldr
-      import Systems.Account.UserAuth
       import CoreWeb.Meta
+      import Systems.Account.UserAuth
 
+      alias CoreWeb.Live.Routes
       alias CoreWeb.Validator.Plug, as: Validator
       alias Systems.Assignment
+
+      require CoreWeb.Cldr
+      require Routes
+      require Systems.Routes
 
       pipeline :browser_base do
         plug(:accepts, ["html"])
@@ -73,9 +76,8 @@ defmodule CoreWeb.Routes do
         plug(Validator)
       end
 
-      CoreWeb.Live.Routes.routes()
+      Routes.routes()
 
-      require Systems.Routes
       Systems.Routes.routes()
 
       scope "/", CoreWeb do

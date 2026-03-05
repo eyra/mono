@@ -13,9 +13,9 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     priority: 3,
     max_attempts: 1
 
-  require Logger
-
   alias Systems.Feldspar
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
@@ -23,9 +23,7 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     deleted_count = Feldspar.DataDonationFolder.cleanup_older_than(retention_hours)
 
     if deleted_count > 0 do
-      Logger.info(
-        "[Feldspar.DataDonationCleanupWorker] Deleted #{deleted_count} files older than #{retention_hours}h"
-      )
+      Logger.info("[Feldspar.DataDonationCleanupWorker] Deleted #{deleted_count} files older than #{retention_hours}h")
     end
 
     :ok

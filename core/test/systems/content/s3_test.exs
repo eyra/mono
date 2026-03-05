@@ -1,6 +1,8 @@
 defmodule Systems.Content.S3Test do
   use ExUnit.Case, async: true
+
   import Mox
+
   alias Systems.Content.S3
 
   setup :verify_on_exit!
@@ -9,7 +11,7 @@ defmodule Systems.Content.S3Test do
     initial_config = Application.get_env(:core, :content)
 
     Application.put_env(:core, :content,
-      backend: Systems.Content.S3,
+      backend: S3,
       bucket: "test-bucket",
       public_url: "http://example.com",
       s3_backend: MockAws

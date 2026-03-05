@@ -1,5 +1,6 @@
 defmodule CoreWeb.UI.Responsive.BreakpointTest do
   use ExUnit.Case, async: true
+
   alias CoreWeb.UI.Responsive.Breakpoint
 
   describe "index_of/1" do
@@ -40,8 +41,8 @@ defmodule CoreWeb.UI.Responsive.BreakpointTest do
     end
 
     test "false" do
-      assert not Breakpoint.up_from?(:sm, :xs)
-      assert not Breakpoint.up_from?(:lg, :md)
+      refute Breakpoint.up_from?(:sm, :xs)
+      refute Breakpoint.up_from?(:lg, :md)
     end
   end
 
@@ -78,21 +79,17 @@ defmodule CoreWeb.UI.Responsive.BreakpointTest do
     end
 
     test "single breakpoint with multiple percentage breaks" do
-      assert Breakpoint.value({:sm, 0}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) == "base_value"
+      assert Breakpoint.value({:sm, 0}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
+               "base_value"
 
-      assert Breakpoint.value({:sm, 40}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) == "break_value-sm-10"
+      assert Breakpoint.value({:sm, 40}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
+               "break_value-sm-10"
 
-      assert Breakpoint.value({:sm, 50}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) == "break_value-sm-50"
+      assert Breakpoint.value({:sm, 50}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
+               "break_value-sm-50"
 
-      assert Breakpoint.value({:sm, 70}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) == "break_value-sm-50"
+      assert Breakpoint.value({:sm, 70}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
+               "break_value-sm-50"
     end
 
     test "multiple breakpoints with multiple percentage breaks" do

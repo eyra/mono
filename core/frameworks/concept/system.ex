@@ -1,4 +1,5 @@
 defmodule Frameworks.Concept.System do
+  @moduledoc false
   import Frameworks.Utility.Module
 
   def director(module) do

@@ -1,8 +1,9 @@
 defmodule Systems.Graphite.LeaderboardContentPageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Systems.Content.PageBuilder
-
   use Gettext, backend: CoreWeb.Gettext
+
   alias Frameworks.Concept
   alias Systems.Content
   alias Systems.Graphite
@@ -32,8 +33,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   defp actions(%{status: :offline}, %{preview: preview, publish: publish, close: close}),
     do: [preview: preview, publish: publish, close: close]
 
-  defp actions(%{status: :online}, %{preview: preview, retract: retract}),
-    do: [preview: preview, retract: retract]
+  defp actions(%{status: :online}, %{preview: preview, retract: retract}), do: [preview: preview, retract: retract]
 
   defp action_map(leaderboard, %{current_user: %{id: _user_id}}) do
     preview_url = Graphite.Private.get_preview_url(leaderboard)
@@ -126,11 +126,10 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   end
 
   defp create_tabs(leaderboard, show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, leaderboard, show_errors, assigns))
+    Enum.map(get_tab_keys(), &create_tab(&1, leaderboard, show_errors, assigns))
   end
 
-  defp get_tab_keys() do
+  defp get_tab_keys do
     [:settings, :submissions, :scores]
   end
 
@@ -190,6 +189,6 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   def set_status(%{assigns: %{model: leaderboard}} = socket, status) do
     changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{status: status})
     {:ok, leaderboard} = Core.Persister.save(leaderboard, changeset)
-    socket |> Phoenix.Component.assign(leaderboard: leaderboard)
+    Phoenix.Component.assign(socket, leaderboard: leaderboard)
   end
 end
