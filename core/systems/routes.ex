@@ -18,6 +18,7 @@ defmodule Systems.Routes do
         :next_action,
         :notification,
         :onyx,
+        :payment,
         :org,
         :pool,
         :project,

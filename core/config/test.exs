@@ -9,7 +9,8 @@ config :core,
 config :core,
   selectical_base_url: "https://jkntvyihutapdkdsoleo.supabase.co",
   selectical_api_key:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnR2eWlodXRhcGRrZHNvbGVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1ODk2NzksImV4cCI6MjAzMTE2NTY3OX0.zTsZmd3EdKFGof1gxI0LxD2aws2BGb2rboFybC_26Gk"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnR2eWlodXRhcGRrZHNvbGVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1ODk2NzksImV4cCI6MjAzMTE2NTY3OX0.zTsZmd3EdKFGof1gxI0LxD2aws2BGb2rboFybC_26Gk",
+  payment_provider: Frameworks.Payment.ProviderMock
 
 # Print only errors during test
 config :logger, level: :error

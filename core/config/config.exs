@@ -81,7 +81,14 @@ config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
+  payment_provider: Frameworks.Payment.Provider.Local,
   tool_directors: [:assignment]
+
+config :core, :payment,
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
+  api_key: System.get_env("OPP_API_KEY"),
+  notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+  webhook_url: "#{System.get_env("APP_DOMAIN", "http://localhost:4000")}/api/payment/opp/webhook"
 
 config :gettext, default_locale: "en"
 
