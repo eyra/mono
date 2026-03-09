@@ -32,14 +32,15 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
 
     conn = Plug.Test.conn(:post, @path, body)
 
-    %{conn |
-      assigns: Map.put(conn.assigns, :raw_body, body),
-      req_headers: [
-        {"signature", signature_header},
-        {"digest", digest},
-        {"host", @host},
-        {"date", @date}
-      ]
+    %{
+      conn
+      | assigns: Map.put(conn.assigns, :raw_body, body),
+        req_headers: [
+          {"signature", signature_header},
+          {"digest", digest},
+          {"host", @host},
+          {"date", @date}
+        ]
     }
   end
 
@@ -95,14 +96,15 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
 
       conn = Plug.Test.conn(:post, @path, body)
 
-      conn = %{conn |
-        assigns: Map.put(conn.assigns, :raw_body, body),
-        req_headers: [
-          {"signature", signature_header},
-          {"digest", digest},
-          {"host", @host},
-          {"date", @date}
-        ]
+      conn = %{
+        conn
+        | assigns: Map.put(conn.assigns, :raw_body, body),
+          req_headers: [
+            {"signature", signature_header},
+            {"digest", digest},
+            {"host", @host},
+            {"date", @date}
+          ]
       }
 
       assert {:error, %Error{code: :invalid_signature}} = Webhook.verify_and_parse(conn)
@@ -124,9 +126,10 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
 
       conn = Plug.Test.conn(:post, @path, body)
 
-      conn = %{conn |
-        assigns: Map.put(conn.assigns, :raw_body, body),
-        req_headers: [{"digest", digest}]
+      conn = %{
+        conn
+        | assigns: Map.put(conn.assigns, :raw_body, body),
+          req_headers: [{"digest", digest}]
       }
 
       assert {:error, %Error{code: :missing_header}} = Webhook.verify_and_parse(conn)

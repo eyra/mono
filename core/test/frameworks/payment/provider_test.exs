@@ -35,7 +35,13 @@ defmodule Frameworks.Payment.ProviderTest do
     test "returns transaction with payment url" do
       Frameworks.Payment.ProviderMock
       |> expect(:create_transaction, fn %{total_amount: 10_000} ->
-        {:ok, %{uid: "t1", status: "created", payment_url: "https://pay.example.com/t1", amount: 10_000}}
+        {:ok,
+         %{
+           uid: "t1",
+           status: "created",
+           payment_url: "https://pay.example.com/t1",
+           amount: 10_000
+         }}
       end)
 
       assert {:ok, %{uid: "t1", payment_url: url}} =
