@@ -24,7 +24,14 @@ defmodule Frameworks.Payment.Provider.Local do
   def create_transaction(attrs) when is_map(attrs) do
     uid = generate_uid()
     Logger.info("[Payment.Local] create_transaction uid=#{uid} attrs=#{inspect(attrs)}")
-    {:ok, %{uid: uid, status: "created", payment_url: "http://localhost:4000/payment/local/#{uid}", amount: Map.get(attrs, :total_amount, 0)}}
+
+    {:ok,
+     %{
+       uid: uid,
+       status: "created",
+       payment_url: "http://localhost:4000/payment/local/#{uid}",
+       amount: Map.get(attrs, :total_amount, 0)
+     }}
   end
 
   @impl true
@@ -38,7 +45,11 @@ defmodule Frameworks.Payment.Provider.Local do
   @impl true
   def create_withdrawal(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
     uid = generate_uid()
-    Logger.info("[Payment.Local] create_withdrawal merchant=#{merchant_uid} uid=#{uid} attrs=#{inspect(attrs)}")
+
+    Logger.info(
+      "[Payment.Local] create_withdrawal merchant=#{merchant_uid} uid=#{uid} attrs=#{inspect(attrs)}"
+    )
+
     {:ok, %{uid: uid, status: "created", amount: Map.get(attrs, :amount, 0)}}
   end
 
