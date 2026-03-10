@@ -16,9 +16,8 @@ defmodule Frameworks.Payment.Provider.OPP.Webhook do
   @spec verify_and_parse(Plug.Conn.t()) :: {:ok, event()} | {:error, Error.t()}
   def verify_and_parse(conn) do
     with {:ok, body} <- read_body(conn),
-         :ok <- verify_signature(conn, body),
-         {:ok, event} <- parse_event(body) do
-      {:ok, event}
+         :ok <- verify_signature(conn, body) do
+      parse_event(body)
     end
   end
 
@@ -33,9 +32,8 @@ defmodule Frameworks.Payment.Provider.OPP.Webhook do
     with {:ok, signature_header} <- get_header(conn, "signature"),
          {:ok, digest_header} <- get_header(conn, "digest"),
          :ok <- verify_digest(digest_header, body),
-         {:ok, params} <- parse_signature_header(signature_header),
-         :ok <- verify_hmac(conn, params) do
-      :ok
+         {:ok, params} <- parse_signature_header(signature_header) do
+      verify_hmac(conn, params)
     end
   end
 

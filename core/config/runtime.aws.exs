@@ -268,6 +268,13 @@ if config_env() == :prod do
          |> Enum.map(&"core@#{&1}")
          |> Enum.map(&String.to_atom/1)
 
+  # Payment Provider (OPP)
+  config :core, :payment,
+    base_url: System.get_env("OPP_BASE_URL", "https://api-sandbox.onlinebetaalplatform.nl/v1"),
+    api_key: System.get_env("OPP_API_KEY"),
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+    webhook_url: "#{base_url}/api/payment/opp/webhook"
+
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
