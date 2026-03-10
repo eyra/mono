@@ -1,19 +1,11 @@
-defmodule Frameworks.Payment.Provider.OPP.Webhook do
+defmodule Systems.Payment.Provider.OPP.Webhook do
+  @behaviour Systems.Payment.Webhook
+
   require Logger
 
-  alias Frameworks.Payment.Error
+  alias Systems.Payment.Error
 
-  @type event :: %{
-          uid: String.t(),
-          type: String.t(),
-          object_uid: String.t(),
-          object_type: String.t(),
-          object_url: String.t(),
-          parent_uid: String.t() | nil,
-          parent_type: String.t() | nil
-        }
-
-  @spec verify_and_parse(Plug.Conn.t()) :: {:ok, event()} | {:error, Error.t()}
+  @impl true
   def verify_and_parse(conn) do
     with {:ok, body} <- read_body(conn),
          :ok <- verify_signature(conn, body) do

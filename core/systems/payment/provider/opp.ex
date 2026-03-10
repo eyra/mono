@@ -1,8 +1,8 @@
-defmodule Frameworks.Payment.Provider.OPP do
-  @behaviour Frameworks.Payment.Provider
+defmodule Systems.Payment.Provider.OPP do
+  @behaviour Systems.Payment.Provider
 
-  alias Frameworks.Payment.Error
-  alias Frameworks.Payment.Provider.OPP.HTTP
+  alias Systems.Payment.Error
+  alias Systems.Payment.Provider.OPP.HTTP
 
   # Merchants
 

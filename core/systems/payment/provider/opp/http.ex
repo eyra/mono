@@ -1,7 +1,7 @@
-defmodule Frameworks.Payment.Provider.OPP.HTTP do
+defmodule Systems.Payment.Provider.OPP.HTTP do
   require Logger
 
-  alias Frameworks.Payment.Error
+  alias Systems.Payment.Error
 
   @spec get(String.t()) :: {:ok, map()} | {:error, Error.t()}
   def get(path) do

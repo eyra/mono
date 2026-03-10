@@ -1,11 +1,12 @@
-defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
+defmodule Systems.Payment.Provider.OPP.WebhookTest do
   use ExUnit.Case, async: true
 
-  alias Frameworks.Payment.Provider.OPP.Webhook
-  alias Frameworks.Payment.Error
+  @moduletag :capture_log
+
+  alias Systems.Payment.Provider.OPP.Webhook
+  alias Systems.Payment.Error
 
   @secret "test_notification_secret"
-  @path "/api/payment/opp/webhook"
   @host "localhost"
   @date "Mon, 09 Mar 2026 12-00-00 GMT"
 
@@ -23,14 +24,14 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
     digest = "SHA-256=" <> (:crypto.hash(:sha256, body) |> Base.encode64())
 
     signing_string =
-      "(request-target): post #{@path}\nhost: #{@host}\ndate: #{@date}\ndigest: #{digest}"
+      "(request-target): post #{"/webhook"}\nhost: #{@host}\ndate: #{@date}\ndigest: #{digest}"
 
     signature = :crypto.mac(:hmac, :sha256, @secret, signing_string) |> Base.encode64()
 
     signature_header =
       "keyId=\"test\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date digest\",signature=\"#{signature}\""
 
-    conn = Plug.Test.conn(:post, @path, body)
+    conn = Plug.Test.conn(:post, "/webhook", body)
 
     %{
       conn
@@ -94,7 +95,7 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
       signature_header =
         "keyId=\"test\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date digest\",signature=\"invalidsig\""
 
-      conn = Plug.Test.conn(:post, @path, body)
+      conn = Plug.Test.conn(:post, "/webhook", body)
 
       conn = %{
         conn
@@ -124,7 +125,7 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
       body = valid_event_body()
       digest = "SHA-256=" <> (:crypto.hash(:sha256, body) |> Base.encode64())
 
-      conn = Plug.Test.conn(:post, @path, body)
+      conn = Plug.Test.conn(:post, "/webhook", body)
 
       conn = %{
         conn
@@ -138,7 +139,7 @@ defmodule Frameworks.Payment.Provider.OPP.WebhookTest do
 
   describe "verify_and_parse/1 body parsing" do
     test "rejects missing body" do
-      conn = Plug.Test.conn(:post, @path, "")
+      conn = Plug.Test.conn(:post, "/webhook", "")
 
       assert {:error, %Error{code: :missing_body}} = Webhook.verify_and_parse(conn)
     end

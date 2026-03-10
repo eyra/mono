@@ -1,5 +1,5 @@
-defmodule Frameworks.Payment.Provider.Local do
-  @behaviour Frameworks.Payment.Provider
+defmodule Systems.Payment.Provider.Local do
+  @behaviour Systems.Payment.Provider
 
   require Logger
 

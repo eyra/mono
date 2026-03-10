@@ -1,4 +1,4 @@
-defmodule Frameworks.Payment.Error do
+defmodule Systems.Payment.Error do
   @type t :: %__MODULE__{
           code: atom(),
           message: String.t(),

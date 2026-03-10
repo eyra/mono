@@ -272,8 +272,7 @@ if config_env() == :prod do
   config :core, :payment,
     base_url: System.get_env("OPP_BASE_URL", "https://api-sandbox.onlinebetaalplatform.nl/v1"),
     api_key: System.get_env("OPP_API_KEY"),
-    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
-    webhook_url: "#{base_url}/api/payment/opp/webhook"
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

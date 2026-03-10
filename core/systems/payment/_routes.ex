@@ -3,7 +3,7 @@ defmodule Systems.Payment.Routes do
     quote do
       scope "/api/payment", Systems.Payment do
         pipe_through([:api])
-        post("/opp/webhook", Controller, :opp_webhook)
+        post("/webhook/:provider", Controller, :webhook)
       end
     end
   end

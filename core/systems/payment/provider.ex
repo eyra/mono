@@ -1,5 +1,5 @@
-defmodule Frameworks.Payment.Provider do
-  alias Frameworks.Payment.Error
+defmodule Systems.Payment.Provider do
+  alias Systems.Payment.Error
 
   # Merchants
 
@@ -100,5 +100,17 @@ defmodule Frameworks.Payment.Provider do
 
   def provider do
     Application.fetch_env!(:core, :payment_provider)
+  end
+
+  def webhook_url do
+    base_url = Application.fetch_env!(:core, :base_url)
+    "#{base_url}/api/payment/webhook/#{provider_name()}"
+  end
+
+  defp provider_name do
+    provider()
+    |> Module.split()
+    |> List.last()
+    |> String.downcase()
   end
 end
