@@ -3,6 +3,8 @@ defmodule Systems.Payment.Provider.Local do
 
   require Logger
 
+  alias Systems.Payment.Transaction
+
   # Merchants
 
   @impl true
@@ -21,16 +23,30 @@ defmodule Systems.Payment.Provider.Local do
   # Transactions
 
   @impl true
-  def create_transaction(attrs) when is_map(attrs) do
+  def create_transaction(
+        merchant_uid,
+        total_amount,
+        currency,
+        invoice_id,
+        idempotence_key,
+        %Transaction.Description{} = description,
+        %Transaction.Metadata{},
+        opts
+      )
+      when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
+             is_atom(currency) and is_binary(invoice_id) and is_binary(idempotence_key) do
     uid = generate_uid()
-    Logger.info("[Payment.Local] create_transaction uid=#{uid} attrs=#{inspect(attrs)}")
+
+    Logger.info(
+      "[Payment.Local] create_transaction uid=#{uid} invoice=#{invoice_id} currency=#{currency} merchant=#{merchant_uid} amount=#{total_amount} description=#{Transaction.Description.format(description, invoice_id)} opts=#{inspect(opts)}"
+    )
 
     {:ok,
      %{
        uid: uid,
        status: "created",
        payment_url: "http://localhost:4000/payment/local/#{uid}",
-       amount: Map.get(attrs, :total_amount, 0)
+       amount: total_amount
      }}
   end
 
@@ -43,11 +59,12 @@ defmodule Systems.Payment.Provider.Local do
   # Withdrawals
 
   @impl true
-  def create_withdrawal(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
+  def create_withdrawal(merchant_uid, currency, attrs)
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) do
     uid = generate_uid()
 
     Logger.info(
-      "[Payment.Local] create_withdrawal merchant=#{merchant_uid} uid=#{uid} attrs=#{inspect(attrs)}"
+      "[Payment.Local] create_withdrawal merchant=#{merchant_uid} currency=#{currency} uid=#{uid} attrs=#{inspect(attrs)}"
     )
 
     {:ok, %{uid: uid, status: "created", amount: Map.get(attrs, :amount, 0)}}
@@ -57,15 +74,6 @@ defmodule Systems.Payment.Provider.Local do
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
     {:ok, %{uid: uid, status: "created", amount: 0}}
-  end
-
-  # Multi-transactions
-
-  @impl true
-  def create_multi_transaction(attrs) when is_map(attrs) do
-    uid = generate_uid()
-    Logger.info("[Payment.Local] create_multi_transaction uid=#{uid} attrs=#{inspect(attrs)}")
-    {:ok, %{uid: uid, status: "created"}}
   end
 
   defp generate_uid do

@@ -13,15 +13,15 @@ defmodule Systems.Payment.Webhook do
 
   @callback verify_and_parse(Plug.Conn.t()) :: {:ok, event()} | {:error, Error.t()}
 
+  @providers %{
+    "opp" => Systems.Payment.Provider.OPP.Webhook
+  }
+
   @spec handler(String.t()) :: {:ok, module()} | {:error, :unknown_provider}
   def handler(provider) do
-    provider_module = Module.concat(Systems.Payment.Provider, String.upcase(provider))
-    module = Module.concat(provider_module, Webhook)
-
-    if Code.ensure_loaded?(module) and function_exported?(module, :verify_and_parse, 1) do
-      {:ok, module}
-    else
-      {:error, :unknown_provider}
+    case Map.fetch(@providers, provider) do
+      {:ok, module} -> {:ok, module}
+      :error -> {:error, :unknown_provider}
     end
   end
 end

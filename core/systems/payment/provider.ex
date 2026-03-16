@@ -1,5 +1,6 @@
 defmodule Systems.Payment.Provider do
   alias Systems.Payment.Error
+  alias Systems.Payment.Transaction
 
   # Merchants
 
@@ -39,24 +40,31 @@ defmodule Systems.Payment.Provider do
   Create a pay-in transaction (researcher topping up budget).
   Returns a payment URL for iDEAL payment.
 
-  ## Attrs
+  The `currency` atom (e.g. `:EUR`) is mapped to the provider's native
+  currency code by each implementation.
 
-    * `merchant_uid` (required) - merchant to receive the payment
-    * `total_amount` (required) - amount in cents (minor units)
-    * `description` - bank statement description,
-      format: "<platform>, <budget>, <invoice-id>, <#participants x amount>"
+  The `invoice_id` (e.g. "NEXT-NL-0128") is used in both the bank statement
+  description and the OPP metadata.
+
+  The `idempotence_key` comes from the bookkeeping entry and prevents duplicate
+  transactions on retry.
+
+  ## Opts
+
     * `payment_method` - "ideal" (default, non-reversible)
     * `return_url` - redirect URL after payment completion
     * `notify_url` - webhook URL for transaction status updates
-    * `metadata` - key/value pairs, used for compliance:
-      * `contact_person` - researcher name
-      * `study_title` - title of the study
-      * `study_goal` - plain text description
-      * `participant_count` - number of participants
-      * `amount_per_participant` - amount per participant in cents
-      * `eyra_id` - UUID linking to assignment + budget
   """
-  @callback create_transaction(attrs :: map()) :: {:ok, transaction()} | {:error, Error.t()}
+  @callback create_transaction(
+              merchant_uid :: String.t(),
+              total_amount :: pos_integer(),
+              currency :: atom(),
+              invoice_id :: String.t(),
+              idempotence_key :: String.t(),
+              description :: Transaction.Description.t(),
+              metadata :: Transaction.Metadata.t(),
+              opts :: keyword()
+            ) :: {:ok, transaction()} | {:error, Error.t()}
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
 
   # Withdrawals
@@ -70,33 +78,17 @@ defmodule Systems.Payment.Provider do
   @doc """
   Create a payout from a merchant to a participant's bank account.
 
+  The `currency` atom (e.g. `:EUR`) is mapped to the provider's native
+  currency code by each implementation.
+
   ## Attrs
 
     * `amount` (required) - payout amount in cents
     * `description` - description for the bank statement
   """
-  @callback create_withdrawal(merchant_uid :: String.t(), attrs :: map()) ::
+  @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
-
-  # Multi-transactions (transfers with split)
-
-  @type multi_transaction :: %{
-          uid: String.t(),
-          status: String.t()
-        }
-
-  @doc """
-  Transfer funds between merchants with split data for platform fees.
-
-  ## Attrs
-
-    * `merchant_uid` (required) - source merchant
-    * `total_amount` (required) - total amount in cents
-    * `splits` - list of split objects defining fee distribution
-  """
-  @callback create_multi_transaction(attrs :: map()) ::
-              {:ok, multi_transaction()} | {:error, Error.t()}
 
   def provider do
     Application.fetch_env!(:core, :payment_provider)

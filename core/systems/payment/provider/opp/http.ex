@@ -3,27 +3,45 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
 
   alias Systems.Payment.Error
 
+  @timeout 10_000
+  @recv_timeout 30_000
+
   @spec get(String.t()) :: {:ok, map()} | {:error, Error.t()}
   def get(path) do
     request(:get, path)
   end
 
-  @spec post(String.t(), map()) :: {:ok, map()} | {:error, Error.t()}
-  def post(path, body) when is_map(body) do
-    request(:post, path, body)
+  @spec post(String.t(), map(), list()) :: {:ok, map()} | {:error, Error.t()}
+  def post(path, body, extra_headers \\ []) when is_map(body) do
+    request(:post, path, body, extra_headers)
   end
 
-  defp request(method, path, body \\ nil) do
+  defp request(method, path, body \\ nil, extra_headers \\ []) do
     url = base_url() <> path
-    headers = build_headers()
+    headers = build_headers() ++ extra_headers
+    options = [timeout: @timeout, recv_timeout: @recv_timeout]
+    request_id = Ecto.UUID.generate()
+    start_time = System.monotonic_time(:millisecond)
 
-    Logger.debug("[OPP] #{method |> to_string() |> String.upcase()} #{url}")
+    Logger.info("[OPP] Request",
+      request_id: request_id,
+      method: method |> to_string() |> String.upcase(),
+      path: path
+    )
 
     result =
       case method do
-        :get -> HTTPoison.get(url, headers)
-        :post -> HTTPoison.post(url, Jason.encode!(body), headers)
+        :get -> HTTPoison.get(url, headers, options)
+        :post -> HTTPoison.post(url, Jason.encode!(body), headers, options)
       end
+
+    duration = System.monotonic_time(:millisecond) - start_time
+
+    Logger.info("[OPP] Response",
+      request_id: request_id,
+      duration_ms: duration,
+      status: extract_status(result)
+    )
 
     handle_response(result)
   end
@@ -35,6 +53,9 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
       {"Accept", "application/json"}
     ]
   end
+
+  defp extract_status({:ok, %HTTPoison.Response{status_code: status}}), do: status
+  defp extract_status({:error, %HTTPoison.Error{reason: reason}}), do: inspect(reason)
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}})
        when status in 200..299 do

@@ -1,6 +1,8 @@
 defmodule Systems.Payment.ProviderTest do
   use Core.PaymentCase, async: true
 
+  alias Systems.Payment.Transaction
+
   @moduletag :capture_log
 
   describe "create_merchant/1" do
@@ -25,10 +27,35 @@ defmodule Systems.Payment.ProviderTest do
     end
   end
 
-  describe "create_transaction/1" do
+  describe "create_transaction/8" do
     test "returns transaction with payment url" do
+      description = %Transaction.Description{
+        platform: "Eyra Next",
+        assignment: "Data Donation TikTok",
+        participant_count: 100,
+        amount_per_participant: 250
+      }
+
+      metadata = %Transaction.Metadata{
+        contact_person: "Dr. Jane Smith",
+        study_title: "TikTok Study",
+        study_goal: "Analyze usage",
+        participant_count: 100,
+        amount_per_participant: 250
+      }
+
+      invoice_id = "NEXT-NL-0128"
+      idempotence_key = "assignment=1,user=42,type=payment"
+
       ProviderMock
-      |> expect(:create_transaction, fn %{total_amount: 10_000} ->
+      |> expect(:create_transaction, fn "m1",
+                                        10_000,
+                                        :EUR,
+                                        ^invoice_id,
+                                        ^idempotence_key,
+                                        ^description,
+                                        ^metadata,
+                                        [] ->
         {:ok,
          %{
            uid: "t1",
@@ -39,7 +66,16 @@ defmodule Systems.Payment.ProviderTest do
       end)
 
       assert {:ok, %{uid: "t1", payment_url: url}} =
-               ProviderMock.create_transaction(%{total_amount: 10_000})
+               ProviderMock.create_transaction(
+                 "m1",
+                 10_000,
+                 :EUR,
+                 invoice_id,
+                 idempotence_key,
+                 description,
+                 metadata,
+                 []
+               )
 
       assert is_binary(url)
     end
@@ -56,15 +92,15 @@ defmodule Systems.Payment.ProviderTest do
     end
   end
 
-  describe "create_withdrawal/2" do
+  describe "create_withdrawal/3" do
     test "delegates to configured provider" do
       ProviderMock
-      |> expect(:create_withdrawal, fn "m1", %{amount: 1000} ->
+      |> expect(:create_withdrawal, fn "m1", :EUR, %{amount: 1000} ->
         {:ok, %{uid: "w1", status: "created", amount: 1000}}
       end)
 
       assert {:ok, %{uid: "w1", amount: 1000}} =
-               ProviderMock.create_withdrawal("m1", %{amount: 1000})
+               ProviderMock.create_withdrawal("m1", :EUR, %{amount: 1000})
     end
   end
 
@@ -76,18 +112,6 @@ defmodule Systems.Payment.ProviderTest do
       end)
 
       assert {:ok, %{uid: "w1", status: "completed"}} = ProviderMock.get_withdrawal("w1")
-    end
-  end
-
-  describe "create_multi_transaction/1" do
-    test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:create_multi_transaction, fn %{amount: 10_000} ->
-        {:ok, %{uid: "mt1", status: "created"}}
-      end)
-
-      assert {:ok, %{uid: "mt1"}} =
-               ProviderMock.create_multi_transaction(%{amount: 10_000})
     end
   end
 end
