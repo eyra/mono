@@ -41,7 +41,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
       ["SHA-256", expected_digest] ->
         actual_digest = :crypto.hash(:sha256, body) |> Base.encode64()
 
-        if actual_digest == expected_digest do
+        if Plug.Crypto.secure_compare(actual_digest, expected_digest) do
           :ok
         else
           {:error, %Error{code: :invalid_digest, message: "Digest mismatch"}}
@@ -71,7 +71,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
       :crypto.mac(:hmac, :sha256, secret, signing_string)
       |> Base.encode64()
 
-    if expected_signature == signature do
+    if Plug.Crypto.secure_compare(expected_signature, signature) do
       :ok
     else
       {:error, %Error{code: :invalid_signature, message: "Signature verification failed"}}

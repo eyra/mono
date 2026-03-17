@@ -85,9 +85,7 @@ config :core,
   tool_directors: [:assignment]
 
 config :core, :payment,
-  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
-  api_key: System.get_env("OPP_API_KEY"),
-  notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"
 
