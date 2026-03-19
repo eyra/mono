@@ -13,6 +13,7 @@ defmodule Systems.Workflow.Platforms do
          :facebook,
          :google,
          :instagram,
+         :linkedin,
          :netflix,
          :samsung,
          :snapchat,

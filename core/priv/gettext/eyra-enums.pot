@@ -279,6 +279,10 @@ msgid "platforms.instagram"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "platforms.linkedin"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "platforms.x"
 msgstr ""
 
