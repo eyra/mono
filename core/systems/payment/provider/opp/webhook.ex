@@ -127,6 +127,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp notification_secret do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:notification_secret)
+    Application.fetch_env!(:core, Systems.Payment.Provider.OPP)
+    |> Keyword.fetch!(:notification_secret)
   end
 end
