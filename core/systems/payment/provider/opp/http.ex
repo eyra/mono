@@ -92,10 +92,10 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   end
 
   defp base_url do
-    Application.fetch_env!(:core, :payment) |> Keyword.fetch!(:base_url)
+    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:base_url)
   end
 
   defp api_key do
-    Application.fetch_env!(:core, :payment) |> Keyword.fetch!(:api_key)
+    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:api_key)
   end
 end

@@ -44,7 +44,7 @@ defmodule Systems.Payment.Provider do
   currency code by each implementation.
 
   The `invoice_id` (e.g. "NEXT-NL-0128") is used in both the bank statement
-  description and the OPP metadata.
+  description and the metadata.
 
   The `idempotence_key` comes from the bookkeeping entry and prevents duplicate
   transactions on retry.
