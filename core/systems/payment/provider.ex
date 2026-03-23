@@ -89,20 +89,4 @@ defmodule Systems.Payment.Provider do
   @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
-
-  def provider do
-    Application.fetch_env!(:core, :payment_provider)
-  end
-
-  def webhook_url do
-    base_url = Application.fetch_env!(:core, :base_url)
-    "#{base_url}/api/payment/webhook/#{provider_name()}"
-  end
-
-  defp provider_name do
-    provider()
-    |> Module.split()
-    |> List.last()
-    |> String.downcase()
-  end
 end

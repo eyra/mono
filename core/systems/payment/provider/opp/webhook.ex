@@ -59,9 +59,10 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
       Regex.scan(@signature_regex, header)
       |> Enum.into(%{}, fn [_, key, value] -> {key, value} end)
 
-    case Map.has_key?(params, "signature") do
-      true -> {:ok, params}
-      false -> {:error, %Error{code: :invalid_signature, message: "Missing signature in header"}}
+    if Map.has_key?(params, "signature") do
+      {:ok, params}
+    else
+      {:error, %Error{code: :invalid_signature, message: "Missing signature in header"}}
     end
   end
 
