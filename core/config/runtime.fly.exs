@@ -233,6 +233,11 @@ if config_env() == :prod do
   # No clustering for dev environment (single node)
   config :core, :dist_hosts, []
 
+  config :core, Systems.Payment.Provider.OPP,
+    base_url: System.get_env("OPP_BASE_URL"),
+    api_key: System.get_env("OPP_API_KEY"),
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
+
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do

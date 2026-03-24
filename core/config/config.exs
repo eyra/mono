@@ -39,7 +39,16 @@ config :tailwind,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :request_path, :query_string, :user_agent]
+  metadata: [
+    :request_id,
+    :request_path,
+    :query_string,
+    :user_agent,
+    :method,
+    :path,
+    :duration_ms,
+    :status
+  ]
 
 config :plug, :statuses, %{
   403 => "Access Denied",
@@ -81,7 +90,14 @@ config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
+  payment_provider: Systems.Payment.Provider.Local,
+  payment_providers: %{
+    "opp" => Systems.Payment.Provider.OPP
+  },
   tool_directors: [:assignment]
+
+config :core, Systems.Payment.Provider.OPP,
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"
 

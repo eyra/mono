@@ -77,6 +77,7 @@ defmodule CoreWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library(),
+    body_reader: {Systems.Payment.Plug, :cache_body_reader, []},
     # Allow large uploads for data donation (configurable via HTTP_BODY_MAX_SIZE env var)
     length: @http_body_max_size
   )
