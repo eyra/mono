@@ -6,7 +6,7 @@ defmodule Systems.Student.Filters do
       {:student_filters, [:inactive, :active, :passed]}
 
   alias Systems.{
-    Budget,
+    Fund,
     Bookkeeping,
     Pool
   }
@@ -26,7 +26,7 @@ defmodule Systems.Student.Filters do
   def include?(student, filter, %Pool.Model{} = pool), do: state(student, pool) == filter
 
   defp state(%Systems.Account.User{} = student, pool) do
-    Budget.Public.list_wallets(student)
+    Fund.Public.list_wallets(student)
     |> Enum.filter(&Pool.Public.wallet_related?(pool, &1))
     |> state(pool)
   end

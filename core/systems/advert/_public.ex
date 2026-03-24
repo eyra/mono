@@ -22,7 +22,7 @@ defmodule Systems.Advert.Public do
   alias Systems.Assignment
   alias Systems.Alliance
   alias Systems.Crew
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Bookkeeping
   alias Systems.Pool
 
@@ -123,11 +123,11 @@ defmodule Systems.Advert.Public do
     |> Repo.all()
   end
 
-  def list_by_budget(%Budget.Model{id: budget_id}, preload \\ []) do
+  def list_by_fund(%Fund.Model{id: fund_id}, preload \\ []) do
     from(c in Advert.Model,
       inner_join: a in Assignment.Model,
       on: c.assignment_id == a.id,
-      where: a.budget_id == ^budget_id,
+      where: a.fund_id == ^fund_id,
       preload: ^preload,
       order_by: [desc: c.updated_at],
       select: c
@@ -302,9 +302,9 @@ defmodule Systems.Advert.Public do
           pool: %{id: pool_id, director: :student} = pool
         }
       }) do
-    # FIXME: budget change after pool update should be handled in student submission form
-    budget = Directable.director(pool).resolve_budget(pool_id, nil)
-    Assignment.Public.update_budget(assignment, budget)
+    # FIXME: fund change after pool update should be handled in student submission form
+    fund = Directable.director(pool).resolve_fund(pool_id, nil)
+    Assignment.Public.update_fund(assignment, fund)
   end
 
   def submission_updated(_), do: nil
@@ -477,23 +477,23 @@ defmodule Systems.Advert.Public do
   end
 
   # FIXME: take care of funding
-  defp validate_funded(%{assignment: %{budget: nil}}) do
+  defp validate_funded(%{assignment: %{fund: nil}}) do
     Logger.error("FIXME: take care of funding")
     :ok
   end
 
   defp validate_funded(%{
-         assignment: %{budget: %{currency: %{type: :legal}} = budget},
+         assignment: %{fund: %{currency: %{type: :legal}} = fund},
          submission: %{reward_value: reward_value}
        }) do
-    if Budget.Model.amount_available(budget) > reward_value do
+    if Fund.Model.amount_available(fund) > reward_value do
       :ok
     else
       {:error, :not_funded}
     end
   end
 
-  defp validate_funded(%{assignment: %{budget: %{currency: %{type: _}}}}), do: :ok
+  defp validate_funded(%{assignment: %{fund: %{currency: %{type: _}}}}), do: :ok
 
   @doc """
     Marks expired tasks in online adverts based on updated_at and estimated duration.
@@ -558,7 +558,7 @@ defmodule Systems.Advert.Public do
       on: pp.pool_id == p.id,
       inner_join: u in User,
       on: pp.user_id == u.id,
-      inner_join: bc in Budget.CurrencyModel,
+      inner_join: bc in Fund.CurrencyModel,
       on: bc.id == p.currency_id,
       where: bc.name == ^currency and u.id == ^user_id,
       select: p

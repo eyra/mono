@@ -5,7 +5,7 @@ defmodule Systems.Advert.FundingView do
 
   alias Frameworks.Pixel.Square
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Bookkeeping
   alias Systems.Pool
   alias Systems.Assignment
@@ -15,7 +15,7 @@ defmodule Systems.Advert.FundingView do
   # Handle update from parent
   @impl true
   def update(
-        %{assignment: assignment, submission: submission, budget: budget},
+        %{assignment: assignment, submission: submission, fund: fund},
         %{assigns: %{id: _id}} = socket
       ) do
     {
@@ -24,14 +24,14 @@ defmodule Systems.Advert.FundingView do
       |> assign(
         assignment: assignment,
         submission: submission,
-        budget: budget
+        fund: fund
       )
       |> update_state()
       |> update_shortage()
       |> update_reward_description()
       |> update_fund_description()
-      |> update_budgets()
-      |> update_budget_items()
+      |> update_funds()
+      |> update_fund_items()
     }
   end
 
@@ -40,7 +40,7 @@ defmodule Systems.Advert.FundingView do
   def update(
         %{
           id: id,
-          assignment: %{budget: budget} = assignment,
+          assignment: %{fund: fund} = assignment,
           submission: submission,
           user: user
         },
@@ -56,7 +56,7 @@ defmodule Systems.Advert.FundingView do
         submission: submission,
         assignment: assignment,
         changeset: changeset,
-        selected_budget: budget,
+        selected_fund: fund,
         user: user,
         locale: CoreWeb.Live.Hook.Locale.get_locale()
       )
@@ -65,22 +65,22 @@ defmodule Systems.Advert.FundingView do
       |> update_shortage()
       |> update_reward_description()
       |> update_fund_description()
-      |> update_budgets()
-      |> update_budget_items()
+      |> update_funds()
+      |> update_fund_items()
     }
   end
 
   defp update_state(
          %{
            assigns: %{
-             selected_budget: selected_budget,
+             selected_fund: selected_fund,
              assignment: assignment,
              submission: %{reward_value: reward_value}
            }
          } = socket
        ) do
     reward_value = guard_number_nil(reward_value)
-    amount_available = Budget.Model.amount_available(selected_budget)
+    amount_available = Fund.Model.amount_available(selected_fund)
 
     count =
       if amount_available > 0 and reward_value > 0 do
@@ -114,7 +114,7 @@ defmodule Systems.Advert.FundingView do
          } = socket
        ) do
     reward_value = guard_number_nil(reward_value)
-    reward_value_label = Budget.CurrencyModel.label(currency, locale, reward_value)
+    reward_value_label = Fund.CurrencyModel.label(currency, locale, reward_value)
     reward_label = dgettext("eyra-advert", "funding.reward.label", amount: reward_value_label)
     socket |> assign(reward_label: reward_label)
   end
@@ -130,7 +130,7 @@ defmodule Systems.Advert.FundingView do
        ) do
     reward_value = guard_number_nil(reward_value)
     shortage = open_spot_count * reward_value
-    shortage_label = Budget.CurrencyModel.label(currency, locale, shortage)
+    shortage_label = Fund.CurrencyModel.label(currency, locale, shortage)
     socket |> assign(shortage_label: shortage_label)
   end
 
@@ -145,7 +145,7 @@ defmodule Systems.Advert.FundingView do
        ) do
     duration = guard_number_nil(duration)
     minimal_reward = @minimal_reward_per_minute * duration
-    minimal_reward_label = Budget.CurrencyModel.label(currency, locale, minimal_reward)
+    minimal_reward_label = Fund.CurrencyModel.label(currency, locale, minimal_reward)
 
     reward_description =
       dgettext("eyra-advert", "funding.reward.description",
@@ -172,21 +172,21 @@ defmodule Systems.Advert.FundingView do
     socket |> assign(fund_description: fund_description)
   end
 
-  defp update_budgets(
+  defp update_funds(
          %{assigns: %{submission: %{pool: %{currency: %{id: _id} = currency}}, user: user}} =
            socket
        ) do
-    budgets =
-      Budget.Public.list_owned_by_currency(user, currency, Budget.Model.preload_graph(:full))
+    funds =
+      Fund.Public.list_owned_by_currency(user, currency, Fund.Model.preload_graph(:full))
 
-    socket |> assign(budgets: budgets)
+    socket |> assign(funds: funds)
   end
 
-  defp update_budget_items(
+  defp update_fund_items(
          %{
            assigns: %{
-             budgets: budgets,
-             selected_budget: selected_budget,
+             funds: funds,
+             selected_fund: selected_fund,
              state: state,
              locale: locale,
              myself: myself
@@ -194,20 +194,18 @@ defmodule Systems.Advert.FundingView do
          } = socket
        ) do
     socket
-    |> assign(
-      budget_items: Enum.map(budgets, &to_item(&1, selected_budget, state, locale, myself))
-    )
+    |> assign(fund_items: Enum.map(funds, &to_item(&1, selected_fund, state, locale, myself)))
   end
 
   defp to_item(
-         %Budget.Model{id: id, name: name, fund: fund, currency: currency, icon: icon},
+         %Fund.Model{id: id, name: name, fund: fund, currency: currency, icon: icon},
          %{id: selected_id},
          state,
          locale,
          target
        ) do
     %{debit: debit, credit: credit} = Bookkeeping.Public.balance(fund)
-    subtitle = Budget.CurrencyModel.label(currency, locale, credit - debit)
+    subtitle = Fund.CurrencyModel.label(currency, locale, credit - debit)
 
     selection_state =
       if selected_id == id do
@@ -220,31 +218,31 @@ defmodule Systems.Advert.FundingView do
       icon: icon,
       title: name,
       subtitle: subtitle,
-      action: %{type: :send, event: "select_budget", item: id, target: target},
+      action: %{type: :send, event: "select_fund", item: id, target: target},
       state: selection_state
     }
   end
 
   @impl true
   def handle_event(
-        "select_budget",
-        %{"item" => budget_id},
-        %{assigns: %{assignment: assignment, budgets: budgets, changeset: submission_changeset}} =
+        "select_fund",
+        %{"item" => fund_id},
+        %{assigns: %{assignment: assignment, funds: funds, changeset: submission_changeset}} =
           socket
       ) do
-    selected_budget = budgets |> Enum.find(&(&1.id == String.to_integer(budget_id)))
-    changeset = Assignment.Model.changeset(assignment, selected_budget)
+    selected_fund = funds |> Enum.find(&(&1.id == String.to_integer(fund_id)))
+    changeset = Assignment.Model.changeset(assignment, selected_fund)
 
     {
       :noreply,
       socket
       |> save(changeset)
       |> copy_entity(:assignment)
-      |> assign(selected_budget: selected_budget, changeset: submission_changeset)
+      |> assign(selected_fund: selected_fund, changeset: submission_changeset)
       |> update_state()
       |> update_shortage()
-      |> update_budgets()
-      |> update_budget_items()
+      |> update_funds()
+      |> update_fund_items()
       |> update_fund_description()
     }
   end
@@ -265,8 +263,8 @@ defmodule Systems.Advert.FundingView do
       |> update_state()
       |> update_reward()
       |> update_shortage()
-      |> update_budgets()
-      |> update_budget_items()
+      |> update_funds()
+      |> update_fund_items()
       |> update_fund_description()
     }
   end
@@ -294,8 +292,8 @@ defmodule Systems.Advert.FundingView do
         <Text.body><%= @fund_description %></Text.body>
         <.spacing value="XS" />
         <Square.container>
-          <%= for budget_item <- @budget_items do %>
-            <Square.item {budget_item} />
+          <%= for fund_item <- @fund_items do %>
+            <Square.item {fund_item} />
           <% end %>
         </Square.container>
         <.spacing value="L" />

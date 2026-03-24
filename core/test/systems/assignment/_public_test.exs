@@ -4,7 +4,7 @@ defmodule Systems.Assignment.PublicTest do
 
   alias Systems.Assignment
   alias Systems.Crew
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Monitor
 
   alias Core.Factories
@@ -292,7 +292,7 @@ defmodule Systems.Assignment.PublicTest do
     end
 
     test "apply_member/4 creates reward with deposit" do
-      %{id: assignment_id, crew: crew, budget: %{id: budget_id}} =
+      %{id: assignment_id, crew: crew, fund: %{id: fund_id}} =
         assignment = Assignment.Factories.create_assignment(31, 1)
 
       %{id: user_id} = user = Factories.insert!(:member)
@@ -318,11 +318,11 @@ defmodule Systems.Assignment.PublicTest do
                  amount: 1000,
                  attempt: 0,
                  user: %{id: ^user_id},
-                 budget: %{id: ^budget_id},
+                 fund: %{id: ^fund_id},
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment_id: nil
                }
-             ] = Budget.Public.list_rewards(user, [:budget, :user, :deposit, :payment])
+             ] = Fund.Public.list_rewards(user, [:fund, :user, :deposit, :payment])
     end
 
     test "apply_member/4 re-uses expired member" do
@@ -374,12 +374,12 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: nil,
                  payment: nil
                }
-             ] = Budget.Public.list_rewards(user, [:deposit, :payment])
+             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                fund: %{balance_credit: 1000, balance_debit: 1000},
                reserve: %{balance_credit: 1000, balance_debit: 1000}
-             } = Budget.Public.get!(assignment.budget_id)
+             } = Fund.Public.get!(assignment.fund_id)
     end
 
     test "apply_member/3 re-apply member creates reward with next attempt deposit" do
@@ -400,15 +400,15 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment: nil
                }
-             ] = Budget.Public.list_rewards(user, [:deposit, :payment])
+             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                fund: %{balance_credit: 1000, balance_debit: 3000},
                reserve: %{balance_credit: 3000, balance_debit: 1000}
-             } = Budget.Public.get!(assignment.budget_id)
+             } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 creates transaction from budget reserve to user wallet" do
+    test "payout_participant/2 creates transaction from fund reserve to user wallet" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
@@ -429,12 +429,12 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment: %{idempotence_key: ^payment_idempotence_key}
                }
-             ] = Budget.Public.list_rewards(user, [:deposit, :payment])
+             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                fund: %{balance_credit: 1000, balance_debit: 3000},
                reserve: %{balance_credit: 3000, balance_debit: 3000}
-             } = Budget.Public.get!(assignment.budget_id)
+             } = Fund.Public.get!(assignment.fund_id)
     end
 
     test "payout_participant/2 twice fails" do

@@ -4,7 +4,7 @@ defmodule Systems.Banking.PublicTest do
 
   alias Systems.{
     Banking,
-    Budget
+    Fund
   }
 
   setup :verify_on_exit!
@@ -20,7 +20,7 @@ defmodule Systems.Banking.PublicTest do
                                       amount: 5432,
                                       description: description
                                     } ->
-        assert description =~ Budget.AccountStrategy.encode({:wallet, "euro", 888})
+        assert description =~ Fund.AccountStrategy.encode({:wallet, "euro", 888})
       end)
 
       Banking.Public.submit_payment(%{
@@ -28,7 +28,7 @@ defmodule Systems.Banking.PublicTest do
         to_iban: "987",
         account: {:wallet, 888},
         amount: 5432,
-        description: "A payment #{Budget.AccountStrategy.encode({:wallet, "euro", 888})}"
+        description: "A payment #{Fund.AccountStrategy.encode({:wallet, "euro", 888})}"
       })
     end
   end

@@ -2,7 +2,7 @@ defmodule Systems.Pool.StudentFiltersTest do
   use Core.DataCase, async: true
 
   alias Systems.{
-    Budget,
+    Fund,
     Student
   }
 
@@ -12,7 +12,7 @@ defmodule Systems.Pool.StudentFiltersTest do
       student2 = Factories.insert!(:member, %{creator: false})
       student3 = Factories.insert!(:member, %{creator: false})
 
-      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
+      currency = Fund.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 
       pool =
         Factories.insert!(:pool, %{
@@ -22,8 +22,8 @@ defmodule Systems.Pool.StudentFiltersTest do
           currency: currency
         })
 
-      Budget.Factories.create_wallet(student1, currency, 60)
-      Budget.Factories.create_wallet(student2, currency, 30)
+      Fund.Factories.create_wallet(student1, currency, 60)
+      Fund.Factories.create_wallet(student2, currency, 30)
 
       assert Student.Filters.include?(student1, [:passed], pool)
       assert Student.Filters.include?(student2, [:passed], pool) == false
@@ -43,7 +43,7 @@ defmodule Systems.Pool.StudentFiltersTest do
       student2 = Factories.insert!(:member, %{creator: false})
       student3 = Factories.insert!(:member, %{creator: false})
 
-      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
+      currency = Fund.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 
       pool =
         Factories.insert!(:pool, %{
@@ -53,9 +53,9 @@ defmodule Systems.Pool.StudentFiltersTest do
           currency: currency
         })
 
-      Budget.Factories.create_wallet(student1, currency, 60)
-      Budget.Factories.create_wallet(student2, currency, 30)
-      Budget.Factories.create_wallet(student3, currency, 0)
+      Fund.Factories.create_wallet(student1, currency, 60)
+      Fund.Factories.create_wallet(student2, currency, 30)
+      Fund.Factories.create_wallet(student3, currency, 0)
 
       assert Student.Filters.include?(student1, [:unknown], pool)
       assert Student.Filters.include?(student2, [:unknown], pool)
@@ -67,7 +67,7 @@ defmodule Systems.Pool.StudentFiltersTest do
       student2 = Factories.insert!(:member, %{creator: false})
       student3 = Factories.insert!(:member, %{creator: false})
 
-      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
+      currency = Fund.Factories.create_currency("test_1234", :legal, "ƒ", 2)
 
       pool =
         Factories.insert!(:pool, %{
@@ -77,9 +77,9 @@ defmodule Systems.Pool.StudentFiltersTest do
           currency: currency
         })
 
-      Budget.Factories.create_wallet(student1, currency, 60)
-      Budget.Factories.create_wallet(student2, currency, 30)
-      Budget.Factories.create_wallet(student3, currency, 0)
+      Fund.Factories.create_wallet(student1, currency, 60)
+      Fund.Factories.create_wallet(student2, currency, 30)
+      Fund.Factories.create_wallet(student3, currency, 0)
 
       assert Student.Filters.include?(student1, [:passed, :unknown], pool)
       assert Student.Filters.include?(student2, [:passed, :unknown], pool) == false

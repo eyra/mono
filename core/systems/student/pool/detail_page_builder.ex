@@ -5,7 +5,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
 
   alias Systems.Pool
   alias Systems.Advert
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Bookkeeping
   alias Systems.Student
 
@@ -69,7 +69,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     participants = Pool.Public.list_participants(pool)
     scale = scale(breakpoint)
 
-    wallets = Budget.Public.list_wallets(currency)
+    wallets = Fund.Public.list_wallets(currency)
 
     credits = Enum.map(wallets, &Bookkeeping.AccountModel.balance(&1))
 
@@ -94,7 +94,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
       )
 
     total_credits = Statistics.sum(truncated_credits) |> do_round()
-    pending_credits = Budget.Public.pending_rewards(currency)
+    pending_credits = Fund.Public.pending_rewards(currency)
     target_credits = total_count * target
 
     %{

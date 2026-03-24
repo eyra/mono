@@ -93,8 +93,7 @@ config :core,
   payment_provider: Systems.Payment.Provider.Local,
   tool_directors: [:assignment]
 
-config :core, :payment,
-  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
+config :core, :payment, base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"
 

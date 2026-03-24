@@ -4,13 +4,13 @@ defmodule Systems.Advert.Builders.Highlight do
   alias Systems.{
     Assignment,
     Pool,
-    Budget
+    Fund
   }
 
-  defp vm(%Budget.CurrencyModel{} = currency, amount, :reward) do
+  defp vm(%Fund.CurrencyModel{} = currency, amount, :reward) do
     reward_title = dgettext("eyra-alliance", "reward.highlight.title")
     locale = Gettext.get_locale(CoreWeb.Gettext)
-    reward_text = Budget.CurrencyModel.label(currency, locale, amount)
+    reward_text = Fund.CurrencyModel.label(currency, locale, amount)
     %{title: reward_title, text: reward_text}
   end
 
@@ -21,7 +21,7 @@ defmodule Systems.Advert.Builders.Highlight do
     vm(currency, amount, :reward)
   end
 
-  def view_model(%Budget.RewardModel{amount: amount, budget: %{currency: currency}}, :reward) do
+  def view_model(%Fund.RewardModel{amount: amount, fund: %{currency: currency}}, :reward) do
     vm(currency, amount, :reward)
   end
 

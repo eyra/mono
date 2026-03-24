@@ -2,7 +2,7 @@ defmodule Systems.Assignment.Factories do
   alias Core.Factories
 
   alias Systems.Alliance
-  alias Systems.Budget
+  alias Systems.Fund
 
   def create_info(duration, subject_count) do
     Factories.insert!(
@@ -43,7 +43,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, consent_agreement, workflow, auth_node, %Budget.Model{} = budget) do
+  def create_assignment(info, consent_agreement, workflow, auth_node, %Fund.Model{} = fund) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{
@@ -52,7 +52,7 @@ defmodule Systems.Assignment.Factories do
       workflow: workflow,
       crew: crew,
       auth_node: auth_node,
-      budget: budget
+      fund: fund
     })
   end
 

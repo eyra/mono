@@ -2,16 +2,16 @@ defmodule Systems.Banking.ProcessorTest do
   use Core.DataCase, async: true
   import ExUnit.CaptureLog
   import Mox
-  alias Systems.{Banking, Bookkeeping, Budget}
+  alias Systems.{Banking, Bookkeeping, Fund}
 
   setup :verify_on_exit!
 
   describe "next/2" do
     setup do
-      currency = Budget.Factories.create_currency("florijn", :legal, "ƒ", 2)
-      bank_account = Budget.Factories.create_bank_account("test_bank", {:emoji, "🚀"}, currency)
-      processor = %Banking.Processor{strategy: Systems.Budget.AccountStrategy, currency: :florijn}
-      wallet = Budget.Factories.create_wallet(1, currency)
+      currency = Fund.Factories.create_currency("florijn", :legal, "ƒ", 2)
+      bank_account = Fund.Factories.create_bank_account("test_bank", {:emoji, "🚀"}, currency)
+      processor = %Banking.Processor{strategy: Systems.Fund.AccountStrategy, currency: :florijn}
+      wallet = Fund.Factories.create_wallet(1, currency)
 
       %{processor: processor, bank_account: bank_account, currency: currency, wallet: wallet}
     end
@@ -25,7 +25,7 @@ defmodule Systems.Banking.ProcessorTest do
         Banking.Processor.next(processor, %{
           id: 1,
           date: DateTime.utc_now(),
-          description: "A transaction with #{Budget.AccountStrategy.encode(wallet)}",
+          description: "A transaction with #{Fund.AccountStrategy.encode(wallet)}",
           amount: 89,
           type: :received,
           from_iban: "2342",
@@ -75,7 +75,7 @@ defmodule Systems.Banking.ProcessorTest do
         Banking.Processor.next(processor, %{
           id: 1,
           date: DateTime.utc_now(),
-          description: "A description #{Budget.AccountStrategy.encode(wallet)}",
+          description: "A description #{Fund.AccountStrategy.encode(wallet)}",
           amount: 789,
           type: :payed,
           from_iban: "1",
@@ -92,7 +92,7 @@ defmodule Systems.Banking.ProcessorTest do
     } do
       account_id =
         wallet
-        |> Budget.AccountStrategy.encode()
+        |> Fund.AccountStrategy.encode()
         |> String.replace("KOE", "AAP")
 
       assert capture_log(fn ->
