@@ -6,17 +6,12 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
   alias Systems.Payment.Provider.OPP.Webhook
   alias Systems.Payment.Error
 
-  @secret "test_notification_secret"
-  @host "localhost"
+  @secret Faker.String.base64(32)
+  @host Faker.Internet.domain_name()
   @date "Mon, 09 Mar 2026 12-00-00 GMT"
 
   setup do
-    Application.put_env(:core, :payment,
-      base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
-      api_key: "",
-      notification_secret: @secret
-    )
-
+    Application.put_env(:core, Systems.Payment.Provider.OPP, notification_secret: @secret)
     :ok
   end
 

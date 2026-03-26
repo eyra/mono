@@ -91,9 +91,13 @@ config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
   payment_provider: Systems.Payment.Provider.Local,
+  payment_providers: %{
+    "opp" => Systems.Payment.Provider.OPP
+  },
   tool_directors: [:assignment]
 
-config :core, :payment, base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
+config :core, Systems.Payment.Provider.OPP,
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"
 

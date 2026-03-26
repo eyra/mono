@@ -11,7 +11,6 @@ config :core, SurfConext,
   site: "https://connect.test.surfconext.nl",
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
-# Payment Provider (OPP) - production provider, config set in runtime.*.exs
 config :core, payment_provider: Systems.Payment.Provider.OPP
 
 # SSL is terminated at the proxy (nginx/Fly). force_ssl provides defense-in-depth.
