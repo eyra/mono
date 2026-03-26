@@ -20,9 +20,11 @@ dialyzer: FORCE
 	cd core && mix dialyzer --force-check --format short
 
 .PHONY: test
-test: ${MIX_PROJECTS:%=test/%}
-test/%: FORCE
-	cd $* && mix test.all
+test: test/core test/banking_proxy
+test/core: FORCE
+	cd core && mix test.all
+test/banking_proxy: FORCE
+	cd banking_proxy && mix test
 
 .PHONY: format
 format: ${MIX_PROJECTS:%=format/%}
