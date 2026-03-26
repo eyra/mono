@@ -22,7 +22,7 @@ dialyzer: FORCE
 .PHONY: test
 test: ${MIX_PROJECTS:%=test/%}
 test/%: FORCE
-	cd $* && mix test
+	cd $* && mix test.all
 
 .PHONY: format
 format: ${MIX_PROJECTS:%=format/%}
