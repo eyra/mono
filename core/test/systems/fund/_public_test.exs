@@ -14,7 +14,7 @@ defmodule Systems.Fund.PublicTest do
     {:ok, currency: currency, fund: fund}
   end
 
-  test "create_reward/4", %{fund: %{fund: fund, reserve: reserve} = fund} do
+  test "create_reward/4", %{fund: %{fund: fund_account, reserve: reserve} = fund} do
     amount = 3500
     %{id: participant_id} = participant = Factories.insert!(:member, %{creator: false})
     reward_idempotence_key = "user:#{participant.id},fund:#{fund.id},assignment:1"
@@ -30,8 +30,8 @@ defmodule Systems.Fund.PublicTest do
 
     journal_message = "Reserved ƒ35.00 on fund #{fund.name} ##{fund.id}"
 
-    fund_balance_credit = fund.balance_credit
-    fund_balance_debit = fund.balance_debit + amount
+    fund_balance_credit = fund_account.balance_credit
+    fund_balance_debit = fund_account.balance_debit + amount
 
     reserve_balance_credit = reserve.balance_credit + amount
     reserve_balance_debit = reserve.balance_debit
@@ -76,7 +76,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "rollback_deposit/4 succeeds with deposit and without payment", %{
-    fund: %{id: fund_id, fund: fund, reserve: reserve} = fund
+    fund: %{id: fund_id, fund: fund_account, reserve: reserve} = fund
   } do
     amount = 3500
 
@@ -90,7 +90,13 @@ defmodule Systems.Fund.PublicTest do
         journal_message: "test_rollback_deposit"
       })
 
-    Factories.insert!(:book_line, %{account: fund, entry: deposit, debit: amount, credit: 0})
+    Factories.insert!(:book_line, %{
+      account: fund_account,
+      entry: deposit,
+      debit: amount,
+      credit: 0
+    })
+
     Factories.insert!(:book_line, %{account: reserve, entry: deposit, debit: 0, credit: amount})
 
     deposit = Bookkeeping.Public.get_entry(idempotence_key, lines: [:account])
@@ -118,8 +124,8 @@ defmodule Systems.Fund.PublicTest do
 
     reverted_deposit = Bookkeeping.Public.get_entry(reverted_idempotence_key, lines: [:account])
 
-    fund_balance_credit = fund.balance_credit + amount
-    fund_balance_debit = fund.balance_debit
+    fund_balance_credit = fund_account.balance_credit + amount
+    fund_balance_debit = fund_account.balance_debit
 
     reserve_balance_credit = reserve.balance_credit
     reserve_balance_debit = reserve.balance_debit + amount
@@ -160,7 +166,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "rollback_deposit/4 fails with deposit and payment", %{
-    fund: %{fund: fund, reserve: reserve} = fund
+    fund: %{fund: fund_account, reserve: reserve} = fund
   } do
     amount = 3500
     deposit_idempotence_key = "idempotence_key_deposit"
@@ -170,7 +176,7 @@ defmodule Systems.Fund.PublicTest do
 
     deposit =
       Bookkeeping.Factories.create_entry(
-        fund,
+        fund_account,
         reserve,
         amount,
         deposit_idempotence_key,
@@ -179,7 +185,7 @@ defmodule Systems.Fund.PublicTest do
 
     payment =
       Bookkeeping.Factories.create_entry(
-        fund,
+        fund_account,
         reserve,
         amount,
         payment_idempotence_key,
@@ -202,7 +208,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "payout_reward/4 succeeds with deposit available", %{
-    fund: %{id: fund_id, fund: fund, reserve: reserve} = fund
+    fund: %{id: fund_id, fund: fund_account, reserve: reserve} = fund
   } do
     amount = 3500
     reward_idempotence_key = "1"
@@ -210,7 +216,7 @@ defmodule Systems.Fund.PublicTest do
 
     deposit =
       Bookkeeping.Factories.create_entry(
-        fund,
+        fund_account,
         reserve,
         amount,
         deposit_idempotence_key,
@@ -232,8 +238,8 @@ defmodule Systems.Fund.PublicTest do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(reward)
     assert {:ok, _} = Fund.Public.payout_reward(reward_idempotence_key)
 
-    fund_balance_credit = fund.balance_credit
-    fund_balance_debit = fund.balance_debit
+    fund_balance_credit = fund_account.balance_credit
+    fund_balance_debit = fund_account.balance_debit
 
     reserve_balance_credit = reserve.balance_credit
     reserve_balance_debit = reserve.balance_debit + amount
@@ -308,7 +314,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "payout_reward/4 fails with payment available", %{
-    fund: %{currency: currency, fund: fund, reserve: reserve} = fund
+    fund: %{currency: currency, fund: fund_account, reserve: reserve} = fund
   } do
     amount = 3500
     reward_idempotence_key = "1"
@@ -320,7 +326,7 @@ defmodule Systems.Fund.PublicTest do
 
     deposit =
       Bookkeeping.Factories.create_entry(
-        fund,
+        fund_account,
         reserve,
         amount,
         deposit_idempotence_key,
@@ -435,7 +441,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "multiply_rewards/2 succeeds", %{
-    fund: %{fund: fund, reserve: reserve} = fund
+    fund: %{fund: fund_account, reserve: reserve} = fund
   } do
     amount = 250
     multiplier = 10
@@ -472,7 +478,7 @@ defmodule Systems.Fund.PublicTest do
     Fund.Public.payout_reward("participant=2")
 
     assert %{debit: ^reserve_debit} = Bookkeeping.Public.balance(reserve)
-    assert %{debit: ^fund_debit} = Bookkeeping.Public.balance(fund)
+    assert %{debit: ^fund_debit} = Bookkeeping.Public.balance(fund_account)
 
     assert [
              %{balance_credit: ^amount},
@@ -493,7 +499,7 @@ defmodule Systems.Fund.PublicTest do
            ] = Fund.Public.multiply_rewards(fund, 10)
 
     assert %{debit: ^expected_reserve_debit} = Bookkeeping.Public.balance(reserve)
-    assert %{debit: ^expected_fund_debit} = Bookkeeping.Public.balance(fund)
+    assert %{debit: ^expected_fund_debit} = Bookkeeping.Public.balance(fund_account)
 
     assert [
              %{balance_credit: ^expected_wallet_credit},

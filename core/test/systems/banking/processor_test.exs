@@ -16,7 +16,7 @@ defmodule Systems.Banking.ProcessorTest do
       %{processor: processor, bank_account: bank_account, currency: currency, wallet: wallet}
     end
 
-    test "create booking when money box receives budget", %{
+    test "create booking when money box receives fund", %{
       processor: processor,
       bank_account: %{account: bank},
       wallet: wallet
