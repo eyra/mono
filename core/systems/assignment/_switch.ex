@@ -276,6 +276,17 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
+  @impl true
+  def intercept(
+        {:project_node, :delete_item} = _signal,
+        %{project_item: %{assignment_id: assignment_id}} = _message
+      )
+      when not is_nil(assignment_id) do
+    assignment = Assignment.Public.get!(assignment_id)
+    Assignment.Public.update!(assignment, %{status: :idle})
+    :ok
+  end
+
   def intercept({:lab_tool, :reservations_cancelled}, %{tool: tool, user: user}) do
     # reset the membership (with new expiration time), so user has time to reserve a spot on a different time slot
     if assignment = Assignment.Public.get_by_tool(tool, [:crew]) do

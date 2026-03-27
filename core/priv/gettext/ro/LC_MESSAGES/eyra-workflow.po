@@ -20,33 +20,38 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Generator: Poedit 3.8\n"
 
+#, elixir-autogen, elixir-format
 msgid "add.to.button"
 msgstr "Adaugă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.description.label"
 msgstr "Descrierea sarcinii"
 
+#, elixir-autogen, elixir-format
 msgid "item.group.label"
 msgstr "Sursa datelor"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.description"
 msgstr "Alegeți sarcinile pe care doriți să le adăugați la fluxul de lucru."
 
+#, elixir-autogen, elixir-format
 msgid "item.library.title"
 msgstr "Bibliotecă"
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.description"
 msgstr "Adăugați sarcini din bibliotecă pentru a crea un flux de lucru personalizat pentru participanți."
 
-#, fuzzy
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.hint"
 msgstr "Folosiți săgețile pentru a ordona sarcinile"
 
+#, elixir-autogen, elixir-format
 msgid "item.title.label"
 msgstr "Titlul sarcinii"
 
+#, elixir-autogen, elixir-format
 msgid "work_list.done.button"
 msgstr "Continuă, am terminat"

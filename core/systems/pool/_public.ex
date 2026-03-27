@@ -178,16 +178,9 @@ defmodule Systems.Pool.Public do
   end
 
   def add_user_to_panl_pool(%Account.User{} = user) do
-    case get_panl() do
-      %Pool.Model{} = panl_pool ->
-        add_participant!(panl_pool, user)
-        :ok
-
-      nil ->
-        require Logger
-        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
-        :error
-    end
+    panl_pool = Pool.Assembly.get_or_create_panl()
+    add_participant!(panl_pool, user)
+    :ok
   end
 
   def panl_participant?(%Account.User{} = user) do
@@ -222,6 +215,7 @@ defmodule Systems.Pool.Public do
     |> Pool.Model.change(%{name: name, target: target, director: director})
     |> Ecto.Changeset.put_assoc(:currency, currency)
     |> Ecto.Changeset.put_assoc(:org, org)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_module().prepare_node())
     |> Repo.insert!()
   end
 

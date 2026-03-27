@@ -1,5 +1,6 @@
 defmodule Systems.Pool.PanlSignupTest do
-  use CoreWeb.ConnCase, async: true
+  # async: false because test relies on global Pool.Public.get_panl() lookup by name
+  use CoreWeb.ConnCase, async: false
 
   alias Systems.Pool
   alias Systems.Account

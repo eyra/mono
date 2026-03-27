@@ -7,7 +7,7 @@ defmodule Core.Authorization do
   """
   use Frameworks.GreenLight.Public,
     repo: Core.Repo,
-    roles: [:visitor, :user, :creator, :owner, :participant, :member, :admin],
+    roles: [:visitor, :member, :creator, :owner, :participant, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
   use Core.BundleOverrides
@@ -24,25 +24,25 @@ defmodule Core.Authorization do
   Core.BundleOverrides.grants()
 
   # Models
-  grant_access(Systems.Advert.Model, [:visitor, :user])
+  grant_access(Systems.Advert.Model, [:visitor, :member])
   grant_access(Systems.Questionnaire.ToolModel, [:owner, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :participant])
 
   # Pages
-  grant_access(CoreWeb.FakeQualtrics, [:user])
+  grant_access(CoreWeb.FakeQualtrics, [:member])
   grant_access(Systems.Account.AwaitConfirmation, [:visitor])
   grant_access(Systems.Account.ConfirmToken, [:visitor])
   grant_access(Systems.Account.ResetPassword, [:visitor])
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.SignupPage, [:visitor])
-  grant_access(Systems.Account.UserProfilePage, [:user])
-  grant_access(Systems.Account.UserSecuritySettings, [:user])
-  grant_access(Systems.Account.UserSettings, [:user])
+  grant_access(Systems.Account.UserProfilePage, [:member])
+  grant_access(Systems.Account.OnboardingPage, [:member])
+  grant_access(Systems.Account.UserSecuritySettings, [:member])
+  grant_access(Systems.Account.UserSettings, [:member])
   grant_access(Systems.Account.UserSignin, [:visitor])
-
-  # ConfigPage accessible to admin and user, but page determines content based on admin?/org_admin?
-  grant_access(Systems.Admin.ConfigPage, [:admin, :user])
-  grant_access(Systems.Admin.LoginPage, [:visitor, :user])
+  grant_access(Systems.Admin.ConfigPage, [:admin])
+  grant_access(Systems.Admin.ImportRewardsPage, [:admin])
+  grant_access(Systems.Admin.LoginPage, [:visitor, :member])
   grant_access(Systems.Admin.TypographyPage, [:admin])
   grant_access(Systems.Advert.ContentPage, [:owner])
   grant_access(Systems.Alliance.CallbackPage, [:owner])
@@ -51,31 +51,31 @@ defmodule Core.Authorization do
   grant_access(Systems.Assignment.LandingPage, [:participant, :tester])
   grant_access(Systems.Budget.FundingPage, [:admin, :creator])
   grant_access(Systems.Desktop.Page, [:creator])
-  grant_access(Systems.Feldspar.AppPage, [:visitor, :user])
+  grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
   grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
   grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
-  grant_access(Systems.Home.Page, [:visitor, :user, :creator])
-  grant_access(Systems.Lab.PublicPage, [:user])
+  grant_access(Systems.Home.Page, [:visitor, :member, :creator])
+  grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Manual.Builder.PublicPage, [:creator])
-  grant_access(Systems.NextAction.OverviewPage, [:user])
-  grant_access(Systems.Notification.OverviewPage, [:user])
+  grant_access(Systems.NextAction.OverviewPage, [:member])
+  grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.Onyx.LandingPage, [:admin])
-  grant_access(Systems.Org.ContentPage, [:admin, :owner])
+  grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Pool.DetailPage, [:creator])
-  grant_access(Systems.Pool.LandingPage, [:visitor, :user, :owner])
+  grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.ParticipantPage, [:creator])
   grant_access(Systems.Pool.SubmissionPage, [:creator])
   grant_access(Systems.Project.NodePage, [:owner])
   grant_access(Systems.Project.OverviewPage, [:admin, :creator])
-  grant_access(Systems.Promotion.LandingPage, [:visitor, :user])
+  grant_access(Systems.Promotion.LandingPage, [:visitor, :member])
   grant_access(Systems.Storage.EndpointContentPage, [:owner])
-  grant_access(Systems.Support.HelpdeskPage, [:user])
+  grant_access(Systems.Support.HelpdeskPage, [:member])
   grant_access(Systems.Support.OverviewPage, [:admin])
   grant_access(Systems.Support.TicketPage, [:admin])
-  grant_access(Systems.Test.Page, [:visitor, :user])
+  grant_access(Systems.Test.Page, [:visitor, :member])
 
   grant_actions(CoreWeb.FakeAllianceController, %{
-    index: [:visitor, :user]
+    index: [:visitor, :member]
   })
 
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
@@ -223,20 +223,11 @@ defmodule Core.Authorization do
     |> Core.Repo.exists?()
   end
 
-  # Entity-level roles that can be assigned via RoleAssignment
-  @entity_roles [:owner, :member, :creator, :participant, :tester]
-
   defp has_required_roles_in_context?(principal, entity, permission) do
     roles_with_permission =
-      permission_map()
-      |> GreenLight.PermissionMap.roles(permission)
-      |> MapSet.to_list()
-      |> Enum.filter(&(&1 in @entity_roles))
+      permission_map() |> GreenLight.PermissionMap.roles(permission) |> MapSet.to_list()
 
-    case roles_with_permission do
-      [] -> false
-      roles -> roles_intersect?(principal, entity, roles)
-    end
+    roles_intersect?(principal, entity, roles_with_permission)
   end
 
   def can_access?(principal, module) when is_atom(module) do

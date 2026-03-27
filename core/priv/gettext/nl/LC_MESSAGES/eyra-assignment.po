@@ -475,3 +475,31 @@ msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. Klik 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
 msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Om deel te nemen aan deze studie moet je eerst je account activeren. Klik op de activatielink in de e-mail die we naar %{email} hebben gestuurd."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Je account is nog niet geactiveerd. Controleer je inbox."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "E-mail opnieuw versturen"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "Activatiemail verstuurd!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Activeer je account"

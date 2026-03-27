@@ -123,4 +123,53 @@ defmodule Systems.Pool.PublicTest do
       assert Public.panl_participant?(user)
     end
   end
+
+  describe "add_user_to_panl_pool/1" do
+    test "adds user to PaNL pool and returns :ok" do
+      user = Factories.insert!(:member)
+
+      refute Public.panl_participant?(user)
+
+      assert :ok = Public.add_user_to_panl_pool(user)
+
+      assert Public.panl_participant?(user)
+    end
+
+    test "creates PaNL pool if it doesn't exist" do
+      user = Factories.insert!(:member)
+
+      # Ensure PaNL pool doesn't exist
+      if panl_pool = Public.get_panl() do
+        Repo.delete(panl_pool)
+      end
+
+      assert Public.get_panl() == nil
+
+      assert :ok = Public.add_user_to_panl_pool(user)
+
+      # Pool should now exist
+      assert Public.get_panl() != nil
+      assert Public.panl_participant?(user)
+    end
+
+    test "is idempotent - adding same user twice succeeds" do
+      user = Factories.insert!(:member)
+
+      assert :ok = Public.add_user_to_panl_pool(user)
+      assert :ok = Public.add_user_to_panl_pool(user)
+
+      assert Public.panl_participant?(user)
+    end
+
+    test "works for multiple different users" do
+      user1 = Factories.insert!(:member)
+      user2 = Factories.insert!(:member)
+
+      assert :ok = Public.add_user_to_panl_pool(user1)
+      assert :ok = Public.add_user_to_panl_pool(user2)
+
+      assert Public.panl_participant?(user1)
+      assert Public.panl_participant?(user2)
+    end
+  end
 end

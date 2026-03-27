@@ -281,6 +281,7 @@ defmodule Frameworks.Pixel.Button do
 
   attr(:label, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")
+  attr(:testid, :string, default: nil)
 
   def submit_wide(assigns) do
     # FIXME: Deprecation notice: Use button.dynamic instead
@@ -289,6 +290,7 @@ defmodule Frameworks.Pixel.Button do
     <button
       class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
       type="submit"
+      data-testid={@testid}
     >
       <%= @label %>
     </button>

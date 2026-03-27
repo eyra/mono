@@ -11,6 +11,8 @@ defmodule Systems.Content.Html do
   alias Frameworks.Pixel.Text
   alias Systems.Content.Adaptable
 
+  import Frameworks.Pixel.Line
+
   attr(:items, :list, required: true)
   attr(:target, :any, default: "")
 
@@ -66,7 +68,9 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      <div id="live_workspace_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.workspace>
@@ -91,7 +95,9 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      <div id="live_website_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.website>
@@ -109,7 +115,9 @@ defmodule Systems.Content.Html do
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      <div id="live_stripped_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
@@ -280,6 +288,7 @@ defmodule Systems.Content.Html do
   attr(:tabbar_id, :any, required: true)
   attr(:initial_item, :any, default: nil)
   attr(:empty_state, :map, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
 
   def adaptable_layout(assigns) do
     Adaptable.layout(assigns)

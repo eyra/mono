@@ -39,7 +39,7 @@ config :tailwind,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [:request_id, :request_path, :query_string, :user_agent]
 
 config :plug, :statuses, %{
   403 => "Access Denied",
@@ -107,7 +107,9 @@ config :core, :rate,
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
     [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
-    [service: :feldspar_data_donation, limit: 10, unit: :call, window: :minute, scope: :local]
+    [service: :feldspar_data_donation, limit: 1, unit: :byte, window: :day, scope: :local],
+    [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
+    [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]
@@ -174,6 +176,9 @@ config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 config :core, :storage,
   services: ~w(builtin yoda),
   job_scheduler: Systems.Storage.JobScheduler.Oban
+
+# Default built-in storage backend (can be overridden in runtime.exs for production)
+config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
 config :core, BankingClient,
   host: "localhost",

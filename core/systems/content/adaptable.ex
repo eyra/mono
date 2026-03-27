@@ -95,6 +95,7 @@ defmodule Systems.Content.Adaptable do
   attr(:tabbar_id, :any, required: true)
   attr(:initial_item, :any, default: nil)
   attr(:empty_state, :map, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
 
   def layout(assigns) do
     assigns = assign(assigns, :layout_mode, determine_layout(assigns.items))
@@ -104,7 +105,7 @@ defmodule Systems.Content.Adaptable do
       <% :empty -> %>
         <.empty_layout empty_state={@empty_state} creatables={@creatables} />
       <% :single -> %>
-        <.single_layout socket={@socket} item={hd(@items)} creatables={@creatables} />
+        <.single_layout socket={@socket} item={hd(@items)} creatables={@creatables} toolbar_buttons={@toolbar_buttons} />
       <% :individual_tabs -> %>
         <.individual_tabs_layout
           socket={@socket}
@@ -112,6 +113,7 @@ defmodule Systems.Content.Adaptable do
           creatables={@creatables}
           tabbar_id={@tabbar_id}
           initial_item={@initial_item}
+          toolbar_buttons={@toolbar_buttons}
         />
       <% :grouped_tabs -> %>
         <.grouped_tabs_layout
@@ -158,15 +160,22 @@ defmodule Systems.Content.Adaptable do
     """
   end
 
-  # Single Layout - direct display without tabbar
+  # Single Layout - direct display without tabbar, buttons below
   attr(:socket, :map, required: true)
   attr(:item, :map, required: true)
   attr(:creatables, :list, default: [])
+  attr(:toolbar_buttons, :list, default: [])
 
   defp single_layout(assigns) do
     ~H"""
     <div>
       <.item_content socket={@socket} item={@item} />
+      <%= if Enum.any?(@toolbar_buttons) do %>
+        <.spacing value="L" />
+        <div class="flex justify-center">
+          <Button.dynamic_bar buttons={@toolbar_buttons} />
+        </div>
+      <% end %>
     </div>
     """
   end
@@ -177,6 +186,7 @@ defmodule Systems.Content.Adaptable do
   attr(:creatables, :list, default: [])
   attr(:tabbar_id, :any, required: true)
   attr(:initial_item, :any, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
 
   defp individual_tabs_layout(assigns) do
     tabs = items_to_tabs(assigns.items)
@@ -188,21 +198,16 @@ defmodule Systems.Content.Adaptable do
       |> assign(:initial_tab, initial_tab)
 
     ~H"""
-    <Navigation.tabbar>
-      <div class="flex flex-row items-center gap-4">
-        <Tabbed.bar
-          id={@tabbar_id}
-          tabs={@tabs}
-          initial_tab={@initial_tab}
-          size={:wide}
-          type={:segmented}
-          preserve_tab_in_url={true}
-        />
-        <%= if Enum.any?(@creatables) do %>
-          <.add_button creatables={@creatables} />
-        <% end %>
-      </div>
-    </Navigation.tabbar>
+    <Navigation.action_bar breadcrumbs={[]} right_bar_buttons={@toolbar_buttons}>
+      <Tabbed.bar
+        id={@tabbar_id}
+        tabs={@tabs}
+        initial_tab={@initial_tab}
+        size={:wide}
+        type={:segmented}
+        preserve_tab_in_url={true}
+      />
+    </Navigation.action_bar>
     <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
     """
   end

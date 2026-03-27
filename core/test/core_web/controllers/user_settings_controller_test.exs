@@ -100,7 +100,7 @@ defmodule Systems.Account.SettingsControllerTest do
     end
   end
 
-  describe "GET /users/settings/confirm-email/:token" do
+  describe "GET /users/settings/activate-account/:token" do
     setup %{user: user} do
       email = Faker.Internet.email()
 
@@ -117,13 +117,13 @@ defmodule Systems.Account.SettingsControllerTest do
     end
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
-      conn = get(conn, ~p"/user/settings/confirm-email/#{token}")
+      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
       assert redirected_to(conn) == ~p"/user/settings"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Email address changed"
       refute Account.Public.get_user_by_email(user.email)
       assert Account.Public.get_user_by_email(email)
 
-      conn = get(conn, ~p"/user/settings/confirm-email/#{token}")
+      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
       assert redirected_to(conn) == ~p"/user/settings"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
@@ -131,7 +131,7 @@ defmodule Systems.Account.SettingsControllerTest do
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
-      conn = get(conn, ~p"/user/settings/confirm-email/oops")
+      conn = get(conn, ~p"/user/settings/activate-account/oops")
       assert redirected_to(conn) == ~p"/user/settings"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
@@ -142,7 +142,7 @@ defmodule Systems.Account.SettingsControllerTest do
 
     test "redirects if user is not logged in", %{token: token} do
       conn = CoreWeb.ConnCase.build_conn()
-      conn = get(conn, ~p"/user/settings/confirm-email/#{token}")
+      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
       assert redirected_to(conn) == ~p"/user/signin"
     end
   end

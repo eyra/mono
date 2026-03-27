@@ -108,7 +108,7 @@ defmodule Systems.Pool.DetailPage do
       <% end %>
 
       <div id={:pool_detail} phx-hook="Viewport">
-        <Navigation.action_bar breadcrumbs={[]}>
+        <Navigation.action_bar breadcrumbs={[]} align={:center}>
           <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} />
         </Navigation.action_bar>
         <Tabbed.content socket={@socket} tabs={@vm.tabs} bar_id={@tabbar_id} />

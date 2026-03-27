@@ -41,6 +41,10 @@ defmodule Systems.Affiliate.Controller do
       Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
 
     cond do
+      # Soft-deleted assignment (project item was deleted)
+      deleted?(assignment) ->
+        not_found(conn)
+
       # Preview mode: tester with ?p=preview from CMS
       preview?(params) and tester?(assignment, conn) ->
         start_tester(conn, params, assignment)
@@ -84,6 +88,9 @@ defmodule Systems.Affiliate.Controller do
 
   defp preview?(params), do: get_participant(params) == "preview"
 
+  defp deleted?(%{status: :idle}), do: true
+  defp deleted?(_), do: false
+
   defp offline?(%{status: status}) do
     status != :online
   end
@@ -119,6 +126,13 @@ defmodule Systems.Affiliate.Controller do
   end
 
   defp path(%{id: id}), do: "/assignment/#{id}"
+
+  defp not_found(conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"404")
+  end
 
   defp forbidden(conn) do
     conn

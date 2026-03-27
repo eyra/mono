@@ -476,3 +476,31 @@ msgstr "Sie haben sich entschieden, nicht teilzunehmen. Ihre Entscheidung wurde 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
 msgstr "Danke. Sie haben diesen Teil abgeschlossen. Klicken Sie auf Weiter, um zu %{platform} fortzufahren."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Um an dieser Studie teilzunehmen, aktivieren Sie bitte zuerst Ihr Konto. Klicken Sie auf den Aktivierungslink in der E-Mail, die wir an %{email} gesendet haben."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Weiter"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Ihr Konto wurde noch nicht aktiviert. Bitte überprüfen Sie Ihren Posteingang."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "E-Mail erneut senden"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "Aktivierungs-E-Mail gesendet!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Konto aktivieren"

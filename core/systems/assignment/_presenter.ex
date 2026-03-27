@@ -2,9 +2,15 @@ defmodule Systems.Assignment.Presenter do
   use Frameworks.Concept.Presenter
 
   alias Systems.{
+    Account,
     Assignment,
     Alliance
   }
+
+  @impl true
+  def view_model(Assignment.ActivateAccountView, %Account.User{} = user, assigns) do
+    Assignment.ActivateAccountViewBuilder.view_model(user, assigns)
+  end
 
   @impl true
   def view_model(Alliance.CallbackPage, %Alliance.ToolModel{} = tool, assigns) do

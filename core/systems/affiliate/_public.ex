@@ -216,6 +216,7 @@ defmodule Systems.Affiliate.Public do
   def prepare_user(%Affiliate.Model{id: affiliate_id}, identifier) do
     email = "affiliate_#{affiliate_id}_#{identifier}@next.eyra.co"
     name = "Affiliate User #{identifier}"
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     Account.User.sso_changeset(%Account.User{}, %{
       email: email,
@@ -225,6 +226,8 @@ defmodule Systems.Affiliate.Public do
         fullname: name
       }
     })
+    # Auto-confirm affiliate users since they have synthetic emails
+    |> Ecto.Changeset.put_change(:confirmed_at, now)
   end
 
   def prepare_affiliate_user(affiliate, user, identifier) do

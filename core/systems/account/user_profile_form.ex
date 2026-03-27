@@ -28,16 +28,6 @@ defmodule Systems.Account.UserProfileForm do
     profile = Account.Public.get_profile(user)
     entity = Account.UserProfileEditModel.create(user, profile)
 
-    signout_button = %{
-      action: %{type: :http_delete, to: ~p"/user/session"},
-      face: %{
-        type: :secondary,
-        label: dgettext("eyra-ui", "menu.item.signout"),
-        border_color: "border-delete",
-        text_color: "text-delete"
-      }
-    }
-
     {
       :ok,
       socket
@@ -45,7 +35,6 @@ defmodule Systems.Account.UserProfileForm do
         id: id,
         user: user,
         entity: entity,
-        signout_button: signout_button,
         show_errors: false
       )
       |> init_file_uploader(:photo)
@@ -121,10 +110,6 @@ defmodule Systems.Account.UserProfileForm do
 
           </.form>
         </div>
-        <.spacing value="M" />
-        <.wrap>
-          <Button.dynamic {@signout_button} />
-        </.wrap>
       </Area.form>
     </div>
     """

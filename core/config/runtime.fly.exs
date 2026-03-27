@@ -115,7 +115,9 @@ if config_env() == :prod do
 
   config :core, Core.Repo,
     url: System.fetch_env!("DATABASE_URL"),
-    socket_options: if(System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: [])
+    socket_options: if(System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []),
+    # Detect stale connections after app wakes from suspend
+    idle_interval: 1000
 
   # =============================================================================
   # TIGRIS OBJECT STORAGE (S3-compatible)

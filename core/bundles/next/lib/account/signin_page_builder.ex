@@ -49,7 +49,8 @@ defmodule Next.Account.SigninPageBuilder do
       show_errors: false,
       title: dgettext("eyra-next", "participant.signin.title"),
       type: :fullpage,
-      child: child
+      child: child,
+      testid: "signin-tab-participant"
     }
   end
 
@@ -73,7 +74,8 @@ defmodule Next.Account.SigninPageBuilder do
       show_errors: false,
       title: dgettext("eyra-next", "creator.signin.title"),
       type: :fullpage,
-      child: child
+      child: child,
+      testid: "signin-tab-creator"
     }
   end
 end

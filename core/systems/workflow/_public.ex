@@ -174,7 +174,7 @@ defmodule Systems.Workflow.Public do
 
   def delete(%Workflow.ItemModel{workflow_id: workflow_id} = item) do
     Multi.new()
-    |> Multi.delete(:workflow_item, item)
+    |> Multi.delete(:workflow_item, item, allow_stale: true)
     |> Multi.run(:items, fn _, _ ->
       {:ok, list_items(workflow_id)}
     end)

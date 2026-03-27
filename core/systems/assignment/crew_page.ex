@@ -114,6 +114,11 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
+  def consume_event(%{name: :email_confirmed}, socket) do
+    {:stop, socket |> handle_action(:email_confirmed)}
+  end
+
+  @impl true
   def consume_event(%{name: :retry}, socket) do
     {:stop, socket |> handle_action(:retry)}
   end

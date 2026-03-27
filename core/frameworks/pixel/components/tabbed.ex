@@ -131,7 +131,7 @@ defmodule Frameworks.Pixel.Tabbed do
           <%= if Map.has_key?(tab, :live_component) do %>
             <.live_component id={tab.id} module={tab.live_component} {tab.props} />
           <% end %>
-          <%= if Map.has_key?(tab, :child) do %>
+          <%= if tab[:child] do %>
             <.live_component {Map.from_struct(tab.child.ref)} {tab.child.params} />
           <% end %>
           <%= if Map.has_key?(tab, :function_component) do %>
@@ -261,6 +261,7 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:count, :integer, default: nil)
   attr(:index, :integer, default: nil)
   attr(:opts, :string, default: "")
+  attr(:testid, :string, default: nil)
 
   def tab(assigns) do
     ~H"""
@@ -272,6 +273,7 @@ defmodule Frameworks.Pixel.Tabbed do
       class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
       idle-class={idle_shape(@size, @type, @ready, @show_errors)}
       active-class={active_shape(@size, @type)}
+      data-testid={@testid}
     >
       <%= if @index do %>
         <div

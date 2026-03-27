@@ -1,0 +1,135 @@
+defmodule CoreWeb.Features.PanlStudyAdvertTest do
+  @moduledoc """
+  Feature test for creating a PaNL study (questionnaire assignment) and its advertisement.
+
+  Tests the complete flow:
+  1. Create a project
+  2. Create a PaNL study (questionnaire) inside the project
+  3. Navigate to the participants tab
+  4. Create an advertisement for the study
+  5. Publish the assignment
+  6. Navigate to the advert and publish it
+  7. Login as a PaNL participant and see the advert on home page
+  """
+  use CoreWeb.FeatureCase
+
+  alias Systems.Pool
+
+  @card_selector "[data-testid^='card_']"
+
+  @sessions 2
+  @tag :feature
+  feature "researcher publishes PaNL study and participant sees advert", %{
+    sessions: [researcher_session, participant_session]
+  } do
+    # Ensure PaNL pool exists (required for advert creation)
+    panl_pool = Pool.Assembly.get_or_create_panl()
+
+    researcher_password = Factories.valid_user_password()
+    participant_password = Factories.valid_user_password()
+
+    researcher =
+      Factories.insert!(:member, %{
+        password: researcher_password,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        creator: true
+      })
+
+    participant =
+      Factories.insert!(:member, %{
+        password: participant_password,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        creator: false
+      })
+
+    # Add participant to PaNL pool
+    Pool.Public.add_participant!(panl_pool, participant)
+
+    # === RESEARCHER SESSION ===
+
+    # Login as researcher
+    researcher_session
+    |> visit("/user/signin?tab=creator")
+    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
+    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: researcher_password)
+    |> click(Query.css("[data-testid='signin-submit-button']"))
+
+    # Create project
+    researcher_session
+    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> click(Query.css("[data-testid='create-first-project-button']"))
+
+    # Navigate into the project
+    researcher_session
+    |> assert_has(Query.css(@card_selector, count: 1))
+    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # Create PaNL study (questionnaire assignment)
+    researcher_session
+    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='selector-item-questionnaire']"))
+    |> click(Query.css("[data-testid='selector-item-questionnaire']"))
+    |> click(Query.css("[data-testid='create-item-button']"))
+
+    # Open the assignment CMS
+    researcher_session
+    |> assert_has(Query.css(@card_selector, count: 1))
+    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # Navigate to participants tab
+    researcher_session
+    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
+    |> click(Query.css("[data-testid='assignment-tab-participants']"))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # Wait for tab content and set subject count to allow participants (required for open spots)
+    # The form input name uses info_model from the changeset
+    researcher_session
+    |> assert_has(Query.css("input[name*='subject_count']"))
+    |> fill_in(Query.css("input[name*='subject_count']"), with: "100")
+
+    # Wait for form auto-save
+    :timer.sleep(500)
+
+    # Create advertisement
+    researcher_session
+    |> assert_has(Query.css("[data-testid='create-advert-button']"))
+    |> click(Query.css("[data-testid='create-advert-button']"))
+    |> assert_has(Query.css("[data-testid='goto-advert-button']"))
+
+    # Publish the assignment
+    researcher_session
+    |> assert_has(Query.css("[data-testid='publish-button']"))
+    |> click(Query.css("[data-testid='publish-button']"))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # Navigate to the advert
+    researcher_session
+    |> click(Query.css("[data-testid='goto-advert-button']"))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # Publish the advert
+    researcher_session
+    |> assert_has(Query.css("[data-testid='advert-publish-button']"))
+    |> click(Query.css("[data-testid='advert-publish-button']"))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+
+    # === PARTICIPANT SESSION ===
+
+    # Login as PaNL participant
+    participant_session
+    |> visit("/user/signin")
+    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
+    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: participant_password)
+    |> click(Query.css("[data-testid='signin-submit-button']"))
+
+    # Verify participant is on home page and sees the advert
+    participant_session
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css(@card_selector))
+  end
+end

@@ -180,6 +180,91 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     end
   end
 
+  describe "activate account interstitial" do
+    test "shows activate account view when user not activated", %{} do
+      # Create unconfirmed user
+      unconfirmed_user = Factories.insert!(:member, %{confirmed_at: nil})
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, unconfirmed_user)
+      mark_intro_visited(assignment, unconfirmed_user)
+
+      assigns = build_assigns(unconfirmed_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.ActivateAccountView
+    end
+
+    test "shows work view when user is activated", %{} do
+      # Create confirmed user (default behavior)
+      confirmed_user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, confirmed_user)
+      mark_intro_visited(assignment, confirmed_user)
+
+      assigns = build_assigns(confirmed_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.CrewWorkView
+    end
+
+    test "shows activate account view after consent signed for unconfirmed user", %{} do
+      unconfirmed_user = Factories.insert!(:member, %{confirmed_at: nil})
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, unconfirmed_user)
+
+      # Sign consent
+      sign_consent(assignment, unconfirmed_user)
+
+      assigns = build_assigns(unconfirmed_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.ActivateAccountView
+    end
+
+    test "testers skip activate account view even when unconfirmed", %{} do
+      unconfirmed_user = Factories.insert!(:member, %{confirmed_at: nil})
+      assignment = Assignment.Factories.create_base_assignment()
+
+      # Make user a tester by assigning tester role on crew
+      %{crew: crew} = assignment
+      Core.Authorization.assign_role(unconfirmed_user, crew, :tester)
+      mark_intro_visited(assignment, unconfirmed_user)
+
+      assigns = build_assigns(unconfirmed_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      # Tester should see work view, not activate account view
+      assert view.implementation == Assignment.CrewWorkView
+    end
+
+    test "shows work view after email_confirmed action", %{} do
+      unconfirmed_user = Factories.insert!(:member, %{confirmed_at: nil})
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, unconfirmed_user)
+      mark_intro_visited(assignment, unconfirmed_user)
+
+      # Simulate the user confirming email - update the user record
+      confirmed_at = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      {:ok, confirmed_user} =
+        unconfirmed_user
+        |> Ecto.Changeset.change(confirmed_at: confirmed_at)
+        |> Repo.update()
+
+      # Simulate round trip with email_confirmed action
+      previous_view = %{implementation: Assignment.ActivateAccountView}
+      assigns = build_assigns(confirmed_user, %{view: previous_view, action: :email_confirmed})
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.CrewWorkView
+    end
+  end
+
   # Helper functions
   defp mark_intro_visited(%{id: assignment_id}, user) do
     Account.Public.mark_as_visited(user, {:assignment_information, assignment_id})
@@ -211,4 +296,9 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
 
   defp maybe_add_action(assigns, %{action: action}), do: Map.put(assigns, :action, action)
   defp maybe_add_action(assigns, _opts), do: assigns
+
+  defp sign_consent(%{consent_agreement: consent_agreement}, user) do
+    revision = Systems.Consent.Public.latest_revision(consent_agreement)
+    Systems.Consent.Public.create_signature(revision, user)
+  end
 end
