@@ -11,29 +11,25 @@ defmodule Systems.Admin.ConfigPageTest do
       assert html =~ "Admin"
     end
 
-    @tag :skip
     test "create bank account", %{conn: conn} do
-      # TODO: Fix after merge - event targeting with LiveNest embedded views
       {:ok, view, _html} = live(conn, ~p"/admin/config")
 
-      view
-      |> element("[phx-click=\"create_bank_account\"]")
-      |> render_click()
+      # Get reference to embedded SystemView and send event there
+      system_view = find_live_child(view, "admin_system_view")
+      render_click(system_view, "create_bank_account", %{"item" => "first"})
 
       # re-render for async popup
       assert render(view) =~ "Bank account"
     end
 
-    @tag :skip
     test "create citizen pool", %{conn: conn} do
-      # TODO: Fix after merge - event targeting with LiveNest embedded views
       Factories.insert!(:currency, %{name: "euro", type: :legal, decimal_scale: 2})
 
       {:ok, view, _html} = live(conn, ~p"/admin/config")
 
-      view
-      |> element("[phx-click=\"create_citizen_pool\"]")
-      |> render_click()
+      # Get reference to embedded SystemView and send event there
+      system_view = find_live_child(view, "admin_system_view")
+      render_click(system_view, "create_citizen_pool", %{"item" => "first"})
 
       # re-render for async popup
       assert render(view) =~ "New pool"
