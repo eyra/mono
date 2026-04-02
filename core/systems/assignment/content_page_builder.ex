@@ -399,6 +399,34 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
+         :payment,
+         assignment,
+         {title, content_flags},
+         _workflow_config,
+         show_errors,
+         %{fabric: fabric, viewport: viewport, breakpoint: breakpoint}
+       ) do
+    child =
+      Fabric.prepare_child(fabric, :payment, Assignment.PaymentView, %{
+        assignment: assignment,
+        title: title,
+        viewport: viewport,
+        breakpoint: breakpoint,
+        content_flags: content_flags
+      })
+
+    %{
+      id: :payment,
+      ready: false,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
          :monitor,
          assignment,
          {title, content_flags},

@@ -11,6 +11,7 @@ defmodule Systems.Fund.Model do
 
   alias Systems.{
     Fund,
+    Budget,
     Bookkeeping
   }
 
@@ -21,6 +22,7 @@ defmodule Systems.Fund.Model do
     field(:icon, Frameworks.Utility.EctoTuple)
     field(:virtual_icon, :string, virtual: true)
     belongs_to(:currency, Fund.CurrencyModel)
+    belongs_to(:currency_ledger, Budget.CurrencyLedgerModel)
     belongs_to(:fund, Bookkeeping.AccountModel)
     belongs_to(:reserve, Bookkeeping.AccountModel)
     belongs_to(:auth_node, Core.Authorization.Node)

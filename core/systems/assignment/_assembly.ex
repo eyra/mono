@@ -4,8 +4,10 @@ defmodule Systems.Assignment.Assembly do
 
   alias Systems.Affiliate
   alias Systems.Assignment
+  alias Systems.Budget
   alias Systems.Consent
   alias Systems.Crew
+  alias Systems.Fund
   alias Systems.Workflow
 
   def create(template, director, user, budget \\ nil) do
@@ -24,6 +26,7 @@ defmodule Systems.Assignment.Assembly do
     page_refs = Assignment.Public.prepare_page_refs(template, auth_node)
     workflow = prepare_workflow(template, workflow_auth_node, user)
     consent_agreement = prepare_consent_agreement(auth_node)
+    fund = budget || prepare_fund(user)
 
     Assignment.Public.prepare(
       %{special: template},
@@ -32,7 +35,7 @@ defmodule Systems.Assignment.Assembly do
       affiliate,
       page_refs,
       workflow,
-      budget,
+      fund,
       consent_agreement,
       auth_node
     )
@@ -81,6 +84,19 @@ defmodule Systems.Assignment.Assembly do
       Assignment.Public.prepare_tool_ref(tool_special, tool)
     end)
     |> Assignment.Public.prepare_workflow_items()
+  end
+
+  defp prepare_fund(user) do
+    currency_ledger = Budget.CurrencyLedgerModel.get_by_currency(:EUR)
+    uuid = Ecto.UUID.generate()
+
+    %Fund.Model{
+      name: uuid,
+      currency_ledger: currency_ledger,
+      fund: Systems.Bookkeeping.AccountModel.create({:fund, uuid}),
+      reserve: Systems.Bookkeeping.AccountModel.create({:reserve, uuid}),
+      auth_node: auth_module().prepare_node(user, :owner)
+    }
   end
 
   defp prepare_consent_agreement(%{} = auth_node) do

@@ -100,7 +100,6 @@ defmodule Systems.Assignment.GeneralForm do
     ~H"""
     <div>
       <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-submit="save" phx-change="save" phx-target={@myself}>
-        <.render_subject_count_field :if={show_subject_count?(@content_flags)} form={form} />
         <.render_language_field :if={show_language_field?(@content_flags)}
           form={form}
           language_items={@language_items}
@@ -110,21 +109,8 @@ defmodule Systems.Assignment.GeneralForm do
     """
   end
 
-  defp show_subject_count?(content_flags) do
-    Map.get(content_flags, :expected, false)
-  end
-
   defp show_language_field?(content_flags) do
     Map.get(content_flags, :language, false)
-  end
-
-  defp render_subject_count_field(assigns) do
-    ~H"""
-    <.number_input
-      form={@form}
-      field={:subject_count}
-      label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
-    """
   end
 
   defp render_language_field(assigns) do

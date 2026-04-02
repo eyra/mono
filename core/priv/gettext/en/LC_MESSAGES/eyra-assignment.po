@@ -246,9 +246,93 @@ msgstr "Language setting for participants"
 msgid "settings.subject_count.label"
 msgstr "Expected number of participants"
 
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_reward.label"
+msgstr "Reward per subject"
+
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
 msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.payment"
+msgstr "Payment"
+
+#, elixir-autogen, elixir-format
+msgid "payment.payout.title"
+msgstr "Participants waiting for pay out"
+
+#, elixir-autogen, elixir-format
+msgid "payment.payout.description"
+msgstr "There are participants waiting to get paid"
+
+#, elixir-autogen, elixir-format
+msgid "payment.payout.button"
+msgstr "Check %{count} pay outs"
+
+#, elixir-autogen, elixir-format
+msgid "payment.budgets.title"
+msgstr "Budgets"
+
+#, elixir-autogen, elixir-format
+msgid "payment.budgets.empty"
+msgstr "No budgets yet. Add a budget to get started."
+
+#, elixir-autogen, elixir-format
+msgid "payment.budget.title"
+msgstr "Budget %{number}"
+
+#, elixir-autogen, elixir-format
+msgid "payment.budget.description"
+msgstr "Based on %{count} participants and %{reward} per participant + service fee"
+
+#, elixir-autogen, elixir-format
+msgid "payment.add_budget.button"
+msgstr "Add budget"
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.paid"
+msgstr "Paid"
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.pending"
+msgstr "Proceed with payment"
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.draft"
+msgstr "Draft"
+
+#, elixir-autogen, elixir-format
+msgid "payment.reward.label"
+msgstr "Reward per participant"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.title"
+msgstr "Add budget"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.reward.label"
+msgstr "Reward per participant"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.slots.label"
+msgstr "Number of participant slots"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.total.label"
+msgstr "Total"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.breakdown"
+msgstr "%{count} participants × %{reward} per participant"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.confirm.button"
+msgstr "Confirm"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.cancel.button"
+msgstr "Cancel"
 
 #, elixir-autogen, elixir-format
 msgid "workflow_item.donate.description"

@@ -17,6 +17,7 @@ defmodule Systems.Assignment.InfoModel do
     field(:logo_url, :string)
 
     field(:subject_count, :integer, default: 0)
+    field(:subject_reward, :integer, default: 0)
     field(:duration, :string)
 
     field(:language, Ecto.Enum,
@@ -33,7 +34,7 @@ defmodule Systems.Assignment.InfoModel do
     timestamps()
   end
 
-  @operational_fields ~w(title subtitle subject_count duration ethical_code ethical_approval devices)a
+  @operational_fields ~w(title subtitle subject_count subject_reward duration ethical_code ethical_approval devices)a
   @fields @operational_fields ++ ~w(image_id logo_url language)a
 
   @required_fields ~w()a
