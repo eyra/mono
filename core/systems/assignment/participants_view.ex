@@ -4,6 +4,7 @@ defmodule Systems.Assignment.ParticipantsView do
   require Logger
 
   use Gettext, backend: CoreWeb.Gettext
+  use Core.FeatureFlags
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
@@ -90,18 +91,22 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
-    advert_button = %{
-      action: %{type: :send, event: "create_advert"},
-      face: %{
-        type: :primary,
-        bg_color: "bg-tertiary",
-        text_color: "text-grey1",
-        label: dgettext("eyra-assignment", "advert.create.button")
-      },
-      "data-testid": "create-advert-button"
-    }
+    if feature_enabled?(:panl_post_launch) do
+      advert_button = %{
+        action: %{type: :send, event: "create_advert"},
+        face: %{
+          type: :primary,
+          bg_color: "bg-tertiary",
+          text_color: "text-grey1",
+          label: dgettext("eyra-assignment", "advert.create.button")
+        },
+        "data-testid": "create-advert-button"
+      }
 
-    assign(socket, advert_button: advert_button)
+      assign(socket, advert_button: advert_button)
+    else
+      assign(socket, advert_button: nil)
+    end
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id} | _]}}} = socket) do
@@ -192,7 +197,9 @@ defmodule Systems.Assignment.ParticipantsView do
                     <Text.title3><%= dgettext("eyra-assignment", "advert.title") %></Text.title3>
                     <Text.body><%= dgettext("eyra-assignment", "advert.body") %></Text.body>
                     <.spacing value="S" />
-                    <Button.dynamic_bar buttons={[@advert_button]} />
+                    <%= if @advert_button do %>
+                      <Button.dynamic_bar buttons={[@advert_button]} />
+                    <% end %>
                   </div>
                   <div>
                     <Logo.product name={:panl} variant={:standing} />

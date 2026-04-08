@@ -64,8 +64,11 @@ defmodule Systems.Home.PageBuilder do
 
   defp block_keys(%Account.User{}, opts) do
     [:next_best_action]
-    |> append_if(:available_adverts, feature_enabled?(:panl))
-    |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
+    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
+    |> append_if(
+      :participated,
+      feature_enabled?(:panl_post_launch) and Keyword.get(opts, :panl?, false)
+    )
   end
 
   defp blocks(model, assigns, opts) do

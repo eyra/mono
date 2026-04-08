@@ -80,6 +80,7 @@ config :core, :features,
   notification_mails: true,
   debug_expire_force: true,
   panl: true,
+  panl_post_launch: true,
   e2e: true
 
 config :core, Oban, queues: false, plugins: false
