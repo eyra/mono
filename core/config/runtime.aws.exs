@@ -16,6 +16,11 @@ if config_env() == :prod do
     base_url: base_url,
     upload_path: upload_path
 
+  # Deployment environment for seed modules. Defaults to :prod for safety.
+  config :core,
+         :deploy_env,
+         System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
