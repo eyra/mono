@@ -29,7 +29,6 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
     find_merchant_by_email_paged(email, 1)
@@ -142,7 +141,6 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
-
 
   # Parsers
 

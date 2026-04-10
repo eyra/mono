@@ -158,7 +158,10 @@ defmodule Systems.Budget.Public do
         lookup_merchant_by_email(user)
 
       {:error, error} ->
-        Logger.warning("[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}")
+        Logger.warning(
+          "[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
+        )
+
         {:error, error}
     end
   end

@@ -59,7 +59,11 @@ defmodule Systems.Assignment.PaymentView do
   end
 
   @impl true
-  def compose(:budget_form, %{assignment: assignment, user: user, active_currency: active_currency}) do
+  def compose(:budget_form, %{
+        assignment: assignment,
+        user: user,
+        active_currency: active_currency
+      }) do
     %{
       module: Assignment.BudgetForm,
       params: %{
@@ -121,13 +125,15 @@ defmodule Systems.Assignment.PaymentView do
   defp save(socket, changeset) do
     case Core.Persister.save(changeset.data, changeset) do
       {:ok, entity} ->
-        assign(socket, entity: entity, changeset: Assignment.InfoModel.changeset(entity, :create, %{}))
+        assign(socket,
+          entity: entity,
+          changeset: Assignment.InfoModel.changeset(entity, :create, %{})
+        )
 
       {:error, changeset} ->
         assign(socket, changeset: changeset)
     end
   end
-
 
   defp get_active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency
   defp get_active_currency(_), do: :EUR

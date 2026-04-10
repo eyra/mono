@@ -90,5 +90,4 @@ defmodule Systems.Payment.Provider do
   @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
-
 end
