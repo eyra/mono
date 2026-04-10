@@ -14,7 +14,8 @@ defmodule Systems.Workflow.ItemCell do
           user: user,
           uri_origin: uri_origin,
           ordering_enabled?: ordering_enabled?,
-          timezone: timezone
+          timezone: timezone,
+          workflow_config: workflow_config
         },
         socket
       ) do
@@ -30,7 +31,8 @@ defmodule Systems.Workflow.ItemCell do
         user: user,
         uri_origin: uri_origin,
         ordering_enabled?: ordering_enabled?,
-        timezone: timezone
+        timezone: timezone,
+        workflow_config: workflow_config
       )
       |> update_item_view()
       |> update_item_form()
@@ -82,10 +84,16 @@ defmodule Systems.Workflow.ItemCell do
     socket |> assign(item_view: item_view)
   end
 
-  defp update_item_form(%{assigns: %{id: id, item: %{tool_ref: tool_ref} = item}} = socket) do
-    group_enabled? =
-      Workflow.ToolRefModel.flatten(tool_ref)
-      |> Concept.ToolModel.group_enabled?()
+  defp update_item_form(
+         %{
+           assigns: %{
+             id: id,
+             item: %{tool_ref: tool_ref} = item,
+             workflow_config: workflow_config
+           }
+         } = socket
+       ) do
+    group_enabled? = group_enabled?(workflow_config, tool_ref)
 
     item_form = %{
       id: "#{id}_item_form",
@@ -95,6 +103,15 @@ defmodule Systems.Workflow.ItemCell do
     }
 
     socket |> assign(item_form: item_form)
+  end
+
+  defp group_enabled?(%Workflow.Config{group_enabled?: override}, _tool_ref)
+       when is_boolean(override),
+       do: override
+
+  defp group_enabled?(_workflow_config, tool_ref) do
+    Workflow.ToolRefModel.flatten(tool_ref)
+    |> Concept.ToolModel.group_enabled?()
   end
 
   defp update_ready(%{assigns: %{item: item}} = socket) do

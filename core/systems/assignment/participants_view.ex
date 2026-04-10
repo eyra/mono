@@ -100,7 +100,7 @@ defmodule Systems.Assignment.ParticipantsView do
           text_color: "text-grey1",
           label: dgettext("eyra-assignment", "advert.create.button")
         },
-        "data-testid": "create-advert-button"
+        testid: "create-advert-button"
       }
 
       assign(socket, advert_button: advert_button)
@@ -117,7 +117,7 @@ defmodule Systems.Assignment.ParticipantsView do
         icon: :forward,
         label: dgettext("eyra-assignment", "advert.goto.button")
       },
-      "data-testid": "goto-advert-button"
+      testid: "goto-advert-button"
     }
 
     assign(socket, advert_button: advert_button)

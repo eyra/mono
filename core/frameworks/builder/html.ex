@@ -26,6 +26,7 @@ defmodule Frameworks.Builder.HTML do
     """
   end
 
+  attr(:id, :any, required: true)
   attr(:type, :any, required: true)
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
@@ -33,7 +34,7 @@ defmodule Frameworks.Builder.HTML do
 
   def library_item(assigns) do
     ~H"""
-    <div class="w-full h-full">
+    <div class="w-full h-full" data-testid={"library-item-#{@id}"}>
       <Panel.flat bg_color="bg-white">
         <Text.title4><%= @title %></Text.title4>
         <.spacing value="XS" />
@@ -51,6 +52,7 @@ defmodule Frameworks.Builder.HTML do
           <Button.dynamic
             face={%{type: :primary, bg_color: "bg-success", label: dgettext("eyra-workflow", "add.to.button") }}
             action={%{type: :send, event: "add", item: @id}}
+            testid={"add-library-item-#{@id}"}
           />
         </.wrap>
       </Panel.flat>

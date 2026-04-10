@@ -30,9 +30,9 @@ defmodule Systems.Assignment.FinishedView do
         <div class="flex-grow" />
         <div class="flex flex-col gap-4 sm:gap-8 items-center w-full h-full px-6">
           <div class="flex-grow" />
-          <Text.title1 margin="" data-testid="finished-title"><%= @vm.title %></Text.title1>
+          <Text.title1 margin="" testid="finished-title"><%= @vm.title %></Text.title1>
           <div>
-            <Text.body_large align="text-center" data-testid="finished-body">
+            <Text.body_large align="text-center" testid="finished-body">
               <%= @vm.body %>
             </Text.body_large>
             <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
@@ -41,8 +41,8 @@ defmodule Systems.Assignment.FinishedView do
           </div>
 
           <div class="flex flex-row items-center gap-6" data-testid="finished-buttons">
-            <Button.dynamic :if={@vm.back_button} {@vm.back_button} data-testid="back-button" />
-            <Button.dynamic :if={@vm.continue_button} {@vm.continue_button} data-testid="continue-button" />
+            <Button.dynamic :if={@vm.back_button} {@vm.back_button} testid="back-button" />
+            <Button.dynamic :if={@vm.continue_button} {@vm.continue_button} testid="continue-button" />
           </div>
           <div class="flex-grow" />
         </div>
