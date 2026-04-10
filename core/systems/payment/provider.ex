@@ -26,6 +26,7 @@ defmodule Systems.Payment.Provider do
   """
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+  @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
 
   # Transactions
 
@@ -89,4 +90,5 @@ defmodule Systems.Payment.Provider do
   @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
+
 end

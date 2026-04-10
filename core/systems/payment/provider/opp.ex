@@ -29,6 +29,31 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+
+  @impl true
+  def find_merchant_by_email(email) when is_binary(email) do
+    find_merchant_by_email_paged(email, 1)
+  end
+
+  defp find_merchant_by_email_paged(email, page) do
+    case HTTP.get("/merchants?page=#{page}") do
+      {:ok, %{"data" => merchants, "has_more" => has_more}} ->
+        case Enum.find(merchants, &(Map.get(&1, "emailaddress") == email)) do
+          %{"uid" => uid} = data ->
+            {:ok, parse_merchant(uid, data)}
+
+          nil when has_more ->
+            find_merchant_by_email_paged(email, page + 1)
+
+          nil ->
+            {:error, %Error{code: :not_found, message: "No merchant found for #{email}"}}
+        end
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   @currency_mapping %{
     EUR: "EUR",
     USD: "USD",
@@ -50,13 +75,24 @@ defmodule Systems.Payment.Provider.OPP do
       )
       when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
              is_atom(currency) and is_binary(invoice_id) and is_binary(idempotence_key) do
+    notify_url = Systems.Payment.Public.webhook_url()
+
     body =
       %{
         merchant_uid: merchant_uid,
         total_amount: total_amount,
         currency: Map.fetch!(@currency_mapping, currency),
         description: Transaction.Description.format(description, invoice_id),
-        metadata: Transaction.Metadata.to_map(metadata, invoice_id)
+        metadata: Transaction.Metadata.to_map(metadata, invoice_id),
+        notify_url: notify_url,
+        products: [
+          %{
+            name: "Participant slots",
+            quantity: description.participant_count,
+            price: description.amount_per_participant
+          }
+        ],
+        total_price: total_amount
       }
       |> put_opts(opts)
 
@@ -106,6 +142,7 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
+
 
   # Parsers
 

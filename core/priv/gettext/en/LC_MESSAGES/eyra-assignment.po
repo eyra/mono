@@ -243,8 +243,16 @@ msgid "settings.language.label"
 msgstr "Language setting for participants"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.subject_count.label"
+msgid "settings.subject_count.expected_label"
 msgstr "Expected number of participants"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Number of participants"
+
+#, elixir-autogen, elixir-format
+msgid "settings.subject_count.tooltip"
+msgstr "Participant slots can be purchased in the Payment tab"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_reward.label"
@@ -279,6 +287,14 @@ msgid "payment.budgets.empty"
 msgstr "No budgets yet. Add a budget to get started."
 
 #, elixir-autogen, elixir-format
+msgid "payment.transactions.title"
+msgstr "Transactions"
+
+#, elixir-autogen, elixir-format
+msgid "payment.transactions.empty"
+msgstr "No transactions yet."
+
+#, elixir-autogen, elixir-format
 msgid "payment.budget.title"
 msgstr "Budget %{number}"
 
@@ -288,7 +304,7 @@ msgstr "Based on %{count} participants and %{reward} per participant + service f
 
 #, elixir-autogen, elixir-format
 msgid "payment.add_budget.button"
-msgstr "Add budget"
+msgstr "Add participants"
 
 #, elixir-autogen, elixir-format
 msgid "payment.status.paid"
@@ -307,8 +323,28 @@ msgid "payment.reward.label"
 msgstr "Reward per participant"
 
 #, elixir-autogen, elixir-format
+msgid "payment.reward_required"
+msgstr "Please set a reward per participant first"
+
+#, elixir-autogen, elixir-format
+msgid "payment.reward.none"
+msgstr "No reward"
+
+#, elixir-autogen, elixir-format
+msgid "payment.reward.locked"
+msgstr "The reward per participant is fixed once slots have been purchased"
+
+#, elixir-autogen, elixir-format
+msgid "payment.reward.warning"
+msgstr "Once participant slots are purchased, the reward can no longer be changed"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.title"
-msgstr "Add budget"
+msgstr "Add participants"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.description"
+msgstr "Proceed to pay the fee and recruit Panl participants."
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.reward.label"

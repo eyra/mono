@@ -17,6 +17,12 @@ defmodule Systems.Payment.Public do
     provider().get_merchant(uid)
   end
 
+  @spec find_merchant_by_email(email :: String.t()) :: {:ok, Provider.merchant()} | {:error, Error.t()}
+  def find_merchant_by_email(email) do
+    provider().find_merchant_by_email(email)
+  end
+
+
   # Transactions
 
   @spec create_transaction(
@@ -70,7 +76,7 @@ defmodule Systems.Payment.Public do
   end
 
   def webhook_url do
-    base_url = Application.fetch_env!(:core, :base_url)
+    base_url = Application.get_env(:core, :payment_webhook_base_url) || Application.fetch_env!(:core, :base_url)
     "#{base_url}/api/payment/webhook/#{provider_name()}"
   end
 

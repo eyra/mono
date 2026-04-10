@@ -26,7 +26,8 @@ defmodule Systems.Assignment.Assembly do
     page_refs = Assignment.Public.prepare_page_refs(template, auth_node)
     workflow = prepare_workflow(template, workflow_auth_node, user)
     consent_agreement = prepare_consent_agreement(auth_node)
-    fund = budget || prepare_fund(user)
+    currency = Assignment.Template.currency(Assignment.Private.get_template(template))
+    fund = budget || prepare_fund(user, currency)
 
     Assignment.Public.prepare(
       %{special: template},
@@ -86,8 +87,8 @@ defmodule Systems.Assignment.Assembly do
     |> Assignment.Public.prepare_workflow_items()
   end
 
-  defp prepare_fund(user) do
-    currency_ledger = Budget.CurrencyLedgerModel.get_by_currency(:EUR)
+  defp prepare_fund(user, currency) do
+    currency_ledger = Budget.CurrencyLedgerModel.get_by_currency(currency)
     uuid = Ecto.UUID.generate()
 
     %Fund.Model{

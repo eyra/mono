@@ -1,0 +1,4 @@
+#!/bin/bash
+eval "$(infisical export --env=local --format=dotenv-export)"
+mix compile
+exec iex -S mix phx.server

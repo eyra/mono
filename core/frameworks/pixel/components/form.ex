@@ -170,7 +170,7 @@ defmodule Frameworks.Pixel.Form do
           name={@field_name}
           value={@field_value}
           placeholder={@placeholder}
-          class={"#{@input_static_class} text-grey3"}
+          class={"#{@input_static_class} text-grey3 border-grey3 bg-grey6"}
           disabled
         />
       <% else %>
@@ -198,7 +198,7 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:label_text, :string)
+  attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
@@ -252,19 +252,25 @@ defmodule Frameworks.Pixel.Form do
         __eyra_field_static_class={@wrapper_static_class}
         __eyra_field_active_color={@active_color}
       >
-        <select
-          name="currency"
-          phx-target={@target}
-          phx-change="save"
-          disabled={@disabled}
-          class={"h-full px-3 text-bodymedium font-body bg-grey6 border-r border-grey3 focus:outline-none shrink-0 #{if @disabled, do: "text-grey3 cursor-not-allowed", else: "text-grey1 cursor-pointer"}"}
-        >
-          <%= for currency <- @currencies do %>
-            <option value={currency} selected={currency == @active_currency}>
-              <%= currency_symbol(currency) %>
-            </option>
-          <% end %>
-        </select>
+        <%= if length(@currencies) > 1 do %>
+          <select
+            name="currency"
+            phx-target={@target}
+            phx-change="save"
+            disabled={@disabled}
+            class={"h-full px-3 text-bodymedium font-body bg-grey6 border-r border-grey3 focus:outline-none shrink-0 #{if @disabled, do: "text-grey3 cursor-not-allowed", else: "text-grey1 cursor-pointer"}"}
+          >
+            <%= for currency <- @currencies do %>
+              <option value={currency} selected={currency == @active_currency}>
+                <%= currency_symbol(currency) %>
+              </option>
+            <% end %>
+          </select>
+        <% else %>
+          <div class="h-full px-3 flex items-center text-grey1 text-bodymedium font-body bg-grey6 border-r border-grey3 shrink-0">
+            <%= currency_symbol(@active_currency) %>
+          </div>
+        <% end %>
         <%= if @disabled do %>
           <input
             type="text"
@@ -305,6 +311,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
+  attr(:disabled, :boolean, default: false)
 
   def number_input(assigns) do
     ~H"""
@@ -316,6 +323,7 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
+      disabled={@disabled}
       type="number"
     />
     """

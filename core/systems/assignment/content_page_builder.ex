@@ -404,11 +404,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, viewport: viewport, breakpoint: breakpoint}
+         %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
        ) do
     child =
       Fabric.prepare_child(fabric, :payment, Assignment.PaymentView, %{
         assignment: assignment,
+        user: user,
         title: title,
         viewport: viewport,
         breakpoint: breakpoint,

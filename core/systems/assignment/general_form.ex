@@ -100,11 +100,49 @@ defmodule Systems.Assignment.GeneralForm do
     ~H"""
     <div>
       <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-submit="save" phx-change="save" phx-target={@myself}>
+        <%= if show_expected?(@content_flags) and is_panl?(@content_flags) do %>
+          <.render_subject_count_display form={form} />
+        <% end %>
+        <%= if show_expected?(@content_flags) and not is_panl?(@content_flags) do %>
+          <.render_subject_count_field form={form} />
+        <% end %>
         <.render_language_field :if={show_language_field?(@content_flags)}
           form={form}
           language_items={@language_items}
           language_mode={@language_mode} />
       </.form>
+    </div>
+    """
+  end
+
+  defp show_expected?(content_flags), do: Map.get(content_flags, :expected, false)
+  defp is_panl?(content_flags), do: Map.get(content_flags, :advert_in_pool, false)
+
+  defp render_subject_count_field(assigns) do
+    ~H"""
+    <.number_input
+      form={@form}
+      field={:subject_count}
+      label_text={dgettext("eyra-assignment", "settings.subject_count.expected_label")} />
+    """
+  end
+
+  defp render_subject_count_display(assigns) do
+    count = input_value(assigns.form, :subject_count) || 0
+    assigns = assign(assigns, :count, count)
+
+    ~H"""
+    <div class="mb-8">
+      <div class="mt-0.5 text-title6 font-title6 leading-snug text-grey1">
+        <%= dgettext("eyra-assignment", "settings.subject_count.label") %>
+      </div>
+      <.spacing value="XXS" />
+      <div class="text-label font-label text-grey2 mb-3">
+        <%= dgettext("eyra-assignment", "settings.subject_count.tooltip") %>
+      </div>
+      <div class="text-title3 font-light text-grey1">
+        <%= @count %>
+      </div>
     </div>
     """
   end

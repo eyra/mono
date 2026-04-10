@@ -243,8 +243,13 @@ msgid "settings.language.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "settings.subject_count.label"
+msgid "settings.subject_count.expected_label"
 msgstr "Verwachtte aantal deelnemers"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.subject_count.label"
+msgstr "Aantal deelnemers"
+
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"

@@ -59,6 +59,8 @@ defmodule Systems.Payment.Transaction do
       metadata
       |> Map.from_struct()
       |> Map.put(:invoice_id, invoice_id)
+      |> Enum.reject(fn {_k, v} -> is_nil(v) or v == "" end)
+      |> Map.new(fn {k, v} -> {k, to_string(v)} end)
     end
   end
 end

@@ -23,6 +23,7 @@ defmodule Systems.Account.User do
     field(:displayname, :string)
     field(:visited_pages, {:array, :string})
     field(:creator, :boolean)
+    field(:merchant_uid, :string)
 
     has_one(:profile, Systems.Account.UserProfileModel)
     has_one(:features, Systems.Account.FeaturesModel)

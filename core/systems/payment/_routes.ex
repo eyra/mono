@@ -5,6 +5,13 @@ defmodule Systems.Payment.Routes do
         pipe_through([:api])
         post("/webhook/:provider", Controller, :webhook)
       end
+
+      scope "/payment/local", Systems.Payment.Provider do
+        pipe_through([:browser])
+        get("/:uid", LocalController, :pay)
+        post("/:uid/complete", LocalController, :complete)
+        post("/:uid/fail", LocalController, :fail)
+      end
     end
   end
 end

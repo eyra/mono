@@ -243,7 +243,7 @@ defmodule Frameworks.Pixel.ModalView do
             <Button.dynamic {close_icon_button(@modal)} />
           </div>
           <%!-- BODY --%>
-          <div class="h-full w-full overflow-y-scroll">
+          <div class="h-full w-full overflow-y-auto">
             <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>

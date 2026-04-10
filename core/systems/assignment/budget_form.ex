@@ -4,12 +4,18 @@ defmodule Systems.Assignment.BudgetForm do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
+  alias Systems.Budget
+
   @impl true
   def update(
-        %{id: id, assignment: assignment, active_currency: active_currency},
+        %{id: id, assignment: assignment, user: user, active_currency: active_currency},
         socket
       ) do
     reward_cents = assignment.info.subject_reward || 0
+
+    changeset =
+      {%{subject_count: 0}, %{subject_count: :integer}}
+      |> Ecto.Changeset.change()
 
     {
       :ok,
@@ -17,7 +23,9 @@ defmodule Systems.Assignment.BudgetForm do
       |> assign(
         id: id,
         assignment: assignment,
+        user: user,
         active_currency: active_currency,
+        changeset: changeset,
         subject_count: 0,
         reward_cents: reward_cents,
         total_cents: 0
@@ -26,10 +34,9 @@ defmodule Systems.Assignment.BudgetForm do
   end
 
   @impl true
-  def handle_event("update_slots", %{"subject_count" => count_str}, socket) do
+  def handle_event("update_slots", %{"slots" => %{"subject_count" => count_str}}, socket) do
     count = parse_int(count_str)
-    reward_cents = socket.assigns.reward_cents
-    total_cents = count * reward_cents
+    total_cents = count * socket.assigns.reward_cents
 
     {
       :noreply,
@@ -39,13 +46,24 @@ defmodule Systems.Assignment.BudgetForm do
   end
 
   @impl true
-  def handle_event("confirm", _, %{assigns: %{subject_count: count}} = socket) when count > 0 do
-    send(self(), {:handle_auto_save_done, socket.assigns.id})
+  def handle_event(
+        "confirm",
+        _,
+        %{assigns: %{subject_count: count, assignment: assignment, user: user}} = socket
+      )
+      when count > 0 do
+    case Budget.Public.create_pay_in(assignment, user, count) do
+      {:ok, %{payment_url: nil}} ->
+        {:noreply, socket |> send_event(:parent, "budget_form_submit")}
 
-    {
-      :noreply,
-      socket
-    }
+      {:ok, %{payment_url: payment_url}} ->
+        {:noreply, redirect(socket, external: payment_url)}
+
+      {:error, reason} ->
+        require Logger
+        Logger.warning("[BudgetForm] Payment creation failed: #{inspect(reason)}")
+        {:noreply, socket |> flash_error()}
+    end
   end
 
   @impl true
@@ -55,8 +73,7 @@ defmodule Systems.Assignment.BudgetForm do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    send(self(), {:handle_auto_save_done, socket.assigns.id})
-    {:noreply, socket}
+    {:noreply, socket |> send_event(:parent, "budget_form_cancelled")}
   end
 
   defp parse_int(str) when is_binary(str) do
@@ -76,57 +93,47 @@ defmodule Systems.Assignment.BudgetForm do
 
   defp format_cents(_), do: "€0,00"
 
-  defp currency_symbol(:EUR), do: "€"
-  defp currency_symbol(:USD), do: "$"
-  defp currency_symbol(c), do: to_string(c)
-
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="p-6 w-popup-md">
-      <Text.title3>
+    <div>
+      <Text.title2>
         <%= dgettext("eyra-assignment", "budget_form.title") %>
-      </Text.title3>
-      <.spacing value="M" />
+      </Text.title2>
+      <Text.body>
+        <%= dgettext("eyra-assignment", "budget_form.description") %>
+      </Text.body>
+      <.spacing value="L" />
 
-      <div class="mb-6">
-        <div class="text-title6 font-title6 text-grey1 mb-2">
-          <%= dgettext("eyra-assignment", "budget_form.reward.label") %>
-        </div>
-        <div class="text-bodylarge font-body text-grey1">
-          <%= currency_symbol(@active_currency) %> <%= format_cents(@reward_cents) %>
-        </div>
-      </div>
-
-      <form phx-change="update_slots" phx-target={@myself}>
+      <.form id={"#{@id}_slots"} :let={form} for={@changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
         <.number_input
-          form={%{}}
+          form={form}
           field={:subject_count}
           label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
           debounce="300"
         />
-      </form>
+      </.form>
 
       <.spacing value="M" />
 
-      <div class="bg-grey6 rounded-md p-4 mb-6">
-        <div class="flex justify-between items-center">
-          <div class="text-bodymedium font-body text-grey2">
-            <%= dgettext("eyra-assignment", "budget_form.total.label") %>
-          </div>
-          <div class="text-title4 font-title4 text-grey1">
-            <%= format_cents(@total_cents) %>
-          </div>
+      <div class="mb-2">
+        <div class="text-title6 font-title6 text-grey1">
+          <%= dgettext("eyra-assignment", "budget_form.total.label") %>
         </div>
-        <div class="text-bodysmall font-body text-grey3 mt-1">
-          <%= dgettext("eyra-assignment", "budget_form.breakdown",
+      </div>
+      <div class="text-bodylarge font-body text-grey1 font-bold">
+        <%= format_cents(@total_cents) %>
+        <span class="font-normal text-bodysmall text-grey2 ml-2">
+          | <%= dgettext("eyra-assignment", "budget_form.breakdown",
             count: @subject_count,
             reward: format_cents(@reward_cents)
           ) %>
-        </div>
+        </span>
       </div>
 
-      <div class="flex flex-row gap-4">
+      <.spacing value="L" />
+
+      <div class="flex flex-row gap-4 items-center">
         <Button.dynamic
           action={%{type: :send, event: "confirm", target: @myself}}
           face={%{type: :primary, label: dgettext("eyra-assignment", "budget_form.confirm.button")}}
@@ -134,7 +141,7 @@ defmodule Systems.Assignment.BudgetForm do
         />
         <Button.dynamic
           action={%{type: :send, event: "cancel", target: @myself}}
-          face={%{type: :label, label: dgettext("eyra-assignment", "budget_form.cancel.button"), text_color: "text-grey1"}}
+          face={%{type: :label, label: dgettext("eyra-assignment", "budget_form.cancel.button"), text_color: "text-primary"}}
         />
       </div>
     </div>

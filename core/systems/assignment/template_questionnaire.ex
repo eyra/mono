@@ -37,6 +37,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           Assignment.Template.Flags.Participants.new(
             opt_in: [
               :language_fixed_nl,
+              :expected,
               :language,
               :advert_in_pool,
               :invite_participants
@@ -55,6 +56,8 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         }
       ]
     end
+
+    def currency(_t), do: :EUR
 
     def workflow_config(_t),
       do: %Workflow.Config{

@@ -18,12 +18,13 @@ defmodule Systems.Assignment.PaymentView do
         %{
           id: id,
           assignment: assignment,
+          user: user,
           title: title,
           viewport: viewport,
           breakpoint: breakpoint,
           content_flags: content_flags
         },
-        socket
+        %{assigns: %{myself: myself}} = socket
       ) do
     info = assignment.info
     changeset = Assignment.InfoModel.changeset(info, :create, %{})
@@ -31,12 +32,18 @@ defmodule Systems.Assignment.PaymentView do
     pending_payouts = count_pending_payouts(assignment)
     active_currency = get_active_currency(assignment)
 
+    add_budget_button = %{
+      action: %{type: :send, event: "add_budget", target: myself},
+      face: %{type: :primary, label: dgettext("eyra-assignment", "payment.add_budget.button")}
+    }
+
     {
       :ok,
       socket
       |> assign(
         id: id,
         assignment: assignment,
+        user: user,
         entity: info,
         changeset: changeset,
         title: title,
@@ -45,17 +52,19 @@ defmodule Systems.Assignment.PaymentView do
         content_flags: content_flags,
         transactions: transactions,
         pending_payouts: pending_payouts,
-        active_currency: active_currency
+        active_currency: active_currency,
+        add_budget_button: add_budget_button
       )
     }
   end
 
   @impl true
-  def compose(:budget_form, %{assignment: assignment, active_currency: active_currency}) do
+  def compose(:budget_form, %{assignment: assignment, user: user, active_currency: active_currency}) do
     %{
       module: Assignment.BudgetForm,
       params: %{
         assignment: assignment,
+        user: user,
         active_currency: active_currency
       }
     }
@@ -77,6 +86,11 @@ defmodule Systems.Assignment.PaymentView do
   end
 
   @impl true
+  def handle_event("budget_form_cancelled", _, socket) do
+    {:noreply, socket |> hide_modal(:budget_form)}
+  end
+
+  @impl true
   def handle_event("budget_form_submit", _, %{assigns: %{assignment: assignment}} = socket) do
     {
       :noreply,
@@ -87,36 +101,16 @@ defmodule Systems.Assignment.PaymentView do
   end
 
   @impl true
-  def handle_event("save", %{"info_model" => attrs} = params, %{assigns: %{entity: entity}} = socket) do
+  def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     attrs = convert_subject_reward(attrs)
     changeset = Assignment.InfoModel.changeset(entity, :auto_save, attrs)
 
     {
       :noreply,
       socket
-      |> maybe_update_currency(params)
       |> save(changeset)
     }
   end
-
-  @impl true
-  def handle_event("save", %{"currency" => _} = params, socket) do
-    {:noreply, maybe_update_currency(socket, params)}
-  end
-
-  defp maybe_update_currency(socket, %{"currency" => currency_string}) do
-    currency = String.to_existing_atom(currency_string)
-
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
-      %Budget.CurrencyLedgerModel{} = ledger ->
-        update_fund_currency_ledger(socket, ledger)
-
-      nil ->
-        socket
-    end
-  end
-
-  defp maybe_update_currency(socket, _), do: socket
 
   defp save(socket, changeset) do
     case Core.Persister.save(changeset.data, changeset) do
@@ -128,29 +122,14 @@ defmodule Systems.Assignment.PaymentView do
     end
   end
 
-  defp update_fund_currency_ledger(
-         %{assigns: %{assignment: %{fund: fund}}} = socket,
-         %Budget.CurrencyLedgerModel{} = ledger
-       )
-       when not is_nil(fund) do
-    fund
-    |> Ecto.Changeset.change(%{currency_ledger_id: ledger.id})
-    |> Core.Repo.update!()
-
-    assign(socket, active_currency: ledger.currency)
-  end
-
-  defp update_fund_currency_ledger(socket, %Budget.CurrencyLedgerModel{currency: currency}) do
-    assign(socket, active_currency: currency)
-  end
 
   defp get_active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency
   defp get_active_currency(_), do: :EUR
 
-  defp list_transactions(%{id: _assignment_id}) do
-    Budget.TransactionModel
-    |> Core.Repo.all()
-    |> Enum.filter(&(&1.target_fund_id != nil))
+  defp list_transactions(%{fund: nil}), do: []
+
+  defp list_transactions(%{fund: fund}) do
+    Budget.Public.list_transactions_by_fund(fund)
   end
 
   defp count_pending_payouts(_assignment), do: 0
@@ -257,57 +236,87 @@ defmodule Systems.Assignment.PaymentView do
           </div>
         <% end %>
 
-        <div class="mb-6">
-          <.form id={"#{@id}_reward"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
-            <.currency_input
-              form={form}
-              field={:subject_reward}
-              value={cents_to_display(input_value(form, :subject_reward))}
-              active_currency={@active_currency}
-              label_text={dgettext("eyra-assignment", "payment.reward.label")}
-              disabled={@transactions != []}
-            />
-          </.form>
+        <div class="mb-8">
+          <%= if @transactions != [] do %>
+            <.reward_display reward_cents={@entity.subject_reward} active_currency={@active_currency} />
+          <% else %>
+            <Text.title6>
+              <%= dgettext("eyra-assignment", "payment.reward.label") %>
+            </Text.title6>
+            <div class="text-bodysmall font-body text-grey2 mb-3">
+              <%= dgettext("eyra-assignment", "payment.reward.warning") %>
+            </div>
+            <.form id={"#{@id}_reward"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
+              <.currency_input
+                form={form}
+                field={:subject_reward}
+                value={cents_to_display(input_value(form, :subject_reward))}
+                active_currency={@active_currency}
+                currencies={[@active_currency]}
+              />
+            </.form>
+          <% end %>
         </div>
 
-        <Text.title3>
-          <%= dgettext("eyra-assignment", "payment.budgets.title") %>
-        </Text.title3>
+        <Text.title6>
+          <%= dgettext("eyra-assignment", "payment.transactions.title") %>
+        </Text.title6>
 
         <div class="flex flex-col gap-4 mb-6">
           <%= for {transaction, index} <- Enum.with_index(@transactions, 1) do %>
-            <.budget_card transaction={transaction} index={index} />
+            <.budget_card transaction={transaction} entity={@entity} index={index} />
           <% end %>
 
           <%= if Enum.empty?(@transactions) do %>
             <div class="text-bodymedium font-body text-grey2 mb-4">
-              <%= dgettext("eyra-assignment", "payment.budgets.empty") %>
+              <%= dgettext("eyra-assignment", "payment.transactions.empty") %>
             </div>
           <% end %>
         </div>
 
-        <Button.dynamic
-          action={%{type: :send, event: "add_budget", target: @myself}}
-          face={%{type: :primary, label: dgettext("eyra-assignment", "payment.add_budget.button")}}
-        />
+        <Button.dynamic {@add_budget_button} />
       </Area.content>
     </div>
     """
   end
 
-  defp budget_card(assigns) do
-    tag = status_tag(assigns.transaction.status)
-    assigns = assign(assigns, :tag, tag)
+  defp reward_display(assigns) do
+    ~H"""
+    <Text.title6>
+      <%= dgettext("eyra-assignment", "payment.reward.label") %>
+    </Text.title6>
+    <div class="text-bodysmall font-body text-grey2 mb-3">
+      <%= dgettext("eyra-assignment", "payment.reward.locked") %>
+    </div>
+    <div class="text-title3 font-light text-grey1">
+      <%= if (@reward_cents || 0) > 0 do %>
+        <%= format_cents(@reward_cents) %> <%= currency_label(@active_currency) %>
+      <% else %>
+        <%= dgettext("eyra-assignment", "payment.reward.none") %>
+      <% end %>
+    </div>
+    """
+  end
+
+  defp currency_label(:EUR), do: "EUR"
+  defp currency_label(:USD), do: "USD"
+  defp currency_label(c), do: to_string(c)
+
+  defp budget_card(%{transaction: transaction, entity: entity} = assigns) do
+    tag = status_tag(transaction.status)
+    reward = entity.subject_reward || 0
+    total = transaction.subject_count * reward
+    assigns = assign(assigns, tag: tag, total: total, reward: reward)
 
     ~H"""
     <Panel.flat>
       <div class="flex items-start justify-between">
         <div>
           <div class="text-title5 font-title5 text-grey1 mb-1">
-            <%= dgettext("eyra-assignment", "payment.budget.title", number: @index) %>
+            <%= @transaction.invoice_id %>
           </div>
           <div class="text-bodysmall font-body text-grey2">
-            <%= format_cents(0) %> | <%= budget_description(0, 0) %>
+            <%= format_cents(@total) %> | <%= budget_description(@transaction.subject_count, @reward) %>
           </div>
         </div>
         <Tag.tag text={@tag.text} bg_color={@tag.bg_color} text_color={@tag.text_color} />

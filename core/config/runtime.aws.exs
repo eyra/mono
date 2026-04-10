@@ -271,7 +271,8 @@ if config_env() == :prod do
   config :core, Systems.Payment.Provider.OPP,
     base_url: System.get_env("OPP_BASE_URL"),
     api_key: System.get_env("OPP_API_KEY"),
-    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+    merchant_uid: System.get_env("OPP_MERCHANT_UID")
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

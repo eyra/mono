@@ -21,6 +21,9 @@ defprotocol Systems.Assignment.Template do
 
   @spec workflow_config(t) :: Systems.Workflow.Config.t()
   def workflow_config(t)
+
+  @spec currency(t) :: atom()
+  def currency(t)
 end
 
 defmodule Systems.Assignment.Template.Flags do

@@ -20,6 +20,14 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, %{uid: uid, status: "active", kyc_level: 0}}
   end
 
+
+  @impl true
+  def find_merchant_by_email(email) when is_binary(email) do
+    uid = generate_uid()
+    Logger.info("[Payment.Local] find_merchant_by_email email=#{email} uid=#{uid}")
+    {:ok, %{uid: uid, status: "active", kyc_level: 0}}
+  end
+
   # Transactions
 
   @impl true
@@ -75,6 +83,7 @@ defmodule Systems.Payment.Provider.Local do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
     {:ok, %{uid: uid, status: "created", amount: 0}}
   end
+
 
   defp generate_uid do
     Ecto.UUID.generate()
