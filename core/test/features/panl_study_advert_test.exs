@@ -91,6 +91,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     page_url = Wallaby.Browser.current_url(researcher_session)
     assignment_id = page_url |> String.split("/") |> Enum.at(-2) |> String.to_integer()
     assignment = Systems.Assignment.Public.get!(assignment_id, [:info])
+
     assignment.info
     |> Ecto.Changeset.change(%{subject_count: 100})
     |> Core.Repo.update!()
