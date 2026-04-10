@@ -100,10 +100,10 @@ defmodule Systems.Assignment.GeneralForm do
     ~H"""
     <div>
       <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-submit="save" phx-change="save" phx-target={@myself}>
-        <%= if show_expected?(@content_flags) and is_panl?(@content_flags) do %>
+        <%= if show_expected?(@content_flags) and paid_slots?(@content_flags) do %>
           <.render_subject_count_display form={form} />
         <% end %>
-        <%= if show_expected?(@content_flags) and not is_panl?(@content_flags) do %>
+        <%= if show_expected?(@content_flags) and not paid_slots?(@content_flags) do %>
           <.render_subject_count_field form={form} />
         <% end %>
         <.render_language_field :if={show_language_field?(@content_flags)}
@@ -116,7 +116,7 @@ defmodule Systems.Assignment.GeneralForm do
   end
 
   defp show_expected?(content_flags), do: Map.get(content_flags, :expected, false)
-  defp is_panl?(content_flags), do: Map.get(content_flags, :advert_in_pool, false)
+  defp paid_slots?(content_flags), do: Map.get(content_flags, :paid_slots, false)
 
   defp render_subject_count_field(assigns) do
     ~H"""

@@ -182,6 +182,7 @@ defmodule Systems.Assignment.TemplateFlagsTest do
       assert participants_flags.advert_in_pool == false
       assert participants_flags.invite_participants == false
       assert participants_flags.affiliate == false
+      assert participants_flags.paid_slots == false
 
       workflow_flags = Flags.Workflow.new()
       assert workflow_flags.library == false

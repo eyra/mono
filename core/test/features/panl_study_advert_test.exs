@@ -86,14 +86,14 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> click(Query.css("[data-testid='assignment-tab-participants']"))
     |> assert_has(Query.css("[data-phx-main].phx-connected"))
 
-    # Wait for tab content and set subject count to allow participants (required for open spots)
-    # The form input name uses info_model from the changeset
-    researcher_session
-    |> assert_has(Query.css("input[name*='subject_count']"))
-    |> fill_in(Query.css("input[name*='subject_count']"), with: "100")
-
-    # Wait for form auto-save
-    :timer.sleep(500)
+    # For PaNL studies, subject_count is managed via the Payment tab (slot purchasing).
+    # Set it directly in the DB so the advert flow has open spots.
+    page_url = Wallaby.Browser.current_url(researcher_session)
+    assignment_id = page_url |> String.split("/") |> Enum.at(-2) |> String.to_integer()
+    assignment = Systems.Assignment.Public.get!(assignment_id, [:info])
+    assignment.info
+    |> Ecto.Changeset.change(%{subject_count: 100})
+    |> Core.Repo.update!()
 
     # Create advertisement
     researcher_session

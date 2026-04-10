@@ -228,6 +228,7 @@ defmodule Systems.Assignment.Template.Flags.Participants do
   - `:advert_in_pool` - Allow advertising in participant pool
   - `:invite_participants` - Enable participant invitation features
   - `:affiliate` - Show affiliate/partner participant options
+  - `:paid_slots` - Subject count is managed via paid slot purchasing (Payment tab)
   """
   use Systems.Assignment.Template.Flags, [
     :language_fixed_nl,
@@ -235,7 +236,8 @@ defmodule Systems.Assignment.Template.Flags.Participants do
     :language,
     :advert_in_pool,
     :invite_participants,
-    :affiliate
+    :affiliate,
+    :paid_slots
   ]
 end
 
