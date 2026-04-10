@@ -49,7 +49,12 @@ defmodule Systems.Budget.Public do
     end
   end
 
-  defp create_paid_pay_in(assignment, %Account.User{id: user_id, merchant_uid: merchant_uid}, subject_count, total_amount) do
+  defp create_paid_pay_in(
+         assignment,
+         %Account.User{id: user_id, merchant_uid: merchant_uid},
+         subject_count,
+         total_amount
+       ) do
     %{info: info, fund: fund} = assignment
     reward_per_participant = info.subject_reward || 0
     currency = get_currency(fund)
@@ -149,7 +154,10 @@ defmodule Systems.Budget.Public do
         lookup_merchant_by_email(user)
 
       {:error, error} ->
-        Logger.warning("[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}")
+        Logger.warning(
+          "[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
+        )
+
         {:error, error}
     end
   end

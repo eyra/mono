@@ -25,7 +25,9 @@ config :core,
   domain: "localhost",
   name: "Next [local]",
   base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
-  payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL") || "https://unoppositional-irremeably-katia.ngrok-free.dev",
+  payment_webhook_base_url:
+    System.get_env("PAYMENT_WEBHOOK_BASE_URL") ||
+      "https://unoppositional-irremeably-katia.ngrok-free.dev",
   upload_path: upload_path
 
 config :core, :feldspar_data_donation,
@@ -47,13 +49,13 @@ verify_mode =
     _ -> :verify_peer
   end
 
-  config :core, Systems.Payment.Provider.OPP,
-    base_url: System.get_env("OPP_BASE_URL") || "https://api-sandbox.onlinebetaalplatform.nl/v1",
-    api_key: System.get_env("OPP_API_KEY"),
-    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
-    merchant_uid: System.get_env("OPP_MERCHANT_UID")
+config :core, Systems.Payment.Provider.OPP,
+  base_url: System.get_env("OPP_BASE_URL") || "https://api-sandbox.onlinebetaalplatform.nl/v1",
+  api_key: System.get_env("OPP_API_KEY"),
+  notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+  merchant_uid: System.get_env("OPP_MERCHANT_UID")
 
-  config :core, skip_webhook_verification: true
+config :core, skip_webhook_verification: true
 
 config :core, Core.Repo,
   username: "postgres",

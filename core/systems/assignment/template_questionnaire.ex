@@ -46,9 +46,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         },
         payment: {
           dgettext("eyra-assignment", "tabbar.item.payment"),
-          Assignment.Template.Flags.Payment.new(
-            opt_in: [:slots]
-          )
+          Assignment.Template.Flags.Payment.new(opt_in: [:slots])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),

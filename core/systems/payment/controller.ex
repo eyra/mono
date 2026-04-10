@@ -58,7 +58,9 @@ defmodule Systems.Payment.Controller do
             end
 
           {:error, error} ->
-            Logger.warning("[Payment.Webhook] Failed to fetch transaction #{uid}: #{inspect(error)}")
+            Logger.warning(
+              "[Payment.Webhook] Failed to fetch transaction #{uid}: #{inspect(error)}"
+            )
         end
 
       _ ->
