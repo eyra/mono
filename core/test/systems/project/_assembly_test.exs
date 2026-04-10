@@ -58,7 +58,7 @@ defmodule Systems.Project.AssemblyTest do
                  members: [],
                  auth_node: %Core.Authorization.Node{}
                },
-               fund: nil,
+               fund: %Systems.Fund.Model{},
                auth_node: %Core.Authorization.Node{
                  role_assignments: []
                },

@@ -90,7 +90,7 @@ config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
-  payment_provider: Systems.Payment.Provider.OPP,
+  payment_provider: Systems.Payment.Provider.Local,
   payment_providers: %{
     "opp" => Systems.Payment.Provider.OPP
   },

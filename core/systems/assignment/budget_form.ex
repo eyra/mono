@@ -1,17 +1,25 @@
 defmodule Systems.Assignment.BudgetForm do
   use CoreWeb.LiveForm
 
+  require Logger
+
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
+  alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
 
   @impl true
   def update(
-        %{id: id, assignment: assignment, user: user, active_currency: active_currency},
+        %{
+          id: id,
+          assignment: %{info: %{subject_reward: subject_reward}} = assignment,
+          user: user,
+          active_currency: active_currency
+        },
         socket
       ) do
-    reward_cents = assignment.info.subject_reward || 0
+    reward_cents = subject_reward || 0
 
     changeset =
       {%{subject_count: 0}, %{subject_count: :integer}}
@@ -60,7 +68,6 @@ defmodule Systems.Assignment.BudgetForm do
         {:noreply, redirect(socket, external: payment_url)}
 
       {:error, reason} ->
-        require Logger
         Logger.warning("[BudgetForm] Payment creation failed: #{inspect(reason)}")
         {:noreply, socket |> flash_error()}
     end
@@ -85,13 +92,7 @@ defmodule Systems.Assignment.BudgetForm do
 
   defp parse_int(_), do: 0
 
-  defp format_cents(cents) when is_integer(cents) and cents > 0 do
-    euros = div(cents, 100)
-    remaining = rem(cents, 100)
-    "€#{euros},#{String.pad_leading("#{remaining}", 2, "0")}"
-  end
-
-  defp format_cents(_), do: "€0,00"
+  defp format_cents(value), do: CurrencyHelpers.format_cents(value)
 
   @impl true
   def render(assigns) do

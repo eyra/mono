@@ -34,10 +34,13 @@ defmodule Systems.Budget.Public do
   Lazily creates an OPP merchant for the user if needed.
   Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.
   """
-  def create_pay_in(%Assignment.Model{} = assignment, %Account.User{} = user, subject_count)
+  def create_pay_in(
+        %Assignment.Model{info: %{subject_reward: subject_reward}, fund: fund} = assignment,
+        %Account.User{id: user_id} = user,
+        subject_count
+      )
       when is_integer(subject_count) and subject_count > 0 do
-    %{info: info, fund: fund} = assignment
-    reward_per_participant = info.subject_reward || 0
+    reward_per_participant = subject_reward || 0
     total_amount = subject_count * reward_per_participant
 
     if total_amount > 0 do
@@ -45,28 +48,35 @@ defmodule Systems.Budget.Public do
         create_paid_pay_in(assignment, user, subject_count, total_amount)
       end
     else
-      create_free_pay_in(fund, user.id, subject_count)
+      create_free_pay_in(fund, user_id, subject_count)
     end
   end
 
-  defp create_paid_pay_in(assignment, %Account.User{id: user_id, merchant_uid: merchant_uid}, subject_count, total_amount) do
-    %{info: info, fund: fund} = assignment
-    reward_per_participant = info.subject_reward || 0
+  defp create_paid_pay_in(
+         %Assignment.Model{
+           info: %{subject_reward: subject_reward, title: title, subtitle: subtitle},
+           fund: fund
+         } = assignment,
+         %Account.User{id: user_id, merchant_uid: merchant_uid},
+         subject_count,
+         total_amount
+       ) do
+    reward_per_participant = subject_reward || 0
     currency = get_currency(fund)
     idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
     invoice_id = generate_invoice_id()
 
     description = %Payment.Transaction.Description{
       platform: "Next",
-      assignment: info.title || "Untitled",
+      assignment: title || "Untitled",
       participant_count: subject_count,
       amount_per_participant: reward_per_participant
     }
 
     metadata = %Payment.Transaction.Metadata{
       contact_person: "Researcher ##{user_id}",
-      study_title: info.title || "Untitled",
-      study_goal: info.subtitle || "",
+      study_title: title || "Untitled",
+      study_goal: subtitle || "",
       participant_count: subject_count,
       amount_per_participant: reward_per_participant
     }
@@ -83,49 +93,48 @@ defmodule Systems.Budget.Public do
              description,
              metadata,
              return_url: return_url
-           ) do
-      transaction =
-        %Budget.TransactionModel{}
-        |> Budget.TransactionModel.changeset(%{
-          transaction_id: provider_result.uid,
-          status: :pending,
-          idempotence_key: idempotence_key,
-          invoice_id: invoice_id,
-          subject_count: subject_count
-        })
-        |> Ecto.Changeset.put_change(:user_id, user_id)
-        |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
-        |> Repo.insert!()
-
+           ),
+         {:ok, transaction} <-
+           %Budget.TransactionModel{}
+           |> Budget.TransactionModel.changeset(%{
+             transaction_id: provider_result.uid,
+             status: :pending,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
+           |> Repo.insert() do
       {:ok, %{transaction: transaction, payment_url: provider_result.payment_url}}
     end
   end
 
-  defp create_free_pay_in(fund, user_id, subject_count) do
-    idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
+  defp create_free_pay_in(%Fund.Model{id: fund_id}, user_id, subject_count) do
+    idempotence_key = "pay_in:fund=#{fund_id}:#{Ecto.UUID.generate()}"
     invoice_id = generate_invoice_id()
 
-    transaction =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
-        transaction_id: "free_#{Ecto.UUID.generate()}",
-        status: :completed,
-        idempotence_key: idempotence_key,
-        invoice_id: invoice_id,
-        subject_count: subject_count
-      })
-      |> Ecto.Changeset.put_change(:user_id, user_id)
-      |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
-      |> Repo.insert!()
-
-    increment_subject_count(fund.id, subject_count)
-
-    {:ok, %{transaction: transaction, payment_url: nil}}
+    with {:ok, transaction} <-
+           %Budget.TransactionModel{}
+           |> Budget.TransactionModel.changeset(%{
+             transaction_id: "free_#{Ecto.UUID.generate()}",
+             status: :completed,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund_id)
+           |> Repo.insert() do
+      increment_subject_count(fund_id, subject_count)
+      {:ok, %{transaction: transaction, payment_url: nil}}
+    end
   end
 
   # --- User merchant ---
 
-  defp ensure_user_merchant(%Account.User{merchant_uid: uid} = user) when is_binary(uid) do
+  defp ensure_user_merchant(%Account.User{merchant_uid: merchant_uid} = user)
+       when is_binary(merchant_uid) do
     {:ok, user}
   end
 

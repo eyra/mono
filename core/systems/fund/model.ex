@@ -9,11 +9,9 @@ defmodule Systems.Fund.Model do
   alias Systems.Account.User
   alias Ecto.Changeset
 
-  alias Systems.{
-    Fund,
-    Budget,
-    Bookkeeping
-  }
+  alias Systems.Fund
+  alias Systems.Budget
+  alias Systems.Bookkeeping
 
   @icon_type :emoji
 

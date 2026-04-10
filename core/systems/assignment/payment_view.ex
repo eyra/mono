@@ -11,13 +11,14 @@ defmodule Systems.Assignment.PaymentView do
   alias Frameworks.Pixel.Button
 
   alias Systems.Assignment
+  alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
 
   @impl true
   def update(
         %{
           id: id,
-          assignment: assignment,
+          assignment: %{info: info} = assignment,
           user: user,
           title: title,
           viewport: viewport,
@@ -26,7 +27,6 @@ defmodule Systems.Assignment.PaymentView do
         },
         %{assigns: %{myself: myself}} = socket
       ) do
-    info = assignment.info
     changeset = Assignment.InfoModel.changeset(info, :create, %{})
     transactions = list_transactions(assignment)
     pending_payouts = count_pending_payouts(assignment)
@@ -91,6 +91,12 @@ defmodule Systems.Assignment.PaymentView do
   end
 
   @impl true
+  def handle_event("check_payouts", _, socket) do
+    # TODO: implement payout review flow (UC-OPP-06)
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("budget_form_submit", _, %{assigns: %{assignment: assignment}} = socket) do
     {
       :noreply,
@@ -135,47 +141,13 @@ defmodule Systems.Assignment.PaymentView do
   defp count_pending_payouts(_assignment), do: 0
 
   defp convert_subject_reward(%{"subject_reward" => value} = attrs) when is_binary(value) do
-    Map.put(attrs, "subject_reward", display_to_cents(value))
+    Map.put(attrs, "subject_reward", CurrencyHelpers.display_to_cents(value))
   end
 
   defp convert_subject_reward(attrs), do: attrs
 
-  defp display_to_cents(value) do
-    case Decimal.parse(value) do
-      {decimal, _} ->
-        decimal
-        |> Decimal.mult(100)
-        |> Decimal.round(0)
-        |> Decimal.to_integer()
-
-      :error ->
-        0
-    end
-  end
-
-  defp cents_to_display(nil), do: ""
-  defp cents_to_display(0), do: ""
-
-  defp cents_to_display(cents) when is_integer(cents) do
-    euros = div(cents, 100)
-    remaining = rem(cents, 100)
-    "#{euros}.#{String.pad_leading("#{remaining}", 2, "0")}"
-  end
-
-  defp cents_to_display(value) when is_binary(value) do
-    case Integer.parse(value) do
-      {cents, _} -> cents_to_display(cents)
-      :error -> ""
-    end
-  end
-
-  defp format_cents(cents) when is_integer(cents) and cents > 0 do
-    euros = div(cents, 100)
-    remaining = rem(cents, 100)
-    "€#{euros},#{String.pad_leading("#{remaining}", 2, "0")}"
-  end
-
-  defp format_cents(_), do: "€0,00"
+  defp cents_to_display(value), do: CurrencyHelpers.cents_to_display(value)
+  defp format_cents(value), do: CurrencyHelpers.format_cents(value)
 
   defp budget_description(subject_count, subject_reward) do
     reward_label = format_cents(subject_reward)
