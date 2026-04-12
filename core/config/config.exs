@@ -11,6 +11,13 @@ config :mime, :types, %{
   "application/x-research-info-systems" => ["ris"]
 }
 
+# Deployment environment used by seed modules to decide which seeds to run.
+# Possible values: :local, :dev, :test, :staging, :prod
+# Defaults to :local for developer machines (mix dev, mix test).
+# Releases override this in runtime.{aws,fly}.exs based on the DEPLOY_ENV env var,
+# defaulting to :prod for safety.
+config :core, :deploy_env, :local
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,
