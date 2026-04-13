@@ -66,7 +66,21 @@ defmodule Frameworks.UserCheck.MockClient do
       public_domain: false,
       alias: false,
       spam: false,
-      did_you_mean: nil
+      did_you_mean: nil,
+      raw: %{
+        "status" => 200,
+        "disposable" => false,
+        "mx" => true,
+        "blocklisted" => false,
+        "role_account" => false,
+        "public_domain" => false,
+        "relay_domain" => false,
+        "alias" => false,
+        "spam" => false,
+        "did_you_mean" => nil,
+        "domain_authority" => 50,
+        "domain_age_in_days" => 3650
+      }
     }
   end
 end

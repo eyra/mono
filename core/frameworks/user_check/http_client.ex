@@ -52,7 +52,8 @@ defmodule Frameworks.UserCheck.HTTPClient do
       public_domain: Map.get(json, "public_domain", false),
       alias: Map.get(json, "alias", false),
       spam: Map.get(json, "spam", false),
-      did_you_mean: Map.get(json, "did_you_mean")
+      did_you_mean: Map.get(json, "did_you_mean"),
+      raw: json
     }
   end
 
