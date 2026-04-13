@@ -288,14 +288,6 @@ msgid "invite.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr ""
 
@@ -504,3 +496,43 @@ msgstr "Aktivierungs-E-Mail gesendet!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Konto aktivieren"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Melden Sie sich mit Ihrer E-Mail-Adresse an, um dem Teilnehmerpool beizutreten."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "E-Mail-Adresse"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Diese E-Mail-Adresse ist bereits registriert."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Wegwerf-E-Mail-Adressen sind nicht erlaubt."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Anmelden"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Wir benachrichtigen Sie, sobald wir starten."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Sie stehen auf der Liste!"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Möchten Sie an weiterer Forschung teilnehmen?"

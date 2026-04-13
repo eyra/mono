@@ -204,6 +204,85 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
   end
 
+  describe "email_capture" do
+    setup do
+      user = Factories.insert!(:member)
+      %{user: user}
+    end
+
+    test "includes email_capture for questionnaire assignment", %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.action == {:add_to_pool, :panl}
+      assert vm.email_capture.title != nil
+      assert vm.email_capture.body != nil
+      assert vm.email_capture.email_label != nil
+      assert vm.email_capture.submit_button.action.type == :submit
+      assert vm.email_capture.submit_button.face.type == :primary
+      assert vm.email_capture.success_title != nil
+      assert vm.email_capture.success_body != nil
+    end
+
+    test "email_capture is nil for non-questionnaire assignment", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
+    end
+
+    test "email_capture is nil when user is already a pool member", %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
+    end
+
+    test "email_capture is nil when consent declined", %{user: user} do
+      consent_agreement = Factories.insert!(:consent_agreement)
+      _revision = Factories.insert!(:consent_revision, %{agreement: consent_agreement})
+
+      auth_node = Factories.insert!(:auth_node)
+      tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
+
+      tool = Assignment.Factories.create_tool(tool_auth_node)
+      tool_ref = Assignment.Factories.create_tool_ref(tool)
+      workflow = Assignment.Factories.create_workflow()
+      _item = Assignment.Factories.create_workflow_item(workflow, tool_ref)
+      info = Assignment.Factories.create_info("10", 100)
+      crew = Factories.insert!(:crew)
+
+      assignment =
+        Factories.insert!(:assignment, %{
+          info: info,
+          consent_agreement: consent_agreement,
+          workflow: workflow,
+          crew: crew,
+          auth_node: auth_node,
+          special: :questionnaire,
+          status: :online
+        })
+        |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Public.decline_member(assignment, user)
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
+    end
+  end
+
   # Helper functions
   defp build_assigns(user, redirect_url \\ nil) do
     %{

@@ -21,7 +21,7 @@ defprotocol Systems.Assignment.Template do
   @spec workflow_config(t) :: Systems.Workflow.Config.t()
   def workflow_config(t)
 
-  @spec runtime_config(t) :: Systems.Assignment.Template.Flags.Runtime.t()
+  @spec runtime_config(t) :: Systems.Assignment.RuntimeConfig.t()
   def runtime_config(t)
 end
 
@@ -280,14 +280,4 @@ defmodule Systems.Assignment.Template.Flags.Monitor do
   - `:consent` - Enable consent tracking and monitoring
   """
   use Systems.Assignment.Template.Flags, [:consent]
-end
-
-defmodule Systems.Assignment.Template.Flags.Runtime do
-  @moduledoc """
-  Feature flags for the participant-facing runtime behavior.
-
-  Available flags:
-  - `:email_capture` - Show email capture form on the finished screen
-  """
-  use Systems.Assignment.Template.Flags, [:email_capture]
 end

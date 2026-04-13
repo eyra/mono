@@ -52,6 +52,30 @@ defmodule EmailSignUp do
   end
 
   @doc """
+  Links a real email to an existing user (e.g. one created via ExternalSignIn
+  with a synthetic email).
+
+  1. Validates email format
+  2. Checks uniqueness
+  3. Calls UserCheck for validation (fails open on timeout/error)
+  4. Applies rejection policy
+  5. Updates user email + creates EmailSignUp.UserModel satellite
+
+  ## Options
+
+    * `:policy` - rejection policy module (default: `EmailSignUp.DefaultRejectionPolicy`)
+  """
+  def link(%User{} = user, email, opts \\ []) when is_binary(email) do
+    policy = Keyword.get(opts, :policy, EmailSignUp.DefaultRejectionPolicy)
+
+    with :ok <- validate_format(email),
+         :ok <- check_uniqueness(email),
+         {:ok, validation_attrs} <- validate_email(email, policy) do
+      link_email_to_user(user, email, validation_attrs)
+    end
+  end
+
+  @doc """
   Returns true if the user is currently in a provisional state:
   no real password set and not confirmed.
   """
@@ -112,6 +136,28 @@ defmodule EmailSignUp do
 
   defp unvalidated_attrs do
     %{validation_data: nil, validated_at: nil}
+  end
+
+  defp link_email_to_user(%User{id: user_id} = user, email, validation_attrs) do
+    email_changeset = User.email_changeset(user, %{email: email})
+
+    Multi.new()
+    |> Multi.update(:user, email_changeset)
+    |> Multi.insert(:email_sign_up_user, fn _changes ->
+      %EmailSignUp.UserModel{user_id: user_id}
+      |> EmailSignUp.UserModel.changeset(validation_attrs)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{user: user}} ->
+        {:ok, user}
+
+      {:error, :user, changeset, _} ->
+        {:error, changeset}
+
+      {:error, :email_sign_up_user, changeset, _} ->
+        {:error, changeset}
+    end
   end
 
   defp create_user_with_satellite(email, validation_attrs) do

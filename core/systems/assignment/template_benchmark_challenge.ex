@@ -45,7 +45,7 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
       ]
     end
 
-    def runtime_config(_t), do: Assignment.Template.Flags.Runtime.new()
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
 
     def workflow_config(_t),
       do: %Workflow.Config{

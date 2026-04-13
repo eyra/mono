@@ -288,14 +288,6 @@ msgid "invite.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr ""
 
@@ -504,3 +496,43 @@ msgstr "E-mail di attivazione inviata!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Attiva il tuo account"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Registrati con la tua email per entrare nel gruppo di partecipanti."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "Indirizzo email"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Questo indirizzo email è già registrato."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Gli indirizzi email usa e getta non sono consentiti."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Inserisci un indirizzo email valido."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Qualcosa è andato storto. Riprova."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Registrati"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Ti avviseremo quando saremo online."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Sei nella lista!"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Vuoi partecipare a più ricerche?"

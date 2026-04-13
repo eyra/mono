@@ -69,6 +69,37 @@ defmodule EmailSignUpTest do
     end
   end
 
+  describe "link/2" do
+    test "links email to existing user and creates satellite" do
+      user = Factories.insert!(:member)
+      new_email = "linked-#{System.unique_integer([:positive])}@example.com"
+
+      assert {:ok, %User{} = updated_user} = EmailSignUp.link(user, new_email)
+      assert updated_user.email == new_email
+      assert updated_user.id == user.id
+
+      satellite = EmailSignUp.get_by_user(updated_user)
+      assert satellite != nil
+      assert satellite.user_id == user.id
+    end
+
+    test "rejects invalid email format" do
+      user = Factories.insert!(:member)
+      assert {:error, :invalid_format} = EmailSignUp.link(user, "not-an-email")
+    end
+
+    test "rejects already registered email" do
+      existing = Factories.insert!(:member, %{email: "taken@example.com"})
+      user = Factories.insert!(:member)
+      assert {:error, :already_registered} = EmailSignUp.link(user, existing.email)
+    end
+
+    test "rejects disposable email" do
+      user = Factories.insert!(:member)
+      assert {:error, :disposable} = EmailSignUp.link(user, "disposable@tempmail.com")
+    end
+  end
+
   describe "provisional?/1" do
     test "returns true for fresh email signup user" do
       assert {:ok, user} = EmailSignUp.register("provisional@example.com")

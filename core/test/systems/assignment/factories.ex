@@ -234,6 +234,31 @@ defmodule Systems.Assignment.Factories do
     Systems.Crew.Factories.create_task(crew, member, identifier, status: :completed)
   end
 
+  def create_questionnaire_assignment do
+    auth_node = Factories.insert!(:auth_node)
+    tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
+
+    tool = create_tool(tool_auth_node)
+    tool_ref = create_tool_ref(tool)
+    workflow = create_workflow()
+    _workflow_item = create_workflow_item(workflow, tool_ref)
+    info = create_info("10", 100)
+    crew = Factories.insert!(:crew)
+
+    assignment =
+      Factories.insert!(:assignment, %{
+        info: info,
+        consent_agreement: nil,
+        workflow: workflow,
+        crew: crew,
+        auth_node: auth_node,
+        special: :questionnaire,
+        status: :online
+      })
+
+    assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+  end
+
   def create_assignment_with_multiple_tasks do
     auth_node = Factories.insert!(:auth_node)
     tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})

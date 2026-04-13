@@ -52,7 +52,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
     end
 
     def runtime_config(_t),
-      do: Assignment.Template.Flags.Runtime.new(opt_in: [:email_capture])
+      do: %Assignment.RuntimeConfig{post_action: {:add_to_pool, :panl}}
 
     def workflow_config(_t),
       do: %Workflow.Config{
