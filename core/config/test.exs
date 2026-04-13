@@ -83,6 +83,8 @@ config :core, :features,
   panl_post_launch: true,
   e2e: true
 
+config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
+
 config :core, Oban, queues: false, plugins: false
 
 config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC

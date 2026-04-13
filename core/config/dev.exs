@@ -23,6 +23,8 @@ config :phoenix_live_view,
 
 config :core, :features, panl_post_launch: true
 
+config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
+
 config :core,
   domain: "localhost",
   name: "Next [local]",
