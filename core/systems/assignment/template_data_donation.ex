@@ -52,6 +52,8 @@ defmodule Systems.Assignment.TemplateDataDonation do
       ]
     end
 
+    def runtime_config(_t), do: Assignment.Template.Flags.Runtime.new()
+
     def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: false,
