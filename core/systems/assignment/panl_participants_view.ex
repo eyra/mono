@@ -113,11 +113,21 @@ defmodule Systems.Assignment.PanlParticipantsView do
 
       {:ok, _} ->
         Logger.warning("[PanlParticipantsView] No payment_url for transaction #{provider_uid}")
-        {:noreply, socket |> Frameworks.Pixel.Flash.push_error(dgettext("eyra-assignment", "panl_participants.resume.error"))}
+
+        {:noreply,
+         socket
+         |> Frameworks.Pixel.Flash.push_error(
+           dgettext("eyra-assignment", "panl_participants.resume.error")
+         )}
 
       {:error, error} ->
         Logger.warning("[PanlParticipantsView] Resume payment failed: #{inspect(error)}")
-        {:noreply, socket |> Frameworks.Pixel.Flash.push_error(dgettext("eyra-assignment", "panl_participants.resume.error"))}
+
+        {:noreply,
+         socket
+         |> Frameworks.Pixel.Flash.push_error(
+           dgettext("eyra-assignment", "panl_participants.resume.error")
+         )}
     end
   end
 

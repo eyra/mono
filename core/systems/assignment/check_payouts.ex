@@ -13,8 +13,7 @@ defmodule Systems.Assignment.CheckPayouts do
     %{
       title: dgettext("eyra-nextaction", "assignment.check.payouts.title"),
       description: dgettext("eyra-nextaction", "assignment.check.payouts.description"),
-      cta_label:
-        dgettext("eyra-nextaction", "assignment.check.payouts.cta", count: pending),
+      cta_label: dgettext("eyra-nextaction", "assignment.check.payouts.cta", count: pending),
       cta_action: %{type: :redirect, to: ~p"/assignment/#{id}/content"}
     }
   end
