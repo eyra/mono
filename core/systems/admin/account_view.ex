@@ -4,7 +4,6 @@ defmodule Systems.Admin.AccountView do
   require Logger
 
   alias Core.ImageHelpers
-  alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
@@ -12,6 +11,7 @@ defmodule Systems.Admin.AccountView do
 
   alias Systems.Admin
   alias Systems.Account
+  alias Systems.Pool
 
   # Initial update
   @impl true
@@ -70,15 +70,21 @@ defmodule Systems.Admin.AccountView do
     }
   end
 
+  @max_users 50
+
   defp update_users(%{assigns: %{active_filters: filters, query: query, myself: myself}} = socket) do
-    users =
+    filtered =
       Account.Public.list_internal_users([:profile])
       |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
       |> query(filters)
       |> query(query)
+
+    users =
+      filtered
+      |> Enum.take(@max_users)
       |> Enum.map(&map_to_item(&1, myself))
 
-    assign(socket, users: users)
+    assign(socket, users: users, user_count: Enum.count(filtered))
   end
 
   defp query(users, nil), do: users
@@ -108,6 +114,7 @@ defmodule Systems.Admin.AccountView do
 
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
   defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
+  defp include?(%Account.User{} = user, :in_pool), do: Pool.Public.list_by_participant(user) != []
 
   defp include?(%Account.UserProfileModel{fullname: fullname}, word)
        when not is_nil(fullname) and is_binary(word) do
@@ -134,10 +141,17 @@ defmodule Systems.Admin.AccountView do
     }
   end
 
-  defp user_info(%Account.User{verified_at: nil}), do: ""
+  defp user_info(%Account.User{} = user) do
+    pool_info(user)
+  end
 
-  defp user_info(%Account.User{verified_at: verified_at}) do
-    "Verified #{Timestamp.humanize(verified_at)}"
+  defp pool_info(%Account.User{} = user) do
+    pools = Pool.Public.list_by_participant(user)
+
+    case pools do
+      [] -> ""
+      pools -> "Pools: " <> Enum.map_join(pools, ", ", & &1.name)
+    end
   end
 
   defp user_action_verify_button(%Account.User{creator: false} = user, target) do
@@ -250,7 +264,7 @@ defmodule Systems.Admin.AccountView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-admin", "account.title") %> <span class="text-primary"><%= Enum.count(@users) %></span></Text.title2>
+        <Text.title2><%= dgettext("eyra-admin", "account.title") %> <span class="text-primary"><%= @user_count %></span></Text.title2>
         <div class="flex flex-row gap-3 items-center">
           <div class="font-label text-label">Filter:</div>
             <.child name={:filter_selector} fabric={@fabric} />

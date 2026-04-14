@@ -509,3 +509,7 @@ msgstr "Litouws"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.ro"
 msgstr "Roemeens"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.in_pool"
+msgstr ""

@@ -510,3 +510,7 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "assignment_languages.ro"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "admin_user_filters.in_pool"
+msgstr ""
