@@ -171,9 +171,28 @@ defmodule Systems.Pool.Public do
     |> Repo.exists?()
   end
 
+  def participant?(pool_slug, %Account.User{} = user) when is_atom(pool_slug) do
+    if pool = get_by_slug(pool_slug) do
+      participant?(pool, user)
+    else
+      false
+    end
+  end
+
   def add_participant!(pool, user) do
     if not auth_module().user_has_role?(user, pool, :participant) do
       :ok = auth_module().assign_role(user, pool, :participant)
+    end
+  end
+
+  def add_to_pool(pool_slug, %Account.User{} = user) when is_atom(pool_slug) do
+    case get_by_slug(pool_slug) do
+      %Pool.Model{} = pool ->
+        add_participant!(pool, user)
+        :ok
+
+      nil ->
+        raise "Pool #{pool_slug} not found. Run the seed task to create it."
     end
   end
 
@@ -183,12 +202,11 @@ defmodule Systems.Pool.Public do
     :ok
   end
 
-  def panl_participant?(%Account.User{} = user) do
-    if pool = get_panl() do
-      participant?(pool, user)
-    else
-      false
-    end
+  def get_by_slug(slug) when is_atom(slug) do
+    slug_string = slug |> Atom.to_string()
+
+    from(p in Pool.Model, where: fragment("lower(replace(?, ' ', '_'))", p.name) == ^slug_string)
+    |> Repo.one()
   end
 
   def remove_participant(pool, user) do

@@ -16,6 +16,16 @@ if config_env() == :prod do
     base_url: base_url,
     upload_path: upload_path
 
+  # Deployment environment for seed modules. Defaults to :prod for safety.
+  config :core,
+         :deploy_env,
+         System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
+
+  # UserCheck email validation API key
+  if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
+    config :core, Frameworks.UserCheck, api_key: usercheck_api_key
+  end
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,

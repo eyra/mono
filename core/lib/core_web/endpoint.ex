@@ -52,7 +52,7 @@ defmodule CoreWeb.Endpoint do
   )
 
   if Code.ensure_loaded?(Tidewave) do
-    plug(Tidewave)
+    plug(Tidewave, team: [id: "Eyra", token: "4xfkyvio76cyuecr7eeo74lpairjg565ghqmkya"])
   end
 
   # Code reloading can be explicitly enabled under the

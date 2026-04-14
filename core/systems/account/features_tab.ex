@@ -15,7 +15,7 @@ defmodule Systems.Account.FeaturesTab do
   def key, do: :features
 
   @impl true
-  def visible?(user), do: Pool.Public.panl_participant?(user)
+  def visible?(user), do: Pool.Public.participant?(:panl, user)
 
   @impl true
   def build(_user, live_context) do

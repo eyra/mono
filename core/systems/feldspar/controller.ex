@@ -61,6 +61,9 @@ defmodule Systems.Feldspar.Controller do
   end
 
   defp do_donate(conn, key, upload, context) do
+    telemetry_metadata = telemetry_metadata(context)
+    start_time = emit_telemetry_start([:feldspar, :donate], telemetry_metadata)
+
     log_message("Server", "info", "Donation request, key=#{key}", context)
 
     with {:ok, _user} <- get_current_user(conn),
@@ -71,16 +74,32 @@ defmodule Systems.Feldspar.Controller do
          file_id <- Feldspar.DataDonationFolder.filename(context),
          {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
          :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
+      measurements = %{file_size_bytes: byte_size(data)}
+      emit_telemetry_stop([:feldspar, :donate], start_time, measurements, telemetry_metadata)
       log_message("Server", "info", "Donation stored, key=#{key}, file_id=#{file_id}", context)
 
       json(conn, %{status: "ok"})
     else
       {:error, :not_authenticated} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :not_authenticated,
+          telemetry_metadata
+        )
+
         conn
         |> put_status(:unauthorized)
         |> json(%{error: "Not authenticated"})
 
       {:error, :file_read_error, reason} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :file_read_error,
+          telemetry_metadata
+        )
+
         log_message("Server", "error", "Failed to read upload: #{inspect(reason)}", context)
 
         conn
@@ -88,6 +107,14 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "Failed to read upload"})
 
       {:error, :rate_limited, reason} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :rate_limited,
+          telemetry_metadata
+        )
+
+        :telemetry.execute([:feldspar, :donate, :rate_limited], %{count: 1}, telemetry_metadata)
         log_message("Server", "warn", "Rate limited: #{reason}", context)
 
         conn
@@ -95,6 +122,13 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "Rate limited: #{reason}"})
 
       {:error, :no_storage_endpoint} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :no_storage_endpoint,
+          telemetry_metadata
+        )
+
         log_message("Server", "error", "No storage endpoint configured", context)
 
         conn
@@ -102,6 +136,13 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "No storage endpoint configured"})
 
       {:error, {:scheduling_failed, step, reason}} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :scheduling_failed,
+          telemetry_metadata
+        )
+
         log_message(
           "Server",
           "error",
@@ -114,6 +155,7 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "Scheduling failed"})
 
       {:error, reason} ->
+        emit_telemetry_exception([:feldspar, :donate], start_time, reason, telemetry_metadata)
         log_message("Server", "error", "Storage failed: #{inspect(reason)}", context)
 
         conn
@@ -142,24 +184,44 @@ defmodule Systems.Feldspar.Controller do
   """
   def log(conn, %{"level" => level, "message" => message} = params) do
     context = params["context"] || %{}
+    telemetry_metadata = telemetry_metadata(context) |> Map.put(:level, level)
+    start_time = emit_telemetry_start([:feldspar, :log], telemetry_metadata)
 
     with {:ok, _user} <- get_current_user(conn),
          :ok <- validate_log_level(level),
          :ok <- check_rate_limit(:feldspar_log, get_remote_ip(conn), 1) do
       log_message("Client", level, message, context)
+      emit_telemetry_stop([:feldspar, :log], start_time, %{}, telemetry_metadata)
       json(conn, %{status: "ok"})
     else
       {:error, :not_authenticated} ->
+        emit_telemetry_exception(
+          [:feldspar, :log],
+          start_time,
+          :not_authenticated,
+          telemetry_metadata
+        )
+
         conn
         |> put_status(:unauthorized)
         |> json(%{error: "Not authenticated"})
 
       {:error, :invalid_level} ->
+        emit_telemetry_exception(
+          [:feldspar, :log],
+          start_time,
+          :invalid_level,
+          telemetry_metadata
+        )
+
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Invalid level. Must be one of: #{Enum.join(@valid_log_levels, ", ")}"})
 
       {:error, :rate_limited, reason} ->
+        emit_telemetry_exception([:feldspar, :log], start_time, :rate_limited, telemetry_metadata)
+        :telemetry.execute([:feldspar, :log, :rate_limited], %{count: 1}, telemetry_metadata)
+
         conn
         |> put_status(:too_many_requests)
         |> json(%{error: "Rate limited: #{reason}"})
@@ -275,6 +337,7 @@ defmodule Systems.Feldspar.Controller do
   defp validate_log_level(_), do: {:error, :invalid_level}
 
   defp log_message(source, level, message, context) do
+    set_appsignal_attributes(context)
     formatted_context = format_log_context(context)
     base_message = "[Feldspar.#{source}] #{message}#{formatted_context}"
 
@@ -287,10 +350,59 @@ defmodule Systems.Feldspar.Controller do
     end
   end
 
+  defp set_appsignal_attributes(context) when context == %{}, do: :ok
+
+  defp set_appsignal_attributes(context) do
+    metadata =
+      context
+      |> Enum.map(fn {k, v} -> {String.to_atom("feldspar_#{k}"), to_string(v)} end)
+
+    Logger.metadata(metadata)
+  end
+
   defp format_log_context(context) when context == %{}, do: ""
 
   defp format_log_context(context) do
     formatted = Enum.map_join(context, ", ", fn {k, v} -> "#{k}=#{inspect(v)}" end)
     " [#{formatted}]"
+  end
+
+  # ============================================================================
+  # Telemetry helpers
+  # ============================================================================
+
+  defp telemetry_metadata(context) do
+    %{
+      assignment_id: context["assignment_id"],
+      participant: context["participant"],
+      group: context["group"],
+      task: context["task"]
+    }
+  end
+
+  defp emit_telemetry_start(event_prefix, metadata) do
+    start_time = System.monotonic_time()
+    :telemetry.execute(event_prefix ++ [:start], %{system_time: System.system_time()}, metadata)
+    start_time
+  end
+
+  defp emit_telemetry_stop(event_prefix, start_time, extra_measurements, metadata) do
+    duration = System.monotonic_time() - start_time
+
+    :telemetry.execute(
+      event_prefix ++ [:stop],
+      Map.merge(%{duration: duration}, extra_measurements),
+      metadata
+    )
+  end
+
+  defp emit_telemetry_exception(event_prefix, start_time, reason, metadata) do
+    duration = System.monotonic_time() - start_time
+
+    :telemetry.execute(
+      event_prefix ++ [:exception],
+      %{duration: duration},
+      Map.put(metadata, :reason, reason)
+    )
   end
 end

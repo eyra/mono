@@ -297,14 +297,6 @@ msgid "invite.panel.title"
 msgstr "Dalyvio kvietimo nuoroda"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr "Pateikite dalyviams instrukcijas."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr "Leidžia dalyviams užsisakyti laiko tarpsnį jūsų vietoje atliekamam tyrimui."
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.body"
 msgstr "Ši reklama bus naudojama jūsų tyrimui reklamuoti „Panl“ dalyviams ir leis jiems dalyvauti jūsų tyrime."
 
@@ -514,3 +506,43 @@ msgstr "Aktyvavimo el. laiškas išsiųstas!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Aktyvuokite savo paskyrą"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Užsiregistruokite su savo el. pašto adresu ir prisijunkite prie dalyvių grupės."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "El. pašto adresas"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Šis el. pašto adresas jau užregistruotas."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Vienkartiniai el. pašto adresai nėra leidžiami."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Įveskite galiojantį el. pašto adresą."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Kažkas nutiko. Bandykite dar kartą."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Registruotis"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Pranešime jums, kai pradėsime veikti."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Jūs sąraše!"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Norite dalyvauti daugiau tyrimų?"

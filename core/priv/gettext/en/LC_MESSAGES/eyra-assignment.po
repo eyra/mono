@@ -286,14 +286,6 @@ msgstr "Use the url below to invite participants. Participants need to sign in o
 msgid "invite.panel.title"
 msgstr "Participant invite link"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr "Provide instructions for participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr "Enables participants to book a time slot for your on-site study."
-
 #, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr "This advertisement will be used to advertise your study to Panl participants and allows them to participate in your study."
@@ -503,3 +495,43 @@ msgstr "Activation email sent!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Activate your account"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Sign up with your email to join the participant pool."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "Email address"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "This email address is already registered."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Disposable email addresses are not allowed."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Please enter a valid email address."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Something went wrong. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Sign up"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "We'll notify you when we launch."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "You're signed up to participate in more research"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Want to participate in more research?"

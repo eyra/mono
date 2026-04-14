@@ -297,14 +297,6 @@ msgid "invite.panel.title"
 msgstr "Link de invitație pentru participanți"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr "Oferiți instrucțiuni participanților."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr "Permite participanților să rezerve un interval de timp pentru studiul dvs. la fața locului."
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.body"
 msgstr "Această reclamă va fi utilizată pentru a promova studiul dumneavoastră în rândul participanților la Panl și le va permite acestora să participe la studiul dumneavoastră."
 
@@ -514,3 +506,43 @@ msgstr "E-mail de activare trimis!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Activați-vă contul"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Înscrie-te cu adresa ta de email pentru a te alătura grupului de participanți."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "Adresă de email"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Această adresă de email este deja înregistrată."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Adresele de email de unică folosință nu sunt permise."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Te rugăm să introduci o adresă de email validă."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Ceva nu a funcționat. Te rugăm să încerci din nou."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Înscrie-te"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Te vom anunța când vom lansa."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Ești pe listă!"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Vrei să participi la mai multe cercetări?"

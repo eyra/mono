@@ -183,14 +183,6 @@ msgid "panl.privacy.policy.required"
 msgstr "You must accept the privacy policy to continue"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Privacy Policy"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Terms and Conditions"
-
-#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "I agree to the Next %{terms_link} and %{privacy_link}"
 

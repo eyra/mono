@@ -11,6 +11,19 @@ config :mime, :types, %{
   "application/x-research-info-systems" => ["ris"]
 }
 
+# Deployment environment used by seed modules to decide which seeds to run.
+# Possible values: :local, :dev, :test, :staging, :prod
+# Defaults to :local for developer machines (mix dev, mix test).
+# Releases override this in runtime.{aws,fly}.exs based on the DEPLOY_ENV env var,
+# defaulting to :prod for safety.
+config :core, :deploy_env, :local
+
+# UserCheck email validation. Default to real HTTP client; dev/test override to mock.
+config :core, Frameworks.UserCheck,
+  client: Frameworks.UserCheck.HTTPClient,
+  base_url: "https://api.usercheck.com",
+  timeout: 2_000
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,

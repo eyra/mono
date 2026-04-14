@@ -286,14 +286,6 @@ msgstr ""
 msgid "invite.panel.title"
 msgstr "Panel"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr ""
@@ -503,3 +495,43 @@ msgstr "Activatiemail verstuurd!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Activeer je account"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Meld je aan met je e-mailadres om deel te nemen aan de deelnemerspool."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "E-mailadres"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Dit e-mailadres is al geregistreerd."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Wegwerp-e-mailadressen zijn niet toegestaan."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Voer een geldig e-mailadres in."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Er is iets misgegaan. Probeer het opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Aanmelden"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "We laten het je weten zodra we live gaan."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Je bent aangemeld voor deelname aan meer onderzoek"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Wil je deelnemen aan meer onderzoek?"
