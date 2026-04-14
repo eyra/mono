@@ -530,7 +530,7 @@ msgstr "We'll notify you when we launch."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "You're on the list!"
+msgstr "You're signed up to participate in more research"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"

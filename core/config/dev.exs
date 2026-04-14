@@ -21,8 +21,6 @@ config :phoenix_live_view,
   debug_attributes: true,
   enable_expensive_runtime_checks: true
 
-config :core, :features, panl_post_launch: true
-
 config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :core,

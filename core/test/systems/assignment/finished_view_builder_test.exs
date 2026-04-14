@@ -206,7 +206,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
   describe "email_capture" do
     setup do
-      user = Factories.insert!(:member)
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      user = affiliate_user.user
       %{user: user}
     end
 
@@ -223,8 +224,16 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.email_capture.email_label != nil
       assert vm.email_capture.submit_button.action.type == :submit
       assert vm.email_capture.submit_button.face.type == :primary
-      assert vm.email_capture.success_title != nil
-      assert vm.email_capture.success_body != nil
+    end
+
+    test "email_capture is nil for non-affiliate user on questionnaire assignment", %{} do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
     end
 
     test "email_capture is nil for non-questionnaire assignment", %{user: user} do
@@ -236,7 +245,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.email_capture == nil
     end
 
-    test "email_capture is nil when user is already a pool member", %{user: user} do
+    test "email_capture shows success when user is already a pool member", %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
       panl_pool = Systems.Pool.Assembly.get_or_create_panl()
       Systems.Pool.Public.add_participant!(panl_pool, user)
@@ -244,10 +253,14 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture == nil
+      assert vm.email_capture != nil
+      assert vm.email_capture.title != nil
+      assert vm.email_capture.body != nil
+      refute Map.has_key?(vm.email_capture, :submit_button)
     end
 
-    test "email_capture is nil when consent declined", %{user: user} do
+    test "email_capture is nil when consent declined", %{} do
+      user = Factories.insert!(:member)
       consent_agreement = Factories.insert!(:consent_agreement)
       _revision = Factories.insert!(:consent_revision, %{agreement: consent_agreement})
 

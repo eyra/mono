@@ -186,9 +186,14 @@ defmodule Systems.Pool.Public do
   end
 
   def add_to_pool(pool_slug, %Account.User{} = user) when is_atom(pool_slug) do
-    pool = get_by_slug(pool_slug)
-    add_participant!(pool, user)
-    :ok
+    case get_by_slug(pool_slug) do
+      %Pool.Model{} = pool ->
+        add_participant!(pool, user)
+        :ok
+
+      nil ->
+        raise "Pool #{pool_slug} not found. Run the seed task to create it."
+    end
   end
 
   def add_user_to_panl_pool(%Account.User{} = user) do

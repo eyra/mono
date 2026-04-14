@@ -217,6 +217,11 @@ defmodule Systems.Assignment.FinishedViewTest do
   end
 
   describe "email capture form" do
+    setup do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      %{user: affiliate_user.user}
+    end
+
     test "renders email capture block for questionnaire assignment", %{conn: conn, user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
 
@@ -274,7 +279,9 @@ defmodule Systems.Assignment.FinishedViewTest do
       new_email = "capture-#{System.unique_integer([:positive])}@example.com"
       view |> render_submit("submit_email", %{"email" => new_email})
 
-      assert view |> has_element?("[data-testid='email-capture-success']")
+      assert view
+             |> has_element?("[data-testid='email-capture-block'] [data-testid='inline-block']")
+
       refute view |> has_element?("[data-testid='email-capture-input']")
     end
 
@@ -298,7 +305,7 @@ defmodule Systems.Assignment.FinishedViewTest do
       refute view |> has_element?("[data-testid='email-capture-success']")
     end
 
-    test "does not render email capture when user is already a pool member", %{
+    test "renders success state when user is already a pool member", %{
       conn: conn,
       user: user
     } do
@@ -317,7 +324,10 @@ defmodule Systems.Assignment.FinishedViewTest do
       session = %{"live_context" => live_context}
       {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
 
-      refute view |> has_element?("[data-testid='email-capture-block']")
+      assert view
+             |> has_element?("[data-testid='email-capture-block'] [data-testid='inline-block']")
+
+      refute view |> has_element?("[data-testid='email-capture-input']")
     end
 
     test "shows error for already registered email", %{conn: conn, user: user} do

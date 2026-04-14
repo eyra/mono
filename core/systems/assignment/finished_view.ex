@@ -5,6 +5,8 @@ defmodule Systems.Assignment.FinishedView do
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.InlineBlock
+  alias Frameworks.Pixel.Logo
 
   alias Systems.Assignment
   alias Systems.Pool
@@ -17,12 +19,16 @@ defmodule Systems.Assignment.FinishedView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(email_submitted: false, email_error: nil)}
+    {:ok, socket |> assign(email_error: nil)}
   end
 
   @impl true
   def handle_event("retry", _, socket) do
     {:noreply, socket |> publish_event(:retry)}
+  end
+
+  def handle_event("change_email", _params, socket) do
+    {:noreply, socket |> assign(email_error: nil)}
   end
 
   def handle_event(
@@ -38,7 +44,7 @@ defmodule Systems.Assignment.FinishedView do
     case EmailSignUp.link(user, email) do
       {:ok, _user} ->
         Pool.Public.add_to_pool(pool_slug, user)
-        {:noreply, socket |> assign(email_submitted: true, email_error: nil)}
+        {:noreply, socket |> assign(email_error: nil) |> update_view_model()}
 
       {:error, :invalid_format} ->
         {:noreply, socket |> assign(email_error: :invalid_format)}
@@ -66,48 +72,43 @@ defmodule Systems.Assignment.FinishedView do
             <Text.body_large align="text-center" testid="finished-body">
               <%= @vm.body %>
             </Text.body_large>
-            <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
-              <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
-            </div>
+            <%= if @vm.email_capture do %>
+              <div class="mt-8" data-testid="email-capture-block">
+                <InlineBlock.inline_block
+                  title={@vm.email_capture.title}
+                  description={@vm.email_capture.body}
+                  icon={Logo.path(:panl, {:product, :standing})}
+                >
+                  <%= if Map.has_key?(@vm.email_capture, :submit_button) do %>
+                    <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">
+                      <div>
+                        <label class="field-tag(label) mt-0.5 text-title6 font-title6 leading-snug text-grey1"><%= @vm.email_capture.email_label %></label>
+                        <input
+                          type="email"
+                          name="email"
+                          required
+                          class="field-input text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px"
+                          data-testid="email-capture-input"
+                        />
+                        <p :if={@email_error} class="text-caption font-caption text-warning mt-1" data-testid="email-capture-error">
+                          <%= email_error_message(@email_error) %>
+                        </p>
+                      </div>
+                      <Button.submit_wide label={@vm.email_capture.submit_button.face.label} bg_color="bg-primary" testid="email-capture-submit" />
+                    </form>
+                  <% end %>
+                </InlineBlock.inline_block>
+              </div>
+            <% else %>
+              <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
+                <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
+              </div>
+            <% end %>
           </div>
-
           <div class="flex flex-row items-center gap-6" data-testid="finished-buttons">
             <Button.dynamic :if={@vm.back_button} {@vm.back_button} testid="back-button" />
             <Button.dynamic :if={@vm.continue_button} {@vm.continue_button} testid="continue-button" />
           </div>
-
-          <%= if @vm.email_capture do %>
-            <div class="w-full max-w-sm mt-4" data-testid="email-capture-block">
-              <%= if @email_submitted do %>
-                <div class="text-center" data-testid="email-capture-success">
-                  <Text.title3><%= @vm.email_capture.success_title %></Text.title3>
-                  <Text.body_large><%= @vm.email_capture.success_body %></Text.body_large>
-                </div>
-              <% else %>
-                <div class="text-center mb-4">
-                  <Text.title3><%= @vm.email_capture.title %></Text.title3>
-                  <Text.body_large><%= @vm.email_capture.body %></Text.body_large>
-                </div>
-                <form phx-submit="submit_email" class="flex flex-col gap-4">
-                  <div>
-                    <label class="block text-sm font-medium mb-1"><%= @vm.email_capture.email_label %></label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      class="w-full border rounded-md px-3 py-2"
-                      data-testid="email-capture-input"
-                    />
-                    <p :if={@email_error} class="text-red-500 text-sm mt-1" data-testid="email-capture-error">
-                      <%= email_error_message(@email_error) %>
-                    </p>
-                  </div>
-                  <Button.dynamic {@vm.email_capture.submit_button} testid="email-capture-submit" />
-                </form>
-              <% end %>
-            </div>
-          <% end %>
-
           <div class="flex-grow" />
         </div>
         <div class="flex-grow" />

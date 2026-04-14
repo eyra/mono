@@ -2,6 +2,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
+  alias Systems.Affiliate
   alias Systems.Pool
 
   def view_model(
@@ -13,13 +14,15 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     redirect_url = get_redirect_url(panel_info)
     runtime_config = runtime_config(assignment)
 
+    email_capture = build_email_capture(declined?, runtime_config, user)
+
     %{
       title: build_title(declined?),
       body: build_body(declined?, redirect_url, platform_name),
       illustration: build_illustration(declined?, redirect_url),
       back_button: build_back_button(),
       continue_button: build_continue_button(redirect_url),
-      email_capture: build_email_capture(declined?, runtime_config, user)
+      email_capture: email_capture
     }
   end
 
@@ -39,10 +42,20 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   defp build_email_capture(_declined?, %{post_action: nil}, _user), do: nil
 
   defp build_email_capture(_declined?, %{post_action: {:add_to_pool, pool_slug} = action}, user) do
-    if Pool.Public.participant?(pool_slug, user), do: nil, else: do_build_email_capture(action)
+    case Affiliate.Public.get_user(user) do
+      {:ok, _affiliate_user} ->
+        cond do
+          Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted()
+          EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted()
+          true -> build_email_capture_form(action)
+        end
+
+      {:error, :user_not_found} ->
+        nil
+    end
   end
 
-  defp do_build_email_capture(action) do
+  defp build_email_capture_form(action) do
     %{
       action: action,
       title: dgettext("eyra-assignment", "email_capture.title"),
@@ -54,9 +67,14 @@ defmodule Systems.Assignment.FinishedViewBuilder do
           type: :primary,
           label: dgettext("eyra-assignment", "email_capture.submit.label")
         }
-      },
-      success_title: dgettext("eyra-assignment", "email_capture.success.title"),
-      success_body: dgettext("eyra-assignment", "email_capture.success.body")
+      }
+    }
+  end
+
+  defp build_email_capture_submitted do
+    %{
+      title: dgettext("eyra-assignment", "email_capture.success.title"),
+      body: dgettext("eyra-assignment", "email_capture.success.body")
     }
   end
 

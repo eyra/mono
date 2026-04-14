@@ -20,5 +20,6 @@ defmodule EmailSignUp.UserModel do
   def changeset(%__MODULE__{} = model, attrs) do
     model
     |> cast(attrs, [:validation_data, :validated_at])
+    |> unique_constraint(:user_id, name: :email_sign_up_user_user_id_index)
   end
 end

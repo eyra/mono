@@ -8,6 +8,7 @@ defmodule Systems.Assignment.ParticipantsView do
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
+  alias Frameworks.Pixel.InlineBlock
   alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
@@ -190,25 +191,16 @@ defmodule Systems.Assignment.ParticipantsView do
 
           <.spacing value="L" />
           <div class="flex flex-col gap-8" %>
-            <%= if @content_flags[:advert_in_pool] do %>
-              <div class="border-grey4 border-2 rounded p-6">
-                <div class="flex flex-row">
-                  <div class="flex-grow">
-                    <Text.title3><%= dgettext("eyra-assignment", "advert.title") %></Text.title3>
-                    <Text.body><%= dgettext("eyra-assignment", "advert.body") %></Text.body>
-                    <.spacing value="S" />
-                    <%= if @advert_button do %>
-                      <Button.dynamic_bar buttons={[@advert_button]} />
-                    <% end %>
-                  </div>
-                  <div>
-                    <Logo.product name={:panl} variant={:standing} />
-                  </div>
-                </div>
-              </div>
+            <%= if feature_enabled?(:panl_post_launch) and @content_flags[:advert_in_pool] do %>
+              <InlineBlock.inline_block
+                title={dgettext("eyra-assignment", "advert.title")}
+                description={dgettext("eyra-assignment", "advert.body")}
+                button={@advert_button}
+                icon={Logo.path(:panl, {:product, :standing})}
+              />
             <% end %>
 
-            <%= if @content_flags[:invite_participants] do %>
+            <%= if feature_enabled?(:panl_post_launch) and @content_flags[:invite_participants] do %>
               <Panel.flat bg_color="bg-grey1">
                 <:title>
                   <div class="text-title3 font-title3 text-white">
@@ -237,6 +229,10 @@ defmodule Systems.Assignment.ParticipantsView do
                   </div>
                 <% end %>
               </Panel.flat>
+            <% end %>
+
+            <%= if not feature_enabled?(:panl_post_launch) and @content_flags[:invite_participants] do %>
+              <Affiliate.Html.url_panel title={@invite_title} annotation={@invite_annotation} url={@affiliate_url} />
             <% end %>
 
             <%= if @content_flags[:affiliate] do %>
