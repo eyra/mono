@@ -88,6 +88,9 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> assert_has(Query.css("[data-testid^='show_more__action__card_']"))
 
+    # Small delay to ensure DOM is stable after LiveView morphing
+    :timer.sleep(500)
+
     # Click show_more to reveal actions, then delete
     researcher
     |> click(Query.css("[data-testid^='show_more__action__card_']"))
