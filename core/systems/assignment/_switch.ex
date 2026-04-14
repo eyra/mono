@@ -421,7 +421,7 @@ defmodule Systems.Assignment.Switch do
     })
   end
 
-  defp update_crew_task_next_action(%{id: assignment_id}, %{
+  defp update_crew_task_next_action(%{id: assignment_id} = assignment, %{
          changeset: %{
            data: %{status: old_status, auth_node_id: auth_node_id},
            changes: %{status: new_status}
@@ -441,9 +441,24 @@ defmodule Systems.Assignment.Switch do
       _ ->
         nil
     end
+
+    update_check_payouts_next_action(assignment, users, opts, new_status)
   end
 
   defp update_crew_task_next_action(_, _), do: nil
+
+  defp update_check_payouts_next_action(_assignment, users, opts, :completed) do
+    NextAction.Public.create_next_action(users, Assignment.CheckPayouts, opts)
+  end
+
+  defp update_check_payouts_next_action(assignment, users, opts, status)
+       when status in [:accepted, :rejected] do
+    if Assignment.Public.count_pending_payouts(assignment) == 0 do
+      NextAction.Public.clear_next_action(users, Assignment.CheckPayouts, opts)
+    end
+  end
+
+  defp update_check_payouts_next_action(_assignment, _users, _opts, _status), do: nil
 
   defp payout_participants(assignment, crew_task, %{changeset: %{data: %{status: old_status}}}) do
     if old_status != :accepted do

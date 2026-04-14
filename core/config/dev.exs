@@ -111,7 +111,9 @@ config :core, Oban,
      crontab: [
        {"*/5 * * * *", Systems.Advert.ExpirationWorker},
        # Clean up old data donation files every hour
-       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}
+       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
+       # Fail pending pay-in transactions older than 15 minutes
+       {"* * * * *", Systems.Budget.PayInExpirationWorker}
      ]}
   ]
 

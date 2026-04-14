@@ -89,8 +89,11 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     # For PaNL studies, subject_count is managed via the Payment tab (slot purchasing).
     # Set it directly in the DB so the advert flow has open spots.
     page_url = Wallaby.Browser.current_url(researcher_session)
-    assignment_id = page_url |> String.split("/") |> Enum.at(-2) |> String.to_integer()
+    [_, assignment_id_str | _] = page_url |> URI.parse() |> Map.get(:path) |> String.split("/assignment/")
+    assignment_id = assignment_id_str |> String.split("/") |> hd() |> String.to_integer()
+
     assignment = Systems.Assignment.Public.get!(assignment_id, [:info])
+
     assignment.info
     |> Ecto.Changeset.change(%{subject_count: 100})
     |> Core.Repo.update!()

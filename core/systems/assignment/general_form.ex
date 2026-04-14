@@ -100,12 +100,7 @@ defmodule Systems.Assignment.GeneralForm do
     ~H"""
     <div>
       <.form id={"#{@id}_general"} :let={form} for={@changeset} phx-submit="save" phx-change="save" phx-target={@myself}>
-        <%= if show_expected?(@content_flags) and paid_slots?(@content_flags) do %>
-          <.render_subject_count_display form={form} />
-        <% end %>
-        <%= if show_expected?(@content_flags) and not paid_slots?(@content_flags) do %>
-          <.render_subject_count_field form={form} />
-        <% end %>
+        <.render_subject_count_field :if={show_subject_count?(@content_flags)} form={form} />
         <.render_language_field :if={show_language_field?(@content_flags)}
           form={form}
           language_items={@language_items}
@@ -115,40 +110,21 @@ defmodule Systems.Assignment.GeneralForm do
     """
   end
 
-  defp show_expected?(content_flags), do: Map.get(content_flags, :expected, false)
-  defp paid_slots?(content_flags), do: Map.get(content_flags, :paid_slots, false)
+  defp show_subject_count?(content_flags) do
+    Map.get(content_flags, :expected, false)
+  end
+
+  defp show_language_field?(content_flags) do
+    Map.get(content_flags, :language, false)
+  end
 
   defp render_subject_count_field(assigns) do
     ~H"""
     <.number_input
       form={@form}
       field={:subject_count}
-      label_text={dgettext("eyra-assignment", "settings.subject_count.expected_label")} />
+      label_text={dgettext("eyra-assignment", "settings.subject_count.label")} />
     """
-  end
-
-  defp render_subject_count_display(assigns) do
-    count = input_value(assigns.form, :subject_count) || 0
-    assigns = assign(assigns, :count, count)
-
-    ~H"""
-    <div class="mb-8">
-      <div class="mt-0.5 text-title6 font-title6 leading-snug text-grey1">
-        <%= dgettext("eyra-assignment", "settings.subject_count.label") %>
-      </div>
-      <.spacing value="XXS" />
-      <div class="text-label font-label text-grey2 mb-3">
-        <%= dgettext("eyra-assignment", "settings.subject_count.tooltip") %>
-      </div>
-      <div class="text-title3 font-light text-grey1">
-        <%= @count %>
-      </div>
-    </div>
-    """
-  end
-
-  defp show_language_field?(content_flags) do
-    Map.get(content_flags, :language, false)
   end
 
   defp render_language_field(assigns) do

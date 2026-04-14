@@ -315,8 +315,8 @@ msgid "payment.status.pending"
 msgstr "Proceed with payment"
 
 #, elixir-autogen, elixir-format
-msgid "payment.status.draft"
-msgstr "Draft"
+msgid "payment.status.failed"
+msgstr "Failed"
 
 #, elixir-autogen, elixir-format
 msgid "payment.reward.label"
@@ -339,6 +339,42 @@ msgid "payment.reward.warning"
 msgstr "Once participant slots are purchased, the reward can no longer be changed"
 
 #, elixir-autogen, elixir-format
+msgid "panl_participants.reward.line"
+msgstr "Reward is set to %{reward} per participant."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.add.button"
+msgstr "Pay to add participants"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.title"
+msgstr "Invite participants"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.has_advert"
+msgstr "You have created an advertisement."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.no_advert"
+msgstr "Create an advertisement to invite Panl participants."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.advert.link"
+msgstr "Go to advertisement"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.monitor.link"
+msgstr "Go to Monitor"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.resume.error"
+msgstr "Unable to resume payment. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.payment_prefix"
+msgstr "Payment"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.title"
 msgstr "Add participants"
 
@@ -351,16 +387,28 @@ msgid "budget_form.reward.label"
 msgstr "Reward per participant"
 
 #, elixir-autogen, elixir-format
+msgid "budget_form.fee.label"
+msgstr "Participant fee"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.hint"
+msgstr "Please note that the minimum fee is €8,00 per hour"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.slots.label"
-msgstr "Number of participant slots"
+msgstr "Number of participants"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
 msgstr "Total"
 
 #, elixir-autogen, elixir-format
+msgid "budget_form.costs.label"
+msgstr "Costs"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.breakdown"
-msgstr "%{count} participants × %{reward} per participant"
+msgstr "Based on %{count} participants and %{reward} per participant + service fee"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.confirm.button"

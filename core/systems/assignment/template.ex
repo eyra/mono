@@ -7,7 +7,6 @@ defprotocol Systems.Assignment.Template do
           import: {title(), Template.Flags.Import.t()} | nil,
           criteria: {title(), Template.Flags.Criteria.t()} | nil,
           participants: {title(), Template.Flags.Participants.t()} | nil,
-          payment: {title(), Template.Flags.Payment.t()} | nil,
           affiliate: {title(), Template.Flags.Affiliate.t()} | nil,
           workflow: {title(), Template.Flags.Workflow.t()} | nil,
           monitor: {binary(), Template.Flags.Monitor.t()} | nil
@@ -285,12 +284,3 @@ defmodule Systems.Assignment.Template.Flags.Monitor do
   use Systems.Assignment.Template.Flags, [:consent]
 end
 
-defmodule Systems.Assignment.Template.Flags.Payment do
-  @moduledoc """
-  Feature flags for controlling payment/funding functionality.
-
-  Available flags:
-  - `:slots` - Show slot purchasing interface
-  """
-  use Systems.Assignment.Template.Flags, [:slots]
-end

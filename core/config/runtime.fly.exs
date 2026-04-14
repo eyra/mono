@@ -86,6 +86,10 @@ if config_env() == :prod do
                 queue: storage_delivery_queue}
              ]}
 
+          "pay_in_expiration" ->
+            {Oban.Plugins.Cron,
+             crontab: [{"* * * * *", Systems.Budget.PayInExpirationWorker}]}
+
           _ ->
             nil
         end

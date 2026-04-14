@@ -376,8 +376,15 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
        ) do
+    view_module =
+      if Map.get(content_flags, :paid_slots, false) do
+        Assignment.PanlParticipantsView
+      else
+        Assignment.ParticipantsView
+      end
+
     child =
-      Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
+      Fabric.prepare_child(fabric, :system, view_module, %{
         assignment: assignment,
         user: user,
         title: title,
@@ -395,35 +402,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       child: child,
       testid: "assignment-tab-participants"
-    }
-  end
-
-  defp create_tab(
-         :payment,
-         assignment,
-         {title, content_flags},
-         _workflow_config,
-         show_errors,
-         %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
-       ) do
-    child =
-      Fabric.prepare_child(fabric, :payment, Assignment.PaymentView, %{
-        assignment: assignment,
-        user: user,
-        title: title,
-        viewport: viewport,
-        breakpoint: breakpoint,
-        content_flags: content_flags
-      })
-
-    %{
-      id: :payment,
-      ready: false,
-      show_errors: show_errors,
-      title: title,
-      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
-      type: :fullpage,
-      child: child
     }
   end
 

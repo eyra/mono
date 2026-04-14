@@ -3,9 +3,12 @@ defmodule Systems.Assignment.BudgetForm do
 
   require Logger
 
+  import Frameworks.Pixel.Form
+
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 
+  alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
 
@@ -13,17 +16,20 @@ defmodule Systems.Assignment.BudgetForm do
   def update(
         %{
           id: id,
-          assignment: %{info: %{subject_reward: subject_reward}} = assignment,
+          assignment: %{info: %{subject_reward: subject_reward} = info} = assignment,
           user: user,
-          active_currency: active_currency
+          active_currency: active_currency,
+          reward_locked?: reward_locked?
         },
         socket
       ) do
     reward_cents = subject_reward || 0
 
-    changeset =
+    slots_changeset =
       {%{subject_count: 0}, %{subject_count: :integer}}
       |> Ecto.Changeset.change()
+
+    fee_changeset = Assignment.InfoModel.changeset(info, :create, %{})
 
     {
       :ok,
@@ -31,9 +37,12 @@ defmodule Systems.Assignment.BudgetForm do
       |> assign(
         id: id,
         assignment: assignment,
+        info: info,
         user: user,
         active_currency: active_currency,
-        changeset: changeset,
+        reward_locked?: reward_locked?,
+        slots_changeset: slots_changeset,
+        fee_changeset: fee_changeset,
         subject_count: 0,
         reward_cents: reward_cents,
         total_cents: 0
@@ -51,6 +60,35 @@ defmodule Systems.Assignment.BudgetForm do
       socket
       |> assign(subject_count: count, total_cents: total_cents)
     }
+  end
+
+  @impl true
+  def handle_event(
+        "save_fee",
+        %{"info_model" => attrs},
+        %{assigns: %{info: info, subject_count: subject_count}} = socket
+      ) do
+    attrs = convert_subject_reward(attrs)
+    changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
+
+    case Core.Persister.save(changeset.data, changeset) do
+      {:ok, updated_info} ->
+        reward_cents = updated_info.subject_reward || 0
+
+        {
+          :noreply,
+          socket
+          |> assign(
+            info: updated_info,
+            fee_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
+            reward_cents: reward_cents,
+            total_cents: subject_count * reward_cents
+          )
+        }
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, fee_changeset: changeset)}
+    end
   end
 
   @impl true
@@ -92,10 +130,24 @@ defmodule Systems.Assignment.BudgetForm do
 
   defp parse_int(_), do: 0
 
+  defp convert_subject_reward(%{"subject_reward" => value} = attrs) when is_binary(value) do
+    Map.put(attrs, "subject_reward", CurrencyHelpers.display_to_cents(value))
+  end
+
+  defp convert_subject_reward(attrs), do: attrs
+
+  defp cents_to_display(value), do: CurrencyHelpers.cents_to_display(value)
   defp format_cents(value), do: CurrencyHelpers.format_cents(value)
+
+  defp confirm_enabled?(%{reward_locked?: true, subject_count: count}), do: count > 0
+
+  defp confirm_enabled?(%{subject_count: count, reward_cents: reward_cents}),
+    do: count > 0 and reward_cents > 0
 
   @impl true
   def render(assigns) do
+    assigns = assign(assigns, :confirm_enabled?, confirm_enabled?(assigns))
+
     ~H"""
     <div>
       <Text.title2>
@@ -106,7 +158,23 @@ defmodule Systems.Assignment.BudgetForm do
       </Text.body>
       <.spacing value="L" />
 
-      <.form id={"#{@id}_slots"} :let={form} for={@changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
+      <%= if not @reward_locked? do %>
+        <.form id={"#{@id}_fee"} :let={fee_form} for={@fee_changeset} phx-change="save_fee" phx-target={@myself}>
+          <.currency_input
+            form={fee_form}
+            field={:subject_reward}
+            label_text={dgettext("eyra-assignment", "budget_form.fee.label")}
+            value={cents_to_display(input_value(fee_form, :subject_reward))}
+            active_currency={@active_currency}
+            currencies={[@active_currency]}
+          />
+        </.form>
+        <div class="-mt-3 mb-4 text-label font-label text-grey2">
+          <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
+        </div>
+      <% end %>
+
+      <.form id={"#{@id}_slots"} :let={form} for={@slots_changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
         <.number_input
           form={form}
           field={:subject_count}
@@ -119,14 +187,14 @@ defmodule Systems.Assignment.BudgetForm do
 
       <div class="mb-2">
         <div class="text-title6 font-title6 text-grey1">
-          <%= dgettext("eyra-assignment", "budget_form.total.label") %>
+          <%= dgettext("eyra-assignment", "budget_form.costs.label") %>
         </div>
       </div>
       <div class="text-bodylarge font-body text-grey1 font-bold">
         <%= format_cents(@total_cents) %>
         <span class="font-normal text-bodysmall text-grey2 ml-2">
           | <%= dgettext("eyra-assignment", "budget_form.breakdown",
-            count: @subject_count,
+            count: display_count(@subject_count),
             reward: format_cents(@reward_cents)
           ) %>
         </span>
@@ -138,7 +206,7 @@ defmodule Systems.Assignment.BudgetForm do
         <Button.dynamic
           action={%{type: :send, event: "confirm", target: @myself}}
           face={%{type: :primary, label: dgettext("eyra-assignment", "budget_form.confirm.button")}}
-          enabled?={@subject_count > 0}
+          enabled?={@confirm_enabled?}
         />
         <Button.dynamic
           action={%{type: :send, event: "cancel", target: @myself}}
@@ -148,4 +216,7 @@ defmodule Systems.Assignment.BudgetForm do
     </div>
     """
   end
+
+  defp display_count(0), do: "-"
+  defp display_count(n), do: n
 end

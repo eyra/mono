@@ -8,6 +8,8 @@ defmodule Systems.Budget.Public do
   alias Core.Repo
   alias Ecto.Multi
 
+  alias Frameworks.Signal
+
   alias Systems.Account
   alias Systems.Budget
   alias Systems.Bookkeeping
@@ -205,8 +207,17 @@ defmodule Systems.Budget.Public do
       |> Repo.preload(target_fund: [:fund, :reserve, currency_ledger: [:inbound, :outbound]])
 
     case transaction.status do
-      :pending -> do_complete_transaction(transaction)
-      status -> {:error, "Transaction already #{status}"}
+      :completed ->
+        {:error, "Transaction already completed"}
+
+      _ ->
+        result = do_complete_transaction(transaction)
+
+        if match?({:ok, _}, result) do
+          notify_assignment_for_fund(transaction.target_fund_id)
+        end
+
+        result
     end
   end
 
@@ -247,9 +258,75 @@ defmodule Systems.Budget.Public do
   def fail_transaction(provider_uid) when is_binary(provider_uid) do
     transaction = get_transaction_by_provider_uid!(provider_uid)
 
-    transaction
-    |> Budget.TransactionModel.changeset(%{status: :failed})
-    |> Repo.update()
+    result =
+      transaction
+      |> Budget.TransactionModel.changeset(%{status: :failed})
+      |> Repo.update()
+
+    if match?({:ok, _}, result) do
+      notify_assignment_for_fund(transaction.target_fund_id)
+    end
+
+    result
+  end
+
+  @pay_in_expiration_minutes 15
+
+  @doc """
+  Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
+
+  The OPP hosted checkout keeps the transaction open on their side, but once we've
+  marked it failed locally `complete_transaction/1` refuses to complete it even if
+  the webhook arrives later, so the user has to start a new pay-in.
+
+  Returns the number of transactions that were expired.
+  """
+  def expire_stale_pay_ins(max_age_minutes \\ @pay_in_expiration_minutes)
+      when is_integer(max_age_minutes) and max_age_minutes > 0 do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    cutoff = NaiveDateTime.add(now, -max_age_minutes * 60, :second)
+
+    {count, expired} =
+      from(t in Budget.TransactionModel,
+        where: t.status == :pending and t.inserted_at < ^cutoff,
+        update: [set: [status: :failed, updated_at: ^now]],
+        select: t.target_fund_id
+      )
+      |> Repo.update_all([])
+
+    if count > 0 do
+      Logger.info("[Budget] Expired #{count} stale pending pay-in(s)")
+
+      expired
+      |> Enum.uniq()
+      |> Enum.each(&notify_assignment_for_fund/1)
+    end
+
+    count
+  end
+
+  defp notify_assignment_for_fund(fund_id) do
+    case Assignment.Public.get_by(:fund_id, fund_id, Assignment.Model.preload_graph(:down)) do
+      nil ->
+        Logger.warning(
+          "[Budget] notify_assignment_for_fund: no assignment for fund_id=#{fund_id}"
+        )
+
+        :ok
+
+      %Assignment.Model{id: id} = assignment ->
+        Logger.info(
+          "[Budget] notify_assignment_for_fund: dispatching {:page, Assignment.ContentPage} for assignment=#{id} (fund=#{fund_id})"
+        )
+
+        Signal.Public.dispatch!({:page, Assignment.ContentPage}, %{
+          id: id,
+          model: assignment,
+          from_pid: self()
+        })
+
+        :ok
+    end
   end
 
   # --- Helpers ---

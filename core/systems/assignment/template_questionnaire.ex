@@ -36,18 +36,11 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new(
             opt_in: [
-              :language_fixed_nl,
-              :expected,
-              :language,
               :advert_in_pool,
               :invite_participants,
               :paid_slots
             ]
           )
-        },
-        payment: {
-          dgettext("eyra-assignment", "tabbar.item.payment"),
-          Assignment.Template.Flags.Payment.new(opt_in: [:slots])
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
