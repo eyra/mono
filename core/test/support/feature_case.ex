@@ -89,4 +89,35 @@ defmodule CoreWeb.FeatureCase do
       creator: creator
     })
   end
+
+  @doc """
+  Retries a block of Wallaby interactions when a StaleReferenceError occurs.
+
+  LiveView may morph the DOM between a `find` and a `click`, causing the
+  element reference to become stale. This macro retries the entire block
+  (find + action) as an atomic unit, matching the retry-on-stale strategy
+  used by Playwright and Cypress.
+
+  ## Example
+
+      retry_stale do
+        session |> click(Query.css("[data-testid='my-button']"))
+      end
+  """
+  defmacro retry_stale(do: block) do
+    quote do
+      CoreWeb.FeatureCase.do_retry_stale(fn -> unquote(block) end)
+    end
+  end
+
+  @doc false
+  def do_retry_stale(fun, attempts \\ 5)
+  def do_retry_stale(fun, 1), do: fun.()
+
+  def do_retry_stale(fun, attempts) do
+    fun.()
+  rescue
+    Wallaby.StaleReferenceError ->
+      do_retry_stale(fun, attempts - 1)
+  end
 end
