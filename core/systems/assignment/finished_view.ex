@@ -52,13 +52,19 @@ defmodule Systems.Assignment.FinishedView do
           socket
       ) do
     email_error =
-      case EmailSignUp.link(user, email) do
-        {:ok, _user} ->
-          Pool.Public.add_to_pool(pool_slug, user)
-          nil
+      try do
+        case EmailSignUp.link(user, email) do
+          {:ok, _user} ->
+            Pool.Public.add_to_pool(pool_slug, user)
+            nil
 
-        {:error, reason} ->
-          email_error_message(reason)
+          {:error, reason} ->
+            email_error_message(reason)
+        end
+      rescue
+        e ->
+          Logger.error("[FinishedView] Email submit crashed: #{Exception.message(e)}")
+          email_error_message(:unknown)
       end
 
     {:noreply,

@@ -79,7 +79,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
       timeout: config(:timeout, 2_000),
       ssl: [
         verify: :verify_peer,
-        cacerts: :public_key.cacerts_get(),
+        cacertfile: CAStore.file_path(),
         depth: 3,
         server_name_indication: ~c"api.usercheck.com",
         customize_hostname_check: [
