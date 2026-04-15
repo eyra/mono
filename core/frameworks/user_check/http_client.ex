@@ -75,6 +75,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
 
   defp http_options do
     [
+      connect_timeout: config(:timeout, 2_000),
       timeout: config(:timeout, 2_000),
       ssl: [
         verify: :verify_peer,
