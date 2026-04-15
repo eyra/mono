@@ -11,6 +11,7 @@ defmodule Systems.Admin.AccountView do
 
   alias Systems.Admin
   alias Systems.Account
+  alias Systems.Affiliate
   alias Systems.Pool
 
   # Initial update
@@ -74,7 +75,7 @@ defmodule Systems.Admin.AccountView do
 
   defp update_users(%{assigns: %{active_filters: filters, query: query, myself: myself}} = socket) do
     filtered =
-      Account.Public.list_internal_users([:profile])
+      Account.Public.list_users([:profile])
       |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
       |> query(filters)
       |> query(query)
@@ -115,6 +116,10 @@ defmodule Systems.Admin.AccountView do
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
   defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
   defp include?(%Account.User{} = user, :in_pool), do: Pool.Public.list_by_participant(user) != []
+
+  defp include?(%Account.User{} = user, :affiliate) do
+    Affiliate.Public.get_user(user) != {:error, :user_not_found}
+  end
 
   defp include?(%Account.UserProfileModel{fullname: fullname}, word)
        when not is_nil(fullname) and is_binary(word) do

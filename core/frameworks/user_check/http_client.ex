@@ -21,17 +21,24 @@ defmodule Frameworks.UserCheck.HTTPClient do
   @impl true
   def check_email(email) when is_binary(email) do
     url = "#{base_url()}/email/#{URI.encode(email)}"
+    Logger.info("[UserCheck] Checking email: #{email}")
 
     case :httpc.request(:get, {url, headers()}, http_options(), []) do
       {:ok, {{_, 200, _}, _headers, body}} ->
-        {:ok, parse(body)}
+        result = parse(body)
+
+        Logger.info(
+          "[UserCheck] Result for #{email}: disposable=#{result.disposable}, mx=#{result.mx}, role=#{result.role_account}, blocklisted=#{result.blocklisted}"
+        )
+
+        {:ok, result}
 
       {:ok, {{_, status, _}, _headers, body}} ->
-        Logger.warning("[UserCheck] HTTP #{status}: #{body}")
+        Logger.error("[UserCheck] HTTP #{status} for #{email}: #{body}")
         {:error, {:http, status}}
 
       {:error, reason} ->
-        Logger.warning("[UserCheck] Request failed: #{inspect(reason)}")
+        Logger.error("[UserCheck] Request failed for #{email}: #{inspect(reason)}")
         {:error, reason}
     end
   end
@@ -72,7 +79,11 @@ defmodule Frameworks.UserCheck.HTTPClient do
       ssl: [
         verify: :verify_peer,
         cacerts: :public_key.cacerts_get(),
-        depth: 3
+        depth: 3,
+        server_name_indication: ~c"api.usercheck.com",
+        customize_hostname_check: [
+          match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+        ]
       ]
     ]
   end
