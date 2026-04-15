@@ -7,14 +7,15 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
   def view_model(
         %{affiliate: affiliate} = assignment,
-        %{current_user: user, live_context: %{data: %{panel_info: panel_info}}}
+        %{current_user: user, live_context: %{data: %{panel_info: panel_info}}} = assigns
       ) do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
     redirect_url = get_redirect_url(panel_info)
     runtime_config = runtime_config(assignment)
+    submitting? = Map.get(assigns, :submitting, false)
 
-    email_capture = build_email_capture(declined?, runtime_config, user)
+    email_capture = build_email_capture(declined?, runtime_config, user, submitting?)
 
     %{
       title: build_title(declined?),
@@ -38,16 +39,21 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     Assignment.Template.runtime_config(template)
   end
 
-  defp build_email_capture(true = _declined?, _runtime_config, _user), do: nil
-  defp build_email_capture(_declined?, %{post_action: nil}, _user), do: nil
+  defp build_email_capture(true = _declined?, _runtime_config, _user, _submitting?), do: nil
+  defp build_email_capture(_declined?, %{post_action: nil}, _user, _submitting?), do: nil
 
-  defp build_email_capture(_declined?, %{post_action: {:add_to_pool, pool_slug} = action}, user) do
+  defp build_email_capture(
+         _declined?,
+         %{post_action: {:add_to_pool, pool_slug} = action},
+         user,
+         submitting?
+       ) do
     case Affiliate.Public.get_user(user) do
       {:ok, _affiliate_user} ->
         cond do
           Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted()
           EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted()
-          true -> build_email_capture_form(action)
+          true -> build_email_capture_form(action, submitting?)
         end
 
       {:error, :user_not_found} ->
@@ -55,7 +61,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     end
   end
 
-  defp build_email_capture_form(action) do
+  defp build_email_capture_form(action, submitting?) do
     %{
       action: action,
       title: dgettext("eyra-assignment", "email_capture.title"),
@@ -65,7 +71,8 @@ defmodule Systems.Assignment.FinishedViewBuilder do
         action: %{type: :submit},
         face: %{
           type: :primary,
-          label: dgettext("eyra-assignment", "email_capture.submit.label")
+          label: dgettext("eyra-assignment", "email_capture.submit.label"),
+          loading: submitting?
         }
       }
     }

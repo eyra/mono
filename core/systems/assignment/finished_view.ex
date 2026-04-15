@@ -19,7 +19,7 @@ defmodule Systems.Assignment.FinishedView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(email_error: nil)}
+    {:ok, socket |> assign(email_error: nil, submitting: false)}
   end
 
   @impl true
@@ -34,30 +34,35 @@ defmodule Systems.Assignment.FinishedView do
   def handle_event(
         "submit_email",
         %{"email" => email},
+        %{assigns: %{vm: %{email_capture: %{action: {:add_to_pool, _}}}}} = socket
+      ) do
+    send(self(), {:do_submit_email, email})
+    {:noreply, socket |> assign(submitting: true, email_error: nil) |> update_view_model()}
+  end
+
+  @impl true
+  def handle_info(
+        {:do_submit_email, email},
         %{
           assigns: %{
             current_user: user,
             vm: %{email_capture: %{action: {:add_to_pool, pool_slug}}}
           }
-        } = socket
+        } =
+          socket
       ) do
-    case EmailSignUp.link(user, email) do
-      {:ok, _user} ->
-        Pool.Public.add_to_pool(pool_slug, user)
-        {:noreply, socket |> assign(email_error: nil) |> update_view_model()}
+    email_error =
+      case EmailSignUp.link(user, email) do
+        {:ok, _user} ->
+          Pool.Public.add_to_pool(pool_slug, user)
+          nil
 
-      {:error, :invalid_format} ->
-        {:noreply, socket |> assign(email_error: :invalid_format)}
+        {:error, reason} ->
+          email_error_message(reason)
+      end
 
-      {:error, :already_registered} ->
-        {:noreply, socket |> assign(email_error: :already_registered)}
-
-      {:error, :disposable} ->
-        {:noreply, socket |> assign(email_error: :disposable)}
-
-      {:error, _} ->
-        {:noreply, socket |> assign(email_error: :unknown)}
-    end
+    {:noreply,
+     socket |> assign(submitting: false, email_error: email_error) |> update_view_model()}
   end
 
   @impl true
@@ -73,32 +78,7 @@ defmodule Systems.Assignment.FinishedView do
               <%= @vm.body %>
             </Text.body_large>
             <%= if @vm.email_capture do %>
-              <div class="mt-8" data-testid="email-capture-block">
-                <InlineBlock.inline_block
-                  title={@vm.email_capture.title}
-                  description={@vm.email_capture.body}
-                  icon={Logo.path(:panl, {:product, :standing})}
-                >
-                  <%= if Map.has_key?(@vm.email_capture, :submit_button) do %>
-                    <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">
-                      <div>
-                        <label class="field-tag(label) mt-0.5 text-title6 font-title6 leading-snug text-grey1"><%= @vm.email_capture.email_label %></label>
-                        <input
-                          type="email"
-                          name="email"
-                          required
-                          class="field-input text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px"
-                          data-testid="email-capture-input"
-                        />
-                        <p :if={@email_error} class="text-caption font-caption text-warning mt-1" data-testid="email-capture-error">
-                          <%= email_error_message(@email_error) %>
-                        </p>
-                      </div>
-                      <Button.submit_wide label={@vm.email_capture.submit_button.face.label} bg_color="bg-primary" testid="email-capture-submit" />
-                    </form>
-                  <% end %>
-                </InlineBlock.inline_block>
-              </div>
+              <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} />
             <% else %>
               <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
                 <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
@@ -113,6 +93,40 @@ defmodule Systems.Assignment.FinishedView do
         </div>
         <div class="flex-grow" />
       </div>
+    """
+  end
+
+  attr(:email_capture, :map, required: true)
+  attr(:email_error, :string, default: nil)
+
+  defp email_capture_block(assigns) do
+    ~H"""
+    <div class="mt-8" data-testid="email-capture-block">
+      <InlineBlock.inline_block
+        title={@email_capture.title}
+        description={@email_capture.body}
+        icon={Logo.path(:panl, {:product, :standing})}
+      >
+        <%= if Map.has_key?(@email_capture, :submit_button) do %>
+          <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">
+            <div>
+              <label class="field-tag(label) mt-0.5 text-title6 font-title6 leading-snug text-grey1"><%= @email_capture.email_label %></label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="field-input text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px"
+                data-testid="email-capture-input"
+              />
+              <p :if={@email_error} class="text-caption font-caption text-warning mt-1" data-testid="email-capture-error">
+                <%= @email_error %>
+              </p>
+            </div>
+            <Button.dynamic {@email_capture.submit_button} testid="email-capture-submit" />
+          </form>
+        <% end %>
+      </InlineBlock.inline_block>
+    </div>
     """
   end
 
