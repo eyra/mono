@@ -21,8 +21,8 @@ defmodule Systems.Fund.Model do
     field(:icon, Frameworks.Utility.EctoTuple)
     field(:virtual_icon, :string, virtual: true)
     belongs_to(:currency, Fund.CurrencyModel)
-    belongs_to(:fund, Bookkeeping.AccountModel)
-    belongs_to(:reserve, Bookkeeping.AccountModel)
+    belongs_to(:available, Bookkeeping.AccountModel, foreign_key: :fund_id)
+    belongs_to(:pending, Bookkeeping.AccountModel, foreign_key: :reserve_id)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_many(:rewards, Fund.RewardModel, foreign_key: :fund_id)
@@ -38,8 +38,8 @@ defmodule Systems.Fund.Model do
       name: name,
       icon: icon,
       currency: currency,
-      fund: Bookkeeping.AccountModel.create({:fund, name}),
-      reserve: Bookkeeping.AccountModel.create({:reserve, name}),
+      available: Bookkeeping.AccountModel.create({:fund, name}),
+      pending: Bookkeeping.AccountModel.create({:reserve, name}),
       auth_node: auth_module().prepare_node()
     }
   end
@@ -51,8 +51,8 @@ defmodule Systems.Fund.Model do
       name: name,
       icon: icon,
       currency: currency,
-      fund: Bookkeeping.AccountModel.create({:fund, uuid}),
-      reserve: Bookkeeping.AccountModel.create({:reserve, uuid}),
+      available: Bookkeeping.AccountModel.create({:fund, uuid}),
+      pending: Bookkeeping.AccountModel.create({:reserve, uuid}),
       auth_node: auth_module().prepare_node(user, :owner)
     }
   end
@@ -61,8 +61,8 @@ defmodule Systems.Fund.Model do
     %__MODULE__{
       name: name,
       icon: icon,
-      fund: Bookkeeping.AccountModel.create({:fund, name}),
-      reserve: Bookkeeping.AccountModel.create({:reserve, name}),
+      available: Bookkeeping.AccountModel.create({:fund, name}),
+      pending: Bookkeeping.AccountModel.create({:reserve, name}),
       currency: Fund.CurrencyModel.create(name, type, decimal_scale, label),
       auth_node: auth_module().prepare_node()
     }
@@ -102,24 +102,24 @@ defmodule Systems.Fund.Model do
     changeset
     |> Changeset.put_assoc(:currency, currency)
     |> Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
-    |> Changeset.put_assoc(:fund, Bookkeeping.AccountModel.create({:fund, uuid}))
-    |> Changeset.put_assoc(:reserve, Bookkeeping.AccountModel.create({:reserve, uuid}))
+    |> Changeset.put_assoc(:available, Bookkeeping.AccountModel.create({:available, uuid}))
+    |> Changeset.put_assoc(:pending, Bookkeeping.AccountModel.create({:pending, uuid}))
   end
 
   def preload_graph(:full) do
-    [:fund, :reserve, currency: Fund.CurrencyModel.preload_graph(:full)]
+    [:available, :pending, currency: Fund.CurrencyModel.preload_graph(:full)]
   end
 
-  def amount_available(%{fund: fund}) do
-    Bookkeeping.AccountModel.balance(fund)
+  def amount_available(%{available: available}) do
+    Bookkeeping.AccountModel.balance(available)
   end
 
-  def amount_reserved(%{reserve: reserve}) do
-    Bookkeeping.AccountModel.balance(reserve)
+  def amount_reserved(%{pending: pending}) do
+    Bookkeeping.AccountModel.balance(pending)
   end
 
-  def amount_spend(%{fund: %{balance_debit: balance_debit}, reserve: reserve}) do
-    balance_debit - Bookkeeping.AccountModel.balance(reserve)
+  def amount_spend(%{available: %{balance_debit: balance_debit}, pending: pending}) do
+    balance_debit - Bookkeeping.AccountModel.balance(pending)
   end
 end
 

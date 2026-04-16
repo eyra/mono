@@ -14,7 +14,7 @@ defmodule Systems.Fund.PublicTest do
     {:ok, currency: currency, fund: fund}
   end
 
-  test "create_reward/4", %{fund: %{fund: fund_account, reserve: reserve} = fund} do
+  test "create_reward/4", %{fund: %{available: fund_account, pending: reserve} = fund} do
     amount = 3500
     %{id: participant_id} = participant = Factories.insert!(:member, %{creator: false})
     reward_idempotence_key = "user:#{participant.id},fund:#{fund.id},assignment:1"
@@ -25,7 +25,7 @@ defmodule Systems.Fund.PublicTest do
 
     reward =
       Fund.Public.get_reward!(reward_id, [
-        [:deposit, :payment, :user, fund: [:fund, :reserve]]
+        [:deposit, :payment, :user, fund: [:available, :pending]]
       ])
 
     journal_message = "Reserved ƒ35.00 on fund #{fund.name} ##{fund.id}"
@@ -42,11 +42,11 @@ defmodule Systems.Fund.PublicTest do
                id: ^participant_id
              },
              fund: %{
-               fund: %{
+               available: %{
                  balance_credit: ^fund_balance_credit,
                  balance_debit: ^fund_balance_debit
                },
-               reserve: %{
+               pending: %{
                  balance_credit: ^reserve_balance_credit,
                  balance_debit: ^reserve_balance_debit
                }
@@ -76,7 +76,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "rollback_deposit/4 succeeds with deposit and without payment", %{
-    fund: %{id: fund_id, fund: fund_account, reserve: reserve} = fund
+    fund: %{id: fund_id, available: fund_account, pending: reserve} = fund
   } do
     amount = 3500
 
@@ -154,11 +154,11 @@ defmodule Systems.Fund.PublicTest do
            } = reverted_deposit
 
     assert %{
-             fund: %{
+             available: %{
                balance_credit: ^fund_balance_credit,
                balance_debit: ^fund_balance_debit
              },
-             reserve: %{
+             pending: %{
                balance_credit: ^reserve_balance_credit,
                balance_debit: ^reserve_balance_debit
              }
@@ -166,7 +166,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "rollback_deposit/4 fails with deposit and payment", %{
-    fund: %{fund: fund_account, reserve: reserve} = fund
+    fund: %{available: fund_account, pending: reserve} = fund
   } do
     amount = 3500
     deposit_idempotence_key = "idempotence_key_deposit"
@@ -208,7 +208,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "payout_reward/4 succeeds with deposit available", %{
-    fund: %{id: fund_id, fund: fund_account, reserve: reserve} = fund
+    fund: %{id: fund_id, available: fund_account, pending: reserve} = fund
   } do
     amount = 3500
     reward_idempotence_key = "1"
@@ -270,11 +270,11 @@ defmodule Systems.Fund.PublicTest do
            } = Bookkeeping.Public.get_entry(payment_idempotence_key, lines: [:account])
 
     assert %{
-             fund: %{
+             available: %{
                balance_credit: ^fund_balance_credit,
                balance_debit: ^fund_balance_debit
              },
-             reserve: %{
+             pending: %{
                balance_credit: ^reserve_balance_credit,
                balance_debit: ^reserve_balance_debit
              }
@@ -314,7 +314,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "payout_reward/4 fails with payment available", %{
-    fund: %{currency: currency, fund: fund_account, reserve: reserve} = fund
+    fund: %{currency: currency, available: fund_account, pending: reserve} = fund
   } do
     amount = 3500
     reward_idempotence_key = "1"
@@ -441,7 +441,7 @@ defmodule Systems.Fund.PublicTest do
   end
 
   test "multiply_rewards/2 succeeds", %{
-    fund: %{fund: fund_account, reserve: reserve} = fund
+    fund: %{available: fund_account, pending: reserve} = fund
   } do
     amount = 250
     multiplier = 10

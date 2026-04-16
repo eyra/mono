@@ -82,8 +82,8 @@ defmodule Systems.Fund.FundingPage do
   defp update_funds(%{assigns: %{current_user: user}} = socket) do
     funds =
       Fund.Public.list_owned(user, [
-        :fund,
-        :reserve,
+        :available,
+        :pending,
         currency: Fund.CurrencyModel.preload_graph(:full)
       ])
       |> Enum.filter(&(&1.currency.type == :legal))
@@ -144,11 +144,11 @@ defmodule Systems.Fund.FundingPage do
   end
 
   defp to_square(
-         %Fund.Model{id: id, name: name, fund: fund, currency: currency, icon: icon} = _fund,
+         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon} = _fund,
          %{id: selected_id},
          locale
        ) do
-    %{debit: debit, credit: credit} = Bookkeeping.Public.balance(fund)
+    %{debit: debit, credit: credit} = Bookkeeping.Public.balance(available)
     subtitle = Fund.CurrencyModel.label(currency, locale, credit - debit)
 
     state =

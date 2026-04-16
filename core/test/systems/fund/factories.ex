@@ -49,8 +49,8 @@ defmodule Systems.Fund.Factories do
     Core.Factories.insert!(:fund, %{
       name: name,
       currency: currency,
-      fund: fund,
-      reserve: reserve,
+      available: fund,
+      pending: reserve,
       auth_node: auth_node
     })
   end
