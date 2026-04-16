@@ -283,4 +283,3 @@ defmodule Systems.Assignment.Template.Flags.Monitor do
   """
   use Systems.Assignment.Template.Flags, [:consent]
 end
-
