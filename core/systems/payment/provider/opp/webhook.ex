@@ -1,6 +1,8 @@
 defmodule Systems.Payment.Provider.OPP.Webhook do
   @behaviour Systems.Payment.Webhook
 
+  @signature_regex ~r/(\w+)="([^"]*)"/
+
   require Logger
 
   alias Systems.Payment.Error
@@ -54,12 +56,13 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
 
   defp parse_signature_header(header) do
     params =
-      Regex.scan(~r/(\w+)="([^"]*)"/, header)
+      Regex.scan(@signature_regex, header)
       |> Enum.into(%{}, fn [_, key, value] -> {key, value} end)
 
-    case Map.has_key?(params, "signature") do
-      true -> {:ok, params}
-      false -> {:error, %Error{code: :invalid_signature, message: "Missing signature in header"}}
+    if Map.has_key?(params, "signature") do
+      {:ok, params}
+    else
+      {:error, %Error{code: :invalid_signature, message: "Missing signature in header"}}
     end
   end
 
@@ -125,6 +128,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp notification_secret do
-    Application.fetch_env!(:core, :payment) |> Keyword.fetch!(:notification_secret)
+    Application.fetch_env!(:core, Systems.Payment.Provider.OPP)
+    |> Keyword.fetch!(:notification_secret)
   end
 end

@@ -11,6 +11,13 @@ config :mime, :types, %{
   "application/x-research-info-systems" => ["ris"]
 }
 
+# Deployment environment used by seed modules to decide which seeds to run.
+# Possible values: :local, :dev, :test, :staging, :prod
+# Defaults to :local for developer machines (mix dev, mix test).
+# Releases override this in runtime.{aws,fly}.exs based on the DEPLOY_ENV env var,
+# defaulting to :prod for safety.
+config :core, :deploy_env, :local
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,
@@ -91,9 +98,12 @@ config :core,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
   payment_provider: Systems.Payment.Provider.Local,
+  payment_providers: %{
+    "opp" => Systems.Payment.Provider.OPP
+  },
   tool_directors: [:assignment]
 
-config :core, :payment,
+config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"

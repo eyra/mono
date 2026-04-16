@@ -16,6 +16,11 @@ if config_env() == :prod do
     base_url: base_url,
     upload_path: upload_path
 
+  # Deployment environment for seed modules. Defaults to :prod for safety.
+  config :core,
+         :deploy_env,
+         System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
@@ -268,9 +273,8 @@ if config_env() == :prod do
          |> Enum.map(&"core@#{&1}")
          |> Enum.map(&String.to_atom/1)
 
-  # Payment Provider (OPP)
-  config :core, :payment,
-    base_url: System.get_env("OPP_BASE_URL", "https://api-sandbox.onlinebetaalplatform.nl/v1"),
+  config :core, Systems.Payment.Provider.OPP,
+    base_url: System.get_env("OPP_BASE_URL"),
     api_key: System.get_env("OPP_API_KEY"),
     notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
 

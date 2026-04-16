@@ -13,14 +13,12 @@ defmodule Systems.Payment.Webhook do
 
   @callback verify_and_parse(Plug.Conn.t()) :: {:ok, event()} | {:error, Error.t()}
 
-  @providers %{
-    "opp" => Systems.Payment.Provider.OPP.Webhook
-  }
-
   @spec handler(String.t()) :: {:ok, module()} | {:error, :unknown_provider}
-  def handler(provider) do
-    case Map.fetch(@providers, provider) do
-      {:ok, module} -> {:ok, module}
+  def handler(provider_name) do
+    providers = Application.fetch_env!(:core, :payment_providers)
+
+    case Map.fetch(providers, provider_name) do
+      {:ok, base_module} -> {:ok, Module.concat(base_module, Webhook)}
       :error -> {:error, :unknown_provider}
     end
   end
