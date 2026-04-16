@@ -535,3 +535,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr ""

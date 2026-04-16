@@ -546,3 +546,7 @@ msgstr "Ačiū, kad domitės panl"
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr "Norite dažniau dalyvauti tyrimuose?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Naudokite asmeninį el. pašto adresą, ne bendrinamą (pvz. info@, admin@)."

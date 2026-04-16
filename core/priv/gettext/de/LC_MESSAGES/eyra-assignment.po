@@ -536,3 +536,7 @@ msgstr "Vielen Dank für Ihr Interesse an panl"
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr "Möchten Sie häufiger an Forschung teilnehmen?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Bitte verwenden Sie eine persönliche E-Mail-Adresse, keine geteilte (z.B. info@, admin@)."
