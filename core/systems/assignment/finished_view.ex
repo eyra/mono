@@ -19,7 +19,7 @@ defmodule Systems.Assignment.FinishedView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(email_error: nil, submitting: false)}
+    {:ok, socket |> assign(email_error: nil, submitting: false, email_value: nil)}
   end
 
   @impl true
@@ -37,7 +37,11 @@ defmodule Systems.Assignment.FinishedView do
         %{assigns: %{vm: %{email_capture: %{action: {:add_to_pool, _}}}}} = socket
       ) do
     send(self(), {:do_submit_email, email})
-    {:noreply, socket |> assign(submitting: true, email_error: nil) |> update_view_model()}
+
+    {:noreply,
+     socket
+     |> assign(submitting: true, email_error: nil, email_value: email)
+     |> update_view_model()}
   end
 
   @impl true
@@ -84,7 +88,7 @@ defmodule Systems.Assignment.FinishedView do
               <%= @vm.body %>
             </Text.body_large>
             <%= if @vm.email_capture do %>
-              <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} />
+              <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} email_value={@email_value} />
             <% else %>
               <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
                 <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
@@ -104,6 +108,7 @@ defmodule Systems.Assignment.FinishedView do
 
   attr(:email_capture, :map, required: true)
   attr(:email_error, :string, default: nil)
+  attr(:email_value, :string, default: nil)
 
   defp email_capture_block(assigns) do
     ~H"""
@@ -120,6 +125,7 @@ defmodule Systems.Assignment.FinishedView do
               <input
                 type="email"
                 name="email"
+                value={@email_value}
                 required
                 class="field-input text-grey1 text-bodymedium font-body pl-3 w-full border-2 border-solid border-grey3 focus:outline-none focus:border-primary rounded h-44px"
                 data-testid="email-capture-input"
