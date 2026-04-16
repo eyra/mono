@@ -189,7 +189,7 @@ msgstr "Consentimiento rechazado"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Gracias. Has terminado. Ahora puedes cerrar la ventana."
+msgstr "Gracias por tu participación."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -281,7 +281,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr ""
+msgstr "Utiliza el enlace de abajo para invitar a los participantes. Sustituye 'participant_id' por un identificador único para cada participante. Se invitará a los participantes a dejar su correo electrónico para futuras investigaciones a través de Panl."
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.title"
@@ -499,7 +499,7 @@ msgstr "Active su cuenta"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Regístrate con tu correo electrónico para unirte al grupo de participantes."
+msgstr "Deja tu dirección de correo electrónico para recibir información sobre cómo participar en investigaciones a través de panl."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -507,11 +507,11 @@ msgstr "Correo electrónico"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.already_registered"
-msgstr "Este correo electrónico ya está registrado."
+msgstr "Este correo electrónico ya se ha utilizado."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.disposable"
-msgstr "No se permiten direcciones de correo electrónico desechables."
+msgstr "Utiliza una dirección de correo electrónico diferente."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.invalid_format"
@@ -523,16 +523,16 @@ msgstr "Algo salió mal. Por favor, inténtalo de nuevo."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.submit.label"
-msgstr "Registrarse"
+msgstr "Enviar"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.body"
-msgstr "Te avisaremos cuando lancemos."
+msgstr "Recibirás pronto un correo electrónico con más información."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "¡Estás en la lista!"
+msgstr "Gracias por tu interés en panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
-msgstr "¿Quieres participar en más investigaciones?"
+msgstr "¿Quieres participar más a menudo en investigaciones?"
