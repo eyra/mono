@@ -189,7 +189,7 @@ msgstr "Consenso rifiutato"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Grazie. Hai finito. Ora puoi chiudere la finestra."
+msgstr "Grazie per la tua partecipazione."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -281,7 +281,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr ""
+msgstr "Usa il link qui sotto per invitare i partecipanti. Sostituisci 'participant_id' con un identificatore univoco per ogni partecipante. Ai partecipanti verrà chiesto di lasciare il proprio indirizzo email per future ricerche tramite Panl."
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.title"
@@ -499,7 +499,7 @@ msgstr "Attiva il tuo account"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Registrati con la tua email per entrare nel gruppo di partecipanti."
+msgstr "Lascia il tuo indirizzo email per ricevere informazioni su come partecipare alla ricerca tramite panl."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -507,11 +507,11 @@ msgstr "Indirizzo email"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.already_registered"
-msgstr "Questo indirizzo email è già registrato."
+msgstr "Questo indirizzo email è già stato utilizzato."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.disposable"
-msgstr "Gli indirizzi email usa e getta non sono consentiti."
+msgstr "Usa un altro indirizzo email."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.invalid_format"
@@ -523,19 +523,19 @@ msgstr "Qualcosa è andato storto. Riprova."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.submit.label"
-msgstr "Registrati"
+msgstr "Invia"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.body"
-msgstr "Ti avviseremo quando saremo online."
+msgstr "Riceverai presto un'email con maggiori informazioni."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "Sei nella lista!"
+msgstr "Grazie per il tuo interesse in panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
-msgstr "Vuoi partecipare a più ricerche?"
+msgstr "Vuoi partecipare più spesso alla ricerca?"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.role_account"

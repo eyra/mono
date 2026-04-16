@@ -198,7 +198,7 @@ msgstr "Sutikimas atmestas"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Ačiū. Dalyvavimas baigtas. Galite uždaryti langą."
+msgstr "Ačiū už jūsų dalyvavimą."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -290,7 +290,7 @@ msgstr "Leidžia dalyviams pateikti savo metodą iššūkiui su GitHub saugyklos
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.annotation"
-msgstr "Naudokite žemiau pateiktą URL adresą, kad pakviestumėte dalyvius. Dalyviai turi prisijungti arba susikurti paskyrą, kad galėtų dalyvauti."
+msgstr "Naudokite toliau pateiktą nuorodą dalyviams pakviesti. Pakeiskite 'participant_id' unikaliu kiekvieno dalyvio identifikatoriumi. Dalyviai bus kviečiami palikti savo el. pašto adresą būsimiesiems tyrimams per Panl."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
@@ -509,7 +509,7 @@ msgstr "Aktyvuokite savo paskyrą"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Užsiregistruokite su savo el. pašto adresu ir prisijunkite prie dalyvių grupės."
+msgstr "Palikite savo el. pašto adresą, kad gautumėte informacijos apie dalyvavimą tyrimuose per panl."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -517,11 +517,11 @@ msgstr "El. pašto adresas"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.already_registered"
-msgstr "Šis el. pašto adresas jau užregistruotas."
+msgstr "Šis el. pašto adresas jau buvo naudotas."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.disposable"
-msgstr "Vienkartiniai el. pašto adresai nėra leidžiami."
+msgstr "Naudokite kitą el. pašto adresą."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.invalid_format"
@@ -533,19 +533,19 @@ msgstr "Kažkas nutiko. Bandykite dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.submit.label"
-msgstr "Registruotis"
+msgstr "Siųsti"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.body"
-msgstr "Pranešime jums, kai pradėsime veikti."
+msgstr "Netrukus gausite el. laišką su daugiau informacijos."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "Jūs sąraše!"
+msgstr "Ačiū, kad domitės panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
-msgstr "Norite dalyvauti daugiau tyrimų?"
+msgstr "Norite dažniau dalyvauti tyrimuose?"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.role_account"

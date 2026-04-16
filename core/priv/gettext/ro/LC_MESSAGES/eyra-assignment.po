@@ -198,7 +198,7 @@ msgstr "Consimțământul refuzat"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Vă mulțumim. Participarea a fost finalizată. Puteți închide fereastra."
+msgstr "Vă mulțumim pentru participare."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -290,7 +290,7 @@ msgstr "Permite participanților să își trimită metoda pentru provocare cu u
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.annotation"
-msgstr "Utilizați adresa URL de mai jos pentru a invita participanții. Participanții trebuie să se autentifice sau să creeze un cont pentru a participa."
+msgstr "Utilizați linkul de mai jos pentru a invita participanții. Înlocuiți 'participant_id' cu un identificator unic pentru fiecare participant. Participanții vor fi invitați să își lase adresa de e-mail pentru cercetări viitoare prin Panl."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
@@ -509,7 +509,7 @@ msgstr "Activați-vă contul"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Înscrie-te cu adresa ta de email pentru a te alătura grupului de participanți."
+msgstr "Lăsați adresa de email pentru a primi informații despre participarea la cercetare prin panl."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -517,11 +517,11 @@ msgstr "Adresă de email"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.already_registered"
-msgstr "Această adresă de email este deja înregistrată."
+msgstr "Această adresă de email a fost deja folosită."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.disposable"
-msgstr "Adresele de email de unică folosință nu sunt permise."
+msgstr "Folosiți o altă adresă de email."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.invalid_format"
@@ -533,19 +533,19 @@ msgstr "Ceva nu a funcționat. Te rugăm să încerci din nou."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.submit.label"
-msgstr "Înscrie-te"
+msgstr "Trimite"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.body"
-msgstr "Te vom anunța când vom lansa."
+msgstr "Veți primi în curând un e-mail cu mai multe informații."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "Ești pe listă!"
+msgstr "Vă mulțumim pentru interesul față de panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
-msgstr "Vrei să participi la mai multe cercetări?"
+msgstr "Doriți să participați mai des la cercetare?"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.role_account"
