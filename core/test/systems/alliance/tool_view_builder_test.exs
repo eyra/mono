@@ -23,7 +23,7 @@ defmodule Systems.Alliance.ToolViewBuilderTest do
       # Should have button configured with url from assigns
       assert vm.button.action.type == :http_get
       assert vm.button.action.to == "https://external-tool.example.com?participant=123"
-      assert vm.button.action.target == "_blank"
+      assert vm.button.action.target == "_self"
       assert vm.button.action.phx_event == "start_tool"
       assert vm.button.face.type == :primary
       assert vm.button.face.label == dgettext("eyra-alliance", "tool.button")
@@ -47,7 +47,7 @@ defmodule Systems.Alliance.ToolViewBuilderTest do
       assert vm.description == "Custom Description"
     end
 
-    test "button opens url in new tab" do
+    test "button opens url in same tab" do
       tool = Factories.insert!(:alliance_tool)
 
       assigns = %{
@@ -58,7 +58,7 @@ defmodule Systems.Alliance.ToolViewBuilderTest do
 
       vm = Alliance.ToolViewBuilder.view_model(tool, assigns)
 
-      assert vm.button.action.target == "_blank"
+      assert vm.button.action.target == "_self"
     end
 
     test "button dispatches tool_started event" do

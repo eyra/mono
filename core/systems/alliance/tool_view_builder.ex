@@ -25,7 +25,7 @@ defmodule Systems.Alliance.ToolViewBuilder do
       action: %{
         type: :http_get,
         to: url,
-        target: "_blank",
+        target: "_self",
         phx_event: "start_tool"
       },
       face: %{
