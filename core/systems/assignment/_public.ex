@@ -817,20 +817,6 @@ defmodule Systems.Assignment.Public do
     idempotence_key = idempotence_key(assignment_id, user_id)
     Fund.Public.rewarded_amount(idempotence_key)
   end
-
-  @doc """
-  Counts crew tasks that participants have completed but the researcher has not
-  yet accepted or rejected. These are the participants waiting to be paid out.
-  """
-  def count_pending_payouts(%Assignment.Model{crew: %Crew.Model{} = crew}) do
-    Crew.Public.count_tasks(crew, [:completed])
-  end
-
-  def count_pending_payouts(%Assignment.Model{id: id}) do
-    id
-    |> get!([:crew])
-    |> count_pending_payouts()
-  end
 end
 
 defimpl Core.Persister, for: Systems.Assignment.Model do

@@ -13,7 +13,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
-  alias Systems.NextAction
   alias Systems.Pool
 
   @impl true
@@ -100,12 +99,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
   end
 
   @impl true
-  def handle_event("check_payouts", _, socket) do
-    # TODO: implement payout review flow (UC-OPP-06)
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_event("resume_payment", %{"provider-uid" => provider_uid}, socket) do
     case Systems.Payment.Public.get_transaction(provider_uid) do
       {:ok, %{payment_url: payment_url}} when is_binary(payment_url) ->
@@ -148,8 +141,8 @@ defmodule Systems.Assignment.PanlParticipantsView do
     assign(socket, transactions: list_transactions(assignment))
   end
 
-  defp assign_pending_payouts(%{assigns: %{assignment: assignment}} = socket) do
-    assign(socket, pending_payouts: Assignment.Public.count_pending_payouts(assignment))
+  defp assign_pending_payouts(socket) do
+    assign(socket, pending_payouts: 0)
   end
 
   defp assign_active_currency(%{assigns: %{assignment: assignment}} = socket) do
@@ -256,18 +249,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
         </div>
         <.spacing value="L" />
 
-        <%= if @pending_payouts > 0 do %>
-          <div class="mb-8" data-testid="payout-warning">
-            <NextAction.View.normal
-              style={:warning}
-              title={dgettext("eyra-assignment", "payment.payout.title")}
-              description={dgettext("eyra-assignment", "payment.payout.description")}
-              cta_label={dgettext("eyra-assignment", "payment.payout.button", count: @pending_payouts)}
-              cta_action={%{type: :send, event: "check_payouts", target: @myself}}
-            />
-          </div>
-        <% end %>
-
         <div class="flex flex-col gap-4 mb-6">
           <%= for transaction <- @transactions do %>
             <.budget_card transaction={transaction} entity={@entity} myself={@myself} />
@@ -294,12 +275,12 @@ defmodule Systems.Assignment.PanlParticipantsView do
               <.nav_link
                 label={dgettext("eyra-assignment", "panl_participants.advert.link")}
                 to={@advert_path}
-                testid="goto-advert-link"
+                testid="goto-advert-button"
               />
               <.nav_link
                 label={dgettext("eyra-assignment", "panl_participants.monitor.link")}
                 to={@monitor_path}
-                testid="goto-monitor-link"
+                testid="goto-monitor-button"
               />
             </div>
           <% else %>

@@ -267,18 +267,6 @@ msgid "tabbar.item.payment"
 msgstr "Payment"
 
 #, elixir-autogen, elixir-format
-msgid "payment.payout.title"
-msgstr "Participants waiting for pay out"
-
-#, elixir-autogen, elixir-format
-msgid "payment.payout.description"
-msgstr "There are participants waiting to get paid"
-
-#, elixir-autogen, elixir-format
-msgid "payment.payout.button"
-msgstr "Check %{count} pay outs"
-
-#, elixir-autogen, elixir-format
 msgid "payment.budgets.title"
 msgstr "Budgets"
 

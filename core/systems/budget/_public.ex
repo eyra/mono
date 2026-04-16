@@ -8,8 +8,6 @@ defmodule Systems.Budget.Public do
   alias Core.Repo
   alias Ecto.Multi
 
-  alias Frameworks.Signal
-
   alias Systems.Account
   alias Systems.Budget
   alias Systems.Bookkeeping
@@ -211,13 +209,7 @@ defmodule Systems.Budget.Public do
         {:error, "Transaction already completed"}
 
       _ ->
-        result = do_complete_transaction(transaction)
-
-        if match?({:ok, _}, result) do
-          notify_assignment_for_fund(transaction.target_fund_id)
-        end
-
-        result
+        do_complete_transaction(transaction)
     end
   end
 
@@ -258,16 +250,9 @@ defmodule Systems.Budget.Public do
   def fail_transaction(provider_uid) when is_binary(provider_uid) do
     transaction = get_transaction_by_provider_uid!(provider_uid)
 
-    result =
-      transaction
-      |> Budget.TransactionModel.changeset(%{status: :failed})
-      |> Repo.update()
-
-    if match?({:ok, _}, result) do
-      notify_assignment_for_fund(transaction.target_fund_id)
-    end
-
-    result
+    transaction
+    |> Budget.TransactionModel.changeset(%{status: :failed})
+    |> Repo.update()
   end
 
   @pay_in_expiration_minutes 15
@@ -286,47 +271,18 @@ defmodule Systems.Budget.Public do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     cutoff = NaiveDateTime.add(now, -max_age_minutes * 60, :second)
 
-    {count, expired} =
+    {count, _} =
       from(t in Budget.TransactionModel,
         where: t.status == :pending and t.inserted_at < ^cutoff,
-        update: [set: [status: :failed, updated_at: ^now]],
-        select: t.target_fund_id
+        update: [set: [status: :failed, updated_at: ^now]]
       )
       |> Repo.update_all([])
 
     if count > 0 do
       Logger.info("[Budget] Expired #{count} stale pending pay-in(s)")
-
-      expired
-      |> Enum.uniq()
-      |> Enum.each(&notify_assignment_for_fund/1)
     end
 
     count
-  end
-
-  defp notify_assignment_for_fund(fund_id) do
-    case Assignment.Public.get_by(:fund_id, fund_id, Assignment.Model.preload_graph(:down)) do
-      nil ->
-        Logger.warning(
-          "[Budget] notify_assignment_for_fund: no assignment for fund_id=#{fund_id}"
-        )
-
-        :ok
-
-      %Assignment.Model{id: id} = assignment ->
-        Logger.info(
-          "[Budget] notify_assignment_for_fund: dispatching {:page, Assignment.ContentPage} for assignment=#{id} (fund=#{fund_id})"
-        )
-
-        Signal.Public.dispatch!({:page, Assignment.ContentPage}, %{
-          id: id,
-          model: assignment,
-          from_pid: self()
-        })
-
-        :ok
-    end
   end
 
   # --- Helpers ---

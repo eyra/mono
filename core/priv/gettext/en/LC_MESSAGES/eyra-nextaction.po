@@ -71,18 +71,6 @@ msgid "assignment.check.rejection.title"
 msgstr "One of your contributions is rejected"
 
 #, elixir-autogen, elixir-format
-msgid "assignment.check.payouts.title"
-msgstr "Participants waiting for pay out"
-
-#, elixir-autogen, elixir-format
-msgid "assignment.check.payouts.description"
-msgstr "There are participants waiting to get paid"
-
-#, elixir-autogen, elixir-format
-msgid "assignment.check.payouts.cta"
-msgstr "Check %{count} pay outs"
-
-#, elixir-autogen, elixir-format
 msgid "fillin.characteristics.cta"
 msgstr "Go to Profile"
 
