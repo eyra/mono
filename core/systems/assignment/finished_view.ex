@@ -148,7 +148,16 @@ defmodule Systems.Assignment.FinishedView do
   defp email_error_message(:already_registered),
     do: dgettext("eyra-assignment", "email_capture.error.already_registered")
 
+  defp email_error_message(:role_account),
+    do: dgettext("eyra-assignment", "email_capture.error.role_account")
+
   defp email_error_message(:disposable),
+    do: dgettext("eyra-assignment", "email_capture.error.disposable")
+
+  defp email_error_message(:invalid_mx),
+    do: dgettext("eyra-assignment", "email_capture.error.invalid_format")
+
+  defp email_error_message(:blocklisted),
     do: dgettext("eyra-assignment", "email_capture.error.disposable")
 
   defp email_error_message(_), do: dgettext("eyra-assignment", "email_capture.error.unknown")

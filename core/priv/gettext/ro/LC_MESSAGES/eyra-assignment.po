@@ -546,3 +546,7 @@ msgstr "Ești pe listă!"
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr "Vrei să participi la mai multe cercetări?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Te rugăm să folosești o adresă de email personală, nu una partajată (ex. info@, admin@)."

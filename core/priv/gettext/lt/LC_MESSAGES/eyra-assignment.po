@@ -546,3 +546,7 @@ msgstr "Jūs sąraše!"
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr "Norite dalyvauti daugiau tyrimų?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Naudokite asmeninį el. pašto adresą, ne bendrinamą (pvz. info@, admin@)."

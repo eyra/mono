@@ -535,3 +535,7 @@ msgstr "Je bent aangemeld voor deelname aan meer onderzoek"
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"
 msgstr "Wil je deelnemen aan meer onderzoek?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, admin@)."
