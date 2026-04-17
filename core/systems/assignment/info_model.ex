@@ -18,6 +18,7 @@ defmodule Systems.Assignment.InfoModel do
 
     field(:subject_count, :integer, default: 0)
     field(:subject_reward, :integer, default: 0)
+    field(:aim_of_study, :string)
     field(:duration, :string)
 
     field(:language, Ecto.Enum,
@@ -34,7 +35,7 @@ defmodule Systems.Assignment.InfoModel do
     timestamps()
   end
 
-  @operational_fields ~w(title subtitle subject_count subject_reward duration ethical_code ethical_approval devices)a
+  @operational_fields ~w(title subtitle subject_count subject_reward aim_of_study duration ethical_code ethical_approval devices)a
   @fields @operational_fields ++ ~w(image_id logo_url language)a
 
   @required_fields ~w()a
@@ -58,11 +59,13 @@ defmodule Systems.Assignment.InfoModel do
     info
     |> cast(params, @fields)
     |> validate_required(@required_fields)
+    |> validate_length(:aim_of_study, min: 10, max: 250)
   end
 
   def changeset(info, _, params) do
     info
     |> cast(params, @fields)
+    |> validate_length(:aim_of_study, min: 10, max: 250)
   end
 
   def devices(%{devices: devices}) when not is_nil(devices), do: devices

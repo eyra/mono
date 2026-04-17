@@ -160,6 +160,15 @@ defmodule Systems.Assignment.BudgetForm do
 
       <%= if not @reward_locked? do %>
         <.form id={"#{@id}_fee"} :let={fee_form} for={@fee_changeset} phx-change="save_fee" phx-target={@myself}>
+          <.text_input
+            form={fee_form}
+            field={:aim_of_study}
+            label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
+            maxlength="250"
+          />
+          <div class="-mt-3 mb-4 text-label font-label text-grey2">
+            <%= dgettext("eyra-assignment", "budget_form.aim.hint") %>
+          </div>
           <.currency_input
             form={fee_form}
             field={:subject_reward}
@@ -168,10 +177,10 @@ defmodule Systems.Assignment.BudgetForm do
             active_currency={@active_currency}
             currencies={[@active_currency]}
           />
+          <div class="-mt-3 mb-4 text-label font-label text-grey2">
+            <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
+          </div>
         </.form>
-        <div class="-mt-3 mb-4 text-label font-label text-grey2">
-          <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
-        </div>
       <% end %>
 
       <.form id={"#{@id}_slots"} :let={form} for={@slots_changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>

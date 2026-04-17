@@ -514,3 +514,103 @@ msgstr "Aktyvavimo el. laiškas išsiųstas!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Aktyvuokite savo paskyrą"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.breakdown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.costs.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.slots.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.add.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.advert.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.has_advert"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.no_advert"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.monitor.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.payment_prefix"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.resume.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.reward.line"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.budget.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.paid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.transactions.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.aim.hint"
+msgstr ""

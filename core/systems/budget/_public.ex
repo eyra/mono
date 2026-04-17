@@ -54,7 +54,12 @@ defmodule Systems.Budget.Public do
 
   defp create_paid_pay_in(
          %Assignment.Model{
-           info: %{subject_reward: subject_reward, title: title, subtitle: subtitle},
+           info: %{
+             subject_reward: subject_reward,
+             title: title,
+             subtitle: subtitle,
+             aim_of_study: aim_of_study
+           },
            fund: fund
          } = assignment,
          %Account.User{id: user_id, merchant_uid: merchant_uid},
@@ -77,6 +82,7 @@ defmodule Systems.Budget.Public do
       contact_person: "Researcher ##{user_id}",
       study_title: title || "Untitled",
       study_goal: subtitle || "",
+      aim_of_study: aim_of_study,
       participant_count: subject_count,
       amount_per_participant: reward_per_participant
     }
