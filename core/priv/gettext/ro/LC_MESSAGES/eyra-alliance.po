@@ -122,4 +122,4 @@ msgstr "Continuă"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Sunteți pe cale să începeți un chestionar într-o filă nouă. După ce îl veți finaliza, veți fi redirecționat automat către această pagină."
+msgstr "Sunteți pe cale să începeți un chestionar. După ce îl finalizați, veți reveni automat la această pagină."
