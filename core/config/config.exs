@@ -104,7 +104,8 @@ config :core,
   tool_directors: [:assignment]
 
 config :core, Systems.Payment.Provider.OPP,
-  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
+  partner_fee_percentage: 0
 
 config :gettext, default_locale: "en"
 

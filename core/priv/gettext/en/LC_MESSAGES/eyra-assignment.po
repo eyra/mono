@@ -509,8 +509,16 @@ msgid "budget_form.aim.label"
 msgstr "Aim of the study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.breakdown"
-msgstr "Based on %{count} participants and %{reward} per participant + service fee"
+msgid "budget_form.subtotal.label"
+msgstr "Subtotal (%{count} × %{reward} reward)"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.partner_fee.label"
+msgstr "Service fee (%{percentage}%)"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.total.label"
+msgstr "Total"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.cancel.button"

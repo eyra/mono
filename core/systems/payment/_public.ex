@@ -83,6 +83,24 @@ defmodule Systems.Payment.Public do
     "#{base_url}/api/payment/webhook/#{provider_name()}"
   end
 
+  @doc """
+  Percentage charged on top of the base amount as partner fee on OPP.
+  Returns 0 when not configured. Integer in range 0..100.
+  """
+  @spec partner_fee_percentage() :: non_neg_integer()
+  def partner_fee_percentage do
+    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    |> Keyword.get(:partner_fee_percentage, 0)
+  end
+
+  @doc """
+  Partner fee in cents for the given base amount, based on `partner_fee_percentage/0`.
+  """
+  @spec partner_fee_amount(non_neg_integer()) :: non_neg_integer()
+  def partner_fee_amount(base_amount) when is_integer(base_amount) and base_amount >= 0 do
+    div(base_amount * partner_fee_percentage(), 100)
+  end
+
   defp provider do
     Application.fetch_env!(:core, :payment_provider)
   end

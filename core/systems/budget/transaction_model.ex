@@ -14,6 +14,7 @@ defmodule Systems.Budget.TransactionModel do
     field(:idempotence_key, :string)
     field(:invoice_id, :string)
     field(:subject_count, :integer)
+    field(:total_amount, :integer, default: 0)
 
     belongs_to(:user, Account.User)
     belongs_to(:target_fund, Fund.Model)
@@ -21,7 +22,7 @@ defmodule Systems.Budget.TransactionModel do
     timestamps()
   end
 
-  @fields ~w(transaction_id status idempotence_key invoice_id subject_count)a
+  @fields ~w(transaction_id status idempotence_key invoice_id subject_count total_amount)a
   @required_fields @fields
 
   def changeset(%__MODULE__{} = transaction, attrs) do

@@ -319,8 +319,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
   defp budget_card(%{transaction: transaction, entity: entity} = assigns) do
     tag = status_tag(transaction.status)
     reward = entity.subject_reward || 0
-    total = transaction.subject_count * reward
-    assigns = assign(assigns, tag: tag, total: total, reward: reward)
+    assigns = assign(assigns, tag: tag, total: transaction.total_amount, reward: reward)
 
     ~H"""
     <Panel.flat>

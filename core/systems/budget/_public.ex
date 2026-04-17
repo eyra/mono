@@ -41,11 +41,13 @@ defmodule Systems.Budget.Public do
       )
       when is_integer(subject_count) and subject_count > 0 do
     reward_per_participant = subject_reward || 0
-    total_amount = subject_count * reward_per_participant
+    base_amount = subject_count * reward_per_participant
+    partner_fee = Payment.Public.partner_fee_amount(base_amount)
+    total_amount = base_amount + partner_fee
 
     if total_amount > 0 do
       with {:ok, user} <- ensure_user_merchant(user) do
-        create_paid_pay_in(assignment, user, subject_count, total_amount)
+        create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
       end
     else
       create_free_pay_in(fund, user_id, subject_count)
@@ -64,7 +66,8 @@ defmodule Systems.Budget.Public do
          } = assignment,
          %Account.User{id: user_id, merchant_uid: merchant_uid},
          subject_count,
-         total_amount
+         total_amount,
+         partner_fee
        ) do
     reward_per_participant = subject_reward || 0
     currency = get_currency(fund)
@@ -89,6 +92,9 @@ defmodule Systems.Budget.Public do
 
     return_url = return_url(assignment)
 
+    opts = [return_url: return_url]
+    opts = if partner_fee > 0, do: Keyword.put(opts, :partner_fee, partner_fee), else: opts
+
     with {:ok, provider_result} <-
            Payment.Public.create_transaction(
              merchant_uid,
@@ -98,7 +104,7 @@ defmodule Systems.Budget.Public do
              idempotence_key,
              description,
              metadata,
-             return_url: return_url
+             opts
            ),
          {:ok, transaction} <-
            %Budget.TransactionModel{}
@@ -107,7 +113,8 @@ defmodule Systems.Budget.Public do
              status: :pending,
              idempotence_key: idempotence_key,
              invoice_id: invoice_id,
-             subject_count: subject_count
+             subject_count: subject_count,
+             total_amount: total_amount
            })
            |> Ecto.Changeset.put_change(:user_id, user_id)
            |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
@@ -127,7 +134,8 @@ defmodule Systems.Budget.Public do
              status: :completed,
              idempotence_key: idempotence_key,
              invoice_id: invoice_id,
-             subject_count: subject_count
+             subject_count: subject_count,
+             total_amount: 0
            })
            |> Ecto.Changeset.put_change(:user_id, user_id)
            |> Ecto.Changeset.put_change(:target_fund_id, fund_id)

@@ -38,5 +38,6 @@ if config_env() == :dev do
     base_url: System.get_env("OPP_BASE_URL") || "https://api-sandbox.onlinebetaalplatform.nl/v1",
     api_key: System.get_env("OPP_API_KEY"),
     notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
-    merchant_uid: System.get_env("OPP_MERCHANT_UID")
+    merchant_uid: System.get_env("OPP_MERCHANT_UID"),
+    partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 end

@@ -11,6 +11,7 @@ defmodule Systems.Assignment.BudgetForm do
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
+  alias Systems.Payment
 
   @impl true
   def update(
@@ -45,20 +46,21 @@ defmodule Systems.Assignment.BudgetForm do
         fee_changeset: fee_changeset,
         subject_count: 0,
         reward_cents: reward_cents,
-        total_cents: 0
+        partner_fee_percentage: Payment.Public.partner_fee_percentage()
       )
+      |> assign_totals(0, reward_cents)
     }
   end
 
   @impl true
   def handle_event("update_slots", %{"slots" => %{"subject_count" => count_str}}, socket) do
     count = parse_int(count_str)
-    total_cents = count * socket.assigns.reward_cents
 
     {
       :noreply,
       socket
-      |> assign(subject_count: count, total_cents: total_cents)
+      |> assign(subject_count: count)
+      |> assign_totals(count, socket.assigns.reward_cents)
     }
   end
 
@@ -81,9 +83,9 @@ defmodule Systems.Assignment.BudgetForm do
           |> assign(
             info: updated_info,
             fee_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
-            reward_cents: reward_cents,
-            total_cents: subject_count * reward_cents
+            reward_cents: reward_cents
           )
+          |> assign_totals(subject_count, reward_cents)
         }
 
       {:error, changeset} ->
@@ -119,6 +121,17 @@ defmodule Systems.Assignment.BudgetForm do
   @impl true
   def handle_event("cancel", _, socket) do
     {:noreply, socket |> send_event(:parent, "budget_form_cancelled")}
+  end
+
+  defp assign_totals(socket, subject_count, reward_cents) do
+    base_cents = subject_count * reward_cents
+    fee_cents = Payment.Public.partner_fee_amount(base_cents)
+
+    assign(socket,
+      base_cents: base_cents,
+      fee_cents: fee_cents,
+      total_cents: base_cents + fee_cents
+    )
   end
 
   defp parse_int(str) when is_binary(str) do
@@ -194,19 +207,36 @@ defmodule Systems.Assignment.BudgetForm do
 
       <.spacing value="M" />
 
-      <div class="mb-2">
+      <div class="mb-3">
         <div class="text-title6 font-title6 text-grey1">
           <%= dgettext("eyra-assignment", "budget_form.costs.label") %>
         </div>
       </div>
-      <div class="text-bodylarge font-body text-grey1 font-bold">
-        <%= format_cents(@total_cents) %>
-        <span class="font-normal text-bodysmall text-grey2 ml-2">
-          | <%= dgettext("eyra-assignment", "budget_form.breakdown",
-            count: display_count(@subject_count),
-            reward: format_cents(@reward_cents)
-          ) %>
-        </span>
+      <div class="flex flex-col gap-1">
+        <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
+          <div>
+            <%= dgettext("eyra-assignment", "budget_form.subtotal.label",
+              count: display_count(@subject_count),
+              reward: format_cents(@reward_cents)
+            ) %>
+          </div>
+          <div><%= format_cents(@base_cents) %></div>
+        </div>
+        <%= if @fee_cents > 0 do %>
+          <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
+            <div>
+              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label",
+                percentage: @partner_fee_percentage
+              ) %>
+            </div>
+            <div><%= format_cents(@fee_cents) %></div>
+          </div>
+        <% end %>
+        <div class="border-t border-grey4 my-2"></div>
+        <div class="flex flex-row justify-between text-bodylarge font-body text-grey1 font-bold">
+          <div><%= dgettext("eyra-assignment", "budget_form.total.label") %></div>
+          <div><%= format_cents(@total_cents) %></div>
+        </div>
       </div>
 
       <.spacing value="L" />
