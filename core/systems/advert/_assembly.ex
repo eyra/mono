@@ -140,7 +140,7 @@ defmodule Systems.Advert.Assembly do
             } = promotion,
           assignment:
             %{
-              budget: budget,
+              fund: fund,
               auth_node: assignment_auth_node,
               info: info,
               workflow: workflow
@@ -155,7 +155,7 @@ defmodule Systems.Advert.Assembly do
     submission = Pool.Public.copy(submission)
     info = Assignment.Public.copy_info(info)
     workflow = Assignment.Public.copy_workflow(workflow)
-    assignment = Assignment.Public.copy(assignment, info, workflow, budget, assignment_auth_node)
+    assignment = Assignment.Public.copy(assignment, info, workflow, fund, assignment_auth_node)
 
     advert = Advert.Public.copy(advert, promotion, assignment, submission, advert_auth_node)
 

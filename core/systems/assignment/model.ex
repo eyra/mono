@@ -13,7 +13,7 @@ defmodule Systems.Assignment.Model do
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Project
@@ -31,7 +31,7 @@ defmodule Systems.Assignment.Model do
     belongs_to(:consent_agreement, Consent.AgreementModel, on_replace: :update)
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
-    belongs_to(:budget, Budget.Model, on_replace: :update)
+    belongs_to(:fund, Fund.Model, on_replace: :update)
     belongs_to(:auth_node, Core.Authorization.Node)
 
     has_one(:project_item, Project.ItemModel, foreign_key: :assignment_id)
@@ -73,9 +73,9 @@ defmodule Systems.Assignment.Model do
 
   def changeset(assignment, nil), do: changeset(assignment, %{})
 
-  def changeset(assignment, %Budget.Model{id: budget_id}) do
+  def changeset(assignment, %Fund.Model{id: fund_id}) do
     assignment
-    |> cast(%{budget_id: budget_id}, [:budget_id])
+    |> cast(%{fund_id: fund_id}, [:fund_id])
   end
 
   def changeset(assignment, attrs) do
@@ -113,7 +113,7 @@ defmodule Systems.Assignment.Model do
       consent_agreement: [:revisions],
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),
-      budget: [:currency, :fund, :reserve],
+      fund: [:currency, :available, :pending],
       auth_node: [:role_assignments]
     ]
   end

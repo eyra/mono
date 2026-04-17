@@ -7,7 +7,7 @@ defmodule Systems.Routes do
         :affiliate,
         :alliance,
         :assignment,
-        :budget,
+        :fund,
         :desktop,
         :document,
         :feldspar,

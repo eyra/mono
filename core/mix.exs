@@ -1,6 +1,10 @@
 defmodule Core.MixProject do
   use Mix.Project
 
+  def cli do
+    [preferred_envs: ["test.all": :test]]
+  end
+
   def project do
     [
       app: :core,

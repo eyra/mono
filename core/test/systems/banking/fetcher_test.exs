@@ -6,7 +6,7 @@ defmodule Systems.Banking.FetcherTest do
 
   alias Systems.{
     Bookkeeping,
-    Budget
+    Fund
   }
 
   setup :verify_on_exit!
@@ -26,9 +26,9 @@ defmodule Systems.Banking.FetcherTest do
 
   describe "fetch/1" do
     setup do
-      currency = Budget.Factories.create_currency("florijn", :legal, "ƒ", 2)
-      bank_account = Budget.Factories.create_bank_account("test_bank", {:emoji, "🚀"}, currency)
-      processor = %Processor{strategy: Systems.Budget.AccountStrategy, currency: :florijn}
+      currency = Fund.Factories.create_currency("florijn", :legal, "ƒ", 2)
+      bank_account = Fund.Factories.create_bank_account("test_bank", {:emoji, "🚀"}, currency)
+      processor = %Processor{strategy: Systems.Fund.AccountStrategy, currency: :florijn}
       state = %{processor: processor}
 
       %{processor: processor, state: state, currency: currency, bank_account: bank_account}

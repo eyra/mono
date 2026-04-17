@@ -4,7 +4,7 @@ defmodule Systems.Admin.SystemView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Citizen
 
   # Initial update
@@ -52,7 +52,7 @@ defmodule Systems.Admin.SystemView do
   @impl true
   def compose(:bank_account_form, %{user: user, locale: locale, active_bank_account: bank_account}) do
     %{
-      module: Budget.BankAccountForm,
+      module: Fund.BankAccountForm,
       params: %{
         title: dgettext("eyra-admin", "system.bank.accounts.new.title"),
         bank_account: bank_account,

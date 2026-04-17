@@ -12,7 +12,7 @@ defmodule Systems.Pool.Model do
 
   alias Systems.{
     Pool,
-    Budget,
+    Fund,
     Content,
     Org
   }
@@ -27,7 +27,7 @@ defmodule Systems.Pool.Model do
     field(:director, Ecto.Enum, values: [:student, :citizen])
     field(:archived, :boolean, default: false)
 
-    belongs_to(:currency, Budget.CurrencyModel)
+    belongs_to(:currency, Fund.CurrencyModel)
     belongs_to(:org, Org.NodeModel)
     belongs_to(:auth_node, Core.Authorization.Node)
 
@@ -71,7 +71,7 @@ defmodule Systems.Pool.Model do
 
   def submit(%Changeset{} = changeset), do: changeset
 
-  def submit(%Changeset{} = changeset, %User{} = user, %Budget.CurrencyModel{} = currency) do
+  def submit(%Changeset{} = changeset, %User{} = user, %Fund.CurrencyModel{} = currency) do
     changeset
     |> Changeset.put_assoc(:currency, currency)
     |> Changeset.put_assoc(:auth_node, auth_module().prepare_node(user, :owner))
@@ -86,7 +86,7 @@ defmodule Systems.Pool.Model do
         :auth_node
       ])
 
-  def preload_graph(:currency), do: [currency: Budget.CurrencyModel.preload_graph(:full)]
+  def preload_graph(:currency), do: [currency: Fund.CurrencyModel.preload_graph(:full)]
   def preload_graph(:org), do: [org: Org.NodeModel.preload_graph(:full)]
   def preload_graph(:submission), do: [submission: [:criteria]]
   def preload_graph(:auth_node), do: [auth_node: []]
