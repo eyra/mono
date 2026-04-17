@@ -377,8 +377,8 @@ defmodule Systems.Assignment.PublicTest do
              ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
-               fund: %{balance_credit: 1000, balance_debit: 1000},
-               reserve: %{balance_credit: 1000, balance_debit: 1000}
+               available: %{balance_credit: 1000, balance_debit: 1000},
+               pending: %{balance_credit: 1000, balance_debit: 1000}
              } = Fund.Public.get!(assignment.fund_id)
     end
 
@@ -403,8 +403,8 @@ defmodule Systems.Assignment.PublicTest do
              ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
-               fund: %{balance_credit: 1000, balance_debit: 3000},
-               reserve: %{balance_credit: 3000, balance_debit: 1000}
+               available: %{balance_credit: 1000, balance_debit: 3000},
+               pending: %{balance_credit: 3000, balance_debit: 1000}
              } = Fund.Public.get!(assignment.fund_id)
     end
 
@@ -432,8 +432,8 @@ defmodule Systems.Assignment.PublicTest do
              ] = Fund.Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
-               fund: %{balance_credit: 1000, balance_debit: 3000},
-               reserve: %{balance_credit: 3000, balance_debit: 3000}
+               available: %{balance_credit: 1000, balance_debit: 3000},
+               pending: %{balance_credit: 3000, balance_debit: 3000}
              } = Fund.Public.get!(assignment.fund_id)
     end
 

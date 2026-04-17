@@ -165,7 +165,9 @@ defmodule Core.MixProject do
         "assets.build"
       ],
       "lfs.pull": "cmd git lfs pull",
-      "test.all": ["ecto.create --quiet", "ecto.migrate", "test", "cmd cd ./assets && npm test"],
+      "test.exs": ["ecto.create --quiet", "ecto.migrate", "test"],
+      "test.js": "cmd cd ./assets && npm test",
+      "test.all": ["test.exs", "test.js"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.link": [

@@ -94,7 +94,7 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
-  def get!(id, preload \\ [:fund, :reserve]) when is_integer(id) do
+  def get!(id, preload \\ [:available, :pending]) when is_integer(id) do
     from(fund in Fund.Model, preload: ^preload)
     |> Repo.get!(id)
   end
@@ -429,7 +429,7 @@ defmodule Systems.Fund.Public do
               }
             }
           },
-          fund: %{identifier: fund_account}
+          available: %{identifier: fund_account}
         },
         %Fund.DepositModel{amount: amount, reference: reference}
       ) do
@@ -520,7 +520,7 @@ defmodule Systems.Fund.Public do
          %{
            deposit: nil,
            fund: %{
-             fund: %{identifier: fund_id}
+             available: %{identifier: fund_id}
            }
          } = reward
        ) do
@@ -530,7 +530,7 @@ defmodule Systems.Fund.Public do
   defp create_payment_transaction(
          %{
            fund: %{
-             reserve: %{identifier: reserve_id}
+             pending: %{identifier: reserve_id}
            }
          } = reward
        ) do
@@ -639,7 +639,7 @@ defmodule Systems.Fund.Public do
   defp deposit_attrs(
          idempotence_key,
          journal_message,
-         %Fund.Model{fund: %{identifier: fund_id}, reserve: %{identifier: reserve_id}},
+         %Fund.Model{available: %{identifier: fund_id}, pending: %{identifier: reserve_id}},
          amount
        ) do
     %{

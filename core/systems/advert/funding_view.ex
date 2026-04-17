@@ -198,13 +198,13 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp to_item(
-         %Fund.Model{id: id, name: name, fund: fund, currency: currency, icon: icon},
+         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon},
          %{id: selected_id},
          state,
          locale,
          target
        ) do
-    %{debit: debit, credit: credit} = Bookkeeping.Public.balance(fund)
+    %{debit: debit, credit: credit} = Bookkeeping.Public.balance(available)
     subtitle = Fund.CurrencyModel.label(currency, locale, credit - debit)
 
     selection_state =

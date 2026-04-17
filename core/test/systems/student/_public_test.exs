@@ -172,18 +172,18 @@ defmodule Systems.Student.PublicTest do
              currency: %{
                name: ^name
              },
-             fund: %{
+             available: %{
                balance_credit: 0,
                balance_debit: 0,
                identifier: ["fund", ^name]
              },
-             reserve: %{
+             pending: %{
                balance_credit: 0,
                balance_debit: 0,
                identifier: ["reserve", ^name]
              },
              rewards: []
-           } = Fund.Public.get_by_name(name, [:fund, :reserve, :rewards, :currency])
+           } = Fund.Public.get_by_name(name, [:available, :pending, :rewards, :currency])
 
     assert %{
              name: ^name,

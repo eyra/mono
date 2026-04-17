@@ -908,13 +908,13 @@ defmodule Core.Factories do
   def build(:fund, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
-    {fund_account, attributes} = Map.pop(attributes, :fund, build(:fund_account))
-    {reserve, attributes} = Map.pop(attributes, :reserve, build(:reserve))
+    {available, attributes} = Map.pop(attributes, :available, build(:fund_account))
+    {pending, attributes} = Map.pop(attributes, :pending, build(:reserve))
 
     %Fund.Model{
       currency: currency,
-      fund: fund_account,
-      reserve: reserve,
+      available: available,
+      pending: pending,
       auth_node: auth_node
     }
     |> struct!(attributes)

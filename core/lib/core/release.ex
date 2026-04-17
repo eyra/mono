@@ -9,6 +9,18 @@ defmodule Core.Release do
     end
   end
 
+  @doc """
+  Runs idempotent seeds for the current deploy environment.
+  Should be invoked from the release startup script after `migrate/0`.
+  """
+  def seed do
+    load_app()
+
+    for repo <- repos() do
+      {:ok, _, _} = Ecto.Migrator.with_repo(repo, fn _repo -> Core.Seeds.seed() end)
+    end
+  end
+
   def rollback(repo, version) do
     load_app()
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
