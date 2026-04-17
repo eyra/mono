@@ -202,7 +202,7 @@ defmodule Systems.Budget.Public do
   def complete_transaction(provider_uid) when is_binary(provider_uid) do
     transaction =
       get_transaction_by_provider_uid!(provider_uid)
-      |> Repo.preload(target_fund: [:fund, :reserve, currency_ledger: [:inbound, :outbound]])
+      |> Repo.preload(target_fund: [:available, :pending, currency_ledger: [:inbound, :outbound]])
 
     case transaction.status do
       :completed ->
@@ -217,7 +217,7 @@ defmodule Systems.Budget.Public do
          %Budget.TransactionModel{
            subject_count: subject_count,
            target_fund: %{
-             fund: %{identifier: fund_account_id},
+             available: %{identifier: fund_account_id},
              currency_ledger: %{inbound: %{identifier: inbound_account_id}}
            }
          } = transaction

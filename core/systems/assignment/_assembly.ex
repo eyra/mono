@@ -94,8 +94,8 @@ defmodule Systems.Assignment.Assembly do
     %Fund.Model{
       name: uuid,
       currency_ledger: currency_ledger,
-      fund: Systems.Bookkeeping.AccountModel.create({:fund, uuid}),
-      reserve: Systems.Bookkeeping.AccountModel.create({:reserve, uuid}),
+      available: Systems.Bookkeeping.AccountModel.create({:fund, uuid}),
+      pending: Systems.Bookkeeping.AccountModel.create({:reserve, uuid}),
       auth_node: auth_module().prepare_node(user, :owner)
     }
   end

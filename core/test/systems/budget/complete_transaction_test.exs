@@ -42,11 +42,11 @@ defmodule Systems.Budget.CompleteTransactionTest do
       |> Ecto.Changeset.change(%{name: "test-fund-#{System.unique_integer([:positive])}"})
       |> Ecto.Changeset.put_assoc(:auth_node, Factories.build(:auth_node))
       |> Ecto.Changeset.put_assoc(
-        :fund,
+        :available,
         Bookkeeping.AccountModel.create({:fund, Ecto.UUID.generate()})
       )
       |> Ecto.Changeset.put_assoc(
-        :reserve,
+        :pending,
         Bookkeeping.AccountModel.create({:reserve, Ecto.UUID.generate()})
       )
       |> Ecto.Changeset.put_change(:currency_ledger_id, currency_ledger.id)
