@@ -144,7 +144,8 @@ defmodule Systems.Fund.FundingPage do
   end
 
   defp to_square(
-         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon} = _fund,
+         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon} =
+           _fund,
          %{id: selected_id},
          locale
        ) do
