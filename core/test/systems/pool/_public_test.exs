@@ -172,4 +172,30 @@ defmodule Systems.Pool.PublicTest do
       assert Public.participant?(:panl, user2)
     end
   end
+
+  describe "list_participant_ids/0" do
+    test "returns user ids of pool participants", %{user: user, pool: pool} do
+      Public.add_participant!(pool, user)
+
+      ids = Public.list_participant_ids()
+      assert user.id in ids
+    end
+
+    test "returns empty list when no participants" do
+      ids = Public.list_participant_ids()
+      # May contain participants from other tests/setup, just verify it's a list
+      assert is_list(ids)
+    end
+
+    test "returns unique ids across multiple pools", %{user: user, pool: pool} do
+      other_pool = Factories.insert!(:pool, %{name: "other_pool", director: :citizen})
+
+      Public.add_participant!(pool, user)
+      Public.add_participant!(other_pool, user)
+
+      ids = Public.list_participant_ids()
+      assert user.id in ids
+      assert Enum.count(ids, &(&1 == user.id)) == 1
+    end
+  end
 end

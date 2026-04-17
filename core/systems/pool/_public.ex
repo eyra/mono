@@ -119,6 +119,19 @@ defmodule Systems.Pool.Public do
     auth_module().users_with_role(pool, :participant)
   end
 
+  def list_participant_ids do
+    pool_ids =
+      from(p in Pool.Model, select: p.auth_node_id)
+      |> Repo.all()
+
+    from(ra in Core.Authorization.RoleAssignment,
+      where: ra.node_id in ^pool_ids and ra.role == :participant,
+      select: ra.principal_id
+    )
+    |> Repo.all()
+    |> Enum.uniq()
+  end
+
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
   def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 

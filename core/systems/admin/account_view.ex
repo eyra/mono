@@ -74,10 +74,12 @@ defmodule Systems.Admin.AccountView do
   @max_users 50
 
   defp update_users(%{assigns: %{active_filters: filters, query: query, myself: myself}} = socket) do
+    filter_index = build_filter_index(filters)
+
     filtered =
       Account.Public.list_users([:profile])
       |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
-      |> query(filters)
+      |> query(filters, filter_index)
       |> query(query)
 
     users =
@@ -88,12 +90,58 @@ defmodule Systems.Admin.AccountView do
     assign(socket, users: users, user_count: Enum.count(filtered))
   end
 
+  defp build_filter_index(filters) do
+    index = %{}
+
+    index =
+      if :affiliate in filters do
+        affiliate_user_ids = Affiliate.Public.list_user_ids()
+        Map.put(index, :affiliate_user_ids, MapSet.new(affiliate_user_ids))
+      else
+        index
+      end
+
+    if :in_pool in filters do
+      pool_user_ids = Pool.Public.list_participant_ids()
+      Map.put(index, :pool_user_ids, MapSet.new(pool_user_ids))
+    else
+      index
+    end
+  end
+
   defp query(users, nil), do: users
   defp query(users, []), do: users
 
   defp query(users, query) when is_list(query) do
     users
     |> Enum.filter(&include?(&1, query))
+  end
+
+  defp query(users, filters, filter_index) when is_list(filters) do
+    users
+    |> Enum.filter(&include?(&1, filters, filter_index))
+  end
+
+  defp include?(_, [], _), do: true
+
+  defp include?(user, [term], index) do
+    include?(user, term, index)
+  end
+
+  defp include?(user, [term | rest], index) do
+    include?(user, term, index) and include?(user, rest, index)
+  end
+
+  defp include?(%Account.User{id: id}, :affiliate, %{affiliate_user_ids: ids}) do
+    MapSet.member?(ids, id)
+  end
+
+  defp include?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}) do
+    MapSet.member?(ids, id)
+  end
+
+  defp include?(user, filter, _index) when is_atom(filter) do
+    include?(user, filter)
   end
 
   defp include?(_, []), do: true
@@ -115,11 +163,8 @@ defmodule Systems.Admin.AccountView do
 
   defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
   defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
-  defp include?(%Account.User{} = user, :in_pool), do: Pool.Public.list_by_participant(user) != []
-
-  defp include?(%Account.User{} = user, :affiliate) do
-    Affiliate.Public.get_user(user) != {:error, :user_not_found}
-  end
+  defp include?(%Account.User{} = _user, :in_pool), do: false
+  defp include?(%Account.User{} = _user, :affiliate), do: false
 
   defp include?(%Account.UserProfileModel{fullname: fullname}, word)
        when not is_nil(fullname) and is_binary(word) do
