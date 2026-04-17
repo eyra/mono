@@ -37,34 +37,38 @@ defmodule Systems.Payment.Controller do
   defp process_event(%{type: type, object_uid: uid} = event) do
     Logger.info("[Payment.Webhook] Processing event type=#{type} object_uid=#{uid}")
     Logger.info("[Payment.Webhook] Full event: #{inspect(event)}")
+    handle_event(type, uid)
+  end
 
-    case type do
-      t when t in ["transaction.status_changed", "transaction.status.changed"] ->
-        case Systems.Payment.Public.get_transaction(uid) do
-          {:ok, %{status: status}} ->
-            Logger.info("[Payment.Webhook] Provider transaction status=#{status} for uid=#{uid}")
+  defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)
+  defp handle_event("transaction.status.changed", uid), do: handle_transaction_status_change(uid)
 
-            case status do
-              "completed" ->
-                result = Budget.Public.complete_transaction(uid)
-                Logger.info("[Payment.Webhook] Complete result: #{inspect(result)}")
+  defp handle_event(type, _uid) do
+    Logger.info("[Payment.Webhook] Ignoring event type=#{type}")
+  end
 
-              "failed" ->
-                result = Budget.Public.fail_transaction(uid)
-                Logger.info("[Payment.Webhook] Fail result: #{inspect(result)}")
+  defp handle_transaction_status_change(uid) do
+    case Systems.Payment.Public.get_transaction(uid) do
+      {:ok, %{status: status}} ->
+        Logger.info("[Payment.Webhook] Provider transaction status=#{status} for uid=#{uid}")
+        apply_transaction_status(status, uid)
 
-              other ->
-                Logger.info("[Payment.Webhook] Ignoring transaction status=#{other}")
-            end
-
-          {:error, error} ->
-            Logger.warning(
-              "[Payment.Webhook] Failed to fetch transaction #{uid}: #{inspect(error)}"
-            )
-        end
-
-      _ ->
-        Logger.info("[Payment.Webhook] Ignoring event type=#{type}")
+      {:error, error} ->
+        Logger.warning("[Payment.Webhook] Failed to fetch transaction #{uid}: #{inspect(error)}")
     end
+  end
+
+  defp apply_transaction_status("completed", uid) do
+    result = Budget.Public.complete_transaction(uid)
+    Logger.info("[Payment.Webhook] Complete result: #{inspect(result)}")
+  end
+
+  defp apply_transaction_status("failed", uid) do
+    result = Budget.Public.fail_transaction(uid)
+    Logger.info("[Payment.Webhook] Fail result: #{inspect(result)}")
+  end
+
+  defp apply_transaction_status(status, _uid) do
+    Logger.info("[Payment.Webhook] Ignoring transaction status=#{status}")
   end
 end

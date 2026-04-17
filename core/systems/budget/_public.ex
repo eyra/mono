@@ -244,7 +244,7 @@ defmodule Systems.Budget.Public do
     |> Multi.run(:update_subject_count, fn _, _ ->
       increment_subject_count(transaction.target_fund_id, subject_count)
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def fail_transaction(provider_uid) when is_binary(provider_uid) do
