@@ -112,4 +112,4 @@ msgstr "Doorgaan"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "U staat op het punt een vragenlijst in een nieuw tabblad te starten. Zodra u de vragenlijst hebt afgerond, wordt u automatisch teruggeleid naar deze pagina."
+msgstr "U staat op het punt een vragenlijst te starten. Zodra u de vragenlijst heeft afgerond, komt u automatisch terug op deze pagina."

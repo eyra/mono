@@ -59,7 +59,7 @@ defmodule Systems.Project.CreateItemView do
             type: :primary,
             label: dgettext("eyra-project", "create_item_popup.create.button")
           },
-          "data-testid": "create-item-button"
+          testid: "create-item-button"
         }
       ]
     )

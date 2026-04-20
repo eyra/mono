@@ -67,7 +67,8 @@ defmodule Systems.Workflow.BuilderView do
           ordering_enabled?: ordering_enabled?,
           user: user,
           timezone: timezone,
-          uri_origin: uri_origin
+          uri_origin: uri_origin,
+          workflow_config: workflow_config
         } = assigns
       ) do
     item = find_by_id(ordered_items, item_id)
@@ -83,7 +84,8 @@ defmodule Systems.Workflow.BuilderView do
         timezone: timezone,
         uri_origin: uri_origin,
         relative_position: relative_position,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        workflow_config: workflow_config
       }
     }
   end

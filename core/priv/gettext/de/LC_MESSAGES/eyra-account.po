@@ -184,14 +184,6 @@ msgid "panl.privacy.policy.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Datenschutzerklärung"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Allgemeine Geschäftsbedingungen"
-
-#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Ich stimme den Next %{terms_link} und der %{privacy_link} zu"
 

@@ -43,7 +43,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
     steps = [:profile]
 
     steps =
-      if Pool.Public.panl_participant?(user) do
+      if Pool.Public.participant?(:panl, user) do
         steps ++ [:features]
       else
         steps

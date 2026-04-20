@@ -18,5 +18,8 @@
       "mcp__flux__dev_get_issue",
       "mcp__flux__dev_add_comment"
     ]
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true
   }
 }

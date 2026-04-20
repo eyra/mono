@@ -23,6 +23,17 @@ if config_env() == :prod do
     base_url: base_url,
     upload_path: upload_path
 
+  # Deployment environment for seed modules. Must be set explicitly on Fly
+  # (we only run :dev, :test, :staging on Fly — never :prod).
+  config :core,
+         :deploy_env,
+         System.fetch_env!("DEPLOY_ENV") |> String.to_atom()
+
+  # UserCheck email validation API key
+  if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
+    config :core, Frameworks.UserCheck, api_key: usercheck_api_key
+  end
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
@@ -115,7 +126,9 @@ if config_env() == :prod do
 
   config :core, Core.Repo,
     url: System.fetch_env!("DATABASE_URL"),
-    socket_options: if(System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: [])
+    socket_options: if(System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []),
+    # Detect stale connections after app wakes from suspend
+    idle_interval: 1000
 
   # =============================================================================
   # TIGRIS OBJECT STORAGE (S3-compatible)
@@ -230,6 +243,11 @@ if config_env() == :prod do
 
   # No clustering for dev environment (single node)
   config :core, :dist_hosts, []
+
+  config :core, Systems.Payment.Provider.OPP,
+    base_url: System.get_env("OPP_BASE_URL"),
+    api_key: System.get_env("OPP_API_KEY"),
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

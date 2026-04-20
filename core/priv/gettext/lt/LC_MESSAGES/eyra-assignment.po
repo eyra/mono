@@ -198,7 +198,7 @@ msgstr "Sutikimas atmestas"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Ačiū. Dalyvavimas baigtas. Galite uždaryti langą."
+msgstr "Ačiū už jūsų dalyvavimą."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -290,19 +290,11 @@ msgstr "Leidžia dalyviams pateikti savo metodą iššūkiui su GitHub saugyklos
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.annotation"
-msgstr "Naudokite žemiau pateiktą URL adresą, kad pakviestumėte dalyvius. Dalyviai turi prisijungti arba susikurti paskyrą, kad galėtų dalyvauti."
+msgstr "Naudokite toliau pateiktą nuorodą dalyviams pakviesti. Pakeiskite 'participant_id' unikaliu kiekvieno dalyvio identifikatoriumi. Dalyviai bus kviečiami palikti savo el. pašto adresą būsimiesiems tyrimams per Panl."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
 msgstr "Dalyvio kvietimo nuoroda"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr "Pateikite dalyviams instrukcijas."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr "Leidžia dalyviams užsisakyti laiko tarpsnį jūsų vietoje atliekamam tyrimui."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert.body"
@@ -514,3 +506,47 @@ msgstr "Aktyvavimo el. laiškas išsiųstas!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Aktyvuokite savo paskyrą"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Palikite savo el. pašto adresą, kad gautumėte informacijos apie dalyvavimą tyrimuose per panl."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "El. pašto adresas"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Šis el. pašto adresas jau buvo naudotas."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Naudokite kitą el. pašto adresą."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Įveskite galiojantį el. pašto adresą."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Kažkas nutiko. Bandykite dar kartą."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Siųsti"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Netrukus gausite el. laišką su daugiau informacijos."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Ačiū, kad domitės panl"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Norite dažniau dalyvauti tyrimuose?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Naudokite asmeninį el. pašto adresą, ne bendrinamą (pvz. info@, admin@)."
