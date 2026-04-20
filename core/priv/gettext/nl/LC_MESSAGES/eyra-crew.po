@@ -52,7 +52,7 @@ msgstr "Gestart"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"
-msgstr "Het Next-platform biedt open-source, direct beschikbare softwarediensten die zijn ontworpen om uw onderzoek efficiënt te laten verlopen. Ze worden door Eyra ontwikkeld, voor en samen met onderzoekers, en worden voortdurend verbeterd. Klaar om aan de slag te gaan? U vindt hieronder alles wat u nodig hebt."
+msgstr "Het Next-platform biedt open-source, direct beschikbare softwarediensten die zijn ontworpen om je onderzoek efficiënt te laten verlopen. Ze worden door Eyra ontwikkeld, voor en samen met onderzoekers, en worden voortdurend verbeterd. Klaar om aan de slag te gaan? Je vindt hieronder alles wat je nodig hebt."
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.image_alt"
@@ -72,7 +72,7 @@ msgstr "Ontdek de diensten"
 
 #, elixir-autogen, elixir-format
 msgid "home.services.description"
-msgstr "Benieuwd naar de softwarediensten die u op het platform kunt gebruiken? Klik op de knop hieronder om de beschikbare diensten en bijbehorende prijzen te bekijken. Het Next-platform is advertentievrij en hanteert een eerlijk prijsmodel om de lange termijn duurzaamheid te ondersteunen. Door een dienst aan te schaffen, draagt u direct bij aan het open ecosysteem dat het platform beschikbaar houdt voor onderzoekers zoals u."
+msgstr "Benieuwd naar de softwarediensten die je op het platform kunt gebruiken? Klik op de knop hieronder om de beschikbare diensten en bijbehorende prijzen te bekijken. Het Next-platform is advertentievrij en hanteert een eerlijk prijsmodel om de lange termijn duurzaamheid te ondersteunen. Door een dienst aan te schaffen, draag je direct bij aan het open ecosysteem dat het platform beschikbaar houdt voor onderzoekers."
 
 #, elixir-autogen, elixir-format
 msgid "home.services.image_alt"
@@ -96,7 +96,7 @@ msgstr "Account aanmaken"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.description"
-msgstr "Start uw eerste project en kies een softwaredienst. U zult zien hoe eenvoudig het is om alles in te stellen en aan te passen."
+msgstr "Start je eerste project en kies een softwaredienst. Je zult zien hoe eenvoudig het is om alles in te stellen en aan te passen."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step2.title"
@@ -104,7 +104,7 @@ msgstr "Maak een project aan"
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.description"
-msgstr "Bekijk en deel uw project gratis met andere platformgebruikers. Er geldt pas een vergoeding wanneer u publiceert of een dienst gebruikt voor uw onderzoek."
+msgstr "Bekijk en deel je project gratis met andere platformgebruikers. Er geldt pas een vergoeding wanneer je publiceert of een dienst gebruikt voor je onderzoek."
 
 #, elixir-autogen, elixir-format
 msgid "home.steps.step3.title"

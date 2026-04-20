@@ -434,7 +434,7 @@ msgstr "Invite link"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
-msgstr "The default language for Panl studies is dutch"
+msgstr "The default language for Panl studies is Dutch"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body.declined"

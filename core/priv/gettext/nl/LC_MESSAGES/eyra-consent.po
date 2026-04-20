@@ -17,7 +17,7 @@ msgstr "<div>Voeg hier de voorwaarden toe waar deelnemers goedkeuring op moeten 
 
 #, elixir-autogen, elixir-format
 msgid "click_wrap.consent.validation"
-msgstr "Gaat u akkoord met de bovenstaande voorwaarden?"
+msgstr "Ga je akkoord met de bovenstaande voorwaarden?"
 
 #, elixir-autogen, elixir-format
 msgid "locked.error.message"
