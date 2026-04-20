@@ -40,4 +40,6 @@ if config_env() == :dev do
     notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
     merchant_uid: System.get_env("OPP_MERCHANT_UID"),
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
+
+  config :core, payment_provider: Core.Config.payment_provider()
 end

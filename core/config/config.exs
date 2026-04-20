@@ -99,7 +99,8 @@ config :core,
   banking_backend: Systems.Banking.Dummy,
   payment_provider: Systems.Payment.Provider.Local,
   payment_providers: %{
-    "opp" => Systems.Payment.Provider.OPP
+    "opp" => Systems.Payment.Provider.OPP,
+    "local" => Systems.Payment.Provider.Local
   },
   tool_directors: [:assignment]
 

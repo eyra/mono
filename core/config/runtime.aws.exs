@@ -280,6 +280,8 @@ if config_env() == :prod do
     merchant_uid: System.get_env("OPP_MERCHANT_UID"),
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 
+  config :core, payment_provider: Core.Config.payment_provider()
+
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do

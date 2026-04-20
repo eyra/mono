@@ -47,8 +47,6 @@ verify_mode =
     _ -> :verify_peer
   end
 
-config :core, payment_provider: Systems.Payment.Provider.OPP
-
 config :core, skip_webhook_verification: true
 
 config :core, Core.Repo,
