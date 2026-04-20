@@ -122,4 +122,4 @@ msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Jūs ketinate pradėti pildyti anketą naujame lange. Baigę pildyti anketą, būsite automatiškai nukreipti atgal į šį puslapį."
+msgstr "Jūs ketinate pradėti pildyti anketą. Kai ją užbaigsite, automatiškai grįšite į šį puslapį."

@@ -12,12 +12,12 @@ defmodule Frameworks.Pixel.Button do
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
   attr(:enabled?, :boolean, default: true)
-  attr(:"data-testid", :string, default: nil)
+  attr(:testid, :string, default: nil)
 
   def dynamic(assigns) do
-    # Pass data-testid to action
+    # Forward testid to the action so it lands on the actual interactive element
     assigns =
-      assign(assigns, :action, Map.put(assigns.action, :"data-testid", assigns[:"data-testid"]))
+      assign(assigns, :action, Map.put(assigns.action, :testid, assigns.testid))
 
     ~H"""
     <%= if @enabled? do %>
@@ -25,7 +25,7 @@ defmodule Frameworks.Pixel.Button do
         <.face {@face} />
       </.action>
     <% else %>
-      <div class="opacity-30 cursor-not-allowed" data-testid={assigns[:"data-testid"]}>
+      <div class="opacity-30 cursor-not-allowed" data-testid={@testid}>
         <.face {@face} />
       </div>
     <% end %>

@@ -18,6 +18,12 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :core, :deploy_env, :local
 
+# UserCheck email validation. Default to real HTTP client; dev/test override to mock.
+config :core, Frameworks.UserCheck,
+  client: Frameworks.UserCheck.HTTPClient,
+  base_url: "https://api.usercheck.com",
+  timeout: 2_000
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,

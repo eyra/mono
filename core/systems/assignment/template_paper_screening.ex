@@ -36,6 +36,8 @@ defmodule Systems.Assignment.TemplatePaperScreening do
       ]
     end
 
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
+
     def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: true,

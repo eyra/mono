@@ -85,7 +85,7 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event("close_modal", %{"item" => modal_id}, socket) do
-    {:noreply, socket |> handle_close_modal(modal_id)}
+    {:noreply, socket |> handle_close_modal(modal_id) |> assign(modal_toolbar_buttons: [])}
   end
 
   @impl true

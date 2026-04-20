@@ -188,7 +188,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Thank you. You have finished. You can now close the window."
+msgstr "Thank you for your participation."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -280,19 +280,11 @@ msgstr "Enables participants to submit their method to the challenge with a GitH
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr "Use the url below to invite participants. Participants need to sign in or create an account to participate."
+msgstr "Use the link below to invite participants. Replace 'participant_id' with a unique identifier for each participant. Participants will be invited to leave their email for future research via Panl."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
 msgstr "Participant invite link"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr "Provide instructions for participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr "Enables participants to book a time slot for your on-site study."
 
 #, elixir-autogen, elixir-format
 msgid "advert.body"
@@ -503,3 +495,47 @@ msgstr "Activation email sent!"
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
 msgstr "Activate your account"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Leave your email address to receive information about participating in research via panl."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "Email address"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "This email address has already been used."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Please use a different email address."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Please enter a valid email address."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Something went wrong. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Submit"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "You will receive an email with more information soon."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Thank you for your interest in panl"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Want to participate in research more often?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Please use a personal email address, not a shared one (e.g. info@, admin@)."

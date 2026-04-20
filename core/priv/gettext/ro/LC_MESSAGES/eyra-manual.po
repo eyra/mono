@@ -50,7 +50,7 @@ msgstr "Editați manualul"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "setup.annotation"
-msgstr "<div><h1>Cum se configurează instrucțiunile pentru participanți?</h1><ul><li>Creați <strong>secțiuni</strong>, astfel încât participanții să poată naviga la secțiunea relevantă.</li><li>Utilizați <strong>etichete</strong> de secțiune pentru a specifica cazuri de utilizare, cum ar fi <i>iPhone</i> sau <i>Android</i>.</li><li>Furnizați mai multe <strong>instrucțiuni</strong> succinte în fiecare secțiune, inclusiv <b>capturi de ecran</b> relevante pentru mai multă claritate.</li></ul></div>"
+msgstr "<div><h1>Cum se configurează instrucțiunile pentru participanți?</h1><ul><li>Creați <strong>secțiuni</strong> pentru a organiza instrucțiunile în părți clare.</li><li>Utilizați <strong>etichete</strong> de secțiune pentru a ajuta participanții să găsească secțiunea relevantă.</li><li>Adăugați mai multe <strong>instrucțiuni</strong> scurte în fiecare secțiune.</li><li>Includeți <strong>imagini</strong> pentru ca instrucțiunile să fie mai ușor de urmat.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"
