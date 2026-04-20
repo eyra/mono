@@ -115,6 +115,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
 
     # Navigate to the advert
     researcher_session
+    |> assert_has(Query.css("[data-testid='goto-advert-button']"))
     |> click(Query.css("[data-testid='goto-advert-button']"))
     |> assert_has(Query.css("[data-phx-main].phx-connected"))
 
