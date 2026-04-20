@@ -225,9 +225,7 @@ defmodule Systems.Assignment.BudgetForm do
         <%= if @fee_cents > 0 do %>
           <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
             <div>
-              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label",
-                percentage: @partner_fee_percentage
-              ) %>
+              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label") %>
             </div>
             <div><%= format_cents(@fee_cents) %></div>
           </div>

@@ -514,7 +514,7 @@ msgstr "Subtotal (%{count} × %{reward} reward)"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr "Service fee (%{percentage}%)"
+msgstr "Service fee"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
