@@ -7,7 +7,7 @@ defmodule Systems.Student.UserForm do
   alias Systems.Account
   alias Systems.Account.FeaturesModel
   alias Systems.Student
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Content
 
   @impl true
@@ -40,7 +40,7 @@ defmodule Systems.Student.UserForm do
 
   defp courses_finised(user, year) do
     user
-    |> Budget.Public.list_wallets()
+    |> Fund.Public.list_wallets()
     |> Enum.filter(
       &(year?(&1, year) and
           finished?(&1))

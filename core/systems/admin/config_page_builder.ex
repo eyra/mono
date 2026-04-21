@@ -3,7 +3,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Citizen
   alias Systems.Org
   alias Systems.Pool
@@ -151,7 +151,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
   # Helper functions
 
   defp get_bank_accounts do
-    Budget.Public.list_bank_accounts(Budget.BankAccountModel.preload_graph(:full))
+    Fund.Public.list_bank_accounts(Fund.BankAccountModel.preload_graph(:full))
   end
 
   defp get_bank_account_items(%{locale: locale}) do
@@ -160,7 +160,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp get_citizen_pools do
-    Citizen.Public.list_pools(currency: Budget.CurrencyModel.preload_graph(:full))
+    Citizen.Public.list_pools(currency: Fund.CurrencyModel.preload_graph(:full))
   end
 
   defp get_citizen_pool_items(%{locale: locale}) do
@@ -169,10 +169,10 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp to_view_model(
-         %Budget.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
+         %Fund.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
          locale
        ) do
-    subtitle = Budget.CurrencyModel.title(currency, locale)
+    subtitle = Fund.CurrencyModel.title(currency, locale)
 
     %{
       icon: icon,
@@ -186,7 +186,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
          %Pool.Model{id: id, name: name, icon: icon, currency: currency},
          locale
        ) do
-    subtitle = Budget.CurrencyModel.title(currency, locale)
+    subtitle = Fund.CurrencyModel.title(currency, locale)
 
     %{
       icon: icon,

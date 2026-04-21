@@ -122,6 +122,11 @@ defmodule Systems.Affiliate.Public do
     register_user(identifier, affiliate)
   end
 
+  def list_user_ids do
+    from(au in Affiliate.User, select: au.user_id, distinct: true)
+    |> Repo.all()
+  end
+
   def get_user(%Account.User{} = user) do
     user =
       from(au in Affiliate.User,

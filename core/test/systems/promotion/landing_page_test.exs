@@ -6,7 +6,7 @@ defmodule Systems.Promotion.LandingPageTest do
   alias Systems.Assignment
   # alias Systems.Promotion
   # alias Systems.Crew
-  alias Systems.Budget
+  alias Systems.Fund
 
   describe "show landing page for: advert -> assignment -> alliance_tool" do
     setup [:login_as_member]
@@ -17,8 +17,8 @@ defmodule Systems.Promotion.LandingPageTest do
       assignment_auth_node = Factories.insert!(:auth_node, %{parent: advert_auth_node})
       tool_auth_node = Factories.insert!(:auth_node, %{parent: assignment_auth_node})
 
-      currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
-      budget = Budget.Factories.create_budget("test_1234", currency)
+      currency = Fund.Factories.create_currency("test_1234", :legal, "ƒ", 2)
+      fund = Fund.Factories.create_fund("test_1234", currency)
 
       pool =
         Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
@@ -36,7 +36,7 @@ defmodule Systems.Promotion.LandingPageTest do
           consent_agreement,
           workflow,
           assignment_auth_node,
-          budget
+          fund
         )
 
       promotion =

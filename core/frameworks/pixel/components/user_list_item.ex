@@ -18,7 +18,7 @@ defmodule Frameworks.Pixel.UserListItem do
   defp update_assigns_for_item(_, item, socket) do
     socket =
       socket
-      |> assign_new(:info, fn -> nil end)
+      |> assign(:info, item[:info])
       |> assign(:confirm_row_visible?, item[:confirm_row_visible?] || false)
       |> assign(:confirm_row_text, item[:confirm_row_text])
       |> assign(:confirm_row_action_buttons, item[:confirm_row_action_buttons])

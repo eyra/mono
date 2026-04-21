@@ -10,7 +10,7 @@ defmodule Systems.Student.Public do
 
   alias Systems.{
     Org,
-    Budget,
+    Fund,
     Bookkeeping,
     Pool,
     Student
@@ -151,7 +151,7 @@ defmodule Systems.Student.Public do
     idempotence_key =
       "type=migrate_wallets,from=#{last_year_currency},to=#{current_year_currency},user=#{user_id}"
 
-    Budget.Public.move_wallet_balance(
+    Fund.Public.move_wallet_balance(
       last_year_wallet,
       current_year_wallet,
       idempotence_key,
@@ -256,7 +256,7 @@ defmodule Systems.Student.Public do
     pool_name = "vu_sbe_rpr_year#{study_year}_#{academic_year}"
 
     %{currency: currency} =
-      create_currency_and_budget!(pool_name, [{:en, "%{amount} credit", "%{amount} credits"}])
+      create_currency_and_fund!(pool_name, [{:en, "%{amount} credit", "%{amount} credits"}])
 
     create_pool(target, pool_name, currency, rpr)
   end
@@ -268,9 +268,9 @@ defmodule Systems.Student.Public do
     end
   end
 
-  defp create_currency_and_budget!(name, label) do
-    case Budget.Public.get_by_name(name, [:currency]) do
-      nil -> Budget.Public.create_currency_and_budget(name, {:emoji, "🏫"}, :virtual, 0, label)
+  defp create_currency_and_fund!(name, label) do
+    case Fund.Public.get_by_name(name, [:currency]) do
+      nil -> Fund.Public.create_currency_and_fund(name, {:emoji, "🏫"}, :virtual, 0, label)
       budget -> budget
     end
   end

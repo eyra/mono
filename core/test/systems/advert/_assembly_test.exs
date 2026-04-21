@@ -11,7 +11,7 @@ defmodule Systems.Advert.AssemblyTest do
   # alias Systems.Workflow
   # alias Systems.Alliance
   # alias Systems.Pool
-  alias Systems.Budget
+  alias Systems.Fund
 
   setup_all do
     Mox.defmock(Systems.Advert.AssemblyTest.UnsplashMockClient,
@@ -25,11 +25,11 @@ defmodule Systems.Advert.AssemblyTest do
   end
 
   setup do
-    currency = Budget.Factories.create_currency("test_1234", :legal, "ƒ", 2)
-    budget = Budget.Factories.create_budget("test_1234", currency)
+    currency = Fund.Factories.create_currency("test_1234", :legal, "ƒ", 2)
+    fund = Fund.Factories.create_fund("test_1234", currency)
     pool = Factories.insert!(:pool, %{name: "test_1234", director: :citizen, currency: currency})
 
-    {:ok, currency: currency, budget: budget, pool: pool}
+    {:ok, currency: currency, fund: fund, pool: pool}
   end
 
   describe "advert assembly" do

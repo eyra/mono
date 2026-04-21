@@ -193,14 +193,6 @@ msgid "panl.privacy.policy.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Privatumo politika"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Naudojimo sąlygos"
-
-#, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Sutinku su Next %{terms_link} ir %{privacy_link}"
 

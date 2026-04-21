@@ -122,7 +122,7 @@ defmodule Systems.Admin.OrgView do
 
       <div class="flex flex-row items-center justify-center mb-6 md:mb-8 lg:mb-10">
         <div class="h-full">
-          <Text.title2 margin="" data-testid="org-title"><%= @vm.title %> <span class="text-primary"><%= @vm.org_count %></span></Text.title2>
+          <Text.title2 margin="" testid="org-title"><%= @vm.title %> <span class="text-primary"><%= @vm.org_count %></span></Text.title2>
         </div>
         <div class="flex-grow">
         </div>

@@ -5,23 +5,23 @@ defmodule Systems.Advert.PublicTest do
     alias Systems.Advert
     alias Systems.Crew
     alias Systems.Bookkeeping
-    alias Systems.Budget
+    alias Systems.Fund
 
     alias CoreWeb.UI.Timestamp
     alias Core.Factories
 
     setup do
-      currency = Budget.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
-      budget = Budget.Factories.create_budget("test", currency)
+      currency = Fund.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
+      fund = Fund.Factories.create_fund("test", currency)
       user = Factories.insert!(:member)
-      {:ok, currency: currency, budget: budget, user: user}
+      {:ok, currency: currency, fund: fund, user: user}
     end
 
     test "mark_expired_debug?/0 should mark 1 expired task in online advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
-      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :accepted, 1, budget)
+      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       task = Advert.Factories.create_task(["task1"], crew, :pending, false, 31)
 
@@ -31,10 +31,10 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/0 should mark 0 expired tasks in submitted advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
-      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :submitted, 1, budget)
+      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :submitted, 1, fund)
 
       task = Advert.Factories.create_task(["task1"], crew, :pending, false, 31)
 
@@ -44,13 +44,13 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/0 should mark 1 expired tasks in closed advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
 
       %{assignment: %{crew: crew}} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget, nil, schedule_end)
+        Advert.Factories.create_advert(user, :accepted, 1, fund, nil, schedule_end)
 
       task = Advert.Factories.create_task(["task1"], crew, :pending, false, 31)
 
@@ -60,7 +60,7 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/1 should mark 1 expired tasks in scheduled advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
@@ -71,7 +71,7 @@ defmodule Systems.Advert.PublicTest do
           user,
           :accepted,
           1,
-          budget,
+          fund,
           schedule_start,
           schedule_end
         )
@@ -84,10 +84,10 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/1 should mark 1 expired tasks in submitted advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
-      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :submitted, 1, budget)
+      %{assignment: %{crew: crew}} = Advert.Factories.create_advert(user, :submitted, 1, fund)
 
       task = Advert.Factories.create_task(["task1"], crew, :pending, false, 31)
 
@@ -97,13 +97,13 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/1 should mark 1 expired tasks in closed advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       schedule_end = yesterday() |> Timestamp.format_user_input_date()
 
       %{assignment: %{crew: crew}} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget, nil, schedule_end)
+        Advert.Factories.create_advert(user, :accepted, 1, fund, nil, schedule_end)
 
       task = Advert.Factories.create_task(["task1"], crew, :pending, false, 31)
 
@@ -113,7 +113,7 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "mark_expired_debug?/0 should mark 1 expired tasks in scheduled advert", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       schedule_start = tomorrow() |> Timestamp.format_user_input_date()
@@ -124,7 +124,7 @@ defmodule Systems.Advert.PublicTest do
           user,
           :accepted,
           1,
-          budget,
+          fund,
           schedule_start,
           schedule_end
         )
@@ -136,14 +136,14 @@ defmodule Systems.Advert.PublicTest do
       assert %{expired: true} = Crew.Public.get_task!(task.id)
     end
 
-    test "payout_participant/2 One transaction of one participant", %{budget: budget, user: user} do
+    test "payout_participant/2 One transaction of one participant", %{fund: fund, user: user} do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       Advert.Factories.create_task(["task1"], participant, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, participant, budget)
+      Fund.Factories.create_reward(assignment, participant, fund)
 
       Advert.Public.payout_participant(assignment, participant)
 
@@ -163,20 +163,20 @@ defmodule Systems.Advert.PublicTest do
                Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 Two transactions of one participant", %{budget: budget, user: user} do
+    test "payout_participant/2 Two transactions of one participant", %{fund: fund, user: user} do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       %{assignment: %{crew: crew2} = assignment2} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       Advert.Factories.create_task(["task1"], participant, crew1, :accepted, false, 31)
       Advert.Factories.create_task(["task2"], participant, crew2, :accepted, false, 31)
 
-      Budget.Factories.create_reward(assignment1, participant, budget)
-      Budget.Factories.create_reward(assignment2, participant, budget)
+      Fund.Factories.create_reward(assignment1, participant, fund)
+      Fund.Factories.create_reward(assignment2, participant, fund)
 
       Advert.Public.payout_participant(assignment1, participant)
       Advert.Public.payout_participant(assignment2, participant)
@@ -198,27 +198,27 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "payout_participant/2 Two transactions of two participants", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       participant1 = Factories.insert!(:member, %{creator: false})
       participant2 = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       %{assignment: %{crew: crew2} = assignment2} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       Advert.Factories.create_task(["task1"], participant1, crew1, :accepted, false, 31)
       Advert.Factories.create_task(["task2"], participant1, crew2, :accepted, false, 31)
       Advert.Factories.create_task(["task3"], participant2, crew1, :accepted, false, 31)
       Advert.Factories.create_task(["task4"], participant2, crew2, :accepted, false, 31)
 
-      Budget.Factories.create_reward(assignment1, participant1, budget)
-      Budget.Factories.create_reward(assignment2, participant1, budget)
-      Budget.Factories.create_reward(assignment1, participant2, budget)
-      Budget.Factories.create_reward(assignment2, participant2, budget)
+      Fund.Factories.create_reward(assignment1, participant1, fund)
+      Fund.Factories.create_reward(assignment2, participant1, fund)
+      Fund.Factories.create_reward(assignment1, participant2, fund)
+      Fund.Factories.create_reward(assignment2, participant2, fund)
 
       Advert.Public.payout_participant(assignment1, participant1)
       Advert.Public.payout_participant(assignment2, participant1)
@@ -250,16 +250,16 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "payout_participant/2 One transaction of one participant (via signals)", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       task = Advert.Factories.create_task(["task1"], participant, crew, :pending, false, 31)
-      Budget.Factories.create_reward(assignment, participant, budget)
+      Fund.Factories.create_reward(assignment, participant, fund)
 
       # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task)
@@ -281,14 +281,14 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "payout_participant/2 One transaction of one participant failed: task already accepted (via signals)",
-         %{budget: budget, user: user} do
+         %{fund: fund, user: user} do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       task = Advert.Factories.create_task(["task1"], participant, crew, :accepted, false, 31)
-      Budget.Factories.create_reward(assignment, participant, budget)
+      Fund.Factories.create_reward(assignment, participant, fund)
 
       # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task)
@@ -303,27 +303,27 @@ defmodule Systems.Advert.PublicTest do
     end
 
     test "payout_participant/2 Multiple transactions of two participants (via signals)", %{
-      budget: budget,
+      fund: fund,
       user: user
     } do
       participant1 = Factories.insert!(:member, %{creator: false})
       participant2 = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       %{assignment: %{crew: crew2} = assignment2} =
-        Advert.Factories.create_advert(user, :accepted, 1, budget)
+        Advert.Factories.create_advert(user, :accepted, 1, fund)
 
       task1 = Advert.Factories.create_task(["task1"], participant1, crew1, :pending, false, 31)
       task2 = Advert.Factories.create_task(["task2"], participant1, crew2, :pending, false, 31)
       task3 = Advert.Factories.create_task(["task3"], participant2, crew1, :pending, false, 31)
       _task4 = Advert.Factories.create_task(["task4"], participant2, crew2, :pending, false, 31)
 
-      Budget.Factories.create_reward(assignment1, participant1, budget)
-      Budget.Factories.create_reward(assignment2, participant1, budget)
-      Budget.Factories.create_reward(assignment1, participant2, budget)
-      Budget.Factories.create_reward(assignment2, participant2, budget)
+      Fund.Factories.create_reward(assignment1, participant1, fund)
+      Fund.Factories.create_reward(assignment2, participant1, fund)
+      Fund.Factories.create_reward(assignment1, participant2, fund)
+      Fund.Factories.create_reward(assignment2, participant2, fund)
 
       # accept task should send signal to advert to reward participant
       Crew.Public.accept_task(task1)

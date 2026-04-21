@@ -287,14 +287,6 @@ msgid "invite.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr ""
 
@@ -502,4 +494,48 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "activate_account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
 msgstr ""

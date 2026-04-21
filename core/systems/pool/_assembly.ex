@@ -2,7 +2,7 @@ defmodule Systems.Pool.Assembly do
   @moduledoc """
   Assembly module for creating and managing pool-related entities.
   """
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Org
   alias Systems.Pool
 
@@ -25,7 +25,7 @@ defmodule Systems.Pool.Assembly do
   end
 
   defp create_panl_pool do
-    currency = Budget.Assembly.get_or_create_euro()
+    currency = Fund.Assembly.get_or_create_euro()
     org = get_or_create_panl_org()
 
     Pool.Public.create!(@panl_name, @panl_target, currency, org, @panl_director)

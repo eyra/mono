@@ -52,7 +52,7 @@ defmodule CoreWeb.Endpoint do
   )
 
   if Code.ensure_loaded?(Tidewave) do
-    plug(Tidewave)
+    plug(Tidewave, team: [id: "Eyra", token: "4xfkyvio76cyuecr7eeo74lpairjg565ghqmkya"])
   end
 
   # Code reloading can be explicitly enabled under the
@@ -77,6 +77,7 @@ defmodule CoreWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library(),
+    body_reader: {Systems.Payment.Plug, :cache_body_reader, []},
     # Allow large uploads for data donation (configurable via HTTP_BODY_MAX_SIZE env var)
     length: @http_body_max_size
   )

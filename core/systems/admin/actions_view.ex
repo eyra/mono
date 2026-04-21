@@ -73,7 +73,7 @@ defmodule Systems.Admin.ActionsView do
     <div data-testid="actions-view">
       <Area.content>
       <Margin.y id={:page_top} />
-      <Text.title2 data-testid="actions-title"><%= @vm.title %></Text.title2>
+      <Text.title2 testid="actions-title"><%= @vm.title %></Text.title2>
 
       <%= for {section, index} <- Enum.with_index(@vm.sections) do %>
         <div data-testid={"section-#{index}"}>
@@ -91,7 +91,7 @@ defmodule Systems.Admin.ActionsView do
 
       <%= if feature_enabled?(:debug_expire_force) do %>
         <.wrap>
-          <Button.dynamic {@vm.expire_force_button} data-testid="expire-force-button" />
+          <Button.dynamic {@vm.expire_force_button} testid="expire-force-button" />
         </.wrap>
       <% end %>
       </Area.content>

@@ -13,7 +13,7 @@ defmodule Systems.Advert.Factories do
         researcher,
         status,
         subject_count \\ 1,
-        budget \\ nil,
+        fund \\ nil,
         schedule_start \\ nil,
         schedule_end \\ nil
       ) do
@@ -47,7 +47,7 @@ defmodule Systems.Advert.Factories do
         consent_agreement,
         workflow,
         assignment_auth_node,
-        budget
+        fund
       )
 
     advert =

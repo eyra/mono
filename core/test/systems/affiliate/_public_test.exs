@@ -96,6 +96,27 @@ defmodule Systems.Affiliate.PublicTest do
     end
   end
 
+  describe "list_user_ids/0" do
+    test "returns user ids of affiliate users" do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "list_test"})
+
+      ids = Affiliate.Public.list_user_ids()
+      assert affiliate_user.user_id in ids
+    end
+
+    test "returns unique ids" do
+      user = Factories.insert!(:member)
+      affiliate1 = Factories.insert!(:affiliate)
+      affiliate2 = Factories.insert!(:affiliate)
+      Factories.insert!(:affiliate_user, %{user: user, identifier: "u1", affiliate: affiliate1})
+      Factories.insert!(:affiliate_user, %{user: user, identifier: "u2", affiliate: affiliate2})
+
+      ids = Affiliate.Public.list_user_ids()
+      assert user.id in ids
+      assert Enum.count(ids, &(&1 == user.id)) == 1
+    end
+  end
+
   describe "obtain_user" do
     test "obtain non existing user" do
       affiliate = Factories.insert!(:affiliate)

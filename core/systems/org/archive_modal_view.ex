@@ -77,7 +77,7 @@ defmodule Systems.Org.ArchiveModalView do
     <div data-testid="archived-orgs-modal">
       <div class="flex flex-row items-center justify-center">
         <div class="h-full">
-          <Text.title2 margin="" data-testid="archived-org-title"><%= @vm.title %> <span class="text-primary"><%= @vm.org_count %></span></Text.title2>
+          <Text.title2 margin="" testid="archived-org-title"><%= @vm.title %> <span class="text-primary"><%= @vm.org_count %></span></Text.title2>
         </div>
         <div class="flex-grow">
         </div>

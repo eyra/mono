@@ -17,7 +17,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
   alias Systems.Crew
@@ -185,8 +185,8 @@ defmodule Core.Factories do
     build(:time_slot, %{})
   end
 
-  def build(:budget) do
-    build(:budget, %{name: Faker.Lorem.sentence()})
+  def build(:fund) do
+    build(:fund, %{name: Faker.Lorem.sentence()})
   end
 
   def build(:book_account) do
@@ -197,7 +197,7 @@ defmodule Core.Factories do
     })
   end
 
-  def build(:fund) do
+  def build(:fund_account) do
     build(:book_account, %{
       identifier: random_identifier(:fund),
       balance_debit: 0,
@@ -634,7 +634,7 @@ defmodule Core.Factories do
 
   def build(:assignment, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
-    {budget, attributes} = Map.pop(attributes, :budget, build(:budget))
+    {fund, attributes} = Map.pop(attributes, :fund, build(:fund))
 
     crew_auth_node = build(:auth_node, %{parent: auth_node})
     {crew, attributes} = Map.pop(attributes, :crew, build(:crew, %{auth_node: crew_auth_node}))
@@ -644,7 +644,7 @@ defmodule Core.Factories do
 
     %Assignment.Model{
       auth_node: auth_node,
-      budget: budget,
+      fund: fund,
       info: info,
       affiliate: affiliate,
       workflow: workflow,
@@ -907,16 +907,16 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:budget, %{} = attributes) do
+  def build(:fund, %{} = attributes) do
     {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
-    {fund, attributes} = Map.pop(attributes, :fund, build(:fund))
-    {reserve, attributes} = Map.pop(attributes, :reserve, build(:reserve))
+    {available, attributes} = Map.pop(attributes, :available, build(:fund_account))
+    {pending, attributes} = Map.pop(attributes, :pending, build(:reserve))
 
-    %Budget.Model{
+    %Fund.Model{
       currency: currency,
-      fund: fund,
-      reserve: reserve,
+      available: available,
+      pending: pending,
       auth_node: auth_node
     }
     |> struct!(attributes)
@@ -926,7 +926,7 @@ defmodule Core.Factories do
     {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
     {account, attributes} = Map.pop(attributes, :account, build(:book_account))
 
-    %Budget.BankAccountModel{
+    %Fund.BankAccountModel{
       currency: currency,
       account: account
     }
@@ -957,20 +957,20 @@ defmodule Core.Factories do
   def build(:currency, %{} = attributes) do
     {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
 
-    %Budget.CurrencyModel{
+    %Fund.CurrencyModel{
       label_bundle: label_bundle
     }
     |> struct!(attributes)
   end
 
   def build(:reward, %{} = attributes) do
-    {budget, attributes} = Map.pop(attributes, :budget, build(:budget))
+    {fund, attributes} = Map.pop(attributes, :fund, build(:fund))
     {user, attributes} = Map.pop(attributes, :user, build(:member))
     {deposit, attributes} = Map.pop(attributes, :deposit, nil)
     {payment, attributes} = Map.pop(attributes, :payment, nil)
 
-    %Budget.RewardModel{
-      budget: budget,
+    %Fund.RewardModel{
+      fund: fund,
       user: user,
       deposit: deposit,
       payment: payment

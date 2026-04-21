@@ -11,7 +11,7 @@ defmodule Systems.Pool.AccountPostActionHandlerTest do
       assert :ok = AccountPostActionHandler.handle(creator, "add_to_panl")
 
       # Creator should NOT be added to PaNL pool
-      refute Pool.Public.panl_participant?(creator)
+      refute Pool.Public.participant?(:panl, creator)
     end
 
     test "skips processing for creator account with unknown action" do
@@ -26,11 +26,11 @@ defmodule Systems.Pool.AccountPostActionHandlerTest do
       user = Factories.insert!(:member, %{creator: false})
       _panl_pool = Pool.Assembly.get_or_create_panl()
 
-      refute Pool.Public.panl_participant?(user)
+      refute Pool.Public.participant?(:panl, user)
 
       assert :ok = AccountPostActionHandler.handle(user, "add_to_panl")
 
-      assert Pool.Public.panl_participant?(user)
+      assert Pool.Public.participant?(:panl, user)
     end
 
     test "succeeds when PaNL pool does not exist" do
@@ -52,7 +52,7 @@ defmodule Systems.Pool.AccountPostActionHandlerTest do
       assert :ok = AccountPostActionHandler.handle(user, "add_to_panl")
       assert :ok = AccountPostActionHandler.handle(user, "add_to_panl")
 
-      assert Pool.Public.panl_participant?(user)
+      assert Pool.Public.participant?(:panl, user)
     end
   end
 
@@ -70,7 +70,7 @@ defmodule Systems.Pool.AccountPostActionHandlerTest do
 
       AccountPostActionHandler.handle(user, "unknown_action")
 
-      refute Pool.Public.panl_participant?(user)
+      refute Pool.Public.participant?(:panl, user)
     end
   end
 end

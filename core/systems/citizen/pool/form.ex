@@ -8,7 +8,7 @@ defmodule Systems.Citizen.Pool.Form do
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Pool
 
   @default_values %{"director" => "citizen", "target" => 0}
@@ -72,7 +72,7 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   defp update_currencies(socket) do
-    currencies = Budget.Public.list_currencies_by_type(:legal)
+    currencies = Fund.Public.list_currencies_by_type(:legal)
     socket |> assign(currencies: currencies)
   end
 
@@ -81,7 +81,7 @@ defmodule Systems.Citizen.Pool.Form do
       Enum.map(currencies, fn currency ->
         %{
           id: currency.id,
-          label: Budget.CurrencyModel.title(currency, locale)
+          label: Fund.CurrencyModel.title(currency, locale)
         }
       end)
 

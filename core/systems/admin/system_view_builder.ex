@@ -8,7 +8,7 @@ defmodule Systems.Admin.SystemViewBuilder do
   """
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Citizen
 
   def view_model(_model, assigns) do
@@ -38,7 +38,7 @@ defmodule Systems.Admin.SystemViewBuilder do
   def build_bank_account_modal(bank_account, user) do
     LiveNest.Modal.prepare_live_component(
       "bank_account_form",
-      Budget.BankAccountForm,
+      Fund.BankAccountForm,
       params: [
         bank_account: bank_account,
         user: user

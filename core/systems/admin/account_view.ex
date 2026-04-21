@@ -101,7 +101,7 @@ defmodule Systems.Admin.AccountView do
     <div data-testid="account-view">
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2 data-testid="account-title">
+        <Text.title2 testid="account-title">
           <%= @vm.title %> <span class="text-primary"><%= @vm.user_count %></span>
         </Text.title2>
         <div class="flex flex-row gap-3 items-center">
