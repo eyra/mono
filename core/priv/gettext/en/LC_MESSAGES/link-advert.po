@@ -92,4 +92,4 @@ msgstr "Go to Settings"
 
 #, elixir-autogen, elixir-format
 msgid "submission.available.sub_heading"
-msgstr "Here you can find the most recent studies published in the panl pool. Click on a study to read more details."
+msgstr "Here you can find the most recent studies published in the Panl pool. Click on a study to read more details."
