@@ -147,12 +147,16 @@ defmodule Systems.Budget.Public do
 
   # --- User merchant ---
 
-  defp ensure_user_merchant(%Account.User{merchant_uid: merchant_uid} = user)
+  defp ensure_user_merchant(%Account.User{} = user) do
+    ensure_merchant_for(Repo.reload!(user))
+  end
+
+  defp ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
        when is_binary(merchant_uid) do
     {:ok, user}
   end
 
-  defp ensure_user_merchant(%Account.User{id: user_id, email: email} = user) do
+  defp ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
     webhook_url = Payment.Public.webhook_url()
 
     Logger.info("[Budget] Creating OPP merchant for user ##{user_id} (#{email})")
