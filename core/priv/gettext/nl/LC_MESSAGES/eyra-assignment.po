@@ -188,7 +188,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Bedankt voor uw deelname."
+msgstr "Bedankt voor je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -418,7 +418,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "Bedankt. Je hebt dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
@@ -438,11 +438,11 @@ msgstr "De standaardtaal voor Panl-studies is het Nederlands."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined"
-msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect"
-msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. U kunt dit venster nu sluiten."
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.title.declined"
@@ -462,11 +462,11 @@ msgstr "Terug"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.declined.redirect.platform"
-msgstr "U heeft ervoor gekozen niet deel te nemen. Uw keuze is opgeslagen. Klik op Doorgaan om verder te gaan naar %{platform}."
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen. Klik op Doorgaan om verder te gaan naar %{platform}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect.platform"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."
+msgstr "Bedankt. Je hebt dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."
 
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
@@ -498,7 +498,7 @@ msgstr "Activeer je account"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Laat je e-mailadres achter om informatie te ontvangen over meedoen aan onderzoek via panl."
+msgstr "Laat je e-mailadres achter om informatie te ontvangen over meedoen aan onderzoek via Panl."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -526,11 +526,11 @@ msgstr "Versturen"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.body"
-msgstr "U ontvangt binnenkort een e-mail met meer informatie."
+msgstr "Je ontvangt binnenkort een e-mail met meer informatie."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "Bedankt voor uw interesse in panl"
+msgstr "Bedankt voor je interesse in Panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"

@@ -499,7 +499,7 @@ msgstr "Konto aktivieren"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Hinterlassen Sie Ihre E-Mail-Adresse, um Informationen zur Teilnahme an Forschung über panl zu erhalten."
+msgstr "Hinterlassen Sie Ihre E-Mail-Adresse, um Informationen zur Teilnahme an Forschung über Panl zu erhalten."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -531,7 +531,7 @@ msgstr "Sie erhalten in Kürze eine E-Mail mit weiteren Informationen."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.success.title"
-msgstr "Vielen Dank für Ihr Interesse an panl"
+msgstr "Vielen Dank für Ihr Interesse an Panl"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.title"

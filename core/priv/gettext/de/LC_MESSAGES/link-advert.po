@@ -93,4 +93,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "submission.available.sub_heading"
-msgstr "Hier findest du die aktuellsten Studien, die im panl-Pool veröffentlicht wurden. Klicke auf eine Studie, um weitere Details zu lesen."
+msgstr "Hier findest du die aktuellsten Studien, die im Panl-Pool veröffentlicht wurden. Klicke auf eine Studie, um weitere Details zu lesen."
