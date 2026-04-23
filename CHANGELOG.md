@@ -9,6 +9,11 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#22.1 2026-04-23
+* Fixed - Panl capitalization normalized across all translations
+* Changed - Dutch copy from formal (u/uw) to informal (je/jouw)
+* Added - Terms and privacy link translations for sign-up page
+
 ## \#22 2026-04-17
 * Added - Panl pre-launch email capture flow for participant onboarding
 * Added - Email validation via UserCheck API (disposable, role account, MX checks)
