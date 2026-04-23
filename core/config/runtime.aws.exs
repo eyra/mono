@@ -282,6 +282,10 @@ if config_env() == :prod do
 
   config :core, payment_provider: Core.Config.payment_provider()
 
+  if System.get_env("SKIP_WEBHOOK_VERIFICATION") == "true" do
+    config :core, skip_webhook_verification: true
+  end
+
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
