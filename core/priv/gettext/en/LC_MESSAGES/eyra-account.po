@@ -176,7 +176,15 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
-msgstr "I agree to the PaNL %{terms_link} and %{privacy_link}"
+msgstr "I agree to the %{terms_link} and %{privacy_link} of Panl"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Privacy Policy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Terms of Use"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
@@ -184,7 +192,7 @@ msgstr "You must accept the privacy policy to continue"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
-msgstr "I agree to the Next %{terms_link} and %{privacy_link}"
+msgstr "I agree to the %{terms_link} and %{privacy_link} of Next"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.required"

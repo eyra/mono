@@ -36,6 +36,8 @@ defmodule Systems.Assignment.TemplatePaperScreening do
       ]
     end
 
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
+
     def currency(_t), do: :EUR
 
     def workflow_config(_t),

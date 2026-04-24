@@ -796,6 +796,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
   attr(:value, :any, default: nil)
+  attr(:testid, :string, default: nil)
 
   def dropdown(%{form: form, field: field, options: options} = assigns) do
     errors = guarded_errors(form, field)
@@ -825,6 +826,8 @@ defmodule Frameworks.Pixel.Form do
       |> JS.toggle(to: "##{options_id}-dropdown-img")
       |> JS.toggle(to: "##{options_id}-dropup-img")
 
+    testid = assigns[:testid] || "dropdown-#{field_id}"
+
     assigns =
       assign(assigns, %{
         field_id: field_id,
@@ -836,7 +839,8 @@ defmodule Frameworks.Pixel.Form do
         active_color: active_color,
         errors: errors,
         has_errors: has_errors,
-        js_click: js_click
+        js_click: js_click,
+        testid: testid
       })
 
     ~H"""
@@ -856,6 +860,7 @@ defmodule Frameworks.Pixel.Form do
           value={@field_value}
           placeholder={@placeholder}
           class={"#{@input_static_class} #{@input_dynamic_class}"}
+          data-testid={@testid}
           __eyra_field_id={@field_id}
           __eyra_field_has_error={@has_errors}
           __eyra_field_static_class={@input_static_class}

@@ -216,6 +216,141 @@ defmodule Systems.Assignment.FinishedViewTest do
     end
   end
 
+  describe "email capture form" do
+    setup do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      %{user: affiliate_user.user}
+    end
+
+    test "renders email capture block for questionnaire assignment", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      assert view |> has_element?("[data-testid='email-capture-block']")
+      assert view |> has_element?("[data-testid='email-capture-input']")
+      assert view |> has_element?("[data-testid='email-capture-submit']")
+    end
+
+    test "does not render email capture for non-questionnaire assignment", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      refute view |> has_element?("[data-testid='email-capture-block']")
+    end
+
+    test "shows success state after valid email submission", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      _panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      new_email = "capture-#{System.unique_integer([:positive])}@example.com"
+      view |> render_submit("submit_email", %{"email" => new_email})
+
+      assert view
+             |> has_element?("[data-testid='email-capture-block'] [data-testid='inline-block']")
+
+      refute view |> has_element?("[data-testid='email-capture-input']")
+    end
+
+    test "shows error for invalid email format", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      view |> render_submit("submit_email", %{"email" => "not-an-email"})
+
+      assert view |> has_element?("[data-testid='email-capture-error']")
+      refute view |> has_element?("[data-testid='email-capture-success']")
+    end
+
+    test "renders success state when user is already a pool member", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      assert view
+             |> has_element?("[data-testid='email-capture-block'] [data-testid='inline-block']")
+
+      refute view |> has_element?("[data-testid='email-capture-input']")
+    end
+
+    test "shows error for already registered email", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      _existing = Factories.insert!(:member, %{email: "taken-capture@example.com"})
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, _html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      view |> render_submit("submit_email", %{"email" => "taken-capture@example.com"})
+
+      assert view |> has_element?("[data-testid='email-capture-error']")
+    end
+  end
+
   describe "Observatory pattern integration" do
     test "view model rebuilds when assignment updates", %{conn: conn, user: user} do
       assignment = Assignment.Factories.create_assignment_with_affiliate(nil)

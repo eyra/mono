@@ -11,6 +11,8 @@ defmodule Core.Application do
   def start(_type, _args) do
     Appsignal.Logger.Handler.add("core")
 
+    Core.AppSignal.TelemetryHandler.attach()
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,

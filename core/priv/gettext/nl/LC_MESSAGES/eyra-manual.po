@@ -41,7 +41,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "setup.annotation"
-msgstr ""
+msgstr "<div><h1>Hoe stel je instructies voor deelnemers in?</h1><ul><li>Maak <strong>secties</strong> om de instructies op te delen in duidelijke onderdelen.</li><li>Gebruik <strong>labels</strong> voor secties om deelnemers te helpen de relevante sectie te vinden.</li><li>Voeg meerdere korte <strong>instructies</strong> toe binnen elke sectie.</li><li>Voeg <strong>afbeeldingen</strong> toe om instructies gemakkelijker te volgen te maken.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"

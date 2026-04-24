@@ -82,16 +82,18 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
 
-    # Wait for LiveView to be fully connected (phx-connected class is added when WebSocket is ready)
-    # This prevents stale reference errors from interacting with elements during DOM morphing
+    # Wait for LiveView to be fully connected
     researcher
     |> assert_has(Query.css("[data-phx-main].phx-connected"))
-    |> assert_has(Query.css("[data-testid^='show_more__action__card_']"))
 
-    # Click show_more to reveal actions, then delete
-    researcher
-    |> click(Query.css("[data-testid^='show_more__action__card_']"))
-    |> click(Query.css("[data-testid^='delete__action__card_']"))
+    # Use retry_stale to handle DOM morphing between find and click
+    retry_stale do
+      researcher |> click(Query.css("[data-testid^='show_more__action__card_']"))
+    end
+
+    retry_stale do
+      researcher |> click(Query.css("[data-testid^='delete__action__card_']"))
+    end
 
     # Wait for the card to be removed - project should now show empty state
     researcher

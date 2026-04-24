@@ -21,6 +21,8 @@ config :phoenix_live_view,
   debug_attributes: true,
   enable_expensive_runtime_checks: true
 
+config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
+
 config :core,
   domain: "localhost",
   name: "Next [local]",

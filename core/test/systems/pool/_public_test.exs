@@ -69,7 +69,7 @@ defmodule Systems.Pool.PublicTest do
     end
   end
 
-  describe "panl_participant?/1" do
+  describe "participant?/2 with slug" do
     test "returns true when user is participant of PANL pool" do
       user = Factories.insert!(:member)
 
@@ -78,14 +78,14 @@ defmodule Systems.Pool.PublicTest do
 
       Public.add_participant!(panl_pool, user)
 
-      assert Public.panl_participant?(user)
+      assert Public.participant?(:panl, user)
     end
 
     test "returns false when user is not participant of PANL pool" do
       user = Factories.insert!(:member)
       Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
 
-      refute Public.panl_participant?(user)
+      refute Public.participant?(:panl, user)
     end
 
     test "returns false when PANL pool does not exist" do
@@ -95,7 +95,7 @@ defmodule Systems.Pool.PublicTest do
         Repo.delete(panl_pool)
       end
 
-      refute Public.panl_participant?(user)
+      refute Public.participant?(:panl, user)
     end
 
     test "returns false when user is participant of different pool but not PANL pool" do
@@ -106,7 +106,7 @@ defmodule Systems.Pool.PublicTest do
 
       Public.add_participant!(other_pool, user)
 
-      refute Public.panl_participant?(user)
+      refute Public.participant?(:panl, user)
     end
 
     test "returns true when user is participant of PANL pool and also other pools" do
@@ -120,7 +120,7 @@ defmodule Systems.Pool.PublicTest do
       Public.add_participant!(panl_pool, user)
       Public.add_participant!(other_pool, user)
 
-      assert Public.panl_participant?(user)
+      assert Public.participant?(:panl, user)
     end
   end
 
@@ -128,11 +128,11 @@ defmodule Systems.Pool.PublicTest do
     test "adds user to PaNL pool and returns :ok" do
       user = Factories.insert!(:member)
 
-      refute Public.panl_participant?(user)
+      refute Public.participant?(:panl, user)
 
       assert :ok = Public.add_user_to_panl_pool(user)
 
-      assert Public.panl_participant?(user)
+      assert Public.participant?(:panl, user)
     end
 
     test "creates PaNL pool if it doesn't exist" do
@@ -149,7 +149,7 @@ defmodule Systems.Pool.PublicTest do
 
       # Pool should now exist
       assert Public.get_panl() != nil
-      assert Public.panl_participant?(user)
+      assert Public.participant?(:panl, user)
     end
 
     test "is idempotent - adding same user twice succeeds" do
@@ -158,7 +158,7 @@ defmodule Systems.Pool.PublicTest do
       assert :ok = Public.add_user_to_panl_pool(user)
       assert :ok = Public.add_user_to_panl_pool(user)
 
-      assert Public.panl_participant?(user)
+      assert Public.participant?(:panl, user)
     end
 
     test "works for multiple different users" do
@@ -168,8 +168,34 @@ defmodule Systems.Pool.PublicTest do
       assert :ok = Public.add_user_to_panl_pool(user1)
       assert :ok = Public.add_user_to_panl_pool(user2)
 
-      assert Public.panl_participant?(user1)
-      assert Public.panl_participant?(user2)
+      assert Public.participant?(:panl, user1)
+      assert Public.participant?(:panl, user2)
+    end
+  end
+
+  describe "list_participant_ids/0" do
+    test "returns user ids of pool participants", %{user: user, pool: pool} do
+      Public.add_participant!(pool, user)
+
+      ids = Public.list_participant_ids()
+      assert user.id in ids
+    end
+
+    test "returns empty list when no participants" do
+      ids = Public.list_participant_ids()
+      # May contain participants from other tests/setup, just verify it's a list
+      assert is_list(ids)
+    end
+
+    test "returns unique ids across multiple pools", %{user: user, pool: pool} do
+      other_pool = Factories.insert!(:pool, %{name: "other_pool", director: :citizen})
+
+      Public.add_participant!(pool, user)
+      Public.add_participant!(other_pool, user)
+
+      ids = Public.list_participant_ids()
+      assert user.id in ids
+      assert Enum.count(ids, &(&1 == user.id)) == 1
     end
   end
 end

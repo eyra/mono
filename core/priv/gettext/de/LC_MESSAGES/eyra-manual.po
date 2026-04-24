@@ -41,7 +41,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "setup.annotation"
-msgstr ""
+msgstr "<div><h1>Wie richtet man Anweisungen für Teilnehmende ein?</h1><ul><li>Erstellen Sie <strong>Abschnitte</strong>, um die Anweisungen in klare Teile zu gliedern.</li><li>Verwenden Sie <strong>Beschriftungen</strong> für Abschnitte, damit Teilnehmende den relevanten Abschnitt leichter finden.</li><li>Fügen Sie in jedem Abschnitt mehrere kurze <strong>Anweisungen</strong> hinzu.</li><li>Fügen Sie <strong>Bilder</strong> hinzu, damit die Anweisungen leichter nachvollziehbar sind.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"

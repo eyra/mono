@@ -82,7 +82,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
             label: dgettext("eyra-assignment", "publish.button"),
             bg_color: "bg-success"
           },
-          "data-testid": "publish-button"
+          testid: "publish-button"
         },
         icon: %{
           action: publish_action,
@@ -99,7 +99,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
             text_color: "text-error",
             border_color: "border-error"
           },
-          "data-testid": "retract-button"
+          testid: "retract-button"
         },
         icon: %{
           action: retract_action,
@@ -270,7 +270,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      child: child,
+      testid: "assignment-tab-workflow"
     }
   end
 

@@ -50,7 +50,7 @@ msgstr "Redaguoti vadovą"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "setup.annotation"
-msgstr "<div><h1>Kaip nustatyti dalyvių instrukcijas?</h1><ul><li>Sukurkite <strong>skyrius</strong>, kad dalyviai galėtų pereiti į atitinkamą skyrių.</li><li>Naudokite skirsnių <strong>pavadinimus</strong>, kad nurodytumėte naudojimo atvejus, pvz., <i>„iPhone“</i> ar <i>„Android</i>“.</li><li>Kiekvienoje sekcijoje pateikite keletą trumpų <strong>instrukcijų</strong>, įskaitant atitinkamus <b>ekrano vaizdus</b>, kad būtų aiškiau.</li></ul></div>"
+msgstr "<div><h1>Kaip nustatyti dalyvių instrukcijas?</h1><ul><li>Sukurkite <strong>skyrius</strong>, kad instrukcijos būtų suskirstytos į aiškias dalis.</li><li>Naudokite skyrių <strong>pavadinimus</strong>, kad padėtumėte dalyviams rasti reikiamą skyrių.</li><li>Kiekviename skyriuje pridėkite kelias trumpas <strong>instrukcijas</strong>.</li><li>Įtraukite <strong>vaizdus</strong>, kad instrukcijas būtų lengviau sekti.</li></ul></div>"
 
 #, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"

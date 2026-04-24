@@ -9,6 +9,23 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#22.1 2026-04-23
+* Fixed - Panl capitalization normalized across all translations
+* Changed - Dutch copy from formal (u/uw) to informal (je/jouw)
+* Added - Terms and privacy link translations for sign-up page
+
+## \#22 2026-04-17
+* Added - Panl pre-launch email capture flow for participant onboarding
+* Added - Email validation via UserCheck API (disposable, role account, MX checks)
+* Added - AppSignal custom metrics for Feldspar donate and log endpoints
+* Added - Pool and Affiliate filters on admin users page
+* Added - Idempotent seed infrastructure for deploy environments
+* Changed - Questionnaire opens in same tab instead of new tab (fixes mobile popup blocker)
+* Changed - Panl post-launch features gated behind separate feature flag
+* Fixed - Modal navigation buttons leaking between workflow steps
+* Fixed - x_square.svg platform logo missing
+* Fixed - Admin user page performance for large user counts
+
 ## \#21 2026-02-28
 * Fixed - Google Sign In callback to show error message instead of 500
 * Fixed - SSO duplicate email handling across all providers

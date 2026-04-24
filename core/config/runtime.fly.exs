@@ -29,6 +29,11 @@ if config_env() == :prod do
          :deploy_env,
          System.fetch_env!("DEPLOY_ENV") |> String.to_atom()
 
+  # UserCheck email validation API key
+  if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
+    config :core, Frameworks.UserCheck, api_key: usercheck_api_key
+  end
+
   # Allow enabling of features from an environment variable
   config :core,
          :features,
