@@ -166,7 +166,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
         type: :primary,
         label: dgettext("eyra-assignment", "panl_participants.add.button")
       },
-      "data-testid": "pay-add-participants-button"
+      testid: "pay-add-participants-button"
     }
 
     assign(socket, add_button: button)
@@ -191,7 +191,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
           text_color: "text-grey1",
           label: dgettext("eyra-assignment", "advert.create.button")
         },
-        "data-testid": "create-advert-button"
+        testid: "create-advert-button"
       },
       monitor_path: ~p"/assignment/#{assignment.id}/content"
     )
