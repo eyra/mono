@@ -507,4 +507,111 @@ defmodule Systems.Fund.PublicTest do
              %{balance_credit: ^expected_wallet_credit}
            ] = Fund.Public.list_wallets(fund)
   end
+
+  describe "mark_pending_approval/1" do
+    setup %{fund: fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},mark"
+      {:ok, _} = Fund.Public.create_reward(fund, 1000, participant, key)
+      {:ok, key: key}
+    end
+
+    test "transitions :reserved → :pending_approval", %{key: key} do
+      assert {:ok, %{status: :pending_approval}} = Fund.Public.mark_pending_approval(key)
+    end
+
+    test "is idempotent on :pending_approval", %{key: key} do
+      {:ok, _} = Fund.Public.mark_pending_approval(key)
+      assert {:ok, %{status: :pending_approval}} = Fund.Public.mark_pending_approval(key)
+    end
+
+    test "is a no-op on :approved", %{key: key} do
+      {:ok, _} = Fund.Public.approve_reward(key)
+      assert {:ok, %{status: :approved}} = Fund.Public.mark_pending_approval(key)
+    end
+
+    test "returns error when reward not found" do
+      assert {:error, :reward_not_found} = Fund.Public.mark_pending_approval("nope")
+    end
+  end
+
+  describe "approve_reward/1" do
+    setup %{fund: fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},approve"
+      {:ok, _} = Fund.Public.create_reward(fund, 1000, participant, key)
+      {:ok, key: key, participant: participant, fund: fund}
+    end
+
+    test "transitions :reserved → :approved and creates wallet payment", %{key: key} do
+      assert {:ok, %{reward: %{status: :approved}, payment: %{payment_id: payment_id}}} =
+               Fund.Public.approve_reward(key)
+
+      refute is_nil(payment_id)
+    end
+
+    test "transitions :pending_approval → :approved", %{key: key} do
+      {:ok, _} = Fund.Public.mark_pending_approval(key)
+      assert {:ok, %{reward: %{status: :approved}}} = Fund.Public.approve_reward(key)
+    end
+
+    test "is idempotent on :approved", %{key: key} do
+      {:ok, _} = Fund.Public.approve_reward(key)
+      assert {:ok, %{status: :approved}} = Fund.Public.approve_reward(key)
+    end
+
+    test "errors on :rejected", %{key: key} do
+      {:ok, _} = Fund.Public.reject_reward(key)
+      assert {:error, :reward_already_rejected} = Fund.Public.approve_reward(key)
+    end
+
+    test "returns error when reward not found" do
+      assert {:error, :reward_not_found} = Fund.Public.approve_reward("nope")
+    end
+  end
+
+  describe "reject_reward/1" do
+    setup %{fund: %{available: fund_account, pending: reserve} = fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},reject"
+      {:ok, _} = Fund.Public.create_reward(fund, 1000, participant, key)
+      {:ok, key: key, fund: fund, fund_account: fund_account, reserve: reserve}
+    end
+
+    test "transitions :reserved → :rejected and reverts deposit", %{
+      key: key,
+      fund: %{id: fund_id, available: %{} = fund_account, pending: %{} = reserve}
+    } do
+      original_available = Bookkeeping.AccountModel.balance(fund_account)
+      original_reserve = Bookkeeping.AccountModel.balance(reserve)
+
+      assert {:ok, _} = Fund.Public.reject_reward(key)
+
+      reloaded = Fund.Public.get!(fund_id)
+
+      assert Bookkeeping.AccountModel.balance(reloaded.available) == original_available
+      assert Bookkeeping.AccountModel.balance(reloaded.pending) == original_reserve
+      assert %{status: :rejected, deposit_id: nil} = Fund.Public.get_reward(key, [])
+    end
+
+    test "transitions :pending_approval → :rejected", %{key: key} do
+      {:ok, _} = Fund.Public.mark_pending_approval(key)
+      assert {:ok, _} = Fund.Public.reject_reward(key)
+      assert %{status: :rejected} = Fund.Public.get_reward(key, [])
+    end
+
+    test "is idempotent on :rejected", %{key: key} do
+      {:ok, _} = Fund.Public.reject_reward(key)
+      assert {:ok, %{status: :rejected}} = Fund.Public.reject_reward(key)
+    end
+
+    test "errors on :approved", %{key: key} do
+      {:ok, _} = Fund.Public.approve_reward(key)
+      assert {:error, :reward_already_approved} = Fund.Public.reject_reward(key)
+    end
+
+    test "returns error when reward not found" do
+      assert {:error, :reward_not_found} = Fund.Public.reject_reward("nope")
+    end
+  end
 end

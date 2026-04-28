@@ -253,6 +253,8 @@ defmodule Systems.Assignment.Switch do
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
           Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
 
+          mark_rewards_pending_approval(assignment, crew_task)
+
           Assignment.Public.get_member_by_task(crew_task)
           |> dispatch_finished_assignment()
 
@@ -450,6 +452,14 @@ defmodule Systems.Assignment.Switch do
       participants = auth_module().users_with_role(crew_task, :owner)
       Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
     end
+  end
+
+  defp mark_rewards_pending_approval(assignment, crew_task) do
+    auth_module().users_with_role(crew_task, :owner)
+    |> Enum.each(fn participant ->
+      idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
+      Systems.Fund.Public.mark_pending_approval(idempotence_key)
+    end)
   end
 
   defp dispatch_finished_assignment(crew_member) do

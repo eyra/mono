@@ -285,6 +285,97 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  @doc """
+  Marks a reserved reward as awaiting researcher approval.
+
+  Called when the participant completes the assignment task. The deposit was
+  already made at apply time (see `create_reward/4`); this only flips the
+  status so the researcher can act on it.
+
+  Idempotent: calling on a reward that is already past `:reserved` is a no-op.
+  """
+  def mark_pending_approval(idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, []) do
+      nil ->
+        Logger.warning("No reward to mark pending approval for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: :reserved} = reward ->
+        reward
+        |> Fund.RewardModel.changeset(%{status: :pending_approval})
+        |> Repo.update()
+
+      %Fund.RewardModel{} = reward ->
+        {:ok, reward}
+    end
+  end
+
+  @doc """
+  Approves a reward and pays it out to the participant's wallet.
+
+  Atomic: the status flip and the payment Bookkeeping entry happen in one
+  transaction. Idempotent on `:approved`/`:paid`.
+  """
+  def approve_reward(idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil ->
+        Logger.warning("No reward to approve for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: status} = reward when status in [:approved, :paid] ->
+        {:ok, reward}
+
+      %Fund.RewardModel{status: :rejected} ->
+        {:error, :reward_already_rejected}
+
+      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
+        do_approve_reward(reward)
+    end
+  end
+
+  defp do_approve_reward(reward) do
+    Multi.new()
+    |> Multi.update(:reward, Fund.RewardModel.changeset(reward, %{status: :approved}))
+    |> Multi.run(:payment, fn _, _ ->
+      case create_payment_transaction(reward) do
+        {:ok, %{entry: payment}} -> link_payment_transaction(reward, payment)
+        {:error, :payment_already_available} -> {:ok, reward}
+        error -> error
+      end
+    end)
+    |> Repo.commit()
+  end
+
+  @doc """
+  Rejects a reward and returns the reserved money to the assignment fund.
+
+  Atomic: the status flip and the deposit reversal happen in one transaction.
+  Idempotent on `:rejected`.
+  """
+  def reject_reward(idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil ->
+        Logger.warning("No reward to reject for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: :rejected} = reward ->
+        {:ok, reward}
+
+      %Fund.RewardModel{status: status} when status in [:approved, :paid] ->
+        {:error, :reward_already_approved}
+
+      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
+        do_reject_reward(reward)
+    end
+  end
+
+  defp do_reject_reward(reward) do
+    Multi.new()
+    |> rollback_deposit(reward)
+    |> Multi.update(:status, Fund.RewardModel.changeset(reward, %{status: :rejected}))
+    |> Repo.commit()
+  end
+
   def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do
     currency_name
     |> Fund.Public.get_currency_by_name()

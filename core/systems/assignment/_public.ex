@@ -810,7 +810,7 @@ defmodule Systems.Assignment.Public do
 
   def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.payout_reward(idempotence_key)
+    Fund.Public.approve_reward(idempotence_key)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

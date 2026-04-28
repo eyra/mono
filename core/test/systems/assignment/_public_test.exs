@@ -437,7 +437,7 @@ defmodule Systems.Assignment.PublicTest do
              } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 twice fails" do
+    test "payout_participant/2 is idempotent" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
@@ -446,7 +446,7 @@ defmodule Systems.Assignment.PublicTest do
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
       assert {:ok, _} = Assignment.Public.payout_participant(assignment, user)
 
-      assert {:error, _, :payment_already_available, %{}} =
+      assert {:ok, %Systems.Fund.RewardModel{status: :approved}} =
                Assignment.Public.payout_participant(assignment, user)
     end
 
