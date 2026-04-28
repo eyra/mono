@@ -12,10 +12,13 @@ defmodule Systems.Fund.RewardModel do
     Bookkeeping
   }
 
+  @statuses [:reserved, :pending_approval, :approved, :rejected, :paid]
+
   schema "fund_rewards" do
     field(:idempotence_key, :string)
     field(:amount, :integer)
     field(:attempt, :integer)
+    field(:status, Ecto.Enum, values: @statuses, default: :reserved)
     belongs_to(:fund, Fund.Model)
     belongs_to(:user, Account.User)
 
@@ -25,8 +28,10 @@ defmodule Systems.Fund.RewardModel do
     timestamps()
   end
 
+  def statuses, do: @statuses
+
   @required_fields ~w(idempotence_key amount)a
-  @optional_fields ~w(attempt)a
+  @optional_fields ~w(attempt status)a
   @fields @required_fields ++ @optional_fields
 
   @doc false

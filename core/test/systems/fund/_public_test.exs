@@ -38,6 +38,7 @@ defmodule Systems.Fund.PublicTest do
 
     assert %{
              amount: ^amount,
+             status: :reserved,
              user: %{
                id: ^participant_id
              },
