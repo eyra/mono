@@ -1,7 +1,7 @@
 # ======================
 # Builder Stage
 # ======================
-FROM debian:trixie-20260406 AS builder
+FROM debian:trixie-20260421 AS builder
 
 WORKDIR /root
 
