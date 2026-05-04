@@ -15,7 +15,7 @@
     "trix": "2.1.18"
   },
   "devDependencies": {
-    "jsdom": "26.1.0",
+    "jsdom": "29.1.1",
     "prettier": "3.6.2",
     "vitest": "3.2.4"
   }
