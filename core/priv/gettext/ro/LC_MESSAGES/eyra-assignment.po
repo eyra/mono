@@ -555,6 +555,6 @@ msgstr "Te rugăm să folosești o adresă de email personală, nu una partajat�
 msgid "recruit.panel.annotation"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
-msgstr "Link de invitație pentru participanți"
+msgstr ""

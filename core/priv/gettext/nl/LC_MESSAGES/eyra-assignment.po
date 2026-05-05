@@ -544,6 +544,6 @@ msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, ad
 msgid "recruit.panel.annotation"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
-msgstr "Panel"
+msgstr ""
