@@ -179,16 +179,16 @@ msgid "panl.privacy.policy.label"
 msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link} van Panl"
 
 #, elixir-autogen, elixir-format
-msgid "panl.privacy.policy.required"
-msgstr "Je moet akkoord gaan met de voorwaarden en het privacybeleid om door te gaan."
-
-#, elixir-autogen, elixir-format
 msgid "privacy.link.privacy"
 msgstr "privacybeleid"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link.terms"
 msgstr "algemene voorwaarden"
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr "Je moet akkoord gaan met de voorwaarden en het privacybeleid om door te gaan."
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"

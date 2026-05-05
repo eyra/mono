@@ -180,16 +180,16 @@ msgid "panl.privacy.policy.label"
 msgstr "Acepto los %{terms_link} y la %{privacy_link} de Panl"
 
 #, elixir-autogen, elixir-format
-msgid "panl.privacy.policy.required"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "privacy.link.privacy"
 msgstr "política de privacidad"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link.terms"
 msgstr "términos y condiciones"
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
