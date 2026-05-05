@@ -539,3 +539,11 @@ msgstr "Wil je vaker meedoen aan onderzoek?"
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.role_account"
 msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, admin@)."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "recruit.panel.title"
+msgstr "Panel"

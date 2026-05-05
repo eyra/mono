@@ -47,10 +47,11 @@ defmodule Systems.Assignment.TemplateMigrationTest do
       assert settings_flags.helpdesk == true
       assert settings_flags.affiliate == true
 
-      # Check participants flags - all should be enabled (was no opt_out)
+      # Check participants flags
       {_title, participants_flags} = tabs[:participants]
       assert participants_flags.advert_in_pool == true
-      assert participants_flags.invite_participants == true
+      assert participants_flags.invite_participants == false
+      assert participants_flags.recruit_participants == true
     end
 
     test "PaperScreening template has correct opt-in flags" do

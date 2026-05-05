@@ -226,6 +226,7 @@ defmodule Systems.Assignment.Template.Flags.Participants do
   - `:language` - Show language selection options
   - `:advert_in_pool` - Allow advertising in participant pool
   - `:invite_participants` - Enable participant invitation features
+  - `:recruit_participants` - Enable organic recruitment link (no pre-assigned participant ID)
   - `:affiliate` - Show affiliate/partner participant options
   """
   use Systems.Assignment.Template.Flags, [
@@ -234,6 +235,7 @@ defmodule Systems.Assignment.Template.Flags.Participants do
     :language,
     :advert_in_pool,
     :invite_participants,
+    :recruit_participants,
     :affiliate
   ]
 end
