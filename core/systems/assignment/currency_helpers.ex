@@ -45,7 +45,11 @@ defmodule Systems.Assignment.CurrencyHelpers do
   end
 
   defp format_currency(%Decimal{} = amount, locale) do
-    case CoreWeb.Cldr.Number.to_string(amount, format: :currency, currency: @currency, locale: locale) do
+    case CoreWeb.Cldr.Number.to_string(amount,
+           format: :currency,
+           currency: @currency,
+           locale: locale
+         ) do
       {:ok, formatted} -> formatted
       _ -> "€0,00"
     end
