@@ -412,7 +412,7 @@ defmodule Systems.Assignment.Public do
 
   def add_participant!(%Assignment.Model{} = assignment, user) do
     assignment =
-      Repo.preload(assignment, [:crew, :info, fund: [:available, :pending]])
+      Repo.preload(assignment, [:crew, :info, fund: [:available, :pending, :currency, :currency_ledger]])
 
     {:ok, %{member: member}} =
       Crew.Public.apply_member_with_role(assignment.crew, user, :participant)
@@ -435,7 +435,7 @@ defmodule Systems.Assignment.Public do
     if Fund.Public.reward_has_outstanding_deposit?(idempotence_key) do
       :ok
     else
-      case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
+      case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
         {:ok, _} ->
           :ok
 
@@ -451,6 +451,25 @@ defmodule Systems.Assignment.Public do
   end
 
   defp reserve_reward!(_assignment, _user), do: :ok
+
+  # Funds created via Assignment.Assembly.prepare_fund only set fund.currency_ledger,
+  # not fund.currency. Resolve the Fund.CurrencyModel via the ledger atom so the
+  # bookkeeping/journal code (which expects fund.currency) works on those rows.
+  defp ensure_fund_currency(%Fund.Model{currency: %Fund.CurrencyModel{}} = fund), do: fund
+
+  defp ensure_fund_currency(
+         %Fund.Model{currency_ledger: %{currency: ledger_currency}} = fund
+       )
+       when is_atom(ledger_currency) and not is_nil(ledger_currency) do
+    name = ledger_currency |> Atom.to_string() |> String.downcase()
+
+    case Fund.Public.get_currency_by_name(name) do
+      %Fund.CurrencyModel{} = currency -> %{fund | currency: currency}
+      _ -> fund
+    end
+  end
+
+  defp ensure_fund_currency(fund), do: fund
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
     case Crew.Public.get_member_unsafe(crew, user) do
@@ -575,7 +594,7 @@ defmodule Systems.Assignment.Public do
   defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
-    case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
+    case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end

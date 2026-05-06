@@ -89,16 +89,21 @@ defmodule Systems.Assignment.Assembly do
 
   defp prepare_fund(user, currency) do
     currency_ledger = Budget.CurrencyLedgerModel.get_by_currency(currency)
+    fund_currency = resolve_fund_currency(currency)
     uuid = Ecto.UUID.generate()
 
     %Fund.Model{
       name: uuid,
+      currency: fund_currency,
       currency_ledger: currency_ledger,
       available: Systems.Bookkeeping.AccountModel.create({:fund, uuid}),
       pending: Systems.Bookkeeping.AccountModel.create({:reserve, uuid}),
       auth_node: auth_module().prepare_node(user, :owner)
     }
   end
+
+  defp resolve_fund_currency(:EUR), do: Fund.Assembly.get_or_create_euro()
+  defp resolve_fund_currency(_), do: nil
 
   defp prepare_consent_agreement(%{} = auth_node) do
     agreement_auth_node = auth_module().prepare_node(auth_node)
