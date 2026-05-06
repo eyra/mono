@@ -545,18 +545,6 @@ msgid "budget_form.aim.label"
 msgstr "Aim of the study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
-msgstr "Subtotal (%{count} × %{reward} reward)"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
-msgstr "Service fee"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.total.label"
-msgstr "Total"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.cancel.button"
 msgstr "Cancel"
 
@@ -647,3 +635,33 @@ msgstr "No transactions yet."
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.hint"
 msgstr "A short description of your study"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.partner_fee.label"
+msgstr "Service fee"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.subtotal.label"
+msgstr "Subtotal (%{count} × %{reward} reward)"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.total.label"
+msgstr "Total"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.approve.button"
+msgstr "Approve"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.participant_prefix"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.reject.button"
+msgstr "Reject"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] "%{count} pending approval"
+msgstr[1] "%{count} pending approvals"

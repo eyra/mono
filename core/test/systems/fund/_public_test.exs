@@ -614,4 +614,63 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, :reward_not_found} = Fund.Public.reject_reward("nope")
     end
   end
+
+  describe "list_pending_approvals/1" do
+    setup %{fund: fund} do
+      [u1, u2, u3] =
+        for _ <- 1..3, do: Factories.insert!(:member, %{creator: false})
+
+      {:ok, _} = Fund.Public.create_reward(fund, 1000, u1, "k1")
+      {:ok, _} = Fund.Public.create_reward(fund, 2000, u2, "k2")
+      {:ok, _} = Fund.Public.create_reward(fund, 3000, u3, "k3")
+
+      {:ok, _} = Fund.Public.mark_pending_approval("k1")
+      {:ok, _} = Fund.Public.approve_reward("k2")
+
+      {:ok, fund: fund, u1: u1}
+    end
+
+    test "returns only :pending_approval rewards for the fund", %{fund: fund, u1: %{id: u1_id}} do
+      assert [
+               %{
+                 idempotence_key: "k1",
+                 amount: 1000,
+                 status: :pending_approval,
+                 user: %{id: ^u1_id}
+               }
+             ] =
+               Fund.Public.list_pending_approvals(fund)
+    end
+
+    test "returns empty list for unrelated fund", %{} do
+      currency = Fund.Factories.create_currency("isolated", :legal, "Ω", 2)
+      other_fund = Fund.Factories.create_fund("other", currency)
+      assert [] = Fund.Public.list_pending_approvals(other_fund)
+    end
+  end
+
+  describe "reject_reward/2 (multi)" do
+    test "composes inside an existing Multi transaction", %{fund: fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},multi-reject"
+      {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
+
+      result =
+        Ecto.Multi.new()
+        |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
+        |> Fund.Public.reject_reward(key)
+        |> Core.Repo.transaction()
+
+      assert {:ok, %{noop: :pre, reject_status: %{status: :rejected}}} = result
+      assert %{status: :rejected, deposit_id: nil} = Fund.Public.get_reward(key, [])
+    end
+
+    test "raises when reward not found" do
+      assert_raise Fund.Public.FundError, fn ->
+        Ecto.Multi.new()
+        |> Fund.Public.reject_reward("nonexistent-key")
+        |> Core.Repo.transaction()
+      end
+    end
+  end
 end

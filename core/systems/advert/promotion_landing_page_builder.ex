@@ -54,7 +54,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
 
   defp highlights(assignment, submission) do
     [
-      Advert.Builders.Highlight.view_model(submission, :reward),
+      Advert.Builders.Highlight.view_model({submission, assignment}, :reward),
       Advert.Builders.Highlight.view_model(assignment, :duration),
       Advert.Builders.Highlight.view_model(assignment, :status)
     ]

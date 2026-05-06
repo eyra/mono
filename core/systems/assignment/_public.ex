@@ -410,10 +410,47 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def add_participant!(%Assignment.Model{crew: crew}, user) do
-    # Use upsert pattern - no check-then-insert to avoid race conditions
-    Crew.Public.apply_member_with_role(crew, user, :participant)
+  def add_participant!(%Assignment.Model{} = assignment, user) do
+    assignment =
+      Repo.preload(assignment, [:crew, :info, fund: [:available, :pending]])
+
+    {:ok, %{member: member}} =
+      Crew.Public.apply_member_with_role(assignment.crew, user, :participant)
+
+    reserve_reward!(assignment, user)
+
+    {:ok, %{member: member}}
   end
+
+  defp reserve_reward!(
+         %Assignment.Model{
+           fund: %Fund.Model{} = fund,
+           info: %{subject_reward: amount}
+         } = assignment,
+         %User{} = user
+       )
+       when is_integer(amount) and amount > 0 do
+    idempotence_key = idempotence_key(assignment, user)
+
+    if Fund.Public.reward_has_outstanding_deposit?(idempotence_key) do
+      :ok
+    else
+      case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
+        {:ok, _} ->
+          :ok
+
+        {:error, step, reason, _} ->
+          Logger.error(
+            "[Assignment] reserve_reward! failed at #{step}: #{inspect(reason)} " <>
+              "assignment=#{assignment.id} user=#{user.id}"
+          )
+
+          :ok
+      end
+    end
+  end
+
+  defp reserve_reward!(_assignment, _user), do: :ok
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
     case Crew.Public.get_member_unsafe(crew, user) do
@@ -566,18 +603,18 @@ defmodule Systems.Assignment.Public do
         %Crew.TaskModel{} = task,
         rejection
       ) do
-    [user] = auth_module().users_with_role(assignment, :owner)
+    [user] = auth_module().users_with_role(task, :owner)
 
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)
-    |> rollback_deposit(assignment, user)
+    |> reject_reward(assignment, user)
     |> Repo.commit()
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
-    |> rollback_deposit(assignment, user)
+    |> reject_reward(assignment, user)
     |> Repo.commit()
   end
 
@@ -797,6 +834,13 @@ defmodule Systems.Assignment.Public do
 
     multi
     |> Fund.Public.rollback_deposit(idempotence_key)
+  end
+
+  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
+    idempotence_key = idempotence_key(assignment, user)
+
+    multi
+    |> Fund.Public.reject_reward(idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

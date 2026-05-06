@@ -94,6 +94,12 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  def list_pending_approvals(%Fund.Model{} = fund, preload \\ [:user]) do
+    Fund.Queries.reward_query(fund, :pending_approval)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
   def get!(id, preload \\ [:available, :pending]) when is_integer(id) do
     from(fund in Fund.Model, preload: ^preload)
     |> Repo.get!(id)
@@ -371,9 +377,30 @@ defmodule Systems.Fund.Public do
 
   defp do_reject_reward(reward) do
     Multi.new()
-    |> rollback_deposit(reward)
-    |> Multi.update(:status, Fund.RewardModel.changeset(reward, %{status: :rejected}))
+    |> reject_reward(reward)
     |> Repo.commit()
+  end
+
+  @doc """
+  Multi-aware variant of `reject_reward/1`. Use when the rejection must commit
+  atomically alongside other operations (e.g. flipping a `Crew.TaskModel` to
+  `:rejected` in `Assignment.Public.reject_task/3`).
+
+  Caller is responsible for ensuring the reward is in `:reserved` or
+  `:pending_approval`. On a `:rejected` reward this is a no-op; on
+  `:approved`/`:paid` it will raise via `rollback_deposit/2`.
+  """
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
+    multi
+    |> rollback_deposit(reward)
+    |> Multi.update(:reject_status, Fund.RewardModel.changeset(reward, %{status: :rejected}))
+  end
+
+  def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil -> raise FundError, message: "No reward available to reject"
+      reward -> reject_reward(multi, reward)
+    end
   end
 
   def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do

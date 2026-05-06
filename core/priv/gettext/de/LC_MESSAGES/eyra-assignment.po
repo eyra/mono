@@ -498,11 +498,51 @@ msgid "activate_account.title"
 msgstr "Konto aktivieren"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.label"
-msgstr ""
+msgid "email_capture.body"
+msgstr "Hinterlassen Sie Ihre E-Mail-Adresse, um Informationen zur Teilnahme an Forschung über Panl zu erhalten."
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.breakdown"
+msgid "email_capture.email.label"
+msgstr "E-Mail-Adresse"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Diese E-Mail-Adresse wurde bereits verwendet."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Bitte verwenden Sie eine andere E-Mail-Adresse."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Absenden"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Sie erhalten in Kürze eine E-Mail mit weiteren Informationen."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Vielen Dank für Ihr Interesse an Panl"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Möchten Sie häufiger an Forschung teilnehmen?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Bitte verwenden Sie eine persönliche E-Mail-Adresse, keine geteilte (z.B. info@, admin@)."
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -597,46 +637,32 @@ msgstr ""
 msgid "budget_form.aim.hint"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "email_capture.body"
-msgstr "Hinterlassen Sie Ihre E-Mail-Adresse, um Informationen zur Teilnahme an Forschung über Panl zu erhalten."
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.partner_fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.subtotal.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.total.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.approve.button"
+msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "email_capture.email.label"
-msgstr "E-Mail-Adresse"
+msgid "panl_participants.pending_approvals.participant_prefix"
+msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "email_capture.error.already_registered"
-msgstr "Diese E-Mail-Adresse wurde bereits verwendet."
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.reject.button"
+msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "email_capture.error.disposable"
-msgstr "Bitte verwenden Sie eine andere E-Mail-Adresse."
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.error.invalid_format"
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.error.unknown"
-msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.submit.label"
-msgstr "Absenden"
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.success.body"
-msgstr "Sie erhalten in Kürze eine E-Mail mit weiteren Informationen."
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.success.title"
-msgstr "Vielen Dank für Ihr Interesse an Panl"
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.title"
-msgstr "Möchten Sie häufiger an Forschung teilnehmen?"
-
-#, elixir-autogen, elixir-format
-msgid "email_capture.error.role_account"
-msgstr "Bitte verwenden Sie eine persönliche E-Mail-Adresse, keine geteilte (z.B. info@, admin@)."
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] ""
+msgstr[1] ""

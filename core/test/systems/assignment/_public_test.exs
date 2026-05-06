@@ -634,4 +634,123 @@ defmodule Systems.Assignment.PublicTest do
       assert Assignment.Public.excluded?(assignment4, user) == false
     end
   end
+
+  describe "approval flow (researcher UI wiring)" do
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      member = Crew.Factories.create_member(crew, user)
+
+      task =
+        Crew.Factories.create_task(
+          crew,
+          member,
+          ["task1", "member=#{member.id}"],
+          status: :completed
+        )
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+
+      {:ok,
+       user: user,
+       assignment: assignment,
+       member: member,
+       task: task,
+       idempotence_key: idempotence_key}
+    end
+
+    test "Crew.Public.accept_task triggers reward approval via switch", %{
+      task: task,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Crew.Public.accept_task(task.id)
+
+      assert %{status: :approved, payment_id: payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(payment_id)
+    end
+
+    test "Assignment.Public.reject_task flips reward to :rejected and rolls back deposit", %{
+      assignment: assignment,
+      task: task,
+      idempotence_key: idempotence_key
+    } do
+      [first_category | _] = Crew.RejectCategories.values()
+      rejection = %{category: first_category, message: "test"}
+
+      assert {:ok, _} = Assignment.Public.reject_task(assignment, task, rejection)
+
+      assert %{status: :rejected, deposit_id: nil} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
+  describe "add_participant!/2 reserves reward at join" do
+    setup do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment(31, 1)
+
+      assignment.info
+      |> Ecto.Changeset.change(%{subject_reward: 100})
+      |> Core.Repo.update!()
+
+      assignment =
+        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      {:ok, user: user, assignment: assignment}
+    end
+
+    test "creates a :reserved reward with deposit", %{user: user, assignment: assignment} do
+      Assignment.Public.add_participant!(assignment, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+
+      assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
+               Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(deposit_id)
+    end
+
+    test "Towel rollback returns money to fund.available and clears deposit", %{
+      user: user,
+      assignment: %{fund_id: fund_id, crew: crew} = assignment
+    } do
+      Assignment.Public.add_participant!(assignment, user)
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      original_available_after_join = Fund.Model.amount_available(Fund.Public.get!(fund_id))
+
+      member = Crew.Public.get_member(crew, user)
+
+      member
+      |> Ecto.Changeset.change(%{
+        expired: true,
+        expire_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
+      |> Core.Repo.update!()
+
+      Assignment.Public.rollback_expired_deposits()
+
+      assert %{deposit_id: nil} = Fund.Public.get_reward(idempotence_key, [])
+
+      assert Fund.Model.amount_available(Fund.Public.get!(fund_id)) ==
+               original_available_after_join + 100
+    end
+
+    test "is a no-op when subject_reward is 0", %{user: user, assignment: assignment} do
+      assignment.info
+      |> Ecto.Changeset.change(%{subject_reward: 0})
+      |> Core.Repo.update!()
+
+      assignment =
+        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      Assignment.Public.add_participant!(assignment, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      assert nil == Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
 end
