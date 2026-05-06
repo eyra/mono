@@ -216,6 +216,12 @@ defmodule Systems.Budget.Public do
 
   Money stays on the user's OPP merchant. Our bookkeeping is the source of truth
   for fund allocation. OPP withdrawals happen at payout time (UC-OPP-06).
+
+  Status handling: `:pending` and `:failed` transactions are both completed by
+  this function. The `:failed → :completed` upgrade resolves the race where the
+  expiration worker marks a transaction failed before a late webhook arrives —
+  the researcher's payment did succeed at OPP and we credit it. Only
+  `:completed` transactions are refused (idempotency on duplicate webhooks).
   """
   def complete_transaction(provider_uid) when is_binary(provider_uid) do
     transaction =
@@ -326,12 +332,9 @@ defmodule Systems.Budget.Public do
     {:ok, :updated}
   end
 
-  @invoice_start_number 128
-
   defp generate_invoice_id do
     env_id = Application.get_env(:core, :invoice_environment, "DEV")
-    count = Repo.aggregate(Budget.TransactionModel, :count)
-    number = @invoice_start_number + count
+    %{rows: [[number]]} = Repo.query!("SELECT nextval('invoice_number_seq')")
     padded = number |> Integer.to_string() |> String.pad_leading(4, "0")
     "NEXT-#{env_id}-#{padded}"
   end
