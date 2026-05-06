@@ -412,7 +412,11 @@ defmodule Systems.Assignment.Public do
 
   def add_participant!(%Assignment.Model{} = assignment, user) do
     assignment =
-      Repo.preload(assignment, [:crew, :info, fund: [:available, :pending, :currency, :currency_ledger]])
+      Repo.preload(assignment, [
+        :crew,
+        :info,
+        fund: [:available, :pending, :currency, :currency_ledger]
+      ])
 
     {:ok, %{member: member}} =
       Crew.Public.apply_member_with_role(assignment.crew, user, :participant)
@@ -457,9 +461,7 @@ defmodule Systems.Assignment.Public do
   # bookkeeping/journal code (which expects fund.currency) works on those rows.
   defp ensure_fund_currency(%Fund.Model{currency: %Fund.CurrencyModel{}} = fund), do: fund
 
-  defp ensure_fund_currency(
-         %Fund.Model{currency_ledger: %{currency: ledger_currency}} = fund
-       )
+  defp ensure_fund_currency(%Fund.Model{currency_ledger: %{currency: ledger_currency}} = fund)
        when is_atom(ledger_currency) and not is_nil(ledger_currency) do
     name = ledger_currency |> Atom.to_string() |> String.downcase()
 
