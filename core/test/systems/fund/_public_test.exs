@@ -659,7 +659,7 @@ defmodule Systems.Fund.PublicTest do
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
         |> Fund.Public.reject_reward(key)
-        |> Core.Repo.transaction()
+        |> Core.Repo.commit()
 
       assert {:ok, %{noop: :pre, reject_status: %{status: :rejected}}} = result
       assert %{status: :rejected, deposit_id: nil} = Fund.Public.get_reward(key, [])
@@ -669,7 +669,7 @@ defmodule Systems.Fund.PublicTest do
       assert_raise Fund.Public.FundError, fn ->
         Ecto.Multi.new()
         |> Fund.Public.reject_reward("nonexistent-key")
-        |> Core.Repo.transaction()
+        |> Core.Repo.commit()
       end
     end
   end

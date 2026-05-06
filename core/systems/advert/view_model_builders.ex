@@ -525,14 +525,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     reward_value_label(currency, subject_reward)
   end
 
-  defp reward_value_label(_, _), do: "?"
-
   defp reward_value_label(%{} = currency, nil), do: reward_value_label(currency, 0)
 
   defp reward_value_label(%{} = currency, reward_value) when is_integer(reward_value) do
     locale = Gettext.get_locale(CoreWeb.Gettext)
     Fund.CurrencyModel.label(currency, locale, reward_value)
   end
+
+  defp reward_value_label(_, _), do: "?"
 
   def get_card_type(submission) do
     case inactive?(submission) do
