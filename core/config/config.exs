@@ -99,6 +99,12 @@ config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 # Maximum HTTP body size for uploads (Plug.Parsers)
 config :core, CoreWeb.Endpoint, http_body_max_size: 210_000_000
 
+config :core, :policy_urls,
+  next_terms: "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c",
+  next_privacy: "https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752",
+  panl_terms: "https://panl.nl/terms",
+  panl_privacy: "https://panl.nl/privacy"
+
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
