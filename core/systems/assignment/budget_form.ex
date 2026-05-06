@@ -68,7 +68,7 @@ defmodule Systems.Assignment.BudgetForm do
   def handle_event(
         "save_fee",
         %{"info_model" => attrs},
-        %{assigns: %{info: info, subject_count: subject_count}} = socket
+        %{assigns: %{assignment: assignment, info: info, subject_count: subject_count}} = socket
       ) do
     attrs = convert_subject_reward(attrs)
     changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
@@ -81,6 +81,7 @@ defmodule Systems.Assignment.BudgetForm do
           :noreply,
           socket
           |> assign(
+            assignment: %{assignment | info: updated_info},
             info: updated_info,
             fee_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
             reward_cents: reward_cents
