@@ -192,15 +192,19 @@ defmodule Systems.Assignment.PayoutModal do
       </div>
 
       <div class="mb-6">
-        <Button.dynamic
-          action={%{type: :send, event: "pay_out_all", target: @myself}}
-          face={%{
-            type: :primary,
-            label: "€  " <> dgettext("eyra-assignment", "payout.pay_out_all.button")
-          }}
-          enabled?={@count > 0}
-          testid="pay-out-all-button"
-        />
+        <button
+          type="button"
+          phx-click="pay_out_all"
+          phx-target={@myself}
+          disabled={@count == 0}
+          data-testid="pay-out-all-button"
+          class={pay_out_all_class(@count > 0)}
+        >
+          <span class="flex items-center justify-center w-5 h-5 rounded-full border border-white text-white text-bodysmall leading-none">
+            €
+          </span>
+          <span><%= dgettext("eyra-assignment", "payout.pay_out_all.button") %></span>
+        </button>
       </div>
 
       <form phx-change="update_search" phx-target={@myself} class="mb-2">
@@ -210,10 +214,22 @@ defmodule Systems.Assignment.PayoutModal do
             name="value"
             value={@search_query}
             placeholder={dgettext("eyra-assignment", "payout.search.placeholder")}
-            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body"
+            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body focus:outline-none focus:border-primary"
             data-testid="payout-search"
           />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">⌕</span>
+          <svg
+            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
         </div>
       </form>
 
@@ -233,11 +249,29 @@ defmodule Systems.Assignment.PayoutModal do
           <% end %>
         </div>
 
-        <div class="mt-4 flex items-center justify-between text-bodysmall font-body text-grey2" data-testid="payout-pagination">
-          <div class="flex items-center gap-1">
-            <span class="px-2 text-grey3">‹</span>
-            <span class="px-3 py-1 rounded bg-primary text-white">1</span>
-            <span class="px-2 text-grey3">›</span>
+        <div class="mt-6 flex items-center justify-between text-bodysmall font-body text-grey2" data-testid="payout-pagination">
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
+              disabled
+              aria-label="previous"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <span class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-button font-button">1</span>
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
+              disabled
+              aria-label="next"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
           </div>
           <span><%= dgettext("eyra-assignment", "payout.pagination.single_page") %></span>
         </div>
@@ -330,6 +364,13 @@ defmodule Systems.Assignment.PayoutModal do
     do: "px-5 py-2 rounded-full bg-primary text-white text-button font-button"
 
   defp tab_segment_class(false),
+    do: "px-5 py-2 rounded-full bg-transparent text-grey2 text-button font-button hover:text-grey1"
+
+  defp pay_out_all_class(true),
     do:
-      "px-5 py-2 rounded-full bg-transparent text-grey2 text-button font-button hover:text-grey1"
+      "inline-flex items-center gap-3 px-5 py-2 rounded bg-primary hover:bg-primary/90 text-white text-button font-button"
+
+  defp pay_out_all_class(false),
+    do:
+      "inline-flex items-center gap-3 px-5 py-2 rounded bg-primary text-white text-button font-button opacity-50 cursor-not-allowed"
 end
