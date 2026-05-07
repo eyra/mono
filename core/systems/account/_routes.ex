@@ -1,6 +1,11 @@
 defmodule CoreWeb.Live.User.Routes do
   defmacro routes() do
     quote do
+      scope "/user", Systems.Account do
+        pipe_through([:browser])
+        get("/onboarding/start", OnboardingController, :start)
+      end
+
       scope "/", Systems.Account do
         pipe_through([:browser, :redirect_if_user_is_authenticated])
         live("/user/signup/:user_type", SignupPage)
@@ -18,6 +23,7 @@ defmodule CoreWeb.Live.User.Routes do
         pipe_through([:browser, :require_authenticated_user])
         live("/user/profile", UserProfilePage)
         live("/user/profile/:tab", UserProfilePage)
+        live("/user/onboarding", OnboardingPage)
       end
 
       scope "/", Systems.Account do
@@ -27,10 +33,16 @@ defmodule CoreWeb.Live.User.Routes do
         put("/user/settings", SettingsController, :update)
 
         get(
-          "/user/settings/confirm-email/:token",
+          "/user/settings/activate-account/:token",
           SettingsController,
-          :confirm_email
+          :activate_account
         )
+      end
+
+      scope "/api/service", Systems.Account do
+        pipe_through([:api])
+
+        post("/login", ServiceLoginController, :create)
       end
     end
   end

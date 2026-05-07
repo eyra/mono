@@ -30,6 +30,11 @@ defmodule Systems.Paper.ReferenceFileModel do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          id: String.t(),
+          status: :uploaded | :processed | :failed | :archived
+        }
+
   @fields ~w(status)a
 
   @required_fields @fields
@@ -42,7 +47,7 @@ defmodule Systems.Paper.ReferenceFileModel do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: preload_graph([:file, :papers, :errors])
+  def preload_graph(:down), do: preload_graph([:file, :errors])
   def preload_graph(:up), do: preload_graph([])
   def preload_graph(:file), do: [file: Content.FileModel.preload_graph(:down)]
 

@@ -136,10 +136,6 @@ msgid "create_item_popup.create.button"
 msgstr "Maak aan"
 
 #, elixir-autogen, elixir-format
-msgid "people.page.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "first.breadcrumb.label"
 msgstr ""
 
@@ -162,3 +158,7 @@ msgstr "Je project heeft nog geen opslag."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "node.data.empty.title"
 msgstr "Geen opslag aangemaakt"
+
+#, elixir-autogen, elixir-format
+msgid "admins.title"
+msgstr ""

@@ -1,0 +1,28 @@
+TY  - JOUR
+TI  - Test Paper for Upload
+AU  - Smith, John
+AU  - Doe, Jane
+PY  - 2023
+DO  - 10.1234/upload.test
+AB  - This is a test paper uploaded via unit test
+KW  - testing
+KW  - unit test
+ER  -
+
+TY  - BOOK
+TI  - Another Test Reference
+AU  - Johnson, Bob
+PY  - 2022
+DO  - 10.5678/book.test
+AB  - A test book reference for import testing
+ER  -
+
+TY  - CONF
+TI  - Conference Paper Example
+AU  - Wilson, Alice
+PY  - 2024
+DO  - 10.9999/conf.example
+AB  - Example conference paper for testing purposes
+KW  - conference
+KW  - testing
+ER  -

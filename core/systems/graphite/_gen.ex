@@ -27,7 +27,7 @@ defmodule Systems.Graphite.Gen do
         |> create_auth_node(name)
         |> create_submission(name, leaderboard.tool)
       end)
-      |> Core.Repo.transaction(returning: true)
+      |> Core.Repo.commit(returning: true)
 
     submission_count = count(result, :submission)
     user_count = count(result, :user)
@@ -95,7 +95,7 @@ defmodule Systems.Graphite.Gen do
       |> Ecto.Multi.delete_all(:features, features_to_delete)
       |> Ecto.Multi.delete_all(:profiles, profiles_to_delete)
       |> Ecto.Multi.delete_all(:users, users_to_delete)
-      |> Core.Repo.transaction()
+      |> Core.Repo.commit()
 
     %{
       submissions: {submission_count, nil},

@@ -4,6 +4,15 @@ defmodule Systems.Workflow.Switch do
   alias Frameworks.Signal
   alias Systems.Workflow
 
+  def intercept(
+        {:zircon_screening_tool, _} = _signal,
+        %{zircon_screening_tool: tool} = _message
+      ) do
+    workflow_item = Workflow.Public.get_item_by_tool(tool, [:workflow, :tool_ref])
+
+    {:continue, :workflow_item, workflow_item}
+  end
+
   def intercept({:manual_tool, _} = signal, %{manual_tool: tool} = message) do
     workflow_item = Workflow.Public.get_item_by_tool(tool, [:workflow, :tool_ref])
 

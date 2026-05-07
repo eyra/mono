@@ -1,6 +1,12 @@
 defmodule Frameworks.Pixel.Icon do
   use CoreWeb, :pixel
 
+  # Path function for use outside of components
+
+  def path(name), do: "/images/icons/#{name}.svg"
+
+  # Components
+
   attr(:type, :atom, required: true)
   attr(:src, :any, required: true)
   attr(:size, :string, required: true)
@@ -96,29 +102,6 @@ defmodule Frameworks.Pixel.Icon do
       bg_color="bg-white"
       border_radius="rounded-full"
     />
-    """
-  end
-
-  attr(:name, :any, required: true)
-  attr(:size, :atom, required: true)
-
-  def menu_home(%{name: name, size: size} = assigns) do
-    icon_name =
-      case size do
-        :wide -> "#{name}_wide"
-        _ -> "#{name}"
-      end
-
-    assigns = assign(assigns, :icon_name, icon_name)
-
-    ~H"""
-    <div class="h-8 sm:h-12">
-      <.generic_body
-        type={:static}
-        src={@icon_name}
-        size=""
-      />
-    </div>
     """
   end
 

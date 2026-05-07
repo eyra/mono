@@ -1,6 +1,7 @@
 import _ from "lodash";
 
-const pdfjsVersion = "5.4.149";
+// IMPORTANT: When updating pdfjs-dist in package.json, update this version to match!
+const pdfjsVersion = "5.4.296";
 const pdfjs = require("../node_modules/pdfjs-dist");
 const worker = `https://unpkg.com/pdfjs-dist@${pdfjsVersion}/build/pdf.worker.min.mjs`;
 
@@ -15,8 +16,10 @@ export const PDFViewer = {
 
     this.loadDocument().then((pdf) => {
       this.pdf = pdf;
-      console.log("[PDFViewer] Document loaded, push event 'tool_initialized'");
-      this.pushEvent("tool_initialized");
+      if (this.el.dataset.notifyReady !== "false") {
+        console.log("[PDFViewer] Document loaded, push event 'pdf_ready'");
+        this.pushEvent("pdf_ready");
+      }
       this.renderPagesIfNeeded();
       var throttledRenderPages = _.throttle(_.partial(renderPages, this), 10, {
         trailing: true,

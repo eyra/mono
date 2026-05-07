@@ -25,9 +25,17 @@ defmodule Systems.Storage.Private do
   def special_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
   def special_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}
 
-  def storage_info(storage_endpoint) do
-    special = Storage.EndpointModel.special(storage_endpoint)
-    {key, backend} = special_info(special)
-    %{key: key, special: special, backend: backend}
+  @doc """
+  Returns the node-local Oban queue name for storage operations.
+
+  Data donation files are stored on the local filesystem, so storage delivery
+  jobs must be processed by the same node that received the donation.
+  The queue name is derived from Node.self() to ensure jobs are processed
+  only by the node that has access to the local filesystem.
+
+  Uses the same naming scheme as runtime.exs configuration.
+  """
+  def storage_delivery_queue do
+    :"storage_delivery_local_#{Node.self()}"
   end
 end

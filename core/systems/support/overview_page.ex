@@ -21,11 +21,10 @@ defmodule Systems.Support.OverviewPage do
   def render(assigns) do
     ~H"""
       <.tabbar_page
+        socket={@socket}
         title={@vm.title}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
         tabs={@vm.tabs}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}

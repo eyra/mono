@@ -21,7 +21,7 @@ defmodule Systems.Assignment.Public do
   alias Systems.Account
   alias Systems.Content
   alias Systems.Consent
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
@@ -136,7 +136,7 @@ defmodule Systems.Assignment.Public do
   end
 
   def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
-    {:ok, %{assignment_instance: instance}} = obtain_instance(assignment, user)
+    {:ok, instance} = obtain_instance(assignment, user)
     instance
   end
 
@@ -148,8 +148,15 @@ defmodule Systems.Assignment.Public do
       on_conflict: {:replace, [:updated_at]},
       conflict_target: [:assignment_id, :user_id]
     )
-    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, %{user: user})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, message: %{user: user})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_instance: instance}} ->
+        {:ok, instance}
+
+      error ->
+        error
+    end
   end
 
   def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
@@ -188,7 +195,7 @@ defmodule Systems.Assignment.Public do
         affiliate,
         page_refs,
         workflow,
-        budget,
+        fund,
         consent_agreement,
         auth_node
       ) do
@@ -199,7 +206,7 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:page_refs, page_refs)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:budget, budget)
+    |> Ecto.Changeset.put_assoc(:fund, fund)
     |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
@@ -270,7 +277,7 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Multi.insert(:assignment_page_ref, page_ref)
     |> Signal.Public.multi_dispatch({:assignment_page_ref, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def delete_page_ref(
@@ -284,10 +291,12 @@ defmodule Systems.Assignment.Public do
 
     Multi.new()
     |> Multi.delete_all(:assignment_page_refs, page_refs)
-    |> Signal.Public.multi_dispatch({:assignment_page_ref, :deleted}, %{
-      assignment_page_ref: page_ref
-    })
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:assignment_page_ref, :deleted},
+      message: %{
+        assignment_page_ref: page_ref
+      }
+    )
+    |> Repo.commit()
   end
 
   def delete_storage_endpoint!(%{storage_endpoint_id: nil} = assignment) do
@@ -310,7 +319,7 @@ defmodule Systems.Assignment.Public do
       Multi.new()
       |> EctoHelper.update_and_dispatch(changeset, :assignment)
       |> Multi.delete(:storage_endpoint_special, storage_endpoint_special)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assignment
   end
@@ -323,7 +332,7 @@ defmodule Systems.Assignment.Public do
         %Assignment.Model{} = assignment,
         %Assignment.InfoModel{} = info,
         %Workflow.Model{} = workflow,
-        %Budget.Model{} = budget,
+        %Fund.Model{} = fund,
         auth_node
       ) do
     # don't copy crew, just create a new one
@@ -333,7 +342,7 @@ defmodule Systems.Assignment.Public do
     |> Assignment.Model.changeset(Map.from_struct(assignment))
     |> Ecto.Changeset.put_assoc(:info, info)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
-    |> Ecto.Changeset.put_assoc(:budget, budget)
+    |> Ecto.Changeset.put_assoc(:fund, fund)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
@@ -355,14 +364,14 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Assignment.ExcludeModel.exclude(assignment1, assignment2)
     |> Assignment.ExcludeModel.exclude(assignment2, assignment1)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def include(%Assignment.Model{} = assignment1, %Assignment.Model{} = assignment2) do
     Multi.new()
     |> Assignment.ExcludeModel.include(assignment1, assignment2)
     |> Assignment.ExcludeModel.include(assignment2, assignment1)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update(assignment, %{} = attrs) do
@@ -377,10 +386,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def update_budget(assignment, budget) do
+  def update_fund(assignment, fund) do
     changeset =
       Assignment.Model.changeset(assignment, %{})
-      |> Ecto.Changeset.put_assoc(:budget, budget)
+      |> Ecto.Changeset.put_assoc(:fund, fund)
 
     Core.Persister.save(assignment, changeset)
   end
@@ -402,9 +411,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def add_participant!(%Assignment.Model{crew: crew}, user) do
-    if not Crew.Public.member?(crew, user) do
-      {:ok, _} = Crew.Public.apply_member_with_role(crew, user, :participant)
-    end
+    # Use upsert pattern - no check-then-insert to avoid race conditions
+    Crew.Public.apply_member_with_role(crew, user, :participant)
   end
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
@@ -506,7 +514,7 @@ defmodule Systems.Assignment.Public do
       |> Multi.run(:member, fn _, _ ->
         run_apply_member(crew, user, identifier, expire_at)
       end)
-      |> Repo.transaction()
+      |> Repo.commit()
     end
   end
 
@@ -520,17 +528,17 @@ defmodule Systems.Assignment.Public do
     if member = Crew.Public.get_member(crew, user) do
       Multi.new()
       |> Crew.Public.expire_member(member)
-      |> Signal.Public.multi_dispatch({:crew_member, :declined}, %{crew_member: member})
-      |> Repo.transaction()
+      |> Signal.Public.multi_dispatch({:crew_member, :declined}, message: %{crew_member: member})
+      |> Repo.commit()
     else
       Logger.warning("Unable to decline member, probably expired already")
     end
   end
 
-  defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
+  defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
-    case Budget.Public.create_reward(budget, amount, user, idempotence_key) do
+    case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end
@@ -563,14 +571,14 @@ defmodule Systems.Assignment.Public do
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)
     |> rollback_deposit(assignment, user)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
     |> rollback_deposit(assignment, user)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def cancel(id, user) do
@@ -776,19 +784,19 @@ defmodule Systems.Assignment.Public do
       |> Enum.map(fn {user_id, assignment_id} ->
         idempotence_key(assignment_id, user_id)
       end)
-      |> Enum.filter(&Budget.Public.reward_has_outstanding_deposit?(&1))
-      |> Enum.each(&Budget.Public.rollback_deposit(&1))
+      |> Enum.filter(&Fund.Public.reward_has_outstanding_deposit?(&1))
+      |> Enum.each(&Fund.Public.rollback_deposit(&1))
 
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
     idempotence_key = idempotence_key(assignment, user)
 
     multi
-    |> Budget.Public.rollback_deposit(idempotence_key)
+    |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
@@ -802,12 +810,12 @@ defmodule Systems.Assignment.Public do
 
   def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Budget.Public.payout_reward(idempotence_key)
+    Fund.Public.payout_reward(idempotence_key)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Budget.Public.rewarded_amount(idempotence_key)
+    Fund.Public.rewarded_amount(idempotence_key)
   end
 end
 

@@ -51,6 +51,10 @@ defmodule CoreWeb.Endpoint do
       ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
   )
 
+  if Code.ensure_loaded?(Tidewave) do
+    plug(Tidewave, team: [id: "Eyra", token: "4xfkyvio76cyuecr7eeo74lpairjg565ghqmkya"])
+  end
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
@@ -63,10 +67,19 @@ defmodule CoreWeb.Endpoint do
   plug(Plug.RequestId)
   plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
 
+  @http_body_max_size Application.compile_env(
+                        :core,
+                        [CoreWeb.Endpoint, :http_body_max_size],
+                        210_000_000
+                      )
+
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Phoenix.json_library()
+    json_decoder: Phoenix.json_library(),
+    body_reader: {Systems.Payment.Plug, :cache_body_reader, []},
+    # Allow large uploads for data donation (configurable via HTTP_BODY_MAX_SIZE env var)
+    length: @http_body_max_size
   )
 
   plug(Plug.MethodOverride)

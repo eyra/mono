@@ -21,6 +21,10 @@ defmodule Next.Menu.Items do
         action: %{type: :redirect, to: ~p"/admin/config"},
         title: dgettext("eyra-ui", "menu.item.admin")
       },
+      onyx: %{
+        action: %{type: :redirect, to: ~p"/onyx"},
+        title: dgettext("eyra-ui", "menu.item.onyx")
+      },
       helpdesk: %{
         action: %{type: :redirect, to: ~p"/support/helpdesk"},
         title: dgettext("eyra-ui", "menu.item.helpdesk")

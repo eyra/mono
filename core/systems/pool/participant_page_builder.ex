@@ -4,13 +4,13 @@ defmodule Systems.Pool.ParticipantPageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Advert
 
   def view_model(user, assigns) do
     wallets =
-      Budget.Public.list_wallets(user)
-      |> Enum.map(&Budget.WalletViewBuilder.view_model(&1, assigns))
+      Fund.Public.list_wallets(user)
+      |> Enum.map(&Fund.WalletViewBuilder.view_model(&1, assigns))
 
     contributions =
       user

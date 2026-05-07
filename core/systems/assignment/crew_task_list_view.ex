@@ -1,243 +1,137 @@
 defmodule Systems.Assignment.CrewTaskListView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
   use Systems.Assignment.CrewTaskHelpers
 
-  alias Frameworks.Utility.UserState
-  alias Systems.Assignment
+  import Systems.Assignment.Html, only: [task_list: 1]
 
-  # Make sure this name is unique, see: Systems.Assignment.CrewTaskSingleView
-  @tool_ref_view_name :tool_ref_view_list
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Workflow
+
+  def dependencies(), do: [:assignment_id, :current_user, {:user_state, :task}, :panel_info]
+
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
+    Assignment.Public.get!(assignment_id, [
+      :crew,
+      workflow: [items: [tool_ref: Systems.Workflow.ToolRefModel.preload_graph(:down)]]
+    ])
+  end
 
   @impl true
-  def update(
-        %{
-          work_items: work_items,
-          crew: crew,
-          user: user,
-          timezone: timezone,
-          panel_info: panel_info,
-          user_state_data: user_state_data
-        },
-        socket
-      ) do
-    user_state_key = UserState.key(user, %{crew: crew.id}, "selected-task")
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket |> handle_view_model_updated()}
+  end
 
-    {
-      :ok,
-      socket
-      |> assign(
-        work_items: work_items,
-        crew: crew,
-        user: user,
-        timezone: timezone,
-        panel_info: panel_info,
-        user_state_key: user_state_key,
-        user_state_data: user_state_data
+  @impl true
+  def handle_view_model_updated(
+        %{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket
       )
-      |> update_title()
-      |> update_participant()
-      |> update_selected_item_id()
-      |> update_selected_item()
-      |> update_user_state_value()
-      |> update_launcher()
-      |> compose_child(:work_list_view)
-      |> compose_child(@tool_ref_view_name)
-      |> show_modal_tool_ref_view_if_needed()
-    }
-  end
-
-  defp update_title(socket) do
-    title = dgettext("eyra-assignment", "work.list.title")
-    socket |> assign(title: title)
-  end
-
-  defp update_selected_item_id(%{assigns: %{selected_item_id: selected_item_id}} = socket)
-       when not is_nil(selected_item_id) do
+      when id == current_id do
+    # Same modal already presented, do nothing
     socket
   end
 
-  defp update_selected_item_id(
-         %{assigns: %{user_state_data: user_state_data, user_state_key: user_state_key}} = socket
-       ) do
-    selected_item_id = UserState.integer_value(user_state_data, user_state_key)
-    socket |> assign(selected_item_id: selected_item_id)
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
+      when not is_nil(tool_modal) do
+    socket
+    |> assign(tool_modal: tool_modal)
+    |> present_modal(tool_modal)
   end
 
-  defp update_user_state_value(%{assigns: %{selected_item_id: selected_item_id}} = socket) do
-    socket |> assign(user_state_value: selected_item_id)
-  end
-
-  defp update_user_state_value(socket) do
-    socket |> assign(user_state_value: nil)
-  end
-
-  defp update_selected_item(%{assigns: %{selected_item_id: selected_item_id}} = socket)
-       when not is_nil(selected_item_id) do
-    selected_item =
-      Enum.find(socket.assigns.work_items, fn {%{id: id}, _} -> id == selected_item_id end)
-
-    socket |> assign(selected_item: selected_item)
-  end
-
-  defp update_selected_item(socket) do
-    socket |> assign(selected_item: nil)
-  end
-
-  defp update_launcher(%{assigns: %{selected_item: selected_item}} = socket)
-       when not is_nil(selected_item) do
-    launcher = launcher(selected_item)
-    socket |> assign(launcher: launcher)
-  end
-
-  defp update_launcher(socket) do
-    socket |> assign(launcher: nil)
-  end
+  def handle_view_model_updated(socket), do: assign(socket, tool_modal: nil)
 
   # Behaviours
 
   @impl true
-  def handle_tool_exited(socket) do
+  def handle_tool_completed(
+        %{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket
+      )
+      when not is_nil(tool_modal) do
+    # First hide the modal, then complete task (which triggers signals that may kill this process)
     socket
-    |> handle_task_completed()
-    |> hide_modal_tool_ref_view()
+    |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
+    |> clear_task()
+    |> complete_task(task)
+  end
+
+  def handle_tool_completed(%{assigns: %{vm: %{work_item: {_, task}}}} = socket) do
+    socket
+    |> close_tool_modal()
+    |> complete_task(task)
   end
 
   @impl true
   def handle_tool_initialized(socket) do
-    socket |> send_event(@tool_ref_view_name, "tool_initialized")
-  end
-
-  # Compose
-
-  @impl true
-  def compose(:work_list_view, %{work_items: work_items}) do
-    work_list = %{
-      items: Enum.map(work_items, &map_item/1),
-      selected_item_id: nil
-    }
-
-    %{module: Workflow.WorkListView, params: %{work_list: work_list}}
-  end
-
-  def compose(
-        @tool_ref_view_name,
-        %{
-          user: user,
-          participant: participant,
-          timezone: timezone,
-          user_state_data: user_state_data,
-          selected_item: {%{title: title, tool_ref: tool_ref}, task} = selected_item
-        }
-      ) do
-    icon = get_icon(selected_item)
-
-    %{
-      module: Workflow.ToolRefView,
-      params: %{
-        title: title,
-        icon: icon,
-        tool_ref: tool_ref,
-        task: task,
-        visible: true,
-        user: user,
-        user_state_data: user_state_data,
-        participant: participant,
-        timezone: timezone
-      }
-    }
-  end
-
-  def compose(@tool_ref_view_name, _) do
-    nil
-  end
-
-  @impl true
-  def handle_modal_closed(socket, @tool_ref_view_name) do
+    # Tool initialized - no specific action needed for list view
     socket
-    |> assign(user_state_value: nil)
-    |> assign(selected_item_id: nil)
-    |> update_selected_item()
-    |> update_launcher()
   end
 
   # Events
 
   @impl true
-  def handle_event(
-        "work_item_selected",
-        %{"item" => item_id},
+  def consume_event(
+        %{name: :work_item_selected, payload: %{"item" => item_id}},
         socket
       ) do
     item_id = String.to_integer(item_id)
-
-    {
-      :noreply,
-      socket |> start_item(item_id)
-    }
+    {:stop, socket |> start_item(item_id)}
   end
 
-  def handle_event("hide_modal", _payload, socket) do
-    {:noreply, socket |> hide_modal_tool_ref_view()}
-  end
-
-  def handle_event("tool_initialized", payload, socket) do
-    {:noreply, socket |> send_event(@tool_ref_view_name, "tool_initialized", payload)}
-  end
-
-  def handle_event("complete_task", _, socket) do
-    {:noreply, socket |> handle_task_completed()}
-  end
-
-  def handle_event("complete_task_and_close", _, socket) do
-    {:noreply, socket |> handle_task_completed() |> hide_modal_tool_ref_view()}
+  # Called by LiveNest Modal Presenter when modal is closed
+  def consume_event(%{name: :modal_closed, payload: %{modal_id: _modal_id}}, socket) do
+    {:stop, socket |> clear_task()}
   end
 
   # Private
 
-  defp start_item(socket, item_id) do
+  defp start_item(%{assigns: %{user_state: user_state}} = socket, item_id) do
     socket
-    |> assign(selected_item_id: item_id)
-    |> update_user_state_value()
-    |> update_selected_item()
-    |> update_launcher()
-    |> compose_child(@tool_ref_view_name)
-    |> show_modal_tool_ref_view_if_needed()
+    |> assign(user_state: Map.put(user_state, :task, item_id))
+    |> update_view_model()
+    |> handle_view_model_updated()
     |> start_task()
+    |> publish_user_state_change(:task, item_id)
   end
 
-  defp start_task(%{assigns: %{selected_item: {_, task}}} = socket) do
+  defp start_task(%{assigns: %{vm: %{work_item: {_, task}}}} = socket) do
     Assignment.Public.start_task(task)
     socket
   end
 
-  defp show_modal_tool_ref_view_if_needed(%{assigns: %{selected_item: selected_item}} = socket)
-       when not is_nil(selected_item) do
-    socket |> show_modal(@tool_ref_view_name, :full)
-  end
+  defp complete_task(socket, task) do
+    {:ok, _} = Crew.Public.complete_task(task)
 
-  defp show_modal_tool_ref_view_if_needed(socket) do
     socket
+    |> publish_event(:task_completed)
   end
 
-  defp hide_modal_tool_ref_view(%{assigns: %{work_items: [_]}} = socket) do
-    socket |> hide_modal(@tool_ref_view_name)
-  end
-
-  defp hide_modal_tool_ref_view(socket) do
+  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
+       when not is_nil(tool_modal) do
     socket
-    |> hide_modal(@tool_ref_view_name)
-    |> assign(selected_item_id: nil)
-    |> update_user_state_value()
-    |> update_selected_item()
-    |> update_launcher()
+    |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
+    |> clear_task()
+  end
+
+  defp close_tool_modal(socket) do
+    socket |> clear_task()
+  end
+
+  defp clear_task(%{assigns: %{user_state: user_state}} = socket) do
+    socket
+    |> assign(user_state: Map.put(user_state, :task, nil))
+    |> update_view_model()
+    |> handle_view_model_updated()
+    |> publish_user_state_change(:task, nil)
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-      <div id="crew_task_list_view" class="w-full h-full" phx-hook="UserState" data-key={@user_state_key} data-value={@user_state_value} >
-        <.task_list title={@title}>
-          <.child name={:work_list_view} fabric={@fabric} />
+      <div data-testid="crew-task-list-view" class="w-full h-full overflow-y-auto">
+        <.task_list>
+          <.live_component module={Workflow.WorkListView} id="work_list" work_list={@vm.work_list} />
         </.task_list>
       </div>
     """

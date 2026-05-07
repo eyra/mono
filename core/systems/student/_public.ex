@@ -10,7 +10,7 @@ defmodule Systems.Student.Public do
 
   alias Systems.{
     Org,
-    Budget,
+    Fund,
     Bookkeeping,
     Pool,
     Student
@@ -53,35 +53,35 @@ defmodule Systems.Student.Public do
   def list_pools(preload \\ []), do: Pool.Public.list_by_director(@pool_director_key, preload)
 
   def list_universities(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:university, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_faculties(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:faculty, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_programs(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:student_program, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_classes(_, preload \\ [])
 
   def list_classes(%User{} = user, preload) do
-    Org.Public.list_nodes(user, :student_class, preload)
+    Org.Public.list_nodes(user, preload)
   end
 
   def list_classes(template, preload) do
-    Org.Public.list_nodes(:student_class, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_courses(_, preload \\ [])
 
   def list_courses(%User{} = user, preload) do
-    Org.Public.list_nodes(user, :student_course, preload)
+    Org.Public.list_nodes(user, preload)
   end
 
   def list_courses(template, preload) do
-    Org.Public.list_nodes(:student_course, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def get_target(%{identifier: ["wallet", currency_name, _]}) do
@@ -117,7 +117,7 @@ defmodule Systems.Student.Public do
     |> update_class_accociations(user, added_to_classes, deleted_from_classes)
     |> update_pool_participations(user, added_to_pools, deleted_from_pools)
     |> migrate_wallets(user, added_to_pools)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def migrate_wallets(multi, %User{} = user, added_to_pools) do
@@ -151,7 +151,7 @@ defmodule Systems.Student.Public do
     idempotence_key =
       "type=migrate_wallets,from=#{last_year_currency},to=#{current_year_currency},user=#{user_id}"
 
-    Budget.Public.move_wallet_balance(
+    Fund.Public.move_wallet_balance(
       last_year_wallet,
       current_year_wallet,
       idempotence_key,
@@ -256,7 +256,7 @@ defmodule Systems.Student.Public do
     pool_name = "vu_sbe_rpr_year#{study_year}_#{academic_year}"
 
     %{currency: currency} =
-      create_currency_and_budget!(pool_name, [{:en, "%{amount} credit", "%{amount} credits"}])
+      create_currency_and_fund!(pool_name, [{:en, "%{amount} credit", "%{amount} credits"}])
 
     create_pool(target, pool_name, currency, rpr)
   end
@@ -268,16 +268,16 @@ defmodule Systems.Student.Public do
     end
   end
 
-  defp create_currency_and_budget!(name, label) do
-    case Budget.Public.get_by_name(name, [:currency]) do
-      nil -> Budget.Public.create_currency_and_budget(name, {:emoji, "🏫"}, :virtual, 0, label)
+  defp create_currency_and_fund!(name, label) do
+    case Fund.Public.get_by_name(name, [:currency]) do
+      nil -> Fund.Public.create_currency_and_fund(name, {:emoji, "🏫"}, :virtual, 0, label)
       budget -> budget
     end
   end
 
-  defp create_org(type, identifier, short_name, full_name) do
+  defp create_org(_type, identifier, short_name, full_name) do
     case Org.Public.get_node(identifier) do
-      nil -> Org.Public.create_node!(type, identifier, short_name, full_name)
+      nil -> Org.Public.create_node!(identifier, short_name, full_name)
       node -> node
     end
   end

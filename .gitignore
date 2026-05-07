@@ -4,6 +4,7 @@ postgres-data
 .netrc
 *.key
 *.pub
+*.mo
 
 # Local development settings
 dev.local.exs
@@ -47,9 +48,11 @@ node_modules/
 /.devcontainer/devcontainer.env
 logfile
 .env
+.mcp.json
 .DS_Store
 /mix_home/
 /core/config/dev.secret.exs
 /core/docker.env
 /core/playground.exs
 core/.elixir_ls/*
+.dir-locals.el

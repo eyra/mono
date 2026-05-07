@@ -54,16 +54,6 @@ defmodule Systems.Document.ToolModel do
     def ready?(tool), do: Document.ToolModel.ready?(tool)
     def form(_, _), do: Document.ToolForm
 
-    def launcher(%{id: id, ref: ref}),
-      do: %{
-        module: Document.PDFNavView,
-        params: %{
-          key: "pdf_view_#{id}",
-          url: ref,
-          title: dgettext("eyra-document", "component.title")
-        }
-      }
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-document", "pending.label"),

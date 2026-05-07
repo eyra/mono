@@ -2,8 +2,17 @@ defmodule Systems.Feldspar.AppView do
   use CoreWeb, :live_component
 
   @impl true
-  def update(%{key: key, url: url, locale: locale}, socket) do
-    {:ok, socket |> assign(key: key, url: url, locale: locale)}
+  def update(%{key: key, url: url, locale: locale} = params, socket) do
+    upload_context = Map.get(params, :upload_context, %{})
+
+    {:ok,
+     socket
+     |> assign(
+       key: key,
+       url: url,
+       locale: locale,
+       upload_context: upload_context
+     )}
   end
 
   @impl true
@@ -14,7 +23,10 @@ defmodule Systems.Feldspar.AppView do
         Changing the preceding siblings of the iframe would result in a reload of the iframe
         due to Morphdom (https://github.com/patrick-steele-idem/morphdom/issues/200).
           --%>
-        <div phx-update="ignore" id={@key} phx-hook="FeldsparApp" data-locale={@locale} data-src={@url}>
+        <div phx-update="ignore" id={@key} phx-hook="FeldsparApp"
+          data-locale={@locale}
+          data-src={@url}
+          data-upload-context={Jason.encode!(@upload_context)}>
           <iframe class="w-full outline-none"></iframe>
         </div>
       </div>

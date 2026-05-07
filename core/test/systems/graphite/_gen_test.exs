@@ -42,6 +42,7 @@ defmodule Systems.Graphite.GenTest do
                from(Graphite.SubmissionModel)
                |> Repo.all()
                |> Repo.preload(auth_node: [:role_assignments])
+               |> Enum.sort_by(& &1.description)
 
       assert [
                %Systems.Account.User{

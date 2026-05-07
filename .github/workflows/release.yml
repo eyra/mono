@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch || github.ref }}
 
@@ -33,10 +33,10 @@ jobs:
         shell: bash
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build Docker Image (dev target) with cache
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
@@ -53,6 +53,7 @@ jobs:
             -e MIX_ENV=$MIX_ENV \
             -e BUNDLE=${{ inputs.bundle || 'next' }} \
             -e VERSION=${{ env.VERSION }} \
+            -e PLATFORM=aws \
             -v ${{ github.workspace }}:/app \
             next-platform:latest \
             bash -c "cd /app/core && ./scripts/build-frontend && ./scripts/build-release"
@@ -61,7 +62,7 @@ jobs:
         run: tar cfj "../${{env.VERSION}}.tar.bz2" "${{env.VERSION}}"
         working-directory: core
 
-      - uses: softprops/action-gh-release@19cd0bcd2b95a5f9e0aab8377b3cae33e51c2234
+      - uses: softprops/action-gh-release@4dd30955cca228da305ffee6fbc3fc1f95d447c2
         with:
           tag_name: "${{env.VERSION}}"
           prerelease: false

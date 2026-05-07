@@ -2,9 +2,14 @@ _build/
 tmp/
 priv/static/content
 priv/static/uploads
+priv/static/donations
 priv/cldr
 .bundle
 deps/
 
 # Ignore generated js hook files for components
 assets/js/_hooks/
+
+# Ignore secrets
+config/dev.secret.exs
+config/test.secret.exs

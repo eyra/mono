@@ -15,10 +15,10 @@ defmodule CoreWeb.Menu.Builder do
 
   def include_map(user) do
     %{
-      admin: Admin.Public.admin?(user),
+      admin: Admin.Public.admin_access?(user),
       support: Admin.Public.admin?(user),
       debug: Admin.Public.admin?(user),
-      profile: Account.Public.internal?(user),
+      profile: Account.Public.show_profile_menu_item?(user),
       signout: not is_nil(user),
       signin: is_nil(user)
     }

@@ -92,6 +92,12 @@ defmodule Systems.Affiliate.Form do
             </div>
           </div>
 
+          <.spacing value="XS" />
+          <Text.body><%= dgettext("eyra-affiliate", "platform_name.body") %></Text.body>
+
+          <.spacing value="S" />
+          <.text_input form={form} field={:platform_name} label_text={dgettext("eyra-affiliate", "platform_name.label")} placeholder={dgettext("eyra-affiliate", "platform_name.placeholder")} reserve_error_space={false}/>
+
           <.spacing value="M" />
 
           <Text.title4><%= dgettext("eyra-affiliate", "callback_url.title") %></Text.title4>

@@ -24,7 +24,7 @@ defmodule Systems.Consent.PublicTest do
       |> Multi.insert(:revision3, fn %{agreement: agreement} ->
         Consent.Public.prepare_revision(agreement, "revision3")
       end)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assert [
              %Systems.Consent.AgreementModel{
@@ -75,7 +75,7 @@ defmodule Systems.Consent.PublicTest do
       |> Multi.insert(:signatureC2, fn %{revision3: revision3} ->
         Consent.Public.prepare_signature(revision3, user_c)
       end)
-      |> Repo.transaction()
+      |> Repo.commit()
 
     assert [
              %Systems.Consent.AgreementModel{

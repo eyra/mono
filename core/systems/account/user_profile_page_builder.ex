@@ -2,62 +2,58 @@ defmodule Systems.Account.UserProfilePageBuilder do
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Concept.LiveContext
   alias Systems.Account
+  alias Systems.Content.Adaptable
 
-  def view_model(%Account.User{} = user, %{fabric: fabric} = assigns) do
+  @tabs [
+    Systems.Account.ProfileTab,
+    Systems.Account.FeaturesTab
+  ]
+
+  def view_model(%Account.User{} = user, _assigns) do
+    live_context = LiveContext.new(%{user_id: user.id})
+
     %{
       title: dgettext("eyra-account", "profile.title"),
-      tabs: build_tabs(user, fabric, assigns),
+      items: build_items(user, live_context),
+      signout_button: build_signout_button(),
       user: user,
       active_menu_item: :profile
     }
   end
 
-  defp build_tabs(user, fabric, assigns) do
-    [
-      create_profile_tab(user, fabric, assigns),
-      create_features_tab(user, fabric, assigns)
-    ]
-  end
-
-  defp create_profile_tab(user, fabric, _assigns) do
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :profile,
-        Systems.Account.UserProfileForm,
-        %{
-          id: :profile_form,
-          user: user
-        }
-      )
-
+  defp build_signout_button do
     %{
-      id: :profile,
-      title: dgettext("eyra-account", "profile.tab.profile.title"),
-      type: :fullpage,
-      child: child,
-      ready?: true
+      action: %{type: :http_delete, to: ~p"/user/session"},
+      face: %{
+        type: :secondary,
+        label: dgettext("eyra-ui", "menu.item.signout"),
+        border_color: "border-delete",
+        text_color: "text-delete"
+      }
     }
   end
 
-  defp create_features_tab(user, fabric, _assigns) do
-    child =
-      Fabric.prepare_child(
-        fabric,
-        :features,
-        Systems.Account.FeaturesForm,
-        %{
-          user: user
-        }
-      )
+  def build_items(user, live_context) do
+    visible_tabs(user)
+    |> Enum.map(&tab_to_item(&1.build(user, live_context)))
+  end
 
-    %{
-      id: :features,
-      title: dgettext("eyra-account", "profile.tab.features.title"),
-      type: :fullpage,
-      child: child,
-      ready?: true
-    }
+  defp tab_to_item(%{id: id, title: title} = tab) do
+    Adaptable.Item.new(id, :profile, title,
+      element: Map.get(tab, :element),
+      child: Map.get(tab, :child)
+    )
+  end
+
+  def tab_keys(user) do
+    visible_tabs(user)
+    |> Enum.map(& &1.key())
+  end
+
+  defp visible_tabs(user) do
+    @tabs
+    |> Enum.filter(& &1.visible?(user))
   end
 end

@@ -12,15 +12,20 @@ defmodule Frameworks.Pixel.Button do
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
   attr(:enabled?, :boolean, default: true)
+  attr(:testid, :string, default: nil)
 
   def dynamic(assigns) do
+    # Forward testid to the action so it lands on the actual interactive element
+    assigns =
+      assign(assigns, :action, Map.put(assigns.action, :testid, assigns.testid))
+
     ~H"""
     <%= if @enabled? do %>
       <.action {@action}>
         <.face {@face} />
       </.action>
     <% else %>
-      <div class="opacity-30 cursor-not-allowed">
+      <div class="opacity-30 cursor-not-allowed" data-testid={@testid}>
         <.face {@face} />
       </div>
     <% end %>
@@ -276,6 +281,7 @@ defmodule Frameworks.Pixel.Button do
 
   attr(:label, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")
+  attr(:testid, :string, default: nil)
 
   def submit_wide(assigns) do
     # FIXME: Deprecation notice: Use button.dynamic instead
@@ -284,6 +290,7 @@ defmodule Frameworks.Pixel.Button do
     <button
       class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
       type="submit"
+      data-testid={@testid}
     >
       <%= @label %>
     </button>

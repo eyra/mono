@@ -38,41 +38,151 @@ msgid "pending.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "papers_form.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_form.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.file.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.timestamp.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.all_count.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.duplicate_count.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.new_count.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "import_history.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "unsupported_type_of_reference"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "import_history.errors.label"
+msgid "screening.criteria.library.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "screening.criteria.library.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "statement.unspecified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criterion.already_exists"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "criterion.insert.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.authors.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.doi.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "paper_set_table.year.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.replace_button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.file_import.select_button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "paper_set.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tool_view.button.next"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.errors.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.phase.prompting.new_papers"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris_entry_error_table.error.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "ris_entry_error_table.line.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "ris_entry_error_table.content.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.papers.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_view.button.continue"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 new paper"
+msgid_plural "%{count} new papers"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.prompting.warnings_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.prompting.new_papers_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_view.processing.importing"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_view.processing.parsing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.processing"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "import_view.processing.waiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_view.button.prepare_import"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 warning"
+msgid_plural "%{count} warnings"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_view.prompting.found_in_file"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "1 duplicate"
+msgid_plural "%{count} duplicates"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.prompting.duplicates_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "import_session.phase.prompting.duplicates"
 msgstr ""

@@ -29,6 +29,7 @@ defmodule Systems.Document.ContentPage do
   def render(assigns) do
     ~H"""
       <.management_page
+        socket={@socket}
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
@@ -38,9 +39,7 @@ defmodule Systems.Document.ContentPage do
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
       />
     """
   end

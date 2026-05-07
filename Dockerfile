@@ -1,7 +1,7 @@
 # ======================
 # Builder Stage
 # ======================
-FROM debian:12 AS builder
+FROM debian:trixie-20260406 AS builder
 
 WORKDIR /root
 
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
       autoconf \
       libssl-dev \
       libncurses-dev \
-      inotify-tools \ 
+      inotify-tools \
     && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
@@ -125,7 +125,7 @@ RUN echo "Release build info:" && \
 # =======================
 # Prod Stage
 # =======================
-FROM debian:12-slim AS prod
+FROM debian:13-slim AS prod
 
 RUN apt-get update && apt-get install -y \
       libssl-dev \

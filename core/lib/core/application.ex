@@ -11,6 +11,8 @@ defmodule Core.Application do
   def start(_type, _args) do
     Appsignal.Logger.Handler.add("core")
 
+    Core.AppSignal.TelemetryHandler.attach()
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -23,6 +25,7 @@ defmodule Core.Application do
       Core.Repo,
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
+      {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
       {Oban, oban_config()},
       {Banking.Supervisor, [{:euro, "account-number"}]},
       CoreWeb.Endpoint,

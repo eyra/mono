@@ -42,6 +42,29 @@ defmodule Systems.NextAction.Public do
   end
 
   @doc """
+  Returns the next action for a specific key.
+  """
+  def next_best_action_for_key(%User{id: user_id}, key) do
+    from(na in NextAction.Model, where: na.user_id == ^user_id and na.key == ^key, limit: 1)
+    |> Repo.one()
+    |> to_view_model()
+  end
+
+  @doc """
+  Lists all next actions of a specific type for a user.
+  """
+  def list_next_actions_by_type(%User{id: user_id}, action_type) when is_atom(action_type) do
+    action_string = to_string(action_type)
+
+    from(na in NextAction.Model,
+      where: na.user_id == ^user_id and na.action == ^action_string,
+      limit: 10
+    )
+    |> Repo.all()
+    |> Enum.map(&to_view_model(&1))
+  end
+
+  @doc """
   Creates a next action for the audience.
   """
   def create_next_action(audience, action, opts \\ [])
@@ -111,8 +134,7 @@ defmodule Systems.NextAction.Public do
   def to_view_model(%NextAction.Model{action: action, count: count, params: params}) do
     action_type = String.to_existing_atom(action)
 
-    action_type
-    |> apply(:to_view_model, [count, params])
+    action_type.to_view_model(count, params)
     |> Map.put(:action_type, action_type)
   end
 end

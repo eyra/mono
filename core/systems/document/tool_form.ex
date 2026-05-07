@@ -60,7 +60,7 @@ defmodule Systems.Document.ToolForm do
   def render(assigns) do
     ~H"""
     <div>
-      <Frameworks.Pixel.Components.FileSelector.file_selector
+      <Frameworks.Pixel.FileSelector.file_selector
         id={@id}
         label={@label}
         placeholder={@placeholder}
@@ -68,6 +68,7 @@ defmodule Systems.Document.ToolForm do
         replace_button={@replace_button}
         select_button={@select_button}
         uploads={@uploads}
+        target={@myself}
       />
     </div>
     """

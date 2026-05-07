@@ -9,8 +9,117 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#17 Under development
-* ..
+## \#22.1 2026-04-23
+* Fixed - Panl capitalization normalized across all translations
+* Changed - Dutch copy from formal (u/uw) to informal (je/jouw)
+* Added - Terms and privacy link translations for sign-up page
+
+## \#22 2026-04-17
+* Added - Panl pre-launch email capture flow for participant onboarding
+* Added - Email validation via UserCheck API (disposable, role account, MX checks)
+* Added - AppSignal custom metrics for Feldspar donate and log endpoints
+* Added - Pool and Affiliate filters on admin users page
+* Added - Idempotent seed infrastructure for deploy environments
+* Changed - Questionnaire opens in same tab instead of new tab (fixes mobile popup blocker)
+* Changed - Panl post-launch features gated behind separate feature flag
+* Fixed - Modal navigation buttons leaking between workflow steps
+* Fixed - x_square.svg platform logo missing
+* Fixed - Admin user page performance for large user counts
+
+## \#21 2026-02-28
+* Fixed - Google Sign In callback to show error message instead of 500
+* Fixed - SSO duplicate email handling across all providers
+* Fixed - OAuth2 missing session state handling in SSO callbacks
+* Fixed - Race condition in workflow item deletion causing StaleEntryError
+* Fixed - File upload controller to handle invalid filenames and missing files
+* Fixed - GreenLight authorization NoResultsError
+* Fixed - Show 404 for deleted assignments instead of Access Denied
+* Fixed - CaseClauseError in NodePageEmptyDataView for Ecto.Multi errors
+* Fixed - Invalidate participant URL when data donation item is deleted
+* Fixed - Trix editor disconnect when modal appears
+* Fixed - Double spacing issue in tabbed navigation
+* Added - Onboard-first signup flow for PaNL participants
+* Added - Auto-confirmation for affiliate users
+* Added - Panl feature flags to guard PaNL-specific functionality
+* Added - Profile menu visibility for unconfirmed internal users
+* Added - Missing translations for sign up screen terms and privacy
+* Added - WaitGroup to ensure data donations complete before exit
+* Added - Feldspar client debug logging for production visibility
+* Added - Fly.io deployment infrastructure
+* Added - Staging option for Fly.io deployment workflow
+* Changed - Branding from "Eyra" to "Next" in terms/privacy agreement text
+* Changed - Improved Feldspar controller logging with uploadContext
+
+## \#20.3 2026-02-12
+* Fixed - Race condition in affiliate user creation
+* Fixed - Race condition in crew member and role assignment creation
+* Added - Service login API endpoint with SERVICE_LOGIN_KEY security
+* Added - E2E tests (Playwright) and load tests (Artillery) infrastructure
+* Added - Fly.io deployment infrastructure with auto-suspend support
+* Added - JSON error responses for API endpoints
+* Changed - Increase HTTP body limit from 200MB to 210MB for data donations
+
+## \#20.2 2026-01-27
+* Fixed - FunctionClauseError in embedded LiveViews for flash messages
+* Fixed - File upload controller to handle invalid filenames and missing files
+* Fixed - Ecto.NoResultsError in GreenLight authorization context
+* Fixed - BadMapError in UserState when parsing conflicting paths
+* Fixed - Files donated without participant identifier due to timing bug
+* Fixed - Panel info retrieval for external panel participant IDs
+* Changed - Update Prism UI to 0.1.5 with spinner centering fix
+
+## \#20 2026-01-14
+* Added - Romanian (RO) and Lithuanian (LT) language support
+* Changed - Font from Finador to Nunito / Nunito Sans
+* Added - Prism UI framework integration
+* Changed - Restructured icons and logos folders
+
+## \#19 2026-01-03
+* Added - Privacy policy acceptance with clickable links during signup (Next platform)
+* Added - UserState framework for managing client-side state (timezone, language)
+* Added - LiveContext framework for passing context through LiveView hierarchy
+* Added - Custom end-of-workflow screen text for panel integration
+* Added - Hide Panl tab for non-Panl participants
+* Added - State machine support in Crew Page
+* Added - Multi-language translations (EN, NL, DE, ES, IT) for panel integration workflow
+* Changed - Complete refactor of CrewPage hierarchy to LiveNest
+* Changed - Improved participant copy and translations
+* Changed - Updated modal view component
+* Changed - Enhanced toolbar component
+
+## \#18 2025-10-22
+* Added: Annotation Recipes (WIP)
+* Added:Ontology + Annotation + Criteria Live View (WIP)
+* Added: support for LiveView tabs
+* Added: Base LiveNest integration including LiveNest Modals
+* Added: Core.Seeder module
+* Added: git worktree scripts
+* Added: Connected Criteria Library items to Annotation/Ontology data
+* Added: Draft version of the Annotation/Ontology systems with a simple Onyx Browser
+* Added: Add banner to prompt participant to fill in characteristics
+* Added: Panl onboarding flow: add participants to Panl from sign-up/in
+* Added: Panl onboarding flow: implement add_to_panl functionality for google signin
+* Added: Logged in landing page with available advertisements
+* Added: tab-bar to the profile page
+* Added: Show privacy policy agreement checkbox based on add_to_panl parameter
+* Added: Support for test IDs to improve end-to-end testing
+* Changed: Improved error handling stream setup in Content.LocalFS and Content.S3
+* Changed: Fix search logic from OR to AND across all ViewBuilders
+* Changed: Refactor Zircon system with enhanced Annotation/Ontology integration
+* Changed: Update sorting and preloading for Annotation/Ontology systems
+
+## \#17.1 2025-10-15
+* Fixed: High CPU usage when viewing PDF
+
+## \#17 2025-10-01
+* Fixed: PDF viewer no longer refreshes when pressing Done button
+* Fixed: Changing number of participants no longer causes page refresh
+* Fixed: Helpdesk form type switching no longer causes immediate submit
+* Fixed: Cannot change Next profile picture
+* Removed: Alpine.js completely removed from codebase
+* Updated: Phoenix LiveView to 1.1.11
+* Updated: Major dependency updates for improved stability
+* Updated: Moved number of participants and participant language to participant tab
 
 ## \#16.1 2025-06-25
 * Fixed: Export progress report pre-affiliate participant links

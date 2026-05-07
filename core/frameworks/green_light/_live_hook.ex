@@ -20,15 +20,24 @@ defmodule Frameworks.GreenLight.LiveHook do
     user = Map.get(socket.assigns, :current_user)
 
     if function_exported?(live_view_module, :get_authorization_context, 3) do
-      can_access? =
-        auth_module().can_access?(
-          user,
-          live_view_module.get_authorization_context(params, session, socket),
-          live_view_module
-        )
+      try do
+        can_access? =
+          auth_module().can_access?(
+            user,
+            live_view_module.get_authorization_context(params, session, socket),
+            live_view_module
+          )
 
-      user && Logger.debug("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
-      can_access?
+        user && Logger.debug("User #{user.id} can_access? #{live_view_module}: #{can_access?}")
+        can_access?
+      rescue
+        Ecto.NoResultsError ->
+          Logger.warning(
+            "Authorization context not found for #{live_view_module}, denying access"
+          )
+
+          false
+      end
     else
       auth_module().can_access?(user, live_view_module)
     end

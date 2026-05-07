@@ -3,7 +3,6 @@ defmodule Systems.Notification.OverviewPage do
   alias Systems.Notification
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
 
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do

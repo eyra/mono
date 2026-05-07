@@ -36,7 +36,7 @@ defmodule Systems.Userflow.Public do
   def add_step(%Userflow.Model{} = userflow, group) do
     Multi.new()
     |> add_step(userflow, group)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{step: step}} ->
         {:ok, step}
@@ -66,7 +66,7 @@ defmodule Systems.Userflow.Public do
   def mark_visited(%Userflow.StepModel{} = step, %Account.User{} = user) do
     Multi.new()
     |> mark_visited(step, user)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """
@@ -96,7 +96,7 @@ defmodule Systems.Userflow.Public do
   def move_step(%Userflow.StepModel{} = step, :up) do
     Multi.new()
     |> move_step(step, :up)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """

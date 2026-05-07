@@ -40,25 +40,27 @@ defmodule Systems.Affiliate.Controller do
     assignment =
       Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
 
-    if tester?(assignment, conn) do
-      if invalid_id?(params) do
-        Logger.error("Access denied invalid id params=#{inspect(params)}")
-        forbidden(conn)
-      else
+    cond do
+      # Soft-deleted assignment (project item was deleted)
+      deleted?(assignment) ->
+        not_found(conn)
+
+      # Preview mode: tester with ?p=preview from CMS
+      preview?(params) and tester?(assignment, conn) ->
         start_tester(conn, params, assignment)
-      end
-    else
-      cond do
-        invalid_id?(params) ->
-          Logger.error("Access denied invalid id #{inspect(params)}")
-          forbidden(conn)
 
-        offline?(assignment) ->
+      # Valid participant ID -> start as participant
+      valid_id?(get_participant(params)) ->
+        if offline?(assignment) do
           service_unavailable(conn)
-
-        true ->
+        else
           start_participant(conn, params, assignment)
-      end
+        end
+
+      # Invalid ID and not a tester -> forbidden
+      true ->
+        Logger.error("Access denied invalid id #{inspect(params)}")
+        forbidden(conn)
     end
   end
 
@@ -84,17 +86,13 @@ defmodule Systems.Affiliate.Controller do
 
   defp tester?(_, _), do: false
 
+  defp preview?(params), do: get_participant(params) == "preview"
+
+  defp deleted?(%{status: :idle}), do: true
+  defp deleted?(_), do: false
+
   defp offline?(%{status: status}) do
     status != :online
-  end
-
-  defp invalid_id?(%{} = params) do
-    id = get_participant(params)
-    invalid_id?(id)
-  end
-
-  defp invalid_id?(id) do
-    not valid_id?(id)
   end
 
   def valid_id?(nil), do: false
@@ -105,15 +103,17 @@ defmodule Systems.Affiliate.Controller do
   end
 
   defp start_tester(conn, params, %{affiliate: affiliate} = assignment) do
+    redirect_url = Affiliate.Public.get_redirect_url(affiliate)
+
     conn
     |> obtain_instance(assignment)
-    |> add_panel_info(params, affiliate)
+    |> add_panel_info(get_participant(params), redirect_url)
     |> redirect(to: path(assignment))
   end
 
   defp start_participant(conn, params, %{affiliate: affiliate} = assignment) do
     participant_id = get_participant(params)
-    %{user: user} = affiliate_user = Affiliate.Public.obtain_user(participant_id, affiliate)
+    %{user: user} = affiliate_user = Affiliate.Public.obtain_user!(participant_id, affiliate)
 
     conn
     |> assign(:current_user, user)
@@ -121,11 +121,18 @@ defmodule Systems.Affiliate.Controller do
     |> authorize_user(assignment)
     |> ensure_user_info(params, affiliate_user)
     |> obtain_instance(assignment)
-    |> add_panel_info(params, affiliate)
+    |> add_panel_info_for_participant(params, affiliate, affiliate_user)
     |> redirect(to: path(assignment))
   end
 
   defp path(%{id: id}), do: "/assignment/#{id}"
+
+  defp not_found(conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"404")
+  end
 
   defp forbidden(conn) do
     conn
@@ -163,19 +170,28 @@ defmodule Systems.Affiliate.Controller do
     conn
   end
 
-  defp add_panel_info(conn, params, affiliate) do
+  defp add_panel_info(conn, participant, redirect_url) do
     panel_info = %{
       panel: :affiliate,
-      redirect?: redirect?(affiliate),
-      participant: get_participant(params)
+      redirect_url: redirect_url,
+      participant: participant
     }
 
     conn |> put_session(:panel_info, panel_info)
   end
 
-  defp redirect?(%{redirect_url: nil}), do: false
-  defp redirect?(%{redirect_url: ""}), do: false
-  defp redirect?(_), do: true
+  defp add_panel_info_for_participant(conn, params, affiliate, affiliate_user) do
+    participant = get_participant(params)
+    redirect_url = get_merged_redirect_url(affiliate, affiliate_user)
+    add_panel_info(conn, participant, redirect_url)
+  end
+
+  defp get_merged_redirect_url(affiliate, affiliate_user) do
+    case Affiliate.Public.redirect_url(affiliate, affiliate_user) do
+      {:ok, url} -> url
+      {:error, _} -> nil
+    end
+  end
 
   # Param Mappings
 

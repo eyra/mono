@@ -26,8 +26,6 @@ defmodule CoreWeb.Layouts.Stripped.Composer do
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
 
-      use CoreWeb.UI.PlainDialog
-
       import CoreWeb.Layouts.Stripped.Html
       import Systems.Content.Html, only: [live_stripped: 1]
     end

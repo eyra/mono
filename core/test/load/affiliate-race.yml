@@ -1,0 +1,20 @@
+config:
+  target: "{{ $processEnvironment.LOAD_BASE_URL }}"
+  phases:
+    - duration: 5
+      arrivalRate: 20
+      name: "Race condition test - same user"
+  processor: "./affiliate-functions.js"
+
+scenarios:
+  - name: "Same participant concurrent access"
+    flow:
+      - function: "generateSqid"
+      - get:
+          url: "/a/{{ sqid }}?p=race_test_participant"
+          followRedirect: false
+          capture:
+            - header: "location"
+              as: "redirectLocation"
+          expect:
+            - statusCode: 302

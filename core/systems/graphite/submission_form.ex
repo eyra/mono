@@ -1,8 +1,9 @@
 defmodule Systems.Graphite.SubmissionForm do
-  use CoreWeb.LiveForm
+  use CoreWeb, :live_component
+
+  import Frameworks.Pixel.Form
 
   alias CoreWeb.UI.Timestamp
-
   alias Systems.Graphite
 
   # Handle initial update
@@ -119,8 +120,8 @@ defmodule Systems.Graphite.SubmissionForm do
   end
 
   @impl true
-  def handle_event("cancel", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "cancel")}
+  def handle_event("cancel", _payload, %{assigns: %{id: id}} = socket) do
+    {:noreply, publish_event(socket, {:cancel, %{source: %{id: id, module: __MODULE__}}})}
   end
 
   # Submit
@@ -145,12 +146,12 @@ defmodule Systems.Graphite.SubmissionForm do
     socket |> put_flash(:error, dgettext("eyra-graphite", "closed_for_submissions.error.message"))
   end
 
-  defp add_submission(%{assigns: %{tool: tool, user: user}} = socket, attrs) do
+  defp add_submission(%{assigns: %{id: id, tool: tool, user: user}} = socket, attrs) do
     case Graphite.Public.add_submission(tool, user, attrs) do
       {:ok, %{graphite_submission: submission}} ->
         socket
         |> assign(submission: submission)
-        |> send_event(:parent, "submitted")
+        |> publish_event({:submitted, %{source: %{id: id, module: __MODULE__}}})
 
       {:error, :graphite_submission, changeset, _} ->
         socket |> assign(show_errors: true, changeset: changeset)
@@ -160,10 +161,10 @@ defmodule Systems.Graphite.SubmissionForm do
     end
   end
 
-  defp update_submission(%{assigns: %{submission: submission}} = socket, attrs) do
+  defp update_submission(%{assigns: %{id: id, submission: submission}} = socket, attrs) do
     case Graphite.Public.update_submission(submission, attrs) do
       {:ok, %{graphite_submission: _submission}} ->
-        socket |> send_event(:parent, "submitted")
+        publish_event(socket, {:submitted, %{source: %{id: id, module: __MODULE__}}})
 
       {:error, :graphite_submission, changeset, _} ->
         socket |> assign(show_errors: true, changeset: changeset)

@@ -1,10 +1,8 @@
 defmodule Systems.Alliance.Presenter do
-  @behaviour Frameworks.Concept.Presenter
-
-  alias Systems.Alliance
+  use Frameworks.Concept.Presenter
 
   @impl true
-  def view_model(page, %Alliance.ToolModel{director: director} = tool, assigns) do
-    Frameworks.Utility.Module.get(director, "Presenter").view_model(page, tool, assigns)
+  def view_model(page, model, assigns) do
+    builder(page).view_model(model, assigns)
   end
 end

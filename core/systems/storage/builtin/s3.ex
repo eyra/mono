@@ -9,8 +9,11 @@ defmodule Systems.Storage.BuiltIn.S3 do
     content_type = content_type(object_key)
     bucket = Access.fetch!(settings(), :bucket)
 
-    S3.put_object(bucket, object_key, data, content_type: content_type)
-    |> backend().request!()
+    case S3.put_object(bucket, object_key, data, content_type: content_type)
+         |> backend().request() do
+      {:ok, _response} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @impl true

@@ -38,9 +38,9 @@ defmodule CoreWeb.Layouts.Stripped.Html do
                   <Hero.illustration2 title={@title} />
                 </div>
               <% end %>
-              <div class="flex-1 bg-white">
-                <div class="flex flex-row w-full h-full">
-                  <div id="layout-inner-block" class="flex-1">
+              <div class="flex-1 min-h-0 bg-white">
+                <div class="flex flex-row w-full h-full min-h-0">
+                  <div id="layout-inner-block" class="flex-1 h-full min-h-0">
                     <%= render_slot(@inner_block) %>
                     <Margin.y id={:page_footer_top} />
                   </div>

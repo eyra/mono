@@ -53,8 +53,12 @@ msgstr "Het geselecteerde bestand is te groot (max 20MB)"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "U staat op het punt om een aantal stappen te doorlopen om uw gegevens te doneren. Vooraf kunt u uw gegevens bekijken en daarna toestemming geven om ze te delen. Het laden van de pagina kan even duren — dank u wel voor uw geduld."
+msgstr "Je staat op het punt om een aantal stappen te doorlopen om je gegevens te doneren. Vooraf kun je je gegevens bekijken en daarna toestemming geven om ze te delen. Het laden van de pagina kan even duren — bedankt voor je geduld."
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

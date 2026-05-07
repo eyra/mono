@@ -11,7 +11,9 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   end
 
   defp migrate_tools(tool_type) do
-    tools = query(Core.Repo, "SELECT assignable_#{tool_type}_id, id, auth_node_id FROM assignments;")
+    tools =
+      query(Core.Repo, "SELECT assignable_#{tool_type}_id, id, auth_node_id FROM assignments;")
+
     migrate_tools(tools, tool_type)
   end
 
@@ -25,7 +27,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
 
   defp migrate_tools([], _), do: :noop
 
-  defp migrate_tools([h|t], tool_type) do
+  defp migrate_tools([h | t], tool_type) do
     migrate_tool(h, tool_type)
     migrate_tools(t, tool_type)
   end
@@ -35,46 +37,51 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   end
 
   defp migrate_tool([id, assignment_id, assignment_auth_node_id], tool_type) do
-    {:ok, %{rows: tools}} = query(Core.Repo, "SELECT id, subject_count, duration, language, ethical_approval, ethical_code, devices FROM #{tool_type}s WHERE id = #{id};")
+    {:ok, %{rows: tools}} =
+      query(
+        Core.Repo,
+        "SELECT id, subject_count, duration, language, ethical_approval, ethical_code, devices FROM #{tool_type}s WHERE id = #{id};"
+      )
+
     tool = tools |> List.first()
 
-    with [tool_id, subject_count, duration, language, ethical_approval, ethical_code, devices] = tool do
-      experiment_id = create_experiment(assignment_auth_node_id, tool_type, %{
-        id: tool_id,
-        subject_count: nillable(subject_count),
-        duration: nillable(duration),
-        language: nillable(language),
-        ethical_approval: nillable(ethical_approval),
-        ethical_code: nillable(ethical_code),
-        devices: to_string_array(devices)
-      })
+    with [tool_id, subject_count, duration, language, ethical_approval, ethical_code, devices] =
+           tool do
+      experiment_id =
+        create_experiment(assignment_auth_node_id, tool_type, %{
+          id: tool_id,
+          subject_count: nillable(subject_count),
+          duration: nillable(duration),
+          language: nillable(language),
+          ethical_approval: nillable(ethical_approval),
+          ethical_code: nillable(ethical_code),
+          devices: to_string_array(devices)
+        })
+
       link(:assignments, assignment_id, :assignable_experiment_id, experiment_id)
     end
   end
 
   defp create_experiment(assignment_auth_node_id, tool_type, %{
-    id: tool_id,
-    subject_count: subject_count,
-    duration: duration,
-    language: language,
-    ethical_approval: ethical_approval,
-    ethical_code: ethical_code,
-    devices: devices
-  }) do
-
+         id: tool_id,
+         subject_count: subject_count,
+         duration: duration,
+         language: language,
+         ethical_approval: ethical_approval,
+         ethical_code: ethical_code,
+         devices: devices
+       }) do
     if not exist?(:experiments, "#{tool_type}_id", tool_id) do
-      execute(
-        """
-        INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
-        VALUES (#{assignment_auth_node_id}, '#{now()}', '#{now()}');
-        """
-      )
-      execute(
-        """
-        INSERT INTO experiments (#{tool_type}_id, director, subject_count, duration, language, ethical_approval, ethical_code, devices, auth_node_id, inserted_at, updated_at)
-        VALUES (#{tool_id}, 'assignment', #{subject_count}, #{duration}, '#{language}', #{ethical_approval}, '#{ethical_code}', '#{devices}', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
-        """
-      )
+      execute("""
+      INSERT INTO authorization_nodes (parent_id, inserted_at, updated_at)
+      VALUES (#{assignment_auth_node_id}, '#{now()}', '#{now()}');
+      """)
+
+      execute("""
+      INSERT INTO experiments (#{tool_type}_id, director, subject_count, duration, language, ethical_approval, ethical_code, devices, auth_node_id, inserted_at, updated_at)
+      VALUES (#{tool_id}, 'assignment', #{subject_count}, #{duration}, '#{language}', #{ethical_approval}, '#{ethical_code}', '#{devices}', CURRVAL('authorization_nodes_id_seq'), '#{now()}', '#{now()}');
+      """)
+
       flush()
     end
 
@@ -84,6 +91,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   # Migration Helpers
 
   def to_string_array(nil), do: "{}"
+
   def to_string_array(enum) do
     "{" <> Enum.join(enum, ",") <> "}"
   end
@@ -97,20 +105,16 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
     end
   end
 
-  def update(table, id, field, value) when is_number(value)do
-      execute(
-      """
-      UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
-      """
-      )
+  def update(table, id, field, value) when is_number(value) do
+    execute("""
+    UPDATE #{table} SET #{field} = #{value} WHERE id = #{id};
+    """)
   end
 
   def update(table, id, field, value) do
-    execute(
-    """
+    execute("""
     UPDATE #{table} SET #{field} = '#{value}' WHERE id = #{id};
-    """
-    )
+    """)
   end
 
   def exist?(table, field, value) do
@@ -118,7 +122,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   end
 
   def exist?(table, where) do
-    {:ok, %{ rows: [[count]] }} =
+    {:ok, %{rows: [[count]]}} =
       query(Core.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
 
     count > 0
@@ -129,7 +133,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   end
 
   def query_field(table, field, where) do
-    {:ok, %{rows: [[id]|_]}} =
+    {:ok, %{rows: [[id] | _]}} =
       query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     id
@@ -163,28 +167,22 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   end
 
   def rename_table(from: from_table_name, to: to_table_name) do
-    execute(
-      """
-      ALTER TABLE #{from_table_name} RENAME TO #{to_table_name};
-      """
-    )
+    execute("""
+    ALTER TABLE #{from_table_name} RENAME TO #{to_table_name};
+    """)
   end
 
   def rename_constraint(table, from, to) do
-    execute(
-      """
-      ALTER TABLE #{table} RENAME CONSTRAINT "#{from}" TO "#{to}";
-      """
-    )
+    execute("""
+    ALTER TABLE #{table} RENAME CONSTRAINT "#{from}" TO "#{to}";
+    """)
   end
 
   def rename_field(table, from, to) do
-    execute(
-      """
-      ALTER TABLE #{table}
-      RENAME COLUMN #{from} TO #{to};
-      """
-    )
+    execute("""
+    ALTER TABLE #{table}
+    RENAME COLUMN #{from} TO #{to};
+    """)
   end
 
   @max_identifier_length 63
@@ -193,5 +191,4 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
     |> Enum.join("_")
     |> String.slice(0, @max_identifier_length)
   end
-
 end

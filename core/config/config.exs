@@ -11,6 +11,19 @@ config :mime, :types, %{
   "application/x-research-info-systems" => ["ris"]
 }
 
+# Deployment environment used by seed modules to decide which seeds to run.
+# Possible values: :local, :dev, :test, :staging, :prod
+# Defaults to :local for developer machines (mix dev, mix test).
+# Releases override this in runtime.{aws,fly}.exs based on the DEPLOY_ENV env var,
+# defaulting to :prod for safety.
+config :core, :deploy_env, :local
+
+# UserCheck email validation. Default to real HTTP client; dev/test override to mock.
+config :core, Frameworks.UserCheck,
+  client: Frameworks.UserCheck.HTTPClient,
+  base_url: "https://api.usercheck.com",
+  timeout: 2_000
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix,
   json_library: Jason,
@@ -39,24 +52,69 @@ config :tailwind,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [
+    :request_id,
+    :request_path,
+    :query_string,
+    :user_agent,
+    :method,
+    :path,
+    :duration_ms,
+    :status
+  ]
 
 config :plug, :statuses, %{
   403 => "Access Denied",
   404 => "Page not found"
 }
 
+config :core, :signal,
+  handlers: [
+    "Core.APNS.SignalHandlers",
+    "Core.Mailer.SignalHandlers",
+    "Core.WebPush.SignalHandlers",
+    "Systems.Account.Switch",
+    "Systems.Admin.Switch",
+    "Systems.Advert.Switch",
+    "Systems.Alliance.Switch",
+    "Systems.Assignment.Switch",
+    "Systems.Consent.Switch",
+    "Systems.Crew.Switch",
+    "Systems.Feldspar.Switch",
+    "Systems.Graphite.Switch",
+    "Systems.Instruction.Switch",
+    "Systems.Manual.Switch",
+    "Systems.NextAction.Switch",
+    "Systems.Observatory.Switch",
+    "Systems.Pool.Switch",
+    "Systems.Project.Switch",
+    "Systems.Storage.Switch",
+    "Systems.Student.Switch",
+    "Systems.Workflow.Switch",
+    "Systems.Zircon.Switch"
+  ]
+
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
+
+# Maximum HTTP body size for uploads (Plug.Parsers)
+config :core, CoreWeb.Endpoint, http_body_max_size: 210_000_000
 
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
+  payment_provider: Systems.Payment.Provider.Local,
+  payment_providers: %{
+    "opp" => Systems.Payment.Provider.OPP
+  },
   tool_directors: [:assignment]
+
+config :core, Systems.Payment.Provider.OPP,
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en es de it nl)
+config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
@@ -64,13 +122,7 @@ config :phoenix_inline_svg,
 
 config :core, Oban,
   repo: Core.Repo,
-  queues: [
-    default: 5,
-    email_dispatchers: 1,
-    email_delivery: 1,
-    storage_delivery: 1,
-    ris_processor: 1
-  ]
+  queues: false
 
 config :packmatic, Packmatic.Source.URL,
   hackney: [
@@ -83,7 +135,10 @@ config :core, :rate,
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local]
+    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
+    [service: :feldspar_data_donation, limit: 1, unit: :byte, window: :day, scope: :local],
+    [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
+    [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]
@@ -120,9 +175,9 @@ config :core, CoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   server: true,
-  force_ssl: [],
+  force_ssl: false,
   render_errors: [
-    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorHTML],
+    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorJSON],
     layout: [html: {CoreWeb.Layouts, :error}]
   ],
   pubsub_server: Core.PubSub,
@@ -147,7 +202,12 @@ config :core, :version, System.get_env("VERSION", "dev")
 
 config :core, :assignment, external_panels: ~w(liss ioresearch generic)
 
-config :core, :storage, services: ~w(builtin yoda)
+config :core, :storage,
+  services: ~w(builtin yoda),
+  job_scheduler: Systems.Storage.JobScheduler.Oban
+
+# Default built-in storage backend (can be overridden in runtime.exs for production)
+config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
 config :core, BankingClient,
   host: "localhost",
@@ -173,5 +233,22 @@ config :core, :bundle, bundle
 unless is_nil(bundle) do
   import_config "../bundles/#{bundle}/config/config.exs"
 end
+
+config :core, :zircon,
+  screening: [
+    agent_module: Systems.Zircon.Screening.HumanAgent
+  ]
+
+# Paper system import configuration
+config :core, :paper,
+  import_batch_size: 100,
+  import_batch_timeout: 30_000,
+  # Maximum allowed RIS file size (default 150MB - supports ~100,000 paper references)
+  ris_max_file_size: 157_286_400,
+  # Chunk size for streaming RIS files (default 64KB)
+  ris_stream_chunk_size: 65_536
+
+# Temp file store for Storage system (stores data donations before delivery)
+config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
 
 import_config "#{config_env()}.exs"

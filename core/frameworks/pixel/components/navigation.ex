@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Navigation do
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Menu
   alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Breadcrumbs
@@ -65,50 +66,57 @@ defmodule Frameworks.Pixel.Navigation do
   attr(:right_bar_buttons, :list, default: [])
   attr(:more_buttons, :list, default: [])
   attr(:hide_seperator, :boolean, default: true)
+  attr(:align, :atom, default: :left)
   slot(:inner_block, required: true)
 
-  def action_bar(%{right_bar_buttons: right_bar_buttons} = assigns) do
+  def action_bar(
+        %{right_bar_buttons: right_bar_buttons, breadcrumbs: breadcrumbs, align: align} = assigns
+      ) do
     assigns =
       assign(assigns, %{
-        has_right_bar_buttons: not Enum.empty?(right_bar_buttons)
+        has_right_bar_buttons: not Enum.empty?(right_bar_buttons),
+        has_breadcrumbs: not Enum.empty?(breadcrumbs),
+        justify: action_bar_justify(align)
       })
 
     ~H"""
-    <div class="relative">
+    <div>
       <div id="action_menu" class="hidden z-50 absolute right-14px -mt-6 top-navbar-height">
         <.action_menu buttons={@more_buttons} />
       </div>
-      <div class="absolute top-0 left-0 w-full">
+      <%= if @has_breadcrumbs do %>
         <div class="hidden md:block">
           <div class="bg-white">
             <Area.content>
-              <div class=" h-navbar-height">
+              <div class="flex items-center h-[64px]">
                 <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs} />
               </div>
             </Area.content>
           </div>
           <.line />
         </div>
-        <Area.content>
-          <div class="overflow-scroll scrollbar-hidden w-full">
-            <div class="flex flex-row items-center w-full h-navbar-height">
-              <div class="flex-grow">
-                <%= render_slot(@inner_block) %> <!-- tabbar -->
-              </div>
-              <%= if @has_right_bar_buttons do %>
-                <div class="flex-grow" />
-                <div>
-                  <Button.dynamic_bar buttons={@right_bar_buttons} />
-                </div>
-              <% end %>
+      <% end %>
+      <Area.content>
+        <div class="overflow-scroll scrollbar-hidden w-full">
+          <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height"}>
+            <div class="flex-shrink-0">
+              <%= render_slot(@inner_block) %>
             </div>
+            <%= if @has_right_bar_buttons do %>
+              <div class="absolute right-0 top-0 h-full flex items-center">
+                <Button.dynamic_bar buttons={@right_bar_buttons} />
+              </div>
+            <% end %>
           </div>
-        </Area.content>
-        <.line />
-      </div>
+        </div>
+      </Area.content>
+      <.line />
     </div>
     """
   end
+
+  defp action_bar_justify(:center), do: "justify-center"
+  defp action_bar_justify(_), do: "justify-start"
 
   attr(:buttons, :list, required: true)
 
@@ -202,7 +210,7 @@ defmodule Frameworks.Pixel.Navigation do
     <div class="pr-4 flex flex-row gap-4 items-center w-full">
       <%= if @logo do %>
         <div>
-          <img src={~p"/images/icons/#{"#{@logo}.svg"}"} alt={@logo} />
+          <Logo.product name={@logo} />
         </div>
       <% end %>
       <div class="flex-grow">

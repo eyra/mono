@@ -1,0 +1,19 @@
+config:
+  target: "{{ $processEnvironment.LOAD_BASE_URL }}"
+  phases:
+    - duration: 1
+      arrivalRate: 5
+      name: "Quick race test"
+  processor: "./affiliate-functions.js"
+  variables:
+    participantId: "quick_test_{{ $randomNumber(1000000, 9999999) }}"
+
+scenarios:
+  - name: "Quick test"
+    flow:
+      - function: "generateSqid"
+      - get:
+          url: "/a/{{ sqid }}?p={{ participantId }}"
+          followRedirect: false
+          expect:
+            - statusCode: 302

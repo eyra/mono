@@ -60,16 +60,20 @@ defmodule Systems.Instruction.Public do
     |> Multi.insert(:instruction_page, fn %{content_page: content_page} ->
       prepare_page(tool, content_page)
     end)
-    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update},
+      message: %{instruction_tool: tool}
+    )
+    |> Repo.commit()
   end
 
   def update_repository_and_page(tool, repository, page) do
     Multi.new()
     |> Multi.update(:content_repository, repository)
     |> Multi.update(:content_page, page)
-    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update},
+      message: %{instruction_tool: tool}
+    )
+    |> Repo.commit()
   end
 
   def add_file_and_page(tool, file, page) do
@@ -82,15 +86,19 @@ defmodule Systems.Instruction.Public do
     |> Multi.insert(:instruction_page, fn %{content_page: content_page} ->
       prepare_page(tool, content_page)
     end)
-    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update},
+      message: %{instruction_tool: tool}
+    )
+    |> Repo.commit()
   end
 
   def update_file_and_page(tool, file, page) do
     Multi.new()
     |> Multi.update(:content_file, file)
     |> Multi.update(:content_page, page)
-    |> Signal.Public.multi_dispatch({:instruction_tool, :update}, %{instruction_tool: tool})
-    |> Repo.transaction()
+    |> Signal.Public.multi_dispatch({:instruction_tool, :update},
+      message: %{instruction_tool: tool}
+    )
+    |> Repo.commit()
   end
 end

@@ -58,3 +58,7 @@ msgstr "You are about to go through a few steps to donate your data. Before dona
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr "The Feldspar app has not been configured. Please go to the Workflow in the Assignment CMS."

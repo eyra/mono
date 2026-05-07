@@ -2,7 +2,6 @@ defmodule Next.Account.SigninPage do
   use CoreWeb, :live_view
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
@@ -68,7 +67,7 @@ defmodule Next.Account.SigninPage do
 
           <.spacing value="M" />
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content include_top_margin={false} tabs={@vm.tabs} />
+            <Tabbed.content socket={@socket} tabs={@vm.tabs} bar_id={@tabbar_id} />
           </div>
         </Area.form>
       </div>

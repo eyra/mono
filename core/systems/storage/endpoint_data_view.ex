@@ -106,7 +106,7 @@ defmodule Systems.Storage.EndpointDataView do
       :noreply,
       socket
       |> compose_child(:empty_confirmation)
-      |> show_modal(:empty_confirmation, :notification)
+      |> show_modal(:empty_confirmation, :compact)
     }
   end
 

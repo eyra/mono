@@ -39,8 +39,19 @@ defmodule Systems.Manual.Switch do
     :ok
   end
 
+  def intercept({:manual_tool, _}, %{manual_tool: tool, from_pid: from_pid}) do
+    update_tool_view(tool, from_pid)
+    :ok
+  end
+
+  def intercept({:manual_tool, _}, _message) do
+    # Handle case without from_pid
+    :ok
+  end
+
   defp handle({:manual, _}, %{manual: manual, from_pid: from_pid}) do
     update_pages(manual, from_pid)
+    update_view(manual, from_pid)
   end
 
   defp update_pages(%Manual.Model{} = manual, from_pid) do
@@ -52,5 +63,21 @@ defmodule Systems.Manual.Switch do
 
   defp update_page(page, model, from_pid) do
     dispatch!({:page, page}, %{id: model.id, model: model, from_pid: from_pid})
+  end
+
+  defp update_tool_view(tool, from_pid) do
+    dispatch!({:embedded_live_view, Manual.ToolView}, %{
+      id: tool.id,
+      model: tool,
+      from_pid: from_pid
+    })
+  end
+
+  defp update_view(manual, from_pid) do
+    dispatch!({:embedded_live_view, Manual.View}, %{
+      id: manual.id,
+      model: manual,
+      from_pid: from_pid
+    })
   end
 end

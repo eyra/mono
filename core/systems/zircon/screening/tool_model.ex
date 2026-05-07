@@ -67,14 +67,6 @@ defmodule Systems.Zircon.Screening.ToolModel do
     def ready?(tool), do: Zircon.Screening.ToolModel.ready?(tool)
     def form(_, _), do: Zircon.Screening.ToolForm
 
-    def launcher(tool),
-      do: %{
-        module: Zircon.Screening.ToolView,
-        params: %{
-          tool: tool
-        }
-      }
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-zircon", "pending.label"),

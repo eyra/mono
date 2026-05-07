@@ -47,7 +47,6 @@ defmodule Systems.Document.PDFNavView do
       :noreply,
       socket
       |> assign(initialized: true)
-      |> send_event(:parent, "tool_initialized")
     }
   end
 

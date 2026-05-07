@@ -1,0 +1,133 @@
+# # "msgid"s in this file come from POT (.pot) files.
+# ##
+# ## Do not add, change, or remove "msgid"s manually here as
+# ## they're tied to the ones in the corresponding POT file
+# ## (with the same domain).
+# ##
+# ## Use "mix gettext.extract --merge" or "mix gettext.merge"
+# ## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "apply.cta.title"
+msgstr "taikyti.cta.title"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.title.label"
+msgstr "Pavadinimas"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "open.cta.title"
+msgstr "atidaryti.cta.title"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.label"
+msgstr "dalyvavo.žymė"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pending.label"
+msgstr "laukiama.etiketė"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.manual.button"
+msgstr "Sukurti vadovą"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "open.manual.button"
+msgstr "Redaguoti vadovą"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "setup.annotation"
+msgstr "<div><h1>Kaip nustatyti dalyvių instrukcijas?</h1><ul><li>Sukurkite <strong>skyrius</strong>, kad instrukcijos būtų suskirstytos į aiškias dalis.</li><li>Naudokite skyrių <strong>pavadinimus</strong>, kad padėtumėte dalyviams rasti reikiamą skyrių.</li><li>Kiekviename skyriuje pridėkite kelias trumpas <strong>instrukcijas</strong>.</li><li>Įtraukite <strong>vaizdus</strong>, kad instrukcijas būtų lengviau sekti.</li></ul></div>"
+
+#, elixir-autogen, elixir-format
+msgid "builder.chapter.overview"
+msgstr "Skyriai"
+
+#, elixir-autogen, elixir-format
+msgid "create.chapter.button"
+msgstr "Pridėti skyrių"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.title.default"
+msgstr "Naujas skyrius"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.group.label"
+msgstr "Etiketė"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "create.page.button"
+msgstr "Pridėti instrukciją"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "page.title.default"
+msgstr "Naujos instrukcijos"
+
+#, elixir-autogen, elixir-format
+msgid "page.title.label"
+msgstr "Pavadinimas"
+
+#, elixir-autogen, elixir-format
+msgid "page.text.label"
+msgstr "Aprašymas"
+
+#, elixir-autogen, elixir-format
+msgid "choose.image.file"
+msgstr "Pasirinkite paveiksliuką"
+
+#, elixir-autogen, elixir-format
+msgid "choose.other.image.file"
+msgstr "Keisti vaizdą"
+
+#, elixir-autogen, elixir-format
+msgid "builder.pages.list.title"
+msgstr "Nurodymai"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.label.first"
+msgstr "Skyriaus pavadinimas"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "chapter.title.first"
+msgstr "Pirmasis skyrius"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "page.title.first"
+msgstr "Pirmasis nurodymas"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.next.button"
+msgstr "Kitas"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.page.indicator"
+msgstr "%{current}/%{count}"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.previous.button"
+msgstr "Ankstesnis"
+
+#, elixir-autogen, elixir-format
+msgid "image.fullscreen.button"
+msgstr "Padidinti"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.done.button"
+msgstr "Atlikta"
+
+#, elixir-autogen, elixir-format
+msgid "chapter.overview"
+msgstr "Apžvalga"

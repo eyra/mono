@@ -4,19 +4,39 @@ defmodule Systems.Paper.Model do
 
   import Ecto.Changeset
   alias Systems.Paper
+  alias Systems.Version
+
+  @type t :: %__MODULE__{
+          doi: String.t(),
+          title: String.t(),
+          subtitle: String.t(),
+          year: String.t(),
+          date: String.t(),
+          abbreviated_journal: String.t(),
+          abstract: String.t(),
+          authors: list(String.t()),
+          keywords: list(String.t())
+        }
 
   schema "paper" do
-    field(:year, :string)
-    field(:date, :string)
-    field(:abbreviated_journal, :string)
     field(:doi, :string)
     field(:title, :string)
     field(:subtitle, :string)
+    field(:year, :string)
+    field(:date, :string)
+    field(:abbreviated_journal, :string)
     field(:abstract, :string)
     field(:authors, {:array, :string})
     field(:keywords, {:array, :string})
 
+    belongs_to(:version, Version.Model)
     has_one(:ris, Paper.RISModel, foreign_key: :paper_id)
+
+    many_to_many(:sets, Paper.SetModel,
+      join_through: Paper.SetAssoc,
+      join_keys: [paper_id: :id, set_id: :id],
+      on_replace: :delete
+    )
 
     timestamps()
   end
@@ -32,9 +52,11 @@ defmodule Systems.Paper.Model do
     validate_required(changeset, @required_fields)
   end
 
-  def preload_graph(:down), do: preload_graph([:ris])
-  def preload_graph(:up), do: preload_graph([])
+  def preload_graph(:down), do: preload_graph([:ris, :version])
+  def preload_graph(:up), do: preload_graph([:sets])
   def preload_graph(:ris), do: [ris: []]
+  def preload_graph(:version), do: [version: []]
+  def preload_graph(:sets), do: [sets: Paper.SetModel.preload_graph(:up)]
 
   @doc """
     Generate an APA style citation for a paper. The citation will be in the format:

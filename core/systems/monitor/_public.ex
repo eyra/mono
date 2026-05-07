@@ -57,7 +57,7 @@ defmodule Systems.Monitor.Public do
   def reset(event_template) when is_list(event_template) do
     Multi.new()
     |> multi_reset(event_template)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def multi_reset(%Multi{} = multi, event_template) when is_tuple(event_template) do

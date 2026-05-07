@@ -11,7 +11,7 @@ defmodule Systems.Student.Director do
   alias Systems.{
     Student,
     Pool,
-    Budget
+    Fund
   }
 
   @impl true
@@ -31,13 +31,13 @@ defmodule Systems.Student.Director do
   end
 
   @impl true
-  def resolve_budget(pool_id, _user_id) do
-    # Student pool rule: name of Pool, Budget & Currency are equal
+  def resolve_fund(pool_id, _user_id) do
+    # Student pool rule: name of Pool, Fund & Currency are equal
     %{currency: currency} = Pool.Public.get!(pool_id, [:currency])
 
-    case Budget.Public.get_by_currency!(currency, Budget.Model.preload_graph(:full)) do
-      nil -> raise Error, message: "Student pool budget not available"
-      budget -> budget
+    case Fund.Public.get_by_currency!(currency, Fund.Model.preload_graph(:full)) do
+      nil -> raise Error, message: "Student pool fund not available"
+      fund -> fund
     end
   end
 

@@ -105,7 +105,7 @@ export class FileInput {
   continueText() {
     return {
       en: "Do you want to continue with the selected file or select a different file?",
-      nl: "Wilt u doorgaan met het gekozen bestand of een ander bestand kiezen?",
+      nl: "Wil je doorgaan met het gekozen bestand of een ander bestand kiezen?",
     };
   }
 

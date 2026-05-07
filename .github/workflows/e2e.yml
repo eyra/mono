@@ -1,0 +1,58 @@
+name: E2E Tests
+
+on:
+  workflow_call:
+    inputs:
+      app_name:
+        description: 'Fly.io app name'
+        required: true
+        type: string
+    secrets:
+      SERVICE_LOGIN_KEY:
+        description: 'Service login key for E2E fixture setup'
+        required: true
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'Fly.io app name'
+        required: true
+        default: 'eyra-next-dev'
+
+jobs:
+  e2e:
+    name: E2E Tests (${{ inputs.app_name }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.15.0'
+
+      - name: Install dependencies
+        working-directory: core/test/e2e
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: core/test/e2e
+        run: npx playwright install chromium
+
+      - name: Run E2E tests
+        working-directory: core/test/e2e
+        env:
+          E2E_BASE_URL: https://${{ inputs.app_name }}.fly.dev
+          SERVICE_LOGIN_KEY: ${{ secrets.SERVICE_LOGIN_KEY }}
+        run: npm run e2e
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: test-results-${{ inputs.app_name }}
+          path: core/test/e2e/test-results/
+          retention-days: 7

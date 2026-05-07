@@ -48,13 +48,13 @@ defmodule Systems.Manual.Public do
     Multi.new()
     |> create_next_chapter(manual)
     |> Signal.Public.multi_dispatch({:manual_chapter, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def remove_chapter(chapter) do
     Multi.new()
     |> remove_chapter(chapter)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def remove_chapter(%Multi{} = multi, chapter) do
@@ -94,7 +94,7 @@ defmodule Systems.Manual.Public do
     Multi.new()
     |> create_next_page(chapter)
     |> Signal.Public.multi_dispatch({:manual_page, :inserted})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """
@@ -103,7 +103,7 @@ defmodule Systems.Manual.Public do
   def delete_page(%Manual.PageModel{} = page) do
     Multi.new()
     |> delete_page(page)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   @doc """

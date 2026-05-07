@@ -58,3 +58,7 @@ msgstr "Sie sind dabei, einige Schritte zu durchlaufen, um Ihre Daten zu spenden
 #, elixir-autogen, elixir-format
 msgid "tool.button"
 msgstr "Weiter"
+
+#, elixir-autogen, elixir-format
+msgid "tool.archive.not.configured"
+msgstr ""

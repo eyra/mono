@@ -135,10 +135,6 @@ msgid "settings.branding.title"
 msgstr "Branding"
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr "Overzicht"
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr "Informatie"
 
@@ -192,7 +188,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Bedankt. U bent klaar. U kunt het venster nu sluiten."
+msgstr "Bedankt voor je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
@@ -284,19 +280,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
-msgstr ""
+msgstr "Gebruik de link hieronder om deelnemers uit te nodigen. Vervang 'participant_id' door een unieke identifier voor elke deelnemer. Deelnemers worden uitgenodigd om hun e-mailadres achter te laten voor toekomstig onderzoek via Panl."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
 msgstr "Panel"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "advert.body"
@@ -385,10 +373,6 @@ msgid "progress.yes"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "retry.button"
-msgstr "Terug"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -434,7 +418,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
-msgstr "Bedankt. U heeft dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
+msgstr "Bedankt. Je hebt dit onderdeel afgerond. Klik op Doorgaan om verder te gaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect.button"
@@ -451,3 +435,107 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
 msgstr "De standaardtaal voor Panl-studies is het Nederlands."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined"
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect"
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.title.declined"
+msgstr "Klaar"
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr "Terug"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.declined.redirect.platform"
+msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen. Klik op Doorgaan om verder te gaan naar %{platform}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "finished_view.body.redirect.platform"
+msgstr "Bedankt. Je hebt dit onderdeel afgerond. Klik op Doorgaan om verder te gaan naar %{platform}."
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr "Om deel te nemen aan deze studie moet je eerst je account activeren. Klik op de activatielink in de e-mail die we naar %{email} hebben gestuurd."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr "Je account is nog niet geactiveerd. Controleer je inbox."
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr "E-mail opnieuw versturen"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr "Activatiemail verstuurd!"
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr "Activeer je account"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr "Laat je e-mailadres achter om informatie te ontvangen over meedoen aan onderzoek via Panl."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr "E-mailadres"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr "Dit e-mailadres is al gebruikt."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr "Gebruik een ander e-mailadres."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr "Voer een geldig e-mailadres in."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr "Er is iets misgegaan. Probeer het opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr "Versturen"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr "Je ontvangt binnenkort een e-mail met meer informatie."
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr "Bedankt voor je interesse in Panl"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr "Wil je vaker meedoen aan onderzoek?"
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
+msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, admin@)."

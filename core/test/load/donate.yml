@@ -1,0 +1,95 @@
+# Artillery Load Test for Data Donation API
+#
+# Usage:
+#   1. Configure env vars in Infisical (Next Load project)
+#   2. Run with: infisical run --projectId="Next Load" --env=test1 -- npm run test:quick
+#
+# Environment variables (configure in Infisical):
+#   LOAD_BASE_URL        - Target URL (e.g., https://eyra-next-test1.fly.dev)
+#   LOAD_SERVICE_EMAIL   - Service user email (e.g., loadtest@eyra.service)
+#   LOAD_SERVICE_PASSWORD - Service user password
+#   LOAD_SERVICE_KEY     - X-Service-Key header value
+#   LOAD_ASSIGNMENT_ID   - Assignment ID for donations
+#   LOAD_FILE_SIZE_MB    - File size: 1, 10, 100, or 200 (default: 1)
+
+config:
+  target: "{{ $processEnvironment.LOAD_BASE_URL }}"
+  processor: "./functions.js"
+  http:
+    timeout: 300  # 5 min for large uploads
+  phases:
+    - duration: 60
+      arrivalCount: 5
+      name: "Sustained load (5 uploads/min)"
+  environments:
+    quick:
+      phases:
+        - duration: 60
+          arrivalCount: 2
+          name: "Quick test (2 uploads)"
+    # Volume test: 320 small uploads (use FILE_SIZE_MB=1 or 10)
+    volume:
+      phases:
+        - duration: 30
+          arrivalRate: 1
+          name: "Warm up (1/sec)"
+        - duration: 60
+          arrivalRate: 2
+          name: "Sustained (2/sec parallel)"
+        - duration: 30
+          arrivalRate: 5
+          name: "Peak (5/sec parallel)"
+        - duration: 10
+          arrivalRate: 5
+          rampTo: 0
+          name: "Cool down"
+    # Large file test: 50 x 100MB
+    large:
+      phases:
+        - duration: 150
+          arrivalCount: 50
+          name: "50 large uploads (1 per 3 sec)"
+    # Max size test: 10 x 200MB (Phoenix max)
+    xlarge:
+      phases:
+        - duration: 20
+          arrivalCount: 10
+          name: "10 max-size uploads (200MB)"
+  includeFiles:
+    - ./testdata_1MB.bin
+    - ./testdata_10MB.bin
+    - ./testdata_100MB.bin
+    - ./testdata_200MB.bin
+
+before:
+  flow:
+    - post:
+        url: "/api/service/login"
+        headers:
+          X-Service-Key: "{{ $processEnvironment.LOAD_SERVICE_KEY }}"
+        json:
+          email: "{{ $processEnvironment.LOAD_SERVICE_EMAIL }}"
+          password: "{{ $processEnvironment.LOAD_SERVICE_PASSWORD }}"
+        capture:
+          - header: "set-cookie"
+            as: "sessionCookie"
+
+scenarios:
+  - name: "Donate file"
+    flow:
+      - function: "incrementCounter"
+      - log: "[{{ uploadNumber }}] Starting upload {{ $uuid }} ({{ $processEnvironment.LOAD_FILE_SIZE_MB }}MB)"
+      - post:
+          url: "/api/feldspar/donate"
+          timeout: 300
+          headers:
+            Cookie: "{{ sessionCookie }}"
+          formData:
+            key: "load_test_{{ $uuid }}"
+            context: '{"assignment_id":{{ $processEnvironment.LOAD_ASSIGNMENT_ID }},"task":"load_test","participant":"artillery_{{ $uuid }}","group":"load_test"}'
+            data:
+              fromFile: "./testdata_{{ $processEnvironment.LOAD_FILE_SIZE_MB }}MB.bin"
+              contentType: application/octet-stream
+          expect:
+            - statusCode: 200
+      - log: "[{{ uploadNumber }}] Completed upload {{ $uuid }}"

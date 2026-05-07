@@ -3,7 +3,7 @@ defmodule Frameworks.GreenLight.LiveFeature do
               Phoenix.LiveView.unsigned_params() | :not_mounted_at_router,
               session :: map,
               socket :: Phoenix.Socket.t()
-            ) :: integer | struct
+            ) :: integer | struct | %{id: :singleton}
 
   @optional_callbacks get_authorization_context: 3
 

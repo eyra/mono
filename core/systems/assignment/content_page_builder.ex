@@ -5,7 +5,9 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Core.Repo
   alias Frameworks.Concept
+  alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
@@ -79,7 +81,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
             type: :primary,
             label: dgettext("eyra-assignment", "publish.button"),
             bg_color: "bg-success"
-          }
+          },
+          testid: "publish-button"
         },
         icon: %{
           action: publish_action,
@@ -95,7 +98,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
             label: dgettext("eyra-assignment", "retract.button"),
             text_color: "text-error",
             border_color: "border-error"
-          }
+          },
+          testid: "retract-button"
         },
         icon: %{
           action: retract_action,
@@ -266,7 +270,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      child: child,
+      testid: "assignment-tab-workflow"
     }
   end
 
@@ -300,19 +305,17 @@ defmodule Systems.Assignment.ContentPageBuilder do
              items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
            }
          },
-         {title, content_flags},
+         {title, _content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, current_user: user, timezone: timezone}
+         %{current_user: user}
        ) do
-    child =
-      Fabric.prepare_child(fabric, :system, Zircon.Screening.ImportView, %{
+    element =
+      LiveNest.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
         tool: zircon_screening_tool,
-        timezone: timezone,
         user: user,
-        title: title,
-        content_flags: content_flags
-      })
+        title: title
+      )
 
     %{
       id: :import,
@@ -321,7 +324,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
@@ -336,18 +339,20 @@ defmodule Systems.Assignment.ContentPageBuilder do
              items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
            }
          },
-         {title, content_flags},
+         {title, _content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, current_user: user}
+         %{current_user: user}
        ) do
-    child =
-      Fabric.prepare_child(fabric, :system, Zircon.CriteriaView, %{
+    zircon_screening_tool =
+      Repo.preload(zircon_screening_tool, annotations: Annotation.Model.preload_graph(:down))
+
+    element =
+      LiveNest.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
-        title: title,
-        content_flags: content_flags
-      })
+        title: title
+      )
 
     %{
       id: :criteria,
@@ -356,7 +361,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      element: element
     }
   end
 
@@ -389,7 +394,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
       title: title,
       forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
       type: :fullpage,
-      child: child
+      child: child,
+      testid: "assignment-tab-participants"
     }
   end
 

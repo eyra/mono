@@ -84,8 +84,8 @@ defmodule CoreWeb.FileUploader do
 
       def consume_file(socket, entry) do
         consume_uploaded_entry(socket, entry, fn %{path: tmp_path} ->
-          path = apply(unquote(store), :store, [tmp_path, entry.client_name])
-          public_url = apply(unquote(store), :get_public_url, [path])
+          path = unquote(store).store(tmp_path, entry.client_name)
+          public_url = unquote(store).get_public_url(path)
 
           info =
             if function_exported?(__MODULE__, :pre_process_file, 1) do

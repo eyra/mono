@@ -135,10 +135,6 @@ msgid "settings.branding.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "work.list.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "intro.page.title"
 msgstr ""
 
@@ -291,14 +287,6 @@ msgid "invite.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.general_instruction.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "workflow_item.onsite_experiment.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "advert.body"
 msgstr ""
 
@@ -385,10 +373,6 @@ msgid "progress.yes"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "retry.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "workflow_item.paper_screening.description"
 msgstr ""
 
@@ -450,4 +434,108 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "settings.language.fixed_nl_message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.title.declined"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "landing.description.default"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "back.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.declined.redirect.platform"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "finished_view.body.redirect.platform"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "storage.failed.warning"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.check.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.not_yet_confirmed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.resend.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activate_account.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.email.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.already_registered"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.disposable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.invalid_format"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.unknown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.submit.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.success.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email_capture.error.role_account"
 msgstr ""

@@ -9,6 +9,7 @@
 - [ ] I have performed a self-review of my own code
 - [ ] My changes generate no new warnings
 - [ ] I have not added superfluous logging
+- [ ] I have added QA steps to the Basecamp ticket
 - [ ] Security
   - [ ] I have considered the security implications of my changes
 - [ ] Privacy

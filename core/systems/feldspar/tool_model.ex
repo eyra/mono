@@ -54,15 +54,6 @@ defmodule Systems.Feldspar.ToolModel do
     def ready?(tool), do: Feldspar.ToolModel.ready?(tool)
     def form(_, _), do: Feldspar.ToolForm
 
-    def launcher(tool) do
-      %{
-        module: Feldspar.ToolView,
-        params: %{
-          tool: tool
-        }
-      }
-    end
-
     def task_labels(_) do
       %{
         pending: dgettext("eyra-feldspar", "pending.label"),

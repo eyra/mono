@@ -14,7 +14,8 @@ defmodule Systems.Workflow.ItemCell do
           user: user,
           uri_origin: uri_origin,
           ordering_enabled?: ordering_enabled?,
-          timezone: timezone
+          timezone: timezone,
+          workflow_config: workflow_config
         },
         socket
       ) do
@@ -23,13 +24,15 @@ defmodule Systems.Workflow.ItemCell do
       socket
       |> assign(
         id: id,
+        testid: "workflow-item-#{item.position}",
         type: type,
         item: item,
         relative_position: relative_position,
         user: user,
         uri_origin: uri_origin,
         ordering_enabled?: ordering_enabled?,
-        timezone: timezone
+        timezone: timezone,
+        workflow_config: workflow_config
       )
       |> update_item_view()
       |> update_item_form()
@@ -71,7 +74,7 @@ defmodule Systems.Workflow.ItemCell do
 
   defp update_item_view(%{assigns: %{item: %{title: _title}}} = socket) do
     item_view = %{
-      function: &Workflow.ItemViews.collapsed/1,
+      function: &Workflow.HTML.collapsed/1,
       props: %{
         # title: title,
         inner_block: nil
@@ -81,10 +84,16 @@ defmodule Systems.Workflow.ItemCell do
     socket |> assign(item_view: item_view)
   end
 
-  defp update_item_form(%{assigns: %{id: id, item: %{tool_ref: tool_ref} = item}} = socket) do
-    group_enabled? =
-      Workflow.ToolRefModel.flatten(tool_ref)
-      |> Concept.ToolModel.group_enabled?()
+  defp update_item_form(
+         %{
+           assigns: %{
+             id: id,
+             item: %{tool_ref: tool_ref} = item,
+             workflow_config: workflow_config
+           }
+         } = socket
+       ) do
+    group_enabled? = group_enabled?(workflow_config, tool_ref)
 
     item_form = %{
       id: "#{id}_item_form",
@@ -94,6 +103,15 @@ defmodule Systems.Workflow.ItemCell do
     }
 
     socket |> assign(item_form: item_form)
+  end
+
+  defp group_enabled?(%Workflow.Config{group_enabled?: override}, _tool_ref)
+       when is_boolean(override),
+       do: override
+
+  defp group_enabled?(_workflow_config, tool_ref) do
+    Workflow.ToolRefModel.flatten(tool_ref)
+    |> Concept.ToolModel.group_enabled?()
   end
 
   defp update_ready(%{assigns: %{item: item}} = socket) do
@@ -113,7 +131,7 @@ defmodule Systems.Workflow.ItemCell do
     }
 
     delete_button = %{
-      action: %{type: :send, event: "delete"},
+      action: %{type: :send, event: "delete", debounce: "500"},
       face: %{type: :icon, icon: :delete_red}
     }
 
@@ -149,7 +167,7 @@ defmodule Systems.Workflow.ItemCell do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={@id} class="bg-white rounded-md p-6" phx-hook="Cell" >
+    <div id={@id} data-testid={@testid} class="bg-white rounded-md p-6" phx-hook="Cell" >
       <div class="flex flex-row gap-4 items-center mb-8">
         <Text.title3 margin=""><%= @type %></Text.title3>
         <%= if @ready? do %>

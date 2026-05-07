@@ -29,14 +29,13 @@ defmodule Systems.Alliance.ContentPage do
   def render(assigns) do
     ~H"""
       <.management_page
+        socket={@socket}
         title={@vm.title}
         tabs={@vm.tabs}
         show_errors={@vm.show_errors}
         breadcrumbs={@vm.breadcrumbs}
         menus={@menus}
-        modals={@modals}
-        popup={@popup}
-        dialog={@dialog}
+        modal={@modal}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
         tabbar_size={@tabbar_size}

@@ -145,7 +145,7 @@ defmodule Systems.Assignment.GdprForm do
     socket
     |> update_switch(confirming_status_off: true)
     |> compose_child(:confirmation_modal)
-    |> show_modal(:confirmation_modal, :dialog)
+    |> show_modal(:confirmation_modal, :compact)
   end
 
   defp handle_off_state(socket, _, _) do

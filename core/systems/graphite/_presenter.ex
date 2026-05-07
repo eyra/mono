@@ -1,13 +1,8 @@
 defmodule Systems.Graphite.Presenter do
-  @behaviour Frameworks.Concept.Presenter
-
-  alias Systems.Graphite
+  use Frameworks.Concept.Presenter
 
   @impl true
-  def view_model(page, %Graphite.LeaderboardModel{} = tool, assigns) do
-    builder(page).view_model(tool, assigns)
+  def view_model(page, model, assigns) do
+    builder(page).view_model(model, assigns)
   end
-
-  defp builder(Graphite.LeaderboardPage), do: Graphite.LeaderboardPageBuilder
-  defp builder(Graphite.LeaderboardContentPage), do: Graphite.LeaderboardContentPageBuilder
 end

@@ -119,6 +119,19 @@ defmodule Systems.Pool.Public do
     auth_module().users_with_role(pool, :participant)
   end
 
+  def list_participant_ids do
+    pool_ids =
+      from(p in Pool.Model, select: p.auth_node_id)
+      |> Repo.all()
+
+    from(ra in Core.Authorization.RoleAssignment,
+      where: ra.node_id in ^pool_ids and ra.role == :participant,
+      select: ra.principal_id
+    )
+    |> Repo.all()
+    |> Enum.uniq()
+  end
+
   def get!(id, preload \\ []), do: Repo.get!(Pool.Model, id) |> Repo.preload(preload)
   def get(id, preload \\ []), do: Repo.get(Pool.Model, id) |> Repo.preload(preload)
 
@@ -171,23 +184,42 @@ defmodule Systems.Pool.Public do
     |> Repo.exists?()
   end
 
+  def participant?(pool_slug, %Account.User{} = user) when is_atom(pool_slug) do
+    if pool = get_by_slug(pool_slug) do
+      participant?(pool, user)
+    else
+      false
+    end
+  end
+
   def add_participant!(pool, user) do
     if not auth_module().user_has_role?(user, pool, :participant) do
       :ok = auth_module().assign_role(user, pool, :participant)
     end
   end
 
-  def add_user_to_panl_pool(%Account.User{} = user) do
-    case get_panl() do
-      %Pool.Model{} = panl_pool ->
-        add_participant!(panl_pool, user)
+  def add_to_pool(pool_slug, %Account.User{} = user) when is_atom(pool_slug) do
+    case get_by_slug(pool_slug) do
+      %Pool.Model{} = pool ->
+        add_participant!(pool, user)
         :ok
 
       nil ->
-        require Logger
-        Logger.warning("PANL pool not found - unable to add user #{user.id} to PANL pool")
-        :error
+        raise "Pool #{pool_slug} not found. Run the seed task to create it."
     end
+  end
+
+  def add_user_to_panl_pool(%Account.User{} = user) do
+    panl_pool = Pool.Assembly.get_or_create_panl()
+    add_participant!(panl_pool, user)
+    :ok
+  end
+
+  def get_by_slug(slug) when is_atom(slug) do
+    slug_string = slug |> Atom.to_string()
+
+    from(p in Pool.Model, where: fragment("lower(replace(?, ' ', '_'))", p.name) == ^slug_string)
+    |> Repo.one()
   end
 
   def remove_participant(pool, user) do
@@ -214,6 +246,7 @@ defmodule Systems.Pool.Public do
     |> Pool.Model.change(%{name: name, target: target, director: director})
     |> Ecto.Changeset.put_assoc(:currency, currency)
     |> Ecto.Changeset.put_assoc(:org, org)
+    |> Ecto.Changeset.put_assoc(:auth_node, auth_module().prepare_node())
     |> Repo.insert!()
   end
 
@@ -263,7 +296,7 @@ defmodule Systems.Pool.Public do
       notify_when_submitted(submission, changeset)
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def update(%Pool.SubmissionModel{} = submission, attrs) do
@@ -278,7 +311,7 @@ defmodule Systems.Pool.Public do
       Signal.Public.dispatch!({:criteria, :updated}, %{criteria: criteria})
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def select(nil, _user), do: nil
@@ -445,7 +478,7 @@ defmodule Systems.Pool.Public do
 
       {:ok, true}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   defp update_pools([_ | _] = pool_names, user, command) do

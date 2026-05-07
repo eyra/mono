@@ -51,7 +51,7 @@ Asynchronous process to persist all valid (RIS) references found in the file. Wh
 ```mermaid
 sequenceDiagram
     Caller->>+Public: start processing reference file (id)
-    create participant Job as RISProcessorJob
+    create participant Job as RISImportJob
     Public->>Job:<<new>>
     Public-)Oban: insert job
     Public->>-Caller:

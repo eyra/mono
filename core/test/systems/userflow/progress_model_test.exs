@@ -27,8 +27,8 @@ defmodule Systems.Userflow.ProgressModelTest do
   describe "changeset/2" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.insert(:userflow)
-      step = Userflow.Factory.insert(:step, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      step = Userflow.Factories.insert(:step, %{userflow: userflow})
       {:ok, user: user, step: step}
     end
 
@@ -68,15 +68,15 @@ defmodule Systems.Userflow.ProgressModelTest do
   describe "mark_visited/1" do
     setup do
       user = Core.Factories.insert!(:member)
-      userflow = Userflow.Factory.insert(:userflow)
-      step = Userflow.Factory.insert(:step, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      step = Userflow.Factories.insert(:step, %{userflow: userflow})
 
       attrs = %{
         user: user,
         step: step
       }
 
-      progress = Userflow.Factory.insert(:progress, attrs)
+      progress = Userflow.Factories.insert(:progress, attrs)
       {:ok, progress: progress}
     end
   end

@@ -36,17 +36,20 @@ defmodule Core.Authorization do
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.SignupPage, [:visitor])
   grant_access(Systems.Account.UserProfilePage, [:member])
+  grant_access(Systems.Account.OnboardingPage, [:member])
   grant_access(Systems.Account.UserSecuritySettings, [:member])
   grant_access(Systems.Account.UserSettings, [:member])
   grant_access(Systems.Account.UserSignin, [:visitor])
   grant_access(Systems.Admin.ConfigPage, [:admin])
   grant_access(Systems.Admin.ImportRewardsPage, [:admin])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
+  grant_access(Systems.Admin.TypographyPage, [:admin])
   grant_access(Systems.Advert.ContentPage, [:owner])
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Assignment.ContentPage, [:owner])
   grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
-  grant_access(Systems.Budget.FundingPage, [:admin, :creator])
+  grant_access(Systems.Assignment.LandingPage, [:participant, :tester])
+  grant_access(Systems.Fund.FundingPage, [:admin, :creator])
   grant_access(Systems.Desktop.Page, [:creator])
   grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
   grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
@@ -56,6 +59,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Manual.Builder.PublicPage, [:creator])
   grant_access(Systems.NextAction.OverviewPage, [:member])
   grant_access(Systems.Notification.OverviewPage, [:member])
+  grant_access(Systems.Onyx.LandingPage, [:admin])
   grant_access(Systems.Org.ContentPage, [:admin])
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
@@ -300,7 +304,7 @@ defmodule Core.Authorization do
   def link(auth_tree) do
     Multi.new()
     |> link(auth_tree)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def link(multi, {parent, [h | t]}) do

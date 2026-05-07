@@ -33,6 +33,8 @@ defmodule Systems.Advert.ModelTest do
     end
 
     test "create/1 with valid data creates a advert" do
+      isolate_signals()
+
       submission = Factories.insert!(:pool_submission)
       promotion = Factories.insert!(:promotion)
       assignment = Factories.insert!(:assignment)

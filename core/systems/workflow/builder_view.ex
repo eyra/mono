@@ -4,7 +4,7 @@ defmodule Systems.Workflow.BuilderView do
   require Logger
 
   import Frameworks.Pixel.SidePanel
-  import Systems.Workflow.ItemViews
+  import Frameworks.Builder.HTML, only: [library: 1]
 
   alias Systems.Workflow
 
@@ -45,7 +45,7 @@ defmodule Systems.Workflow.BuilderView do
       |> update_render_library()
       |> reset_children()
       |> order_items()
-      |> compose_item_cells()
+      |> compose_workflow_items()
     }
   end
 
@@ -53,21 +53,22 @@ defmodule Systems.Workflow.BuilderView do
     assign(socket, render_library?: true)
   end
 
-  defp compose_item_cells(%{assigns: %{ordered_items: ordered_items}} = socket) do
+  defp compose_workflow_items(%{assigns: %{ordered_items: ordered_items}} = socket) do
     Enum.reduce(ordered_items, socket, fn item, socket ->
-      compose_child(socket, "item_cell_#{item.id}")
+      compose_child(socket, "workflow_item_#{item.id}")
     end)
   end
 
   @impl true
   def compose(
-        "item_cell_" <> item_id,
+        "workflow_item_" <> item_id,
         %{
           ordered_items: ordered_items,
           ordering_enabled?: ordering_enabled?,
           user: user,
           timezone: timezone,
-          uri_origin: uri_origin
+          uri_origin: uri_origin,
+          workflow_config: workflow_config
         } = assigns
       ) do
     item = find_by_id(ordered_items, item_id)
@@ -83,7 +84,8 @@ defmodule Systems.Workflow.BuilderView do
         timezone: timezone,
         uri_origin: uri_origin,
         relative_position: relative_position,
-        ordering_enabled?: ordering_enabled?
+        ordering_enabled?: ordering_enabled?,
+        workflow_config: workflow_config
       }
     }
   end
@@ -96,11 +98,11 @@ defmodule Systems.Workflow.BuilderView do
   def handle_event(
         "add",
         %{"item" => item_id},
-        %{assigns: %{workflow: %{id: id}, director: director}} = socket
+        %{assigns: %{workflow: %{id: id}, director: director, user: user}} = socket
       ) do
     item = get_library_item(socket, item_id)
 
-    {:ok, _} = Workflow.Public.add_item(id, item, director)
+    {:ok, _} = Workflow.Public.add_item(id, item, director, user)
 
     {
       :noreply,
@@ -133,7 +135,7 @@ defmodule Systems.Workflow.BuilderView do
   defp get_title(%{tool_ref: %{special: special}}, %{
          workflow_config: %{library: %{items: library_items}}
        }) do
-    case Enum.find(library_items, &(&1.special == special)) do
+    case Enum.find(library_items, &(&1.id == special)) do
       %{title: title} ->
         title
 
@@ -153,7 +155,7 @@ defmodule Systems.Workflow.BuilderView do
 
   defp get_library_item(%{assigns: %{workflow_config: %{library: %{items: items}}}}, item_id)
        when is_atom(item_id) do
-    Enum.find(items, &(&1.special == item_id))
+    Enum.find(items, &(&1.id == item_id))
   end
 
   @impl true

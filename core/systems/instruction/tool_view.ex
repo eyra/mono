@@ -1,72 +1,40 @@
 defmodule Systems.Instruction.ToolView do
-  use CoreWeb, :live_component
+  use CoreWeb, :modal_live_view
+  use Frameworks.Pixel
 
-  use Gettext, backend: CoreWeb.Gettext
+  alias Systems.Workflow
 
-  alias Systems.Content
+  def dependencies(), do: [:tool_ref]
 
-  @impl true
-  def update(%{tool: tool}, socket) do
-    {
-      :ok,
-      socket
-      |> send_event(:parent, "tool_initialized")
-      |> assign(tool: tool)
-      |> update_page()
-      |> update_done_button()
-      |> compose_child(:page_view)
-    }
-  end
-
-  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket) do
-    socket |> assign(page: page)
-  end
-
-  defp update_page(socket) do
-    socket |> assign(page: nil)
-  end
-
-  defp update_done_button(%{assigns: %{myself: myself}} = socket) do
-    done_button = %{
-      action: %{type: :send, event: "done", target: myself},
-      face: %{type: :primary, label: dgettext("eyra-ui", "done.button")}
-    }
-
-    socket |> assign(done_button: done_button)
+  def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
+    Workflow.ToolRefModel.tool(tool_ref)
   end
 
   @impl true
-  def compose(:page_view, %{page: nil}), do: nil
-
-  @impl true
-  def compose(:page_view, %{page: page}) do
-    %{
-      module: Content.PageView,
-      params: %{
-        page: page
-      }
-    }
+  def mount(:not_mounted_at_router, _session, socket) do
+    {:ok, socket}
   end
 
   @impl true
   def handle_event("done", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "complete_task")}
+    {:noreply, publish_event(socket, :tool_completed)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-      <div>
-        <Area.content>
-          <Margin.y id={:page_top} />
-          <Text.title2><%= dgettext("eyra-instruction", "page.title") %></Text.title2>
-          <.child name={:page_view} fabric={@fabric} />
-          <.spacing value="M" />
-          <.wrap>
-            <Button.dynamic {@done_button} />
-          </.wrap>
-        </Area.content>
-      </div>
+    <div>
+      <Area.content>
+        <Margin.y id={:page_top} />
+        <%= if @vm.page_view do %>
+          <.live_component {@vm.page_view} />
+        <% end %>
+        <.spacing value="M" />
+        <.wrap>
+          <Button.dynamic {@vm.done_button} />
+        </.wrap>
+      </Area.content>
+    </div>
     """
   end
 end

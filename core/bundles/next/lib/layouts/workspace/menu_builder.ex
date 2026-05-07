@@ -1,4 +1,6 @@
 defmodule Next.Layouts.Workspace.MenuBuilder do
+  import Core.FeatureFlags
+
   @home_flags [
     desktop_menu: [:wide],
     tablet_menu: [:narrow],
@@ -17,6 +19,7 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
       :desktop,
       :projects,
       :admin,
+      :onyx,
       :support,
       :todo
     ],
@@ -38,6 +41,7 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
   def include_map(user),
     do: %{
       desktop: Systems.Admin.Public.admin?(user) or user.creator,
-      projects: Systems.Admin.Public.admin?(user) or user.creator
+      projects: Systems.Admin.Public.admin?(user) or user.creator,
+      onyx: Systems.Admin.Public.admin?(user) and feature_enabled?(:onyx)
     }
 end

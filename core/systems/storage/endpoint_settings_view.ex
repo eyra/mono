@@ -39,7 +39,7 @@ defmodule Systems.Storage.EndpointSettingsView do
   end
 
   defp update_logo(%{assigns: %{endpoint: endpoint}} = socket) do
-    logo = Storage.EndpointModel.asset_image_src(endpoint, :logo)
+    logo = Storage.EndpointModel.asset_image_src(endpoint, {:logo, {:product, :wide}})
     assign(socket, logo: logo)
   end
 

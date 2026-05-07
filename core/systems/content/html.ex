@@ -3,12 +3,15 @@ defmodule Systems.Content.Html do
   import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
   import CoreWeb.Layouts.Website.Html, only: [website: 1]
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
-  import CoreWeb.UI.Popup
-  alias Frameworks.Pixel.ModalView
-  import CoreWeb.UI.PlainDialog
-  alias Frameworks.Pixel.Tabbed
-  alias Frameworks.Pixel.Navigation
+  import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Breadcrumbs
+  alias Frameworks.Pixel.ModalView
+  alias Frameworks.Pixel.Navigation
+  alias Frameworks.Pixel.Tabbed
+  alias Frameworks.Pixel.Text
+  alias Systems.Content.Adaptable
+
+  import Frameworks.Pixel.Line
 
   attr(:items, :list, required: true)
   attr(:target, :any, default: "")
@@ -49,25 +52,11 @@ defmodule Systems.Content.Html do
     """
   end
 
-  attr(:modals, :map, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
-
-  def live_block(assigns) do
-    ~H"""
-    <div>
-      <.popup_block popup={@popup} />
-      <.plain_dialog_block dialog={@dialog} />
-      <ModalView.dynamic modals={@modals} />
-    </div>
-    """
-  end
-
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
 
   slot(:top_bar)
   slot(:inner_block, required: true)
@@ -79,19 +68,21 @@ defmodule Systems.Content.Html do
         <%= render_slot(@top_bar) %>
       </:top_bar>
 
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <div id="live_workspace_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:user, :map, required: true)
   attr(:user_agent, :map, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
   attr(:include_right_sidepadding?, :boolean, default: true)
 
   slot(:hero, required: true)
@@ -104,35 +95,38 @@ defmodule Systems.Content.Html do
         <%= render_slot(@hero) %>
       </:hero>
 
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <div id="live_website_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
 
       <%= render_slot(@inner_block) %>
     </.website>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
 
   slot(:inner_block, required: true)
 
   def live_stripped(assigns) do
     ~H"""
     <.stripped title={@title} menus={@menus} >
-      <.live_block modals={@modals} popup={@popup} dialog={@dialog}/>
+      <div id="live_stripped_modal">
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
+      </div>
       <%= render_slot(@inner_block) %>
     </.stripped>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -140,25 +134,33 @@ defmodule Systems.Content.Html do
 
   def tabbar_page(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
-        <%= if Enum.count(@tabs) > 0 do %>
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
+        <%= if Enum.count(@tabs) > 1 do %>
           <Navigation.tabbar>
             <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
           </Navigation.tabbar>
 
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content tabs={@tabs} include_top_margin={false} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
+        <% else %>
+          <%= if Enum.count(@tabs) == 1 do %>
+            <% [tab] = @tabs %>
+            <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+              <%= if tab[:element] do %>
+                <LiveNest.HTML.element socket={@socket} {Map.from_struct(tab.element)} />
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </.live_workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -167,36 +169,86 @@ defmodule Systems.Content.Html do
 
   def tabbar_page_breadcrumbs(assigns) do
     ~H"""
-      <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
         <%= if Enum.count(@tabs) > 0 do %>
-          <div class="flex flex-row items-center justify-between w-full h-navbar-height">
+          <%!-- Breadcrumb row --%>
+          <%= if Enum.count(@breadcrumbs || []) > 0 do %>
+            <div class="bg-white">
+              <Area.content>
+                <div class="py-4">
+                  <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
+                </div>
+              </Area.content>
+            </div>
+            <.line />
+          <% end %>
+
+          <%!-- Segmented control row --%>
+          <div class="bg-white">
             <Area.content>
-              <div class="flex flex-col gap-y-4 mt-4 sm:mt-0 sm:flex-row w-full justify-between">
-                  <div>
-                    <%= if Enum.count(@breadcrumbs || []) > 0 do %>
-                      <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
-                    <% end %>
-                  </div>
-                  <div class="flex justify-center">
-                    <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
-                  </div>
-                  <div class=""></div>
+              <div class="flex items-center justify-center py-6">
+                <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
               </div>
             </Area.content>
           </div>
+          <.line />
+
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-              <Tabbed.content tabs={@tabs} include_top_margin={false} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
     """
   end
 
+  attr(:socket, :map, required: true)
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
-  attr(:modals, :list, required: true)
-  attr(:popup, :map, required: true)
-  attr(:dialog, :map, required: true)
+  attr(:modal, :map, required: true)
+  attr(:tabs, :list, required: true)
+  attr(:tabbar_id, :atom, required: true)
+  attr(:initial_tab, :string, required: true)
+  attr(:show_errors, :string, required: true)
+  attr(:back_path, :string, default: nil)
+
+  @doc """
+  A tabbar page with a title bar that includes an optional back button.
+  The title is displayed prominently, with a back arrow if back_path is provided.
+  Tabs are centered below the title bar.
+  """
+  def tabbar_page_title(assigns) do
+    ~H"""
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
+        <%= if Enum.count(@tabs) > 0 do %>
+          <Area.content>
+            <div class="pt-6 pb-4">
+              <div class="flex flex-row items-center gap-4">
+                <%= if @back_path do %>
+                  <a href={@back_path} class="text-grey2 hover:text-primary">
+                    <img src={~p"/images/icons/back.svg"} alt="Back" class="w-6 h-6" />
+                  </a>
+                <% end %>
+                <Text.title2><%= @title %></Text.title2>
+              </div>
+            </div>
+          </Area.content>
+
+          <Navigation.tabbar>
+            <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+          </Navigation.tabbar>
+
+          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
+          </div>
+        <% end %>
+      </.live_workspace>
+    """
+  end
+
+  attr(:socket, :map, required: true)
+  attr(:title, :string, required: true)
+  attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
@@ -209,7 +261,7 @@ defmodule Systems.Content.Html do
   def management_page(assigns) do
     ~H"""
       <div id={:content_management_page} phx-hook="Viewport">
-        <.live_workspace title={@title} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+        <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
               <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
@@ -217,11 +269,28 @@ defmodule Systems.Content.Html do
           </:top_bar>
 
           <div id="content_management_live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content tabs={@tabs} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
-          <Tabbed.footer tabs={@tabs} />
+          <Tabbed.footer bar_id={@tabbar_id} tabs={@tabs} />
         </.live_workspace>
       </div>
     """
+  end
+
+  @doc """
+  Adaptable layout that adjusts based on item count.
+
+  See `Systems.Content.Adaptable` for full documentation.
+  """
+  attr(:socket, :map, required: true)
+  attr(:items, :list, required: true)
+  attr(:creatables, :list, default: [])
+  attr(:tabbar_id, :any, required: true)
+  attr(:initial_item, :any, default: nil)
+  attr(:empty_state, :map, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
+
+  def adaptable_layout(assigns) do
+    Adaptable.layout(assigns)
   end
 end

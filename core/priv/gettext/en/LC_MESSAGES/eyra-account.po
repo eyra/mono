@@ -28,7 +28,7 @@ msgstr "Password"
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
-msgstr "My profile"
+msgstr "Account"
 
 #, elixir-autogen, elixir-format
 msgid "signup.button"
@@ -67,20 +67,8 @@ msgid "features.description"
 msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
 
 #, elixir-autogen, elixir-format
-msgid "features.birthyear.title"
-msgstr "Birth year"
-
-#, elixir-autogen, elixir-format
-msgid "features.dominanthand.title"
-msgstr "Dominant hand"
-
-#, elixir-autogen, elixir-format
 msgid "features.gender.title"
 msgstr "Gender"
-
-#, elixir-autogen, elixir-format
-msgid "features.nativelanguage.title"
-msgstr "First language"
 
 #, elixir-autogen, elixir-format
 msgid "features.title"
@@ -163,17 +151,77 @@ msgid "Account activated successfully."
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.label"
-msgstr "I agree to the privacy policy"
+msgid "features.birthyear.title"
+msgstr "Birth year"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.policy.must.be.accepted"
-msgstr "You must accept the privacy policy to continue"
+msgid "profile.tab.features.title"
+msgstr "Panl"
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
 msgstr "My profile"
 
 #, elixir-autogen, elixir-format
-msgid "profile.tab.features.title"
-msgstr "Panl"
+msgid "onboarding.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Onboarding"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.token.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.label"
+msgstr "I agree to the %{terms_link} and %{privacy_link} of Panl"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Privacy Policy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Terms of Use"
+
+#, elixir-autogen, elixir-format
+msgid "panl.privacy.policy.required"
+msgstr "You must accept the privacy policy to continue"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.label"
+msgstr "I agree to the %{terms_link} and %{privacy_link} of Next"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.next-policy.required"
+msgstr "You must accept the terms, conditions and privacy policy to continue"
+
+#, elixir-autogen, elixir-format
+msgid "sso.error.generic"
+msgstr "An error occurred during sign-in. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "sso.error.session_not_found"
+msgstr "Sign-in could not be completed. Please click the sign-in button to start again."
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.body"
+msgstr "We sent a confirmation email to %{email}. Click the link to activate your account. You can already browse studies in the meantime."
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.continue.button"
+msgstr "Start browsing"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.title"
+msgstr "Check your email"
+
+#, elixir-autogen, elixir-format
+msgid "signup.rate_limited"
+msgstr "Too many signup attempts. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "people.add.button"
+msgstr "Add"

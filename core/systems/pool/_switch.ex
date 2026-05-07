@@ -79,9 +79,10 @@ defmodule Systems.Pool.Switch do
   end
 
   # Check if features are considered complete
-  # For now, we consider features complete if both gender and birth_year are filled
+  # Features are complete if either gender or birth_year is filled
+  # (user has engaged with the features form)
   defp features_complete?(%{gender: gender, birth_year: birth_year}) do
-    gender != nil && birth_year != nil
+    gender != nil || birth_year != nil
   end
 
   defp features_complete?(_), do: false

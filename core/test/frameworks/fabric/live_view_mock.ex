@@ -1,5 +1,7 @@
 defmodule Fabric.LiveViewMock do
-  use Fabric.LiveView, Fabric.TestLayouts
+  use Phoenix.LiveView, layout: {Fabric.TestLayouts, :live}
+  use Fabric.LiveView
+  CoreWeb.Layouts
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do

@@ -1,0 +1,16 @@
+name: E2E Tests (dev)
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy to Fly.io (dev)"]
+    types:
+      - completed
+
+jobs:
+  e2e:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    uses: ./.github/workflows/e2e.yml
+    with:
+      app_name: eyra-next-dev
+    secrets: inherit

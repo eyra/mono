@@ -27,7 +27,7 @@ defmodule Systems.Userflow.StepModelTest do
 
   describe "validate/1" do
     setup do
-      userflow = Userflow.Factory.insert(:userflow)
+      userflow = Userflow.Factories.insert(:userflow)
       {:ok, userflow: userflow}
     end
 

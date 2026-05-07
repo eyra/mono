@@ -313,16 +313,16 @@ defmodule Fabric.Test do
     end
   end
 
-  describe "show_popup/2" do
+  describe "show_modal/2" do
     test "socket" do
       socket =
         %Phoenix.LiveView.Socket{}
         |> Phoenix.Component.assign(:fabric, create_fabric())
-        |> Fabric.show_popup(create_child(:child))
+        |> Fabric.ModalController.show_modal(create_child(:child), :compact)
 
       assert_received %{
         fabric_event: %{
-          name: "show_popup",
+          name: "show_modal",
           payload: %Fabric.LiveComponent.Model{
             params: %{
               fabric: %Fabric.Model{
@@ -375,7 +375,7 @@ defmodule Fabric.Test do
     end
   end
 
-  describe "hide_popup/2" do
+  describe "hide_modal/2" do
     test "socket" do
       child = create_child(:child, Fabric.LiveComponentMock)
 
@@ -384,9 +384,9 @@ defmodule Fabric.Test do
       socket =
         %Phoenix.LiveView.Socket{}
         |> Phoenix.Component.assign(:fabric, fabric)
-        |> Fabric.hide_popup(:child)
+        |> Fabric.ModalController.hide_modal(:child)
 
-      assert_received %{fabric_event: %{name: "hide_popup", payload: %{}}}
+      assert_received %{fabric_event: %{name: "hide_modal", payload: %{}}}
 
       assert %Phoenix.LiveView.Socket{
                assigns: %{

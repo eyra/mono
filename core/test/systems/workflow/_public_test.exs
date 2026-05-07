@@ -311,7 +311,7 @@ defmodule Systems.Workflow.PublicTest do
     Multi.new()
     |> Multi.update(:item_c, Workflow.ItemModel.changeset(item_c, %{position: 3}))
     |> Multi.update(:item_d, Workflow.ItemModel.changeset(item_d, %{position: 2}))
-    |> Repo.transaction()
+    |> Repo.commit()
 
     {:error, :validate_old_position, :out_of_sync, _} = Workflow.Public.update_position(item_d, 1)
   end
@@ -328,7 +328,7 @@ defmodule Systems.Workflow.PublicTest do
 
     Multi.new()
     |> Multi.delete(:item_c, item_c)
-    |> Repo.transaction()
+    |> Repo.commit()
 
     {:error, :validate_old_position, :out_of_bounds, _} =
       Workflow.Public.update_position(item_d, 0)
@@ -374,6 +374,30 @@ defmodule Systems.Workflow.PublicTest do
                  id: ^id_d,
                  position: 2
                }
+             ]
+           } = result
+  end
+
+  test "delete/1 handles already-deleted item gracefully (race condition)" do
+    tool = Factories.create_tool()
+    tool_ref = Factories.create_tool_ref(tool, :request_manual)
+    workflow = Factories.create_workflow()
+
+    %{id: id_a} = Factories.create_item(workflow, tool_ref, 0)
+    %{id: id_b} = Factories.create_item(workflow, tool_ref, 1)
+    item_c = Factories.create_item(workflow, tool_ref, 2)
+
+    # First delete succeeds
+    {:ok, _} = Workflow.Public.delete(item_c)
+
+    # Second delete should not raise StaleEntryError (simulates double-click)
+    {:ok, result} = Workflow.Public.delete(item_c)
+
+    # The remaining items should still be correctly rearranged
+    assert %{
+             items: [
+               %Systems.Workflow.ItemModel{id: ^id_a, position: 0},
+               %Systems.Workflow.ItemModel{id: ^id_b, position: 1}
              ]
            } = result
   end

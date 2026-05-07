@@ -13,9 +13,9 @@ defmodule Core.Repo.Migrations.AddAssignmentExclude do
   end
 
   def down do
-    drop index(:assignment_excludes, [:from_id])
-    drop index(:assignment_excludes, [:to_id])
+    drop(index(:assignment_excludes, [:from_id]))
+    drop(index(:assignment_excludes, [:to_id]))
 
-    drop table(:assignment_excludes)
+    drop(table(:assignment_excludes))
   end
 end

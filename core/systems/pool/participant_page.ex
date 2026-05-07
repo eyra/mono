@@ -5,7 +5,7 @@ defmodule Systems.Pool.ParticipantPage do
   import Frameworks.Pixel.Content
 
   alias Frameworks.Pixel.Text
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Account
 
   @impl true
@@ -21,7 +21,7 @@ defmodule Systems.Pool.ParticipantPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.live_workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus} modals={@modals} popup={@popup} dialog={@dialog}>
+    <.live_workspace title={dgettext("link-studentpool", "participant.title")} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
         <%= if @vm.member do %>
@@ -34,7 +34,7 @@ defmodule Systems.Pool.ParticipantPage do
             <Text.title2>
               <%= dgettext("link-dashboard", "book.accounts.title") %>
             </Text.title2>
-            <Budget.WalletView.list items={@vm.wallets} />
+            <Fund.WalletView.list items={@vm.wallets} />
             <.spacing value="XL" />
           </div>
         <% end %>

@@ -6,8 +6,8 @@ defmodule Systems.Manual.PageModelTest do
 
   describe "validate/2" do
     test "with valid attributes" do
-      userflow = Userflow.Factory.insert(:userflow)
-      userflow_step = Userflow.Factory.insert(:step, %{userflow: userflow})
+      userflow = Userflow.Factories.insert(:userflow)
+      userflow_step = Userflow.Factories.insert(:step, %{userflow: userflow})
 
       attrs = %{
         title: "Test Page",

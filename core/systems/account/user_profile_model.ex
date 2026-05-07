@@ -14,6 +14,18 @@ defmodule Systems.Account.UserProfileModel do
     timestamps()
   end
 
+  @type t() :: %__MODULE__{
+          __meta__: Ecto.Schema.Metadata.t(),
+          id: integer() | nil,
+          fullname: String.t() | nil,
+          title: String.t() | nil,
+          photo_url: String.t() | nil,
+          user_id: integer() | nil,
+          user: User.t() | Ecto.Association.NotLoaded.t() | nil,
+          inserted_at: NaiveDateTime.t(),
+          updated_at: NaiveDateTime.t()
+        }
+
   @fields ~w(fullname title photo_url)a
 
   @doc false

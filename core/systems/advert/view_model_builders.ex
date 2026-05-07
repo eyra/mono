@@ -9,7 +9,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     Promotion,
     Assignment,
     Pool,
-    Budget
+    Fund
   }
 
   alias Core.ImageHelpers
@@ -309,7 +309,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
              image_id: image_id
            }
          } = advert,
-         {Budget.FundingPage, :budget_adverts},
+         {Fund.FundingPage, :fund_adverts},
          _assigns
        ) do
     path = ~p"/advert/#{id}/content?tab=#{:funding}"
@@ -388,18 +388,18 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
     locale = Gettext.get_locale(CoreWeb.Gettext)
     required_funding_amount = subject_count * reward_value
-    required_funding_label = Budget.CurrencyModel.label(currency, locale, required_funding_amount)
+    required_funding_label = Fund.CurrencyModel.label(currency, locale, required_funding_amount)
     dgettext("eyra-advert", "required.funding.label", funding: required_funding_label)
   end
 
   defp funding_tag(%{
          submission: %{reward_value: reward_value},
-         assignment: %{budget: budget, assignable_inquiry: %{subject_count: subject_count}}
+         assignment: %{fund: fund, assignable_inquiry: %{subject_count: subject_count}}
        }) do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)
 
-    available = Budget.Model.amount_available(budget)
+    available = Fund.Model.amount_available(fund)
 
     if available < reward_value do
       %{text: dgettext("eyra-advert", "funding.status.broke.label"), type: :error}
@@ -530,7 +530,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp reward_value_label(%{} = currency, reward_value) when is_integer(reward_value) do
     locale = Gettext.get_locale(CoreWeb.Gettext)
-    Budget.CurrencyModel.label(currency, locale, reward_value)
+    Fund.CurrencyModel.label(currency, locale, reward_value)
   end
 
   def get_card_type(submission) do

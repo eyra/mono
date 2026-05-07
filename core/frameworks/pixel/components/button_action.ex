@@ -1,11 +1,32 @@
 defmodule Frameworks.Pixel.Button.Action do
+  @moduledoc """
+  Button action components that handle different interaction types.
+
+  ## Testing Convention
+  All action functions accept an optional `testid` attribute that is applied
+  to the outermost interactive element (button, anchor, div, etc.) as
+  `data-testid`. This ensures:
+  - Test selectors target the actual clickable element
+  - Disabled states still have testids on their wrapper
+  - Each action type correctly applies testids to its specific HTML semantics
+
+  When adding new action types, always include:
+  ```elixir
+  attr(:testid, :string, default: nil)
+  ```
+  And apply it to the outermost interactive element:
+  ```elixir
+  <a ... data-testid={@testid}>
+  ```
+  """
   use CoreWeb, :pixel
 
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def fake(assigns) do
     ~H"""
-    <div class="cursor-pointer focus:outline-none">
+    <div class="cursor-pointer focus:outline-none" data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -13,10 +34,11 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:js, :any, required: true)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def phoenix_js(assigns) do
     ~H"""
-    <div phx-click={@js} class="cursor-pointer focus:outline-none">
+    <div phx-click={@js} class="cursor-pointer focus:outline-none" data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -25,6 +47,7 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:to, :string, required: true)
   slot(:inner_block, required: true)
   attr(:replace, :boolean, default: false)
+  attr(:testid, :string, default: nil)
 
   def redirect(assigns) do
     ~H"""
@@ -33,6 +56,7 @@ defmodule Frameworks.Pixel.Button.Action do
       class="cursor-pointer focus:outline-none block"
       data-phx-link="redirect"
       data-phx-link-state={if @replace do "replace" else "push" end}
+      data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
     </a>
@@ -44,7 +68,9 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:item, :string, default: "")
   attr(:target, :string, default: "")
   attr(:enabled?, :boolean, default: true)
+  attr(:debounce, :string, default: nil)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def send(assigns) do
     ~H"""
@@ -53,12 +79,14 @@ defmodule Frameworks.Pixel.Button.Action do
         phx-click={@event}
         phx-value-item={@item}
         phx-target={@target}
+        phx-debounce={@debounce}
         class="touchstart-sensitive cursor-pointer focus:outline-none"
+        data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
       </div>
     <% else %>
-      <div class="opacity-30">
+      <div class="opacity-30" data-testid={@testid}>
         <%= render_slot(@inner_block) %>
       </div>
     <% end %>
@@ -67,6 +95,7 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:form_id, :string, default: nil)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def submit(assigns) do
     ~H"""
@@ -75,6 +104,7 @@ defmodule Frameworks.Pixel.Button.Action do
         type="submit"
         class="cursor-pointer focus:outline-none"
         form={@form_id}
+        data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
       </button>
@@ -82,6 +112,7 @@ defmodule Frameworks.Pixel.Button.Action do
       <button
         type="submit"
         class="cursor-pointer focus:outline-none"
+        data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
       </button>
@@ -91,10 +122,11 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:field, :string, required: true)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def label(assigns) do
     ~H"""
-    <label for={@field}>
+    <label for={@field} data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -103,6 +135,7 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:id, :string, required: true)
   attr(:target, :string, required: true)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def toggle(assigns) do
     ~H"""
@@ -111,11 +144,15 @@ defmodule Frameworks.Pixel.Button.Action do
       phx-hook="Toggle"
       target={@target}
       class="cursor-pointer focus:outline-none"
+      data-testid={@testid}
     >
       <%= render_slot(@inner_block) %>
     </div>
     """
   end
+
+  attr(:testid, :string, default: nil)
+  slot(:inner_block, required: true)
 
   def sidepanel(assigns) do
     ~H"""
@@ -123,6 +160,7 @@ defmodule Frameworks.Pixel.Button.Action do
       id={@id}
       phx-hook="NativeWrapper"
       class="cursor-pointer"
+      data-testid={@testid}
     >
       <%= render_slot(@inner_block) %>
     </div>
@@ -133,6 +171,7 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:method, :string, required: true)
   attr(:target, :string, default: "_self")
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def http(assigns) do
     ~H"""
@@ -143,6 +182,7 @@ defmodule Frameworks.Pixel.Button.Action do
       data-method={@method}
       data-csrf={Plug.CSRFProtection.get_csrf_token_for(@to)}
       target={@target}
+      data-testid={@testid}
     >
       <%= render_slot(@inner_block) %>
     </a>
@@ -154,10 +194,11 @@ defmodule Frameworks.Pixel.Button.Action do
   attr(:phx_event, :string, default: nil)
   attr(:phx_target, :string, default: nil)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def http_get(assigns) do
     ~H"""
-    <a href={@to} target={@target} phx-target={@phx_target} phx-click={@phx_event}>
+    <a href={@to} target={@target} phx-target={@phx_target} phx-click={@phx_event} data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </a>
     """
@@ -183,10 +224,11 @@ defmodule Frameworks.Pixel.Button.Action do
 
   attr(:to, :string, required: true)
   slot(:inner_block, required: true)
+  attr(:testid, :string, default: nil)
 
   def http_download(assigns) do
     ~H"""
-    <a href={@to} download>
+    <a href={@to} download data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </a>
     """

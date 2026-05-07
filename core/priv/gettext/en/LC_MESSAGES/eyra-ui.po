@@ -43,10 +43,6 @@ msgid "todo.title"
 msgstr "To-do"
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.features"
-msgstr "Characteristics"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.student"
 msgstr "Study program"
 
@@ -205,3 +201,7 @@ msgstr "Skip this page?"
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.forward"
 msgstr "Go to %{to}"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "menu.item.onyx"
+msgstr "Onyx"

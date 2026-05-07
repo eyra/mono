@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+echo "Running database migrations..."
+/opt/app/bin/core eval Core.Release.migrate
+echo "Migrations complete."
+
+echo "Running seeds..."
+/opt/app/bin/core eval Core.Release.seed
+echo "Seeds complete."

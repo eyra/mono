@@ -35,7 +35,7 @@ defmodule Systems.Home.PageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl? = panl_participant?(user)
+    panl? = Pool.Public.participant?(:panl, user)
     put_locale(user, panl?)
 
     %{
@@ -54,14 +54,6 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
-  defp panl_participant?(%Account.User{} = user) do
-    if pool = Pool.Public.get_panl() do
-      Pool.Public.participant?(pool, user)
-    else
-      false
-    end
-  end
-
   defp put_locale(%Systems.Account.User{creator: false}, true) do
     CoreWeb.Live.Hook.Locale.put_locale("nl")
   end
@@ -71,8 +63,12 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{}, opts) do
-    [:next_best_action, :available_adverts]
-    |> append_if(:participated, feature_enabled?(:panl) and Keyword.get(opts, :panl?, false))
+    [:next_best_action]
+    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
+    |> append_if(
+      :participated,
+      feature_enabled?(:panl_post_launch) and Keyword.get(opts, :panl?, false)
+    )
   end
 
   defp blocks(model, assigns, opts) do

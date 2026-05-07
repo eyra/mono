@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mock Feldspar App - Monitor Test</title>
+</head>
+<body>
+  <h1>Mock Monitor App</h1>
+  <div id="status">Waiting for init...</div>
+
+  <script>
+    let port = null;
+
+    // Listen for live-init message from parent
+    window.addEventListener('message', function(event) {
+      if (event.data.action === 'live-init') {
+        // Store the MessageChannel port for communication
+        port = event.ports[0];
+
+        document.getElementById('status').textContent = 'Connected!';
+
+        // Send a monitor:log message
+        port.postMessage({
+          __type__: 'monitor:log',
+          json_string: JSON.stringify({
+            level: 'info',
+            message: 'Mock app initialized',
+            source: 'mock_monitor_app'
+          })
+        });
+
+        // Send an error log too
+        setTimeout(function() {
+          port.postMessage({
+            __type__: 'monitor:log',
+            json_string: JSON.stringify({
+              level: 'error',
+              message: 'Mock error for testing',
+              source: 'mock_monitor_app'
+            })
+          });
+          document.getElementById('status').textContent = 'Logs sent!';
+        }, 100);
+      }
+    });
+
+    // Signal that app is loaded
+    window.parent.postMessage({ action: 'app-loaded' }, '*');
+  </script>
+</body>
+</html>

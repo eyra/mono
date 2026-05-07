@@ -58,11 +58,10 @@ defmodule Core.Repo.Migrations.AddCrew do
   end
 
   def down do
-    execute "DROP TRIGGER IF EXISTS crew_members_public_id ON crew_members;"
-    execute "DROP FUNCTION IF EXISTS set_crew_members_public_id() CASCADE;"
+    execute("DROP TRIGGER IF EXISTS crew_members_public_id ON crew_members;")
+    execute("DROP FUNCTION IF EXISTS set_crew_members_public_id() CASCADE;")
 
     drop(index(:crew_members, [:crew_id, :public_id]))
-
 
     drop(index(:crew_tasks, [:status]))
     drop(index(:crew_tasks, [:crew_id]))

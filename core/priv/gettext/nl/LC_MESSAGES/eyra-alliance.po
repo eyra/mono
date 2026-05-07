@@ -110,6 +110,6 @@ msgstr "Deelgenomen"
 msgid "tool.button"
 msgstr "Doorgaan"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "U staat op het punt om een vragenlijst te starten in een nieuw tabblad. Als u klaar bent, komt u automatisch terug op deze pagina."
+msgstr "Je staat op het punt een vragenlijst te starten. Zodra je de vragenlijst hebt afgerond, kom je automatisch terug op deze pagina."

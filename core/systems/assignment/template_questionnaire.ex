@@ -1,6 +1,7 @@
 defmodule Systems.Assignment.TemplateQuestionnaire do
   alias Systems.Assignment
   alias Systems.Workflow
+  alias Frameworks.Builder
 
   defstruct [:id]
 
@@ -50,36 +51,26 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
       ]
     end
 
+    def runtime_config(_t),
+      do: %Assignment.RuntimeConfig{post_action: {:add_to_pool, :panl}}
+
     def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: false,
-        library: %Workflow.LibraryModel{
+        group_enabled?: false,
+        library: %Builder.LibraryModel{
           items: [
-            %Workflow.LibraryItemModel{
-              special: :manual,
-              tool: :manual_tool,
+            %Builder.LibraryItemModel{
+              id: :manual,
+              type: :manual_tool,
               title: Assignment.WorkflowItemSpecials.translate(:manual),
               description: dgettext("eyra-assignment", "workflow_item.manual.description")
             },
-            %Workflow.LibraryItemModel{
-              special: :general_instruction,
-              tool: :instruction_tool,
-              title: Assignment.WorkflowItemSpecials.translate(:general_instruction),
-              description:
-                dgettext("eyra-assignment", "workflow_item.general_instruction.description")
-            },
-            %Workflow.LibraryItemModel{
-              special: :questionnaire,
-              tool: :alliance_tool,
+            %Builder.LibraryItemModel{
+              id: :questionnaire,
+              type: :alliance_tool,
               title: Assignment.WorkflowItemSpecials.translate(:questionnaire),
               description: dgettext("eyra-assignment", "workflow_item.questionnaire.description")
-            },
-            %Workflow.LibraryItemModel{
-              special: :onsite_experiment,
-              tool: :lab_tool,
-              title: Assignment.WorkflowItemSpecials.translate(:onsite_experiment),
-              description:
-                dgettext("eyra-assignment", "workflow_item.onsite_experiment.description")
             }
           ]
         },

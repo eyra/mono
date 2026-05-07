@@ -22,6 +22,7 @@ defmodule CoreWeb.Live.Routes do
         scope "/test", Systems.Test do
           pipe_through(:browser)
           live("/page/:id", Page)
+          live("/routed/:id", RoutedLiveView)
         end
       end
     end

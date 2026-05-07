@@ -1,6 +1,10 @@
 defmodule Core.MixProject do
   use Mix.Project
 
+  def cli do
+    [preferred_envs: ["test.all": :test]]
+  end
+
   def project do
     [
       app: :core,
@@ -37,6 +41,13 @@ defmodule Core.MixProject do
           # :race_conditions,
           :no_opaque
         ]
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -66,79 +77,81 @@ defmodule Core.MixProject do
   defp deps do
     [
       # Deps
-      {:appsignal_phoenix, "== 2.7.0"},
-      {:assent, "== 0.3.1"},
+      {:appsignal_phoenix, "2.7.0"},
+      {:assent, "0.3.1"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
        github: "eyra/bamboo_phoenix", ref: "59d3961228cb8bd315403cfbf48415aae19f25f1"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
-      {:bamboo, "== 2.5.0"},
-      {:bcrypt_elixir, "== 3.3.2"},
-      {:cldr_utils, "== 2.28.3", override: true},
-      {:csv, "== 3.2.2"},
-      {:ecto_sql, "== 3.13.2"},
-      {:esbuild, "== 0.10.0", runtime: Mix.env() == :dev},
-      {:ex_aws_s3, "== 2.5.8"},
+      {:bamboo, "2.5.0"},
+      {:bcrypt_elixir, "3.3.2"},
+      {:cldr_utils, "2.28.3", override: true},
+      {:csv, "3.2.2"},
+      {:ecto_sql, "3.13.2"},
+      {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
+      {:ex_aws_s3, "2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
-      {:faker, "== 0.19.0-alpha.1"},
-      {:gen_smtp, "== 1.3.0"},
-      {:gettext, "== 0.26.2"},
-      {:hackney, "== 1.25.0"},
-      {:httpoison, "== 2.2.3"},
-      {:image, "== 0.62.0"},
-      {:jason, "== 1.4.4"},
-      {:kadabra, "== 0.6.1"},
-      {:libcluster, "== 3.5.0"},
-      {:logger_json, "== 7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "ccc85f40883576517f870d7a9a4ed2f47044e230"},
-      {:mime, "== 2.0.7"},
-      {:nimble_parsec, "== 1.4.2"},
-      {:nimble_options, "== 1.1.1"},
-      {:oban, "== 2.20.1"},
+      {:faker, "0.19.0-alpha.1"},
+      {:gen_smtp, "1.3.0"},
+      {:gettext, "0.26.2"},
+      {:hackney, "1.25.0"},
+      {:httpoison, "2.2.3"},
+      {:image, "0.62.0"},
+      {:jason, "1.4.4"},
+      {:kadabra, "0.6.1"},
+      {:libcluster, "3.5.0"},
+      {:logger_json, "7.0.4"},
+      {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
+      {:mime, "2.0.7"},
+      {:nimble_parsec, "1.4.2"},
+      {:nimble_options, "1.1.1"},
+      {:oban, "2.20.1"},
       # Fork supports elixir 1.18.4
-      {:packmatic, github: "eyra/packmatic", ref: "c7bd7b8a26d124e5b107a2a0f82e4f114d027849"},
-      {:phoenix_ecto, "== 4.6.5"},
-      {:phoenix_html, "== 4.3.0"},
-      {:phoenix_html_helpers, "== 1.0.1"},
-      {:phoenix_inline_svg, "== 1.4.0"},
-      {:phoenix_live_view, "== 1.1.13"},
-      {:phoenix_view, "== 2.0.4"},
-      {:phoenix, "== 1.8.1"},
-      {:plug_cowboy, "== 2.7.4"},
-      {:postgrex, "== 0.21.1"},
-      {:remote_ip, "== 1.2.0"},
-      {:slugify, "== 1.3.1"},
-      {:sqids, "== 0.2.1"},
-      {:statistics, "== 0.6.3"},
-      {:tailwind, "== 0.4.0", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "== 1.1.0"},
-      {:telemetry_poller, "== 1.3.0"},
-      {:timex, "== 3.7.13"},
-      {:typed_struct, "== 0.3.0"},
-      {:tzdata, "== 1.1.3"},
+      {:packmatic, github: "eyra/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
+      {:phoenix_ecto, "4.6.5"},
+      {:phoenix_html, "4.3.0"},
+      {:phoenix_html_helpers, "1.0.1"},
+      {:phoenix_inline_svg, "1.4.0"},
+      {:phoenix_live_view, "1.1.13"},
+      {:phoenix_view, "2.0.4"},
+      {:phoenix, "1.8.1"},
+      {:plug_cowboy, "2.7.4"},
+      {:postgrex, "0.21.1"},
+      {:remote_ip, "1.2.0"},
+      {:slugify, "1.3.1"},
+      {:sqids, "0.2.1"},
+      {:statistics, "0.6.3"},
+      {:tailwind, "0.4.0", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "1.1.0"},
+      {:telemetry_poller, "1.3.0"},
+      {:timex, "3.7.13"},
+      {:typed_struct, "0.3.0"},
+      {:tzdata, "1.1.3"},
       # i18n
-      {:ex_cldr, "== 2.43.2"},
-      {:ex_cldr_numbers, "== 2.35.2"},
-      {:ex_cldr_dates_times, "== 2.24.0"},
-      {:ex_cldr_plugs, "== 1.3.4"},
+      {:ex_cldr, "2.43.2"},
+      {:ex_cldr_numbers, "2.35.2"},
+      {:ex_cldr_dates_times, "2.24.0"},
+      {:ex_cldr_plugs, "1.3.4"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "== 2.15.0"},
+      {:certifi, "2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:ssl_verify_fun, "== 1.1.7"},
+      {:ssl_verify_fun, "1.1.7"},
       # Dev and test deps
-      {:ex_machina, "== 2.8.0", only: :test},
-      {:file_system, "== 1.1.1", only: [:dev, :test]},
-      {:bypass, "== 2.1.0", only: :test},
-      {:lazy_html, "== 0.1.8", only: :test},
-      {:mox, "== 1.2.0", only: :test},
-      {:promox, "== 0.1.4", only: :test},
-      {:mock, "== 0.3.9", only: :test},
-      {:phoenix_live_reload, "== 1.6.1", only: :dev},
-      {:credo, "== 1.7.12", only: [:dev, :test], runtime: false},
-      {:ex_doc, "== 0.38.4", only: [:dev, :test], runtime: false},
-      {:table_rex, "== 4.1.0"},
-      {:dialyxir, "== 1.4.6", only: [:dev, :test], runtime: false},
-      {:browser, "== 0.5.5"}
+      {:ex_machina, "2.8.0", only: :test},
+      {:file_system, "1.1.1", only: [:dev, :test]},
+      {:bypass, "2.1.0", only: :test},
+      {:lazy_html, "0.1.8", only: :test},
+      {:mox, "1.2.0", only: :test},
+      {:promox, "0.1.4", only: :test},
+      {:mock, "0.3.9", only: :test},
+      {:wallaby, "0.30.9", only: :test, runtime: false},
+      {:phoenix_live_reload, "1.6.1", only: :dev},
+      {:credo, "1.7.12", only: [:dev, :test], runtime: false},
+      {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
+      {:table_rex, "4.1.0"},
+      {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},
+      {:browser, "0.5.5"},
+      {:tidewave, "0.5.2", only: :dev}
     ]
   end
 
@@ -151,13 +164,17 @@ defmodule Core.MixProject do
   defp aliases do
     [
       setup: [
+        "lfs.pull",
         "deps.get",
         "ecto.setup",
         "assets.setup",
         "assets.install",
         "assets.build"
       ],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "lfs.pull": "cmd git lfs pull",
+      "test.exs": ["ecto.create --quiet", "ecto.migrate", "test"],
+      "test.js": "cmd cd ./assets && npm test",
+      "test.all": ["test.exs", "test.js"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "ecto.reset.link": [
@@ -181,7 +198,16 @@ defmodule Core.MixProject do
         "esbuild default --minify",
         "phx.digest"
       ],
-      run: "phx.server"
+      run: "phx.server",
+      github_release:
+        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
+      precommit: "cmd cd .. && pre-commit run --all-files",
+      "test.e2e":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",
+      "test.e2e.debug":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
+      "test.e2e.headed":
+        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
   end
 end

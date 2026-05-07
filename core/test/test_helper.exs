@@ -1,8 +1,16 @@
 require Promox
 
+# Start Wallaby for feature tests
+{:ok, _} = Application.ensure_all_started(:wallaby)
+
 Promox.defmock(for: Frameworks.Concept.Branch)
 
-ExUnit.start()
+# Ensure test signal handlers are compiled and loaded
+Code.ensure_loaded!(Frameworks.Signal.TestRecorder)
+Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
+Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
+
+ExUnit.start(exclude: [:slow])
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
@@ -13,7 +21,9 @@ Application.put_env(:core, :web_push_backend, Core.WebPush.MockBackend)
 Mox.defmock(Core.APNS.MockBackend, for: Core.APNS.Backend)
 Application.put_env(:core, :apns_backend, Core.APNS.MockBackend)
 
-Application.put_env(:core, :signal_handlers, ["Frameworks.Signal.TestHelper"])
+# TestHelper should not be globally added - it should only be active
+# when tests explicitly call isolate_signals()
+# Removed incorrect global TestHelper configuration
 
 Application.put_env(
   :core,
@@ -32,3 +42,5 @@ Application.put_env(:core, BankingClient, client: BankingClient.MockClient)
 
 Mox.defmock(Systems.Storage.MockBackend, for: Systems.Storage.Backend)
 Mox.defmock(Systems.Storage.BuiltIn.MockSpecial, for: Systems.Storage.BuiltIn.Special)
+Mox.defmock(Systems.Storage.MockTempFileStore, for: Systems.Storage.TempFileStore)
+Mox.defmock(Systems.Storage.MockJobScheduler, for: Systems.Storage.JobScheduler)

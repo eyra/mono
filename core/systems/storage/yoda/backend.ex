@@ -5,6 +5,7 @@ defmodule Systems.Storage.Yoda.Backend do
 
   require Logger
 
+  @impl true
   def store(
         %{
           "user" => username,
@@ -12,24 +13,30 @@ defmodule Systems.Storage.Yoda.Backend do
           "url" => yoda_url
         } = _endpoint,
         data,
-        meta_data
+        %{"identifier" => identifier}
       ) do
-    filename = filename(meta_data)
+    filename = filename(identifier)
     file_url = url([yoda_url, filename])
 
-    {:ok, _} = Yoda.Client.upload_file(username, password, file_url, data)
+    case Yoda.Client.upload_file(username, password, file_url, data) do
+      {:ok, _} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
   end
 
+  @impl true
   def list_files(_endpoint) do
     Logger.error("Not yet implemented: list_files/1")
     {:error, :not_implemented}
   end
 
+  @impl true
   def delete_files(_endpoint) do
     Logger.error("Not yet implemented: delete_files/1")
     {:error, :not_implemented}
   end
 
+  @impl true
   def connected?(%{user: user, password: _, url: _}) when user == nil or user == "", do: false
 
   def connected?(%{user: _, password: password, url: _}) when password == nil or password == "",
@@ -58,11 +65,8 @@ defmodule Systems.Storage.Yoda.Backend do
 
   def connected?(_), do: false
 
-  defp filename(%{"identifier" => identifier}) do
-    identifier
-    |> Enum.map_join("_", fn [key, value] -> "#{key}-#{value}" end)
-    |> then(&"#{&1}.json")
-  end
+  @impl true
+  def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp url(components) do
     Enum.join(components, "/")

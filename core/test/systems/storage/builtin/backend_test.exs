@@ -20,6 +20,21 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
     :ok
   end
 
+  describe "filename/1" do
+    test "empty identifier" do
+      assert ".json" = Backend.filename([])
+    end
+
+    test "single identifier" do
+      assert "participant=1.json" = Backend.filename([[:participant, 1]])
+    end
+
+    test "multiple identifiers" do
+      identifier = [[:assignment, 1], [:participant, "abc"], [:source, "test"]]
+      assert "assignment=1_participant=abc_source=test.json" = Backend.filename(identifier)
+    end
+  end
+
   describe "store/4" do
     test "unknown folder" do
       assert {:error, :endpoint_key_missing} = Backend.store(%{}, "data", %{})
@@ -75,10 +90,10 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
                })
     end
 
-    test "folder + participant + meta key + source=nil" do
+    test "folder + participant + meta key + source=nil is filtered out" do
       expect(MockSpecial, :store, fn folder, filename, _data ->
         assert "assignment=1" = folder
-        assert "participant=1_session=1_source=.json" = filename
+        assert "participant=1_session=1.json" = filename
         :ok
       end)
 

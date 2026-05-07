@@ -9,7 +9,7 @@ defmodule Systems.Monitor.Queries do
   def upsert_event([_ | _] = identifier, value) do
     Multi.new()
     |> upsert_event(identifier, value)
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def upsert_event(%Multi{} = multi, [_ | _] = identifier, value) do
@@ -61,6 +61,7 @@ defmodule Systems.Monitor.Queries do
 
     case result do
       nil -> 0
+      %Decimal{} = value -> Decimal.to_integer(value)
       value -> value
     end
   end

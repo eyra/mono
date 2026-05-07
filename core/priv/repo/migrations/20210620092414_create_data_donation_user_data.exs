@@ -3,13 +3,13 @@ defmodule Core.Repo.Migrations.CreateDataDonationUserData do
 
   def change do
     create table(:data_donation_user_data) do
-      add :data, :binary
-      add :tool_id, references(:data_donation_tools, on_delete: :nothing)
-      add :user_id, references(:users, on_delete: :nothing)
+      add(:data, :binary)
+      add(:tool_id, references(:data_donation_tools, on_delete: :nothing))
+      add(:user_id, references(:users, on_delete: :nothing))
 
       timestamps()
     end
 
-    create index(:data_donation_user_data, [:tool_id])
+    create(index(:data_donation_user_data, [:tool_id]))
   end
 end

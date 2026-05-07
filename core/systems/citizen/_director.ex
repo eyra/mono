@@ -12,7 +12,7 @@ defmodule Systems.Citizen.Director do
 
   alias Systems.{
     Pool,
-    Budget,
+    Fund,
     Citizen
   }
 
@@ -33,20 +33,20 @@ defmodule Systems.Citizen.Director do
   end
 
   @impl true
-  def resolve_budget(pool_id, user_id) do
-    # return first budget as default or create a new one as a starter
+  def resolve_fund(pool_id, user_id) do
+    # return first fund as default or create a new one as a starter
     user = Systems.Account.Public.get_user!(user_id)
     %{currency: currency} = Pool.Public.get!(pool_id, [:currency])
 
-    case Budget.Public.list_owned_by_currency(user, currency, Budget.Model.preload_graph(:full)) do
-      [budget | _] -> budget
-      _ -> create_first_budget(currency, user)
+    case Fund.Public.list_owned_by_currency(user, currency, Fund.Model.preload_graph(:full)) do
+      [fund | _] -> fund
+      _ -> create_first_fund(currency, user)
     end
   end
 
-  defp create_first_budget(currency, user) do
-    default_name = dgettext("eyra-budget", "budget.default.name")
-    Budget.Public.create_budget(currency, default_name, {:emoji, "💰"}, user)
+  defp create_first_fund(currency, user) do
+    default_name = dgettext("eyra-fund", "fund.default.name")
+    Fund.Public.create_fund(currency, default_name, {:emoji, "💰"}, user)
   end
 
   @impl true

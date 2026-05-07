@@ -1,12 +1,10 @@
 defmodule Systems.Feldspar.Presenter do
-  @behaviour Frameworks.Concept.Presenter
+  use Frameworks.Concept.Presenter
 
-  alias Systems.{
-    Feldspar
-  }
+  alias Systems.Feldspar
 
   @impl true
-  def view_model(_page, %Feldspar.ToolModel{} = _tool, _assigns) do
-    %{}
+  def view_model(Feldspar.ToolView, %Feldspar.ToolModel{} = tool, assigns) do
+    builder(Feldspar.ToolView).view_model(tool, assigns)
   end
 end

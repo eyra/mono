@@ -2,7 +2,6 @@ defmodule Systems.Feldspar.AppPage do
   use CoreWeb, :live_view
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
@@ -65,11 +64,6 @@ defmodule Systems.Feldspar.AppPage do
       :noreply,
       socket |> handle(nil, inspect(event))
     }
-  end
-
-  defp handle(socket, "CommandSystemDonate", event) do
-    Frameworks.Pixel.Flash.put_error(socket, "Unsupported CommandSystemDonate " <> event)
-    socket
   end
 
   defp handle(socket, "CommandSystemExit", event) do

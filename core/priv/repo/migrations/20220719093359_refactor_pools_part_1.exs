@@ -56,19 +56,23 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart1 do
       timestamps()
     end
 
-    create index(:org_links, [:from_id])
-    create index(:org_links, [:to_id])
+    create(index(:org_links, [:from_id]))
+    create(index(:org_links, [:to_id]))
 
-    create unique_index(
-      :org_links,
-      [:from_id, :to_id],
-      name: :org_links_from_id_to_id_index
+    create(
+      unique_index(
+        :org_links,
+        [:from_id, :to_id],
+        name: :org_links_from_id_to_id_index
+      )
     )
 
-    create unique_index(
-      :org_links,
-      [:to_id, :from_id],
-      name: :org_links_to_id_from_id_index
+    create(
+      unique_index(
+        :org_links,
+        [:to_id, :from_id],
+        name: :org_links_to_id_from_id_index
+      )
     )
 
     create table(:budget_rewards) do
@@ -107,6 +111,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart1 do
     drop(index(:pool_submissions, [:pool_id, :promotion_id]))
 
     drop(constraint(:pool_submissions, "pool_submissions_promotion_id_fkey"))
+
     alter table(:pool_submissions) do
       modify(:promotion_id, references(:promotions, on_delete: :delete_all), null: true)
     end
@@ -116,7 +121,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart1 do
     create(unique_index(:pool_submissions, [:pool_id, :promotion_id]))
 
     drop(index(:campaign_submissions, [:submission_id]))
-    drop table(:campaign_submissions)
+    drop(table(:campaign_submissions))
 
     alter table(:pools) do
       remove(:org_id)
@@ -128,14 +133,14 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart1 do
       remove(:budget_id)
     end
 
-    drop table(:budget_rewards)
-    drop table(:budgets)
-    drop table(:org_users)
-    drop table(:org_links)
-    drop table(:org_nodes)
+    drop(table(:budget_rewards))
+    drop(table(:budgets))
+    drop(table(:org_users))
+    drop(table(:org_links))
+    drop(table(:org_nodes))
 
-    drop table(:currencies)
-    drop table(:text_items)
-    drop table(:text_bundles)
+    drop(table(:currencies))
+    drop(table(:text_items))
+    drop(table(:text_bundles))
   end
 end

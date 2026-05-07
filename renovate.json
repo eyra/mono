@@ -6,12 +6,33 @@
     "group:allNonMajor"
   ],
   "timezone": "Europe/Amsterdam",
-  "prConcurrentLimit": 1,
-  "branchConcurrentLimit": 1,
+  "ignoreDeps": [
+    "bamboo_phoenix",
+    "bamboo_ses",
+    "live_nest",
+    "certifi"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": ["*"],
       "automerge": false
+    },
+    {
+      "description": "httpoison 2.3+ blocked by packmatic ~> 2.2.1 dependency",
+      "matchPackageNames": ["httpoison"],
+      "enabled": false
+    },
+    {
+      "description": "gettext 1.0+ blocked by timex 3.7.13 requiring ~> 0.26",
+      "matchPackageNames": ["gettext"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "hackney 3.x blocked by ex_aws ~> 2.4 requiring ~> 1.16",
+      "matchPackageNames": ["hackney"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ],
   "lockFileMaintenance": {

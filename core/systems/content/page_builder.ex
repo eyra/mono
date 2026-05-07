@@ -17,7 +17,7 @@ defmodule Systems.Content.PageBuilder do
 
     socket
     |> Fabric.add_child(child)
-    |> Fabric.show_modal(:request_verification_view, :notification)
+    |> Fabric.ModalController.show_modal(:request_verification_view, :compact)
   end
 
   defmacro __using__(_) do

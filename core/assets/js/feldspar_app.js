@@ -1,5 +1,19 @@
+import { WaitGroup } from "./wait_group";
+
+// Send logs to server for AppSignal
+function sendLog(level, message, context = {}) {
+  fetch("/api/feldspar/log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ level, message, context }),
+  }).catch(() => {
+    // Silently fail - don't let logging errors break the app
+  });
+}
+
 export const FeldsparApp = {
   mounted() {
+    this.donations = new WaitGroup();
     const iframe = this.el.querySelector("iframe");
 
     // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
@@ -55,7 +69,189 @@ export const FeldsparApp = {
     ]);
   },
 
-  handleMessage(e) {
-    this.pushEvent("feldspar_event", e.data);
+  async handleMessage(e) {
+    const type = e.data.__type__;
+
+    if (type === "CommandSystemLog") {
+      // Handle log messages via HTTP POST to AppSignal
+      this.handleLogCommand(e.data);
+    } else if (type === "CommandSystemDonate") {
+      // Handle large data donations via HTTP POST instead of WebSocket
+      await this.donate_via_api(e.data);
+    } else if (type === "CommandSystemExit") {
+      // Wait for pending donations before exiting
+      await this.waitForDonationsAndExit(e.data);
+    } else {
+      // All other events pass through to LiveView
+      try {
+        this.pushEvent("feldspar_event", e.data);
+      } catch (error) {
+        console.warn(
+          "[Feldspar] Could not push event (LiveView disconnected):",
+          type
+        );
+      }
+    }
+  },
+
+  async waitForDonationsAndExit(data) {
+    if (this.donations.count > 0) {
+      console.log(
+        `[Feldspar] Exit requested, waiting for ${this.donations.count} pending donations...`
+      );
+      sendLog(
+        "info",
+        `Exit waiting for ${this.donations.count} donations`,
+        this.getLogContext()
+      );
+
+      await this.donations.wait();
+
+      console.log("[Feldspar] All donations completed, proceeding with exit");
+    }
+
+    try {
+      this.pushEvent("feldspar_event", data);
+      console.log("[Feldspar] Exit event sent");
+      sendLog("info", "Exit event sent", this.getLogContext());
+    } catch (error) {
+      console.warn("[Feldspar] Could not push exit event:", error.message);
+      sendLog(
+        "error",
+        `Could not push exit event: ${error.message}`,
+        this.getLogContext()
+      );
+    }
+  },
+
+  handleLogCommand(data) {
+    try {
+      const payload = JSON.parse(data.json_string);
+      const { level, message, ...context } = payload;
+      // Merge uploadContext (assignment_id, task, participant, etc.) with log context
+      sendLog(level, message, { ...this.getLogContext(), ...context });
+    } catch (error) {
+      console.warn(
+        "[Feldspar] Invalid CommandSystemLog payload:",
+        error.message
+      );
+    }
+  },
+
+  getLogContext() {
+    try {
+      return JSON.parse(this.el.dataset.uploadContext || "{}");
+    } catch {
+      return {};
+    }
+  },
+
+  // Donate response contract (sent via MessageChannel to Feldspar app):
+  // - DonateSuccess: { __type__: "DonateSuccess", key: string, status: number }
+  // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
+  //   Note: status=0 indicates a network error (offline, timeout, CORS, etc.)
+  async donate_via_api(data) {
+    this.donations.add();
+
+    try {
+      await this._performDonation(data);
+    } finally {
+      this.donations.done();
+    }
+  },
+
+  async _performDonation(data) {
+    const formData = new FormData();
+    formData.append("key", data.key);
+    formData.append("context", this.el.dataset.uploadContext || "{}");
+    formData.append(
+      "data",
+      new Blob([data.json_string], { type: "application/json" }),
+      "data.json"
+    );
+
+    let response;
+    const dataSize = data.json_string ? data.json_string.length : 0;
+    const logContext = { ...this.getLogContext(), key: data.key, dataSize };
+
+    console.log("[Feldspar] Donate starting:", { key: data.key, dataSize });
+    sendLog("info", "Donate starting", logContext);
+
+    try {
+      response = await fetch("/api/feldspar/donate", {
+        method: "POST",
+        body: formData,
+      });
+      console.log("[Feldspar] Donate fetch completed:", {
+        key: data.key,
+        status: response.status,
+      });
+    } catch (error) {
+      // Network error (offline, timeout, etc.)
+      console.error("[Feldspar] Donate network error:", error.message);
+      sendLog("error", `Donate network error: ${error.message}`, logContext);
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: 0,
+        error: `Network error: ${error.message}`,
+      });
+      return;
+    }
+
+    try {
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("[Feldspar] Donate success:", {
+          key: data.key,
+          status: response.status,
+        });
+        sendLog("info", "Donate success", {
+          ...logContext,
+          status: response.status,
+        });
+        this.sendDonateResponse({
+          __type__: "DonateSuccess",
+          key: data.key,
+          status: response.status,
+        });
+      } else {
+        console.error(
+          "[Feldspar] Donate failed:",
+          response.status,
+          result.error
+        );
+        sendLog("error", `Donate failed: ${result.error}`, {
+          ...logContext,
+          status: response.status,
+        });
+        this.sendDonateResponse({
+          __type__: "DonateError",
+          key: data.key,
+          status: response.status,
+          error: result.error || "Unknown error",
+        });
+      }
+    } catch (error) {
+      // JSON parse error
+      console.error("[Feldspar] Donate response parse error:", error.message);
+      sendLog("error", `Donate response parse error: ${error.message}`, {
+        ...logContext,
+        status: response.status,
+      });
+      this.sendDonateResponse({
+        __type__: "DonateError",
+        key: data.key,
+        status: response.status,
+        error: "Invalid response from server",
+      });
+    }
+  },
+
+  sendDonateResponse(message) {
+    if (this.channel && this.channel.port1) {
+      this.channel.port1.postMessage(message);
+    }
   },
 };

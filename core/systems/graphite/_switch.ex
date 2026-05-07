@@ -25,6 +25,34 @@ defmodule Systems.Graphite.Switch do
   @impl true
   def intercept(
         {:graphite_tool, _} = signal,
+        %{graphite_tool: tool, from_pid: from_pid} = message
+      ) do
+    if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
+      dispatch!(
+        {:assignment, signal},
+        Map.merge(message, %{assignment: assignment})
+      )
+    end
+
+    if leaderboard =
+         Graphite.Public.get_leaderboard_by_tool(
+           tool,
+           Graphite.LeaderboardModel.preload_graph(:down)
+         ) do
+      dispatch!(
+        {:graphite_leaderboard, signal},
+        Map.merge(message, %{graphite_leaderboard: leaderboard})
+      )
+    end
+
+    update_tool_view(tool, from_pid)
+
+    :ok
+  end
+
+  @impl true
+  def intercept(
+        {:graphite_tool, _} = signal,
         %{graphite_tool: tool} = message
       ) do
     if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
@@ -93,5 +121,13 @@ defmodule Systems.Graphite.Switch do
 
   defp update_page(page, model, from_pid) do
     dispatch!({:page, page}, %{id: model.id, model: model, from_pid: from_pid})
+  end
+
+  defp update_tool_view(tool, from_pid) do
+    dispatch!({:embedded_live_view, Graphite.ToolView}, %{
+      id: tool.id,
+      model: tool,
+      from_pid: from_pid
+    })
   end
 end

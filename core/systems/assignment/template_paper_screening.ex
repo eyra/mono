@@ -2,6 +2,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
   use Gettext, backend: CoreWeb.Gettext
   alias Systems.Assignment
   alias Systems.Workflow
+  alias Frameworks.Builder
 
   defstruct [:id]
 
@@ -35,14 +36,16 @@ defmodule Systems.Assignment.TemplatePaperScreening do
       ]
     end
 
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
+
     def workflow_config(_t),
       do: %Workflow.Config{
         singleton?: true,
-        library: %Workflow.LibraryModel{
+        library: %Builder.LibraryModel{
           items: [
-            %Workflow.LibraryItemModel{
-              special: :paper_screening,
-              tool: :zircon_screening_tool,
+            %Builder.LibraryItemModel{
+              id: :paper_screening,
+              type: :zircon_screening_tool,
               title: Assignment.WorkflowItemSpecials.translate(:paper_screening),
               description:
                 dgettext("eyra-assignment", "workflow_item.paper_screening.description")

@@ -76,7 +76,7 @@ defmodule Systems.Workflow.ToolRefModel do
   end
 
   def preload_graph(%Ecto.Association.BelongsTo{related: tool_model}) do
-    apply(tool_model, :preload_graph, [:down])
+    tool_model.preload_graph(:down)
   end
 
   defp tool_model(tool_id_field) do

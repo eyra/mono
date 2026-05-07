@@ -11,6 +11,9 @@ config :core, Systems.Account.UserAuth,
   creator_signed_in_page: "/project",
   member_signed_in_page: "/"
 
+# Feature flags: these are the defaults for local dev.
+# On Fly/AWS, ENABLED_APP_FEATURES merges on top: listed flags become true,
+# unlisted flags keep their default from this config.
 config :core, :features,
   sign_in_with_apple: false,
   surfconext_sign_in: false,
@@ -19,8 +22,10 @@ config :core, :features,
   notification_mails: false,
   debug_expire_force: false,
   leaderboard: true,
-  panl: false,
-  onyx: false
+  panl: true,
+  panl_post_launch: false,
+  onyx: false,
+  e2e: false
 
 config :core, :meta,
   bundle_title: "Next",

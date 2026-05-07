@@ -40,11 +40,12 @@ defmodule Frameworks.Pixel.LoadingSpinner do
   end
 
   attr(:progress, :integer, default: 0)
+  attr(:size, :integer, default: 30)
 
   def progress_spinner(assigns) do
     ~H"""
     <div class="animate-spin">
-      <svg width="30" height="30" viewBox="0 0 100 100">
+      <svg width={@size} height={@size} viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="45" fill="none" stroke="#e0e0e0" stroke-width="10"/>
         <circle cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="10"
                 stroke-linecap="round"

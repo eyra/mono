@@ -68,6 +68,10 @@ defmodule Systems.Project.Public do
     |> get_storage_endpoint_by()
   end
 
+  def get_storage_endpoint_by(nil) do
+    {:error, {:storage_endpoint, :not_available}}
+  end
+
   def get_storage_endpoint_by(%Project.ItemModel{} = project_item) do
     project_item
     |> Project.Public.get_node_by_item!([:auth_node])
@@ -329,7 +333,7 @@ defmodule Systems.Project.Public do
       end
     end)
     |> Signal.Public.multi_dispatch({:project, :add_owner})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def remove_owner!(%Project.Model{} = project, user) do
@@ -343,7 +347,7 @@ defmodule Systems.Project.Public do
       end
     end)
     |> Signal.Public.multi_dispatch({:project, :remove_owner})
-    |> Repo.transaction()
+    |> Repo.commit()
   end
 
   def list_owners(%Project.Model{} = project, preload \\ []) do
@@ -377,7 +381,7 @@ defimpl Core.Persister, for: Systems.Project.ItemModel do
       |> Core.Repo.multi_update(:project_item, changeset)
       |> EctoHelper.run(:project_node, &load_node!/1)
       |> Signal.Public.multi_dispatch({:project_node, :update})
-      |> Core.Repo.transaction()
+      |> Core.Repo.commit()
 
     case result do
       {:ok, %{project_item: project_item}} -> {:ok, project_item}

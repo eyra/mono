@@ -31,7 +31,8 @@ defmodule Frameworks.Pixel.ClickableCard do
   def show_more_button(assigns) do
     ~H"""
     <div id={"card-#{@card_id}-show-more"}
-         phx-click={show_actions_js(@card_id)}>
+         phx-click={show_actions_js(@card_id)}
+         data-testid={"show_more__action__card_#{@card_id}"}>
       <Button.Face.icon icon={:more_horizontal} />
     </div>
     """
@@ -57,9 +58,14 @@ defmodule Frameworks.Pixel.ClickableCard do
   attr(:position, :atom, required: true)
 
   def action_button(assigns) do
+    event = get_in(assigns, [:button, :action, :event])
+
+    assigns = assign(assigns, :event, event)
+
     ~H"""
     <div id={"card-#{@card_id}-actions-#{@position}-#{@index}"}
-         class={"card-#{@card_id}-actions hidden"}>
+         class={"card-#{@card_id}-actions hidden"}
+         data-testid={"#{@event}__action__card_#{@card_id}"}>
       <Button.dynamic {@button} />
     </div>
     """
@@ -74,7 +80,7 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   slot(:inner_block, required: true)
   slot(:top)
-  slot(:title, required: true)
+  slot(:title)
   attr(:target, :any, default: "")
 
   def clickable_card(assigns) do
@@ -90,12 +96,16 @@ defmodule Frameworks.Pixel.ClickableCard do
             phx-target={@target}
             phx-click="card_clicked"
             phx-value-item={@id}
+            data-testid={"card_#{@id}"}
           >
             <%= render_slot(@top) %>
-            <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
-              <%= render_slot(@title) %>
-            </div>
-            <div class="flex-grow" />
+            <%= if @title != [] do %>
+              <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
+                <%= render_slot(@title) %>
+              </div>
+            <% else %>
+              <div class="pt-6 px-6 lg:pl-8 lg:pr-8 lg:pt-8" />
+            <% end %>
             <div>
               <div
                 class="relative pl-6 pr-6 pb-6 lg:pl-8 lg:pr-8 lg:pb-8"
