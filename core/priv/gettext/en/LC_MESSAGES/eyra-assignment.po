@@ -647,3 +647,11 @@ msgstr "No transactions yet."
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.hint"
 msgstr "A short description of your study"
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr "Share this link on social media or other platforms to recruit participants. Each participant receives a unique participant ID automatically. After participating, participants will be invited to leave their email address for future research via Panl."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.title"
+msgstr "Recruit participants"

@@ -6,11 +6,12 @@ defmodule Systems.Account.UserForm do
 
   alias Frameworks.Pixel.AlertBanner
 
-  # Helper function to create a clickable policy link
-  defp policy_link(url, text_key) do
-    link_text = Gettext.dgettext(CoreWeb.Gettext, "eyra-account", text_key)
+  @policy_urls Application.compile_env(:core, :policy_urls)
 
-    "<a href='#{url}' target='_blank' rel='noopener noreferrer' class='text-semibold text-primary underline hover:opacity-80' onclick='event.stopPropagation();'>#{link_text}</a>"
+  defp policy_link(key, label) when is_atom(key) do
+    url = @policy_urls[key]
+
+    "<a href='#{url}' target='_blank' rel='noopener noreferrer' class='text-semibold text-primary underline hover:opacity-80' onclick='event.stopPropagation();'>#{label}</a>"
   end
 
   attr(:changeset, :map, required: true)
@@ -34,8 +35,8 @@ defmodule Systems.Account.UserForm do
               %{
                 id: :next_privacy_policy_accepted,
                 value: dgettext("eyra-account", "privacy.next-policy.label",
-                  terms_link: policy_link("https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c", "privacy.link.terms"),
-                  privacy_link: policy_link("https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752", "privacy.link.privacy")
+                  terms_link: policy_link(:next_terms, dgettext("eyra-account", "privacy.link.terms")),
+                  privacy_link: policy_link(:next_privacy, dgettext("eyra-account", "privacy.link.privacy"))
                 ),
                 active: @next_privacy_policy_accepted
               }
@@ -60,8 +61,8 @@ defmodule Systems.Account.UserForm do
               %{
                 id: :panl_privacy_policy_accepted,
                 value: dgettext("eyra-account", "panl.privacy.policy.label",
-                  terms_link: policy_link("https://panl.nl/terms", "privacy.link.terms"),
-                  privacy_link: policy_link("https://panl.nl/privacy", "privacy.link.privacy")
+                  terms_link: policy_link(:panl_terms, dgettext("eyra-account", "privacy.link.terms")),
+                  privacy_link: policy_link(:panl_privacy, dgettext("eyra-account", "privacy.link.privacy"))
                 ),
                 active: @panl_privacy_policy_accepted
               }

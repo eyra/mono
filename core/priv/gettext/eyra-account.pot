@@ -213,3 +213,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "signup.rate_limited"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr ""

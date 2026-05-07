@@ -275,7 +275,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
 
         <.spacing value="XL" />
 
-        <%= if @content_flags[:invite_participants] do %>
+        <%= if @content_flags[:recruit_participants] do %>
           <Text.title3><%= dgettext("eyra-assignment", "panl_participants.invite.title") %></Text.title3>
           <.spacing value="S" />
           <%= if @has_advert? do %>

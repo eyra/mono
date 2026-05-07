@@ -640,3 +640,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.aim.hint"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "recruit.panel.title"
+msgstr ""

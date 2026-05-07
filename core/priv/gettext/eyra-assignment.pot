@@ -639,3 +639,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.hint"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.title"
+msgstr ""
