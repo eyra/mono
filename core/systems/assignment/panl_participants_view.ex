@@ -92,7 +92,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
       :noreply,
       socket
       |> compose_child(:payout_modal)
-      |> show_modal(:payout_modal, :sheet)
+      |> show_modal(:payout_modal, :compact)
     }
   end
 

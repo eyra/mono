@@ -46,11 +46,6 @@ defmodule Systems.Assignment.PayoutModal do
   end
 
   @impl true
-  def handle_event("close", _, socket) do
-    {:noreply, send_event(socket, :parent, "payout_modal_close")}
-  end
-
-  @impl true
   def handle_event("pay_out_all", _, %{assigns: %{assignment: assignment}} = socket) do
     Assignment.Public.bulk_approve_pending_payouts(assignment)
 
@@ -122,56 +117,43 @@ defmodule Systems.Assignment.PayoutModal do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="bg-white rounded-lg" data-testid="payout-modal">
-      <div class="relative px-8 pt-6">
-        <div class="flex justify-center">
-          <div class="flex gap-2">
-            <button
-              type="button"
-              phx-click="switch_tab"
-              phx-value-tab="waiting"
-              phx-target={@myself}
-              data-testid="payout-tab-waiting"
-              class={tab_class(@active_tab == :waiting)}
-            >
-              <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
-            </button>
-            <button
-              type="button"
-              phx-click="switch_tab"
-              phx-value-tab="overview"
-              phx-target={@myself}
-              data-testid="payout-tab-overview"
-              class={tab_class(@active_tab == :overview)}
-            >
-              <%= dgettext("eyra-assignment", "payout.tab.overview") %>
-            </button>
-          </div>
+    <div data-testid="payout-modal">
+      <div class="flex justify-center pb-6">
+        <div class="inline-flex p-1 rounded-full bg-grey5">
+          <button
+            type="button"
+            phx-click="switch_tab"
+            phx-value-tab="waiting"
+            phx-target={@myself}
+            data-testid="payout-tab-waiting"
+            class={tab_segment_class(@active_tab == :waiting)}
+          >
+            <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
+          </button>
+          <button
+            type="button"
+            phx-click="switch_tab"
+            phx-value-tab="overview"
+            phx-target={@myself}
+            data-testid="payout-tab-overview"
+            class={tab_segment_class(@active_tab == :overview)}
+          >
+            <%= dgettext("eyra-assignment", "payout.tab.overview") %>
+          </button>
         </div>
-        <button
-          type="button"
-          phx-click="close"
-          phx-target={@myself}
-          class="absolute top-6 right-8 text-primary hover:text-grey1 text-2xl leading-none"
-          data-testid="payout-close"
-        >
-          ×
-        </button>
       </div>
-      <div class="border-b border-grey4 mt-6" />
-      <div class="px-8 py-6">
-        <%= if @active_tab == :waiting do %>
-          <.waiting_tab
-            payouts={filter_payouts(@payouts, @search_query)}
-            search_query={@search_query}
-            declining_task_id={@declining_task_id}
-            decline_reason={@decline_reason}
-            myself={@myself}
-          />
-        <% else %>
-          <.overview_tab assignment={@assignment} />
-        <% end %>
-      </div>
+      <div class="border-b border-grey4 -mx-9 mb-6" />
+      <%= if @active_tab == :waiting do %>
+        <.waiting_tab
+          payouts={filter_payouts(@payouts, @search_query)}
+          search_query={@search_query}
+          declining_task_id={@declining_task_id}
+          decline_reason={@decline_reason}
+          myself={@myself}
+        />
+      <% else %>
+        <.overview_tab assignment={@assignment} />
+      <% end %>
     </div>
     """
   end
@@ -344,9 +326,9 @@ defmodule Systems.Assignment.PayoutModal do
     """
   end
 
-  defp tab_class(true),
+  defp tab_segment_class(true),
     do: "px-5 py-2 rounded-full bg-primary text-white text-button font-button"
 
-  defp tab_class(false),
-    do: "px-5 py-2 rounded-full bg-grey5 text-grey2 text-button font-button hover:bg-grey4"
+  defp tab_segment_class(false),
+    do: "px-5 py-2 rounded-full bg-transparent text-grey2 text-button font-button hover:text-grey1"
 end
