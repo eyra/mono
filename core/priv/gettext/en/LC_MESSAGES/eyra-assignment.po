@@ -665,3 +665,51 @@ msgid "panl_participants.pending_approvals.title.one"
 msgid_plural "panl_participants.pending_approvals.title.other"
 msgstr[0] "%{count} pending approval"
 msgstr[1] "%{count} pending approvals"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.open.button"
+msgstr "Approve"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.link"
+msgstr "Decline"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.reason.label"
+msgstr "Reason for pay out refusal"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.submit.button"
+msgstr "Decline pay out"
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.coming_soon"
+msgstr "Pay-out overview will land in a follow-up."
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.heading"
+msgstr "Pay out overview"
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.button"
+msgstr "Pay out all"
+
+#, elixir-autogen, elixir-format
+msgid "payout.subject_label"
+msgstr "Subject"
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.overview"
+msgstr "Pay out overview"
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.waiting"
+msgstr "Waiting for pay out"
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.empty"
+msgstr "No participants are waiting for pay out."
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.heading"
+msgstr "Waiting for pay out"

@@ -13,8 +13,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Budget
-  alias Systems.Crew
-  alias Systems.Fund
   alias Systems.Pool
 
   @impl true
@@ -68,11 +66,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
         reward_locked?: transactions != []
       }
     }
-  end
-
-  @impl true
-  def compose(:reject_view, _assigns) do
-    %{module: Crew.RejectView, params: %{}}
   end
 
   @impl true
@@ -150,71 +143,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
     {:noreply, socket |> assign_advert_link()}
   end
 
-  @impl true
-  def handle_event("approve_reward", %{"item" => task_id}, socket) do
-    case Crew.Public.accept_task(String.to_integer(task_id)) do
-      {:ok, _} ->
-        :ok
-
-      error ->
-        Logger.error("[PanlParticipantsView] Approve failed: #{inspect(error)}")
-    end
-
-    {:noreply, socket |> refresh_assignment() |> assign_pending_approvals()}
-  end
-
-  @impl true
-  def handle_event("reject_reward", %{"item" => task_id}, socket) do
-    {
-      :noreply,
-      socket
-      |> assign(reject_target_task_id: String.to_integer(task_id))
-      |> compose_child(:reject_view)
-      |> show_modal(:reject_view, :dialog)
-    }
-  end
-
-  @impl true
-  def handle_event(
-        "reject_submit",
-        %{rejection: rejection},
-        %{
-          assigns: %{
-            assignment: assignment,
-            reject_target_task_id: task_id
-          }
-        } = socket
-      ) do
-    task = Crew.Public.get_task!(task_id)
-
-    case Assignment.Public.reject_task(assignment, task, rejection) do
-      {:ok, _} ->
-        :ok
-
-      error ->
-        Logger.error("[PanlParticipantsView] Reject failed: #{inspect(error)}")
-    end
-
-    {
-      :noreply,
-      socket
-      |> hide_modal(:reject_view)
-      |> assign(reject_target_task_id: nil)
-      |> refresh_assignment()
-      |> assign_pending_approvals()
-    }
-  end
-
-  @impl true
-  def handle_event("reject_cancel", _, socket) do
-    {
-      :noreply,
-      socket
-      |> hide_modal(:reject_view)
-      |> assign(reject_target_task_id: nil)
-    }
-  end
-
   defp refresh_assignment(%{assigns: %{assignment: %{id: id}}} = socket) do
     assignment = Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
     assign(socket, assignment: assignment, entity: assignment.info)
@@ -276,38 +204,8 @@ defmodule Systems.Assignment.PanlParticipantsView do
     Budget.Public.list_transactions_by_fund(fund)
   end
 
-  defp assign_pending_approvals(%{assigns: %{assignment: %{fund: nil}}} = socket) do
-    assign(socket, pending_approvals: [])
-  end
-
-  defp assign_pending_approvals(%{assigns: %{assignment: %{crew: crew, fund: fund}}} = socket) do
-    approvals =
-      fund
-      |> Fund.Public.list_pending_approvals(user: [], fund: [:currency])
-      |> Enum.flat_map(&pending_approval_row(&1, crew))
-
-    assign(socket, pending_approvals: approvals)
-  end
-
-  defp pending_approval_row(%Fund.RewardModel{} = reward, %Crew.Model{} = crew) do
-    case Crew.Public.list_tasks_for_user(crew, reward.user_id) do
-      [%Crew.TaskModel{status: :completed} = task | _] ->
-        member = Crew.Public.get_member(crew, reward.user_id)
-
-        [
-          %{
-            reward_id: reward.id,
-            task_id: task.id,
-            member_public_id: member && member.public_id,
-            amount: reward.amount,
-            currency: reward.fund.currency,
-            completed_at: task.completed_at
-          }
-        ]
-
-      _ ->
-        []
-    end
+  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
+    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end
 
   defp get_active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency
@@ -393,10 +291,15 @@ defmodule Systems.Assignment.PanlParticipantsView do
             ) %>
           </Text.title3>
           <.spacing value="S" />
-          <div class="flex flex-col gap-3" data-testid="pending-approvals-list">
-            <%= for approval <- @pending_approvals do %>
-              <.pending_approval_card approval={approval} myself={@myself} />
-            <% end %>
+          <div data-testid="pending-approvals-cta">
+            <Button.dynamic
+              action={%{type: :redirect, to: ~p"/assignment/#{@assignment.id}/payout"}}
+              face={%{
+                type: :primary,
+                label: dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")
+              }}
+              testid="open-payout-page-button"
+            />
           </div>
           <.spacing value="XL" />
         <% end %>
@@ -439,60 +342,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
     <a href={@to} data-testid={@testid} class="text-primary hover:underline text-bodymedium font-body">
       <%= @label %> &rsaquo;
     </a>
-    """
-  end
-
-  attr(:approval, :map, required: true)
-  attr(:myself, :any, required: true)
-
-  defp pending_approval_card(assigns) do
-    ~H"""
-    <Panel.flat>
-      <div
-        class="flex items-start justify-between gap-4"
-        data-testid={"pending-approval-card-#{@approval.task_id}"}
-      >
-        <div>
-          <div class="text-title5 font-title5 text-grey1 mb-1">
-            <%= dgettext("eyra-assignment", "panl_participants.pending_approvals.participant_prefix") %>
-            <%= @approval.member_public_id || @approval.task_id %>
-          </div>
-          <div class="text-bodysmall font-body text-grey2">
-            <%= Fund.CurrencyModel.label(@approval.currency, :en, @approval.amount) %>
-          </div>
-        </div>
-        <div class="flex flex-row gap-2 flex-shrink-0">
-          <Button.dynamic
-            action={%{
-              type: :send,
-              event: "approve_reward",
-              target: @myself,
-              item: @approval.task_id
-            }}
-            face={%{
-              type: :primary,
-              label: dgettext("eyra-assignment", "panl_participants.pending_approvals.approve.button")
-            }}
-            testid={"approve-reward-button-#{@approval.task_id}"}
-          />
-          <Button.dynamic
-            action={%{
-              type: :send,
-              event: "reject_reward",
-              target: @myself,
-              item: @approval.task_id
-            }}
-            face={%{
-              type: :secondary,
-              label: dgettext("eyra-assignment", "panl_participants.pending_approvals.reject.button"),
-              border_color: "border-delete",
-              text_color: "text-delete"
-            }}
-            testid={"reject-reward-button-#{@approval.task_id}"}
-          />
-        </div>
-      </div>
-    </Panel.flat>
     """
   end
 

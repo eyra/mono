@@ -745,8 +745,58 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
-  Is assignment open for new members?
+  Returns one row per `:pending_approval` reward on the assignment, joined to
+  the crew member + completed task so the researcher's pay-out modal can
+  render them.
+
+  Each row: `%{reward_id, task_id, member_public_id, amount, currency,
+  completed_at}`.
   """
+  def list_pending_payouts(%Assignment.Model{crew: crew, fund: fund}) when not is_nil(fund) do
+    fund
+    |> Fund.Public.list_pending_approvals(user: [], fund: [:currency])
+    |> Enum.flat_map(&pending_payout_row(&1, crew))
+  end
+
+  def list_pending_payouts(_), do: []
+
+  defp pending_payout_row(%Fund.RewardModel{} = reward, %Crew.Model{} = crew) do
+    case Crew.Public.list_tasks_for_user(crew, reward.user_id) do
+      [%Crew.TaskModel{status: :completed} = task | _] ->
+        member = Crew.Public.get_member(crew, reward.user_id)
+
+        [
+          %{
+            reward_id: reward.id,
+            task_id: task.id,
+            member_public_id: member && member.public_id,
+            amount: reward.amount,
+            currency: reward.fund.currency,
+            completed_at: task.completed_at
+          }
+        ]
+
+      _ ->
+        []
+    end
+  end
+
+  @doc """
+  Bulk-approves every reward currently in `:pending_approval` on the assignment
+  by accepting the matching crew task. Each accept fires the existing assignment
+  switch which calls `Fund.Public.approve_reward/1`. Failures are logged but
+  don't block subsequent rows.
+  """
+  def bulk_approve_pending_payouts(%Assignment.Model{} = assignment) do
+    list_pending_payouts(assignment)
+    |> Enum.each(fn %{task_id: task_id} ->
+      case Crew.Public.accept_task(task_id) do
+        {:ok, _} -> :ok
+        error -> Logger.warning("[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}")
+      end
+    end)
+  end
+
   def has_open_spots?(%{crew: _crew} = assignment) do
     open_spot_count(assignment) > 0
   end
