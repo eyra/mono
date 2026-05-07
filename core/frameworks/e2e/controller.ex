@@ -40,6 +40,25 @@ defmodule Frameworks.E2E.Controller do
   @feldspar_filename "feldspar_e2e.zip"
 
   @doc """
+  Returns the live feature-flag set so E2E test runners can discover
+  which features are enabled and skip tests accordingly.
+
+  Intentionally NOT gated by the :e2e feature flag — the test runner
+  needs to call this BEFORE bootstrap to decide what to do. The
+  feature list itself is not sensitive.
+  """
+  def features(conn, _params) do
+    enabled =
+      :core
+      |> Application.get_env(:features, [])
+      |> Enum.filter(fn {_, on?} -> on? end)
+      |> Enum.map(fn {key, _} -> Atom.to_string(key) end)
+      |> Enum.sort()
+
+    json(conn, %{features: enabled})
+  end
+
+  @doc """
   Bootstrap endpoint - creates the E2E service user.
   No authentication required, but only works when :e2e feature is enabled.
   Call this once before running E2E tests.

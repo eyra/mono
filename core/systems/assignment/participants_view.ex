@@ -51,6 +51,9 @@ defmodule Systems.Assignment.ParticipantsView do
       |> update_affiliate_title()
       |> update_affiliate_url()
       |> update_affiliate_annotation()
+      |> update_recruit_title()
+      |> update_recruit_url()
+      |> update_recruit_annotation()
     }
   end
 
@@ -154,6 +157,21 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, affiliate_url: url)
   end
 
+  defp update_recruit_title(socket) do
+    title = dgettext("eyra-assignment", "recruit.panel.title")
+    assign(socket, recruit_title: title)
+  end
+
+  defp update_recruit_url(%{assigns: %{assignment: assignment}} = socket) do
+    url = Affiliate.Public.recruit_url_for_resource(assignment)
+    assign(socket, recruit_url: url)
+  end
+
+  defp update_recruit_annotation(socket) do
+    annotation = dgettext("eyra-assignment", "recruit.panel.annotation")
+    assign(socket, recruit_annotation: annotation)
+  end
+
   defp get_base_url do
     Application.get_env(:core, :base_url)
   end
@@ -231,7 +249,11 @@ defmodule Systems.Assignment.ParticipantsView do
               </Panel.flat>
             <% end %>
 
-            <%= if not feature_enabled?(:panl_post_launch) and @content_flags[:invite_participants] do %>
+            <%= if @content_flags[:recruit_participants] do %>
+              <Affiliate.Html.url_panel title={@recruit_title} annotation={@recruit_annotation} url={@recruit_url} />
+            <% end %>
+
+            <%= if @content_flags[:invite_participants] do %>
               <Affiliate.Html.url_panel title={@invite_title} annotation={@invite_annotation} url={@affiliate_url} />
             <% end %>
 

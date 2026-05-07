@@ -539,3 +539,11 @@ msgstr "Want to participate in research more often?"
 #, elixir-autogen, elixir-format
 msgid "email_capture.error.role_account"
 msgstr "Please use a personal email address, not a shared one (e.g. info@, admin@)."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr "Share this link on social media or other platforms to recruit participants. Each participant receives a unique participant ID automatically. After participating, participants will be invited to leave their email address for future research via Panl."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.title"
+msgstr "Recruit participants"
