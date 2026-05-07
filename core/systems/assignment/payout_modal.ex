@@ -330,5 +330,6 @@ defmodule Systems.Assignment.PayoutModal do
     do: "px-5 py-2 rounded-full bg-primary text-white text-button font-button"
 
   defp tab_segment_class(false),
-    do: "px-5 py-2 rounded-full bg-transparent text-grey2 text-button font-button hover:text-grey1"
+    do:
+      "px-5 py-2 rounded-full bg-transparent text-grey2 text-button font-button hover:text-grey1"
 end
