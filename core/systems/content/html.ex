@@ -3,10 +3,13 @@ defmodule Systems.Content.Html do
   import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
   import CoreWeb.Layouts.Website.Html, only: [website: 1]
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
-  alias Frameworks.Pixel.ModalView
-  alias Frameworks.Pixel.Tabbed
-  alias Frameworks.Pixel.Navigation
+  import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Breadcrumbs
+  alias Frameworks.Pixel.ModalView
+  alias Frameworks.Pixel.Navigation
+  alias Frameworks.Pixel.Tabbed
+  alias Frameworks.Pixel.Text
+  alias Systems.Content.Adaptable
 
   import Frameworks.Pixel.Line
 
@@ -53,6 +56,7 @@ defmodule Systems.Content.Html do
   attr(:title, :string, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
 
   slot(:top_bar)
   slot(:inner_block, required: true)
@@ -65,7 +69,7 @@ defmodule Systems.Content.Html do
       </:top_bar>
 
       <div id="live_workspace_modal">
-        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
       </div>
 
       <%= render_slot(@inner_block) %>
@@ -78,6 +82,7 @@ defmodule Systems.Content.Html do
   attr(:user_agent, :map, required: true)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
   attr(:include_right_sidepadding?, :boolean, default: true)
 
   slot(:hero, required: true)
@@ -91,7 +96,7 @@ defmodule Systems.Content.Html do
       </:hero>
 
       <div id="live_website_modal">
-        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
       </div>
 
       <%= render_slot(@inner_block) %>
@@ -103,6 +108,7 @@ defmodule Systems.Content.Html do
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
+  attr(:modal_toolbar_buttons, :list, default: [])
 
   slot(:inner_block, required: true)
 
@@ -110,7 +116,7 @@ defmodule Systems.Content.Html do
     ~H"""
     <.stripped title={@title} menus={@menus} >
       <div id="live_stripped_modal">
-        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} />
+        <ModalView.dynamic :if={@modal} modal={@modal} socket={@socket} toolbar_buttons={@modal_toolbar_buttons} />
       </div>
       <%= render_slot(@inner_block) %>
     </.stripped>
@@ -129,7 +135,7 @@ defmodule Systems.Content.Html do
   def tabbar_page(assigns) do
     ~H"""
       <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
-        <%= if Enum.count(@tabs) > 0 do %>
+        <%= if Enum.count(@tabs) > 1 do %>
           <Navigation.tabbar>
             <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
           </Navigation.tabbar>
@@ -137,6 +143,15 @@ defmodule Systems.Content.Html do
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
             <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
+        <% else %>
+          <%= if Enum.count(@tabs) == 1 do %>
+            <% [tab] = @tabs %>
+            <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+              <%= if tab[:element] do %>
+                <LiveNest.HTML.element socket={@socket} {Map.from_struct(tab.element)} />
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </.live_workspace>
     """
@@ -156,24 +171,74 @@ defmodule Systems.Content.Html do
     ~H"""
       <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
         <%= if Enum.count(@tabs) > 0 do %>
+          <%!-- Breadcrumb row --%>
           <%= if Enum.count(@breadcrumbs || []) > 0 do %>
-            <Area.content>
-              <div class="flex flex-row items-center h-[64px]">
-                <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
-              </div>
-            </Area.content>
+            <div class="bg-white">
+              <Area.content>
+                <div class="py-4">
+                  <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
+                </div>
+              </Area.content>
+            </div>
             <.line />
           <% end %>
-          <Area.content>
-            <div class="flex flex-row items-center justify-center w-full h-navbar-height">
-              <div class="flex-shrink-0">
+
+          <%!-- Segmented control row --%>
+          <div class="bg-white">
+            <Area.content>
+              <div class="flex items-center justify-center py-6">
                 <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+              </div>
+            </Area.content>
+          </div>
+          <.line />
+
+          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
+          </div>
+        <% end %>
+      </.live_workspace>
+    """
+  end
+
+  attr(:socket, :map, required: true)
+  attr(:title, :string, required: true)
+  attr(:menus, :map, required: true)
+  attr(:modal, :map, required: true)
+  attr(:tabs, :list, required: true)
+  attr(:tabbar_id, :atom, required: true)
+  attr(:initial_tab, :string, required: true)
+  attr(:show_errors, :string, required: true)
+  attr(:back_path, :string, default: nil)
+
+  @doc """
+  A tabbar page with a title bar that includes an optional back button.
+  The title is displayed prominently, with a back arrow if back_path is provided.
+  Tabs are centered below the title bar.
+  """
+  def tabbar_page_title(assigns) do
+    ~H"""
+      <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
+        <%= if Enum.count(@tabs) > 0 do %>
+          <Area.content>
+            <div class="pt-6 pb-4">
+              <div class="flex flex-row items-center gap-4">
+                <%= if @back_path do %>
+                  <a href={@back_path} class="text-grey2 hover:text-primary">
+                    <img src={~p"/images/icons/back.svg"} alt="Back" class="w-6 h-6" />
+                  </a>
+                <% end %>
+                <Text.title2><%= @title %></Text.title2>
               </div>
             </div>
           </Area.content>
-          <.line />
+
+          <Navigation.tabbar>
+            <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} type={:segmented} />
+          </Navigation.tabbar>
+
           <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-              <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
+            <Tabbed.content socket={@socket} tabs={@tabs} bar_id={@tabbar_id} />
           </div>
         <% end %>
       </.live_workspace>
@@ -210,5 +275,22 @@ defmodule Systems.Content.Html do
         </.live_workspace>
       </div>
     """
+  end
+
+  @doc """
+  Adaptable layout that adjusts based on item count.
+
+  See `Systems.Content.Adaptable` for full documentation.
+  """
+  attr(:socket, :map, required: true)
+  attr(:items, :list, required: true)
+  attr(:creatables, :list, default: [])
+  attr(:tabbar_id, :any, required: true)
+  attr(:initial_item, :any, default: nil)
+  attr(:empty_state, :map, default: nil)
+  attr(:toolbar_buttons, :list, default: [])
+
+  def adaptable_layout(assigns) do
+    Adaptable.layout(assigns)
   end
 end

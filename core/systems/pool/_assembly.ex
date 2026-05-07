@@ -38,7 +38,6 @@ defmodule Systems.Pool.Assembly do
 
       nil ->
         Org.Public.create_node!(
-          :company,
           @panl_org_identifier,
           [{:en, "Panl"}, {:nl, "Panl"}],
           [{:en, "Panl"}, {:nl, "Panl"}]

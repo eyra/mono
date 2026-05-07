@@ -1,9 +1,45 @@
 defmodule Systems.Account.PeopleView do
+  @moduledoc """
+  DEPRECATED: Use `Systems.Account.PeopleEditorComponent` instead.
+
+  This component uses the legacy Fabric framework. New code should use
+  `PeopleEditorComponent` (LiveComponent) which works with LiveNest.
+
+  ## Migration Guide
+
+  1. Replace `PeopleView` with `PeopleEditorComponent` in your view:
+
+      <.live_component
+        module={Account.PeopleEditorComponent}
+        id="people_editor"
+        title={@vm.title}
+        people={@vm.people}
+        users={@vm.users}
+        current_user={@current_user}
+      />
+
+  2. Handle events in parent LiveView:
+
+      def handle_info({:add_user, %{user: user}}, socket) do
+        # Persist the addition
+        {:noreply, update_view_model(socket)}
+      end
+
+      def handle_info({:remove_user, %{user: user}}, socket) do
+        # Persist the removal
+        {:noreply, update_view_model(socket)}
+      end
+
+  3. For modal usage, see `Systems.Account.PeopleEditorModalView`.
+  """
   use CoreWeb.LiveForm
 
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.{SearchBar, UserListItem}
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.UserListItem
   alias Systems.Account
+  alias Systems.Account.PeopleHelpers
 
   @impl true
   def update(%{users: users, people: people, title: title, current_user: current_user}, socket) do
@@ -189,35 +225,18 @@ defmodule Systems.Account.PeopleView do
   defp build_user_display_data(_type, %Account.User{} = user, me, _count, ids, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
+    base_item = %{
+      photo_url: photo_url,
+      name: user.displayname,
+      email: user.email
+    }
+
     if user.id == me.id and MapSet.member?(ids, user.id) do
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: [],
-        confirm_row_visible?: true,
-        confirm_row_text: dgettext("eyra-account", "people.confirm_remove.text"),
-        confirm_row_action_buttons: [
-          %{
-            action: %{type: :send, event: "remove", item: user.id, target: target},
-            face: %{
-              type: :primary,
-              label: dgettext("eyra-account", "people.confirm_remove.label")
-            }
-          },
-          %{
-            action: %{type: :send, event: "cancel_remove", item: user.id, target: target},
-            face: %{type: :primary, label: dgettext("eyra-account", "people.cancel_remove.label")}
-          }
-        ]
-      }
+      base_item
+      |> Map.put(:action_buttons, [])
+      |> Map.merge(PeopleHelpers.build_confirm_row(user.id, target))
     else
-      %{
-        photo_url: photo_url,
-        name: user.displayname,
-        email: user.email,
-        action_buttons: user_action_buttons(:people, user, me, 999, target)
-      }
+      Map.put(base_item, :action_buttons, user_action_buttons(:people, user, me, 999, target))
     end
   end
 
@@ -260,15 +279,16 @@ defmodule Systems.Account.PeopleView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-10 h-full">
-      <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
+    <div class="flex flex-col h-full">
+      <Text.title2><%= @title %> <span class="text-primary"><%= Enum.count(@people) %></span></Text.title2>
+      <div class="flex flex-col gap-8">
+        <div class="py-3 px-6 border-2 border-grey4 rounded overflow-y-scroll">
         <table class="w-full">
           <%= for people_item <- @people_items do %>
             <.live_component module={UserListItem} id={people_item.email} people_item={people_item} />
           <% end %>
         </table>
       </div>
-
       <div>
         <Text.title5 align="text-left">
           <%= dgettext("eyra-account", "people.add.title") %>
@@ -295,8 +315,8 @@ defmodule Systems.Account.PeopleView do
         <% else %>
           <.spacing value="XS" />
         <% end %>
+        </div>
       </div>
-
       <div class="flex-grow" />
     </div>
     """

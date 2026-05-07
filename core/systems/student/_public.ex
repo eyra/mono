@@ -53,35 +53,35 @@ defmodule Systems.Student.Public do
   def list_pools(preload \\ []), do: Pool.Public.list_by_director(@pool_director_key, preload)
 
   def list_universities(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:university, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_faculties(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:faculty, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_programs(template \\ [], preload \\ []) do
-    Org.Public.list_nodes(:student_program, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_classes(_, preload \\ [])
 
   def list_classes(%User{} = user, preload) do
-    Org.Public.list_nodes(user, :student_class, preload)
+    Org.Public.list_nodes(user, preload)
   end
 
   def list_classes(template, preload) do
-    Org.Public.list_nodes(:student_class, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def list_courses(_, preload \\ [])
 
   def list_courses(%User{} = user, preload) do
-    Org.Public.list_nodes(user, :student_course, preload)
+    Org.Public.list_nodes(user, preload)
   end
 
   def list_courses(template, preload) do
-    Org.Public.list_nodes(:student_course, template, preload)
+    Org.Public.list_nodes(template, preload)
   end
 
   def get_target(%{identifier: ["wallet", currency_name, _]}) do
@@ -275,9 +275,9 @@ defmodule Systems.Student.Public do
     end
   end
 
-  defp create_org(type, identifier, short_name, full_name) do
+  defp create_org(_type, identifier, short_name, full_name) do
     case Org.Public.get_node(identifier) do
-      nil -> Org.Public.create_node!(type, identifier, short_name, full_name)
+      nil -> Org.Public.create_node!(identifier, short_name, full_name)
       node -> node
     end
   end

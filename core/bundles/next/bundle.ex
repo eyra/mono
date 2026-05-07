@@ -25,7 +25,7 @@ defmodule Next.Bundle do
   def grants do
     if include?() do
       quote do
-        grant_access(Next.Account.SigninPage, [:visitor, :member])
+        grant_access(Next.Account.SigninPage, [:visitor, :user])
       end
     end
   end

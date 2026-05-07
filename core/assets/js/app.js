@@ -26,7 +26,6 @@ import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
-import { Sticky } from "./sticky";
 import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { Blurhash } from "./blurhash";
@@ -100,7 +99,6 @@ let Hooks = {
   Viewport,
   Wysiwyg,
   AutoSubmit,
-  Sticky,
   ResetScroll,
   FullscreenImage,
   Blurhash,

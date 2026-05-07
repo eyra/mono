@@ -1,15 +1,14 @@
 defmodule Systems.Account.UserProfilePage do
   @moduledoc """
-  The user profile page with tabbed interface.
-  Uses LiveNest routed_live_view pattern with embedded views for tabs.
+  The user profile page with adaptable layout.
+  Uses single layout for 1 item (most users), tabbed for 2+ items (PANL participants).
   """
   use CoreWeb, :routed_live_view
   use Gettext, backend: CoreWeb.Gettext
 
-  import CoreWeb.Layouts.Workspace.Html
+  import Systems.Content.Html
 
-  alias Frameworks.Pixel.Navigation
-  alias Frameworks.Pixel.Tabbed
+  alias Core
 
   # Set up workspace hooks (excluding Fabric.LiveHook)
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
@@ -44,18 +43,18 @@ defmodule Systems.Account.UserProfilePage do
   def mount(params, _session, socket) do
     tabbar_id = "user_profile"
 
-    active_tab =
-      Map.get(params, "tab", "profile")
-      |> String.to_existing_atom()
+    initial_item =
+      case Map.get(params, "tab") do
+        nil -> nil
+        tab -> String.to_existing_atom(tab)
+      end
 
     {
       :ok,
       socket
       |> assign(
         tabbar_id: tabbar_id,
-        initial_tab: active_tab,
-        modal: nil,
-        modal_toolbar_buttons: []
+        initial_item: initial_item
       )
     }
   end
@@ -68,14 +67,15 @@ defmodule Systems.Account.UserProfilePage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.workspace title={@vm.title} menus={@menus}>
-      <:top_bar>
-        <Navigation.action_bar breadcrumbs={[]} right_bar_buttons={[@vm.signout_button]} align={:center}>
-          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} size={:wide} type={:segmented} preserve_tab_in_url={true} />
-        </Navigation.action_bar>
-      </:top_bar>
-      <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@vm.tabs} />
-    </.workspace>
+    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
+      <.adaptable_layout
+        socket={@socket}
+        items={@vm.items}
+        tabbar_id={@tabbar_id}
+        initial_item={@initial_item}
+        toolbar_buttons={[@vm.signout_button]}
+      />
+    </.live_workspace>
     """
   end
 end

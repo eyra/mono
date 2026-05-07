@@ -13,6 +13,12 @@ defmodule Systems.Citizen.Pool.Form do
 
   @default_values %{"director" => "citizen", "target" => 0}
 
+  # Successive update - ignore if already initialized
+  @impl true
+  def update(_, %{assigns: %{pool: _pool}} = socket) do
+    {:ok, socket}
+  end
+
   # Initial update create
   @impl true
   def update(%{id: id, pool: nil, user: user, locale: locale}, socket) do
@@ -27,7 +33,6 @@ defmodule Systems.Citizen.Pool.Form do
       |> assign(
         id: id,
         title: title,
-        pool: nil,
         user: user,
         locale: locale,
         pool: pool,
@@ -37,7 +42,6 @@ defmodule Systems.Citizen.Pool.Form do
       |> update_currencies()
       |> update_selected_currency()
       |> update_options()
-      |> compose_child(:currency_selector)
       |> init_buttons()
     }
   end
@@ -63,23 +67,7 @@ defmodule Systems.Citizen.Pool.Form do
       |> update_currencies()
       |> update_selected_currency()
       |> update_options()
-      |> compose_child(:currency_selector)
       |> init_buttons()
-    }
-  end
-
-  @impl true
-  def compose(:currency_selector, %{options: options, selected_currency: selected_currency}) do
-    selected_option_index = Enum.find_index(options, &(&1.id == selected_currency.id))
-
-    %{
-      module: DropdownSelector,
-      params: %{
-        options: options,
-        selected_option_index: selected_option_index,
-        background: :light,
-        debounce: 0
-      }
     }
   end
 
@@ -100,9 +88,7 @@ defmodule Systems.Citizen.Pool.Form do
     socket |> assign(options: options)
   end
 
-  defp update_selected_currency(
-         %{assigns: %{budget: %{currency: %{id: _id} = currency}}} = socket
-       ) do
+  defp update_selected_currency(%{assigns: %{pool: %{currency: %{id: _id} = currency}}} = socket) do
     socket |> assign(selected_currency: currency)
   end
 
@@ -112,6 +98,14 @@ defmodule Systems.Citizen.Pool.Form do
 
   defp update_selected_currency(socket) do
     socket |> assign(selected_currency: nil)
+  end
+
+  defp selected_option_index(%{options: options, selected_currency: nil}) do
+    if Enum.empty?(options), do: nil, else: 0
+  end
+
+  defp selected_option_index(%{options: options, selected_currency: selected_currency}) do
+    Enum.find_index(options, &(&1.id == selected_currency.id)) || 0
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
@@ -210,14 +204,18 @@ defmodule Systems.Citizen.Pool.Form do
           label_text={dgettext("link-citizen", "pool.icon.label")}
         />
 
-        <.child name={:currency_selector} fabric={@fabric}>
-          <:header>
-            <Text.form_field_label id={:currency_label}>
-              <%= dgettext("link-citizen", "pool.currency.label") %>
-            </Text.form_field_label>
-            <.spacing value="XXS" />
-          </:header>
-        </.child>
+        <Text.form_field_label id={:currency_label}>
+          <%= dgettext("link-citizen", "pool.currency.label") %>
+        </Text.form_field_label>
+        <.spacing value="XXS" />
+        <.live_component
+          id={:currency_selector}
+          module={DropdownSelector}
+          options={@options}
+          selected_option_index={selected_option_index(assigns)}
+          background={:light}
+          debounce={0}
+        />
 
         <.spacing value="M" />
         <div class="flex flex-row gap-4">

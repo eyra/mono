@@ -10,7 +10,7 @@ defimpl Frameworks.GreenLight.Principal, for: Systems.Account.User do
   def roles(user) do
     MapSet.new([:member])
     |> add_role_when(:creator, user.creator)
-    |> add_role_when(:admin, Systems.Admin.Public.admin?(user))
+    |> add_role_when(:admin, Systems.Admin.Public.admin_access?(user))
   end
 
   defp add_role_when(roles, role, flag) do
