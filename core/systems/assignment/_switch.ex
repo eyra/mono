@@ -260,9 +260,10 @@ defmodule Systems.Assignment.Switch do
 
         :accepted ->
           payout_participants(assignment, crew_task, message)
+          clear_pending_payout_if_empty(assignment)
 
         :rejected ->
-          nil
+          clear_pending_payout_if_empty(assignment)
       end
 
       update_crew_task_next_action(assignment, message)
@@ -460,6 +461,47 @@ defmodule Systems.Assignment.Switch do
       idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
       Systems.Fund.Public.mark_pending_approval(idempotence_key)
     end)
+
+    notify_pending_payout(assignment)
+  end
+
+  defp notify_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
+    case auth_module().users_with_role(assignment, :owner) do
+      [] ->
+        :ok
+
+      researchers ->
+        NextAction.Public.create_next_action(
+          researchers,
+          Systems.Fund.NextActions.PendingPayout,
+          key: "assignment=#{assignment_id}",
+          params: %{"assignment_id" => assignment_id}
+        )
+    end
+  end
+
+  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: nil}) do
+    clear_pending_payout(assignment_id)
+  end
+
+  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: fund}) do
+    if Systems.Fund.Public.list_pending_approvals(fund) == [] do
+      clear_pending_payout(assignment_id)
+    end
+  end
+
+  defp clear_pending_payout(assignment_id) do
+    case auth_module().users_with_role(assignment_id, :owner) do
+      [] ->
+        :ok
+
+      researchers ->
+        NextAction.Public.clear_next_action(
+          researchers,
+          Systems.Fund.NextActions.PendingPayout,
+          key: "assignment=#{assignment_id}"
+        )
+    end
   end
 
   defp dispatch_finished_assignment(crew_member) do

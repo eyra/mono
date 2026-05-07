@@ -560,9 +560,10 @@ defmodule Systems.Fund.PublicTest do
       assert {:ok, %{status: :approved}} = Fund.Public.approve_reward(key)
     end
 
-    test "errors on :rejected", %{key: key} do
+    test "overrides a :rejected reward (pay out anyway)", %{key: key} do
       {:ok, _} = Fund.Public.reject_reward(key)
-      assert {:error, :reward_already_rejected} = Fund.Public.approve_reward(key)
+      assert {:ok, _} = Fund.Public.approve_reward(key)
+      assert %{status: :approved} = Fund.Public.get_reward(key, [])
     end
 
     test "returns error when reward not found" do
@@ -646,6 +647,63 @@ defmodule Systems.Fund.PublicTest do
       currency = Fund.Factories.create_currency("isolated", :legal, "Ω", 2)
       other_fund = Fund.Factories.create_fund("other", currency)
       assert [] = Fund.Public.list_pending_approvals(other_fund)
+    end
+  end
+
+  describe "reject_reward/2 reason + override" do
+    setup %{fund: fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},override"
+      {:ok, _} = Fund.Public.create_reward(fund, 1000, participant, key)
+      {:ok, _} = Fund.Public.mark_pending_approval(key)
+
+      {:ok, fund: fund, key: key}
+    end
+
+    test "stores rejection_reason and rejected_at when reason given", %{key: key} do
+      assert {:ok, _} = Fund.Public.reject_reward(key, "No valid answers given")
+
+      reward = Fund.Public.get_reward(key, [])
+      assert reward.status == :rejected
+      assert reward.rejection_reason == "No valid answers given"
+      refute is_nil(reward.rejected_at)
+    end
+
+    test "leaves rejection_reason nil when no reason given", %{key: key} do
+      assert {:ok, _} = Fund.Public.reject_reward(key)
+
+      reward = Fund.Public.get_reward(key, [])
+      assert reward.status == :rejected
+      assert is_nil(reward.rejection_reason)
+    end
+
+    test "approve_reward overrides a rejected reward, paying from fund.available",
+         %{key: key, fund: %{id: fund_id}} do
+      {:ok, _} = Fund.Public.reject_reward(key, "initial decline")
+      assert %{status: :rejected} = Fund.Public.get_reward(key, [])
+
+      assert {:ok, _} = Fund.Public.approve_reward(key)
+
+      reward = Fund.Public.get_reward(key, [])
+      assert reward.status == :approved
+      assert is_nil(reward.rejection_reason)
+      assert is_nil(reward.rejected_at)
+      refute is_nil(reward.payment_id)
+
+      _ = fund_id
+    end
+
+    test "approve_reward of a rejected reward errors when fund.available is insufficient",
+         %{key: key, fund: %{id: fund_id}} do
+      {:ok, _} = Fund.Public.reject_reward(key, "decline")
+
+      drain_amount = Fund.Model.amount_available(Fund.Public.get!(fund_id))
+
+      Fund.Public.get!(fund_id).available
+      |> Ecto.Changeset.change(%{balance_debit: drain_amount + 100_000})
+      |> Core.Repo.update!()
+
+      assert {:error, :insufficient_fund} = Fund.Public.approve_reward(key)
     end
   end
 

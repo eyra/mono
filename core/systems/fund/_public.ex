@@ -331,9 +331,12 @@ defmodule Systems.Fund.Public do
       %Fund.RewardModel{status: status} = reward when status in [:approved, :paid] ->
         {:ok, reward}
 
-      %Fund.RewardModel{status: :rejected} ->
-        {:error, :reward_already_rejected}
-
+      %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
+        if Fund.Model.amount_available(fund) < amount do
+          {:error, :insufficient_fund}
+        else
+          do_override_rejected(reward)
+        end
       %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
         do_approve_reward(reward)
     end
@@ -352,6 +355,31 @@ defmodule Systems.Fund.Public do
     |> Repo.commit()
   end
 
+  # Override path for previously-rejected rewards. Reject already rolled the
+  # deposit back to Fund.available, so we pay directly from there to the
+  # participant's wallet (create_payment_transaction routes through the
+  # `deposit: nil` branch). Status flips back to :approved and the rejection
+  # metadata is cleared.
+  defp do_override_rejected(reward) do
+    Multi.new()
+    |> Multi.update(
+      :reward,
+      Fund.RewardModel.changeset(reward, %{
+        status: :approved,
+        rejection_reason: nil,
+        rejected_at: nil
+      })
+    )
+    |> Multi.run(:payment, fn _, _ ->
+      case create_payment_transaction(reward) do
+        {:ok, %{entry: payment}} -> link_payment_transaction(reward, payment)
+        {:error, :payment_already_available} -> {:ok, reward}
+        error -> error
+      end
+    end)
+    |> Repo.commit()
+  end
+
   @doc """
   Rejects a reward and returns the reserved money to the assignment fund.
 
@@ -359,6 +387,10 @@ defmodule Systems.Fund.Public do
   Idempotent on `:rejected`.
   """
   def reject_reward(idempotence_key) when is_binary(idempotence_key) do
+    reject_reward(idempotence_key, nil)
+  end
+
+  def reject_reward(idempotence_key, reason) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
       nil ->
         Logger.warning("No reward to reject for #{idempotence_key}")
@@ -371,14 +403,8 @@ defmodule Systems.Fund.Public do
         {:error, :reward_already_approved}
 
       %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
-        do_reject_reward(reward)
+        do_reject_reward(reward, reason)
     end
-  end
-
-  defp do_reject_reward(reward) do
-    Multi.new()
-    |> reject_reward(reward)
-    |> Repo.commit()
   end
 
   @doc """
@@ -389,18 +415,40 @@ defmodule Systems.Fund.Public do
   Caller is responsible for ensuring the reward is in `:reserved` or
   `:pending_approval`. On a `:rejected` reward this is a no-op; on
   `:approved`/`:paid` it will raise via `rollback_deposit/2`.
+
+  The third argument is the optional rejection reason; nil leaves it unset.
   """
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
-    multi
-    |> rollback_deposit(reward)
-    |> Multi.update(:reject_status, Fund.RewardModel.changeset(reward, %{status: :rejected}))
+    reject_reward(multi, reward, nil)
   end
 
   def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
+    reject_reward(multi, idempotence_key, nil)
+  end
+
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward, reason) do
+    attrs = %{
+      status: :rejected,
+      rejection_reason: reason,
+      rejected_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    }
+
+    multi
+    |> rollback_deposit(reward)
+    |> Multi.update(:reject_status, Fund.RewardModel.changeset(reward, attrs))
+  end
+
+  def reject_reward(%Multi{} = multi, idempotence_key, reason) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
       nil -> raise FundError, message: "No reward available to reject"
-      reward -> reject_reward(multi, reward)
+      reward -> reject_reward(multi, reward, reason)
     end
+  end
+
+  defp do_reject_reward(reward, reason) do
+    Multi.new()
+    |> reject_reward(reward, reason)
+    |> Repo.commit()
   end
 
   def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do

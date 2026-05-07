@@ -625,10 +625,11 @@ defmodule Systems.Assignment.Public do
         rejection
       ) do
     [user] = auth_module().users_with_role(task, :owner)
+    reason = Map.get(rejection, :message) || Map.get(rejection, "message")
 
     Multi.new()
     |> Crew.Public.reject_task(task, rejection)
-    |> reject_reward(assignment, user)
+    |> reject_reward(assignment, user, reason)
     |> Repo.commit()
   end
 
@@ -857,11 +858,11 @@ defmodule Systems.Assignment.Public do
     |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
-  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
+  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user, reason \\ nil) do
     idempotence_key = idempotence_key(assignment, user)
 
     multi
-    |> Fund.Public.reject_reward(idempotence_key)
+    |> Fund.Public.reject_reward(idempotence_key, reason)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
