@@ -85,22 +85,8 @@ E2E tests use Infisical for environment-specific secrets. The workspace is confi
 | `E2E_PARTICIPANT_PASSWORD` | Test participant account password |
 | `E2E_DONATE_ASSIGNMENT_PATH` | Assignment path for donate tests (e.g., `/a/nWPk4K`) |
 | `SERVICE_LOGIN_KEY` | Must match the Fly secret for E2E bootstrap |
-| `ENABLED_APP_FEATURES` | Must mirror the Fly secret - controls which feature tests run |
 
-### IMPORTANT: Keep ENABLED_APP_FEATURES in sync
-
-When you change `ENABLED_APP_FEATURES` on Fly, **also update it in Infisical**:
-
-```bash
-# Check what's on Fly
-fly secrets list -a eyra-next-staging | grep ENABLED
-
-# Update Infisical to match (from core/test/e2e directory)
-cd core/test/e2e
-infisical secrets set ENABLED_APP_FEATURES="feature1,feature2,..." --env=staging
-```
-
-Feature-specific tests (e.g., PaNL tests) check `ENABLED_APP_FEATURES` and skip if their feature isn't enabled.
+The enabled feature set is discovered automatically via `GET /api/e2e/features` during global-setup, so it does not need to be mirrored in Infisical. Feature-specific tests (e.g., PaNL tests) declare their required flags via `missingFeaturesReason(...)` in `lib/features.ts` and skip when those flags aren't enabled on the target environment.
 
 ## Running Tests
 

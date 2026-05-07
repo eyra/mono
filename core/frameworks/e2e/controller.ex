@@ -326,12 +326,14 @@ defmodule Frameworks.E2E.Controller do
     assignment
   end
 
+  @donate_assignment_title "E2E Auto Donate"
+
   defp find_e2e_assignment do
     import Ecto.Query
 
     from(a in Assignment.Model,
       join: i in assoc(a, :info),
-      where: like(i.title, "E2E Test%"),
+      where: i.title == ^@donate_assignment_title,
       limit: 1
     )
     |> Repo.one()
@@ -370,7 +372,7 @@ defmodule Frameworks.E2E.Controller do
     # Create assignment info
     info =
       Core.Factories.insert!(:assignment_info, %{
-        title: "E2E Test Data Donation",
+        title: @donate_assignment_title,
         subject_count: 100,
         duration: "10",
         language: :en,
