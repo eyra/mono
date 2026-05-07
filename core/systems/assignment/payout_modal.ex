@@ -27,11 +27,17 @@ defmodule Systems.Assignment.PayoutModal do
         assignment_id: assignment_id,
         active_tab: :waiting,
         declining_task_id: nil,
-        decline_reason: ""
+        decline_reason: "",
+        search_query: ""
       )
       |> load_assignment()
       |> load_payouts()
     }
+  end
+
+  @impl true
+  def handle_event("update_search", %{"value" => query}, socket) do
+    {:noreply, assign(socket, search_query: query)}
   end
 
   @impl true
@@ -116,56 +122,75 @@ defmodule Systems.Assignment.PayoutModal do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="bg-white rounded-lg p-8" data-testid="payout-modal">
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex gap-2">
-          <button
-            type="button"
-            phx-click="switch_tab"
-            phx-value-tab="waiting"
-            phx-target={@myself}
-            data-testid="payout-tab-waiting"
-            class={tab_class(@active_tab == :waiting)}
-          >
-            <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
-          </button>
-          <button
-            type="button"
-            phx-click="switch_tab"
-            phx-value-tab="overview"
-            phx-target={@myself}
-            data-testid="payout-tab-overview"
-            class={tab_class(@active_tab == :overview)}
-          >
-            <%= dgettext("eyra-assignment", "payout.tab.overview") %>
-          </button>
+    <div class="bg-white rounded-lg" data-testid="payout-modal">
+      <div class="relative px-8 pt-6">
+        <div class="flex justify-center">
+          <div class="flex gap-2">
+            <button
+              type="button"
+              phx-click="switch_tab"
+              phx-value-tab="waiting"
+              phx-target={@myself}
+              data-testid="payout-tab-waiting"
+              class={tab_class(@active_tab == :waiting)}
+            >
+              <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
+            </button>
+            <button
+              type="button"
+              phx-click="switch_tab"
+              phx-value-tab="overview"
+              phx-target={@myself}
+              data-testid="payout-tab-overview"
+              class={tab_class(@active_tab == :overview)}
+            >
+              <%= dgettext("eyra-assignment", "payout.tab.overview") %>
+            </button>
+          </div>
         </div>
         <button
           type="button"
           phx-click="close"
           phx-target={@myself}
-          class="text-grey3 hover:text-grey1 text-2xl leading-none"
+          class="absolute top-6 right-8 text-primary hover:text-grey1 text-2xl leading-none"
           data-testid="payout-close"
         >
           ×
         </button>
       </div>
-
-      <%= if @active_tab == :waiting do %>
-        <.waiting_tab
-          payouts={@payouts}
-          declining_task_id={@declining_task_id}
-          decline_reason={@decline_reason}
-          myself={@myself}
-        />
-      <% else %>
-        <.overview_tab assignment={@assignment} />
-      <% end %>
+      <div class="border-b border-grey4 mt-6" />
+      <div class="px-8 py-6">
+        <%= if @active_tab == :waiting do %>
+          <.waiting_tab
+            payouts={filter_payouts(@payouts, @search_query)}
+            search_query={@search_query}
+            declining_task_id={@declining_task_id}
+            decline_reason={@decline_reason}
+            myself={@myself}
+          />
+        <% else %>
+          <.overview_tab assignment={@assignment} />
+        <% end %>
+      </div>
     </div>
     """
   end
 
+  defp filter_payouts(payouts, ""), do: payouts
+
+  defp filter_payouts(payouts, query) do
+    needle = String.downcase(query)
+
+    Enum.filter(payouts, fn %{member_public_id: id} ->
+      id
+      |> to_string()
+      |> String.downcase()
+      |> String.contains?(needle)
+    end)
+  end
+
   attr(:payouts, :list, required: true)
+  attr(:search_query, :string, default: "")
   attr(:declining_task_id, :integer, default: nil)
   attr(:decline_reason, :string, default: "")
   attr(:myself, :any, required: true)
@@ -179,7 +204,9 @@ defmodule Systems.Assignment.PayoutModal do
         <Text.title3 margin="">
           <%= dgettext("eyra-assignment", "payout.waiting.heading") %>
         </Text.title3>
-        <span class="text-title3 font-title3 text-primary"><%= @count %></span>
+        <span class="text-title3 font-title3 text-primary" data-testid="payout-waiting-count">
+          <%= @count %>
+        </span>
       </div>
 
       <div class="mb-6">
@@ -187,19 +214,33 @@ defmodule Systems.Assignment.PayoutModal do
           action={%{type: :send, event: "pay_out_all", target: @myself}}
           face={%{
             type: :primary,
-            label: dgettext("eyra-assignment", "payout.pay_out_all.button")
+            label: "€  " <> dgettext("eyra-assignment", "payout.pay_out_all.button")
           }}
           enabled?={@count > 0}
           testid="pay-out-all-button"
         />
       </div>
 
+      <form phx-change="update_search" phx-target={@myself} class="mb-2">
+        <div class="relative">
+          <input
+            type="text"
+            name="value"
+            value={@search_query}
+            placeholder={dgettext("eyra-assignment", "payout.search.placeholder")}
+            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body"
+            data-testid="payout-search"
+          />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-primary">⌕</span>
+        </div>
+      </form>
+
       <%= if @count == 0 do %>
-        <div class="text-bodymedium font-body text-grey2" data-testid="payout-empty">
+        <div class="text-bodymedium font-body text-grey2 py-8" data-testid="payout-empty">
           <%= dgettext("eyra-assignment", "payout.waiting.empty") %>
         </div>
       <% else %>
-        <div class="flex flex-col divide-y divide-grey4">
+        <div class="flex flex-col">
           <%= for row <- @payouts do %>
             <.payout_row
               row={row}
@@ -208,6 +249,15 @@ defmodule Systems.Assignment.PayoutModal do
               myself={@myself}
             />
           <% end %>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between text-bodysmall font-body text-grey2" data-testid="payout-pagination">
+          <div class="flex items-center gap-1">
+            <span class="px-2 text-grey3">‹</span>
+            <span class="px-3 py-1 rounded bg-primary text-white">1</span>
+            <span class="px-2 text-grey3">›</span>
+          </div>
+          <span><%= dgettext("eyra-assignment", "payout.pagination.single_page") %></span>
         </div>
       <% end %>
     </div>
