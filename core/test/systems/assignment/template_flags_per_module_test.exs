@@ -87,6 +87,7 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       assert flags.advert_in_pool == false
       assert flags.invite_participants == false
       assert flags.affiliate == false
+      assert flags.paid_slots == false
     end
 
     test "new/1 with opt_in enables specific flags" do
@@ -97,6 +98,7 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
       assert flags.expected == true
       assert flags.invite_participants == false
       assert flags.language == false
+      assert flags.paid_slots == false
     end
 
     test "Access protocol works correctly" do
@@ -116,8 +118,10 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
         :language,
         :advert_in_pool,
         :invite_participants,
+        :recruit_participants,
         :affiliate,
-        :language_fixed_nl
+        :language_fixed_nl,
+        :paid_slots
       ]
 
       assert flags_list -- expected == []

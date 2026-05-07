@@ -113,7 +113,7 @@ defmodule Systems.Assignment.Model do
       consent_agreement: [:revisions],
       crew: [:tasks, :members, :auth_node],
       workflow: Workflow.Model.preload_graph(:down),
-      fund: [:currency, :available, :pending],
+      fund: [:currency, :currency_ledger, :available, :pending],
       auth_node: [:role_assignments]
     ]
   end

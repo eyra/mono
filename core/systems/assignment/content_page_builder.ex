@@ -377,8 +377,15 @@ defmodule Systems.Assignment.ContentPageBuilder do
          show_errors,
          %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
        ) do
+    view_module =
+      if Map.get(content_flags, :paid_slots, false) do
+        Assignment.PanlParticipantsView
+      else
+        Assignment.ParticipantsView
+      end
+
     child =
-      Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
+      Fabric.prepare_child(fabric, :system, view_module, %{
         assignment: assignment,
         user: user,
         title: title,

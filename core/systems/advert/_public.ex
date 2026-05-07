@@ -482,6 +482,8 @@ defmodule Systems.Advert.Public do
     :ok
   end
 
+  defp validate_funded(%{assignment: %{fund: %{currency: nil}}}), do: :ok
+
   defp validate_funded(%{
          assignment: %{fund: %{currency: %{type: :legal}} = fund},
          submission: %{reward_value: reward_value}

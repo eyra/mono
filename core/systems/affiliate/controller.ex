@@ -9,11 +9,73 @@ defmodule Systems.Affiliate.Controller do
 
   alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Rate
 
   require Logger
 
   @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
   @id_max_lenght 64
+
+  # Recruit action: generates a participant ID on the fly for organic recruitment
+  def recruit(conn, %{"sqid" => sqid}) do
+    with :ok <- check_rate_limit(conn),
+         {:ok, numbers} <- numbers(sqid) do
+      do_recruit(conn, sqid, numbers)
+    else
+      {:error, :rate_limited} ->
+        too_many_requests(conn)
+
+      {:error, _} ->
+        Logger.error("Invalid recruit sqid=#{sqid}")
+        forbidden(conn)
+    end
+  end
+
+  defp do_recruit(conn, sqid, [@annotation_resource_id, assignment_id]) do
+    assignment =
+      Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
+
+    cond do
+      deleted?(assignment) ->
+        not_found(conn)
+
+      offline?(assignment) ->
+        service_unavailable(conn)
+
+      true ->
+        participant_id = generate_participant_id()
+        redirect(conn, to: "/a/#{sqid}?p=#{participant_id}")
+    end
+  end
+
+  defp do_recruit(conn, _sqid, _numbers), do: forbidden(conn)
+
+  defp generate_participant_id do
+    random =
+      :crypto.strong_rand_bytes(6)
+      |> Base.url_encode64(padding: false)
+
+    "R_#{random}"
+  end
+
+  defp check_rate_limit(conn) do
+    remote_ip =
+      conn.remote_ip
+      |> :inet.ntoa()
+      |> to_string()
+
+    Rate.Public.request_permission(:recruit, remote_ip, 1)
+    :ok
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  defp too_many_requests(conn) do
+    conn
+    |> put_status(:too_many_requests)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"429")
+  end
 
   def create(conn, %{"sqid" => sqid} = params) do
     case numbers(sqid) do

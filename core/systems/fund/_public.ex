@@ -14,11 +14,9 @@ defmodule Systems.Fund.Public do
 
   alias Systems.Account
 
-  alias Systems.{
-    Fund,
-    Bookkeeping,
-    Banking
-  }
+  alias Systems.Fund
+  alias Systems.Bookkeeping
+  alias Systems.Banking
 
   defmodule FundError do
     @moduledoc false

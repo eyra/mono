@@ -36,11 +36,9 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new(
             opt_in: [
-              :language_fixed_nl,
-              :expected,
-              :language,
               :advert_in_pool,
-              :invite_participants
+              :recruit_participants,
+              :paid_slots
             ]
           )
         },
@@ -50,6 +48,8 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         }
       ]
     end
+
+    def currency(_t), do: :EUR
 
     def runtime_config(_t),
       do: %Assignment.RuntimeConfig{post_action: {:add_to_pool, :panl}}

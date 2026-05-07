@@ -10,6 +10,7 @@ defmodule Mix.Tasks.E2e do
       mix e2e --env=test1         # https://eyra-next-test1.fly.dev
       mix e2e --env=test2         # https://eyra-next-test2.fly.dev
       mix e2e --env=staging       # https://eyra-next-staging.fly.dev
+      mix e2e --env=prod          # https://next.eyra.co
       mix e2e --headed            # show browser window
       mix e2e --browser=chromium  # chromium | webkit | firefox (default chromium)
       mix e2e --env=test1 panl_onboarding   # filter to one test file
@@ -20,7 +21,7 @@ defmodule Mix.Tasks.E2e do
 
   use Mix.Task
 
-  @envs ~w(local dev test1 test2 staging)
+  @envs ~w(local dev test1 test2 staging prod)
   @e2e_dir "test/e2e"
 
   @impl true
