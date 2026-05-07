@@ -19,7 +19,10 @@ defmodule Systems.Fund.NextActions.PendingPayout do
       title: dgettext("eyra-nextaction", "fund.pending_payout.title"),
       description: dgettext("eyra-nextaction", "fund.pending_payout.description"),
       cta_label: dgettext("eyra-nextaction", "fund.pending_payout.cta"),
-      cta_action: %{type: :redirect, to: ~p"/assignment/#{assignment_id}/payout"}
+      cta_action: %{
+        type: :redirect,
+        to: ~p"/assignment/#{assignment_id}/content?tab=participants&modal=payout"
+      }
     }
   end
 end

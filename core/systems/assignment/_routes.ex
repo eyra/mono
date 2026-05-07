@@ -11,7 +11,6 @@ defmodule Systems.Assignment.Routes do
         live("/", CrewPage)
         live("/content", ContentPage)
         live("/landing", LandingPage)
-        live("/payout", PayoutPage)
         get("/invite", Controller, :invite)
         get("/apply", Controller, :apply)
         get("/join", Controller, :join)

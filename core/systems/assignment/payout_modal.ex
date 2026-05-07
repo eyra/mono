@@ -1,14 +1,13 @@
-defmodule Systems.Assignment.PayoutPage do
+defmodule Systems.Assignment.PayoutModal do
   @moduledoc """
-  Modal-style page that lets a researcher resolve pending pay-outs for an
-  assignment. Reachable from the home-page NextAction CTA and from the
-  assignment Participants tab.
+  Modal that lets a researcher resolve pending pay-outs for an assignment.
+  Composed via `compose_child(:payout_modal) |> show_modal(:payout_modal, :sheet)`.
 
   Two tabs: `:waiting` (default) lists rewards in `:pending_approval` with
   per-row Decline expansion + bulk "Pay out all"; `:overview` shows historical
-  approvals + rejections with override/filter (UI lands in commit C).
+  approvals + rejections (UI lands in commit C).
   """
-  use CoreWeb, :live_view
+  use CoreWeb, :live_component
 
   require Logger
 
@@ -19,12 +18,13 @@ defmodule Systems.Assignment.PayoutPage do
   alias Systems.Crew
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def update(%{id: id, assignment_id: assignment_id}, socket) do
     {
       :ok,
       socket
       |> assign(
-        assignment_id: String.to_integer(id),
+        id: id,
+        assignment_id: assignment_id,
         active_tab: :waiting,
         declining_task_id: nil,
         decline_reason: ""
@@ -40,27 +40,19 @@ defmodule Systems.Assignment.PayoutPage do
   end
 
   @impl true
+  def handle_event("close", _, socket) do
+    {:noreply, send_event(socket, :parent, "payout_modal_close")}
+  end
+
+  @impl true
   def handle_event("pay_out_all", _, %{assigns: %{assignment: assignment}} = socket) do
     Assignment.Public.bulk_approve_pending_payouts(assignment)
 
     {:noreply,
      socket
+     |> assign(declining_task_id: nil, decline_reason: "")
      |> load_assignment()
-     |> load_payouts()
-     |> assign(declining_task_id: nil, decline_reason: "")}
-  end
-
-  @impl true
-  def handle_event("pay_out_one", %{"task-id" => task_id}, socket) do
-    case Crew.Public.accept_task(String.to_integer(task_id)) do
-      {:ok, _} ->
-        :ok
-
-      error ->
-        Logger.warning("[PayoutPage] accept_task #{task_id} failed: #{inspect(error)}")
-    end
-
-    {:noreply, socket |> load_assignment() |> load_payouts()}
+     |> load_payouts()}
   end
 
   @impl true
@@ -103,7 +95,7 @@ defmodule Systems.Assignment.PayoutPage do
         :ok
 
       error ->
-        Logger.warning("[PayoutPage] reject_task #{task_id} failed: #{inspect(error)}")
+        Logger.warning("[PayoutModal] reject_task #{task_id} failed: #{inspect(error)}")
     end
 
     {:noreply,
@@ -124,48 +116,51 @@ defmodule Systems.Assignment.PayoutPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="min-h-screen bg-grey6 flex items-start justify-center py-12 px-4">
-      <div class="w-full max-w-2xl bg-white shadow-floating rounded-lg p-8" data-testid="payout-modal">
-        <div class="flex items-center justify-between mb-8">
-          <div class="flex gap-2">
-            <button
-              type="button"
-              phx-click="switch_tab"
-              phx-value-tab="waiting"
-              data-testid="tab-waiting"
-              class={tab_class(@active_tab == :waiting)}
-            >
-              <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
-            </button>
-            <button
-              type="button"
-              phx-click="switch_tab"
-              phx-value-tab="overview"
-              data-testid="tab-overview"
-              class={tab_class(@active_tab == :overview)}
-            >
-              <%= dgettext("eyra-assignment", "payout.tab.overview") %>
-            </button>
-          </div>
-          <a
-            href={~p"/assignment/#{@assignment.id}/content"}
-            class="text-grey3 hover:text-grey1 text-2xl leading-none"
-            data-testid="payout-close"
+    <div class="bg-white rounded-lg p-8" data-testid="payout-modal">
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex gap-2">
+          <button
+            type="button"
+            phx-click="switch_tab"
+            phx-value-tab="waiting"
+            phx-target={@myself}
+            data-testid="payout-tab-waiting"
+            class={tab_class(@active_tab == :waiting)}
           >
-            ×
-          </a>
+            <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
+          </button>
+          <button
+            type="button"
+            phx-click="switch_tab"
+            phx-value-tab="overview"
+            phx-target={@myself}
+            data-testid="payout-tab-overview"
+            class={tab_class(@active_tab == :overview)}
+          >
+            <%= dgettext("eyra-assignment", "payout.tab.overview") %>
+          </button>
         </div>
-
-        <%= if @active_tab == :waiting do %>
-          <.waiting_tab
-            payouts={@payouts}
-            declining_task_id={@declining_task_id}
-            decline_reason={@decline_reason}
-          />
-        <% else %>
-          <.overview_tab assignment={@assignment} />
-        <% end %>
+        <button
+          type="button"
+          phx-click="close"
+          phx-target={@myself}
+          class="text-grey3 hover:text-grey1 text-2xl leading-none"
+          data-testid="payout-close"
+        >
+          ×
+        </button>
       </div>
+
+      <%= if @active_tab == :waiting do %>
+        <.waiting_tab
+          payouts={@payouts}
+          declining_task_id={@declining_task_id}
+          decline_reason={@decline_reason}
+          myself={@myself}
+        />
+      <% else %>
+        <.overview_tab assignment={@assignment} />
+      <% end %>
     </div>
     """
   end
@@ -173,12 +168,13 @@ defmodule Systems.Assignment.PayoutPage do
   attr(:payouts, :list, required: true)
   attr(:declining_task_id, :integer, default: nil)
   attr(:decline_reason, :string, default: "")
+  attr(:myself, :any, required: true)
 
   defp waiting_tab(assigns) do
     assigns = assign(assigns, count: length(assigns.payouts))
 
     ~H"""
-    <div data-testid="waiting-tab">
+    <div data-testid="payout-waiting-tab">
       <div class="flex items-baseline gap-2 mb-6">
         <Text.title3 margin="">
           <%= dgettext("eyra-assignment", "payout.waiting.heading") %>
@@ -188,7 +184,7 @@ defmodule Systems.Assignment.PayoutPage do
 
       <div class="mb-6">
         <Button.dynamic
-          action={%{type: :send, event: "pay_out_all"}}
+          action={%{type: :send, event: "pay_out_all", target: @myself}}
           face={%{
             type: :primary,
             label: dgettext("eyra-assignment", "payout.pay_out_all.button")
@@ -209,6 +205,7 @@ defmodule Systems.Assignment.PayoutPage do
               row={row}
               declining?={@declining_task_id == row.task_id}
               decline_reason={@decline_reason}
+              myself={@myself}
             />
           <% end %>
         </div>
@@ -220,6 +217,7 @@ defmodule Systems.Assignment.PayoutPage do
   attr(:row, :map, required: true)
   attr(:declining?, :boolean, default: false)
   attr(:decline_reason, :string, default: "")
+  attr(:myself, :any, required: true)
 
   defp payout_row(assigns) do
     ~H"""
@@ -232,6 +230,7 @@ defmodule Systems.Assignment.PayoutPage do
         <%= if @declining? do %>
           <a
             phx-click="cancel_decline"
+            phx-target={@myself}
             class="text-primary cursor-pointer hover:underline"
             data-testid={"cancel-decline-#{@row.task_id}"}
           >
@@ -241,6 +240,7 @@ defmodule Systems.Assignment.PayoutPage do
           <a
             phx-click="expand_decline"
             phx-value-task-id={@row.task_id}
+            phx-target={@myself}
             class="text-primary cursor-pointer hover:underline"
             data-testid={"decline-#{@row.task_id}"}
           >
@@ -250,8 +250,8 @@ defmodule Systems.Assignment.PayoutPage do
       </div>
 
       <%= if @declining? do %>
-        <div class="mt-3 ml-0">
-          <form phx-submit="submit_decline" phx-change="update_reason">
+        <div class="mt-3">
+          <form phx-submit="submit_decline" phx-change="update_reason" phx-target={@myself}>
             <label class="block text-bodymedium font-body font-bold mb-1">
               <%= dgettext("eyra-assignment", "payout.decline.reason.label") %>
             </label>
@@ -282,7 +282,7 @@ defmodule Systems.Assignment.PayoutPage do
 
   defp overview_tab(assigns) do
     ~H"""
-    <div data-testid="overview-tab">
+    <div data-testid="payout-overview-tab">
       <Text.title3>
         <%= dgettext("eyra-assignment", "payout.overview.heading") %>
       </Text.title3>

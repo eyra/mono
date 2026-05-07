@@ -69,12 +69,41 @@ defmodule Systems.Assignment.PanlParticipantsView do
   end
 
   @impl true
+  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
+    %{
+      module: Assignment.PayoutModal,
+      params: %{assignment_id: assignment_id}
+    }
+  end
+
+  @impl true
   def handle_event("add_budget", _, socket) do
     {
       :noreply,
       socket
       |> compose_child(:budget_form)
       |> show_modal(:budget_form, :compact)
+    }
+  end
+
+  @impl true
+  def handle_event("open_payout_modal", _, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:payout_modal)
+      |> show_modal(:payout_modal, :sheet)
+    }
+  end
+
+  @impl true
+  def handle_event("payout_modal_close", _, socket) do
+    {
+      :noreply,
+      socket
+      |> hide_modal(:payout_modal)
+      |> refresh_assignment()
+      |> assign_pending_approvals()
     }
   end
 
@@ -293,12 +322,12 @@ defmodule Systems.Assignment.PanlParticipantsView do
           <.spacing value="S" />
           <div data-testid="pending-approvals-cta">
             <Button.dynamic
-              action={%{type: :redirect, to: ~p"/assignment/#{@assignment.id}/payout"}}
+              action={%{type: :send, event: "open_payout_modal", target: @myself}}
               face={%{
                 type: :primary,
                 label: dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")
               }}
-              testid="open-payout-page-button"
+              testid="open-payout-modal-button"
             />
           </div>
           <.spacing value="XL" />
