@@ -290,7 +290,6 @@ defmodule Systems.Assignment.PayoutModal do
       <Text.body color="text-grey2">
         <%= dgettext("eyra-assignment", "payout.overview.coming_soon") %>
       </Text.body>
-      <%= _ = @assignment %>
     </div>
     """
   end
