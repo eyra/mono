@@ -296,10 +296,8 @@ defmodule Systems.Assignment.PayoutPage do
   end
 
   defp tab_class(true),
-    do:
-      "px-5 py-2 rounded-full bg-primary text-white text-button font-button"
+    do: "px-5 py-2 rounded-full bg-primary text-white text-button font-button"
 
   defp tab_class(false),
-    do:
-      "px-5 py-2 rounded-full bg-grey5 text-grey2 text-button font-button hover:bg-grey4"
+    do: "px-5 py-2 rounded-full bg-grey5 text-grey2 text-button font-button hover:bg-grey4"
 end

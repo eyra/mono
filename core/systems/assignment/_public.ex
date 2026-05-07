@@ -791,8 +791,13 @@ defmodule Systems.Assignment.Public do
     list_pending_payouts(assignment)
     |> Enum.each(fn %{task_id: task_id} ->
       case Crew.Public.accept_task(task_id) do
-        {:ok, _} -> :ok
-        error -> Logger.warning("[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}")
+        {:ok, _} ->
+          :ok
+
+        error ->
+          Logger.warning(
+            "[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}"
+          )
       end
     end)
   end
