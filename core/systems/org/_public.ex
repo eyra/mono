@@ -287,6 +287,8 @@ defmodule Systems.Org.Public do
   @doc """
   Checks if the user owns any organisations.
   """
+  def owns_any?(%User{id: nil}), do: false
+
   def owns_any?(%User{} = user) do
     node_ids = auth_module().query_node_ids(role: :owner, principal: user)
 
