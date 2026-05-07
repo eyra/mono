@@ -9,6 +9,13 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#22.2 2026-05-07
+* Added - Recruit URL (/r/:code) for organic participant recruitment with rate limiting (5/min/IP)
+* Added - Recruit participants panel in CMS for questionnaire studies
+* Added - /api/e2e/features endpoint for E2E feature flag introspection
+* Changed - Policy URLs (terms/privacy) moved to compile-time config
+* Fixed - Privacy and terms link translations being removed by gettext extract
+
 ## \#22.1 2026-04-23
 * Fixed - Panl capitalization normalized across all translations
 * Changed - Dutch copy from formal (u/uw) to informal (je/jouw)
