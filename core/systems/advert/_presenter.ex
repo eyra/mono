@@ -26,4 +26,5 @@ defmodule Systems.Advert.Presenter do
 
   defp builder(Advert.ContentPage), do: Advert.ContentPageBuilder
   defp builder(Promotion.LandingPage), do: Advert.PromotionLandingPageBuilder
+  defp builder(Advert.SubmissionView), do: Advert.SubmissionViewBuilder
 end
