@@ -14,6 +14,7 @@ interface E2EFixtures {
   participant_email: string;
   participant_password: string;
   donate_assignment_path: string;
+  test_org_id?: number;
 }
 
 declare global {
@@ -106,6 +107,9 @@ export default async function globalSetup() {
       process.env.E2E_PARTICIPANT_EMAIL = fixtures.participant_email;
       process.env.E2E_PARTICIPANT_PASSWORD = fixtures.participant_password;
       process.env.E2E_DONATE_ASSIGNMENT_PATH = fixtures.donate_assignment_path;
+      if (fixtures.test_org_id != null) {
+        process.env.E2E_TEST_ORG_ID = String(fixtures.test_org_id);
+      }
 
       console.log(`[GLOBAL SETUP] Fixtures ready:`);
       console.log(`  Researcher: ${fixtures.researcher_email}`);
