@@ -84,7 +84,7 @@ msgstr "Complete Your Characteristics"
 
 #, elixir-autogen, elixir-format
 msgid "fund.pending_payout.cta"
-msgstr "Open"
+msgstr "Review"
 
 #, elixir-autogen, elixir-format
 msgid "fund.pending_payout.description"

@@ -279,6 +279,26 @@ defmodule Systems.Assignment.PanlParticipantsView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
+        <%= if Enum.any?(@pending_approvals) do %>
+          <div data-testid="pending-approvals-cta">
+            <Systems.NextAction.View.highlight
+              title={
+                dngettext(
+                  "eyra-assignment",
+                  "panl_participants.pending_approvals.title.one",
+                  "panl_participants.pending_approvals.title.other",
+                  length(@pending_approvals),
+                  count: length(@pending_approvals)
+                )
+              }
+              description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
+              cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+              cta_action={%{type: :send, event: "open_payout_modal", target: @myself}}
+            />
+          </div>
+          <.spacing value="XL" />
+        <% end %>
+
         <div class="flex flex-row items-baseline gap-3">
           <Text.title2 margin=""><%= @title %></Text.title2>
           <div class="text-title2 font-title2 text-primary">
@@ -308,26 +328,6 @@ defmodule Systems.Assignment.PanlParticipantsView do
         <Button.dynamic {@add_button} />
 
         <.spacing value="XL" />
-
-        <%= if Enum.any?(@pending_approvals) do %>
-          <div data-testid="pending-approvals-cta">
-            <Systems.NextAction.View.highlight
-              title={
-                dngettext(
-                  "eyra-assignment",
-                  "panl_participants.pending_approvals.title.one",
-                  "panl_participants.pending_approvals.title.other",
-                  length(@pending_approvals),
-                  count: length(@pending_approvals)
-                )
-              }
-              description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
-              cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
-              cta_action={%{type: :send, event: "open_payout_modal", target: @myself}}
-            />
-          </div>
-          <.spacing value="XL" />
-        <% end %>
 
         <%= if @content_flags[:invite_participants] do %>
           <Text.title3><%= dgettext("eyra-assignment", "panl_participants.invite.title") %></Text.title3>

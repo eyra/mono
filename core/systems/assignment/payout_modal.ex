@@ -142,7 +142,7 @@ defmodule Systems.Assignment.PayoutModal do
           </button>
         </div>
       </div>
-      <div class="border-b border-grey4 -mx-9 mb-6" />
+      <div class="border-b border-grey4 mb-6" />
       <%= if @active_tab == :waiting do %>
         <.waiting_tab
           payouts={filter_payouts(@payouts, @search_query)}
@@ -200,7 +200,10 @@ defmodule Systems.Assignment.PayoutModal do
           data-testid="pay-out-all-button"
           class={pay_out_all_class(@count > 0)}
         >
-          <span class="flex items-center justify-center w-5 h-5 rounded-full border border-white text-white text-bodysmall leading-none">
+          <span
+            class="inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-white text-white"
+            style="font-size: 11px; line-height: 1;"
+          >
             €
           </span>
           <span><%= dgettext("eyra-assignment", "payout.pay_out_all.button") %></span>

@@ -656,7 +656,7 @@ msgstr[1] "%{count} pending approvals"
 
 #, elixir-autogen, elixir-format
 msgid "panl_participants.pending_approvals.open.button"
-msgstr "Approve"
+msgstr "Review"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.link"
