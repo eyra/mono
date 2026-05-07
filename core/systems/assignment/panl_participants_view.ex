@@ -310,24 +310,20 @@ defmodule Systems.Assignment.PanlParticipantsView do
         <.spacing value="XL" />
 
         <%= if Enum.any?(@pending_approvals) do %>
-          <Text.title3 testid="pending-approvals-title">
-            <%= dngettext(
-              "eyra-assignment",
-              "panl_participants.pending_approvals.title.one",
-              "panl_participants.pending_approvals.title.other",
-              length(@pending_approvals),
-              count: length(@pending_approvals)
-            ) %>
-          </Text.title3>
-          <.spacing value="S" />
           <div data-testid="pending-approvals-cta">
-            <Button.dynamic
-              action={%{type: :send, event: "open_payout_modal", target: @myself}}
-              face={%{
-                type: :primary,
-                label: dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")
-              }}
-              testid="open-payout-modal-button"
+            <Systems.NextAction.View.highlight
+              title={
+                dngettext(
+                  "eyra-assignment",
+                  "panl_participants.pending_approvals.title.one",
+                  "panl_participants.pending_approvals.title.other",
+                  length(@pending_approvals),
+                  count: length(@pending_approvals)
+                )
+              }
+              description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
+              cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+              cta_action={%{type: :send, event: "open_payout_modal", target: @myself}}
             />
           </div>
           <.spacing value="XL" />

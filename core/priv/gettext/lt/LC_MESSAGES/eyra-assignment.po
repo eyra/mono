@@ -721,3 +721,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.description"
+msgstr ""

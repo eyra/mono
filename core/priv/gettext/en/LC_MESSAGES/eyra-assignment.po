@@ -709,3 +709,7 @@ msgstr "1 page"
 #, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
 msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.description"
+msgstr "Tap to review and pay out completed participants."
