@@ -27,6 +27,7 @@ config :core,
   domain: "localhost",
   name: "Next [local]",
   base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
+  payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
   upload_path: upload_path
 
 config :core, :feldspar_data_donation,
@@ -47,6 +48,8 @@ verify_mode =
     "verify_none" -> :verify_none
     _ -> :verify_peer
   end
+
+config :core, skip_webhook_verification: true
 
 config :core, Core.Repo,
   username: "postgres",
@@ -102,7 +105,9 @@ config :core, Oban,
      crontab: [
        {"*/5 * * * *", Systems.Advert.ExpirationWorker},
        # Clean up old data donation files every hour
-       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}
+       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
+       # Fail pending pay-in transactions older than 15 minutes
+       {"* * * * *", Systems.Budget.PayInExpirationWorker}
      ]}
   ]
 

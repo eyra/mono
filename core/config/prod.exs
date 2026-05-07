@@ -11,8 +11,6 @@ config :core, SurfConext,
   site: "https://connect.test.surfconext.nl",
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 
-config :core, payment_provider: Systems.Payment.Provider.OPP
-
 # SSL is terminated at the proxy (nginx/Fly). force_ssl provides defense-in-depth.
 # Set FORCE_SSL=false at build time to disable (e.g., for Fly.io where health checks use HTTP)
 if System.get_env("FORCE_SSL") != "false" do

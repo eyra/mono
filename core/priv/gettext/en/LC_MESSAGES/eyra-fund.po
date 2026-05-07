@@ -34,14 +34,6 @@ msgstr "Name"
 msgid "funding.title"
 msgstr "Funding"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "funding.budgets.title"
-msgstr "My funds"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "funding.budgets.new.title"
-msgstr "New fund"
-
 #, elixir-autogen, elixir-format
 msgid "fund.create.title"
 msgstr "New fund"
@@ -125,3 +117,11 @@ msgstr "Save"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "fund.default.name"
 msgstr "My first fund"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.funds.new.title"
+msgstr "New fund"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "funding.funds.title"
+msgstr "Funding"

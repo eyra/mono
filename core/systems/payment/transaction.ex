@@ -35,6 +35,7 @@ defmodule Systems.Payment.Transaction do
             contact_person: String.t(),
             study_title: String.t(),
             study_goal: String.t(),
+            aim_of_study: String.t() | nil,
             participant_count: pos_integer(),
             amount_per_participant: pos_integer()
           }
@@ -50,6 +51,7 @@ defmodule Systems.Payment.Transaction do
       :contact_person,
       :study_title,
       :study_goal,
+      :aim_of_study,
       :participant_count,
       :amount_per_participant
     ]
@@ -59,6 +61,8 @@ defmodule Systems.Payment.Transaction do
       metadata
       |> Map.from_struct()
       |> Map.put(:invoice_id, invoice_id)
+      |> Enum.reject(fn {_k, v} -> is_nil(v) or v == "" end)
+      |> Map.new(fn {k, v} -> {k, to_string(v)} end)
     end
   end
 end

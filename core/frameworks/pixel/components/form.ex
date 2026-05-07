@@ -170,7 +170,7 @@ defmodule Frameworks.Pixel.Form do
           name={@field_name}
           value={@field_value}
           placeholder={@placeholder}
-          class={"#{@input_static_class} text-grey3"}
+          class={"#{@input_static_class} text-grey3 border-grey3 bg-grey6"}
           disabled
         />
       <% else %>
@@ -198,11 +198,120 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
+  attr(:label_text, :string, default: nil)
+  attr(:label_color, :string, default: "text-grey1")
+  attr(:background, :atom, default: :light)
+  attr(:reserve_error_space, :boolean, default: true)
+  attr(:debounce, :string, default: "1000")
+  attr(:currencies, :list, default: [:EUR, :USD])
+  attr(:active_currency, :atom, default: :EUR)
+  attr(:placeholder, :string, default: "0.00")
+  attr(:value, :string, default: nil)
+  attr(:disabled, :boolean, default: false)
+  attr(:testid, :string, default: nil)
+
+  def currency_input(%{form: form, field: field} = assigns) do
+    errors = guarded_errors(form, field)
+    field_id = String.to_atom(input_id(form, field))
+    input_id = field_item_id(field_id, @input)
+
+    wrapper_static_class =
+      "#{field_tag(@input)} flex items-center text-grey1 text-bodymedium font-body w-full border-2 border-solid focus-within:outline-none rounded h-44px"
+
+    wrapper_dynamic_class = "border-grey3"
+    active_color = active_input_color(assigns)
+    has_errors = Enum.count(errors) > 0
+
+    assigns =
+      assign(assigns, %{
+        field_id: field_id,
+        field_name: input_name(form, field),
+        field_value: assigns.value || value(form, assigns),
+        target: target(form),
+        input_id: input_id,
+        wrapper_static_class: wrapper_static_class,
+        wrapper_dynamic_class: wrapper_dynamic_class,
+        active_color: active_color,
+        errors: errors,
+        has_errors: has_errors
+      })
+
+    ~H"""
+    <.field
+      field={@field_id}
+      label_text={@label_text}
+      label_color={@label_color}
+      background={@background}
+      reserve_error_space={@reserve_error_space}
+      errors={@errors}
+    >
+      <div
+        class={[@wrapper_static_class, @wrapper_dynamic_class]}
+        __eyra_field_id={@field_id}
+        __eyra_field_has_errors={@has_errors}
+        __eyra_field_static_class={@wrapper_static_class}
+        __eyra_field_active_color={@active_color}
+      >
+        <%= if length(@currencies) > 1 do %>
+          <select
+            name="currency"
+            phx-target={@target}
+            phx-change="save"
+            disabled={@disabled}
+            class={"h-full px-3 text-bodymedium font-body bg-grey6 border-r border-grey3 focus:outline-none shrink-0 #{if @disabled, do: "text-grey3 cursor-not-allowed", else: "text-grey1 cursor-pointer"}"}
+          >
+            <%= for currency <- @currencies do %>
+              <option value={currency} selected={currency == @active_currency}>
+                <%= currency_symbol(currency) %>
+              </option>
+            <% end %>
+          </select>
+        <% else %>
+          <div class="h-full px-3 flex items-center text-grey1 text-bodymedium font-body bg-grey6 border-r border-grey3 shrink-0">
+            <%= currency_symbol(@active_currency) %>
+          </div>
+        <% end %>
+        <%= if @disabled do %>
+          <input
+            type="text"
+            id={@input_id}
+            name={@field_name}
+            value={@field_value}
+            placeholder={@placeholder}
+            class="flex-1 min-w-0 h-full pl-3 bg-transparent border-0 focus:outline-none text-grey3 text-bodymedium font-body"
+            disabled
+          />
+        <% else %>
+          <input
+            type="text"
+            inputmode="decimal"
+            id={@input_id}
+            name={@field_name}
+            value={@field_value}
+            placeholder={@placeholder}
+            phx-target={@target}
+            phx-debounce={@debounce}
+            class="flex-1 min-w-0 h-full pl-3 bg-transparent border-0 focus:outline-none text-grey1 text-bodymedium font-body"
+            data-testid={@testid}
+          />
+        <% end %>
+      </div>
+    </.field>
+    """
+  end
+
+  defp currency_symbol(:EUR), do: "€"
+  defp currency_symbol(:USD), do: "$"
+  defp currency_symbol(currency), do: to_string(currency)
+
+  attr(:form, :any, required: true)
+  attr(:field, :atom, required: true)
   attr(:label_text, :string)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
+  attr(:disabled, :boolean, default: false)
 
   def number_input(assigns) do
     ~H"""
@@ -214,6 +323,7 @@ defmodule Frameworks.Pixel.Form do
       background={@background}
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
+      disabled={@disabled}
       type="number"
     />
     """

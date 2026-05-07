@@ -20,6 +20,13 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, %{uid: uid, status: "active", kyc_level: 0}}
   end
 
+  @impl true
+  def find_merchant_by_email(email) when is_binary(email) do
+    uid = generate_uid()
+    Logger.info("[Payment.Local] find_merchant_by_email email=#{email} uid=#{uid}")
+    {:ok, %{uid: uid, status: "active", kyc_level: 0}}
+  end
+
   # Transactions
 
   @impl true

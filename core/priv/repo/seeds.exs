@@ -72,6 +72,18 @@ _data_donation_promotions =
 #   }
 # end)
 
+# Currency Ledgers
+for currency <- Systems.Budget.CurrencyLedgerModel.currencies() do
+  case Systems.Budget.CurrencyLedgerModel.get_by_currency(currency) do
+    nil ->
+      Systems.Budget.CurrencyLedgerModel.create(currency)
+      |> Core.Repo.insert!()
+
+    _existing ->
+      :ok
+  end
+end
+
 password = "asdf;lkjASDF0987"
 
 member =
