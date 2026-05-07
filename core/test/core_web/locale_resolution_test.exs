@@ -18,6 +18,8 @@ defmodule CoreWeb.LocaleResolutionTest do
                default: "en"
              )
 
+  @session_key Cldr.Plug.PutLocale.session_key()
+
   defp call_plug(conn) do
     conn
     |> Plug.Test.init_test_session(%{})
@@ -27,7 +29,7 @@ defmodule CoreWeb.LocaleResolutionTest do
   describe "Cldr.Plug.PutLocale (browser pipeline config)" do
     test "uses session locale when present" do
       build_conn(:get, "/")
-      |> Plug.Test.init_test_session(%{cldr_locale: "nl"})
+      |> Plug.Test.init_test_session(%{@session_key => "nl"})
       |> Cldr.Plug.PutLocale.call(@plug_opts)
 
       assert "nl" == Gettext.get_locale(CoreWeb.Gettext)
@@ -36,7 +38,7 @@ defmodule CoreWeb.LocaleResolutionTest do
     test "session locale wins over Accept-Language" do
       build_conn(:get, "/")
       |> Plug.Conn.put_req_header("accept-language", "de-DE,de;q=0.9")
-      |> Plug.Test.init_test_session(%{cldr_locale: "nl"})
+      |> Plug.Test.init_test_session(%{@session_key => "nl"})
       |> Cldr.Plug.PutLocale.call(@plug_opts)
 
       assert "nl" == Gettext.get_locale(CoreWeb.Gettext)
