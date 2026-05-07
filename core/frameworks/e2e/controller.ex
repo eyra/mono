@@ -24,9 +24,11 @@ defmodule Frameworks.E2E.Controller do
 
   alias Core.Repo
   alias Systems.Account
+  alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Feldspar
+  alias Systems.Pool
   alias Systems.Storage
 
   @service_email "e2e@eyra.service"
@@ -38,6 +40,25 @@ defmodule Frameworks.E2E.Controller do
   # Feldspar app release for E2E testing
   @feldspar_release_url "https://github.com/eyra/feldspar/releases/download/2026-02-25_5_milestone-6/feldspar_milestone-6_2026-02-25_5.zip"
   @feldspar_filename "feldspar_e2e.zip"
+
+  @doc """
+  Returns the live feature-flag set so E2E test runners can discover
+  which features are enabled and skip tests accordingly.
+
+  Intentionally NOT gated by the :e2e feature flag — the test runner
+  needs to call this BEFORE bootstrap to decide what to do. The
+  feature list itself is not sensitive.
+  """
+  def features(conn, _params) do
+    enabled =
+      :core
+      |> Application.get_env(:features, [])
+      |> Enum.filter(fn {_, on?} -> on? end)
+      |> Enum.map(fn {key, _} -> Atom.to_string(key) end)
+      |> Enum.sort()
+
+    json(conn, %{features: enabled})
+  end
 
   @doc """
   Bootstrap endpoint - creates the E2E service user.
@@ -85,6 +106,7 @@ defmodule Frameworks.E2E.Controller do
       researcher = get_or_create_researcher()
       participant = get_or_create_participant()
       assignment = get_or_create_donate_assignment(researcher)
+      _panl_advert = get_or_create_panl_advert(researcher)
 
       {:ok,
        %{
@@ -151,6 +173,69 @@ defmodule Frameworks.E2E.Controller do
       creator: false,
       confirmed_at: now
     })
+  end
+
+  defp get_or_create_panl_advert(researcher) do
+    case find_e2e_panl_advert() do
+      nil -> create_panl_advert(researcher)
+      advert -> advert
+    end
+  end
+
+  defp find_e2e_panl_advert do
+    import Ecto.Query
+
+    from(a in Advert.Model,
+      join: p in assoc(a, :promotion),
+      where: like(p.title, "E2E PaNL%"),
+      where: a.status == :online,
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  defp create_panl_advert(researcher) do
+    panl_pool = Pool.Assembly.get_or_create_panl()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    promotion = Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study"})
+
+    submission =
+      Core.Factories.insert!(:pool_submission, %{
+        pool: panl_pool,
+        status: :accepted,
+        submitted_at: now
+      })
+
+    info =
+      Core.Factories.insert!(:assignment_info, %{
+        title: "E2E PaNL Test Study",
+        subject_count: 100,
+        duration: "5",
+        language: :en,
+        devices: [:desktop]
+      })
+
+    crew = Core.Factories.insert!(:crew)
+
+    assignment =
+      Core.Factories.insert!(:assignment, %{
+        info: info,
+        crew: crew,
+        status: :online
+      })
+
+    advert =
+      Core.Factories.insert!(:advert, %{
+        promotion: promotion,
+        submission: submission,
+        assignment: assignment,
+        status: :online
+      })
+
+    Core.Authorization.assign_role(researcher, advert, :owner)
+    Logger.info("[E2E] Created published PaNL advert #{advert.id}")
+    advert
   end
 
   defp get_or_create_donate_assignment(researcher) do
