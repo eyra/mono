@@ -858,7 +858,12 @@ defmodule Systems.Assignment.Public do
     |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
-  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user, reason \\ nil) do
+  defp reject_reward(
+         %Multi{} = multi,
+         %Assignment.Model{} = assignment,
+         %User{} = user,
+         reason \\ nil
+       ) do
     idempotence_key = idempotence_key(assignment, user)
 
     multi

@@ -11,7 +11,8 @@ defmodule Systems.Assignment.PayoutPage do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
-    assignment = Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
+    assignment =
+      Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
 
     {:ok,
      socket

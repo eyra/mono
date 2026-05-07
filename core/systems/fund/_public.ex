@@ -337,6 +337,7 @@ defmodule Systems.Fund.Public do
         else
           do_override_rejected(reward)
         end
+
       %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
         do_approve_reward(reward)
     end
