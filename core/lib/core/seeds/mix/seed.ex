@@ -15,6 +15,7 @@ defmodule Mix.Tasks.Seed do
     Mix.Task.run("app.config")
     {:ok, _} = Application.ensure_all_started(:postgrex)
     {:ok, _} = Application.ensure_all_started(:ecto_sql)
+    {:ok, _} = Application.ensure_all_started(:bcrypt_elixir)
     {:ok, _} = Core.Repo.start_link()
 
     Core.Seeds.seed()
