@@ -487,7 +487,8 @@ defmodule Systems.Advert.Public do
   defp validate_funded(%{
          assignment: %{fund: %{currency: %{type: :legal}} = fund},
          submission: %{reward_value: reward_value}
-       }) do
+       })
+       when is_integer(reward_value) and reward_value > 0 do
     if Fund.Model.amount_available(fund) > reward_value do
       :ok
     else
