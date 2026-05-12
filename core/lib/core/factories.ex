@@ -469,10 +469,12 @@ defmodule Core.Factories do
   end
 
   def build(:org_node, %{} = attributes) do
+    {auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {short_name_bundle, attributes} = Map.pop(attributes, :short_name_bundle, build(:text_bundle))
     {full_name_bundle, attributes} = Map.pop(attributes, :full_name_bundle, build(:text_bundle))
 
     %Org.NodeModel{
+      auth_node: auth_node,
       short_name_bundle: short_name_bundle,
       full_name_bundle: full_name_bundle
     }
@@ -805,7 +807,7 @@ defmodule Core.Factories do
       Map.pop(
         attributes,
         :org_node,
-        build(:org_node, %{type: :university, identifier: random_identifier(:org)})
+        build(:org_node, %{identifier: random_identifier(:org)})
       )
 
     %Pool.Model{

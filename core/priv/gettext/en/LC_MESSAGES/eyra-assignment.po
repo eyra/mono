@@ -713,3 +713,11 @@ msgstr "Search"
 #, elixir-autogen, elixir-format
 msgid "panl_participants.pending_approvals.description"
 msgstr "Tap to review and pay out completed participants."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "recruit.panel.title"
+msgstr "Participant invite link"

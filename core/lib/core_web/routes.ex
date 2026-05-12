@@ -23,7 +23,7 @@ defmodule CoreWeb.Routes do
             gettext: CoreWeb.Gettext,
             gettext: Timex.Gettext
           ],
-          from: [:session],
+          from: [:session, :accept_language],
           default: "en"
         )
 

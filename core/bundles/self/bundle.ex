@@ -24,7 +24,7 @@ defmodule Self.Bundle do
   def grants do
     if include?() do
       quote do
-        grant_access(Self.Account.SigninPage, [:visitor, :member])
+        grant_access(Self.Account.SigninPage, [:visitor, :user])
       end
     end
   end

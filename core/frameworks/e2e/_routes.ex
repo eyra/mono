@@ -10,6 +10,10 @@ defmodule Frameworks.E2E.Routes do
       scope "/api/e2e", Frameworks.E2E do
         pipe_through([:api])
 
+        # Public introspection of enabled feature flags — used by E2E test
+        # runners to decide which tests to skip. Not feature-gated.
+        get("/features", Controller, :features)
+
         # Bootstrap creates the service user - no auth required, protected by :e2e feature flag
         post("/bootstrap", Controller, :bootstrap)
       end

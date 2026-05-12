@@ -118,6 +118,7 @@ defmodule Systems.Assignment.TemplateFlagsPerModuleTest do
         :language,
         :advert_in_pool,
         :invite_participants,
+        :recruit_participants,
         :affiliate,
         :language_fixed_nl,
         :paid_slots

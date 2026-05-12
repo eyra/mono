@@ -37,7 +37,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           Assignment.Template.Flags.Participants.new(
             opt_in: [
               :advert_in_pool,
-              :invite_participants,
+              :recruit_participants,
               :paid_slots
             ]
           )

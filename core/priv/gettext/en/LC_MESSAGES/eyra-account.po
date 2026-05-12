@@ -213,3 +213,7 @@ msgstr "Check your email"
 #, elixir-autogen, elixir-format
 msgid "signup.rate_limited"
 msgstr "Too many signup attempts. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "people.add.button"
+msgstr "Add"

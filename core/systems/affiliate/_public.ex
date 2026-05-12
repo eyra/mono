@@ -43,6 +43,11 @@ defmodule Systems.Affiliate.Public do
     get_base_url() <> path
   end
 
+  def recruit_url_for_resource(%resource_type{} = %{id: id}) do
+    path = ~p"/r/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
+    get_base_url() <> path
+  end
+
   def decode_id(id) do
     Affiliate.Sqids.decode!(id)
   end
