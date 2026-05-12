@@ -3,15 +3,25 @@ defmodule Systems.Home.AdvertsView do
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Logo
+  alias Frameworks.Pixel.Text
   alias Systems.Advert
+
+  @max_visible 6
 
   @impl true
   def update(%{title: title, cards: cards}, %{assigns: %{}} = socket) do
     sub_heading_text = dgettext("link-advert", "submission.available.sub_heading")
+    visible_cards = Enum.take(cards, @max_visible)
 
     {
       :ok,
-      socket |> assign(title: title, cards: cards, sub_heading_text: sub_heading_text)
+      socket
+      |> assign(
+        title: title,
+        cards: cards,
+        visible_cards: visible_cards,
+        sub_heading_text: sub_heading_text
+      )
     }
   end
 
@@ -29,9 +39,9 @@ defmodule Systems.Home.AdvertsView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="border-2 border-grey4 rounded p-6">
+    <div class="border-2 border-grey4 rounded p-6" data-testid="adverts">
       <div class="flex flex-col">
-        <div class="flex flex-row">
+        <div class="flex flex-row items-center">
           <Text.title2 margin="">
             <%= @title %>
             <span class="text-primary"> <%= Enum.count(@cards) %></span>
@@ -48,11 +58,11 @@ defmodule Systems.Home.AdvertsView do
           </Text.body>
         </div>
       </div>
-      <%= if not Enum.empty?(@cards) do %>
+      <%= if not Enum.empty?(@visible_cards) do %>
         <.spacing value="M" />
       <% end %>
       <Grid.dynamic>
-        <%= for card <- @cards do %>
+        <%= for card <- @visible_cards do %>
           <Advert.CardView.dynamic card={card} target={@myself}/>
         <% end %>
       </Grid.dynamic>

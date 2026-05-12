@@ -29,3 +29,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.approved"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.rejected"
+msgstr ""

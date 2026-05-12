@@ -125,3 +125,27 @@ msgstr "Nieuw fonds"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "funding.funds.title"
 msgstr "Financiën"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.approved.pill"
+msgstr "Goedgekeurd"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.approved.threshold"
+msgstr "Uitbetalen of doneren is mogelijk vanaf € 5"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.pending.caption"
+msgstr "Wacht op goedkeuring"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.pending.pill"
+msgstr "In afwachting"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.rejected.pill"
+msgstr "Afgekeurd"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.title"
+msgstr "Vergoedingen"

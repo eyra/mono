@@ -62,8 +62,13 @@ defmodule Systems.Home.PageBuilder do
     CoreWeb.Live.Hook.Locale.put_locale("en")
   end
 
-  defp block_keys(%Account.User{}, opts) do
+  defp block_keys(%Account.User{} = user, opts) do
     [:next_best_action]
+    |> append_if(
+      :rewards_summary,
+      feature_enabled?(:panl_post_launch) and Keyword.get(opts, :panl?, false) and
+        not user.creator
+    )
     |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
     |> append_if(
       :participated,
@@ -75,6 +80,19 @@ defmodule Systems.Home.PageBuilder do
     block_keys(model, opts)
     |> Enum.map(&{&1, block(&1, model, assigns, opts)})
     |> Enum.reject(fn {_, map} -> map == nil end)
+  end
+
+  defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
+    case Systems.Fund.Public.summarize_rewards(user) do
+      %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
+        nil
+
+      totals ->
+        %{
+          module: Systems.Home.RewardsSummaryView,
+          params: totals
+        }
+    end
   end
 
   defp block(:next_best_action, %Account.User{} = user, _assigns, _opts) do
@@ -143,34 +161,49 @@ defmodule Systems.Home.PageBuilder do
          %Assignment.Model{
            id: assignment_id,
            crew: crew,
-           info: %{title: title, subtitle: subtitle}
-         },
+           info: %{title: title, subtitle: subtitle, image_id: image_id, subject_reward: reward}
+         } = assignment,
          user
        ) do
-    tasks = Crew.Public.list_tasks_for_user(crew, user)
-    finished? = Crew.Public.tasks_finished?(Enum.map(tasks, & &1.id))
-
-    quick_summary =
-      if finished? do
-        finished_at = most_recent_completed_at(tasks)
-        get_quick_summary(finished_at)
-      else
-        case Crew.Public.get_member(crew, user) do
-          %{inserted_at: timestamp} -> get_quick_summary(timestamp)
-          _ -> ""
-        end
-      end
+    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+    reward_row = Systems.Fund.Public.get_reward(idempotence_key, [])
 
     %{
       path: ~p"/assignment/#{assignment_id}",
-      title: title,
-      subtitle: subtitle,
-      tag: tag(finished?),
-      level: :critical,
-      image: nil,
-      quick_summary: quick_summary
+      title: title || dgettext("eyra-home", "activities.fallback_title"),
+      subtitle: subtitle || activity_quick_summary(crew, user),
+      image_info: image_info(image_id),
+      reward_cents: reward || 0,
+      reward_status: reward_status(reward_row)
     }
   end
+
+  defp activity_quick_summary(crew, user) do
+    tasks = Crew.Public.list_tasks_for_user(crew, user)
+    finished? = Crew.Public.tasks_finished?(Enum.map(tasks, & &1.id))
+
+    if finished? do
+      finished_at = most_recent_completed_at(tasks)
+      get_quick_summary(finished_at)
+    else
+      case Crew.Public.get_member(crew, user) do
+        %{inserted_at: timestamp} -> get_quick_summary(timestamp)
+        _ -> ""
+      end
+    end
+  end
+
+  defp image_info(nil), do: nil
+  defp image_info(image_id), do: Core.ImageHelpers.get_image_info(image_id, 96, 64)
+
+  defp reward_status(%{status: status})
+       when status in [:reserved, :pending_approval],
+       do: :awaiting
+
+  defp reward_status(%{status: :approved}), do: :approved
+  defp reward_status(%{status: :paid}), do: :approved
+  defp reward_status(%{status: :rejected}), do: :rejected
+  defp reward_status(_), do: nil
 
   defp most_recent_completed_at(tasks) do
     Enum.reduce(tasks, nil, fn %{completed_at: completed_at}, acc ->
@@ -184,14 +217,6 @@ defmodule Systems.Home.PageBuilder do
     timestamp
     |> CoreWeb.UI.Timestamp.apply_timezone()
     |> CoreWeb.UI.Timestamp.humanize()
-  end
-
-  defp tag(true) do
-    %{text: dgettext("eyra-crew", "progress.finished.label"), type: :success}
-  end
-
-  defp tag(false) do
-    %{text: dgettext("eyra-crew", "progress.started.label"), type: :warning}
   end
 
   defp to_card(%Advert.Model{} = advert, assigns) do

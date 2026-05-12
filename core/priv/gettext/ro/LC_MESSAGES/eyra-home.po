@@ -39,3 +39,23 @@ msgstr "Studii Panl"
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Dezvoltat pentru și împreună cu cercetătorii"
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.approved"
+msgstr "Contribuții"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.rejected"
+msgstr "Contribuții"

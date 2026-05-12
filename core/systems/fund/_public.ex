@@ -854,6 +854,42 @@ defmodule Systems.Fund.Public do
     )
   end
 
+  @doc """
+  Rolls up a participant's reward situation into three amounts (in cents):
+
+  - `pending_cents` — rewards currently locked in `Fund.pending` awaiting
+    approval (status `:reserved` or `:pending_approval`).
+  - `approved_cents` — money credited to the participant's wallet that they
+    can pay out or donate (sum of all wallet Bookkeeping balances for the
+    user).
+  - `rejected_cents` — rewards the researcher refused (status `:rejected`).
+
+  Used by the home page rewards-summary card.
+  """
+  def summarize_rewards(%Account.User{id: user_id} = user) do
+    totals =
+      from(r in Fund.RewardModel,
+        where: r.user_id == ^user_id,
+        group_by: r.status,
+        select: {r.status, sum(r.amount)}
+      )
+      |> Repo.all()
+      |> Enum.into(%{})
+
+    pending =
+      (Map.get(totals, :reserved) || 0) + (Map.get(totals, :pending_approval) || 0)
+
+    rejected = Map.get(totals, :rejected) || 0
+
+    approved =
+      list_wallets(user)
+      |> Enum.reduce(0, fn account, acc ->
+        acc + Bookkeeping.AccountModel.balance(account)
+      end)
+
+    %{pending_cents: pending, approved_cents: approved, rejected_cents: rejected}
+  end
+
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)
 
