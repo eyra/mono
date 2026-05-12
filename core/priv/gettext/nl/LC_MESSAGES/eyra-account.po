@@ -213,3 +213,15 @@ msgstr "Onboarding"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Maak een account aan"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "people.add.button"
+msgstr ""

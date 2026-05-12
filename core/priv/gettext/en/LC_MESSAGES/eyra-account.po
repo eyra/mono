@@ -215,5 +215,13 @@ msgid "signup.rate_limited"
 msgstr "Too many signup attempts. Please try again later."
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "people.add.button"
 msgstr "Add"

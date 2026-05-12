@@ -223,3 +223,15 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Creează cont"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "people.add.button"
+msgstr "Pe cine doriți să adăugați?"
