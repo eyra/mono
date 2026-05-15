@@ -179,6 +179,14 @@ msgid "panl.privacy.policy.label"
 msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link} van Panl"
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "algemene voorwaarden"
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr "Je moet akkoord gaan met de voorwaarden en het privacybeleid om door te gaan."
 
@@ -213,14 +221,6 @@ msgstr "Onboarding"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Maak een account aan"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"

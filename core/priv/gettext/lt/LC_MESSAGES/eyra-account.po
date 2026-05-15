@@ -189,6 +189,14 @@ msgid "panl.privacy.policy.label"
 msgstr "Sutinku su %{terms_link} ir %{privacy_link} Panl"
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "privatumo politika"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "naudojimo sąlygomis"
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
@@ -223,14 +231,6 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Sukurti paskyrą"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"

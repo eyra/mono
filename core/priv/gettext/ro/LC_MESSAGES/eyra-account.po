@@ -189,6 +189,14 @@ msgid "panl.privacy.policy.label"
 msgstr "Sunt de acord cu %{terms_link} și cu %{privacy_link} ale Panl"
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "politica de confidențialitate"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "termenii și condițiile"
+
+#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
@@ -223,14 +231,6 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Creează cont"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
