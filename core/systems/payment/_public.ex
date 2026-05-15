@@ -25,36 +25,10 @@ defmodule Systems.Payment.Public do
 
   # Transactions
 
-  @spec create_transaction(
-          merchant_uid :: String.t(),
-          total_amount :: pos_integer(),
-          currency :: atom(),
-          invoice_id :: String.t(),
-          idempotence_key :: String.t(),
-          description :: Transaction.Description.t(),
-          metadata :: Transaction.Metadata.t(),
-          opts :: keyword()
-        ) :: {:ok, Provider.transaction()} | {:error, Error.t()}
-  def create_transaction(
-        merchant_uid,
-        total_amount,
-        currency,
-        invoice_id,
-        idempotence_key,
-        description,
-        metadata,
-        opts \\ []
-      ) do
-    provider().create_transaction(
-      merchant_uid,
-      total_amount,
-      currency,
-      invoice_id,
-      idempotence_key,
-      description,
-      metadata,
-      opts
-    )
+  @spec create_transaction(Transaction.Request.t()) ::
+          {:ok, Provider.transaction()} | {:error, Error.t()}
+  def create_transaction(%Transaction.Request{} = request) do
+    provider().create_transaction(request)
   end
 
   @spec get_transaction(uid :: String.t()) :: {:ok, Provider.transaction()} | {:error, Error.t()}
