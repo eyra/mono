@@ -115,10 +115,14 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> click(Query.css("[data-testid='publish-button']"))
     |> assert_has(Query.css("[data-testid='retract-button']"))
 
-    # Navigate to the advert. Wrapped in retry_stale to re-find the button
-    # if its element reference is invalidated between find and action.
-    retry_stale do
+    # Navigate to the advert. The click can race with LiveView DOM morphs;
+    # a stale error after the click typically means the click already fired
+    # and triggered navigation, so swallow it and confirm by waiting for the
+    # advert page's publish button.
+    try do
       researcher_session |> click(Query.css("[data-testid='goto-advert-button']"))
+    rescue
+      Wallaby.StaleReferenceError -> :ok
     end
 
     researcher_session
