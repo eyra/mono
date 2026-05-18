@@ -6,12 +6,9 @@ defmodule Systems.Home.AdvertsView do
   alias Frameworks.Pixel.Text
   alias Systems.Advert
 
-  @max_visible 6
-
   @impl true
   def update(%{title: title, cards: cards}, %{assigns: %{}} = socket) do
     sub_heading_text = dgettext("link-advert", "submission.available.sub_heading")
-    visible_cards = Enum.take(cards, @max_visible)
 
     {
       :ok,
@@ -19,7 +16,6 @@ defmodule Systems.Home.AdvertsView do
       |> assign(
         title: title,
         cards: cards,
-        visible_cards: visible_cards,
         sub_heading_text: sub_heading_text
       )
     }
@@ -58,11 +54,11 @@ defmodule Systems.Home.AdvertsView do
           </Text.body>
         </div>
       </div>
-      <%= if not Enum.empty?(@visible_cards) do %>
+      <%= if not Enum.empty?(@cards) do %>
         <.spacing value="M" />
       <% end %>
       <Grid.dynamic>
-        <%= for card <- @visible_cards do %>
+        <%= for card <- @cards do %>
           <Advert.CardView.dynamic card={card} target={@myself}/>
         <% end %>
       </Grid.dynamic>

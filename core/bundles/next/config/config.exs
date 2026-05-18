@@ -23,7 +23,7 @@ config :core, :features,
   debug_expire_force: false,
   leaderboard: true,
   panl: true,
-  panl_post_launch: true,
+  panl_post_launch: false,
   onyx: false,
   e2e: false
 
