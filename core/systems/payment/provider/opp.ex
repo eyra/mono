@@ -62,16 +62,16 @@ defmodule Systems.Payment.Provider.OPP do
   # Transactions
 
   @impl true
-  def create_transaction(
-        merchant_uid,
-        total_amount,
-        currency,
-        invoice_id,
-        idempotence_key,
-        %Transaction.Description{} = description,
-        %Transaction.Metadata{} = metadata,
-        opts
-      )
+  def create_transaction(%Transaction.Request{
+        merchant_uid: merchant_uid,
+        total_amount: total_amount,
+        currency: currency,
+        invoice_id: invoice_id,
+        idempotence_key: idempotence_key,
+        description: %Transaction.Description{} = description,
+        metadata: %Transaction.Metadata{} = metadata,
+        opts: opts
+      })
       when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
              is_atom(currency) and is_binary(invoice_id) and is_binary(idempotence_key) do
     notify_url = Systems.Payment.Public.webhook_url()

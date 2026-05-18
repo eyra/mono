@@ -56,16 +56,8 @@ defmodule Systems.Payment.Provider do
     * `return_url` - redirect URL after payment completion
     * `notify_url` - webhook URL for transaction status updates
   """
-  @callback create_transaction(
-              merchant_uid :: String.t(),
-              total_amount :: pos_integer(),
-              currency :: atom(),
-              invoice_id :: String.t(),
-              idempotence_key :: String.t(),
-              description :: Transaction.Description.t(),
-              metadata :: Transaction.Metadata.t(),
-              opts :: keyword()
-            ) :: {:ok, transaction()} | {:error, Error.t()}
+  @callback create_transaction(request :: Transaction.Request.t()) ::
+              {:ok, transaction()} | {:error, Error.t()}
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
 
   # Withdrawals
