@@ -247,17 +247,30 @@ defmodule Systems.Org.Public do
   # Owner role management
 
   @doc """
-  Assigns the :owner role to a user for the given organisation.
+  Assigns the :owner role to a user for the given organisation and
+  immediately syncs the AddDomainMembers NextAction so the new owner
+  sees outstanding domain-matched users on their next admin visit
+  without waiting for a registration event.
   """
-  def assign_owner(%Node{} = org, %User{} = user) do
-    auth_module().assign_role(user, org, :owner)
+  def assign_owner(%Node{id: org_id} = org, %User{} = user) do
+    :ok = auth_module().assign_role(user, org, :owner)
+
+    org_id
+    |> get_node!(Node.preload_graph(:full))
+    |> sync_domain_match_next_action(user)
+
+    :ok
   end
 
   @doc """
-  Revokes the :owner role from a user for the given organisation.
+  Revokes the :owner role from a user for the given organisation and
+  clears their AddDomainMembers NextAction for this org, since they
+  are no longer responsible for adding domain-matched members here.
   """
-  def revoke_owner(%Node{} = org, %User{} = user) do
+  def revoke_owner(%Node{id: org_id} = org, %User{} = user) do
     auth_module().remove_role!(user, org, :owner)
+    clear_domain_match_next_action(org_id, user)
+    :ok
   end
 
   @doc """
@@ -396,6 +409,19 @@ defmodule Systems.Org.Public do
         key: "org:#{org_id}"
       )
     end
+  end
+
+  @doc """
+  Clears the AddDomainMembers NextAction for a user on a given org.
+  Used when revoking the :owner role so the action disappears
+  immediately instead of lingering until the next sync pass.
+  """
+  def clear_domain_match_next_action(org_id, %User{} = user) do
+    NextAction.Public.clear_next_action(
+      user,
+      Org.NextActions.AddDomainMembers,
+      key: "org:#{org_id}"
+    )
   end
 
   @doc """
