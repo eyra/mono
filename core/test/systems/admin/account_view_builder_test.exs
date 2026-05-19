@@ -163,4 +163,41 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       assert activate_button.face.label == "Activate"
     end
   end
+
+  describe "view_model/2 capping and bulk filters" do
+    test "caps the rendered users list at 50, but user_count reflects the full match" do
+      # Add a handful of creators so the unfiltered list is well above 50
+      for _ <- 1..60 do
+        Factories.insert!(:member, %{
+          creator: true,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+      end
+
+      vm = AccountViewBuilder.view_model(nil, %{active_filters: [:creator], query: []})
+
+      assert length(vm.users) == 50
+      assert vm.user_count >= 60
+    end
+
+    test ":affiliate filter uses the bulk index and returns affiliate users only" do
+      affiliate =
+        Factories.insert!(:member, %{
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      Factories.insert!(:affiliate_user, %{user: affiliate, identifier: "affiliate_user_test"})
+
+      non_affiliate =
+        Factories.insert!(:member, %{
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      vm = AccountViewBuilder.view_model(nil, %{active_filters: [:affiliate], query: []})
+      emails = Enum.map(vm.users, & &1.email)
+
+      assert affiliate.email in emails
+      refute non_affiliate.email in emails
+    end
+  end
 end
