@@ -181,7 +181,7 @@ if config_env() == :prod do
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
   config :core, Core.SurfConext,
-    redirect_uri: "#{base_url}/surfconext/auth",
+    redirect_uri: "#{base_url}/auth/surfconext/callback",
     site: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")

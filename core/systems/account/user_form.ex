@@ -187,7 +187,7 @@ defmodule Systems.Account.UserForm do
 
   def surfconext_signin(assigns) do
     ~H"""
-      <a href="/surfconext">
+      <a href="/auth/surfconext">
         <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
           <div class="flex w-full justify-center items-center">
             <div>

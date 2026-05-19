@@ -30,3 +30,22 @@ config :core, :features,
 config :core, :meta,
   bundle_title: "Next",
   bundle: :next
+
+config :core, :account,
+  oauth_providers: %{
+    "surfconext" => %{
+      name: "SURFconext",
+      logo: "/images/logos/platforms/surfconext.svg",
+      auth_path: "/auth/surfconext"
+    },
+    "google" => %{
+      name: "Google",
+      logo: "/images/logos/platforms/google.svg",
+      auth_path: "/auth/google"
+    },
+    "centerdata" => %{
+      name: "Centerdata (LISS)",
+      logo: "/images/logos/platforms/centerdata.svg",
+      auth_path: "/centerdata"
+    }
+  }

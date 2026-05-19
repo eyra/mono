@@ -12,12 +12,18 @@ defmodule Frameworks.Pixel.Button do
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
   attr(:enabled?, :boolean, default: true)
+  attr(:full_width, :boolean, default: false)
   attr(:testid, :string, default: nil)
 
   def dynamic(assigns) do
-    # Forward testid to the action so it lands on the actual interactive element
     assigns =
-      assign(assigns, :action, Map.put(assigns.action, :testid, assigns.testid))
+      assigns
+      |> assign(
+        :action,
+        Map.put(assigns.action, :testid, assigns.testid)
+        |> Map.put(:full_width, assigns.full_width)
+      )
+      |> assign(:face, Map.put(assigns.face, :full_width, assigns.full_width))
 
     ~H"""
     <%= if @enabled? do %>
@@ -49,6 +55,7 @@ defmodule Frameworks.Pixel.Button do
   end
 
   attr(:type, :atom, required: true)
+  attr(:full_width, :boolean, default: false)
   slot(:inner_block, required: true)
 
   def action(%{type: type} = assigns) do
@@ -58,7 +65,7 @@ defmodule Frameworks.Pixel.Button do
       })
 
     ~H"""
-    <div class="h-full">
+    <div class={"h-full #{if @full_width, do: "w-full"}"}>
       <div class="flex flex-col h-full justify-center">
         <div class="flex-wrap">
           <.function_component function={@function} props={assigns} >
