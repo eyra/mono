@@ -6,6 +6,7 @@ defmodule Systems.Assignment.PublicTest do
   alias Systems.Crew
   alias Systems.Fund
   alias Systems.Monitor
+  alias Systems.Budget
 
   alias Core.Factories
 
@@ -751,6 +752,36 @@ defmodule Systems.Assignment.PublicTest do
 
       idempotence_key = Assignment.Public.idempotence_key(assignment, user)
       assert nil == Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "resolves currency for pre-fix fund (currency nil, ledger :EUR) without crashing", %{
+      user: user,
+      assignment: %{fund_id: fund_id} = assignment
+    } do
+      eur_ledger = Core.Repo.insert!(Budget.CurrencyLedgerModel.create(:EUR))
+      fund = Fund.Public.get!(fund_id)
+
+      fund
+      |> Ecto.Changeset.change(%{currency_id: nil, currency_ledger_id: eur_ledger.id})
+      |> Core.Repo.update!()
+
+      # The resolved euro currency is :legal, which activates the fund balance
+      # guard; give the fund enough available funds so the deposit succeeds.
+      fund.available
+      |> Ecto.Changeset.change(%{balance_credit: 10_000})
+      |> Core.Repo.update!()
+
+      assignment =
+        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      Assignment.Public.add_participant!(assignment, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+
+      assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
+               Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(deposit_id)
     end
   end
 end

@@ -456,19 +456,15 @@ defmodule Systems.Assignment.Public do
 
   defp reserve_reward!(_assignment, _user), do: :ok
 
-  # Funds created via Assignment.Assembly.prepare_fund only set fund.currency_ledger,
-  # not fund.currency. Resolve the Fund.CurrencyModel via the ledger atom so the
+  # Pre-fix funds (created before fund.currency was persisted) only have
+  # fund.currency_ledger set. Resolve the Fund.CurrencyModel from the ledger
+  # currency atom via the explicit mapping in Fund.Assembly so the
   # bookkeeping/journal code (which expects fund.currency) works on those rows.
   defp ensure_fund_currency(%Fund.Model{currency: %Fund.CurrencyModel{}} = fund), do: fund
 
   defp ensure_fund_currency(%Fund.Model{currency_ledger: %{currency: ledger_currency}} = fund)
        when is_atom(ledger_currency) and not is_nil(ledger_currency) do
-    name = ledger_currency |> Atom.to_string() |> String.downcase()
-
-    case Fund.Public.get_currency_by_name(name) do
-      %Fund.CurrencyModel{} = currency -> %{fund | currency: currency}
-      _ -> fund
-    end
+    %{fund | currency: Fund.Assembly.get_or_create(ledger_currency)}
   end
 
   defp ensure_fund_currency(fund), do: fund

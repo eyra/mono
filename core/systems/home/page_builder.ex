@@ -66,8 +66,7 @@ defmodule Systems.Home.PageBuilder do
     [:next_best_action]
     |> append_if(
       :rewards_summary,
-      feature_enabled?(:panl_post_launch) and Keyword.get(opts, :panl?, false) and
-        not user.creator
+      feature_enabled?(:panl_post_launch) and not user.creator
     )
     |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
     |> append_if(

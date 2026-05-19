@@ -102,8 +102,7 @@ defmodule Systems.Assignment.Assembly do
     }
   end
 
-  defp resolve_fund_currency(:EUR), do: Fund.Assembly.get_or_create_euro()
-  defp resolve_fund_currency(_), do: nil
+  defp resolve_fund_currency(currency), do: Fund.Assembly.get_or_create(currency)
 
   defp prepare_consent_agreement(%{} = auth_node) do
     agreement_auth_node = auth_module().prepare_node(auth_node)
