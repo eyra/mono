@@ -27,6 +27,8 @@ defmodule CoreWeb.Routes do
           default: "en"
         )
 
+        plug(CoreWeb.Plug.PersistLocale)
+
         plug(RemoteIp)
         plug(CoreWeb.Plug.RemoteIp)
 
