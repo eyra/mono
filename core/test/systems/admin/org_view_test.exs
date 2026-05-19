@@ -105,5 +105,32 @@ defmodule Systems.Admin.OrgViewTest do
 
       assert view |> has_element?("[data-testid='org-view']")
     end
+
+    # Regression coverage for FX#9905887344 — the AddDomainMembers banner
+    # on Admin.OrgView must disappear without a manual refresh when the
+    # NextAction is cleared (e.g. because the user's :owner role was
+    # revoked in another session).
+    test "AddDomainMembers banner disappears live when the NextAction is cleared",
+         %{conn: conn, user: user, org: org, context: context} do
+      Systems.NextAction.Public.create_next_action(
+        user,
+        Systems.Org.NextActions.AddDomainMembers,
+        key: "org:#{org.id}",
+        params: %{org_id: org.id, org_name: "Test Org", domains: "test-domain.test"}
+      )
+
+      {:ok, view, html} =
+        live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
+
+      assert html =~ "Manage members"
+
+      Systems.NextAction.Public.clear_next_action(
+        user,
+        Systems.Org.NextActions.AddDomainMembers,
+        key: "org:#{org.id}"
+      )
+
+      refute render(view) =~ "Manage members"
+    end
   end
 end

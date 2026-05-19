@@ -26,6 +26,11 @@ defmodule Systems.Desktop.Page do
   end
 
   @impl true
+  def handle_view_model_updated(socket) do
+    socket |> update_child(:desktop_view)
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
