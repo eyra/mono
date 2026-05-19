@@ -72,10 +72,6 @@ defmodule Systems.Assignment.PayoutModal do
         {:error, reason} ->
           Logger.warning("[PayoutModal] bulk approve failed: #{inspect(reason)}")
           :pay_out_all
-
-        other ->
-          Logger.warning("[PayoutModal] bulk approve unexpected: #{inspect(other)}")
-          :pay_out_all
       end
 
     {:noreply,
