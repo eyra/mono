@@ -30,9 +30,14 @@ defmodule Systems.Org.UserViewBuilder do
       Account.Public.list_creators([:profile])
       |> Enum.reject(&(&1.id in excluded_ids))
 
-    # Find domain-matched users and sync NextAction
+    # Find domain-matched users and sync NextAction (only for users who
+    # are still allowed to manage this org — prevents stale ex-admin
+    # sessions from re-creating NextActions for themselves).
     domain_matched = Org.Public.find_domain_matched_users(domains, members ++ owners)
-    Org.Public.sync_domain_match_next_action(node, current_user, locale)
+
+    if Org.Public.can_manage?(node, current_user) do
+      Org.Public.sync_domain_match_next_action(node, current_user, locale)
+    end
 
     # Build banner for domain-matched users (with specific count)
     domain_banner = build_domain_banner(domain_matched, org_id)

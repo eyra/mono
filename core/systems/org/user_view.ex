@@ -22,28 +22,42 @@ defmodule Systems.Org.UserView do
   end
 
   @impl true
-  def handle_event("add_all_domain_matched", _, %{assigns: %{model: org}} = socket) do
-    members = Org.Public.list_members(org)
-    owners = Org.Public.list_owners(org)
-    domain_matched = Org.Public.find_domain_matched_users(org.domains, members ++ owners)
+  def handle_event("add_all_domain_matched", _, socket) do
+    authorize(socket, fn %{assigns: %{model: org}} = socket ->
+      members = Org.Public.list_members(org)
+      owners = Org.Public.list_owners(org)
+      domain_matched = Org.Public.find_domain_matched_users(org.domains, members ++ owners)
 
-    Enum.each(domain_matched, fn user ->
-      Org.Public.add_member(org, user)
+      Enum.each(domain_matched, fn user ->
+        Org.Public.add_member(org, user)
+      end)
+
+      {:noreply, update_view_model(socket)}
     end)
-
-    {:noreply, update_view_model(socket)}
   end
 
   @impl true
-  def handle_info({:add_user, %{user: user}}, %{assigns: %{model: org}} = socket) do
-    Org.Public.add_member(org, user)
-    {:noreply, update_view_model(socket)}
+  def handle_info({:add_user, %{user: user}}, socket) do
+    authorize(socket, fn %{assigns: %{model: org}} = socket ->
+      Org.Public.add_member(org, user)
+      {:noreply, update_view_model(socket)}
+    end)
   end
 
   @impl true
-  def handle_info({:remove_user, %{user: user}}, %{assigns: %{model: org}} = socket) do
-    Org.Public.remove_member(org, user)
-    {:noreply, update_view_model(socket)}
+  def handle_info({:remove_user, %{user: user}}, socket) do
+    authorize(socket, fn %{assigns: %{model: org}} = socket ->
+      Org.Public.remove_member(org, user)
+      {:noreply, update_view_model(socket)}
+    end)
+  end
+
+  defp authorize(%{assigns: %{model: org, current_user: user}} = socket, fun) do
+    if Org.Public.can_manage?(org, user) do
+      fun.(socket)
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true

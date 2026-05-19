@@ -459,6 +459,21 @@ defmodule Systems.Org.Public do
   alias Systems.Admin
 
   @doc """
+  Returns true when the user is allowed to manage the given organisation
+  (members, settings, domain-matched actions). Mirrors the access rule
+  used by the UI: system admins can manage any org; org owners can
+  manage their own.
+
+  Use this at event-handler boundaries to defend against stale LiveView
+  sessions where a user's role was revoked while the page was still open.
+  """
+  def can_manage?(%Node{} = org, %User{} = user) do
+    Admin.Public.admin?(user) or user.id in Enum.map(list_owners(org), & &1.id)
+  end
+
+  def can_manage?(_, _), do: false
+
+  @doc """
   Syncs NextActions for a specific user across relevant orgs.
   For system admins: syncs all orgs.
   For org owners: syncs only orgs they own.

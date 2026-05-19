@@ -498,6 +498,46 @@ defmodule Systems.Org.PublicTest do
     test "owns_any?/1 returns false for nil" do
       refute Public.owns_any?(nil)
     end
+
+    test "can_manage?/2 returns true for org owner" do
+      user = Factories.insert!(:member)
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_owner_org"]})
+      Core.Authorization.assign_role(user, org, :owner)
+
+      assert Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns false for non-owner non-admin" do
+      user = Factories.insert!(:member, %{email: "outsider@other.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_outsider_org"]})
+
+      refute Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns false after the owner role is revoked" do
+      user = Factories.insert!(:member, %{email: "ex@other.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_revoked_org"]})
+      Core.Authorization.assign_role(user, org, :owner)
+
+      assert Public.can_manage?(org, user)
+
+      Public.revoke_owner(org, user)
+
+      refute Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns true for system admins regardless of org membership" do
+      # System admin patterns are configured via :core, :admins — set one
+      # for the duration of this test so the email matches.
+      original = Application.get_env(:core, :admins, [])
+      Application.put_env(:core, :admins, ["*@admin-can-manage.test"])
+      on_exit(fn -> Application.put_env(:core, :admins, original) end)
+
+      sysadmin = Factories.insert!(:member, %{email: "anyone@admin-can-manage.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_sysadmin_org"]})
+
+      assert Public.can_manage?(org, sysadmin)
+    end
   end
 
   describe "member management" do
