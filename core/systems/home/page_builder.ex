@@ -64,16 +64,15 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block_keys(%Account.User{creator: creator}, opts) do
+    panl? = Keyword.get(opts, :panl?, false)
+
     [:next_best_action]
     |> append_if(
       :rewards_summary,
       feature_enabled?(:panl_post_launch) and creator != true
     )
-    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
-    |> append_if(
-      :participated,
-      feature_enabled?(:panl_post_launch) and Keyword.get(opts, :panl?, false)
-    )
+    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch) and panl?)
+    |> append_if(:participated, feature_enabled?(:panl_post_launch))
   end
 
   defp blocks(model, assigns, opts) do

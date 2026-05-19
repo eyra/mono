@@ -3,6 +3,7 @@ defmodule Systems.Home.PageBuilderTest do
 
   alias Systems.Home
   alias Systems.Pool
+  alias Systems.Assignment
 
   alias Core.Factories
 
@@ -73,6 +74,49 @@ defmodule Systems.Home.PageBuilderTest do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
       refute :rewards_summary in block_keys(vm)
+    end
+  end
+
+  describe "view_model/2 available_adverts (future studies) visibility" do
+    test "non-panl member does not see available_adverts" do
+      user = Factories.insert!(:member, %{creator: false})
+
+      refute Pool.Public.participant?(:panl, user)
+
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      refute :available_adverts in block_keys(vm)
+    end
+
+    test "panl member sees available_adverts" do
+      user = Factories.insert!(:member, %{creator: false})
+      make_panl_participant(user)
+
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert :available_adverts in block_keys(vm)
+    end
+  end
+
+  describe "view_model/2 participated (activities) visibility" do
+    test "non-panl member WITH a participated assignment sees participated" do
+      user = Factories.insert!(:member, %{creator: false})
+      assignment = Assignment.Factories.create_assignment(31, 1)
+      Assignment.Public.add_participant!(assignment, user)
+
+      refute Pool.Public.participant?(:panl, user)
+
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert :participated in block_keys(vm)
+    end
+
+    test "member WITHOUT any participation does not see participated" do
+      user = Factories.insert!(:member, %{creator: false})
+
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      refute :participated in block_keys(vm)
     end
   end
 end

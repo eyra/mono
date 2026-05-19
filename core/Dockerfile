@@ -49,6 +49,8 @@ ENV GIT_COMMIT=$GIT_COMMIT
 ENV MIX_ENV=prod
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+# Gives `bin/core remote` a usable line editor (arrows/history/tab) over SSH.
+ENV TERM=xterm-256color
 
 LABEL org.opencontainers.image.revision=$GIT_COMMIT
 
