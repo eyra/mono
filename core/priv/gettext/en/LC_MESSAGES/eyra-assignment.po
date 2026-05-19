@@ -721,3 +721,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "recruit.panel.title"
 msgstr "Participant invite link"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
+msgstr "Could not decline this pay-out. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr "Some pay-outs could not be processed. Please review and try again."

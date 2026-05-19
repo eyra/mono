@@ -721,3 +721,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "recruit.panel.title"
 msgstr "Panel"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
+msgstr "Deze uitbetaling kon niet worden afgewezen. Probeer het opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr "Sommige uitbetalingen konden niet worden verwerkt. Controleer en probeer opnieuw."

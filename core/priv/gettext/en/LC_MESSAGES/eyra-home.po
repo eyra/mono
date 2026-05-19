@@ -16,7 +16,7 @@ msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Contributions"
+msgstr "Activities"
 
 #, elixir-autogen, elixir-format
 msgid "available.member.title"

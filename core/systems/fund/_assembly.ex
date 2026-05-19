@@ -6,14 +6,8 @@ defmodule Systems.Fund.Assembly do
   alias Systems.Fund
   alias Systems.Content
 
-  # Maps a Budget.CurrencyLedgerModel currency enum (:EUR, :USD) to its
-  # Fund.CurrencyModel spec.
-  #
-  # The ledger uses ISO-style atoms (:EUR/:USD) while Fund.CurrencyModel.name
-  # is a friendly name ("euro"). These are two different naming domains, so the
-  # mapping MUST be explicit here and must never be derived from the atom (e.g.
-  # `Atom.to_string |> downcase`), which would look up "eur" and never find the
-  # "euro" row.
+  # Ledger enum (:EUR) and currency name ("euro") are different naming domains;
+  # the mapping must be explicit, never derived by downcasing the atom.
   @currency_specs %{
     EUR: %{name: "euro", type: :legal, decimal_scale: 2, sign: "€"},
     USD: %{name: "dollar", type: :legal, decimal_scale: 2, sign: "$"}

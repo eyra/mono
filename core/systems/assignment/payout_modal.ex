@@ -3,6 +3,10 @@ defmodule Systems.Assignment.PayoutModal do
   Modal that lets a researcher resolve pending pay-outs for an assignment.
   Composed via `compose_child(:payout_modal) |> show_modal(:payout_modal, :sheet)`.
 
+  All data access, transformation and i18n live in
+  `Systems.Assignment.PayoutModalBuilder`; this component only renders the
+  view model and handles events (delegating mutations to `Assignment.Public`).
+
   Two tabs: `:waiting` (default) lists rewards in `:pending_approval` with
   per-row Decline expansion + bulk "Pay out all"; `:overview` shows historical
   approvals + rejections (UI lands in commit C).
@@ -15,7 +19,7 @@ defmodule Systems.Assignment.PayoutModal do
   alias Frameworks.Pixel.Text
 
   alias Systems.Assignment
-  alias Systems.Crew
+  alias Systems.Assignment.PayoutModalBuilder, as: Builder
 
   @impl true
   def update(%{id: id, assignment_id: assignment_id}, socket) do
@@ -28,44 +32,70 @@ defmodule Systems.Assignment.PayoutModal do
         active_tab: :waiting,
         declining_task_id: nil,
         decline_reason: "",
-        search_query: ""
+        search_query: "",
+        error: nil
       )
-      |> load_assignment()
-      |> load_payouts()
+      |> assign_vm()
     }
+  end
+
+  defp assign_vm(%{assigns: %{assignment_id: assignment_id} = assigns} = socket) do
+    state =
+      Map.take(assigns, [
+        :active_tab,
+        :declining_task_id,
+        :decline_reason,
+        :search_query,
+        :error
+      ])
+
+    assign(socket, vm: Builder.view_model(assignment_id, state))
   end
 
   @impl true
   def handle_event("update_search", %{"value" => query}, socket) do
-    {:noreply, assign(socket, search_query: query)}
+    {:noreply, socket |> assign(search_query: query) |> assign_vm()}
   end
 
   @impl true
   def handle_event("switch_tab", %{"tab" => tab}, socket) do
-    {:noreply, assign(socket, active_tab: String.to_existing_atom(tab))}
+    {:noreply, socket |> assign(active_tab: Builder.resolve_tab(tab)) |> assign_vm()}
   end
 
   @impl true
-  def handle_event("pay_out_all", _, %{assigns: %{assignment: assignment}} = socket) do
-    Assignment.Public.bulk_approve_pending_payouts(assignment)
+  def handle_event("pay_out_all", _, %{assigns: %{vm: %{assignment: assignment}}} = socket) do
+    error =
+      case Assignment.Public.bulk_approve_pending_payouts(assignment) do
+        {:ok, _count} ->
+          nil
+
+        {:error, reason} ->
+          Logger.warning("[PayoutModal] bulk approve failed: #{inspect(reason)}")
+          :pay_out_all
+
+        other ->
+          Logger.warning("[PayoutModal] bulk approve unexpected: #{inspect(other)}")
+          :pay_out_all
+      end
 
     {:noreply,
      socket
-     |> assign(declining_task_id: nil, decline_reason: "")
-     |> load_assignment()
-     |> load_payouts()}
+     |> assign(declining_task_id: nil, decline_reason: "", error: error)
+     |> assign_vm()}
   end
 
   @impl true
   def handle_event("expand_decline", %{"task-id" => task_id}, socket) do
     {:noreply,
      socket
-     |> assign(declining_task_id: String.to_integer(task_id), decline_reason: "")}
+     |> assign(declining_task_id: String.to_integer(task_id), decline_reason: "", error: nil)
+     |> assign_vm()}
   end
 
   @impl true
   def handle_event("cancel_decline", _, socket) do
-    {:noreply, assign(socket, declining_task_id: nil, decline_reason: "")}
+    {:noreply,
+     socket |> assign(declining_task_id: nil, decline_reason: "", error: nil) |> assign_vm()}
   end
 
   @impl true
@@ -79,45 +109,44 @@ defmodule Systems.Assignment.PayoutModal do
         _,
         %{
           assigns: %{
-            assignment: assignment,
+            vm: %{assignment: assignment},
             declining_task_id: task_id,
             decline_reason: reason
           }
         } = socket
       )
       when is_integer(task_id) do
-    task = Crew.Public.get_task!(task_id)
+    {declining_task_id, error} =
+      case Assignment.Public.reject_task_by_id(assignment, task_id, %{
+             category: :other,
+             message: reason
+           }) do
+        {:ok, _} ->
+          {nil, nil}
 
-    case Assignment.Public.reject_task(assignment, task, %{
-           category: :other,
-           message: reason
-         }) do
-      {:ok, _} ->
-        :ok
-
-      error ->
-        Logger.warning("[PayoutModal] reject_task #{task_id} failed: #{inspect(error)}")
-    end
+        error ->
+          Logger.warning("[PayoutModal] reject_task #{task_id} failed: #{inspect(error)}")
+          {task_id, :decline}
+      end
 
     {:noreply,
      socket
-     |> assign(declining_task_id: nil, decline_reason: "")
-     |> load_assignment()
-     |> load_payouts()}
-  end
-
-  defp load_assignment(%{assigns: %{assignment_id: id}} = socket) do
-    assign(socket, assignment: Assignment.Public.get!(id, Assignment.Model.preload_graph(:down)))
-  end
-
-  defp load_payouts(%{assigns: %{assignment: assignment}} = socket) do
-    assign(socket, payouts: Assignment.Public.list_pending_payouts(assignment))
+     |> assign(declining_task_id: declining_task_id, decline_reason: "", error: error)
+     |> assign_vm()}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div data-testid="payout-modal">
+      <%= if @vm.error do %>
+        <div
+          class="mb-6 px-4 py-3 rounded bg-warning text-white text-bodymedium font-body"
+          data-testid="payout-error"
+        >
+          <%= error_message(@vm) %>
+        </div>
+      <% end %>
       <div class="flex justify-center pb-6">
         <div class="inline-flex p-1 rounded-full bg-grey5">
           <button
@@ -126,9 +155,9 @@ defmodule Systems.Assignment.PayoutModal do
             phx-value-tab="waiting"
             phx-target={@myself}
             data-testid="payout-tab-waiting"
-            class={tab_segment_class(@active_tab == :waiting)}
+            class={tab_segment_class(@vm.active_tab == :waiting)}
           >
-            <%= dgettext("eyra-assignment", "payout.tab.waiting") %>
+            <%= @vm.labels.tab_waiting %>
           </button>
           <button
             type="button"
@@ -136,55 +165,48 @@ defmodule Systems.Assignment.PayoutModal do
             phx-value-tab="overview"
             phx-target={@myself}
             data-testid="payout-tab-overview"
-            class={tab_segment_class(@active_tab == :overview)}
+            class={tab_segment_class(@vm.active_tab == :overview)}
           >
-            <%= dgettext("eyra-assignment", "payout.tab.overview") %>
+            <%= @vm.labels.tab_overview %>
           </button>
         </div>
       </div>
       <div class="border-b border-grey4 mb-6" />
-      <%= if @active_tab == :waiting do %>
+      <%= if @vm.active_tab == :waiting do %>
         <.waiting_tab
-          payouts={filter_payouts(@payouts, @search_query)}
-          search_query={@search_query}
-          declining_task_id={@declining_task_id}
-          decline_reason={@decline_reason}
+          payouts={@vm.payouts}
+          count={@vm.count}
+          search_query={@vm.search_query}
+          declining_task_id={@vm.declining_task_id}
+          decline_reason={@vm.decline_reason}
+          labels={@vm.labels}
           myself={@myself}
         />
       <% else %>
-        <.overview_tab assignment={@assignment} />
+        <.overview_tab labels={@vm.labels} />
       <% end %>
     </div>
     """
   end
 
-  defp filter_payouts(payouts, ""), do: payouts
-
-  defp filter_payouts(payouts, query) do
-    needle = String.downcase(query)
-
-    Enum.filter(payouts, fn %{member_public_id: id} ->
-      id
-      |> to_string()
-      |> String.downcase()
-      |> String.contains?(needle)
-    end)
-  end
+  defp error_message(%{error: :pay_out_all, labels: %{pay_out_all_error: msg}}), do: msg
+  defp error_message(%{error: :decline, labels: %{decline_error: msg}}), do: msg
+  defp error_message(%{labels: %{decline_error: msg}}), do: msg
 
   attr(:payouts, :list, required: true)
+  attr(:count, :integer, required: true)
   attr(:search_query, :string, default: "")
   attr(:declining_task_id, :integer, default: nil)
   attr(:decline_reason, :string, default: "")
+  attr(:labels, :map, required: true)
   attr(:myself, :any, required: true)
 
   defp waiting_tab(assigns) do
-    assigns = assign(assigns, count: length(assigns.payouts))
-
     ~H"""
     <div data-testid="payout-waiting-tab">
       <div class="flex items-baseline gap-2 mb-6">
         <Text.title3 margin="">
-          <%= dgettext("eyra-assignment", "payout.waiting.heading") %>
+          <%= @labels.waiting_heading %>
         </Text.title3>
         <span class="text-title3 font-title3 text-primary" data-testid="payout-waiting-count">
           <%= @count %>
@@ -206,7 +228,7 @@ defmodule Systems.Assignment.PayoutModal do
           >
             €
           </span>
-          <span><%= dgettext("eyra-assignment", "payout.pay_out_all.button") %></span>
+          <span><%= @labels.pay_out_all %></span>
         </button>
       </div>
 
@@ -216,7 +238,7 @@ defmodule Systems.Assignment.PayoutModal do
             type="text"
             name="value"
             value={@search_query}
-            placeholder={dgettext("eyra-assignment", "payout.search.placeholder")}
+            placeholder={@labels.search_placeholder}
             class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body focus:outline-none focus:border-primary"
             data-testid="payout-search"
           />
@@ -238,7 +260,7 @@ defmodule Systems.Assignment.PayoutModal do
 
       <%= if @count == 0 do %>
         <div class="text-bodymedium font-body text-grey2 py-8" data-testid="payout-empty">
-          <%= dgettext("eyra-assignment", "payout.waiting.empty") %>
+          <%= @labels.waiting_empty %>
         </div>
       <% else %>
         <div class="flex flex-col">
@@ -247,6 +269,7 @@ defmodule Systems.Assignment.PayoutModal do
               row={row}
               declining?={@declining_task_id == row.task_id}
               decline_reason={@decline_reason}
+              labels={@labels}
               myself={@myself}
             />
           <% end %>
@@ -276,7 +299,7 @@ defmodule Systems.Assignment.PayoutModal do
               </svg>
             </button>
           </div>
-          <span><%= dgettext("eyra-assignment", "payout.pagination.single_page") %></span>
+          <span><%= @labels.pagination_single %></span>
         </div>
       <% end %>
     </div>
@@ -286,6 +309,7 @@ defmodule Systems.Assignment.PayoutModal do
   attr(:row, :map, required: true)
   attr(:declining?, :boolean, default: false)
   attr(:decline_reason, :string, default: "")
+  attr(:labels, :map, required: true)
   attr(:myself, :any, required: true)
 
   defp payout_row(assigns) do
@@ -293,7 +317,7 @@ defmodule Systems.Assignment.PayoutModal do
     <div class="py-3" data-testid={"payout-row-#{@row.task_id}"}>
       <div class="flex items-center justify-between">
         <span class="text-bodymedium font-body">
-          <%= dgettext("eyra-assignment", "payout.subject_label") %>
+          <%= @labels.subject_label %>
           <%= @row.member_public_id || @row.task_id %>
         </span>
         <%= if @declining? do %>
@@ -303,7 +327,7 @@ defmodule Systems.Assignment.PayoutModal do
             class="text-primary cursor-pointer hover:underline"
             data-testid={"cancel-decline-#{@row.task_id}"}
           >
-            <%= dgettext("eyra-ui", "cancel.button") %>
+            <%= @labels.cancel %>
           </a>
         <% else %>
           <a
@@ -313,7 +337,7 @@ defmodule Systems.Assignment.PayoutModal do
             class="text-primary cursor-pointer hover:underline"
             data-testid={"decline-#{@row.task_id}"}
           >
-            <%= dgettext("eyra-assignment", "payout.decline.link") %>
+            <%= @labels.decline_link %>
           </a>
         <% end %>
       </div>
@@ -322,7 +346,7 @@ defmodule Systems.Assignment.PayoutModal do
         <div class="mt-3">
           <form phx-submit="submit_decline" phx-change="update_reason" phx-target={@myself}>
             <label class="block text-bodymedium font-body font-bold mb-1">
-              <%= dgettext("eyra-assignment", "payout.decline.reason.label") %>
+              <%= @labels.decline_reason_label %>
             </label>
             <textarea
               name="reason"
@@ -335,7 +359,7 @@ defmodule Systems.Assignment.PayoutModal do
                 action={%{type: :submit}}
                 face={%{
                   type: :primary,
-                  label: dgettext("eyra-assignment", "payout.decline.submit.button")
+                  label: @labels.decline_submit
                 }}
                 testid={"submit-decline-#{@row.task_id}"}
               />
@@ -347,17 +371,17 @@ defmodule Systems.Assignment.PayoutModal do
     """
   end
 
-  attr(:assignment, :map, required: true)
+  attr(:labels, :map, required: true)
 
   defp overview_tab(assigns) do
     ~H"""
     <div data-testid="payout-overview-tab">
       <Text.title3>
-        <%= dgettext("eyra-assignment", "payout.overview.heading") %>
+        <%= @labels.overview_heading %>
       </Text.title3>
       <.spacing value="S" />
       <Text.body color="text-grey2">
-        <%= dgettext("eyra-assignment", "payout.overview.coming_soon") %>
+        <%= @labels.overview_coming_soon %>
       </Text.body>
     </div>
     """

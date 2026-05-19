@@ -733,3 +733,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "recruit.panel.title"
 msgstr "Dalyvio kvietimo nuoroda"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.decline.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.pay_out_all.error"
+msgstr ""

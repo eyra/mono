@@ -1,8 +1,10 @@
 defmodule Systems.Home.RewardsSummaryView do
   @moduledoc """
-  "Vergoedingen" card on the participant home page. Three columns: awaiting,
-  approved (wallet balance), rejected — each with the amount and a per-status
-  CTA. Bottom-right link opens the payments modal listing all reward history.
+  "Vergoedingen" card on the participant home page. Three columns — pending,
+  approved, rejected — each showing the per-status amount (cents) and a label.
+
+  All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
+  the supplied `labels`.
   """
   use CoreWeb, :live_component
 
@@ -10,14 +12,23 @@ defmodule Systems.Home.RewardsSummaryView do
   alias Systems.Assignment.CurrencyHelpers
 
   @impl true
-  def update(%{pending_cents: p, approved_cents: a, rejected_cents: r}, %{assigns: %{}} = socket) do
+  def update(
+        %{
+          pending_cents: pending_cents,
+          approved_cents: approved_cents,
+          rejected_cents: rejected_cents,
+          labels: labels
+        },
+        socket
+      ) do
     {
       :ok,
       socket
       |> assign(
-        pending_cents: p,
-        approved_cents: a,
-        rejected_cents: r
+        pending_cents: pending_cents,
+        approved_cents: approved_cents,
+        rejected_cents: rejected_cents,
+        labels: labels
       )
     }
   end
@@ -27,25 +38,25 @@ defmodule Systems.Home.RewardsSummaryView do
     ~H"""
     <div class="border-2 border-grey4 rounded p-6" data-testid="rewards-summary">
       <Text.title2 margin="">
-        <%= dgettext("eyra-fund", "rewards_summary.title") %>
+        <%= @labels.title %>
       </Text.title2>
       <.spacing value="M" />
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <.column
-          pill_label={dgettext("eyra-fund", "rewards_summary.pending.pill")}
+          pill_label={@labels.pending_pill}
           pill_color="bg-warning"
           amount_cents={@pending_cents}
-          caption={dgettext("eyra-fund", "rewards_summary.pending.caption")}
+          caption={@labels.pending_caption}
         />
         <.column
-          pill_label={dgettext("eyra-fund", "rewards_summary.approved.pill")}
+          pill_label={@labels.approved_pill}
           pill_color="bg-success"
           amount_cents={@approved_cents}
-          caption={dgettext("eyra-fund", "rewards_summary.approved.threshold")}
+          caption={@labels.approved_caption}
         />
         <.column
-          pill_label={dgettext("eyra-fund", "rewards_summary.rejected.pill")}
+          pill_label={@labels.rejected_pill}
           pill_color="bg-delete"
           amount_cents={@rejected_cents}
         />

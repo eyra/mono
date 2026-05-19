@@ -12,6 +12,7 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Advert
+  alias Systems.Fund
   alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Crew
@@ -62,11 +63,11 @@ defmodule Systems.Home.PageBuilder do
     CoreWeb.Live.Hook.Locale.put_locale("en")
   end
 
-  defp block_keys(%Account.User{} = user, opts) do
+  defp block_keys(%Account.User{creator: creator}, opts) do
     [:next_best_action]
     |> append_if(
       :rewards_summary,
-      feature_enabled?(:panl_post_launch) and not user.creator
+      feature_enabled?(:panl_post_launch) and not creator
     )
     |> append_if(:available_adverts, feature_enabled?(:panl_post_launch))
     |> append_if(
@@ -82,14 +83,14 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
-    case Systems.Fund.Public.summarize_rewards(user) do
+    case Fund.Public.summarize_rewards(user) do
       %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
         nil
 
       totals ->
         %{
-          module: Systems.Home.RewardsSummaryView,
-          params: totals
+          module: Home.RewardsSummaryView,
+          params: Map.put(totals, :labels, rewards_summary_labels())
         }
     end
   end
@@ -118,7 +119,8 @@ defmodule Systems.Home.PageBuilder do
       %{
         module: Home.ParticipatedView,
         params: %{
-          content_items: content_items
+          content_items: content_items,
+          labels: participated_labels()
         }
       }
     end
@@ -156,6 +158,29 @@ defmodule Systems.Home.PageBuilder do
 
   defp block(_, _, _assigns, _opts), do: nil
 
+  defp rewards_summary_labels do
+    %{
+      title: dgettext("eyra-fund", "rewards_summary.title"),
+      pending_pill: dgettext("eyra-fund", "rewards_summary.pending.pill"),
+      pending_caption: dgettext("eyra-fund", "rewards_summary.pending.caption"),
+      approved_pill: dgettext("eyra-fund", "rewards_summary.approved.pill"),
+      approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
+      rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill")
+    }
+  end
+
+  defp participated_labels do
+    %{
+      title: dgettext("eyra-home", "participated.title"),
+      reward_label: dgettext("eyra-home", "participated.reward.label"),
+      status: %{
+        awaiting: dgettext("eyra-home", "participated.status.awaiting"),
+        approved: dgettext("eyra-home", "participated.status.approved"),
+        rejected: dgettext("eyra-home", "participated.status.rejected")
+      }
+    }
+  end
+
   defp to_content_item(
          %Assignment.Model{
            id: assignment_id,
@@ -165,7 +190,7 @@ defmodule Systems.Home.PageBuilder do
          user
        ) do
     idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-    reward_row = Systems.Fund.Public.get_reward(idempotence_key, [])
+    reward_row = Fund.Public.get_reward(idempotence_key, [])
 
     %{
       path: ~p"/assignment/#{assignment_id}",

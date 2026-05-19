@@ -1,28 +1,24 @@
 defmodule Core.Repo.Migrations.AddStatusToFundRewards do
   use Ecto.Migration
 
+  # Non-transactional so the index can build CONCURRENTLY without blocking writes.
+  @disable_ddl_transaction true
+  @disable_migration_lock true
+
   def up do
+    # Constant-default NOT NULL add is metadata-only on PG11+ (no full-scan lock).
     alter table(:fund_rewards) do
-      add(:status, :string)
+      add(:status, :string, null: false, default: "reserved")
     end
 
-    execute("""
-    UPDATE fund_rewards
-    SET status = CASE
-      WHEN payment_id IS NOT NULL THEN 'paid'
-      ELSE 'approved'
-    END
-    """)
+    # Unpaid rewards stay 'reserved' (entry state), not mislabeled 'approved'.
+    execute("UPDATE fund_rewards SET status = 'paid' WHERE payment_id IS NOT NULL")
 
-    alter table(:fund_rewards) do
-      modify(:status, :string, null: false, default: "reserved")
-    end
-
-    create(index(:fund_rewards, [:status]))
+    create(index(:fund_rewards, [:status], concurrently: true))
   end
 
   def down do
-    drop_if_exists(index(:fund_rewards, [:status]))
+    drop_if_exists(index(:fund_rewards, [:status], concurrently: true))
 
     alter table(:fund_rewards) do
       remove(:status)

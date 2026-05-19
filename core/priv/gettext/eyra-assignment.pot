@@ -721,3 +721,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr ""

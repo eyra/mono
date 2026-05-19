@@ -707,6 +707,76 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "summarize_rewards/1" do
+    test "returns all zeros when the user has no rewards" do
+      user = Factories.insert!(:member, %{creator: false})
+
+      assert %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} =
+               Fund.Public.summarize_rewards(user)
+    end
+
+    test "sums :reserved and :pending_approval into pending_cents", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 100,
+        status: :reserved,
+        idempotence_key: "sr-reserved-100-#{System.unique_integer([:positive])}"
+      })
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 250,
+        status: :pending_approval,
+        idempotence_key: "sr-pending-250-#{System.unique_integer([:positive])}"
+      })
+
+      assert %{pending_cents: 350, approved_cents: 0, rejected_cents: 0} =
+               Fund.Public.summarize_rewards(user)
+    end
+
+    test "folds :paid and :approved into approved_cents", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 100,
+        status: :approved,
+        idempotence_key: "sr-approved-100-#{System.unique_integer([:positive])}"
+      })
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 400,
+        status: :paid,
+        idempotence_key: "sr-paid-400-#{System.unique_integer([:positive])}"
+      })
+
+      assert %{pending_cents: 0, approved_cents: 500, rejected_cents: 0} =
+               Fund.Public.summarize_rewards(user)
+    end
+
+    test "sums :rejected into rejected_cents", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 75,
+        status: :rejected,
+        idempotence_key: "sr-rejected-75-#{System.unique_integer([:positive])}"
+      })
+
+      assert %{pending_cents: 0, approved_cents: 0, rejected_cents: 75} =
+               Fund.Public.summarize_rewards(user)
+    end
+  end
+
   describe "reject_reward/2 (multi)" do
     test "composes inside an existing Multi transaction", %{fund: fund} do
       participant = Factories.insert!(:member, %{creator: false})
@@ -729,6 +799,41 @@ defmodule Systems.Fund.PublicTest do
         |> Fund.Public.reject_reward("nonexistent-key")
         |> Core.Repo.commit()
       end
+    end
+
+    test "fails the transaction with :reward_already_approved on an approved reward", %{
+      fund: fund
+    } do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},multi-reject-approved"
+      {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
+      {:ok, _} = Fund.Public.mark_pending_approval(key)
+      {:ok, _} = Fund.Public.approve_reward(key)
+
+      result =
+        Ecto.Multi.new()
+        |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
+        |> Fund.Public.reject_reward(key)
+        |> Core.Repo.commit()
+
+      assert {:error, :reject_guard, :reward_already_approved, _} = result
+      assert %{status: :approved} = Fund.Public.get_reward(key, [])
+    end
+
+    test "is a pass-through no-op on an already-rejected reward", %{fund: fund} do
+      participant = Factories.insert!(:member, %{creator: false})
+      key = "user:#{participant.id},fund:#{fund.id},multi-reject-rejected"
+      {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
+      {:ok, _} = Fund.Public.reject_reward(key)
+
+      result =
+        Ecto.Multi.new()
+        |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
+        |> Fund.Public.reject_reward(key)
+        |> Core.Repo.commit()
+
+      assert {:ok, %{noop: :pre}} = result
+      assert %{status: :rejected} = Fund.Public.get_reward(key, [])
     end
   end
 end

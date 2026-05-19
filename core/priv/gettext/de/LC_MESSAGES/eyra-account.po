@@ -180,14 +180,6 @@ msgid "panl.privacy.policy.label"
 msgstr "Ich stimme den %{terms_link} und der %{privacy_link} von Panl zu"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Datenschutzerklärung"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Allgemeinen Geschäftsbedingungen"
-
-#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr ""
 
@@ -222,6 +214,14 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Datenschutzerklärung"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Allgemeinen Geschäftsbedingungen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
