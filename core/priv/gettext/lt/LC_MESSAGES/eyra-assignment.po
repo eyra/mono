@@ -556,10 +556,6 @@ msgid "budget_form.aim.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.breakdown"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.cancel.button"
 msgstr ""
 
@@ -657,4 +653,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.partner_fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.subtotal.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.total.label"
 msgstr ""

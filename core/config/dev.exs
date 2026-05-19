@@ -116,6 +116,11 @@ config :core,
     "*@eyra.co"
   ]
 
+existing_providers =
+  Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+
+config :core, :account, oauth_providers: existing_providers ++ [:mock]
+
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
   quotas: [

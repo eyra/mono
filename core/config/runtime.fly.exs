@@ -25,9 +25,8 @@ if config_env() == :prod do
 
   # Deployment environment for seed modules. Must be set explicitly on Fly
   # (we only run :dev, :test, :staging on Fly — never :prod).
-  config :core,
-         :deploy_env,
-         System.fetch_env!("DEPLOY_ENV") |> String.to_atom()
+  deploy_env = System.fetch_env!("DEPLOY_ENV") |> String.to_atom()
+  config :core, :deploy_env, deploy_env
 
   # UserCheck email validation API key
   if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
@@ -260,5 +259,12 @@ if config_env() == :prod do
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
     config :core, :service_login, key: service_login_key
+  end
+
+  if deploy_env != :prod do
+    existing_providers =
+      Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+
+    config :core, :account, oauth_providers: existing_providers ++ [:mock]
   end
 end

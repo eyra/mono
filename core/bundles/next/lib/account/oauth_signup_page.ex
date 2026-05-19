@@ -12,22 +12,24 @@ defmodule Next.Account.OAuthSignupPage do
   alias Frameworks.Pixel.Button
 
   defp providers do
-    Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, %{})
+    Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
   end
 
   @impl true
   def mount(%{"provider" => provider}, _session, socket) do
-    case Map.get(providers(), provider) do
-      nil ->
-        {:ok, redirect(socket, to: "/user/signin")}
-
-      %{name: name, logo: logo, auth_path: auth_path} ->
-        {
-          :ok,
-          socket
-          |> assign(provider_name: name, provider_logo: logo, auth_path: auth_path)
-          |> update_menus()
-        }
+    if Enum.any?(providers(), &(Atom.to_string(&1) == provider)) do
+      {
+        :ok,
+        socket
+        |> assign(
+          provider_name: String.capitalize(provider),
+          provider_logo: "/images/logos/platforms/#{provider}.svg",
+          auth_path: "/auth/#{provider}"
+        )
+        |> update_menus()
+      }
+    else
+      {:ok, redirect(socket, to: "/user/signin")}
     end
   end
 

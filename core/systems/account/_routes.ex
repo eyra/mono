@@ -39,6 +39,12 @@ defmodule CoreWeb.Live.User.Routes do
         )
       end
 
+      scope "/auth", Systems.Account.MockOAuth do
+        pipe_through([:browser])
+        get("/mock", InitiatorPlug, [])
+        get("/mock/callback", CallbackController, :authenticate)
+      end
+
       scope "/api/service", Systems.Account do
         pipe_through([:api])
 
