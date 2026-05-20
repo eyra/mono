@@ -1,12 +1,16 @@
-defmodule Systems.Org.UserView do
+defmodule Systems.Org.MemberView do
   @moduledoc """
   Embedded LiveView for managing organisation members.
 
-  Uses PeopleEditorView for the add/remove functionality.
+  Renders a search bar and filter chips (driven by `Org.MemberFilters`)
+  above a reusable `Account.PeopleEditorComponent`, which handles the
+  add/remove flow.
   """
   use CoreWeb, :embedded_live_view
 
   alias Frameworks.Pixel.AlertBanner
+  alias Frameworks.Pixel.SearchBar
+  alias Frameworks.Pixel.Selector
   alias Systems.Account
   alias Systems.Org
 
@@ -18,7 +22,7 @@ defmodule Systems.Org.UserView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket}
+    {:ok, socket |> assign(query_string: "")}
   end
 
   @impl true
@@ -52,6 +56,29 @@ defmodule Systems.Org.UserView do
     end)
   end
 
+  @impl true
+  def handle_info({"active_item_ids", %{active_item_ids: active_filters}}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(active_filters: active_filters)
+      |> update_view_model()
+    }
+  end
+
+  @impl true
+  def consume_event(
+        %{name: :search_query, payload: %{query: query, query_string: query_string}},
+        socket
+      ) do
+    {
+      :stop,
+      socket
+      |> assign(query: query, query_string: query_string)
+      |> update_view_model()
+    }
+  end
+
   defp authorize(%{assigns: %{model: org, current_user: user}} = socket, fun) do
     if Org.Public.can_manage?(org, user) do
       fun.(socket)
@@ -63,7 +90,7 @@ defmodule Systems.Org.UserView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="org-member-view">
       <Area.content>
         <Margin.y id={:page_top} />
 
@@ -72,10 +99,32 @@ defmodule Systems.Org.UserView do
           <.spacing value="M" />
         <% end %>
 
+        <div class="flex flex-row gap-3 items-center">
+          <div class="font-label text-label">Filter:</div>
+          <.live_component
+            module={Selector}
+            id={:org_member_filters}
+            items={@vm.filter_labels}
+            type={:label}
+          />
+          <div class="flex-grow" />
+          <div class="flex-shrink-0">
+            <.live_component
+              module={SearchBar}
+              id={:org_member_search_bar}
+              query_string={@query_string}
+              placeholder={@vm.search_placeholder}
+              debounce="200"
+            />
+          </div>
+        </div>
+        <.spacing value="M" />
+
         <.live_component
           module={Account.PeopleEditorComponent}
           id="members_editor"
           title={@vm.title}
+          total_count={@vm.user_count}
           people={@vm.people}
           users={@vm.users}
           current_user={@current_user}

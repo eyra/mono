@@ -83,7 +83,7 @@ defmodule Systems.Org.ContentPageBuilder do
     element =
       CoreWeb.Live.Element.prepare_live_view(
         "org_user_view_#{node_id}",
-        Org.UserView,
+        Org.MemberView,
         live_context: context
       )
 

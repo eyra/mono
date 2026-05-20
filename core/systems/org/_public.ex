@@ -346,6 +346,35 @@ defmodule Systems.Org.Public do
   end
 
   @doc """
+  Like `list_members/1` but returns `{user, added_at}` tuples where
+  `added_at` is the timestamp at which the `:member` role was granted on
+  the org's auth_node. Used by the Members tab to power the "Recent"
+  filter.
+  """
+  def list_members_with_added_at(%Node{auth_node_id: nil}), do: []
+
+  def list_members_with_added_at(%Node{auth_node_id: auth_node_id}) do
+    rows =
+      from(ra in Core.Authorization.RoleAssignment,
+        join: u in User,
+        on: u.id == ra.principal_id,
+        where: ra.node_id == ^auth_node_id and ra.role == :member,
+        select: {u, ra.inserted_at}
+      )
+      |> Repo.all()
+
+    profiles_by_id =
+      rows
+      |> Enum.map(&elem(&1, 0))
+      |> Repo.preload(:profile)
+      |> Map.new(&{&1.id, &1.profile})
+
+    Enum.map(rows, fn {user, added_at} ->
+      {%{user | profile: Map.get(profiles_by_id, user.id)}, added_at}
+    end)
+  end
+
+  @doc """
   Assigns the :member role to a user for the given organisation.
   Auth roles are the source of truth for membership (Option C pattern).
   """
