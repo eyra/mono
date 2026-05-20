@@ -56,3 +56,9 @@ logfile
 /core/playground.exs
 core/.elixir_ls/*
 .dir-locals.el
+
+# Claude Code local state
+.claude/projects/
+
+# Playwright e2e test results
+core/test/e2e/test-results/
