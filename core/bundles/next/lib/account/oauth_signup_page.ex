@@ -57,7 +57,8 @@ defmodule Next.Account.OAuthSignupPage do
           %{
             action: %{type: :http_get, to: @auth_path},
             face: %{type: :primary, label: dgettext("eyra-next", "oauth.signup.button", identity_provider: @provider_name), bg_color: "bg-grey1", text_color: "text-white"},
-            full_width: true
+            full_width: true,
+            testid: "oauth-signin-button"
           }
         ]} />
       </Area.form>

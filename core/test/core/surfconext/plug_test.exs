@@ -119,6 +119,10 @@ defmodule Core.SurfConext.CallbackController.Test do
     test "creates a user", %{conn: conn} do
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/oauth/onboarding"
+
+      assert [user] = Core.Repo.all(Systems.Account.User)
+      assert user.confirmed_at != nil
+      assert user.creator == true
     end
 
     test "redirects when the changeset is invalid", %{conn: conn, conf: conf} do

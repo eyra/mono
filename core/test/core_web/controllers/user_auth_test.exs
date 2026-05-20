@@ -64,6 +64,52 @@ defmodule Systems.Account.UserAuthTest do
     end
   end
 
+  describe "signed_in_path/1" do
+    test "returns creator_signed_in_page for creators", %{user: user} do
+      user = user |> Map.put(:creator, true)
+      assert UserAuth.signed_in_path(user) == "/project"
+    end
+
+    test "returns member_signed_in_page for non-creators", %{user: user} do
+      user = user |> Map.put(:creator, false)
+      assert UserAuth.signed_in_path(user) == "/"
+    end
+
+    test "returns member_signed_in_page for users without creator field" do
+      assert UserAuth.signed_in_path(%{}) == "/"
+    end
+  end
+
+  describe "sign_out_current_user/1" do
+    test "deletes the user token from session", %{conn: conn, user: user} do
+      user_token = Account.Public.generate_user_session_token(user)
+
+      conn =
+        conn
+        |> put_session(:user_token, user_token)
+        |> UserAuth.sign_out_current_user()
+
+      refute get_session(conn, :user_token)
+    end
+
+    test "does not redirect", %{conn: conn, user: user} do
+      user_token = Account.Public.generate_user_session_token(user)
+
+      conn =
+        conn
+        |> put_session(:user_token, user_token)
+        |> UserAuth.sign_out_current_user()
+
+      refute conn.halted
+      refute Map.has_key?(conn.resp_headers |> Map.new(), "location")
+    end
+
+    test "works on a fresh conn with no session", %{conn: conn} do
+      conn = conn |> UserAuth.sign_out_current_user()
+      refute get_session(conn, :user_token)
+    end
+  end
+
   describe "logout_user/1" do
     test "erases session and cookies", %{conn: conn, user: user} do
       user_token = Account.Public.generate_user_session_token(user)

@@ -56,33 +56,36 @@ defmodule Systems.Account.OAuthOnboardingPage do
     ~H"""
     <.stripped menus={@menus}>
       <Area.form>
-        <Margin.y id={:page_top} />
-        <Margin.y id={:page_top} />
-        <div class="flex justify-center">
-          <img class="h-16" src="/images/logos/products/next_wide.svg" alt="Next">
+        <div data-testid="oauth-onboarding-page">
+          <Margin.y id={:page_top} />
+          <Margin.y id={:page_top} />
+          <div class="flex justify-center">
+            <img class="h-16" src="/images/logos/products/next_wide.svg" alt="Next">
+          </div>
+          <.spacing value="L" />
+          <Text.title2 align="center"><%= dgettext("eyra-account", "oauth.onboarding.title") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_small align="center"><%= dgettext("eyra-account", "oauth.onboarding.body") %></Text.body_small>
+          <.spacing value="M" />
+          <div class="cursor-pointer" phx-click="toggle_terms" data-testid="oauth-onboarding-terms">
+            <SelectorItem.checkbox raw?={true} item={%{
+              value: dgettext("eyra-account", "oauth.onboarding.terms",
+                terms: ~s(<a href="#{@terms_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "terms.link")}</a>),
+                privacy: ~s(<a href="#{@privacy_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "privacy.link")}</a>)
+              ),
+              active: @terms_accepted
+            }} />
+          </div>
+          <.spacing value="M" />
+          <Button.dynamic_bar buttons={[
+            %{
+              action: %{type: :send, event: "continue"},
+              face: %{type: :primary, label: dgettext("eyra-account", "oauth.onboarding.continue.button"), bg_color: "bg-grey1", text_color: "text-white"},
+              full_width: true,
+              testid: "oauth-onboarding-continue"
+            }
+          ]} />
         </div>
-        <.spacing value="L" />
-        <Text.title2 align="center"><%= dgettext("eyra-account", "oauth.onboarding.title") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_small align="center"><%= dgettext("eyra-account", "oauth.onboarding.body") %></Text.body_small>
-        <.spacing value="M" />
-        <div class="cursor-pointer" phx-click="toggle_terms">
-          <SelectorItem.checkbox raw?={true} item={%{
-            value: dgettext("eyra-account", "oauth.onboarding.terms",
-              terms: ~s(<a href="#{@terms_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "terms.link")}</a>),
-              privacy: ~s(<a href="#{@privacy_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "privacy.link")}</a>)
-            ),
-            active: @terms_accepted
-          }} />
-        </div>
-        <.spacing value="M" />
-        <Button.dynamic_bar buttons={[
-          %{
-            action: %{type: :send, event: "continue"},
-            face: %{type: :primary, label: dgettext("eyra-account", "oauth.onboarding.continue.button"), bg_color: "bg-grey1", text_color: "text-white"},
-            full_width: true
-          }
-        ]} />
       </Area.form>
     </.stripped>
     """
