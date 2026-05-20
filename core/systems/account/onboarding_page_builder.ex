@@ -57,7 +57,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
   end
 
   defp build_step_view(:features, _user, live_context) do
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       :features_view,
       Account.FeaturesView,
       live_context: live_context
@@ -72,7 +72,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
         show_top_margin: false
       })
 
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       :profile_view,
       Account.ProfileView,
       live_context: profile_context

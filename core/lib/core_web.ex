@@ -173,6 +173,7 @@ defmodule CoreWeb do
       # Standard embedded LiveView hooks
       on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Locale, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Timezone, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Context, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Language, __MODULE__})

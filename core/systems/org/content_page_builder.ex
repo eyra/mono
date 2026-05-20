@@ -63,7 +63,7 @@ defmodule Systems.Org.ContentPageBuilder do
 
   defp create_tab(:node, %{id: node_id}, %{live_context: context}) do
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "org_node_view_#{node_id}",
         Org.NodeView,
         live_context: context
@@ -81,7 +81,7 @@ defmodule Systems.Org.ContentPageBuilder do
 
   defp create_tab(:users, %{id: node_id}, %{live_context: context}) do
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "org_user_view_#{node_id}",
         Org.UserView,
         live_context: context

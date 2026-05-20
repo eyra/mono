@@ -26,6 +26,20 @@ defmodule Systems.Account.UserProfilePageTest do
       assert html =~ "profile" or html =~ "Profile"
     end
 
+    # Regression coverage for FX#9867397728 — the LiveView mount runs in
+    # a separate process from the HTTP request, so unless the Locale
+    # hook reads the session, pages without their own put_locale call
+    # fall back to English. Iris confirmed `/` rendered NL while
+    # `/user/profile` rendered EN for the same panl-onboarded session.
+    test "honours the session locale on /user/profile", %{conn: conn} do
+      conn = Plug.Conn.put_session(conn, Cldr.Plug.PutLocale.session_key(), "nl")
+
+      {:ok, _view, html} = live(conn, "/user/profile")
+
+      assert html =~ "Mijn profiel"
+      refute html =~ "My profile"
+    end
+
     test "renders profile tab by default", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/profile")
 

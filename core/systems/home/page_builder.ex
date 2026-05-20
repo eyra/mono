@@ -36,7 +36,6 @@ defmodule Systems.Home.PageBuilder do
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
     panl? = Pool.Public.participant?(:panl, user)
-    put_locale(user, panl?)
 
     %{
       hero: %{
@@ -52,14 +51,6 @@ defmodule Systems.Home.PageBuilder do
       blocks: blocks(user, assigns, panl?: panl?),
       include_right_sidepadding?: false
     }
-  end
-
-  defp put_locale(%Systems.Account.User{creator: false}, true) do
-    CoreWeb.Live.Hook.Locale.put_locale("nl")
-  end
-
-  defp put_locale(_, _) do
-    CoreWeb.Live.Hook.Locale.put_locale("en")
   end
 
   defp block_keys(%Account.User{}, opts) do

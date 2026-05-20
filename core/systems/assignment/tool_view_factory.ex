@@ -24,7 +24,7 @@ defmodule Systems.Assignment.ToolViewFactory do
     view_module = tool_model_to_view_module(tool.__struct__)
     task_context = extend_context_for_tool(tool, task_context)
 
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       "tool_view",
       view_module,
       live_context: task_context

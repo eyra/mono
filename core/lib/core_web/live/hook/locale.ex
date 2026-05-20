@@ -1,12 +1,52 @@
 defmodule CoreWeb.Live.Hook.Locale do
-  @moduledoc "A Live Hook that changes the locale of the current process"
+  @moduledoc """
+  Live hook that pins the LiveView process's locale.
+
+  The LiveView mount runs in a separate process from the HTTP request,
+  so neither Cldr.Plug.PutLocale nor the process-level gettext locale
+  from the initial request carries over. Without this hook, every
+  LiveView would inherit the BEAM default (`en`) and any page that
+  doesn't explicitly call `put_locale/1` would render in English even
+  when the session says otherwise.
+
+  Resolution rule:
+    * Creators (researchers) always see English.
+    * Routed views read the locale from the WebSocket session key
+      written by Cldr.Plug.PutLocale / Plug.PersistLocale (or by
+      `user_auth.ex` during panl onboarding).
+    * Embedded views read the locale stamped into their session by
+      `CoreWeb.Live.Element.prepare_live_view/3`, which captures the
+      parent process's locale at the moment the embedded view is
+      prepared.
+    * Falls back to the current Gettext process locale otherwise.
+  """
 
   use Frameworks.Concept.LiveHook
 
   @impl true
-  def mount(_live_view_module, _params, _session, socket) do
-    {:cont, socket |> Phoenix.Component.assign(locale: CoreWeb.Live.Hook.Locale.get_locale())}
+  def mount(_live_view_module, _params, session, socket) do
+    locale = resolve_locale(socket.assigns[:current_user], session)
+    put_locale(locale)
+    {:cont, socket |> Phoenix.Component.assign(locale: locale)}
   end
+
+  defp resolve_locale(%Systems.Account.User{creator: true}, _session), do: "en"
+
+  defp resolve_locale(_user, session) when is_map(session) do
+    cldr_key = Cldr.Plug.PutLocale.session_key()
+
+    locale =
+      Map.get(session, cldr_key) ||
+        Map.get(session, "locale")
+
+    case locale do
+      nil -> get_locale()
+      locale when is_binary(locale) -> locale
+      locale -> to_string(locale)
+    end
+  end
+
+  defp resolve_locale(_user, _session), do: get_locale()
 
   def put_locale(locale) when is_atom(locale), do: put_locale(Atom.to_string(locale))
 

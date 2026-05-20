@@ -20,7 +20,7 @@ defmodule Systems.Account.FeaturesTab do
   @impl true
   def build(_user, live_context) do
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         :features_view,
         Account.FeaturesView,
         live_context: live_context
