@@ -88,7 +88,7 @@ defmodule CoreWeb.Plug.ResolveLocale do
   """
   import Plug.Conn
 
-  @participant_path_prefixes ["/user/signup/participant"]
+  @participant_path_prefixes ["/user/signup/participant", "/user/onboarding"]
 
   def init(opts), do: opts
 
