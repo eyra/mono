@@ -130,7 +130,8 @@ config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
 config :core, CoreWeb.Plug.ResolveLocale,
   browser_locale_path_prefixes: [
     "/user/signup/participant",
-    "/user/onboarding"
+    "/user/onboarding",
+    "/user/profile"
   ]
 
 config :phoenix_inline_svg,
