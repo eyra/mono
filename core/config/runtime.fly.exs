@@ -117,7 +117,7 @@ if config_env() == :prod do
       adapter: Bamboo.MailgunAdapter,
       base_uri: "https://api.eu.mailgun.net/v2",
       api_key: mailgun_api_key,
-      domain: app_domain,
+      domain: app_mail_domain,
       default_from_email: "#{app_name} <#{app_mail_noreply}>",
       hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
