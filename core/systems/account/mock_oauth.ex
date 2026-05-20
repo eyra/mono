@@ -1,20 +1,24 @@
+defmodule Systems.Account.MockOAuth do
+  def configured?() do
+    Application.get_env(:core, :account, [])
+    |> Keyword.get(:oauth_providers, [])
+    |> Enum.member?(:mock)
+  end
+end
+
 defmodule Systems.Account.MockOAuth.InitiatorPlug do
   import Plug.Conn
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if mock_configured?() do
-      Phoenix.Controller.redirect(conn, to: "/auth/mock/callback")
+    if Systems.Account.MockOAuth.configured?() do
+      conn
+      |> Systems.Account.UserAuth.sign_out_current_user()
+      |> Phoenix.Controller.redirect(to: "/auth/mock/callback")
     else
       conn |> send_resp(404, "Not found") |> halt()
     end
-  end
-
-  defp mock_configured?() do
-    Application.get_env(:core, :account, [])
-    |> Keyword.get(:oauth_providers, [])
-    |> Enum.member?(:mock)
   end
 end
 
@@ -26,24 +30,21 @@ defmodule Systems.Account.MockOAuth.CallbackController do
   alias Systems.Account.User
 
   def authenticate(conn, _params) do
-    if mock_configured?() do
-      user = find_or_create_mock_user()
-      Systems.Account.UserAuth.log_in_user(conn, user, false)
+    if Systems.Account.MockOAuth.configured?() do
+      {user, first_time?} = find_or_create_mock_user()
+
+      conn
+      |> Systems.Account.UserAuth.sign_out_current_user()
+      |> Systems.Account.UserAuth.log_in_user(user, first_time?)
     else
       conn |> send_resp(404, "Not found") |> halt()
     end
   end
 
-  defp mock_configured?() do
-    Application.get_env(:core, :account, [])
-    |> Keyword.get(:oauth_providers, [])
-    |> Enum.member?(:mock)
-  end
-
   defp find_or_create_mock_user() do
     case Repo.get_by(User, email: "mock@example.com") do
-      nil -> create_mock_user()
-      user -> user
+      nil -> {create_mock_user(), true}
+      user -> {user, false}
     end
   end
 
@@ -63,5 +64,36 @@ defmodule Systems.Account.MockOAuth.CallbackController do
 
     Frameworks.Signal.Public.dispatch!({:user, :created}, %{user: user})
     user
+  end
+end
+
+defmodule Systems.Account.MockOAuth.ResetController do
+  use Phoenix.Controller, formats: [:html]
+  use CoreWeb, :verified_routes
+
+  import Ecto.Query
+  import Plug.Conn
+
+  alias Core.Repo
+  alias Systems.Account.FeaturesModel
+  alias Systems.Account.User
+
+  def reset(conn, _params) do
+    if Systems.Account.MockOAuth.configured?() do
+      Repo.get_by(User, email: "mock@example.com") |> delete_if_present()
+
+      conn
+      |> Systems.Account.UserAuth.sign_out_current_user()
+      |> redirect(to: ~p"/user/auth/mock")
+    else
+      conn |> send_resp(404, "Not found") |> halt()
+    end
+  end
+
+  defp delete_if_present(nil), do: :ok
+
+  defp delete_if_present(user) do
+    Repo.delete_all(from(f in FeaturesModel, where: f.user_id == ^user.id))
+    Repo.delete!(user)
   end
 end

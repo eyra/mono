@@ -55,12 +55,12 @@ defmodule Systems.Account.UserAuthTest do
       assert max_age == 5_184_000
     end
 
-    test "creator first time redirects to project", %{conn: conn, user: user} do
+    test "creator first time redirects to oauth onboarding", %{conn: conn, user: user} do
       first_time? = true
       user = user |> Map.put(:creator, first_time?)
       conn = conn |> UserAuth.log_in_user(user, true, %{})
 
-      assert redirected_to(conn) == "/project"
+      assert redirected_to(conn) == "/user/oauth/onboarding"
     end
   end
 

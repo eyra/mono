@@ -24,6 +24,7 @@ defmodule CoreWeb.Live.User.Routes do
         live("/user/profile", UserProfilePage)
         live("/user/profile/:tab", UserProfilePage)
         live("/user/onboarding", OnboardingPage)
+        live("/user/oauth/onboarding", OAuthOnboardingPage)
       end
 
       scope "/", Systems.Account do
@@ -43,6 +44,11 @@ defmodule CoreWeb.Live.User.Routes do
         pipe_through([:browser])
         get("/mock", InitiatorPlug, [])
         get("/mock/callback", CallbackController, :authenticate)
+      end
+
+      scope "/user/auth", Systems.Account.MockOAuth do
+        pipe_through([:browser])
+        get("/mock/reset", ResetController, :reset)
       end
 
       scope "/api/service", Systems.Account do

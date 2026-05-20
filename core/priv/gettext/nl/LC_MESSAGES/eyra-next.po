@@ -23,10 +23,14 @@ msgstr "Deelnemer"
 msgid "surfconext.signin.body"
 msgstr "Heeft jouw organisatie toestemming gegeven om in te loggen via SURFconext? Klik dan op de onderstaande knop. Zo niet, gebruik dan jouw e-mailadres en wachtwoord."
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "surfconext.signup.title"
-msgstr "Heeft jouw organisatie toestemming gegeven om in te loggen via SURFconext? Klik dan op de onderstaande knop. Zo niet, gebruik dan jouw e-mailadres en wachtwoord."
+#, elixir-autogen, elixir-format
+msgid "oauth.signup.body"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "surfconext.signup.body"
-msgstr "Heeft jouw organisatie toestemming gegeven om in te loggen via SURFconext? Klik dan op de onderstaande knop. Zo niet, gebruik dan jouw e-mailadres en wachtwoord."
+#, elixir-autogen, elixir-format
+msgid "oauth.signup.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "oauth.signup.title"
+msgstr ""

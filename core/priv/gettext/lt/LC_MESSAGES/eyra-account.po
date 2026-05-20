@@ -232,6 +232,26 @@ msgstr "privatumo politika"
 msgid "privacy.link.terms"
 msgstr "naudojimo sąlygomis"
 
+#, elixir-autogen, elixir-format
+msgid "oauth.onboarding.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "oauth.onboarding.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "oauth.onboarding.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "oauth.onboarding.title"
+msgstr ""
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
 msgstr "Ką norite pridėti?"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "oauth.onboarding.terms.required"
+msgstr ""

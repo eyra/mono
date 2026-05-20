@@ -26,10 +26,13 @@ defmodule Systems.Account.UserAuth do
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
   """
-  def log_in_user(conn, user, _first_time?, params \\ %{}) do
+  def log_in_user(conn, user, first_time?, params \\ %{}) do
     token = Account.Public.generate_user_session_token(user)
 
-    redirect_to = redirect_path_after_signin(conn, user)
+    redirect_to =
+      if first_time?,
+        do: ~p"/user/oauth/onboarding",
+        else: redirect_path_after_signin(conn, user)
 
     conn
     |> renew_session()
@@ -90,11 +93,12 @@ defmodule Systems.Account.UserAuth do
     do: put_session(conn, Cldr.Plug.PutLocale.session_key(), locale)
 
   @doc """
-  Logs the user out.
+  Signs out the current user without redirecting.
 
-  It clears all session data for safety. See renew_session.
+  Broadcasts a disconnect to any active LiveView session, forgets the
+  user (deletes token and remember-me cookie) and renews the session.
   """
-  def log_out_user(conn) do
+  def sign_out_current_user(conn) do
     if live_socket_id = get_session(conn, :live_socket_id) do
       CoreWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
@@ -102,6 +106,16 @@ defmodule Systems.Account.UserAuth do
     conn
     |> forget_user()
     |> renew_session()
+  end
+
+  @doc """
+  Logs the user out.
+
+  It clears all session data for safety. See renew_session.
+  """
+  def log_out_user(conn) do
+    conn
+    |> sign_out_current_user()
     |> redirect(to: ~p"/user/signin")
   end
 
@@ -187,13 +201,13 @@ defmodule Systems.Account.UserAuth do
 
   defp onboarding_path(_), do: nil
 
-  defp signed_in_path(%{creator: false}),
+  def signed_in_path(%{creator: false}),
     do: path(:member_signed_in_page)
 
-  defp signed_in_path(%{creator: true}),
+  def signed_in_path(%{creator: true}),
     do: path(:creator_signed_in_page)
 
-  defp signed_in_path(_user),
+  def signed_in_path(_user),
     do: path(:member_signed_in_page)
 
   defp path(key), do: auth_config(key)

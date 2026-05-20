@@ -31,7 +31,7 @@ defmodule Frameworks.Pixel.Button do
         <.face {@face} />
       </.action>
     <% else %>
-      <div class="opacity-30 cursor-not-allowed" data-testid={@testid}>
+      <div class={"h-full #{if @full_width, do: "w-full"} opacity-30 cursor-not-allowed"} data-testid={@testid}>
         <.face {@face} />
       </div>
     <% end %>
