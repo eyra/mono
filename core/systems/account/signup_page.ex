@@ -213,8 +213,7 @@ defmodule Systems.Account.SignupPage do
 
   defp onboarding_redirect_path("add_to_panl", user) do
     token = Account.OnboardingController.generate_token(user)
-    locale = Gettext.get_locale()
-    ~p"/user/onboarding/start?token=#{token}&locale=#{locale}"
+    ~p"/user/onboarding/start?token=#{token}"
   end
 
   defp onboarding_redirect_path(_, _user) do

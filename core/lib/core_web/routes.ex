@@ -16,6 +16,8 @@ defmodule CoreWeb.Routes do
 
         plug(Systems.Account.Plug)
 
+        plug(CoreWeb.Plug.ResolveLocale)
+
         plug(Cldr.Plug.PutLocale,
           apps: [
             cldr: CoreWeb.Cldr,

@@ -10,43 +10,47 @@ defmodule CoreWeb.Live.Hook.Locale do
   when the session says otherwise.
 
   Resolution rule:
-    * Creators (researchers) always see English.
-    * Routed views read the locale from the WebSocket session key
-      written by Cldr.Plug.PutLocale / Plug.PersistLocale (or by
-      `user_auth.ex` during panl onboarding).
-    * Embedded views read the locale stamped into their session by
-      `CoreWeb.Live.Element.prepare_live_view/3`, which captures the
-      parent process's locale at the moment the embedded view is
-      prepared.
-    * Falls back to the current Gettext process locale otherwise.
+    * Read the locale from the session — written by Cldr.Plug.PutLocale
+      / Plug.PersistLocale for routed views, or stamped by
+      Live.Element.prepare_live_view for embedded views.
+    * Validate it against the configured Cldr set; fall back to English
+      otherwise.
+
+  The user-aware decision (EN unless the request is in participant
+  context) lives entirely in `CoreWeb.Plug.ResolveLocale`; this hook
+  just trusts the session.
   """
 
   use Frameworks.Concept.LiveHook
 
+  @cldr_locales CoreWeb.Cldr.known_locale_names() |> Enum.map(&Atom.to_string/1)
+  @default_locale "en"
+
   @impl true
   def mount(_live_view_module, _params, session, socket) do
-    locale = resolve_locale(socket.assigns[:current_user], session)
+    locale = resolve_locale(session)
     put_locale(locale)
     {:cont, socket |> Phoenix.Component.assign(locale: locale)}
   end
 
-  defp resolve_locale(%Systems.Account.User{creator: true}, _session), do: "en"
+  defp resolve_locale(session) do
+    case session_locale(session) do
+      locale when locale in @cldr_locales -> locale
+      _ -> @default_locale
+    end
+  end
 
-  defp resolve_locale(_user, session) when is_map(session) do
+  defp session_locale(session) when is_map(session) do
     cldr_key = Cldr.Plug.PutLocale.session_key()
 
-    locale =
-      Map.get(session, cldr_key) ||
-        Map.get(session, "locale")
-
-    case locale do
-      nil -> get_locale()
+    case Map.get(session, cldr_key) || Map.get(session, "locale") do
+      nil -> nil
       locale when is_binary(locale) -> locale
       locale -> to_string(locale)
     end
   end
 
-  defp resolve_locale(_user, _session), do: get_locale()
+  defp session_locale(_), do: nil
 
   def put_locale(locale) when is_atom(locale), do: put_locale(Atom.to_string(locale))
 
@@ -60,6 +64,49 @@ defmodule CoreWeb.Live.Hook.Locale do
   def get_locale() do
     Gettext.get_locale()
   end
+end
+
+defmodule CoreWeb.Plug.ResolveLocale do
+  @moduledoc """
+  Forces the session locale to English for any request that is not made
+  in a "participant context", so the rest of the locale pipeline (Cldr,
+  Hook.Locale, Gettext) can simply read the session.
+
+  Participant context covers:
+    * A logged-in participant (`%Account.User{creator: false}`).
+    * The participant signup route (`/user/signup/participant`), where
+      the visitor is anonymous but intends to become a participant and
+      should see the page in their browser language.
+
+  Runs after `Systems.Account.Plug` (which assigns `current_user`) and
+  before `Cldr.Plug.PutLocale` (which reads the session). For
+  participant contexts the session is left untouched so Cldr can keep
+  resolving from session / Accept-Language. For everyone else the
+  session locale is pinned to "en", which keeps the initial HTTP render
+  and the subsequent LiveView mount agreeing on the locale (no
+  EN→non-EN flash for creators / anonymous visitors).
+  """
+  import Plug.Conn
+
+  @participant_path_prefixes ["/user/signup/participant"]
+
+  def init(opts), do: opts
+
+  def call(conn, _opts) do
+    if participant_context?(conn) do
+      conn
+    else
+      put_session(conn, Cldr.Plug.PutLocale.session_key(), "en")
+    end
+  end
+
+  defp participant_context?(%{assigns: %{current_user: %Systems.Account.User{creator: false}}}),
+    do: true
+
+  defp participant_context?(%{request_path: path}) when is_binary(path),
+    do: Enum.any?(@participant_path_prefixes, &String.starts_with?(path, &1))
+
+  defp participant_context?(_), do: false
 end
 
 defmodule CoreWeb.Plug.PersistLocale do

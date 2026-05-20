@@ -10,6 +10,7 @@ defmodule Systems.Account.UserProfilePageTest do
 
     user =
       Factories.insert!(:member, %{
+        creator: false,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       })
 
