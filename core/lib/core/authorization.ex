@@ -37,7 +37,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Account.SignupPage, [:visitor])
   grant_access(Systems.Account.UserProfilePage, [:member])
   grant_access(Systems.Account.OnboardingPage, [:member])
-  grant_access(Systems.Account.OAuthOnboardingPage, [:member])
+  grant_access(Systems.Account.TermsAndPrivacyOnboardingPage, [:member])
   grant_access(Systems.Account.UserSecuritySettings, [:member])
   grant_access(Systems.Account.UserSettings, [:member])
   grant_access(Systems.Account.UserSignin, [:visitor])

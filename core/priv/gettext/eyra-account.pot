@@ -223,25 +223,25 @@ msgid "privacy.link.terms"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "oauth.onboarding.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.continue.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.terms"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "people.add.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "oauth.onboarding.terms.required"
+msgid "terms_and_privacy.onboarding.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
 msgstr ""

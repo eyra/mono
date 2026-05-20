@@ -1,10 +1,10 @@
-defmodule Next.Account.OAuthSignupPageTest do
+defmodule Next.Account.AuthSignupPageTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   setup do
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
 
     on_exit(fn ->
       account = Application.get_env(:core, :account, [])
@@ -12,7 +12,7 @@ defmodule Next.Account.OAuthSignupPageTest do
       Application.put_env(
         :core,
         :account,
-        Keyword.put(account, :oauth_providers, original_providers)
+        Keyword.put(account, :auth_providers, original_providers)
       )
     end)
 
@@ -21,7 +21,7 @@ defmodule Next.Account.OAuthSignupPageTest do
 
   defp set_providers(providers) do
     account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :oauth_providers, providers))
+    Application.put_env(:core, :account, Keyword.put(account, :auth_providers, providers))
   end
 
   describe "rendering" do
@@ -46,14 +46,14 @@ defmodule Next.Account.OAuthSignupPageTest do
   end
 
   describe "unknown provider" do
-    test "redirects to signin when provider not in oauth_providers", %{conn: conn} do
+    test "redirects to signin when provider not in auth_providers", %{conn: conn} do
       set_providers([:surfconext])
 
       assert {:error, {:redirect, %{to: "/user/signin"}}} =
                live(conn, "/user/auth/unknown")
     end
 
-    test "redirects to signin when oauth_providers is empty", %{conn: conn} do
+    test "redirects to signin when auth_providers is empty", %{conn: conn} do
       set_providers([])
 
       assert {:error, {:redirect, %{to: "/user/signin"}}} =

@@ -10,7 +10,7 @@ defmodule Next.Bundle do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", Account.SigninPage)
           live("/user/signin/:user_type", Account.SigninPage)
-          live("/user/auth/:provider", Account.OAuthSignupPage)
+          live("/user/auth/:provider", Account.AuthSignupPage)
           get("/user/session", Account.SessionController, :new)
           post("/user/session", Account.SessionController, :create)
         end
@@ -27,7 +27,7 @@ defmodule Next.Bundle do
     if include?() do
       quote do
         grant_access(Next.Account.SigninPage, [:visitor, :user])
-        grant_access(Next.Account.OAuthSignupPage, [:visitor, :user])
+        grant_access(Next.Account.AuthSignupPage, [:visitor, :user])
       end
     end
   end

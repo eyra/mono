@@ -1,18 +1,18 @@
-defmodule Systems.Account.MockOAuth do
+defmodule Systems.Account.MockAuth do
   def configured?() do
     Application.get_env(:core, :account, [])
-    |> Keyword.get(:oauth_providers, [])
+    |> Keyword.get(:auth_providers, [])
     |> Enum.member?(:mock)
   end
 end
 
-defmodule Systems.Account.MockOAuth.InitiatorPlug do
+defmodule Systems.Account.MockAuth.InitiatorPlug do
   import Plug.Conn
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if Systems.Account.MockOAuth.configured?() do
+    if Systems.Account.MockAuth.configured?() do
       conn
       |> Systems.Account.UserAuth.sign_out_current_user()
       |> Phoenix.Controller.redirect(to: "/auth/mock/callback")
@@ -22,7 +22,7 @@ defmodule Systems.Account.MockOAuth.InitiatorPlug do
   end
 end
 
-defmodule Systems.Account.MockOAuth.CallbackController do
+defmodule Systems.Account.MockAuth.CallbackController do
   use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
 
@@ -30,7 +30,7 @@ defmodule Systems.Account.MockOAuth.CallbackController do
   alias Systems.Account.User
 
   def authenticate(conn, _params) do
-    if Systems.Account.MockOAuth.configured?() do
+    if Systems.Account.MockAuth.configured?() do
       {user, first_time?} = find_or_create_mock_user()
 
       conn
@@ -67,7 +67,7 @@ defmodule Systems.Account.MockOAuth.CallbackController do
   end
 end
 
-defmodule Systems.Account.MockOAuth.ResetController do
+defmodule Systems.Account.MockAuth.ResetController do
   use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
 
@@ -79,7 +79,7 @@ defmodule Systems.Account.MockOAuth.ResetController do
   alias Systems.Account.User
 
   def reset(conn, _params) do
-    if Systems.Account.MockOAuth.configured?() do
+    if Systems.Account.MockAuth.configured?() do
       Repo.get_by(User, email: "mock@example.com") |> delete_if_present()
 
       conn

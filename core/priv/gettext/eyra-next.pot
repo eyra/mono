@@ -24,13 +24,13 @@ msgid "surfconext.signin.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "oauth.signup.body"
+msgid "auth.signup.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "oauth.signup.button"
+msgid "auth.signup.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "oauth.signup.title"
+msgid "auth.signup.title"
 msgstr ""

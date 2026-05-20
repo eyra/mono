@@ -223,25 +223,25 @@ msgid "privacy.link.terms"
 msgstr "Terms of Use"
 
 #, elixir-autogen, elixir-format
-msgid "oauth.onboarding.body"
-msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.continue.button"
-msgstr "Continue"
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.terms"
-msgstr "I agree to the %{terms} and %{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.title"
-msgstr "Welcome"
-
-#, elixir-autogen, elixir-format
 msgid "people.add.button"
 msgstr "Add"
 
-#, elixir-autogen, elixir-format
-msgid "oauth.onboarding.terms.required"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.body"
+msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "I agree to the %{terms} and %{privacy}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms.required"
 msgstr "Please accept the terms and privacy statement to continue."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Welcome"

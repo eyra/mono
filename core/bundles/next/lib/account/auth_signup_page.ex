@@ -1,4 +1,4 @@
-defmodule Next.Account.OAuthSignupPage do
+defmodule Next.Account.AuthSignupPage do
   use CoreWeb, :live_view
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
@@ -12,7 +12,7 @@ defmodule Next.Account.OAuthSignupPage do
   alias Frameworks.Pixel.Button
 
   defp providers do
-    Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+    Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
   end
 
   @impl true
@@ -49,16 +49,16 @@ defmodule Next.Account.OAuthSignupPage do
           <img class="h-16" src={@provider_logo} alt={@provider_name}>
         </div>
         <.spacing value="L" />
-        <Text.title2 align="center"><%= dgettext("eyra-next", "oauth.signup.title") %></Text.title2>
+        <Text.title2 align="center"><%= dgettext("eyra-next", "auth.signup.title") %></Text.title2>
         <.spacing value="M" />
-        <Text.body_small align="center"><%= raw(dgettext("eyra-next", "oauth.signup.body", identity_provider: @provider_name)) %></Text.body_small>
+        <Text.body_small align="center"><%= raw(dgettext("eyra-next", "auth.signup.body", identity_provider: @provider_name)) %></Text.body_small>
         <.spacing value="M" />
         <Button.dynamic_bar buttons={[
           %{
             action: %{type: :http_get, to: @auth_path},
-            face: %{type: :primary, label: dgettext("eyra-next", "oauth.signup.button", identity_provider: @provider_name), bg_color: "bg-grey1", text_color: "text-white"},
+            face: %{type: :primary, label: dgettext("eyra-next", "auth.signup.button", identity_provider: @provider_name), bg_color: "bg-grey1", text_color: "text-white"},
             full_width: true,
-            testid: "oauth-signin-button"
+            testid: "auth-signin-button"
           }
         ]} />
       </Area.form>

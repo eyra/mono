@@ -1,32 +1,32 @@
-defmodule Systems.Account.MockOAuthTest do
+defmodule Systems.Account.MockAuthTest do
   use CoreWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
 
   alias Core.Repo
   alias Systems.Account.FeaturesModel
-  alias Systems.Account.MockOAuth
+  alias Systems.Account.MockAuth
   alias Systems.Account.User
 
   setup do
     isolate_signals()
 
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
 
     on_exit(fn ->
-      put_oauth_providers(original_providers)
+      put_auth_providers(original_providers)
     end)
 
     :ok
   end
 
-  defp put_oauth_providers(providers) do
+  defp put_auth_providers(providers) do
     account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :oauth_providers, providers))
+    Application.put_env(:core, :account, Keyword.put(account, :auth_providers, providers))
   end
 
-  defp enable_mock(), do: put_oauth_providers([:mock])
-  defp disable_mock(), do: put_oauth_providers([])
+  defp enable_mock(), do: put_auth_providers([:mock])
+  defp disable_mock(), do: put_auth_providers([])
 
   defp insert_mock_user() do
     Factories.insert!(:creator, %{
@@ -36,14 +36,14 @@ defmodule Systems.Account.MockOAuthTest do
   end
 
   describe "configured?/0" do
-    test "returns true when :mock is in oauth_providers" do
+    test "returns true when :mock is in auth_providers" do
       enable_mock()
-      assert MockOAuth.configured?()
+      assert MockAuth.configured?()
     end
 
-    test "returns false when :mock is not in oauth_providers" do
+    test "returns false when :mock is not in auth_providers" do
       disable_mock()
-      refute MockOAuth.configured?()
+      refute MockAuth.configured?()
     end
   end
 
@@ -70,7 +70,7 @@ defmodule Systems.Account.MockOAuthTest do
 
       conn = conn |> get("/auth/mock/callback")
 
-      assert redirected_to(conn) == "/user/oauth/onboarding"
+      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
 
       user = Repo.get_by(User, email: "mock@example.com")
       assert user

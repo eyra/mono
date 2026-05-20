@@ -117,9 +117,9 @@ config :core,
   ]
 
 existing_providers =
-  Application.get_env(:core, :account, []) |> Keyword.get(:oauth_providers, [])
+  Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
 
-config :core, :account, oauth_providers: existing_providers ++ [:mock]
+config :core, :account, auth_providers: existing_providers ++ [:mock]
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,

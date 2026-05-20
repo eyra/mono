@@ -1,4 +1,4 @@
-defmodule Systems.Account.OAuthOnboardingPageTest do
+defmodule Systems.Account.TermsAndPrivacyOnboardingPageTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
@@ -14,7 +14,7 @@ defmodule Systems.Account.OAuthOnboardingPageTest do
 
   describe "rendering" do
     test "renders welcome title and terms checkbox", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/user/oauth/onboarding")
+      {:ok, _view, html} = live(conn, "/user/onboarding/terms-and-privacy")
       assert html =~ "Welcome"
       assert html =~ "Terms"
       assert html =~ "Privacy"
@@ -24,7 +24,7 @@ defmodule Systems.Account.OAuthOnboardingPageTest do
 
   describe "toggle_terms event" do
     test "toggles the accepted state", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/oauth/onboarding")
+      {:ok, view, _html} = live(conn, "/user/onboarding/terms-and-privacy")
 
       # Initially unaccepted - clicking continue flashes error
       assert view |> render_click("continue") =~ "Please accept"
@@ -39,12 +39,12 @@ defmodule Systems.Account.OAuthOnboardingPageTest do
 
   describe "continue event" do
     test "flashes error when terms not accepted", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/oauth/onboarding")
+      {:ok, view, _html} = live(conn, "/user/onboarding/terms-and-privacy")
       assert view |> render_click("continue") =~ "Please accept"
     end
 
     test "redirects creator to /project when terms accepted", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/oauth/onboarding")
+      {:ok, view, _html} = live(conn, "/user/onboarding/terms-and-privacy")
       view |> render_click("toggle_terms")
 
       assert {:error, {:live_redirect, %{to: "/project"}}} =
@@ -56,7 +56,7 @@ defmodule Systems.Account.OAuthOnboardingPageTest do
       user = Factories.insert!(:member, %{creator: false})
       {:ok, conn: conn, user: _user} = login(user, %{conn: conn})
 
-      {:ok, view, _html} = live(conn, "/user/oauth/onboarding")
+      {:ok, view, _html} = live(conn, "/user/onboarding/terms-and-privacy")
       view |> render_click("toggle_terms")
 
       assert {:error, {:live_redirect, %{to: "/"}}} =

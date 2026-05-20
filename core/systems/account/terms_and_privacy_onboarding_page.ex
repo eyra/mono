@@ -1,4 +1,4 @@
-defmodule Systems.Account.OAuthOnboardingPage do
+defmodule Systems.Account.TermsAndPrivacyOnboardingPage do
   use CoreWeb, :live_view
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
@@ -43,7 +43,11 @@ defmodule Systems.Account.OAuthOnboardingPage do
   @impl true
   def handle_event("continue", _params, %{assigns: %{terms_accepted: false}} = socket) do
     {:noreply,
-     put_flash(socket, :error, dgettext("eyra-account", "oauth.onboarding.terms.required"))}
+     put_flash(
+       socket,
+       :error,
+       dgettext("eyra-account", "terms_and_privacy.onboarding.terms.required")
+     )}
   end
 
   @impl true
@@ -56,20 +60,20 @@ defmodule Systems.Account.OAuthOnboardingPage do
     ~H"""
     <.stripped menus={@menus}>
       <Area.form>
-        <div data-testid="oauth-onboarding-page">
+        <div data-testid="terms-and-privacy-onboarding-page">
           <Margin.y id={:page_top} />
           <Margin.y id={:page_top} />
           <div class="flex justify-center">
             <img class="h-16" src="/images/logos/products/next_wide.svg" alt="Next">
           </div>
           <.spacing value="L" />
-          <Text.title2 align="center"><%= dgettext("eyra-account", "oauth.onboarding.title") %></Text.title2>
+          <Text.title2 align="center"><%= dgettext("eyra-account", "terms_and_privacy.onboarding.title") %></Text.title2>
           <.spacing value="M" />
-          <Text.body_small align="center"><%= dgettext("eyra-account", "oauth.onboarding.body") %></Text.body_small>
+          <Text.body_small align="center"><%= dgettext("eyra-account", "terms_and_privacy.onboarding.body") %></Text.body_small>
           <.spacing value="M" />
-          <div class="cursor-pointer" phx-click="toggle_terms" data-testid="oauth-onboarding-terms">
+          <div class="cursor-pointer" phx-click="toggle_terms" data-testid="terms-and-privacy-onboarding-terms">
             <SelectorItem.checkbox raw?={true} item={%{
-              value: dgettext("eyra-account", "oauth.onboarding.terms",
+              value: dgettext("eyra-account", "terms_and_privacy.onboarding.terms",
                 terms: ~s(<a href="#{@terms_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "terms.link")}</a>),
                 privacy: ~s(<a href="#{@privacy_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "privacy.link")}</a>)
               ),
@@ -80,9 +84,9 @@ defmodule Systems.Account.OAuthOnboardingPage do
           <Button.dynamic_bar buttons={[
             %{
               action: %{type: :send, event: "continue"},
-              face: %{type: :primary, label: dgettext("eyra-account", "oauth.onboarding.continue.button"), bg_color: "bg-grey1", text_color: "text-white"},
+              face: %{type: :primary, label: dgettext("eyra-account", "terms_and_privacy.onboarding.continue.button"), bg_color: "bg-grey1", text_color: "text-white"},
               full_width: true,
-              testid: "oauth-onboarding-continue"
+              testid: "terms-and-privacy-onboarding-continue"
             }
           ]} />
         </div>
