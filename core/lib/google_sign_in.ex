@@ -32,7 +32,7 @@ defmodule GoogleSignIn do
       profile: %{
         fullname: fullname
       },
-      confirmed_at: NaiveDateTime.utc_now()
+      verified_at: NaiveDateTime.utc_now()
     }
 
     user = User.sso_changeset(%User{}, sso_info)

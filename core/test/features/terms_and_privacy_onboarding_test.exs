@@ -41,14 +41,17 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
     |> assert_has(Query.css("[data-testid='auth-signin-button']"))
     |> click(Query.css("[data-testid='auth-signin-button']"))
     |> assert_has(Query.css("[data-phx-main].phx-connected"))
-    |> assert_has(Query.css("[data-testid='terms-and-privacy-onboarding-page']"))
+    # First step: terms-and-privacy
+    |> assert_has(Query.css("[data-testid='terms-and-privacy-onboarding-terms']"))
     # Continue without accepting terms → flash error
-    |> click(Query.css("[data-testid='terms-and-privacy-onboarding-continue']"))
+    |> click(Query.css("[data-testid='onboarding-continue']"))
     |> assert_has(Query.css("[role='alert']"))
-    # Accept terms and continue
+    # Accept terms and continue → advance to profile step
     |> click(Query.css("[data-testid='terms-and-privacy-onboarding-terms']"))
-    |> click(Query.css("[data-testid='terms-and-privacy-onboarding-continue']"))
-    # Wait for navigation to /project (creator landing) — assert visible text from that page
+    |> click(Query.css("[data-testid='onboarding-continue']"))
+    |> assert_has(Query.css("[data-testid='profile-view']"))
+    # Continue past profile step → land on creator home
+    |> click(Query.css("[data-testid='onboarding-continue']"))
     |> assert_has(Query.text("Start your first project", count: 2))
   end
 end

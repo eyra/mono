@@ -24,7 +24,6 @@ defmodule CoreWeb.Live.User.Routes do
         live("/user/profile", UserProfilePage)
         live("/user/profile/:tab", UserProfilePage)
         live("/user/onboarding", OnboardingPage)
-        live("/user/onboarding/terms-and-privacy", TermsAndPrivacyOnboardingPage)
       end
 
       scope "/", Systems.Account do

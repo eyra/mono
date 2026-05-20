@@ -60,7 +60,7 @@ defmodule Systems.Account.UserAuthTest do
       user = user |> Map.put(:creator, first_time?)
       conn = conn |> UserAuth.log_in_user(user, true, %{})
 
-      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
+      assert redirected_to(conn) == "/user/onboarding"
     end
   end
 

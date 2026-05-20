@@ -55,7 +55,7 @@ defmodule Core.SurfConext do
         fullname: fullname
       },
       creator: true,
-      confirmed_at: NaiveDateTime.utc_now()
+      verified_at: NaiveDateTime.utc_now()
     }
 
     user = User.sso_changeset(%User{}, sso_info)

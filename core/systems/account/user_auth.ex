@@ -31,7 +31,7 @@ defmodule Systems.Account.UserAuth do
 
     redirect_to =
       if first_time?,
-        do: ~p"/user/onboarding/terms-and-privacy",
+        do: ~p"/user/onboarding",
         else: redirect_path_after_signin(conn, user)
 
     conn

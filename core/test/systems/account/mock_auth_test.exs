@@ -62,7 +62,7 @@ defmodule Systems.Account.MockAuthTest do
   end
 
   describe "CallbackController" do
-    test "creates a new mock user with confirmed_at and redirects to oauth onboarding", %{
+    test "creates a new mock user and redirects to onboarding", %{
       conn: conn
     } do
       enable_mock()
@@ -70,12 +70,13 @@ defmodule Systems.Account.MockAuthTest do
 
       conn = conn |> get("/auth/mock/callback")
 
-      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
+      assert redirected_to(conn) == "/user/onboarding"
 
       user = Repo.get_by(User, email: "mock@example.com")
       assert user
       assert user.creator == true
-      assert user.confirmed_at != nil
+      assert user.verified_at != nil
+      assert user.confirmed_at == nil
     end
 
     test "logs in existing mock user and redirects to signed-in page", %{conn: conn} do

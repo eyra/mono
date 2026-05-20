@@ -118,10 +118,11 @@ defmodule Core.SurfConext.CallbackController.Test do
   describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
       conn = conn |> get("/auth/surfconext/callback")
-      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
+      assert redirected_to(conn) == "/user/onboarding"
 
       assert [user] = Core.Repo.all(Systems.Account.User)
-      assert user.confirmed_at != nil
+      assert user.verified_at != nil
+      assert user.confirmed_at == nil
       assert user.creator == true
     end
 
@@ -188,7 +189,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       Application.put_env(:core, Core.SurfConext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
-      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
+      assert redirected_to(conn) == "/user/onboarding"
     end
 
     test "authenticates new student", %{conn: conn, conf: conf} do
@@ -200,7 +201,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       Application.put_env(:core, Core.SurfConext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
-      assert redirected_to(conn) == "/user/onboarding/terms-and-privacy"
+      assert redirected_to(conn) == "/user/onboarding"
     end
 
     test "updates an existing student", %{conn: conn, conf: conf} do

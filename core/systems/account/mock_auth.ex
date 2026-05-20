@@ -54,7 +54,7 @@ defmodule Systems.Account.MockAuth.CallbackController do
       displayname: "Mock User",
       profile: %{fullname: "Mock User"},
       creator: true,
-      confirmed_at: NaiveDateTime.utc_now()
+      verified_at: NaiveDateTime.utc_now()
     }
 
     {:ok, user} =
