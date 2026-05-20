@@ -67,9 +67,9 @@ msgstr ""
 msgid "Signed out successfully"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "account.created.successfully"
-msgstr ""
+msgstr "Paskyra sukurta"
 
 #, elixir-autogen, elixir-format
 msgid "email.changed.successfully"

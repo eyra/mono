@@ -172,33 +172,33 @@ msgstr "Panl"
 msgid "profile.tab.profile.title"
 msgstr "Mano paskyra"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Tęsti"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Pradžia"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Žetonas neteisingas arba pasibaigęs"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Sutinku su %{terms_link} ir %{privacy_link} Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Norėdami tęsti, turite sutikti su privatumo politika"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Sutinku su %{terms_link} ir %{privacy_link} Next"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy.next-policy.required"
-msgstr ""
+msgstr "Norėdami tęsti, turite sutikti su sąlygomis, taisyklėmis ir privatumo politika"
 
 #, elixir-autogen, elixir-format
 msgid "sso.error.generic"
@@ -208,17 +208,17 @@ msgstr ""
 msgid "sso.error.session_not_found"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Išsiuntėme patvirtinimo el. laišką adresu %{email}. Spustelėkite nuorodą, kad aktyvuotumėte savo paskyrą. Tuo tarpu jau galite naršyti tyrimus."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Pradėti naršyti"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "Patikrinkite el. paštą"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
