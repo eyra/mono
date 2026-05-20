@@ -179,14 +179,6 @@ msgid "panl.privacy.policy.label"
 msgstr "I agree to the %{terms_link} and %{privacy_link} of Panl"
 
 #, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Privacy Policy"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Terms of Use"
-
-#, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
 msgstr "You must accept the privacy policy to continue"
 
@@ -221,6 +213,14 @@ msgstr "Check your email"
 #, elixir-autogen, elixir-format
 msgid "signup.rate_limited"
 msgstr "Too many signup attempts. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Privacy Policy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Terms of Use"
 
 #, elixir-autogen, elixir-format
 msgid "people.add.button"

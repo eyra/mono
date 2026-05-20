@@ -545,18 +545,6 @@ msgid "budget_form.aim.label"
 msgstr "Aim of the study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
-msgstr "Subtotal (%{count} × %{reward} reward)"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
-msgstr "Service fee"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.total.label"
-msgstr "Total"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.cancel.button"
 msgstr "Cancel"
 
@@ -655,3 +643,15 @@ msgstr "Share this link on social media or other platforms to recruit participan
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
 msgstr "Recruit participants"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.partner_fee.label"
+msgstr "Service fee"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.subtotal.label"
+msgstr "Subtotal (%{count} × %{reward} reward)"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.total.label"
+msgstr "Total"
