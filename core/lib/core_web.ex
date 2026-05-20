@@ -117,6 +117,7 @@ defmodule CoreWeb do
       # Hooks for routed LiveViews (User must come before UserState)
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})
       on_mount({Frameworks.UserState.LiveHook, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Locale, __MODULE__})
 
       unquote(pixel())
       use Frameworks.Pixel
@@ -142,6 +143,7 @@ defmodule CoreWeb do
       # Hooks for routed LiveViews (User must come before UserState)
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})
       on_mount({Frameworks.UserState.LiveHook, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Locale, __MODULE__})
 
       unquote(pixel())
       use Frameworks.Pixel
