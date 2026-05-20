@@ -15,9 +15,9 @@ msgstr ""
 msgid "confirm.token.email.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.email.label"
-msgstr ""
+msgstr "Correo electrónico"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.password.label"
@@ -27,29 +27,29 @@ msgstr ""
 msgid "password_reset.password_confirmation.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_button"
-msgstr ""
+msgstr "Enviar instrucciones"
 
 #, elixir-autogen, elixir-format
 msgid "password_reset.reset_password_button"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.title"
-msgstr ""
+msgstr "Nueva contraseña"
 
 #, elixir-autogen, elixir-format
 msgid "Invalid email or password"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "register.link"
-msgstr ""
+msgstr "Registrarse"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "reset.link"
-msgstr ""
+msgstr "¿Olvidaste tu contraseña?"
 
 #, elixir-autogen, elixir-format
 msgid "user.password_reset.flash"

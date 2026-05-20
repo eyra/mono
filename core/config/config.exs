@@ -129,7 +129,9 @@ config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
 # everything else is pinned to English. See CoreWeb.Plug.ResolveLocale.
 config :core, CoreWeb.Plug.ResolveLocale,
   browser_locale_path_prefixes: [
-    "/user/signup/participant",
+    "/user/signup",
+    "/user/signin",
+    "/user/reset-password",
     "/user/onboarding",
     "/user/profile"
   ]
