@@ -160,17 +160,17 @@ msgstr "Ar tikrai norite pasitraukti iš šio projekto?"
 msgid "Account activated successfully."
 msgstr "Sąskaita sėkmingai aktyvuota."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
-msgstr ""
+msgstr "Gimimo metai"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
-msgstr ""
+msgstr "Panl"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
-msgstr ""
+msgstr "Mano paskyra"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"

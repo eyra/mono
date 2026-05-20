@@ -146,9 +146,9 @@ msgstr "I am sure"
 msgid "people.confirm_remove.text"
 msgstr "Are you sure you want to remove yourself from this project?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "Account activated successfully."
-msgstr ""
+msgstr "Account activated successfully."
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"

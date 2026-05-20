@@ -118,21 +118,21 @@ msgstr "Account activatie"
 msgid "confirm.button"
 msgstr "Activeer"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.no_match.message"
-msgstr ""
+msgstr "Niemand gevonden met dit e-mailadres."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.placeholder"
-msgstr ""
+msgstr "Zoek op e-mailadres"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
-msgstr ""
+msgstr "Wie wilt u toevoegen?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.alread_added.message"
-msgstr ""
+msgstr "Al toegevoegd"
 
 #, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
@@ -146,9 +146,9 @@ msgstr "Ik weet het zeker"
 msgid "people.confirm_remove.text"
 msgstr "Weet je zeker dat je jezelf uit dit project wilt verwijderen?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "Account activated successfully."
-msgstr ""
+msgstr "Account is geactiveerd."
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
@@ -224,4 +224,4 @@ msgstr "algemene voorwaarden"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
-msgstr ""
+msgstr "Toevoegen"

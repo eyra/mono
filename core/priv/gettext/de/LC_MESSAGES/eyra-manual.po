@@ -11,93 +11,93 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Anmelden"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "chapter.title.label"
-msgstr ""
+msgstr "Titel"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Zur Studie"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "participated.label"
-msgstr ""
+msgstr "Teilgenommen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "Ausstehend"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.manual.button"
-msgstr ""
+msgstr "Handbuch erstellen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
-msgstr ""
+msgstr "Handbuch bearbeiten"
 
 #, elixir-autogen, elixir-format
 msgid "setup.annotation"
 msgstr "<div><h1>Wie richtet man Anweisungen für Teilnehmende ein?</h1><ul><li>Erstellen Sie <strong>Abschnitte</strong>, um die Anweisungen in klare Teile zu gliedern.</li><li>Verwenden Sie <strong>Beschriftungen</strong> für Abschnitte, damit Teilnehmende den relevanten Abschnitt leichter finden.</li><li>Fügen Sie in jedem Abschnitt mehrere kurze <strong>Anweisungen</strong> hinzu.</li><li>Fügen Sie <strong>Bilder</strong> hinzu, damit die Anweisungen leichter nachvollziehbar sind.</li></ul></div>"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "builder.chapter.overview"
-msgstr ""
+msgstr "Abschnitte"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "create.chapter.button"
-msgstr ""
+msgstr "Abschnitt hinzufügen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.default"
-msgstr ""
+msgstr "Neuer Abschnitt"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "chapter.group.label"
-msgstr ""
+msgstr "Bezeichnung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.page.button"
-msgstr ""
+msgstr "Anleitung hinzufügen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.default"
-msgstr ""
+msgstr "Neue Anleitung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.label"
-msgstr ""
+msgstr "Titel"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "page.text.label"
-msgstr ""
+msgstr "Beschreibung"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "choose.image.file"
-msgstr ""
+msgstr "Bild auswählen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "choose.other.image.file"
-msgstr ""
+msgstr "Bild ändern"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "builder.pages.list.title"
-msgstr ""
+msgstr "Anleitungen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.label.first"
-msgstr ""
+msgstr "Abschnittsbezeichnung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.first"
-msgstr ""
+msgstr "Erster Abschnitt"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "page.title.first"
-msgstr ""
+msgstr "Erste Anleitung"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.next.button"
