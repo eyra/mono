@@ -98,7 +98,7 @@ defmodule Systems.Account.ConfirmToken do
             # FIXME: Add lockout logic
             Account.Public.deliver_user_confirmation_instructions(
               user,
-              &~p"/user/confirm/#{&1}"
+              &~p"/user/onboarding/confirm/#{&1}"
             )
 
           user ->

@@ -16,9 +16,9 @@ defmodule CoreWeb.Live.Hook.Locale do
     * Validate it against the configured Cldr set; fall back to English
       otherwise.
 
-  The user-aware decision (EN unless the request is in participant
-  context) lives entirely in `CoreWeb.Plug.ResolveLocale`; this hook
-  just trusts the session.
+  The decision of when to honor the browser locale vs. pin to EN lives
+  entirely in `CoreWeb.Plug.ResolveLocale`; this hook just trusts the
+  session.
   """
 
   use Frameworks.Concept.LiveHook
@@ -68,49 +68,49 @@ end
 
 defmodule CoreWeb.Plug.ResolveLocale do
   @moduledoc """
-  Forces the session locale to English for any request that is not made
-  in a "participant context", so the rest of the locale pipeline (Cldr,
+  Forces the session locale to English unless the request should honor
+  the browser's locale, so the rest of the locale pipeline (Cldr,
   Hook.Locale, Gettext) can simply read the session.
 
-  Participant context covers:
+  Browser locale is honored for:
     * A logged-in participant (`%Account.User{creator: false}`).
-    * The participant signup route (`/user/signup/participant`), where
-      the visitor is anonymous but intends to become a participant and
-      should see the page in their browser language.
+    * Any request whose path starts with a configured prefix in
+      `:browser_locale_path_prefixes` — typically the anonymous signup /
+      onboarding routes where we don't yet know who the user is but they
+      intend to become a participant.
 
   Runs after `Systems.Account.Plug` (which assigns `current_user`) and
-  before `Cldr.Plug.PutLocale` (which reads the session). For
-  participant contexts the session is left untouched so Cldr can keep
-  resolving from session / Accept-Language. For everyone else the
+  before `Cldr.Plug.PutLocale` (which reads the session). When the
+  browser locale is honored the session is left untouched so Cldr can
+  keep resolving from session / Accept-Language. For everyone else the
   session locale is pinned to "en", which keeps the initial HTTP render
   and the subsequent LiveView mount agreeing on the locale (no
   EN→non-EN flash for creators / anonymous visitors).
   """
   import Plug.Conn
 
-  @participant_path_prefixes [
-    "/user/signup/participant",
-    "/user/onboarding",
-    "/user/await-confirmation"
-  ]
+  @browser_locale_path_prefixes Application.compile_env!(
+                                  :core,
+                                  [__MODULE__, :browser_locale_path_prefixes]
+                                )
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if participant_context?(conn) do
+    if honor_browser_locale?(conn) do
       conn
     else
       put_session(conn, Cldr.Plug.PutLocale.session_key(), "en")
     end
   end
 
-  defp participant_context?(%{assigns: %{current_user: %Systems.Account.User{creator: false}}}),
+  defp honor_browser_locale?(%{assigns: %{current_user: %Systems.Account.User{creator: false}}}),
     do: true
 
-  defp participant_context?(%{request_path: path}) when is_binary(path),
-    do: Enum.any?(@participant_path_prefixes, &String.starts_with?(path, &1))
+  defp honor_browser_locale?(%{request_path: path}) when is_binary(path),
+    do: Enum.any?(@browser_locale_path_prefixes, &String.starts_with?(path, &1))
 
-  defp participant_context?(_), do: false
+  defp honor_browser_locale?(_), do: false
 end
 
 defmodule CoreWeb.Plug.PersistLocale do

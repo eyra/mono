@@ -91,7 +91,7 @@ defmodule CoreWeb.Live.User.SignupPage.Test do
         user: %{email: Faker.Internet.email(), password: Factories.valid_user_password()}
       })
 
-      assert_redirect(view, "/user/await-confirmation")
+      assert_redirect(view, "/user/onboarding/await-confirmation")
     end
   end
 end

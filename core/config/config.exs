@@ -125,6 +125,14 @@ config :gettext, default_locale: "en"
 
 config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
 
+# Anonymous requests to these path prefixes keep their browser locale;
+# everything else is pinned to English. See CoreWeb.Plug.ResolveLocale.
+config :core, CoreWeb.Plug.ResolveLocale,
+  browser_locale_path_prefixes: [
+    "/user/signup/participant",
+    "/user/onboarding"
+  ]
+
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"

@@ -2,7 +2,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
   @moduledoc """
   Regression: after registering via `/user/signup/participant`, the
   post-signup landing pages (`/user/onboarding` for PaNL,
-  `/user/await-confirmation` otherwise) should keep the browser locale
+  `/user/onboarding/await-confirmation` otherwise) should keep the browser locale
   (NL) instead of falling back to English.
   """
   use CoreWeb.FeatureCase
@@ -49,7 +49,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
 
   @sessions [[capabilities: @nl_capabilities]]
   @tag :feature
-  feature "participant signup keeps browser locale on /user/await-confirmation", %{
+  feature "participant signup keeps browser locale on /user/onboarding/await-confirmation", %{
     session: session
   } do
     password = Factories.valid_user_password()
