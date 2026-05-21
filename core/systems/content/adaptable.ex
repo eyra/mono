@@ -169,13 +169,15 @@ defmodule Systems.Content.Adaptable do
   defp single_layout(assigns) do
     ~H"""
     <div>
-      <.item_content socket={@socket} item={@item} />
-      <%= if Enum.any?(@toolbar_buttons) do %>
-        <.spacing value="L" />
-        <div class="flex justify-center">
-          <Button.dynamic_bar buttons={@toolbar_buttons} />
-        </div>
-      <% end %>
+      <Area.content>
+        <.item_content socket={@socket} item={@item} />
+        <%= if Enum.any?(@toolbar_buttons) do %>
+          <.spacing value="L" />
+          <div class="flex justify-center">
+            <Button.dynamic_bar buttons={@toolbar_buttons} />
+          </div>
+        <% end %>
+      </Area.content>
     </div>
     """
   end
@@ -208,7 +210,9 @@ defmodule Systems.Content.Adaptable do
         preserve_tab_in_url={true}
       />
     </Navigation.action_bar>
-    <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
+    <Area.content>
+      <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
+    </Area.content>
     """
   end
 
@@ -291,7 +295,9 @@ defmodule Systems.Content.Adaptable do
           <.add_button creatables={@creatables} />
         <% end %>
       </div>
-      <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
+      <Area.content>
+        <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
+      </Area.content>
     </div>
     """
   end
