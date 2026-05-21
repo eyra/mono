@@ -32,8 +32,8 @@ defmodule Systems.Account.UserProfilePageTest do
     # hook reads the session, pages without their own put_locale call
     # fall back to English. Iris confirmed `/` rendered NL while
     # `/user/profile` rendered EN for the same panl-onboarded session.
-    test "honours the session locale on /user/profile", %{conn: conn} do
-      conn = Plug.Conn.put_session(conn, Cldr.Plug.PutLocale.session_key(), "nl")
+    test "honours the browser locale on /user/profile", %{conn: conn} do
+      conn = Plug.Conn.put_req_header(conn, "accept-language", "nl-NL,nl;q=0.9")
 
       {:ok, _view, html} = live(conn, "/user/profile")
 

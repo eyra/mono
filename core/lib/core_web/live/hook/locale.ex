@@ -89,16 +89,11 @@ defmodule CoreWeb.Plug.ResolveLocale do
   """
   import Plug.Conn
 
-  @browser_locale_path_prefixes Application.compile_env!(
-                                  :core,
-                                  [__MODULE__, :browser_locale_path_prefixes]
-                                )
-
   def init(opts), do: opts
 
   def call(conn, _opts) do
     if honor_browser_locale?(conn) do
-      conn
+      delete_session(conn, Cldr.Plug.PutLocale.session_key())
     else
       put_session(conn, Cldr.Plug.PutLocale.session_key(), "en")
     end
@@ -108,9 +103,17 @@ defmodule CoreWeb.Plug.ResolveLocale do
     do: true
 
   defp honor_browser_locale?(%{request_path: path}) when is_binary(path),
-    do: Enum.any?(@browser_locale_path_prefixes, &String.starts_with?(path, &1))
+    do: Enum.any?(browser_locale_path_prefixes(), &path_matches_prefix?(path, &1))
 
   defp honor_browser_locale?(_), do: false
+
+  defp path_matches_prefix?(path, prefix),
+    do: path == prefix or String.starts_with?(path, prefix <> "/")
+
+  defp browser_locale_path_prefixes do
+    Application.get_env(:core, __MODULE__, [])
+    |> Keyword.fetch!(:browser_locale_path_prefixes)
+  end
 end
 
 defmodule CoreWeb.Plug.PersistLocale do
