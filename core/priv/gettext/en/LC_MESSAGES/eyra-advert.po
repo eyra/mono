@@ -121,3 +121,27 @@ msgstr "Share this link with participants so they can take the assignment."
 #, elixir-autogen, elixir-format
 msgid "settings.invite.title"
 msgstr "Invite link"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.fund.button"
+msgstr "Fund assignment"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.banner.subtitle"
+msgstr "Your advert is hidden in the pool because the fund is empty."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.banner.title"
+msgstr "Not visible – no budget"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.label"
+msgstr "Not visible – no budget"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.visible.banner"
+msgstr "This advert is visible in the pool."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.visible.label"
+msgstr "Visible in Pool"

@@ -434,6 +434,15 @@ defmodule Systems.Advert.Public do
     end
   end
 
+  def pool_visibility(%Advert.Model{status: :online} = advert) do
+    case validate_funded(advert) do
+      :ok -> :visible
+      {:error, :not_funded} -> :not_funded
+    end
+  end
+
+  def pool_visibility(%Advert.Model{}), do: :invisible
+
   defp validate_member(%{assignment: assignment}, user) do
     if Assignment.Public.member?(assignment, user) do
       {:error, :already_member}

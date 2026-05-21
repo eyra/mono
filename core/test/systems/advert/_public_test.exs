@@ -366,4 +366,71 @@ defmodule Systems.Advert.PublicTest do
       Advert.Factories.timestamp(7 * 24 * 60)
     end
   end
+
+  describe "pool_visibility" do
+    alias Systems.Advert
+    alias Systems.Fund
+    alias Core.Factories
+
+    setup do
+      currency = Fund.Factories.create_currency("vis_currency", :legal, "ƒ", 2)
+      user = Factories.insert!(:member)
+      {:ok, currency: currency, user: user}
+    end
+
+    defp reload(advert), do: Advert.Public.get!(advert.id, Advert.Model.preload_graph(:down))
+
+    defp online(advert) do
+      advert |> Ecto.Changeset.change(status: :online) |> Core.Repo.update!()
+      reload(advert)
+    end
+
+    defp empty_fund(advert) do
+      advert.assignment.fund.available
+      |> Ecto.Changeset.change(%{balance_credit: 0, balance_debit: 0})
+      |> Core.Repo.update!()
+    end
+
+    test "is :invisible when the advert is not online", %{currency: currency, user: user} do
+      fund = Fund.Factories.create_fund("draft", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> reload()
+
+      assert advert.status != :online
+      assert Advert.Public.pool_visibility(advert) == :invisible
+    end
+
+    test "is :visible when online and the fund covers the reward", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("funded", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+
+      assert Advert.Public.pool_visibility(advert) == :visible
+    end
+
+    test "is :not_funded when online and the fund is empty", %{currency: currency, user: user} do
+      fund = Fund.Factories.create_fund("empty", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+      empty_fund(advert)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :not_funded
+    end
+
+    test "is :visible for an online free study even with an empty fund", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("free", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+
+      advert.submission
+      |> Ecto.Changeset.change(%{reward_value: 0})
+      |> Core.Repo.update!()
+
+      empty_fund(advert)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :visible
+    end
+  end
 end
