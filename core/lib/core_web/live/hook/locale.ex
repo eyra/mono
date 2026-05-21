@@ -68,52 +68,29 @@ end
 
 defmodule CoreWeb.Plug.ResolveLocale do
   @moduledoc """
-  Forces the session locale to English unless the request should honor
-  the browser's locale, so the rest of the locale pipeline (Cldr,
-  Hook.Locale, Gettext) can simply read the session.
+  Pins the session locale to English for creators; clears it for
+  everyone else so the rest of the locale pipeline (Cldr, Hook.Locale,
+  Gettext) resolves from Accept-Language.
 
-  Browser locale is honored for:
-    * A logged-in participant (`%Account.User{creator: false}`).
-    * Any request whose path starts with a configured prefix in
-      `:browser_locale_path_prefixes` — typically the anonymous signup /
-      onboarding routes where we don't yet know who the user is but they
-      intend to become a participant.
-
-  Runs after `Systems.Account.Plug` (which assigns `current_user`) and
-  before `Cldr.Plug.PutLocale` (which reads the session). When the
-  browser locale is honored the session is left untouched so Cldr can
-  keep resolving from session / Accept-Language. For everyone else the
-  session locale is pinned to "en", which keeps the initial HTTP render
-  and the subsequent LiveView mount agreeing on the locale (no
-  EN→non-EN flash for creators / anonymous visitors).
+  Runs after `Systems.Account.Plug` (which assigns `current_user` for
+  authenticated non-restricted users) and before `Cldr.Plug.PutLocale`.
+  Anonymous visitors and signed-in participants honor the browser
+  locale; only signed-in creators get pinned to English.
   """
   import Plug.Conn
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if honor_browser_locale?(conn) do
-      delete_session(conn, Cldr.Plug.PutLocale.session_key())
-    else
+    if creator?(conn) do
       put_session(conn, Cldr.Plug.PutLocale.session_key(), "en")
+    else
+      delete_session(conn, Cldr.Plug.PutLocale.session_key())
     end
   end
 
-  defp honor_browser_locale?(%{assigns: %{current_user: %Systems.Account.User{creator: false}}}),
-    do: true
-
-  defp honor_browser_locale?(%{request_path: path}) when is_binary(path),
-    do: Enum.any?(browser_locale_path_prefixes(), &path_matches_prefix?(path, &1))
-
-  defp honor_browser_locale?(_), do: false
-
-  defp path_matches_prefix?(path, prefix),
-    do: path == prefix or String.starts_with?(path, prefix <> "/")
-
-  defp browser_locale_path_prefixes do
-    Application.get_env(:core, __MODULE__, [])
-    |> Keyword.fetch!(:browser_locale_path_prefixes)
-  end
+  defp creator?(%{assigns: %{current_user: %Systems.Account.User{creator: true}}}), do: true
+  defp creator?(_), do: false
 end
 
 defmodule CoreWeb.Plug.PersistLocale do

@@ -15,13 +15,19 @@ defmodule Systems.Account.Plug do
   def call(conn, _opts) do
     case current_user(conn) do
       {:ok, %{} = user} ->
-        restricted_user? = Account.Public.external?(user) or Account.Public.affiliate?(user)
-        signof_if_needed(conn, restricted_user?)
+        if restricted?(user) do
+          signof_restricted(conn)
+        else
+          assign(conn, :current_user, user)
+        end
 
       _ ->
         conn
     end
   end
+
+  defp restricted?(user),
+    do: Account.Public.external?(user) or Account.Public.affiliate?(user)
 
   defp current_user(conn) do
     if user_token = get_session(conn, :user_token) do
@@ -31,7 +37,7 @@ defmodule Systems.Account.Plug do
     end
   end
 
-  defp signof_if_needed(%{request_path: request_path} = conn, true = _restricted_user?) do
+  defp signof_restricted(%{request_path: request_path} = conn) do
     if Regex.match?(@valid_participant_path, request_path) do
       conn
     else
@@ -42,6 +48,4 @@ defmodule Systems.Account.Plug do
       Account.UserAuth.forget_user(conn)
     end
   end
-
-  defp signof_if_needed(conn, _), do: conn
 end
