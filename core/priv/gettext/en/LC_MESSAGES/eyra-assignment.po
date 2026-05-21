@@ -630,7 +630,7 @@ msgstr "Proceed with payment"
 
 #, elixir-autogen, elixir-format
 msgid "payment.transactions.empty"
-msgstr "No transactions yet."
+msgstr "You haven't paid for any participant slots yet."
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.hint"

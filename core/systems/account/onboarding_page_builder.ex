@@ -68,8 +68,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
     profile_context =
       LiveContext.extend(live_context, %{
         show_signout_button: false,
-        show_email: false,
-        show_top_margin: false
+        show_email: false
       })
 
     CoreWeb.Live.Element.prepare_live_view(

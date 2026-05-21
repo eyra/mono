@@ -170,6 +170,7 @@ defmodule Systems.Content.Adaptable do
     ~H"""
     <div>
       <Area.content>
+        <Margin.y id={:page_top} />
         <.item_content socket={@socket} item={@item} />
         <%= if Enum.any?(@toolbar_buttons) do %>
           <.spacing value="L" />
@@ -211,6 +212,7 @@ defmodule Systems.Content.Adaptable do
       />
     </Navigation.action_bar>
     <Area.content>
+      <Margin.y id={:page_top} />
       <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
     </Area.content>
     """
@@ -296,6 +298,7 @@ defmodule Systems.Content.Adaptable do
         <% end %>
       </div>
       <Area.content>
+        <Margin.y id={:page_top} />
         <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
       </Area.content>
     </div>
