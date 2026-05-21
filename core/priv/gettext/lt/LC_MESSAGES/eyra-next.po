@@ -19,6 +19,6 @@ msgstr "Tyrėjas"
 msgid "participant.signin.title"
 msgstr "Dalyvis"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Jei jūsų institucija leidžia prieigą prie Next platformos per SURFconext, naudokite žemiau esantį mygtuką, kad prisijungtumėte. Kitu atveju naudokite savo el. pašto adresą ir slaptažodį."

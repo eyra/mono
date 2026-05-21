@@ -11,37 +11,37 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.email.label"
 msgstr "Email"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "Nuova"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Conferma"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_button"
 msgstr "Invia istruzioni"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Crea"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.title"
 msgstr "Nuova password"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email or password"
-msgstr ""
+msgstr "Indirizzo email o password non validi"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "register.link"
@@ -51,34 +51,34 @@ msgstr "Registrati"
 msgid "reset.link"
 msgstr "Password dimenticata?"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
-msgstr ""
+msgstr "Nuova password richiesta. Se il suo indirizzo email è registrato, riceverà a breve le istruzioni."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email"
-msgstr ""
+msgstr "Indirizzo email non valido"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr ""
+msgstr "Se il suo indirizzo email è registrato ma non ancora confermato, riceverà a breve le istruzioni."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Signed out successfully"
-msgstr ""
+msgstr "Disconnesso"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "account.created.successfully"
 msgstr "Account creato"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "email.changed.successfully"
-msgstr ""
+msgstr "Indirizzo email modificato"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
-msgstr ""
+msgstr "Password modificata"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
-msgstr ""
+msgstr "Password aggiornata"

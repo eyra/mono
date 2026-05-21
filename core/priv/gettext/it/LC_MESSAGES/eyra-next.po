@@ -19,6 +19,6 @@ msgstr "Ricercatore"
 msgid "participant.signin.title"
 msgstr "Partecipante"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Se la sua istituzione consente l'accesso alla piattaforma Next tramite SURFconext, usi il pulsante qui sotto per accedere. Altrimenti utilizzi il suo indirizzo email e la sua password."

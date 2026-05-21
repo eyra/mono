@@ -163,25 +163,25 @@ msgstr "Panl"
 msgid "profile.tab.profile.title"
 msgstr "Mein Konto"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Weiter"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Onboarding"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Ungültiger oder abgelaufener Link"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Ich stimme den %{terms_link} und der %{privacy_link} von Panl zu"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Sie müssen die Datenschutzerklärung akzeptieren, um fortzufahren"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
@@ -191,25 +191,25 @@ msgstr "Ich stimme den %{terms_link} und der %{privacy_link} von Next zu"
 msgid "privacy.next-policy.required"
 msgstr "Sie müssen den Geschäftsbedingungen und der Datenschutzerklärung zustimmen, um fortzufahren"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.generic"
-msgstr ""
+msgstr "Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr ""
+msgstr "Anmeldung konnte nicht abgeschlossen werden. Klicken Sie erneut auf die Anmeldeschaltfläche."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Wir haben eine Bestätigungs-E-Mail an %{email} gesendet. Klicken Sie auf den Link, um Ihr Konto zu aktivieren. In der Zwischenzeit können Sie bereits Studien durchsuchen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Mit dem Stöbern beginnen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "E-Mail prüfen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"

@@ -163,25 +163,25 @@ msgstr "Panl"
 msgid "profile.tab.profile.title"
 msgstr "Il mio profilo"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continua"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Onboarding"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Link non valido o scaduto"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Accetto i %{terms_link} e l'%{privacy_link} di Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Deve accettare l'informativa sulla privacy per continuare"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
@@ -191,25 +191,25 @@ msgstr "Accetto i %{terms_link} e l'%{privacy_link} di Next"
 msgid "privacy.next-policy.required"
 msgstr "È necessario accettare i termini, le condizioni e l'informativa sulla privacy per continuare"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.generic"
-msgstr ""
+msgstr "Si è verificato un errore durante l'accesso. Riprovi."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr ""
+msgstr "L'accesso non è stato completato. Clicchi sul pulsante di accesso per ricominciare."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Abbiamo inviato un'email di conferma a %{email}. Clicchi sul link per attivare il suo account. Nel frattempo può già consultare gli studi."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Inizia a esplorare"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "Controlli la sua email"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"

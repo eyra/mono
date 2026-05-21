@@ -11,37 +11,37 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "Email"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.email.label"
 msgstr "Email"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "Nouă"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Confirmă"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_button"
 msgstr "Trimite instrucțiunile"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Creează"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.title"
 msgstr "Parolă nouă"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email or password"
-msgstr ""
+msgstr "Adresa de e-mail sau parola nu sunt valide"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "register.link"
@@ -51,34 +51,34 @@ msgstr "Înregistrare"
 msgid "reset.link"
 msgstr "Ai uitat parola?"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
-msgstr ""
+msgstr "Parolă nouă solicitată. Dacă adresa dvs. de e-mail este înregistrată, veți primi în scurt timp instrucțiuni."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email"
-msgstr ""
+msgstr "Adresă de e-mail nevalidă"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr ""
+msgstr "Dacă adresa dvs. de e-mail este înregistrată, dar nu este încă confirmată, veți primi în scurt timp instrucțiuni."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Signed out successfully"
-msgstr ""
+msgstr "Deconectat"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "account.created.successfully"
 msgstr "Cont creat"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "email.changed.successfully"
-msgstr ""
+msgstr "Adresa de e-mail a fost modificată"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
-msgstr ""
+msgstr "Parola a fost schimbată"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
-msgstr ""
+msgstr "Parola a fost actualizată"

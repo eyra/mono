@@ -11,37 +11,37 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "Correo electrónico"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.email.label"
 msgstr "Correo electrónico"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "Nueva"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Confirmar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_button"
 msgstr "Enviar instrucciones"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Crear"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.title"
 msgstr "Nueva contraseña"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email or password"
-msgstr ""
+msgstr "Dirección de correo electrónico o contraseña no válida"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "register.link"
@@ -51,34 +51,34 @@ msgstr "Registrarse"
 msgid "reset.link"
 msgstr "¿Olvidaste tu contraseña?"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
-msgstr ""
+msgstr "Nueva contraseña solicitada. Si su dirección de correo electrónico está registrada, recibirá instrucciones en breve."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email"
-msgstr ""
+msgstr "Dirección de correo electrónico no válida"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr ""
+msgstr "Si su dirección de correo electrónico está registrada pero aún no confirmada, recibirá instrucciones en breve."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Signed out successfully"
-msgstr ""
+msgstr "Sesión cerrada"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "account.created.successfully"
 msgstr "Cuenta creada"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "email.changed.successfully"
-msgstr ""
+msgstr "Dirección de correo electrónico cambiada"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
-msgstr ""
+msgstr "Contraseña cambiada"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
-msgstr ""
+msgstr "Contraseña actualizada"

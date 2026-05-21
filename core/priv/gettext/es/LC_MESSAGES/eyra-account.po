@@ -163,25 +163,25 @@ msgstr "Panl"
 msgid "profile.tab.profile.title"
 msgstr "Mi perfil"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continuar"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Bienvenida"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Enlace no válido o caducado"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Acepto los %{terms_link} y la %{privacy_link} de Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Debe aceptar la política de privacidad para continuar"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
@@ -191,25 +191,25 @@ msgstr "Acepto los %{terms_link} y la %{privacy_link} de Next"
 msgid "privacy.next-policy.required"
 msgstr "Debe aceptar los términos, condiciones y la política de privacidad para continuar"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.generic"
-msgstr ""
+msgstr "Se produjo un error al iniciar sesión. Inténtelo de nuevo."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr ""
+msgstr "No se pudo completar el inicio de sesión. Haga clic en el botón de inicio de sesión para empezar de nuevo."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Hemos enviado un correo de confirmación a %{email}. Haga clic en el enlace para activar su cuenta. Mientras tanto, ya puede explorar los estudios."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Empezar a explorar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "Revise su correo electrónico"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
