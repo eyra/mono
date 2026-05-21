@@ -83,17 +83,17 @@ msgstr ""
 msgid "native_languages.nl"
 msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket_types.bug"
-msgstr ""
+msgstr "He tenido un problema"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket_types.question"
-msgstr ""
+msgstr "Tengo una pregunta"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket_types.tip"
-msgstr ""
+msgstr "Tengo una idea para mejorar la plataforma"
 
 #, elixir-autogen, elixir-format
 msgid "themes.accounting"
