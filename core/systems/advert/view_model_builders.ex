@@ -42,7 +42,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
        ) do
     duration = if duration === nil, do: 0, else: duration
 
-    reward_value_label = reward_value_label(submission)
+    reward_value_label = reward_value_label(submission, assignment)
     reward_label = dgettext("eyra-submission", "reward.title")
     duration_label = dgettext("eyra-promotion", "duration.title")
 
@@ -117,7 +117,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     open_spots_label = dgettext("eyra-promotion", "open.spots.label", count: "#{open_spot_count}")
 
     reward_label = dgettext("eyra-submission", "reward.title")
-    reward_value_label = reward_value_label(submission)
+    reward_value_label = reward_value_label(submission, assignment)
 
     info1_elements = [
       "#{duration_label}: #{duration} min.",
@@ -203,13 +203,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
              title: title,
              themes: themes
            },
-           assignment: %{
-             info: %{
-               image_id: image_id,
-               logo_url: logo_url,
-               duration: duration
-             }
-           },
+           assignment:
+             %{
+               info: %{
+                 image_id: image_id,
+                 logo_url: logo_url,
+                 duration: duration
+               }
+             } = assignment,
            submission: submission
          },
          {:marketplace, :card},
@@ -222,7 +223,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
     duration_label = dgettext("eyra-promotion", "duration.title")
     reward_label = dgettext("eyra-submission", "reward.title")
-    reward_value_label = reward_value_label(submission)
+    reward_value_label = reward_value_label(submission, assignment)
 
     info1_elements = [
       "#{duration_label}: #{duration} min.",
@@ -517,14 +518,12 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     end
   end
 
-  defp reward_value_label(%Pool.SubmissionModel{
-         pool: %{currency: currency},
-         reward_value: reward_value
-       }) do
-    reward_value_label(currency, reward_value)
+  defp reward_value_label(
+         %Pool.SubmissionModel{pool: %{currency: currency}},
+         %Assignment.Model{info: %{subject_reward: subject_reward}}
+       ) do
+    reward_value_label(currency, subject_reward)
   end
-
-  defp reward_value_label(_), do: "?"
 
   defp reward_value_label(%{} = currency, nil), do: reward_value_label(currency, 0)
 
@@ -532,6 +531,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     locale = Gettext.get_locale(CoreWeb.Gettext)
     Fund.CurrencyModel.label(currency, locale, reward_value)
   end
+
+  defp reward_value_label(_, _), do: "?"
 
   def get_card_type(submission) do
     case inactive?(submission) do

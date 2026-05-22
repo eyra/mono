@@ -221,3 +221,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "privacy.link.terms"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.add.button"
+msgstr ""

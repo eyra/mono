@@ -410,10 +410,64 @@ defmodule Systems.Assignment.Public do
     Core.Persister.save(assignment, changeset)
   end
 
-  def add_participant!(%Assignment.Model{crew: crew}, user) do
-    # Use upsert pattern - no check-then-insert to avoid race conditions
-    Crew.Public.apply_member_with_role(crew, user, :participant)
+  def add_participant!(%Assignment.Model{} = assignment, user) do
+    assignment =
+      Repo.preload(assignment, [
+        :crew,
+        :info,
+        fund: [:available, :pending, :currency, :currency_ledger]
+      ])
+
+    {:ok, %{member: member}} =
+      Crew.Public.apply_member_with_role(assignment.crew, user, :participant)
+
+    reserve_reward!(assignment, user)
+
+    {:ok, %{member: member}}
   end
+
+  defp reserve_reward!(
+         %Assignment.Model{
+           fund: %Fund.Model{} = fund,
+           info: %{subject_reward: amount}
+         } = assignment,
+         %User{} = user
+       )
+       when is_integer(amount) and amount > 0 do
+    idempotence_key = idempotence_key(assignment, user)
+
+    if Fund.Public.reward_has_outstanding_deposit?(idempotence_key) do
+      :ok
+    else
+      case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
+        {:ok, _} ->
+          :ok
+
+        {:error, step, reason, _} ->
+          Logger.error(
+            "[Assignment] reserve_reward! failed at #{step}: #{inspect(reason)} " <>
+              "assignment=#{assignment.id} user=#{user.id}"
+          )
+
+          # A participant must never join with money silently un-reserved.
+          raise "reserve_reward! failed at #{step}: #{inspect(reason)} " <>
+                  "(assignment=#{assignment.id} user=#{user.id})"
+      end
+    end
+  end
+
+  defp reserve_reward!(_assignment, _user), do: :ok
+
+  # Pre-fix funds persisted only currency_ledger; resolve currency from it so
+  # bookkeeping (which needs fund.currency) still works on those rows.
+  defp ensure_fund_currency(%Fund.Model{currency: %Fund.CurrencyModel{}} = fund), do: fund
+
+  defp ensure_fund_currency(%Fund.Model{currency_ledger: %{currency: ledger_currency}} = fund)
+       when is_atom(ledger_currency) and not is_nil(ledger_currency) do
+    %{fund | currency: Fund.Assembly.get_or_create(ledger_currency)}
+  end
+
+  defp ensure_fund_currency(fund), do: fund
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
     case Crew.Public.get_member_unsafe(crew, user) do
@@ -538,7 +592,7 @@ defmodule Systems.Assignment.Public do
   defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
-    case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
+    case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end
@@ -566,18 +620,34 @@ defmodule Systems.Assignment.Public do
         %Crew.TaskModel{} = task,
         rejection
       ) do
-    [user] = auth_module().users_with_role(assignment, :owner)
+    case auth_module().users_with_role(task, :owner) do
+      [%User{} = user | _] ->
+        reason = Map.get(rejection, :message) || Map.get(rejection, "message")
 
-    Multi.new()
-    |> Crew.Public.reject_task(task, rejection)
-    |> rollback_deposit(assignment, user)
-    |> Repo.commit()
+        Multi.new()
+        |> Crew.Public.reject_task(task, rejection)
+        |> reject_reward(assignment, user, reason)
+        |> Repo.commit()
+
+      [] ->
+        Logger.error("[Assignment] reject_task: task #{task.id} has no owner")
+        {:error, :no_task_owner}
+    end
+  end
+
+  @doc """
+  Rejects the pending task identified by `task_id`. Keeps the `Crew` lookup
+  inside the `Assignment` system so views never query `Crew` directly.
+  """
+  def reject_task_by_id(%Assignment.Model{} = assignment, task_id, rejection)
+      when is_integer(task_id) do
+    reject_task(assignment, Crew.Public.get_task!(task_id), rejection)
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
-    |> rollback_deposit(assignment, user)
+    |> reject_reward(assignment, user)
     |> Repo.commit()
   end
 
@@ -686,8 +756,99 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
-  Is assignment open for new members?
+  Returns one row per `:pending_approval` reward on the assignment, joined to
+  the crew member + completed task so the researcher's pay-out modal can
+  render them.
+
+  Each row: `%{reward_id, task_id, member_public_id, amount, currency,
+  completed_at}`.
   """
+  def list_pending_payouts(%Assignment.Model{
+        crew: %Crew.Model{} = crew,
+        fund: %Fund.Model{} = fund
+      }) do
+    members_by_user_id =
+      crew
+      |> Crew.Public.list_members()
+      |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
+
+    fund
+    |> Fund.Public.list_pending_approvals(fund: [:currency])
+    |> Enum.flat_map(&pending_payout_row(&1, crew, members_by_user_id))
+  end
+
+  def list_pending_payouts(_), do: []
+
+  # Per-row task lookup remains: the task↔owner link is role-based and lives in
+  # Crew, so full O(1) batching would need a dedicated Crew.Public query.
+  defp pending_payout_row(
+         %Fund.RewardModel{
+           id: reward_id,
+           user_id: user_id,
+           amount: amount,
+           fund: %Fund.Model{currency: currency}
+         },
+         %Crew.Model{} = crew,
+         members_by_user_id
+       ) do
+    case Crew.Public.list_tasks_for_user(crew, user_id) do
+      [%Crew.TaskModel{status: :completed, id: task_id, completed_at: completed_at} | _] ->
+        [
+          %{
+            reward_id: reward_id,
+            task_id: task_id,
+            member_public_id: member_public_id(members_by_user_id, user_id),
+            amount: amount,
+            currency: currency,
+            completed_at: completed_at
+          }
+        ]
+
+      _ ->
+        []
+    end
+  end
+
+  defp member_public_id(members_by_user_id, user_id) do
+    case Map.get(members_by_user_id, user_id) do
+      %Crew.MemberModel{public_id: public_id} -> public_id
+      nil -> nil
+    end
+  end
+
+  @doc """
+  Bulk-approves every reward currently in `:pending_approval` on the assignment
+  by accepting the matching crew task. Each accept fires the existing assignment
+  switch which calls `Fund.Public.approve_reward/1`. A failing row is logged
+  and does not block subsequent rows, but the overall outcome is reported:
+  `{:ok, count}` when all succeeded, or
+  `{:error, {:partial, %{ok: n, failed: [task_id, ...]}}}` otherwise.
+  """
+  def bulk_approve_pending_payouts(%Assignment.Model{} = assignment) do
+    results =
+      list_pending_payouts(assignment)
+      |> Enum.map(fn %{task_id: task_id} ->
+        case Crew.Public.accept_task(task_id) do
+          {:ok, _} ->
+            {:ok, task_id}
+
+          error ->
+            Logger.warning(
+              "[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}"
+            )
+
+            {:error, task_id}
+        end
+      end)
+
+    failed = for {:error, task_id} <- results, do: task_id
+
+    case failed do
+      [] -> {:ok, length(results)}
+      _ -> {:error, {:partial, %{ok: length(results) - length(failed), failed: failed}}}
+    end
+  end
+
   def has_open_spots?(%{crew: _crew} = assignment) do
     open_spot_count(assignment) > 0
   end
@@ -799,6 +960,18 @@ defmodule Systems.Assignment.Public do
     |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
+  defp reject_reward(
+         %Multi{} = multi,
+         %Assignment.Model{} = assignment,
+         %User{} = user,
+         reason \\ nil
+       ) do
+    idempotence_key = idempotence_key(assignment, user)
+
+    multi
+    |> Fund.Public.reject_reward(idempotence_key, reason)
+  end
+
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key(assignment_id, user_id)
   end
@@ -810,7 +983,7 @@ defmodule Systems.Assignment.Public do
 
   def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.payout_reward(idempotence_key)
+    Fund.Public.approve_reward(idempotence_key)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

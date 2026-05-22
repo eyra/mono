@@ -82,3 +82,15 @@ msgstr "Si prega di compilare le proprie caratteristiche personali per partecipa
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr "Completare le caratteristiche"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr ""

@@ -81,3 +81,15 @@ msgstr "Vul je persoonlijke kenmerken in om aan meer onderzoeken deel te nemen."
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr "Kenmerken invullen"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr ""
