@@ -26,7 +26,7 @@ defmodule Systems.Account.ProfileTab do
       })
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         :profile_view,
         Account.ProfileView,
         live_context: profile_context

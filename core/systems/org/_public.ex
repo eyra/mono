@@ -247,17 +247,30 @@ defmodule Systems.Org.Public do
   # Owner role management
 
   @doc """
-  Assigns the :owner role to a user for the given organisation.
+  Assigns the :owner role to a user for the given organisation and
+  immediately syncs the AddDomainMembers NextAction so the new owner
+  sees outstanding domain-matched users on their next admin visit
+  without waiting for a registration event.
   """
-  def assign_owner(%Node{} = org, %User{} = user) do
-    auth_module().assign_role(user, org, :owner)
+  def assign_owner(%Node{id: org_id} = org, %User{} = user) do
+    :ok = auth_module().assign_role(user, org, :owner)
+
+    org_id
+    |> get_node!(Node.preload_graph(:full))
+    |> sync_domain_match_next_action(user)
+
+    :ok
   end
 
   @doc """
-  Revokes the :owner role from a user for the given organisation.
+  Revokes the :owner role from a user for the given organisation and
+  clears their AddDomainMembers NextAction for this org, since they
+  are no longer responsible for adding domain-matched members here.
   """
-  def revoke_owner(%Node{} = org, %User{} = user) do
+  def revoke_owner(%Node{id: org_id} = org, %User{} = user) do
     auth_module().remove_role!(user, org, :owner)
+    clear_domain_match_next_action(org_id, user)
+    :ok
   end
 
   @doc """
@@ -333,6 +346,35 @@ defmodule Systems.Org.Public do
   end
 
   @doc """
+  Like `list_members/1` but returns `{user, added_at}` tuples where
+  `added_at` is the timestamp at which the `:member` role was granted on
+  the org's auth_node. Used by the Members tab to power the "Recent"
+  filter.
+  """
+  def list_members_with_added_at(%Node{auth_node_id: nil}), do: []
+
+  def list_members_with_added_at(%Node{auth_node_id: auth_node_id}) do
+    rows =
+      from(ra in Core.Authorization.RoleAssignment,
+        join: u in User,
+        on: u.id == ra.principal_id,
+        where: ra.node_id == ^auth_node_id and ra.role == :member,
+        select: {u, ra.inserted_at}
+      )
+      |> Repo.all()
+
+    profiles_by_id =
+      rows
+      |> Enum.map(&elem(&1, 0))
+      |> Repo.preload(:profile)
+      |> Map.new(&{&1.id, &1.profile})
+
+    Enum.map(rows, fn {user, added_at} ->
+      {%{user | profile: Map.get(profiles_by_id, user.id)}, added_at}
+    end)
+  end
+
+  @doc """
   Assigns the :member role to a user for the given organisation.
   Auth roles are the source of truth for membership (Option C pattern).
   """
@@ -399,6 +441,19 @@ defmodule Systems.Org.Public do
   end
 
   @doc """
+  Clears the AddDomainMembers NextAction for a user on a given org.
+  Used when revoking the :owner role so the action disappears
+  immediately instead of lingering until the next sync pass.
+  """
+  def clear_domain_match_next_action(org_id, %User{} = user) do
+    NextAction.Public.clear_next_action(
+      user,
+      Org.NextActions.AddDomainMembers,
+      key: "org:#{org_id}"
+    )
+  end
+
+  @doc """
   Syncs NextActions for all org owners when a new user registers.
   Finds orgs whose domains match the user's email and notifies their owners.
   """
@@ -431,6 +486,21 @@ defmodule Systems.Org.Public do
   end
 
   alias Systems.Admin
+
+  @doc """
+  Returns true when the user is allowed to manage the given organisation
+  (members, settings, domain-matched actions). Mirrors the access rule
+  used by the UI: system admins can manage any org; org owners can
+  manage their own.
+
+  Use this at event-handler boundaries to defend against stale LiveView
+  sessions where a user's role was revoked while the page was still open.
+  """
+  def can_manage?(%Node{} = org, %User{} = user) do
+    Admin.Public.admin?(user) or user.id in Enum.map(list_owners(org), & &1.id)
+  end
+
+  def can_manage?(_, _), do: false
 
   @doc """
   Syncs NextActions for a specific user across relevant orgs.

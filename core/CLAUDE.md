@@ -30,7 +30,7 @@ Always investigate first, understand second, fix third.
 - `mix ecto.setup` - Create and migrate database
 - `mix ecto.migrate` - Run database migrations
 - `mix ecto.reset` - Drop and recreate database
-- `mix ecto.reset.link` - Reset with link bundle seeds
+- `mix seed` - Run idempotent seeds for the current deploy environment (`Core.Seeds.seed/0`)
 
 ### Testing
 - `mix test --warnings-as-errors` - Run all tests (ALWAYS use this)

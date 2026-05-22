@@ -25,7 +25,7 @@ defmodule Systems.Assignment.ActivateAccountView do
   def handle_event("resend", _params, %{assigns: %{model: user}} = socket) do
     case Account.Public.deliver_user_confirmation_instructions(
            user,
-           &(CoreWeb.Endpoint.url() <> "/user/confirm/#{&1}")
+           &(CoreWeb.Endpoint.url() <> "/user/onboarding/confirm/#{&1}")
          ) do
       {:ok, _} ->
         {:noreply,

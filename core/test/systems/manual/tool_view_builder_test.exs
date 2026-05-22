@@ -40,7 +40,7 @@ defmodule Systems.Manual.ToolViewBuilderTest do
       assert vm.manual_view.id == "manual_view"
 
       # Options should contain live_context with manual_id
-      [element_id: _, live_context: session_context] = vm.manual_view.options
+      session_context = Keyword.fetch!(vm.manual_view.options, :live_context)
       assert session_context.data.manual_id == manual.id
       assert session_context.data.current_user == user
       assert session_context.data.user_state == %{chapter: 2, section: 1}
@@ -59,7 +59,7 @@ defmodule Systems.Manual.ToolViewBuilderTest do
       vm = Manual.ToolViewBuilder.view_model(tool, assigns)
 
       # Options should contain context with empty user_state
-      [element_id: _, live_context: session_context] = vm.manual_view.options
+      session_context = Keyword.fetch!(vm.manual_view.options, :live_context)
       assert session_context.data.manual_id == manual.id
       assert session_context.data.user_state == %{}
     end
@@ -79,7 +79,7 @@ defmodule Systems.Manual.ToolViewBuilderTest do
       vm = Manual.ToolViewBuilder.view_model(tool, assigns)
 
       # Should preserve embedded presentation
-      [element_id: _, live_context: session_context] = vm.manual_view.options
+      session_context = Keyword.fetch!(vm.manual_view.options, :live_context)
       assert session_context.data.presentation == :embedded
     end
 
@@ -97,7 +97,7 @@ defmodule Systems.Manual.ToolViewBuilderTest do
       vm = Manual.ToolViewBuilder.view_model(tool, assigns)
 
       # Should default to modal presentation
-      [element_id: _, live_context: session_context] = vm.manual_view.options
+      session_context = Keyword.fetch!(vm.manual_view.options, :live_context)
       assert session_context.data.presentation == :modal
     end
   end

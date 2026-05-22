@@ -9,6 +9,28 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#23 2026-05-22
+* Added - Organisations: org owner role, admin pages per org, owners modal, archive modal, org node/admin views, members search & filter
+* Added - Onboarding journey nested under /user/onboarding/*: await-confirmation, confirm-token, post-signup activation
+* Added - Paid participant slots block on the Participants tab: subject count + reward, budget transactions, "Pay to add participants" button, payment-resume flow
+* Added - mix e2e task with Playwright + per-environment feature-flag-driven setup
+* Added - Live refresh of NextAction banners on Desktop and Admin Organisations
+* Changed - Locale rule simplified to a single check: signed-in researchers see English, everyone else (signed-in participants + anonymous visitors) follows their browser language. Removes the previous per-role / per-path patchwork.
+* Changed - Confirmation email link URL moved to /user/onboarding/confirm/...
+* Changed - The Participants tab no longer has a separate post-launch view; pre-launch shows only the recruit URL, post-launch adds the advert + pay-for-slots panels (driven by template flags)
+* Changed - Privacy / terms acceptance is now a step of the onboarding flow instead of a separate page
+* Changed - Org owners are granted the :admin role; /org/node/{id} authorises per-org rather than via a global :admin
+* Fixed - Activation, sign-in and profile pages had no mobile side-margins
+* Fixed - /user/profile and other authenticated pages rendered in English even with the browser set to a different language
+* Fixed - Confirmation, password-reset and other transactional emails were not being delivered from Fly environments (Mailgun adapter pointed at the wrong domain)
+* Fixed - Profile tab and Panl tab on /user/profile had inconsistent top margins
+* Fixed - First pay-in skipping the paid path due to stale BudgetForm assignment
+* Fixed - NextAction-banner staying visible on Desktop after an admin role was revoked
+* Fixed - /org/node/{id} remained accessible to ex-admins after their role was revoked
+* Fixed - "Add domain members" action could be triggered by stale LiveView sessions whose owner role had been revoked
+* Fixed - Translations across LT / DE / ES / IT / RO for sign-in, sign-up, password-reset, onboarding, SURFconext, SSO errors, helpdesk form, "Complete your profile" prompt, and the post-signup success flash
+* Fixed - "Reward is set to …" line on the Participants tab only shows once at least one transaction exists; empty-state copy rephrased
+
 ## \#22.2 2026-05-07
 * Added - Recruit URL (/r/:code) for organic participant recruitment with rate limiting (5/min/IP)
 * Added - Recruit participants panel in CMS for questionnaire studies

@@ -581,26 +581,6 @@ msgid "panl_participants.add.button"
 msgstr "Pay to add participants"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.advert.link"
-msgstr "Go to advertisement"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.has_advert"
-msgstr "You have created an advertisement."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.no_advert"
-msgstr "Create an advertisement to invite Panl participants."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.title"
-msgstr "Invite participants"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.monitor.link"
-msgstr "Go to Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "panl_participants.payment_prefix"
 msgstr "Payment"
 
@@ -655,20 +635,6 @@ msgstr "Subtotal (%{count} × %{reward} reward)"
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
 msgstr "Total"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.description"
-msgstr "Create an advertisement to invite Panl participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.open.button"
-msgstr "Create an advertisement to invite Panl participants."
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] "Create an advertisement to invite Panl participants."
-msgstr[1] "Create an advertisement to invite Panl participants."
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.error"

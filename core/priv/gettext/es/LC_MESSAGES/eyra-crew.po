@@ -11,45 +11,45 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part1"
-msgstr ""
+msgstr "Su contribución será revisada por el autor de este estudio y aceptada o rechazada."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part2"
-msgstr ""
+msgstr "Visite su consola para ver el estado de su contribución."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.title"
-msgstr ""
+msgstr "Gracias por participar"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.subtitle"
-msgstr ""
+msgstr "Lamentablemente, su sesión ha caducado"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.text"
-msgstr ""
+msgstr "Si el estudio sigue abierto, puede participar de nuevo. ¿El estudio está cerrado? Visite el marketplace para consultar otros estudios."
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.subtitle"
-msgstr ""
+msgstr "✅ Ida y vuelta confirmada"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.text"
-msgstr ""
+msgstr "Si el título de esta página coincide con el título de su campaña, el viaje de ida y vuelta de Next a Qualtrics y de regreso fue exitoso."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.finished.label"
-msgstr ""
+msgstr "Finalizado"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.remaining.label"
-msgstr ""
+msgstr "Previsto"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.started.label"
-msgstr ""
+msgstr "Iniciado"
 
 #, elixir-autogen, elixir-format
 msgid "home.intro.description"

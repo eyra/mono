@@ -6,3 +6,4 @@
 
 export * from './liveview';
 export * from './feldspar';
+export * from './features';

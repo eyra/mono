@@ -15,17 +15,17 @@ msgstr ""
 msgid "member.title"
 msgstr "Servizi software"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.title"
-msgstr ""
+msgstr "Contributi"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "available.member.title"
-msgstr ""
+msgstr "Studi Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "available.visitor.title"
-msgstr ""
+msgstr "Studi Panl"
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"

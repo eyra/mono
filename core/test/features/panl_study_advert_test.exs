@@ -115,13 +115,12 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> click(Query.css("[data-testid='publish-button']"))
     |> assert_has(Query.css("[data-testid='retract-button']"))
 
-    # Navigate to the advert. The click can race with LiveView DOM morphs;
-    # retry_stale re-finds the element and re-clicks on StaleReferenceError.
+    # Navigate to the advert. The click can race with LiveView DOM morphs,
+    # so retry on StaleReferenceError until the click goes through. Then
+    # confirm we landed on the advert page by waiting for its publish button.
     retry_stale do
       researcher_session
-      |> assert_has(Query.css("[data-testid='goto-advert-button']"))
       |> click(Query.css("[data-testid='goto-advert-button']"))
-      |> assert_has(Query.css("[data-testid='advert-publish-button']"))
     end
 
     # Publish the advert

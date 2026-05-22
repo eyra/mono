@@ -16,7 +16,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
           Account.Public.deliver_user_confirmation_instructions(user, url)
         end)
 
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/#{token}")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/#{token}")
 
       {:error, {:redirect, %{to: to}}} = render_click(view, "confirm")
 
@@ -34,14 +34,14 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
           Account.Public.deliver_user_confirmation_instructions(user, url)
         end)
 
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/#{token}")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/#{token}")
 
       {:error, {:redirect, %{to: _to}}} =
         view
         |> render_click("confirm")
 
       # The second time should not redirect
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/abc")
 
       html =
         view
@@ -52,7 +52,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
     test "an invalid token does not activate the account", %{conn: conn} do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/abc")
 
       view
       |> render_click("confirm")
@@ -61,7 +61,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "an invalid token shows resend form", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/abc")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/abc")
 
       html =
         view
@@ -71,7 +71,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "resend form validates the email field", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/test")
 
       view
       |> render_click("confirm")
@@ -86,7 +86,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     end
 
     test "resend form fakes sending mail when user does not exist", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/test")
 
       view
       |> render_click("confirm")
@@ -102,7 +102,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
     test "resend form sends new token to not-yet activated user", %{conn: conn} do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/test")
 
       view
       |> render_click("confirm")
@@ -118,7 +118,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
 
     test "resend form sends login info to already activated user", %{conn: conn} do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      {:ok, view, _html} = live(conn, ~p"/user/confirm/test")
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/test")
 
       view
       |> render_click("confirm")
@@ -136,7 +136,7 @@ defmodule CoreWeb.Live.User.ConfirmToken.Test do
     setup [:login_as_member]
 
     test "opening activation mail with expired (invalid) token should redirect", %{conn: conn} do
-      {:error, {:redirect, %{to: _}}} = live(conn, ~p"/user/confirm/abc")
+      {:error, {:redirect, %{to: _}}} = live(conn, ~p"/user/onboarding/confirm/abc")
     end
   end
 end

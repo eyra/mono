@@ -7,6 +7,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
+    use Core.FeatureFlags
     alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
@@ -34,19 +35,20 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         },
         participants: {
           dgettext("eyra-assignment", "tabbar.item.participants"),
-          Assignment.Template.Flags.Participants.new(
-            opt_in: [
-              :advert_in_pool,
-              :recruit_participants,
-              :paid_slots
-            ]
-          )
+          Assignment.Template.Flags.Participants.new(opt_in: participants_opt_in())
         },
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
           Assignment.Template.Flags.Monitor.new()
         }
       ]
+    end
+
+    defp participants_opt_in do
+      [:recruit_participants] ++
+        if feature_enabled?(:panl_post_launch),
+          do: [:advert_in_pool, :paid_slots],
+          else: []
     end
 
     def currency(_t), do: :EUR

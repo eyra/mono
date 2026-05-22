@@ -11,53 +11,53 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.body"
-msgstr ""
+msgstr "Opcionalmente, proporcione una URL de webhook para recibir actualizaciones en tiempo real sobre el progreso de los participantes."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.placeholder"
-msgstr ""
+msgstr "https://panel-company.com/study?s=progress"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.title"
-msgstr ""
+msgstr "Progreso"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.placeholder"
-msgstr ""
+msgstr "https://panel-company.com/study?s=done"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.body"
-msgstr ""
+msgstr "Opcionalmente, proporcione una URL de redirección para enviar a los participantes a otra plataforma u organización después de completar el flujo de trabajo."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.title"
-msgstr ""
+msgstr "Fin del flujo de trabajo"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.invalid_parts"
-msgstr ""
+msgstr "Por favor, introduzca una URL válida"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_host"
-msgstr ""
+msgstr "Por favor, incluya un dominio"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_scheme"
-msgstr ""
+msgstr "Por favor, utilice un prefijo como https://"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.no_spaces_allowed"
-msgstr ""
+msgstr "Por favor, elimine los espacios de la URL"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "test.success"
-msgstr ""
+msgstr "La URL parece correcta y es accesible"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.unreachable"
-msgstr ""
+msgstr "Por favor, compruebe la URL: no es accesible"
 
 #, elixir-autogen, elixir-format
 msgid "platform_name.label"

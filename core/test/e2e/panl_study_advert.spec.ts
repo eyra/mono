@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * PaNL Study & Advert E2E Test
@@ -17,10 +18,10 @@ import { test, expect } from '@playwright/test';
  * - A researcher/creator account must exist
  */
 
-// Skip all tests in this file if PaNL feature is not enabled
-// Reads from ENABLED_APP_FEATURES (comma-separated list, same as server config)
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
+// Skip all tests in this file when required features are not enabled.
+// `missingFeaturesReason` reads from ENABLED_APP_FEATURES, which is
+// populated by global-setup from the server's /api/e2e/features.
+const SKIP_REASON = missingFeaturesReason('panl', 'panl_post_launch');
 
 // Test researcher account - configure via Infisical per environment
 // Defaults match seeds.exs for localhost development
@@ -33,7 +34,7 @@ const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 
 test.describe('PaNL Study & Advert Creation', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set E2E_PANL_ENABLED=true)');
+  test.skip(SKIP_REASON !== '', SKIP_REASON);
   test('researcher can create study, set subject count, create and publish advert', async ({ page }) => {
     console.log('[TEST] Starting PaNL Study & Advert creation test');
 

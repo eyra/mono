@@ -11,74 +11,74 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.email.label"
-msgstr ""
+msgstr "E-Mail"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.email.label"
-msgstr ""
+msgstr "E-Mail"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password.label"
-msgstr ""
+msgstr "Neu"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.password_confirmation.label"
-msgstr ""
+msgstr "Bestätigen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_button"
-msgstr ""
+msgstr "Anweisungen senden"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password_reset.reset_password_button"
-msgstr ""
+msgstr "Erstellen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.title"
-msgstr ""
+msgstr "Neues Passwort"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email or password"
-msgstr ""
+msgstr "Ungültige E-Mail-Adresse oder Passwort"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "register.link"
-msgstr ""
+msgstr "Registrieren"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "reset.link"
-msgstr ""
+msgstr "Passwort vergessen?"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "user.password_reset.flash"
-msgstr ""
+msgstr "Neues Passwort angefordert. Wenn Ihre E-Mail-Adresse registriert ist, erhalten Sie in Kürze eine Anleitung."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Invalid email"
-msgstr ""
+msgstr "Ungültige E-Mail-Adresse"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.flash"
-msgstr ""
+msgstr "Wenn Ihre E-Mail-Adresse registriert, aber noch nicht bestätigt ist, erhalten Sie in Kürze eine Anleitung."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Signed out successfully"
-msgstr ""
+msgstr "Abgemeldet"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "account.created.successfully"
-msgstr ""
+msgstr "Konto erstellt"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "email.changed.successfully"
-msgstr ""
+msgstr "E-Mail-Adresse geändert"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
-msgstr ""
+msgstr "Passwort geändert"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
-msgstr ""
+msgstr "Passwort aktualisiert"

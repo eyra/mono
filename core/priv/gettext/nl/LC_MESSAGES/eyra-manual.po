@@ -11,93 +11,93 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Aanmelden"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.label"
-msgstr ""
+msgstr "Titel"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
-msgstr ""
+msgstr "Ga naar studie"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
-msgstr ""
+msgstr "Deelgenomen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "In afwachting"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.manual.button"
-msgstr ""
+msgstr "Handleiding maken"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
-msgstr ""
+msgstr "Handleiding bewerken"
 
 #, elixir-autogen, elixir-format
 msgid "setup.annotation"
 msgstr "<div><h1>Hoe stel je instructies voor deelnemers in?</h1><ul><li>Maak <strong>secties</strong> om de instructies op te delen in duidelijke onderdelen.</li><li>Gebruik <strong>labels</strong> voor secties om deelnemers te helpen de relevante sectie te vinden.</li><li>Voeg meerdere korte <strong>instructies</strong> toe binnen elke sectie.</li><li>Voeg <strong>afbeeldingen</strong> toe om instructies gemakkelijker te volgen te maken.</li></ul></div>"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "builder.chapter.overview"
-msgstr ""
+msgstr "Secties"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.chapter.button"
-msgstr ""
+msgstr "Sectie toevoegen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.default"
-msgstr ""
+msgstr "Nieuwe sectie"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.group.label"
-msgstr ""
+msgstr "Label"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "create.page.button"
-msgstr ""
+msgstr "Instructie toevoegen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.default"
-msgstr ""
+msgstr "Nieuwe instructie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.label"
-msgstr ""
+msgstr "Titel"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.text.label"
-msgstr ""
+msgstr "Beschrijving"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.image.file"
-msgstr ""
+msgstr "Afbeelding selecteren"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.image.file"
-msgstr ""
+msgstr "Afbeelding wijzigen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "builder.pages.list.title"
-msgstr ""
+msgstr "Instructies"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.label.first"
-msgstr ""
+msgstr "Sectielabel"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.first"
-msgstr ""
+msgstr "Eerste sectie"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
-msgstr ""
+msgstr "Eerste instructie"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.next.button"
