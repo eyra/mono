@@ -415,9 +415,7 @@ defmodule Systems.Advert.Public do
     with :ok <- validate_member(advert, user),
          :ok <- validate_exclusion(advert, user),
          :ok <- validate_eligitable(advert, user),
-         :ok <- validate_open_spots(advert),
-         :ok <- validate_released(advert),
-         :ok <- validate_funded(advert) do
+         :ok <- validate_open(advert) do
       :ok
     else
       error -> error
