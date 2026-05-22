@@ -17,7 +17,7 @@ defmodule Systems.Pool.AdvertItemBuilder do
         },
         assignment:
           %{
-            assignable_inquiry: %{
+            info: %{
               subject_count: target_subject_count
             }
           } = assignment

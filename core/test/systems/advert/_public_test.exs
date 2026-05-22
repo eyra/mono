@@ -369,6 +369,7 @@ defmodule Systems.Advert.PublicTest do
 
   describe "pool_visibility" do
     alias Systems.Advert
+    alias Systems.Crew
     alias Systems.Fund
     alias Core.Factories
 
@@ -431,6 +432,20 @@ defmodule Systems.Advert.PublicTest do
       empty_fund(advert)
 
       assert Advert.Public.pool_visibility(reload(advert)) == :visible
+    end
+
+    test "is :not_funded when online and funded but all spots are filled", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("filled", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+
+      # Fill the single subject slot, mimicking one completed participant.
+      participant = Factories.insert!(:member)
+      Crew.Factories.create_member(advert.assignment.crew, participant)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :not_funded
     end
   end
 end

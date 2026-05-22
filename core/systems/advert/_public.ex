@@ -435,9 +435,11 @@ defmodule Systems.Advert.Public do
   end
 
   def pool_visibility(%Advert.Model{status: :online} = advert) do
-    case validate_funded(advert) do
+    case validate_open(advert) do
       :ok -> :visible
+      {:error, :no_open_spots} -> :not_funded
       {:error, :not_funded} -> :not_funded
+      {:error, :not_released} -> :invisible
     end
   end
 
