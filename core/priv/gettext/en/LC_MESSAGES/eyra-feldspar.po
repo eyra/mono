@@ -11,25 +11,25 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Sign up"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Campaign"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Go to study"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "participated.label"
-msgstr ""
+msgstr "Participated"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "Pending"
 
 #, elixir-autogen, elixir-format
 msgid "zip-replace-file-button"

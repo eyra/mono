@@ -15,13 +15,13 @@ defmodule Systems.Account.OnboardingController do
   @token_salt "onboarding_token"
   @token_max_age 300
 
-  def start(conn, %{"token" => token, "locale" => locale}) do
+  def start(conn, %{"token" => token}) do
     case verify_token(token) do
       {:ok, user_id} ->
         user = Account.Public.get_user!(user_id)
 
         conn
-        |> Account.UserAuth.log_in_user_for_onboarding(user, locale)
+        |> Account.UserAuth.log_in_user_without_redirect(user)
         |> redirect(to: ~p"/user/onboarding")
 
       {:error, _reason} ->

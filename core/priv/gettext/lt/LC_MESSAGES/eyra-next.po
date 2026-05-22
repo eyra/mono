@@ -11,14 +11,14 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "creator.signin.title"
-msgstr ""
+msgstr "Tyrėjas"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participant.signin.title"
-msgstr ""
+msgstr "Dalyvis"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Jei jūsų institucija leidžia prieigą prie Next platformos per SURFconext, naudokite žemiau esantį mygtuką, kad prisijungtumėte. Kitu atveju naudokite savo el. pašto adresą ir slaptažodį."

@@ -11,101 +11,101 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "config.url.label"
-msgstr ""
+msgstr "Enlace del cuestionario"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
-msgstr ""
+msgstr "Recompensa"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Participar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Continuar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.description"
-msgstr ""
+msgstr "Para redirigir a los participantes de vuelta a Next al final del cuestionario, copie la URL de redirección a continuación y péguela como \"Website URL\" en Qualtrics como %{link}."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.title"
-msgstr ""
+msgstr "URL de redirección"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "Pendiente"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Campaña"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.description"
-msgstr ""
+msgstr "Next añade automáticamente el ID del participante a su URL de Qualtrics. Para utilizar este ID en Qualtrics, añada un campo de elemento de datos embebido con el nombre \"participant\", tal como %{link} en \"PART 2\"."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.title"
-msgstr ""
+msgstr "ID del participante"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "setup.title"
-msgstr ""
+msgstr "¿Cómo configurar su cuestionario en Qualtrics?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
-msgstr ""
+msgstr "Copiar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.description"
-msgstr ""
+msgstr "Para obtener el enlace de su cuestionario de Qualtrics, siga %{link}. Pegue su enlace en el campo \"Enlace del cuestionario\" del formulario a continuación."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.title"
-msgstr ""
+msgstr "Enlace del cuestionario"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.instructions.link"
-msgstr ""
+msgstr "se explica aquí"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.instructions.link"
-msgstr ""
+msgstr "se indica aquí"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "study.instructions.link"
-msgstr ""
+msgstr "estas instrucciones"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.text"
-msgstr ""
+msgstr "%{duration} minutos"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
-msgstr ""
+msgstr "Duración"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
-msgstr ""
+msgstr "Cerrado para participación"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.highlight.title"
-msgstr ""
+msgstr "Estado"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.open.highlight.text"
-msgstr ""
+msgstr "Abierto para participación"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "language.highlight.title"
-msgstr ""
+msgstr "Idioma"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
-msgstr ""
+msgstr "Participado"
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"

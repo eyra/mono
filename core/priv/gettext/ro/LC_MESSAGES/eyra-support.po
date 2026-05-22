@@ -11,38 +11,38 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.description"
-msgstr ""
+msgstr "Aveți o întrebare despre platformă? Sau doriți să ne oferiți feedback? Completați formularul de mai jos. Vă vom răspunde prin e-mail."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.title"
-msgstr ""
+msgstr "Asistență"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.description.label"
-msgstr ""
+msgstr "Descriere"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.title.label"
-msgstr ""
+msgstr "Subiect"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create_ticket.button"
-msgstr ""
+msgstr "Trimite"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.type"
-msgstr ""
+msgstr "Formular"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.form.title"
-msgstr ""
+msgstr "Asistență"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.description.next"
-msgstr ""
+msgstr "Vă mulțumim pentru mesaj. Vă vom contacta cât mai curând posibil."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
-msgstr ""
+msgstr "Trimite un alt mesaj"

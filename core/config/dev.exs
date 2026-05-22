@@ -34,6 +34,8 @@ config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336
 
+config :core, :features, e2e: true
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 

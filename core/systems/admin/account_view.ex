@@ -68,13 +68,12 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def handle_event(
-        "search_query",
-        %{query: query, query_string: query_string, source: %{name: :account_search_bar}},
+  def consume_event(
+        %{name: :search_query, payload: %{query: query, query_string: query_string}},
         socket
       ) do
     {
-      :noreply,
+      :stop,
       socket
       |> assign(query: query, query_string: query_string)
       |> update_view_model()
@@ -82,11 +81,7 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :account_filters}},
-        socket
-      ) do
+  def handle_info({"active_item_ids", %{active_item_ids: active_filters}}, socket) do
     {
       :noreply,
       socket

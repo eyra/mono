@@ -81,7 +81,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
 
   # Single item - show single view
   defp task_view(1, assignment_id, _user_state, context) do
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       "crew_task_single_view_#{assignment_id}",
       Assignment.CrewTaskSingleView,
       live_context: context
@@ -90,7 +90,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
 
   # Multiple items - show list view
   defp task_view(_item_count, assignment_id, _user_state, context) do
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       "crew_task_list_view_#{assignment_id}",
       Assignment.CrewTaskListView,
       live_context: context

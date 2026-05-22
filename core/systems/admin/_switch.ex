@@ -23,4 +23,10 @@ defmodule Systems.Admin.Switch do
     update_embedded(Org.ArchiveModalView, Observatory.SingletonModel.instance(), from_pid)
     :ok
   end
+
+  @impl true
+  def intercept({:next_action, _}, %{from_pid: from_pid}) do
+    update_embedded(Admin.OrgView, Observatory.SingletonModel.instance(), from_pid)
+    :ok
+  end
 end

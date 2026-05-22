@@ -42,6 +42,6 @@ msgstr "Support"
 msgid "form.description.next"
 msgstr "Heb je een vraag over het platform? Of wil je ons feedback geven? Vul dan het onderstaande formulier in. We nemen contact met je op via e-mail."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
-msgstr ""
+msgstr "Verstuur nog een bericht"

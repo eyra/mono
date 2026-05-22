@@ -11,37 +11,37 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "add.to.button"
-msgstr ""
+msgstr "Hinzufügen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.description.label"
-msgstr ""
+msgstr "Aufgabenbeschreibung"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.group.label"
-msgstr ""
+msgstr "Datenquelle"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.library.description"
-msgstr ""
+msgstr "Wählen Sie aus, welche Aufgaben dem Workflow hinzugefügt werden sollen."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.library.title"
-msgstr ""
+msgstr "Bibliothek"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.list.description"
-msgstr ""
+msgstr "Fügen Sie Aufgaben aus der Bibliothek hinzu, um einen individuellen Workflow für Teilnehmende zu erstellen."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.list.hint"
-msgstr ""
+msgstr "Verwenden Sie die Pfeile, um die Aufgaben zu sortieren"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "item.title.label"
-msgstr ""
+msgstr "Aufgabentitel"
 
 #, elixir-autogen, elixir-format
 msgid "work_list.done.button"

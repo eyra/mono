@@ -24,9 +24,12 @@ defmodule Frameworks.E2E.Controller do
 
   alias Core.Repo
   alias Systems.Account
+  alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Feldspar
+  alias Systems.Org
+  alias Systems.Pool
   alias Systems.Storage
 
   @service_email "e2e@eyra.service"
@@ -104,6 +107,8 @@ defmodule Frameworks.E2E.Controller do
       researcher = get_or_create_researcher()
       participant = get_or_create_participant()
       assignment = get_or_create_donate_assignment(researcher)
+      _panl_advert = get_or_create_panl_advert(researcher)
+      test_org = get_or_create_e2e_test_org(researcher)
 
       {:ok,
        %{
@@ -111,7 +116,8 @@ defmodule Frameworks.E2E.Controller do
          researcher_password: @e2e_password,
          participant_email: participant.email,
          participant_password: @e2e_password,
-         donate_assignment_path: assignment_path(assignment)
+         donate_assignment_path: assignment_path(assignment),
+         test_org_id: test_org.id
        }}
     rescue
       e -> {:error, Exception.message(e)}
@@ -170,6 +176,96 @@ defmodule Frameworks.E2E.Controller do
       creator: false,
       confirmed_at: now
     })
+  end
+
+  @e2e_org_identifier ["e2e_test_org"]
+  @e2e_org_name "E2E Test Org"
+
+  defp get_or_create_e2e_test_org(researcher) do
+    org =
+      case Org.Public.get_node(@e2e_org_identifier) do
+        %Org.NodeModel{} = existing ->
+          existing
+
+        nil ->
+          Logger.info("[E2E] Creating E2E test org")
+
+          Org.Public.create_node!(
+            @e2e_org_identifier,
+            [{:en, @e2e_org_name}],
+            [{:en, @e2e_org_name}]
+          )
+      end
+
+    unless researcher in Org.Public.list_owners(org) do
+      Org.Public.assign_owner(org, researcher)
+      Logger.info("[E2E] Assigned #{researcher.email} as owner of E2E test org")
+    end
+
+    org
+  end
+
+  defp get_or_create_panl_advert(researcher) do
+    case find_e2e_panl_advert() do
+      nil -> create_panl_advert(researcher)
+      advert -> advert
+    end
+  end
+
+  defp find_e2e_panl_advert do
+    import Ecto.Query
+
+    from(a in Advert.Model,
+      join: p in assoc(a, :promotion),
+      where: like(p.title, "E2E PaNL%"),
+      where: a.status == :online,
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  defp create_panl_advert(researcher) do
+    panl_pool = Pool.Assembly.get_or_create_panl()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    promotion = Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study"})
+
+    submission =
+      Core.Factories.insert!(:pool_submission, %{
+        pool: panl_pool,
+        status: :accepted,
+        submitted_at: now
+      })
+
+    info =
+      Core.Factories.insert!(:assignment_info, %{
+        title: "E2E PaNL Test Study",
+        subject_count: 100,
+        duration: "5",
+        language: :en,
+        devices: [:desktop]
+      })
+
+    crew = Core.Factories.insert!(:crew)
+
+    assignment =
+      Core.Factories.insert!(:assignment, %{
+        info: info,
+        crew: crew,
+        status: :online
+      })
+
+    advert =
+      Core.Factories.insert!(:advert, %{
+        promotion: promotion,
+        submission: submission,
+        assignment: assignment,
+        status: :online
+      })
+
+    Core.Authorization.assign_role(researcher, advert, :owner)
+    Logger.info("[E2E] Created published PaNL advert #{advert.id}")
+    advert
   end
 
   defp get_or_create_donate_assignment(researcher) do
@@ -260,12 +356,14 @@ defmodule Frameworks.E2E.Controller do
     assignment
   end
 
+  @donate_assignment_title "E2E Auto Donate"
+
   defp find_e2e_assignment do
     import Ecto.Query
 
     from(a in Assignment.Model,
       join: i in assoc(a, :info),
-      where: like(i.title, "E2E Test%"),
+      where: i.title == ^@donate_assignment_title,
       limit: 1
     )
     |> Repo.one()
@@ -304,7 +402,7 @@ defmodule Frameworks.E2E.Controller do
     # Create assignment info
     info =
       Core.Factories.insert!(:assignment_info, %{
-        title: "E2E Test Data Donation",
+        title: @donate_assignment_title,
         subject_count: 100,
         duration: "10",
         language: :en,
@@ -342,9 +440,11 @@ defmodule Frameworks.E2E.Controller do
         project_path: []
       })
 
-    # Create storage endpoint (builtin for local dev)
+    # Create storage endpoint (builtin for local dev) — unique per assignment
+    # so re-running setup against an env with leftover endpoints from prior
+    # runs doesn't collide on the unique builtin-key index.
     storage_endpoint =
-      Storage.Public.prepare_endpoint(:builtin, %{key: "e2e_test_storage"})
+      Storage.Public.prepare_endpoint(:builtin, %{key: "e2e_test_storage_#{assignment.id}"})
       |> Repo.insert!()
 
     # Link assignment to project node
