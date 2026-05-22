@@ -437,11 +437,11 @@ defmodule Systems.Advert.Public do
       :ok -> :visible
       {:error, :no_open_spots} -> :not_funded
       {:error, :not_funded} -> :not_funded
-      {:error, :not_released} -> :invisible
+      {:error, :not_released} -> nil
     end
   end
 
-  def pool_visibility(%Advert.Model{}), do: :invisible
+  def pool_visibility(%Advert.Model{}), do: nil
 
   defp validate_member(%{assignment: assignment}, user) do
     if Assignment.Public.member?(assignment, user) do

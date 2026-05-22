@@ -58,7 +58,7 @@ defmodule Systems.Advert.SettingsView do
         <Area.content>
           <Margin.y id={:page_top} />
           <.pool_visibility_banner
-            :if={@pool_visibility != :invisible}
+            :if={@pool_visibility != nil}
             status={@pool_visibility}
             manage_participants_path={@manage_participants_path}
           />

@@ -397,7 +397,7 @@ defmodule Systems.Advert.PublicTest do
       advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> reload()
 
       assert advert.status != :online
-      assert Advert.Public.pool_visibility(advert) == :invisible
+      assert Advert.Public.pool_visibility(advert) == nil
     end
 
     test "is :visible when online and the fund covers the reward", %{

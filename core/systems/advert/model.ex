@@ -48,7 +48,7 @@ defmodule Systems.Advert.Model do
       case Advert.Public.pool_visibility(advert) do
         :visible -> [dgettext("eyra-advert", "pool.visibility.visible.label")]
         :not_funded -> [dgettext("eyra-advert", "pool.visibility.not_funded.label")]
-        :invisible -> []
+        _ -> []
       end
     end
   end
