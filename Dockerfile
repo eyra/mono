@@ -140,7 +140,8 @@ ARG VERSION
 
 ENV HOME=/app \
     PORT=4000 \
-    APP_NAME=core
+    APP_NAME=core \
+    TERM=xterm-256color
 
 # Copy the built release in
 COPY --from=build_release /app/core/${VERSION} ./

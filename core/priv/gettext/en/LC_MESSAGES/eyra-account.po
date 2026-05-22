@@ -231,10 +231,6 @@ msgid "terms_and_privacy.onboarding.body"
 msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "terms_and_privacy.onboarding.continue.button"
-msgstr "Continue"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "I agree to the %{terms} and %{privacy}."
 

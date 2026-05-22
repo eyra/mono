@@ -113,3 +113,11 @@ msgstr "Participate"
 #, elixir-autogen, elixir-format
 msgid "settings.title"
 msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "settings.invite.annotation"
+msgstr "Share this link with participants so they can take the assignment."
+
+#, elixir-autogen, elixir-format
+msgid "settings.invite.title"
+msgstr "Invite link"

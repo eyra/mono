@@ -95,17 +95,18 @@ defmodule Systems.Budget.Public do
     opts = [return_url: return_url]
     opts = if partner_fee > 0, do: Keyword.put(opts, :partner_fee, partner_fee), else: opts
 
-    with {:ok, provider_result} <-
-           Payment.Public.create_transaction(
-             merchant_uid,
-             total_amount,
-             currency,
-             invoice_id,
-             idempotence_key,
-             description,
-             metadata,
-             opts
-           ),
+    request = %Payment.Transaction.Request{
+      merchant_uid: merchant_uid,
+      total_amount: total_amount,
+      currency: currency,
+      invoice_id: invoice_id,
+      idempotence_key: idempotence_key,
+      description: description,
+      metadata: metadata,
+      opts: opts
+    }
+
+    with {:ok, provider_result} <- Payment.Public.create_transaction(request),
          {:ok, transaction} <-
            %Budget.TransactionModel{}
            |> Budget.TransactionModel.changeset(%{

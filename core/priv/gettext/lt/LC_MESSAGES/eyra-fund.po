@@ -126,3 +126,27 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "funding.funds.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.approved.pill"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.approved.threshold"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.pending.caption"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.pending.pill"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.rejected.pill"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.title"
+msgstr ""

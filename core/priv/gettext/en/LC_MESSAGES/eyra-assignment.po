@@ -655,3 +655,77 @@ msgstr "Subtotal (%{count} × %{reward} reward)"
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
 msgstr "Total"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.description"
+msgstr "Create an advertisement to invite Panl participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.open.button"
+msgstr "Create an advertisement to invite Panl participants."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] "Create an advertisement to invite Panl participants."
+msgstr[1] "Create an advertisement to invite Panl participants."
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.reason.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.coming_soon"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pagination.single_page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.subject_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.overview"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.waiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.heading"
+msgstr ""

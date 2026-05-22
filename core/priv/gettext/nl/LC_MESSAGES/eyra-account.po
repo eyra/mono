@@ -231,10 +231,6 @@ msgid "terms_and_privacy.onboarding.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "terms_and_privacy.onboarding.continue.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
 msgstr ""
 

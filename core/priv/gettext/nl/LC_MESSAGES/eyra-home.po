@@ -16,7 +16,7 @@ msgstr "Softwarediensten"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Bijdragen"
+msgstr "Activiteiten"
 
 #, elixir-autogen, elixir-format
 msgid "available.member.title"
@@ -29,3 +29,23 @@ msgstr "Panl studies"
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Ontwikkeld voor en met onderzoekers"
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr "Studie"
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr "Vergoeding:"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.approved"
+msgstr "Goedgekeurd"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr "In afwachting"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.rejected"
+msgstr "Afgekeurd"

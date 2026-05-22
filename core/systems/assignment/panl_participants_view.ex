@@ -46,6 +46,7 @@ defmodule Systems.Assignment.PanlParticipantsView do
       |> assign_active_currency()
       |> assign_add_button()
       |> assign_advert_link()
+      |> assign_pending_approvals()
     }
   end
 
@@ -68,12 +69,41 @@ defmodule Systems.Assignment.PanlParticipantsView do
   end
 
   @impl true
+  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
+    %{
+      module: Assignment.PayoutModal,
+      params: %{assignment_id: assignment_id}
+    }
+  end
+
+  @impl true
   def handle_event("add_budget", _, socket) do
     {
       :noreply,
       socket
       |> compose_child(:budget_form)
       |> show_modal(:budget_form, :compact)
+    }
+  end
+
+  @impl true
+  def handle_event("open_payout_modal", _, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:payout_modal)
+      |> show_modal(:payout_modal, :compact)
+    }
+  end
+
+  @impl true
+  def handle_event("payout_modal_close", _, socket) do
+    {
+      :noreply,
+      socket
+      |> hide_modal(:payout_modal)
+      |> refresh_assignment()
+      |> assign_pending_approvals()
     }
   end
 
@@ -203,6 +233,10 @@ defmodule Systems.Assignment.PanlParticipantsView do
     Budget.Public.list_transactions_by_fund(fund)
   end
 
+  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
+    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
+  end
+
   defp get_active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency
   defp get_active_currency(_), do: :EUR
 
@@ -245,6 +279,26 @@ defmodule Systems.Assignment.PanlParticipantsView do
     <div>
       <Area.content>
         <Margin.y id={:page_top} />
+        <%= if Enum.any?(@pending_approvals) do %>
+          <div data-testid="pending-approvals-cta">
+            <Systems.NextAction.View.highlight
+              title={
+                dngettext(
+                  "eyra-assignment",
+                  "panl_participants.pending_approvals.title.one",
+                  "panl_participants.pending_approvals.title.other",
+                  length(@pending_approvals),
+                  count: length(@pending_approvals)
+                )
+              }
+              description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
+              cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+              cta_action={%{type: :send, event: "open_payout_modal", target: @myself}}
+            />
+          </div>
+          <.spacing value="XL" />
+        <% end %>
+
         <div class="flex flex-row items-baseline gap-3">
           <Text.title2 margin=""><%= @title %></Text.title2>
           <div class="text-title2 font-title2 text-primary">
