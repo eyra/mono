@@ -1,710 +1,352 @@
 defmodule Systems.Budget.Public do
   use Core, :public
-  import Ecto.Query, warn: false
-  import Ecto.Changeset
-
-  import Systems.Budget.Queries
 
   require Logger
 
-  alias Ecto.Multi
-  alias Core.Repo
+  import Ecto.Query
 
-  alias Frameworks.Utility.Identifier
+  alias Core.Repo
+  alias Ecto.Multi
 
   alias Systems.Account
+  alias Systems.Budget
+  alias Systems.Bookkeeping
+  alias Systems.Payment
+  alias Systems.Assignment
+  alias Systems.Fund
 
-  alias Systems.{
-    Budget,
-    Bookkeeping,
-    Banking
-  }
-
-  defmodule BudgetError do
-    @moduledoc false
-    defexception [:message]
-  end
-
-  def list(preload \\ []) do
-    Repo.all(Budget.Model) |> Repo.preload(preload)
-  end
-
-  def list_owned(%Account.User{} = user, preload \\ []) do
-    node_ids =
-      auth_module().query_node_ids(
-        role: :owner,
-        principal: user
-      )
-
-    from(b in Budget.Model,
-      where: b.auth_node_id in subquery(node_ids),
-      preload: ^preload
+  def list_transactions_by_fund(%Fund.Model{id: fund_id}) do
+    from(t in Budget.TransactionModel,
+      where: t.target_fund_id == ^fund_id,
+      order_by: [desc: t.inserted_at]
     )
     |> Repo.all()
   end
 
-  def list_owned_by_currency(
-        %Account.User{} = user,
-        %Budget.CurrencyModel{id: currency_id},
-        preload \\ []
-      ) do
-    node_ids =
-      auth_module().query_node_ids(
-        role: :owner,
-        principal: user
+  def get_transaction_by_provider_uid!(provider_uid) do
+    Repo.get_by!(Budget.TransactionModel, transaction_id: provider_uid)
+  end
+
+  # --- Pay-in creation ---
+
+  @doc """
+  Creates a pending transaction and initiates payment with the payment provider.
+  Lazily creates an OPP merchant for the user if needed.
+  Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.
+  """
+  def create_pay_in(
+        %Assignment.Model{info: %{subject_reward: subject_reward}, fund: fund} = assignment,
+        %Account.User{id: user_id} = user,
+        subject_count
       )
+      when is_integer(subject_count) and subject_count > 0 do
+    reward_per_participant = subject_reward || 0
+    base_amount = subject_count * reward_per_participant
+    partner_fee = Payment.Public.partner_fee_amount(base_amount)
+    total_amount = base_amount + partner_fee
 
-    from(b in Budget.Model,
-      where: b.auth_node_id in subquery(node_ids),
-      where: b.currency_id == ^currency_id,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
-  def list_currencies(preload \\ []) do
-    currency_query()
-    |> Repo.all()
-    |> Repo.preload(preload)
-  end
-
-  def list_currencies_by_type(type, preload \\ []) do
-    currency_query(type)
-    |> Repo.all()
-    |> Repo.preload(preload)
-  end
-
-  def list_bank_accounts(preload \\ []) do
-    Repo.all(Budget.BankAccountModel) |> Repo.preload(preload)
-  end
-
-  def list_wallets(%Account.User{id: user_id}) do
-    Bookkeeping.Public.list_accounts(["wallet", "#{user_id}"])
-  end
-
-  def list_wallets(%Budget.Model{currency: currency}), do: list_wallets(currency)
-
-  def list_wallets(%Budget.CurrencyModel{name: name}) do
-    Bookkeeping.Public.list_accounts(["wallet", "#{name}"])
-  end
-
-  def list_rewards(%Account.User{id: user_id}, preload \\ []) do
-    from(reward in Budget.RewardModel,
-      where: reward.user_id == ^user_id,
-      preload: ^preload
-    )
-    |> Repo.all()
-  end
-
-  def get!(id, preload \\ [:fund, :reserve]) when is_integer(id) do
-    from(budget in Budget.Model, preload: ^preload)
-    |> Repo.get!(id)
-  end
-
-  def get_by_currency!(%Budget.CurrencyModel{id: currency_id}, preload \\ []) do
-    Repo.get_by!(Budget.Model, currency_id: currency_id)
-    |> Repo.preload(preload)
-  end
-
-  def get_by_name(name, preload \\ []) when is_binary(name) do
-    Repo.get_by(Budget.Model, name: name)
-    |> Repo.preload(preload)
-  end
-
-  def get_bank_account!(id, preload \\ []) when is_integer(id) do
-    from(bank_account in Budget.BankAccountModel, preload: ^preload)
-    |> Repo.get!(id)
-  end
-
-  def get_currency!(id, preload \\ []) when is_integer(id) do
-    from(currency in Budget.CurrencyModel, preload: ^preload)
-    |> Repo.get!(id)
-  end
-
-  def get_currency_by_name(name, preload \\ []) when is_binary(name) do
-    Repo.get_by(Budget.CurrencyModel, name: name)
-    |> Repo.preload(preload)
-  end
-
-  def get_reward!(id, preload \\ [:budget, :deposit, :payment, :user]) do
-    from(reward in Budget.RewardModel, preload: ^preload)
-    |> Repo.get!(id)
-  end
-
-  def get_reward(idempotence_key, preload) when is_binary(idempotence_key) do
-    from(reward in Budget.RewardModel,
-      where: reward.idempotence_key == ^idempotence_key,
-      preload: ^preload
-    )
-    |> Repo.one()
-  end
-
-  def get_reward(%Budget.Model{id: budget_id}, %Account.User{id: user_id}, preload \\ []) do
-    from(reward in Budget.RewardModel,
-      where: reward.user_id == ^user_id,
-      where: reward.budget_id == ^budget_id,
-      where: not (is_nil(reward.deposit_id) and is_nil(reward.payment_id)),
-      preload: ^preload
-    )
-    |> Repo.one()
-  end
-
-  def get_wallet_identifier(%Systems.Account.User{} = user, %Budget.CurrencyModel{
-        name: currency_name
-      }),
-      do: get_wallet_identifier(user, currency_name)
-
-  def get_wallet_identifier(%Systems.Account.User{id: user_id}, currency_name)
-      when is_binary(currency_name) do
-    {:wallet, currency_name, user_id}
-  end
-
-  def create_bank_account(name, icon, type, decimal_scale, label_bundle) do
-    Budget.BankAccountModel.create(name, icon, type, decimal_scale, label_bundle)
-    |> Repo.insert!()
-  end
-
-  def create_budget(%Budget.CurrencyModel{} = currency, name, icon) do
-    Budget.Model.create(currency, name, icon)
-    |> Repo.insert!()
-  end
-
-  def create_budget(%Budget.CurrencyModel{} = currency, name, icon, %Account.User{} = owner) do
-    Budget.Model.create(currency, name, icon, owner)
-    |> Repo.insert!()
-  end
-
-  def create_currency_and_budget(name, icon, type, decimal_scale, label) do
-    Budget.Model.create(name, icon, type, decimal_scale, label)
-    |> Repo.insert!()
-  end
-
-  def move_wallet_balance(
-        [_ | _] = from,
-        [_ | _] = to,
-        idempotence_key,
-        limit
-      )
-      when is_integer(limit) do
-    Bookkeeping.Public.get_account(from)
-    |> move_wallet_balance(to, idempotence_key, limit)
-  end
-
-  def move_wallet_balance(
-        nil,
-        [_ | _] = _to,
-        idempotence_key,
-        _limit
-      ),
-      do: raise("Unable to move balance: #{idempotence_key}")
-
-  def move_wallet_balance(
-        %{} = from_account,
-        [_ | _] = to,
-        idempotence_key,
-        limit
-      ) do
-    amount = Bookkeeping.AccountModel.balance(from_account)
-    move_wallet_balance(from_account, to, idempotence_key, limit, amount)
-  end
-
-  def move_wallet_balance(
-        %{identifier: from},
-        [_ | _] = to,
-        idempotence_key,
-        limit,
-        amount
-      )
-      when amount > 0 and amount < limit do
-    journal_message =
-      "Moved #{amount} from account #{Identifier.to_string(from)} to account #{Identifier.to_string(to)}"
-
-    create_payment_transaction(from, to, amount, idempotence_key, journal_message)
-  end
-
-  def move_wallet_balance(_, _, idempotence_key, limit, amount) do
-    Logger.info(
-      "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
-    )
-  end
-
-  def wallet_is_passive?(%{
-        identifier: ["wallet", _, _],
-        balance_credit: balance_credit,
-        balance_debit: balance_debit
-      }) do
-    balance_credit > 0 and balance_credit == balance_debit
-  end
-
-  def wallet_is_active?(%{identifier: ["wallet", _, _]} = wallet) do
-    not wallet_is_passive?(wallet)
-  end
-
-  def create_reward(%Budget.Model{} = budget, amount, user, idempotence_key)
-      when is_integer(amount) and is_binary(idempotence_key) do
-    Multi.new()
-    |> create_reward(budget, amount, user, idempotence_key)
-    |> Repo.commit()
-  end
-
-  def create_reward(
-        multi,
-        %Budget.Model{} = budget,
-        amount,
-        user,
-        idempotence_key
-      )
-      when is_integer(amount) and is_binary(idempotence_key) do
-    multi
-    |> guard_budget_balance(budget, amount)
-    |> upsert_reward(budget, amount, user, idempotence_key)
-    |> make_deposit()
-  end
-
-  defp guard_budget_balance(
-         multi,
-         %Budget.Model{currency: %{type: :legal}} = budget,
-         amount
-       )
-       when is_integer(amount) do
-    multi
-    |> Multi.run(:budget_balance, fn _, _ ->
-      if Budget.Model.amount_available(budget) >= amount do
-        {:ok, true}
-      else
-        Logger.warning("Budget has not enough funds to make reward reservation")
-        {:error, :no_funding}
+    if total_amount > 0 do
+      with {:ok, user} <- ensure_user_merchant(user) do
+        create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
       end
-    end)
-  end
-
-  defp guard_budget_balance(multi, _, _), do: multi
-
-  def payout_reward(idempotence_key) when is_binary(idempotence_key) do
-    case get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-      nil -> Logger.warning("No reward available to payout for #{idempotence_key}")
-      reward -> make_payment(reward)
-    end
-  end
-
-  def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do
-    currency_name
-    |> Budget.Public.get_currency_by_name()
-    |> multiply_rewards(multiplier)
-  end
-
-  def multiply_rewards(%Budget.CurrencyModel{} = currency, multiplier) do
-    currency
-    |> Budget.Public.get_by_currency!(Budget.Model.preload_graph(:full))
-    |> multiply_rewards(multiplier)
-  end
-
-  def multiply_rewards(%Budget.Model{} = budget, multiplier) when multiplier > 1 do
-    Budget.Public.list_wallets(budget)
-    |> Enum.map(&multiply_reward(&1, budget, multiplier))
-  end
-
-  def multiply_rewards(_, multiplier), do: raise("Attempt to multiply rewards by #{multiplier}")
-
-  defp multiply_reward(
-         %Bookkeeping.AccountModel{
-           balance_credit: balance_credit,
-           identifier: ["wallet", currency_name, user_id]
-         },
-         %Budget.Model{} = budget,
-         multiplier
-       )
-       when multiplier > 1 do
-    user =
-      String.to_integer(user_id)
-      |> Systems.Account.Public.get_user!()
-
-    reward_amount = balance_credit * (multiplier - 1)
-    idempotence_key = "multiplier=#{multiplier},currency=#{currency_name},user=#{user_id}"
-
-    Budget.Public.create_reward(budget, reward_amount, user, idempotence_key)
-    Budget.Public.payout_reward(idempotence_key)
-  end
-
-  defp upsert_reward(
-         multi,
-         %Budget.Model{} = budget,
-         amount,
-         %Account.User{} = user,
-         idempotence_key
-       )
-       when is_integer(amount) do
-    multi
-    |> Multi.run(:reward, fn _, _ ->
-      case Budget.Public.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-        nil -> insert_reward(budget, amount, user, idempotence_key)
-        reward -> update_reward(reward, %{amount: amount})
-      end
-    end)
-  end
-
-  defp insert_reward(
-         %Budget.Model{} = budget,
-         amount,
-         %Account.User{} = user,
-         idempotence_key
-       )
-       when is_integer(amount) do
-    %Budget.RewardModel{}
-    |> Budget.RewardModel.changeset(%{
-      idempotence_key: idempotence_key,
-      amount: amount,
-      attempt: 0
-    })
-    |> put_assoc(:budget, budget)
-    |> put_assoc(:user, user)
-    |> put_assoc(:deposit, nil)
-    |> Repo.insert()
-  end
-
-  defp update_reward(reward, %{} = attrs) do
-    reward
-    |> Budget.RewardModel.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def reward_has_outstanding_deposit?(idempotence_key) do
-    from(reward in Budget.RewardModel,
-      where: reward.idempotence_key == ^idempotence_key,
-      where: not is_nil(reward.deposit_id),
-      where: is_nil(reward.payment_id)
-    )
-    |> Repo.exists?()
-  end
-
-  def rollback_deposit(idempotence_key) when is_binary(idempotence_key) do
-    case Budget.Public.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-      nil -> raise BudgetError, "No reward available to rollback"
-      reward -> rollback_deposit(reward)
-    end
-  end
-
-  def rollback_deposit(%Budget.RewardModel{} = reward) do
-    Multi.new()
-    |> rollback_deposit(reward)
-    |> Repo.commit()
-  end
-
-  def rollback_deposit(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
-    case Budget.Public.get_reward(idempotence_key, Budget.RewardModel.preload_graph(:full)) do
-      nil -> raise BudgetError, "No reward available to rollback"
-      reward -> rollback_deposit(multi, reward)
-    end
-  end
-
-  def rollback_deposit(%Multi{} = multi, reward) do
-    multi
-    |> revert_deposit(reward)
-    |> reset_reward(reward)
-  end
-
-  defp reset_reward(multi, %Budget.RewardModel{attempt: attempt} = reward) do
-    next_attempt = attempt + 1
-
-    multi
-    |> Multi.update_all(
-      :reset_reward,
-      fn _ ->
-        from(r in Budget.RewardModel,
-          where: r.id == ^reward.id,
-          update: [set: [attempt: ^next_attempt, deposit_id: nil]]
-        )
-      end,
-      []
-    )
-  end
-
-  def make_test_deposit(
-        %Budget.Model{
-          id: budget_id,
-          currency: %{
-            name: currency_name,
-            bank_account: %{
-              id: bank_account_id,
-              account: %{
-                identifier: bank_account
-              }
-            }
-          },
-          fund: %{identifier: fund}
-        },
-        %Budget.DepositModel{amount: amount, reference: reference}
-      ) do
-    if Banking.Public.is_live?(currency_name) do
-      raise BudgetError,
-        message: "Can not deposit money from #{bank_account}. It is connected to a real bank."
-    end
-
-    amount = String.to_integer(amount)
-
-    transaction = %{
-      idempotence_key:
-        "bank_account=#{bank_account_id},budget=#{budget_id},reference=#{reference}",
-      journal_message: "Transfer #{amount} from #{bank_account} to #{fund}",
-      lines: [
-        %{
-          account: bank_account,
-          debit: amount
-        },
-        %{
-          account: fund,
-          credit: amount
-        }
-      ]
-    }
-
-    Bookkeeping.Public.enter(transaction)
-  end
-
-  def make_deposit(%Multi{} = multi) do
-    multi
-    |> Multi.run(:deposit, fn _, %{reward: reward} ->
-      {:ok, deposit: deposit} = create_deposit_transaction(reward)
-      link_deposit_transaction(reward, deposit)
-    end)
-  end
-
-  defp make_payment(reward) do
-    Multi.new()
-    |> Multi.run(:reward, fn _, _ ->
-      case create_payment_transaction(reward) do
-        {:ok, %{entry: payment}} -> link_payment_transaction(reward, payment)
-        error -> error
-      end
-    end)
-    |> Repo.commit()
-  end
-
-  defp link_deposit_transaction(reward, deposit) do
-    reward
-    |> Budget.RewardModel.changeset(%{})
-    |> put_assoc(:deposit, deposit)
-    |> Repo.update()
-  end
-
-  defp link_payment_transaction(reward, payment) do
-    reward
-    |> Budget.RewardModel.changeset(%{})
-    |> put_assoc(:payment, payment)
-    |> Repo.update()
-  end
-
-  defp create_deposit_transaction(
-         %Budget.RewardModel{
-           amount: amount,
-           budget: %{id: budget_id, name: budget_name, currency: currency} = budget
-         } = reward
-       ) do
-    amount_label = Budget.CurrencyModel.label(currency, :en, amount)
-    journal_message = "Reserved #{amount_label} on budget #{budget_name} ##{budget_id}"
-
-    deposit_idempotence_key = Budget.RewardModel.deposit_idempotence_key(reward)
-
-    deposit_attrs = deposit_attrs(deposit_idempotence_key, journal_message, budget, amount)
-    {:ok, %{entry: deposit}} = Bookkeeping.Public.enter(deposit_attrs)
-
-    {:ok, deposit: deposit}
-  end
-
-  defp create_payment_transaction(%{amount: amount, payment: %{idempotence_key: idempotence_key}}) do
-    Logger.warning(
-      "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-    )
-
-    {:error, :payment_already_available}
-  end
-
-  defp create_payment_transaction(
-         %{
-           deposit: nil,
-           budget: %{
-             fund: %{identifier: fund_id}
-           }
-         } = reward
-       ) do
-    create_payment_transaction(reward, fund_id)
-  end
-
-  defp create_payment_transaction(
-         %{
-           budget: %{
-             reserve: %{identifier: reserve_id}
-           }
-         } = reward
-       ) do
-    create_payment_transaction(reward, reserve_id)
-  end
-
-  defp create_payment_transaction(
-         %{
-           idempotence_key: idempotence_key,
-           amount: amount,
-           user: user,
-           budget: %{
-             id: budget_id,
-             name: budget_name,
-             currency: currency
-           }
-         },
-         from_id
-       ) do
-    amount_label = Budget.CurrencyModel.label(currency, :en, amount)
-    journal_message = "Payout #{amount_label} on budget #{budget_name} ##{budget_id}"
-    wallet_id = get_wallet_identifier(user, currency)
-
-    payment_idempotence_key = Budget.RewardModel.payment_idempotence_key(idempotence_key)
-
-    create_payment_transaction(
-      from_id,
-      wallet_id,
-      amount,
-      payment_idempotence_key,
-      journal_message
-    )
-  end
-
-  defp create_payment_transaction(from, to, amount, idempotence_key, journal_message) do
-    lines = [
-      %{account: from, debit: amount},
-      %{account: to, credit: amount}
-    ]
-
-    payment = %{
-      idempotence_key: idempotence_key,
-      journal_message: journal_message,
-      lines: lines
-    }
-
-    if Bookkeeping.Public.exists?(idempotence_key) do
-      Logger.warning(
-        "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-      )
-
-      {:error, :payment_already_available}
     else
-      result = Bookkeeping.Public.enter(payment)
+      create_free_pay_in(fund, user_id, subject_count)
+    end
+  end
 
-      with {:error, error} <- result do
-        Logger.warning("Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}")
+  defp create_paid_pay_in(
+         %Assignment.Model{
+           info: %{
+             subject_reward: subject_reward,
+             title: title,
+             subtitle: subtitle,
+             aim_of_study: aim_of_study
+           },
+           fund: fund
+         } = assignment,
+         %Account.User{id: user_id, merchant_uid: merchant_uid},
+         subject_count,
+         total_amount,
+         partner_fee
+       ) do
+    reward_per_participant = subject_reward || 0
+    currency = get_currency(fund)
+    idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
+    invoice_id = generate_invoice_id()
+
+    description = %Payment.Transaction.Description{
+      platform: "Next",
+      assignment: title || "Untitled",
+      participant_count: subject_count,
+      amount_per_participant: reward_per_participant
+    }
+
+    metadata = %Payment.Transaction.Metadata{
+      contact_person: "Researcher ##{user_id}",
+      study_title: title || "Untitled",
+      study_goal: subtitle || "",
+      aim_of_study: aim_of_study,
+      participant_count: subject_count,
+      amount_per_participant: reward_per_participant
+    }
+
+    return_url = return_url(assignment)
+
+    opts = [return_url: return_url]
+    opts = if partner_fee > 0, do: Keyword.put(opts, :partner_fee, partner_fee), else: opts
+
+    with {:ok, provider_result} <-
+           Payment.Public.create_transaction(
+             merchant_uid,
+             total_amount,
+             currency,
+             invoice_id,
+             idempotence_key,
+             description,
+             metadata,
+             opts
+           ),
+         {:ok, transaction} <-
+           %Budget.TransactionModel{}
+           |> Budget.TransactionModel.changeset(%{
+             transaction_id: provider_result.uid,
+             status: :pending,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count,
+             total_amount: total_amount
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
+           |> Repo.insert() do
+      {:ok, %{transaction: transaction, payment_url: provider_result.payment_url}}
+    end
+  end
+
+  defp create_free_pay_in(%Fund.Model{id: fund_id}, user_id, subject_count) do
+    idempotence_key = "pay_in:fund=#{fund_id}:#{Ecto.UUID.generate()}"
+    invoice_id = generate_invoice_id()
+
+    with {:ok, transaction} <-
+           %Budget.TransactionModel{}
+           |> Budget.TransactionModel.changeset(%{
+             transaction_id: "free_#{Ecto.UUID.generate()}",
+             status: :completed,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count,
+             total_amount: 0
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund_id)
+           |> Repo.insert() do
+      increment_subject_count(fund_id, subject_count)
+      {:ok, %{transaction: transaction, payment_url: nil}}
+    end
+  end
+
+  # --- User merchant ---
+
+  defp ensure_user_merchant(%Account.User{} = user) do
+    ensure_merchant_for(Repo.reload!(user))
+  end
+
+  defp ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
+       when is_binary(merchant_uid) do
+    {:ok, user}
+  end
+
+  defp ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
+    webhook_url = Payment.Public.webhook_url()
+
+    Logger.info("[Budget] Creating OPP merchant for user ##{user_id} (#{email})")
+
+    case Payment.Public.create_merchant(%{
+           emailaddress: email,
+           country: "NLD",
+           notify_url: webhook_url,
+           metadata: %{user_id: "#{user_id}"}
+         }) do
+      {:ok, %{uid: merchant_uid}} ->
+        Logger.info("[Budget] Merchant created: #{merchant_uid} for user ##{user_id}")
+        save_merchant_uid(user, merchant_uid)
+
+      {:error, %{details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => _}}}}}} ->
+        Logger.info("[Budget] Merchant already exists at OPP for #{email}, looking up...")
+        lookup_merchant_by_email(user)
+
+      {:error, error} ->
+        Logger.warning(
+          "[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
+        )
+
         {:error, error}
-      end
     end
   end
 
-  defp revert_deposit(multi, reward) do
-    multi
-    |> Multi.run(:revert_deposit, fn _, _ ->
-      revert_deposit(reward)
+  defp lookup_merchant_by_email(%Account.User{email: email} = user) do
+    case Payment.Public.find_merchant_by_email(email) do
+      {:ok, %{uid: merchant_uid}} ->
+        Logger.info("[Budget] Found existing merchant: #{merchant_uid} for #{email}")
+        save_merchant_uid(user, merchant_uid)
+
+      {:error, error} ->
+        Logger.warning("[Budget] Merchant lookup failed for #{email}: #{inspect(error)}")
+        {:error, error}
+    end
+  end
+
+  defp save_merchant_uid(user, merchant_uid) do
+    user =
+      user
+      |> Ecto.Changeset.change(%{merchant_uid: merchant_uid})
+      |> Repo.update!()
+
+    {:ok, user}
+  end
+
+  # --- Transaction completion ---
+
+  @doc """
+  Completes a transaction after successful payment.
+  In one atomic Multi:
+  1. Update transaction status to :completed
+  2. Create bookkeeping entry (debit CurrencyLedger.inbound, credit Fund.available)
+  3. Increment assignment subject_count
+
+  Money stays on the user's OPP merchant. Our bookkeeping is the source of truth
+  for fund allocation. OPP withdrawals happen at payout time (UC-OPP-06).
+
+  Status handling: `:pending` and `:failed` transactions are both completed by
+  this function. The `:failed → :completed` upgrade resolves the race where the
+  expiration worker marks a transaction failed before a late webhook arrives —
+  the researcher's payment did succeed at OPP and we credit it. Only
+  `:completed` transactions are refused (idempotency on duplicate webhooks).
+  """
+  def complete_transaction(provider_uid) when is_binary(provider_uid) do
+    transaction =
+      get_transaction_by_provider_uid!(provider_uid)
+      |> Repo.preload(target_fund: [:available, :pending, currency_ledger: [:inbound, :outbound]])
+
+    case transaction.status do
+      :completed ->
+        {:error, "Transaction already completed"}
+
+      _ ->
+        do_complete_transaction(transaction)
+    end
+  end
+
+  defp do_complete_transaction(
+         %Budget.TransactionModel{
+           subject_count: subject_count,
+           target_fund: %{
+             available: %{identifier: fund_account_id},
+             currency_ledger: %{inbound: %{identifier: inbound_account_id}}
+           }
+         } = transaction
+       ) do
+    reward_per_participant = get_reward_per_participant(transaction)
+    total_amount = subject_count * reward_per_participant
+
+    Multi.new()
+    |> Multi.update(
+      :transaction,
+      Budget.TransactionModel.changeset(transaction, %{status: :completed})
+    )
+    |> Multi.run(:bookkeeping, fn _, _ ->
+      Bookkeeping.Public.enter(%{
+        idempotence_key: "complete:#{transaction.idempotence_key}",
+        journal_message:
+          "Pay-in #{total_amount} cents for #{subject_count} participants on fund ##{transaction.target_fund_id}",
+        lines: [
+          %{account: inbound_account_id, debit: total_amount},
+          %{account: fund_account_id, credit: total_amount}
+        ]
+      })
     end)
+    |> Multi.run(:update_subject_count, fn _, _ ->
+      increment_subject_count(transaction.target_fund_id, subject_count)
+    end)
+    |> Repo.commit()
   end
 
-  defp revert_deposit(%{deposit: nil}), do: {:error, :deposit_not_available}
+  def fail_transaction(provider_uid) when is_binary(provider_uid) do
+    transaction = get_transaction_by_provider_uid!(provider_uid)
 
-  defp revert_deposit(%{payment: payment}) when not is_nil(payment),
-    do: {:error, :payment_already_available}
-
-  defp revert_deposit(%{deposit: deposit}), do: revert_deposit(deposit)
-
-  defp revert_deposit(%{
-         lines: lines,
-         idempotence_key: idempotence_key,
-         journal_message: journal_message
-       })
-       when is_list(lines) do
-    lines =
-      lines
-      |> Enum.map(&revert_deposit_line(&1))
-
-    rollback_entry = %{
-      idempotence_key: "[REVERT] #{idempotence_key}",
-      journal_message: "[REVERT] #{journal_message}",
-      lines: lines
-    }
-
-    Bookkeeping.Public.enter(rollback_entry)
+    transaction
+    |> Budget.TransactionModel.changeset(%{status: :failed})
+    |> Repo.update()
   end
 
-  defp revert_deposit_line(
-         %{account: %{identifier: account_id}, debit: debit, credit: credit} = _line
-       ) do
-    %{
-      account: account_id,
-      debit: credit,
-      credit: debit
-    }
-  end
+  @pay_in_expiration_minutes 15
 
-  defp deposit_attrs(
-         idempotence_key,
-         journal_message,
-         %Budget.Model{fund: %{identifier: fund_id}, reserve: %{identifier: reserve_id}},
-         amount
-       ) do
-    %{
-      idempotence_key: idempotence_key,
-      journal_message: journal_message,
-      lines: [
-        %{
-          account: fund_id,
-          debit: amount
-        },
-        %{
-          account: reserve_id,
-          credit: amount
-        }
-      ]
-    }
-  end
+  @doc """
+  Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
 
-  def pending_rewards(%{id: student_id} = _student, currency) do
-    from([_, _, _, u] in pending_rewards_query(currency),
-      where: u.id == ^student_id
-    )
-    |> Repo.one!()
-    |> guard_number_nil()
-  end
+  The OPP hosted checkout keeps the transaction open on their side, but once we've
+  marked it failed locally `complete_transaction/1` refuses to complete it even if
+  the webhook arrives later, so the user has to start a new pay-in.
 
-  def pending_rewards(currency) do
-    from(c in pending_rewards_query(currency))
-    |> Repo.one!()
-    |> guard_number_nil()
-  end
+  Returns the number of transactions that were expired.
+  """
+  def expire_stale_pay_ins(max_age_minutes \\ @pay_in_expiration_minutes)
+      when is_integer(max_age_minutes) and max_age_minutes > 0 do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    cutoff = NaiveDateTime.add(now, -max_age_minutes * 60, :second)
 
-  def pending_rewards_query(%{name: currency_name}), do: pending_rewards_query(currency_name)
+    {count, _} =
+      from(t in Budget.TransactionModel,
+        where: t.status == :pending and t.inserted_at < ^cutoff,
+        update: [set: [status: :failed, updated_at: ^now]]
+      )
+      |> Repo.update_all([])
 
-  def pending_rewards_query(currency_name) do
-    from(r in Budget.RewardModel,
-      inner_join: b in Budget.Model,
-      on: b.id == r.budget_id,
-      inner_join: c in Budget.CurrencyModel,
-      on: c.id == b.currency_id,
-      inner_join: u in Account.User,
-      on: u.id == r.user_id,
-      where: c.name == ^currency_name and not is_nil(r.deposit_id) and is_nil(r.payment_id),
-      select: sum(r.amount)
-    )
-  end
-
-  def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
-    payment_idempotence_key = Budget.RewardModel.payment_idempotence_key(idempotence_key)
-
-    case Bookkeeping.Public.get_entry(payment_idempotence_key, [:lines]) do
-      nil -> 0
-      payment -> rewarded_amount(payment)
+    if count > 0 do
+      Logger.info("[Budget] Expired #{count} stale pending pay-in(s)")
     end
+
+    count
   end
 
-  def rewarded_amount(%{lines: lines}), do: rewarded_amount(lines)
-  def rewarded_amount([first_line | _]), do: rewarded_amount(first_line)
-  def rewarded_amount(%{debit: debit, credit: nil}), do: debit
-  def rewarded_amount(%{debit: nil, credit: credit}), do: credit
-  def rewarded_amount(_), do: 0
+  # --- Helpers ---
 
-  defp guard_number_nil(nil), do: 0
-  defp guard_number_nil(number), do: number
+  defp get_reward_per_participant(%Budget.TransactionModel{target_fund_id: fund_id}) do
+    from(a in Assignment.Model,
+      join: i in assoc(a, :info),
+      where: a.fund_id == ^fund_id,
+      select: i.subject_reward
+    )
+    |> Repo.one() || 0
+  end
+
+  defp increment_subject_count(fund_id, additional_count) do
+    from(i in Assignment.InfoModel,
+      join: a in Assignment.Model,
+      on: a.info_id == i.id,
+      where: a.fund_id == ^fund_id,
+      update: [inc: [subject_count: ^additional_count]]
+    )
+    |> Repo.update_all([])
+
+    {:ok, :updated}
+  end
+
+  defp generate_invoice_id do
+    env_id = Application.get_env(:core, :invoice_environment, "DEV")
+    %{rows: [[number]]} = Repo.query!("SELECT nextval('invoice_number_seq')")
+    padded = number |> Integer.to_string() |> String.pad_leading(4, "0")
+    "NEXT-#{env_id}-#{padded}"
+  end
+
+  defp return_url(%Assignment.Model{id: assignment_id}) do
+    base_url =
+      Application.get_env(:core, :payment_webhook_base_url) ||
+        Application.fetch_env!(:core, :base_url)
+
+    "#{base_url}/assignment/#{assignment_id}/content"
+  end
+
+  defp get_currency(%{currency_ledger: %{currency: currency}}), do: currency
+  defp get_currency(_), do: :EUR
 end

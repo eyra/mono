@@ -11,101 +11,101 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "config.url.label"
-msgstr ""
+msgstr "Fragebogen-Link"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
-msgstr ""
+msgstr "Vergütung"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Teilnehmen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Fortfahren"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.description"
-msgstr ""
+msgstr "Um Teilnehmende am Ende des Fragebogens zurück zu Next zu leiten, kopieren Sie die untenstehende Weiterleitungs-URL und fügen Sie diese in Qualtrics als \"Website URL\" ein, wie %{link}."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.title"
-msgstr ""
+msgstr "Weiterleitungs-URL"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "Ausstehend"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Kampagne"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.description"
-msgstr ""
+msgstr "Next fügt die Teilnehmer-ID automatisch zu Ihrer Qualtrics-URL hinzu. Um diese ID in Qualtrics zu verwenden, fügen Sie ein eingebettetes Datenfeld mit dem Namen \"participant\" hinzu, wie %{link} in \"PART 2\"."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.title"
-msgstr ""
+msgstr "Teilnehmer-ID"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "setup.title"
-msgstr ""
+msgstr "Wie richten Sie Ihren Fragebogen in Qualtrics ein?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
-msgstr ""
+msgstr "Kopieren"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.description"
-msgstr ""
+msgstr "Um den Link zu Ihrem Qualtrics-Fragebogen zu erhalten, folgen Sie %{link}. Fügen Sie Ihren Link in das Feld \"Fragebogen-Link\" im untenstehenden Formular ein."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.title"
-msgstr ""
+msgstr "Fragebogen-Link"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.instructions.link"
-msgstr ""
+msgstr "hier erklärt"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.instructions.link"
-msgstr ""
+msgstr "hier beschrieben"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "study.instructions.link"
-msgstr ""
+msgstr "diese Anleitung"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.text"
-msgstr ""
+msgstr "%{duration} Minuten"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
-msgstr ""
+msgstr "Dauer"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
-msgstr ""
+msgstr "Geschlossen für Teilnahme"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.highlight.title"
-msgstr ""
+msgstr "Status"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.open.highlight.text"
-msgstr ""
+msgstr "Offen für Teilnahme"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "language.highlight.title"
-msgstr ""
+msgstr "Sprache"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
-msgstr ""
+msgstr "Teilgenommen"
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"

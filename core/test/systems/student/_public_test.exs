@@ -3,7 +3,7 @@ defmodule Systems.Student.PublicTest do
 
   alias Systems.{
     Student,
-    Budget,
+    Fund,
     Pool,
     Org,
     Bookkeeping
@@ -15,8 +15,8 @@ defmodule Systems.Student.PublicTest do
     last_year = "course_year1_2000"
     current_year = "course_year1_2001"
 
-    last_year_currency = Budget.Factories.create_currency(last_year, :virtual, "credits", 0)
-    current_year_currency = Budget.Factories.create_currency(current_year, :virtual, "credits", 0)
+    last_year_currency = Fund.Factories.create_currency(last_year, :virtual, "credits", 0)
+    current_year_currency = Fund.Factories.create_currency(current_year, :virtual, "credits", 0)
 
     last_year_wallet = ["wallet", last_year, "#{student.id}"]
     current_year_wallet = ["wallet", current_year, "#{student.id}"]
@@ -49,13 +49,11 @@ defmodule Systems.Student.PublicTest do
 
     class_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_class,
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_course,
         identifier: ["course", ":year1", ":2001"]
       })
 
@@ -83,8 +81,8 @@ defmodule Systems.Student.PublicTest do
     last_year = "course_year1_2000"
     current_year = "course_year1_2001"
 
-    last_year_currency = Budget.Factories.create_currency(last_year, :virtual, "credits", 0)
-    current_year_currency = Budget.Factories.create_currency(current_year, :virtual, "credits", 0)
+    last_year_currency = Fund.Factories.create_currency(last_year, :virtual, "credits", 0)
+    current_year_currency = Fund.Factories.create_currency(current_year, :virtual, "credits", 0)
 
     last_year_wallet = ["wallet", last_year, "#{student.id}"]
     current_year_wallet = ["wallet", current_year, "#{student.id}"]
@@ -117,13 +115,11 @@ defmodule Systems.Student.PublicTest do
 
     class_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_class,
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
       Core.Factories.insert!(:org_node, %{
-        type: :student_course,
         identifier: ["course", ":year1", ":2001"]
       })
 
@@ -165,25 +161,25 @@ defmodule Systems.Student.PublicTest do
                  }
                ]
              }
-           } = Budget.Public.get_currency_by_name(name, label_bundle: [:items])
+           } = Fund.Public.get_currency_by_name(name, label_bundle: [:items])
 
     assert %{
              name: ^name,
              currency: %{
                name: ^name
              },
-             fund: %{
+             available: %{
                balance_credit: 0,
                balance_debit: 0,
                identifier: ["fund", ^name]
              },
-             reserve: %{
+             pending: %{
                balance_credit: 0,
                balance_debit: 0,
                identifier: ["reserve", ^name]
              },
              rewards: []
-           } = Budget.Public.get_by_name(name, [:fund, :reserve, :rewards, :currency])
+           } = Fund.Public.get_by_name(name, [:available, :pending, :rewards, :currency])
 
     assert %{
              name: ^name,
@@ -191,14 +187,12 @@ defmodule Systems.Student.PublicTest do
                name: ^name
              },
              org: %{
-               identifier: ^identifier,
-               type: :student_course
+               identifier: ^identifier
              },
              target: 100
            } = Pool.Public.get_by_name(name, [:org, :currency])
 
     assert %{
-             type: :student_course,
              identifier: ^identifier,
              full_name_bundle: %{
                items: [
@@ -239,7 +233,6 @@ defmodule Systems.Student.PublicTest do
              ])
 
     assert %{
-             type: :student_class,
              identifier: ["vu", "sbe", "bk", ":year1", ":2024"],
              full_name_bundle: %{
                items: [
@@ -271,7 +264,6 @@ defmodule Systems.Student.PublicTest do
              },
              links: [
                %{
-                 type: :student_course,
                  identifier: ["vu", "sbe", "rpr", ":year1", ":2024"]
                }
              ],
@@ -285,7 +277,6 @@ defmodule Systems.Student.PublicTest do
              ])
 
     assert %{
-             type: :student_class,
              identifier: ["vu", "sbe", "iba", ":year1", ":2024"],
              full_name_bundle: %{
                items: [
@@ -317,7 +308,6 @@ defmodule Systems.Student.PublicTest do
              },
              links: [
                %{
-                 type: :student_course,
                  identifier: ["vu", "sbe", "rpr", ":year1", ":2024"]
                }
              ],

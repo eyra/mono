@@ -63,8 +63,8 @@ defmodule Systems.Payment.TransactionTest do
                contact_person: "Dr. Jane Smith",
                study_title: "TikTok Data Donation Study",
                study_goal: "Analyze social media usage patterns",
-               participant_count: 100,
-               amount_per_participant: 250,
+               participant_count: "100",
+               amount_per_participant: "250",
                invoice_id: "NEXT-NL-0128"
              }
     end

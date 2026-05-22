@@ -1,6 +1,10 @@
 defmodule Core.MixProject do
   use Mix.Project
 
+  def cli do
+    [preferred_envs: ["test.all": :test]]
+  end
+
   def project do
     [
       app: :core,
@@ -37,6 +41,13 @@ defmodule Core.MixProject do
           # :race_conditions,
           :no_opaque
         ]
+      ],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -166,12 +177,6 @@ defmodule Core.MixProject do
       "test.all": ["test.exs", "test.js"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "ecto.reset.link": [
-        "ecto.drop",
-        "ecto.create",
-        "ecto.migrate",
-        "run bundles/link/seeds.exs"
-      ],
       i18n: [
         "gettext.extract --merge priv/gettext"
       ],

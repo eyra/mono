@@ -6,7 +6,7 @@ defmodule Systems.Pool.Queries do
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Pool
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Account
 
   def pool_query() do
@@ -19,7 +19,7 @@ defmodule Systems.Pool.Queries do
     ])
   end
 
-  def pool_query(%Budget.CurrencyModel{id: currency_id}) do
+  def pool_query(%Fund.CurrencyModel{id: currency_id}) do
     build(pool_query(), :pool, [
       currency_id == ^currency_id
     ])
@@ -47,7 +47,7 @@ defmodule Systems.Pool.Queries do
     )
   end
 
-  def pool_query(%Budget.CurrencyModel{id: currency_id}, %Account.User{} = user, role) do
+  def pool_query(%Fund.CurrencyModel{id: currency_id}, %Account.User{} = user, role) do
     build(pool_query(user, role), :pool, [
       currency_id == ^currency_id
     ])

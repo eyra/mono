@@ -13,3 +13,8 @@ assets/js/_hooks/
 # Ignore secrets
 config/dev.secret.exs
 config/test.secret.exs
+
+# Generated per-platform at build/start time from config/runtime.{platform}.exs
+config/runtime.exs
+
+tmp_i18n/

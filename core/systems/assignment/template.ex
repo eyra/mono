@@ -23,6 +23,9 @@ defprotocol Systems.Assignment.Template do
 
   @spec runtime_config(t) :: Systems.Assignment.RuntimeConfig.t()
   def runtime_config(t)
+
+  @spec currency(t) :: atom()
+  def currency(t)
 end
 
 defmodule Systems.Assignment.Template.Flags do
@@ -228,6 +231,7 @@ defmodule Systems.Assignment.Template.Flags.Participants do
   - `:invite_participants` - Enable participant invitation features
   - `:recruit_participants` - Enable organic recruitment link (no pre-assigned participant ID)
   - `:affiliate` - Show affiliate/partner participant options
+  - `:paid_slots` - Subject count is managed via paid slot purchasing (Payment tab)
   """
   use Systems.Assignment.Template.Flags, [
     :language_fixed_nl,
@@ -236,7 +240,8 @@ defmodule Systems.Assignment.Template.Flags.Participants do
     :advert_in_pool,
     :invite_participants,
     :recruit_participants,
-    :affiliate
+    :affiliate,
+    :paid_slots
   ]
 end
 

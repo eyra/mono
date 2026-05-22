@@ -240,43 +240,43 @@ msgstr "Toestemming geweigerd"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
-msgstr ""
+msgstr "Taalinstelling voor deelnemers"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
-msgstr "Verwachtte aantal deelnemers"
+msgstr "Aantal deelnemers"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "tabbar.item.participants"
-msgstr ""
+msgstr "Deelnemers"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "workflow_item.donate.description"
-msgstr ""
+msgstr "Stelt deelnemers in staat om data te doneren."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "workflow_item.download.description"
-msgstr ""
+msgstr "Upload een PDF-handleiding met instructies voor het downloaden van digitale tracegegevens. Let op: niet geschikt voor mobiel."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "workflow_item.questionnaire.description"
-msgstr ""
+msgstr "Stuurt deelnemers door naar een online vragenlijst."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "workflow_item.request.description"
-msgstr ""
+msgstr "Upload een PDF-handleiding met instructies voor het opvragen van digitale tracegegevens. Let op: niet geschikt voor mobiel."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download_instruction.description"
-msgstr ""
+msgstr "Stelt deelnemers in staat om uw zip-bestand met deelnemersdata te downloaden."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.fork_instruction.description"
-msgstr ""
+msgstr "Geeft deelnemers de link naar uw GitHub template-repository die ze nodig hebben om hun methode voor te bereiden voor inzending."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.submit.description"
-msgstr ""
+msgstr "Stelt deelnemers in staat om hun methode aan de challenge in te dienen via een GitHub repository commit-link."
 
 #, elixir-autogen, elixir-format
 msgid "invite.panel.annotation"
@@ -286,21 +286,21 @@ msgstr "Gebruik de link hieronder om deelnemers uit te nodigen. Vervang 'partici
 msgid "invite.panel.title"
 msgstr "Panel"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "advert.body"
-msgstr ""
+msgstr "Deze advertentie wordt gebruikt om uw studie onder Panl-deelnemers te promoten en stelt hen in staat om aan uw studie deel te nemen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "advert.create.button"
 msgstr "Offline halen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "advert.goto.button"
-msgstr ""
+msgstr "Ga naar advertentie"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "advert.title"
-msgstr ""
+msgstr "Panl-advertentie"
 
 #, elixir-autogen, elixir-format
 msgid "context.menu.consent.title"
@@ -322,13 +322,13 @@ msgstr "Privacy"
 msgid "storage.create.button"
 msgstr "Offline halen"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "storage.goto.button"
-msgstr ""
+msgstr "Ga naar bestanden"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "storage.not_available.warning"
-msgstr ""
+msgstr "Stel een verbinding met een dataopslag in"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "1 participant"
@@ -336,53 +336,53 @@ msgid_plural "* participants"
 msgstr[0] ""
 msgstr[1] ""
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "leaf.tag"
-msgstr ""
+msgstr "Opdracht"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
-msgstr ""
+msgstr "Let op: als u bevestigt, wordt de pagina-inhoud verwijderd, evenals de bijbehorende registratie van wie toestemming heeft gegeven."
 
-#, elixir-autogen
+#, fuzzy, elixir-autogen
 msgid "export.progress.button"
-msgstr ""
+msgstr "Voortgangsrapport"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "monitor.description"
-msgstr ""
+msgstr "Deze gebeurtenismonitor registreert gebruikersinteracties om inzicht te geven in of uw gepubliceerde workflow naar verwachting functioneert. Hij is niet bedoeld om voortgang per deelnemer te volgen. Wilt u de voortgang per deelnemer zien, exporteer dan het voortgangsrapport rechtsboven."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "progress.header.consent"
-msgstr ""
+msgstr "Toestemming"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "progress.header.participant"
-msgstr ""
+msgstr "Deelnemer"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "progress.no"
-msgstr ""
+msgstr "nee"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "progress.not.applicable"
-msgstr ""
+msgstr "n.v.t."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "progress.yes"
-msgstr ""
+msgstr "ja"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
-msgstr ""
+msgstr "Screening op basis van titel en samenvatting"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "tabbar.item.reviewers"
-msgstr ""
+msgstr "Beoordelaars"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
-msgstr ""
+msgstr "Instellingen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.workflow"
@@ -390,15 +390,15 @@ msgstr "Monitor"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.criteria"
-msgstr ""
+msgstr "Criteria"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
-msgstr ""
+msgstr "Papers"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.manual.description"
-msgstr ""
+msgstr "Geef instructies over hoe digitale tracegegevens kunnen worden opgevraagd of gedownload door een mobielvriendelijke handleiding op te bouwen."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "affiliate.body"
@@ -406,15 +406,15 @@ msgstr "Stel het panel in dat je wilt gebruiken voor het werven van deelnemers."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.affiliate"
-msgstr ""
+msgstr "Integratie"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "affiliate.panel.annotation"
-msgstr ""
+msgstr "Gebruik de onderstaande link om deelnemers uit te nodigen. Inloggen is niet vereist. Vervang 'participant_id' door een unieke identificatie voor elke deelnemer. U kunt optioneel aangepaste parameters aan de link toevoegen (bijv. &d=abc123). Deze worden automatisch doorgestuurd naar elk extern systeem dat via het tabblad Integratie is gekoppeld."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "affiliate.panel.title"
-msgstr ""
+msgstr "Uitnodigingslink"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "finished_view.body.redirect"
@@ -424,13 +424,13 @@ msgstr "Bedankt. Je hebt dit onderdeel afgerond. Klik op Doorgaan om verder te g
 msgid "redirect.button"
 msgstr "Doorgaan"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "external.panel.annotation"
-msgstr ""
+msgstr "Gebruik de onderstaande link om deelnemers uit te nodigen. Inloggen is niet vereist. Vervang 'participant_id' door een unieke identificatie voor elke deelnemer."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "external.panel.title"
-msgstr ""
+msgstr "Uitnodigingslink"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.fixed_nl_message"
@@ -448,13 +448,13 @@ msgstr "Je hebt ervoor gekozen niet deel te nemen. Deze keuze is opgeslagen."
 msgid "finished_view.title.declined"
 msgstr "Klaar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "landing.continue.button"
-msgstr ""
+msgstr "Verder"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "landing.description.default"
-msgstr ""
+msgstr "Welkom! Klik op verder om met deze opdracht te beginnen."
 
 #, elixir-autogen, elixir-format
 msgid "back.button"
@@ -541,9 +541,117 @@ msgid "email_capture.error.role_account"
 msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, admin@)."
 
 #, elixir-autogen, elixir-format
+msgid "budget_form.aim.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.costs.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.slots.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.add.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.advert.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.has_advert"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.no_advert"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.invite.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.monitor.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.payment_prefix"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.resume.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.reward.line"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.budget.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.paid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payment.transactions.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.aim.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.partner_fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.subtotal.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.total.label"
 msgstr ""

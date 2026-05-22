@@ -11,14 +11,14 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "creator.signin.title"
-msgstr ""
+msgstr "Cercetător"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participant.signin.title"
-msgstr ""
+msgstr "Participant"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Dacă instituția dvs. permite accesul la platforma Next prin SURFconext, utilizați butonul de mai jos pentru a vă conecta. În caz contrar, utilizați adresa de e-mail și parola."

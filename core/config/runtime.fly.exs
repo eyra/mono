@@ -97,6 +97,9 @@ if config_env() == :prod do
                 queue: storage_delivery_queue}
              ]}
 
+          "pay_in_expiration" ->
+            {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Budget.PayInExpirationWorker}]}
+
           _ ->
             nil
         end
@@ -114,7 +117,7 @@ if config_env() == :prod do
       adapter: Bamboo.MailgunAdapter,
       base_uri: "https://api.eu.mailgun.net/v2",
       api_key: mailgun_api_key,
-      domain: app_domain,
+      domain: app_mail_domain,
       default_from_email: "#{app_name} <#{app_mail_noreply}>",
       hackney_opts: [recv_timeout: :timer.minutes(1)]
   end
@@ -247,7 +250,11 @@ if config_env() == :prod do
   config :core, Systems.Payment.Provider.OPP,
     base_url: System.get_env("OPP_BASE_URL"),
     api_key: System.get_env("OPP_API_KEY"),
-    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET")
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+    merchant_uid: System.get_env("OPP_MERCHANT_UID"),
+    partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
+
+  config :core, payment_provider: Core.Config.payment_provider()
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

@@ -11,17 +11,17 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.cta"
-msgstr ""
+msgstr "Ir al perfil"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.description"
-msgstr ""
+msgstr "Algunos campos de su perfil no están completos."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.title"
-msgstr ""
+msgstr "Complete su perfil"
 
 #, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"

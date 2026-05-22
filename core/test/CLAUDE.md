@@ -191,6 +191,52 @@ view |> element("[data-testid='my-button']") |> render_click()
 - Works consistently across different button/action types
 
 ### Testing Embedded LiveViews
+
+#### LiveContext for Dependencies
+
+Embedded views that declare `dependencies()` get those values injected from parent via `LiveContext`. When testing with `live_isolated`, you must pass a LiveContext in the session for dependencies to be available in socket.assigns:
+
+```elixir
+alias Frameworks.Concept.LiveContext
+
+setup ctx do
+  user = Factories.insert!(:member)
+  {:ok, ctx} = login(user, ctx)
+  conn = ctx[:conn] |> Map.put(:request_path, "/admin/system")
+
+  # Create LiveContext with all dependencies the view needs
+  context = LiveContext.new(%{
+    current_user: user,
+    locale: :en,
+    # Include other dependencies declared in dependencies()
+    bank_accounts: [],
+    citizen_pools: []
+  })
+
+  {:ok, conn: conn, user: user, context: context}
+end
+
+test "event handler works", %{conn: conn, context: context} do
+  # Pass context in session - key must be "live_context"
+  {:ok, view, _html} = live_isolated(conn, Admin.SystemView,
+    session: %{"live_context" => context}
+  )
+
+  # Now event handlers that pattern match on assigns will work
+  _ = view |> render_click("create_citizen_pool")
+
+  assert view |> has_element?("[data-testid='system-view']")
+end
+```
+
+**Why this matters:**
+- The view's `dependencies()` function declares what it needs (e.g., `[:current_user, :locale, ...]`)
+- The `CoreWeb.Live.Hook.Context` hook extracts these from LiveContext and assigns to socket
+- Event handlers often pattern match on `%{assigns: %{locale: locale}}` - this fails without LiveContext
+- Without LiveContext, the view model may render but event handlers will fail with "no function clause matching"
+
+#### Basic Embedded View Testing
+
 ```elixir
 # Parent view
 {:ok, parent_view, parent_html} =

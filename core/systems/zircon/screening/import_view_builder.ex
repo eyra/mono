@@ -29,7 +29,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     button_config = build_button_config(import_status)
 
     paper_set_view =
-      LiveNest.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView,
+      CoreWeb.Live.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView,
         paper_set_id: paper_set.id
       )
 

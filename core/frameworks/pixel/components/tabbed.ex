@@ -131,7 +131,7 @@ defmodule Frameworks.Pixel.Tabbed do
           <%= if Map.has_key?(tab, :live_component) do %>
             <.live_component id={tab.id} module={tab.live_component} {tab.props} />
           <% end %>
-          <%= if Map.has_key?(tab, :child) do %>
+          <%= if tab[:child] do %>
             <.live_component {Map.from_struct(tab.child.ref)} {tab.child.params} />
           <% end %>
           <%= if Map.has_key?(tab, :function_component) do %>

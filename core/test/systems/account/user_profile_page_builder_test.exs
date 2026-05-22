@@ -31,21 +31,21 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
       assert vm.active_menu_item == :profile
     end
 
-    test "includes profile tab for regular user", %{user: user} do
+    test "includes profile item for regular user", %{user: user} do
       vm = Account.UserProfilePageBuilder.view_model(user, %{})
 
-      tab_ids = Enum.map(vm.tabs, & &1.id)
-      assert :profile in tab_ids
+      item_ids = Enum.map(vm.items, & &1.id)
+      assert :profile in item_ids
     end
 
-    test "excludes features tab for non-PANL user", %{user: user} do
+    test "excludes features item for non-PANL user", %{user: user} do
       vm = Account.UserProfilePageBuilder.view_model(user, %{})
 
-      tab_ids = Enum.map(vm.tabs, & &1.id)
-      refute :features in tab_ids
+      item_ids = Enum.map(vm.items, & &1.id)
+      refute :features in item_ids
     end
 
-    test "includes features tab for PANL participant" do
+    test "includes features item for PANL participant" do
       user = Factories.insert!(:member)
 
       panl_pool =
@@ -56,19 +56,19 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
       user = Core.Repo.preload(user, [:features, :profile])
       vm = Account.UserProfilePageBuilder.view_model(user, %{})
 
-      tab_ids = Enum.map(vm.tabs, & &1.id)
-      assert :profile in tab_ids
-      assert :features in tab_ids
+      item_ids = Enum.map(vm.items, & &1.id)
+      assert :profile in item_ids
+      assert :features in item_ids
     end
 
-    test "tabs have LiveNest element structure", %{user: user} do
+    test "items have LiveNest element structure", %{user: user} do
       vm = Account.UserProfilePageBuilder.view_model(user, %{})
 
-      profile_tab = Enum.find(vm.tabs, &(&1.id == :profile))
-      assert profile_tab != nil
-      assert Map.has_key?(profile_tab, :element)
-      assert %LiveNest.Element{} = profile_tab.element
-      assert profile_tab.element.implementation == Account.ProfileView
+      profile_item = Enum.find(vm.items, &(&1.id == :profile))
+      assert profile_item != nil
+      assert Map.has_key?(profile_item, :element)
+      assert %LiveNest.Element{} = profile_item.element
+      assert profile_item.element.implementation == Account.ProfileView
     end
   end
 

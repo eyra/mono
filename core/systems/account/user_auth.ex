@@ -48,22 +48,6 @@ defmodule Systems.Account.UserAuth do
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
   end
 
-  @doc """
-  Logs the user in for onboarding without redirect.
-
-  Used after signup to auto-login the user before they complete onboarding.
-  Preserves the locale in the session.
-  """
-  def log_in_user_for_onboarding(conn, user, locale) do
-    token = Account.Public.generate_user_session_token(user)
-
-    conn
-    |> renew_session()
-    |> put_session(:user_token, token)
-    |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
-    |> put_session(:locale, locale)
-  end
-
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
     put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
   end
@@ -76,7 +60,7 @@ defmodule Systems.Account.UserAuth do
   # session to avoid fixation attacks. Preserves locale across
   # session renewal.
   defp renew_session(conn) do
-    locale = get_session(conn, :locale)
+    locale = get_session(conn, Cldr.Plug.PutLocale.session_key())
 
     conn
     |> configure_session(renew: true)
@@ -85,7 +69,9 @@ defmodule Systems.Account.UserAuth do
   end
 
   defp maybe_restore_locale(conn, nil), do: conn
-  defp maybe_restore_locale(conn, locale), do: put_session(conn, :locale, locale)
+
+  defp maybe_restore_locale(conn, locale),
+    do: put_session(conn, Cldr.Plug.PutLocale.session_key(), locale)
 
   @doc """
   Logs the user out.

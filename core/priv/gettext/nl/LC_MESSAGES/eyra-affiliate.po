@@ -11,53 +11,53 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "callback_url.body"
-msgstr ""
+msgstr "Geef optioneel een webhook-URL op om real-time updates over de voortgang van deelnemers te ontvangen."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "callback_url.placeholder"
-msgstr ""
+msgstr "https://panel-company.com/study?s=progress"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "callback_url.title"
-msgstr ""
+msgstr "Voortgang"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect_url.placeholder"
-msgstr ""
+msgstr "https://panel-company.com/study?s=done"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.body"
-msgstr ""
+msgstr "Geef optioneel een redirect-URL op om deelnemers na het voltooien van de workflow door te sturen naar een ander platform of organisatie."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.title"
-msgstr ""
+msgstr "Einde van workflow"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "invalid_url.invalid_parts"
-msgstr ""
+msgstr "Voer een geldige URL in"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "invalid_url.missing_host"
-msgstr ""
+msgstr "Voeg een domein toe"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "invalid_url.missing_scheme"
-msgstr ""
+msgstr "Gebruik een prefix zoals https://"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "invalid_url.no_spaces_allowed"
-msgstr ""
+msgstr "Verwijder eventuele spaties uit de URL"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "test.success"
-msgstr ""
+msgstr "De URL ziet er goed uit en is bereikbaar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.unreachable"
-msgstr ""
+msgstr "Controleer de URL - deze is niet bereikbaar"
 
 #, elixir-autogen, elixir-format
 msgid "platform_name.label"

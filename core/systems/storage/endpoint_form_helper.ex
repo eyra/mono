@@ -63,7 +63,7 @@ defmodule Systems.Storage.EndpointForm.Helper do
         {
           :noreply,
           socket
-          |> auto_save(changeset)
+          |> save(changeset)
           |> validate()
           |> test_connection()
         }

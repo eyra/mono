@@ -11,101 +11,101 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "config.url.label"
-msgstr ""
+msgstr "Link del questionario"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "reward.highlight.title"
-msgstr ""
+msgstr "Ricompensa"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Partecipa"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Procedi"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.description"
-msgstr ""
+msgstr "Per reindirizzare i partecipanti a Next al termine del questionario, copi l'URL di reindirizzamento qui sotto e lo incolli come \"Website URL\" in Qualtrics come %{link}."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.title"
-msgstr ""
+msgstr "URL di reindirizzamento"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "In attesa"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Campagna"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.description"
-msgstr ""
+msgstr "Next aggiunge automaticamente l'ID del partecipante al suo URL Qualtrics. Per utilizzare questo ID in Qualtrics, aggiunga un campo embedded data con il nome \"participant\", come %{link} in \"PART 2\"."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.title"
-msgstr ""
+msgstr "ID partecipante"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "setup.title"
-msgstr ""
+msgstr "Come configurare il suo questionario su Qualtrics?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.copy.button"
-msgstr ""
+msgstr "Copia"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.description"
-msgstr ""
+msgstr "Per ottenere il link al suo questionario Qualtrics, segua %{link}. Incolli il suo link nel campo \"Link del questionario\" nel modulo qui sotto."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "link.title"
-msgstr ""
+msgstr "Link del questionario"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "nextid.instructions.link"
-msgstr ""
+msgstr "spiegato qui"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "redirect.instructions.link"
-msgstr ""
+msgstr "indicato qui"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "study.instructions.link"
-msgstr ""
+msgstr "queste istruzioni"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.text"
-msgstr ""
+msgstr "%{duration} minuti"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "duration.highlight.title"
-msgstr ""
+msgstr "Durata"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.closed.highlight.text"
-msgstr ""
+msgstr "Chiuso alla partecipazione"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.highlight.title"
-msgstr ""
+msgstr "Stato"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "status.open.highlight.text"
-msgstr ""
+msgstr "Aperto alla partecipazione"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "language.highlight.title"
-msgstr ""
+msgstr "Lingua"
 
-#, elixir-autogen, elixir-format, ex-autogen
+#, fuzzy, elixir-autogen, elixir-format, ex-autogen
 msgid "participated.label"
-msgstr ""
+msgstr "Partecipato"
 
 #, elixir-autogen, elixir-format
 msgid "tool.button"

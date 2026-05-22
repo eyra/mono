@@ -80,6 +80,7 @@ config :core, :signal,
     "Systems.Assignment.Switch",
     "Systems.Consent.Switch",
     "Systems.Crew.Switch",
+    "Systems.Desktop.Switch",
     "Systems.Feldspar.Switch",
     "Systems.Graphite.Switch",
     "Systems.Instruction.Switch",
@@ -111,12 +112,14 @@ config :core,
   banking_backend: Systems.Banking.Dummy,
   payment_provider: Systems.Payment.Provider.Local,
   payment_providers: %{
-    "opp" => Systems.Payment.Provider.OPP
+    "opp" => Systems.Payment.Provider.OPP,
+    "local" => Systems.Payment.Provider.Local
   },
   tool_directors: [:assignment]
 
 config :core, Systems.Payment.Provider.OPP,
-  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1"
+  base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
+  partner_fee_percentage: 0
 
 config :gettext, default_locale: "en"
 

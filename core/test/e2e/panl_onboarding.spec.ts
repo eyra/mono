@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { waitForLiveView, waitForNavigation, debugLiveViewState } from './lib/liveview';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * PaNL Onboarding E2E Test
@@ -14,10 +15,10 @@ import { waitForLiveView, waitForNavigation, debugLiveViewState } from './lib/li
  * - At least one published PaNL study with advert must exist
  */
 
-// Skip all tests in this file if PaNL feature is not enabled
-// Reads from ENABLED_APP_FEATURES (comma-separated list, same as server config)
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
+// Skip all tests in this file when required features are not enabled.
+// `missingFeaturesReason` reads from ENABLED_APP_FEATURES, which is
+// populated by global-setup from the server's /api/e2e/features.
+const SKIP_REASON = missingFeaturesReason('panl', 'panl_post_launch');
 
 function generateTestEmail(): string {
   const timestamp = Date.now();
@@ -28,7 +29,7 @@ function generateTestEmail(): string {
 const TEST_PASSWORD = 'TestPassword123!';
 
 test.describe('PaNL Onboarding Flow', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set E2E_PANL_ENABLED=true)');
+  test.skip(SKIP_REASON !== '', SKIP_REASON);
   test('new participant can sign up, complete onboarding, and see PaNL advert', async ({ page }) => {
     const testEmail = generateTestEmail();
     console.log(`[TEST] Starting with email: ${testEmail}`);

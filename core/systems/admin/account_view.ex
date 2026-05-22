@@ -1,241 +1,26 @@
 defmodule Systems.Admin.AccountView do
-  use CoreWeb, :live_component
+  use CoreWeb, :embedded_live_view
 
-  require Logger
-
-  alias Core.ImageHelpers
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem
 
-  alias Systems.Admin
   alias Systems.Account
-  alias Systems.Affiliate
-  alias Systems.Pool
+  alias Systems.Observatory
 
-  # Initial update
+  def dependencies(), do: []
+
+  def get_model(:not_mounted_at_router, _session, _assigns) do
+    Observatory.SingletonModel.instance()
+  end
+
   @impl true
-  def update(
-        %{
-          id: id,
-          user: user,
-          creators: creators
-        },
-        socket
-      ) do
-    form = to_form(%{"query" => nil})
-    active_filters = Map.get(socket.assigns, :active_filters, [:creator])
-    query = Map.get(socket.assigns, :query, [])
-    query_string = Map.get(socket.assigns, :query_string, "")
-
+  def mount(:not_mounted_at_router, _session, socket) do
     {
       :ok,
       socket
-      |> assign(
-        id: id,
-        user: user,
-        creators: creators,
-        form: form,
-        active_filters: active_filters,
-        query: query,
-        query_string: query_string,
-        user_count: 0
-      )
-      |> update_users()
-      |> compose_child(:filter_selector)
-      |> compose_child(:search_bar)
-    }
-  end
-
-  @impl true
-  def compose(:filter_selector, %{active_filters: active_filters}) do
-    %{
-      module: Selector,
-      params: %{
-        items: Admin.UserFilters.labels(active_filters),
-        type: :label
-      }
-    }
-  end
-
-  @impl true
-  def compose(:search_bar, %{query_string: query_string}) do
-    %{
-      module: SearchBar,
-      params: %{
-        query_string: query_string,
-        placeholder: dgettext("eyra-admin", "search.placeholder"),
-        debounce: "200"
-      }
-    }
-  end
-
-  @max_users 50
-
-  defp update_users(%{assigns: %{active_filters: filters, query: query, myself: myself}} = socket) do
-    filter_index = build_filter_index(filters)
-
-    filtered =
-      Account.Public.list_users([:profile])
-      |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
-      |> query(filters, filter_index)
-      |> query(query)
-
-    users =
-      filtered
-      |> Enum.take(@max_users)
-      |> Enum.map(&map_to_item(&1, myself))
-
-    assign(socket, users: users, user_count: Enum.count(filtered))
-  end
-
-  defp build_filter_index(filters) do
-    index = %{}
-
-    index =
-      if :affiliate in filters do
-        affiliate_user_ids = Affiliate.Public.list_user_ids()
-        Map.put(index, :affiliate_user_ids, MapSet.new(affiliate_user_ids))
-      else
-        index
-      end
-
-    if :in_pool in filters do
-      pool_user_ids = Pool.Public.list_participant_ids()
-      Map.put(index, :pool_user_ids, MapSet.new(pool_user_ids))
-    else
-      index
-    end
-  end
-
-  defp query(users, nil), do: users
-  defp query(users, []), do: users
-
-  defp query(users, query) when is_list(query) do
-    users
-    |> Enum.filter(&include?(&1, query))
-  end
-
-  defp query(users, filters, filter_index) when is_list(filters) do
-    users
-    |> Enum.filter(&include?(&1, filters, filter_index))
-  end
-
-  defp include?(_, [], _), do: true
-
-  defp include?(user, [term], index) do
-    include?(user, term, index)
-  end
-
-  defp include?(user, [term | rest], index) do
-    include?(user, term, index) and include?(user, rest, index)
-  end
-
-  defp include?(%Account.User{id: id}, :affiliate, %{affiliate_user_ids: ids}) do
-    MapSet.member?(ids, id)
-  end
-
-  defp include?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}) do
-    MapSet.member?(ids, id)
-  end
-
-  defp include?(user, filter, _index) when is_atom(filter) do
-    include?(user, filter)
-  end
-
-  defp include?(_, []), do: true
-
-  defp include?(user, [term]) do
-    include?(user, term)
-  end
-
-  defp include?(user, [term | rest]) do
-    include?(user, term) and include?(user, rest)
-  end
-
-  defp include?(_, ""), do: true
-
-  defp include?(%Account.User{email: email, profile: profile}, word) when is_binary(word) do
-    word = String.downcase(word)
-    String.contains?(email |> String.downcase(), word) or include?(profile, word)
-  end
-
-  defp include?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
-  defp include?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
-  defp include?(%Account.User{} = _user, :in_pool), do: false
-  defp include?(%Account.User{} = _user, :affiliate), do: false
-
-  defp include?(%Account.UserProfileModel{fullname: fullname}, word)
-       when not is_nil(fullname) and is_binary(word) do
-    String.contains?(fullname |> String.downcase(), word)
-  end
-
-  defp include?(_, _), do: false
-
-  defp map_to_item(%Account.User{} = user, target) do
-    photo_url = ImageHelpers.get_photo_url(user.profile)
-    info = user_info(user)
-    action_verify_button = user_action_verify_button(user, target)
-    action_activate_button = user_action_activate_button(user, target)
-
-    %{
-      photo_url: photo_url,
-      name: user.displayname,
-      email: user.email,
-      info: info,
-      action_buttons: [
-        action_activate_button,
-        action_verify_button
-      ]
-    }
-  end
-
-  defp user_info(%Account.User{} = user) do
-    pool_info(user)
-  end
-
-  defp pool_info(%Account.User{} = user) do
-    pools = Pool.Public.list_by_participant(user)
-
-    case pools do
-      [] -> ""
-      pools -> "Pools: " <> Enum.map_join(pools, ", ", & &1.name)
-    end
-  end
-
-  defp user_action_verify_button(%Account.User{creator: false} = user, target) do
-    %{
-      action: %{type: :send, event: "make_creator", item: user.id, target: target},
-      face: %{type: :plain, label: "Make creator", icon: :add}
-    }
-  end
-
-  defp user_action_verify_button(%Account.User{verified_at: nil} = user, target) do
-    %{
-      action: %{type: :send, event: "verify_creator", item: user.id, target: target},
-      face: %{type: :plain, label: "Verify", icon: :verify}
-    }
-  end
-
-  defp user_action_verify_button(user, target) do
-    %{
-      action: %{type: :send, event: "unverify_creator", item: user.id, target: target},
-      face: %{type: :plain, label: "Unverify", icon: :unverify}
-    }
-  end
-
-  defp user_action_activate_button(%Account.User{confirmed_at: nil} = user, target) do
-    %{
-      action: %{type: :send, event: "activate_user", item: user.id, target: target},
-      face: %{type: :plain, label: "Activate", icon: :verify}
-    }
-  end
-
-  defp user_action_activate_button(user, target) do
-    %{
-      action: %{type: :send, event: "deactivate_user", item: user.id, target: target},
-      face: %{type: :plain, label: "Deactivate", icon: :unverify}
+      |> assign(query_string: "")
     }
   end
 
@@ -243,7 +28,7 @@ defmodule Systems.Admin.AccountView do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
     changeset = Account.User.admin_changeset(user, attrs)
     {:ok, _} = Core.Persister.save(user, changeset)
-    socket |> update_users()
+    socket |> update_view_model()
   end
 
   # Events
@@ -283,50 +68,60 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def handle_event(
-        "search_query",
-        %{query: query, query_string: query_string, source: %{name: :search_bar}},
+  def consume_event(
+        %{name: :search_query, payload: %{query: query, query_string: query_string}},
         socket
       ) do
     {
-      :noreply,
+      :stop,
       socket
       |> assign(query: query, query_string: query_string)
-      |> update_users()
+      |> update_view_model()
     }
   end
 
   @impl true
-  def handle_event("active_item_ids", %{active_item_ids: active_filters}, socket) do
+  def handle_info({"active_item_ids", %{active_item_ids: active_filters}}, socket) do
     {
       :noreply,
       socket
       |> assign(active_filters: active_filters)
-      |> update_users()
-      |> update_child(:search_bar)
-      |> update_child(:filter_selector)
+      |> update_view_model()
     }
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="account-view">
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.title2><%= dgettext("eyra-admin", "account.title") %> <span class="text-primary"><%= @user_count %></span></Text.title2>
+        <Text.title2 testid="account-title">
+          <%= @vm.title %> <span class="text-primary"><%= @vm.user_count %></span>
+        </Text.title2>
         <div class="flex flex-row gap-3 items-center">
           <div class="font-label text-label">Filter:</div>
-            <.child name={:filter_selector} fabric={@fabric} />
+            <.live_component
+              module={Selector}
+              id={:account_filters}
+              items={@vm.filter_labels}
+              type={:label}
+            />
           <div class="flex-grow" />
           <div class="flex-shrink-0">
-            <.child name={:search_bar} fabric={@fabric} />
+            <.live_component
+              module={SearchBar}
+              id={:account_search_bar}
+              query_string={@query_string}
+              placeholder={@vm.search_placeholder}
+              debounce="200"
+            />
           </div>
         </div>
         <.spacing value="M" />
 
-        <table class="w-full">
-          <%= for user_item <- @users do %>
+        <table class="w-full" data-testid="user-list">
+          <%= for user_item <- @vm.users do %>
             <.live_component module={UserListItem} id={user_item.email} user_item={user_item} />
           <% end %>
         </table>

@@ -11,14 +11,14 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "creator.signin.title"
-msgstr ""
+msgstr "Investigador"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participant.signin.title"
-msgstr ""
+msgstr "Participante"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
-msgstr ""
+msgstr "Si su institución permite el acceso a la plataforma Next a través de SURFconext, utilice el botón siguiente para iniciar sesión. De lo contrario, use su dirección de correo electrónico y contraseña."

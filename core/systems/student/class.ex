@@ -38,9 +38,19 @@ defmodule Systems.Student.Class do
   def code(identifier), do: Frameworks.Utility.Identifier.to_string(identifier)
 
   def get_course(%{links: links, identifier: identifier}) do
-    case Enum.find(links, &(&1.type == :student_course)) do
+    # Find linked org that is a course by checking identifier contains course-related patterns
+    # (e.g. "rpr" for Research Participation Requirement courses)
+    case Enum.find(links, &course?(&1)) do
       nil -> raise "No course found for class #{Identifier.to_string(identifier)}"
       course -> course
     end
   end
+
+  defp course?(%{identifier: identifier}) when is_list(identifier) do
+    # Course identifiers contain "rpr" (Research Participation Requirement)
+    # or "course" for test/legacy data
+    Enum.any?(identifier, &(&1 in ["rpr", "course"]))
+  end
+
+  defp course?(_), do: false
 end

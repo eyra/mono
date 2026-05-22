@@ -23,11 +23,16 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp verify_signature(conn, body) do
-    with {:ok, signature_header} <- get_header(conn, "signature"),
-         {:ok, digest_header} <- get_header(conn, "digest"),
-         :ok <- verify_digest(digest_header, body),
-         {:ok, params} <- parse_signature_header(signature_header) do
-      verify_hmac(conn, params)
+    if Application.get_env(:core, :skip_webhook_verification, false) do
+      Logger.warning("[OPP.Webhook] Skipping signature verification (dev mode)")
+      :ok
+    else
+      with {:ok, signature_header} <- get_header(conn, "signature"),
+           {:ok, digest_header} <- get_header(conn, "digest"),
+           :ok <- verify_digest(digest_header, body),
+           {:ok, params} <- parse_signature_header(signature_header) do
+        verify_hmac(conn, params)
+      end
     end
   end
 

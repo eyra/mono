@@ -4,6 +4,7 @@ defmodule Systems.Account.UserProfilePageBuilder do
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
+  alias Systems.Content.Adaptable
 
   @tabs [
     Systems.Account.ProfileTab,
@@ -15,7 +16,7 @@ defmodule Systems.Account.UserProfilePageBuilder do
 
     %{
       title: dgettext("eyra-account", "profile.title"),
-      tabs: build_tabs(user, live_context),
+      items: build_items(user, live_context),
       signout_button: build_signout_button(),
       user: user,
       active_menu_item: :profile
@@ -34,9 +35,16 @@ defmodule Systems.Account.UserProfilePageBuilder do
     }
   end
 
-  def build_tabs(user, live_context) do
+  def build_items(user, live_context) do
     visible_tabs(user)
-    |> Enum.map(& &1.build(user, live_context))
+    |> Enum.map(&tab_to_item(&1.build(user, live_context)))
+  end
+
+  defp tab_to_item(%{id: id, title: title} = tab) do
+    Adaptable.Item.new(id, :profile, title,
+      element: Map.get(tab, :element),
+      child: Map.get(tab, :child)
+    )
   end
 
   def tab_keys(user) do

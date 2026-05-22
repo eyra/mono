@@ -1,7 +1,7 @@
 defmodule Systems.Pool.AssemblyTest do
   use Core.DataCase
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Org
   alias Systems.Pool
 
@@ -32,7 +32,7 @@ defmodule Systems.Pool.AssemblyTest do
       pool = Pool.Assembly.get_or_create_panl()
       pool = Repo.preload(pool, :currency)
 
-      assert %Budget.CurrencyModel{
+      assert %Fund.CurrencyModel{
                name: "euro",
                type: :legal,
                decimal_scale: 2
@@ -44,13 +44,12 @@ defmodule Systems.Pool.AssemblyTest do
       pool = Repo.preload(pool, :org)
 
       assert %Org.NodeModel{
-               identifier: ["panl"],
-               type: :company
+               identifier: ["panl"]
              } = pool.org
     end
 
     test "reuses existing euro currency" do
-      euro = Budget.Assembly.get_or_create_euro()
+      euro = Fund.Assembly.get_or_create_euro()
       pool = Pool.Assembly.get_or_create_panl()
       pool = Repo.preload(pool, :currency)
 
@@ -58,7 +57,7 @@ defmodule Systems.Pool.AssemblyTest do
     end
 
     test "reuses existing panl org" do
-      Org.Public.create_node!(:company, ["panl"], [{:en, "Panl"}], [{:en, "Panl"}])
+      Org.Public.create_node!(["panl"], [{:en, "Panl"}], [{:en, "Panl"}])
       org = Org.Public.get_node(["panl"])
 
       pool = Pool.Assembly.get_or_create_panl()

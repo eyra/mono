@@ -118,21 +118,21 @@ msgstr "Account activatie"
 msgid "confirm.button"
 msgstr "Activeer"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.no_match.message"
-msgstr ""
+msgstr "Niemand gevonden met dit e-mailadres."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.placeholder"
-msgstr ""
+msgstr "Zoek op e-mailadres"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
-msgstr ""
+msgstr "Wie wilt u toevoegen?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "people.search.alread_added.message"
-msgstr ""
+msgstr "Al toegevoegd"
 
 #, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
@@ -146,9 +146,9 @@ msgstr "Ik weet het zeker"
 msgid "people.confirm_remove.text"
 msgstr "Weet je zeker dat je jezelf uit dit project wilt verwijderen?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "Account activated successfully."
-msgstr ""
+msgstr "Account is geactiveerd."
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
@@ -170,21 +170,13 @@ msgstr "Doorgaan"
 msgid "onboarding.hero.title"
 msgstr "Onboarding"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Link is ongeldig of verlopen"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Ik ga akkoord met de %{terms_link} en het %{privacy_link} van Panl"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "privacybeleid"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "algemene voorwaarden"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
@@ -206,9 +198,9 @@ msgstr "Er is een fout opgetreden bij het inloggen. Probeer het opnieuw."
 msgid "sso.error.session_not_found"
 msgstr "Inloggen kon niet worden voltooid. Klik op de inlogknop om opnieuw te beginnen."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "We hebben een bevestigingsmail gestuurd naar %{email}. Klik op de link om je account te activeren. In de tussentijd kun je al studies bekijken."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
@@ -221,3 +213,15 @@ msgstr "Onboarding"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
 msgstr "Maak een account aan"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "privacybeleid"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "algemene voorwaarden"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "people.add.button"
+msgstr "Toevoegen"

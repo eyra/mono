@@ -5,7 +5,7 @@ defmodule Systems.Pool.ParticipantPage do
   import Frameworks.Pixel.Content
 
   alias Frameworks.Pixel.Text
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Account
 
   @impl true
@@ -34,7 +34,7 @@ defmodule Systems.Pool.ParticipantPage do
             <Text.title2>
               <%= dgettext("link-dashboard", "book.accounts.title") %>
             </Text.title2>
-            <Budget.WalletView.list items={@vm.wallets} />
+            <Fund.WalletView.list items={@vm.wallets} />
             <.spacing value="XL" />
           </div>
         <% end %>

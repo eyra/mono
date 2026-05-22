@@ -190,17 +190,17 @@ msgstr "Mijn werkplek"
 msgid "confirm.button"
 msgstr "Klaar"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "confirmation_modal.body"
-msgstr ""
+msgstr "Let op: als u bevestigt, wordt de pagina-inhoud verwijderd."
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "confirmation_modal.title"
-msgstr ""
+msgstr "Deze pagina overslaan?"
 
-#, elixir-autogen, elixir-format
+#, fuzzy, elixir-autogen, elixir-format
 msgid "tabbar.item.forward"
-msgstr ""
+msgstr "Ga naar %{to}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.onyx"

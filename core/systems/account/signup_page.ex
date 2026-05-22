@@ -200,7 +200,7 @@ defmodule Systems.Account.SignupPage do
     {:ok, _} =
       Account.Public.deliver_user_confirmation_instructions(
         user,
-        &url(socket, ~p"/user/confirm/#{&1}")
+        &url(socket, ~p"/user/onboarding/confirm/#{&1}")
       )
 
     redirect_path = onboarding_redirect_path(socket.assigns.post_signup_action, user)
@@ -213,12 +213,11 @@ defmodule Systems.Account.SignupPage do
 
   defp onboarding_redirect_path("add_to_panl", user) do
     token = Account.OnboardingController.generate_token(user)
-    locale = Gettext.get_locale()
-    ~p"/user/onboarding/start?token=#{token}&locale=#{locale}"
+    ~p"/user/onboarding/start?token=#{token}"
   end
 
   defp onboarding_redirect_path(_, _user) do
-    ~p"/user/await-confirmation"
+    ~p"/user/onboarding/await-confirmation"
   end
 
   defp parse_post_signup_action(params) do

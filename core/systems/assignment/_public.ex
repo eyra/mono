@@ -21,7 +21,7 @@ defmodule Systems.Assignment.Public do
   alias Systems.Account
   alias Systems.Content
   alias Systems.Consent
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
@@ -195,7 +195,7 @@ defmodule Systems.Assignment.Public do
         affiliate,
         page_refs,
         workflow,
-        budget,
+        fund,
         consent_agreement,
         auth_node
       ) do
@@ -206,7 +206,7 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:page_refs, page_refs)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:crew, crew)
-    |> Ecto.Changeset.put_assoc(:budget, budget)
+    |> Ecto.Changeset.put_assoc(:fund, fund)
     |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
@@ -332,7 +332,7 @@ defmodule Systems.Assignment.Public do
         %Assignment.Model{} = assignment,
         %Assignment.InfoModel{} = info,
         %Workflow.Model{} = workflow,
-        %Budget.Model{} = budget,
+        %Fund.Model{} = fund,
         auth_node
       ) do
     # don't copy crew, just create a new one
@@ -342,7 +342,7 @@ defmodule Systems.Assignment.Public do
     |> Assignment.Model.changeset(Map.from_struct(assignment))
     |> Ecto.Changeset.put_assoc(:info, info)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
-    |> Ecto.Changeset.put_assoc(:budget, budget)
+    |> Ecto.Changeset.put_assoc(:fund, fund)
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
     |> Repo.insert!()
@@ -386,10 +386,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def update_budget(assignment, budget) do
+  def update_fund(assignment, fund) do
     changeset =
       Assignment.Model.changeset(assignment, %{})
-      |> Ecto.Changeset.put_assoc(:budget, budget)
+      |> Ecto.Changeset.put_assoc(:fund, fund)
 
     Core.Persister.save(assignment, changeset)
   end
@@ -535,10 +535,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  defp run_create_reward(%Assignment.Model{budget: budget} = assignment, %User{} = user, amount) do
+  defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
     idempotence_key = idempotence_key(assignment, user)
 
-    case Budget.Public.create_reward(budget, amount, user, idempotence_key) do
+    case Fund.Public.create_reward(fund, amount, user, idempotence_key) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end
@@ -784,8 +784,8 @@ defmodule Systems.Assignment.Public do
       |> Enum.map(fn {user_id, assignment_id} ->
         idempotence_key(assignment_id, user_id)
       end)
-      |> Enum.filter(&Budget.Public.reward_has_outstanding_deposit?(&1))
-      |> Enum.each(&Budget.Public.rollback_deposit(&1))
+      |> Enum.filter(&Fund.Public.reward_has_outstanding_deposit?(&1))
+      |> Enum.each(&Fund.Public.rollback_deposit(&1))
 
       {:ok, true}
     end)
@@ -796,7 +796,7 @@ defmodule Systems.Assignment.Public do
     idempotence_key = idempotence_key(assignment, user)
 
     multi
-    |> Budget.Public.rollback_deposit(idempotence_key)
+    |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
@@ -810,12 +810,12 @@ defmodule Systems.Assignment.Public do
 
   def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Budget.Public.payout_reward(idempotence_key)
+    Fund.Public.payout_reward(idempotence_key)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
-    Budget.Public.rewarded_amount(idempotence_key)
+    Fund.Public.rewarded_amount(idempotence_key)
   end
 end
 

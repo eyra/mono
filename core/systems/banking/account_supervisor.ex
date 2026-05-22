@@ -12,7 +12,7 @@ defmodule Systems.Banking.AccountSupervisor do
   def init({currency, account_number}) do
     children = [
       {Systems.Banking.Public.backend(), account_number},
-      {Systems.Banking.Fetcher, currency: currency, strategy: Systems.Budget.AccountStrategy}
+      {Systems.Banking.Fetcher, currency: currency, strategy: Systems.Fund.AccountStrategy}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

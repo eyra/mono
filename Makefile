@@ -21,10 +21,8 @@ dialyzer: FORCE
 
 .PHONY: test
 test: test/core test/banking_proxy
-
 test/core: FORCE
-	cd core && MIX_ENV=test mix test.exs
-
+	cd core && mix test.all
 test/banking_proxy: FORCE
 	cd banking_proxy && mix test
 
