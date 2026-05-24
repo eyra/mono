@@ -182,7 +182,7 @@ if config_env() == :prod do
 
   config :core, Core.SurfConext,
     redirect_uri: "#{base_url}/auth/surfconext/callback",
-    site: System.get_env("SURFCONEXT_SITE"),
+    base_url: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 

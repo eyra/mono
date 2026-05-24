@@ -51,7 +51,7 @@ defmodule Core.SurfConext.FakeOIDC do
   end
 
   def authorize_url(config) do
-    {:ok, %{url: Keyword.get(config, :site), session_params: %{some: :stuff}}}
+    {:ok, %{url: Keyword.get(config, :base_url), session_params: %{some: :stuff}}}
   end
 end
 
@@ -68,7 +68,7 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
       Application.put_env(:test, Core.SurfConext,
         client_id: domain,
         client_secret: Faker.Lorem.sentence(),
-        site: "https://connect.test.surfconext.nl",
+        base_url: "https://connect.test.surfconext.nl",
         redirect_uri: "https://#{domain}/auth/surfconext/callback",
         oidc_module: Core.SurfConext.FakeOIDC
       )
@@ -101,7 +101,7 @@ defmodule Core.SurfConext.CallbackController.Test do
     test_conf = [
       client_id: domain,
       client_secret: Faker.Lorem.sentence(),
-      site: "https://connect.test.surfconext.nl",
+      base_url: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/auth/surfconext/callback",
       oidc_module: Core.SurfConext.FakeOIDC
     ]
