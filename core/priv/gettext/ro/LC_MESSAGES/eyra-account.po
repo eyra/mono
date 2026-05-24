@@ -224,7 +224,7 @@ msgstr "Verificați-vă e-mailul"
 msgid "signup.rate_limited"
 msgstr "Creează cont"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "privacy.link.privacy"
 msgstr "politica de confidențialitate"
 
@@ -236,18 +236,18 @@ msgstr "termenii și condițiile"
 msgid "people.add.button"
 msgstr "Pe cine doriți să adăugați?"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
 msgstr ""

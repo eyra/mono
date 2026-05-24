@@ -631,9 +631,9 @@ msgstr ""
 msgid "recruit.panel.annotation"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
-msgstr "Dalyvio kvietimo nuoroda"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.partner_fee.label"
@@ -647,7 +647,7 @@ msgstr ""
 msgid "budget_form.total.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "payout.decline.error"
 msgstr ""
 
@@ -679,7 +679,7 @@ msgstr ""
 msgid "payout.pay_out_all.button"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.error"
 msgstr ""
 

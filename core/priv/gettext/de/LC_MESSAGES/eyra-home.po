@@ -41,7 +41,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.approved"
-msgstr ""
+msgstr "Beiträge"
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
@@ -49,4 +49,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
-msgstr ""
+msgstr "Beiträge"
