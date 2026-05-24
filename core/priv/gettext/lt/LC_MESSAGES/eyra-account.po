@@ -224,7 +224,7 @@ msgstr "Patikrinkite el. paštą"
 msgid "signup.rate_limited"
 msgstr "Sukurti paskyrą"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "privacy.link.privacy"
 msgstr "privatumo politika"
 
@@ -236,18 +236,18 @@ msgstr "naudojimo sąlygomis"
 msgid "people.add.button"
 msgstr "Ką norite pridėti?"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
 msgstr ""

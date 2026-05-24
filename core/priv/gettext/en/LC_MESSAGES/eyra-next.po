@@ -23,14 +23,14 @@ msgstr "Participant"
 msgid "surfconext.signin.body"
 msgstr "If your institution allows access to the Next platform through SURFconext use the button below to sign in. Otherwise use your email address and password."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "auth.signup.body"
-msgstr "Sign in with your institutional account to continue.<br>You will be redirected to the secure %{identity_provider} login page."
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "auth.signup.button"
-msgstr "Sign in with %{identity_provider}"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "auth.signup.title"
-msgstr "Welcome"
+msgstr ""

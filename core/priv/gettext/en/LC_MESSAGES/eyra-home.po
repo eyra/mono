@@ -16,7 +16,7 @@ msgstr "Software Services"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Activities"
+msgstr "Contributions"
 
 #, elixir-autogen, elixir-format
 msgid "available.member.title"
@@ -32,20 +32,20 @@ msgstr "Developed for and with researchers"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr "Study"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"
-msgstr "Reward:"
+msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.approved"
-msgstr "Approved"
+msgstr "Contributions"
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
-msgstr "Awaiting"
+msgstr ""
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
-msgstr "Rejected"
+msgstr "Contributions"
