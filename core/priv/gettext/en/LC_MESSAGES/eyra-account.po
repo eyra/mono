@@ -226,18 +226,18 @@ msgstr "Terms of Use"
 msgid "people.add.button"
 msgstr "Add"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.body"
-msgstr ""
+msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
+msgstr "I agree to the %{terms} and %{privacy}."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms.required"
-msgstr ""
+msgstr "Please accept the terms and privacy statement to continue."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.title"
-msgstr ""
+msgstr "Welcome"

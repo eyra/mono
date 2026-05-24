@@ -128,24 +128,24 @@ msgstr "Funding"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.pill"
-msgstr ""
+msgstr "Approved"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.threshold"
-msgstr ""
+msgstr "Pay out or donate is possible from € 5"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.caption"
-msgstr ""
+msgstr "Waiting for approval"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.pill"
-msgstr ""
+msgstr "Awaiting"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.rejected.pill"
-msgstr ""
+msgstr "Rejected"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
-msgstr ""
+msgstr "Rewards"
