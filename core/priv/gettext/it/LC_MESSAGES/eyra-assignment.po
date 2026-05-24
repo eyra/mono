@@ -11,43 +11,43 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "ticket.title"
 msgstr "Il suo ID partecipante"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "earned.label"
 msgstr "%{amount} guadagnati"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "pending.label"
 msgstr "%{amount} in attesa"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "togo.label"
 msgstr "%{amount} rimanenti"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "pool.target"
 msgstr "%{target} crediti richiesti"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "close.button"
 msgstr "Concludi"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.button"
 msgstr "Apri"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "preview.button"
 msgstr "Anteprima"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "publish.button"
 msgstr "Pubblica"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "retract.button"
 msgstr "Metti offline"
 
@@ -59,79 +59,79 @@ msgstr "Continua"
 msgid "onboarding.consent.title"
 msgstr "Consenso"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "connect.button"
 msgstr "Configura"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "connector.cancel.button"
 msgstr "Annulla"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "connector.connect.button"
 msgstr "Collega"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "connector.storage.text"
 msgstr "Selezioni il tipo di storage che desidera utilizzare per memorizzare i dati dei partecipanti."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "connector.storage.title"
 msgstr "Configuri lo storage dei dati"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "disconnect.button"
 msgstr "Scollega"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.off.label"
 msgstr "Salta"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.on.label"
 msgstr "Mostra"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.body"
 msgstr "Utilizzi il campo di testo qui sotto per scrivere un modulo di consenso per i suoi partecipanti. I suoi partecipanti hanno già prestato il consenso in un altro modo? Scelga 'Salta'."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.consent.title"
 msgstr "Modulo di consenso"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subtitle.label"
 msgstr "Sottotitolo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.title.label"
 msgstr "Titolo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.image.title"
 msgstr "Immagine di intestazione"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "search.different.image.button"
 msgstr "Cambia immagine"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.logo.file"
 msgstr "Carica logo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.logo.file"
 msgstr "Cambia logo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.logo.title"
 msgstr "Logo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.text"
 msgstr "Utilizzi i campi qui sotto per personalizzare l'intestazione del workflow dei partecipanti. Vuole vedere come apparirà ai partecipanti? Clicchi su 'Anteprima' in alto a destra per verificare."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.branding.title"
 msgstr "Branding"
 
@@ -139,19 +139,19 @@ msgstr "Branding"
 msgid "intro.page.title"
 msgstr "Informazioni"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.off.label"
 msgstr "Salta"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "intro_form.on.label"
 msgstr "Mostra"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.body"
 msgstr "Aggiunga una pagina informativa per accogliere e informare i suoi partecipanti, oppure scelga 'Salta'."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.intro.title"
 msgstr "Pagina informativa"
 
@@ -159,11 +159,11 @@ msgstr "Pagina informativa"
 msgid "onboarding.intro.title"
 msgstr "Informazioni"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.body"
 msgstr "Utilizzi il campo di testo qui sotto per informare i partecipanti su come ricevere supporto in caso di necessità. Questa pagina sarà mostrata quando i partecipanti cliccano sulla 'i' in basso a destra. Controlli 'Anteprima' per vedere come apparirà. Scelga 'Salta' se non intende fornire supporto."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.support.title"
 msgstr "Pagina di assistenza"
 
@@ -171,11 +171,11 @@ msgstr "Pagina di assistenza"
 msgid "support.page.title"
 msgstr "Domande?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.off.label"
 msgstr "Salta"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "support_form.on.label"
 msgstr "Mostra"
 
@@ -195,27 +195,27 @@ msgstr "Grazie per la tua partecipazione."
 msgid "finished_view.title"
 msgstr "Fatto"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy_doc.placeholder"
 msgstr "Carichi un'informativa sulla privacy"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy_doc.replace.button"
 msgstr "Sostituisci PDF"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy_doc.select.button"
 msgstr "Seleziona PDF"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.body"
 msgstr "L'aggiunta di un'informativa sulla privacy è facoltativa. Quando viene caricato un pdf, sarà mostrato come pagina della privacy separata. Può aggiungere informazioni sulla privacy ai campi di testo della pagina informativa o del modulo di consenso senza caricare un pdf, oppure utilizzare l'URL dell'informativa sulla privacy disponibile dopo il caricamento per fare riferimento all'informativa caricata."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.privacy.title"
 msgstr "Pagina della privacy"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy_doc.annotation"
 msgstr "<h1>URL dell'informativa sulla privacy</h1> Utilizzi l'URL qui sotto per fare riferimento all'informativa sulla privacy caricata. Si noti che quando viene caricato un nuovo pdf, l'URL verrà aggiornato.<br>"
 
@@ -223,59 +223,59 @@ msgstr "<h1>URL dell'informativa sulla privacy</h1> Utilizzi l'URL qui sotto per
 msgid "privacy.title"
 msgstr "Privacy"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.monitor"
 msgstr "Monitor"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "finished.participants"
 msgstr "Completato"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "started.participants"
 msgstr "Iniziato"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "declined.participants"
 msgstr "Consenso rifiutato"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.language.label"
 msgstr "Impostazione della lingua per i partecipanti"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "settings.subject_count.label"
 msgstr "Numero di partecipanti"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.participants"
 msgstr "Partecipanti"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.donate.description"
 msgstr "Permette ai partecipanti di donare i dati."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download.description"
 msgstr "Carichi un manuale PDF con istruzioni per scaricare i dati di tracciamento digitale. Nota: non adatto per dispositivi mobili."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.questionnaire.description"
 msgstr "Reindirizza i partecipanti a un questionario online."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.request.description"
 msgstr "Carichi un manuale PDF con istruzioni per richiedere i dati di tracciamento digitale. Nota: non adatto per dispositivi mobili."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.download_instruction.description"
 msgstr "Permette ai partecipanti di scaricare il file zip dei loro dati di partecipazione."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.fork_instruction.description"
 msgstr "Fornisce ai partecipanti il link al suo repository GitHub di template, necessario per preparare il loro metodo per l'invio."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.submit.description"
 msgstr "Permette ai partecipanti di inviare il loro metodo alla sfida con un link di commit del repository GitHub."
 
@@ -283,23 +283,23 @@ msgstr "Permette ai partecipanti di inviare il loro metodo alla sfida con un lin
 msgid "invite.panel.annotation"
 msgstr "Usa il link qui sotto per invitare i partecipanti. Sostituisci 'participant_id' con un identificatore univoco per ogni partecipante. Ai partecipanti verrà chiesto di lasciare il proprio indirizzo email per future ricerche tramite Panl."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invite.panel.title"
 msgstr "Link di invito per i partecipanti"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.body"
 msgstr "Questo annuncio sarà utilizzato per pubblicizzare il suo studio ai partecipanti Panl e consentire loro di partecipare al suo studio."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.create.button"
 msgstr "Crea annuncio"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.goto.button"
 msgstr "Vai all'annuncio"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "advert.title"
 msgstr "Annuncio Panl"
 
@@ -319,15 +319,15 @@ msgstr "Domande?"
 msgid "context.menu.privacy.title"
 msgstr "Privacy"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "storage.create.button"
 msgstr "Collega storage"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "storage.goto.button"
 msgstr "Vai ai file"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "storage.not_available.warning"
 msgstr "Configuri la connessione a uno storage dati"
 
@@ -337,63 +337,63 @@ msgid_plural "* participants"
 msgstr[0] ""
 msgstr[1] ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "leaf.tag"
 msgstr "Incarico"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
 msgstr "Si noti che, se sceglie di confermare, il contenuto della pagina sarà eliminato, così come la registrazione associata di chi ha prestato il consenso."
 
-#, fuzzy, elixir-autogen
+#, elixir-autogen, fuzzy
 msgid "export.progress.button"
 msgstr "Report di avanzamento"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "monitor.description"
 msgstr "Questo monitor di eventi traccia gli eventi di interazione dell'utente per ottenere informazioni sul corretto funzionamento del workflow pubblicato. Non deve essere utilizzato per il tracciamento per singolo partecipante. Se desidera conoscere l'avanzamento per singolo partecipante, esporti il report di avanzamento nell'angolo in alto a destra."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.header.consent"
 msgstr "Consenso"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.header.participant"
 msgstr "Partecipante"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.no"
 msgstr "no"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.not.applicable"
 msgstr "n/d"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.yes"
 msgstr "sì"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "workflow_item.paper_screening.description"
 msgstr "Selezione basata su titolo e abstract"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.reviewers"
 msgstr "Revisori"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.settings"
 msgstr "Impostazioni"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.workflow"
 msgstr "Workflow"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.criteria"
 msgstr "Criteri"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.import"
 msgstr "Articoli"
 
@@ -409,11 +409,11 @@ msgstr "Colleghi il workflow dei partecipanti a un sistema esterno fornendo gli 
 msgid "tabbar.item.affiliate"
 msgstr "Integrazione"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "affiliate.panel.annotation"
 msgstr "Utilizzi il link qui sotto per invitare i partecipanti. Non è richiesto l'accesso. Sostituisca 'participant_id' con un identificatore univoco per ogni partecipante. Può facoltativamente aggiungere parametri personalizzati al link (ad es. &d=abc123). Saranno inoltrati automaticamente a qualsiasi sistema esterno collegato tramite la scheda Integrazione."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "affiliate.panel.title"
 msgstr "Link di invito"
 
@@ -425,11 +425,11 @@ msgstr "Grazie. Ha completato questa parte. Clicchi su Continua per proseguire."
 msgid "redirect.button"
 msgstr "Continua"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "external.panel.annotation"
 msgstr "Utilizzi il link qui sotto per invitare i partecipanti. Non è richiesto l'accesso. Sostituisca 'participant_id' con un identificatore univoco per ogni partecipante."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "external.panel.title"
 msgstr "Link di invito"
 
@@ -449,11 +449,11 @@ msgstr "Ha scelto di non partecipare. La sua scelta è stata registrata. Ora pu�
 msgid "finished_view.title.declined"
 msgstr "Fatto"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "landing.continue.button"
 msgstr "Continua"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "landing.description.default"
 msgstr "Benvenuto! Clicchi su Continua per iniziare a partecipare a questo incarico."
 
@@ -582,26 +582,6 @@ msgid "panl_participants.add.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.advert.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.has_advert"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.no_advert"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.monitor.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "panl_participants.payment_prefix"
 msgstr ""
 
@@ -637,6 +617,14 @@ msgstr ""
 msgid "budget_form.aim.hint"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "recruit.panel.title"
+msgstr ""
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.partner_fee.label"
 msgstr ""
@@ -649,14 +637,8 @@ msgstr ""
 msgid "budget_form.total.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] ""
-msgstr[1] ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.open.button"
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -680,7 +662,19 @@ msgid "payout.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "payout.pagination.single_page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -701,32 +695,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "recruit.panel.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "recruit.panel.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "payout.decline.error"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "payout.pay_out_all.error"
 msgstr ""

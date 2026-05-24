@@ -123,9 +123,6 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
       |> click(Query.css("[data-testid='goto-advert-button']"))
     end
 
-    researcher_session
-    |> assert_has(Query.css("[data-testid='advert-publish-button']"))
-
     # Publish the advert
     researcher_session
     |> assert_has(Query.css("[data-testid='advert-publish-button']"))

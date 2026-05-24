@@ -118,21 +118,21 @@ msgstr "Account activatie"
 msgid "confirm.button"
 msgstr "Activeer"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.no_match.message"
-msgstr "Niemand gevonden met dit e-mailadres."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.placeholder"
-msgstr "Zoek op e-mailadres"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
-msgstr "Wie wilt u toevoegen?"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.alread_added.message"
-msgstr "Al toegevoegd"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
@@ -146,9 +146,9 @@ msgstr "Ik weet het zeker"
 msgid "people.confirm_remove.text"
 msgstr "Weet je zeker dat je jezelf uit dit project wilt verwijderen?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "Account activated successfully."
-msgstr "Account is geactiveerd."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
@@ -170,9 +170,9 @@ msgstr "Doorgaan"
 msgid "onboarding.hero.title"
 msgstr "Onboarding"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"
-msgstr "Link is ongeldig of verlopen"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
@@ -198,9 +198,9 @@ msgstr "Er is een fout opgetreden bij het inloggen. Probeer het opnieuw."
 msgid "sso.error.session_not_found"
 msgstr "Inloggen kon niet worden voltooid. Klik op de inlogknop om opnieuw te beginnen."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.activate_account.body"
-msgstr "We hebben een bevestigingsmail gestuurd naar %{email}. Klik op de link om je account te activeren. In de tussentijd kun je al studies bekijken."
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
@@ -224,4 +224,20 @@ msgstr "algemene voorwaarden"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
-msgstr "Toevoegen"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.title"
+msgstr ""

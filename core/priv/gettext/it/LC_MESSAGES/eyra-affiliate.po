@@ -11,19 +11,19 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.body"
 msgstr "Facoltativamente, fornisca un URL webhook per ricevere aggiornamenti in tempo reale sull'avanzamento dei partecipanti."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.placeholder"
 msgstr "https://panel-company.com/study?s=progress"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.title"
 msgstr "Avanzamento"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.placeholder"
 msgstr "https://panel-company.com/study?s=done"
 
@@ -35,23 +35,23 @@ msgstr "Facoltativamente, fornisca un URL di reindirizzamento per inoltrare i pa
 msgid "redirect_url.title"
 msgstr "Fine del workflow"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.invalid_parts"
 msgstr "Inserisca un URL valido"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_host"
 msgstr "Includa un dominio"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_scheme"
 msgstr "Utilizzi un prefisso come https://"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.no_spaces_allowed"
 msgstr "Rimuova eventuali spazi dall'URL"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "test.success"
 msgstr "L'URL sembra valido ed è raggiungibile"
 

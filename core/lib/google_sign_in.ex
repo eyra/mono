@@ -31,7 +31,8 @@ defmodule GoogleSignIn do
       displayname: display_name,
       profile: %{
         fullname: fullname
-      }
+      },
+      verified_at: NaiveDateTime.utc_now()
     }
 
     user = User.sso_changeset(%User{}, sso_info)

@@ -11,35 +11,35 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "add.to.button"
 msgstr "Hinzufügen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.description.label"
 msgstr "Aufgabenbeschreibung"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.group.label"
 msgstr "Datenquelle"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.description"
 msgstr "Wählen Sie aus, welche Aufgaben dem Workflow hinzugefügt werden sollen."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.title"
 msgstr "Bibliothek"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.description"
 msgstr "Fügen Sie Aufgaben aus der Bibliothek hinzu, um einen individuellen Workflow für Teilnehmende zu erstellen."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.hint"
 msgstr "Verwenden Sie die Pfeile, um die Aufgaben zu sortieren"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.title.label"
 msgstr "Aufgabentitel"
 

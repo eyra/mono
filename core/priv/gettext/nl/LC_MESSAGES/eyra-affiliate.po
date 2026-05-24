@@ -11,19 +11,19 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.body"
 msgstr "Geef optioneel een webhook-URL op om real-time updates over de voortgang van deelnemers te ontvangen."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.placeholder"
 msgstr "https://panel-company.com/study?s=progress"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "callback_url.title"
 msgstr "Voortgang"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "redirect_url.placeholder"
 msgstr "https://panel-company.com/study?s=done"
 
@@ -35,23 +35,23 @@ msgstr "Geef optioneel een redirect-URL op om deelnemers na het voltooien van de
 msgid "redirect_url.title"
 msgstr "Einde van workflow"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.invalid_parts"
 msgstr "Voer een geldige URL in"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_host"
 msgstr "Voeg een domein toe"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.missing_scheme"
 msgstr "Gebruik een prefix zoals https://"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "invalid_url.no_spaces_allowed"
 msgstr "Verwijder eventuele spaties uit de URL"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "test.success"
 msgstr "De URL ziet er goed uit en is bereikbaar"
 

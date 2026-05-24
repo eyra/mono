@@ -11,178 +11,177 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "displayname.label"
-msgstr "Nombre para mostrar"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "email.label"
-msgstr "Correo electrónico"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "fullname.label"
-msgstr "Nombre completo"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "password.label"
-msgstr "Contraseña"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "profile.title"
 msgstr "Cuenta"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.button"
-msgstr "Registrarse"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signup.title"
-msgstr "Crear una cuenta"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "await.confirmation.title"
-msgstr "Active su cuenta"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "confirm.token.resend_button"
-msgstr "Reenviar enlace de activación"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.profile.photo.file"
-msgstr "Seleccionar imagen"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
-msgstr "Cambiar"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "professionaltitle.label"
-msgstr "Título profesional"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "feature.study.description"
-msgstr "Para obtener créditos por participación en investigación (OP / RPR) en bedrijfskunde (BK) o international business administration (IBA), seleccione uno o más cursos a continuación. Si no terminó algún curso el año pasado, asegúrese de seleccionarlo también."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "Algunos estudios utilizan requisitos de elegibilidad específicos. Seleccionar las características opcionales a continuación le permite participar en estudios que requieren dichas características."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.gender.title"
-msgstr "Género"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.title"
-msgstr "Inclusión"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "features.content.description"
-msgstr "Seleccione los criterios de inclusión para su estudio. Si no se selecciona ninguno, todas las personas del grupo podrán participar."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.google.button"
-msgstr "Iniciar sesión con Google"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "login.surf.button"
-msgstr "Iniciar sesión con SURFconext"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.button"
-msgstr "Iniciar sesión"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "signin.title"
-msgstr "Iniciar sesión"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "await.confirmation.description"
-msgstr "Su cuenta ha sido creada. Le hemos enviado un correo electrónico de activación. Haga clic en el enlace del correo para activar su cuenta."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "activation.failed.body"
-msgstr "Es posible que su cuenta ya haya sido activada o que el enlace de activación haya caducado. Haga clic en 'Iniciar sesión' en la parte superior derecha para intentar acceder con sus datos. Si su cuenta no está activada, introduzca su dirección de correo electrónico a continuación para recibir un nuevo enlace de activación."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "activation.failed.title"
-msgstr "Activación de cuenta"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "activation.confirm.body"
-msgstr "Haga clic en el botón de abajo para activar su cuenta. Será redirigido a la página de inicio de sesión."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "activation.confirm.title"
-msgstr "Activación de cuenta"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "confirm.button"
-msgstr "Activar"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.no_match.message"
-msgstr "No se encontró a nadie con esta dirección de correo electrónico."
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.placeholder"
-msgstr "Buscar por dirección de correo electrónico"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.add.title"
-msgstr "¿A quién desea añadir?"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.search.alread_added.message"
-msgstr "Ya añadido"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.cancel_remove.label"
-msgstr "Cancelar"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.confirm_remove.label"
-msgstr "Estoy seguro"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "people.confirm_remove.text"
-msgstr "¿Está seguro de que desea eliminarse de este proyecto?"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "Account activated successfully."
-msgstr "Cuenta activada con éxito."
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "features.birthyear.title"
-msgstr "Año de nacimiento"
+msgstr ""
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
-msgstr "Panl"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.profile.title"
-msgstr "Mi perfil"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
-msgstr "Continuar"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Bienvenida"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"
-msgstr "Enlace no válido o caducado"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Acepto los %{terms_link} y la %{privacy_link} de Panl"
 
 #, elixir-autogen, elixir-format
-#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr "Debe aceptar la política de privacidad para continuar"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
@@ -192,29 +191,29 @@ msgstr "Acepto los %{terms_link} y la %{privacy_link} de Next"
 msgid "privacy.next-policy.required"
 msgstr "Debe aceptar los términos, condiciones y la política de privacidad para continuar"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "sso.error.generic"
-msgstr "Se produjo un error al iniciar sesión. Inténtelo de nuevo."
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr "No se pudo completar el inicio de sesión. Haga clic en el botón de inicio de sesión para empezar de nuevo."
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "onboarding.activate_account.body"
-msgstr "Hemos enviado un correo de confirmación a %{email}. Haga clic en el enlace para activar su cuenta. Mientras tanto, ya puede explorar los estudios."
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr "Empezar a explorar"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr "Revise su correo electrónico"
+msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
-msgstr "Demasiados intentos de registro. Por favor, inténtelo de nuevo más tarde."
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "privacy.link.privacy"
@@ -226,4 +225,20 @@ msgstr "términos y condiciones"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
-msgstr "Añadir"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.title"
+msgstr ""

@@ -11,35 +11,35 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "add.to.button"
 msgstr "Añadir"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.description.label"
 msgstr "Descripción de la tarea"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.group.label"
 msgstr "Fuente de datos"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.description"
 msgstr "Elija qué tareas añadir al flujo de trabajo."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.title"
 msgstr "Biblioteca"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.description"
 msgstr "Añada tareas de la biblioteca para crear un flujo de trabajo personalizado para los participantes."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.hint"
 msgstr "Utilice las flechas para ordenar las tareas"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.title.label"
 msgstr "Título de la tarea"
 
