@@ -25,12 +25,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.body"
-msgstr ""
+msgstr "Conectați-vă cu contul instituțional pentru a continua.<br>Veți fi redirecționat către pagina securizată de autentificare %{identity_provider}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.button"
-msgstr ""
+msgstr "Conectați-vă cu %{identity_provider}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.title"
-msgstr ""
+msgstr "Bun venit"

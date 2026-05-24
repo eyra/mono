@@ -229,16 +229,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.body"
-msgstr ""
+msgstr "Sie sind jetzt mit Ihrem institutionellen Konto angemeldet. Bitte lesen Sie die Allgemeinen Geschäftsbedingungen und die Datenschutzerklärung, bevor Sie fortfahren."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
+msgstr "Ich stimme den %{terms} und der %{privacy} zu."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms.required"
-msgstr ""
+msgstr "Bitte akzeptieren Sie die Allgemeinen Geschäftsbedingungen und die Datenschutzerklärung, um fortzufahren."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.title"
-msgstr ""
+msgstr "Willkommen"

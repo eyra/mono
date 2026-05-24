@@ -228,16 +228,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.body"
-msgstr ""
+msgstr "Je bent nu ingelogd met je institutionele account. Lees de Algemene Voorwaarden en het Privacybeleid voordat je verdergaat."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
+msgstr "Ik ga akkoord met de %{terms} en het %{privacy}."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms.required"
-msgstr ""
+msgstr "Accepteer de algemene voorwaarden en privacyverklaring om door te gaan."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.title"
-msgstr ""
+msgstr "Welkom"

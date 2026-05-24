@@ -25,12 +25,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.body"
-msgstr ""
+msgstr "Melden Sie sich mit Ihrem institutionellen Konto an, um fortzufahren.<br>Sie werden zur sicheren Anmeldeseite von %{identity_provider} weitergeleitet."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.button"
-msgstr ""
+msgstr "Anmelden mit %{identity_provider}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "auth.signup.title"
-msgstr ""
+msgstr "Willkommen"
