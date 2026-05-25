@@ -25,12 +25,12 @@ msgstr "Si su institución permite el acceso a la plataforma Next a través de S
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.body"
-msgstr ""
+msgstr "Inicie sesión con su cuenta institucional para continuar.<br>Será redirigido a la página de inicio de sesión segura de %{identity_provider}."
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.button"
-msgstr ""
+msgstr "Iniciar sesión con %{identity_provider}"
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.title"
-msgstr ""
+msgstr "Bienvenido"

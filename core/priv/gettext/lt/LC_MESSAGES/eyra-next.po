@@ -25,12 +25,12 @@ msgstr "Jei jūsų institucija leidžia prieigą prie Next platformos per SURFco
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.body"
-msgstr ""
+msgstr "Prisijunkite naudodami savo institucinę paskyrą, kad galėtumėte tęsti.<br>Būsite nukreipti į saugų %{identity_provider} prisijungimo puslapį."
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.button"
-msgstr ""
+msgstr "Prisijungti su %{identity_provider}"
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.title"
-msgstr ""
+msgstr "Sveiki"

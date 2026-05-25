@@ -25,12 +25,12 @@ msgstr "Heeft jouw organisatie toestemming gegeven om in te loggen via SURFconex
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.body"
-msgstr ""
+msgstr "Log in met je institutionele account om door te gaan.<br>Je wordt doorgestuurd naar de beveiligde inlogpagina van %{identity_provider}."
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.button"
-msgstr ""
+msgstr "Inloggen met %{identity_provider}"
 
 #, elixir-autogen, elixir-format
 msgid "auth.signup.title"
-msgstr ""
+msgstr "Welkom"

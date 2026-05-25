@@ -238,16 +238,16 @@ msgstr "Ką norite pridėti?"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
-msgstr ""
+msgstr "Dabar esate prisijungę naudodami savo institucinę paskyrą. Prieš tęsdami, peržiūrėkite Sąlygas ir Privatumo politiką."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
+msgstr "Sutinku su %{terms} ir %{privacy}."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
-msgstr ""
+msgstr "Norėdami tęsti, sutikite su sąlygomis ir privatumo politika."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
-msgstr ""
+msgstr "Sveiki"

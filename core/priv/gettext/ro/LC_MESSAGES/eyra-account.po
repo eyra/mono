@@ -238,16 +238,16 @@ msgstr "Pe cine doriți să adăugați?"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
-msgstr ""
+msgstr "V-ați conectat acum cu contul instituțional. Înainte de a continua, vă rugăm să examinați Termenii și Declarația de confidențialitate."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
+msgstr "Sunt de acord cu %{terms} și %{privacy}."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
-msgstr ""
+msgstr "Vă rugăm să acceptați termenii și declarația de confidențialitate pentru a continua."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
-msgstr ""
+msgstr "Bun venit"
