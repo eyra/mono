@@ -19,11 +19,7 @@
 * Added - Rewards summary card on the participant home page
 * Changed - Auth provider routes standardised to /auth/:provider and /auth/:provider/callback (SURFconext IdP dashboard updated to match)
 * Changed - SSO users are activated when they accept the terms-and-privacy onboarding step (sets confirmed_at) rather than being auto-activated on registration
-* Fixed - Free studies remain visible in the marketplace
-* Fixed - Future-studies card only shown for panl participants; activities shown to non-panl members
-* Fixed - Fund.currency is now set on fund creation so reward bookkeeping works for new assignments
-* Fixed - Rewards summary visible to non-panl members
-* Fixed - Translations for auth.signup.* and terms_and_privacy.onboarding.* in DE / ES / IT / LT / NL / RO
+* Fixed - Free studies were excluded from the marketplace visibility check on milestone 23 — now treated as visible
 
 ## \#23 2026-05-22
 * Added - Organisations: org owner role, admin pages per org, owners modal, archive modal, org node/admin views, members search & filter
