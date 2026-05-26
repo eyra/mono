@@ -72,11 +72,13 @@ defmodule Frameworks.Utility.EctoHelper do
 
   def apply_virtual_change(changeset, field, virtual, delimiters)
       when is_atom(field) and is_atom(virtual) and is_list(delimiters) do
-    if virtual_string = Changeset.get_change(changeset, virtual) do
-      value = virtual_string |> String.split(delimiters, trim: true)
-      Changeset.put_change(changeset, field, value)
-    else
-      changeset
+    case Map.fetch(changeset.params || %{}, to_string(virtual)) do
+      {:ok, virtual_string} when is_binary(virtual_string) ->
+        value = virtual_string |> String.split(delimiters, trim: true)
+        Changeset.put_change(changeset, field, value)
+
+      _ ->
+        changeset
     end
   end
 
