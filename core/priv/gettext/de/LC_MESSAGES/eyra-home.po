@@ -15,17 +15,13 @@ msgstr ""
 msgid "member.title"
 msgstr "Software-Dienste"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Beiträge"
+msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "available.member.title"
-msgstr "Panl-Studien"
-
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "available.visitor.title"
-msgstr "Panl-Studien"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
@@ -41,7 +37,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.approved"
-msgstr "Beiträge"
+msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
@@ -49,4 +45,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
-msgstr "Beiträge"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "overview.breadcrumb"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.empty.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.show_more"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.title"
+msgstr ""

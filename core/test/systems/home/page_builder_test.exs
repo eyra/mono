@@ -3,11 +3,27 @@ defmodule Systems.Home.PageBuilderTest do
 
   alias Systems.Home
   alias Systems.Pool
+  alias Systems.Advert
   alias Systems.Assignment
 
   alias Core.Factories
 
   defp block_keys(vm), do: Enum.map(vm.blocks, &elem(&1, 0))
+
+  defp block_params(vm, name) do
+    {^name, %{params: params}} = Enum.find(vm.blocks, fn {k, _} -> k == name end)
+    params
+  end
+
+  # Build an online + funded + open advert that passes validate_open/2 for any
+  # panl participant. reward_value 0 short-circuits the funding check so we
+  # don't need to wire up a Fund + currency.
+  defp create_open_online_advert(creator) do
+    advert = Advert.Factories.create_advert(creator, :accepted, 1)
+    {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
+    {:ok, _} = advert.submission |> Ecto.Changeset.change(reward_value: 0) |> Repo.update()
+    advert
+  end
 
   defp give_reward(user, amount \\ 1500) do
     Factories.insert!(:reward, %{
@@ -95,6 +111,37 @@ defmodule Systems.Home.PageBuilderTest do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
       assert :available_adverts in block_keys(vm)
+    end
+  end
+
+  describe "view_model/2 available_adverts shape (home card limit / more link)" do
+    setup do
+      researcher = Factories.insert!(:creator)
+      user = Factories.insert!(:member, %{creator: false})
+      make_panl_participant(user)
+
+      for _ <- 1..5, do: create_open_online_advert(researcher)
+
+      {:ok, user: user}
+    end
+
+    test "caps displayed cards at the home page limit", %{user: user} do
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert %{cards: cards} = block_params(vm, :available_adverts)
+      assert length(cards) == 3
+    end
+
+    test "reports the total advert count, not the capped card count", %{user: user} do
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert %{count: 5} = block_params(vm, :available_adverts)
+    end
+
+    test "links to the /studies marketplace via more_path", %{user: user} do
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert %{more_path: "/studies"} = block_params(vm, :available_adverts)
     end
   end
 

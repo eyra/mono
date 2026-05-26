@@ -29,10 +29,6 @@ msgid "participated.title"
 msgstr "Contribuții"
 
 #, elixir-autogen, elixir-format
-msgid "available.member.title"
-msgstr "Studii Panl"
-
-#, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr "Studii Panl"
 
@@ -59,3 +55,23 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
 msgstr "Contribuții"
+
+#, elixir-autogen, elixir-format
+msgid "overview.breadcrumb"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.empty.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.show_more"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.title"
+msgstr ""

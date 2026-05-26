@@ -17,6 +17,9 @@ defmodule Systems.Home.PageBuilder do
   alias Systems.Pool
   alias Systems.Crew
 
+  # Number of studies shown on the home page before linking to the marketplace
+  @home_card_limit 3
+
   # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
@@ -117,16 +120,22 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
-    cards =
+    adverts =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
+
+    cards =
+      adverts
+      |> Enum.take(@home_card_limit)
       |> Enum.map(&to_card(&1, assigns))
 
     %{
       module: Home.AdvertsView,
       params: %{
-        title: dgettext("eyra-home", "available.member.title"),
-        cards: cards
+        title: dgettext("eyra-home", "studies.title"),
+        cards: cards,
+        count: Enum.count(adverts),
+        more_path: ~p"/studies"
       }
     }
   end

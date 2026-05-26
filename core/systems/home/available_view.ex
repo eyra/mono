@@ -7,7 +7,7 @@ defmodule Systems.Home.AdvertsView do
   alias Systems.Advert
 
   @impl true
-  def update(%{title: title, cards: cards}, %{assigns: %{}} = socket) do
+  def update(%{title: title, cards: cards} = params, %{assigns: %{}} = socket) do
     sub_heading_text = dgettext("link-advert", "submission.available.sub_heading")
 
     {
@@ -16,6 +16,8 @@ defmodule Systems.Home.AdvertsView do
       |> assign(
         title: title,
         cards: cards,
+        count: Map.get(params, :count, Enum.count(cards)),
+        more_path: Map.get(params, :more_path),
         sub_heading_text: sub_heading_text
       )
     }
@@ -40,7 +42,7 @@ defmodule Systems.Home.AdvertsView do
         <div class="flex flex-row items-center">
           <Text.title2 margin="">
             <%= @title %>
-            <span class="text-primary"> <%= Enum.count(@cards) %></span>
+            <span class="text-primary"> <%= @count %></span>
           </Text.title2>
           <div class="flex-grow" />
           <div>
@@ -62,6 +64,17 @@ defmodule Systems.Home.AdvertsView do
           <Advert.CardView.dynamic card={card} target={@myself}/>
         <% end %>
       </Grid.dynamic>
+      <%= if @more_path && @count > Enum.count(@cards) do %>
+        <.spacing value="M" />
+        <div class="flex flex-row justify-end">
+          <.link navigate={@more_path}>
+            <div class="flex flex-row items-center gap-2 text-button font-button text-primary">
+              <%= dgettext("eyra-home", "studies.show_more") %>
+              <img src={~p"/images/icons/forward.svg"} alt="" />
+            </div>
+          </.link>
+        </div>
+      <% end %>
     </div>
     """
   end

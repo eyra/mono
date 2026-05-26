@@ -19,10 +19,6 @@ msgid "participated.title"
 msgstr "Activities"
 
 #, elixir-autogen, elixir-format
-msgid "available.member.title"
-msgstr "Panl studies"
-
-#, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr "Panl studies"
 
@@ -49,3 +45,23 @@ msgstr "Awaiting"
 #, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
 msgstr "Rejected"
+
+#, elixir-autogen, elixir-format
+msgid "overview.breadcrumb"
+msgstr "Overview"
+
+#, elixir-autogen, elixir-format
+msgid "studies.empty.message"
+msgstr "There are no studies available at the moment."
+
+#, elixir-autogen, elixir-format
+msgid "studies.search.placeholder"
+msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "studies.show_more"
+msgstr "Show more"
+
+#, elixir-autogen, elixir-format
+msgid "studies.title"
+msgstr "Studies"

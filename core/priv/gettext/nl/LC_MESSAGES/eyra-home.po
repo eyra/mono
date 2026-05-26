@@ -16,11 +16,7 @@ msgstr "Softwarediensten"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Bijdragen"
-
-#, elixir-autogen, elixir-format
-msgid "available.member.title"
-msgstr "Panl studies"
+msgstr "Activiteiten"
 
 #, elixir-autogen, elixir-format
 msgid "available.visitor.title"
@@ -32,20 +28,40 @@ msgstr "Ontwikkeld voor en met onderzoekers"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr ""
+msgstr "Studie"
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"
-msgstr ""
+msgstr "Vergoeding:"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "participated.status.approved"
-msgstr "Bijdragen"
+msgstr "Goedgekeurd"
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
-msgstr ""
+msgstr "In afwachting"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
-msgstr "Bijdragen"
+msgstr "Afgekeurd"
+
+#, elixir-autogen, elixir-format
+msgid "overview.breadcrumb"
+msgstr "Overzicht"
+
+#, elixir-autogen, elixir-format
+msgid "studies.empty.message"
+msgstr "Er zijn op dit moment geen studies beschikbaar."
+
+#, elixir-autogen, elixir-format
+msgid "studies.search.placeholder"
+msgstr "Zoeken"
+
+#, elixir-autogen, elixir-format
+msgid "studies.show_more"
+msgstr "Toon meer"
+
+#, elixir-autogen, elixir-format
+msgid "studies.title"
+msgstr "Studies"
