@@ -13,6 +13,8 @@ defmodule Systems.Home.StudiesPage do
 
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
+    Home.Private.apply_panl_locale(user)
+
     socket = socket |> compose_child(:studies_view)
 
     if participant?(user) do

@@ -6,7 +6,6 @@ defmodule Systems.Home.StudiesPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Account
   alias Systems.Advert
-  alias Systems.Pool
 
   # For guest users (access is blocked in the page mount, but guard here too)
   def view_model(_, %{current_user: nil}) do
@@ -15,9 +14,6 @@ defmodule Systems.Home.StudiesPageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl? = Pool.Public.participant?(:panl, user)
-    put_locale(user, panl?)
-
     items = build_items(user, assigns)
     base_vm(items, available_years(items))
   end
@@ -72,11 +68,4 @@ defmodule Systems.Home.StudiesPageBuilder do
     |> Enum.sort(:desc)
   end
 
-  defp put_locale(%Account.User{creator: false}, true) do
-    CoreWeb.Live.Hook.Locale.put_locale("nl")
-  end
-
-  defp put_locale(_, _) do
-    CoreWeb.Live.Hook.Locale.put_locale("en")
-  end
 end
