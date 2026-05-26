@@ -83,6 +83,7 @@ defmodule Systems.Org.NodeModel do
     |> apply_text_bundle_changes(attrs, :short_name_bundle)
     |> apply_virtual_changes()
     |> validate_required(@required_fields)
+    |> validate_length(:identifier, min: 1)
     |> unique_constraint(:identifier)
   end
 
