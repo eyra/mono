@@ -81,12 +81,10 @@ defmodule Systems.Admin.AccountView do
     }
   end
 
+  # Selector (embedded LV without Fabric) falls back to send(self(), {event, payload}),
+  # which arrives here as handle_info — see Frameworks.Pixel.Selector.send_parent_event/3.
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :account_filters}},
-        socket
-      ) do
+  def handle_info({"active_item_ids", %{active_item_ids: active_filters}}, socket) do
     {
       :noreply,
       socket
