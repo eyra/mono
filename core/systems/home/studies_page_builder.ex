@@ -67,5 +67,4 @@ defmodule Systems.Home.StudiesPageBuilder do
     |> Enum.uniq()
     |> Enum.sort(:desc)
   end
-
 end
