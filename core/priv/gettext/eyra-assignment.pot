@@ -705,7 +705,5 @@ msgid "panl_participants.pending_approvals.open.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] ""
-msgstr[1] ""
+msgid "panl_participants.pending_approvals.title"
+msgstr ""
