@@ -80,7 +80,10 @@ defmodule Systems.Home.PageBuilder do
       totals ->
         %{
           module: Home.RewardsSummaryView,
-          params: Map.put(totals, :labels, rewards_summary_labels())
+          params:
+            totals
+            |> Map.put(:labels, rewards_summary_labels())
+            |> Map.put(:user, user)
         }
     end
   end
@@ -155,7 +158,12 @@ defmodule Systems.Home.PageBuilder do
       pending_caption: dgettext("eyra-fund", "rewards_summary.pending.caption"),
       approved_pill: dgettext("eyra-fund", "rewards_summary.approved.pill"),
       approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
-      rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill")
+      rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill"),
+      payout_button: dgettext("eyra-fund", "rewards_summary.payout.button"),
+      payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
+      payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
+      payout_no_merchant: dgettext("eyra-fund", "rewards_summary.payout.no_merchant"),
+      payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed")
     }
   end
 

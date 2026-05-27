@@ -149,3 +149,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.below_threshold"
+msgstr "Uitbetalen kan vanaf een saldo van €5."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.button"
+msgstr "Uitbetalen"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.failed"
+msgstr "Uitbetaling kan op dit moment niet worden verwerkt. Probeer het later opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.no_merchant"
+msgstr "Uitbetaling is nog niet ingericht. Rond eerst de aanmelding bij de betalingsprovider af."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.success"
+msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."

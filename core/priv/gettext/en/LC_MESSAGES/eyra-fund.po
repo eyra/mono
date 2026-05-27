@@ -149,3 +149,23 @@ msgstr "Rejected"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
 msgstr "Rewards"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.below_threshold"
+msgstr "Payout requires a minimum balance of €5."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.button"
+msgstr "Pay out"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.failed"
+msgstr "Payout could not be processed right now. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.no_merchant"
+msgstr "Payout setup is incomplete. Please finish your payment provider onboarding first."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.success"
+msgstr "Payout requested. Your reward is on its way to your bank account."

@@ -1,12 +1,16 @@
 defmodule Systems.Fund.PublicTest do
   use Core.DataCase
+  import Mox
 
   alias Systems.{
     Fund,
     Bookkeeping
   }
 
+  alias Systems.Payment.ProviderMock
   alias Core.Factories
+
+  setup :verify_on_exit!
 
   setup do
     currency = Fund.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -738,7 +742,7 @@ defmodule Systems.Fund.PublicTest do
                Fund.Public.summarize_rewards(user)
     end
 
-    test "folds :paid and :approved into approved_cents", %{fund: fund} do
+    test "approved_cents only counts :approved rewards (excludes :paid)", %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -757,7 +761,22 @@ defmodule Systems.Fund.PublicTest do
         idempotence_key: "sr-paid-400-#{System.unique_integer([:positive])}"
       })
 
-      assert %{pending_cents: 0, approved_cents: 500, rejected_cents: 0} =
+      assert %{approved_cents: 100, paid_out_cents: 400} =
+               Fund.Public.summarize_rewards(user)
+    end
+
+    test "pending_payout_cents sums rewards locked for payout", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 250,
+        status: :pending_payout,
+        idempotence_key: "sr-pendingpayout-250-#{System.unique_integer([:positive])}"
+      })
+
+      assert %{approved_cents: 0, pending_payout_cents: 250} =
                Fund.Public.summarize_rewards(user)
     end
 
@@ -834,6 +853,95 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:ok, %{noop: :pre}} = result
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
+    end
+  end
+
+  describe "request_payout/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_test_123"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp insert_reward(user, fund, amount, status) do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: amount,
+        status: status,
+        idempotence_key: "rp-#{status}-#{amount}-#{System.unique_integer([:positive])}"
+      })
+    end
+
+    test "returns :no_merchant when participant has no merchant_uid", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
+      insert_reward(user, fund, 1000, :approved)
+
+      assert {:error, :no_merchant} = Fund.Public.request_payout(user)
+    end
+
+    test "returns :below_threshold when approved balance is under €5", %{user: user, fund: fund} do
+      insert_reward(user, fund, 499, :approved)
+
+      assert {:error, {:below_threshold, 499}} = Fund.Public.request_payout(user)
+    end
+
+    test "returns :below_threshold with 0 when participant has no approved rewards", %{user: user} do
+      assert {:error, {:below_threshold, 0}} = Fund.Public.request_payout(user)
+    end
+
+    test "locks approved rewards as :pending_payout on success", %{user: user, fund: fund} do
+      %{id: id1} = insert_reward(user, fund, 600, :approved)
+      %{id: id2} = insert_reward(user, fund, 400, :approved)
+
+      expect(ProviderMock, :create_withdrawal, fn _, :eur, _ ->
+        {:ok, %{uid: "w_1", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.request_payout(user)
+
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id1), [])
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id2), [])
+    end
+
+    test "calls OPP with the participant's merchant_uid, :eur, and summed amount",
+         %{user: %{merchant_uid: merchant_uid} = user, fund: fund} do
+      insert_reward(user, fund, 600, :approved)
+      insert_reward(user, fund, 400, :approved)
+
+      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid, :eur, %{amount: 1000} ->
+        {:ok, %{uid: "w_2", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{amount: 1000, withdrawal: %{uid: "w_2"}}} =
+               Fund.Public.request_payout(user)
+    end
+
+    test "reverts the lock when OPP returns an error", %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      expect(ProviderMock, :create_withdrawal, fn _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} = Fund.Public.request_payout(user)
+
+      assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
+    end
+
+    test "ignores rewards in other statuses when computing the payout", %{user: user, fund: fund} do
+      insert_reward(user, fund, 1000, :approved)
+      insert_reward(user, fund, 9000, :pending_approval)
+      insert_reward(user, fund, 9000, :paid)
+
+      expect(ProviderMock, :create_withdrawal, fn _, _, %{amount: 1000} ->
+        {:ok, %{uid: "w_3", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{amount: 1000}} = Fund.Public.request_payout(user)
+    end
+
+    defp reward_key(id) do
+      Core.Repo.get!(Fund.RewardModel, id).idempotence_key
     end
   end
 end

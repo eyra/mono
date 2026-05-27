@@ -17,6 +17,7 @@ defmodule Systems.Fund.Public do
   alias Systems.Fund
   alias Systems.Bookkeeping
   alias Systems.Banking
+  alias Systems.Payment
 
   defmodule FundError do
     @moduledoc false
@@ -898,18 +899,22 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Rolls up a participant's reward situation into three amounts (in cents),
-  used by the home page rewards-summary card:
+  Rolls up a participant's reward situation into amounts (in cents), used by
+  the home page rewards-summary card:
 
-  - `pending_cents` — status `:reserved` or `:pending_approval`.
-  - `approved_cents` — status `:approved` or `:paid`.
+  - `pending_cents` — status `:reserved` or `:pending_approval` (waiting on
+    researcher approval).
+  - `approved_cents` — status `:approved`. The participant's currently
+    available balance — eligible for payout.
+  - `pending_payout_cents` — status `:pending_payout`. Funds locked while a
+    payout request is in flight at the payment provider.
+  - `paid_out_cents` — status `:paid`. Funds that have completed payout.
   - `rejected_cents` — status `:rejected`.
 
-  All three are immutable per-status earned-amount snapshots (sum of
+  All buckets are immutable per-status earned-amount snapshots (sum of
   `Fund.RewardModel.amount`) sharing a single source of truth (the reward
   rows), so they cannot drift relative to each other the way mixing reward
-  sums with live wallet balances would. `:paid` folds into `approved_cents`
-  (a paid reward is an approved reward that has been transferred out).
+  sums with live wallet balances would.
   """
   def summarize_rewards(%Account.User{id: user_id}) do
     totals =
@@ -925,9 +930,92 @@ defmodule Systems.Fund.Public do
 
     %{
       pending_cents: amount.(:reserved) + amount.(:pending_approval),
-      approved_cents: amount.(:approved) + amount.(:paid),
+      approved_cents: amount.(:approved),
+      pending_payout_cents: amount.(:pending_payout),
+      paid_out_cents: amount.(:paid),
       rejected_cents: amount.(:rejected)
     }
+  end
+
+  @payout_threshold_cents 500
+
+  @doc """
+  Minimum approved balance (in cents) required to request a payout — €5.
+  """
+  def payout_threshold_cents, do: @payout_threshold_cents
+
+  @doc """
+  Requests a payout for all of the participant's `:approved` rewards.
+
+  Vertical slice for UC-OPP-06 (MS.4 → MS.10, without MS.11 webhook handling):
+
+    1. Validate the participant has an OPP merchant on file.
+    2. Validate the available balance ≥ `@payout_threshold_cents`.
+    3. Lock the eligible rewards: status `:approved` → `:pending_payout`.
+    4. Call `Payment.Public.create_withdrawal/3` to initiate the OPP payout.
+    5. On failure, revert the lock so the funds remain available.
+
+  Returns `{:ok, %{withdrawal: withdrawal, amount: cents}}` on success or
+  one of:
+
+    * `{:error, :no_merchant}` — participant has no OPP merchant_uid.
+    * `{:error, {:below_threshold, cents}}` — available balance under €5.
+    * `{:error, {:opp_failed, reason}}` — provider rejected the withdrawal;
+      the lock has been reverted.
+
+  Webhook handling (MS.11) and the eventual `:pending_payout` → `:paid`
+  transition land in a follow-up PR.
+  """
+  def request_payout(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
+
+  def request_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}) do
+    approved = list_approved_rewards(user_id)
+    total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
+
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      reward_ids = Enum.map(approved, & &1.id)
+      lock_rewards_for_payout(reward_ids)
+
+      case Payment.Public.create_withdrawal(merchant_uid, :eur, %{amount: total}) do
+        {:ok, withdrawal} ->
+          {:ok, %{withdrawal: withdrawal, amount: total}}
+
+        {:error, reason} ->
+          revert_payout_lock(reward_ids)
+          {:error, {:opp_failed, reason}}
+      end
+    end
+  end
+
+  defp list_approved_rewards(user_id) do
+    from(r in Fund.RewardModel,
+      where: r.user_id == ^user_id and r.status == :approved
+    )
+    |> Repo.all()
+  end
+
+  defp lock_rewards_for_payout([]), do: :ok
+
+  defp lock_rewards_for_payout(reward_ids) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    from(r in Fund.RewardModel, where: r.id in ^reward_ids)
+    |> Repo.update_all(set: [status: :pending_payout, updated_at: now])
+
+    :ok
+  end
+
+  defp revert_payout_lock([]), do: :ok
+
+  defp revert_payout_lock(reward_ids) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    from(r in Fund.RewardModel, where: r.id in ^reward_ids)
+    |> Repo.update_all(set: [status: :approved, updated_at: now])
+
+    :ok
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do

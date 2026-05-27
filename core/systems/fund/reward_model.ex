@@ -12,7 +12,7 @@ defmodule Systems.Fund.RewardModel do
     Bookkeeping
   }
 
-  @statuses [:reserved, :pending_approval, :approved, :rejected, :paid]
+  @statuses [:reserved, :pending_approval, :approved, :pending_payout, :rejected, :paid]
 
   schema "fund_rewards" do
     field(:idempotence_key, :string)
