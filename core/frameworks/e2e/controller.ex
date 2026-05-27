@@ -35,6 +35,7 @@ defmodule Frameworks.E2E.Controller do
   @service_email "e2e@eyra.service"
   @service_password "E2EServicePassword123!"
   @researcher_email "e2e-researcher@eyra.co"
+  @researcher_b_email "e2e-researcher-b@eyra.co"
   @participant_email "e2e-participant@eyra.co"
   @e2e_password "E2ETestPassword123!"
 
@@ -105,6 +106,7 @@ defmodule Frameworks.E2E.Controller do
     # No transaction needed - all operations are idempotent (get_or_create)
     try do
       researcher = get_or_create_researcher()
+      researcher_b = get_or_create_researcher_b()
       participant = get_or_create_participant()
       assignment = get_or_create_donate_assignment(researcher)
       _panl_advert = get_or_create_panl_advert(researcher)
@@ -114,6 +116,8 @@ defmodule Frameworks.E2E.Controller do
        %{
          researcher_email: researcher.email,
          researcher_password: @e2e_password,
+         researcher_b_email: researcher_b.email,
+         researcher_b_password: @e2e_password,
          participant_email: participant.email,
          participant_password: @e2e_password,
          donate_assignment_path: assignment_path(assignment),
@@ -153,6 +157,25 @@ defmodule Frameworks.E2E.Controller do
 
     Core.Factories.insert!(:member, %{
       email: @researcher_email,
+      password: @e2e_password,
+      creator: true,
+      confirmed_at: now,
+      verified_at: now
+    })
+  end
+
+  defp get_or_create_researcher_b do
+    case Account.Public.get_user_by_email(@researcher_b_email) do
+      nil -> create_researcher_b()
+      user -> user
+    end
+  end
+
+  defp create_researcher_b do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    Core.Factories.insert!(:member, %{
+      email: @researcher_b_email,
       password: @e2e_password,
       creator: true,
       confirmed_at: now,

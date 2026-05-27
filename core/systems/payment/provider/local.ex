@@ -52,7 +52,7 @@ defmodule Systems.Payment.Provider.Local do
      %{
        uid: uid,
        status: "created",
-       payment_url: "http://localhost:4000/payment/local/#{uid}",
+       payment_url: "#{CoreWeb.Endpoint.url()}/payment/local/#{uid}",
        amount: total_amount
      }}
   end

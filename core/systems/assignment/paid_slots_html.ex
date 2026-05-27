@@ -56,19 +56,21 @@ defmodule Systems.Assignment.PaidSlotsHtml do
     assigns = assign(assigns, tag: tag, total: transaction.total_amount, reward: reward)
 
     ~H"""
-    <Panel.flat>
-      <div class="flex items-start justify-between">
-        <div>
-          <div class="text-title5 font-title5 text-grey1 mb-1">
-            <%= dgettext("eyra-assignment", "panl_participants.payment_prefix") %> <%= @transaction.invoice_id %>
+    <div data-testid={"transaction-card-#{@transaction.status}"}>
+      <Panel.flat>
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="text-title5 font-title5 text-grey1 mb-1">
+              <%= dgettext("eyra-assignment", "panl_participants.payment_prefix") %> <%= @transaction.invoice_id %>
+            </div>
+            <div class="text-bodysmall font-body text-grey2">
+              <%= Helpers.format_cents(@total) %> | <%= Helpers.budget_description(@transaction.subject_count, @reward) %>
+            </div>
           </div>
-          <div class="text-bodysmall font-body text-grey2">
-            <%= Helpers.format_cents(@total) %> | <%= Helpers.budget_description(@transaction.subject_count, @reward) %>
-          </div>
+          <.status_element transaction={@transaction} tag={@tag} target={@target} />
         </div>
-        <.status_element transaction={@transaction} tag={@tag} target={@target} />
-      </div>
-    </Panel.flat>
+      </Panel.flat>
+    </div>
     """
   end
 
