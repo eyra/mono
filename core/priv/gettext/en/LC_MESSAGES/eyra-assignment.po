@@ -638,63 +638,63 @@ msgstr "Total"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.error"
-msgstr ""
+msgstr "Could not decline this pay-out. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.link"
-msgstr ""
+msgstr "Decline"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.reason.label"
-msgstr ""
+msgstr "Reason for pay out refusal"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.submit.button"
-msgstr ""
+msgstr "Decline pay out"
 
 #, elixir-autogen, elixir-format
 msgid "payout.overview.coming_soon"
-msgstr ""
+msgstr "Pay-out overview will land in a follow-up."
 
 #, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
-msgstr ""
+msgstr "Pay out overview"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pagination.single_page"
-msgstr ""
+msgstr "1 page"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
-msgstr ""
+msgstr "Pay out all"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.error"
-msgstr ""
+msgstr "Some pay-outs could not be processed. Check and try again."
 
 #, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
-msgstr ""
+msgstr "Search"
 
 #, elixir-autogen, elixir-format
 msgid "payout.subject_label"
-msgstr ""
+msgstr "Subject"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.overview"
-msgstr ""
+msgstr "Pay out overview"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.waiting"
-msgstr ""
+msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.empty"
-msgstr ""
+msgstr "No participants are waiting for pay out."
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
-msgstr ""
+msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
 msgid "panl_participants.pending_approvals.description"
