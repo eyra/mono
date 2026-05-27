@@ -780,13 +780,6 @@ defmodule Systems.Assignment.Public do
 
   def list_pending_payouts(_), do: []
 
-  @doc """
-  Lists completed (paid) payouts on an assignment, joined to the crew
-  members so the researcher's overview tab can render them. Sorted most-
-  recent-first by the bookkeeping `payment.inserted_at` timestamp.
-
-  Each row: `%{reward_id, member_public_id, amount, currency, paid_at}`.
-  """
   def list_completed_payouts(%Assignment.Model{
         crew: %Crew.Model{} = crew,
         fund: %Fund.Model{} = fund

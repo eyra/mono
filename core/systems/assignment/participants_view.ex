@@ -282,11 +282,6 @@ defmodule Systems.Assignment.ParticipantsView do
     """
   end
 
-  @doc """
-  Banner that surfaces participants whose rewards are awaiting researcher
-  approval. Renders nothing when `pending_approvals` is empty so the
-  enclosing layout stays compact in the common case.
-  """
   attr(:pending_approvals, :list, required: true)
   attr(:target, :any, required: true)
 
