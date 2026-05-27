@@ -78,6 +78,7 @@ defmodule Systems.Assignment.ParticipantsView do
     }
   end
 
+  @impl true
   def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
     %{
       module: Assignment.PayoutModal,
@@ -101,6 +102,7 @@ defmodule Systems.Assignment.ParticipantsView do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("open_payout_modal", _, socket) do
     {
       :noreply,
@@ -110,6 +112,7 @@ defmodule Systems.Assignment.ParticipantsView do
     }
   end
 
+  @impl true
   def handle_event("payout_modal_close", _, socket) do
     {
       :noreply,
@@ -240,25 +243,7 @@ defmodule Systems.Assignment.ParticipantsView do
 
           <.spacing value="L" />
 
-          <%= if Enum.any?(@pending_approvals) do %>
-            <div data-testid="pending-approvals-cta">
-              <NextAction.View.highlight
-                title={
-                  dngettext(
-                    "eyra-assignment",
-                    "panl_participants.pending_approvals.title.one",
-                    "panl_participants.pending_approvals.title.other",
-                    length(@pending_approvals),
-                    count: length(@pending_approvals)
-                  )
-                }
-                description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
-                cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
-                cta_action={%{type: :send, event: "open_payout_modal", target: @myself}}
-              />
-            </div>
-            <.spacing value="L" />
-          <% end %>
+          <.pending_approvals_banner pending_approvals={@pending_approvals} target={@myself} />
 
           <%= if @content_flags[:paid_slots] do %>
             <.paid_slots
@@ -294,6 +279,38 @@ defmodule Systems.Assignment.ParticipantsView do
           </div>
         </Area.content>
       </div>
+    """
+  end
+
+  @doc """
+  Banner that surfaces participants whose rewards are awaiting researcher
+  approval. Renders nothing when `pending_approvals` is empty so the
+  enclosing layout stays compact in the common case.
+  """
+  attr(:pending_approvals, :list, required: true)
+  attr(:target, :any, required: true)
+
+  def pending_approvals_banner(assigns) do
+    ~H"""
+    <%= if Enum.any?(@pending_approvals) do %>
+      <div data-testid="pending-approvals-cta">
+        <NextAction.View.highlight
+          title={
+            dngettext(
+              "eyra-assignment",
+              "panl_participants.pending_approvals.title.one",
+              "panl_participants.pending_approvals.title.other",
+              length(@pending_approvals),
+              count: length(@pending_approvals)
+            )
+          }
+          description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
+          cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+          cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
+        />
+      </div>
+      <.spacing value="L" />
+    <% end %>
     """
   end
 end
