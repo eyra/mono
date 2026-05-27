@@ -49,6 +49,7 @@ defmodule Systems.Account.PeopleEditorComponent do
     socket =
       socket
       |> assign(assigns)
+      |> assign_new(:total_count, fn -> nil end)
       |> assign_new(:query_string, fn -> "" end)
       |> assign_new(:confirm_removal_user_ids, fn -> MapSet.new() end)
       |> assign_new(:user_item, fn -> nil end)
@@ -233,7 +234,7 @@ defmodule Systems.Account.PeopleEditorComponent do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col h-full">
-      <Text.title2><%= @title %> <span class="text-primary"><%= Enum.count(@people) %></span></Text.title2>
+      <Text.title2><%= @title %> <span class="text-primary"><%= @total_count || Enum.count(@people) %></span></Text.title2>
 
       <div class="flex flex-col gap-8">
         <%= if @people_items != [] do %>

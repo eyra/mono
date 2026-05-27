@@ -10,12 +10,13 @@ defmodule Systems.Advert.Builders.Highlight do
   defp vm(%Fund.CurrencyModel{} = currency, amount, :reward) do
     reward_title = dgettext("eyra-alliance", "reward.highlight.title")
     locale = Gettext.get_locale(CoreWeb.Gettext)
-    reward_text = Fund.CurrencyModel.label(currency, locale, amount)
+    reward_text = Fund.CurrencyModel.label(currency, locale, amount || 0)
     %{title: reward_title, text: reward_text}
   end
 
   def view_model(
-        %Pool.SubmissionModel{pool: %{currency: currency}, reward_value: amount},
+        {%Pool.SubmissionModel{pool: %{currency: %Fund.CurrencyModel{} = currency}},
+         %Assignment.Model{info: %{subject_reward: amount}}},
         :reward
       ) do
     vm(currency, amount, :reward)

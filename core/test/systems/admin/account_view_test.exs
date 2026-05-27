@@ -148,5 +148,71 @@ defmodule Systems.Admin.AccountViewTest do
       # View should still be rendered
       assert view |> has_element?("[data-testid='account-view']")
     end
+
+    # Regression coverage for FX#9905883929 — Pixel.Selector falls back to
+    # `send(self(), {event_name, payload})` when :fabric is not in
+    # assigns, so the filter handler must accept the raw handle_info
+    # tuple rather than a Phoenix `handle_event` with a `source` key.
+    test "filter change updates the list via handle_info({\"active_item_ids\", ...})",
+         %{conn: conn} do
+      non_creator =
+        Factories.insert!(:member, %{
+          creator: false,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: %{})
+
+      # Default filter is [:creator] — a non-creator should not be visible.
+      refute html =~ non_creator.email
+
+      # Selector emulation: send the raw fallback message it would send
+      # when no Fabric context is present.
+      send(view.pid, {"active_item_ids", %{active_item_ids: []}})
+
+      assert render(view) =~ non_creator.email
+    end
+
+    # Regression coverage for FX#9905883929 — Pixel.SearchBar's fallback
+    # publishes a LiveNest event {:live_nest_event, %LiveNest.Event{
+    # name: :search_query, ...}}, which is routed to consume_event/2.
+    test "search query narrows the list via consume_event(:search_query)",
+         %{conn: conn} do
+      a_creator =
+        Factories.insert!(:member, %{
+          creator: true,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      other_creator =
+        Factories.insert!(:member, %{
+          creator: true,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: %{})
+
+      assert html =~ a_creator.email
+      assert html =~ other_creator.email
+
+      # SearchBar emulation: publish a LiveNest :search_query event.
+      query = String.split(a_creator.email, " ")
+
+      send(
+        view.pid,
+        {:live_nest_event,
+         %LiveNest.Event{
+           name: :search_query,
+           payload: %{query: query, query_string: a_creator.email},
+           source: {self(), nil}
+         }}
+      )
+
+      rendered = render(view)
+      assert rendered =~ a_creator.email
+      refute rendered =~ other_creator.email
+    end
   end
 end

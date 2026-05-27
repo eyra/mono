@@ -300,6 +300,8 @@ defmodule Systems.Org.PublicTest do
   end
 
   describe "owner management" do
+    alias Systems.NextAction
+
     test "list_owners returns users with :owner role" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["test_uni"]})
@@ -363,6 +365,121 @@ defmodule Systems.Org.PublicTest do
       assert Enum.empty?(Public.list_owners(org))
     end
 
+    test "assign_owner/2 creates AddDomainMembers NextAction when domain-matched users exist" do
+      domain = "assign-owner-match.test"
+
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["assign_owner_match_org"],
+          domains: [domain]
+        })
+
+      _candidate = Factories.insert!(:member, %{email: "candidate@#{domain}"})
+      owner = Factories.insert!(:member)
+
+      :ok = Public.assign_owner(org, owner)
+
+      next_actions =
+        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+
+      assert length(next_actions) >= 1
+    end
+
+    test "assign_owner/2 does not create NextAction when no domain-matched users exist" do
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["assign_owner_nomatch_org"],
+          domains: ["empty-org.test"]
+        })
+
+      owner = Factories.insert!(:member, %{email: "owner@other-domain.test"})
+
+      :ok = Public.assign_owner(org, owner)
+
+      next_actions =
+        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+
+      assert Enum.empty?(next_actions)
+    end
+
+    test "revoke_owner/2 clears the AddDomainMembers NextAction for the revoked owner" do
+      domain = "revoke-clear.test"
+
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["revoke_clear_org"],
+          domains: [domain]
+        })
+
+      _candidate = Factories.insert!(:member, %{email: "candidate@#{domain}"})
+      owner = Factories.insert!(:member)
+
+      :ok = Public.assign_owner(org, owner)
+
+      assert length(
+               NextAction.Public.list_next_actions_by_type(
+                 owner,
+                 Org.NextActions.AddDomainMembers
+               )
+             ) >= 1
+
+      :ok = Public.revoke_owner(org, owner)
+
+      assert Enum.empty?(
+               NextAction.Public.list_next_actions_by_type(
+                 owner,
+                 Org.NextActions.AddDomainMembers
+               )
+             )
+    end
+
+    test "revoke_owner/2 leaves other owners' NextActions intact" do
+      domain = "revoke-isolation.test"
+
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["revoke_isolation_org"],
+          domains: [domain]
+        })
+
+      _candidate = Factories.insert!(:member, %{email: "candidate@#{domain}"})
+      owner1 = Factories.insert!(:member)
+      owner2 = Factories.insert!(:member)
+
+      :ok = Public.assign_owner(org, owner1)
+      :ok = Public.assign_owner(org, owner2)
+
+      assert length(
+               NextAction.Public.list_next_actions_by_type(
+                 owner1,
+                 Org.NextActions.AddDomainMembers
+               )
+             ) >= 1
+
+      assert length(
+               NextAction.Public.list_next_actions_by_type(
+                 owner2,
+                 Org.NextActions.AddDomainMembers
+               )
+             ) >= 1
+
+      :ok = Public.revoke_owner(org, owner1)
+
+      assert Enum.empty?(
+               NextAction.Public.list_next_actions_by_type(
+                 owner1,
+                 Org.NextActions.AddDomainMembers
+               )
+             )
+
+      assert length(
+               NextAction.Public.list_next_actions_by_type(
+                 owner2,
+                 Org.NextActions.AddDomainMembers
+               )
+             ) >= 1
+    end
+
     test "owns_any?/1 returns true when user owns at least one org" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["owns_any_org"]})
@@ -380,6 +497,46 @@ defmodule Systems.Org.PublicTest do
 
     test "owns_any?/1 returns false for nil" do
       refute Public.owns_any?(nil)
+    end
+
+    test "can_manage?/2 returns true for org owner" do
+      user = Factories.insert!(:member)
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_owner_org"]})
+      Core.Authorization.assign_role(user, org, :owner)
+
+      assert Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns false for non-owner non-admin" do
+      user = Factories.insert!(:member, %{email: "outsider@other.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_outsider_org"]})
+
+      refute Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns false after the owner role is revoked" do
+      user = Factories.insert!(:member, %{email: "ex@other.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_revoked_org"]})
+      Core.Authorization.assign_role(user, org, :owner)
+
+      assert Public.can_manage?(org, user)
+
+      Public.revoke_owner(org, user)
+
+      refute Public.can_manage?(org, user)
+    end
+
+    test "can_manage?/2 returns true for system admins regardless of org membership" do
+      # System admin patterns are configured via :core, :admins — set one
+      # for the duration of this test so the email matches.
+      original = Application.get_env(:core, :admins, [])
+      Application.put_env(:core, :admins, ["*@admin-can-manage.test"])
+      on_exit(fn -> Application.put_env(:core, :admins, original) end)
+
+      sysadmin = Factories.insert!(:member, %{email: "anyone@admin-can-manage.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["can_manage_sysadmin_org"]})
+
+      assert Public.can_manage?(org, sysadmin)
     end
   end
 

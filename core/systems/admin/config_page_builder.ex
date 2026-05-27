@@ -71,7 +71,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
       })
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "admin_system_view",
         Admin.SystemView,
         live_context: child_context
@@ -96,7 +96,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
       })
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "admin_account_view",
         Admin.AccountView,
         live_context: child_context
@@ -114,7 +114,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   defp create_admin_tab(:org, %{live_context: context}) do
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "admin_org_view",
         Admin.OrgView,
         live_context: context
@@ -132,7 +132,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   defp create_admin_tab(:actions, %{live_context: context}) do
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         "admin_actions_view",
         Admin.ActionsView,
         live_context: context

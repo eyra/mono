@@ -81,3 +81,15 @@ msgstr "Please fill in your personal characteristics to participate in more stud
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr "Complete Your Characteristics"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr "Review"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr "Participants are waiting for payment approval."
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr "Pay out"

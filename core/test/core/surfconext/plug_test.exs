@@ -51,7 +51,7 @@ defmodule Core.SurfConext.FakeOIDC do
   end
 
   def authorize_url(config) do
-    {:ok, %{url: Keyword.get(config, :site), session_params: %{some: :stuff}}}
+    {:ok, %{url: Keyword.get(config, :base_url), session_params: %{some: :stuff}}}
   end
 end
 
@@ -68,13 +68,13 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
       Application.put_env(:test, Core.SurfConext,
         client_id: domain,
         client_secret: Faker.Lorem.sentence(),
-        site: "https://connect.test.surfconext.nl",
-        redirect_uri: "https://#{domain}/surfconext/auth",
+        base_url: "https://connect.test.surfconext.nl",
+        redirect_uri: "https://#{domain}/auth/surfconext/callback",
         oidc_module: Core.SurfConext.FakeOIDC
       )
 
       conn =
-        conn(:get, "/surfconext/auth")
+        conn(:get, "/auth/surfconext/callback")
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
 
@@ -101,8 +101,8 @@ defmodule Core.SurfConext.CallbackController.Test do
     test_conf = [
       client_id: domain,
       client_secret: Faker.Lorem.sentence(),
-      site: "https://connect.test.surfconext.nl",
-      redirect_uri: "https://#{domain}/surfconext/auth",
+      base_url: "https://connect.test.surfconext.nl",
+      redirect_uri: "https://#{domain}/auth/surfconext/callback",
       oidc_module: Core.SurfConext.FakeOIDC
     ]
 
@@ -117,8 +117,13 @@ defmodule Core.SurfConext.CallbackController.Test do
 
   describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
-      conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/project"
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
+
+      assert [user] = Core.Repo.all(Systems.Account.User)
+      assert user.verified_at != nil
+      assert user.confirmed_at == nil
+      assert user.creator == true
     end
 
     test "redirects when the changeset is invalid", %{conn: conn, conf: conf} do
@@ -128,7 +133,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         Keyword.put(conf, :limit_schac_home_organization, "my-org")
       )
 
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/signin"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "not allowed to authenticate"
@@ -143,7 +148,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "preferred_username" => Faker.Person.name()
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -157,7 +162,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "eduperson_affiliation" => ["employee"]
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -171,7 +176,7 @@ defmodule Core.SurfConext.CallbackController.Test do
         "eduperson_affiliation" => ["student"]
       })
 
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -183,9 +188,8 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
-      # no onboarding yet for researchers
-      assert redirected_to(conn) == "/project"
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
     end
 
     test "authenticates new student", %{conn: conn, conf: conf} do
@@ -196,8 +200,8 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
-      assert redirected_to(conn) == "/project"
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
     end
 
     test "updates an existing student", %{conn: conn, conf: conf} do
@@ -217,7 +221,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
 
       user = Core.SurfConext.get_user_by_sub("student")
       surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
@@ -243,7 +247,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       Application.put_env(:core, Core.SurfConext, conf)
 
       # Attempt SSO login - should redirect to signin with error, not crash
-      conn = conn |> get("/surfconext/auth")
+      conn = conn |> get("/auth/surfconext/callback")
 
       assert redirected_to(conn) == "/user/signin"
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "already been taken"
@@ -257,7 +261,7 @@ defmodule Core.SurfConext.CallbackController.Test do
           conn =
             CoreWeb.ConnCase.build_conn()
             |> init_test_session(%{})
-            |> get("/surfconext/auth?code=abc&state=xyz")
+            |> get("/auth/surfconext/callback?code=abc&state=xyz")
 
           assert redirected_to(conn) == "/user/signin"
           assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Sign-in could not be completed"

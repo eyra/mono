@@ -146,9 +146,9 @@ msgstr "I am sure"
 msgid "people.confirm_remove.text"
 msgstr "Are you sure you want to remove yourself from this project?"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Account activated successfully."
-msgstr ""
+msgstr "Account activated successfully."
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
@@ -172,19 +172,11 @@ msgstr "Onboarding"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Invalid or expired link"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "I agree to the %{terms_link} and %{privacy_link} of Panl"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.privacy"
-msgstr "Privacy Policy"
-
-#, elixir-autogen, elixir-format
-msgid "privacy.link.terms"
-msgstr "Terms of Use"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.required"
@@ -223,5 +215,29 @@ msgid "signup.rate_limited"
 msgstr "Too many signup attempts. Please try again later."
 
 #, elixir-autogen, elixir-format
+msgid "privacy.link.privacy"
+msgstr "Privacy Policy"
+
+#, elixir-autogen, elixir-format
+msgid "privacy.link.terms"
+msgstr "Terms of Use"
+
+#, elixir-autogen, elixir-format
 msgid "people.add.button"
 msgstr "Add"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.body"
+msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "I agree to the %{terms} and %{privacy}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Please accept the terms and privacy statement to continue."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Welcome"

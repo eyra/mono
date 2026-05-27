@@ -49,15 +49,20 @@ defmodule Systems.Account.OnboardingPageBuilder do
         steps
       end
 
-    if Account.Public.activated?(user) do
-      steps
-    else
-      steps ++ [:activate_account]
+    cond do
+      Account.Public.activated?(user) ->
+        steps
+
+      Account.Public.sso_user?(user) ->
+        [:terms_and_privacy | steps]
+
+      true ->
+        steps ++ [:activate_account]
     end
   end
 
   defp build_step_view(:features, _user, live_context) do
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       :features_view,
       Account.FeaturesView,
       live_context: live_context
@@ -68,11 +73,10 @@ defmodule Systems.Account.OnboardingPageBuilder do
     profile_context =
       LiveContext.extend(live_context, %{
         show_signout_button: false,
-        show_email: false,
-        show_top_margin: false
+        show_email: false
       })
 
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       :profile_view,
       Account.ProfileView,
       live_context: profile_context
@@ -85,10 +89,18 @@ defmodule Systems.Account.OnboardingPageBuilder do
     dgettext("eyra-account", "onboarding.activate_account.title")
   end
 
+  defp build_step_title(:terms_and_privacy) do
+    dgettext("eyra-account", "terms_and_privacy.onboarding.title")
+  end
+
   defp build_step_title(_), do: nil
 
   defp build_step_body(:activate_account, email) do
     dgettext("eyra-account", "onboarding.activate_account.body", email: email)
+  end
+
+  defp build_step_body(:terms_and_privacy, _email) do
+    dgettext("eyra-account", "terms_and_privacy.onboarding.body")
   end
 
   defp build_step_body(_, _), do: nil

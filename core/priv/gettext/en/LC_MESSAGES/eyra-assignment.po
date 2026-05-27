@@ -545,18 +545,6 @@ msgid "budget_form.aim.label"
 msgstr "Aim of the study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
-msgstr "Subtotal (%{count} × %{reward} reward)"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
-msgstr "Service fee"
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.total.label"
-msgstr "Total"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.cancel.button"
 msgstr "Cancel"
 
@@ -591,26 +579,6 @@ msgstr "Add participants"
 #, elixir-autogen, elixir-format
 msgid "panl_participants.add.button"
 msgstr "Pay to add participants"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.advert.link"
-msgstr "Go to advertisement"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.has_advert"
-msgstr "You have created an advertisement."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.no_advert"
-msgstr "Create an advertisement to invite Panl participants."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.title"
-msgstr "Invite participants"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.monitor.link"
-msgstr "Go to Monitor"
 
 #, elixir-autogen, elixir-format
 msgid "panl_participants.payment_prefix"
@@ -655,3 +623,75 @@ msgstr "Share this link on social media or other platforms to recruit participan
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.title"
 msgstr "Recruit participants"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.partner_fee.label"
+msgstr "Service fee"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.subtotal.label"
+msgstr "Subtotal (%{count} × %{reward} reward)"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.total.label"
+msgstr "Total"
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.reason.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.decline.submit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.coming_soon"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pagination.single_page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.subject_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.overview"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.tab.waiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.waiting.heading"
+msgstr ""

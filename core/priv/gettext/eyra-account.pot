@@ -221,3 +221,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "privacy.link.terms"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "people.add.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
+msgstr ""

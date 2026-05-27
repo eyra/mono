@@ -56,20 +56,19 @@ defmodule Next.Account.SigninPage do
     ~H"""
     <.stripped menus={@menus}>
       <div id="signup_content" phx-hook="LiveContent" data-show-errors={true}>
-        <Area.form>
-          <Margin.y id={:page_top} />
-          <Margin.y id={:page_top} />
-          <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
-          <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} type={:segmented} size={:full} />
-          <.spacing value="M" />
-          <.line />
-
-
-          <.spacing value="M" />
-          <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-            <Tabbed.content socket={@socket} tabs={@vm.tabs} bar_id={@tabbar_id} />
-          </div>
-        </Area.form>
+        <Area.content>
+          <Area.form>
+            <Margin.y id={:page_top} />
+            <Text.title2><%= dgettext("eyra-account", "signin.title") %></Text.title2>
+            <Tabbed.bar id={@tabbar_id} tabs={@vm.tabs} initial_tab={@initial_tab} type={:segmented} size={:full} />
+            <.spacing value="M" />
+            <Area.full_bleed><.line /></Area.full_bleed>
+            <.spacing value="M" />
+            <div id="live_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+              <Tabbed.content socket={@socket} tabs={@vm.tabs} bar_id={@tabbar_id} />
+            </div>
+          </Area.form>
+        </Area.content>
       </div>
     </.stripped>
     """

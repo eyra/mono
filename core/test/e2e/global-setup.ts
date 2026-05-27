@@ -16,6 +16,7 @@ interface E2EFixtures {
   participant_email: string;
   participant_password: string;
   donate_assignment_path: string;
+  test_org_id?: number;
 }
 
 declare global {
@@ -81,6 +82,20 @@ export default async function globalSetup() {
     console.log(`[GLOBAL SETUP] Health check warning: ${error.message}`);
   }
 
+  // Step 2b: Discover enabled features from the server (single source of truth)
+  try {
+    const response = await fetch(`${BASE_URL}/api/e2e/features`);
+    if (response.ok) {
+      const { features } = await response.json() as { features: string[] };
+      process.env.ENABLED_APP_FEATURES = features.join(',');
+      console.log(`[GLOBAL SETUP] Enabled features: ${process.env.ENABLED_APP_FEATURES}`);
+    } else {
+      console.log(`[GLOBAL SETUP] /api/e2e/features returned ${response.status}, falling back to env var`);
+    }
+  } catch (error: any) {
+    console.log(`[GLOBAL SETUP] /api/e2e/features fetch failed: ${error.message}, falling back to env var`);
+  }
+
   // Step 3: Setup E2E fixtures (skip on production - use Infisical values)
   if (process.env.E2E_SKIP_SETUP !== 'true') {
     console.log(`[GLOBAL SETUP] Setting up E2E fixtures...`);
@@ -96,6 +111,9 @@ export default async function globalSetup() {
       process.env.E2E_PARTICIPANT_EMAIL = fixtures.participant_email;
       process.env.E2E_PARTICIPANT_PASSWORD = fixtures.participant_password;
       process.env.E2E_DONATE_ASSIGNMENT_PATH = fixtures.donate_assignment_path;
+      if (fixtures.test_org_id != null) {
+        process.env.E2E_TEST_ORG_ID = String(fixtures.test_org_id);
+      }
 
       console.log(`[GLOBAL SETUP] Fixtures ready:`);
       console.log(`  Researcher: ${fixtures.researcher_email}`);

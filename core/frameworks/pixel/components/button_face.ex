@@ -144,10 +144,11 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:bg_color, :string, default: "bg-primary")
   attr(:text_color, :string, default: "text-white")
   attr(:loading, :boolean, default: false)
+  attr(:full_width, :boolean, default: false)
 
   def primary(assigns) do
     ~H"""
-    <div class={"prism-btn prism-btn-primary #{if @loading, do: "prism-btn-loading"} #{@bg_color} #{@text_color}"}>
+    <div class={"prism-btn prism-btn-primary #{if @full_width, do: "w-full"} #{if @loading, do: "prism-btn-loading"} #{@bg_color} #{@text_color}"}>
       <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
       <%= if @loading do %>
         <Spinner.static color="white" />

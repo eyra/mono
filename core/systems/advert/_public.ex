@@ -476,18 +476,15 @@ defmodule Systems.Advert.Public do
     end
   end
 
-  # FIXME: take care of funding
-  defp validate_funded(%{assignment: %{fund: nil}}) do
-    Logger.error("FIXME: take care of funding")
-    :ok
-  end
-
-  defp validate_funded(%{assignment: %{fund: %{currency: nil}}}), do: :ok
+  defp validate_funded(%{submission: %{reward_value: reward_value}})
+       when not (is_integer(reward_value) and reward_value > 0),
+       do: :ok
 
   defp validate_funded(%{
          assignment: %{fund: %{currency: %{type: :legal}} = fund},
          submission: %{reward_value: reward_value}
-       }) do
+       })
+       when is_integer(reward_value) and reward_value > 0 do
     if Fund.Model.amount_available(fund) > reward_value do
       :ok
     else
@@ -495,7 +492,14 @@ defmodule Systems.Advert.Public do
     end
   end
 
+  # Non-legal currency (e.g. credits): no real money to guard.
   defp validate_funded(%{assignment: %{fund: %{currency: %{type: _}}}}), do: :ok
+
+  # Missing/unresolved fund currency: not funded, never silently visible.
+  defp validate_funded(%{assignment: %{fund: _}}) do
+    Logger.error("Paid advert has no resolvable fund currency; treating as not funded")
+    {:error, :not_funded}
+  end
 
   @doc """
     Marks expired tasks in online adverts based on updated_at and estimated duration.

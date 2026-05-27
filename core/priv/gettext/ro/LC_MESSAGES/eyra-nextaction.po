@@ -11,17 +11,17 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.cta"
-msgstr ""
+msgstr "Mergeți la profil"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.description"
-msgstr ""
+msgstr "Unele câmpuri din profilul dvs. nu sunt completate."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.title"
-msgstr ""
+msgstr "Completați-vă profilul"
 
 #, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"
@@ -81,4 +81,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
 msgstr ""

@@ -29,3 +29,23 @@ msgstr "Panl studies"
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Ontwikkeld voor en met onderzoekers"
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.approved"
+msgstr "Bijdragen"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.rejected"
+msgstr "Bijdragen"

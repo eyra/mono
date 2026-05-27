@@ -94,6 +94,12 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  def list_pending_approvals(%Fund.Model{} = fund, preload \\ [:user]) do
+    Fund.Queries.reward_query(fund, :pending_approval)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
   def get!(id, preload \\ [:available, :pending]) when is_integer(id) do
     from(fund in Fund.Model, preload: ^preload)
     |> Repo.get!(id)
@@ -283,6 +289,207 @@ defmodule Systems.Fund.Public do
       nil -> Logger.warning("No reward available to payout for #{idempotence_key}")
       reward -> make_payment(reward)
     end
+  end
+
+  @doc """
+  Marks a reserved reward as awaiting researcher approval.
+
+  Called when the participant completes the assignment task. The deposit was
+  already made at apply time (see `create_reward/4`); this only flips the
+  status so the researcher can act on it.
+
+  Idempotent: calling on a reward that is already past `:reserved` is a no-op.
+  """
+  def mark_pending_approval(idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, []) do
+      nil ->
+        Logger.warning("No reward to mark pending approval for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: :reserved} = reward ->
+        cas_to_pending_approval(reward, idempotence_key)
+
+      %Fund.RewardModel{} = reward ->
+        {:ok, reward}
+    end
+  end
+
+  defp cas_to_pending_approval(%Fund.RewardModel{id: id}, idempotence_key) do
+    query =
+      from(r in Fund.RewardModel,
+        where: r.id == ^id and r.status == ^:reserved,
+        select: r
+      )
+
+    case Repo.update_all(query, set: [status: :pending_approval, updated_at: now()]) do
+      {1, [reward]} ->
+        {:ok, reward}
+
+      {0, _} ->
+        case get_reward(idempotence_key, []) do
+          nil -> {:error, :reward_not_found}
+          %Fund.RewardModel{} = reward -> {:ok, reward}
+        end
+    end
+  end
+
+  @doc """
+  Approves a reward and pays it out to the participant's wallet.
+
+  Atomic: the status flip and the payment Bookkeeping entry happen in one
+  transaction. Idempotent on `:approved`/`:paid`.
+  """
+  def approve_reward(idempotence_key) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil ->
+        Logger.warning("No reward to approve for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: status} = reward when status in [:approved, :paid] ->
+        {:ok, reward}
+
+      %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
+        if Fund.Model.amount_available(fund) < amount do
+          {:error, :insufficient_fund}
+        else
+          do_override_rejected(reward)
+        end
+
+      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
+        do_approve_reward(reward)
+    end
+  end
+
+  defp do_approve_reward(%Fund.RewardModel{} = reward) do
+    Multi.new()
+    |> cas_status_step(:reward, reward, [:reserved, :pending_approval], status: :approved)
+    |> approve_payment_step(reward)
+    |> Repo.commit()
+  end
+
+  # Reject already rolled the deposit back to Fund.available, so payment comes
+  # from there (the `deposit: nil` branch of create_payment_transaction).
+  defp do_override_rejected(%Fund.RewardModel{} = reward) do
+    Multi.new()
+    |> cas_status_step(:reward, reward, [:rejected],
+      status: :approved,
+      rejection_reason: nil,
+      rejected_at: nil
+    )
+    |> approve_payment_step(reward)
+    |> Repo.commit()
+  end
+
+  # A reward must never be :approved with a nil payment_id.
+  defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{}} = reward) do
+    Multi.run(multi, :payment, fn _, _ -> {:ok, reward} end)
+  end
+
+  defp approve_payment_step(multi, %Fund.RewardModel{} = reward) do
+    Multi.run(multi, :payment, fn _, _ ->
+      with {:ok, %{entry: payment}} <- create_payment_transaction(reward) do
+        link_payment_transaction(reward, payment)
+      end
+    end)
+  end
+
+  # Compare-and-swap: the status precondition serializes concurrent transitions
+  # so a losing writer hits 0 rows and rolls back instead of double-applying.
+  defp cas_status_step(multi, name, %Fund.RewardModel{id: id}, from_statuses, set)
+       when is_list(from_statuses) and is_list(set) do
+    set = Keyword.put_new(set, :updated_at, now())
+
+    Multi.run(multi, name, fn repo, _ ->
+      query =
+        from(r in Fund.RewardModel,
+          where: r.id == ^id and r.status in ^from_statuses,
+          select: r
+        )
+
+      case repo.update_all(query, set: set) do
+        {1, [reward]} -> {:ok, reward}
+        {0, _} -> {:error, :stale_reward}
+      end
+    end)
+  end
+
+  defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+  @doc """
+  Rejects a reward and returns the reserved money to the assignment fund.
+
+  Atomic: the status flip and the deposit reversal happen in one transaction.
+  Idempotent on `:rejected`.
+  """
+  def reject_reward(idempotence_key) when is_binary(idempotence_key) do
+    reject_reward(idempotence_key, nil)
+  end
+
+  def reject_reward(idempotence_key, reason) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil ->
+        Logger.warning("No reward to reject for #{idempotence_key}")
+        {:error, :reward_not_found}
+
+      %Fund.RewardModel{status: :rejected} = reward ->
+        {:ok, reward}
+
+      %Fund.RewardModel{status: status} when status in [:approved, :paid] ->
+        {:error, :reward_already_approved}
+
+      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
+        do_reject_reward(reward, reason)
+    end
+  end
+
+  @doc """
+  Multi-aware variant of `reject_reward/1`. Use when the rejection must commit
+  atomically alongside other operations (e.g. flipping a `Crew.TaskModel` to
+  `:rejected` in `Assignment.Public.reject_task/3`).
+
+  On a `:rejected` reward this is a no-op; on `:approved`/`:paid` it fails the
+  surrounding transaction with `{:error, :reward_already_approved}` (rather
+  than raising deep in `rollback_deposit/2`). The status flip is a guarded
+  compare-and-swap, so a concurrent transition makes this a safe rollback.
+
+  The third argument is the optional rejection reason; nil leaves it unset.
+  """
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
+    reject_reward(multi, reward, nil)
+  end
+
+  def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
+    reject_reward(multi, idempotence_key, nil)
+  end
+
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}, _reason), do: multi
+
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status}, _reason)
+      when status in [:approved, :paid] do
+    Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
+  end
+
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward, reason) do
+    multi
+    |> rollback_deposit(reward)
+    |> cas_status_step(:reject_status, reward, [:reserved, :pending_approval],
+      status: :rejected,
+      rejection_reason: reason,
+      rejected_at: now()
+    )
+  end
+
+  def reject_reward(%Multi{} = multi, idempotence_key, reason) when is_binary(idempotence_key) do
+    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
+      nil -> raise FundError, message: "No reward available to reject"
+      reward -> reject_reward(multi, reward, reason)
+    end
+  end
+
+  defp do_reject_reward(reward, reason) do
+    Multi.new()
+    |> reject_reward(reward, reason)
+    |> Repo.commit()
   end
 
   def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do
@@ -577,19 +784,22 @@ defmodule Systems.Fund.Public do
       lines: lines
     }
 
-    if Bookkeeping.Public.exists?(idempotence_key) do
-      Logger.warning(
-        "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-      )
+    case Bookkeeping.Public.get_entry(idempotence_key) do
+      %Bookkeeping.EntryModel{} = existing ->
+        Logger.info(
+          "Reward payout already booked, adopting existing entry: idempotence_key=#{idempotence_key}"
+        )
 
-      {:error, :payment_already_available}
-    else
-      result = Bookkeeping.Public.enter(payment)
+        {:ok, %{entry: existing}}
 
-      with {:error, error} <- result do
-        Logger.warning("Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}")
-        {:error, error}
-      end
+      nil ->
+        with {:error, error} <- Bookkeeping.Public.enter(payment) do
+          Logger.warning(
+            "Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}"
+          )
+
+          {:error, error}
+        end
     end
   end
 
@@ -685,6 +895,39 @@ defmodule Systems.Fund.Public do
       where: c.name == ^currency_name and not is_nil(r.deposit_id) and is_nil(r.payment_id),
       select: sum(r.amount)
     )
+  end
+
+  @doc """
+  Rolls up a participant's reward situation into three amounts (in cents),
+  used by the home page rewards-summary card:
+
+  - `pending_cents` — status `:reserved` or `:pending_approval`.
+  - `approved_cents` — status `:approved` or `:paid`.
+  - `rejected_cents` — status `:rejected`.
+
+  All three are immutable per-status earned-amount snapshots (sum of
+  `Fund.RewardModel.amount`) sharing a single source of truth (the reward
+  rows), so they cannot drift relative to each other the way mixing reward
+  sums with live wallet balances would. `:paid` folds into `approved_cents`
+  (a paid reward is an approved reward that has been transferred out).
+  """
+  def summarize_rewards(%Account.User{id: user_id}) do
+    totals =
+      from(r in Fund.RewardModel,
+        where: r.user_id == ^user_id,
+        group_by: r.status,
+        select: {r.status, sum(r.amount)}
+      )
+      |> Repo.all()
+      |> Enum.into(%{})
+
+    amount = fn status -> Map.get(totals, status) || 0 end
+
+    %{
+      pending_cents: amount.(:reserved) + amount.(:pending_approval),
+      approved_cents: amount.(:approved) + amount.(:paid),
+      rejected_cents: amount.(:rejected)
+    }
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do

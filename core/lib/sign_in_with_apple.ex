@@ -25,7 +25,8 @@ defmodule SignInWithApple do
     sso_info = %{
       email: attrs.email,
       displayname: display_name,
-      profile: %{fullname: fullname}
+      profile: %{fullname: fullname},
+      verified_at: NaiveDateTime.utc_now()
     }
 
     user = User.sso_changeset(%User{}, sso_info)

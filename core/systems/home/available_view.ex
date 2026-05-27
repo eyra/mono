@@ -3,6 +3,7 @@ defmodule Systems.Home.AdvertsView do
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Logo
+  alias Frameworks.Pixel.Text
   alias Systems.Advert
 
   @impl true
@@ -11,7 +12,12 @@ defmodule Systems.Home.AdvertsView do
 
     {
       :ok,
-      socket |> assign(title: title, cards: cards, sub_heading_text: sub_heading_text)
+      socket
+      |> assign(
+        title: title,
+        cards: cards,
+        sub_heading_text: sub_heading_text
+      )
     }
   end
 
@@ -29,9 +35,9 @@ defmodule Systems.Home.AdvertsView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="border-2 border-grey4 rounded p-6">
+    <div class="border-2 border-grey4 rounded p-6" data-testid="adverts">
       <div class="flex flex-col">
-        <div class="flex flex-row">
+        <div class="flex flex-row items-center">
           <Text.title2 margin="">
             <%= @title %>
             <span class="text-primary"> <%= Enum.count(@cards) %></span>

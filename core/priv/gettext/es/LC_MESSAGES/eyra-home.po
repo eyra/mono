@@ -15,18 +15,38 @@ msgstr ""
 msgid "member.title"
 msgstr "Servicios de software"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.title"
-msgstr ""
+msgstr "Contribuciones"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "available.member.title"
-msgstr ""
+msgstr "Estudios de Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "available.visitor.title"
-msgstr ""
+msgstr "Estudios de Panl"
 
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Desarrollados para y con investigadores"
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.approved"
+msgstr "Contribuciones"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.rejected"
+msgstr "Contribuciones"

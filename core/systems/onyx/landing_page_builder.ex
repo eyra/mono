@@ -37,7 +37,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
     concepts = Ontology.Public.list_concepts([:entity])
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         :landing_page_concept,
         Onyx.ConceptTab,
         title: title,
@@ -62,7 +62,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
     predicates = Ontology.Public.list_predicates([:entity, :subject, :type, :object])
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         :landing_page_predicate,
         Onyx.PredicateTab,
         title: title,
@@ -89,7 +89,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
       Annotation.Public.list_annotations(entities, Annotation.Model.preload_graph(:down))
 
     element =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         :landing_page_annotation,
         Onyx.AnnotationTab,
         title: title,

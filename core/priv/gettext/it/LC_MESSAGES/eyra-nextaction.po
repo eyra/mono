@@ -11,17 +11,17 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.cta"
-msgstr ""
+msgstr "Vai al profilo"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.description"
-msgstr ""
+msgstr "Alcuni campi del suo profilo non sono compilati."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.title"
-msgstr ""
+msgstr "Completi il suo profilo"
 
 #, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"
@@ -82,3 +82,15 @@ msgstr "Si prega di compilare le proprie caratteristiche personali per partecipa
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr "Completare le caratteristiche"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr ""

@@ -11,45 +11,45 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Anmelden"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.title"
-msgstr ""
+msgstr "Kampagne"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
-msgstr ""
+msgstr "Zur Studie"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
-msgstr ""
+msgstr "Teilgenommen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
-msgstr ""
+msgstr "Ausstehend"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-replace-file-button"
-msgstr ""
+msgstr "Datei ersetzen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-file-button"
-msgstr ""
+msgstr "Datei auswählen"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-label"
-msgstr ""
+msgstr "Flow-Anwendung"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-select-placeholder"
-msgstr ""
+msgstr "Wählen Sie eine ZIP-Datei aus"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "zip-too-large"
-msgstr ""
+msgstr "Die ausgewählte Datei ist zu groß (max. 20 MB)"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"

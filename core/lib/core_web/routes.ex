@@ -16,6 +16,8 @@ defmodule CoreWeb.Routes do
 
         plug(Systems.Account.Plug)
 
+        plug(CoreWeb.Plug.ResolveLocale)
+
         plug(Cldr.Plug.PutLocale,
           apps: [
             cldr: CoreWeb.Cldr,
@@ -26,6 +28,8 @@ defmodule CoreWeb.Routes do
           from: [:session, :accept_language],
           default: "en"
         )
+
+        plug(CoreWeb.Plug.PersistLocale)
 
         plug(RemoteIp)
         plug(CoreWeb.Plug.RemoteIp)

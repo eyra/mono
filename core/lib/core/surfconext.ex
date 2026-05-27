@@ -92,12 +92,12 @@ defmodule Core.SurfConext do
 
       scope "/", Core.SurfConext do
         pipe_through([:surfconext_browser])
-        get("/surfconext", AuthorizePlug, otp_app)
+        get("/auth/surfconext", AuthorizePlug, otp_app)
       end
 
       scope "/", Core.SurfConext do
         pipe_through([:browser])
-        get("/surfconext/auth", CallbackController, :authenticate)
+        get("/auth/surfconext/callback", CallbackController, :authenticate)
       end
     end
   end

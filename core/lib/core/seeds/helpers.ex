@@ -26,6 +26,19 @@ defmodule Core.Seeds.Helpers do
     end
   end
 
+  @doc """
+  Idempotently seeds a creator account. Thin wrapper over
+  `ensure_user!/2` that forces `creator: true`. Use across deploy
+  environments that need a known researcher account (local, dev,
+  test, staging).
+
+  Accepts the same options as `ensure_user!/2` — `:name` and
+  `:password` are required.
+  """
+  def seed_creator!(email, opts) when is_binary(email) and is_list(opts) do
+    ensure_user!(email, Keyword.put(opts, :creator, true))
+  end
+
   defp insert_user!(email, opts) do
     password = Keyword.fetch!(opts, :password)
     name = Keyword.fetch!(opts, :name)

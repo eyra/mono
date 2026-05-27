@@ -10,6 +10,7 @@ defmodule Systems.Account.UserProfilePageTest do
 
     user =
       Factories.insert!(:member, %{
+        creator: false,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       })
 
@@ -24,6 +25,20 @@ defmodule Systems.Account.UserProfilePageTest do
 
       # Should render the page with profile content
       assert html =~ "profile" or html =~ "Profile"
+    end
+
+    # Regression coverage for FX#9867397728 — the LiveView mount runs in
+    # a separate process from the HTTP request, so unless the Locale
+    # hook reads the session, pages without their own put_locale call
+    # fall back to English. Iris confirmed `/` rendered NL while
+    # `/user/profile` rendered EN for the same panl-onboarded session.
+    test "honours the browser locale on /user/profile", %{conn: conn} do
+      conn = Plug.Conn.put_req_header(conn, "accept-language", "nl-NL,nl;q=0.9")
+
+      {:ok, _view, html} = live(conn, "/user/profile")
+
+      assert html =~ "Mijn profiel"
+      refute html =~ "My profile"
     end
 
     test "renders profile tab by default", %{conn: conn} do

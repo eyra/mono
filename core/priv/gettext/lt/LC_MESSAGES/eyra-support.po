@@ -11,38 +11,38 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.description"
-msgstr ""
+msgstr "Turite klausimą apie platformą? Arba norite pateikti atsiliepimą? Užpildykite žemiau esančią formą. Atsakysime el. paštu."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.title"
-msgstr ""
+msgstr "Pagalbos centras"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.description.label"
-msgstr ""
+msgstr "Aprašymas"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.title.label"
-msgstr ""
+msgstr "Tema"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create_ticket.button"
-msgstr ""
+msgstr "Pateikti"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.type"
-msgstr ""
+msgstr "Forma"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.form.title"
-msgstr ""
+msgstr "Pagalba"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.description.next"
-msgstr ""
+msgstr "Ačiū už jūsų žinutę. Susisieksime su jumis kuo greičiau."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
-msgstr ""
+msgstr "Siųsti dar vieną žinutę"

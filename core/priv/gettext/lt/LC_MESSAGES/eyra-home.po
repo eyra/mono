@@ -39,3 +39,23 @@ msgstr "Panl tyrimai"
 #, elixir-autogen, elixir-format
 msgid "member.caption"
 msgstr "Sukurta mokslininkams ir kartu su jais"
+
+#, elixir-autogen, elixir-format
+msgid "activities.fallback_title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participated.reward.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.approved"
+msgstr "Indėliai"
+
+#, elixir-autogen, elixir-format
+msgid "participated.status.awaiting"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participated.status.rejected"
+msgstr "Indėliai"

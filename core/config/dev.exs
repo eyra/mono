@@ -34,6 +34,8 @@ config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336
 
+config :core, :features, e2e: true
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 
@@ -115,6 +117,11 @@ config :core,
   admins: [
     "*@eyra.co"
   ]
+
+existing_providers =
+  Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+
+config :core, :account, auth_providers: existing_providers ++ [:mock]
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
