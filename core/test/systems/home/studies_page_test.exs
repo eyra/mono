@@ -26,7 +26,7 @@ defmodule Systems.Home.StudiesPageTest do
       make_panl_participant(user)
 
       assert {:ok, _view, html} = live(conn, ~p"/studies")
-      assert html =~ "Studies"
+      assert html =~ ~s(data-testid="studies-marketplace")
     end
   end
 end

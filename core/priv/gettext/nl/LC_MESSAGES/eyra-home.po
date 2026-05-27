@@ -65,3 +65,7 @@ msgstr "Toon meer"
 #, elixir-autogen, elixir-format
 msgid "studies.title"
 msgstr "Studies"
+
+#, elixir-autogen, elixir-format
+msgid "studies.filter.label"
+msgstr "Filter:"

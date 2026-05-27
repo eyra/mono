@@ -10,9 +10,7 @@ defmodule Systems.Home.Page do
   end
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    Home.Private.apply_panl_locale(user)
-
+  def mount(_params, _session, socket) do
     {
       :ok,
       socket

@@ -9,10 +9,12 @@ defmodule Systems.Home.StudiesView do
   # Subsequent view model updates: keep filter/search state
   @impl true
   def update(%{items: items, years: years}, %{assigns: %{active_year: active_year}} = socket) do
+    active_year = if active_year in years, do: active_year, else: List.first(years)
+
     {
       :ok,
       socket
-      |> assign(items: items, years: years, active_year: active_year || List.first(years))
+      |> assign(items: items, years: years, active_year: active_year)
       |> apply_filter()
     }
   end
@@ -118,7 +120,7 @@ defmodule Systems.Home.StudiesView do
         <Text.body><%= dgettext("eyra-home", "studies.empty.message") %></Text.body>
       <% else %>
         <div class="flex flex-row items-center gap-3">
-          <div class="font-label text-label">Filter:</div>
+          <div class="font-label text-label"><%= dgettext("eyra-home", "studies.filter.label") %></div>
           <%= for year <- @years do %>
             <div
               class="cursor-pointer select-none"

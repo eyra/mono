@@ -66,3 +66,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "studies.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "studies.filter.label"
+msgstr ""

@@ -50,13 +50,10 @@ defmodule Systems.Home.StudiesPageBuilder do
     }
   end
 
-  defp published_year(%Advert.Model{submission: %{submitted_at: %NaiveDateTime{} = submitted_at}}) do
-    submitted_at.year
-  end
+  defp published_year(%Advert.Model{submission: %{submitted_at: %NaiveDateTime{year: year}}}),
+    do: year
 
-  defp published_year(%Advert.Model{inserted_at: %NaiveDateTime{} = inserted_at}) do
-    inserted_at.year
-  end
+  defp published_year(%Advert.Model{inserted_at: %NaiveDateTime{year: year}}), do: year
 
   defp published_year(_), do: nil
 
