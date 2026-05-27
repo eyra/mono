@@ -80,40 +80,11 @@ defmodule Systems.Pool.MarketplaceView do
 
   @impl true
   def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{items: items}} = socket) do
-    card_id = String.to_integer(card_id)
-
-    case Enum.find(items, &(&1.card.id == card_id)) do
-      %{card: %{path: path}} -> {:noreply, push_navigate(socket, to: path)}
-      nil -> {:noreply, socket}
+    case Pool.MarketplaceViewBuilder.card_path(items, String.to_integer(card_id)) do
+      {:ok, path} -> {:noreply, push_navigate(socket, to: path)}
+      :stale -> {:noreply, socket}
     end
   end
-
-  defp filtered_cards(items, active_year, query) do
-    items
-    |> filter_by_year(active_year)
-    |> filter_by_query(query)
-    |> Enum.map(& &1.card)
-  end
-
-  defp filter_by_year(items, nil), do: items
-  defp filter_by_year(items, year), do: Enum.filter(items, &(&1.year == year))
-
-  defp filter_by_query(items, nil), do: items
-  defp filter_by_query(items, []), do: items
-
-  defp filter_by_query(items, query) when is_list(query) do
-    Enum.filter(items, &matches_query?(&1, query))
-  end
-
-  defp matches_query?(item, query) do
-    Enum.all?(query, &matches_word?(item, &1))
-  end
-
-  defp matches_word?(%{card: %{title: title}}, word) when is_binary(title) and is_binary(word) do
-    String.contains?(String.downcase(title), String.downcase(word))
-  end
-
-  defp matches_word?(_item, _word), do: false
 
   @impl true
   def render(assigns) do
@@ -132,7 +103,7 @@ defmodule Systems.Pool.MarketplaceView do
         </div>
         <.spacing value="L" />
         <Grid.dynamic>
-          <%= for card <- filtered_cards(@items, @active_year, @query) do %>
+          <%= for card <- Pool.MarketplaceViewBuilder.filtered_cards(@items, @active_year, @query) do %>
             <Advert.CardView.dynamic card={card} target={@myself} />
           <% end %>
         </Grid.dynamic>
