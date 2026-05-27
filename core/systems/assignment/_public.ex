@@ -19,6 +19,7 @@ defmodule Systems.Assignment.Public do
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Account
+  alias Systems.Bookkeeping
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Fund
@@ -778,6 +779,53 @@ defmodule Systems.Assignment.Public do
   end
 
   def list_pending_payouts(_), do: []
+
+  @doc """
+  Lists completed (paid) payouts on an assignment, joined to the crew
+  members so the researcher's overview tab can render them. Sorted most-
+  recent-first by the bookkeeping `payment.inserted_at` timestamp.
+
+  Each row: `%{reward_id, member_public_id, amount, currency, paid_at}`.
+  """
+  def list_completed_payouts(%Assignment.Model{
+        crew: %Crew.Model{} = crew,
+        fund: %Fund.Model{} = fund
+      }) do
+    members_by_user_id =
+      crew
+      |> Crew.Public.list_members()
+      |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
+
+    fund
+    |> Fund.Public.list_paid_rewards(fund: [:currency], payment: [])
+    |> Enum.map(&completed_payout_row(&1, members_by_user_id))
+    |> Enum.sort_by(& &1.paid_at, {:desc, NaiveDateTime})
+  end
+
+  def list_completed_payouts(_), do: []
+
+  defp completed_payout_row(
+         %Fund.RewardModel{
+           id: reward_id,
+           user_id: user_id,
+           amount: amount,
+           updated_at: updated_at,
+           fund: %Fund.Model{currency: currency},
+           payment: payment
+         },
+         members_by_user_id
+       ) do
+    %{
+      reward_id: reward_id,
+      member_public_id: member_public_id(members_by_user_id, user_id),
+      amount: amount,
+      currency: currency,
+      paid_at: paid_at_for(payment, updated_at)
+    }
+  end
+
+  defp paid_at_for(%Bookkeeping.EntryModel{inserted_at: inserted_at}, _fallback), do: inserted_at
+  defp paid_at_for(_, fallback), do: fallback
 
   # Per-row task lookup remains: the task↔owner link is role-based and lives in
   # Crew, so full O(1) batching would need a dedicated Crew.Public query.

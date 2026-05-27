@@ -664,10 +664,6 @@ msgid "payout.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr ""
 
@@ -717,4 +713,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "panl_participants.pending_approvals.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.amount_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.date_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.empty"
 msgstr ""

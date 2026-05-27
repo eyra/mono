@@ -100,6 +100,18 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  @doc """
+  Lists rewards with status `:paid` for a fund — i.e. payouts that have
+  been settled. Mirrors `list_pending_approvals/2`; default preloads
+  include `:payment` so callers can read `payment.inserted_at` as the
+  settlement timestamp.
+  """
+  def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do
+    Fund.Queries.reward_query(fund, :paid)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
   def get!(id, preload \\ [:available, :pending]) when is_integer(id) do
     from(fund in Fund.Model, preload: ^preload)
     |> Repo.get!(id)

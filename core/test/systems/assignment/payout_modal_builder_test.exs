@@ -50,6 +50,24 @@ defmodule Systems.Assignment.PayoutModalBuilderTest do
       assert vm.count == 0
     end
 
+    test "exposes completed_payouts and completed_count for the overview tab",
+         %{assignment: %{id: id}} do
+      vm = Builder.view_model(id, %{})
+
+      assert vm.completed_payouts == []
+      assert vm.completed_count == 0
+    end
+
+    test "includes the new overview labels", %{assignment: %{id: id}} do
+      vm = Builder.view_model(id, %{})
+
+      assert is_binary(vm.labels.overview_heading)
+      assert is_binary(vm.labels.overview_empty)
+      assert is_binary(vm.labels.overview_amount)
+      assert is_binary(vm.labels.overview_date)
+      refute Map.has_key?(vm.labels, :overview_coming_soon)
+    end
+
     test "carries transient decline/error state through", %{assignment: %{id: id}} do
       vm = Builder.view_model(id, %{declining_task_id: 42, error: :decline})
 

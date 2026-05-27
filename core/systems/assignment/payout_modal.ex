@@ -15,10 +15,12 @@ defmodule Systems.Assignment.PayoutModal do
 
   require Logger
 
+  alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 
   alias Systems.Assignment
+  alias Systems.Assignment.CurrencyHelpers
   alias Systems.Assignment.PayoutModalBuilder, as: Builder
 
   @impl true
@@ -179,7 +181,13 @@ defmodule Systems.Assignment.PayoutModal do
           myself={@myself}
         />
       <% else %>
-        <.overview_tab labels={@vm.labels} />
+        <.overview_tab
+          labels={@vm.labels}
+          completed_payouts={@vm.completed_payouts}
+          completed_count={@vm.completed_count}
+          search_query={@vm.search_query}
+          myself={@myself}
+        />
       <% end %>
     </div>
     """
@@ -368,17 +376,109 @@ defmodule Systems.Assignment.PayoutModal do
   end
 
   attr(:labels, :map, required: true)
+  attr(:completed_payouts, :list, required: true)
+  attr(:completed_count, :integer, required: true)
+  attr(:search_query, :string, required: true)
+  attr(:myself, :any, required: true)
 
   defp overview_tab(assigns) do
     ~H"""
     <div data-testid="payout-overview-tab">
-      <Text.title3>
-        <%= @labels.overview_heading %>
-      </Text.title3>
-      <.spacing value="S" />
-      <Text.body color="text-grey2">
-        <%= @labels.overview_coming_soon %>
-      </Text.body>
+      <div class="flex items-baseline gap-2 mb-6">
+        <Text.title3 margin="">
+          <%= @labels.overview_heading %>
+        </Text.title3>
+        <span class="text-title3 font-title3 text-primary" data-testid="payout-overview-count">
+          <%= @completed_count %>
+        </span>
+      </div>
+
+      <form phx-change="update_search" phx-target={@myself} class="mb-2">
+        <div class="relative">
+          <input
+            type="text"
+            name="value"
+            value={@search_query}
+            placeholder={@labels.search_placeholder}
+            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body focus:outline-none focus:border-primary"
+            data-testid="payout-overview-search"
+          />
+          <svg
+            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </div>
+      </form>
+
+      <%= if @completed_count == 0 do %>
+        <div class="text-bodymedium font-body text-grey2 py-8" data-testid="payout-overview-empty">
+          <%= @labels.overview_empty %>
+        </div>
+      <% else %>
+        <div class="flex flex-col">
+          <%= for row <- @completed_payouts do %>
+            <.overview_row row={row} labels={@labels} />
+          <% end %>
+        </div>
+
+        <div class="mt-6 flex items-center justify-between text-bodysmall font-body text-grey2" data-testid="payout-overview-pagination">
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
+              disabled
+              aria-label="previous"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <span class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-button font-button">1</span>
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
+              disabled
+              aria-label="next"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </div>
+          <span><%= @labels.pagination_single %></span>
+        </div>
+      <% end %>
+    </div>
+    """
+  end
+
+  attr(:row, :map, required: true)
+  attr(:labels, :map, required: true)
+
+  defp overview_row(assigns) do
+    ~H"""
+    <div class="py-3 flex items-center justify-between" data-testid={"payout-overview-row-#{@row.reward_id}"}>
+      <span class="text-bodymedium font-body">
+        <%= @labels.subject_label %>
+        <%= @row.member_public_id || @row.reward_id %>
+      </span>
+      <span class="flex items-center gap-6 text-bodymedium font-body text-grey2">
+        <span data-testid={"payout-overview-amount-#{@row.reward_id}"}>
+          <%= CurrencyHelpers.format_cents(@row.amount) %>
+        </span>
+        <span data-testid={"payout-overview-date-#{@row.reward_id}"}>
+          <%= Timestamp.format_date!(@row.paid_at) %>
+        </span>
+      </span>
     </div>
     """
   end
