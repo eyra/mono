@@ -696,3 +696,17 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "panl_participants.pending_approvals.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] ""
+msgstr[1] ""

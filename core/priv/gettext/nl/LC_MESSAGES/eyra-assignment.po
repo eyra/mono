@@ -695,3 +695,17 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.description"
+msgstr "Bekijk de deelnemers die hun taak hebben afgerond en keur hun beloning goed of af."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.open.button"
+msgstr "Open uitbetalingsoverzicht"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] "%{count} beloning wacht op goedkeuring"
+msgstr[1] "%{count} beloningen wachten op goedkeuring"
