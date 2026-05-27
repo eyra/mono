@@ -45,27 +45,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "overview.breadcrumb"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "studies.empty.message"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "studies.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "studies.show_more"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "studies.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "studies.filter.label"
-msgstr ""

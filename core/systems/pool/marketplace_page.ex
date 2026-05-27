@@ -1,35 +1,30 @@
-defmodule Systems.Home.StudiesPage do
+defmodule Systems.Pool.MarketplacePage do
   use Systems.Content.Composer, :live_website
 
-  alias Systems.Home
   alias Systems.Pool
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Breadcrumbs
 
   @impl true
-  def get_model(_params, _session, _socket) do
-    Systems.Observatory.SingletonModel.instance()
+  def get_model(%{"id" => id}, _session, _socket) do
+    Pool.Public.get!(String.to_integer(id))
   end
 
   @impl true
-  def mount(_params, _session, %{assigns: %{current_user: user}} = socket) do
-    socket = socket |> compose_child(:studies_view)
-
-    if participant?(user) do
-      {:ok, socket}
+  def mount(_params, _session, %{assigns: %{current_user: user, model: pool}} = socket) do
+    if Pool.Public.participant?(pool, user) do
+      {:ok, socket |> compose_child(:marketplace_view)}
     else
       {:ok, socket |> push_navigate(to: ~p"/")}
     end
   end
 
-  defp participant?(%Systems.Account.User{} = user), do: Pool.Public.participant?(:panl, user)
-  defp participant?(_), do: false
-
   @impl true
-  def compose(:studies_view, %{vm: %{items: items, years: years}}) do
+  def compose(:marketplace_view, %{vm: %{pool: pool, items: items, years: years}}) do
     %{
-      module: Home.StudiesView,
+      module: Pool.MarketplaceView,
       params: %{
+        pool: pool,
         items: items,
         years: years
       }
@@ -38,7 +33,7 @@ defmodule Systems.Home.StudiesPage do
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket |> update_child(:studies_view)
+    socket |> update_child(:marketplace_view)
   end
 
   @impl true
@@ -51,11 +46,11 @@ defmodule Systems.Home.StudiesPage do
       <div class="bg-grey6 min-h-full">
         <div class="py-4 border-b border-grey4">
           <Area.content>
-            <.live_component module={Breadcrumbs} id={:studies_breadcrumbs} elements={@vm.breadcrumbs} />
+            <.live_component module={Breadcrumbs} id={:marketplace_breadcrumbs} elements={@vm.breadcrumbs} />
           </Area.content>
         </div>
         <Area.content class="py-6 lg:py-8">
-          <.child name={:studies_view} fabric={@fabric} />
+          <.child name={:marketplace_view} fabric={@fabric} />
         </Area.content>
       </div>
     </.live_website>

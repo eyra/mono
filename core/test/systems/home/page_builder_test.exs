@@ -138,10 +138,12 @@ defmodule Systems.Home.PageBuilderTest do
       assert %{count: 5} = block_params(vm, :available_adverts)
     end
 
-    test "links to the /studies marketplace via more_path", %{user: user} do
+    test "links to the panl pool marketplace via more_path", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert %{more_path: "/studies"} = block_params(vm, :available_adverts)
+      %Pool.Model{id: panl_id} = Pool.Public.get_panl()
+      assert %{more_path: more_path} = block_params(vm, :available_adverts)
+      assert more_path == "/pool/#{panl_id}/marketplace"
     end
   end
 

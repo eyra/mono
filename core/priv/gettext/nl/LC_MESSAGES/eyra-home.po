@@ -45,27 +45,3 @@ msgstr "In afwachting"
 #, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
 msgstr "Afgekeurd"
-
-#, elixir-autogen, elixir-format
-msgid "overview.breadcrumb"
-msgstr "Overzicht"
-
-#, elixir-autogen, elixir-format
-msgid "studies.empty.message"
-msgstr "Er zijn op dit moment geen studies beschikbaar."
-
-#, elixir-autogen, elixir-format
-msgid "studies.search.placeholder"
-msgstr "Zoeken"
-
-#, elixir-autogen, elixir-format
-msgid "studies.show_more"
-msgstr "Toon meer"
-
-#, elixir-autogen, elixir-format
-msgid "studies.title"
-msgstr "Studies"
-
-#, elixir-autogen, elixir-format
-msgid "studies.filter.label"
-msgstr "Filter:"

@@ -5,8 +5,4 @@ defmodule Systems.Home.Presenter do
   def view_model(Systems.Home.Page, _, assigns) do
     Systems.Home.PageBuilder.view_model(nil, assigns)
   end
-
-  def view_model(Systems.Home.StudiesPage, _, assigns) do
-    Systems.Home.StudiesPageBuilder.view_model(nil, assigns)
-  end
 end

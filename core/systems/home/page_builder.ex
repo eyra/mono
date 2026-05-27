@@ -120,6 +120,8 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
+    %Pool.Model{id: panl_id} = Pool.Public.get_panl()
+
     adverts =
       Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
@@ -132,10 +134,10 @@ defmodule Systems.Home.PageBuilder do
     %{
       module: Home.AdvertsView,
       params: %{
-        title: dgettext("eyra-home", "studies.title"),
+        title: dgettext("eyra-pool", "marketplace.title"),
         cards: cards,
         count: Enum.count(adverts),
-        more_path: ~p"/studies"
+        more_path: ~p"/pool/#{panl_id}/marketplace"
       }
     }
   end

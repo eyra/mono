@@ -30,8 +30,11 @@ defmodule Systems.Home.AdvertsView do
         %{assigns: %{cards: cards}} = socket
       ) do
     card_id = String.to_integer(card_id)
-    %{path: path} = Enum.find(cards, &(&1.id == card_id))
-    {:noreply, push_navigate(socket, to: path)}
+
+    case Enum.find(cards, &(&1.id == card_id)) do
+      %{path: path} -> {:noreply, push_navigate(socket, to: path)}
+      nil -> {:noreply, socket}
+    end
   end
 
   @impl true
@@ -69,7 +72,7 @@ defmodule Systems.Home.AdvertsView do
         <div class="flex flex-row justify-end">
           <.link navigate={@more_path}>
             <div class="flex flex-row items-center gap-2 text-button font-button text-primary">
-              <%= dgettext("eyra-home", "studies.show_more") %>
+              <%= dgettext("eyra-pool", "marketplace.show_more") %>
               <img src={~p"/images/icons/forward.svg"} alt="" />
             </div>
           </.link>

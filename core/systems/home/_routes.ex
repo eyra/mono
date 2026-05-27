@@ -4,7 +4,6 @@ defmodule Systems.Home.Routes do
       scope "/", Systems.Home do
         pipe_through([:browser])
         live("/", Page)
-        live("/studies", StudiesPage)
       end
     end
   end
