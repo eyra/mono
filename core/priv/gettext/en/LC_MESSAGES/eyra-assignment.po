@@ -695,3 +695,17 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.description"
+msgstr "Review the participants who finished their task and approve or reject their reward."
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.open.button"
+msgstr "Open pay-out overview"
+
+#, elixir-autogen, elixir-format
+msgid "panl_participants.pending_approvals.title.one"
+msgid_plural "panl_participants.pending_approvals.title.other"
+msgstr[0] "%{count} reward is waiting for your approval"
+msgstr[1] "%{count} rewards are waiting for your approval"
