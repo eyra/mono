@@ -130,7 +130,7 @@ defmodule Systems.Promotion.LandingPage do
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
             <:call_to_action>
-              <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" />
+              <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
             </:call_to_action>
           </Hero.image_large>
         </div>
@@ -182,7 +182,7 @@ defmodule Systems.Promotion.LandingPage do
           logo_url={@vm.logo_url}
         />
         <.spacing value="XL" />
-        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" />
+        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
       </Area.content>
     </.live_website>
     </div>
