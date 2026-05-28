@@ -411,18 +411,16 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await researcherPage.locator("[data-testid='pay-out-all-button']").click();
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
-    // Waiting tab should now be empty
+    // Waiting tab should now be empty — the reward has left :pending_approval
+    // and moved to :approved (server-side). This is the strongest UI proof we
+    // have of MS.5 (Fund.pending → Fund.available wallet) in this milestone.
+    //
+    // NOTE: the :overview tab in PayoutModal is a placeholder ("coming soon")
+    // in this milestone — see Systems.Assignment.PayoutModal.overview_tab/1.
+    // It does not render approved/rejected rows yet, so we intentionally do
+    // NOT assert on its contents here. Once that tab is implemented, replace
+    // this comment with a check on a specific approved row.
     await expect(researcherPage.locator("[data-testid='payout-empty']")).toBeVisible({ timeout: 5000 });
-
-    // Switch to overview tab — the approved row should appear there
-    await researcherPage.locator("[data-testid='payout-tab-overview']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await expect(researcherPage.locator("[data-testid='payout-overview-tab']")).toBeVisible();
-
-    // The overview tab should contain at least one approved row
-    // (specific row testid depends on task_id, so we assert on the tab content)
-    const overviewTab = researcherPage.locator("[data-testid='payout-overview-tab']");
-    await expect(overviewTab).not.toBeEmpty();
 
     console.log('[TEST] Approve Reward (UC-OPP-05) test completed successfully');
 
