@@ -29,7 +29,7 @@ jobs:
         run: echo ::set-output "name=TAG::$(date +%F)_${{github.run_number}}"
 
       - name: Log in to the Container registry
-        uses: docker/login-action@04bf81902ca5d9c8e9f40ca42da112a7cb239165
+        uses: docker/login-action@3999a1f4362c53e6a6048cde50f69868af81da5c
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
