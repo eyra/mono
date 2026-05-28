@@ -29,7 +29,7 @@ jobs:
         run: echo ::set-output "name=TAG::$(date +%F)_${{github.run_number}}"
 
       - name: Log in to the Container registry
-        uses: docker/login-action@4f5a161ff1b9dde732913c738afffb9afac67587
+        uses: docker/login-action@5dbe09f08d69a120a09508cd14d11c11d67cdc5e
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@1b2e78b2f16968c43ad83fa0537a1bd30d0c1447
+        uses: docker/metadata-action@17e943b6741018cb076d01088a79f7a301f67b15
         with:
           images: |
             ${{env.REGISTRY}}/eyra/${{github.event.inputs.bundle}}
