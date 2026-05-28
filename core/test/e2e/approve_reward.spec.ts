@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * Approve Reward E2E Test (UC-OPP-05)
@@ -25,8 +26,10 @@ import { test, expect } from '@playwright/test';
  *   - Researcher account: e2e-researcher@eyra.co (seeded by /api/e2e/setup)
  */
 
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
+// Skip all tests in this file when required features are not enabled.
+// `missingFeaturesReason` reads from ENABLED_APP_FEATURES, which is
+// populated by global-setup from the server's /api/e2e/features.
+const SKIP_REASON = missingFeaturesReason('panl', 'panl_post_launch');
 
 const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL || 'e2e-researcher@eyra.co';
 const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD || 'asdf;lkjASDF0987';
@@ -50,7 +53,7 @@ const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 
 test.describe('Approve Reward (UC-OPP-05)', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set ENABLED_APP_FEATURES=...,panl)');
+  test.skip(SKIP_REASON !== '', SKIP_REASON);
 
   test('researcher approves a participant reward after questionnaire completion', async ({ browser }) => {
     test.setTimeout(180000); // 3 min — full flow with two browser contexts.
