@@ -1,8 +1,10 @@
 defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
+  import Ecto.Query
   import Systems.NextAction.TestHelper
 
   alias Systems.Assignment
+  alias Systems.Bookkeeping
   alias Systems.Crew
   alias Systems.Fund
   alias Systems.Monitor
@@ -782,6 +784,103 @@ defmodule Systems.Assignment.PublicTest do
                Fund.Public.get_reward(idempotence_key, [])
 
       refute is_nil(deposit_id)
+    end
+  end
+
+  describe "list_completed_payouts/1" do
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      # Reload to pick up public_id assigned by the crew_members trigger.
+      member = Crew.Factories.create_member(crew, user) |> Repo.reload!()
+
+      {:ok, user: user, fund: fund, crew: crew, member: member, assignment: assignment}
+    end
+
+    defp insert_paid_reward(user, fund, opts \\ []) do
+      amount = Keyword.get(opts, :amount, 500)
+      paid_at = Keyword.get(opts, :paid_at)
+      with_payment? = Keyword.get(opts, :with_payment, true)
+
+      payment =
+        if with_payment? do
+          entry =
+            Factories.insert!(:book_entry, %{
+              idempotence_key: "pay-#{System.unique_integer([:positive])}",
+              journal_message: "test_list_completed_payouts"
+            })
+
+          if paid_at do
+            from(e in Bookkeeping.EntryModel, where: e.id == ^entry.id)
+            |> Repo.update_all(set: [inserted_at: paid_at])
+          end
+
+          Repo.get!(Bookkeeping.EntryModel, entry.id)
+        end
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "rw-#{System.unique_integer([:positive])}",
+        amount: amount,
+        status: :paid,
+        user: user,
+        fund: fund,
+        payment: payment
+      })
+    end
+
+    test "returns paid rewards as rows joined to crew members",
+         %{user: user, fund: fund, member: member, assignment: assignment} do
+      reward = insert_paid_reward(user, fund, amount: 750)
+
+      assert [
+               %{
+                 reward_id: reward_id,
+                 member_public_id: member_public_id,
+                 amount: 750,
+                 currency: %Fund.CurrencyModel{},
+                 paid_at: %NaiveDateTime{}
+               }
+             ] = Assignment.Public.list_completed_payouts(assignment)
+
+      assert reward_id == reward.id
+      assert member_public_id == member.public_id
+    end
+
+    test "excludes rewards that are not yet paid",
+         %{user: user, fund: fund, assignment: assignment} do
+      insert_paid_reward(user, fund)
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "rw-approved-#{System.unique_integer([:positive])}",
+        amount: 100,
+        status: :approved,
+        user: user,
+        fund: fund
+      })
+
+      assert [%{amount: 500}] = Assignment.Public.list_completed_payouts(assignment)
+    end
+
+    test "returns [] when the assignment has no fund" do
+      assignment = Factories.insert!(:assignment, %{fund: nil})
+
+      assert [] = Assignment.Public.list_completed_payouts(assignment)
+    end
+
+    test "sorts rows by paid_at descending (most recent first)",
+         %{user: user, fund: fund, assignment: assignment} do
+      %{id: older_id} = insert_paid_reward(user, fund, paid_at: ~N[2024-01-01 00:00:00])
+      %{id: newer_id} = insert_paid_reward(user, fund, paid_at: ~N[2025-06-01 00:00:00])
+
+      assert [%{reward_id: ^newer_id}, %{reward_id: ^older_id}] =
+               Assignment.Public.list_completed_payouts(assignment)
+    end
+
+    test "falls back to reward.updated_at when the reward has no payment",
+         %{user: user, fund: fund, assignment: assignment} do
+      %{updated_at: updated_at} = insert_paid_reward(user, fund, with_payment: false)
+
+      assert [%{paid_at: ^updated_at}] = Assignment.Public.list_completed_payouts(assignment)
     end
   end
 end

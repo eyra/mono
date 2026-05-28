@@ -31,12 +31,19 @@ defmodule Systems.Assignment.PayoutModalBuilder do
       |> Assignment.Public.list_pending_payouts()
       |> filter_payouts(query)
 
+    completed_payouts =
+      assignment
+      |> Assignment.Public.list_completed_payouts()
+      |> filter_payouts(query)
+
     %{
       assignment: assignment,
       active_tab: active_tab,
       search_query: query,
       payouts: payouts,
       count: length(payouts),
+      completed_payouts: completed_payouts,
+      completed_count: length(completed_payouts),
       declining_task_id: Map.get(state, :declining_task_id),
       decline_reason: Map.get(state, :decline_reason, ""),
       error: Map.get(state, :error),
@@ -74,7 +81,9 @@ defmodule Systems.Assignment.PayoutModalBuilder do
       decline_submit: dgettext("eyra-assignment", "payout.decline.submit.button"),
       decline_error: dgettext("eyra-assignment", "payout.decline.error"),
       overview_heading: dgettext("eyra-assignment", "payout.overview.heading"),
-      overview_coming_soon: dgettext("eyra-assignment", "payout.overview.coming_soon")
+      overview_empty: dgettext("eyra-assignment", "payout.overview.empty"),
+      overview_amount: dgettext("eyra-assignment", "payout.overview.amount_label"),
+      overview_date: dgettext("eyra-assignment", "payout.overview.date_label")
     }
   end
 end

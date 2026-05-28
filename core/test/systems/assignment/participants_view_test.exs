@@ -41,14 +41,15 @@ defmodule Systems.Assignment.ParticipantsViewTest do
       assert html =~ ~s(phx-click="open_payout_modal")
     end
 
-    test "uses the plural title when more than one approval is pending" do
+    test "renders the configured title and CTA copy" do
       html =
         render_component(&ParticipantsView.pending_approvals_banner/1, %{
-          pending_approvals: [%{reward_id: 1}, %{reward_id: 2}],
+          pending_approvals: [%{reward_id: 1}],
           target: :stub
         })
 
-      assert html =~ "2 rewards"
+      assert html =~ "Participants waiting for pay out"
+      assert html =~ "Check pay outs"
     end
   end
 end

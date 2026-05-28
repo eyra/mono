@@ -282,11 +282,6 @@ defmodule Systems.Assignment.ParticipantsView do
     """
   end
 
-  @doc """
-  Banner that surfaces participants whose rewards are awaiting researcher
-  approval. Renders nothing when `pending_approvals` is empty so the
-  enclosing layout stays compact in the common case.
-  """
   attr(:pending_approvals, :list, required: true)
   attr(:target, :any, required: true)
 
@@ -295,17 +290,9 @@ defmodule Systems.Assignment.ParticipantsView do
     <%= if Enum.any?(@pending_approvals) do %>
       <div data-testid="pending-approvals-cta">
         <NextAction.View.highlight
-          title={
-            dngettext(
-              "eyra-assignment",
-              "panl_participants.pending_approvals.title.one",
-              "panl_participants.pending_approvals.title.other",
-              length(@pending_approvals),
-              count: length(@pending_approvals)
-            )
-          }
-          description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
-          cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+          title={dgettext("eyra-assignment", "pending_approvals.title")}
+          description={dgettext("eyra-assignment", "pending_approvals.description")}
+          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
           cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
         />
       </div>
