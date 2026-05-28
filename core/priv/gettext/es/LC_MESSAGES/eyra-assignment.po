@@ -694,18 +694,6 @@ msgid "payout.waiting.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.open.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "payout.overview.amount_label"
 msgstr ""
 
@@ -715,4 +703,16 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payout.overview.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
 msgstr ""

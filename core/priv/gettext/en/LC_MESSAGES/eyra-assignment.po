@@ -693,18 +693,6 @@ msgid "payout.waiting.heading"
 msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.description"
-msgstr "There are participants waiting to get paid"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.open.button"
-msgstr "Check pay outs"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.title"
-msgstr "Participants waiting for pay out"
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.amount_label"
 msgstr "Amount"
 
@@ -715,3 +703,15 @@ msgstr "Date"
 #, elixir-autogen, elixir-format
 msgid "payout.overview.empty"
 msgstr "No payouts yet."
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr "There are participants waiting to get paid"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr "Check pay outs"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
+msgstr "Participants waiting for pay out"

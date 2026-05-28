@@ -290,9 +290,9 @@ defmodule Systems.Assignment.ParticipantsView do
     <%= if Enum.any?(@pending_approvals) do %>
       <div data-testid="pending-approvals-cta">
         <NextAction.View.highlight
-          title={dgettext("eyra-assignment", "panl_participants.pending_approvals.title")}
-          description={dgettext("eyra-assignment", "panl_participants.pending_approvals.description")}
-          cta_label={dgettext("eyra-assignment", "panl_participants.pending_approvals.open.button")}
+          title={dgettext("eyra-assignment", "pending_approvals.title")}
+          description={dgettext("eyra-assignment", "pending_approvals.description")}
+          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
           cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
         />
       </div>

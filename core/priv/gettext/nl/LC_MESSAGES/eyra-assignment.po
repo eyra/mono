@@ -693,18 +693,6 @@ msgid "payout.waiting.heading"
 msgstr "Wachten op uitbetaling"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.description"
-msgstr "Er zijn deelnemers die op een uitbetaling wachten"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.open.button"
-msgstr "Bekijk uitbetalingen"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.title"
-msgstr "Deelnemers wachten op uitbetaling"
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.amount_label"
 msgstr "Bedrag"
 
@@ -715,3 +703,15 @@ msgstr "Datum"
 #, elixir-autogen, elixir-format
 msgid "payout.overview.empty"
 msgstr "Er zijn nog geen uitbetalingen."
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr "Er zijn deelnemers die op een uitbetaling wachten"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr "Bekijk uitbetalingen"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
+msgstr "Deelnemers wachten op uitbetaling"

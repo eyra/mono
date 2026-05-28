@@ -17,11 +17,17 @@ defmodule Systems.Assignment.PayoutModal do
 
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
 
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Assignment.PayoutModalBuilder, as: Builder
+
+  @impl true
+  def update(%{id: _id, search_query: %{query_string: query_string}}, socket) do
+    {:ok, socket |> assign(search_query: query_string) |> assign_vm()}
+  end
 
   @impl true
   def update(%{id: id, assignment_id: assignment_id}, socket) do
@@ -52,11 +58,6 @@ defmodule Systems.Assignment.PayoutModal do
       ])
 
     assign(socket, vm: Builder.view_model(assignment_id, state))
-  end
-
-  @impl true
-  def handle_event("update_search", %{"value" => query}, socket) do
-    {:noreply, socket |> assign(search_query: query) |> assign_vm()}
   end
 
   @impl true
@@ -393,31 +394,16 @@ defmodule Systems.Assignment.PayoutModal do
         </span>
       </div>
 
-      <form phx-change="update_search" phx-target={@myself} class="mb-2">
-        <div class="relative">
-          <input
-            type="text"
-            name="value"
-            value={@search_query}
-            placeholder={@labels.search_placeholder}
-            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body focus:outline-none focus:border-primary"
-            data-testid="payout-overview-search"
-          />
-          <svg
-            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-        </div>
-      </form>
+      <div class="mb-2">
+        <.live_component
+          module={SearchBar}
+          id={:payout_overview_search_bar}
+          query_string={@search_query}
+          placeholder={@labels.search_placeholder}
+          debounce="200"
+          target={{__MODULE__, @id}}
+        />
+      </div>
 
       <%= if @completed_count == 0 do %>
         <div class="text-bodymedium font-body text-grey2 py-8" data-testid="payout-overview-empty">
@@ -432,27 +418,13 @@ defmodule Systems.Assignment.PayoutModal do
 
         <div class="mt-6 flex items-center justify-between text-bodysmall font-body text-grey2" data-testid="payout-overview-pagination">
           <div class="flex items-center gap-2">
-            <button
-              type="button"
-              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
-              disabled
-              aria-label="previous"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
+            <div class="opacity-40 pointer-events-none">
+              <Button.Face.icon icon={:back} size="w-8 h-8" alt="previous" />
+            </div>
             <span class="w-8 h-8 flex items-center justify-center rounded bg-primary text-white text-button font-button">1</span>
-            <button
-              type="button"
-              class="w-8 h-8 flex items-center justify-center rounded text-grey3 cursor-default"
-              disabled
-              aria-label="next"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
+            <div class="opacity-40 pointer-events-none">
+              <Button.Face.icon icon={:forward} size="w-8 h-8" alt="next" />
+            </div>
           </div>
           <span><%= @labels.pagination_single %></span>
         </div>
