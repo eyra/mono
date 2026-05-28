@@ -173,6 +173,7 @@ defmodule Systems.Assignment.PayoutModal do
       <div class="border-b border-grey4 mb-6" />
       <%= if @vm.active_tab == :waiting do %>
         <.waiting_tab
+          id={@id}
           payouts={@vm.payouts}
           count={@vm.count}
           search_query={@vm.search_query}
@@ -183,6 +184,7 @@ defmodule Systems.Assignment.PayoutModal do
         />
       <% else %>
         <.overview_tab
+          id={@id}
           labels={@vm.labels}
           completed_payouts={@vm.completed_payouts}
           completed_count={@vm.completed_count}
@@ -198,6 +200,7 @@ defmodule Systems.Assignment.PayoutModal do
   defp error_message(%{error: :decline, labels: %{decline_error: msg}}), do: msg
   defp error_message(%{labels: %{decline_error: msg}}), do: msg
 
+  attr(:id, :any, required: true)
   attr(:payouts, :list, required: true)
   attr(:count, :integer, required: true)
   attr(:search_query, :string, default: "")
@@ -237,31 +240,16 @@ defmodule Systems.Assignment.PayoutModal do
         </button>
       </div>
 
-      <form phx-change="update_search" phx-target={@myself} class="mb-2">
-        <div class="relative">
-          <input
-            type="text"
-            name="value"
-            value={@search_query}
-            placeholder={@labels.search_placeholder}
-            class="w-full border border-grey3 rounded px-4 py-2 pr-10 text-bodymedium font-body focus:outline-none focus:border-primary"
-            data-testid="payout-search"
-          />
-          <svg
-            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-        </div>
-      </form>
+      <div class="mb-2">
+        <.live_component
+          module={SearchBar}
+          id={:payout_waiting_search_bar}
+          query_string={@search_query}
+          placeholder={@labels.search_placeholder}
+          debounce="200"
+          target={{__MODULE__, @id}}
+        />
+      </div>
 
       <%= if @count == 0 do %>
         <div class="text-bodymedium font-body text-grey2 py-8" data-testid="payout-empty">
@@ -376,6 +364,7 @@ defmodule Systems.Assignment.PayoutModal do
     """
   end
 
+  attr(:id, :any, required: true)
   attr(:labels, :map, required: true)
   attr(:completed_payouts, :list, required: true)
   attr(:completed_count, :integer, required: true)
