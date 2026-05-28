@@ -10,19 +10,6 @@ defmodule Core.SurfConext do
     defexception [:message]
   end
 
-  def get_user_by_student_id(student_id) do
-    student_id_code = "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:#{student_id}"
-
-    surfconext_query =
-      from(sc in Core.SurfConext.User,
-        where: ^student_id_code in sc.schac_personal_unique_code,
-        select: sc.user_id
-      )
-
-    from(u in User, where: u.id in subquery(surfconext_query))
-    |> Repo.one()
-  end
-
   def get_user_by_sub(sub) do
     from(u in User,
       where:
@@ -59,10 +46,11 @@ defmodule Core.SurfConext do
     }
 
     user = User.sso_changeset(%User{}, sso_info)
+    sub = Map.get(attrs, "sub")
 
     with {:ok, surf_user} <-
            %Core.SurfConext.User{}
-           |> Core.SurfConext.User.register_changeset(attrs)
+           |> Core.SurfConext.User.register_changeset(%{email: email, sub: sub, userinfo: attrs})
            |> Ecto.Changeset.put_assoc(:user, user)
            |> Repo.insert() do
       Signal.Public.dispatch!({:user, :created}, %{user: surf_user.user})
@@ -79,7 +67,7 @@ defmodule Core.SurfConext do
 
   def update_user(%User{} = user, attrs) do
     get_surfconext_user_by_user(user)
-    |> Core.SurfConext.User.update_changeset(attrs)
+    |> Core.SurfConext.User.update_changeset(%{userinfo: attrs})
     |> Repo.update!()
   end
 
