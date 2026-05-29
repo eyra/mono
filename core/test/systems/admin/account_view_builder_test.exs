@@ -66,6 +66,20 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       refute non_creator.email in emails
     end
 
+    test "filters by :unverified filter", %{
+      creator_verified: creator_verified,
+      creator_unverified: creator_unverified,
+      non_creator: non_creator
+    } do
+      items = AccountViewBuilder.build_user_items([:unverified], [])
+
+      emails = Enum.map(items, & &1.email)
+
+      refute creator_verified.email in emails
+      assert creator_unverified.email in emails
+      assert non_creator.email in emails
+    end
+
     test "filters by search query" do
       user =
         Factories.insert!(:member, %{
