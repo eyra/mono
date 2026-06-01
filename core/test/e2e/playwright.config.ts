@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  workers: 1,  // Tests share a researcher account and DB — must run sequentially
   testDir: '.',
   testIgnore: ['**/load/**'],  // Exclude load tests by default
   timeout: 30000,  // 30s max per test - fail fast
