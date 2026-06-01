@@ -32,7 +32,7 @@ defmodule CoreWeb.Router do
     get("/uploads/:filename", UploadedFileController, :get)
   end
 
-  if Mix.env() == :dev do
+  if Application.compile_env(:core, :enable_e2e_support, false) do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
 end

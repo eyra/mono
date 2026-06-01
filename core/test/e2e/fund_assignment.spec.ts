@@ -33,6 +33,22 @@ const AIM_OF_STUDY = 'E2E fund assignment test';
 
 const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
+const ADD_ITEM_SELECTOR = "[data-testid='create-first-item-button'],[data-testid='add-item-button'],[phx-click='create_item']";
+
+async function clickAddItemButton(page: any) {
+  // Wait for ANY of the three variants to appear before checking which one
+  await page.waitForSelector(ADD_ITEM_SELECTOR, { timeout: 10000 });
+  const createFirst = page.locator("[data-testid='create-first-item-button']");
+  const addItem = page.locator("[data-testid='add-item-button']");
+  const byEvent = page.locator("[phx-click='create_item']");
+  if (await createFirst.isVisible()) {
+    await createFirst.click();
+  } else if (await addItem.isVisible()) {
+    await addItem.click();
+  } else {
+    await byEvent.click();
+  }
+}
 
 test.describe('Fund Assignment via BudgetForm', () => {
   test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set ENABLED_APP_FEATURES=...,panl)');
@@ -56,11 +72,14 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Step 2: Open existing project, or create one
     console.log('[TEST] Step 2: Opening / creating project');
-    const createProjectButton = page.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    const createFirstProject = page.locator("[data-testid='create-first-project-button']");
+    const createNewProject = page.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await page.locator(CARD_SELECTOR).first().click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
@@ -68,19 +87,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Step 3: Create a fresh questionnaire study so the test is self-contained
     console.log('[TEST] Step 3: Creating questionnaire study');
-    const createFirstItemButton = page.locator("[data-testid='create-first-item-button']");
-    const addItemButton = page.locator("[data-testid='add-item-button']");
-    const addItemByEvent = page.locator("[phx-click='create_item']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else if (await addItemByEvent.isVisible({ timeout: 2000 })) {
-      await addItemByEvent.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await page.locator("[data-testid='selector-item-questionnaire']").click();
@@ -116,7 +123,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     // Step 7: Fill BudgetForm — fee form first (has phx-change save_fee with 1000ms debounce)
     console.log('[TEST] Step 7: Filling BudgetForm');
     const aimInput = page.locator("[data-testid='budget-form-aim-input']");
-    await expect(aimInput).toBeVisible({ timeout: 5000 });
+    await expect(aimInput).toBeVisible({ timeout: 10000 });
     await aimInput.fill(AIM_OF_STUDY);
 
     const rewardInput = page.locator("[data-testid='budget-form-reward-input']");
@@ -177,11 +184,14 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
-    const createProjectButton = page.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    const createFirstProject = page.locator("[data-testid='create-first-project-button']");
+    const createNewProject = page.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await page.locator(CARD_SELECTOR).first().click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
@@ -189,19 +199,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Create a fresh questionnaire study (independent from the previous test)
     console.log('[TEST] Step 3: Creating questionnaire study');
-    const createFirstItemButton = page.locator("[data-testid='create-first-item-button']");
-    const addItemButton = page.locator("[data-testid='add-item-button']");
-    const addItemByEvent = page.locator("[phx-click='create_item']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else if (await addItemByEvent.isVisible({ timeout: 2000 })) {
-      await addItemByEvent.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await page.locator("[data-testid='selector-item-questionnaire']").click();
@@ -230,7 +228,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("[data-testid='pay-add-participants-button']").click();
 
     const aimInput = page.locator("[data-testid='budget-form-aim-input']");
-    await expect(aimInput).toBeVisible({ timeout: 5000 });
+    await expect(aimInput).toBeVisible({ timeout: 10000 });
     await aimInput.fill(AIM_OF_STUDY);
 
     await page.locator("[data-testid='budget-form-reward-input']").fill(SUBJECT_REWARD);
@@ -303,11 +301,14 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
-    const createProjectButton = page.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    const createFirstProject = page.locator("[data-testid='create-first-project-button']");
+    const createNewProject = page.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await page.locator(CARD_SELECTOR).first().click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
@@ -315,19 +316,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Create a fresh questionnaire study
     console.log('[TEST] Step 3: Creating questionnaire study');
-    const createFirstItemButton = page.locator("[data-testid='create-first-item-button']");
-    const addItemButton = page.locator("[data-testid='add-item-button']");
-    const addItemByEvent = page.locator("[phx-click='create_item']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else if (await addItemByEvent.isVisible({ timeout: 2000 })) {
-      await addItemByEvent.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await page.locator("[data-testid='selector-item-questionnaire']").click();
@@ -355,7 +344,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     console.log('[TEST] Step 5: Filling BudgetForm');
     await page.locator("[data-testid='pay-add-participants-button']").click();
     const aimInput = page.locator("[data-testid='budget-form-aim-input']");
-    await expect(aimInput).toBeVisible({ timeout: 5000 });
+    await expect(aimInput).toBeVisible({ timeout: 10000 });
     await aimInput.fill(AIM_OF_STUDY);
     await page.locator("[data-testid='budget-form-reward-input']").fill(SUBJECT_REWARD);
     await page.waitForTimeout(1500);
@@ -425,11 +414,14 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
-    const createProjectButton = page.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    const createFirstProject = page.locator("[data-testid='create-first-project-button']");
+    const createNewProject = page.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await page.locator(CARD_SELECTOR).first().click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
@@ -437,19 +429,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Create a fresh questionnaire study
     console.log('[TEST] Step 3: Creating questionnaire study');
-    const createFirstItemButton = page.locator("[data-testid='create-first-item-button']");
-    const addItemButton = page.locator("[data-testid='add-item-button']");
-    const addItemByEvent = page.locator("[phx-click='create_item']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else if (await addItemByEvent.isVisible({ timeout: 2000 })) {
-      await addItemByEvent.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await page.locator("[data-testid='selector-item-questionnaire']").click();
@@ -499,30 +479,21 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.waitForTimeout(1000);
 
     // Open / create project
-    const createProjectButton = page.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    const createFirstProject = page.locator("[data-testid='create-first-project-button']");
+    const createNewProject = page.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await page.locator(CARD_SELECTOR).first().click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Create study
-    const createFirstItemButton = page.locator("[data-testid='create-first-item-button']");
-    const addItemButton = page.locator("[data-testid='add-item-button']");
-    const addItemByEvent = page.locator("[phx-click='create_item']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else if (await addItemByEvent.isVisible({ timeout: 2000 })) {
-      await addItemByEvent.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await page.locator("[data-testid='selector-item-questionnaire']").click();

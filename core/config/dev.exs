@@ -34,7 +34,15 @@ config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336
 
-config :core, :features, e2e: true
+config :core, :features,
+  e2e: true,
+  leaderboard: true,
+  member_google_sign_in: true,
+  onyx: true,
+  panl: true,
+  panl_post_launch: true,
+  password_sign_in: true,
+  surfconext_sign_in: true
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1

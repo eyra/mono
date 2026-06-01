@@ -1,5 +1,21 @@
 import { test, expect } from '@playwright/test';
 import { missingFeaturesReason } from './lib/features';
+const ADD_ITEM_SELECTOR = "[data-testid='create-first-item-button'],[data-testid='add-item-button'],[phx-click='create_item']";
+
+async function clickAddItemButton(page: any) {
+  await page.waitForSelector(ADD_ITEM_SELECTOR, { timeout: 10000 });
+  const createFirst = page.locator("[data-testid='create-first-item-button']");
+  const addItem = page.locator("[data-testid='add-item-button']");
+  const byEvent = page.locator("[phx-click='create_item']");
+  if (await createFirst.isVisible()) {
+    await createFirst.click();
+  } else if (await addItem.isVisible()) {
+    await addItem.click();
+  } else {
+    await byEvent.click();
+  }
+}
+
 
 /**
  * Approve Reward E2E Test (UC-OPP-05)
@@ -91,12 +107,17 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await researcherPage.waitForTimeout(1000);
 
-    // Open or create project
-    const createProjectButton = researcherPage.locator("[data-testid='create-first-project-button']");
-    if (await createProjectButton.isVisible({ timeout: 3000 })) {
-      await createProjectButton.click();
-      await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
+    // Always create a fresh project so the study we create is the only card —
+    // avoids positional selector fragility caused by residual advert/study cards
+    // from prior test runs in a reused project.
+    const createFirstProject = researcherPage.locator("[data-testid='create-first-project-button']");
+    const createNewProject = researcherPage.locator("[data-testid='create-project-button']");
+    if (await createFirstProject.isVisible({ timeout: 3000 })) {
+      await createFirstProject.click();
+    } else {
+      await createNewProject.click();
     }
+    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await researcherPage.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
     await researcherPage.locator(CARD_SELECTOR).first().click();
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
@@ -104,16 +125,7 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
 
     // Create a fresh questionnaire study
     console.log('[TEST] Creating questionnaire study');
-    const createFirstItemButton = researcherPage.locator("[data-testid='create-first-item-button']");
-    const addItemButton = researcherPage.locator("[data-testid='add-item-button']");
-
-    if (await createFirstItemButton.isVisible({ timeout: 3000 })) {
-      await createFirstItemButton.click();
-    } else if (await addItemButton.isVisible({ timeout: 2000 })) {
-      await addItemButton.click();
-    } else {
-      throw new Error('Could not find create/add item button');
-    }
+    await clickAddItemButton(researcherPage);
 
     await researcherPage.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
     await researcherPage.locator("[data-testid='selector-item-questionnaire']").click();
