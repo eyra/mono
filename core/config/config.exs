@@ -117,6 +117,13 @@ config :core,
   },
   tool_directors: [:assignment]
 
+# Generic compile-time flag for E2E support facilities baked into the build
+# (e.g. the local payment simulator routes /payment/local/...). Off by default
+# so production never compiles in these stubs; enabled for :dev/:test (see
+# dev.exs/test.exs) and for non-production release builds via the
+# ENABLE_E2E_SUPPORT build arg.
+config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
+
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
   partner_fee_percentage: 0

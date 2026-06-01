@@ -11,6 +11,10 @@ org = 'eyra'
     # VERSION and PLATFORM are passed from GitHub Actions workflow
     BUNDLE = 'next'
     FORCE_SSL = 'false'
+    # Compile in E2E support facilities (e.g. the local payment simulator) so
+    # the E2E suite can run on the dev server. Compiled out of production
+    # builds.
+    ENABLE_E2E_SUPPORT = 'true'
 
 [env]
   # Phoenix configuration
