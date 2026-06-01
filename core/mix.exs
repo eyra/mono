@@ -175,6 +175,8 @@ defmodule Core.MixProject do
       "test.exs": ["ecto.create --quiet", "ecto.migrate", "test"],
       "test.js": "cmd cd ./assets && npm test",
       "test.all": ["test.exs", "test.js"],
+      "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
+      seed: "cmd ./scripts/seed",
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       i18n: [
