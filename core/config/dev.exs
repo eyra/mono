@@ -165,6 +165,9 @@ config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
+# Compile in E2E support facilities (e.g. local payment simulator).
+config :core, :enable_e2e_support, true
+
 try do
   import_config "dev.secret.exs"
 rescue

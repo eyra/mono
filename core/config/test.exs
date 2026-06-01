@@ -14,6 +14,9 @@ config :core,
 
 config :core, Systems.Payment.Provider.OPP, notification_secret: "test_notification_secret"
 
+# Compile in E2E support facilities (e.g. local payment simulator).
+config :core, :enable_e2e_support, true
+
 # Print only errors during test
 config :logger, level: :error
 
