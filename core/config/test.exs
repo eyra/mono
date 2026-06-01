@@ -6,7 +6,13 @@ import Config
 # session an isolated HTTP port and database. Unset (0) reproduces the default
 # port (4002) and database (core_test), so normal single-session runs are
 # unchanged.
-feature_test_session = System.get_env("FEATURE_TEST_SESSION", "0") |> String.to_integer()
+feature_test_session =
+  System.get_env("FEATURE_TEST_SESSION", "0")
+  |> case do
+    "" -> 0
+    n -> String.to_integer(n)
+  end
+
 feature_test_port = 4002 + feature_test_session
 feature_test_base_url = "http://localhost:#{feature_test_port}"
 
