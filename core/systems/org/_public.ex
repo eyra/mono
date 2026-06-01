@@ -281,7 +281,8 @@ defmodule Systems.Org.Public do
   def list_owners(%Node{} = org) do
     auth_module().list_principals(org)
     |> Enum.filter(fn %{roles: roles} -> :owner in roles end)
-    |> Enum.map(fn %{id: user_id} -> Repo.get!(User, user_id) end)
+    |> Enum.map(fn %{id: user_id} -> Repo.get(User, user_id) end)
+    |> Enum.reject(&is_nil/1)
   end
 
   @doc """
@@ -342,7 +343,8 @@ defmodule Systems.Org.Public do
   def list_members(%Node{} = org) do
     auth_module().list_principals(org)
     |> Enum.filter(fn %{roles: roles} -> :member in roles end)
-    |> Enum.map(fn %{id: user_id} -> Repo.get!(User, user_id) end)
+    |> Enum.map(fn %{id: user_id} -> Repo.get(User, user_id) end)
+    |> Enum.reject(&is_nil/1)
   end
 
   @doc """
