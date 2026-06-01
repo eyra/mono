@@ -1,8 +1,21 @@
 import Config
 
+# Feature tests run a real HTTP server on a fixed port and share a database via
+# Wallaby's shared-sandbox mode, so concurrent runs (e.g. multiple developer or
+# agent sessions) collide on both resources. FEATURE_TEST_SESSION gives each
+# session an isolated HTTP port and database. Unset (0) reproduces the default
+# port (4002) and database (core_test), so normal single-session runs are
+# unchanged.
+feature_test_session = System.get_env("FEATURE_TEST_SESSION", "0") |> String.to_integer()
+feature_test_port = 4002 + feature_test_session
+feature_test_base_url = "http://localhost:#{feature_test_port}"
+
+feature_test_db_suffix =
+  if feature_test_session == 0, do: "", else: to_string(feature_test_session)
+
 config :core,
   name: "Next [test]",
-  base_url: "http://localhost:4002",
+  base_url: feature_test_base_url,
   upload_path: "/tmp"
 
 # Selectical test configuration
@@ -41,10 +54,10 @@ config :bcrypt_elixir, :log_rounds, 1
 config :core, Core.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASS", "postgres"),
-  database: "core_test",
+  database: "core_test#{feature_test_db_suffix}",
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: 10,
+  pool_size: 33,
   queue_target: 5000
 
 # Reduce password hashing impact on test duration
@@ -59,14 +72,14 @@ config :core, :paper,
   ris_stream_chunk_size: 1_024
 
 config :core, CoreWeb.Endpoint,
-  http: [port: 4002],
+  http: [port: feature_test_port],
   force_ssl: false,
   server: true
 
 # Wallaby configuration
 config :wallaby,
   otp_app: :core,
-  base_url: "http://localhost:4002",
+  base_url: feature_test_base_url,
   driver: Wallaby.Chrome,
   screenshot_dir: "tmp/wallaby_screenshots",
   screenshot_on_failure: true,
