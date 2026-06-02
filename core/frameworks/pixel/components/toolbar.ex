@@ -37,7 +37,7 @@ defmodule Frameworks.Pixel.Toolbar do
     assign(socket, toolbar_buttons: toolbar_buttons)
   end
 
-  defp rewrite_button_action(%{action: %{event: event}, face: face}, _index, myself) do
+  defp rewrite_button_action(%{action: %{event: event}, face: face} = button, _index, myself) do
     %{
       action: %{
         type: :send,
@@ -45,7 +45,8 @@ defmodule Frameworks.Pixel.Toolbar do
         item: event,
         target: myself
       },
-      face: face
+      face: face,
+      testid: Map.get(button, :testid)
     }
   end
 

@@ -35,6 +35,7 @@ defmodule Frameworks.E2E.Controller do
   @service_email "e2e@eyra.service"
   @service_password "E2EServicePassword123!"
   @researcher_email "e2e-researcher@eyra.co"
+  @researcher_b_email "e2e-researcher-b@eyra.co"
   @participant_email "e2e-participant@eyra.co"
   @e2e_password "E2ETestPassword123!"
 
@@ -83,6 +84,33 @@ defmodule Frameworks.E2E.Controller do
     end
   end
 
+  @doc """
+  Directly activates a user account by email. Only available when :e2e feature is enabled.
+  Bypasses the email confirmation flow so E2E tests don't need to read from /sent_emails.
+  """
+  def activate_user(conn, %{"email" => email}) do
+    if feature_enabled?(:e2e) do
+      case Account.Public.get_user_by_email(email) do
+        nil ->
+          conn |> put_status(404) |> json(%{error: "User not found: #{email}"})
+
+        %{confirmed_at: confirmed_at} = user when not is_nil(confirmed_at) ->
+          json(conn, %{status: "already_confirmed", email: user.email})
+
+        user ->
+          now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+          user
+          |> Ecto.Changeset.change(%{confirmed_at: now})
+          |> Repo.update!()
+
+          json(conn, %{status: "confirmed", email: user.email})
+      end
+    else
+      conn |> put_status(403) |> json(%{error: "E2E not available"})
+    end
+  end
+
   def setup(conn, _params) do
     if feature_enabled?(:e2e) do
       case setup_fixtures() do
@@ -105,6 +133,7 @@ defmodule Frameworks.E2E.Controller do
     # No transaction needed - all operations are idempotent (get_or_create)
     try do
       researcher = get_or_create_researcher()
+      researcher_b = get_or_create_researcher_b()
       participant = get_or_create_participant()
       assignment = get_or_create_donate_assignment(researcher)
       _panl_advert = get_or_create_panl_advert(researcher)
@@ -114,6 +143,8 @@ defmodule Frameworks.E2E.Controller do
        %{
          researcher_email: researcher.email,
          researcher_password: @e2e_password,
+         researcher_b_email: researcher_b.email,
+         researcher_b_password: @e2e_password,
          participant_email: participant.email,
          participant_password: @e2e_password,
          donate_assignment_path: assignment_path(assignment),
@@ -144,15 +175,41 @@ defmodule Frameworks.E2E.Controller do
   defp get_or_create_researcher do
     case Account.Public.get_user_by_email(@researcher_email) do
       nil -> create_researcher()
-      user -> user
+      user -> ensure_verified(user)
     end
   end
+
+  defp ensure_verified(%{verified_at: nil} = user) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    user |> Ecto.Changeset.change(%{verified_at: now}) |> Repo.update!()
+  end
+
+  defp ensure_verified(user), do: user
 
   defp create_researcher do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     Core.Factories.insert!(:member, %{
       email: @researcher_email,
+      password: @e2e_password,
+      creator: true,
+      confirmed_at: now,
+      verified_at: now
+    })
+  end
+
+  defp get_or_create_researcher_b do
+    case Account.Public.get_user_by_email(@researcher_b_email) do
+      nil -> create_researcher_b()
+      user -> ensure_verified(user)
+    end
+  end
+
+  defp create_researcher_b do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    Core.Factories.insert!(:member, %{
+      email: @researcher_b_email,
       password: @e2e_password,
       creator: true,
       confirmed_at: now,

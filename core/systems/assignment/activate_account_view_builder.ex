@@ -21,7 +21,8 @@ defmodule Systems.Assignment.ActivateAccountViewBuilder do
       face: %{
         type: :secondary,
         label: dgettext("eyra-assignment", "activate_account.resend.button")
-      }
+      },
+      testid: "activate-account-resend-button"
     }
   end
 
@@ -31,7 +32,8 @@ defmodule Systems.Assignment.ActivateAccountViewBuilder do
       face: %{
         type: :primary,
         label: dgettext("eyra-assignment", "activate_account.check.button")
-      }
+      },
+      testid: "activate-account-check-button"
     }
   end
 end

@@ -23,15 +23,15 @@ defmodule CoreWeb.Layouts.Stripped.Html do
     ~H"""
     <div class="flex flex-row">
       <div class="flex-1">
-        <div id="main-content" class="flex flex-col w-full h-viewport">
+        <div id="main-content" class="flex flex-col w-full min-h-viewport md:h-viewport">
             <div class="flex-wrap lg:hidden">
               <Navigation.mobile_navbar {@menus.mobile_navbar} />
             </div>
             <div class="flex-wrap hidden lg:flex">
               <Navigation.desktop_navbar {@menus.desktop_navbar} />
             </div>
-          <div class="flex-1">
-            <div class="flex flex-col h-full border-t border-b border-grey4">
+          <div class="flex-1 flex flex-col">
+            <div class="flex-1 flex flex-col border-t border-b border-grey4">
               <%= render_slot(@header) %>
               <%= if @title do %>
                 <div class="flex-none">

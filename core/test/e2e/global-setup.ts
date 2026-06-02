@@ -11,6 +11,8 @@ const SERVICE_KEY = process.env.SERVICE_LOGIN_KEY || 'dev-test-key';
 interface E2EFixtures {
   researcher_email: string;
   researcher_password: string;
+  researcher_b_email: string;
+  researcher_b_password: string;
   participant_email: string;
   participant_password: string;
   donate_assignment_path: string;
@@ -104,6 +106,8 @@ export default async function globalSetup() {
       // Also set as env vars for tests that read them
       process.env.E2E_RESEARCHER_EMAIL = fixtures.researcher_email;
       process.env.E2E_RESEARCHER_PASSWORD = fixtures.researcher_password;
+      process.env.E2E_RESEARCHER_B_EMAIL = fixtures.researcher_b_email;
+      process.env.E2E_RESEARCHER_B_PASSWORD = fixtures.researcher_b_password;
       process.env.E2E_PARTICIPANT_EMAIL = fixtures.participant_email;
       process.env.E2E_PARTICIPANT_PASSWORD = fixtures.participant_password;
       process.env.E2E_DONATE_ASSIGNMENT_PATH = fixtures.donate_assignment_path;

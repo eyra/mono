@@ -211,6 +211,7 @@ defmodule Frameworks.Pixel.Button do
   attr(:event, :string, required: true)
   attr(:width, :string, default: "pl-4 pr-4")
   attr(:target, :any, default: nil)
+  attr(:testid, :string, default: nil)
 
   def primary_live_view(assigns) do
     # FIXME: Deprecation notice: Use button.dynamic instead
@@ -219,6 +220,7 @@ defmodule Frameworks.Pixel.Button do
     <button
       phx-target={@target}
       phx-click={@event}
+      data-testid={@testid}
       class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded bg-primary #{@width}"}
     >
       <%= @label %>

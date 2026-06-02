@@ -96,7 +96,15 @@ defmodule Systems.Fund.Public do
   end
 
   def list_pending_approvals(%Fund.Model{} = fund, preload \\ [:user]) do
-    Fund.Queries.reward_query(fund, :pending_approval)
+    reward_query(fund, :pending_approval)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
+  # Default preload includes `:payment` so callers can read
+  # `payment.inserted_at` as the settlement timestamp.
+  def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do
+    reward_query(fund, :paid)
     |> preload(^preload)
     |> Repo.all()
   end

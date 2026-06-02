@@ -312,6 +312,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:reserve_error_space, :boolean, default: true)
   attr(:debounce, :string, default: "1000")
   attr(:disabled, :boolean, default: false)
+  attr(:testid, :string, default: nil)
 
   def number_input(assigns) do
     ~H"""
@@ -324,6 +325,7 @@ defmodule Frameworks.Pixel.Form do
       reserve_error_space={@reserve_error_space}
       debounce={@debounce}
       disabled={@disabled}
+      testid={@testid}
       type="number"
     />
     """

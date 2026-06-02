@@ -494,3 +494,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "org_member_filters.recent"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.unverified"
+msgstr "Nicht verifiziert"

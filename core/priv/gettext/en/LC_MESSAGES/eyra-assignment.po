@@ -638,74 +638,80 @@ msgstr "Total"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.error"
-msgstr ""
+msgstr "Could not decline this pay-out. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.link"
-msgstr ""
+msgstr "Decline"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.reason.label"
-msgstr ""
+msgstr "Reason for pay out refusal"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.submit.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
+msgstr "Decline pay out"
 
 #, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
-msgstr ""
+msgstr "Pay out overview"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pagination.single_page"
-msgstr ""
+msgstr "1 page"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
-msgstr ""
+msgstr "Pay out all"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.error"
-msgstr ""
+msgstr "Some pay-outs could not be processed. Check and try again."
 
 #, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
-msgstr ""
+msgstr "Search"
 
 #, elixir-autogen, elixir-format
 msgid "payout.subject_label"
-msgstr ""
+msgstr "Subject"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.overview"
-msgstr ""
+msgstr "Pay out overview"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.waiting"
-msgstr ""
+msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.empty"
-msgstr ""
+msgstr "No participants are waiting for pay out."
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
-msgstr ""
+msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.description"
-msgstr "Review the participants who finished their task and approve or reject their reward."
+msgid "payout.overview.amount_label"
+msgstr "Amount"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.open.button"
-msgstr "Open pay-out overview"
+msgid "payout.overview.date_label"
+msgstr "Date"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] "%{count} reward is waiting for your approval"
-msgstr[1] "%{count} rewards are waiting for your approval"
+msgid "payout.overview.empty"
+msgstr "No payouts yet."
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr "There are participants waiting to get paid"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr "Check pay outs"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
+msgstr "Participants waiting for pay out"

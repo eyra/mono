@@ -42,7 +42,8 @@ defmodule Systems.Account.ConfirmToken do
   defp update_confirm_button(socket) do
     confirm_button = %{
       action: %{type: :send, event: "confirm"},
-      face: %{type: :primary, label: dgettext("eyra-account", "confirm.button")}
+      face: %{type: :primary, label: dgettext("eyra-account", "confirm.button")},
+      testid: "account-confirm-button"
     }
 
     assign(socket, confirm_button: confirm_button)
