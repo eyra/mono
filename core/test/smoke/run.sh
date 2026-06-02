@@ -33,4 +33,5 @@ esac
 echo "=== Smoke tests against $ENV ($BASE_URL) ==="
 
 export SMOKE_BASE_URL="$BASE_URL"
+export SMOKE_ENV="$ENV"
 exec npx playwright test "$@"
