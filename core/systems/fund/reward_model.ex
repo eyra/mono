@@ -23,6 +23,7 @@ defmodule Systems.Fund.RewardModel do
     field(:rejected_at, :naive_datetime)
     belongs_to(:fund, Fund.Model)
     belongs_to(:user, Account.User)
+    belongs_to(:payout, Fund.PayoutModel)
 
     belongs_to(:deposit, Bookkeeping.EntryModel)
     belongs_to(:payment, Bookkeeping.EntryModel)
@@ -33,7 +34,7 @@ defmodule Systems.Fund.RewardModel do
   def statuses, do: @statuses
 
   @required_fields ~w(idempotence_key amount)a
-  @optional_fields ~w(attempt status rejection_reason rejected_at)a
+  @optional_fields ~w(attempt status rejection_reason rejected_at payout_id)a
   @fields @required_fields ++ @optional_fields
 
   @doc false
