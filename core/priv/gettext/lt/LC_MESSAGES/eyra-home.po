@@ -29,10 +29,6 @@ msgid "participated.title"
 msgstr "Indėliai"
 
 #, elixir-autogen, elixir-format
-msgid "available.member.title"
-msgstr "Panl tyrimai"
-
-#, elixir-autogen, elixir-format
 msgid "available.visitor.title"
 msgstr "Panl tyrimai"
 

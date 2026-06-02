@@ -331,37 +331,21 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
       console.log('[TEST] No consent step — skipping');
     }
 
-    // Step 4: Activate account via the email confirmation link.
-    // Phoenix-style mail confirmation assumes the user opens the link in a
-    // separate browser/tab where they are NOT logged in. Visiting the confirm
-    // URL in the participant's logged-in session causes a server-side redirect
-    // (no confirm-button page shown). So we open the link in a CLEAN context
-    // (no cookies → unauthenticated), click the confirm button there, then
-    // close it and reload the participant's assignment view.
+    // Step 4: Activate account via the E2E API endpoint.
+    // Directly confirms the participant without going through the email flow —
+    // works on all environments regardless of mailer adapter.
     if (await participantPage.locator("[data-testid='activate-account-check-button']").isVisible({ timeout: 3000 })) {
-      console.log('[TEST] Participant needs to activate account — fetching link from /sent_emails');
-      await participantPage.goto('/sent_emails');
-      await participantPage.waitForLoadState('domcontentloaded');
-
-      const html = await participantPage.content();
-      const confirmLinkMatch = html.match(/\/user\/onboarding\/confirm\/[A-Za-z0-9_\-]+/);
-      if (!confirmLinkMatch) {
-        throw new Error('Activation link not found in /sent_emails');
+      console.log(`[TEST] Activating account via E2E API for ${participantEmail}`);
+      const activateResponse = await fetch(`${process.env.E2E_BASE_URL || 'http://localhost:4000'}/api/e2e/activate_user`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: participantEmail })
+      });
+      if (!activateResponse.ok) {
+        const body = await activateResponse.text();
+        throw new Error(`Failed to activate user: ${activateResponse.status} - ${body}`);
       }
-      const confirmPath = confirmLinkMatch[0];
-      console.log(`[TEST] Activation URL: ${confirmPath}`);
-
-      // Open the confirm URL in a clean (unauthenticated) browser context.
-      const confirmContext = await browser.newContext();
-      const confirmPage = await confirmContext.newPage();
-      await confirmPage.goto(`http://localhost:4000${confirmPath}`);
-      await confirmPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-      await expect(confirmPage.locator("[data-testid='account-confirm-button']")).toBeVisible({ timeout: 5000 });
-      console.log('[TEST] Clicking account-confirm-button in clean context');
-      await confirmPage.locator("[data-testid='account-confirm-button']").click();
-      await confirmPage.waitForURL(/\/user\/signin/, { timeout: 10000 });
-      console.log('[TEST] Account activated — redirected to signin');
-      await confirmContext.close();
+      console.log('[TEST] Account activated via E2E API');
 
       // Back to the participant's assignment so the view-router recomputes.
       await participantPage.goto(`/assignment/${assignmentId}`);
