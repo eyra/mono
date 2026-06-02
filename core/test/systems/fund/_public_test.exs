@@ -940,8 +940,172 @@ defmodule Systems.Fund.PublicTest do
       assert {:ok, %{amount: 1000}} = Fund.Public.request_payout(user)
     end
 
+    test "creates a Fund.Payout aggregate linked to the locked rewards on success",
+         %{user: %{id: user_id} = user, fund: fund} do
+      %{id: r1_id} = insert_reward(user, fund, 600, :approved)
+      %{id: r2_id} = insert_reward(user, fund, 400, :approved)
+
+      expect(ProviderMock, :create_withdrawal, fn _, :eur, _ ->
+        {:ok, %{uid: "w_aggregate_1", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{payout: payout}} = Fund.Public.request_payout(user)
+
+      assert %Fund.PayoutModel{
+               user_id: ^user_id,
+               amount_cents: 1000,
+               currency: "eur",
+               status: :pending,
+               provider_uid: "w_aggregate_1",
+               failure_reason: nil
+             } = Core.Repo.reload!(payout)
+
+      payout_id = payout.id
+      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r1_id)
+      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r2_id)
+    end
+
+    test "marks the Payout :failed (with reason) and detaches reverted rewards on OPP failure",
+         %{user: user, fund: fund} do
+      %{id: r_id} = insert_reward(user, fund, 1000, :approved)
+
+      expect(ProviderMock, :create_withdrawal, fn _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user)
+
+      reward = Core.Repo.get!(Fund.RewardModel, r_id)
+      assert reward.status == :approved
+      assert reward.payout_id == nil
+
+      [payout] = Core.Repo.all(Fund.PayoutModel)
+      assert payout.status == :failed
+      assert payout.failure_reason =~ "opp_call_failed"
+      assert payout.provider_uid == nil
+    end
+
     defp reward_key(id) do
       Core.Repo.get!(Fund.RewardModel, id).idempotence_key
+    end
+  end
+
+  describe "apply_withdrawal_status/2" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_apply_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp insert_pending_payout(user, fund, amounts, provider_uid) do
+      total = Enum.sum(amounts)
+
+      payout =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: total,
+          currency: "eur",
+          status: :pending,
+          provider_uid: provider_uid
+        })
+
+      rewards =
+        Enum.map(amounts, fn amount ->
+          Factories.insert!(:reward, %{
+            user: user,
+            fund: fund,
+            amount: amount,
+            status: :pending_payout,
+            payout_id: payout.id,
+            idempotence_key: "apply-#{System.unique_integer([:positive])}"
+          })
+        end)
+
+      {payout, rewards}
+    end
+
+    test ~s(maps OPP "completed" to Payout :completed and rewards :paid),
+         %{user: user, fund: fund} do
+      {payout, [r1, r2]} = insert_pending_payout(user, fund, [600, 400], "w_completed_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :completed, failure_reason: nil}} =
+               Fund.Public.apply_withdrawal_status("w_completed_1", "completed")
+
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+      assert %{status: :paid} = Core.Repo.reload!(r2)
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+    end
+
+    test ~s(maps OPP "failed" to Payout :failed and reverts rewards to :approved),
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_failed_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
+               Fund.Public.apply_withdrawal_status("w_failed_1", "failed")
+
+      assert reason =~ "failed"
+      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
+    end
+
+    test ~s(maps OPP "disapproved" to Payout :failed with a disapproved reason),
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
+               Fund.Public.apply_withdrawal_status("w_disapproved_1", "disapproved")
+
+      assert reason =~ "disapproved"
+      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :failed} = Core.Repo.reload!(payout)
+    end
+
+    test "intermediate OPP statuses (approved/pending/new) are no-ops",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_intermediate_1")
+
+      for opp_status <- ["approved", "pending", "new", "unknown_future_value"] do
+        assert :ok = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
+      end
+
+      # Nothing should have moved from the original :pending / :pending_payout state.
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :pending} = Core.Repo.reload!(payout)
+    end
+
+    test "returns :ok and does nothing when the provider_uid is unknown" do
+      assert :ok = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
+    end
+
+    test "is idempotent: re-applying to an already-:completed payout short-circuits",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_completed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+
+      # A second "completed" webhook must not flip the (now :paid) reward back
+      # to :pending_payout or otherwise change state.
+      assert {:ok, %Fund.PayoutModel{status: :completed}} =
+               Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+    end
+
+    test "is idempotent: a stray late status after :failed does not re-transition",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_failed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_failed", "failed")
+      assert %{status: :approved} = Core.Repo.reload!(r1)
+
+      # Late "completed" must not flip a :failed payout to :completed or
+      # move the reverted reward back to :paid.
+      assert {:ok, %Fund.PayoutModel{status: :failed}} =
+               Fund.Public.apply_withdrawal_status("w_idempotent_failed", "completed")
+
+      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :failed} = Core.Repo.reload!(payout)
     end
   end
 end
