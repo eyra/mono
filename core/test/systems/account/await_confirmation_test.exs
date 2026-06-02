@@ -5,6 +5,6 @@ defmodule Systems.Account.AwaitConfirmationTest do
 
   test "render", %{conn: conn} do
     {:ok, _view, html} = live(conn, ~p"/user/onboarding/await-confirmation")
-    assert html =~ "Sign in"
+    assert html =~ "Activate your account"
   end
 end
