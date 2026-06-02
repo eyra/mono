@@ -20,6 +20,8 @@ const EXPECTED_FEATURES: Record<string, string[]> = {
     'password_sign_in',
   ],
   staging: [
+    'debug',
+    'e2e',
     'leaderboard',
     'member_google_sign_in',
     'panl',
@@ -36,8 +38,10 @@ const EXPECTED_FEATURES: Record<string, string[]> = {
     'surfconext_sign_in',
   ],
   test1: [
+    'e2e',
     'leaderboard',
     'member_google_sign_in',
+    'onyx',
     'panl',
     'password_sign_in',
   ],
