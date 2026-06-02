@@ -84,16 +84,16 @@ export default async function globalSetup() {
 
   // Step 2b: Discover enabled features from the server (single source of truth)
   try {
-    const response = await fetch(`${BASE_URL}/api/e2e/features`);
+    const response = await fetch(`${BASE_URL}/.status/features`);
     if (response.ok) {
       const { features } = await response.json() as { features: string[] };
       process.env.ENABLED_APP_FEATURES = features.join(',');
       console.log(`[GLOBAL SETUP] Enabled features: ${process.env.ENABLED_APP_FEATURES}`);
     } else {
-      console.log(`[GLOBAL SETUP] /api/e2e/features returned ${response.status}, falling back to env var`);
+      console.log(`[GLOBAL SETUP] /.status/features returned ${response.status}, falling back to env var`);
     }
   } catch (error: any) {
-    console.log(`[GLOBAL SETUP] /api/e2e/features fetch failed: ${error.message}, falling back to env var`);
+    console.log(`[GLOBAL SETUP] /.status/features fetch failed: ${error.message}, falling back to env var`);
   }
 
   // Step 3: Setup E2E fixtures (skip on production - use Infisical values)
