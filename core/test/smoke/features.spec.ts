@@ -8,7 +8,8 @@ import { test, expect } from '@playwright/test';
  * the :e2e feature to be enabled on prod.
  */
 
-const REQUIRED_FEATURES = ['panl', 'panl_post_launch', 'password_sign_in'];
+const REQUIRED_FEATURES = ['panl', 'password_sign_in'];
+const FORBIDDEN_FEATURES = ['e2e'];  // must never be enabled on prod
 
 test('deployed app exposes expected feature flags', async ({ request }) => {
   const response = await request.get('/api/e2e/features');
@@ -21,5 +22,9 @@ test('deployed app exposes expected feature flags', async ({ request }) => {
 
   for (const feature of REQUIRED_FEATURES) {
     expect(features, `Expected feature "${feature}" to be enabled`).toContain(feature);
+  }
+
+  for (const feature of FORBIDDEN_FEATURES) {
+    expect(features, `Feature "${feature}" must NOT be enabled on prod`).not.toContain(feature);
   }
 });
