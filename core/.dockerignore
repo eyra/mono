@@ -9,3 +9,8 @@ priv/static/uploads
 priv/static/content
 .bundle
 assets/js/_hooks/
+test
+.elixir_ls
+.elixir-tools
+priv/plts
+priv/static/assets

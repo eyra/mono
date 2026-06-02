@@ -42,7 +42,8 @@ defmodule Systems.Account.ConfirmToken do
   defp update_confirm_button(socket) do
     confirm_button = %{
       action: %{type: :send, event: "confirm"},
-      face: %{type: :primary, label: dgettext("eyra-account", "confirm.button")}
+      face: %{type: :primary, label: dgettext("eyra-account", "confirm.button")},
+      testid: "account-confirm-button"
     }
 
     assign(socket, confirm_button: confirm_button)
@@ -98,7 +99,7 @@ defmodule Systems.Account.ConfirmToken do
             # FIXME: Add lockout logic
             Account.Public.deliver_user_confirmation_instructions(
               user,
-              &~p"/user/confirm/#{&1}"
+              &~p"/user/onboarding/confirm/#{&1}"
             )
 
           user ->
@@ -128,25 +129,27 @@ defmodule Systems.Account.ConfirmToken do
   def render(assigns) do
     ~H"""
       <.stripped menus={@menus}>
-        <Area.sheet>
-        <Margin.y id={:page_top} />
-        <%= if @failed do %>
-          <Text.title1><%= dgettext("eyra-account", "activation.failed.title") %></Text.title1>
-          <Text.body><%= dgettext("eyra-account", "activation.failed.body") %></Text.body>
-          <.spacing value="M" />
-          <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
-            <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
-            <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
-          </.form>
-        <% else %>
-          <Text.title1><%= dgettext("eyra-account", "activation.confirm.title") %></Text.title1>
-          <Text.body><%= dgettext("eyra-account", "activation.confirm.body") %></Text.body>
-          <.spacing value="M" />
-          <.wrap>
-            <Button.dynamic {@confirm_button} />
-          </.wrap>
-        <% end %>
-        </Area.sheet>
+        <Area.content>
+          <Area.sheet>
+          <Margin.y id={:page_top} />
+          <%= if @failed do %>
+            <Text.title1><%= dgettext("eyra-account", "activation.failed.title") %></Text.title1>
+            <Text.body><%= dgettext("eyra-account", "activation.failed.body") %></Text.body>
+            <.spacing value="M" />
+            <.form id="confirm_token" :let={form} for={%{}} phx-submit="resend-token" >
+              <.email_input form={form} field={:email} label_text={dgettext("eyra-user", "confirm.token.email.label")} />
+              <Button.submit label={dgettext("eyra-account", "confirm.token.resend_button")} />
+            </.form>
+          <% else %>
+            <Text.title1><%= dgettext("eyra-account", "activation.confirm.title") %></Text.title1>
+            <Text.body><%= dgettext("eyra-account", "activation.confirm.body") %></Text.body>
+            <.spacing value="M" />
+            <.wrap>
+              <Button.dynamic {@confirm_button} />
+            </.wrap>
+          <% end %>
+          </Area.sheet>
+        </Area.content>
       </.stripped>
     """
   end

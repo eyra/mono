@@ -1,0 +1,21 @@
+#!/bin/bash
+# Run database seeds for the current environment.
+# Safe to run multiple times — all seed operations are idempotent.
+#
+# Usage (from the core/ directory):
+#   scripts/seed            # uses MIX_ENV (default: dev)
+#   MIX_ENV=test scripts/seed
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "Running seeds (MIX_ENV=${MIX_ENV:-dev})..."
+
+mix eval "
+  Application.put_env(:core, CoreWeb.Endpoint, server: false)
+  {:ok, _} = Application.ensure_all_started(:core)
+  Core.Seeds.seed()
+"
+
+echo "Done."

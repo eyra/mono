@@ -75,4 +75,42 @@ defmodule CoreWeb.LocaleResolutionTest do
       assert "en" == Gettext.get_locale(CoreWeb.Gettext)
     end
   end
+
+  # Regression coverage for FX#9867378604 — the LiveView mount runs in
+  # a separate process from the HTTP request and reads the session over
+  # the WebSocket. Without persisting the Cldr-resolved locale into the
+  # session, anonymous visitors see a NL → EN flash between the initial
+  # server render and the LiveView connect.
+  describe "CoreWeb.Plug.PersistLocale" do
+    test "writes the Accept-Language-derived locale to the session" do
+      conn =
+        build_conn(:get, "/")
+        |> Plug.Conn.put_req_header("accept-language", "nl-NL,nl;q=0.9")
+        |> call_plug()
+        |> CoreWeb.Plug.PersistLocale.call([])
+
+      assert Plug.Conn.get_session(conn, @session_key) == "nl"
+    end
+
+    test "writes the session-derived locale back to the session" do
+      conn =
+        build_conn(:get, "/")
+        |> Plug.Test.init_test_session(%{@session_key => "de"})
+        |> Cldr.Plug.PutLocale.call(@plug_opts)
+        |> CoreWeb.Plug.PersistLocale.call([])
+
+      assert Plug.Conn.get_session(conn, @session_key) == "de"
+    end
+
+    test "is a no-op when Cldr couldn't resolve a locale" do
+      # No accept-language header, no session — Cldr falls back to the
+      # default. We still expect PersistLocale to write something safe.
+      conn =
+        build_conn(:get, "/")
+        |> call_plug()
+        |> CoreWeb.Plug.PersistLocale.call([])
+
+      assert Plug.Conn.get_session(conn, @session_key) == "en"
+    end
+  end
 end

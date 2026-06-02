@@ -92,7 +92,7 @@ defmodule Systems.Onyx.LandingPage do
         %{assigns: %{vm: %{entities: entities}, model: model, history: history}} = socket
       ) do
     browser_view =
-      LiveNest.Element.prepare_live_view(
+      CoreWeb.Live.Element.prepare_live_view(
         get_browser_view_id(model),
         Onyx.BrowserView,
         history: history,

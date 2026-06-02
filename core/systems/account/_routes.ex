@@ -9,9 +9,9 @@ defmodule CoreWeb.Live.User.Routes do
       scope "/", Systems.Account do
         pipe_through([:browser, :redirect_if_user_is_authenticated])
         live("/user/signup/:user_type", SignupPage)
-        live("/user/confirm/:token", ConfirmToken)
-        live("/user/confirm", ConfirmToken)
-        live("/user/await-confirmation", AwaitConfirmation)
+        live("/user/onboarding/confirm/:token", ConfirmToken)
+        live("/user/onboarding/confirm", ConfirmToken)
+        live("/user/onboarding/await-confirmation", AwaitConfirmation)
 
         live("/user/reset-password", ResetPassword)
         live("/user/reset-password/:token", ResetPasswordToken)
@@ -37,6 +37,17 @@ defmodule CoreWeb.Live.User.Routes do
           SettingsController,
           :activate_account
         )
+      end
+
+      scope "/auth", Systems.Account.MockAuth do
+        pipe_through([:browser])
+        get("/mock", InitiatorPlug, [])
+        get("/mock/callback", CallbackController, :authenticate)
+      end
+
+      scope "/user/auth", Systems.Account.MockAuth do
+        pipe_through([:browser])
+        get("/mock/reset", ResetController, :reset)
       end
 
       scope "/api/service", Systems.Account do

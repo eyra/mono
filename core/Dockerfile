@@ -28,11 +28,15 @@ ARG BUNDLE
 ARG VERSION
 ARG PLATFORM=fly
 ARG FORCE_SSL=true
+# Compiles E2E support facilities (e.g. local payment simulator) into the
+# build. Non-production only.
+ARG ENABLE_E2E_SUPPORT=false
 
 ENV BUNDLE=$BUNDLE
 ENV VERSION=$VERSION
 ENV PLATFORM=$PLATFORM
 ENV FORCE_SSL=$FORCE_SSL
+ENV ENABLE_E2E_SUPPORT=$ENABLE_E2E_SUPPORT
 
 COPY mix.exs .
 RUN mix deps.get

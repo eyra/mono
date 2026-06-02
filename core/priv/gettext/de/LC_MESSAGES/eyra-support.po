@@ -11,38 +11,38 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.description"
-msgstr ""
+msgstr "Haben Sie eine Frage zur Plattform? Oder möchten Sie uns Feedback geben? Füllen Sie das untenstehende Formular aus. Wir antworten per E-Mail."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.title"
-msgstr ""
+msgstr "Helpdesk"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.description.label"
-msgstr ""
+msgstr "Beschreibung"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.title.label"
-msgstr ""
+msgstr "Betreff"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create_ticket.button"
-msgstr ""
+msgstr "Senden"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ticket.type"
-msgstr ""
+msgstr "Formular"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "content.form.title"
-msgstr ""
+msgstr "Support"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.description.next"
-msgstr ""
+msgstr "Vielen Dank für Ihre Nachricht. Wir melden uns so schnell wie möglich bei Ihnen."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
-msgstr ""
+msgstr "Eine weitere Nachricht senden"

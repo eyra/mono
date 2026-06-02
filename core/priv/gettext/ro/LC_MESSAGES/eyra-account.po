@@ -172,53 +172,53 @@ msgstr "Panl"
 msgid "profile.tab.profile.title"
 msgstr "Profilul meu"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Continuă"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Onboarding"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Link nevalid sau expirat"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Sunt de acord cu %{terms_link} și cu %{privacy_link} ale Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Trebuie să acceptați politica de confidențialitate pentru a continua"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Sunt de acord cu %{terms_link} și cu %{privacy_link} ale Next"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy.next-policy.required"
-msgstr ""
+msgstr "Trebuie să acceptați termenii, condițiile și politica de confidențialitate pentru a continua"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.generic"
-msgstr ""
+msgstr "A apărut o eroare la conectare. Vă rugăm să încercați din nou."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr ""
+msgstr "Conectarea nu a putut fi finalizată. Faceți clic pe butonul de conectare pentru a începe din nou."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Am trimis un e-mail de confirmare la %{email}. Faceți clic pe link pentru a vă activa contul. Între timp, puteți deja parcurge studiile."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Începeți să explorați"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "Verificați-vă e-mailul"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
@@ -235,3 +235,19 @@ msgstr "termenii și condițiile"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
 msgstr "Pe cine doriți să adăugați?"
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.body"
+msgstr "V-ați conectat acum cu contul instituțional. Înainte de a continua, vă rugăm să examinați Termenii și Declarația de confidențialitate."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "Sunt de acord cu %{terms} și %{privacy}."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Vă rugăm să acceptați termenii și declarația de confidențialitate pentru a continua."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Bun venit"

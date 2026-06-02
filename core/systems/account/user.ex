@@ -176,7 +176,7 @@ defmodule Systems.Account.User do
   """
   def sso_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :displayname, :creator, :verified_at])
+    |> cast(attrs, [:email, :displayname, :creator, :confirmed_at, :verified_at])
     |> cast_assoc(:profile)
     |> put_change(:hashed_password, "no-password-set")
     |> unique_constraint(:email)

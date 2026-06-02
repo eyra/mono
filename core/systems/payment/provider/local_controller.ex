@@ -17,14 +17,14 @@ defmodule Systems.Payment.Provider.LocalController do
       <br/>
       <form method="post" action="/payment/local/#{uid}/complete">
         <input type="hidden" name="_csrf_token" value="#{Plug.CSRFProtection.get_csrf_token()}" />
-        <button type="submit" style="padding: 12px 24px; font-size: 16px; background: #22c55e; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        <button type="submit" data-testid="local-payment-complete-button" style="padding: 12px 24px; font-size: 16px; background: #22c55e; color: white; border: none; border-radius: 6px; cursor: pointer;">
           Complete Payment (Success)
         </button>
       </form>
       <br/>
       <form method="post" action="/payment/local/#{uid}/fail">
         <input type="hidden" name="_csrf_token" value="#{Plug.CSRFProtection.get_csrf_token()}" />
-        <button type="submit" style="padding: 12px 24px; font-size: 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        <button type="submit" data-testid="local-payment-fail-button" style="padding: 12px 24px; font-size: 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;">
           Fail Payment
         </button>
       </form>

@@ -84,4 +84,20 @@ defmodule CoreWeb.UI.Area do
     </div>
     """
   end
+
+  @doc """
+  Cancels the horizontal margin of a parent `Area.content`. Use inside
+  `Area.content` for elements that should span edge-to-edge — e.g. a
+  full-bleed `<.line>` below a tabbar, or a banner.
+  """
+  attr(:class, :string, default: "")
+  slot(:inner_block, required: true)
+
+  def full_bleed(assigns) do
+    ~H"""
+    <div class={"-mx-6 lg:-mx-14 #{@class}"}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
 end

@@ -160,65 +160,65 @@ msgstr "Ar tikrai norite pasitraukti iš šio projekto?"
 msgid "Account activated successfully."
 msgstr "Sąskaita sėkmingai aktyvuota."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.birthyear.title"
-msgstr ""
+msgstr "Gimimo metai"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.features.title"
-msgstr ""
+msgstr "Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.profile.title"
-msgstr ""
+msgstr "Mano paskyra"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr ""
+msgstr "Tęsti"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr ""
+msgstr "Pradžia"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
-msgstr ""
+msgstr "Žetonas neteisingas arba pasibaigęs"
 
 #, elixir-autogen, elixir-format
 msgid "panl.privacy.policy.label"
 msgstr "Sutinku su %{terms_link} ir %{privacy_link} Panl"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "panl.privacy.policy.required"
-msgstr ""
+msgstr "Norėdami tęsti, turite sutikti su privatumo politika"
 
 #, elixir-autogen, elixir-format
 msgid "privacy.next-policy.label"
 msgstr "Sutinku su %{terms_link} ir %{privacy_link} Next"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "privacy.next-policy.required"
-msgstr ""
+msgstr "Norėdami tęsti, turite sutikti su sąlygomis, taisyklėmis ir privatumo politika"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.generic"
-msgstr ""
+msgstr "Prisijungiant įvyko klaida. Bandykite dar kartą."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "sso.error.session_not_found"
-msgstr ""
+msgstr "Prisijungti nepavyko. Spustelėkite prisijungimo mygtuką, kad pradėtumėte iš naujo."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.body"
-msgstr ""
+msgstr "Išsiuntėme patvirtinimo el. laišką adresu %{email}. Spustelėkite nuorodą, kad aktyvuotumėte savo paskyrą. Tuo tarpu jau galite naršyti tyrimus."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.continue.button"
-msgstr ""
+msgstr "Pradėti naršyti"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.activate_account.title"
-msgstr ""
+msgstr "Patikrinkite el. paštą"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "signup.rate_limited"
@@ -235,3 +235,19 @@ msgstr "naudojimo sąlygomis"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
 msgstr "Ką norite pridėti?"
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.body"
+msgstr "Dabar esate prisijungę naudodami savo institucinę paskyrą. Prieš tęsdami, peržiūrėkite Sąlygas ir Privatumo politiką."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "Sutinku su %{terms} ir %{privacy}."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Norėdami tęsti, sutikite su sąlygomis ir privatumo politika."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Sveiki"

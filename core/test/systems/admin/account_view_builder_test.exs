@@ -66,6 +66,20 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       refute non_creator.email in emails
     end
 
+    test "filters by :unverified filter", %{
+      creator_verified: creator_verified,
+      creator_unverified: creator_unverified,
+      non_creator: non_creator
+    } do
+      items = AccountViewBuilder.build_user_items([:unverified], [])
+
+      emails = Enum.map(items, & &1.email)
+
+      refute creator_verified.email in emails
+      assert creator_unverified.email in emails
+      assert non_creator.email in emails
+    end
+
     test "filters by search query" do
       user =
         Factories.insert!(:member, %{
@@ -161,6 +175,43 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       activate_button = Enum.find(item.action_buttons, &(&1.action.event == "activate_user"))
       assert activate_button != nil
       assert activate_button.face.label == "Activate"
+    end
+  end
+
+  describe "view_model/2 capping and bulk filters" do
+    test "caps the rendered users list at 50, but user_count reflects the full match" do
+      # Add a handful of creators so the unfiltered list is well above 50
+      for _ <- 1..60 do
+        Factories.insert!(:member, %{
+          creator: true,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+      end
+
+      vm = AccountViewBuilder.view_model(nil, %{active_filters: [:creator], query: []})
+
+      assert length(vm.users) == 50
+      assert vm.user_count >= 60
+    end
+
+    test ":affiliate filter uses the bulk index and returns affiliate users only" do
+      affiliate =
+        Factories.insert!(:member, %{
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      Factories.insert!(:affiliate_user, %{user: affiliate, identifier: "affiliate_user_test"})
+
+      non_affiliate =
+        Factories.insert!(:member, %{
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      vm = AccountViewBuilder.view_model(nil, %{active_filters: [:affiliate], query: []})
+      emails = Enum.map(vm.users, & &1.email)
+
+      assert affiliate.email in emails
+      refute non_affiliate.email in emails
     end
   end
 end

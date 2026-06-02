@@ -137,7 +137,8 @@ defmodule Systems.Manual.ViewBuilder do
             type: :plain,
             label: dgettext("eyra-manual", "chapter.done.button"),
             icon: :done
-          }
+          },
+          testid: "manual-chapter-done-button"
         }
       else
         %{
@@ -146,7 +147,8 @@ defmodule Systems.Manual.ViewBuilder do
             type: :plain,
             label: dgettext("eyra-manual", "chapter.next.button"),
             icon: :forward
-          }
+          },
+          testid: "manual-chapter-next-button"
         }
       end
 

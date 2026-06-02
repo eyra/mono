@@ -11,17 +11,17 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.cta"
-msgstr ""
+msgstr "Eiti į profilį"
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.description"
-msgstr ""
+msgstr "Kai kurie laukai jūsų profilyje neužpildyti."
 
-#, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "complete.profile.title"
-msgstr ""
+msgstr "Užpildykite savo profilį"
 
 #, elixir-autogen, elixir-format
 msgid "promote.push.student.cta"

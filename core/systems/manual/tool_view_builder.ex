@@ -32,7 +32,7 @@ defmodule Systems.Manual.ToolViewBuilder do
         user_state_namespace: [:manual, manual_id]
       })
 
-    LiveNest.Element.prepare_live_view(
+    CoreWeb.Live.Element.prepare_live_view(
       "manual_view",
       Manual.View,
       live_context: context

@@ -26,12 +26,16 @@ if config_env() == :prod do
     config :core, Frameworks.UserCheck, api_key: usercheck_api_key
   end
 
-  # Allow enabling of features from an environment variable
+  # Allow enabling of features from an environment variable.
+  # :e2e is explicitly excluded on prod — it gates test-only endpoints
+  # (/api/e2e/bootstrap, /api/e2e/setup, /api/e2e/activate_user) that must
+  # never be reachable on production.
   config :core,
          :features,
          System.get_env("ENABLED_APP_FEATURES", "")
          |> String.split(~r"\s*,\s*")
          |> Enum.map(&String.to_atom/1)
+         |> Enum.reject(&(&1 == :e2e))
          |> Enum.map(&{&1, true})
 
   config :core,
@@ -181,8 +185,8 @@ if config_env() == :prod do
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
   config :core, Core.SurfConext,
-    redirect_uri: "#{base_url}/surfconext/auth",
-    site: System.get_env("SURFCONEXT_SITE"),
+    redirect_uri: "#{base_url}/auth/surfconext/callback",
+    base_url: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 

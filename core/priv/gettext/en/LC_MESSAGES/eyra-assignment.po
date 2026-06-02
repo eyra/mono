@@ -581,26 +581,6 @@ msgid "panl_participants.add.button"
 msgstr "Pay to add participants"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.advert.link"
-msgstr "Go to advertisement"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.has_advert"
-msgstr "You have created an advertisement."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.no_advert"
-msgstr "Create an advertisement to invite Panl participants."
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.title"
-msgstr "Invite participants"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.monitor.link"
-msgstr "Go to Monitor"
-
-#, elixir-autogen, elixir-format
 msgid "panl_participants.payment_prefix"
 msgstr "Payment"
 
@@ -637,6 +617,14 @@ msgid "budget_form.aim.hint"
 msgstr "A short description of your study"
 
 #, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr "Share this link on social media or other platforms to recruit participants. Each participant receives a unique participant ID automatically. After participating, participants will be invited to leave their email address for future research via Panl."
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.title"
+msgstr "Recruit participants"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
 msgstr "Service fee"
 
@@ -649,14 +637,8 @@ msgid "budget_form.total.label"
 msgstr "Total"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] "%{count} pending approval"
-msgstr[1] "%{count} pending approvals"
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.open.button"
-msgstr "Review"
+msgid "payout.decline.error"
+msgstr "Could not decline this pay-out. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.link"
@@ -671,16 +653,24 @@ msgid "payout.decline.submit.button"
 msgstr "Decline pay out"
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr "Pay-out overview will land in a follow-up."
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr "Pay out overview"
 
 #, elixir-autogen, elixir-format
+msgid "payout.pagination.single_page"
+msgstr "1 page"
+
+#, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
 msgstr "Pay out all"
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr "Some pay-outs could not be processed. Check and try again."
+
+#, elixir-autogen, elixir-format
+msgid "payout.search.placeholder"
+msgstr "Search"
 
 #, elixir-autogen, elixir-format
 msgid "payout.subject_label"
@@ -703,29 +693,25 @@ msgid "payout.waiting.heading"
 msgstr "Waiting for pay out"
 
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
-msgstr "1 page"
+msgid "payout.overview.amount_label"
+msgstr "Amount"
 
 #, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
-msgstr "Search"
+msgid "payout.overview.date_label"
+msgstr "Date"
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.pending_approvals.description"
-msgstr "Tap to review and pay out completed participants."
+msgid "payout.overview.empty"
+msgstr "No payouts yet."
 
 #, elixir-autogen, elixir-format
-msgid "recruit.panel.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "recruit.panel.title"
-msgstr "Participant invite link"
+msgid "pending_approvals.description"
+msgstr "There are participants waiting to get paid"
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.error"
-msgstr "Could not decline this pay-out. Please try again."
+msgid "pending_approvals.open.button"
+msgstr "Check pay outs"
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.error"
-msgstr "Some pay-outs could not be processed. Please review and try again."
+msgid "pending_approvals.title"
+msgstr "Participants waiting for pay out"

@@ -12,8 +12,8 @@ defmodule Systems.Org.Presenter do
     Org.NodeViewBuilder.view_model(model, assigns)
   end
 
-  def view_model(Org.UserView, model, assigns) do
-    Org.UserViewBuilder.view_model(model, assigns)
+  def view_model(Org.MemberView, model, assigns) do
+    Org.MemberViewBuilder.view_model(model, assigns)
   end
 
   def view_model(Org.OwnersView, model, assigns) do

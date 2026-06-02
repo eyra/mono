@@ -5,7 +5,10 @@ defmodule Systems.Org.ContentPage do
 
   @impl true
   def get_authorization_context(params, session, socket) do
-    get_model(params, session, socket)
+    org = get_model(params, session, socket)
+    user = Map.get(socket.assigns, :current_user)
+
+    if Org.Public.can_manage?(org, user), do: org, else: nil
   end
 
   @impl true

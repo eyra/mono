@@ -33,6 +33,7 @@ defmodule Systems.Manual.Html do
       phx-click="select_chapter"
       phx-value-item={@id}
       phx-target={@target}
+      data-testid={"chapter-list-item-#{@id}"}
     >
       <div class="flex flex-col gap-4">
         <div class="flex flex-row gap-4">

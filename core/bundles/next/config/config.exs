@@ -30,3 +30,5 @@ config :core, :features,
 config :core, :meta,
   bundle_title: "Next",
   bundle: :next
+
+config :core, :account, auth_providers: [:surfconext, :google, :centerdata]

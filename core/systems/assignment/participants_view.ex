@@ -4,22 +4,22 @@ defmodule Systems.Assignment.ParticipantsView do
   require Logger
 
   use Gettext, backend: CoreWeb.Gettext
-  use Core.FeatureFlags
+  use Systems.Assignment.PaidSlotsLogic
 
-  alias Frameworks.Pixel.Panel
-  alias Frameworks.Pixel.Annotation
   alias Frameworks.Pixel.InlineBlock
   alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
+  alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Assignment
+  alias Systems.Assignment.PaidSlotsLogic
 
   @impl true
   def update(
         %{
           id: id,
-          assignment: assignment,
+          assignment: %{info: info} = assignment,
           title: title,
           content_flags: content_flags,
           user: user,
@@ -36,6 +36,7 @@ defmodule Systems.Assignment.ParticipantsView do
       |> assign(
         id: id,
         assignment: assignment,
+        entity: info,
         title: title,
         content_flags: content_flags,
         user: user,
@@ -45,15 +46,17 @@ defmodule Systems.Assignment.ParticipantsView do
       )
       |> compose_child(:general)
       |> update_advert_button()
-      |> update_invite_title()
-      |> update_invite_url()
-      |> update_invite_annotation()
       |> update_affiliate_title()
       |> update_affiliate_url()
       |> update_affiliate_annotation()
       |> update_recruit_title()
       |> update_recruit_url()
       |> update_recruit_annotation()
+      |> update_invite_title()
+      |> update_invite_url()
+      |> update_invite_annotation()
+      |> assign_pending_approvals()
+      |> PaidSlotsLogic.assign_paid_slots_state()
     }
   end
 
@@ -75,42 +78,68 @@ defmodule Systems.Assignment.ParticipantsView do
     }
   end
 
-  defp update_invite_title(socket) do
-    invite_title = dgettext("eyra-assignment", "invite.panel.title")
-    assign(socket, invite_title: invite_title)
+  @impl true
+  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
+    %{
+      module: Assignment.PayoutModal,
+      params: %{assignment_id: assignment_id}
+    }
   end
 
-  defp update_affiliate_title(
-         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
-       )
-       when not is_nil(external_panel) do
-    # backward compatibility using deprecated Assignment.external_panel field
-    affiliate_title = dgettext("eyra-assignment", "external.panel.title")
-    assign(socket, affiliate_title: affiliate_title)
+  @impl true
+  def handle_event(
+        "create_advert",
+        _payload,
+        %{assigns: %{assignment: assignment, user: user}} = socket
+      ) do
+    if pool = Pool.Public.get_panl() do
+      Advert.Assembly.create(assignment, user, pool)
+    else
+      Logger.error("Panl pool not found")
+      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
+    end
+
+    {:noreply, socket}
   end
 
-  defp update_affiliate_title(socket) do
-    affiliate_title = dgettext("eyra-assignment", "affiliate.panel.title")
-    assign(socket, affiliate_title: affiliate_title)
+  @impl true
+  def handle_event("open_payout_modal", _, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:payout_modal)
+      |> show_modal(:payout_modal, :compact)
+    }
+  end
+
+  @impl true
+  def handle_event("payout_modal_close", _, socket) do
+    {
+      :noreply,
+      socket
+      |> hide_modal(:payout_modal)
+      |> PaidSlotsLogic.refresh_assignment()
+      |> assign_pending_approvals()
+    }
+  end
+
+  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
+    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
-    if feature_enabled?(:panl_post_launch) do
-      advert_button = %{
-        action: %{type: :send, event: "create_advert"},
-        face: %{
-          type: :primary,
-          bg_color: "bg-tertiary",
-          text_color: "text-grey1",
-          label: dgettext("eyra-assignment", "advert.create.button")
-        },
-        testid: "create-advert-button"
-      }
+    advert_button = %{
+      action: %{type: :send, event: "create_advert"},
+      face: %{
+        type: :primary,
+        bg_color: "bg-tertiary",
+        text_color: "text-grey1",
+        label: dgettext("eyra-assignment", "advert.create.button")
+      },
+      testid: "create-advert-button"
+    }
 
-      assign(socket, advert_button: advert_button)
-    else
-      assign(socket, advert_button: nil)
-    end
+    assign(socket, advert_button: advert_button)
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id} | _]}}} = socket) do
@@ -127,9 +156,33 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, advert_button: advert_button)
   end
 
+  defp update_invite_title(socket) do
+    invite_title = dgettext("eyra-assignment", "invite.panel.title")
+    assign(socket, invite_title: invite_title)
+  end
+
   defp update_invite_annotation(socket) do
     annotation = dgettext("eyra-assignment", "invite.panel.annotation")
     assign(socket, invite_annotation: annotation)
+  end
+
+  defp update_invite_url(%{assigns: %{assignment: assignment}} = socket) do
+    url = Affiliate.Public.url_for_resource(assignment) <> "?p=participant_id"
+    assign(socket, invite_url: url)
+  end
+
+  defp update_affiliate_title(
+         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
+       )
+       when not is_nil(external_panel) do
+    # backward compatibility using deprecated Assignment.external_panel field
+    affiliate_title = dgettext("eyra-assignment", "external.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
+  end
+
+  defp update_affiliate_title(socket) do
+    affiliate_title = dgettext("eyra-assignment", "affiliate.panel.title")
+    assign(socket, affiliate_title: affiliate_title)
   end
 
   defp update_affiliate_annotation(
@@ -144,12 +197,6 @@ defmodule Systems.Assignment.ParticipantsView do
   defp update_affiliate_annotation(socket) do
     annotation = dgettext("eyra-assignment", "affiliate.panel.annotation")
     assign(socket, affiliate_annotation: annotation)
-  end
-
-  defp update_invite_url(%{assigns: %{assignment: %{id: id}}} = socket) do
-    path = ~p"/assignment/#{id}/invite"
-    url = get_base_url() <> path
-    assign(socket, url: url)
   end
 
   defp update_affiliate_url(%{assigns: %{assignment: assignment}} = socket) do
@@ -172,33 +219,20 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, recruit_annotation: annotation)
   end
 
-  defp get_base_url do
-    Application.get_env(:core, :base_url)
-  end
-
-  @impl true
-  def handle_event(
-        "create_advert",
-        _payload,
-        %{assigns: %{assignment: assignment, user: user}} = socket
-      ) do
-    if pool = Pool.Public.get_panl() do
-      Advert.Assembly.create(assignment, user, pool)
-    else
-      Logger.error("Panl pool not found")
-      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
-    end
-
-    {:noreply, socket}
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
       <div>
         <Area.content>
           <Margin.y id={:page_top} />
-          <Text.title2><%= @title %></Text.title2>
+          <div class="flex flex-row items-baseline gap-3">
+            <Text.title2 margin=""><%= @title %></Text.title2>
+            <%= if @content_flags[:paid_slots] do %>
+              <div class="text-title2 font-title2 text-primary">
+                <%= @entity.subject_count %>
+              </div>
+            <% end %>
+          </div>
           <.spacing value="L" />
 
           <.child name={:general} fabric={@fabric} >
@@ -208,8 +242,21 @@ defmodule Systems.Assignment.ParticipantsView do
           </.child>
 
           <.spacing value="L" />
-          <div class="flex flex-col gap-8" %>
-            <%= if feature_enabled?(:panl_post_launch) and @content_flags[:advert_in_pool] do %>
+
+          <.pending_approvals_banner pending_approvals={@pending_approvals} target={@myself} />
+
+          <%= if @content_flags[:paid_slots] do %>
+            <.paid_slots
+              entity={@entity}
+              transactions={@transactions}
+              add_button={@add_button}
+              target={@myself}
+            />
+            <.spacing value="L" />
+          <% end %>
+
+          <div class="flex flex-col gap-8">
+            <%= if @content_flags[:advert_in_pool] do %>
               <InlineBlock.inline_block
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
@@ -218,43 +265,12 @@ defmodule Systems.Assignment.ParticipantsView do
               />
             <% end %>
 
-            <%= if feature_enabled?(:panl_post_launch) and @content_flags[:invite_participants] do %>
-              <Panel.flat bg_color="bg-grey1">
-                <:title>
-                  <div class="text-title3 font-title3 text-white">
-                    <%= @invite_title %>
-                  </div>
-                </:title>
-                <.spacing value="S" />
-                <%= if @invite_annotation do %>
-                  <Annotation.view annotation={@invite_annotation} />
-                <% end %>
-                <%= if @url do %>
-                  <.spacing value="S" />
-                  <div class="flex flex-row gap-6 items-center">
-                    <div class="flex-wrap">
-                      <Text.body_large color="text-white"><span class="break-all"><%= @url %></span></Text.body_large>
-                    </div>
-                    <div class="flex-wrap flex-shrink-0 mt-1">
-                      <div id="copy-assignment-url" class="cursor-pointer" phx-hook="Clipboard" data-text={@url}>
-                        <Button.Face.label_icon
-                          label={dgettext("eyra-ui", "copy.clipboard.button")}
-                          icon={:clipboard_tertiary}
-                          text_color="text-tertiary"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </Panel.flat>
-            <% end %>
-
             <%= if @content_flags[:recruit_participants] do %>
               <Affiliate.Html.url_panel title={@recruit_title} annotation={@recruit_annotation} url={@recruit_url} />
             <% end %>
 
             <%= if @content_flags[:invite_participants] do %>
-              <Affiliate.Html.url_panel title={@invite_title} annotation={@invite_annotation} url={@affiliate_url} />
+              <Affiliate.Html.url_panel title={@invite_title} annotation={@invite_annotation} url={@invite_url} />
             <% end %>
 
             <%= if @content_flags[:affiliate] do %>
@@ -263,6 +279,25 @@ defmodule Systems.Assignment.ParticipantsView do
           </div>
         </Area.content>
       </div>
+    """
+  end
+
+  attr(:pending_approvals, :list, required: true)
+  attr(:target, :any, required: true)
+
+  def pending_approvals_banner(assigns) do
+    ~H"""
+    <%= if Enum.any?(@pending_approvals) do %>
+      <div data-testid="pending-approvals-cta">
+        <NextAction.View.highlight
+          title={dgettext("eyra-assignment", "pending_approvals.title")}
+          description={dgettext("eyra-assignment", "pending_approvals.description")}
+          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
+          cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
+        />
+      </div>
+      <.spacing value="L" />
+    <% end %>
     """
   end
 end

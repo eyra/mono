@@ -80,6 +80,7 @@ config :core, :signal,
     "Systems.Assignment.Switch",
     "Systems.Consent.Switch",
     "Systems.Crew.Switch",
+    "Systems.Desktop.Switch",
     "Systems.Feldspar.Switch",
     "Systems.Graphite.Switch",
     "Systems.Instruction.Switch",
@@ -115,6 +116,13 @@ config :core,
     "local" => Systems.Payment.Provider.Local
   },
   tool_directors: [:assignment]
+
+# Generic compile-time flag for E2E support facilities baked into the build
+# (e.g. the local payment simulator routes /payment/local/...). Off by default
+# so production never compiles in these stubs; enabled for :dev/:test (see
+# dev.exs/test.exs) and for non-production release builds via the
+# ENABLE_E2E_SUPPORT build arg.
+config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
 
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
@@ -159,7 +167,7 @@ config :core, Systems.Email.Mailer,
 config :core, Core.SurfConext,
   client_id: "not-set",
   client_secret: "not-set",
-  site: "https://connect.test.surfconext.nl",
+  base_url: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set",
   limit_schac_home_organization: nil
 

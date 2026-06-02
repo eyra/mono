@@ -592,26 +592,6 @@ msgid "panl_participants.add.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "panl_participants.advert.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.has_advert"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.no_advert"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.invite.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "panl_participants.monitor.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "panl_participants.payment_prefix"
 msgstr ""
 
@@ -647,6 +627,14 @@ msgstr ""
 msgid "budget_form.aim.hint"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recruit.panel.title"
+msgstr ""
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.partner_fee.label"
 msgstr ""
@@ -659,15 +647,8 @@ msgstr ""
 msgid "budget_form.total.label"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.title.one"
-msgid_plural "panl_participants.pending_approvals.title.other"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.open.button"
+#, elixir-autogen, elixir-format
+msgid "payout.decline.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -683,15 +664,23 @@ msgid "payout.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "payout.pagination.single_page"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.pay_out_all.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -714,30 +703,26 @@ msgstr ""
 msgid "payout.waiting.heading"
 msgstr ""
 
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.amount_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.date_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.empty"
+msgstr ""
+
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
+msgid "pending_approvals.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "panl_participants.pending_approvals.description"
+msgid "pending_approvals.open.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "recruit.panel.annotation"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "recruit.panel.title"
-msgstr "Link de invitație pentru participanți"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "payout.decline.error"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "payout.pay_out_all.error"
+msgid "pending_approvals.title"
 msgstr ""

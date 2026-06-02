@@ -179,6 +179,7 @@ defmodule Systems.Assignment.BudgetForm do
             field={:aim_of_study}
             label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
             maxlength="250"
+            testid="budget-form-aim-input"
           />
           <div class="-mt-3 mb-4 text-label font-label text-grey2">
             <%= dgettext("eyra-assignment", "budget_form.aim.hint") %>
@@ -190,6 +191,7 @@ defmodule Systems.Assignment.BudgetForm do
             value={cents_to_display(input_value(fee_form, :subject_reward))}
             active_currency={@active_currency}
             currencies={[@active_currency]}
+            testid="budget-form-reward-input"
           />
           <div class="-mt-3 mb-4 text-label font-label text-grey2">
             <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
@@ -203,6 +205,7 @@ defmodule Systems.Assignment.BudgetForm do
           field={:subject_count}
           label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
           debounce="300"
+          testid="budget-form-slots-input"
         />
       </.form>
 
@@ -245,10 +248,12 @@ defmodule Systems.Assignment.BudgetForm do
           action={%{type: :send, event: "confirm", target: @myself}}
           face={%{type: :primary, label: dgettext("eyra-assignment", "budget_form.confirm.button")}}
           enabled?={@confirm_enabled?}
+          testid="budget-form-confirm-button"
         />
         <Button.dynamic
           action={%{type: :send, event: "cancel", target: @myself}}
           face={%{type: :label, label: dgettext("eyra-assignment", "budget_form.cancel.button"), text_color: "text-primary"}}
+          testid="budget-form-cancel-button"
         />
       </div>
     </div>

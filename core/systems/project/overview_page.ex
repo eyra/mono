@@ -216,7 +216,7 @@ defmodule Systems.Project.OverviewPage do
             <div class="flex-grow">
             </div>
             <div class="h-full pt-2px lg:pt-1">
-              <Button.Action.send event="create_project">
+              <Button.Action.send event="create_project" testid="create-project-button">
                 <div class="sm:hidden">
                   <Button.Face.plain_icon label={dgettext("eyra-project", "add.new.button.short")} icon={:forward} />
                 </div>
