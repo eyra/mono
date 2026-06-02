@@ -145,3 +145,11 @@ msgstr "This advert is visible in the pool."
 #, elixir-autogen, elixir-format
 msgid "pool.visibility.visible.label"
 msgstr "Visible in Pool"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.filled.banner"
+msgstr "All spots are filled."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.filled.label"
+msgstr "All spots filled"

@@ -434,7 +434,7 @@ defmodule Systems.Advert.PublicTest do
       assert Advert.Public.pool_visibility(reload(advert)) == :visible
     end
 
-    test "is :not_funded when online and funded but all spots are filled", %{
+    test "is :filled when online and funded but all spots are reserved", %{
       currency: currency,
       user: user
     } do
@@ -445,7 +445,18 @@ defmodule Systems.Advert.PublicTest do
       participant = Factories.insert!(:member)
       Crew.Factories.create_member(advert.assignment.crew, participant)
 
-      assert Advert.Public.pool_visibility(reload(advert)) == :not_funded
+      assert Advert.Public.pool_visibility(reload(advert)) == :filled
+    end
+
+    test "is nil when online but the submission is not released (scheduled in the future)",
+         %{currency: currency, user: user} do
+      fund = Fund.Factories.create_fund("scheduled", currency)
+
+      advert =
+        Advert.Factories.create_advert(user, :accepted, 1, fund, "2099-01-01", nil)
+        |> online()
+
+      assert Advert.Public.pool_visibility(reload(advert)) == nil
     end
   end
 end

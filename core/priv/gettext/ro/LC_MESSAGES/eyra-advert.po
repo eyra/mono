@@ -146,3 +146,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pool.visibility.visible.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.banner"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.label"
+msgstr ""

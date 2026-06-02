@@ -90,6 +90,17 @@ defmodule Systems.Advert.SettingsView do
     """
   end
 
+  defp pool_visibility_banner(%{status: :filled} = assigns) do
+    ~H"""
+    <div>
+      <AlertBanner.success>
+        <%= dgettext("eyra-advert", "pool.visibility.filled.banner") %>
+      </AlertBanner.success>
+      <.spacing value="M" />
+    </div>
+    """
+  end
+
   defp pool_visibility_banner(%{status: :not_funded} = assigns) do
     ~H"""
     <div>
