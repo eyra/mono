@@ -10,6 +10,7 @@ defmodule Systems.Fund.Public do
   alias Ecto.Multi
   alias Core.Repo
 
+  alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
   alias Systems.Account
@@ -1082,6 +1083,94 @@ defmodule Systems.Fund.Public do
       where: r.user_id == ^user_id and r.status == :approved
     )
     |> Repo.all()
+  end
+
+  @doc """
+  Applies an OPP withdrawal status change to the linked `Fund.PayoutModel`
+  and its rewards.
+
+  OPP statuses collapse into local vocab:
+
+      "completed"   -> Payout :completed; rewards :pending_payout -> :paid
+      "failed"      -> Payout :failed;    rewards :pending_payout -> :approved
+      "disapproved" -> Payout :failed;    rewards :pending_payout -> :approved
+      (other)       -> no-op (logged)
+
+  Idempotent: once a Payout is in a terminal state, subsequent calls
+  short-circuit. If the OPP withdrawal UID isn't linked to any Payout
+  (e.g. a webhook for a deposit-side transaction was misrouted, or the
+  webhook arrived before the request_payout DB write committed), the
+  call logs and returns `:ok`.
+
+  Returns `{:ok, payout}` for terminal transitions, `:ok` when no
+  Payout was found, and `{:error, reason}` for DB failures.
+  """
+  def apply_withdrawal_status(provider_uid, opp_status)
+      when is_binary(provider_uid) and is_binary(opp_status) do
+    case Repo.get_by(Fund.PayoutModel, provider_uid: provider_uid) do
+      nil ->
+        Logger.warning("[Fund] withdrawal #{provider_uid} not linked to any Payout — ignoring")
+
+        :ok
+
+      %Fund.PayoutModel{status: status} = payout when status in [:completed, :failed] ->
+        # Already terminal. OPP retries webhooks; tolerate the duplicate.
+        {:ok, payout}
+
+      %Fund.PayoutModel{} = payout ->
+        apply_status(payout, opp_status)
+    end
+  end
+
+  defp apply_status(%Fund.PayoutModel{} = payout, "completed") do
+    finalize_payout(payout, :completed, :paid, nil)
+  end
+
+  defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
+       when opp_status in ["failed", "disapproved"] do
+    finalize_payout(payout, :failed, :approved, "opp_status: #{opp_status}")
+  end
+
+  defp apply_status(%Fund.PayoutModel{provider_uid: uid}, opp_status) do
+    Logger.info("[Fund] withdrawal #{uid} OPP status=#{opp_status} — no local transition")
+
+    :ok
+  end
+
+  defp finalize_payout(
+         %Fund.PayoutModel{id: payout_id} = payout,
+         payout_status,
+         reward_status,
+         failure_reason
+       ) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    result =
+      Multi.new()
+      |> Multi.update(
+        :payout,
+        Fund.PayoutModel.changeset(payout, %{
+          status: payout_status,
+          failure_reason: failure_reason
+        })
+      )
+      |> Multi.update_all(
+        :rewards,
+        from(r in Fund.RewardModel,
+          where: r.payout_id == ^payout_id and r.status == :pending_payout
+        ),
+        set: [status: reward_status, updated_at: now]
+      )
+      |> Repo.transaction()
+
+    case result do
+      {:ok, %{payout: payout}} ->
+        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: payout.user_id})
+        {:ok, payout}
+
+      {:error, _step, reason, _changes} ->
+        {:error, reason}
+    end
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do

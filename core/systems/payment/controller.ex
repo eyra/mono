@@ -43,6 +43,8 @@ defmodule Systems.Payment.Controller do
   defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)
   defp handle_event("transaction.status.changed", uid), do: handle_transaction_status_change(uid)
 
+  defp handle_event("withdrawal.status.changed", uid), do: handle_withdrawal_status_change(uid)
+
   defp handle_event(type, _uid) do
     Logger.info("[Payment.Webhook] Ignoring event type=#{type}")
   end
@@ -70,5 +72,17 @@ defmodule Systems.Payment.Controller do
 
   defp apply_transaction_status(status, _uid) do
     Logger.info("[Payment.Webhook] Ignoring transaction status=#{status}")
+  end
+
+  defp handle_withdrawal_status_change(uid) do
+    case Systems.Payment.Public.get_withdrawal(uid) do
+      {:ok, %{status: status}} ->
+        Logger.info("[Payment.Webhook] Provider withdrawal status=#{status} for uid=#{uid}")
+        result = Systems.Fund.Public.apply_withdrawal_status(uid, status)
+        Logger.info("[Payment.Webhook] Withdrawal apply result: #{inspect(result)}")
+
+      {:error, error} ->
+        Logger.warning("[Payment.Webhook] Failed to fetch withdrawal #{uid}: #{inspect(error)}")
+    end
   end
 end
