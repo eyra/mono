@@ -19,36 +19,24 @@ const PROD_FEATURES = [
   'password_sign_in',
 ].sort();
 
+// test2 is the reference for pre-prod environments.
+// dev and test1 deviating from this is a known signal.
+const PRE_PROD_FEATURES = [
+  'e2e',
+  'leaderboard',
+  'member_google_sign_in',
+  'onyx',
+  'panl',
+  'panl_post_launch',
+  'password_sign_in',
+].sort();
+
 const EXPECTED: Record<string, string[]> = {
-  prod: PROD_FEATURES,
+  prod:    PROD_FEATURES,
   staging: [...PROD_FEATURES, 'e2e'].sort(),  // prod + e2e so E2E suite can run against staging
-  dev: [
-    'e2e',
-    'leaderboard',
-    'member_google_sign_in',
-    'onyx',
-    'panl',
-    'panl_post_launch',
-    'password_sign_in',
-    'surfconext_sign_in',
-  ].sort(),
-  test1: [
-    'e2e',
-    'leaderboard',
-    'member_google_sign_in',
-    'onyx',
-    'panl',
-    'password_sign_in',
-  ].sort(),
-  test2: [
-    'e2e',
-    'leaderboard',
-    'member_google_sign_in',
-    'onyx',
-    'panl',
-    'panl_post_launch',
-    'password_sign_in',
-  ].sort(),
+  dev:     PRE_PROD_FEATURES,
+  test1:   PRE_PROD_FEATURES,
+  test2:   PRE_PROD_FEATURES,
 };
 
 const env = process.env.SMOKE_ENV || 'prod';
