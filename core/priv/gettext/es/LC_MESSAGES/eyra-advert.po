@@ -148,9 +148,17 @@ msgid "pool.visibility.visible.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "pool.visibility.filled.banner"
+msgid "pool.visibility.filled.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "pool.visibility.filled.label"
+msgid "pool.visibility.filled.add_spots.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.banner.title"
 msgstr ""

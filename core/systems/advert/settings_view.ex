@@ -93,9 +93,17 @@ defmodule Systems.Advert.SettingsView do
   defp pool_visibility_banner(%{status: :filled} = assigns) do
     ~H"""
     <div>
-      <AlertBanner.success>
-        <%= dgettext("eyra-advert", "pool.visibility.filled.banner") %>
-      </AlertBanner.success>
+      <AlertBanner.action
+        title={dgettext("eyra-advert", "pool.visibility.filled.banner.title")}
+        subtitle={dgettext("eyra-advert", "pool.visibility.filled.banner.subtitle")}
+        button={%{
+          action: %{type: :http_get, to: @manage_participants_path},
+          face: %{
+            type: :primary,
+            label: dgettext("eyra-advert", "pool.visibility.filled.add_spots.button")
+          }
+        }}
+      />
       <.spacing value="M" />
     </div>
     """

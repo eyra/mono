@@ -147,9 +147,17 @@ msgid "pool.visibility.visible.label"
 msgstr "Zichtbaar in pool"
 
 #, elixir-autogen, elixir-format
-msgid "pool.visibility.filled.banner"
-msgstr "Alle plekken zijn gereserveerd."
+msgid "pool.visibility.filled.label"
+msgstr "Alle plekken gereserveerd"
 
 #, elixir-autogen, elixir-format
-msgid "pool.visibility.filled.label"
+msgid "pool.visibility.filled.add_spots.button"
+msgstr "Plekken toevoegen"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.filled.banner.subtitle"
+msgstr "Meer deelnemers nodig? Voeg meer plekken toe."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.filled.banner.title"
 msgstr "Alle plekken gereserveerd"
