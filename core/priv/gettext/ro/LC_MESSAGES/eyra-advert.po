@@ -122,3 +122,43 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "settings.invite.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.fund.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.not_funded.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.visible.banner"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.visible.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.add_spots.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pool.visibility.filled.banner.title"
+msgstr ""
