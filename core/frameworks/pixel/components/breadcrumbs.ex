@@ -54,7 +54,7 @@ defmodule Frameworks.Pixel.Breadcrumbs do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="h-full w-full overflow-scroll">
+      <div class="h-full w-full overflow-x-auto">
         <div class="flex flex-row items-center gap-2 h-full">
           <%= for {type, value} <- @blocks do %>
             <%= if type == :separator do %>

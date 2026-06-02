@@ -41,3 +41,31 @@ msgstr "Afmelden"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "landing.description.visitor"
 msgstr "Je bent nog geen lid van deze pool."
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.breadcrumb.overview"
+msgstr "Overzicht"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.empty.message"
+msgstr "De marktplaats is momenteel leeg."
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.all"
+msgstr "Alle"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.label"
+msgstr "Filter:"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.search.placeholder"
+msgstr "Zoeken"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.show_more"
+msgstr "Toon meer"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.title"
+msgstr "Marketplace"
