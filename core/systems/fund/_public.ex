@@ -980,21 +980,101 @@ defmodule Systems.Fund.Public do
     approved = list_approved_rewards(user_id)
     total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
 
-    if total < @payout_threshold_cents do
-      {:error, {:below_threshold, total}}
-    else
-      reward_ids = Enum.map(approved, & &1.id)
-      lock_rewards_for_payout(reward_ids)
+    cond do
+      total < @payout_threshold_cents ->
+        {:error, {:below_threshold, total}}
 
-      case Payment.Public.create_withdrawal(merchant_uid, :eur, %{amount: total}) do
-        {:ok, withdrawal} ->
-          {:ok, %{withdrawal: withdrawal, amount: total}}
-
-        {:error, reason} ->
-          revert_payout_lock(reward_ids)
-          {:error, {:opp_failed, reason}}
-      end
+      true ->
+        do_request_payout(user_id, merchant_uid, approved, total)
     end
+  end
+
+  defp do_request_payout(user_id, merchant_uid, approved, total) do
+    reward_ids = Enum.map(approved, & &1.id)
+
+    with {:ok, payout} <- lock_for_payout(user_id, reward_ids, total),
+         {:ok, withdrawal} <-
+           Payment.Public.create_withdrawal(merchant_uid, :eur, %{amount: total}),
+         {:ok, payout} <-
+           payout
+           |> Fund.PayoutModel.changeset(%{provider_uid: withdrawal.uid})
+           |> Repo.update() do
+      {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+    else
+      {:error, %Ecto.Changeset{}} ->
+        {:error, :lock_failed}
+
+      {:error, reason} ->
+        # OPP call failed (or post-OPP update failed). Mark the payout
+        # :failed and revert rewards to :approved per UC-OPP-06.A3.
+        revert_payout_lock(reward_ids, "opp_call_failed: #{inspect(reason)}")
+        {:error, {:opp_failed, reason}}
+    end
+  end
+
+  defp lock_for_payout(user_id, reward_ids, total) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    Multi.new()
+    |> Multi.insert(
+      :payout,
+      Fund.PayoutModel.changeset(%Fund.PayoutModel{}, %{
+        user_id: user_id,
+        amount_cents: total,
+        status: :pending
+      })
+    )
+    |> Multi.run(:lock_rewards, fn _repo, %{payout: %{id: payout_id}} ->
+      {count, _} =
+        from(r in Fund.RewardModel, where: r.id in ^reward_ids)
+        |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now])
+
+      {:ok, count}
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{payout: payout}} -> {:ok, payout}
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp revert_payout_lock(reward_ids, failure_reason) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    Multi.new()
+    |> Multi.run(:payout, fn _repo, _changes ->
+      # Look up the (just-created) :pending payout via any reward's
+      # payout_id. They all share the same payout because lock_for_payout
+      # assigns one payout_id to the whole batch.
+      case Repo.one(
+             from(r in Fund.RewardModel,
+               where: r.id in ^reward_ids and not is_nil(r.payout_id),
+               select: r.payout_id,
+               limit: 1
+             )
+           ) do
+        nil ->
+          {:ok, nil}
+
+        payout_id ->
+          payout = Repo.get!(Fund.PayoutModel, payout_id)
+
+          payout
+          |> Fund.PayoutModel.changeset(%{
+            status: :failed,
+            failure_reason: failure_reason
+          })
+          |> Repo.update()
+      end
+    end)
+    |> Multi.update_all(
+      :rewards,
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids),
+      set: [status: :approved, payout_id: nil, updated_at: now]
+    )
+    |> Repo.transaction()
+
+    :ok
   end
 
   defp list_approved_rewards(user_id) do
@@ -1002,28 +1082,6 @@ defmodule Systems.Fund.Public do
       where: r.user_id == ^user_id and r.status == :approved
     )
     |> Repo.all()
-  end
-
-  defp lock_rewards_for_payout([]), do: :ok
-
-  defp lock_rewards_for_payout(reward_ids) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
-    from(r in Fund.RewardModel, where: r.id in ^reward_ids)
-    |> Repo.update_all(set: [status: :pending_payout, updated_at: now])
-
-    :ok
-  end
-
-  defp revert_payout_lock([]), do: :ok
-
-  defp revert_payout_lock(reward_ids) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
-    from(r in Fund.RewardModel, where: r.id in ^reward_ids)
-    |> Repo.update_all(set: [status: :approved, updated_at: now])
-
-    :ok
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
