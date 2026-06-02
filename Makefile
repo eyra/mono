@@ -22,7 +22,7 @@ dialyzer: FORCE
 .PHONY: test
 test: test/core test/banking_proxy
 test/core: FORCE
-	cd core && $(if $(FEATURE_TEST_SESSION),FEATURE_TEST_SESSION=$(FEATURE_TEST_SESSION),) mix test.all
+	cd core && $(if $(FEATURE_TEST_SESSION),FEATURE_TEST_SESSION=$(FEATURE_TEST_SESSION),) mix test.ci
 test/banking_proxy: FORCE
 	cd banking_proxy && mix test
 

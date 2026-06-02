@@ -2,7 +2,7 @@ defmodule Core.MixProject do
   use Mix.Project
 
   def cli do
-    [preferred_envs: ["test.all": :test]]
+    [preferred_envs: ["test.ci": :test]]
   end
 
   def project do
@@ -174,8 +174,9 @@ defmodule Core.MixProject do
       "lfs.pull": "cmd git lfs pull",
       "test.exs": ["ecto.create --quiet", "ecto.migrate", "test"],
       "test.js": "cmd cd ./assets && npm test",
-      "test.all": ["test.exs", "test.js"],
+      "test.ci": ["test.exs", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
+      "test.smoke": "cmd ./test/smoke/run.sh",
       seed: "cmd ./scripts/seed",
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
