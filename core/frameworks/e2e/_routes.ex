@@ -16,6 +16,7 @@ defmodule Frameworks.E2E.Routes do
 
         # Bootstrap creates the service user - no auth required, protected by :e2e feature flag
         post("/bootstrap", Controller, :bootstrap)
+        post("/activate_user", Controller, :activate_user)
       end
 
       scope "/api/e2e", Frameworks.E2E do

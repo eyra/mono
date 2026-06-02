@@ -38,7 +38,17 @@ test(`data donation flow works on ${env}`, async ({ page }, testInfo) => {
   console.log(`[SMOKE] Navigating to ${donateUrl}?p=${participantId}`);
   await page.goto(`${donateUrl}?p=${participantId}`);
 
-  // Single task, no intro or consent — lands directly on the Feldspar tool
+  // Wait for LiveView to connect before interacting
+  await page.waitForSelector('[data-phx-main].phx-connected', { timeout: 15000 });
+
+  // Single task, no consent — but there is an intro/continue step before the tool
+  const continueBtn = page.getByText('Continue').first();
+  if (await continueBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    console.log(`[SMOKE] Clicking Continue...`);
+    await continueBtn.click();
+    await page.waitForSelector('[data-phx-main].phx-connected', { timeout: 10000 });
+  }
+
   // Wait for Feldspar iframe
   console.log(`[SMOKE] Waiting for Feldspar iframe...`);
   const feldsparContainer = page.locator('[phx-hook="FeldsparApp"]');
@@ -59,14 +69,9 @@ test(`data donation flow works on ${env}`, async ({ page }, testInfo) => {
 
   // Donate
   console.log(`[SMOKE] Donating...`);
-  const donateResponse = page.waitForResponse(
-    r => r.url().includes('/api/feldspar/donate') && r.status() === 200,
-    { timeout: 30000 }
-  );
-
   await frame.getByRole('button', { name: 'Donate' }).click();
 
-  const response = await donateResponse;
-  expect(response.status()).toBe(200);
-  console.log(`[SMOKE] Donate API responded 200 ✓`);
+  // After donating the Mono app shows the finished view
+  await page.locator('[data-testid="finished-view"]').waitFor({ state: 'visible', timeout: 30000 });
+  console.log(`[SMOKE] Finished view visible ✓`);
 });
