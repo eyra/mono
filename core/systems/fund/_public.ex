@@ -981,12 +981,10 @@ defmodule Systems.Fund.Public do
     approved = list_approved_rewards(user_id)
     total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
 
-    cond do
-      total < @payout_threshold_cents ->
-        {:error, {:below_threshold, total}}
-
-      true ->
-        do_request_payout(user_id, merchant_uid, approved, total)
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      do_request_payout(user_id, merchant_uid, approved, total)
     end
   end
 
@@ -1032,7 +1030,7 @@ defmodule Systems.Fund.Public do
 
       {:ok, count}
     end)
-    |> Repo.transaction()
+    |> Repo.commit()
     |> case do
       {:ok, %{payout: payout}} -> {:ok, payout}
       {:error, _step, reason, _changes} -> {:error, reason}
@@ -1073,7 +1071,7 @@ defmodule Systems.Fund.Public do
       from(r in Fund.RewardModel, where: r.id in ^reward_ids),
       set: [status: :approved, payout_id: nil, updated_at: now]
     )
-    |> Repo.transaction()
+    |> Repo.commit()
 
     :ok
   end
@@ -1161,7 +1159,7 @@ defmodule Systems.Fund.Public do
         ),
         set: [status: reward_status, updated_at: now]
       )
-      |> Repo.transaction()
+      |> Repo.commit()
 
     case result do
       {:ok, %{payout: payout}} ->
