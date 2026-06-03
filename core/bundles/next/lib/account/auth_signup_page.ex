@@ -42,26 +42,28 @@ defmodule Next.Account.AuthSignupPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
-      <Area.form>
-        <Margin.y id={:page_top} />
-        <Margin.y id={:page_top} />
-        <div class="flex justify-center">
-          <img class="h-16" src={@provider_logo} alt={@provider_name}>
-        </div>
-        <.spacing value="L" />
-        <Text.title2 align="center"><%= dgettext("eyra-next", "auth.signup.title") %></Text.title2>
-        <.spacing value="M" />
-        <Text.body_small align="center"><%= raw(dgettext("eyra-next", "auth.signup.body", identity_provider: @provider_name)) %></Text.body_small>
-        <.spacing value="M" />
-        <Button.dynamic_bar buttons={[
-          %{
-            action: %{type: :http_get, to: @auth_path},
-            face: %{type: :primary, label: dgettext("eyra-next", "auth.signup.button", identity_provider: @provider_name), bg_color: "bg-grey1", text_color: "text-white"},
-            full_width: true,
-            testid: "auth-signin-button"
-          }
-        ]} />
-      </Area.form>
+      <Area.content>
+        <Area.form>
+          <Margin.y id={:page_top} />
+          <Margin.y id={:page_top} />
+          <div class="flex justify-center">
+            <img class="h-16" src={@provider_logo} alt={@provider_name}>
+          </div>
+          <.spacing value="L" />
+          <Text.title2 align="center"><%= dgettext("eyra-next", "auth.signup.title") %></Text.title2>
+          <.spacing value="M" />
+          <Text.body_small align="center"><%= raw(dgettext("eyra-next", "auth.signup.body", identity_provider: @provider_name)) %></Text.body_small>
+          <.spacing value="M" />
+          <Button.dynamic_bar buttons={[
+            %{
+              action: %{type: :http_get, to: @auth_path},
+              face: %{type: :primary, label: dgettext("eyra-next", "auth.signup.button", identity_provider: @provider_name), bg_color: "bg-grey1", text_color: "text-white"},
+              full_width: true,
+              testid: "auth-signin-button"
+            }
+          ]} />
+        </Area.form>
+      </Area.content>
     </.stripped>
     """
   end

@@ -12,4 +12,5 @@ defmodule Systems.Account.Presenter do
   defp builder(Account.FeaturesView), do: Account.FeaturesViewBuilder
   defp builder(Account.ProfileView), do: Account.ProfileViewBuilder
   defp builder(Account.OnboardingPage), do: Account.OnboardingPageBuilder
+  defp builder(Account.TermsAndPrivacyView), do: Account.TermsAndPrivacyViewBuilder
 end
