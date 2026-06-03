@@ -990,6 +990,62 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "payout_eligibility/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_elig_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    test "returns :no_merchant when participant has no merchant_uid" do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
+      assert {:error, :no_merchant} = Fund.Public.payout_eligibility(user)
+    end
+
+    test "returns :below_threshold with the current total when under €5", %{
+      user: user,
+      fund: fund
+    } do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 499,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert {:error, {:below_threshold, 499}} = Fund.Public.payout_eligibility(user)
+    end
+
+    test "returns :ok when at or above €5", %{user: user, fund: fund} do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 500,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert :ok = Fund.Public.payout_eligibility(user)
+    end
+
+    test "does not lock rewards or create a Payout row", %{user: user, fund: fund} do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 1000,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert :ok = Fund.Public.payout_eligibility(user)
+
+      [reward] = Core.Repo.all(Fund.RewardModel)
+      assert reward.status == :approved
+      assert reward.payout_id == nil
+      assert Core.Repo.all(Fund.PayoutModel) == []
+    end
+  end
+
   describe "apply_withdrawal_status/2" do
     setup %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_apply_1"})

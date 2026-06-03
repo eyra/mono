@@ -174,7 +174,10 @@ defmodule Systems.Home.PageBuilder do
       payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
       payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
       payout_no_merchant: dgettext("eyra-fund", "rewards_summary.payout.no_merchant"),
-      payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed")
+      payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),
+      payout_handoff_body: dgettext("eyra-fund", "rewards_summary.payout.handoff.body"),
+      payout_handoff_confirm: dgettext("eyra-fund", "rewards_summary.payout.handoff.confirm"),
+      payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel")
     }
   end
 

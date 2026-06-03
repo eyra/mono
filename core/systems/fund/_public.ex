@@ -988,6 +988,26 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  @doc """
+  Pre-flight check for a payout request — same `{:error, _}` shape as
+  `request_payout/1` but without locking anything or hitting OPP. Used by
+  the home rewards card to decide between an error flash (below threshold
+  / no merchant) and showing the MS.6 handoff screen.
+  """
+  def payout_eligibility(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
+
+  def payout_eligibility(%Account.User{id: user_id}) do
+    total =
+      list_approved_rewards(user_id)
+      |> Enum.reduce(0, fn r, acc -> acc + r.amount end)
+
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      :ok
+    end
+  end
+
   defp do_request_payout(user_id, merchant_uid, approved, total) do
     reward_ids = Enum.map(approved, & &1.id)
 

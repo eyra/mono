@@ -169,3 +169,15 @@ msgstr "Payout setup is incomplete. Please finish your payment provider onboardi
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr "Payout requested. Your reward is on its way to your bank account."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.body"
+msgstr "🔒 Payments are securely processed via Online Payment Platform (OPP). You will now leave the Next platform and be returned afterwards."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.cancel"
+msgstr "Cancel"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.confirm"
+msgstr "Go to payout"

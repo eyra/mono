@@ -169,3 +169,15 @@ msgstr "Uitbetaling is nog niet ingericht. Rond eerst de aanmelding bij de betal
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.body"
+msgstr "🔒 Betalingen worden veilig verwerkt via Online Payment Platform (OPP). U verlaat nu Next platform en wordt na afloop weer terug gestuurd."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.cancel"
+msgstr "Annuleren"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.confirm"
+msgstr "Ga naar uitbetalen"

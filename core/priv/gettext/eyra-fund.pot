@@ -169,3 +169,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.cancel"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.confirm"
+msgstr ""
