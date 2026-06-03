@@ -138,7 +138,7 @@ defmodule Systems.Advert.FundingView do
          %{
            assigns: %{
              submission: %{pool: %{currency: currency}},
-             assignment: %{assignable_inquiry: %{duration: duration}},
+             assignment: %{info: %{duration: duration}},
              locale: locale
            }
          } = socket

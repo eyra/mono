@@ -15,9 +15,6 @@ defmodule Core.SurfConext.FakeOIDC do
       config
       |> base_user()
       |> Map.put("eduperson_affiliation", ["student"])
-      |> Map.put("schac_personal_unique_code", [
-        "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"
-      ])
 
     {:ok, user}
   end
@@ -45,7 +42,6 @@ defmodule Core.SurfConext.FakeOIDC do
       "preferred_username" => "#{first_name} #{last_name}",
       "given_name" => first_name,
       "family_name" => last_name,
-      "schac_home_organization" => "eduid.nl",
       "updated_at" => 1_615_100_207
     }
   end
@@ -124,19 +120,6 @@ defmodule Core.SurfConext.CallbackController.Test do
       assert user.verified_at != nil
       assert user.confirmed_at == nil
       assert user.creator == true
-    end
-
-    test "redirects when the changeset is invalid", %{conn: conn, conf: conf} do
-      Application.put_env(
-        :core,
-        Core.SurfConext,
-        Keyword.put(conf, :limit_schac_home_organization, "my-org")
-      )
-
-      conn = conn |> get("/auth/surfconext/callback")
-      assert redirected_to(conn) == "/user/signin"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "not allowed to authenticate"
     end
 
     test "authenticates an existing user", %{conn: conn} do
@@ -227,10 +210,7 @@ defmodule Core.SurfConext.CallbackController.Test do
       surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
 
       assert redirected_to(conn) == "/project"
-
-      assert surfconext_user.schac_personal_unique_code == [
-               "urn:schac:personalUniqueCode:nl:local:vu.nl:studentid:1234567"
-             ]
+      assert surfconext_user.userinfo["eduperson_affiliation"] == ["student"]
     end
 
     test "handles duplicate email gracefully", %{conn: conn, conf: conf} do

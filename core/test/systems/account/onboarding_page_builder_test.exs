@@ -146,6 +146,56 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     end
   end
 
+  describe "view_model/2 with unactivated SSO user" do
+    setup do
+      {:ok, user} =
+        %Account.User{}
+        |> Account.User.sso_changeset(%{
+          email: "sso-#{System.unique_integer([:positive])}@example.com",
+          displayname: "SSO User",
+          creator: true,
+          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+        |> Core.Repo.insert()
+
+      user = Core.Repo.preload(user, [:features, :profile])
+
+      %{user: user}
+    end
+
+    test "first step is terms_and_privacy", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.current_step == :terms_and_privacy
+      assert hd(vm.steps) == :terms_and_privacy
+    end
+
+    test "step_view is TermsAndPrivacyView", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.step_view.implementation == Account.TermsAndPrivacyView
+    end
+
+    test "step_title and step_body are nil (rendered by the view)", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.step_title == nil
+      assert vm.step_body == nil
+    end
+
+    test "continue_button is nil (the view renders its own)", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.continue_button == nil
+    end
+
+    test "no activate_account step for SSO users (terms step activates them)", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      refute :activate_account in vm.steps
+    end
+  end
+
   describe "view_model/2 defaults" do
     setup do
       user = Factories.insert!(:member)

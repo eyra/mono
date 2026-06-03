@@ -382,7 +382,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp required_funding(%{
          submission: %{reward_value: reward_value, pool: %{currency: currency}},
-         assignment: %{assignable_inquiry: %{subject_count: subject_count}}
+         assignment: %{info: %{subject_count: subject_count}}
        }) do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)
@@ -395,7 +395,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp funding_tag(%{
          submission: %{reward_value: reward_value},
-         assignment: %{fund: fund, assignable_inquiry: %{subject_count: subject_count}}
+         assignment: %{fund: fund, info: %{subject_count: subject_count}}
        }) do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)

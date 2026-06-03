@@ -42,3 +42,31 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "landing.description.visitor"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.breadcrumb.overview"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.empty.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.all"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.show_more"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.title"
+msgstr ""

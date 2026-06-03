@@ -83,24 +83,24 @@ defmodule Systems.Account.OnboardingPageBuilder do
     )
   end
 
+  defp build_step_view(:terms_and_privacy, _user, live_context) do
+    CoreWeb.Live.Element.prepare_live_view(
+      :terms_and_privacy_view,
+      Account.TermsAndPrivacyView,
+      live_context: live_context
+    )
+  end
+
   defp build_step_view(_, _, _), do: nil
 
   defp build_step_title(:activate_account) do
     dgettext("eyra-account", "onboarding.activate_account.title")
   end
 
-  defp build_step_title(:terms_and_privacy) do
-    dgettext("eyra-account", "terms_and_privacy.onboarding.title")
-  end
-
   defp build_step_title(_), do: nil
 
   defp build_step_body(:activate_account, email) do
     dgettext("eyra-account", "onboarding.activate_account.body", email: email)
-  end
-
-  defp build_step_body(:terms_and_privacy, _email) do
-    dgettext("eyra-account", "terms_and_privacy.onboarding.body")
   end
 
   defp build_step_body(_, _), do: nil
@@ -114,6 +114,8 @@ defmodule Systems.Account.OnboardingPageBuilder do
       }
     }
   end
+
+  defp build_continue_button(:terms_and_privacy), do: nil
 
   defp build_continue_button(_) do
     %{
