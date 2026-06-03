@@ -82,3 +82,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr ""

@@ -113,3 +113,11 @@ msgstr "Doe mee"
 #, elixir-autogen, elixir-format
 msgid "settings.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.invite.annotation"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.invite.title"
+msgstr ""

@@ -11,43 +11,43 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part1"
 msgstr "Ihr Beitrag wird vom Autor dieser Studie geprüft und entweder angenommen oder abgelehnt."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.message.part2"
 msgstr "Besuchen Sie Ihre Konsole, um den Status Ihres Beitrags einzusehen."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.completed.title"
 msgstr "Vielen Dank für Ihre Teilnahme"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.subtitle"
 msgstr "Leider ist Ihre Sitzung abgelaufen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "task.expired.text"
 msgstr "Falls die Studie noch offen ist, können Sie erneut teilnehmen. Ist die Studie geschlossen? Besuchen Sie den Marktplatz, um nach anderen Studien zu suchen."
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.subtitle"
 msgstr "✅ Roundtrip bestätigt"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "tester.completed.text"
 msgstr "Wenn der Titel dieser Seite mit dem Titel Ihrer Kampagne übereinstimmt, war der Roundtrip von Next zu Qualtrics und zurück erfolgreich."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.finished.label"
 msgstr "Abgeschlossen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.remaining.label"
 msgstr "Erwartet"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "progress.started.label"
 msgstr "Begonnen"
 
@@ -55,7 +55,7 @@ msgstr "Begonnen"
 msgid "home.intro.description"
 msgstr "Die Next-Plattform bietet Open-Source-Softwaredienste, die sofort verfügbar sind und Ihnen dabei helfen, Ihre Forschung effizient durchzuführen. Sie werden von Eyra entwickelt – für und gemeinsam mit Forschenden – und kontinuierlich verbessert. Bereit zum Start? Alles, was Sie brauchen, finden Sie weiter unten."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "home.intro.image_alt"
 msgstr "Abstraktes Bild, das Zusammenarbeit und Forschung darstellt"
 

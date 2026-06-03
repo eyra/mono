@@ -9,6 +9,22 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#24 Unreleased
+* Changed - SURFconext userinfo (name, email, affiliation) is now stored as a raw JSON map; individual parsed columns removed from the database
+* Fixed - Auth signup page (/user/auth/:provider) had no side margins on mobile
+* Fixed - Sign-in button incorrectly appeared in the navbar on dedicated provider auth pages
+* Fixed - Org member/owner list crashed when an auth principal had no linked user (orphaned principals are now silently skipped)
+* Added - SURFconext-based authentication for creators: a provider-agnostic signup page at /user/auth/:provider (SURFconext, Google, Apple, and a new Mock provider for dev/test); name, logo, and auth path are derived from the provider key
+* Added - Terms-and-privacy onboarding step shown to first-time SSO users; folds into the existing /user/onboarding flow
+* Added - Mock auth provider for local/dev/test environments only, with a /user/auth/mock/reset utility for clean test runs
+* Added - Researcher reward approval flow on the Participants tab: Pay-out modal with Waiting + Overview tabs, per-row decline with rejection reason, bulk "Pay out all"
+* Added - Reward state machine (reserved → approved/rejected) with compare-and-swap transitions to prevent double-apply under concurrency
+* Added - Pay-out NextAction CTA on the home page for researchers with pending approvals
+* Added - Rewards summary card on the participant home page
+* Changed - Auth provider routes standardised to /auth/:provider and /auth/:provider/callback (SURFconext IdP dashboard updated to match)
+* Changed - SSO users are activated when they accept the terms-and-privacy onboarding step (sets confirmed_at) rather than being auto-activated on registration
+* Fixed - Free studies were excluded from the marketplace visibility check on milestone 23 — now treated as visible
+
 ## \#23 2026-05-22
 * Added - Organisations: org owner role, admin pages per org, owners modal, archive modal, org node/admin views, members search & filter
 * Added - Onboarding journey nested under /user/onboarding/*: await-confirmation, confirm-token, post-signup activation

@@ -428,13 +428,13 @@ defmodule Frameworks.Pixel.ModalView do
   def compact(assigns) do
     ~H"""
       <div class="modal-dialog w-[700px] px-4 sm:px-10">
-        <div class="relative h-full w-full bg-white pt-6 pb-9 px-9 rounded shadow-floating">
+        <div class="relative w-full max-h-[90vh] bg-white pt-6 pb-9 px-9 rounded shadow-floating flex flex-col">
           <%!-- Floating close button --%>
           <div class="absolute z-30 top-6 right-9">
             <Button.dynamic {close_icon_button(@modal)} />
           </div>
           <%!-- BODY --%>
-          <div class="h-full w-full overflow-y-auto">
+          <div class="w-full overflow-y-auto">
             <.element {Map.from_struct(@modal.element)} socket={@socket} />
           </div>
         </div>

@@ -39,35 +39,35 @@ msgstr "To-do"
 msgid "menu.item.todo"
 msgstr "To-do"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "todo.title"
 msgstr "To-do"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.student"
 msgstr "Studienprogramm"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.helpdesk"
 msgstr "Helpdesk"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "cancel.button"
 msgstr "Abbrechen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.text"
 msgstr "Dieses Element (%{item}) wird dauerhaft gelöscht."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.title"
 msgstr "%{item} löschen?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "delete.confirm.label"
 msgstr "Löschen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "ok.button"
 msgstr "Ok"
 
@@ -75,63 +75,63 @@ msgstr "Ok"
 msgid "menu.item.support"
 msgstr "Fragen?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.today"
 msgstr "heute um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterday"
 msgstr "gestern um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "authentication.required.message"
 msgstr "Bitte melden Sie sich zuerst an"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "duplicate.button"
 msgstr "Duplizieren"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "share.button"
 msgstr "Personen"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.payments"
 msgstr "Menü"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
 msgstr "Nicht gespeichert. Bitte laden Sie die Seite neu und versuchen Sie es erneut"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "mailto.button"
 msgstr "Kontakt aufnehmen"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "notify.all"
 msgstr "Benachrichtigung senden"
 
-#, fuzzy, elixir-autogen, elixir-format, ex-autogen
+#, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "menu.item.admin"
 msgstr "Admin"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.projects"
 msgstr "Projekte"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.projects"
 msgstr "Zum Desktop"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "start.page.home"
 msgstr "Zum Desktop"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "collapse.button"
 msgstr "Einklappen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "expand.button"
 msgstr "Ausklappen"
 
@@ -143,47 +143,47 @@ msgstr "Datenschutzerklärung"
 msgid "terms.link"
 msgstr "AGB"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "edit.button"
 msgstr "Bearbeiten"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "copy.clipboard.button"
 msgstr "Kopieren"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "submit.button"
 msgstr "Speichern"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "done.button"
 msgstr "Fertig"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.date"
 msgstr "%{weekday}, %{day_of_month}. %{month}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.datetime"
 msgstr "%{weekday}, %{day_of_month}. %{month} um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.yesterweek"
 msgstr "letzten %{weekday} um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.tomorrow"
 msgstr "morgen um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "timestamp.nextweek"
 msgstr "nächsten %{weekday} um %{time}"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.desktop"
 msgstr "Desktop"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.workspace"
 msgstr "Mein Arbeitsbereich"
 
@@ -191,15 +191,15 @@ msgstr "Mein Arbeitsbereich"
 msgid "confirm.button"
 msgstr "Bestätigen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.body"
 msgstr "Bitte beachten Sie, dass bei einer Bestätigung der Seiteninhalt gelöscht wird."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirmation_modal.title"
 msgstr "Diese Seite überspringen?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.forward"
 msgstr "Zu %{to}"
 

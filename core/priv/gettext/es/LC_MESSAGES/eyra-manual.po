@@ -11,31 +11,31 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "Inscribirse"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.label"
 msgstr "Título"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "Ir al estudio"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "Participado"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "Pendiente"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.manual.button"
 msgstr "Crear manual"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.manual.button"
 msgstr "Editar manual"
 
@@ -43,59 +43,59 @@ msgstr "Editar manual"
 msgid "setup.annotation"
 msgstr "<div><h1>¿Cómo configurar las instrucciones para los participantes?</h1><ul><li>Cree <strong>secciones</strong> para organizar las instrucciones en partes claras.</li><li>Utilice <strong>etiquetas</strong> de sección para ayudar a los participantes a encontrar la sección relevante.</li><li>Añada varias <strong>instrucciones</strong> breves dentro de cada sección.</li><li>Incluya <strong>imágenes</strong> para que las instrucciones sean más fáciles de seguir.</li></ul></div>"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "builder.chapter.overview"
 msgstr "Secciones"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.chapter.button"
 msgstr "Añadir sección"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.default"
 msgstr "Nueva sección"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.group.label"
 msgstr "Etiqueta"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.page.button"
 msgstr "Añadir instrucción"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.default"
 msgstr "Nueva instrucción"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.label"
 msgstr "Título"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.text.label"
 msgstr "Descripción"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.image.file"
 msgstr "Seleccionar imagen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.image.file"
 msgstr "Cambiar imagen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "builder.pages.list.title"
 msgstr "Instrucciones"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.label.first"
 msgstr "Etiqueta de la sección"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.first"
 msgstr "Primera sección"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
 msgstr "Primera instrucción"
 

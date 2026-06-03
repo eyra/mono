@@ -35,21 +35,26 @@ defmodule Systems.Account.OnboardingPage do
   end
 
   @impl true
+  def consume_event(%{name: :terms_completed}, socket) do
+    {:stop, socket |> push_navigate(to: ~p"/user/onboarding")}
+  end
+
+  @impl true
   def handle_event("continue", _params, socket) do
     %{
       assigns: %{
-        vm: %{is_last_step: is_last_step, current_step_index: current_step_index, steps: steps}
+        vm: %{is_last_step: is_last_step, current_step_index: current_step_index, steps: steps},
+        current_user: user
       }
-    } =
-      socket
+    } = socket
 
     if is_last_step do
-      {:noreply, socket |> push_navigate(to: ~p"/")}
+      {:noreply, socket |> push_navigate(to: Account.UserAuth.signed_in_path(user))}
     else
       next_step = Enum.at(steps, current_step_index + 1)
 
       if next_step == :activate_account and activated?(socket) do
-        {:noreply, socket |> push_navigate(to: ~p"/")}
+        {:noreply, socket |> push_navigate(to: Account.UserAuth.signed_in_path(user))}
       else
         {:noreply,
          socket
@@ -60,8 +65,8 @@ defmodule Systems.Account.OnboardingPage do
   end
 
   @impl true
-  def handle_event("skip", _params, socket) do
-    {:noreply, socket |> push_navigate(to: ~p"/")}
+  def handle_event("skip", _params, %{assigns: %{current_user: user}} = socket) do
+    {:noreply, socket |> push_navigate(to: Account.UserAuth.signed_in_path(user))}
   end
 
   defp activated?(%{assigns: %{current_user: %{id: user_id}}}) do
@@ -89,9 +94,11 @@ defmodule Systems.Account.OnboardingPage do
 
         <.spacing value="L" />
 
-        <div class="flex flex-row gap-4 justify-center">
-          <Button.dynamic {@vm.continue_button} testid="onboarding-continue" />
-        </div>
+        <%= if @vm.continue_button do %>
+          <div class="flex flex-row gap-4 justify-center">
+            <Button.dynamic {@vm.continue_button} testid="onboarding-continue" />
+          </div>
+        <% end %>
       </Area.content>
     </.stripped>
     """

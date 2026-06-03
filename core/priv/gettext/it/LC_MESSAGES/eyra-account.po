@@ -11,19 +11,19 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "displayname.label"
 msgstr "Nome visualizzato"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "email.label"
 msgstr "Email"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "fullname.label"
 msgstr "Nome completo"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "password.label"
 msgstr "Password"
 
@@ -31,123 +31,123 @@ msgstr "Password"
 msgid "profile.title"
 msgstr "Account"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "signup.button"
 msgstr "Registrati"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "signup.title"
 msgstr "Crea un account"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.title"
 msgstr "Attivi il suo account"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.token.resend_button"
 msgstr "Invia di nuovo il link di attivazione"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.profile.photo.file"
 msgstr "Seleziona immagine"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.profile.photo.file"
 msgstr "Cambia"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "professionaltitle.label"
 msgstr "Titolo professionale"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "feature.study.description"
 msgstr "Per ottenere crediti per la partecipazione alla ricerca (OP / RPR) per bedrijfskunde (BK) o international business administration (IBA), seleziona uno o più corsi qui sotto. Se non hai completato un corso lo scorso anno, assicurati di selezionare anche quel corso."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.description"
 msgstr "Alcuni studi utilizzano requisiti di idoneità specifici. Selezionando le caratteristiche opzionali qui sotto, potrà partecipare a studi che specificano le sue caratteristiche come requisiti."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.gender.title"
 msgstr "Genere"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.title"
 msgstr "Inclusione"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.content.description"
 msgstr "Seleziona i criteri di inclusione per il tuo studio. Se non viene selezionato nulla, chiunque nel pool sarà idoneo a partecipare."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "login.google.button"
 msgstr "Accedi con Google"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "login.surf.button"
 msgstr "Accedi con SURFconext"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "signin.button"
 msgstr "Accedi"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "signin.title"
 msgstr "Accedi"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "await.confirmation.description"
 msgstr "Il suo account è stato creato. Le abbiamo inviato un'email di attivazione. Clicchi sul link nell'email per attivare il suo account."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.failed.body"
 msgstr "Il suo account potrebbe essere già stato attivato o il link di attivazione è scaduto. Clicchi su 'Accedi' in alto a destra per provare ad accedere con i dati del suo account. Se il suo account non è attivato, inserisca il suo indirizzo email qui sotto per ricevere un nuovo link di attivazione."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.failed.title"
 msgstr "Attivazione account"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.body"
 msgstr "Clicchi sul pulsante qui sotto per attivare il suo account. Sarà reindirizzato alla pagina di accesso."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "activation.confirm.title"
 msgstr "Attivazione account"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "confirm.button"
 msgstr "Attiva"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.no_match.message"
 msgstr "Nessuno trovato con questo indirizzo email."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.placeholder"
 msgstr "Cerca per indirizzo email"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.title"
 msgstr "Chi desidera aggiungere?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.search.alread_added.message"
 msgstr "Già aggiunto"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.cancel_remove.label"
 msgstr "Annulla"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.label"
 msgstr "Sono sicuro"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "people.confirm_remove.text"
 msgstr "È sicuro di volersi rimuovere da questo progetto?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Account activated successfully."
 msgstr "Account attivato con successo."
 
@@ -155,7 +155,7 @@ msgstr "Account attivato con successo."
 msgid "features.birthyear.title"
 msgstr "Anno di nascita"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.features.title"
 msgstr "Panl"
 
@@ -226,3 +226,19 @@ msgstr "termini e condizioni"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
 msgstr "Aggiungi"
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.body"
+msgstr "Hai effettuato l'accesso con il tuo account istituzionale. Prima di continuare, rivedi i Termini e l'Informativa sulla privacy."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "Accetto i %{terms} e l'%{privacy}."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Accetta i termini e l'informativa sulla privacy per continuare."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Benvenuto"

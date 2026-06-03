@@ -146,7 +146,7 @@ msgstr "I am sure"
 msgid "people.confirm_remove.text"
 msgstr "Are you sure you want to remove yourself from this project?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "Account activated successfully."
 msgstr "Account activated successfully."
 
@@ -225,3 +225,19 @@ msgstr "Terms of Use"
 #, elixir-autogen, elixir-format
 msgid "people.add.button"
 msgstr "Add"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.body"
+msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "I agree to the %{terms} and %{privacy}."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Please accept the terms and privacy statement to continue."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Welcome"

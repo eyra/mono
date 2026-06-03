@@ -19,7 +19,7 @@ msgstr "<div>Fügen Sie die Bedingungen hinzu, denen die Teilnehmer einwilligen 
 msgid "click_wrap.consent.validation"
 msgstr "Stimmen Sie den oben genannten Bedingungen zu?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "locked.error.message"
 msgstr "Bitte beachten Sie, dass diese Version des Einwilligungstextes bereits von Teilnehmenden unterzeichnet wurde. Aktualisieren Sie die Seite, wenn Sie den Text weiter bearbeiten möchten."
 

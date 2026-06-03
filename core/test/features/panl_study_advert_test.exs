@@ -107,23 +107,21 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> click(Query.css("[data-testid='create-advert-button']"))
     |> assert_has(Query.css("[data-testid='goto-advert-button']"))
 
-    # Publish the assignment
+    # Publish the assignment. Wait for the retract-button to appear — it
+    # replaces publish-button once status flips to :online, so its presence
+    # is a stable signal that the publish-triggered DOM morphs have settled.
     researcher_session
     |> assert_has(Query.css("[data-testid='publish-button']"))
     |> click(Query.css("[data-testid='publish-button']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='retract-button']"))
 
-    # Navigate to the advert
-    researcher_session
-    |> assert_has(Query.css("[data-testid='goto-advert-button']"))
-
+    # Navigate to the advert. The click can race with LiveView DOM morphs,
+    # so retry on StaleReferenceError until the click goes through. Then
+    # confirm we landed on the advert page by waiting for its publish button.
     retry_stale do
       researcher_session
       |> click(Query.css("[data-testid='goto-advert-button']"))
     end
-
-    researcher_session
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
 
     # Publish the advert
     researcher_session

@@ -82,3 +82,15 @@ msgstr "Bitte füllen Sie Ihre persönlichen Merkmale aus, um an mehr Studien te
 #, elixir-autogen, elixir-format
 msgid "fillin.characteristics.title"
 msgstr "Merkmale vervollständigen"
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "fund.pending_payout.title"
+msgstr ""

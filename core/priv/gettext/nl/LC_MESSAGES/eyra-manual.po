@@ -11,23 +11,23 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "Aanmelden"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.label"
 msgstr "Titel"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "Ga naar studie"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "Deelgenomen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "In afwachting"
 
@@ -43,11 +43,11 @@ msgstr "Handleiding bewerken"
 msgid "setup.annotation"
 msgstr "<div><h1>Hoe stel je instructies voor deelnemers in?</h1><ul><li>Maak <strong>secties</strong> om de instructies op te delen in duidelijke onderdelen.</li><li>Gebruik <strong>labels</strong> voor secties om deelnemers te helpen de relevante sectie te vinden.</li><li>Voeg meerdere korte <strong>instructies</strong> toe binnen elke sectie.</li><li>Voeg <strong>afbeeldingen</strong> toe om instructies gemakkelijker te volgen te maken.</li></ul></div>"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "builder.chapter.overview"
 msgstr "Secties"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.chapter.button"
 msgstr "Sectie toevoegen"
 
@@ -55,7 +55,7 @@ msgstr "Sectie toevoegen"
 msgid "chapter.title.default"
 msgstr "Nieuwe sectie"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.group.label"
 msgstr "Label"
 
@@ -71,15 +71,15 @@ msgstr "Nieuwe instructie"
 msgid "page.title.label"
 msgstr "Titel"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.text.label"
 msgstr "Beschrijving"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.image.file"
 msgstr "Afbeelding selecteren"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.image.file"
 msgstr "Afbeelding wijzigen"
 
@@ -95,7 +95,7 @@ msgstr "Sectielabel"
 msgid "chapter.title.first"
 msgstr "Eerste sectie"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
 msgstr "Eerste instructie"
 

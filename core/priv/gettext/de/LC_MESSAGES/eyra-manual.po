@@ -11,23 +11,23 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "apply.cta.title"
 msgstr "Anmelden"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.title.label"
 msgstr "Titel"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "open.cta.title"
 msgstr "Zur Studie"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "participated.label"
 msgstr "Teilgenommen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "pending.label"
 msgstr "Ausstehend"
 
@@ -43,11 +43,11 @@ msgstr "Handbuch bearbeiten"
 msgid "setup.annotation"
 msgstr "<div><h1>Wie richtet man Anweisungen für Teilnehmende ein?</h1><ul><li>Erstellen Sie <strong>Abschnitte</strong>, um die Anweisungen in klare Teile zu gliedern.</li><li>Verwenden Sie <strong>Beschriftungen</strong> für Abschnitte, damit Teilnehmende den relevanten Abschnitt leichter finden.</li><li>Fügen Sie in jedem Abschnitt mehrere kurze <strong>Anweisungen</strong> hinzu.</li><li>Fügen Sie <strong>Bilder</strong> hinzu, damit die Anweisungen leichter nachvollziehbar sind.</li></ul></div>"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "builder.chapter.overview"
 msgstr "Abschnitte"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "create.chapter.button"
 msgstr "Abschnitt hinzufügen"
 
@@ -55,7 +55,7 @@ msgstr "Abschnitt hinzufügen"
 msgid "chapter.title.default"
 msgstr "Neuer Abschnitt"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "chapter.group.label"
 msgstr "Bezeichnung"
 
@@ -71,15 +71,15 @@ msgstr "Neue Anleitung"
 msgid "page.title.label"
 msgstr "Titel"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.text.label"
 msgstr "Beschreibung"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.image.file"
 msgstr "Bild auswählen"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "choose.other.image.file"
 msgstr "Bild ändern"
 
@@ -95,7 +95,7 @@ msgstr "Abschnittsbezeichnung"
 msgid "chapter.title.first"
 msgstr "Erster Abschnitt"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "page.title.first"
 msgstr "Erste Anleitung"
 

@@ -160,15 +160,15 @@ msgstr "Ar tikrai norite pasitraukti iš šio projekto?"
 msgid "Account activated successfully."
 msgstr "Sąskaita sėkmingai aktyvuota."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "features.birthyear.title"
 msgstr "Gimimo metai"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.features.title"
 msgstr "Panl"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.profile.title"
 msgstr "Mano paskyra"
 
@@ -235,3 +235,19 @@ msgstr "naudojimo sąlygomis"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "people.add.button"
 msgstr "Ką norite pridėti?"
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.body"
+msgstr "Dabar esate prisijungę naudodami savo institucinę paskyrą. Prieš tęsdami, peržiūrėkite Sąlygas ir Privatumo politiką."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms"
+msgstr "Sutinku su %{terms} ir %{privacy}."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms.required"
+msgstr "Norėdami tęsti, sutikite su sąlygomis ir privatumo politika."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.title"
+msgstr "Sveiki"

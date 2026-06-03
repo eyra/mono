@@ -11,35 +11,35 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "add.to.button"
 msgstr "Aggiungi"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.description.label"
 msgstr "Descrizione del task"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.group.label"
 msgstr "Origine dei dati"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.description"
 msgstr "Scelga quali task aggiungere al workflow."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.library.title"
 msgstr "Libreria"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.description"
 msgstr "Aggiunga task dalla libreria per costruire un workflow personalizzato per i partecipanti."
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.list.hint"
 msgstr "Utilizzi le frecce per ordinare i task"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "item.title.label"
 msgstr "Titolo del task"
 

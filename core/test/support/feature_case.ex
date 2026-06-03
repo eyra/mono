@@ -56,6 +56,9 @@ defmodule CoreWeb.FeatureCase do
     |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
     |> fill_in(css("[data-testid='signin-password-input']"), with: password)
     |> click(css("[data-testid='signin-submit-button']"))
+    # Wait for the post-login redirect to land before returning, so callers
+    # that chain visit/2 don't race the in-flight redirect.
+    |> assert_has(css("[data-testid='signin-submit-button']", count: 0))
   end
 
   @doc """

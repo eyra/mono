@@ -162,6 +162,9 @@ defmodule Systems.Account.Public do
     get!(user_id) |> confirmed?()
   end
 
+  def sso_user?(%User{hashed_password: "no-password-set"}), do: true
+  def sso_user?(%User{}), do: false
+
   def show_profile_menu_item?(user), do: internal?(user)
 
   ## Database getters

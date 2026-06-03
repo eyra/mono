@@ -22,3 +22,15 @@ msgstr "Teilnehmer"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
 msgstr "Wenn Ihre Institution den Zugang zur Next-Plattform über SURFconext erlaubt, verwenden Sie die Schaltfläche unten, um sich anzumelden. Andernfalls verwenden Sie Ihre E-Mail-Adresse und Ihr Passwort."
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.body"
+msgstr "Melden Sie sich mit Ihrem institutionellen Konto an, um fortzufahren.<br>Sie werden zur sicheren Anmeldeseite von %{identity_provider} weitergeleitet."
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.button"
+msgstr "Anmelden mit %{identity_provider}"
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.title"
+msgstr "Willkommen"

@@ -11,7 +11,7 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "default.consent.text"
 msgstr "<div>Añada los términos y condiciones a los que los participantes deben dar su consentimiento.</div>"
 
@@ -19,7 +19,7 @@ msgstr "<div>Añada los términos y condiciones a los que los participantes debe
 msgid "click_wrap.consent.validation"
 msgstr "¿Aceptas los términos y condiciones anteriores?"
 
-#, fuzzy, elixir-autogen, elixir-format
+#, elixir-autogen, elixir-format, fuzzy
 msgid "locked.error.message"
 msgstr "Tenga en cuenta que esta versión del texto de consentimiento ya ha sido firmada por los participantes. Actualice la página si desea seguir modificando el texto."
 

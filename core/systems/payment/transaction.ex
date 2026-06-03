@@ -1,6 +1,43 @@
 defmodule Systems.Payment.Transaction do
   @moduledoc false
 
+  defmodule Request do
+    @moduledoc false
+
+    alias Systems.Payment.Transaction
+
+    @type t :: %__MODULE__{
+            merchant_uid: String.t(),
+            total_amount: pos_integer(),
+            currency: atom(),
+            invoice_id: String.t(),
+            idempotence_key: String.t(),
+            description: Transaction.Description.t(),
+            metadata: Transaction.Metadata.t(),
+            opts: keyword()
+          }
+
+    @enforce_keys [
+      :merchant_uid,
+      :total_amount,
+      :currency,
+      :invoice_id,
+      :idempotence_key,
+      :description,
+      :metadata
+    ]
+    defstruct [
+      :merchant_uid,
+      :total_amount,
+      :currency,
+      :invoice_id,
+      :idempotence_key,
+      :description,
+      :metadata,
+      opts: []
+    ]
+  end
+
   defmodule Description do
     @moduledoc false
 

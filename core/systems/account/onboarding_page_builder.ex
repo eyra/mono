@@ -49,10 +49,15 @@ defmodule Systems.Account.OnboardingPageBuilder do
         steps
       end
 
-    if Account.Public.activated?(user) do
-      steps
-    else
-      steps ++ [:activate_account]
+    cond do
+      Account.Public.activated?(user) ->
+        steps
+
+      Account.Public.sso_user?(user) ->
+        [:terms_and_privacy | steps]
+
+      true ->
+        steps ++ [:activate_account]
     end
   end
 
@@ -75,6 +80,14 @@ defmodule Systems.Account.OnboardingPageBuilder do
       :profile_view,
       Account.ProfileView,
       live_context: profile_context
+    )
+  end
+
+  defp build_step_view(:terms_and_privacy, _user, live_context) do
+    CoreWeb.Live.Element.prepare_live_view(
+      :terms_and_privacy_view,
+      Account.TermsAndPrivacyView,
+      live_context: live_context
     )
   end
 
@@ -101,6 +114,8 @@ defmodule Systems.Account.OnboardingPageBuilder do
       }
     }
   end
+
+  defp build_continue_button(:terms_and_privacy), do: nil
 
   defp build_continue_button(_) do
     %{

@@ -27,7 +27,7 @@ defmodule Systems.Payment.ProviderTest do
     end
   end
 
-  describe "create_transaction/8" do
+  describe "create_transaction/1" do
     test "returns transaction with payment url" do
       description = %Transaction.Description{
         platform: "Eyra Next",
@@ -44,18 +44,18 @@ defmodule Systems.Payment.ProviderTest do
         amount_per_participant: 250
       }
 
-      invoice_id = "NEXT-NL-0128"
-      idempotence_key = "assignment=1,user=42,type=payment"
+      request = %Transaction.Request{
+        merchant_uid: "m1",
+        total_amount: 10_000,
+        currency: :EUR,
+        invoice_id: "NEXT-NL-0128",
+        idempotence_key: "assignment=1,user=42,type=payment",
+        description: description,
+        metadata: metadata
+      }
 
       ProviderMock
-      |> expect(:create_transaction, fn "m1",
-                                        10_000,
-                                        :EUR,
-                                        ^invoice_id,
-                                        ^idempotence_key,
-                                        ^description,
-                                        ^metadata,
-                                        [] ->
+      |> expect(:create_transaction, fn ^request ->
         {:ok,
          %{
            uid: "t1",
@@ -66,16 +66,7 @@ defmodule Systems.Payment.ProviderTest do
       end)
 
       assert {:ok, %{uid: "t1", payment_url: url}} =
-               ProviderMock.create_transaction(
-                 "m1",
-                 10_000,
-                 :EUR,
-                 invoice_id,
-                 idempotence_key,
-                 description,
-                 metadata,
-                 []
-               )
+               ProviderMock.create_transaction(request)
 
       assert is_binary(url)
     end

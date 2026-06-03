@@ -22,3 +22,15 @@ msgstr "Dalyvis"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "surfconext.signin.body"
 msgstr "Jei jūsų institucija leidžia prieigą prie Next platformos per SURFconext, naudokite žemiau esantį mygtuką, kad prisijungtumėte. Kitu atveju naudokite savo el. pašto adresą ir slaptažodį."
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.body"
+msgstr "Prisijunkite naudodami savo institucinę paskyrą, kad galėtumėte tęsti.<br>Būsite nukreipti į saugų %{identity_provider} prisijungimo puslapį."
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.button"
+msgstr "Prisijungti su %{identity_provider}"
+
+#, elixir-autogen, elixir-format
+msgid "auth.signup.title"
+msgstr "Sveiki"

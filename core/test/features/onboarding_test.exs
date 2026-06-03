@@ -31,6 +31,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> assert_has(Query.css("[data-testid='profile-view']"))
   end
 
@@ -54,14 +55,17 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     # First step: profile
     |> assert_has(Query.css("[data-testid='profile-view']"))
     # Click continue to go to features step
     |> click(Query.css("[phx-click='continue']"))
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> assert_has(Query.css("[data-testid='features-view']"))
     # Click continue to finish onboarding
     |> click(Query.css("[phx-click='continue']"))
-    # Should navigate to home page
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    # Should navigate away from onboarding
     |> assert_has(Query.css("body"))
   end
 
@@ -79,6 +83,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     # Non-PANL user should see profile view but not features view
     |> assert_has(Query.css("[data-testid='profile-view']"))
     |> refute_has(Query.css("[data-testid='features-view']"))
@@ -98,6 +103,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
+    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> assert_has(Query.css("[data-testid='profile-view']"))
     # For non-PANL confirmed user, profile is the only step
     # Clicking continue should redirect to home
