@@ -62,7 +62,14 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   end
 
   defp user_with_reward(amount, merchant_uid) do
-    currency = Fund.Factories.create_currency("h_cur_#{System.unique_integer([:positive])}", :legal, "ƒ", 2)
+    currency =
+      Fund.Factories.create_currency(
+        "h_cur_#{System.unique_integer([:positive])}",
+        :legal,
+        "ƒ",
+        2
+      )
+
     fund = Fund.Factories.create_fund("h_fund_#{System.unique_integer([:positive])}", currency)
     user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
 

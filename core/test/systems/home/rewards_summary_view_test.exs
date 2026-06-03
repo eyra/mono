@@ -33,7 +33,10 @@ defmodule Systems.Home.RewardsSummaryViewTest do
                  }
                }
              } =
-               RewardsSummaryView.compose(:handoff_modal, %{handoff_mode: :payout, labels: @labels})
+               RewardsSummaryView.compose(:handoff_modal, %{
+                 handoff_mode: :payout,
+                 labels: @labels
+               })
     end
 
     test "kyc mode maps to the kyc labels + an external-link confirm action" do
