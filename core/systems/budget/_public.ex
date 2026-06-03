@@ -46,7 +46,7 @@ defmodule Systems.Budget.Public do
     total_amount = base_amount + partner_fee
 
     if total_amount > 0 do
-      with {:ok, user} <- ensure_user_merchant(user) do
+      with {:ok, {user, _merchant}} <- Payment.Public.ensure_merchant_for(user) do
         create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
       end
     else
@@ -144,66 +144,6 @@ defmodule Systems.Budget.Public do
       increment_subject_count(fund_id, subject_count)
       {:ok, %{transaction: transaction, payment_url: nil}}
     end
-  end
-
-  # --- User merchant ---
-
-  defp ensure_user_merchant(%Account.User{} = user) do
-    ensure_merchant_for(Repo.reload!(user))
-  end
-
-  defp ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
-       when is_binary(merchant_uid) do
-    {:ok, user}
-  end
-
-  defp ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
-    webhook_url = Payment.Public.webhook_url()
-
-    Logger.info("[Budget] Creating OPP merchant for user ##{user_id} (#{email})")
-
-    case Payment.Public.create_merchant(%{
-           emailaddress: email,
-           country: "NLD",
-           notify_url: webhook_url,
-           metadata: %{user_id: "#{user_id}"}
-         }) do
-      {:ok, %{uid: merchant_uid}} ->
-        Logger.info("[Budget] Merchant created: #{merchant_uid} for user ##{user_id}")
-        save_merchant_uid(user, merchant_uid)
-
-      {:error, %{details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => _}}}}}} ->
-        Logger.info("[Budget] Merchant already exists at OPP for #{email}, looking up...")
-        lookup_merchant_by_email(user)
-
-      {:error, error} ->
-        Logger.warning(
-          "[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
-        )
-
-        {:error, error}
-    end
-  end
-
-  defp lookup_merchant_by_email(%Account.User{email: email} = user) do
-    case Payment.Public.find_merchant_by_email(email) do
-      {:ok, %{uid: merchant_uid}} ->
-        Logger.info("[Budget] Found existing merchant: #{merchant_uid} for #{email}")
-        save_merchant_uid(user, merchant_uid)
-
-      {:error, error} ->
-        Logger.warning("[Budget] Merchant lookup failed for #{email}: #{inspect(error)}")
-        {:error, error}
-    end
-  end
-
-  defp save_merchant_uid(user, merchant_uid) do
-    user =
-      user
-      |> Ecto.Changeset.change(%{merchant_uid: merchant_uid})
-      |> Repo.update!()
-
-    {:ok, user}
   end
 
   # --- Transaction completion ---

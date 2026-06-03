@@ -4,18 +4,22 @@ defmodule Systems.Home.RewardsSummaryView do
   approved, rejected — each showing the per-status amount (cents) and a label.
 
   The approved column also exposes a "Uitbetalen" (payout) button when the
-  participant has any `:approved` rewards. Clicking it runs a pre-flight
-  eligibility check (`Fund.Public.payout_eligibility/1`); on `:ok` we show
-  the MS.6 handoff modal ("you are leaving Next to be sent to OPP"); on
-  error we surface the corresponding flash. The actual
-  `Fund.Public.request_payout/1` call fires when the participant confirms
-  in the handoff modal.
+  participant has any `:approved` rewards. Clicking it runs
+  `Fund.Public.prepare_payout/1` and presents the MS.6 handoff via the shared
+  `Frameworks.Pixel.ConfirmationModal` (`show_modal(:handoff_modal, :compact)`):
+
+    * `:ok` — `:payout` variant ("you are leaving Next to be sent to OPP");
+      confirming fires `Fund.Public.request_payout/1`.
+    * `{:kyc_required, url}` — `:kyc` variant; confirming redirects to OPP to
+      complete onboarding.
+    * `{:below_threshold, _}` / other errors — a flash, no modal.
 
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
   """
   use CoreWeb, :live_component
 
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
@@ -42,48 +46,105 @@ defmodule Systems.Home.RewardsSummaryView do
         labels: labels,
         user: user
       )
-      |> assign_new(:show_handoff_modal?, fn -> false end)
+      |> assign_new(:handoff_mode, fn -> :payout end)
+      |> assign_new(:kyc_overview_url, fn -> nil end)
+    }
+  end
+
+  @impl true
+  def compose(:handoff_modal, %{handoff_mode: :kyc, kyc_overview_url: url, labels: labels})
+      when is_binary(url) do
+    # KYC confirm is an external link to OPP — NOT a server "confirm" event.
+    # A redirect issued from the parent-event (send_update) cycle would be
+    # silently dropped, so the browser must navigate via a real anchor.
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_kyc_title,
+          body: labels.payout_kyc_body,
+          confirm_label: labels.payout_kyc_confirm,
+          cancel_label: labels.payout_handoff_cancel,
+          confirm_action: %{type: :http_get, to: url}
+        }
+      }
+    }
+  end
+
+  def compose(:handoff_modal, %{handoff_mode: :payout, labels: labels}) do
+    # Payout confirm is a standard "confirm" send event -> request_payout.
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_handoff_title,
+          body: labels.payout_handoff_body,
+          confirm_label: labels.payout_handoff_confirm,
+          cancel_label: labels.payout_handoff_cancel
+        }
+      }
     }
   end
 
   @impl true
   def handle_event("request_payout", _params, %{assigns: %{user: user, labels: labels}} = socket) do
-    case Fund.Public.payout_eligibility(user) do
+    case Fund.Public.prepare_payout(user) do
       :ok ->
-        {:noreply, assign(socket, show_handoff_modal?: true)}
+        {:noreply, present_handoff(socket, :payout, nil)}
 
-      {:error, :no_merchant} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_no_merchant)}
+      {:error, {:kyc_required, kyc_url}} when is_binary(kyc_url) ->
+        {:noreply, present_handoff(socket, :kyc, kyc_url)}
 
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
+
+      # Covers {:error, :kyc_unavailable}, {:error, :no_merchant} and any
+      # provider/network error — no handoff, just surface the failure.
+      {:error, _reason} ->
+        {:noreply, socket |> Flash.push_error(labels.payout_failed)}
     end
   end
 
+  # Payout variant confirm (the KYC variant confirms via an external link, so
+  # it never reaches the server). ConfirmationModal sends "confirmed" to its
+  # parent; this runs inside a send_update cycle, so we must NOT rely on a
+  # redirect here — only DB work + flash + assign, which propagate fine.
   @impl true
-  def handle_event("confirm_handoff", _params, %{assigns: %{user: user, labels: labels}} = socket) do
-    socket = assign(socket, show_handoff_modal?: false)
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :handoff_modal}},
+        %{assigns: %{user: user, labels: labels}} = socket
+      ) do
+    socket = hide_modal(socket, :handoff_modal)
 
     case Fund.Public.request_payout(user) do
       {:ok, _result} ->
         {:noreply, socket |> Flash.push_info(labels.payout_success) |> refresh_totals(user)}
 
-      {:error, :no_merchant} ->
-        # Lost a race with merchant_uid being cleared; fall back to the flash.
-        {:noreply, socket |> Flash.push_error(labels.payout_no_merchant)}
-
       {:error, {:below_threshold, _cents}} ->
-        # Lost a race with an in-flight payout; fall back to the flash.
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
 
-      {:error, {:opp_failed, _reason}} ->
+      # {:opp_failed, _}, :no_merchant, :lock_failed, :kyc_unavailable, and a
+      # drifted {:kyc_required, _} (rare) — surface a flash; the next click
+      # re-evaluates and shows the KYC link.
+      {:error, _reason} ->
         {:noreply, socket |> Flash.push_error(labels.payout_failed)}
     end
   end
 
   @impl true
-  def handle_event("cancel_handoff", _params, socket) do
-    {:noreply, assign(socket, show_handoff_modal?: false)}
+  def handle_event("cancelled", %{source: %{name: :handoff_modal}}, socket) do
+    {:noreply, hide_modal(socket, :handoff_modal)}
+  end
+
+  @impl true
+  def handle_modal_closed(socket, :handoff_modal), do: socket
+
+  defp present_handoff(socket, mode, kyc_overview_url) do
+    socket
+    |> assign(handoff_mode: mode, kyc_overview_url: kyc_overview_url)
+    |> compose_child(:handoff_modal)
+    |> show_modal(:handoff_modal, :compact)
   end
 
   defp refresh_totals(socket, user) do
@@ -122,49 +183,6 @@ defmodule Systems.Home.RewardsSummaryView do
           pill_color="bg-delete"
           amount_cents={@rejected_cents}
         />
-      </div>
-      <%= if @show_handoff_modal? do %>
-        <.handoff_modal labels={@labels} target={@myself} />
-      <% end %>
-    </div>
-    """
-  end
-
-  attr(:labels, :map, required: true)
-  attr(:target, :any, required: true)
-
-  @doc false
-  def handoff_modal(assigns) do
-    ~H"""
-    <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      data-testid="payout-handoff-modal"
-    >
-      <div class="bg-white rounded-lg p-6 max-w-md mx-4 shadow-lg">
-        <Text.body_large>
-          <%= @labels.payout_handoff_body %>
-        </Text.body_large>
-        <.spacing value="M" />
-        <div class="flex flex-row gap-4 justify-end">
-          <button
-            type="button"
-            phx-click="cancel_handoff"
-            phx-target={@target}
-            data-testid="payout-handoff-cancel"
-            class="text-button font-button text-grey2 px-4 py-2 hover:underline"
-          >
-            <%= @labels.payout_handoff_cancel %>
-          </button>
-          <button
-            type="button"
-            phx-click="confirm_handoff"
-            phx-target={@target}
-            data-testid="payout-handoff-confirm"
-            class="text-button font-button text-white bg-primary rounded px-4 py-2 hover:bg-primary-hover"
-          >
-            <%= @labels.payout_handoff_confirm %>
-          </button>
-        </div>
       </div>
     </div>
     """

@@ -7,24 +7,56 @@ defmodule Systems.Payment.Provider.Local do
 
   # Merchants
 
+  # Local provider always returns a "fully verified" merchant so the pay-out
+  # path works end-to-end in dev/test without hitting OPP's KYC funnel.
+  defp stub_merchant(uid) do
+    %{
+      uid: uid,
+      status: "live",
+      kyc_level: 100,
+      compliance_status: "verified",
+      overview_url: nil
+    }
+  end
+
   @impl true
   def create_merchant(attrs) when is_map(attrs) do
     uid = generate_uid()
     Logger.info("[Payment.Local] create_merchant uid=#{uid} attrs=#{inspect(attrs)}")
-    {:ok, %{uid: uid, status: "active", kyc_level: 0}}
+    {:ok, stub_merchant(uid)}
   end
 
   @impl true
   def get_merchant(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_merchant uid=#{uid}")
-    {:ok, %{uid: uid, status: "active", kyc_level: 0}}
+    {:ok, stub_merchant(uid)}
   end
 
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
     uid = generate_uid()
     Logger.info("[Payment.Local] find_merchant_by_email email=#{email} uid=#{uid}")
-    {:ok, %{uid: uid, status: "active", kyc_level: 0}}
+    {:ok, stub_merchant(uid)}
+  end
+
+  # Bank accounts — local stub always reports an approved one so the
+  # pay-out path doesn't get stuck in KYC.
+
+  defp stub_bank_account(uid) do
+    %{uid: uid, status: "approved", verification_url: nil}
+  end
+
+  @impl true
+  def create_bank_account(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
+    uid = generate_uid()
+    Logger.info("[Payment.Local] create_bank_account merchant=#{merchant_uid} uid=#{uid}")
+    {:ok, stub_bank_account(uid)}
+  end
+
+  @impl true
+  def list_bank_accounts(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_bank_accounts merchant=#{merchant_uid}")
+    {:ok, [stub_bank_account(generate_uid())]}
   end
 
   # Transactions

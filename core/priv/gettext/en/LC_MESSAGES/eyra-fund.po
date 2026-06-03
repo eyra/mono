@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr "Payout could not be processed right now. Please try again later."
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.no_merchant"
-msgstr "Payout setup is incomplete. Please finish your payment provider onboarding first."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr "Payout requested. Your reward is on its way to your bank account."
 
@@ -181,3 +177,19 @@ msgstr "Cancel"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Go to payout"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.body"
+msgstr "🔒 You first need to verify your identity at our payment provider (OPP). You will be redirected to OPP to complete this step, then come back to start your payout."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.confirm"
+msgstr "Continue to OPP"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.title"
+msgstr "Start payout"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.title"
+msgstr "Verification required"

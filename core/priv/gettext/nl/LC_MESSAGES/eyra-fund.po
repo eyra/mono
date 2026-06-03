@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr "Uitbetaling kan op dit moment niet worden verwerkt. Probeer het later opnieuw."
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.no_merchant"
-msgstr "Uitbetaling is nog niet ingericht. Rond eerst de aanmelding bij de betalingsprovider af."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
 
@@ -181,3 +177,19 @@ msgstr "Annuleren"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Ga naar uitbetalen"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.body"
+msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider (OPP). U wordt naar OPP gestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.confirm"
+msgstr "Verder naar OPP"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.title"
+msgstr "Uitbetaling starten"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.title"
+msgstr "Verificatie nodig"

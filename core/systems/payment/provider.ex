@@ -7,7 +7,9 @@ defmodule Systems.Payment.Provider do
   @type merchant :: %{
           uid: String.t(),
           status: String.t(),
-          kyc_level: integer()
+          kyc_level: integer(),
+          compliance_status: String.t(),
+          overview_url: String.t() | nil
         }
 
   @doc """
@@ -27,6 +29,31 @@ defmodule Systems.Payment.Provider do
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+
+  # Bank accounts (attached to a merchant; needed for withdrawals)
+
+  @type bank_account :: %{
+          uid: String.t(),
+          status: String.t(),
+          verification_url: String.t() | nil
+        }
+
+  @doc """
+  Create a bank account on the given merchant. OPP returns a
+  verification_url the merchant must visit to enter their IBAN and
+  complete the bank-verification step of KYC.
+
+  ## Attrs
+    * `return_url` (required) - where to send the participant after verification
+    * `notify_url` (required) - webhook URL for status notifications
+    * `is_default` - boolean
+    * `reference` - free-form string (≤50 chars)
+  """
+  @callback create_bank_account(merchant_uid :: String.t(), attrs :: map()) ::
+              {:ok, bank_account()} | {:error, Error.t()}
+
+  @callback list_bank_accounts(merchant_uid :: String.t()) ::
+              {:ok, [bank_account()]} | {:error, Error.t()}
 
   # Transactions
 

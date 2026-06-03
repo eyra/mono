@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.no_merchant"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.success"
 msgstr ""
 
@@ -180,4 +176,20 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.title"
 msgstr ""

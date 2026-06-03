@@ -31,22 +31,26 @@ defmodule Systems.Payment.Provider.OPP do
 
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
-    find_merchant_by_email_paged(email, 1)
-  end
+    # OPP supports `?filter[emailaddress]=...` natively (max perpage = 100),
+    # which avoids a full-merchant scan and works even with hundreds of
+    # sub-merchants. The list response does NOT echo `emailaddress` per row,
+    # so we trust the filter: if `data` has any entries, the first one is
+    # ours. If it has many (multiple merchants registered against the same
+    # email, which OPP allows in some configurations) we still take the
+    # first — caller wins; the duplicate-email recovery path only cares
+    # about getting a working uid back.
+    query =
+      URI.encode_query(%{
+        "filter[emailaddress]" => email,
+        "perpage" => "100"
+      })
 
-  defp find_merchant_by_email_paged(email, page) do
-    case HTTP.get("/merchants?page=#{page}") do
-      {:ok, %{"data" => merchants, "has_more" => has_more}} ->
-        case Enum.find(merchants, &(Map.get(&1, "emailaddress") == email)) do
-          %{"uid" => uid} = data ->
-            {:ok, parse_merchant(uid, data)}
+    case HTTP.get("/merchants?#{query}") do
+      {:ok, %{"data" => [%{"uid" => uid} = data | _]}} ->
+        {:ok, parse_merchant(uid, data)}
 
-          nil when has_more ->
-            find_merchant_by_email_paged(email, page + 1)
-
-          nil ->
-            {:error, %Error{code: :not_found, message: "No merchant found for #{email}"}}
-        end
+      {:ok, %{"data" => []}} ->
+        {:error, %Error{code: :not_found, message: "No merchant found for #{email}"}}
 
       {:error, %Error{}} = error ->
         error
@@ -115,6 +119,30 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  # Bank accounts
+
+  @impl true
+  def create_bank_account(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
+    case HTTP.post("/merchants/#{merchant_uid}/bank_accounts", attrs) do
+      {:ok, %{"uid" => uid} = data} ->
+        {:ok, parse_bank_account(uid, data)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  @impl true
+  def list_bank_accounts(merchant_uid) when is_binary(merchant_uid) do
+    case HTTP.get("/merchants/#{merchant_uid}/bank_accounts?perpage=100") do
+      {:ok, %{"data" => entries}} ->
+        {:ok, Enum.map(entries, fn %{"uid" => uid} = data -> parse_bank_account(uid, data) end)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   # Withdrawals
 
   @impl true
@@ -144,11 +172,23 @@ defmodule Systems.Payment.Provider.OPP do
 
   # Parsers
 
+  defp parse_bank_account(uid, data) do
+    %{
+      uid: uid,
+      status: Map.get(data, "status", "new"),
+      verification_url: Map.get(data, "verification_url")
+    }
+  end
+
   defp parse_merchant(uid, data) do
+    compliance = Map.get(data, "compliance", %{})
+
     %{
       uid: uid,
       status: Map.get(data, "status", "unknown"),
-      kyc_level: Map.get(data, "compliance", %{}) |> Map.get("level", 0)
+      kyc_level: Map.get(compliance, "level", 0),
+      compliance_status: Map.get(compliance, "status", "unverified"),
+      overview_url: Map.get(compliance, "overview_url")
     }
   end
 

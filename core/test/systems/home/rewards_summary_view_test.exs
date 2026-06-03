@@ -1,60 +1,59 @@
 defmodule Systems.Home.RewardsSummaryViewTest do
   @moduledoc """
-  Render-level coverage for the MS.6 handoff modal. The modal lives inline
-  in the rewards summary card and is only rendered when the parent's
-  `@show_handoff_modal?` assign is true.
-
-  Event-handler coverage (eligibility -> show modal -> request_payout) is
-  exercised at the Fund.Public level via payout_eligibility/1 and
-  request_payout/1 tests in test/systems/fund/_public_test.exs.
+  Unit coverage for the payout handoff modal *configuration*: compose/2 maps
+  the handoff mode to the right shared ConfirmationModal assigns (title, body,
+  confirm/cancel labels). The handler dispatch + the rendered modal chrome are
+  covered by Fund.Public tests and the ConfirmationModal component test.
   """
   use ExUnit.Case, async: true
-  import Phoenix.LiveViewTest
 
+  alias Frameworks.Pixel
   alias Systems.Home.RewardsSummaryView
 
-  defp labels do
-    %{
-      payout_handoff_body: "🔒 You will leave Next to be sent to OPP.",
-      payout_handoff_confirm: "Go to payout",
-      payout_handoff_cancel: "Cancel"
-    }
-  end
+  @labels %{
+    payout_handoff_title: "Start payout",
+    payout_handoff_body: "PAYOUT body",
+    payout_handoff_confirm: "Go to payout",
+    payout_handoff_cancel: "Cancel",
+    payout_kyc_title: "Verification required",
+    payout_kyc_body: "KYC body",
+    payout_kyc_confirm: "Continue to OPP"
+  }
 
-  describe "handoff_modal/1" do
-    test "renders the testid wrapper, body copy, and both buttons" do
-      html =
-        render_component(&RewardsSummaryView.handoff_modal/1, %{
-          labels: labels(),
-          target: :stub
-        })
-
-      assert html =~ ~s(data-testid="payout-handoff-modal")
-      assert html =~ ~s(data-testid="payout-handoff-confirm")
-      assert html =~ ~s(data-testid="payout-handoff-cancel")
-      assert html =~ "🔒 You will leave Next to be sent to OPP."
-      assert html =~ "Go to payout"
-      assert html =~ "Cancel"
+  describe "compose/2 :handoff_modal" do
+    test "payout mode maps to the payout labels on ConfirmationModal" do
+      assert %{
+               module: Pixel.ConfirmationModal,
+               params: %{
+                 assigns: %{
+                   title: "Start payout",
+                   body: "PAYOUT body",
+                   confirm_label: "Go to payout",
+                   cancel_label: "Cancel"
+                 }
+               }
+             } =
+               RewardsSummaryView.compose(:handoff_modal, %{handoff_mode: :payout, labels: @labels})
     end
 
-    test "wires the confirm button to the confirm_handoff event on the target" do
-      html =
-        render_component(&RewardsSummaryView.handoff_modal/1, %{
-          labels: labels(),
-          target: :stub
-        })
-
-      assert html =~ ~s(phx-click="confirm_handoff")
-    end
-
-    test "wires the cancel button to the cancel_handoff event on the target" do
-      html =
-        render_component(&RewardsSummaryView.handoff_modal/1, %{
-          labels: labels(),
-          target: :stub
-        })
-
-      assert html =~ ~s(phx-click="cancel_handoff")
+    test "kyc mode maps to the kyc labels + an external-link confirm action" do
+      assert %{
+               module: Pixel.ConfirmationModal,
+               params: %{
+                 assigns: %{
+                   title: "Verification required",
+                   body: "KYC body",
+                   confirm_label: "Continue to OPP",
+                   cancel_label: "Cancel",
+                   confirm_action: %{type: :http_get, to: "https://opp.test/kyc"}
+                 }
+               }
+             } =
+               RewardsSummaryView.compose(:handoff_modal, %{
+                 handoff_mode: :kyc,
+                 kyc_overview_url: "https://opp.test/kyc",
+                 labels: @labels
+               })
     end
   end
 end

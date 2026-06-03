@@ -975,27 +975,31 @@ defmodule Systems.Fund.Public do
   Webhook handling (MS.11) and the eventual `:pending_payout` → `:paid`
   transition land in a follow-up PR.
   """
-  def request_payout(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
+  def request_payout(%Account.User{} = user) do
+    # Reload from the DB: prepare_payout/1 may have just provisioned the OPP
+    # merchant and persisted merchant_uid, while the caller (e.g. a LiveView
+    # socket assign) still holds a stale struct with merchant_uid: nil.
+    case Repo.reload!(user) do
+      %Account.User{merchant_uid: nil} ->
+        {:error, :no_merchant}
 
-  def request_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}) do
-    approved = list_approved_rewards(user_id)
-    total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
+      %Account.User{id: user_id, merchant_uid: merchant_uid} ->
+        approved = list_approved_rewards(user_id)
+        total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
 
-    if total < @payout_threshold_cents do
-      {:error, {:below_threshold, total}}
-    else
-      do_request_payout(user_id, merchant_uid, approved, total)
+        if total < @payout_threshold_cents do
+          {:error, {:below_threshold, total}}
+        else
+          do_request_payout(user_id, merchant_uid, approved, total)
+        end
     end
   end
 
   @doc """
-  Pre-flight check for a payout request — same `{:error, _}` shape as
-  `request_payout/1` but without locking anything or hitting OPP. Used by
-  the home rewards card to decide between an error flash (below threshold
-  / no merchant) and showing the MS.6 handoff screen.
+  Pre-flight check for a payout request — pure / no side effects. Used by
+  `prepare_payout/1` to gate the threshold + balance checks before any OPP
+  call.
   """
-  def payout_eligibility(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
-
   def payout_eligibility(%Account.User{id: user_id}) do
     total =
       list_approved_rewards(user_id)
@@ -1008,7 +1012,87 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  @doc """
+  Side-effecting pre-handoff check (UC-OPP-06.A1).
+
+  Ensures the participant has an OPP merchant and a bank account, then
+  reports payout readiness. Returns one of:
+
+    * `:ok` — merchant is `status="live"` AND `compliance_status="verified"`
+      AND has an `approved` bank account, and the approved balance is at or
+      above the payout threshold.
+    * `{:error, {:below_threshold, cents}}` — under €5; no OPP call made.
+    * `{:error, {:kyc_required, url}}` — merchant/bank not yet payout-ready
+      and `url` is a usable page to send the participant to (the merchant
+      KYC overview when present, else the bank-account verification page).
+    * `{:error, :kyc_unavailable}` — not payout-ready and OPP gave us no
+      usable URL to route to; surface a generic "try again later" flash.
+    * `{:error, reason}` — an OPP call failed.
+
+  Per the ticket, no local KYC tracking in MVP — we re-check OPP each
+  time the participant clicks Uitbetalen.
+  """
+  def prepare_payout(%Account.User{} = user) do
+    with :ok <- payout_eligibility(user),
+         {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
+         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
+      payout_ready_for(merchant, bank_account)
+    end
+  end
+
+  # Fully payout-ready: live + verified merchant with an approved bank
+  # account. (compliance_status "verified" is documented to subsume bank
+  # approval, but we check the bank status explicitly so a live withdrawal
+  # is never fired against an unapproved account.)
+  defp payout_ready_for(
+         %{status: "live", compliance_status: "verified"},
+         %{status: "approved"}
+       ),
+       do: :ok
+
+  # Merchant itself is done — only the bank step remains. Send straight to
+  # the bank-account verification page rather than the (now redundant)
+  # merchant overview.
+  defp payout_ready_for(
+         %{status: "live", compliance_status: "verified"},
+         %{verification_url: verification_url}
+       )
+       when is_binary(verification_url) and verification_url != "",
+       do: {:error, {:kyc_required, verification_url}}
+
+  # Merchant not yet done — route to the merchant KYC overview (the
+  # comprehensive checklist) when OPP gave us one.
+  defp payout_ready_for(%{overview_url: overview_url}, _bank_account)
+       when is_binary(overview_url) and overview_url != "",
+       do: {:error, {:kyc_required, overview_url}}
+
+  # No overview page (common once only the bank step remains) — fall back to
+  # the bank-account verification page.
+  defp payout_ready_for(_merchant, %{verification_url: verification_url})
+       when is_binary(verification_url) and verification_url != "",
+       do: {:error, {:kyc_required, verification_url}}
+
+  # Not ready and no usable URL to send the participant to.
+  defp payout_ready_for(_merchant, _bank_account), do: {:error, :kyc_unavailable}
+
+  # Re-verify readiness at withdrawal time against fresh OPP state. Guards
+  # against the merchant/bank status drifting between the handoff screen and
+  # the confirm click (TOCTOU). Returns the same shape as payout_ready_for/2.
+  defp recheck_payout_ready(merchant_uid) do
+    with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
+         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant_uid) do
+      payout_ready_for(merchant, bank_account)
+    end
+  end
+
   defp do_request_payout(user_id, merchant_uid, approved, total) do
+    case recheck_payout_ready(merchant_uid) do
+      :ok -> lock_and_withdraw(user_id, merchant_uid, approved, total)
+      {:error, _} = error -> error
+    end
+  end
+
+  defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
     reward_ids = Enum.map(approved, & &1.id)
 
     with {:ok, payout} <- lock_for_payout(user_id, reward_ids, total),
