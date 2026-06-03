@@ -415,9 +415,7 @@ defmodule Systems.Advert.Public do
     with :ok <- validate_member(advert, user),
          :ok <- validate_exclusion(advert, user),
          :ok <- validate_eligitable(advert, user),
-         :ok <- validate_open_spots(advert),
-         :ok <- validate_released(advert),
-         :ok <- validate_funded(advert) do
+         :ok <- validate_open(advert) do
       :ok
     else
       error -> error
@@ -433,6 +431,17 @@ defmodule Systems.Advert.Public do
       error -> error
     end
   end
+
+  def pool_visibility(%Advert.Model{status: :online} = advert) do
+    case validate_open(advert) do
+      :ok -> :visible
+      {:error, :no_open_spots} -> :filled
+      {:error, :not_funded} -> :not_funded
+      {:error, :not_released} -> nil
+    end
+  end
+
+  def pool_visibility(%Advert.Model{}), do: nil
 
   defp validate_member(%{assignment: assignment}, user) do
     if Assignment.Public.member?(assignment, user) do

@@ -43,7 +43,7 @@ const env = process.env.SMOKE_ENV || 'prod';
 const expected = EXPECTED[env] ?? PROD_FEATURES;
 
 test(`deployed app (${env}) has exactly the expected feature flags`, async ({ request }) => {
-  const response = await request.get('/api/e2e/features');
+  const response = await request.get('/.status/features');
 
   expect(response.status()).toBe(200);
 

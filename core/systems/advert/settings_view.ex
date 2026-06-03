@@ -2,6 +2,8 @@ defmodule Systems.Advert.SettingsView do
   use CoreWeb, :live_component
   require Systems.Advert.Themes
 
+  alias Frameworks.Pixel.AlertBanner
+
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Promotion
@@ -12,9 +14,19 @@ defmodule Systems.Advert.SettingsView do
       :ok,
       socket
       |> assign(advert: advert)
+      |> assign_pool_visibility()
       |> assign_invite_url()
       |> compose_child(:promotion_form)
     }
+  end
+
+  defp assign_pool_visibility(
+         %{assigns: %{advert: %{assignment_id: assignment_id} = advert}} = socket
+       ) do
+    assign(socket,
+      pool_visibility: Advert.Public.pool_visibility(advert),
+      manage_participants_path: ~p"/assignment/#{assignment_id}/content?tab=#{:participants}"
+    )
   end
 
   @impl true
@@ -45,6 +57,11 @@ defmodule Systems.Advert.SettingsView do
       <div>
         <Area.content>
           <Margin.y id={:page_top} />
+          <.pool_visibility_banner
+            :if={@pool_visibility != nil}
+            status={@pool_visibility}
+            manage_participants_path={@manage_participants_path}
+          />
           <Text.title2><%= dgettext("eyra-advert", "settings.title") %></Text.title2>
           <.spacing value="M" />
           <Affiliate.Html.url_panel
@@ -56,6 +73,55 @@ defmodule Systems.Advert.SettingsView do
           <.child name={:promotion_form} fabric={@fabric} />
         </Area.content>
       </div>
+    """
+  end
+
+  attr(:status, :atom, required: true)
+  attr(:manage_participants_path, :string, default: nil)
+
+  defp pool_visibility_banner(%{status: :visible} = assigns) do
+    ~H"""
+    <div>
+      <AlertBanner.success>
+        <%= dgettext("eyra-advert", "pool.visibility.visible.banner") %>
+      </AlertBanner.success>
+      <.spacing value="M" />
+    </div>
+    """
+  end
+
+  defp pool_visibility_banner(%{status: :filled} = assigns) do
+    ~H"""
+    <div>
+      <AlertBanner.action
+        title={dgettext("eyra-advert", "pool.visibility.filled.banner.title")}
+        subtitle={dgettext("eyra-advert", "pool.visibility.filled.banner.subtitle")}
+        button={%{
+          action: %{type: :http_get, to: @manage_participants_path},
+          face: %{
+            type: :primary,
+            label: dgettext("eyra-advert", "pool.visibility.filled.add_spots.button")
+          }
+        }}
+      />
+      <.spacing value="M" />
+    </div>
+    """
+  end
+
+  defp pool_visibility_banner(%{status: :not_funded} = assigns) do
+    ~H"""
+    <div>
+      <AlertBanner.action
+        title={dgettext("eyra-advert", "pool.visibility.not_funded.banner.title")}
+        subtitle={dgettext("eyra-advert", "pool.visibility.not_funded.banner.subtitle")}
+        button={%{
+          action: %{type: :http_get, to: @manage_participants_path},
+          face: %{type: :primary, label: dgettext("eyra-advert", "pool.visibility.fund.button")}
+        }}
+      />
+      <.spacing value="M" />
+    </div>
     """
   end
 end

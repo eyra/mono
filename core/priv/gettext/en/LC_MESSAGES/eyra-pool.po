@@ -41,3 +41,31 @@ msgstr "Sign off"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "landing.description.visitor"
 msgstr "🚫 You are not a member of this pool."
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.breadcrumb.overview"
+msgstr "Overview"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.empty.message"
+msgstr "The marketplace is currently empty."
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.all"
+msgstr "All"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.label"
+msgstr "Filter:"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.search.placeholder"
+msgstr "Search"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.show_more"
+msgstr "Show more"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.title"
+msgstr "Marketplace"
