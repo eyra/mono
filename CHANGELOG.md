@@ -10,6 +10,10 @@
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
 ## \#24 Unreleased
+* Changed - SURFconext userinfo (name, email, affiliation) is now stored as a raw JSON map; individual parsed columns removed from the database
+* Fixed - Auth signup page (/user/auth/:provider) had no side margins on mobile
+* Fixed - Sign-in button incorrectly appeared in the navbar on dedicated provider auth pages
+* Fixed - Org member/owner list crashed when an auth principal had no linked user (orphaned principals are now silently skipped)
 * Added - SURFconext-based authentication for creators: a provider-agnostic signup page at /user/auth/:provider (SURFconext, Google, Apple, and a new Mock provider for dev/test); name, logo, and auth path are derived from the provider key
 * Added - Terms-and-privacy onboarding step shown to first-time SSO users; folds into the existing /user/onboarding flow
 * Added - Mock auth provider for local/dev/test environments only, with a /user/auth/mock/reset utility for clean test runs
