@@ -29,8 +29,10 @@ defmodule CoreWeb.FileUploader do
     quote do
       @behaviour CoreWeb.FileUploader
 
-      # Skip init if it already has been called
-      def init_file_uploader(%{assigns: %{uploads: _uploads}} = socket, _key), do: socket
+      # Skip init if this key is already registered
+      def init_file_uploader(%{assigns: %{uploads: uploads}} = socket, key)
+          when is_map_key(uploads, key),
+          do: socket
 
       def init_file_uploader(socket, key) do
         socket
