@@ -168,7 +168,7 @@ msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
-msgstr "🔒 Betalingen worden veilig verwerkt via Online Payment Platform (OPP). U verlaat nu Next platform en wordt na afloop weer terug gestuurd."
+msgstr "🔒 %{amount} wordt uitbetaald naar uw bankrekening. Betalingen worden veilig verwerkt door onze betaalprovider."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.cancel"
@@ -176,15 +176,15 @@ msgstr "Annuleren"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
-msgstr "Ga naar uitbetalen"
+msgstr "Nu uitbetalen"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.kyc.body"
-msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider (OPP). U wordt naar OPP gestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
+msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider. U wordt doorgestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.kyc.confirm"
-msgstr "Verder naar OPP"
+msgstr "Doorgaan naar verificatie"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"

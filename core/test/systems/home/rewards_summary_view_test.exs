@@ -17,7 +17,7 @@ defmodule Systems.Home.RewardsSummaryViewTest do
     payout_handoff_cancel: "Cancel",
     payout_kyc_title: "Verification required",
     payout_kyc_body: "KYC body",
-    payout_kyc_confirm: "Continue to OPP"
+    payout_kyc_confirm: "Continue to verification"
   }
 
   describe "compose/2 :handoff_modal" do
@@ -33,7 +33,10 @@ defmodule Systems.Home.RewardsSummaryViewTest do
                  }
                }
              } =
-               RewardsSummaryView.compose(:handoff_modal, %{handoff_mode: :payout, labels: @labels})
+               RewardsSummaryView.compose(:handoff_modal, %{
+                 handoff_mode: :payout,
+                 labels: @labels
+               })
     end
 
     test "kyc mode maps to the kyc labels + an external-link confirm action" do
@@ -43,7 +46,7 @@ defmodule Systems.Home.RewardsSummaryViewTest do
                  assigns: %{
                    title: "Verification required",
                    body: "KYC body",
-                   confirm_label: "Continue to OPP",
+                   confirm_label: "Continue to verification",
                    cancel_label: "Cancel",
                    confirm_action: %{type: :http_get, to: "https://opp.test/kyc"}
                  }

@@ -91,6 +91,23 @@ defmodule Systems.Home.PageBuilderTest do
 
       refute :rewards_summary in block_keys(vm)
     end
+
+    test "payout handoff body interpolates the approved amount (no stray placeholder)" do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        amount: 2000,
+        status: :approved,
+        idempotence_key: "approved=#{System.unique_integer([:positive])}"
+      })
+
+      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
+
+      assert %{labels: %{payout_handoff_body: body}} = block_params(vm, :rewards_summary)
+      refute body =~ "%{amount}"
+      assert body =~ "20"
+    end
   end
 
   describe "view_model/2 available_adverts (future studies) visibility" do

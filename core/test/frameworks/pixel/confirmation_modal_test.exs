@@ -16,7 +16,8 @@ defmodule Frameworks.Pixel.ConfirmationModalTest do
   end
 
   test "renders a custom confirm label" do
-    assert render_modal(%{confirm_label: "Continue to OPP"}) =~ "Continue to OPP"
+    assert render_modal(%{confirm_label: "Continue to verification"}) =~
+             "Continue to verification"
   end
 
   test "renders a custom cancel label" do
@@ -32,12 +33,12 @@ defmodule Frameworks.Pixel.ConfirmationModalTest do
   test "renders the confirm button as an external link when given an http_get action" do
     html =
       render_modal(%{
-        confirm_label: "Continue to OPP",
+        confirm_label: "Continue to verification",
         confirm_action: %{type: :http_get, to: "https://opp.test/kyc"}
       })
 
     assert html =~ ~s(href="https://opp.test/kyc")
-    assert html =~ "Continue to OPP"
+    assert html =~ "Continue to verification"
   end
 
   test "defaults the confirm button to a send event when no action is given" do

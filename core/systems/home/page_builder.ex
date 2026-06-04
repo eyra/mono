@@ -80,12 +80,12 @@ defmodule Systems.Home.PageBuilder do
       %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
         nil
 
-      totals ->
+      %{approved_cents: approved_cents} = totals ->
         %{
           module: Home.RewardsSummaryView,
           params:
             totals
-            |> Map.put(:labels, rewards_summary_labels())
+            |> Map.put(:labels, rewards_summary_labels(approved_cents))
             |> Map.put(:user, user)
         }
     end
@@ -162,7 +162,7 @@ defmodule Systems.Home.PageBuilder do
 
   defp block(_, _, _assigns, _opts), do: nil
 
-  defp rewards_summary_labels do
+  defp rewards_summary_labels(approved_cents) do
     %{
       title: dgettext("eyra-fund", "rewards_summary.title"),
       pending_pill: dgettext("eyra-fund", "rewards_summary.pending.pill"),
@@ -175,7 +175,10 @@ defmodule Systems.Home.PageBuilder do
       payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
       payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),
       payout_handoff_title: dgettext("eyra-fund", "rewards_summary.payout.handoff.title"),
-      payout_handoff_body: dgettext("eyra-fund", "rewards_summary.payout.handoff.body"),
+      payout_handoff_body:
+        dgettext("eyra-fund", "rewards_summary.payout.handoff.body",
+          amount: Assignment.CurrencyHelpers.format_cents(approved_cents)
+        ),
       payout_handoff_confirm: dgettext("eyra-fund", "rewards_summary.payout.handoff.confirm"),
       payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel"),
       payout_kyc_title: dgettext("eyra-fund", "rewards_summary.payout.kyc.title"),
