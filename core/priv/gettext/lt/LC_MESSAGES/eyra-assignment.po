@@ -509,7 +509,7 @@ msgstr "Aktyvuokite savo paskyrą"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Palikite savo el. pašto adresą, kad gautumėte informacijos apie dalyvavimą tyrimuose per Panl."
+msgstr "Panl suartina piliečius ir mokslą. Ar norėtumėte dažniau dalyvauti tyrimuose? Toliau palikite savo el. pašto adresą. Visada patys sprendžiate, ar ir kada dalyvauti, ir už dalyvavimą gaunate atlygį."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
