@@ -498,7 +498,7 @@ msgstr "Activeer je account"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Laat je e-mailadres achter om informatie te ontvangen over meedoen aan onderzoek via Panl."
+msgstr "Panl brengt burgers en wetenschap dichter bij elkaar. Wil je vaker meedoen aan onderzoek? Laat dan hieronder je e-mailadres achter. Je kiest altijd zelf of en wanneer je meedoet, en ontvangt een vergoeding voor je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
