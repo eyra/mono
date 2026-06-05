@@ -332,7 +332,10 @@ defmodule Systems.Assignment.Switch do
     update_content_page(assignment, from_pid)
   end
 
-  defp handle({:assignment, _}, %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message) do
+  defp handle(
+         {:assignment, _},
+         %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message
+       ) do
     assignment = reload_for_views(assignment_id)
     update_content_page(assignment, from_pid)
     update_crew_page(assignment, from_pid)
