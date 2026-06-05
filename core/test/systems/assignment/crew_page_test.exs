@@ -97,10 +97,6 @@ defmodule Systems.Assignment.CrewPageTest do
         |> put_connect_params(%{"user_state" => user_state})
         |> live(~p"/assignment/#{assignment.id}")
 
-      # Save HTML to file for analysis
-      File.write!("/tmp/crew_page_test.html", html)
-      IO.puts("\n\n=== HTML saved to /tmp/crew_page_test.html ===\n\n")
-
       assert html =~ "crew_page"
     end
   end

@@ -1,6 +1,8 @@
 defmodule Systems.Affiliate.PublicTest do
   use Core.DataCase
 
+  @moduletag :capture_log
+
   alias Systems.Affiliate
 
   describe "redirect_url" do
