@@ -2,6 +2,8 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
   use Core.DataCase
   use Oban.Testing, repo: Core.Repo
 
+  @moduletag :capture_log
+
   import Frameworks.Signal.TestHelper
 
   setup do

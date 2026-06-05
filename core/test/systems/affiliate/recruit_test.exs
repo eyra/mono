@@ -1,6 +1,8 @@
 defmodule Systems.Affiliate.RecruitTest do
   use CoreWeb.ConnCase, async: false
 
+  @moduletag :capture_log
+
   alias Systems.Assignment
   alias Systems.Affiliate
 
