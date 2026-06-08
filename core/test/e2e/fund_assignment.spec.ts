@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { activateLocalPayment } from './lib';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * Fund Assignment E2E Test (PR #1468)
@@ -22,8 +23,6 @@ import { activateLocalPayment } from './lib';
  *   - A creator account (defaults match seeds.exs)
  */
 
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
 
 const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL || 'researcher@eyra.co';
 const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD || 'asdf;lkjASDF0987';
@@ -52,7 +51,7 @@ async function clickAddItemButton(page: any) {
 }
 
 test.describe('Fund Assignment via BudgetForm', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set ENABLED_APP_FEATURES=...,panl)');
+  test.skip(!!missingFeaturesReason('panl', 'panl_post_launch'), missingFeaturesReason('panl', 'panl_post_launch'));
 
   test('researcher can assign budget to a questionnaire and complete local payment', async ({ page }) => {
     page.on('console', msg => {
