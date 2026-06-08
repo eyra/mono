@@ -11,7 +11,15 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
   @date "Mon, 09 Mar 2026 12-00-00 GMT"
 
   setup do
-    Application.put_env(:core, Systems.Payment.Provider.OPP, notification_secret: @secret)
+    original = Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+
+    Application.put_env(
+      :core,
+      Systems.Payment.Provider.OPP,
+      Keyword.put(original, :notification_secret, @secret)
+    )
+
+    on_exit(fn -> Application.put_env(:core, Systems.Payment.Provider.OPP, original) end)
     :ok
   end
 

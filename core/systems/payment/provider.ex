@@ -101,12 +101,46 @@ defmodule Systems.Payment.Provider do
   The `currency` atom (e.g. `:EUR`) is mapped to the provider's native
   currency code by each implementation.
 
+  The `idempotence_key` is a stable, caller-owned unique id. The provider
+  passes it to the payment platform so retrying the same logical payout
+  never creates a duplicate withdrawal.
+
   ## Attrs
 
     * `amount` (required) - payout amount in cents
     * `description` - description for the bank statement
   """
-  @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
+  @callback create_withdrawal(
+              merchant_uid :: String.t(),
+              currency :: atom(),
+              attrs :: map(),
+              idempotence_key :: String.t()
+            ) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
+
+  # Charges (internal balance move between two merchants on the platform)
+
+  @type charge :: %{
+          uid: String.t(),
+          status: String.t(),
+          amount: integer()
+        }
+
+  @doc """
+  Move funds between two merchant balances on the platform — an OPP "charge" of
+  type `balance`. Debits `from_owner_uid` and credits `to_owner_uid`.
+
+  Used to fund a participant's merchant from the platform (eyra) merchant before
+  the participant withdraws to their bank account.
+
+  The `idempotence_key` is a stable, caller-owned unique id so retrying the same
+  logical charge never moves the money twice.
+  """
+  @callback create_charge(
+              from_owner_uid :: String.t(),
+              to_owner_uid :: String.t(),
+              amount :: non_neg_integer(),
+              idempotence_key :: String.t()
+            ) :: {:ok, charge()} | {:error, Error.t()}
 end

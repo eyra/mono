@@ -199,15 +199,42 @@ defmodule Systems.Payment.Public do
 
   # Withdrawals
 
-  @spec create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
-          {:ok, Provider.withdrawal()} | {:error, Error.t()}
-  def create_withdrawal(merchant_uid, currency, attrs) do
-    provider().create_withdrawal(merchant_uid, currency, attrs)
+  @spec create_withdrawal(
+          merchant_uid :: String.t(),
+          currency :: atom(),
+          attrs :: map(),
+          idempotence_key :: String.t()
+        ) :: {:ok, Provider.withdrawal()} | {:error, Error.t()}
+  def create_withdrawal(merchant_uid, currency, attrs, idempotence_key) do
+    provider().create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
   end
 
   @spec get_withdrawal(uid :: String.t()) :: {:ok, Provider.withdrawal()} | {:error, Error.t()}
   def get_withdrawal(uid) do
     provider().get_withdrawal(uid)
+  end
+
+  # Charges (internal balance move between merchants)
+
+  @spec create_charge(
+          from_owner_uid :: String.t(),
+          to_owner_uid :: String.t(),
+          amount :: non_neg_integer(),
+          idempotence_key :: String.t()
+        ) :: {:ok, Provider.charge()} | {:error, Error.t()}
+  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key) do
+    provider().create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+  end
+
+  @doc """
+  The platform (eyra) merchant UID that holds the float — the `from_owner` of
+  participant payout charges. Sourced from the OPP `merchant_uid` config
+  (`OPP_MERCHANT_UID`).
+  """
+  @spec platform_merchant_uid() :: String.t() | nil
+  def platform_merchant_uid do
+    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    |> Keyword.get(:merchant_uid)
   end
 
   def webhook_url do

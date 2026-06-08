@@ -961,8 +961,11 @@ defmodule Systems.Fund.Public do
     1. Validate the participant has an OPP merchant on file.
     2. Validate the available balance ≥ `@payout_threshold_cents`.
     3. Lock the eligible rewards: status `:approved` → `:pending_payout`.
-    4. Call `Payment.Public.create_withdrawal/3` to initiate the OPP payout.
-    5. On failure, revert the lock so the funds remain available.
+    4. Call `Payment.Public.create_withdrawal/4` to initiate the OPP payout,
+       keyed by the payout's idempotence key so retries never duplicate it.
+    5. On failure *before* OPP accepts, revert the lock so the funds remain
+       available. Once OPP accepts, the lock stands (reverting would risk a
+       double payout); the status webhook drives it to `:completed`/`:failed`.
 
   Returns `{:ok, %{withdrawal: withdrawal, amount: cents}}` on success or
   one of:
@@ -1095,23 +1098,72 @@ defmodule Systems.Fund.Public do
   defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
     reward_ids = Enum.map(approved, & &1.id)
 
-    with {:ok, payout} <- lock_for_payout(user_id, reward_ids, total),
-         {:ok, withdrawal} <-
-           Payment.Public.create_withdrawal(merchant_uid, :eur, %{amount: total}),
-         {:ok, payout} <-
-           payout
-           |> Fund.PayoutModel.changeset(%{provider_uid: withdrawal.uid})
-           |> Repo.update() do
-      {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
-    else
-      {:error, %Ecto.Changeset{}} ->
+    case lock_for_payout(user_id, reward_ids, total) do
+      {:ok, payout} ->
+        withdraw_for_payout(payout, merchant_uid, total, reward_ids)
+
+      {:error, _reason} ->
         {:error, :lock_failed}
+    end
+  end
+
+  # Two-leg payout: first move the funds from the platform (eyra) merchant to
+  # the participant's merchant (an OPP balance charge), then withdraw from the
+  # participant's merchant to their bank account. Each leg has its own stable
+  # idempotence key derived from the payout, so retries never double-move money.
+  defp withdraw_for_payout(payout, merchant_uid, total, reward_ids) do
+    base_key = Fund.PayoutModel.idempotence_key(payout)
+    platform_uid = Payment.Public.platform_merchant_uid()
+
+    case Payment.Public.create_charge(platform_uid, merchant_uid, total, base_key <> ",type=charge") do
+      {:ok, _charge} ->
+        # Funds moved platform → participant merchant. From here we must never
+        # revert (that would risk a double payout); both legs are idempotent.
+        withdraw_after_charge(payout, merchant_uid, total, base_key)
 
       {:error, reason} ->
-        # OPP call failed (or post-OPP update failed). Mark the payout
-        # :failed and revert rewards to :approved per UC-OPP-06.A3.
-        revert_payout_lock(reward_ids, "opp_call_failed: #{inspect(reason)}")
+        # The charge failed → nothing left the platform merchant, so it is safe
+        # to revert the lock and return the rewards to :approved (UC-OPP-06.A3).
+        revert_payout_lock(reward_ids, "opp_charge_failed: #{inspect(reason)}")
         {:error, {:opp_failed, reason}}
+    end
+  end
+
+  defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
+    attrs = %{amount: total, description: "Reward payout"}
+
+    case Payment.Public.create_withdrawal(merchant_uid, :EUR, attrs, base_key <> ",type=withdrawal") do
+      {:ok, withdrawal} ->
+        record_withdrawal(payout, withdrawal, total)
+
+      {:error, reason} ->
+        # The charge already funded the participant's merchant, so we must NOT
+        # revert. Leave the payout :pending; reconciliation (SF-OPP-02) re-issues
+        # the withdrawal with the same idempotence key to complete it.
+        Logger.error(
+          "[Fund] charge succeeded but withdrawal failed for payout #{payout.id}; " <>
+            "left :pending for reconciliation: #{inspect(reason)}"
+        )
+
+        {:error, {:opp_failed, reason}}
+    end
+  end
+
+  defp record_withdrawal(payout, %{uid: uid} = withdrawal, total) do
+    case payout |> Fund.PayoutModel.changeset(%{provider_uid: uid}) |> Repo.update() do
+      {:ok, payout} ->
+        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+
+      {:error, _changeset} ->
+        # The withdrawal exists at OPP but we could not persist its uid. Do
+        # NOT revert. Leave the payout :pending; reconciliation can re-issue
+        # the withdrawal with the same idempotence key to recover the uid.
+        Logger.error(
+          "[Fund] OPP withdrawal #{uid} created but provider_uid not persisted for " <>
+            "payout #{payout.id}; left :pending for reconciliation"
+        )
+
+        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
     end
   end
 

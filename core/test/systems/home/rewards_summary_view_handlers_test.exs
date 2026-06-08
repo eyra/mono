@@ -183,7 +183,11 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_c_pay")
       stub_ready("m_c_pay")
 
-      stub(ProviderMock, :create_withdrawal, fn "m_c_pay", :eur, %{amount: 1000} ->
+      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+        {:ok, %{uid: "chg", status: "created", amount: 0}}
+      end)
+
+      stub(ProviderMock, :create_withdrawal, fn "m_c_pay", :EUR, %{amount: 1000}, _ ->
         {:ok, %{uid: "w", status: "created", amount: 1000}}
       end)
 
@@ -203,7 +207,11 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_provisioned")
       stub_ready("m_provisioned")
 
-      stub(ProviderMock, :create_withdrawal, fn "m_provisioned", :eur, _ ->
+      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+        {:ok, %{uid: "chg", status: "created", amount: 0}}
+      end)
+
+      stub(ProviderMock, :create_withdrawal, fn "m_provisioned", :EUR, _, _ ->
         {:ok, %{uid: "w", status: "created", amount: 1000}}
       end)
 

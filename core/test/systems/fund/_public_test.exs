@@ -891,6 +891,14 @@ defmodule Systems.Fund.PublicTest do
       end)
     end
 
+    # The payout first charges the funds platform (eyra) -> participant merchant,
+    # then withdraws. Stub the charge leg as succeeding.
+    defp stub_charge_ok do
+      expect(ProviderMock, :create_charge, fn _from, _to, _amount, _key ->
+        {:ok, %{uid: "chg_ok", status: "created", amount: 0}}
+      end)
+    end
+
     test "returns :no_merchant when participant has no merchant_uid", %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
       insert_reward(user, fund, 1000, :approved)
@@ -913,8 +921,9 @@ defmodule Systems.Fund.PublicTest do
       %{id: id2} = insert_reward(user, fund, 400, :approved)
 
       stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
 
-      expect(ProviderMock, :create_withdrawal, fn _, :eur, _ ->
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
         {:ok, %{uid: "w_1", status: "created", amount: 1000}}
       end)
 
@@ -924,14 +933,25 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id2), [])
     end
 
-    test "calls OPP with the participant's merchant_uid, :eur, and summed amount",
+    test "calls OPP with the participant's merchant_uid, :EUR, and summed amount",
          %{user: %{merchant_uid: merchant_uid} = user, fund: fund} do
       insert_reward(user, fund, 600, :approved)
       insert_reward(user, fund, 400, :approved)
 
       stub_payout_ready(merchant_uid)
 
-      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid, :eur, %{amount: 1000} ->
+      # Charge moves the funds platform (eyra) -> participant merchant first.
+      expect(ProviderMock, :create_charge, fn "mer_platform_test",
+                                              ^merchant_uid,
+                                              1000,
+                                              "payout=" <> _ ->
+        {:ok, %{uid: "chg_2", status: "created", amount: 1000}}
+      end)
+
+      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid,
+                                                  :EUR,
+                                                  %{amount: 1000},
+                                                  "payout=" <> _ ->
         {:ok, %{uid: "w_2", status: "created", amount: 1000}}
       end)
 
@@ -944,7 +964,8 @@ defmodule Systems.Fund.PublicTest do
 
       stub_payout_ready(user.merchant_uid)
 
-      expect(ProviderMock, :create_withdrawal, fn _, _, _ ->
+      # Charge (platform -> participant) fails before any money moves -> revert.
+      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
@@ -959,8 +980,9 @@ defmodule Systems.Fund.PublicTest do
       insert_reward(user, fund, 9000, :paid)
 
       stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
 
-      expect(ProviderMock, :create_withdrawal, fn _, _, %{amount: 1000} ->
+      expect(ProviderMock, :create_withdrawal, fn _, _, %{amount: 1000}, _ ->
         {:ok, %{uid: "w_3", status: "created", amount: 1000}}
       end)
 
@@ -973,8 +995,9 @@ defmodule Systems.Fund.PublicTest do
       %{id: r2_id} = insert_reward(user, fund, 400, :approved)
 
       stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
 
-      expect(ProviderMock, :create_withdrawal, fn _, :eur, _ ->
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
         {:ok, %{uid: "w_aggregate_1", status: "created", amount: 1000}}
       end)
 
@@ -1000,7 +1023,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_payout_ready(user.merchant_uid)
 
-      expect(ProviderMock, :create_withdrawal, fn _, _, _ ->
+      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
@@ -1012,7 +1035,7 @@ defmodule Systems.Fund.PublicTest do
 
       [payout] = Core.Repo.all(Fund.PayoutModel)
       assert payout.status == :failed
-      assert payout.failure_reason =~ "opp_call_failed"
+      assert payout.failure_reason =~ "opp_charge_failed"
       assert payout.provider_uid == nil
     end
 

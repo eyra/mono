@@ -98,12 +98,13 @@ defmodule Systems.Payment.Provider.Local do
   # Withdrawals
 
   @impl true
-  def create_withdrawal(merchant_uid, currency, attrs)
-      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) do
+  def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
+             is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
-      "[Payment.Local] create_withdrawal merchant=#{merchant_uid} currency=#{currency} uid=#{uid} attrs=#{inspect(attrs)}"
+      "[Payment.Local] create_withdrawal merchant=#{merchant_uid} currency=#{currency} uid=#{uid} idempotence_key=#{idempotence_key} attrs=#{inspect(attrs)}"
     )
 
     {:ok, %{uid: uid, status: "created", amount: Map.get(attrs, :amount, 0)}}
@@ -113,6 +114,19 @@ defmodule Systems.Payment.Provider.Local do
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
     {:ok, %{uid: uid, status: "created", amount: 0}}
+  end
+
+  @impl true
+  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
+             is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
+    uid = generate_uid()
+
+    Logger.info(
+      "[Payment.Local] create_charge from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
+    )
+
+    {:ok, %{uid: uid, status: "created", amount: amount}}
   end
 
   defp generate_uid do

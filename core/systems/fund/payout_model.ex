@@ -16,7 +16,7 @@ defmodule Systems.Fund.PayoutModel do
   `failure_reason` for audit.
 
   `provider_uid` is the OPP withdrawal UID; populated as soon as
-  `Payment.Public.create_withdrawal/3` returns successfully.
+  `Payment.Public.create_withdrawal/4` returns successfully.
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -40,6 +40,14 @@ defmodule Systems.Fund.PayoutModel do
   end
 
   def statuses, do: @statuses
+
+  @doc """
+  Stable, caller-owned idempotency key for the OPP withdrawal. The payout row
+  is the unique object (per OPP's idempotency best practice), so its `id` keys
+  the withdrawal: retrying the same payout re-issues the same withdrawal
+  instead of creating a duplicate.
+  """
+  def idempotence_key(%__MODULE__{id: id}) when is_integer(id), do: "payout=#{id}"
 
   @required_fields ~w(user_id amount_cents)a
   @optional_fields ~w(currency status provider_uid failure_reason)a

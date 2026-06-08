@@ -8,15 +8,20 @@ defmodule Systems.Payment.Provider.OPPTest do
   use ExUnit.Case, async: false
 
   alias Systems.Payment.Provider.OPP
+  alias Systems.Payment.Error
 
   setup do
     bypass = Bypass.open()
     previous = Application.get_env(:core, OPP)
 
-    Application.put_env(:core, OPP,
-      base_url: "http://localhost:#{bypass.port}",
-      api_key: "test_key",
-      notification_secret: "test_secret"
+    Application.put_env(
+      :core,
+      OPP,
+      Keyword.merge(previous || [],
+        base_url: "http://localhost:#{bypass.port}",
+        api_key: "test_key",
+        notification_secret: "test_secret"
+      )
     )
 
     on_exit(fn -> Application.put_env(:core, OPP, previous) end)
@@ -134,6 +139,67 @@ defmodule Systems.Payment.Provider.OPPTest do
                 compliance_status: "unverified",
                 overview_url: nil
               }} = OPP.create_merchant(%{emailaddress: "a@b.c"})
+    end
+  end
+
+  describe "create_withdrawal/4" do
+    test "maps the currency, sends the idempotency key + reference, and parses the response",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/merchants/m_1/withdrawals", fn conn ->
+        assert ["payout=7"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert body["currency"] == "EUR"
+        assert body["reference"] == "payout=7"
+        assert body["amount"] == 1000
+        # OPP rejects withdrawals missing these (HTTP 400), so they must be sent.
+        assert is_binary(body["description"]) and body["description"] != ""
+        assert body["notify_url"] =~ "/api/payment/webhook/"
+
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "w_1", "status": "pending", "amount": 1000}>)
+      end)
+
+      assert {:ok, %{uid: "w_1", status: "pending", amount: 1000}} =
+               OPP.create_withdrawal("m_1", :EUR, %{amount: 1000}, "payout=7")
+    end
+
+    # Regression for the UC-OPP-06 payout crash: an unknown currency must
+    # return an error tuple (not raise) so the caller reverts the payout lock
+    # instead of crashing after the funds were already locked. No HTTP request
+    # is made — the Bypass server has no expectation, so a POST would fail.
+    test "returns an error for an unsupported currency without calling OPP" do
+      assert {:error, %Error{code: :unsupported_currency}} =
+               OPP.create_withdrawal("m_1", :eur, %{amount: 1000}, "payout=7")
+    end
+  end
+
+  describe "create_charge/4" do
+    test "POSTs a balance charge from->to with idempotency key and parses the response",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        assert ["payout=7,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert body["type"] == "balance"
+        assert body["from_owner_uid"] == "mer_platform"
+        assert body["to_owner_uid"] == "mer_participant"
+        # OPP expects the amount as a string.
+        assert body["amount"] == "1000"
+
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
+      end)
+
+      assert {:ok, %{uid: "chg_1", status: "created", amount: 1000}} =
+               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        Plug.Conn.resp(conn, 400, ~s<{"error": {"message": "nope"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} =
+               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
     end
   end
 end

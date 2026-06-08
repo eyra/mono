@@ -63,6 +63,8 @@ defmodule Systems.Payment.Provider.OPP do
     GBP: "GBP"
   }
 
+  @default_withdrawal_description "Payout"
+
   # Transactions
 
   @impl true
@@ -146,13 +148,60 @@ defmodule Systems.Payment.Provider.OPP do
   # Withdrawals
 
   @impl true
-  def create_withdrawal(merchant_uid, currency, attrs)
-      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) do
-    attrs = Map.put(attrs, :currency, Map.fetch!(@currency_mapping, currency))
+  def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
+             is_binary(idempotence_key) do
+    # Resolve the currency before any money moves. An unknown currency must
+    # return an error tuple (not raise), so the caller's compensation reverts
+    # the payout lock instead of crashing mid-transfer.
+    case Map.fetch(@currency_mapping, currency) do
+      {:ok, code} ->
+        # OPP requires `description` and `notify_url` on a withdrawal. The
+        # caller may supply a bank-statement description; `notify_url` is ours
+        # so OPP posts `withdrawal.status.changed` back to our webhook.
+        body =
+          attrs
+          |> Map.put(:currency, code)
+          |> Map.put(:reference, idempotence_key)
+          |> Map.put_new(:description, @default_withdrawal_description)
+          |> Map.put(:notify_url, Systems.Payment.Public.webhook_url())
 
-    case HTTP.post("/merchants/#{merchant_uid}/withdrawals", attrs) do
+        post_withdrawal(merchant_uid, body, idempotence_key)
+
+      :error ->
+        {:error,
+         %Error{code: :unsupported_currency, message: "Unsupported currency: #{inspect(currency)}"}}
+    end
+  end
+
+  defp post_withdrawal(merchant_uid, body, idempotence_key) do
+    case HTTP.post("/merchants/#{merchant_uid}/withdrawals", body, [
+           {"Idempotency-Key", idempotence_key}
+         ]) do
       {:ok, %{"uid" => uid} = data} ->
         {:ok, parse_withdrawal(uid, data)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  # Charges
+
+  @impl true
+  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
+             is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
+    body = %{
+      type: "balance",
+      amount: Integer.to_string(amount),
+      from_owner_uid: from_owner_uid,
+      to_owner_uid: to_owner_uid
+    }
+
+    case HTTP.post("/charges", body, [{"Idempotency-Key", idempotence_key}]) do
+      {:ok, %{"uid" => uid} = data} ->
+        {:ok, parse_charge(uid, data)}
 
       {:error, %Error{}} = error ->
         error
@@ -202,6 +251,14 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   defp parse_withdrawal(uid, data) do
+    %{
+      uid: uid,
+      status: Map.get(data, "status", "unknown"),
+      amount: Map.get(data, "amount", 0)
+    }
+  end
+
+  defp parse_charge(uid, data) do
     %{
       uid: uid,
       status: Map.get(data, "status", "unknown"),
