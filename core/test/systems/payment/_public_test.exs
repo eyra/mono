@@ -167,4 +167,11 @@ defmodule Systems.Payment.PublicTest do
       assert {:ok, %{uid: "ba_fresh"}} = Payment.Public.ensure_bank_account_for("m_dis")
     end
   end
+
+  describe "platform_merchant_uid/0" do
+    test "returns the configured platform (eyra) merchant uid" do
+      # config/test.exs sets merchant_uid: "mer_platform_test"
+      assert Payment.Public.platform_merchant_uid() == "mer_platform_test"
+    end
+  end
 end

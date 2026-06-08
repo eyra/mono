@@ -46,9 +46,7 @@ defmodule Systems.Budget.Public do
     total_amount = base_amount + partner_fee
 
     if total_amount > 0 do
-      with {:ok, {user, _merchant}} <- Payment.Public.ensure_merchant_for(user) do
-        create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
-      end
+      create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
     else
       create_free_pay_in(fund, user_id, subject_count)
     end
@@ -64,11 +62,12 @@ defmodule Systems.Budget.Public do
            },
            fund: fund
          } = assignment,
-         %Account.User{id: user_id, merchant_uid: merchant_uid},
+         %Account.User{id: user_id} = user,
          subject_count,
          total_amount,
          partner_fee
        ) do
+    merchant_uid = pay_in_merchant_uid(user)
     reward_per_participant = subject_reward || 0
     currency = get_currency(fund)
     idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
@@ -121,6 +120,20 @@ defmodule Systems.Budget.Public do
            |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
            |> Repo.insert() do
       {:ok, %{transaction: transaction, payment_url: provider_result.payment_url}}
+    end
+  end
+
+  # Pay-ins land on the platform (eyra) merchant so it accumulates the float
+  # that funds participant payout charges. Fall back to the researcher's own
+  # merchant only when no platform merchant is configured (e.g. local dev).
+  defp pay_in_merchant_uid(user) do
+    case Payment.Public.platform_merchant_uid() do
+      nil ->
+        {:ok, {_user, %{uid: uid}}} = Payment.Public.ensure_merchant_for(user)
+        uid
+
+      uid ->
+        uid
     end
   end
 

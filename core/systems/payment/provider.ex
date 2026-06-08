@@ -128,7 +128,7 @@ defmodule Systems.Payment.Provider do
         }
 
   @doc """
-  Move funds between two merchant balances on the platform — an OPP "charge" of
+  Move funds between two merchant balances on the platform — a "charge" of
   type `balance`. Debits `from_owner_uid` and credits `to_owner_uid`.
 
   Used to fund a participant's merchant from the platform (eyra) merchant before
