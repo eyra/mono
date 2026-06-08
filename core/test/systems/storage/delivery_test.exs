@@ -2,6 +2,8 @@ defmodule Systems.Storage.DeliveryTest do
   use Core.DataCase, async: false
   use Oban.Testing, repo: Core.Repo
 
+  @moduletag :capture_log
+
   import Mox
   import Frameworks.Signal.TestHelper
 
