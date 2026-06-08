@@ -9,14 +9,14 @@
   "dependencies": {
     "blurhash": "2.0.5",
     "lodash": "4.18.1",
-    "pdfjs-dist": "5.4.296",
+    "pdfjs-dist": "5.7.284",
     "pinch-zoom-js": "2.3.5",
-    "@novasoftwarefoundation/prism": "0.1.5",
-    "trix": "2.1.18"
+    "@novasoftwarefoundation/prism": "0.1.6",
+    "trix": "2.1.19"
   },
   "devDependencies": {
     "jsdom": "29.1.1",
-    "prettier": "3.6.2",
-    "vitest": "4.1.5"
+    "prettier": "3.8.3",
+    "vitest": "4.1.8"
   }
 }

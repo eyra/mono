@@ -1,7 +1,7 @@
 # ======================
 # Builder Stage
 # ======================
-FROM debian:12 AS builder
+FROM debian:bookworm-20260518 AS builder
 
 WORKDIR /root
 
