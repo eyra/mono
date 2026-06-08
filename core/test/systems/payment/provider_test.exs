@@ -98,12 +98,20 @@ defmodule Systems.Payment.ProviderTest do
   describe "create_charge/4" do
     test "delegates to configured provider" do
       ProviderMock
-      |> expect(:create_charge, fn "mer_platform", "mer_participant", 1000, "payout=1,type=charge" ->
+      |> expect(:create_charge, fn "mer_platform",
+                                   "mer_participant",
+                                   1000,
+                                   "payout=1,type=charge" ->
         {:ok, %{uid: "chg1", status: "created", amount: 1000}}
       end)
 
       assert {:ok, %{uid: "chg1", amount: 1000}} =
-               ProviderMock.create_charge("mer_platform", "mer_participant", 1000, "payout=1,type=charge")
+               ProviderMock.create_charge(
+                 "mer_platform",
+                 "mer_participant",
+                 1000,
+                 "payout=1,type=charge"
+               )
     end
   end
 

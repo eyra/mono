@@ -1115,7 +1115,12 @@ defmodule Systems.Fund.Public do
     base_key = Fund.PayoutModel.idempotence_key(payout)
     platform_uid = Payment.Public.platform_merchant_uid()
 
-    case Payment.Public.create_charge(platform_uid, merchant_uid, total, base_key <> ",type=charge") do
+    case Payment.Public.create_charge(
+           platform_uid,
+           merchant_uid,
+           total,
+           base_key <> ",type=charge"
+         ) do
       {:ok, _charge} ->
         # Funds moved platform → participant merchant. From here we must never
         # revert (that would risk a double payout); both legs are idempotent.
@@ -1132,7 +1137,12 @@ defmodule Systems.Fund.Public do
   defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
     attrs = %{amount: total, description: "Reward payout"}
 
-    case Payment.Public.create_withdrawal(merchant_uid, :EUR, attrs, base_key <> ",type=withdrawal") do
+    case Payment.Public.create_withdrawal(
+           merchant_uid,
+           :EUR,
+           attrs,
+           base_key <> ",type=withdrawal"
+         ) do
       {:ok, withdrawal} ->
         record_withdrawal(payout, withdrawal, total)
 

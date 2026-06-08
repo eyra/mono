@@ -170,7 +170,10 @@ defmodule Systems.Payment.Provider.OPP do
 
       :error ->
         {:error,
-         %Error{code: :unsupported_currency, message: "Unsupported currency: #{inspect(currency)}"}}
+         %Error{
+           code: :unsupported_currency,
+           message: "Unsupported currency: #{inspect(currency)}"
+         }}
     end
   end
 
