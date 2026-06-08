@@ -1,0 +1,11 @@
+<h1>Your sign-in code</h1>
+
+Use the code below to sign in to Next. It expires in 10 minutes.
+<br /><br />
+<strong style="font-size: 32px; letter-spacing: 8px;"><%= @code %></strong>
+<br /><br />
+If you did not request this code, you can safely ignore this email.
+<br /><br />
+Kind regards,
+<br /><br />
+The Eyra team

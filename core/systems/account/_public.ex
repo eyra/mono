@@ -411,6 +411,41 @@ defmodule Systems.Account.Public do
     :ok
   end
 
+  ## OTP
+
+  def generate_otp(email) when is_binary(email) do
+    Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
+
+    user = get_user_by_email(email)
+    {code, token} = Account.AuthCodeModel.build(email, user && user.id)
+    Repo.insert!(token)
+
+    Account.UserNotifier.deliver_otp(email, code)
+    :ok
+  end
+
+  def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+    case Account.AuthCodeModel.active_query(email) |> Repo.one() do
+      nil ->
+        {:error, :not_found}
+
+      token ->
+        case Account.AuthCodeModel.verify(token, code) do
+          :ok ->
+            Repo.delete!(token)
+            user = token.user_id && get_user!(token.user_id)
+            {:ok, user}
+
+          {:error, reason} ->
+            token
+            |> Ecto.Changeset.change(attempts: token.attempts + 1)
+            |> Repo.update!()
+
+            {:error, reason}
+        end
+    end
+  end
+
   ## Confirmation
 
   @doc """
