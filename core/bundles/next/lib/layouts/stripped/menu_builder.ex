@@ -10,7 +10,7 @@ defmodule Next.Layouts.Stripped.MenuBuilder do
   ]
 
   @primary []
-  @secondary [:signin, :profile]
+  @secondary [:profile]
 
   use CoreWeb.Menu.Builder, home: :next
 

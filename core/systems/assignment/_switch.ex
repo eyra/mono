@@ -325,18 +325,27 @@ defmodule Systems.Assignment.Switch do
 
   defp handle(
          {:assignment, :monitor_event},
-         %{assignment: assignment, from_pid: from_pid} = _message
+         %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message
        ) do
+    assignment = reload_for_views(assignment_id)
     # Don't update the crew page here
     update_content_page(assignment, from_pid)
   end
 
-  defp handle({:assignment, _}, %{assignment: assignment, from_pid: from_pid} = _message) do
+  defp handle(
+         {:assignment, _},
+         %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message
+       ) do
+    assignment = reload_for_views(assignment_id)
     update_content_page(assignment, from_pid)
-    # update all crew pages for the assignment
     update_crew_page(assignment, from_pid)
-    # update all assignment embedded views
     update_assignment_embedded_views(assignment, from_pid)
+  end
+
+  # Callers of {:assignment, _} may dispatch a bare model (e.g.
+  # Advert.Public.handle_exclusion), but the view builders need the full graph.
+  defp reload_for_views(assignment_id) do
+    Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
   end
 
   defp delete_crew_tasks(%{

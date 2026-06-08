@@ -498,7 +498,7 @@ msgstr "Activate your account"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Leave your email address to receive information about participating in research via Panl."
+msgstr "Panl brings citizens and science closer together. Would you like to take part in research more often? Leave your email address below. You always decide for yourself whether and when you participate, and you receive compensation for your participation."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"

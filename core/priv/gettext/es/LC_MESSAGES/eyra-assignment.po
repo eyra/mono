@@ -499,7 +499,7 @@ msgstr "Active su cuenta"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Deja tu dirección de correo electrónico para recibir información sobre cómo participar en investigaciones a través de Panl."
+msgstr "Panl acerca a la ciudadanía y la ciencia. ¿Quieres participar en investigaciones con más frecuencia? Deja abajo tu dirección de correo electrónico. Tú decides siempre si participas y cuándo, y recibirás una compensación por tu participación."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
