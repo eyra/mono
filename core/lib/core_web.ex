@@ -179,6 +179,7 @@ defmodule CoreWeb do
       on_mount({CoreWeb.Live.Hook.Timezone, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Context, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Language, __MODULE__})
+      on_mount({CoreWeb.Live.Hook.Inject, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
 

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { activateLocalPayment } from './lib';
 
 /**
  * Fund Assignment E2E Test (PR #1468)
@@ -69,6 +70,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Step 2: Open existing project, or create one
     console.log('[TEST] Step 2: Opening / creating project');
@@ -181,6 +183,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -298,6 +301,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -411,6 +415,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -477,6 +482,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");

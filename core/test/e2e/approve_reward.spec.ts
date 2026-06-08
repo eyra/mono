@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { missingFeaturesReason } from './lib/features';
+import { activateLocalPayment } from './lib';
 const ADD_ITEM_SELECTOR = "[data-testid='create-first-item-button'],[data-testid='add-item-button'],[phx-click='create_item']";
 
 async function clickAddItemButton(page: any) {
@@ -106,6 +107,7 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await researcherPage.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await researcherPage.waitForTimeout(1000);
+    await activateLocalPayment(researcherPage);
 
     // Always create a fresh project so the study we create is the only card —
     // avoids positional selector fragility caused by residual advert/study cards

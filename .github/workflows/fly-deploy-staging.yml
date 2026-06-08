@@ -1,4 +1,4 @@
-name: Deploy to Fly.io
+name: Deploy to Fly.io (staging)
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Fly.io
+    name: Deploy to Fly.io (staging)
     runs-on: ubuntu-latest
 
     steps:
