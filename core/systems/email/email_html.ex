@@ -10,6 +10,14 @@ defmodule Systems.Email.EmailHTML do
   # Returns whatever the embedded templates return (safe tuples for HTML, strings for text)
   # bamboo_phoenix will handle the normalization
 
+  def otp_sign_in("html", assigns) do
+    otp_sign_in_html(assigns)
+  end
+
+  def otp_sign_in("text", assigns) do
+    otp_sign_in_text(assigns)
+  end
+
   def account_confirmation_instructions("html", assigns) do
     account_confirmation_instructions_html(assigns)
   end

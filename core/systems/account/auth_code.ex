@@ -46,7 +46,7 @@ defmodule Systems.Account.AuthCodeModel do
       where: t.email == ^email,
       where: t.inserted_at > ago(@validity_in_minutes, "minute"),
       where: t.attempts < @max_attempts,
-      order_by: [desc: t.inserted_at],
+      order_by: [desc: t.id],
       limit: 1
     )
   end
