@@ -1,10 +1,6 @@
 defmodule Core.Repo.Migrations.CreateFundPayouts do
   use Ecto.Migration
 
-  # Required so the CONCURRENTLY indexes can build without blocking writes.
-  @disable_ddl_transaction true
-  @disable_migration_lock true
-
   def change do
     create table(:fund_payouts) do
       add(:user_id, references(:users, on_delete: :restrict), null: false)
@@ -21,15 +17,12 @@ defmodule Core.Repo.Migrations.CreateFundPayouts do
       add(:payout_id, references(:fund_payouts, on_delete: :nilify_all))
     end
 
-    create(index(:fund_payouts, [:user_id], concurrently: true))
+    # fund_payouts is brand-new (empty), so plain transactional index builds are
+    # safe and instant. CONCURRENTLY would add no benefit here and can't run
+    # inside a transaction. The index on the existing fund_rewards table is built
+    # CONCURRENTLY in a separate migration so this one stays transactional.
+    create(index(:fund_payouts, [:user_id]))
 
-    create(
-      unique_index(:fund_payouts, [:provider_uid],
-        where: "provider_uid IS NOT NULL",
-        concurrently: true
-      )
-    )
-
-    create(index(:fund_rewards, [:payout_id], concurrently: true))
+    create(unique_index(:fund_payouts, [:provider_uid], where: "provider_uid IS NOT NULL"))
   end
 end

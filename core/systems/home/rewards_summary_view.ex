@@ -31,6 +31,7 @@ defmodule Systems.Home.RewardsSummaryView do
           pending_cents: pending_cents,
           approved_cents: approved_cents,
           rejected_cents: rejected_cents,
+          pending_payout_cents: pending_payout_cents,
           labels: labels,
           user: user
         },
@@ -43,6 +44,7 @@ defmodule Systems.Home.RewardsSummaryView do
         pending_cents: pending_cents,
         approved_cents: approved_cents,
         rejected_cents: rejected_cents,
+        pending_payout_cents: pending_payout_cents,
         labels: labels,
         user: user
       )
@@ -117,18 +119,23 @@ defmodule Systems.Home.RewardsSummaryView do
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
+    # Always refresh after the call: on success the locked balance drops to 0,
+    # and on a lost lock-race (:lock_failed) the winner already moved the rewards
+    # to :pending_payout — refreshing hides the now-stale balance + payout button
+    # so the participant doesn't keep clicking a button that can only fail.
     case Fund.Public.request_payout(user) do
       {:ok, _result} ->
         {:noreply, socket |> Flash.push_info(labels.payout_success) |> refresh_totals(user)}
 
       {:error, {:below_threshold, _cents}} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
+        {:noreply,
+         socket |> Flash.push_error(labels.payout_below_threshold) |> refresh_totals(user)}
 
       # {:opp_failed, _}, :no_merchant, :lock_failed, :kyc_unavailable, and a
       # drifted {:kyc_required, _} (rare) — surface a flash; the next click
       # re-evaluates and shows the KYC link.
       {:error, _reason} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_failed)}
+        {:noreply, socket |> Flash.push_error(labels.payout_failed) |> refresh_totals(user)}
     end
   end
 
@@ -148,10 +155,19 @@ defmodule Systems.Home.RewardsSummaryView do
   end
 
   defp refresh_totals(socket, user) do
-    %{pending_cents: p, approved_cents: a, rejected_cents: r} =
-      Fund.Public.summarize_rewards(user)
+    %{
+      pending_cents: pending_cents,
+      approved_cents: approved_cents,
+      rejected_cents: rejected_cents,
+      pending_payout_cents: pending_payout_cents
+    } = Fund.Public.summarize_rewards(user)
 
-    assign(socket, pending_cents: p, approved_cents: a, rejected_cents: r)
+    assign(socket,
+      pending_cents: pending_cents,
+      approved_cents: approved_cents,
+      rejected_cents: rejected_cents,
+      pending_payout_cents: pending_payout_cents
+    )
   end
 
   @impl true
@@ -176,6 +192,8 @@ defmodule Systems.Home.RewardsSummaryView do
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
           payout_enabled?={@approved_cents > 0}
+          pending_payout_cents={@pending_payout_cents}
+          pending_payout_label={@labels.payout_pending}
           target={@myself}
         />
         <.column
@@ -216,6 +234,8 @@ defmodule Systems.Home.RewardsSummaryView do
   attr(:caption, :string, required: true)
   attr(:payout_button_label, :string, required: true)
   attr(:payout_enabled?, :boolean, required: true)
+  attr(:pending_payout_cents, :integer, required: true)
+  attr(:pending_payout_label, :string, required: true)
   attr(:target, :any, required: true)
 
   defp approved_column(assigns) do
@@ -237,6 +257,11 @@ defmodule Systems.Home.RewardsSummaryView do
         >
           <%= @payout_button_label %>
         </button>
+      <% end %>
+      <%= if @pending_payout_cents > 0 do %>
+        <div class="text-bodysmall font-body text-grey2" data-testid="pending-payout">
+          <%= @pending_payout_label %>: <%= CurrencyHelpers.format_cents(@pending_payout_cents) %>
+        </div>
       <% end %>
       <div class="text-bodysmall font-body text-grey2">
         <%= @caption %>

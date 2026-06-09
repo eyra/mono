@@ -974,6 +974,41 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
     end
 
+    test "rolls back without an OPP charge when the rewards are locked concurrently",
+         %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      # Simulate a concurrent payout (other tab/device) that locks these rewards
+      # during this request's OPP readiness recheck. get_merchant runs inside
+      # recheck_payout_ready, just before lock_for_payout's compare-and-swap.
+      expect(ProviderMock, :get_merchant, fn merchant_uid ->
+        Core.Repo.get!(Fund.RewardModel, id)
+        |> Ecto.Changeset.change(%{status: :pending_payout})
+        |> Core.Repo.update!()
+
+        {:ok,
+         %{
+           uid: merchant_uid,
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
+        {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+      end)
+
+      # No create_charge / create_withdrawal expectations: the compare-and-swap
+      # lock must find 0 approved rows and bail before any money moves. Mox's
+      # verify_on_exit! raises if either OPP call is made.
+      assert {:error, :lock_failed} = Fund.Public.request_payout(user)
+
+      # The losing attempt's payout insert was rolled back with the failed lock.
+      assert Core.Repo.all(Fund.PayoutModel) == []
+    end
+
     test "ignores rewards in other statuses when computing the payout", %{user: user, fund: fund} do
       insert_reward(user, fund, 1000, :approved)
       insert_reward(user, fund, 9000, :pending_approval)

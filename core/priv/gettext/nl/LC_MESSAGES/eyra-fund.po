@@ -193,3 +193,7 @@ msgstr "Uitbetaling starten"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.kyc.title"
 msgstr "Verificatie nodig"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.pending"
+msgstr "Wordt uitbetaald"

@@ -193,3 +193,7 @@ msgstr "Start payout"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.kyc.title"
 msgstr "Verification required"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.pending"
+msgstr "Being paid out"

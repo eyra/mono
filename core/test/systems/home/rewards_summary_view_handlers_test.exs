@@ -226,6 +226,28 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       assert reward_status(user) == :pending_payout
     end
+
+    test "a failed confirm refreshes the card so the stale balance and button clear" do
+      user = user_with_reward(1000, "m_stale")
+
+      # Simulate a lost lock-race: by confirm time the rewards are no longer
+      # :approved (a concurrent winner moved them to :pending_payout), so
+      # request_payout fails. The card must refresh to drop the now-stale
+      # approved balance — otherwise the loser keeps clicking a doomed button.
+      Core.Repo.get_by!(Fund.RewardModel, user_id: user.id)
+      |> Ecto.Changeset.change(%{status: :pending_payout})
+      |> Core.Repo.update!()
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :payout, approved_cents: 1000})
+        )
+
+      assert socket.assigns.approved_cents == 0
+      assert socket.assigns.pending_payout_cents == 1000
+    end
   end
 
   describe "cancelled (from the handoff modal)" do

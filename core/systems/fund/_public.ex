@@ -1187,11 +1187,14 @@ defmodule Systems.Fund.Public do
       })
     )
     |> Multi.run(:lock_rewards, fn _repo, %{payout: %{id: payout_id}} ->
+      # Compare-and-swap on :approved: a concurrent payout (second tab/device)
+      # that already locked these rewards leaves us short of the expected count,
+      # so we roll the whole Multi back rather than firing a duplicate OPP payout.
       {count, _} =
-        from(r in Fund.RewardModel, where: r.id in ^reward_ids)
+        from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
         |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now])
 
-      {:ok, count}
+      if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
     end)
     |> Repo.commit()
     |> case do
