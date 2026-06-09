@@ -151,14 +151,10 @@ defmodule Systems.Payment.Provider.OPP do
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
       when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
              is_binary(idempotence_key) do
-    # Resolve the currency before any money moves. An unknown currency must
-    # return an error tuple (not raise), so the caller's compensation reverts
-    # the payout lock instead of crashing mid-transfer.
+    # Unknown currency must return an error (not raise) so the caller can revert.
     case Map.fetch(@currency_mapping, currency) do
       {:ok, code} ->
-        # OPP requires `description` and `notify_url` on a withdrawal. The
-        # caller may supply a bank-statement description; `notify_url` is ours
-        # so OPP posts `withdrawal.status.changed` back to our webhook.
+        # OPP 400s without description + notify_url; notify_url drives our webhook.
         body =
           attrs
           |> Map.put(:currency, code)
@@ -170,7 +166,10 @@ defmodule Systems.Payment.Provider.OPP do
 
       :error ->
         {:error,
-         %Error{code: :unsupported_currency, message: "Unsupported currency: #{inspect(currency)}"}}
+         %Error{
+           code: :unsupported_currency,
+           message: "Unsupported currency: #{inspect(currency)}"
+         }}
     end
   end
 

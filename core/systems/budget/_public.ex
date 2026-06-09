@@ -123,9 +123,8 @@ defmodule Systems.Budget.Public do
     end
   end
 
-  # Pay-ins land on the platform (eyra) merchant so it accumulates the float
-  # that funds participant payout charges. Fall back to the researcher's own
-  # merchant only when no platform merchant is configured (e.g. local dev).
+  # Pay-ins fund the platform merchant (the float for payout charges); fall back
+  # to the user's own merchant only when no platform merchant is configured.
   defp pay_in_merchant_uid(user) do
     case Payment.Public.platform_merchant_uid() do
       nil ->

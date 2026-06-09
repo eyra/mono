@@ -1359,7 +1359,7 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :completed} = Core.Repo.reload!(payout)
     end
 
-    test ~s(maps OPP "failed" to Payout :failed and reverts rewards to :approved),
+    test ~s(maps OPP "failed" to Payout :failed and leaves rewards :pending_payout),
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_failed_1")
 
@@ -1367,7 +1367,10 @@ defmodule Systems.Fund.PublicTest do
                Fund.Public.apply_withdrawal_status("w_failed_1", "failed")
 
       assert reason =~ "failed"
-      assert %{status: :approved} = Core.Repo.reload!(r1)
+      # The charge already funded the participant merchant, so the rewards stay
+      # locked (:pending_payout) for reconciliation rather than reverting to
+      # :approved (a re-payout would charge the platform again).
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
     end
 
@@ -1379,7 +1382,7 @@ defmodule Systems.Fund.PublicTest do
                Fund.Public.apply_withdrawal_status("w_disapproved_1", "disapproved")
 
       assert reason =~ "disapproved"
-      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
     end
 
@@ -1421,14 +1424,14 @@ defmodule Systems.Fund.PublicTest do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_failed")
 
       assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_failed", "failed")
-      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
 
-      # Late "completed" must not flip a :failed payout to :completed or
-      # move the reverted reward back to :paid.
+      # Late "completed" must not flip a :failed payout to :completed or move
+      # the still-locked reward.
       assert {:ok, %Fund.PayoutModel{status: :failed}} =
                Fund.Public.apply_withdrawal_status("w_idempotent_failed", "completed")
 
-      assert %{status: :approved} = Core.Repo.reload!(r1)
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
     end
   end

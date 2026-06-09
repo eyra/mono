@@ -988,7 +988,7 @@ defmodule Systems.Fund.Public do
 
       %Account.User{id: user_id, merchant_uid: merchant_uid} ->
         approved = list_approved_rewards(user_id)
-        total = Enum.reduce(approved, 0, fn r, acc -> acc + r.amount end)
+        total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
 
         if total < @payout_threshold_cents do
           {:error, {:below_threshold, total}}
@@ -1006,7 +1006,7 @@ defmodule Systems.Fund.Public do
   def payout_eligibility(%Account.User{id: user_id}) do
     total =
       list_approved_rewards(user_id)
-      |> Enum.reduce(0, fn r, acc -> acc + r.amount end)
+      |> Enum.reduce(0, fn %{amount: amount}, acc -> acc + amount end)
 
     if total < @payout_threshold_cents do
       {:error, {:below_threshold, total}}
@@ -1096,34 +1096,40 @@ defmodule Systems.Fund.Public do
   end
 
   defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
-    reward_ids = Enum.map(approved, & &1.id)
+    # Resolve before locking: a missing platform merchant must fail cleanly, not crash mid-payout.
+    case Payment.Public.platform_merchant_uid() do
+      nil ->
+        {:error, :no_platform_merchant}
 
-    case lock_for_payout(user_id, reward_ids, total) do
-      {:ok, payout} ->
-        withdraw_for_payout(payout, merchant_uid, total, reward_ids)
+      platform_uid ->
+        reward_ids = Enum.map(approved, fn %{id: id} -> id end)
 
-      {:error, _reason} ->
-        {:error, :lock_failed}
+        case lock_for_payout(user_id, reward_ids, total) do
+          {:ok, payout} ->
+            withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids)
+
+          {:error, _reason} ->
+            {:error, :lock_failed}
+        end
     end
   end
 
-  # Two-leg payout: first move the funds from the platform (eyra) merchant to
-  # the participant's merchant (an OPP balance charge), then withdraw from the
-  # participant's merchant to their bank account. Each leg has its own stable
-  # idempotence key derived from the payout, so retries never double-move money.
-  defp withdraw_for_payout(payout, merchant_uid, total, reward_ids) do
+  # Per-leg idempotence keys so retries never double-move money.
+  defp withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids) do
     base_key = Fund.PayoutModel.idempotence_key(payout)
-    platform_uid = Payment.Public.platform_merchant_uid()
 
-    case Payment.Public.create_charge(platform_uid, merchant_uid, total, base_key <> ",type=charge") do
+    case Payment.Public.create_charge(
+           platform_uid,
+           merchant_uid,
+           total,
+           base_key <> ",type=charge"
+         ) do
       {:ok, _charge} ->
-        # Funds moved platform → participant merchant. From here we must never
-        # revert (that would risk a double payout); both legs are idempotent.
+        # OPP accepted the charge — never revert past here (double-payout risk).
         withdraw_after_charge(payout, merchant_uid, total, base_key)
 
       {:error, reason} ->
-        # The charge failed → nothing left the platform merchant, so it is safe
-        # to revert the lock and return the rewards to :approved (UC-OPP-06.A3).
+        # Nothing moved yet — safe to revert (UC-OPP-06.A3).
         revert_payout_lock(reward_ids, "opp_charge_failed: #{inspect(reason)}")
         {:error, {:opp_failed, reason}}
     end
@@ -1132,14 +1138,17 @@ defmodule Systems.Fund.Public do
   defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
     attrs = %{amount: total, description: "Reward payout"}
 
-    case Payment.Public.create_withdrawal(merchant_uid, :EUR, attrs, base_key <> ",type=withdrawal") do
+    case Payment.Public.create_withdrawal(
+           merchant_uid,
+           :EUR,
+           attrs,
+           base_key <> ",type=withdrawal"
+         ) do
       {:ok, withdrawal} ->
         record_withdrawal(payout, withdrawal, total)
 
       {:error, reason} ->
-        # The charge already funded the participant's merchant, so we must NOT
-        # revert. Leave the payout :pending; reconciliation (SF-OPP-02) re-issues
-        # the withdrawal with the same idempotence key to complete it.
+        # Funds already on the participant merchant — don't revert; SF-OPP-02 completes it.
         Logger.error(
           "[Fund] charge succeeded but withdrawal failed for payout #{payout.id}; " <>
             "left :pending for reconciliation: #{inspect(reason)}"
@@ -1155,9 +1164,7 @@ defmodule Systems.Fund.Public do
         {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
 
       {:error, _changeset} ->
-        # The withdrawal exists at OPP but we could not persist its uid. Do
-        # NOT revert. Leave the payout :pending; reconciliation can re-issue
-        # the withdrawal with the same idempotence key to recover the uid.
+        # Withdrawal exists at OPP but uid unsaved — don't revert; SF-OPP-02 recovers it.
         Logger.error(
           "[Fund] OPP withdrawal #{uid} created but provider_uid not persisted for " <>
             "payout #{payout.id}; left :pending for reconciliation"
@@ -1282,7 +1289,9 @@ defmodule Systems.Fund.Public do
 
   defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
        when opp_status in ["failed", "disapproved"] do
-    finalize_payout(payout, :failed, :approved, "opp_status: #{opp_status}")
+    # Don't revert rewards to :approved: the charge already moved funds, so a
+    # re-payout would charge again. SF-OPP-02 reconciles.
+    fail_payout(payout, "opp_status: #{opp_status}")
   end
 
   defp apply_status(%Fund.PayoutModel{provider_uid: uid}, opp_status) do
@@ -1324,6 +1333,19 @@ defmodule Systems.Fund.Public do
 
       {:error, _step, reason, _changes} ->
         {:error, reason}
+    end
+  end
+
+  defp fail_payout(%Fund.PayoutModel{} = payout, failure_reason) do
+    case payout
+         |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
+         |> Repo.update() do
+      {:ok, payout} ->
+        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: payout.user_id})
+        {:ok, payout}
+
+      {:error, _changeset} = error ->
+        error
     end
   end
 

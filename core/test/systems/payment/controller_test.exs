@@ -85,7 +85,7 @@ defmodule Systems.Payment.ControllerTest do
       assert %{status: :paid} = Core.Repo.reload!(reward)
     end
 
-    test ~s(routes "failed" to Fund.Public and reverts the rewards to :approved),
+    test ~s(routes "failed" to Fund.Public, :failed payout, rewards stay :pending_payout),
          %{conn: conn, fund: fund, user: user} do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_failed")
 
@@ -98,7 +98,7 @@ defmodule Systems.Payment.ControllerTest do
       assert json_response(conn, 200) == %{"status" => "ok"}
       assert %{status: :failed, failure_reason: reason} = Core.Repo.reload!(payout)
       assert reason =~ "failed"
-      assert %{status: :approved} = Core.Repo.reload!(reward)
+      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
     end
 
     test "returns 200 and leaves state untouched when get_withdrawal fails",
