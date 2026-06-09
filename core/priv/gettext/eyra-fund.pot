@@ -193,7 +193,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.kyc.title"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.pending"
-msgstr ""

@@ -31,7 +31,6 @@ defmodule Systems.Home.RewardsSummaryView do
           pending_cents: pending_cents,
           approved_cents: approved_cents,
           rejected_cents: rejected_cents,
-          pending_payout_cents: pending_payout_cents,
           labels: labels,
           user: user
         },
@@ -44,7 +43,6 @@ defmodule Systems.Home.RewardsSummaryView do
         pending_cents: pending_cents,
         approved_cents: approved_cents,
         rejected_cents: rejected_cents,
-        pending_payout_cents: pending_payout_cents,
         labels: labels,
         user: user
       )
@@ -158,15 +156,13 @@ defmodule Systems.Home.RewardsSummaryView do
     %{
       pending_cents: pending_cents,
       approved_cents: approved_cents,
-      rejected_cents: rejected_cents,
-      pending_payout_cents: pending_payout_cents
+      rejected_cents: rejected_cents
     } = Fund.Public.summarize_rewards(user)
 
     assign(socket,
       pending_cents: pending_cents,
       approved_cents: approved_cents,
-      rejected_cents: rejected_cents,
-      pending_payout_cents: pending_payout_cents
+      rejected_cents: rejected_cents
     )
   end
 
@@ -192,8 +188,6 @@ defmodule Systems.Home.RewardsSummaryView do
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
           payout_enabled?={@approved_cents > 0}
-          pending_payout_cents={@pending_payout_cents}
-          pending_payout_label={@labels.payout_pending}
           target={@myself}
         />
         <.column
@@ -234,8 +228,6 @@ defmodule Systems.Home.RewardsSummaryView do
   attr(:caption, :string, required: true)
   attr(:payout_button_label, :string, required: true)
   attr(:payout_enabled?, :boolean, required: true)
-  attr(:pending_payout_cents, :integer, required: true)
-  attr(:pending_payout_label, :string, required: true)
   attr(:target, :any, required: true)
 
   defp approved_column(assigns) do
@@ -257,11 +249,6 @@ defmodule Systems.Home.RewardsSummaryView do
         >
           <%= @payout_button_label %>
         </button>
-      <% end %>
-      <%= if @pending_payout_cents > 0 do %>
-        <div class="text-bodysmall font-body text-grey2" data-testid="pending-payout">
-          <%= @pending_payout_label %>: <%= CurrencyHelpers.format_cents(@pending_payout_cents) %>
-        </div>
       <% end %>
       <div class="text-bodysmall font-body text-grey2">
         <%= @caption %>

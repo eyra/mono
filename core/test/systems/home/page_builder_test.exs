@@ -92,22 +92,6 @@ defmodule Systems.Home.PageBuilderTest do
       refute :rewards_summary in block_keys(vm)
     end
 
-    test "member whose only reward is locked for payout still sees rewards_summary" do
-      user = Factories.insert!(:member, %{creator: false})
-
-      Factories.insert!(:reward, %{
-        user: user,
-        amount: 1000,
-        status: :pending_payout,
-        idempotence_key: "pendingpayout=#{System.unique_integer([:positive])}"
-      })
-
-      vm = Home.PageBuilder.view_model(nil, %{current_user: user})
-
-      assert :rewards_summary in block_keys(vm)
-      assert %{pending_payout_cents: 1000} = block_params(vm, :rewards_summary)
-    end
-
     test "payout handoff body interpolates the approved amount (no stray placeholder)" do
       user = Factories.insert!(:member, %{creator: false})
 

@@ -77,7 +77,7 @@ defmodule Systems.Home.PageBuilder do
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
     case Fund.Public.summarize_rewards(user) do
-      %{pending_cents: 0, approved_cents: 0, rejected_cents: 0, pending_payout_cents: 0} ->
+      %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
         nil
 
       %{approved_cents: approved_cents} = totals ->
@@ -171,7 +171,6 @@ defmodule Systems.Home.PageBuilder do
       approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
       rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill"),
       payout_button: dgettext("eyra-fund", "rewards_summary.payout.button"),
-      payout_pending: dgettext("eyra-fund", "rewards_summary.payout.pending"),
       payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
       payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
       payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),

@@ -246,7 +246,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert socket.assigns.approved_cents == 0
-      assert socket.assigns.pending_payout_cents == 1000
     end
   end
 
