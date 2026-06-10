@@ -45,16 +45,6 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and Que
       autolayout lr
     }
 
-    container next "Containers" "Phoenix is the single Eyra container that integrates with Centerdata. Three logical interfaces converge on the same external party." {
-      include participant
-      include cdOps
-      include eyraOps
-      include phx
-      include pg
-      include centerdata
-      autolayout lr
-    }
-
     dynamic next "Provisioning" "Interface 1 — Centerdata pre-registers a LISS panelist and an assignment in Next, before the participant ever signs in." {
       centerdata -> phx "[Provisioning] POST /oauth/token (client_credentials)"
       phx        -> centerdata "[Provisioning] Access token (Bearer, short-lived)"

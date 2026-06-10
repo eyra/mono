@@ -203,10 +203,9 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 
 ## 9. Diagrams
 
-Five diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed. Steps in the dynamic views are tagged with `[Provisioning]`, `[LISS IdP]`, or `[Quest]` to identify which interface they belong to. See [`diagrams.md`](diagrams.md) for regeneration instructions.
+Four diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed. Steps in the dynamic views are tagged with `[Provisioning]`, `[LISS IdP]`, or `[Quest]` to identify which interface they belong to. See [`diagrams.md`](diagrams.md) for regeneration instructions.
 
 - **Context** (`structurizr-Context.png`) — Participant, Eyra/Next, Centerdata, and existing IdPs (SurfConext, Google) shown for the "generic OIDC RP" framing.
-- **Containers** (`structurizr-Containers.png`) — Phoenix is the single Eyra container that integrates with Centerdata; three logical interfaces converge on the same external party. SurfConext/Google omitted to keep this view focused.
 - **Interface 1 — Provisioning** (`structurizr-Provisioning.png`) — Dynamic view: Centerdata pre-registers a participant and an assignment, authenticated via `client_credentials`.
 - **Interface 2 — LISS-OIDC sign-in** (`structurizr-SignIn.png`) — Dynamic view: OIDC Authorization Code + PKCE flow, identical for web and mobile.
 - **Interface 3 — Quest launch** (`structurizr-QuestLaunch.png`) — Dynamic view: signed JWT launch URL, questionnaire completion, redirect + webhook return.
