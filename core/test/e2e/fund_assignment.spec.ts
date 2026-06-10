@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { activateLocalPayment } from './lib';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * Fund Assignment E2E Test (PR #1468)
@@ -21,8 +23,6 @@ import { test, expect } from '@playwright/test';
  *   - A creator account (defaults match seeds.exs)
  */
 
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
 
 const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL || 'researcher@eyra.co';
 const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD || 'asdf;lkjASDF0987';
@@ -51,7 +51,7 @@ async function clickAddItemButton(page: any) {
 }
 
 test.describe('Fund Assignment via BudgetForm', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set ENABLED_APP_FEATURES=...,panl)');
+  test.skip(!!missingFeaturesReason('panl', 'panl_post_launch'), missingFeaturesReason('panl', 'panl_post_launch'));
 
   test('researcher can assign budget to a questionnaire and complete local payment', async ({ page }) => {
     page.on('console', msg => {
@@ -69,6 +69,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Step 2: Open existing project, or create one
     console.log('[TEST] Step 2: Opening / creating project');
@@ -181,6 +182,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -298,6 +300,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -411,6 +414,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
@@ -477,6 +481,7 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
