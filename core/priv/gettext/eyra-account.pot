@@ -255,14 +255,6 @@ msgid "auth.code.max_attempts"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "auth.code.resend.link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "auth.code.resent"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "auth.code.title"
 msgstr ""
 
@@ -280,8 +272,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "auth.code.placeholder"
 msgstr ""

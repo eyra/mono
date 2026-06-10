@@ -78,9 +78,10 @@ defmodule Next.Account.AuthPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
-      <Area.content class="items-center h-full">
+      <Area.content>
         <Area.form>
-          <Text.title2><%= dgettext("eyra-account", "auth.title") %></Text.title2>
+          <Margin.y id={:page_top} />
+          <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
           <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change">
             <.email_input

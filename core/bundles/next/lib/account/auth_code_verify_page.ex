@@ -22,7 +22,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
       {
         :ok,
         socket
-        |> assign(email: email, form: to_form(%{"code" => ""}), error: nil, sending: false)
+        |> assign(email: email, form: to_form(%{"code" => ""}), error: nil)
         |> update_menus()
       }
     else
@@ -47,40 +47,22 @@ defmodule Next.Account.AuthCodeVerifyPage do
 
       {:error, :invalid} ->
         {:noreply,
-         assign(socket,
-           error: dgettext("eyra-account", "auth.code.invalid"),
-           form: to_form(%{"code" => ""})
-         )}
+         socket
+         |> assign(error: dgettext("eyra-account", "auth.code.invalid"))
+         |> push_event("auth_code:clear", %{})}
 
-      {:error, :max_attempts} ->
-        {:noreply,
-         assign(socket,
-           error: dgettext("eyra-account", "auth.code.max_attempts"),
-           form: to_form(%{"code" => ""})
-         )}
+      {:error, reason} when reason in [:max_attempts, :not_found] ->
+        message =
+          case reason do
+            :max_attempts -> dgettext("eyra-account", "auth.code.max_attempts")
+            :not_found -> dgettext("eyra-account", "auth.code.expired")
+          end
 
-      {:error, :not_found} ->
         {:noreply,
-         assign(socket,
-           error: dgettext("eyra-account", "auth.code.expired"),
-           form: to_form(%{"code" => ""})
-         )}
+         socket
+         |> put_flash(:error, message)
+         |> push_navigate(to: ~p"/user/auth")}
     end
-  end
-
-  @impl true
-  def handle_event("resend", _params, %{assigns: %{email: email}} = socket) do
-    Account.Public.generate_otp(email)
-
-    {:noreply,
-     socket
-     |> assign(error: nil, sending: false, form: to_form(%{"code" => ""}))
-     |> put_flash(:info, dgettext("eyra-account", "auth.code.resent"))}
-  end
-
-  @impl true
-  def handle_event("change", _params, socket) do
-    {:noreply, assign(socket, error: nil)}
   end
 
   def verify_finalize_token(token) do
@@ -94,25 +76,33 @@ defmodule Next.Account.AuthCodeVerifyPage do
       <Area.content>
         <Area.form>
           <Margin.y id={:page_top} />
-          <Text.title2><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
+          <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_code_form" for={@form} phx-submit="verify" phx-change="change">
-            <input
-              type="text"
-              name="code"
-              value=""
-              maxlength="6"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              autocomplete="one-time-code"
-              placeholder={dgettext("eyra-account", "auth.code.placeholder")}
+          <.form id="auth_code_form" for={@form} phx-submit="verify">
+            <div
+              id="auth-code-input"
+              phx-hook="AuthCodeInput"
+              phx-update="ignore"
+              class="flex flex-row justify-between gap-2"
               data-testid="auth-code-input"
-              class="text-center text-title3 font-title3 tracking-widest w-full h-14 rounded border border-grey3 focus:border-primary focus:outline-none bg-white"
-              phx-debounce="false"
-            />
+            >
+              <%= for i <- 0..5 do %>
+                <input
+                  type="text"
+                  data-otp-cell={i}
+                  maxlength="1"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  autocomplete={if i == 0, do: "one-time-code", else: "off"}
+                  data-testid={"auth-code-cell-#{i}"}
+                  class="text-center text-title4 font-title4 text-grey1 w-12 h-14 rounded border-2 border-grey3 focus:border-primary focus:outline-none bg-white"
+                />
+              <% end %>
+              <input type="hidden" name="code" data-otp-value />
+            </div>
             <%= if @error do %>
               <.spacing value="XS" />
-              <Text.body_small color="text-delete"><%= @error %></Text.body_small>
+              <Text.caption color="text-warning" padding="" margin=""><%= @error %></Text.caption>
             <% end %>
             <.spacing value="M" />
             <Button.submit_wide
@@ -121,13 +111,6 @@ defmodule Next.Account.AuthCodeVerifyPage do
               testid="auth-code-verify-button"
             />
           </.form>
-          <.spacing value="M" />
-          <div class="flex justify-center">
-            <Button.dynamic
-              action={%{type: :send, event: "resend"}}
-              face={%{type: :link, text: dgettext("eyra-account", "auth.code.resend.link")}}
-            />
-          </div>
         </Area.form>
       </Area.content>
     </.stripped>
