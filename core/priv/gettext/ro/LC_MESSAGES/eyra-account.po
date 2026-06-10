@@ -251,3 +251,59 @@ msgstr "Vă rugăm să acceptați termenii și declarația de confidențialitate
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
 msgstr "Bun venit"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.change_email.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.expired"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.max_attempts"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.resend.link"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.resent"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.verify.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.placeholder"
+msgstr ""

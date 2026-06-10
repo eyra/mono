@@ -124,6 +124,11 @@ config :core,
 # ENABLE_E2E_SUPPORT build arg.
 config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
 
+# Feature flag defaults. Override per environment in dev.secret.exs, test.exs,
+# or via ENABLED_APP_FEATURES at runtime. Use safe-by-default (false) for any
+# feature that exposes routes or UI to users until the epic is fully shipped.
+config :core, :features, otp: false
+
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
   partner_fee_percentage: 0
@@ -170,6 +175,10 @@ config :core, Core.SurfConext,
   client_secret: "not-set",
   base_url: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
+
+# Domains routed to SurfConext SSO on the email-first auth page.
+# Override in runtime config per environment.
+config :core, :surfconext_domains, []
 
 config :core, SignInWithApple,
   client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),

@@ -53,6 +53,30 @@ defmodule Next.Account.SessionController do
     end
   end
 
+  def finalize_otp(conn, %{"token" => token}) do
+    if feature_enabled?(:otp) do
+      do_finalize_otp(conn, token)
+    else
+      redirect(conn, to: ~p"/user/signin")
+    end
+  end
+
+  defp do_finalize_otp(conn, token) do
+    case Next.Account.AuthCodeVerifyPage.verify_finalize_token(token) do
+      {:ok, %{user_id: nil, email: email}} ->
+        redirect(conn, to: ~p"/user/signup/participant?email=#{email}")
+
+      {:ok, %{user_id: user_id}} ->
+        user = Account.Public.get_user!(user_id)
+        Account.UserAuth.log_in_user(conn, user, false, %{})
+
+      _ ->
+        conn
+        |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
+        |> redirect(to: ~p"/user/auth")
+    end
+  end
+
   defp render_new(conn) do
     redirect(conn, to: ~p"/user/signin")
   end

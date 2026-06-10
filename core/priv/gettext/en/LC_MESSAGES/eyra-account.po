@@ -228,7 +228,7 @@ msgstr "Add"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.body"
-msgstr "You are now signed in with your institutional account. Before continuing, please review the Terms and Privacy Statement."
+msgstr "You are now signed in. Before continuing, please review our Terms and Privacy Statement."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
@@ -241,3 +241,59 @@ msgstr "Please accept the terms and privacy statement to continue."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.title"
 msgstr "Welcome"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.change_email.link"
+msgstr "Change email address"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.expired"
+msgstr "This code has expired. Please request a new one."
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.invalid"
+msgstr "Incorrect code. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.label"
+msgstr "6-digit code"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.max_attempts"
+msgstr "Too many incorrect attempts. Please request a new code."
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.resend.link"
+msgstr "Resend code"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.resent"
+msgstr "A new code has been sent to your email."
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.subtitle"
+msgstr "We sent a 6-digit code to"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.title"
+msgstr "Check your email"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.verify.button"
+msgstr "Verify"
+
+#, elixir-autogen, elixir-format
+msgid "auth.continue.button"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.invalid"
+msgstr "Please enter a valid email address."
+
+#, elixir-autogen, elixir-format
+msgid "auth.title"
+msgstr "Hello"
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.placeholder"
+msgstr "Enter your email and continue"

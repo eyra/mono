@@ -108,7 +108,8 @@ config :core, :features,
   debug_expire_force: true,
   panl: true,
   panl_post_launch: true,
-  e2e: true
+  e2e: true,
+  otp: true
 
 config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
