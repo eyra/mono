@@ -8,7 +8,7 @@ C4 diagrams (Context, Containers, and three dynamic flow views) for the Eyra ↔
 - `structurizr-Context.png` — System Context (C4 L1).
 - `structurizr-Provisioning.png` — Dynamic view, Interface 1.
 - `structurizr-SignIn.png` — Dynamic view, Interface 2.
-- `structurizr-QuestLaunch.png` — Dynamic view, Interface 3.
+- `structurizr-QuestionnaireLaunch.png` — Dynamic view, Interface 3.
 
 No C4 Container view is included: from Centerdata's perspective, Eyra Next and Centerdata are each one external party. Their internal containers are not material to the integration contract and are deferred to internal Eyra documentation.
 
