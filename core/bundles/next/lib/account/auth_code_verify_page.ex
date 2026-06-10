@@ -95,36 +95,28 @@ defmodule Next.Account.AuthCodeVerifyPage do
         <Area.form>
           <Margin.y id={:page_top} />
           <Text.title2><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
-          <.spacing value="XS" />
-          <Text.body_medium color="text-grey2">
-            <%= dgettext("eyra-account", "auth.code.subtitle") %> <strong><%= @email %></strong>
-          </Text.body_medium>
           <.spacing value="L" />
           <.form id="auth_code_form" for={@form} phx-submit="verify" phx-change="change">
-            <div class="flex flex-col gap-1">
-              <label class="text-label font-label text-grey1">
-                <%= dgettext("eyra-account", "auth.code.label") %>
-              </label>
-              <input
-                type="text"
-                name="code"
-                value=""
-                maxlength="6"
-                inputmode="numeric"
-                pattern="[0-9]*"
-                autocomplete="one-time-code"
-                data-testid="auth-code-input"
-                class="text-center text-title3 font-title3 tracking-widest w-full h-14 rounded border border-grey3 focus:border-primary focus:outline-none bg-white"
-                phx-debounce="false"
-              />
-            </div>
+            <input
+              type="text"
+              name="code"
+              value=""
+              maxlength="6"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              autocomplete="one-time-code"
+              placeholder={dgettext("eyra-account", "auth.code.placeholder")}
+              data-testid="auth-code-input"
+              class="text-center text-title3 font-title3 tracking-widest w-full h-14 rounded border border-grey3 focus:border-primary focus:outline-none bg-white"
+              phx-debounce="false"
+            />
             <%= if @error do %>
               <.spacing value="XS" />
               <Text.body_small color="text-delete"><%= @error %></Text.body_small>
             <% end %>
             <.spacing value="M" />
             <Button.submit_wide
-              label={dgettext("eyra-account", "auth.code.verify.button")}
+              label={dgettext("eyra-account", "auth.continue.button")}
               bg_color="bg-grey1"
               testid="auth-code-verify-button"
             />
@@ -134,13 +126,6 @@ defmodule Next.Account.AuthCodeVerifyPage do
             <Button.dynamic
               action={%{type: :send, event: "resend"}}
               face={%{type: :link, text: dgettext("eyra-account", "auth.code.resend.link")}}
-            />
-          </div>
-          <.spacing value="M" />
-          <div class="flex justify-center">
-            <Button.dynamic
-              action={%{type: :redirect, to: ~p"/user/auth"}}
-              face={%{type: :link, text: dgettext("eyra-account", "auth.code.change_email.link")}}
             />
           </div>
         </Area.form>
