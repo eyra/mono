@@ -28,20 +28,9 @@ defmodule Systems.Payment.Public do
   end
 
   @doc """
-  Ensures the user has an OPP merchant on file. Returns the user (with
-  `merchant_uid` populated) and the current merchant payload from OPP
-  (which includes `compliance_status` and `overview_url` for KYC flows).
-
-  - If `User.merchant_uid` is nil, creates a merchant at OPP and persists
-    the new uid on the user. On email-collision (merchant already exists
-    at OPP for that email — common when a user is re-created locally),
-    falls back to `find_merchant_by_email/1` and re-uses the existing uid.
-  - If `User.merchant_uid` is already set, fetches the current merchant
-    payload from OPP (no-op locally; one HTTP call to OPP). Needed so
-    callers that route on KYC status (`prepare_payout/1` in Fund) have
-    fresh data.
-
-  Returns `{:ok, {user, merchant}}` or `{:error, reason}`.
+  Ensures the user has an OPP merchant on file, recovering via
+  `find_merchant_by_email/1` on email-collision. Returns `{:ok, {user, merchant}}`
+  or `{:error, reason}`.
   """
   @spec ensure_merchant_for(Account.User.t()) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
@@ -147,19 +136,8 @@ defmodule Systems.Payment.Public do
   end
 
   @doc """
-  Ensures the given merchant has at least one usable bank_account on file.
-
-  Seeded as part of the KYC flow: OPP's onboarding overview page only
-  lets the participant complete the "Bankrekening" step when a
-  bank_account record already exists on the merchant — so we create
-  one preemptively (status `"new"`, awaiting verification).
-
-  Idempotent with recovery: returns the first non-`disapproved` account
-  when one exists. If the merchant has no accounts — or only
-  `disapproved` ones (OPP's documented recovery is to create a fresh
-  account) — a new account is created.
-
-  Returns `{:ok, bank_account}` or `{:error, reason}`.
+  Ensures the merchant has a usable bank account, creating one when it has none
+  or only `disapproved` ones. Returns `{:ok, bank_account}` or `{:error, reason}`.
   """
   @spec ensure_bank_account_for(merchant_uid :: String.t()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
@@ -214,7 +192,7 @@ defmodule Systems.Payment.Public do
     provider().get_withdrawal(uid)
   end
 
-  # Charges (internal balance move between merchants)
+  # Charges
 
   @spec create_charge(
           from_owner_uid :: String.t(),

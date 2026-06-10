@@ -1,22 +1,10 @@
 defmodule Systems.Fund.PayoutModel do
   @moduledoc """
-  A payout aggregates one or more `Fund.RewardModel` rows that are paid out
-  to a participant in a single OPP withdrawal.
+  Aggregates the `Fund.RewardModel` rows paid out in a single OPP withdrawal.
 
-  Lifecycle mirrors the pay-in side (`Budget.TransactionModel`):
-
-      :pending    — created locally; OPP request in-flight.
-      :completed  — terminal success; OPP released funds to the participant.
-      :failed     — terminal failure (OPP "failed" or "disapproved", or any
-                    rollback prior to OPP accepting the call).
-
-  OPP's intermediate statuses (`new`, `pending`, `approved`) are not
-  persisted locally — they collapse into our `:pending`. `:disapproved`
-  collapses into `:failed`; the OPP string is captured in
-  `failure_reason` for audit.
-
-  `provider_uid` is the OPP withdrawal UID; populated as soon as
-  `Payment.Public.create_withdrawal/4` returns successfully.
+  Status collapses OPP's vocabulary into `:pending` (in-flight, incl. OPP's
+  new/pending/approved), `:completed`, and `:failed` (incl. disapproved or a
+  pre-acceptance rollback; the OPP string is kept in `failure_reason`).
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -42,10 +30,8 @@ defmodule Systems.Fund.PayoutModel do
   def statuses, do: @statuses
 
   @doc """
-  Stable, caller-owned idempotency key for the OPP withdrawal. The payout row
-  is the unique object (per OPP's idempotency best practice), so its `id` keys
-  the withdrawal: retrying the same payout re-issues the same withdrawal
-  instead of creating a duplicate.
+  Stable idempotency key for the OPP withdrawal, keyed by the payout `id` so
+  retries re-issue the same withdrawal instead of duplicating it.
   """
   def idempotence_key(%__MODULE__{id: id}) when is_integer(id), do: "payout=#{id}"
 

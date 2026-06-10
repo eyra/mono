@@ -1426,7 +1426,7 @@ defmodule Systems.Fund.PublicTest do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_intermediate_1")
 
       for opp_status <- ["approved", "pending", "new", "unknown_future_value"] do
-        assert :ok = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
+        assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
       end
 
       # Nothing should have moved from the original :pending / :pending_payout state.
@@ -1434,8 +1434,8 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :pending} = Core.Repo.reload!(payout)
     end
 
-    test "returns :ok and does nothing when the provider_uid is unknown" do
-      assert :ok = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
+    test "returns {:ok, nil} and does nothing when the provider_uid is unknown" do
+      assert {:ok, nil} = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
     end
 
     test "is idempotent: re-applying to an already-:completed payout short-circuits",

@@ -54,9 +54,7 @@ defmodule Systems.Home.RewardsSummaryView do
   @impl true
   def compose(:handoff_modal, %{handoff_mode: :kyc, kyc_overview_url: url, labels: labels})
       when is_binary(url) do
-    # KYC confirm is an external link to OPP — NOT a server "confirm" event.
-    # A redirect issued from the parent-event (send_update) cycle would be
-    # silently dropped, so the browser must navigate via a real anchor.
+    # KYC confirm is an external link (http_get); a redirect from the send_update cycle would be dropped.
     %{
       module: Pixel.ConfirmationModal,
       params: %{
@@ -72,7 +70,6 @@ defmodule Systems.Home.RewardsSummaryView do
   end
 
   def compose(:handoff_modal, %{handoff_mode: :payout, labels: labels}) do
-    # Payout confirm is a standard "confirm" send event -> request_payout.
     %{
       module: Pixel.ConfirmationModal,
       params: %{
@@ -98,17 +95,11 @@ defmodule Systems.Home.RewardsSummaryView do
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
 
-      # Covers {:error, :kyc_unavailable}, {:error, :no_merchant} and any
-      # provider/network error — no handoff, just surface the failure.
       {:error, _reason} ->
         {:noreply, socket |> Flash.push_error(labels.payout_failed)}
     end
   end
 
-  # Payout variant confirm (the KYC variant confirms via an external link, so
-  # it never reaches the server). ConfirmationModal sends "confirmed" to its
-  # parent; this runs inside a send_update cycle, so we must NOT rely on a
-  # redirect here — only DB work + flash + assign, which propagate fine.
   @impl true
   def handle_event(
         "confirmed",
@@ -117,10 +108,8 @@ defmodule Systems.Home.RewardsSummaryView do
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
-    # Always refresh after the call: on success the locked balance drops to 0,
-    # and on a lost lock-race (:lock_failed) the winner already moved the rewards
-    # to :pending_payout — refreshing hides the now-stale balance + payout button
-    # so the participant doesn't keep clicking a button that can only fail.
+    # Refresh either way: success zeroes the locked balance, a lost lock-race
+    # hides the now-stale payout button.
     case Fund.Public.request_payout(user) do
       {:ok, _result} ->
         {:noreply, socket |> Flash.push_info(labels.payout_success) |> refresh_totals(user)}
@@ -129,9 +118,6 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply,
          socket |> Flash.push_error(labels.payout_below_threshold) |> refresh_totals(user)}
 
-      # {:opp_failed, _}, :no_merchant, :lock_failed, :kyc_unavailable, and a
-      # drifted {:kyc_required, _} (rare) — surface a flash; the next click
-      # re-evaluates and shows the KYC link.
       {:error, _reason} ->
         {:noreply, socket |> Flash.push_error(labels.payout_failed) |> refresh_totals(user)}
     end

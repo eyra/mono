@@ -31,14 +31,8 @@ defmodule Systems.Payment.Provider.OPP do
 
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
-    # OPP supports `?filter[emailaddress]=...` natively (max perpage = 100),
-    # which avoids a full-merchant scan and works even with hundreds of
-    # sub-merchants. The list response does NOT echo `emailaddress` per row,
-    # so we trust the filter: if `data` has any entries, the first one is
-    # ours. If it has many (multiple merchants registered against the same
-    # email, which OPP allows in some configurations) we still take the
-    # first — caller wins; the duplicate-email recovery path only cares
-    # about getting a working uid back.
+    # Trust OPP's `filter[emailaddress]` (rows don't echo the email): take the
+    # first match — the recovery path only needs a working uid.
     query =
       URI.encode_query(%{
         "filter[emailaddress]" => email,

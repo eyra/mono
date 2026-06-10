@@ -7,8 +7,7 @@ defmodule Systems.Payment.Provider.Local do
 
   # Merchants
 
-  # Local provider always returns a "fully verified" merchant so the pay-out
-  # path works end-to-end in dev/test without hitting OPP's KYC funnel.
+  # Always "fully verified" so the dev/test pay-out path skips OPP's KYC funnel.
   defp stub_merchant(uid) do
     %{
       uid: uid,
@@ -39,8 +38,7 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, stub_merchant(uid)}
   end
 
-  # Bank accounts — local stub always reports an approved one so the
-  # pay-out path doesn't get stuck in KYC.
+  # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
 
   defp stub_bank_account(uid) do
     %{uid: uid, status: "approved", verification_url: nil}

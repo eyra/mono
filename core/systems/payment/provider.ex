@@ -30,7 +30,7 @@ defmodule Systems.Payment.Provider do
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
 
-  # Bank accounts (attached to a merchant; needed for withdrawals)
+  # Bank accounts
 
   @type bank_account :: %{
           uid: String.t(),
@@ -119,7 +119,7 @@ defmodule Systems.Payment.Provider do
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
 
-  # Charges (internal balance move between two merchants on the platform)
+  # Charges
 
   @type charge :: %{
           uid: String.t(),

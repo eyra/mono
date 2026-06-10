@@ -102,8 +102,6 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
-  # Default preload includes `:payment` so callers can read
-  # `payment.inserted_at` as the settlement timestamp.
   def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do
     reward_query(fund, :paid)
     |> preload(^preload)
@@ -908,22 +906,7 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Rolls up a participant's reward situation into amounts (in cents), used by
-  the home page rewards-summary card:
-
-  - `pending_cents` — status `:reserved` or `:pending_approval` (waiting on
-    researcher approval).
-  - `approved_cents` — status `:approved`. The participant's currently
-    available balance — eligible for payout.
-  - `pending_payout_cents` — status `:pending_payout`. Funds locked while a
-    payout request is in flight at the payment provider.
-  - `paid_out_cents` — status `:paid`. Funds that have completed payout.
-  - `rejected_cents` — status `:rejected`.
-
-  All buckets are immutable per-status earned-amount snapshots (sum of
-  `Fund.RewardModel.amount`) sharing a single source of truth (the reward
-  rows), so they cannot drift relative to each other the way mixing reward
-  sums with live wallet balances would.
+  Per-status reward totals (in cents) for the home rewards-summary card.
   """
   def summarize_rewards(%Account.User{id: user_id}) do
     totals =
@@ -954,34 +937,12 @@ defmodule Systems.Fund.Public do
   def payout_threshold_cents, do: @payout_threshold_cents
 
   @doc """
-  Requests a payout for all of the participant's `:approved` rewards.
-
-  Vertical slice for UC-OPP-06 (MS.4 → MS.10, without MS.11 webhook handling):
-
-    1. Validate the participant has an OPP merchant on file.
-    2. Validate the available balance ≥ `@payout_threshold_cents`.
-    3. Lock the eligible rewards: status `:approved` → `:pending_payout`.
-    4. Call `Payment.Public.create_withdrawal/4` to initiate the OPP payout,
-       keyed by the payout's idempotence key so retries never duplicate it.
-    5. On failure *before* OPP accepts, revert the lock so the funds remain
-       available. Once OPP accepts, the lock stands (reverting would risk a
-       double payout); the status webhook drives it to `:completed`/`:failed`.
-
-  Returns `{:ok, %{withdrawal: withdrawal, amount: cents}}` on success or
-  one of:
-
-    * `{:error, :no_merchant}` — participant has no OPP merchant_uid.
-    * `{:error, {:below_threshold, cents}}` — available balance under €5.
-    * `{:error, {:opp_failed, reason}}` — provider rejected the withdrawal;
-      the lock has been reverted.
-
-  Webhook handling (MS.11) and the eventual `:pending_payout` → `:paid`
-  transition land in a follow-up PR.
+  Requests a payout for all of the participant's `:approved` rewards: locks
+  them, then charges and withdraws via OPP. Returns `{:ok, result}` or
+  `{:error, reason}`.
   """
   def request_payout(%Account.User{} = user) do
-    # Reload from the DB: prepare_payout/1 may have just provisioned the OPP
-    # merchant and persisted merchant_uid, while the caller (e.g. a LiveView
-    # socket assign) still holds a stale struct with merchant_uid: nil.
+    # Reload: the caller may hold a struct from before prepare_payout/1 set merchant_uid.
     case Repo.reload!(user) do
       %Account.User{merchant_uid: nil} ->
         {:error, :no_merchant}
@@ -999,9 +960,7 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Pre-flight check for a payout request — pure / no side effects. Used by
-  `prepare_payout/1` to gate the threshold + balance checks before any OPP
-  call.
+  Pure pre-flight threshold check (no side effects), used by `prepare_payout/1`.
   """
   def payout_eligibility(%Account.User{id: user_id}) do
     total =
@@ -1016,24 +975,8 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Side-effecting pre-handoff check (UC-OPP-06.A1).
-
-  Ensures the participant has an OPP merchant and a bank account, then
-  reports payout readiness. Returns one of:
-
-    * `:ok` — merchant is `status="live"` AND `compliance_status="verified"`
-      AND has an `approved` bank account, and the approved balance is at or
-      above the payout threshold.
-    * `{:error, {:below_threshold, cents}}` — under €5; no OPP call made.
-    * `{:error, {:kyc_required, url}}` — merchant/bank not yet payout-ready
-      and `url` is a usable page to send the participant to (the merchant
-      KYC overview when present, else the bank-account verification page).
-    * `{:error, :kyc_unavailable}` — not payout-ready and OPP gave us no
-      usable URL to route to; surface a generic "try again later" flash.
-    * `{:error, reason}` — an OPP call failed.
-
-  Per the ticket, no local KYC tracking in MVP — we re-check OPP each
-  time the participant clicks Uitbetalen.
+  Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
+  account exist, then reports payout readiness via `payout_ready_for/2`.
   """
   def prepare_payout(%Account.User{} = user) do
     with :ok <- payout_eligibility(user),
@@ -1043,19 +986,14 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  # Fully payout-ready: live + verified merchant with an approved bank
-  # account. (compliance_status "verified" is documented to subsume bank
-  # approval, but we check the bank status explicitly so a live withdrawal
-  # is never fired against an unapproved account.)
+  # Check the bank status explicitly so a live withdrawal never fires against an
+  # unapproved account, even though "verified" is documented to subsume it.
   defp payout_ready_for(
          %{status: "live", compliance_status: "verified"},
          %{status: "approved"}
        ),
        do: :ok
 
-  # Merchant itself is done — only the bank step remains. Send straight to
-  # the bank-account verification page rather than the (now redundant)
-  # merchant overview.
   defp payout_ready_for(
          %{status: "live", compliance_status: "verified"},
          %{verification_url: verification_url}
@@ -1063,24 +1001,17 @@ defmodule Systems.Fund.Public do
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, verification_url}}
 
-  # Merchant not yet done — route to the merchant KYC overview (the
-  # comprehensive checklist) when OPP gave us one.
   defp payout_ready_for(%{overview_url: overview_url}, _bank_account)
        when is_binary(overview_url) and overview_url != "",
        do: {:error, {:kyc_required, overview_url}}
 
-  # No overview page (common once only the bank step remains) — fall back to
-  # the bank-account verification page.
   defp payout_ready_for(_merchant, %{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, verification_url}}
 
-  # Not ready and no usable URL to send the participant to.
   defp payout_ready_for(_merchant, _bank_account), do: {:error, :kyc_unavailable}
 
-  # Re-verify readiness at withdrawal time against fresh OPP state. Guards
-  # against the merchant/bank status drifting between the handoff screen and
-  # the confirm click (TOCTOU). Returns the same shape as payout_ready_for/2.
+  # Re-check readiness at confirm time against fresh OPP state (TOCTOU guard).
   defp recheck_payout_ready(merchant_uid) do
     with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
          {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant_uid) do
@@ -1096,7 +1027,6 @@ defmodule Systems.Fund.Public do
   end
 
   defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
-    # Resolve before locking: a missing platform merchant must fail cleanly, not crash mid-payout.
     case Payment.Public.platform_merchant_uid() do
       nil ->
         {:error, :no_platform_merchant}
@@ -1187,9 +1117,8 @@ defmodule Systems.Fund.Public do
       })
     )
     |> Multi.run(:lock_rewards, fn _repo, %{payout: %{id: payout_id}} ->
-      # Compare-and-swap on :approved: a concurrent payout (second tab/device)
-      # that already locked these rewards leaves us short of the expected count,
-      # so we roll the whole Multi back rather than firing a duplicate OPP payout.
+      # CAS on :approved — a concurrent payout leaves us short of the count, so we
+      # roll back rather than fire a duplicate OPP payout.
       {count, _} =
         from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
         |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now])
@@ -1208,9 +1137,6 @@ defmodule Systems.Fund.Public do
 
     Multi.new()
     |> Multi.run(:payout, fn _repo, _changes ->
-      # Look up the (just-created) :pending payout via any reward's
-      # payout_id. They all share the same payout because lock_for_payout
-      # assigns one payout_id to the whole batch.
       case Repo.one(
              from(r in Fund.RewardModel,
                where: r.id in ^reward_ids and not is_nil(r.payout_id),
@@ -1238,8 +1164,18 @@ defmodule Systems.Fund.Public do
       set: [status: :approved, payout_id: nil, updated_at: now]
     )
     |> Repo.commit()
+    |> case do
+      {:ok, _changes} ->
+        :ok
 
-    :ok
+      {:error, step, reason, _changes} ->
+        Logger.error(
+          "[Fund] failed to revert payout lock for rewards #{inspect(reward_ids)} at " <>
+            "#{step} (#{failure_reason}); they remain :pending_payout: #{inspect(reason)}"
+        )
+
+        {:error, reason}
+    end
   end
 
   defp list_approved_rewards(user_id) do
@@ -1250,24 +1186,9 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Applies an OPP withdrawal status change to the linked `Fund.PayoutModel`
-  and its rewards.
-
-  OPP statuses collapse into local vocab:
-
-      "completed"   -> Payout :completed; rewards :pending_payout -> :paid
-      "failed"      -> Payout :failed;    rewards :pending_payout -> :approved
-      "disapproved" -> Payout :failed;    rewards :pending_payout -> :approved
-      (other)       -> no-op (logged)
-
-  Idempotent: once a Payout is in a terminal state, subsequent calls
-  short-circuit. If the OPP withdrawal UID isn't linked to any Payout
-  (e.g. a webhook for a deposit-side transaction was misrouted, or the
-  webhook arrived before the request_payout DB write committed), the
-  call logs and returns `:ok`.
-
-  Returns `{:ok, payout}` for terminal transitions, `:ok` when no
-  Payout was found, and `{:error, reason}` for DB failures.
+  Applies an OPP withdrawal status change to the linked payout and its rewards.
+  Idempotent: terminal payouts short-circuit. Returns `{:ok, payout}` when a
+  payout was found, `{:ok, nil}` when none matched the uid, or `{:error, reason}`.
   """
   def apply_withdrawal_status(provider_uid, opp_status)
       when is_binary(provider_uid) and is_binary(opp_status) do
@@ -1275,10 +1196,10 @@ defmodule Systems.Fund.Public do
       nil ->
         Logger.warning("[Fund] withdrawal #{provider_uid} not linked to any Payout — ignoring")
 
-        :ok
+        {:ok, nil}
 
       %Fund.PayoutModel{status: status} = payout when status in [:completed, :failed] ->
-        # Already terminal. OPP retries webhooks; tolerate the duplicate.
+        # Already terminal; tolerate OPP's webhook retries.
         {:ok, payout}
 
       %Fund.PayoutModel{} = payout ->
@@ -1292,15 +1213,14 @@ defmodule Systems.Fund.Public do
 
   defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
        when opp_status in ["failed", "disapproved"] do
-    # Don't revert rewards to :approved: the charge already moved funds, so a
-    # re-payout would charge again. SF-OPP-02 reconciles.
+    # Charge already moved funds — don't revert to :approved (would re-charge). SF-OPP-02 reconciles.
     fail_payout(payout, "opp_status: #{opp_status}")
   end
 
-  defp apply_status(%Fund.PayoutModel{provider_uid: uid}, opp_status) do
+  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, opp_status) do
     Logger.info("[Fund] withdrawal #{uid} OPP status=#{opp_status} — no local transition")
 
-    :ok
+    {:ok, payout}
   end
 
   defp finalize_payout(
@@ -1330,8 +1250,8 @@ defmodule Systems.Fund.Public do
       |> Repo.commit()
 
     case result do
-      {:ok, %{payout: payout}} ->
-        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: payout.user_id})
+      {:ok, %{payout: %{user_id: user_id} = payout}} ->
+        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
         {:ok, payout}
 
       {:error, _step, reason, _changes} ->
@@ -1343,8 +1263,8 @@ defmodule Systems.Fund.Public do
     case payout
          |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
          |> Repo.update() do
-      {:ok, payout} ->
-        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: payout.user_id})
+      {:ok, %{user_id: user_id} = payout} ->
+        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
         {:ok, payout}
 
       {:error, _changeset} = error ->
