@@ -499,7 +499,7 @@ msgstr "Active su cuenta"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Deja tu dirección de correo electrónico para recibir información sobre cómo participar en investigaciones a través de Panl."
+msgstr "Panl acerca a la ciudadanía y la ciencia. ¿Quieres participar en investigaciones con más frecuencia? Deja abajo tu dirección de correo electrónico. Tú decides siempre si participas y cuándo, y recibirás una compensación por tu participación."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -654,10 +654,6 @@ msgid "payout.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr ""
 
@@ -695,4 +691,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.amount_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.date_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
 msgstr ""

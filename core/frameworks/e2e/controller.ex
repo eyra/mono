@@ -44,25 +44,6 @@ defmodule Frameworks.E2E.Controller do
   @feldspar_filename "feldspar_e2e.zip"
 
   @doc """
-  Returns the live feature-flag set so E2E test runners can discover
-  which features are enabled and skip tests accordingly.
-
-  Intentionally NOT gated by the :e2e feature flag — the test runner
-  needs to call this BEFORE bootstrap to decide what to do. The
-  feature list itself is not sensitive.
-  """
-  def features(conn, _params) do
-    enabled =
-      :core
-      |> Application.get_env(:features, [])
-      |> Enum.filter(fn {_, on?} -> on? end)
-      |> Enum.map(fn {key, _} -> Atom.to_string(key) end)
-      |> Enum.sort()
-
-    json(conn, %{features: enabled})
-  end
-
-  @doc """
   Bootstrap endpoint - creates the E2E service user.
   No authentication required, but only works when :e2e feature is enabled.
   Call this once before running E2E tests.
@@ -83,6 +64,52 @@ defmodule Frameworks.E2E.Controller do
       |> json(%{error: "E2E bootstrap not available (enable :e2e feature)"})
     end
   end
+
+  @doc """
+  Directly activates a user account by email. Only available when :e2e feature is enabled.
+  Bypasses the email confirmation flow so E2E tests don't need to read from /sent_emails.
+  """
+  def activate_user(conn, %{"email" => email}) do
+    if feature_enabled?(:e2e) do
+      case Account.Public.get_user_by_email(email) do
+        nil ->
+          conn |> put_status(404) |> json(%{error: "User not found: #{email}"})
+
+        %{confirmed_at: confirmed_at} = user when not is_nil(confirmed_at) ->
+          json(conn, %{status: "already_confirmed", email: user.email})
+
+        user ->
+          now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+          user
+          |> Ecto.Changeset.change(%{confirmed_at: now})
+          |> Repo.update!()
+
+          json(conn, %{status: "confirmed", email: user.email})
+      end
+    else
+      conn |> put_status(403) |> json(%{error: "E2E not available"})
+    end
+  end
+
+  def inject(conn, params) do
+    if feature_enabled?(:e2e) do
+      conn
+      |> put_session("need", resolve_injections(params))
+      |> json(%{ok: true})
+    else
+      conn |> put_status(403) |> json(%{error: "E2E not available"})
+    end
+  end
+
+  defp resolve_injections(%{"payment_provider" => "local"} = params) do
+    params
+    |> Map.delete("payment_provider")
+    |> resolve_injections()
+    |> Map.put(:payment_provider, Systems.Payment.Provider.Local)
+  end
+
+  defp resolve_injections(_), do: %{}
 
   def setup(conn, _params) do
     if feature_enabled?(:e2e) do
@@ -148,9 +175,16 @@ defmodule Frameworks.E2E.Controller do
   defp get_or_create_researcher do
     case Account.Public.get_user_by_email(@researcher_email) do
       nil -> create_researcher()
-      user -> user
+      user -> ensure_verified(user)
     end
   end
+
+  defp ensure_verified(%{verified_at: nil} = user) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    user |> Ecto.Changeset.change(%{verified_at: now}) |> Repo.update!()
+  end
+
+  defp ensure_verified(user), do: user
 
   defp create_researcher do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
@@ -167,7 +201,7 @@ defmodule Frameworks.E2E.Controller do
   defp get_or_create_researcher_b do
     case Account.Public.get_user_by_email(@researcher_b_email) do
       nil -> create_researcher_b()
-      user -> user
+      user -> ensure_verified(user)
     end
   end
 

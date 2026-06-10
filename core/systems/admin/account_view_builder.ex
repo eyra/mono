@@ -107,6 +107,9 @@ defmodule Systems.Admin.AccountViewBuilder do
   defp matches_filter?(%Account.User{verified_at: verified_at}, :verified),
     do: verified_at != nil
 
+  defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified),
+    do: verified_at == nil
+
   defp matches_filter?(%Account.User{creator: creator}, :creator) when not is_nil(creator),
     do: creator
 

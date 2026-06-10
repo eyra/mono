@@ -1,0 +1,11 @@
+{
+  "name": "smoke",
+  "version": "1.0.0",
+  "description": "Smoke tests — run after prod deploy to verify critical paths",
+  "scripts": {
+    "smoke": "npx playwright test --project=chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}

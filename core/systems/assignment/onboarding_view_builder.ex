@@ -32,7 +32,8 @@ defmodule Systems.Assignment.OnboardingViewBuilder do
       face: %{
         type: :primary,
         label: dgettext("eyra-assignment", "onboarding.continue.button")
-      }
+      },
+      testid: "assignment-onboarding-continue-button"
     }
   end
 end

@@ -25,6 +25,7 @@ defmodule CoreWeb.Router do
     pipe_through([:browser_base])
     get("/.status/health", HealthController, :get)
     get("/.status/wakeup", WakeupController, :get)
+    get("/.status/features", FeaturesController, :get)
   end
 
   scope "/", CoreWeb do
@@ -32,7 +33,7 @@ defmodule CoreWeb.Router do
     get("/uploads/:filename", UploadedFileController, :get)
   end
 
-  if Mix.env() == :dev do
+  if Application.compile_env(:core, :enable_e2e_support, false) do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
 end

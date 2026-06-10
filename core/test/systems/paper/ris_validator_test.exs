@@ -1,5 +1,8 @@
 defmodule Systems.Paper.RISValidatorTest do
   use Core.DataCase
+
+  @moduletag :capture_log
+
   alias Systems.Paper.RISValidator
 
   describe "validate_content/1" do

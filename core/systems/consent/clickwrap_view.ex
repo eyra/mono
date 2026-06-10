@@ -48,7 +48,8 @@ defmodule Systems.Consent.ClickWrapView do
       face: %{
         type: :primary,
         label: accept_text
-      }
+      },
+      testid: "consent-accept-button"
     }
 
     decline_button = %{
@@ -56,7 +57,8 @@ defmodule Systems.Consent.ClickWrapView do
       face: %{
         type: :label,
         label: decline_text
-      }
+      },
+      testid: "consent-decline-button"
     }
 
     assign(socket, buttons: [accept_button, decline_button])

@@ -498,7 +498,7 @@ msgstr "Activeer je account"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Laat je e-mailadres achter om informatie te ontvangen over meedoen aan onderzoek via Panl."
+msgstr "Panl brengt burgers en wetenschap dichter bij elkaar. Wil je vaker meedoen aan onderzoek? Laat dan hieronder je e-mailadres achter. Je kiest altijd zelf of en wanneer je meedoet, en ontvangt een vergoeding voor je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -638,60 +638,80 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.error"
-msgstr ""
+msgstr "Deze uitbetaling kon niet worden afgewezen. Probeer het opnieuw."
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.link"
-msgstr ""
+msgstr "Afwijzen"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.reason.label"
-msgstr ""
+msgstr "Reden voor afwijzing"
 
 #, elixir-autogen, elixir-format
 msgid "payout.decline.submit.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
+msgstr "Uitbetaling afwijzen"
 
 #, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
-msgstr ""
+msgstr "Uitbetalingsoverzicht"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pagination.single_page"
-msgstr ""
+msgstr "1 pagina"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.button"
-msgstr ""
+msgstr "Alles uitbetalen"
 
 #, elixir-autogen, elixir-format
 msgid "payout.pay_out_all.error"
-msgstr ""
+msgstr "Sommige uitbetalingen konden niet worden verwerkt. Controleer en probeer opnieuw."
 
 #, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
-msgstr ""
+msgstr "Zoeken"
 
 #, elixir-autogen, elixir-format
 msgid "payout.subject_label"
-msgstr ""
+msgstr "Deelnemer"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.overview"
-msgstr ""
+msgstr "Uitbetalingsoverzicht"
 
 #, elixir-autogen, elixir-format
 msgid "payout.tab.waiting"
-msgstr ""
+msgstr "Wachten op uitbetaling"
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.empty"
-msgstr ""
+msgstr "Er zijn geen deelnemers die op uitbetaling wachten."
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
-msgstr ""
+msgstr "Wachten op uitbetaling"
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.amount_label"
+msgstr "Bedrag"
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.date_label"
+msgstr "Datum"
+
+#, elixir-autogen, elixir-format
+msgid "payout.overview.empty"
+msgstr "Er zijn nog geen uitbetalingen."
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr "Er zijn deelnemers die op een uitbetaling wachten"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr "Bekijk uitbetalingen"
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
+msgstr "Deelnemers wachten op uitbetaling"

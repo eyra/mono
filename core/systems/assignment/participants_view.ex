@@ -10,6 +10,7 @@ defmodule Systems.Assignment.ParticipantsView do
   alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
+  alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Assignment
   alias Systems.Assignment.PaidSlotsLogic
@@ -54,6 +55,7 @@ defmodule Systems.Assignment.ParticipantsView do
       |> update_invite_title()
       |> update_invite_url()
       |> update_invite_annotation()
+      |> assign_pending_approvals()
       |> PaidSlotsLogic.assign_paid_slots_state()
     }
   end
@@ -77,6 +79,14 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   @impl true
+  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
+    %{
+      module: Assignment.PayoutModal,
+      params: %{assignment_id: assignment_id}
+    }
+  end
+
+  @impl true
   def handle_event(
         "create_advert",
         _payload,
@@ -90,6 +100,31 @@ defmodule Systems.Assignment.ParticipantsView do
     end
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("open_payout_modal", _, socket) do
+    {
+      :noreply,
+      socket
+      |> compose_child(:payout_modal)
+      |> show_modal(:payout_modal, :compact)
+    }
+  end
+
+  @impl true
+  def handle_event("payout_modal_close", _, socket) do
+    {
+      :noreply,
+      socket
+      |> hide_modal(:payout_modal)
+      |> PaidSlotsLogic.refresh_assignment()
+      |> assign_pending_approvals()
+    }
+  end
+
+  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
+    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
@@ -208,6 +243,8 @@ defmodule Systems.Assignment.ParticipantsView do
 
           <.spacing value="L" />
 
+          <.pending_approvals_banner pending_approvals={@pending_approvals} target={@myself} />
+
           <%= if @content_flags[:paid_slots] do %>
             <.paid_slots
               entity={@entity}
@@ -242,6 +279,25 @@ defmodule Systems.Assignment.ParticipantsView do
           </div>
         </Area.content>
       </div>
+    """
+  end
+
+  attr(:pending_approvals, :list, required: true)
+  attr(:target, :any, required: true)
+
+  def pending_approvals_banner(assigns) do
+    ~H"""
+    <%= if Enum.any?(@pending_approvals) do %>
+      <div data-testid="pending-approvals-cta">
+        <NextAction.View.highlight
+          title={dgettext("eyra-assignment", "pending_approvals.title")}
+          description={dgettext("eyra-assignment", "pending_approvals.description")}
+          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
+          cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
+        />
+      </div>
+      <.spacing value="L" />
+    <% end %>
     """
   end
 end

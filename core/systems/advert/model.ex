@@ -38,11 +38,20 @@ defmodule Systems.Advert.Model do
     def tag(_), do: dgettext("eyra-advert", "leaf.tag")
     def resource_id(%{id: id}), do: "advert/#{id}"
 
-    def info(%{submission: %{pool: %{name: pool_name}}}, _timezone) do
-      [pool_name]
+    def info(%{submission: %{pool: %{name: pool_name}}} = advert, _timezone) do
+      [pool_name | visibility_info(advert)]
     end
 
     def status(%{status: status}), do: %Concept.Leaf.Status{value: status}
+
+    defp visibility_info(advert) do
+      case Advert.Public.pool_visibility(advert) do
+        :visible -> [dgettext("eyra-advert", "pool.visibility.visible.label")]
+        :filled -> [dgettext("eyra-advert", "pool.visibility.filled.label")]
+        :not_funded -> [dgettext("eyra-advert", "pool.visibility.not_funded.label")]
+        _ -> []
+      end
+    end
   end
 
   @doc false

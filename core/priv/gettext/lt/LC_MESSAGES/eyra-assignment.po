@@ -509,7 +509,7 @@ msgstr "Aktyvuokite savo paskyrą"
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.body"
-msgstr "Palikite savo el. pašto adresą, kad gautumėte informacijos apie dalyvavimą tyrimuose per Panl."
+msgstr "Panl suartina piliečius ir mokslą. Ar norėtumėte dažniau dalyvauti tyrimuose? Toliau palikite savo el. pašto adresą. Visada patys sprendžiate, ar ir kada dalyvauti, ir už dalyvavimą gaunate atlygį."
 
 #, elixir-autogen, elixir-format
 msgid "email_capture.email.label"
@@ -664,10 +664,6 @@ msgid "payout.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.coming_soon"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr ""
 
@@ -705,4 +701,28 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payout.waiting.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.amount_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.date_label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payout.overview.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.open.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pending_approvals.title"
 msgstr ""

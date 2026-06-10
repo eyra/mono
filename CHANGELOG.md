@@ -9,6 +9,12 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#25 Unreleased
+* Fixed - "Participants waiting for pay out" banner on the Participants tab was lost in the milestone 23 refactor; restored with correct copy
+* Fixed - Pay-out modal translations (payout.*) were wiped in the SURFconext-auth merge; EN and NL strings restored
+* Added - Pay-out Overview tab now shows a list of completed payouts instead of the "coming soon" placeholder
+* Changed - Updated PaNL onboarding copy
+
 ## \#24 Unreleased
 * Changed - SURFconext userinfo (name, email, affiliation) is now stored as a raw JSON map; individual parsed columns removed from the database
 * Fixed - Auth signup page (/user/auth/:provider) had no side margins on mobile

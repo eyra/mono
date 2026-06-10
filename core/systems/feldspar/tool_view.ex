@@ -113,7 +113,7 @@ defmodule Systems.Feldspar.ToolView do
         <% end %>
         <div
           data-testid="start-container"
-          class={"absolute inset-0 items-center justify-center #{if @started and @initialized, do: "hidden", else: "flex"}"}
+          class={"w-full h-full flex-col items-center justify-center py-8 #{if @started and @initialized, do: "hidden", else: "flex"}"}
         >
           <Area.sheet>
             <div class="flex flex-col gap-8 items-center px-8">

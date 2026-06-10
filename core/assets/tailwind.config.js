@@ -147,6 +147,7 @@ module.exports = {
       },
       minHeight: {
         "wysiwyg-editor": "512px",
+        viewport: "calc(var(--vh, 1vh) * 100)",
       },
       // maxHeight.dropdown comes from Prism preset
       maxHeight: {

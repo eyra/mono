@@ -20,10 +20,6 @@ msgid "participated.title"
 msgstr "Beiträge"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "available.member.title"
-msgstr "Panl-Studien"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "available.visitor.title"
 msgstr "Panl-Studien"
 

@@ -493,3 +493,7 @@ msgstr "Extern"
 #, elixir-autogen, elixir-format
 msgid "org_member_filters.recent"
 msgstr "Recent"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.unverified"
+msgstr "Niet geverifieerd"
