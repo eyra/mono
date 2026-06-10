@@ -37,7 +37,16 @@ defmodule GoogleSignIn.AuthorizePlug do
   end
 
   defp with_login_hint(config, %{"login_hint" => hint}) when is_binary(hint) and hint != "" do
-    Keyword.put(config, :authorization_params, login_hint: hint)
+    # Don't blow away Assent.Strategy.Google's default scope ("email profile") —
+    # without it Google's callback omits the email and user registration fails.
+    existing = Keyword.get(config, :authorization_params, [])
+
+    merged =
+      existing
+      |> Keyword.put_new(:scope, "email profile")
+      |> Keyword.put(:login_hint, hint)
+
+    Keyword.put(config, :authorization_params, merged)
   end
 
   defp with_login_hint(config, _), do: config
