@@ -20,7 +20,7 @@ defmodule GoogleSignIn.AuthorizePlug do
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(%{params: conn_params} = conn, otp_app) do
-    config = config(otp_app)
+    config = config(otp_app) |> with_login_hint(conn_params)
 
     {:ok, %{url: url, session_params: session_params}} =
       google_module(config).authorize_url(config)
@@ -35,6 +35,12 @@ defmodule GoogleSignIn.AuthorizePlug do
     return_to = Map.get(conn.query_params, "return_to")
     if return_to, do: put_session(conn, :user_return_to, return_to), else: conn
   end
+
+  defp with_login_hint(config, %{"login_hint" => hint}) when is_binary(hint) and hint != "" do
+    Keyword.put(config, :authorization_params, login_hint: hint)
+  end
+
+  defp with_login_hint(config, _), do: config
 end
 
 defmodule GoogleSignIn.CallbackPlug do

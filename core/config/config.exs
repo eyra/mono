@@ -180,7 +180,7 @@ config :core, SignInWithApple,
 config :core, GoogleSignIn,
   client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET"),
-  redirect_uri: "http://localhost:4000/google-sign-in/auth"
+  redirect_uri: "http://localhost:4000/auth/google/callback"
 
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",

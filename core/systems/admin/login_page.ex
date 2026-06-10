@@ -48,7 +48,7 @@ defmodule Systems.Admin.LoginPage do
             Log in
           </div>
           <div class="mb-6" />
-          <a href="/google-sign-in?creator=true">
+          <a href="/auth/google?creator=true">
             <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-grey1 rounded pl-4 pr-4">
               <div class="flex w-full justify-center items-center">
                 <div>
