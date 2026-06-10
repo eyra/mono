@@ -12,6 +12,7 @@ defmodule Systems.Account.Public do
   alias Systems.Account
   alias Systems.Account.User
   alias Systems.Affiliate
+  alias Systems.Rate
 
   def create_profile!(user_id) do
     %Account.UserProfileModel{user_id: user_id}
@@ -414,6 +415,8 @@ defmodule Systems.Account.Public do
   ## OTP
 
   def generate_otp(email) when is_binary(email) do
+    Rate.Public.request_permission(:otp_request, email, 1)
+
     Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
 
     user = get_user_by_email(email)
@@ -422,6 +425,8 @@ defmodule Systems.Account.Public do
 
     Account.UserNotifier.deliver_otp(email, code)
     :ok
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
 
   def verify_otp(email, code) when is_binary(email) and is_binary(code) do

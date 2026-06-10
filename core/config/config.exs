@@ -155,7 +155,8 @@ config :core, :rate,
     [service: :feldspar_data_donation, limit: 1, unit: :byte, window: :day, scope: :local],
     [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
     [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local]
+    [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local],
+    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
   ]
 
 config :core, ecto_repos: [Core.Repo]

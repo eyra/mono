@@ -6,6 +6,10 @@ defmodule Systems.Account.AuthCodeTest do
   alias Systems.Account
   alias Systems.Account.AuthCodeModel
 
+  defp unique_email(prefix) do
+    "#{prefix}-#{System.unique_integer([:positive])}@example.com"
+  end
+
   describe "AuthCodeModel.build/2" do
     test "generates a 6-digit code" do
       {code, _auth_code} = AuthCodeModel.build("user@example.com", nil)
@@ -141,6 +145,38 @@ defmodule Systems.Account.AuthCodeTest do
 
       auth_code = Repo.one(AuthCodeModel.active_query("brand-new@example.com"))
       assert auth_code.user_id == nil
+    end
+  end
+
+  describe "Account.Public.generate_otp/1 rate limiting" do
+    test "permits requests under the per-email limit" do
+      email = unique_email("under-limit")
+
+      assert :ok = Account.Public.generate_otp(email)
+      assert :ok = Account.Public.generate_otp(email)
+      assert :ok = Account.Public.generate_otp(email)
+    end
+
+    test "returns {:error, :rate_limited} after exceeding the per-email limit" do
+      email = unique_email("over-limit")
+
+      Account.Public.generate_otp(email)
+      Account.Public.generate_otp(email)
+      Account.Public.generate_otp(email)
+
+      assert {:error, :rate_limited} = Account.Public.generate_otp(email)
+    end
+
+    test "tracks limits per email independently" do
+      email_exhausted = unique_email("exhausted")
+      email_fresh = unique_email("fresh")
+
+      Account.Public.generate_otp(email_exhausted)
+      Account.Public.generate_otp(email_exhausted)
+      Account.Public.generate_otp(email_exhausted)
+      assert {:error, :rate_limited} = Account.Public.generate_otp(email_exhausted)
+
+      assert :ok = Account.Public.generate_otp(email_fresh)
     end
   end
 
