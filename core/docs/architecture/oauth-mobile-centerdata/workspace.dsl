@@ -12,9 +12,6 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and Que
 
     centerdata = softwareSystem "Centerdata" "Operates the LISS panel; exposes provisioning, OIDC, and Quest endpoints to Eyra (internal architecture opaque to Eyra)" "External"
 
-    surfconext = softwareSystem "SurfConext IdP" "OIDC IdP for academic SSO — existing integration, shown for context" "External"
-    google     = softwareSystem "Google Sign-In" "OIDC IdP — existing integration, shown for context" "External"
-
     eyraOps -> phx "Configures IdPs and clients"
     cdOps   -> centerdata "Operates"
 
@@ -33,14 +30,11 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and Que
     centerdata -> phx        "Provisioning (pre-register users + assignments)" "REST/JSON, OAuth 2.0 client_credentials"
     phx        -> centerdata "Access tokens, API responses"                    "REST/JSON"
 
-    phx -> surfconext "Authenticates academic users (existing)" "OIDC"
-    phx -> google     "Authenticates Google users (existing)"   "OIDC"
-
     phx -> pg "Reads/writes" "SQL/TLS"
   }
 
   views {
-    systemContext next "Context" "Who participates and which external systems Next integrates with. Centerdata is one IdP among several; SurfConext and Google shown for context." {
+    systemContext next "Context" "Who participates and which external party Next integrates with for the Centerdata integration." {
       include *
       autolayout lr
     }
