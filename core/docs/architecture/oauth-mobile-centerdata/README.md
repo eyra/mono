@@ -39,7 +39,7 @@ Next already integrates with external identity providers using the OpenID Connec
 
 ## 4. The three Eyra ↔ Centerdata interfaces
 
-The integration is the sum of three independent interfaces:
+From Eyra's perspective, Centerdata is **one external party** that we integrate with through three independent logical interfaces. We do not presume how Centerdata splits these internally — e.g., whether the LISS IdP and the Provisioning endpoints are functions extended onto the existing Quest software, or whether they live in separate services. That is Centerdata's call.
 
 | # | Direction | Purpose | Protocol |
 |---|-----------|---------|----------|
@@ -203,10 +203,10 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 
 ## 9. Diagrams
 
-Five diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). See [`diagrams.md`](diagrams.md) for regeneration instructions.
+Five diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed. Steps in the dynamic views are tagged with `[Provisioning]`, `[LISS IdP]`, or `[Quest]` to identify which interface they belong to. See [`diagrams.md`](diagrams.md) for regeneration instructions.
 
-- **Context** (`structurizr-Context.png`) — Participant, Eyra/Next, Centerdata's three systems (grouped), and the existing IdPs shown for context.
-- **Containers** (`structurizr-Containers.png`) — Phoenix is the single Eyra container that integrates with Centerdata's three systems — one per interface.
+- **Context** (`structurizr-Context.png`) — Participant, Eyra/Next, Centerdata, and existing IdPs (SurfConext, Google) shown for the "generic OIDC RP" framing.
+- **Containers** (`structurizr-Containers.png`) — Phoenix is the single Eyra container that integrates with Centerdata; three logical interfaces converge on the same external party. SurfConext/Google omitted to keep this view focused.
 - **Interface 1 — Provisioning** (`structurizr-Provisioning.png`) — Dynamic view: Centerdata pre-registers a participant and an assignment, authenticated via `client_credentials`.
 - **Interface 2 — LISS-OIDC sign-in** (`structurizr-SignIn.png`) — Dynamic view: OIDC Authorization Code + PKCE flow, identical for web and mobile.
 - **Interface 3 — Quest launch** (`structurizr-QuestLaunch.png`) — Dynamic view: signed JWT launch URL, questionnaire completion, redirect + webhook return.

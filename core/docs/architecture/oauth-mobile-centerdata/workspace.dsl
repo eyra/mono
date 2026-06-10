@@ -10,35 +10,28 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and Que
       pg  = container "Postgres" "User, assignment, and integration state" "PostgreSQL 15+" "Database"
     }
 
-    group "Centerdata" {
-      lissIdp        = softwareSystem "LISS IdP"            "OIDC Authorization Server for LISS panelists"                              "External"
-      quest          = softwareSystem "Quest"               "Hosts and serves web questionnaires"                                       "External"
-      provisioningCd = softwareSystem "Provisioning client" "Pre-registers panelists and assignments into Next (Centerdata back office)" "External"
-    }
+    centerdata = softwareSystem "Centerdata" "Operates the LISS panel; exposes provisioning, OIDC, and Quest endpoints to Eyra (internal architecture opaque to Eyra)" "External"
 
     surfconext = softwareSystem "SurfConext IdP" "OIDC IdP for academic SSO — existing integration, shown for context" "External"
     google     = softwareSystem "Google Sign-In" "OIDC IdP — existing integration, shown for context" "External"
 
     eyraOps -> phx "Configures IdPs and clients"
-    cdOps   -> provisioningCd "Operates"
+    cdOps   -> centerdata "Operates"
 
-    participant -> phx     "Uses (web browser or mobile shell)" "HTTPS"
-    phx         -> participant "Renders UI, redirects"          "HTTPS"
+    participant -> phx        "Uses (web browser or mobile shell)" "HTTPS"
+    phx         -> participant "Renders UI, redirects"             "HTTPS"
 
-    participant -> lissIdp "Authenticates at LISS IdP"        "HTTPS"
-    lissIdp     -> participant "Auth UI + redirects with code" "HTTPS"
+    participant -> centerdata "Authenticates at LISS IdP; completes questionnaires in Quest" "HTTPS"
+    centerdata  -> participant "Auth UI, questionnaire UI, redirects"                        "HTTPS"
 
-    participant -> quest "Completes questionnaire"           "HTTPS"
-    quest       -> participant "Renders questionnaire, redirects" "HTTPS"
+    phx        -> centerdata "OIDC sign-in (Authorization Code + PKCE)"      "OIDC / HTTPS"
+    centerdata -> phx        "ID token + access token"                       "OIDC / HTTPS"
 
-    phx     -> lissIdp "OIDC: token exchange (code → tokens), JWKS" "OIDC / HTTPS"
-    lissIdp -> phx     "id_token + access_token"                    "OIDC / HTTPS"
+    phx        -> centerdata "Quest launch (signed JWT URL)"                 "HTTPS"
+    centerdata -> phx        "Quest completion (signed payload — redirect + webhook)" "HTTPS"
 
-    phx   -> quest "Signed launch URL (JWT)"             "HTTPS"
-    quest -> phx   "Completion webhook (signed payload)" "HTTPS"
-
-    provisioningCd -> phx "Pre-register users and assignments" "REST/JSON, OAuth 2.0 client_credentials"
-    phx            -> provisioningCd "Access tokens, API responses" "REST/JSON"
+    centerdata -> phx        "Provisioning (pre-register users + assignments)" "REST/JSON, OAuth 2.0 client_credentials"
+    phx        -> centerdata "Access tokens, API responses"                    "REST/JSON"
 
     phx -> surfconext "Authenticates academic users (existing)" "OIDC"
     phx -> google     "Authenticates Google users (existing)"   "OIDC"
@@ -47,49 +40,54 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and Que
   }
 
   views {
-    systemContext next "Context" "Who participates and which external systems Next integrates with for the Centerdata integration." {
+    systemContext next "Context" "Who participates and which external systems Next integrates with. Centerdata is one IdP among several; SurfConext and Google shown for context." {
       include *
       autolayout lr
     }
 
-    container next "Containers" "Phoenix is the single Eyra container that integrates with Centerdata — through three distinct external Centerdata systems, one per interface." {
-      include *
+    container next "Containers" "Phoenix is the single Eyra container that integrates with Centerdata. Three logical interfaces converge on the same external party." {
+      include participant
+      include cdOps
+      include eyraOps
+      include phx
+      include pg
+      include centerdata
       autolayout lr
     }
 
     dynamic next "Provisioning" "Interface 1 — Centerdata pre-registers a LISS panelist and an assignment in Next, before the participant ever signs in." {
-      provisioningCd -> phx "POST /oauth/token (client_credentials)"
-      phx            -> provisioningCd "Access token (Bearer, short-lived)"
-      provisioningCd -> phx "POST /api/centerdata/v1/users {liss_sub, email, ...}"
-      phx            -> pg  "Insert pre-registered user"
-      phx            -> provisioningCd "201 Created"
-      provisioningCd -> phx "POST /api/centerdata/v1/assignments"
-      phx            -> pg  "Insert assignment"
-      phx            -> provisioningCd "201 Created"
+      centerdata -> phx "[Provisioning] POST /oauth/token (client_credentials)"
+      phx        -> centerdata "[Provisioning] Access token (Bearer, short-lived)"
+      centerdata -> phx "[Provisioning] POST /api/centerdata/v1/users {liss_sub, email, ...}"
+      phx        -> pg  "Insert pre-registered user"
+      phx        -> centerdata "[Provisioning] 201 Created"
+      centerdata -> phx "[Provisioning] POST /api/centerdata/v1/assignments"
+      phx        -> pg  "Insert assignment"
+      phx        -> centerdata "[Provisioning] 201 Created"
       autolayout tb
     }
 
     dynamic next "SignIn" "Interface 2 — A LISS participant signs in via OIDC. Identical for web and mobile." {
-      participant -> phx     "Clicks 'Log in with LISS'"
+      participant -> phx        "Clicks 'Log in with LISS'"
       phx         -> participant "302 Redirect to LISS IdP /authorize (code + PKCE)"
-      participant -> lissIdp "Follows redirect; authenticates at LISS IdP"
-      lissIdp     -> participant "302 Redirect to /auth/liss/callback with code"
-      participant -> phx     "GET /auth/liss/callback?code=..."
-      phx         -> lissIdp "POST /token (code + PKCE verifier)"
-      lissIdp     -> phx     "id_token + access_token"
-      phx         -> pg      "Lookup user by id_token.sub == liss_sub"
+      participant -> centerdata "[LISS IdP] Follows redirect; authenticates"
+      centerdata  -> participant "[LISS IdP] 302 Redirect to /auth/liss/callback with code"
+      participant -> phx        "GET /auth/liss/callback?code=..."
+      phx         -> centerdata "[LISS IdP] POST /token (code + PKCE verifier)"
+      centerdata  -> phx        "[LISS IdP] id_token + access_token"
+      phx         -> pg         "Lookup user by id_token.sub == liss_sub"
       phx         -> participant "Session established; redirect to LiveView"
       autolayout tb
     }
 
     dynamic next "QuestLaunch" "Interface 3 — A signed-in participant launches a Quest questionnaire." {
-      participant -> phx   "Taps 'Start' on Quest assignment"
+      participant -> phx        "Taps 'Start' on Quest assignment"
       phx         -> participant "302 Redirect to Quest launch URL (signed JWT)"
-      participant -> quest "Follows redirect; completes questionnaire"
-      quest       -> participant "302 Redirect to return_url (signed completion)"
-      participant -> phx   "GET return_url"
-      quest       -> phx   "Webhook: POST /quest/completion (signed)"
-      phx         -> pg    "Record completion"
+      participant -> centerdata "[Quest] Follows redirect; completes questionnaire"
+      centerdata  -> participant "[Quest] 302 Redirect to return_url (signed completion)"
+      participant -> phx        "GET return_url"
+      centerdata  -> phx        "[Quest] Webhook: POST /quest/completion (signed)"
+      phx         -> pg         "Record completion"
       autolayout tb
     }
 
