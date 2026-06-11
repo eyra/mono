@@ -225,7 +225,25 @@ Four diagrams accompany this document, all generated from `workspace.dsl` (Struc
 - **Interface 2 — OIDC sign-in** (`structurizr-SignIn.png`) — Dynamic view: OIDC Authorization Code + PKCE flow, identical for web and mobile.
 - **Interface 3 — Questionnaire launch** (`structurizr-QuestionnaireLaunch.png`) — Dynamic view: signed JWT launch URL, questionnaire completion, redirect + webhook return.
 
-## 10. Glossary
+## 10. References — prerequisite reading
+
+The OAuth/OIDC concepts in this document are explained inline, but spec-level grounding helps when implementing. The following are the authoritative specs.
+
+**Core (recommended before implementing):**
+
+- [OAuth 2.0 — RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) — the base OAuth framework. Defines grants (including `client_credentials`), tokens, the authorization endpoint, the token endpoint.
+- [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html) — the identity layer on top of OAuth 2.0. Defines the ID token, the standard claims (`sub`, `iss`, `aud`, `nonce`, …), and the Authorization Code flow used in Interface 2.
+- [PKCE — RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) — Proof Key for Code Exchange; the `code_verifier` / `code_challenge` mechanism that protects the authorization code.
+
+**Reference (look up as needed):**
+
+- [OpenID Connect Discovery 1.0](https://openid.net/specs/openid-connect-discovery-1_0.html) — defines `/.well-known/openid-configuration` and the IdP metadata document.
+- [Well-Known URIs — RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) — the general `/.well-known/` convention.
+- [JWT — RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519), [JWS — RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), [JWK — RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517) — the JSON Web Token format, its signature container, and the key format used in JWKS.
+- [OAuth 2.0 for Native Apps — RFC 8252](https://datatracker.ietf.org/doc/html/rfc8252) — best practice for the in-app browser tab + universal/app link pattern used in Interface 2 on mobile.
+- [OAuth 2.0 Security Best Current Practice — RFC 9700](https://datatracker.ietf.org/doc/html/rfc9700) — modern security guidance for new OAuth implementations.
+
+## 11. Glossary
 
 - **Next** — Eyra's research platform (Phoenix / LiveView).
 - **LISS** — The Longitudinal Internet studies for the Social Sciences panel, operated by Centerdata.
