@@ -7,6 +7,20 @@
 
 ---
 
+## TL;DR — what Centerdata needs to build
+
+To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Eyra-specific protocol:
+
+- **An OIDC Identity Provider.** Expose `/.well-known/openid-configuration` and a JWKS endpoint. Support the **Authorization Code + PKCE** flow. Register Eyra as a client (one `client_id` + `client_secret` per environment) and accept Eyra's `redirect_uri`. Include `sub` (stable, never reassigned), `email`, and ideally `email_verified` in the ID token.
+- **A provisioning client.** Pre-register LISS panelists and their assignments in Next by calling Eyra's REST API (`POST /api/provisioning/v1/users` and `/assignments`). Authenticate to that API via OAuth 2.0 **`client_credentials`** using credentials Eyra issues. Each user record carries the `sub` Centerdata will later issue at sign-in, plus `email`.
+- **A signed-JWT launch handler for questionnaires.** Accept a signed launch URL from Eyra, verify the signature against Eyra's published JWKS (`/.well-known/jwks.json`), open the questionnaire, and return the participant to `return_url` with a signed completion payload (and ideally POST a completion webhook).
+
+The three interfaces are independent — Centerdata is free to host them in the same service or in separate ones; Eyra makes no assumption either way.
+
+Please also review the [open questions in §7](#7-open-questions-for-centerdata) — your answers determine the final shape of the contract.
+
+---
+
 ## 1. Purpose
 
 This document proposes the technical integration between **Eyra's Next platform** and **Centerdata** to enable LISS panelists to participate in research assignments through Next — on the web *and* through the Next mobile app.
