@@ -3,13 +3,27 @@ defmodule Systems.Home.RewardsSummaryView do
   "Vergoedingen" card on the participant home page. Three columns — pending,
   approved, rejected — each showing the per-status amount (cents) and a label.
 
+  The approved column also exposes a "Uitbetalen" (payout) button when the
+  participant has any `:approved` rewards. Clicking it runs
+  `Fund.Public.prepare_payout/1` and presents the MS.6 handoff via the shared
+  `Frameworks.Pixel.ConfirmationModal` (`show_modal(:handoff_modal, :compact)`):
+
+    * `:ok` — `:payout` variant ("you are leaving Next to be sent to OPP");
+      confirming fires `Fund.Public.request_payout/1`.
+    * `{:kyc_required, url}` — `:kyc` variant; confirming redirects to OPP to
+      complete onboarding.
+    * `{:below_threshold, _}` / other errors — a flash, no modal.
+
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
   """
   use CoreWeb, :live_component
 
+  alias Frameworks.Pixel
+  alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
+  alias Systems.Fund
 
   @impl true
   def update(
@@ -17,7 +31,8 @@ defmodule Systems.Home.RewardsSummaryView do
           pending_cents: pending_cents,
           approved_cents: approved_cents,
           rejected_cents: rejected_cents,
-          labels: labels
+          labels: labels,
+          user: user
         },
         socket
       ) do
@@ -28,9 +43,116 @@ defmodule Systems.Home.RewardsSummaryView do
         pending_cents: pending_cents,
         approved_cents: approved_cents,
         rejected_cents: rejected_cents,
-        labels: labels
+        labels: labels,
+        user: user
       )
+      |> assign_new(:handoff_mode, fn -> :payout end)
+      |> assign_new(:kyc_overview_url, fn -> nil end)
     }
+  end
+
+  @impl true
+  def compose(:handoff_modal, %{handoff_mode: :kyc, kyc_overview_url: url, labels: labels})
+      when is_binary(url) do
+    # KYC confirm is an external link (http_get); a redirect from the send_update cycle would be dropped.
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_kyc_title,
+          body: labels.payout_kyc_body,
+          confirm_label: labels.payout_kyc_confirm,
+          cancel_label: labels.payout_handoff_cancel,
+          confirm_action: %{type: :http_get, to: url}
+        }
+      }
+    }
+  end
+
+  def compose(:handoff_modal, %{handoff_mode: :payout, labels: labels}) do
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_handoff_title,
+          body: labels.payout_handoff_body,
+          confirm_label: labels.payout_handoff_confirm,
+          cancel_label: labels.payout_handoff_cancel
+        }
+      }
+    }
+  end
+
+  @impl true
+  def handle_event("request_payout", _params, %{assigns: %{user: user, labels: labels}} = socket) do
+    case Fund.Public.prepare_payout(user) do
+      :ok ->
+        {:noreply, present_handoff(socket, :payout, nil)}
+
+      {:error, {:kyc_required, kyc_url}} when is_binary(kyc_url) ->
+        {:noreply, present_handoff(socket, :kyc, kyc_url)}
+
+      {:error, {:below_threshold, _cents}} ->
+        {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
+
+      {:error, _reason} ->
+        {:noreply, socket |> Flash.push_error(labels.payout_failed)}
+    end
+  end
+
+  @impl true
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :handoff_modal}},
+        %{assigns: %{user: user}} = socket
+      ) do
+    socket = hide_modal(socket, :handoff_modal)
+    result = Fund.Public.request_payout(user)
+
+    # Refresh either way: success zeroes the locked balance, a lost lock-race
+    # hides the now-stale payout button.
+    {:noreply, socket |> flash_payout_result(result) |> refresh_totals(user)}
+  end
+
+  @impl true
+  def handle_event("cancelled", %{source: %{name: :handoff_modal}}, socket) do
+    {:noreply, hide_modal(socket, :handoff_modal)}
+  end
+
+  @impl true
+  def handle_modal_closed(socket, :handoff_modal), do: socket
+
+  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:ok, _result}),
+    do: Flash.push_info(socket, labels.payout_success)
+
+  defp flash_payout_result(
+         %{assigns: %{labels: labels}} = socket,
+         {:error, {:below_threshold, _cents}}
+       ),
+       do: Flash.push_error(socket, labels.payout_below_threshold)
+
+  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:error, _reason}),
+    do: Flash.push_error(socket, labels.payout_failed)
+
+  defp present_handoff(socket, mode, kyc_overview_url) do
+    socket
+    |> assign(handoff_mode: mode, kyc_overview_url: kyc_overview_url)
+    |> compose_child(:handoff_modal)
+    |> show_modal(:handoff_modal, :compact)
+  end
+
+  defp refresh_totals(socket, user) do
+    %{
+      pending_cents: pending_cents,
+      approved_cents: approved_cents,
+      rejected_cents: rejected_cents
+    } = Fund.Public.summarize_rewards(user)
+
+    assign(socket,
+      pending_cents: pending_cents,
+      approved_cents: approved_cents,
+      rejected_cents: rejected_cents
+    )
   end
 
   @impl true
@@ -49,11 +171,13 @@ defmodule Systems.Home.RewardsSummaryView do
           amount_cents={@pending_cents}
           caption={@labels.pending_caption}
         />
-        <.column
+        <.approved_column
           pill_label={@labels.approved_pill}
-          pill_color="bg-success"
           amount_cents={@approved_cents}
           caption={@labels.approved_caption}
+          payout_button_label={@labels.payout_button}
+          payout_enabled?={@approved_cents > 0}
+          target={@myself}
         />
         <.column
           pill_label={@labels.rejected_pill}
@@ -84,6 +208,40 @@ defmodule Systems.Home.RewardsSummaryView do
           <%= @caption %>
         </div>
       <% end %>
+    </div>
+    """
+  end
+
+  attr(:pill_label, :string, required: true)
+  attr(:amount_cents, :integer, required: true)
+  attr(:caption, :string, required: true)
+  attr(:payout_button_label, :string, required: true)
+  attr(:payout_enabled?, :boolean, required: true)
+  attr(:target, :any, required: true)
+
+  defp approved_column(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-2" data-testid="approved-column">
+      <span class="inline-flex self-start px-3 py-1 rounded-full text-white text-label font-label bg-success">
+        <%= @pill_label %>
+      </span>
+      <div class="text-title3 font-title3 text-grey1">
+        <%= CurrencyHelpers.format_cents(@amount_cents) %>
+      </div>
+      <%= if @payout_enabled? do %>
+        <button
+          type="button"
+          phx-click="request_payout"
+          phx-target={@target}
+          data-testid="payout-button"
+          class="self-start text-button font-button text-primary hover:underline"
+        >
+          <%= @payout_button_label %>
+        </button>
+      <% end %>
+      <div class="text-bodysmall font-body text-grey2">
+        <%= @caption %>
+      </div>
     </div>
     """
   end

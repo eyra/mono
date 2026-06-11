@@ -12,19 +12,37 @@ defmodule Frameworks.Pixel.ConfirmationModal do
       |> assign_new(:body, fn ->
         Map.get(assigns, :body, dgettext("eyra-ui", "confirmation_modal.body"))
       end)
+      |> assign_new(:confirm_label, fn ->
+        Map.get(assigns, :confirm_label, dgettext("eyra-ui", "confirm.button"))
+      end)
+      |> assign_new(:cancel_label, fn ->
+        Map.get(assigns, :cancel_label, dgettext("eyra-ui", "cancel.button"))
+      end)
+      # Optional custom confirm action (e.g. an http_get link to an external
+      # URL). Defaults to a "confirm" send event handled by the parent.
+      |> assign_new(:confirm_action, fn -> Map.get(assigns, :confirm_action) end)
       |> update_buttons()
     }
   end
 
-  defp update_buttons(%{assigns: %{myself: myself}} = socket) do
+  defp update_buttons(
+         %{
+           assigns: %{
+             myself: myself,
+             confirm_label: confirm_label,
+             cancel_label: cancel_label,
+             confirm_action: confirm_action
+           }
+         } = socket
+       ) do
     confirm = %{
-      action: %{type: :send, target: myself, event: "confirm"},
-      face: %{type: :primary, label: dgettext("eyra-ui", "confirm.button")}
+      action: confirm_action || %{type: :send, target: myself, event: "confirm"},
+      face: %{type: :primary, label: confirm_label}
     }
 
     cancel = %{
       action: %{type: :send, target: myself, event: "cancel"},
-      face: %{type: :secondary, label: dgettext("eyra-ui", "cancel.button")}
+      face: %{type: :secondary, label: cancel_label}
     }
 
     assign(socket, buttons: [confirm, cancel])

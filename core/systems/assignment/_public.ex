@@ -832,8 +832,11 @@ defmodule Systems.Assignment.Public do
          %Crew.Model{} = crew,
          members_by_user_id
        ) do
-    case Crew.Public.list_tasks_for_user(crew, user_id) do
-      [%Crew.TaskModel{status: :completed, id: task_id, completed_at: completed_at} | _] ->
+    crew
+    |> Crew.Public.list_tasks_for_user(user_id)
+    |> Enum.find(&match?(%Crew.TaskModel{status: :completed}, &1))
+    |> case do
+      %Crew.TaskModel{id: task_id, completed_at: completed_at} ->
         [
           %{
             reward_id: reward_id,
@@ -845,7 +848,7 @@ defmodule Systems.Assignment.Public do
           }
         ]
 
-      _ ->
+      nil ->
         []
     end
   end

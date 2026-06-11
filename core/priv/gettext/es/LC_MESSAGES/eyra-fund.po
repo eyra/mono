@@ -150,3 +150,47 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.below_threshold"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.success"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.handoff.cancel"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.kyc.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.kyc.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.kyc.title"
+msgstr ""

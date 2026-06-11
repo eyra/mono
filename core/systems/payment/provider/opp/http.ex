@@ -75,6 +75,8 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
         {:error, _} -> %{"raw" => body}
       end
 
+    Logger.warning("[OPP] API error #{status}: #{inspect(details)}")
+
     {:error,
      %Error{
        code: :api_error,

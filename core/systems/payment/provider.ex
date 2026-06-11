@@ -7,7 +7,9 @@ defmodule Systems.Payment.Provider do
   @type merchant :: %{
           uid: String.t(),
           status: String.t(),
-          kyc_level: integer()
+          kyc_level: integer(),
+          compliance_status: String.t(),
+          overview_url: String.t() | nil
         }
 
   @doc """
@@ -27,6 +29,31 @@ defmodule Systems.Payment.Provider do
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+
+  # Bank accounts
+
+  @type bank_account :: %{
+          uid: String.t(),
+          status: String.t(),
+          verification_url: String.t() | nil
+        }
+
+  @doc """
+  Create a bank account on the given merchant. OPP returns a
+  verification_url the merchant must visit to enter their IBAN and
+  complete the bank-verification step of KYC.
+
+  ## Attrs
+    * `return_url` (required) - where to send the participant after verification
+    * `notify_url` (required) - webhook URL for status notifications
+    * `is_default` - boolean
+    * `reference` - free-form string (≤50 chars)
+  """
+  @callback create_bank_account(merchant_uid :: String.t(), attrs :: map()) ::
+              {:ok, bank_account()} | {:error, Error.t()}
+
+  @callback list_bank_accounts(merchant_uid :: String.t()) ::
+              {:ok, [bank_account()]} | {:error, Error.t()}
 
   # Transactions
 
@@ -74,12 +101,46 @@ defmodule Systems.Payment.Provider do
   The `currency` atom (e.g. `:EUR`) is mapped to the provider's native
   currency code by each implementation.
 
+  The `idempotence_key` is a stable, caller-owned unique id. The provider
+  passes it to the payment platform so retrying the same logical payout
+  never creates a duplicate withdrawal.
+
   ## Attrs
 
     * `amount` (required) - payout amount in cents
     * `description` - description for the bank statement
   """
-  @callback create_withdrawal(merchant_uid :: String.t(), currency :: atom(), attrs :: map()) ::
+  @callback create_withdrawal(
+              merchant_uid :: String.t(),
+              currency :: atom(),
+              attrs :: map(),
+              idempotence_key :: String.t()
+            ) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
+
+  # Charges
+
+  @type charge :: %{
+          uid: String.t(),
+          status: String.t(),
+          amount: integer()
+        }
+
+  @doc """
+  Move funds between two merchant balances on the platform — a "charge" of
+  type `balance`. Debits `from_owner_uid` and credits `to_owner_uid`.
+
+  Used to fund a participant's merchant from the platform (eyra) merchant before
+  the participant withdraws to their bank account.
+
+  The `idempotence_key` is a stable, caller-owned unique id so retrying the same
+  logical charge never moves the money twice.
+  """
+  @callback create_charge(
+              from_owner_uid :: String.t(),
+              to_owner_uid :: String.t(),
+              amount :: non_neg_integer(),
+              idempotence_key :: String.t()
+            ) :: {:ok, charge()} | {:error, Error.t()}
 end

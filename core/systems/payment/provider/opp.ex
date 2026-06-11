@@ -5,6 +5,14 @@ defmodule Systems.Payment.Provider.OPP do
   alias Systems.Payment.Transaction
   alias Systems.Payment.Provider.OPP.HTTP
 
+  @currency_mapping %{
+    EUR: "EUR",
+    USD: "USD",
+    GBP: "GBP"
+  }
+
+  @default_withdrawal_description "Payout"
+
   # Merchants
 
   @impl true
@@ -31,33 +39,23 @@ defmodule Systems.Payment.Provider.OPP do
 
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
-    find_merchant_by_email_paged(email, 1)
-  end
+    query =
+      URI.encode_query(%{
+        "filter[emailaddress]" => email,
+        "perpage" => "100"
+      })
 
-  defp find_merchant_by_email_paged(email, page) do
-    case HTTP.get("/merchants?page=#{page}") do
-      {:ok, %{"data" => merchants, "has_more" => has_more}} ->
-        case Enum.find(merchants, &(Map.get(&1, "emailaddress") == email)) do
-          %{"uid" => uid} = data ->
-            {:ok, parse_merchant(uid, data)}
+    case HTTP.get("/merchants?#{query}") do
+      {:ok, %{"data" => [%{"uid" => uid} = data | _]}} ->
+        {:ok, parse_merchant(uid, data)}
 
-          nil when has_more ->
-            find_merchant_by_email_paged(email, page + 1)
-
-          nil ->
-            {:error, %Error{code: :not_found, message: "No merchant found for #{email}"}}
-        end
+      {:ok, %{"data" => []}} ->
+        {:error, %Error{code: :not_found, message: "No merchant found for #{email}"}}
 
       {:error, %Error{}} = error ->
         error
     end
   end
-
-  @currency_mapping %{
-    EUR: "EUR",
-    USD: "USD",
-    GBP: "GBP"
-  }
 
   # Transactions
 
@@ -115,16 +113,91 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  # Bank accounts
+
+  @impl true
+  def create_bank_account(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
+    case HTTP.post("/merchants/#{merchant_uid}/bank_accounts", attrs) do
+      {:ok, %{"uid" => uid} = data} ->
+        {:ok, parse_bank_account(uid, data)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  @impl true
+  def list_bank_accounts(merchant_uid) when is_binary(merchant_uid) do
+    case HTTP.get("/merchants/#{merchant_uid}/bank_accounts?perpage=100") do
+      {:ok, %{"data" => entries}} ->
+        {:ok, Enum.map(entries, fn %{"uid" => uid} = data -> parse_bank_account(uid, data) end)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   # Withdrawals
 
   @impl true
-  def create_withdrawal(merchant_uid, currency, attrs)
-      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) do
-    attrs = Map.put(attrs, :currency, Map.fetch!(@currency_mapping, currency))
+  def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
+             is_binary(idempotence_key) do
+    # Unknown currency must return an error (not raise) so the caller can revert.
+    case Map.fetch(@currency_mapping, currency) do
+      {:ok, code} ->
+        post_withdrawal(
+          merchant_uid,
+          withdrawal_body(attrs, code, idempotence_key),
+          idempotence_key
+        )
 
-    case HTTP.post("/merchants/#{merchant_uid}/withdrawals", attrs) do
+      :error ->
+        {:error,
+         %Error{
+           code: :unsupported_currency,
+           message: "Unsupported currency: #{inspect(currency)}"
+         }}
+    end
+  end
+
+  # OPP 400s without description + notify_url; notify_url drives our webhook.
+  defp withdrawal_body(attrs, currency_code, idempotence_key) do
+    attrs
+    |> Map.put(:currency, currency_code)
+    |> Map.put(:reference, idempotence_key)
+    |> Map.put_new(:description, @default_withdrawal_description)
+    |> Map.put(:notify_url, Systems.Payment.Public.webhook_url())
+  end
+
+  defp post_withdrawal(merchant_uid, body, idempotence_key) do
+    case HTTP.post("/merchants/#{merchant_uid}/withdrawals", body, [
+           {"Idempotency-Key", idempotence_key}
+         ]) do
       {:ok, %{"uid" => uid} = data} ->
         {:ok, parse_withdrawal(uid, data)}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  # Charges
+
+  @impl true
+  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
+             is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
+    body = %{
+      type: "balance",
+      amount: Integer.to_string(amount),
+      from_owner_uid: from_owner_uid,
+      to_owner_uid: to_owner_uid
+    }
+
+    case HTTP.post("/charges", body, [{"Idempotency-Key", idempotence_key}]) do
+      {:ok, %{"uid" => uid} = data} ->
+        {:ok, parse_charge(uid, data)}
 
       {:error, %Error{}} = error ->
         error
@@ -144,11 +217,23 @@ defmodule Systems.Payment.Provider.OPP do
 
   # Parsers
 
+  defp parse_bank_account(uid, data) do
+    %{
+      uid: uid,
+      status: Map.get(data, "status", "new"),
+      verification_url: Map.get(data, "verification_url")
+    }
+  end
+
   defp parse_merchant(uid, data) do
+    compliance = Map.get(data, "compliance", %{})
+
     %{
       uid: uid,
       status: Map.get(data, "status", "unknown"),
-      kyc_level: Map.get(data, "compliance", %{}) |> Map.get("level", 0)
+      kyc_level: Map.get(compliance, "level", 0),
+      compliance_status: Map.get(compliance, "status", "unverified"),
+      overview_url: Map.get(compliance, "overview_url")
     }
   end
 
@@ -162,6 +247,14 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   defp parse_withdrawal(uid, data) do
+    %{
+      uid: uid,
+      status: Map.get(data, "status", "unknown"),
+      amount: Map.get(data, "amount", 0)
+    }
+  end
+
+  defp parse_charge(uid, data) do
     %{
       uid: uid,
       status: Map.get(data, "status", "unknown"),

@@ -13,6 +13,7 @@ defmodule Systems.Fund.RewardModelTest do
                :reserved,
                :pending_approval,
                :approved,
+               :pending_payout,
                :rejected,
                :paid
              ]

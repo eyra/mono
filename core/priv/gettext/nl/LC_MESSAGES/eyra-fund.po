@@ -149,3 +149,47 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.below_threshold"
+msgstr "Uitbetalen kan vanaf een saldo van €5."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.button"
+msgstr "Uitbetalen"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.failed"
+msgstr "Uitbetaling kan op dit moment niet worden verwerkt. Probeer het later opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.success"
+msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.body"
+msgstr "🔒 %{amount} wordt uitbetaald naar uw bankrekening. Betalingen worden veilig verwerkt door onze betaalprovider."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.cancel"
+msgstr "Annuleren"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.confirm"
+msgstr "Nu uitbetalen"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.body"
+msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider. U wordt doorgestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.confirm"
+msgstr "Doorgaan naar verificatie"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.handoff.title"
+msgstr "Uitbetaling starten"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.kyc.title"
+msgstr "Verificatie nodig"
