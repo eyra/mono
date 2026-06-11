@@ -39,8 +39,6 @@ In scope:
 
 Out of scope (for this briefing):
 
-- Email/password sign-up for non-LISS users (handled entirely by Eyra; mentioned only as context).
-- Other Centerdata panels beyond LISS (the design leaves room for them; we focus on LISS).
 - Eyra-internal data modelling decisions.
 
 ## 3. Eyra-side context
