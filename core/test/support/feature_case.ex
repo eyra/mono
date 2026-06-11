@@ -61,8 +61,14 @@ defmodule CoreWeb.FeatureCase do
     # can navigate (e.g. visit("/user/onboarding")) before the auth session
     # cookie is set and get bounced back to /user/signin — a race that surfaces
     # as flaky "element not found" failures under load. Waiting for the sign-in
-    # form to disappear confirms we've landed on the authenticated page.
+    # form to disappear confirms we've landed on the authenticated page,
+    # and waiting for the destination LiveView's phx-connected class confirms
+    # the post-login page has finished mounting before the caller proceeds.
+    # Without the second wait, a follow-up visit/2 can interrupt the in-flight
+    # navigation and leave chromedriver mid-load, producing HTTPoison :timeout
+    # failures on the next Wallaby request.
     |> refute_has(css("[data-testid='signin-form']"))
+    |> assert_has(css("[data-phx-main].phx-connected"))
   end
 
   @doc """
