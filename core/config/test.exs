@@ -137,7 +137,8 @@ config :core, :rate,
   quotas: [
     [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :feldspar_log, limit: 100, unit: :call, window: :minute, scope: :local],
-    [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local]
+    [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local],
+    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
   ]
 
 try do

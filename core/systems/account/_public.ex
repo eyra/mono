@@ -12,6 +12,7 @@ defmodule Systems.Account.Public do
   alias Systems.Account
   alias Systems.Account.User
   alias Systems.Affiliate
+  alias Systems.Rate
 
   def create_profile!(user_id) do
     %Account.UserProfileModel{user_id: user_id}
@@ -409,6 +410,45 @@ defmodule Systems.Account.Public do
   def delete_session_token(token) do
     Repo.delete_all(Account.UserTokenModel.token_and_context_query(token, "session"))
     :ok
+  end
+
+  ## OTP
+
+  def generate_otp(email) when is_binary(email) do
+    Rate.Public.request_permission(:otp_request, email, 1)
+
+    Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
+
+    user = get_user_by_email(email)
+    {code, token} = Account.AuthCodeModel.build(email, user && user.id)
+    Repo.insert!(token)
+
+    Account.UserNotifier.deliver_otp(email, code)
+    :ok
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+    case Account.AuthCodeModel.active_query(email) |> Repo.one() do
+      nil ->
+        {:error, :not_found}
+
+      token ->
+        case Account.AuthCodeModel.verify(token, code) do
+          :ok ->
+            Repo.delete!(token)
+            user = token.user_id && get_user!(token.user_id)
+            {:ok, user}
+
+          {:error, reason} ->
+            token
+            |> Ecto.Changeset.change(attempts: token.attempts + 1)
+            |> Repo.update!()
+
+            {:error, reason}
+        end
+    end
   end
 
   ## Confirmation

@@ -8,6 +8,14 @@ defmodule Systems.Account.UserNotifier do
   end
 
   @doc """
+  Deliver OTP sign-in code to the given email address.
+  """
+  def deliver_otp(email, code) do
+    Email.Factory.otp_sign_in(email, code)
+    |> deliver_later()
+  end
+
+  @doc """
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do

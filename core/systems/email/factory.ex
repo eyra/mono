@@ -17,6 +17,12 @@ defmodule Systems.Email.Factory do
     mail_user(email) |> assign(:user, user)
   end
 
+  def otp_sign_in(email, code) when is_binary(email) do
+    mail_user(email)
+    |> subject("Your sign-in code")
+    |> render(:otp_sign_in, code: code)
+  end
+
   def account_confirmation_instructions(user, url) do
     mail_user(user)
     |> subject("Activate your account")
