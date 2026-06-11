@@ -7,7 +7,7 @@
 
 ---
 
-## TL;DR — what Centerdata needs to build
+## What Centerdata needs to build
 
 To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Eyra-specific protocol:
 
