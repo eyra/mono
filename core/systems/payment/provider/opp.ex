@@ -5,6 +5,14 @@ defmodule Systems.Payment.Provider.OPP do
   alias Systems.Payment.Transaction
   alias Systems.Payment.Provider.OPP.HTTP
 
+  @currency_mapping %{
+    EUR: "EUR",
+    USD: "USD",
+    GBP: "GBP"
+  }
+
+  @default_withdrawal_description "Payout"
+
   # Merchants
 
   @impl true
@@ -31,8 +39,6 @@ defmodule Systems.Payment.Provider.OPP do
 
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
-    # Trust OPP's `filter[emailaddress]` (rows don't echo the email): take the
-    # first match — the recovery path only needs a working uid.
     query =
       URI.encode_query(%{
         "filter[emailaddress]" => email,
@@ -50,14 +56,6 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
-
-  @currency_mapping %{
-    EUR: "EUR",
-    USD: "USD",
-    GBP: "GBP"
-  }
-
-  @default_withdrawal_description "Payout"
 
   # Transactions
 
@@ -148,15 +146,11 @@ defmodule Systems.Payment.Provider.OPP do
     # Unknown currency must return an error (not raise) so the caller can revert.
     case Map.fetch(@currency_mapping, currency) do
       {:ok, code} ->
-        # OPP 400s without description + notify_url; notify_url drives our webhook.
-        body =
-          attrs
-          |> Map.put(:currency, code)
-          |> Map.put(:reference, idempotence_key)
-          |> Map.put_new(:description, @default_withdrawal_description)
-          |> Map.put(:notify_url, Systems.Payment.Public.webhook_url())
-
-        post_withdrawal(merchant_uid, body, idempotence_key)
+        post_withdrawal(
+          merchant_uid,
+          withdrawal_body(attrs, code, idempotence_key),
+          idempotence_key
+        )
 
       :error ->
         {:error,
@@ -165,6 +159,15 @@ defmodule Systems.Payment.Provider.OPP do
            message: "Unsupported currency: #{inspect(currency)}"
          }}
     end
+  end
+
+  # OPP 400s without description + notify_url; notify_url drives our webhook.
+  defp withdrawal_body(attrs, currency_code, idempotence_key) do
+    attrs
+    |> Map.put(:currency, currency_code)
+    |> Map.put(:reference, idempotence_key)
+    |> Map.put_new(:description, @default_withdrawal_description)
+    |> Map.put(:notify_url, Systems.Payment.Public.webhook_url())
   end
 
   defp post_withdrawal(merchant_uid, body, idempotence_key) do

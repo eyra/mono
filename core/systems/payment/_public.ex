@@ -27,11 +27,6 @@ defmodule Systems.Payment.Public do
     provider().find_merchant_by_email(email)
   end
 
-  @doc """
-  Ensures the user has an OPP merchant on file, recovering via
-  `find_merchant_by_email/1` on email-collision. Returns `{:ok, {user, merchant}}`
-  or `{:error, reason}`.
-  """
   @spec ensure_merchant_for(Account.User.t()) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
   def ensure_merchant_for(%Account.User{} = user) do
@@ -47,16 +42,14 @@ defmodule Systems.Payment.Public do
   end
 
   defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
-    Logger.info("[Payment] Creating OPP merchant for user ##{user_id} (#{email})")
+    Logger.info("[Payment] Creating merchant for user ##{user_id} (#{email})")
 
     case create_merchant(merchant_attrs(user)) do
       {:ok, %{uid: merchant_uid} = merchant} ->
-        Logger.info("[Payment] Merchant created: #{merchant_uid} for user ##{user_id}")
-        {:ok, user} = save_merchant_uid(user, merchant_uid)
-        {:ok, {user, merchant}}
+        register_merchant(user, merchant_uid, merchant)
 
       {:error, %{details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => _}}}}}} ->
-        Logger.info("[Payment] Merchant already exists at OPP for #{email}, looking up...")
+        Logger.info("[Payment] Merchant already exists for #{email}, looking up...")
         lookup_merchant_by_email(user)
 
       {:error, error} ->
@@ -66,6 +59,16 @@ defmodule Systems.Payment.Public do
 
         {:error, error}
     end
+  end
+
+  defp register_merchant(%Account.User{id: user_id} = user, merchant_uid, merchant) do
+    Logger.info("[Payment] Merchant created: #{merchant_uid} for user ##{user_id}")
+    persist_merchant(user, merchant_uid, merchant)
+  end
+
+  defp persist_merchant(user, merchant_uid, merchant) do
+    {:ok, user} = save_merchant_uid(user, merchant_uid)
+    {:ok, {user, merchant}}
   end
 
   defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}) do
@@ -103,8 +106,7 @@ defmodule Systems.Payment.Public do
     case find_merchant_by_email(email) do
       {:ok, %{uid: merchant_uid} = merchant} ->
         Logger.info("[Payment] Found existing merchant: #{merchant_uid} for #{email}")
-        {:ok, user} = save_merchant_uid(user, merchant_uid)
-        {:ok, {user, merchant}}
+        persist_merchant(user, merchant_uid, merchant)
 
       {:error, error} ->
         Logger.warning("[Payment] Merchant lookup failed for #{email}: #{inspect(error)}")
@@ -143,14 +145,15 @@ defmodule Systems.Payment.Public do
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def ensure_bank_account_for(merchant_uid) when is_binary(merchant_uid) do
     case list_bank_accounts(merchant_uid) do
-      {:ok, accounts} ->
-        case Enum.find(accounts, &(&1.status != "disapproved")) do
-          nil -> create_bank_account(merchant_uid, bank_account_attrs())
-          usable -> {:ok, usable}
-        end
+      {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+      {:error, _} = error -> error
+    end
+  end
 
-      {:error, _} = error ->
-        error
+  defp usable_or_new_bank_account(merchant_uid, accounts) do
+    case Enum.find(accounts, &(&1.status != "disapproved")) do
+      nil -> create_bank_account(merchant_uid, bank_account_attrs())
+      usable -> {:ok, usable}
     end
   end
 

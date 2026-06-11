@@ -1027,20 +1027,14 @@ defmodule Systems.Fund.Public do
   end
 
   defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
-    case Payment.Public.platform_merchant_uid() do
-      nil ->
-        {:error, :no_platform_merchant}
+    reward_ids = Enum.map(approved, fn %{id: id} -> id end)
 
-      platform_uid ->
-        reward_ids = Enum.map(approved, fn %{id: id} -> id end)
-
-        case lock_for_payout(user_id, reward_ids, total) do
-          {:ok, payout} ->
-            withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids)
-
-          {:error, _reason} ->
-            {:error, :lock_failed}
-        end
+    with platform_uid when not is_nil(platform_uid) <- Payment.Public.platform_merchant_uid(),
+         {:ok, payout} <- lock_for_payout(user_id, reward_ids, total) do
+      withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids)
+    else
+      nil -> {:error, :no_platform_merchant}
+      {:error, _reason} -> {:error, :lock_failed}
     end
   end
 
@@ -1105,25 +1099,10 @@ defmodule Systems.Fund.Public do
   end
 
   defp lock_for_payout(user_id, reward_ids, total) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
     Multi.new()
-    |> Multi.insert(
-      :payout,
-      Fund.PayoutModel.changeset(%Fund.PayoutModel{}, %{
-        user_id: user_id,
-        amount_cents: total,
-        status: :pending
-      })
-    )
+    |> Multi.insert(:payout, new_payout_changeset(user_id, total))
     |> Multi.run(:lock_rewards, fn _repo, %{payout: %{id: payout_id}} ->
-      # CAS on :approved — a concurrent payout leaves us short of the count, so we
-      # roll back rather than fire a duplicate OPP payout.
-      {count, _} =
-        from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
-        |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now])
-
-      if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
+      lock_approved_rewards(reward_ids, payout_id)
     end)
     |> Repo.commit()
     |> case do
@@ -1132,36 +1111,31 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  defp new_payout_changeset(user_id, total) do
+    Fund.PayoutModel.changeset(%Fund.PayoutModel{}, %{
+      user_id: user_id,
+      amount_cents: total,
+      status: :pending
+    })
+  end
+
+  # CAS on :approved — a concurrent payout leaves us short of the count, so we
+  # roll back rather than fire a duplicate OPP payout.
+  defp lock_approved_rewards(reward_ids, payout_id) do
+    {count, _} =
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
+      |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now()])
+
+    if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
+  end
+
   defp revert_payout_lock(reward_ids, failure_reason) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
     Multi.new()
-    |> Multi.run(:payout, fn _repo, _changes ->
-      case Repo.one(
-             from(r in Fund.RewardModel,
-               where: r.id in ^reward_ids and not is_nil(r.payout_id),
-               select: r.payout_id,
-               limit: 1
-             )
-           ) do
-        nil ->
-          {:ok, nil}
-
-        payout_id ->
-          payout = Repo.get!(Fund.PayoutModel, payout_id)
-
-          payout
-          |> Fund.PayoutModel.changeset(%{
-            status: :failed,
-            failure_reason: failure_reason
-          })
-          |> Repo.update()
-      end
-    end)
+    |> Multi.run(:payout, fn _repo, _changes -> fail_batch_payout(reward_ids, failure_reason) end)
     |> Multi.update_all(
       :rewards,
       from(r in Fund.RewardModel, where: r.id in ^reward_ids),
-      set: [status: :approved, payout_id: nil, updated_at: now]
+      set: [status: :approved, payout_id: nil, updated_at: now()]
     )
     |> Repo.commit()
     |> case do
@@ -1176,6 +1150,29 @@ defmodule Systems.Fund.Public do
 
         {:error, reason}
     end
+  end
+
+  # Rewards in a batch share one payout_id; mark that payout :failed.
+  defp fail_batch_payout(reward_ids, failure_reason) do
+    case batch_payout_id(reward_ids) do
+      nil ->
+        {:ok, nil}
+
+      payout_id ->
+        Repo.get!(Fund.PayoutModel, payout_id)
+        |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
+        |> Repo.update()
+    end
+  end
+
+  defp batch_payout_id(reward_ids) do
+    Repo.one(
+      from(r in Fund.RewardModel,
+        where: r.id in ^reward_ids and not is_nil(r.payout_id),
+        select: r.payout_id,
+        limit: 1
+      )
+    )
   end
 
   defp list_approved_rewards(user_id) do
@@ -1229,33 +1226,22 @@ defmodule Systems.Fund.Public do
          reward_status,
          failure_reason
        ) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
-    result =
-      Multi.new()
-      |> Multi.update(
-        :payout,
-        Fund.PayoutModel.changeset(payout, %{
-          status: payout_status,
-          failure_reason: failure_reason
-        })
-      )
-      |> Multi.update_all(
-        :rewards,
-        from(r in Fund.RewardModel,
-          where: r.payout_id == ^payout_id and r.status == :pending_payout
-        ),
-        set: [status: reward_status, updated_at: now]
-      )
-      |> Repo.commit()
-
-    case result do
-      {:ok, %{payout: %{user_id: user_id} = payout}} ->
-        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
-        {:ok, payout}
-
-      {:error, _step, reason, _changes} ->
-        {:error, reason}
+    Multi.new()
+    |> Multi.update(
+      :payout,
+      Fund.PayoutModel.changeset(payout, %{status: payout_status, failure_reason: failure_reason})
+    )
+    |> Multi.update_all(
+      :rewards,
+      from(r in Fund.RewardModel,
+        where: r.payout_id == ^payout_id and r.status == :pending_payout
+      ),
+      set: [status: reward_status, updated_at: now()]
+    )
+    |> Repo.commit()
+    |> case do
+      {:ok, %{payout: payout}} -> notify_rewards_summary(payout)
+      {:error, _step, reason, _changes} -> {:error, reason}
     end
   end
 
@@ -1263,13 +1249,14 @@ defmodule Systems.Fund.Public do
     case payout
          |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
          |> Repo.update() do
-      {:ok, %{user_id: user_id} = payout} ->
-        Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
-        {:ok, payout}
-
-      {:error, _changeset} = error ->
-        error
+      {:ok, payout} -> notify_rewards_summary(payout)
+      {:error, _changeset} = error -> error
     end
+  end
+
+  defp notify_rewards_summary(%Fund.PayoutModel{user_id: user_id} = payout) do
+    Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
+    {:ok, payout}
   end
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do

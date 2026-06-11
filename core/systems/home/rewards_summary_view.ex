@@ -104,23 +104,14 @@ defmodule Systems.Home.RewardsSummaryView do
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
-        %{assigns: %{user: user, labels: labels}} = socket
+        %{assigns: %{user: user}} = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
+    result = Fund.Public.request_payout(user)
 
     # Refresh either way: success zeroes the locked balance, a lost lock-race
     # hides the now-stale payout button.
-    case Fund.Public.request_payout(user) do
-      {:ok, _result} ->
-        {:noreply, socket |> Flash.push_info(labels.payout_success) |> refresh_totals(user)}
-
-      {:error, {:below_threshold, _cents}} ->
-        {:noreply,
-         socket |> Flash.push_error(labels.payout_below_threshold) |> refresh_totals(user)}
-
-      {:error, _reason} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_failed) |> refresh_totals(user)}
-    end
+    {:noreply, socket |> flash_payout_result(result) |> refresh_totals(user)}
   end
 
   @impl true
@@ -130,6 +121,18 @@ defmodule Systems.Home.RewardsSummaryView do
 
   @impl true
   def handle_modal_closed(socket, :handoff_modal), do: socket
+
+  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:ok, _result}),
+    do: Flash.push_info(socket, labels.payout_success)
+
+  defp flash_payout_result(
+         %{assigns: %{labels: labels}} = socket,
+         {:error, {:below_threshold, _cents}}
+       ),
+       do: Flash.push_error(socket, labels.payout_below_threshold)
+
+  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:error, _reason}),
+    do: Flash.push_error(socket, labels.payout_failed)
 
   defp present_handoff(socket, mode, kyc_overview_url) do
     socket
