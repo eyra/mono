@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "403.body"
-msgstr ""
+msgstr "Deja, neturite prieigos prie šio puslapio. Jei manote, kad tai mūsų klaida, būtume dėkingi, jei tai praneštumėte el. paštu <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[403] %{status}\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "page.title"
-msgstr ""
+msgstr "Atsiprašome"
 
 #, elixir-autogen, elixir-format
 msgid "404.body"
