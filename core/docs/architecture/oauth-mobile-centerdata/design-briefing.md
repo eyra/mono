@@ -1,4 +1,4 @@
-# Eyra ↔ Centerdata integration — design briefing
+# Next ↔ Centerdata integration — design briefing
 
 **Status:** Draft v0.1 — for review with Centerdata (Arnoud Wijnant)
 **Author:** Eyra (Melle Lieuwes)
@@ -9,13 +9,13 @@
 
 ## What Centerdata needs to build
 
-To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Eyra-specific protocol:
+To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Next-specific protocol:
 
-- **An OIDC Identity Provider.** Expose `/.well-known/openid-configuration` and a JWKS endpoint. Support the **Authorization Code + PKCE** flow. Register Eyra as a client (one `client_id` + `client_secret` per environment) and accept Eyra's `redirect_uri`. Include `sub` (stable, never reassigned), `email`, and ideally `email_verified` in the ID token.
-- **A provisioning client.** Pre-register LISS panelists and their assignments in Next by calling Eyra's REST API (`POST /api/provisioning/v1/users` and `/assignments`). Authenticate to that API via OAuth 2.0 **`client_credentials`** using credentials Eyra issues. Each user record carries the `sub` Centerdata will later issue at sign-in, plus `email`.
-- **A signed-JWT launch handler for questionnaires.** Accept a signed launch URL from Eyra, verify the signature against Eyra's published JWKS (`/.well-known/jwks.json`), open the questionnaire, and return the participant to `return_url` with a signed completion payload (and ideally POST a completion webhook).
+- **An OIDC Identity Provider.** Expose `/.well-known/openid-configuration` and a JWKS endpoint. Support the **Authorization Code + PKCE** flow. Register Next as a client (one `client_id` + `client_secret` per environment) and accept Next's `redirect_uri`. Include `sub` (stable, never reassigned), `email`, and ideally `email_verified` in the ID token.
+- **A provisioning client.** Pre-register LISS panelists and their assignments in Next by calling Next's REST API (`POST /api/provisioning/v1/users` and `/assignments`). Authenticate to that API via OAuth 2.0 **`client_credentials`** using credentials Next issues. Each user record carries the `sub` Centerdata will later issue at sign-in, plus `email`.
+- **A signed-JWT launch handler for questionnaires.** Accept a signed launch URL from Next, verify the signature against Next's published JWKS (`/.well-known/jwks.json`), open the questionnaire, and return the participant to `return_url` with a signed completion payload (and ideally POST a completion webhook).
 
-The three interfaces are independent — Centerdata is free to host them in the same service or in separate ones; Eyra makes no assumption either way.
+The three interfaces are independent — Centerdata is free to host them in the same service or in separate ones; this design makes no assumption either way.
 
 Please also review the [open questions in §7](#7-open-questions-for-centerdata) — your answers determine the final shape of the contract.
 
@@ -23,7 +23,7 @@ Please also review the [open questions in §7](#7-open-questions-for-centerdata)
 
 ## 1. Purpose
 
-This document proposes the technical integration between **Eyra's Next platform** and **Centerdata** to enable LISS panelists to participate in research assignments through Next — on the web *and* through the Next mobile app.
+This document proposes the technical integration between **Next** and **Centerdata** to enable LISS panelists to participate in research assignments through Next — on the web *and* through the Next mobile app.
 
 The goal of this briefing is to align on the integration shape so that Eyra and Centerdata can identify implementation work and next steps.
 
@@ -41,23 +41,23 @@ Out of scope (for this briefing):
 
 - Eyra-internal data modelling decisions.
 
-## 3. Eyra-side context
+## 3. Next overview
 
-Next is the Eyra research platform. The mobile app is a **hybrid**: a thin native shell (iOS/Android) that hosts a mobile-tuned Phoenix LiveView session. Auth state therefore lives server-side, and the same authentication flows work for both web and mobile clients — there is no separate native auth path.
+Next is Eyra's research platform. The mobile app is a **hybrid**: a thin native shell (iOS/Android) that hosts a mobile-tuned Phoenix LiveView session. Auth state therefore lives server-side, and the same authentication flows work for both web and mobile clients — there is no separate native auth path.
 
 Next already integrates with external identity providers using the **OpenID Connect (OIDC)** standard — the identity layer built on top of OAuth 2.0. An OIDC IdP authenticates the user and returns a signed **ID token** containing identity claims. SURFconext (academic SSO) and Google sign-in are wired in today; **Centerdata fits the same pattern**, with no bespoke mobile or LISS-specific flow introduced.
 
-In other words, what Centerdata implements is a standard OIDC IdP. Nothing about the contract is Eyra-specific.
+In other words, what Centerdata implements is a standard OIDC IdP. Nothing about the contract is Next-specific.
 
-## 4. The three Eyra ↔ Centerdata interfaces
+## 4. The three Next ↔ Centerdata interfaces
 
 From Eyra's perspective, Centerdata is **one external party** that we integrate with through three independent logical interfaces. We do not presume how Centerdata splits these internally — whether the OIDC, provisioning, and questionnaire endpoints are functions of the same system or live in separate services. That is Centerdata's call.
 
 | # | Direction | Purpose | Protocol |
 |---|-----------|---------|----------|
-| 1 | Centerdata → Eyra | Pre-register participants and assignments | REST/JSON, OAuth 2.0 `client_credentials` |
-| 2 | Eyra → Centerdata | Authenticate a LISS panelist at sign-in | OpenID Connect (Authorization Code + PKCE) |
-| 3 | Eyra → Centerdata (and back) | Launch a questionnaire and receive completion | Signed launch URL + redirect callback |
+| 1 | Centerdata → Next | Pre-register participants and assignments | REST/JSON, OAuth 2.0 `client_credentials` |
+| 2 | Next → Centerdata | Authenticate a LISS panelist at sign-in | OpenID Connect (Authorization Code + PKCE) |
+| 3 | Next → Centerdata (and back) | Launch a questionnaire and receive completion | Signed launch URL + redirect callback |
 
 Each interface is described in detail below.
 
@@ -71,12 +71,12 @@ Centerdata pre-creates the LISS panelists and their assignments in Next **before
 
 ### 5.2 Direction and authentication
 
-**Direction:** Centerdata calls a REST API exposed by Eyra/Next. Eyra is the resource server.
+**Direction:** Centerdata calls a REST API exposed by Next. Next is the resource server.
 
 **Authentication:** OAuth 2.0 **client_credentials** flow — the standard OAuth grant for machine-to-machine authentication, where no human user is involved and the calling service authenticates as itself.
 
-- Eyra issues Centerdata a `client_id` + `client_secret` pair (one per environment: staging, production). The `client_id` is public; the `client_secret` is the shared secret Centerdata uses to prove its identity.
-- Centerdata POSTs `client_id` + `client_secret` to Eyra's token endpoint and gets back a short-lived **access token**. It then presents that token as an `Authorization: Bearer <token>` header on every API call (a "Bearer" token because whoever holds it can use it — keep it confidential).
+- Next issues Centerdata a `client_id` + `client_secret` pair (one per environment: staging, production). The `client_id` is public; the `client_secret` is the shared secret Centerdata uses to prove its identity.
+- Centerdata POSTs `client_id` + `client_secret` to Next's token endpoint and gets back a short-lived **access token**. It then presents that token as an `Authorization: Bearer <token>` header on every API call (a "Bearer" token because whoever holds it can use it — keep it confidential).
 - Tokens are short-lived (≤ 1 hour). Centerdata refreshes as needed.
 
 **Alternatives considered:**
@@ -90,7 +90,7 @@ Each user provisioned by Centerdata is identified by **two required fields**:
 - `centerdata_sub` *(required, primary)* — the value of the OIDC `sub` claim that Centerdata will issue for this panelist at sign-in: a stable, never-reassigned identifier. This is the **primary join key**.
 - `email` *(required)* — the panelist's email address. Used for display, notifications, and as a sanity check at first sign-in.
 
-At first sign-in via OIDC, Eyra looks up the pre-registered Next user by matching the OIDC ID token's `sub` claim against the stored `centerdata_sub`. Email mismatch produces a warning but does **not** block the sign-in — this covers legitimate email changes at Centerdata.
+At first sign-in via OIDC, Next looks up the pre-registered user by matching the OIDC ID token's `sub` claim against the stored `centerdata_sub`. Email mismatch produces a warning but does **not** block the sign-in — this covers legitimate email changes at Centerdata.
 
 **Rationale:** Email is mutable and occasionally reassigned; relying on email alone for the durable join would break the link when a panelist's email changes at Centerdata. The OIDC `sub` claim is defined by the OIDC spec as locally-unique to the IdP and never-reassigned, making it the canonical join key.
 
@@ -128,7 +128,7 @@ All requests/responses are JSON. All endpoints return standard HTTP status codes
 
 ### 6.1 Purpose
 
-Authenticate a LISS panelist visiting Next (on web or in the mobile app), using Centerdata's OIDC IdP. After successful sign-in, Eyra has a Phoenix session for the participant, linked to the pre-registered Next user.
+Authenticate a LISS panelist visiting Next (on web or in the mobile app), using Centerdata's OIDC IdP. After successful sign-in, Next has a session for the participant, linked to the pre-registered user record.
 
 ### 6.2 Flow
 
@@ -136,8 +136,8 @@ Standard OpenID Connect **Authorization Code with PKCE**. Identical for web and 
 
 Two concepts to keep in mind:
 
-- **Authorization Code flow** — the OIDC flow where the IdP, after authenticating the user in the browser, returns a short-lived *authorization code* to the client (Eyra) via redirect. Eyra then exchanges that code for tokens by making a server-to-server `POST` to the IdP's token endpoint. The user-agent never sees the tokens.
-- **PKCE** (Proof Key for Code Exchange, RFC 7636) — Eyra generates a one-time secret (`code_verifier`) at the start of the flow and sends only a hash of it (`code_challenge`) with the authorization request. To exchange the code, Eyra has to present the original verifier. An attacker who intercepts the code alone cannot use it.
+- **Authorization Code flow** — the OIDC flow where the IdP, after authenticating the user in the browser, returns a short-lived *authorization code* to the client (Next) via redirect. Next then exchanges that code for tokens by making a server-to-server `POST` to the IdP's token endpoint. The user-agent never sees the tokens.
+- **PKCE** (Proof Key for Code Exchange, RFC 7636) — Next generates a one-time secret (`code_verifier`) at the start of the flow and sends only a hash of it (`code_challenge`) with the authorization request. To exchange the code, Next has to present the original verifier. An attacker who intercepts the code alone cannot use it.
 
 Steps:
 
@@ -145,15 +145,15 @@ Steps:
 2. Next (the OIDC **Relying Party** — the client that consumes the IdP's assertions) constructs an authorization request and redirects the participant to Centerdata's `/authorize` endpoint.
 3. On mobile, the redirect opens in an **in-app browser tab** — `ASWebAuthenticationSession` on iOS, **Custom Tabs** on Android. On web, the redirect happens in the same browser tab.
 4. The participant authenticates at Centerdata.
-5. Centerdata redirects back to Eyra's callback URL with an authorization code.
-6. Eyra exchanges the code for tokens at Centerdata's `/token` endpoint and validates the ID token signature against Centerdata's **JWKS** (JSON Web Key Set — the set of public keys Centerdata publishes at a discoverable URL, used to verify ID token signatures).
-7. Eyra looks up the pre-registered Next user by `id_token.sub == stored.centerdata_sub`, establishes a session, and redirects the participant back into the Next UI.
+5. Centerdata redirects back to Next's callback URL with an authorization code.
+6. Next exchanges the code for tokens at Centerdata's `/token` endpoint and validates the ID token signature against Centerdata's **JWKS** (JSON Web Key Set — the set of public keys Centerdata publishes at a discoverable URL, used to verify ID token signatures).
+7. Next looks up the pre-registered user by `id_token.sub == stored.centerdata_sub`, establishes a session, and redirects the participant back into the Next UI.
 
-### 6.3 What Eyra needs from Centerdata
+### 6.3 What Next needs from Centerdata
 
-- OIDC discovery endpoint (`/.well-known/openid-configuration`) — so Eyra can auto-configure the endpoints, supported algorithms, and JWKS URI.
-- A registered OIDC client for Eyra (`client_id`, `client_secret`), one per environment (staging, production).
-- A list of permitted **redirect URIs** that Centerdata will accept. Eyra will provide them:
+- OIDC discovery endpoint (`/.well-known/openid-configuration`) — so Next can auto-configure the endpoints, supported algorithms, and JWKS URI.
+- A registered OIDC client for Next (`client_id`, `client_secret`), one per environment (staging, production).
+- A list of permitted **redirect URIs** that Centerdata will accept. Next's URIs are:
   - Web: `https://next.eyra.co/auth/liss/callback` (and equivalent for staging).
   - Mobile: same web URL — mobile shell uses universal links / app links on top of the same URL.
 
@@ -163,20 +163,20 @@ The ID token is a signed JWT (JSON Web Token — a signed, base64url-encoded JSO
 
 | Claim | Required | Notes |
 |-------|----------|-------|
-| `sub` | yes | Subject — the IdP's stable, never-reassigned identifier for the user. Eyra's primary join key — must match the `centerdata_sub` from provisioning. |
+| `sub` | yes | Subject — the IdP's stable, never-reassigned identifier for the user. Next's primary join key — must match the `centerdata_sub` from provisioning. |
 | `email` | yes | Display + sanity check at first sign-in. |
 | `email_verified` | recommended | True only if Centerdata has verified ownership. |
-| `iss` | yes | Issuer — the IdP's identifier URL. Eyra checks it matches Centerdata's published issuer. |
-| `aud` | yes | Audience — must contain Eyra's `client_id`, so the token can't be replayed against a different RP. |
+| `iss` | yes | Issuer — the IdP's identifier URL. Next checks it matches Centerdata's published issuer. |
+| `aud` | yes | Audience — must contain Next's `client_id`, so the token can't be replayed against a different RP. |
 | `iat` | yes | Issued-at timestamp. |
-| `exp` | yes | Expiry timestamp — Eyra rejects expired tokens. |
-| `nonce` | yes | A random value Eyra generates per authorization request and includes in the request; Centerdata echoes it back in the ID token. Eyra checks it matches, which prevents replay of a captured ID token. |
+| `exp` | yes | Expiry timestamp — Next rejects expired tokens. |
+| `nonce` | yes | A random value Next generates per authorization request and includes in the request; Centerdata echoes it back in the ID token. Next checks it matches, which prevents replay of a captured ID token. |
 
 ### 6.5 Mobile — same contract as web
 
 From Centerdata's side, the mobile flow is **identical** to the web flow: same OIDC client, same `client_id`, same `redirect_uri`, same `/authorize` and `/token` endpoints. There is no separate mobile client registration to maintain.
 
-Eyra absorbs the mobile/web difference internally — the OIDC flow stays server-side.
+Next absorbs the mobile/web difference internally — the OIDC flow stays server-side.
 
 ## 7. Interface 3 — Questionnaire launch
 
@@ -190,20 +190,20 @@ The participant is **already authenticated in Next** as a LISS panelist (Interfa
 
 ### 7.3 Proposed mechanism — signed launch URL
 
-Eyra mints a short-lived signed URL pointing at Centerdata's questionnaire endpoint. The URL carries a JWT (signed, base64url-encoded JSON payload — same format as the OIDC ID token) with the following claims. The roles here are reversed from Interface 2: this time Eyra signs, Centerdata verifies.
+Next mints a short-lived signed URL pointing at Centerdata's questionnaire endpoint. The URL carries a JWT (signed, base64url-encoded JSON payload — same format as the OIDC ID token) with the following claims. The roles here are reversed from Interface 2: this time Next signs, Centerdata verifies.
 
 | Claim | Purpose |
 |-------|---------|
-| `iss` | Issuer — Eyra's identifier URL; Centerdata uses this to fetch Eyra's public keys. |
+| `iss` | Issuer — Next's identifier URL; Centerdata uses this to fetch Next's public keys. |
 | `aud` | Audience — identifies Centerdata as the intended recipient; prevents the token being replayed against a different system. |
 | `centerdata_sub` | Identifies the participant using the `sub` Centerdata previously issued at sign-in. |
 | `questionnaire_id` | Which questionnaire to load. |
-| `assignment_id` | Eyra's assignment identifier (echoed back at completion). |
+| `assignment_id` | Next's assignment identifier (echoed back at completion). |
 | `nonce` | One-time random value that Centerdata records to detect a replayed launch URL. |
 | `iat`, `exp` | Issued-at and expiry timestamps. Short expiry (~ 60 seconds) so a leaked URL is useless almost immediately. |
 | `return_url` | Where Centerdata should send the participant after completion. |
 
-Centerdata validates the JWT signature against Eyra's public key (which Eyra publishes at `/.well-known/jwks.json` — same JWKS mechanism as in Interface 2, just with roles reversed), checks `aud`, `exp`, and `nonce`, then opens the questionnaire. On completion, Centerdata redirects the participant to `return_url`, with a signed completion payload (or a callback `POST` to a Next webhook — see open questions).
+Centerdata validates the JWT signature against Next's public key (which Next publishes at `/.well-known/jwks.json` — same JWKS mechanism as in Interface 2, just with roles reversed), checks `aud`, `exp`, and `nonce`, then opens the questionnaire. On completion, Centerdata redirects the participant to `return_url`, with a signed completion payload (or a callback `POST` to a Next webhook — see open questions).
 
 This is the **LTI-style** pattern — Learning Tools Interoperability, an ed-tech standard where a Learning Management System hands off to an external tool with a signed identity assertion instead of forcing the user to re-authenticate. Widely used for launching external assessments on behalf of an already-authenticated user.
 
@@ -228,7 +228,7 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 1. **OIDC support and conformance.** Can Centerdata's OIDC endpoint support Authorization Code + PKCE, with discovery (`/.well-known/openid-configuration`) and a JWKS endpoint?
 2. **`sub` stability.** Can Centerdata guarantee the OIDC `sub` claim is stable and never reassigned for the lifetime of a LISS panelist?
 3. **Email claim.** Will Centerdata include `email` (and ideally `email_verified`) in the ID token?
-4. **Provisioning API direction.** We propose Centerdata calls an Eyra-exposed REST API authenticated with `client_credentials`. Does this fit Centerdata's operational model, or does Centerdata prefer Eyra to poll Centerdata endpoints?
+4. **Provisioning API direction.** We propose Centerdata calls a Next-exposed REST API authenticated with `client_credentials`. Does this fit Centerdata's operational model, or does Centerdata prefer Next to poll Centerdata endpoints?
 5. **Questionnaire launch mechanism.** What signed-launch mechanism does Centerdata's questionnaire system already support — LTI 1.3, a bespoke JWT scheme, shared HMAC, or something else? We propose to align with whatever Centerdata already does rather than introduce a new contract.
 6. **Questionnaire completion callback.** Does Centerdata support a server-to-server completion webhook in addition to the redirect, and what signing/auth does it expect?
 7. **Account lifecycle signals.** How does Centerdata signal participant deactivation or removal (provisioning `DELETE`, periodic reconciliation, lifecycle webhook)?
@@ -238,7 +238,7 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 
 Four diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed, and the diagrams therefore do not name any internal Centerdata component. See [`diagrams.md`](diagrams.md) for regeneration instructions.
 
-- **Context** (`structurizr-Context.png`) — Participant, Eyra/Next, Centerdata, and the operators on each side.
+- **Context** (`structurizr-Context.png`) — Participant, Next, Centerdata, and the operators on each side.
 - **Interface 1 — Provisioning** (`structurizr-Provisioning.png`) — Dynamic view: Centerdata pre-registers a participant and an assignment, authenticated via `client_credentials`.
 - **Interface 2 — OIDC sign-in** (`structurizr-SignIn.png`) — Dynamic view: OIDC Authorization Code + PKCE flow, identical for web and mobile.
 - **Interface 3 — Questionnaire launch** (`structurizr-QuestionnaireLaunch.png`) — Dynamic view: signed JWT launch URL, questionnaire completion, redirect + webhook return.
