@@ -103,15 +103,24 @@ At first sign-in via OIDC, Eyra looks up the pre-registered Next user by matchin
 The exact API contract is part of the implementation work and will be specified separately. As a starting sketch:
 
 ```
-POST   /api/provisioning/v1/users             Pre-register a LISS panelist
-PATCH  /api/provisioning/v1/users/{sub}       Update a pre-registered user
-DELETE /api/provisioning/v1/users/{sub}       Deactivate a user
-POST   /api/provisioning/v1/assignments       Create an assignment for one or more users
-PATCH  /api/provisioning/v1/assignments/{id}  Update an assignment
-DELETE /api/provisioning/v1/assignments/{id}  Withdraw an assignment
+POST   /api/provisioning/v1/users                              Pre-register a LISS panelist
+PATCH  /api/provisioning/v1/users/{sub}                        Update a pre-registered user
+DELETE /api/provisioning/v1/users/{sub}                        Deactivate a user
+
+POST   /api/provisioning/v1/assignments                        Create assignment (metadata + optional initial participants)
+PATCH  /api/provisioning/v1/assignments/{id}                   Update assignment metadata
+DELETE /api/provisioning/v1/assignments/{id}                   Withdraw assignment
+
+PUT    /api/provisioning/v1/assignments/{id}/participants      Replace participant list (declarative, idempotent)
+GET    /api/provisioning/v1/assignments/{id}/participants      List participants (for reconciliation)
 ```
 
-The API is generic — Centerdata is one client among others (future partners, the internal Next CLI). The `provisioning` scope and `v1` version are independent of any specific caller.
+**Design notes:**
+
+- **Participants are a sub-resource of an assignment.** An assignment's *metadata* (questionnaire, schedule, etc.) and its *membership* (who is in it) have different lifecycles, so they get separate endpoints. Updating one doesn't touch the other.
+- **Membership is declarative.** `PUT /participants` takes the full desired list and the server reconciles. Centerdata can therefore re-sync at any time by sending the current truth — no need to track deltas. Retries are safe.
+- **Convenience on create.** `POST /assignments` accepts an optional `participants` array so the common "create assignment + add panelists" case is one round trip.
+- The API is generic — Centerdata is one client among others (future partners, the internal Next CLI). The `provisioning` scope and `v1` version are independent of any specific caller.
 
 All requests/responses are JSON. All endpoints return standard HTTP status codes and a structured error body on failure.
 
