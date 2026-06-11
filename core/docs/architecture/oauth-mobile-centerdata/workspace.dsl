@@ -36,9 +36,9 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and ext
     dynamic * "Provisioning" "Interface 1 — Centerdata pre-registers a LISS panelist and an assignment in Next, before the participant ever signs in." {
       centerdata -> next "POST /oauth/token (client_credentials)"
       next       -> centerdata "Access token (Bearer, short-lived)"
-      centerdata -> next "POST /api/centerdata/v1/users {sub, email, ...}"
+      centerdata -> next "POST /api/provisioning/v1/users {sub, email, ...}"
       next       -> centerdata "201 Created"
-      centerdata -> next "POST /api/centerdata/v1/assignments"
+      centerdata -> next "POST /api/provisioning/v1/assignments"
       next       -> centerdata "201 Created"
       autolayout tb
     }

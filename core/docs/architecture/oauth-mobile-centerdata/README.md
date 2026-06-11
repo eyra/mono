@@ -91,13 +91,15 @@ At first sign-in via OIDC, Eyra looks up the pre-registered Next user by matchin
 The exact API contract is part of the implementation work and will be specified separately. As a starting sketch:
 
 ```
-POST   /api/centerdata/v1/users               Pre-register a LISS panelist
-PATCH  /api/centerdata/v1/users/{sub}         Update a pre-registered user
-DELETE /api/centerdata/v1/users/{sub}         Deactivate a user
-POST   /api/centerdata/v1/assignments         Create an assignment for one or more users
-PATCH  /api/centerdata/v1/assignments/{id}    Update an assignment
-DELETE /api/centerdata/v1/assignments/{id}    Withdraw an assignment
+POST   /api/provisioning/v1/users             Pre-register a LISS panelist
+PATCH  /api/provisioning/v1/users/{sub}       Update a pre-registered user
+DELETE /api/provisioning/v1/users/{sub}       Deactivate a user
+POST   /api/provisioning/v1/assignments       Create an assignment for one or more users
+PATCH  /api/provisioning/v1/assignments/{id}  Update an assignment
+DELETE /api/provisioning/v1/assignments/{id}  Withdraw an assignment
 ```
+
+The API is generic — Centerdata is one client among others (future partners, the internal Next CLI). The `provisioning` scope and `v1` version are independent of any specific caller.
 
 All requests/responses are JSON. All endpoints return standard HTTP status codes and a structured error body on failure.
 
