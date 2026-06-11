@@ -33,9 +33,9 @@ Out of scope (for this briefing):
 
 Next is the Eyra research platform. The mobile app is a **hybrid**: a thin native shell (iOS/Android) that hosts a mobile-tuned Phoenix LiveView session. Auth state therefore lives server-side, and the same authentication flows work for both web and mobile clients — there is no separate native auth path.
 
-Next already integrates with external identity providers using the **OpenID Connect (OIDC)** standard — the identity layer built on top of OAuth 2.0. An OIDC IdP authenticates the user and returns a signed **ID token** containing identity claims. Today, **SurfConext** is wired in as an OIDC IdP using the `Assent` OIDC strategy. **Google sign-in** uses the same pattern. The implementation lives in `lib/core/surfconext/` and `lib/google_sign_in/`.
+Next already integrates with external identity providers using the **OpenID Connect (OIDC)** standard — the identity layer built on top of OAuth 2.0. An OIDC IdP authenticates the user and returns a signed **ID token** containing identity claims. SURFconext (academic SSO) and Google sign-in are wired in today; **Centerdata fits the same pattern**, with no bespoke mobile or LISS-specific flow introduced.
 
-**Centerdata fits into this same pattern.** From Eyra's perspective, Centerdata is one OIDC IdP among several, serving LISS panelists specifically. No bespoke mobile or LISS-specific authentication flow is introduced.
+In other words, what Centerdata implements is a standard OIDC IdP. Nothing about the contract is Eyra-specific.
 
 ## 4. The three Eyra ↔ Centerdata interfaces
 
@@ -126,7 +126,7 @@ Steps:
 4. The participant authenticates at Centerdata.
 5. Centerdata redirects back to Eyra's callback URL with an authorization code.
 6. Eyra exchanges the code for tokens at Centerdata's `/token` endpoint and validates the ID token signature against Centerdata's **JWKS** (JSON Web Key Set — the set of public keys Centerdata publishes at a discoverable URL, used to verify ID token signatures).
-7. Eyra looks up the pre-registered Next user by `id_token.sub == stored.centerdata_sub`, establishes a Phoenix session, and redirects back to the LiveView (web: same tab; mobile: a universal link / app link that returns the participant to the mobile shell).
+7. Eyra looks up the pre-registered Next user by `id_token.sub == stored.centerdata_sub`, establishes a session, and redirects the participant back into the Next UI.
 
 ### 6.3 What Eyra needs from Centerdata
 
@@ -151,14 +151,11 @@ The ID token is a signed JWT (JSON Web Token — a signed, base64url-encoded JSO
 | `exp` | yes | Expiry timestamp — Eyra rejects expired tokens. |
 | `nonce` | yes | A random value Eyra generates per authorization request and includes in the request; Centerdata echoes it back in the ID token. Eyra checks it matches, which prevents replay of a captured ID token. |
 
-### 6.5 Mobile specifics
+### 6.5 Mobile — same contract as web
 
-The mobile shell does **not** do native OAuth itself. The OIDC flow is driven by Phoenix (server-side); the shell only needs to:
+From Centerdata's side, the mobile flow is **identical** to the web flow: same OIDC client, same `client_id`, same `redirect_uri`, same `/authorize` and `/token` endpoints. There is no separate mobile client registration to maintain.
 
-- Open OIDC redirects in a system-provided in-app browser tab (not a WebView) so password managers and Centerdata's existing browser sessions work normally.
-- Register **universal links** (iOS) / **app links** (Android) — OS-level features that route a specific HTTPS URL directly to a registered app instead of opening the browser — so the OIDC callback URL returns control to the mobile shell after Centerdata redirects back.
-
-**Alternative considered: native PKCE direct to Centerdata.** In this variant, the mobile shell would be the OAuth client and obtain tokens directly from Centerdata, then exchange them for a Next session. Rejected because: (a) the Next mobile app is a hybrid LiveView app — auth state lives server-side regardless, so there is little benefit to terminating PKCE in the shell; (b) it would create asymmetric auth paths between web and mobile; (c) it would require Centerdata to maintain a separate mobile client registration with platform-specific concerns (app attestation, store-bound credentials).
+Eyra absorbs the mobile/web difference internally — the OIDC flow stays server-side.
 
 ## 7. Interface 3 — Questionnaire launch
 
@@ -240,17 +237,15 @@ The OAuth/OIDC concepts in this document are explained inline, but spec-level gr
 - [OpenID Connect Discovery 1.0](https://openid.net/specs/openid-connect-discovery-1_0.html) — defines `/.well-known/openid-configuration` and the IdP metadata document.
 - [Well-Known URIs — RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) — the general `/.well-known/` convention.
 - [JWT — RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519), [JWS — RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), [JWK — RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517) — the JSON Web Token format, its signature container, and the key format used in JWKS.
-- [OAuth 2.0 for Native Apps — RFC 8252](https://datatracker.ietf.org/doc/html/rfc8252) — best practice for the in-app browser tab + universal/app link pattern used in Interface 2 on mobile.
 - [OAuth 2.0 Security Best Current Practice — RFC 9700](https://datatracker.ietf.org/doc/html/rfc9700) — modern security guidance for new OAuth implementations.
 
 ## 11. Glossary
 
-- **Next** — Eyra's research platform (Phoenix / LiveView).
+- **Next** — Eyra's research platform.
 - **LISS** — The Longitudinal Internet studies for the Social Sciences panel, operated by Centerdata.
 - **OIDC** — OpenID Connect, the identity layer on top of OAuth 2.0.
 - **PKCE** — Proof Key for Code Exchange (RFC 7636), an OAuth 2.0 extension that protects the authorization code from interception.
 - **RP** — Relying Party, the OIDC term for the OAuth client that consumes identity assertions from an IdP.
 - **IdP** — Identity Provider.
 - **`sub`** — The OIDC subject identifier claim — a stable, never-reassigned identifier for the user as known to the IdP.
-- **LiveView** — Phoenix's server-driven UI framework; the Next mobile shell hosts a LiveView session.
 - **LTI** — Learning Tools Interoperability, an ed-tech standard for launching external tools with a signed identity assertion.
