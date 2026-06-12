@@ -23,7 +23,7 @@ Please also review the [open questions in §7](#7-open-questions-for-centerdata)
 
 ## Setup sequence
 
-**One-time, per partnership:**
+**One time:**
 
 1. Centerdata stands up an OIDC IdP (publish discovery + JWKS, register Next as a client, accept Next's `redirect_uri`). See §6.3.
 2. The Centerdata operator gets a Next user account with the creator role.
