@@ -17,6 +17,33 @@ async function clickAddItemButton(page: any) {
   }
 }
 
+// Returns the data-testid of the single card that appeared after a creation
+// step — by diffing against the testids captured before the click. Decouples
+// the test from sort order and accumulated state so it stays green on
+// long-lived environments (e.g. dev) without DB resets.
+async function pickNewCardTestid(page: any, before: (string | null)[]): Promise<string> {
+  const cardSelector = "[data-testid^='card_']";
+  // LiveView event → server → DOM patch is async. Wait until the new card is
+  // actually rendered before reading the DOM.
+  await page.waitForFunction(
+    ({ selector, expectedCount }: { selector: string; expectedCount: number }) =>
+      document.querySelectorAll(selector).length >= expectedCount,
+    { selector: cardSelector, expectedCount: before.length + 1 },
+    { timeout: 10000 }
+  );
+  const after: (string | null)[] = await page.locator(cardSelector).evaluateAll(
+    (els: Element[]) => els.map((el) => el.getAttribute('data-testid'))
+  );
+  const newCards = after.filter((id): id is string => id !== null && !before.includes(id));
+  if (newCards.length === 0) {
+    throw new Error(`No new card found. Before: [${before.join(', ')}]. After: [${after.join(', ')}]`);
+  }
+  if (newCards.length > 1) {
+    throw new Error(`Multiple new cards found: [${newCards.join(', ')}]. Expected exactly one.`);
+  }
+  return newCards[0];
+}
+
 
 /**
  * Approve Reward E2E Test (UC-OPP-05)
@@ -109,9 +136,12 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await researcherPage.waitForTimeout(1000);
     await activateLocalPayment(researcherPage);
 
-    // Always create a fresh project so the study we create is the only card —
-    // avoids positional selector fragility caused by residual advert/study cards
-    // from prior test runs in a reused project.
+    // Capture existing project card testids so we can deterministically pick
+    // the newly-created one regardless of project-list sort order or any
+    // accumulated state from prior test runs.
+    const projectTestidsBefore: (string | null)[] = await researcherPage.locator(CARD_SELECTOR)
+      .evaluateAll((els: Element[]) => els.map((el) => el.getAttribute('data-testid')));
+
     const createFirstProject = researcherPage.locator("[data-testid='create-first-project-button']");
     const createNewProject = researcherPage.locator("[data-testid='create-project-button']");
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
@@ -120,10 +150,18 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
       await createNewProject.click();
     }
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await researcherPage.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await researcherPage.locator(CARD_SELECTOR).first().click();
+
+    const newProjectTestid = await pickNewCardTestid(researcherPage, projectTestidsBefore);
+    console.log(`[TEST] Created project: ${newProjectTestid}`);
+    await researcherPage.locator(`[data-testid='${newProjectTestid}']`).click();
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await researcherPage.waitForTimeout(500);
+
+    // Capture existing item card testids so we can deterministically open the
+    // newly-created questionnaire — independent of inserted_at sort order or
+    // any residual items in this project.
+    const itemTestidsBefore: (string | null)[] = await researcherPage.locator(CARD_SELECTOR)
+      .evaluateAll((els: Element[]) => els.map((el) => el.getAttribute('data-testid')));
 
     // Create a fresh questionnaire study
     console.log('[TEST] Creating questionnaire study');
@@ -137,10 +175,11 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await researcherPage.waitForTimeout(500);
 
     // Open the newly created study
-    await researcherPage.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    const lastCard = researcherPage.locator(CARD_SELECTOR).last();
-    await lastCard.scrollIntoViewIfNeeded();
-    await lastCard.click();
+    const newItemTestid = await pickNewCardTestid(researcherPage, itemTestidsBefore);
+    console.log(`[TEST] Created item: ${newItemTestid}`);
+    const newCard = researcherPage.locator(`[data-testid='${newItemTestid}']`);
+    await newCard.scrollIntoViewIfNeeded();
+    await newCard.click();
     await researcherPage.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     const assignmentUrl = researcherPage.url();
@@ -226,7 +265,18 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await expect(researcherPage.locator("[data-testid='advert-publish-button']")).toBeVisible({ timeout: 5000 });
     await researcherPage.locator("[data-testid='advert-publish-button']").click();
     await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    console.log('[TEST] Advert published — participant can now see it');
+
+    // Capture the promotion URL the researcher just published so the participant
+    // can navigate to it directly. Picking "last advert card" on the homepage is
+    // brittle on environments with accumulated stale adverts (dev DB) — picking
+    // the wrong card lands the participant in a previous test run's crew and
+    // any later attempt to access this run's assignment 403s.
+    const inviteLinkText = await researcherPage.locator(
+      "text=/https?:\\/\\/[^/]+\\/promotion\\/\\d+/"
+    ).first().textContent({ timeout: 5000 });
+    const promotionPath = inviteLinkText && inviteLinkText.match(/\/promotion\/\d+/)?.[0];
+    if (!promotionPath) throw new Error(`Could not extract promotion path from invite link text: ${inviteLinkText}`);
+    console.log(`[TEST] Advert published — promotion path: ${promotionPath}`);
 
     // =========================================================================
     // PHASE 2 — Participant signs in, opens advert, completes questionnaire
@@ -286,17 +336,12 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     await participantPage.goto('/');
     await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
-    // Find the advert card for our study and click it. Pick the LAST card —
-    // that's our freshly-published advert. Picking .first() can land on a
-    // stale card from a previous test run that no longer accepts new
-    // participants.
-    console.log('[TEST] Participant opens advert');
-    await participantPage.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await participantPage.locator(CARD_SELECTOR).last().click();
-
-    // Wait for navigation to a /promotion/{id} URL — push_navigate fires
-    // server-side, Playwright's waitForSelector(CONNECTED) alone would race.
-    await participantPage.waitForURL(/\/promotion\/\d+/, { timeout: 5000 });
+    // Go directly to the promotion page we captured from the researcher's
+    // advert page. Avoids the brittle "pick the last advert card" heuristic
+    // which collides with stale adverts from previous test runs on shared
+    // environments (e.g. dev).
+    console.log(`[TEST] Participant opens advert at ${promotionPath}`);
+    await participantPage.goto(promotionPath);
     await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     // Apply for the study via the hero CTA on the promotion page.
