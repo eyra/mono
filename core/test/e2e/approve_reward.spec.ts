@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { missingFeaturesReason } from './lib/features';
-import { activateLocalPayment } from './lib';
+import { activateLocalPayment, snapshotCardTestids, pickNewCardTestid } from './lib';
 const ADD_ITEM_SELECTOR = "[data-testid='create-first-item-button'],[data-testid='add-item-button'],[phx-click='create_item']";
 
 async function clickAddItemButton(page: any) {
@@ -15,33 +15,6 @@ async function clickAddItemButton(page: any) {
   } else {
     await byEvent.click();
   }
-}
-
-// Returns the data-testid of the single card that appeared after a creation
-// step — by diffing against the testids captured before the click. Decouples
-// the test from sort order and accumulated state so it stays green on
-// long-lived environments (e.g. dev) without DB resets.
-async function pickNewCardTestid(page: any, before: (string | null)[]): Promise<string> {
-  const cardSelector = "[data-testid^='card_']";
-  // LiveView event → server → DOM patch is async. Wait until the new card is
-  // actually rendered before reading the DOM.
-  await page.waitForFunction(
-    ({ selector, expectedCount }: { selector: string; expectedCount: number }) =>
-      document.querySelectorAll(selector).length >= expectedCount,
-    { selector: cardSelector, expectedCount: before.length + 1 },
-    { timeout: 10000 }
-  );
-  const after: (string | null)[] = await page.locator(cardSelector).evaluateAll(
-    (els: Element[]) => els.map((el) => el.getAttribute('data-testid'))
-  );
-  const newCards = after.filter((id): id is string => id !== null && !before.includes(id));
-  if (newCards.length === 0) {
-    throw new Error(`No new card found. Before: [${before.join(', ')}]. After: [${after.join(', ')}]`);
-  }
-  if (newCards.length > 1) {
-    throw new Error(`Multiple new cards found: [${newCards.join(', ')}]. Expected exactly one.`);
-  }
-  return newCards[0];
 }
 
 
@@ -93,7 +66,6 @@ const SUBJECT_COUNT = '10';
 const SUBJECT_REWARD = '5.00';
 const AIM_OF_STUDY = 'E2E approve reward test';
 
-const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 
 test.describe('Approve Reward (UC-OPP-05)', () => {
@@ -139,8 +111,7 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     // Capture existing project card testids so we can deterministically pick
     // the newly-created one regardless of project-list sort order or any
     // accumulated state from prior test runs.
-    const projectTestidsBefore: (string | null)[] = await researcherPage.locator(CARD_SELECTOR)
-      .evaluateAll((els: Element[]) => els.map((el) => el.getAttribute('data-testid')));
+    const projectTestidsBefore = await snapshotCardTestids(researcherPage);
 
     const createFirstProject = researcherPage.locator("[data-testid='create-first-project-button']");
     const createNewProject = researcherPage.locator("[data-testid='create-project-button']");
@@ -160,8 +131,7 @@ test.describe('Approve Reward (UC-OPP-05)', () => {
     // Capture existing item card testids so we can deterministically open the
     // newly-created questionnaire — independent of inserted_at sort order or
     // any residual items in this project.
-    const itemTestidsBefore: (string | null)[] = await researcherPage.locator(CARD_SELECTOR)
-      .evaluateAll((els: Element[]) => els.map((el) => el.getAttribute('data-testid')));
+    const itemTestidsBefore = await snapshotCardTestids(researcherPage);
 
     // Create a fresh questionnaire study
     console.log('[TEST] Creating questionnaire study');
