@@ -12,7 +12,7 @@
 To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Next-specific protocol:
 
 - **An OIDC Identity Provider.** Expose `/.well-known/openid-configuration` and a JWKS endpoint. Support the **Authorization Code + PKCE** flow. Register Next as a client (one `client_id` + `client_secret` per environment) and accept Next's `redirect_uri`. Include `sub` (stable, never reassigned), `email`, and ideally `email_verified` in the ID token.
-- **A CSV export from the LISS panel.** Centerdata's operator enrolls participants on an assignment by uploading a CSV via Next's CMS. The CSV needs `centerdata_sub` and `email` (plus an optional `label` for human audit). See §5 and [`csv-import.md`](csv-import.md) for the contract and details.
+- **A CSV export from the LISS panel.** Centerdata's operator enrolls participants on an assignment by uploading a CSV via Next's CMS. The CSV needs `centerdata_sub` and `email` (plus an optional `label` for human audit). See §5 and [`design-details.md`](design-details.md) for the contract and details.
 - **A signed-JWT launch handler for questionnaires.** Accept a signed launch URL from Next, verify the signature against Next's published JWKS (`/.well-known/jwks.json`), open the questionnaire, and return the participant to `return_url` with a signed completion payload (and ideally POST a completion webhook).
 
 The three interfaces are independent — Centerdata is free to host them in the same service or in separate ones; this design makes no assumption either way.
@@ -96,7 +96,7 @@ This way a stale CSV cannot roll back a fresher email that Centerdata's IdP issu
 - **`sub` as primary join key.** The OIDC `sub` claim is spec-defined as locally-unique to the IdP and never reassigned. Email alone would break the link when a panelist's email changes at Centerdata. *Rejected:* email-only matching (fragile); `sub`-only with no email (loses display + sanity check).
 - **Declarative replace with protected-started carve-out.** Operators can re-sync any time by re-exporting; in-flight participants are never silently removed.
 
-Implementation specifics (validation, confirmation dialog, race-condition handling, error reporting) live in [`csv-import.md`](csv-import.md).
+Implementation specifics (validation, confirmation dialog, race-condition handling, error reporting) live in [`design-details.md`](design-details.md).
 
 ## 6. Interface 2 — OIDC sign-in
 
