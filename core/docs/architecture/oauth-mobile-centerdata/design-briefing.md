@@ -134,7 +134,7 @@ Steps:
 
 1. Participant clicks "Log in with LISS panel" inside a Next page.
 2. Next (the OIDC **Relying Party** — the client that consumes the IdP's assertions) constructs an authorization request and redirects the participant to Centerdata's `/authorize` endpoint.
-3. On mobile, the redirect opens in an **in-app browser tab** — `ASWebAuthenticationSession` on iOS, **Custom Tabs** on Android. On web, the redirect happens in the same browser tab.
+3. On mobile, the redirect opens in an embedded web browser; on web, in the same browser tab.
 4. The participant authenticates at Centerdata.
 5. Centerdata redirects back to Next's callback URL with an authorization code.
 6. Next exchanges the code for tokens at Centerdata's `/token` endpoint and validates the ID token signature against Centerdata's **JWKS** (JSON Web Key Set — the set of public keys Centerdata publishes at a discoverable URL, used to verify ID token signatures).
