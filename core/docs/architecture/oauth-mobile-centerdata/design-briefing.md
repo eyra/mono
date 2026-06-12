@@ -69,7 +69,7 @@ In other words, what Centerdata implements is a standard OIDC IdP. Nothing about
 
 ## 4. The three Next ↔ Centerdata interfaces
 
-From Eyra's perspective, Centerdata is **one external party** that we integrate with through three independent logical interfaces. We do not presume how Centerdata splits these internally — whether the OIDC, provisioning, and questionnaire endpoints are functions of the same system or live in separate services. That is Centerdata's call.
+From Eyra's perspective, Centerdata is **one external party** that we integrate with through three independent logical interfaces. We do not presume how Centerdata splits these internally — whether the OIDC and questionnaire endpoints are functions of the same system or live in separate services. That is Centerdata's call. (Interface 1 — participant enrollment — runs entirely through the Next CMS via CSV upload and requires no endpoint on Centerdata's side.)
 
 | # | Direction | Purpose | Protocol |
 |---|-----------|---------|----------|
@@ -224,8 +224,7 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 4. **CSV export from the LISS panel.** Can Centerdata produce a per-assignment export of LISS panelists with at least `centerdata_sub` and `email` (plus optionally a human-recognizable `label`)? And which Centerdata role(s) would operate the import on the Next side?
 5. **Questionnaire launch mechanism.** What signed-launch mechanism does Centerdata's questionnaire system already support — LTI 1.3, a bespoke JWT scheme, shared HMAC, or something else? We propose to align with whatever Centerdata already does rather than introduce a new contract.
 6. **Questionnaire completion callback.** Does Centerdata support a server-to-server completion webhook in addition to the redirect, and what signing/auth does it expect?
-7. **Account lifecycle signals.** How does Centerdata signal participant deactivation or removal (provisioning `DELETE`, periodic reconciliation, lifecycle webhook)?
-8. **Per-pool client identities.** If Centerdata supports multiple panels (LISS primary, secondary, etc.) in the future, does each panel get its own OIDC client_id, or is one shared client identity with `scope`/claims used to distinguish them?
+7. **Per-pool client identities.** If Centerdata supports multiple panels (LISS primary, secondary, etc.) in the future, does each panel get its own OIDC client_id, or is one shared client identity with `scope`/claims used to distinguish them?
 
 ## 9. Diagrams
 

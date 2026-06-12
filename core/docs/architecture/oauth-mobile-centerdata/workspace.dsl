@@ -1,12 +1,12 @@
-workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and external questionnaire launch — covering web and the hybrid Next mobile app." {
+workspace "Next ↔ Centerdata integration" "OIDC sign-in and external questionnaire launch — covering web and the hybrid Next mobile app." {
 
   model {
     participant = person "LISS Participant" "Signs in via Centerdata; completes Centerdata-hosted questionnaires"
-    cdOps       = person "Centerdata Operator" "Operates provisioning of LISS panelists into Next"
+    cdOps       = person "Centerdata Operator" "Enrolls LISS panelists on Next assignments via CSV upload"
     eyraOps     = person "Eyra Operator" "Configures the Centerdata OIDC integration"
 
     next       = softwareSystem "Eyra Next"  "Research platform — web + hybrid mobile app, LiveView-based"
-    centerdata = softwareSystem "Centerdata" "Operates the LISS panel; exposes provisioning, OIDC, and questionnaire endpoints to Eyra (internal architecture opaque to Eyra)" "External"
+    centerdata = softwareSystem "Centerdata" "Operates the LISS panel; exposes OIDC and questionnaire endpoints to Next (internal architecture opaque)" "External"
 
     eyraOps -> next       "Configures IdPs and clients"
     cdOps   -> centerdata "Operates"
