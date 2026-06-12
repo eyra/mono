@@ -190,7 +190,8 @@ defmodule Systems.Payment.Provider.OPP do
              is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     body = %{
       type: "balance",
-      amount: Integer.to_string(amount),
+      amount: amount,
+      currency: "EUR",
       from_owner_uid: from_owner_uid,
       to_owner_uid: to_owner_uid
     }

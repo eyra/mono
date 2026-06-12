@@ -262,6 +262,12 @@ defmodule Systems.Budget.Public do
     count
   end
 
+  @doc """
+  Reconciles pay-in transactions against OPP (SF-OPP-02).
+  See `Systems.Budget.TransactionReconciliation`.
+  """
+  def reconcile_transactions(opts \\ []), do: Budget.TransactionReconciliation.run(opts)
+
   # --- Helpers ---
 
   defp get_reward_per_participant(%Budget.TransactionModel{target_fund_id: fund_id}) do

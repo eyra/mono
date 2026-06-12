@@ -181,10 +181,10 @@ defmodule Systems.Payment.Provider.OPPTest do
         {:ok, raw, conn} = Plug.Conn.read_body(conn)
         body = Jason.decode!(raw)
         assert body["type"] == "balance"
+        assert body["currency"] == "EUR"
         assert body["from_owner_uid"] == "mer_platform"
         assert body["to_owner_uid"] == "mer_participant"
-        # OPP expects the amount as a string.
-        assert body["amount"] == "1000"
+        assert body["amount"] == 1000
 
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
       end)

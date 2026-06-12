@@ -95,6 +95,9 @@ if config_env() == :prod do
                 queue: storage_delivery_queue}
              ]}
 
+          "payment_reconciliation" ->
+            {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
+
           _ ->
             nil
         end

@@ -1259,6 +1259,12 @@ defmodule Systems.Fund.Public do
     {:ok, payout}
   end
 
+  @doc """
+  Reconciles `:pending` payouts against OPP (SF-OPP-02).
+  See `Systems.Fund.PayoutReconciliation`.
+  """
+  def reconcile_pending_payouts(opts \\ []), do: Fund.PayoutReconciliation.run(opts)
+
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)
 
