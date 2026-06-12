@@ -132,7 +132,7 @@ Two concepts to keep in mind:
 
 Steps:
 
-1. Participant clicks "Log in with LISS panel" inside a Next page (web browser or mobile WebView).
+1. Participant clicks "Log in with LISS panel" inside a Next page.
 2. Next (the OIDC **Relying Party** — the client that consumes the IdP's assertions) constructs an authorization request and redirects the participant to Centerdata's `/authorize` endpoint.
 3. On mobile, the redirect opens in an **in-app browser tab** — `ASWebAuthenticationSession` on iOS, **Custom Tabs** on Android. On web, the redirect happens in the same browser tab.
 4. The participant authenticates at Centerdata.
