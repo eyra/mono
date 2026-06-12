@@ -157,9 +157,11 @@ Next absorbs the mobile/web difference internally — the OIDC flow stays server
 
 When a logged-in LISS participant taps "Start" on an assignment that points at a Centerdata-hosted questionnaire, Next hands off to Centerdata, the participant completes the questionnaire, and control returns to Next with a completion signal.
 
-### 7.2 Pre-condition
+### 7.2 Pre-conditions
 
-The participant is **already authenticated in Next** as a LISS panelist (Interface 2 has run). Questionnaire launch is therefore not an authentication step — it is an *identity assertion + launch context* handoff. Centerdata does not need to re-authenticate the user.
+**Setup (per assignment, one-time):** The assignment's workflow in the Next CMS contains a **Quest task**, added by the Centerdata operator. The Quest task has a URL field that the operator populates with the URL of the Centerdata-hosted questionnaire to launch.
+
+**Runtime:** The participant is **already authenticated in Next** as a LISS panelist (Interface 2 has run). Questionnaire launch is therefore not an authentication step — it is an *identity assertion + launch context* handoff. Centerdata does not need to re-authenticate the user.
 
 ### 7.3 Proposed mechanism — signed launch URL
 
