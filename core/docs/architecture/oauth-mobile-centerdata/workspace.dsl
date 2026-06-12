@@ -23,24 +23,13 @@ workspace "Eyra ↔ Centerdata integration" "OIDC sign-in, provisioning, and ext
     next       -> centerdata "Questionnaire launch (signed JWT URL)"                       "HTTPS"
     centerdata -> next       "Questionnaire completion (signed payload — redirect + webhook)" "HTTPS"
 
-    centerdata -> next "Provisioning (pre-register users + assignments)" "REST/JSON, OAuth 2.0 client_credentials"
-    next       -> centerdata "Access tokens, API responses"              "REST/JSON"
+    cdOps -> next "Uploads CSV via Next CMS to enroll participants on an assignment" "HTTPS"
   }
 
   views {
     systemContext next "Context" "Who participates and which external party Next integrates with for the Centerdata integration." {
       include *
       autolayout lr
-    }
-
-    dynamic * "Provisioning" "Interface 1 — Centerdata pre-registers a LISS panelist and an assignment in Next, before the participant ever signs in." {
-      centerdata -> next "POST /oauth/token (client_credentials)"
-      next       -> centerdata "Access token (Bearer, short-lived)"
-      centerdata -> next "POST /api/provisioning/v1/users {sub, email, ...}"
-      next       -> centerdata "201 Created"
-      centerdata -> next "POST /api/provisioning/v1/assignments"
-      next       -> centerdata "201 Created"
-      autolayout tb
     }
 
     dynamic * "SignIn" "Interface 2 — A LISS participant signs in via OIDC. Identical for web and mobile." {

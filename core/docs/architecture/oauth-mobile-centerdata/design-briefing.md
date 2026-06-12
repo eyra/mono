@@ -12,7 +12,7 @@
 To let LISS panelists participate in Next assignments via web and the Next mobile app, Centerdata implements three things — all using standard OAuth 2.0 / OIDC mechanics, no Next-specific protocol:
 
 - **An OIDC Identity Provider.** Expose `/.well-known/openid-configuration` and a JWKS endpoint. Support the **Authorization Code + PKCE** flow. Register Next as a client (one `client_id` + `client_secret` per environment) and accept Next's `redirect_uri`. Include `sub` (stable, never reassigned), `email`, and ideally `email_verified` in the ID token.
-- **A provisioning client.** Pre-register LISS panelists and their assignments in Next by calling Next's REST API (`POST /api/provisioning/v1/users` and `/assignments`). Authenticate to that API via OAuth 2.0 **`client_credentials`** using credentials Next issues. Each user record carries the `sub` Centerdata will later issue at sign-in, plus `email`.
+- **A CSV export from the LISS panel.** Centerdata's operator enrolls participants on an assignment by uploading a CSV via Next's CMS. The CSV needs `centerdata_sub` and `email` (plus an optional `label` for human audit). See §5 and [`csv-import.md`](csv-import.md) for the contract and details.
 - **A signed-JWT launch handler for questionnaires.** Accept a signed launch URL from Next, verify the signature against Next's published JWKS (`/.well-known/jwks.json`), open the questionnaire, and return the participant to `return_url` with a signed completion payload (and ideally POST a completion webhook).
 
 The three interfaces are independent — Centerdata is free to host them in the same service or in separate ones; this design makes no assumption either way.
@@ -34,7 +34,7 @@ We make concrete design choices throughout. Each significant choice is followed 
 In scope:
 
 - A participant logs in to Next as a LISS panelist (web and mobile).
-- Centerdata pre-registers LISS panelists and assignments in Next before the participant has ever signed in.
+- Centerdata enrolls LISS panelists on an assignment in Next (via CSV upload), at any time.
 - Next launches a Centerdata-hosted questionnaire on behalf of a logged-in participant and receives a completion signal in return.
 
 Out of scope (for this briefing):
@@ -55,7 +55,7 @@ From Eyra's perspective, Centerdata is **one external party** that we integrate 
 
 | # | Direction | Purpose | Protocol |
 |---|-----------|---------|----------|
-| 1 | Centerdata → Next | Pre-register participants and assignments | REST/JSON, OAuth 2.0 `client_credentials` |
+| 1 | Centerdata → Next | Enroll participants on an assignment | CSV upload via the Next CMS |
 | 2 | Next → Centerdata | Authenticate a LISS panelist at sign-in | OpenID Connect (Authorization Code + PKCE) |
 | 3 | Next → Centerdata (and back) | Launch a questionnaire and receive completion | Signed launch URL + redirect callback |
 
@@ -63,72 +63,46 @@ Each interface is described in detail below.
 
 ---
 
-## 5. Interface 1 — Provisioning API
+## 5. Interface 1 — CSV import
 
 ### 5.1 Purpose
 
-Centerdata pre-creates the LISS panelists and their assignments in Next **before any participant ever signs in**, so that a panelist who signs in for the first time immediately sees their assignments waiting.
+Centerdata enrolls LISS panelists on an assignment in Next, so that when they sign in (or on their next session if already signed in) they see and can start the assignment.
 
-### 5.2 Direction and authentication
+### 5.2 Shape
 
-**Direction:** Centerdata calls a REST API exposed by Next. Next is the resource server.
+- Centerdata exports a CSV from the LISS panel.
+- A Centerdata operator — a regular Next user with the **creator role** on the relevant project — uploads the CSV via the Next CMS's "Import participants" button on the assignment.
+- The CSV is the **declarative truth** for that assignment's participant list: importing replaces the list, except for participants who have already started the assignment (they are protected and kept).
 
-**Authentication:** OAuth 2.0 **client_credentials** flow — the standard OAuth grant for machine-to-machine authentication, where no human user is involved and the calling service authenticates as itself.
+### 5.3 CSV contract
 
-- Next issues Centerdata a `client_id` + `client_secret` pair (one per environment: staging, production). The `client_id` is public; the `client_secret` is the shared secret Centerdata uses to prove its identity.
-- Centerdata POSTs `client_id` + `client_secret` to Next's token endpoint and gets back a short-lived **access token**. It then presents that token as an `Authorization: Bearer <token>` header on every API call (a "Bearer" token because whoever holds it can use it — keep it confidential).
-- Tokens are short-lived (≤ 1 hour). Centerdata refreshes as needed.
+| Column | Required | Purpose |
+|---|---|---|
+| `centerdata_sub` | yes | The value of the OIDC `sub` claim Centerdata will issue for this panelist at sign-in. Primary join key — stable, never reassigned. |
+| `email` | yes | Display, notifications, and sanity check at first sign-in. |
+| `label` | no | Free-form human-readable handle (a name, a Centerdata-internal panel ID, a batch tag). Helps operators recognize rows. Per-assignment, not per-user. |
 
-**Alternatives considered:**
-- *Long-lived API key*: simpler, but harder to rotate and revoke. Rejected — `client_credentials` is the standard for service-to-service, and we already have to speak OAuth/OIDC for Interface 2.
-- *Mutual TLS*: stronger transport-level auth, but operationally heavier and not needed for the threat model.
+File format is standard RFC 4180 CSV, UTF-8, with the header row above (column order does not matter).
 
-### 5.3 User identifier — the join key
+### 5.4 Authority over user-level fields
 
-Each user provisioned by Centerdata is identified by **two required fields**:
+Both CSV import and OIDC sign-in can **create** a User record if none exists yet for a given `centerdata_sub`. Only OIDC sign-in can **update** an existing User record (`email` is overwritten with whatever the live ID token issues). CSV import never overwrites User fields — it only writes Participant rows (user ↔ assignment membership, plus per-assignment `label`).
 
-- `centerdata_sub` *(required, primary)* — the value of the OIDC `sub` claim that Centerdata will issue for this panelist at sign-in: a stable, never-reassigned identifier. This is the **primary join key**.
-- `email` *(required)* — the panelist's email address. Used for display, notifications, and as a sanity check at first sign-in.
+This way a stale CSV cannot roll back a fresher email that Centerdata's IdP issued at sign-in.
 
-At first sign-in via OIDC, Next looks up the pre-registered user by matching the OIDC ID token's `sub` claim against the stored `centerdata_sub`. Email mismatch produces a warning but does **not** block the sign-in — this covers legitimate email changes at Centerdata.
+### 5.5 Rationale
 
-**Rationale:** Email is mutable and occasionally reassigned; relying on email alone for the durable join would break the link when a panelist's email changes at Centerdata. The OIDC `sub` claim is defined by the OIDC spec as locally-unique to the IdP and never-reassigned, making it the canonical join key.
+- **`sub` as primary join key.** The OIDC `sub` claim is spec-defined as locally-unique to the IdP and never reassigned. Email alone would break the link when a panelist's email changes at Centerdata. *Rejected:* email-only matching (fragile); `sub`-only with no email (loses display + sanity check).
+- **Declarative replace with protected-started carve-out.** Operators can re-sync any time by re-exporting; in-flight participants are never silently removed.
 
-**Alternatives considered:**
-- *Email-only matching*: simpler but fragile (see rationale above). Rejected.
-- *`sub`-only matching*: cleaner but loses email as a sanity check and a human-meaningful display field at provisioning time. Rejected.
-
-### 5.4 API surface (initial sketch)
-
-The exact API contract is part of the implementation work and will be specified separately. As a starting sketch:
-
-```
-POST   /api/provisioning/v1/users                              Pre-register a LISS panelist
-PATCH  /api/provisioning/v1/users/{sub}                        Update a pre-registered user
-DELETE /api/provisioning/v1/users/{sub}                        Deactivate a user
-
-POST   /api/provisioning/v1/assignments                        Create assignment (metadata + optional initial participants)
-PATCH  /api/provisioning/v1/assignments/{id}                   Update assignment metadata
-DELETE /api/provisioning/v1/assignments/{id}                   Withdraw assignment
-
-PUT    /api/provisioning/v1/assignments/{id}/participants      Replace participant list (declarative, idempotent)
-GET    /api/provisioning/v1/assignments/{id}/participants      List participants (for reconciliation)
-```
-
-**Design notes:**
-
-- **Participants are a sub-resource of an assignment.** An assignment's *metadata* (questionnaire, schedule, etc.) and its *membership* (who is in it) have different lifecycles, so they get separate endpoints. Updating one doesn't touch the other.
-- **Membership is declarative.** `PUT /participants` takes the full desired list and the server reconciles. Centerdata can therefore re-sync at any time by sending the current truth — no need to track deltas. Retries are safe.
-- **Convenience on create.** `POST /assignments` accepts an optional `participants` array so the common "create assignment + add panelists" case is one round trip.
-- The API is generic — Centerdata is one client among others (future partners, the internal Next CLI). The `provisioning` scope and `v1` version are independent of any specific caller.
-
-All requests/responses are JSON. All endpoints return standard HTTP status codes and a structured error body on failure.
+Implementation specifics (validation, confirmation dialog, race-condition handling, error reporting) live in [`csv-import.md`](csv-import.md).
 
 ## 6. Interface 2 — OIDC sign-in
 
 ### 6.1 Purpose
 
-Authenticate a LISS panelist visiting Next (on web or in the mobile app), using Centerdata's OIDC IdP. After successful sign-in, Next has a session for the participant, linked to the pre-registered user record.
+Authenticate a LISS panelist visiting Next, using Centerdata's OIDC IdP. After successful sign-in, Next has a session for the participant. If they have been imported into one or more assignments, those appear on the home page; otherwise the home page shows an empty state.
 
 ### 6.2 Flow
 
@@ -147,7 +121,7 @@ Steps:
 4. The participant authenticates at Centerdata.
 5. Centerdata redirects back to Next's callback URL with an authorization code.
 6. Next exchanges the code for tokens at Centerdata's `/token` endpoint and validates the ID token signature against Centerdata's **JWKS** (JSON Web Key Set — the set of public keys Centerdata publishes at a discoverable URL, used to verify ID token signatures).
-7. Next looks up the pre-registered user by `id_token.sub == stored.centerdata_sub`, establishes a session, and redirects the participant back into the Next UI.
+7. Next looks up the user by `id_token.sub == stored.centerdata_sub` (creating a fresh user record if this is a first-time sub), updates the user's email from the ID token, establishes a session, and redirects the participant back into the Next UI.
 
 ### 6.3 What Next needs from Centerdata
 
@@ -163,7 +137,7 @@ The ID token is a signed JWT (JSON Web Token — a signed, base64url-encoded JSO
 
 | Claim | Required | Notes |
 |-------|----------|-------|
-| `sub` | yes | Subject — the IdP's stable, never-reassigned identifier for the user. Next's primary join key — must match the `centerdata_sub` from provisioning. |
+| `sub` | yes | Subject — the IdP's stable, never-reassigned identifier for the user. Next's primary join key — matched against the `centerdata_sub` of any CSV-imported participant rows. |
 | `email` | yes | Display + sanity check at first sign-in. |
 | `email_verified` | recommended | True only if Centerdata has verified ownership. |
 | `iss` | yes | Issuer — the IdP's identifier URL. Next checks it matches Centerdata's published issuer. |
@@ -228,7 +202,7 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 1. **OIDC support and conformance.** Can Centerdata's OIDC endpoint support Authorization Code + PKCE, with discovery (`/.well-known/openid-configuration`) and a JWKS endpoint?
 2. **`sub` stability.** Can Centerdata guarantee the OIDC `sub` claim is stable and never reassigned for the lifetime of a LISS panelist?
 3. **Email claim.** Will Centerdata include `email` (and ideally `email_verified`) in the ID token?
-4. **Provisioning API direction.** We propose Centerdata calls a Next-exposed REST API authenticated with `client_credentials`. Does this fit Centerdata's operational model, or does Centerdata prefer Next to poll Centerdata endpoints?
+4. **CSV export from the LISS panel.** Can Centerdata produce a per-assignment export of LISS panelists with at least `centerdata_sub` and `email` (plus optionally a human-recognizable `label`)? And which Centerdata role(s) would operate the import on the Next side?
 5. **Questionnaire launch mechanism.** What signed-launch mechanism does Centerdata's questionnaire system already support — LTI 1.3, a bespoke JWT scheme, shared HMAC, or something else? We propose to align with whatever Centerdata already does rather than introduce a new contract.
 6. **Questionnaire completion callback.** Does Centerdata support a server-to-server completion webhook in addition to the redirect, and what signing/auth does it expect?
 7. **Account lifecycle signals.** How does Centerdata signal participant deactivation or removal (provisioning `DELETE`, periodic reconciliation, lifecycle webhook)?
@@ -236,12 +210,13 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 
 ## 9. Diagrams
 
-Four diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed, and the diagrams therefore do not name any internal Centerdata component. See [`diagrams.md`](diagrams.md) for regeneration instructions.
+Three diagrams accompany this document, all generated from `workspace.dsl` (Structurizr DSL). Centerdata is modelled as a single external Software System throughout — its internal split is not assumed, and the diagrams therefore do not name any internal Centerdata component. See [`diagrams.md`](diagrams.md) for regeneration instructions.
 
 - **Context** (`structurizr-Context.png`) — Participant, Next, Centerdata, and the operators on each side.
-- **Interface 1 — Provisioning** (`structurizr-Provisioning.png`) — Dynamic view: Centerdata pre-registers a participant and an assignment, authenticated via `client_credentials`.
 - **Interface 2 — OIDC sign-in** (`structurizr-SignIn.png`) — Dynamic view: OIDC Authorization Code + PKCE flow, identical for web and mobile.
 - **Interface 3 — Questionnaire launch** (`structurizr-QuestionnaireLaunch.png`) — Dynamic view: signed JWT launch URL, questionnaire completion, redirect + webhook return.
+
+Interface 1 (CSV import) is a manual operator flow, not a runtime interaction — no dynamic diagram.
 
 ## 10. References — prerequisite reading
 
