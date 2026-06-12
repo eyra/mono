@@ -45,7 +45,7 @@ This document proposes the technical integration between **Next** and **Centerda
 
 The goal of this briefing is to align on the integration shape so that Eyra and Centerdata can identify implementation work and next steps.
 
-We make concrete design choices throughout. Each significant choice is followed by a short **Alternatives considered** note explaining what we rejected and why. Genuinely open items are collected in [Section 7 — Open questions for Centerdata](#7-open-questions-for-centerdata).
+We make concrete design choices throughout. Genuinely open items are collected in [Section 7 — Open questions for Centerdata](#7-open-questions-for-centerdata).
 
 ## 2. Scope
 
