@@ -163,7 +163,7 @@ The ID token is a signed JWT (JSON Web Token — a signed, base64url-encoded JSO
 | `exp` | yes | Expiry timestamp — Next rejects expired tokens. |
 | `nonce` | yes | A random value Next generates per authorization request and includes in the request; Centerdata echoes it back in the ID token. Next checks it matches, which prevents replay of a captured ID token. |
 
-### 6.5 Mobile — same contract as web
+### 6.5 No separate mobile contract
 
 From Centerdata's side, the mobile flow is **identical** to the web flow: same OIDC client, same `client_id`, same `redirect_uri`, same `/authorize` and `/token` endpoints. There is no separate mobile client registration to maintain.
 
