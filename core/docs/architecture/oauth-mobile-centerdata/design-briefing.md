@@ -21,6 +21,24 @@ Please also review the [open questions in §7](#7-open-questions-for-centerdata)
 
 ---
 
+## Setup sequence
+
+**One-time, per partnership:**
+
+1. Centerdata stands up an OIDC IdP (publish discovery + JWKS, register Next as a client, accept Next's `redirect_uri`). See §6.3.
+2. The Centerdata operator gets a Next user account with the creator role.
+
+**Per assignment:**
+
+3. The operator creates (or selects) a project and creates an assignment in it via the Next CMS.
+4. The operator adds a **Quest task** to the assignment workflow and populates its URL field with the Centerdata-hosted questionnaire URL. See §7.2.
+5. The operator imports a CSV (exported from the LISS panel) on the assignment. See §5.
+6. Eyra verifies and **publishes** the assignment, making it available to participants.
+
+After publishing, runtime flows (§6 sign-in and §7 launch) work as described.
+
+---
+
 ## 1. Purpose
 
 This document proposes the technical integration between **Next** and **Centerdata** to enable LISS panelists to participate in research assignments through Next — on the web *and* through the Next mobile app.
