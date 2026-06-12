@@ -224,7 +224,6 @@ These are the items where Eyra has made a working assumption but Centerdata's an
 4. **CSV export from the LISS panel.** Can Centerdata produce a per-assignment export of LISS panelists with at least `centerdata_sub` and `email` (plus optionally a human-recognizable `label`)? And which Centerdata role(s) would operate the import on the Next side?
 5. **Questionnaire launch mechanism.** What signed-launch mechanism does Centerdata's questionnaire system already support — LTI 1.3, a bespoke JWT scheme, shared HMAC, or something else? We propose to align with whatever Centerdata already does rather than introduce a new contract.
 6. **Questionnaire completion callback.** Does Centerdata support a server-to-server completion webhook in addition to the redirect, and what signing/auth does it expect?
-7. **Per-pool client identities.** If Centerdata supports multiple panels (LISS primary, secondary, etc.) in the future, does each panel get its own OIDC client_id, or is one shared client identity with `scope`/claims used to distinguish them?
 
 ## 9. Diagrams
 
