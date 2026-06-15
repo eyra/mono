@@ -1260,7 +1260,7 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Reconciles `:pending` payouts against OPP (SF-OPP-02).
+  Reconciles `:pending` payouts against the payment provider.
   See `Systems.Fund.PayoutReconciliation`.
   """
   def reconcile_pending_payouts(opts \\ []), do: Fund.PayoutReconciliation.run(opts)
