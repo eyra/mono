@@ -113,3 +113,7 @@ msgstr "Doorgaan"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Je staat op het punt een vragenlijst te starten. Zodra je de vragenlijst hebt afgerond, kom je automatisch terug op deze pagina."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Volgeboekt"

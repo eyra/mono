@@ -123,3 +123,7 @@ msgstr "Tęsti"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Jūs ketinate pradėti pildyti anketą. Kai ją užbaigsite, automatiškai grįšite į šį puslapį."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Vietų nebėra"

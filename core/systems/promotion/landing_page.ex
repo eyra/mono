@@ -121,6 +121,29 @@ defmodule Systems.Promotion.LandingPage do
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
+  attr(:active?, :boolean, required: true)
+  attr(:label, :string, required: true)
+  attr(:event, :string, required: true)
+  attr(:testid, :string, required: true)
+
+  defp apply_button(%{active?: true} = assigns) do
+    ~H"""
+    <Button.primary_live_view label={@label} event={@event} testid={@testid} />
+    """
+  end
+
+  defp apply_button(%{active?: false} = assigns) do
+    ~H"""
+    <button
+      disabled
+      data-testid={@testid <> "-disabled"}
+      class="pt-15px pb-15px leading-none font-button text-button text-white rounded bg-grey3 pl-4 pr-4 cursor-not-allowed"
+    >
+      <%= @label %>
+    </button>
+    """
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -130,7 +153,7 @@ defmodule Systems.Promotion.LandingPage do
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
             <:call_to_action>
-              <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
+              <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
             </:call_to_action>
           </Hero.image_large>
         </div>
@@ -182,7 +205,7 @@ defmodule Systems.Promotion.LandingPage do
           logo_url={@vm.logo_url}
         />
         <.spacing value="XL" />
-        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
+        <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
       </Area.content>
     </.live_website>
     </div>

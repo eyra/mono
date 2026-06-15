@@ -60,14 +60,20 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     ]
   end
 
-  defp apply_call_to_action(advert) do
+  defp apply_call_to_action(%Advert.Model{assignment: assignment} = advert) do
+    active? = Assignment.Public.has_budget_capacity?(assignment)
+
     %{
-      label: dgettext("eyra-advert", "promotion.apply.button"),
+      label: cta_label(active?),
+      active?: active?,
       target: %{type: :event, value: "apply"},
       advert: advert,
       handle: &handle_apply/1
     }
   end
+
+  defp cta_label(true), do: dgettext("eyra-advert", "promotion.apply.button")
+  defp cta_label(false), do: dgettext("eyra-advert", "promotion.full.button")
 
   def handle_apply(
         %{

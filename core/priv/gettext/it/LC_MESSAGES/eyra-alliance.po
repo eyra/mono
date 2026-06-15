@@ -114,3 +114,7 @@ msgstr "Continua"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Sta per iniziare un questionario. Una volta completato, verrà reindirizzato automaticamente a questa pagina."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Al completo"
