@@ -1,9 +1,10 @@
 defmodule Systems.Budget.TransactionReconciliation do
   @moduledoc """
-  SF-OPP-02 reconciliation for pay-in transactions: re-applies OPP's current
-  status to `:pending`/`:failed` transactions whose webhook was lost or failed —
-  including rescuing a transaction the expiry worker marked `:failed` while OPP
-  actually completed it. Driven daily by `Systems.Payment.ReconciliationWorker`.
+  SF-OPP-02 reconciliation for pay-in transactions: re-applies the provider's
+  current status to `:pending`/`:failed` transactions whose webhook was lost or
+  failed — including rescuing a transaction the expiry worker marked `:failed`
+  while the provider actually completed it. Driven daily by
+  `Systems.Payment.ReconciliationWorker`.
   """
   import Ecto.Query
 
@@ -18,11 +19,11 @@ defmodule Systems.Budget.TransactionReconciliation do
 
   @doc """
   Reconciles `:pending`/`:failed` transactions in the `[min_age_minutes,
-  max_age_days]` window against OPP:
+  max_age_days]` window against the provider:
 
-    * OPP "completed" → `Budget.Public.complete_transaction/1` (also rescues a
+    * "completed" → `Budget.Public.complete_transaction/1` (also rescues a
       transaction expiry marked `:failed`; idempotent on already-`:completed`).
-    * OPP "failed" → `Budget.Public.fail_transaction/1` for a still-`:pending`
+    * "failed" → `Budget.Public.fail_transaction/1` for a still-`:pending`
       row (an already-`:failed` one is left untouched).
     * still in flight → left untouched.
 
@@ -64,14 +65,14 @@ defmodule Systems.Budget.TransactionReconciliation do
     Payment.ReconciliationSummary.tally(summary, outcome)
   end
 
-  # OPP "completed" → complete (also rescues an expiry-failed row, idempotent on :completed).
+  # "completed" → complete (also rescues an expiry-failed row, idempotent on :completed).
   defp resolve(%{transaction_id: uid}, "completed") do
     run_resolution(:resolved_completed, "complete_transaction #{uid}", fn ->
       Budget.Public.complete_transaction(uid)
     end)
   end
 
-  # OPP "failed" → fail a still-:pending row; an already-:failed one is left untouched.
+  # "failed" → fail a still-:pending row; an already-:failed one is left untouched.
   defp resolve(%{status: :pending, transaction_id: uid}, "failed") do
     run_resolution(:resolved_failed, "fail_transaction #{uid}", fn ->
       Budget.Public.fail_transaction(uid)

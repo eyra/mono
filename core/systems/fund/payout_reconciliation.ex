@@ -1,8 +1,8 @@
 defmodule Systems.Fund.PayoutReconciliation do
   @moduledoc """
-  SF-OPP-02 reconciliation for participant payouts: re-applies OPP's current
-  withdrawal status to `:pending` payouts whose webhook was lost or failed.
-  Driven daily by `Systems.Payment.ReconciliationWorker`.
+  SF-OPP-02 reconciliation for participant payouts: re-applies the provider's
+  current withdrawal status to `:pending` payouts whose webhook was lost or
+  failed. Driven daily by `Systems.Payment.ReconciliationWorker`.
   """
   import Ecto.Query
 
@@ -17,9 +17,9 @@ defmodule Systems.Fund.PayoutReconciliation do
 
   @doc """
   Reconciles `:pending` payouts older than `:min_age_minutes` and newer than
-  `:max_age_days` against OPP — driving each to `:completed`/`:failed` when OPP
-  is terminal, leaving it when OPP is still in flight. A pending payout without a
-  `provider_uid` can't be queried and is reported for manual review.
+  `:max_age_days` against the provider — driving each to `:completed`/`:failed`
+  when the provider is terminal, leaving it when still in flight. A pending payout
+  without a `provider_uid` can't be queried and is reported for manual review.
 
   Returns a `Systems.Payment.ReconciliationSummary` tally.
   """
@@ -61,9 +61,9 @@ defmodule Systems.Fund.PayoutReconciliation do
     Payment.ReconciliationSummary.tally(summary, outcome)
   end
 
-  # Apply OPP's status; tally what OPP reported, or :errors if the local transition
-  # returns/raises an error — so a failed transition isn't logged as resolved and one
-  # bad row can't crash the whole sweep.
+  # Apply the provider's status; tally what it reported, or :errors if the local
+  # transition returns/raises an error — so a failed transition isn't logged as
+  # resolved and one bad row can't crash the whole sweep.
   defp resolve(uid, status) do
     case Fund.Public.apply_withdrawal_status(uid, status) do
       {:ok, _} -> withdrawal_outcome(status)

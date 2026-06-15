@@ -1,9 +1,9 @@
 defmodule Systems.Payment.ReconciliationWorker do
   @moduledoc """
   Daily SF-OPP-02 reconciliation sweep. Compares our pay-in (`Budget`) and payout
-  (`Fund`) state against OPP and resolves safe discrepancies — a lost or failed
-  webhook that left a transaction/payout stuck, or a pay-in the expiry worker
-  marked `:failed` while OPP actually completed it.
+  (`Fund`) state against the payment provider and resolves safe discrepancies — a
+  lost or failed webhook that left a transaction/payout stuck, or a pay-in the
+  expiry worker marked `:failed` while the provider actually completed it.
 
   This is the consistency backstop behind the synchronous webhook path and the
   fast local pay-in expiry, so it should normally find little to do. Every run

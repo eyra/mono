@@ -5,11 +5,11 @@ defmodule Systems.Payment.ReconciliationSummary do
   and aggregated by `Systems.Payment.ReconciliationWorker`.
 
   Outcomes:
-    * `:resolved_completed` — OPP terminal "completed"; local driven to completed.
-    * `:resolved_failed`    — OPP terminal failure; local driven to failed.
-    * `:still_pending`      — OPP still in flight; left untouched.
+    * `:resolved_completed` — provider terminal "completed"; local driven to completed.
+    * `:resolved_failed`    — provider terminal failure; local driven to failed.
+    * `:still_pending`      — provider still in flight; left untouched.
     * `:unresolvable`       — can't be queried (e.g. no provider uid) — needs manual review.
-    * `:errors`             — the OPP query itself failed.
+    * `:errors`             — the provider query itself failed.
   """
   @outcomes [:resolved_completed, :resolved_failed, :still_pending, :unresolvable, :errors]
   @keys [:scanned | @outcomes]
