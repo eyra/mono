@@ -1,6 +1,6 @@
 defmodule Systems.Fund.PayoutReconciliation do
   @moduledoc """
-  SF-OPP-02 reconciliation for participant payouts: re-applies the provider's
+  Reconciliation for participant payouts: re-applies the provider's
   current withdrawal status to `:pending` payouts whose webhook was lost or
   failed. Driven daily by `Systems.Payment.ReconciliationWorker`.
   """
@@ -61,9 +61,6 @@ defmodule Systems.Fund.PayoutReconciliation do
     Payment.ReconciliationSummary.tally(summary, outcome)
   end
 
-  # Apply the provider's status; tally what it reported, or :errors if the local
-  # transition returns/raises an error — so a failed transition isn't logged as
-  # resolved and one bad row can't crash the whole sweep.
   defp resolve(uid, status) do
     case Fund.Public.apply_withdrawal_status(uid, status) do
       {:ok, _} -> withdrawal_outcome(status)

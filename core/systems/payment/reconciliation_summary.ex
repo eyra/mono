@@ -1,6 +1,6 @@
 defmodule Systems.Payment.ReconciliationSummary do
   @moduledoc """
-  Tally of a reconciliation run (SF-OPP-02), shared by the per-type reconcilers
+  Tally of a reconciliation run, shared by the per-type reconcilers
   (`Fund.Public.reconcile_pending_payouts/1`, `Budget.Public.reconcile_transactions/1`)
   and aggregated by `Systems.Payment.ReconciliationWorker`.
 

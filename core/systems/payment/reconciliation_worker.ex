@@ -1,6 +1,6 @@
 defmodule Systems.Payment.ReconciliationWorker do
   @moduledoc """
-  Daily SF-OPP-02 reconciliation sweep. Compares our pay-in (`Budget`) and payout
+  Daily reconciliation sweep. Compares our pay-in (`Budget`) and payout
   (`Fund`) state against the payment provider and resolves safe discrepancies — a
   lost or failed webhook that left a transaction/payout stuck, or a pay-in the
   expiry worker marked `:failed` while the provider actually completed it.

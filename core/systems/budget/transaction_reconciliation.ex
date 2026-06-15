@@ -1,6 +1,6 @@
 defmodule Systems.Budget.TransactionReconciliation do
   @moduledoc """
-  SF-OPP-02 reconciliation for pay-in transactions: re-applies the provider's
+  Reconciliation for pay-in transactions: re-applies the provider's
   current status to `:pending`/`:failed` transactions whose webhook was lost or
   failed — including rescuing a transaction the expiry worker marked `:failed`
   while the provider actually completed it. Driven daily by
@@ -65,14 +65,12 @@ defmodule Systems.Budget.TransactionReconciliation do
     Payment.ReconciliationSummary.tally(summary, outcome)
   end
 
-  # "completed" → complete (also rescues an expiry-failed row, idempotent on :completed).
   defp resolve(%{transaction_id: uid}, "completed") do
     run_resolution(:resolved_completed, "complete_transaction #{uid}", fn ->
       Budget.Public.complete_transaction(uid)
     end)
   end
 
-  # "failed" → fail a still-:pending row; an already-:failed one is left untouched.
   defp resolve(%{status: :pending, transaction_id: uid}, "failed") do
     run_resolution(:resolved_failed, "fail_transaction #{uid}", fn ->
       Budget.Public.fail_transaction(uid)
@@ -82,9 +80,6 @@ defmodule Systems.Budget.TransactionReconciliation do
   defp resolve(_transaction, "failed"), do: :resolved_failed
   defp resolve(_transaction, _status), do: :still_pending
 
-  # Tally the resolution's success outcome, or :errors if it returns/raises an error —
-  # so the audit summary never reports a fix that didn't happen and one bad row can't
-  # crash the whole sweep.
   defp run_resolution(success_outcome, label, fun) do
     case fun.() do
       {:ok, _} -> success_outcome
