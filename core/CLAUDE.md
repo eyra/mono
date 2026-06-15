@@ -442,32 +442,42 @@ Uses **GreenLight** framework with hierarchical permissions:
 
 ## Development Guidelines
 
-### 🚨 CRITICAL ELIXIR RULE #1: ALWAYS USE PATTERN MATCHING 🚨
+### 🚨 CRITICAL ELIXIR RULE #1: PATTERN MATCH AT FUNCTION BOUNDARIES 🚨
 
-**THIS IS THE MOST IMPORTANT RULE - NEVER ACCESS DATA WITH DOT NOTATION**
+**Destructure data at function heads. Don't pull fields out with dot notation inside the body when they're part of the function's contract.**
+
+The goal is twofold:
+1. **Fail at the gate.** A wrong-shaped input crashes at the function head with a clear `FunctionClauseError`, not three calls deep with a confusing `nil` or `KeyError`.
+2. **Document the contract.** The function signature shows exactly what shape the function depends on — readers don't need to scan the body to find out.
 
 ```elixir
-# ✅✅✅ ALWAYS DO THIS - Pattern match in function head
+# ✅ Pattern match in the function head
 def view_model(%{entries: entries, reference_file: %{file: %{name: filename}}}, assigns) do
-  # Work with extracted variables
   process_entries(entries)
   create_description(filename)
 end
 
 def handle_event("click", _params, %{assigns: %{model: %{status: status}}} = socket) do
-  # Work with extracted status
   handle_status(status)
 end
 
-# ❌❌❌ NEVER DO THIS - Dot notation access
+# ❌ Dot notation hides what the function needs
 def view_model(session, assigns) do
-  filename = session.reference_file.file.name  # WRONG!
-  entries = session.entries  # WRONG!
-  status = assigns.model.status  # WRONG!
+  filename = session.reference_file.file.name
+  entries = session.entries
 end
 ```
 
-**REMEMBER**: If you find yourself writing `variable.field` or `variable.field.nested_field`, STOP and rewrite with pattern matching!
+**When the rule applies strictly:**
+- Function entry, especially when destructuring deep or nested shapes.
+- Any field you use for *logic* (dispatch keys, control flow, downstream calls).
+- Anywhere you'd otherwise traverse `a.b.c.d` — the depth is a signal.
+
+**When pragmatism wins:**
+- Single-field reads in log strings (`"payout #{payout.id} failed"`) when the struct is already pattern-matched at the head.
+- Truly local, single-use property access where pattern matching would add ceremony without adding clarity.
+
+**Rule of thumb:** if removing the dot access would make the function's contract more visible to a future reader, pattern-match. If it would only add noise, leave it.
 
 ### Elixir Style Rules
 - **No alias grouping** - Each alias on separate line
