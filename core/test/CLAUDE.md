@@ -362,25 +362,54 @@ data-testid={"show_more__action__card_#{@card_id}"}   # Show more button
 data-testid={"delete__action__card_#{@card_id}"}      # Delete action
 ```
 
-### Waiting for LiveView to be Ready (Stale Reference Prevention)
-After navigation, LiveView may still be connecting or morphing the DOM. Wait for the `.phx-connected` class:
+### Waiting After Navigation — Project Policy
+
+The Playwright/Cypress consensus, and what we follow here:
+
+1. **Wait on the destination, not the source.** After an action that navigates
+   (click, visit, form submit), the next assertion must be on something visible
+   on the **target page** — never on framework state of the page you just left.
+2. **Wait on a user-visible signal**, not on `.phx-connected` and not on
+   `data-phx-main`. The destination's own `data-testid` *is* the signal.
+3. **Let `assert_has` do the polling.** Wallaby's `assert_has` already retries
+   up to `max_wait_time` (5s default). One `assert_has` on a target-page testid
+   handles both "wait for navigation" and "verify page rendered" in one step.
+4. **No `assert_has(".phx-connected")` after navigation.** It waits on the
+   source page's WebSocket handshake instead of the destination's content; it
+   doesn't prove the next page is ready; and it can leave chromedriver doing
+   extra work (active WebSocket teardown) that pushes a follow-up `visit` past
+   the HTTPoison timeout, surfacing as a hard `RuntimeError` instead of a clean
+   assertion failure.
+5. **Helpers like `sign_in` end at a *negative* signal on the source page**
+   (`refute_has(signin-form)` — proves we left). They MUST NOT add positive
+   waits on the destination — that belongs to the caller, on the page they
+   actually need.
 
 ```elixir
-# ❌ WRONG: Element becomes stale during LiveView DOM morphing
-researcher |> click(Query.css(@card_selector))
-researcher |> assert_has(Query.css("[data-testid='my-button']"))
-researcher |> click(Query.css("[data-testid='my-button']"))  # StaleReferenceError!
+# ✅ CORRECT — wait on a user-visible element of the page we actually want
+session
+|> sign_in(user, password)                            # ends at refute_has(signin-form)
+|> visit("/user/onboarding")
+|> assert_has(Query.css("[data-testid='profile-view']"))
 
-# ✅ CORRECT: Wait for LiveView WebSocket connection to be established
-researcher |> click(Query.css(@card_selector))
-researcher |> assert_has(Query.css("[data-phx-main].phx-connected"))  # Wait for LiveView ready
-researcher |> assert_has(Query.css("[data-testid='my-button']"))
-researcher |> click(Query.css("[data-testid='my-button']"))
+# ✅ CORRECT — same rule for in-page clicks. The destination testid wait
+# also prevents stale-element races, because the assertion polls until the
+# DOM morph settles.
+researcher
+|> click(Query.css(@card_selector))
+|> assert_has(Query.css("[data-testid='my-button']"))
+|> click(Query.css("[data-testid='my-button']"))
+
+# ❌ WRONG — waits on source/framework state, not destination content
+session
+|> sign_in(user, password)
+|> assert_has(Query.css("[data-phx-main].phx-connected"))  # source page; tears down on next visit
+|> visit("/user/onboarding")
 ```
 
-**Why this works**: Phoenix LiveView adds `.phx-connected` class to the main container (`[data-phx-main]`)
-when the WebSocket connection is established and the view is ready. Before this, the DOM may be morphing
-and elements can become stale between `find` and interaction.
+The same rule applies to E2E tests in `core/test/e2e/`: prefer
+`waitFor`/`expect(...).toBeVisible()` on a target-page `data-testid`. Don't
+wait on `.phx-connected` after navigation.
 
 ### Debugging Wallaby Tests
 When a selector doesn't match, **add logging** to see what's actually on the page:

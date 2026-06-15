@@ -24,14 +24,23 @@ await expect(element).toBeVisible({ timeout: 30000 });
 await expect(element).toBeVisible({ timeout: 3000 });
 ```
 
-### 3. Wait for specific elements, not just connection
-Don't always wait for `.phx-connected`. Wait for the elements you need.
+### 3. Wait on the destination, not on `.phx-connected`
+After a navigation or action, wait on a `data-testid` of the **target page**.
+Playwright's `expect(...).toBeVisible()` auto-polls — that one assertion both
+waits for the navigation and verifies the target rendered. Don't wait on
+`.phx-connected`: it's framework state of the source page, doesn't prove the
+next page is ready, and forces the browser to tear down an active LiveView
+WebSocket on the next action.
+
+See `core/test/CLAUDE.md` → "Waiting After Navigation — Project Policy" for
+the same rule applied to Wallaby feature tests.
 
 ```typescript
-// Often sufficient - wait for the element you need
+// ✅ wait on a user-visible element of the target page
+await page.goto('/user/onboarding');
 await expect(page.locator('[data-testid="profile-view"]')).toBeVisible();
 
-// Only when you need LiveView interactivity
+// ❌ don't gate on the source page's WebSocket
 await page.waitForSelector('[data-phx-main].phx-connected', { timeout: 5000 });
 ```
 
