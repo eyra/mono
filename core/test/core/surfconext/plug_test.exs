@@ -117,8 +117,8 @@ defmodule Core.SurfConext.CallbackController.Test do
       assert redirected_to(conn) == "/user/onboarding"
 
       assert [user] = Core.Repo.all(Systems.Account.User)
-      assert user.verified_at != nil
-      assert user.confirmed_at == nil
+      assert user.verified_at == nil
+      assert user.confirmed_at != nil
       assert user.creator == true
     end
 
