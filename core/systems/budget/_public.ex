@@ -237,9 +237,10 @@ defmodule Systems.Budget.Public do
   @doc """
   Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
 
-  The OPP hosted checkout keeps the transaction open on their side, but once we've
-  marked it failed locally `complete_transaction/1` refuses to complete it even if
-  the webhook arrives later, so the user has to start a new pay-in.
+  The OPP hosted checkout keeps the transaction open on their side. A `:failed`
+  mark here is not final: if the payment did succeed at OPP, a late webhook (or
+  the SF-OPP-02 reconciliation sweep) drives `:failed -> :completed` via
+  `complete_transaction/1` and books the funds — only `:completed` is refused.
 
   Returns the number of transactions that were expired.
   """

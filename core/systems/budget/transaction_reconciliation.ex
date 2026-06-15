@@ -57,28 +57,44 @@ defmodule Systems.Budget.TransactionReconciliation do
   defp reconcile_transaction(%Budget.TransactionModel{transaction_id: uid} = transaction, summary) do
     outcome =
       case Payment.Public.get_transaction(uid) do
-        {:ok, %{status: status}} -> apply_reconciled_status(transaction, status)
-        {:error, reason} -> log_transaction_error(uid, reason)
+        {:ok, %{status: status}} -> resolve(transaction, status)
+        {:error, reason} -> log_failure("get_transaction #{uid}", reason)
       end
 
     Payment.ReconciliationSummary.tally(summary, outcome)
   end
 
-  defp apply_reconciled_status(%{transaction_id: uid}, "completed") do
-    Budget.Public.complete_transaction(uid)
-    :resolved_completed
+  # OPP "completed" → complete (also rescues an expiry-failed row, idempotent on :completed).
+  defp resolve(%{transaction_id: uid}, "completed") do
+    run_resolution(:resolved_completed, "complete_transaction #{uid}", fn ->
+      Budget.Public.complete_transaction(uid)
+    end)
   end
 
-  defp apply_reconciled_status(%{status: :pending, transaction_id: uid}, "failed") do
-    Budget.Public.fail_transaction(uid)
-    :resolved_failed
+  # OPP "failed" → fail a still-:pending row; an already-:failed one is left untouched.
+  defp resolve(%{status: :pending, transaction_id: uid}, "failed") do
+    run_resolution(:resolved_failed, "fail_transaction #{uid}", fn ->
+      Budget.Public.fail_transaction(uid)
+    end)
   end
 
-  defp apply_reconciled_status(_transaction, "failed"), do: :resolved_failed
-  defp apply_reconciled_status(_transaction, _status), do: :still_pending
+  defp resolve(_transaction, "failed"), do: :resolved_failed
+  defp resolve(_transaction, _status), do: :still_pending
 
-  defp log_transaction_error(uid, reason) do
-    Logger.warning("[Budget] reconcile: get_transaction #{uid} failed: #{inspect(reason)}")
+  # Tally the resolution's success outcome, or :errors if it returns/raises an error —
+  # so the audit summary never reports a fix that didn't happen and one bad row can't
+  # crash the whole sweep.
+  defp run_resolution(success_outcome, label, fun) do
+    case fun.() do
+      {:ok, _} -> success_outcome
+      other -> log_failure(label, other)
+    end
+  rescue
+    error -> log_failure(label, error)
+  end
+
+  defp log_failure(label, reason) do
+    Logger.warning("[Budget] reconcile: #{label} failed: #{inspect(reason)}")
     :errors
   end
 end

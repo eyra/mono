@@ -52,18 +52,33 @@ defmodule Systems.Fund.PayoutReconciliation do
   end
 
   defp reconcile_payout(%Fund.PayoutModel{provider_uid: uid}, summary) do
-    case Payment.Public.get_withdrawal(uid) do
-      {:ok, %{status: status}} ->
-        Fund.Public.apply_withdrawal_status(uid, status)
-        Payment.ReconciliationSummary.tally(summary, withdrawal_outcome(status))
+    outcome =
+      case Payment.Public.get_withdrawal(uid) do
+        {:ok, %{status: status}} -> resolve(uid, status)
+        {:error, reason} -> log_failure("get_withdrawal #{uid}", reason)
+      end
 
-      {:error, reason} ->
-        Logger.warning("[Fund] reconcile: get_withdrawal #{uid} failed: #{inspect(reason)}")
-        Payment.ReconciliationSummary.tally(summary, :errors)
+    Payment.ReconciliationSummary.tally(summary, outcome)
+  end
+
+  # Apply OPP's status; tally what OPP reported, or :errors if the local transition
+  # returns/raises an error — so a failed transition isn't logged as resolved and one
+  # bad row can't crash the whole sweep.
+  defp resolve(uid, status) do
+    case Fund.Public.apply_withdrawal_status(uid, status) do
+      {:ok, _} -> withdrawal_outcome(status)
+      other -> log_failure("apply_withdrawal_status #{uid}", other)
     end
+  rescue
+    error -> log_failure("apply_withdrawal_status #{uid}", error)
   end
 
   defp withdrawal_outcome("completed"), do: :resolved_completed
   defp withdrawal_outcome(status) when status in ["failed", "disapproved"], do: :resolved_failed
   defp withdrawal_outcome(_status), do: :still_pending
+
+  defp log_failure(label, reason) do
+    Logger.warning("[Fund] reconcile: #{label} failed: #{inspect(reason)}")
+    :errors
+  end
 end

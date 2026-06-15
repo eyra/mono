@@ -14,7 +14,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
 
   defp setup_transaction(status, opts \\ []) do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
-    currency_ledger = ensure_currency_ledger(:EUR)
+    with_ledger? = Keyword.get(opts, :ledger, true)
     user = Factories.insert!(:member)
 
     fund =
@@ -29,7 +29,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
         :pending,
         Bookkeeping.AccountModel.create({:reserve, Ecto.UUID.generate()})
       )
-      |> Ecto.Changeset.put_change(:currency_ledger_id, currency_ledger.id)
+      |> maybe_put_ledger(with_ledger?)
       |> Repo.insert!()
 
     uid = "provider-" <> Ecto.UUID.generate()
@@ -66,6 +66,12 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
       nil -> Budget.CurrencyLedgerModel.create(currency) |> Repo.insert!()
       existing -> Repo.preload(existing, [:inbound, :outbound])
     end
+  end
+
+  defp maybe_put_ledger(changeset, false), do: changeset
+
+  defp maybe_put_ledger(changeset, true) do
+    Ecto.Changeset.put_change(changeset, :currency_ledger_id, ensure_currency_ledger(:EUR).id)
   end
 
   defp stub_opp_status(uid, status) do
@@ -130,5 +136,17 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
 
     assert %{scanned: 1, errors: 1} = Budget.Public.reconcile_transactions()
     assert %{status: :pending} = Repo.reload!(transaction)
+  end
+
+  test "tallies :errors (does not crash, does not report resolved) when the resolution raises" do
+    # A fund without a currency ledger makes complete_transaction raise. A single
+    # bad row must be counted as :errors, not abort the sweep or be logged as fixed.
+    transaction = setup_transaction(:failed, ledger: false)
+    stub_opp_status(transaction.transaction_id, "completed")
+
+    assert %{scanned: 1, errors: 1, resolved_completed: 0} =
+             Budget.Public.reconcile_transactions()
+
+    assert %{status: :failed} = Repo.reload!(transaction)
   end
 end

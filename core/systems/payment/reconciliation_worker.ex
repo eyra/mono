@@ -24,19 +24,13 @@ defmodule Systems.Payment.ReconciliationWorker do
   alias Systems.Payment.ReconciliationSummary
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: args}) do
-    opts = reconcile_opts(args)
+  def perform(%Oban.Job{args: args}), do: run(reconcile_opts(args))
 
-    payouts = Fund.Public.reconcile_pending_payouts(opts)
-    transactions = Budget.Public.reconcile_transactions(opts)
-
-    log_audit(payouts, transactions)
-    :ok
-  end
-
-  def perform(args) do
-    opts = reconcile_opts(args)
-
+  @doc """
+  Runs a reconciliation pass directly (manual / IEx). `opts` may include
+  `:min_age_minutes` and `:max_age_days`.
+  """
+  def run(opts \\ []) do
     payouts = Fund.Public.reconcile_pending_payouts(opts)
     transactions = Budget.Public.reconcile_transactions(opts)
 
