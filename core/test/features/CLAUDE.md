@@ -4,6 +4,29 @@ These are browser-based feature tests using Wallaby (Elixir WebDriver).
 
 See also: `core/test/CLAUDE.md` for detailed Wallaby patterns.
 
+## Scope policy
+
+**Feature tests walk a *user journey* end-to-end through the UI, happy path only.** One `feature` block per journey. External systems are mocked (`Systems.Payment.ProviderMock`, etc.). A journey can span multiple USCs — e.g. *"participant earns reward and cashes out"* is one journey across UC-OPP-05 + UC-OPP-06; it gets *one* feature test, not three.
+
+**Edge cases do NOT belong in feature tests.** Disabled-button state, double-click idempotency, error branches, state-machine transitions, "field X is hidden when Y" — these all live in:
+
+- **Unit tests** (`test/systems/...`) for state-machine / business-logic edges
+- **`live_isolated` LV tests** (`test/systems/.../*_view_test.exs` or `*_handlers_test.exs`) for UI-state assertions
+
+Feature tests are slow (browser, chromedriver, full LV stack). Use them for one thing: *does the user journey work end-to-end?* Don't load them with assertions a unit test can make in 1ms.
+
+## When to add a broad journey test on top of narrow ones
+
+Don't, by default. Cost is duplication.
+
+Add a broad journey test on top of narrow ones **only when narrow tests Factory-skip a signal chain that has realistic breakage risk.** All three conditions must hold:
+
+1. The flow has **signal chains or state machines crossing system boundaries** (e.g. Eyra payment flow: task-completion → reward state → wallet entry).
+2. Those chains have **broken before** or are **realistic to break** (look at the bug-fix history — if the answer is "yes, the signal handler stops firing every few months," that's the case).
+3. The narrow tests **Factory-build the intermediate state**, bypassing the chain (so they can't catch chain breakage).
+
+When any one is false, narrow is enough. Don't preemptively add coverage for breakage that hasn't happened.
+
 ## Key Principles
 
 ### 1. Never rely on labels

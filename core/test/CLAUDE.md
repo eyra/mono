@@ -333,6 +333,8 @@ end
 
 ## Wallaby Feature Testing
 
+Scope policy + multi-session + testid naming + waiting + debugging — see `test/features/CLAUDE.md`. The rest of this section is patterns specific to mechanics (not scope decisions).
+
 ### Multi-Session Tests
 Use `@sessions N` to create multiple browser sessions:
 ```elixir
