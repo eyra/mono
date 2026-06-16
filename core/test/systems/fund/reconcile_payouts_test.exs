@@ -6,9 +6,16 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Fund
+  alias Systems.Payment
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
+
+  defp reconcile(opts \\ []) do
+    Payment.Public.new_reconciliation_state()
+    |> then(&Fund.Public.reconcile_pending_payouts(opts, &1))
+    |> Map.fetch!(:summary)
+  end
 
   setup do
     currency =
@@ -28,13 +35,14 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
 
   defp insert_payout(user, fund, amount, provider_uid, opts \\ []) do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
+    status = Keyword.get(opts, :status, :pending)
 
     payout =
-      Repo.insert!(%Fund.PayoutModel{
-        user_id: user.id,
+      Factories.insert!(:payout, %{
+        user: user,
         amount_cents: amount,
         currency: "eur",
-        status: :pending,
+        status: status,
         provider_uid: provider_uid
       })
 
@@ -69,7 +77,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       {:ok, %{uid: "w_done", status: "completed", amount: 1000}}
     end)
 
-    assert %{scanned: 1, resolved_completed: 1} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 1, resolved_completed: 1} = reconcile()
     assert %{status: :completed} = Repo.reload!(payout)
     assert %{status: :paid} = Repo.reload!(reward)
   end
@@ -81,7 +89,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       {:ok, %{uid: "w_failed", status: "failed", amount: 1000}}
     end)
 
-    assert %{scanned: 1, resolved_failed: 1} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 1, resolved_failed: 1} = reconcile()
     assert %{status: :failed} = Repo.reload!(payout)
     # Charge already moved funds, so rewards stay locked for reconciliation.
     assert %{status: :pending_payout} = Repo.reload!(reward)
@@ -94,7 +102,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       {:ok, %{uid: "w_inflight", status: "pending", amount: 1000}}
     end)
 
-    assert %{scanned: 1, still_pending: 1} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 1, still_pending: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
   end
 
@@ -103,7 +111,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, _reward} = insert_payout(user, fund, 1000, nil)
     # No ProviderMock stub: Mox would raise if get_withdrawal were called.
 
-    assert %{scanned: 1, unresolvable: 1} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 1, unresolvable: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
   end
 
@@ -111,7 +119,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     insert_payout(user, fund, 1000, "w_fresh", minutes_ago: 5)
     # default min_age is 60 minutes; no OPP call expected.
 
-    assert %{scanned: 0} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 0} = reconcile()
   end
 
   test "counts an OPP query error and leaves the payout pending", %{user: user, fund: fund} do
@@ -121,7 +129,31 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
     end)
 
-    assert %{scanned: 1, errors: 1} = Fund.Public.reconcile_pending_payouts()
+    assert %{scanned: 1, errors: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
+  end
+
+  test "opens the circuit after repeated provider failures and skips the rest",
+       %{user: user, fund: fund} do
+    for i <- 1..6, do: insert_payout(user, fund, 1000, "w_c#{i}")
+
+    # Circuit opens after 5 consecutive failures, so only 5 provider calls happen;
+    # the 6th payout is skipped without a call (Mox would raise on a 6th call).
+    expect(ProviderMock, :get_withdrawal, 5, fn _uid ->
+      {:error, %Systems.Payment.Error{code: :connection_error, message: "down"}}
+    end)
+
+    assert %{scanned: 6, errors: 5, skipped: 1} = reconcile()
+  end
+
+  test "flags a :completed payout the provider has no record of", %{user: user, fund: fund} do
+    {payout, _reward} = insert_payout(user, fund, 1000, "w_gone", status: :completed)
+
+    expect(ProviderMock, :get_withdrawal, fn "w_gone" ->
+      {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 404}}}
+    end)
+
+    assert %{scanned: 1, missing_at_provider: 1} = reconcile()
+    assert %{status: :completed} = Repo.reload!(payout)
   end
 end

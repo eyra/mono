@@ -7,6 +7,7 @@ defmodule Systems.Payment.Public do
   alias Systems.Account
   alias Systems.Payment.Error
   alias Systems.Payment.Provider
+  alias Systems.Payment.Reconciliation
   alias Systems.Payment.Transaction
 
   # Merchants
@@ -194,6 +195,14 @@ defmodule Systems.Payment.Public do
   def get_withdrawal(uid) do
     provider().get_withdrawal(uid)
   end
+
+  # Reconciliation
+
+  defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state
+  defdelegate reconcile_get_withdrawal(state, uid), to: Reconciliation, as: :get_withdrawal
+  defdelegate reconcile_get_transaction(state, uid), to: Reconciliation, as: :get_transaction
+  defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
+  defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run
 
   # Charges
 

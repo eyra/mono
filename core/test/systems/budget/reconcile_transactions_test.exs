@@ -8,9 +8,16 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
   alias Systems.Bookkeeping
   alias Systems.Budget
   alias Systems.Fund
+  alias Systems.Payment
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
+
+  defp reconcile(opts \\ []) do
+    Payment.Public.new_reconciliation_state()
+    |> then(&Budget.Public.reconcile_transactions(opts, &1))
+    |> Map.fetch!(:summary)
+  end
 
   defp setup_transaction(status, opts \\ []) do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
@@ -84,7 +91,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     transaction = setup_transaction(:pending)
     stub_opp_status(transaction.transaction_id, "completed")
 
-    assert %{scanned: 1, resolved_completed: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, resolved_completed: 1} = reconcile()
     assert %{status: :completed} = Repo.reload!(transaction)
   end
 
@@ -92,23 +99,42 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     transaction = setup_transaction(:failed)
     stub_opp_status(transaction.transaction_id, "completed")
 
-    assert %{scanned: 1, resolved_completed: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, resolved_completed: 1} = reconcile()
     assert %{status: :completed} = Repo.reload!(transaction)
   end
 
-  test "leaves a :failed transaction that OPP confirms failed" do
+  test "verifies a :failed transaction that OPP confirms failed" do
     transaction = setup_transaction(:failed)
     stub_opp_status(transaction.transaction_id, "failed")
 
-    assert %{scanned: 1, resolved_failed: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, verified: 1, resolved_failed: 0} = reconcile()
     assert %{status: :failed} = Repo.reload!(transaction)
+  end
+
+  test "verifies a :completed transaction the provider still has" do
+    transaction = setup_transaction(:completed)
+    stub_opp_status(transaction.transaction_id, "completed")
+
+    assert %{scanned: 1, verified: 1} = reconcile()
+    assert %{status: :completed} = Repo.reload!(transaction)
+  end
+
+  test "flags a :completed transaction the provider has no record of" do
+    transaction = setup_transaction(:completed)
+
+    expect(ProviderMock, :get_transaction, fn _uid ->
+      {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 404}}}
+    end)
+
+    assert %{scanned: 1, missing_at_provider: 1} = reconcile()
+    assert %{status: :completed} = Repo.reload!(transaction)
   end
 
   test "fails a pending transaction that OPP has failed" do
     transaction = setup_transaction(:pending)
     stub_opp_status(transaction.transaction_id, "failed")
 
-    assert %{scanned: 1, resolved_failed: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, resolved_failed: 1} = reconcile()
     assert %{status: :failed} = Repo.reload!(transaction)
   end
 
@@ -116,7 +142,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     transaction = setup_transaction(:pending)
     stub_opp_status(transaction.transaction_id, "new")
 
-    assert %{scanned: 1, still_pending: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, still_pending: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(transaction)
   end
 
@@ -124,7 +150,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     setup_transaction(:pending, minutes_ago: 5)
     # default min_age is 60 minutes; no OPP call expected.
 
-    assert %{scanned: 0} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 0} = reconcile()
   end
 
   test "counts an OPP query error and leaves the transaction untouched" do
@@ -134,7 +160,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
       {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
     end)
 
-    assert %{scanned: 1, errors: 1} = Budget.Public.reconcile_transactions()
+    assert %{scanned: 1, errors: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(transaction)
   end
 
@@ -145,7 +171,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     stub_opp_status(transaction.transaction_id, "completed")
 
     assert %{scanned: 1, errors: 1, resolved_completed: 0} =
-             Budget.Public.reconcile_transactions()
+             reconcile()
 
     assert %{status: :failed} = Repo.reload!(transaction)
   end

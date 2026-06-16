@@ -157,8 +157,12 @@ config :core, :rate,
     [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
     [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
     [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
+    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local],
+    [service: :provider_reconcile, limit: 300, unit: :call, window: :minute, scope: :global]
   ]
+
+# Reconciliation sweep: base back-off (ms) for provider retries/throttle waits.
+config :core, :reconciliation, backoff_ms: 200
 
 config :core, ecto_repos: [Core.Repo]
 

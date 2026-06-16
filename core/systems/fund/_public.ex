@@ -1263,7 +1263,7 @@ defmodule Systems.Fund.Public do
   Reconciles `:pending` payouts against the payment provider.
   See `Systems.Fund.PayoutReconciliation`.
   """
-  def reconcile_pending_payouts(opts \\ []), do: Fund.PayoutReconciliation.run(opts)
+  def reconcile_pending_payouts(opts, state), do: Fund.PayoutReconciliation.run(opts, state)
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)

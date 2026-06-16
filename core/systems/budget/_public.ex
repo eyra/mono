@@ -258,7 +258,7 @@ defmodule Systems.Budget.Public do
     count
   end
 
-  def reconcile_transactions(opts \\ []), do: Budget.TransactionReconciliation.run(opts)
+  def reconcile_transactions(opts, state), do: Budget.TransactionReconciliation.run(opts, state)
 
   # --- Helpers ---
 

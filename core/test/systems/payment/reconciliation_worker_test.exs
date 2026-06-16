@@ -15,6 +15,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   alias Systems.Budget
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
+  alias Systems.Payment.ReconciliationFindingModel
+  alias Systems.Payment.ReconciliationRunModel
   alias Systems.Payment.ReconciliationWorker
 
   setup :verify_on_exit!
@@ -119,5 +121,34 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
 
     assert %{status: :completed} = Repo.reload!(payout)
     assert %{status: :completed} = Repo.reload!(transaction)
+  end
+
+  test "records the run and its findings in the database" do
+    payout = stuck_payout()
+    transaction = stuck_transaction()
+
+    expect(ProviderMock, :get_withdrawal, fn "w_payout" ->
+      {:ok, %{uid: "w_payout", status: "completed", amount: 1000}}
+    end)
+
+    expect(ProviderMock, :get_transaction, fn "tx_payin" ->
+      {:ok, %{uid: "tx_payin", status: "completed", payment_url: nil, amount: 0}}
+    end)
+
+    assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
+
+    run = Repo.one!(ReconciliationRunModel)
+    assert run.run_type == :cron
+    assert run.finished_at != nil
+    assert run.scanned == 2
+    assert run.resolved_completed == 2
+
+    findings = Repo.all(ReconciliationFindingModel)
+    assert length(findings) == 2
+    assert Enum.all?(findings, &(&1.outcome == :resolved_completed))
+    assert Enum.all?(findings, &(&1.reconciliation_run_id == run.id))
+
+    assert MapSet.new(findings, & &1.subject_type) == MapSet.new([:payout, :transaction])
+    assert MapSet.new(findings, & &1.subject_id) == MapSet.new([payout.id, transaction.id])
   end
 end
