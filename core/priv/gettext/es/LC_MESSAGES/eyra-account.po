@@ -274,3 +274,7 @@ msgstr "¿Cuál es tu correo electrónico?"
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
 msgstr "tu@example.com"
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.rate_limited"
+msgstr ""

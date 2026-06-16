@@ -283,3 +283,7 @@ msgstr "Care este adresa ta de email?"
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
 msgstr "tu@example.com"
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.rate_limited"
+msgstr ""

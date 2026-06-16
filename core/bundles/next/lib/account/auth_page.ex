@@ -67,8 +67,17 @@ defmodule Next.Account.AuthPage do
         {:noreply, redirect(socket, to: "/auth/surfconext")}
 
       :otp ->
-        Account.Public.generate_otp(email)
-        {:noreply, push_navigate(socket, to: ~p"/user/auth/verify?email=#{email}")}
+        case Account.Public.generate_otp(email) do
+          :ok ->
+            {:noreply, push_navigate(socket, to: ~p"/user/auth/verify?email=#{email}")}
+
+          {:error, :rate_limited} ->
+            {:noreply,
+             assign(socket,
+               loading: false,
+               error: dgettext("eyra-account", "auth.email.rate_limited")
+             )}
+        end
     end
   end
 
