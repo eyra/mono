@@ -1,6 +1,6 @@
-defmodule CoreWeb.Features.PaymentFlowTest do
+defmodule CoreWeb.Features.PayoutFlowTest do
   @moduledoc """
-  Broad journey test for the payment flow: participant earns a reward,
+  Broad journey test for the payout flow: participant earns a reward,
   researcher approves it, participant requests payout.
 
   Walks steps 2-5 of `test/e2e/request_payout.spec.ts` (UC-OPP-06) through
