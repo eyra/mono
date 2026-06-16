@@ -39,6 +39,13 @@ async function clickAddItemButton(page: any) {
  *
  * No fixtures are used. The full flow is exercised end-to-end through the UI.
  *
+ * Wait pattern: per `core/test/e2e/CLAUDE.md`, we wait on a target-page
+ * `data-testid` via `expect(...).toBeVisible()` (auto-polling) after each
+ * navigation, rather than on `.phx-connected` of the source page. The few
+ * `waitForTimeout` calls left in this spec are load-bearing — debounced form
+ * persistence (BudgetForm, FeaturesForm) and one consent → CrewPage re-render
+ * that the parent view model recomputes asynchronously.
+ *
  * Prerequisites:
  *   - Local server (mix phx.server) on http://localhost:4000
  *   - ENABLED_APP_FEATURES contains "panl", "e2e", and "panl_post_launch"
@@ -62,8 +69,6 @@ function generateParticipantEmail(): string {
 const SUBJECT_COUNT = '10';
 const SUBJECT_REWARD = '5.00';
 const AIM_OF_STUDY = 'E2E request payout test';
-
-const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 
 test.describe('Request Payout (UC-OPP-06)', () => {
   test.skip(SKIP_REASON !== '', SKIP_REASON);
@@ -92,14 +97,11 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     console.log('[TEST] === Phase 1: Researcher setup ===');
 
     await researcherPage.goto('/user/signin');
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await researcherPage.locator("[data-testid='signin-tab-creator']").click();
-    await researcherPage.waitForTimeout(300);
+    await expect(researcherPage.locator("#account_signin-tab_panel_creator [data-testid='signin-email-input']")).toBeVisible({ timeout: 5000 });
     await researcherPage.locator("#account_signin-tab_panel_creator [data-testid='signin-email-input']").fill(RESEARCHER_EMAIL);
     await researcherPage.locator("#account_signin-tab_panel_creator [data-testid='signin-password-input']").fill(RESEARCHER_PASSWORD);
     await researcherPage.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
-    await researcherPage.waitForTimeout(1000);
     await activateLocalPayment(researcherPage);
 
     const projectTestidsBefore = await snapshotCardTestids(researcherPage);
@@ -111,25 +113,19 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     } else {
       await createNewProject.click();
     }
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     const newProjectTestid = await pickNewCardTestid(researcherPage, projectTestidsBefore);
     console.log(`[TEST] Created project: ${newProjectTestid}`);
     await researcherPage.locator(`[data-testid='${newProjectTestid}']`).click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await researcherPage.waitForTimeout(500);
 
     const itemTestidsBefore = await snapshotCardTestids(researcherPage);
 
     console.log('[TEST] Creating questionnaire study');
     await clickAddItemButton(researcherPage);
 
-    await researcherPage.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
+    await expect(researcherPage.locator("[data-testid='selector-item-questionnaire']")).toBeVisible({ timeout: 10000 });
     await researcherPage.locator("[data-testid='selector-item-questionnaire']").click();
-    await researcherPage.waitForTimeout(300);
     await researcherPage.locator("[data-testid='create-item-button']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await researcherPage.waitForTimeout(500);
 
     const newItemTestid = await pickNewCardTestid(researcherPage, itemTestidsBefore);
     console.log(`[TEST] Created item: ${newItemTestid}`);
@@ -137,24 +133,18 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     await newCard.scrollIntoViewIfNeeded();
     await newCard.click();
     await researcherPage.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     const assignmentUrl = researcherPage.url();
     assignmentId = assignmentUrl.match(/\/assignment\/(\d+)/)![1];
     console.log(`[TEST] Inside assignment ${assignmentId}`);
 
     console.log('[TEST] Adding Instruction Manual to workflow');
-    await researcherPage.waitForSelector("[data-testid='assignment-tab-workflow']", { timeout: 10000 });
+    await expect(researcherPage.locator("[data-testid='assignment-tab-workflow']")).toBeVisible({ timeout: 10000 });
     await researcherPage.locator("[data-testid='assignment-tab-workflow']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await researcherPage.waitForTimeout(500);
     await expect(researcherPage.locator("[data-testid='add-library-item-manual']")).toBeVisible({ timeout: 5000 });
     await researcherPage.locator("[data-testid='add-library-item-manual']").click();
-    await researcherPage.waitForTimeout(1000);
 
-    await researcherPage.waitForSelector("[data-testid='assignment-tab-participants']", { timeout: 10000 });
+    await expect(researcherPage.locator("[data-testid='assignment-tab-participants']")).toBeVisible({ timeout: 10000 });
     await researcherPage.locator("[data-testid='assignment-tab-participants']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await researcherPage.waitForTimeout(500);
 
     const addBudgetBtn = researcherPage.locator("[data-testid='pay-add-participants-button']");
     await expect(addBudgetBtn).toBeVisible({ timeout: 5000 });
@@ -166,10 +156,12 @@ test.describe('Request Payout (UC-OPP-06)', () => {
 
     const rewardInput = researcherPage.locator("[data-testid='budget-form-reward-input']");
     await rewardInput.fill(SUBJECT_REWARD);
+    // BudgetForm has a 1000ms phx-change debounce on the fee form + server roundtrip.
     await researcherPage.waitForTimeout(1500);
 
     const slotsInput = researcherPage.locator("[data-testid='budget-form-slots-input']");
     await slotsInput.fill(SUBJECT_COUNT);
+    // 300ms debounce on slots + brief settle.
     await researcherPage.waitForTimeout(500);
 
     const confirmBtn = researcherPage.locator("[data-testid='budget-form-confirm-button']");
@@ -179,10 +171,8 @@ test.describe('Request Payout (UC-OPP-06)', () => {
 
     await researcherPage.locator("[data-testid='local-payment-complete-button']").click();
     await researcherPage.waitForURL(/\/assignment\/\d+\/content/, { timeout: 10000 });
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     await researcherPage.locator("[data-testid='assignment-tab-participants']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await expect(researcherPage.locator("[data-testid='transaction-card-completed']")).toBeVisible({ timeout: 5000 });
 
     console.log('[TEST] Creating and publishing advert');
@@ -199,11 +189,9 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     await expect(researcherPage.locator("[data-testid='retract-button']")).toBeVisible({ timeout: 10000 });
 
     await researcherPage.locator("[data-testid='goto-advert-button']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     await expect(researcherPage.locator("[data-testid='advert-publish-button']")).toBeVisible({ timeout: 5000 });
     await researcherPage.locator("[data-testid='advert-publish-button']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     const inviteLinkText = await researcherPage.locator(
       "text=/https?:\\/\\/[^/]+\\/promotion\\/\\d+/"
@@ -222,7 +210,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     console.log(`[TEST] Signing up participant: ${participantEmail}`);
 
     await participantPage.goto('/user/signup/participant?post_signup_action=add_to_panl');
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     await participantPage.locator('#signup_form input[name="user[email]"]').fill(participantEmail);
     await participantPage.locator('#signup_form input[name="user[password]"]').fill(PARTICIPANT_PASSWORD);
@@ -231,7 +218,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     await participantPage.locator('#signup_form button[type="submit"]').click();
 
     await participantPage.waitForURL('**/user/onboarding', { timeout: 5000 });
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 5000 });
 
     await expect(participantPage.locator('[data-testid="profile-view"]')).toBeVisible({ timeout: 3000 });
     await participantPage.locator('[data-testid="onboarding-continue"]').click();
@@ -247,32 +233,29 @@ test.describe('Request Payout (UC-OPP-06)', () => {
 
     console.log('[TEST] Filling participant features (gender)');
     await participantPage.goto('/user/profile');
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await participantPage.locator('[data-tab-id="features"]').first().click();
     await expect(participantPage.locator('[data-testid="features-view"]')).toBeVisible({ timeout: 5000 });
     await participantPage.locator("[data-testid='selector-item-man']").click();
+    // phx-change save on the selector — give the server a moment to persist.
     await participantPage.waitForTimeout(500);
 
     await participantPage.goto(promotionPath);
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     await expect(participantPage.locator("[data-testid='promotion-apply-button-hero']")).toBeVisible({ timeout: 5000 });
     await participantPage.locator("[data-testid='promotion-apply-button-hero']").click();
     await participantPage.waitForURL(/\/assignment\/\d+(\/.*)?$/, { timeout: 10000 });
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     for (let i = 0; i < 10; i++) {
       const onboardingContinue = participantPage.locator("[data-testid='assignment-onboarding-continue-button']");
       if (!(await onboardingContinue.isVisible({ timeout: 2000 }))) break;
       await onboardingContinue.click();
-      await participantPage.waitForTimeout(500);
     }
 
     const consentAcceptButton = participantPage.locator("[data-testid='consent-accept-button']");
     if (await consentAcceptButton.isVisible({ timeout: 5000 })) {
       await consentAcceptButton.click();
+      // consent → publish_event(:accept) → parent recomputes view model → CrewPage re-renders.
       await participantPage.waitForTimeout(2000);
-      await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     }
 
     if (await participantPage.locator("[data-testid='activate-account-check-button']").isVisible({ timeout: 3000 })) {
@@ -286,19 +269,16 @@ test.describe('Request Payout (UC-OPP-06)', () => {
         throw new Error(`Failed to activate user: ${activateResponse.status} - ${await activateResponse.text()}`);
       }
       await participantPage.goto(`/assignment/${assignmentId}`);
-      await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     }
 
     console.log('[TEST] Participant completes Instruction Manual');
     await expect(participantPage.locator("[data-testid^='chapter-list-item-']").first()).toBeVisible({ timeout: 5000 });
     await participantPage.locator("[data-testid^='chapter-list-item-']").first().click();
-    await participantPage.waitForTimeout(500);
 
     for (let i = 0; i < 20; i++) {
       const next = participantPage.locator("[data-testid='manual-chapter-next-button']");
       if (await next.isVisible({ timeout: 1000 })) {
         await next.click();
-        await participantPage.waitForTimeout(300);
         continue;
       }
       const done = participantPage.locator("[data-testid='manual-chapter-done-button']");
@@ -319,7 +299,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     console.log('[TEST] === Phase 3: Researcher approves reward ===');
 
     await researcherPage.goto(`/assignment/${assignmentId}/content?tab=participants`);
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await expect(researcherPage.locator("[data-testid='pending-approvals-cta']")).toBeVisible({ timeout: 5000 });
     await researcherPage.locator("[data-testid='pending-approvals-cta']").click();
 
@@ -328,7 +307,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     await expect(waitingCount).not.toHaveText('0');
 
     await researcherPage.locator("[data-testid='pay-out-all-button']").click();
-    await researcherPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await expect(researcherPage.locator("[data-testid='payout-empty']")).toBeVisible({ timeout: 5000 });
     console.log('[TEST] Reward approved — participant wallet now has approved balance');
 
@@ -340,7 +318,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
 
     // Navigate to home page where the rewards-summary widget is shown.
     await participantPage.goto('/');
-    await participantPage.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
     // Rewards summary must be visible with a non-zero approved balance.
     await expect(participantPage.locator("[data-testid='rewards-summary']")).toBeVisible({ timeout: 5000 });
