@@ -331,148 +331,65 @@ end
 - Database isolation still works with `async: false`
 - Use `async: true` when not testing signals for better performance
 
-## Wallaby Feature Testing
+## When to write which kind of test
 
-Scope policy + multi-session + testid naming + waiting + debugging — see `test/features/CLAUDE.md`. The rest of this section is patterns specific to mechanics (not scope decisions).
+Eyra has four test categories. They live in different directories, have different mechanics, and answer different questions. Pick the right one *before* writing.
 
-### Multi-Session Tests
-Use `@sessions N` to create multiple browser sessions:
-```elixir
-@sessions 2
-@tag :feature
-feature "two users interact", %{sessions: [researcher, participant]} do
-  # researcher and participant are separate browser sessions
-end
-```
+| Category | Directory | What it answers | Speed | External systems |
+|---|---|---|---|---|
+| **Unit** | `test/systems/...`, `test/core_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
+| **Feature (Wallaby)** | `test/features/` | "Does this user journey work end-to-end through the UI, happy path?" | seconds | mocked via Mox |
+| **E2E (Playwright)** | `test/e2e/` | "Does the deployed system work in a real browser, with real external integrations (real OPP sandbox, real Feldspar, real storage)?" | tens of seconds | real |
+| **Smoke (Playwright)** | `test/smoke/` | "Did the latest deploy survive its own boot? Are the critical endpoints reachable?" | seconds | real |
 
-### data-testid Naming Convention
-Use this convention to avoid CSS selector collisions:
+### Unit (`test/systems/...`)
 
-- **Main elements**: `{element}_{id}` → `card_7`
-- **Actions/buttons**: `{event}__action__{element}_{id}` → `delete__action__card_7`
+Use for:
+- State-machine clause coverage (each `when` guard, each branch)
+- Changesets, validations
+- Error / failure branches (`{:error, _}` paths)
+- Business-logic edges: "rapid double-click doesn't create duplicates," "button is disabled when reward = 0," "second transaction on same assignment uses fresh provider uid"
+- `live_isolated` tests for view-builder + event-handler logic without full browser stack
 
-**Separators**:
-- `_` for words within a segment (e.g., `create_first_item`)
-- `__` for hierarchy levels (e.g., `delete__action__card_7`)
+If the question is "what does function X return when input is Y?" — unit.
+If the question is "what does the LV render when assigns look like Z?" — `live_isolated` LV test.
 
-**Why**: CSS prefix selectors like `[data-testid^='card_']` only match main cards, not action buttons.
+### Feature (`test/features/`)
 
-```elixir
-# In clickable_card.ex
-data-testid={"card_#{@id}"}                           # Main card
-data-testid={"show_more__action__card_#{@card_id}"}   # Show more button
-data-testid={"delete__action__card_#{@card_id}"}      # Delete action
-```
+Use for:
+- One *user journey* walked end-to-end through the UI, happy path only
+- Cross-system flows where the UI integration matters
+- Multi-session interactions (researcher + participant)
 
-### Waiting After Navigation — Project Policy
+**Edge cases do NOT belong here.** Disabled-button state, double-click idempotency, error branches, state-machine transitions, "field X is hidden when Y" — these all live in unit tests or `live_isolated` LV tests. Feature tests are slow (browser, chromedriver, full LV stack); don't load them with assertions a unit test can make in 1ms.
 
-The Playwright/Cypress consensus, and what we follow here:
+If the question is "does the user journey from signin → action → result work?" — feature.
 
-1. **Wait on the destination, not the source.** After an action that navigates
-   (click, visit, form submit), the next assertion must be on something visible
-   on the **target page** — never on framework state of the page you just left.
-2. **Wait on a user-visible signal**, not on `.phx-connected` and not on
-   `data-phx-main`. The destination's own `data-testid` *is* the signal.
-3. **Let `assert_has` do the polling.** Wallaby's `assert_has` already retries
-   up to `max_wait_time` (5s default). One `assert_has` on a target-page testid
-   handles both "wait for navigation" and "verify page rendered" in one step.
-4. **No `assert_has(".phx-connected")` after navigation.** It waits on the
-   source page's WebSocket handshake instead of the destination's content; it
-   doesn't prove the next page is ready; and it can leave chromedriver doing
-   extra work (active WebSocket teardown) that pushes a follow-up `visit` past
-   the HTTPoison timeout, surfacing as a hard `RuntimeError` instead of a clean
-   assertion failure.
-5. **Helpers like `sign_in` end at a *negative* signal on the source page**
-   (`refute_has(signin-form)` — proves we left). They MUST NOT add positive
-   waits on the destination — that belongs to the caller, on the page they
-   actually need.
+Mechanics, scope, multi-session, testids, waiting: `test/features/CLAUDE.md`.
 
-```elixir
-# ✅ CORRECT — wait on a user-visible element of the page we actually want
-session
-|> sign_in(user, password)                            # ends at refute_has(signin-form)
-|> visit("/user/onboarding")
-|> assert_has(Query.css("[data-testid='profile-view']"))
+### E2E (`test/e2e/`)
 
-# ✅ CORRECT — same rule for in-page clicks. The destination testid wait
-# also prevents stale-element races, because the assertion polls until the
-# DOM morph settles.
-researcher
-|> click(Query.css(@card_selector))
-|> assert_has(Query.css("[data-testid='my-button']"))
-|> click(Query.css("[data-testid='my-button']"))
+Use for:
+- Verifying the *deployed system* works against real external dependencies (OPP sandbox, Feldspar storage backends, real Phoenix runtime)
+- Things only real deployments break: cookies across navigation, CSP headers, asset pipeline, environment-specific config
 
-# ❌ WRONG — waits on source/framework state, not destination content
-session
-|> sign_in(user, password)
-|> assert_has(Query.css("[data-phx-main].phx-connected"))  # source page; tears down on next visit
-|> visit("/user/onboarding")
-```
+If the journey can be mocked via Mox without losing what you're testing → feature, not E2E. E2E is for the "real integrations" bucket; if it doesn't exercise a real external system, it's a feature test in disguise.
 
-The same rule applies to E2E tests in `core/test/e2e/`: prefer
-`waitFor`/`expect(...).toBeVisible()` on a target-page `data-testid`. Don't
-wait on `.phx-connected` after navigation.
+Mechanics: `test/e2e/CLAUDE.md`.
 
-### Debugging Wallaby Tests
-When a selector doesn't match, **add logging** to see what's actually on the page:
+### Smoke (`test/smoke/`)
 
-```elixir
-# Log all data-testids on the page
-html = Wallaby.Browser.page_source(session)
-testids = Regex.scan(~r/data-testid="([^"]+)"/, html) |> Enum.map(&List.last/1)
-IO.puts("\n=== ALL DATA-TESTIDS ===")
-testids |> Enum.each(&IO.puts/1)
-IO.puts("=== END ===\n")
-```
+Use for:
+- Post-deploy verification — does the env at URL X respond to GET /, do the auth endpoints return their expected shape, does Feldspar load
+- Run as part of the deploy pipeline against a freshly-rolled env
 
-**Key principle**: Don't assume bugs in Wallaby. Always log and verify what's actually rendered.
+Smoke tests are *not* feature tests with a shorter list. They're targeted assertions on specific endpoints/pages that tell you a deploy is alive.
 
-### Getting Element Attributes
-```elixir
-# Find element and get attribute
-element = session |> find(Query.css("[data-testid^='card_']"))
-testid = Wallaby.Element.attr(element, "data-testid")
-# Extract ID: "card_7" -> "7"
-card_id = testid |> String.replace("card_", "")
-```
+### How the four interact
 
-### CSS Attribute Selectors
-- `^=` starts with: `[data-testid^='card_']` matches `card_7`
-- `$=` ends with: `[data-testid$='_button']` matches `submit_button`
-- `*=` contains: `[data-testid*='action']` matches `delete__action__card_7`
-- `=` exact match: `[data-testid='card_7']` matches only `card_7`
-
-### Feature Test File Template
-```elixir
-defmodule CoreWeb.Features.MyFeatureTest do
-  use CoreWeb.FeatureCase
-
-  @card_selector "[data-testid^='card_']"
-
-  @sessions 2
-  @tag :feature
-  feature "description", %{sessions: [user1, user2]} do
-    # Setup users
-    password = Factories.valid_user_password()
-    user = Factories.insert!(:member, %{
-      password: password,
-      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      creator: true
-    })
-
-    # Login
-    user1
-    |> visit("/user/signin")
-    |> click(Query.css("[data-testid='signin-tab-creator']"))
-    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: user.email)
-    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
-    |> click(Query.css("[data-testid='signin-submit-button']"))
-
-    # Test actions...
-  end
-end
-```
+- A new flow gets a **happy-path feature test** (one journey, one `feature` block) plus **unit tests for every state-machine clause and error branch.** That's the default.
+- An **E2E test** is added on top *only* when a real external integration needs verification (OPP sandbox, real storage upload). Otherwise the feature test covers it.
+- **Smoke** is for deploy-time, not for verifying behavior.
 
 ## Pre-commit Hook Rules
 
