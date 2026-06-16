@@ -40,11 +40,11 @@ async function clickAddItemButton(page: any) {
  * No fixtures are used. The full flow is exercised end-to-end through the UI.
  *
  * Wait pattern: per `core/test/e2e/CLAUDE.md`, we wait on a target-page
- * `data-testid` via `expect(...).toBeVisible()` (auto-polling) after each
- * navigation, rather than on `.phx-connected` of the source page. The few
- * `waitForTimeout` calls left in this spec are load-bearing — debounced form
- * persistence (BudgetForm, FeaturesForm) and one consent → CrewPage re-render
- * that the parent view model recomputes asynchronously.
+ * `data-testid` (or specific class transition) via `expect(...).toBeVisible()`
+ * / `expect(...).not.toHaveClass(...)` (auto-polling) after each action,
+ * rather than on `.phx-connected` of the source page. No `waitForTimeout`
+ * calls — debounced form state, async server recomputes, and selector save
+ * acks all surface as observable destination signals we can poll on.
  *
  * Prerequisites:
  *   - Local server (mix phx.server) on http://localhost:4000
@@ -156,16 +156,15 @@ test.describe('Request Payout (UC-OPP-06)', () => {
 
     const rewardInput = researcherPage.locator("[data-testid='budget-form-reward-input']");
     await rewardInput.fill(SUBJECT_REWARD);
-    // BudgetForm has a 1000ms phx-change debounce on the fee form + server roundtrip.
-    await researcherPage.waitForTimeout(1500);
 
     const slotsInput = researcherPage.locator("[data-testid='budget-form-slots-input']");
     await slotsInput.fill(SUBJECT_COUNT);
-    // 300ms debounce on slots + brief settle.
-    await researcherPage.waitForTimeout(500);
 
+    // Confirm button is disabled (cursor-not-allowed) until BudgetForm's
+    // phx-change debounces fire and the server enables it. Polling on the
+    // class transition is the replacement for hardcoded debounce sleeps.
     const confirmBtn = researcherPage.locator("[data-testid='budget-form-confirm-button']");
-    await expect(confirmBtn).toBeVisible({ timeout: 3000 });
+    await expect(confirmBtn).not.toHaveClass(/cursor-not-allowed/, { timeout: 5000 });
     await confirmBtn.click();
     await researcherPage.waitForURL(/\/payment\/local\/[a-f0-9-]+$/, { timeout: 10000 });
 
@@ -236,8 +235,6 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     await participantPage.locator('[data-tab-id="features"]').first().click();
     await expect(participantPage.locator('[data-testid="features-view"]')).toBeVisible({ timeout: 5000 });
     await participantPage.locator("[data-testid='selector-item-man']").click();
-    // phx-change save on the selector — give the server a moment to persist.
-    await participantPage.waitForTimeout(500);
 
     await participantPage.goto(promotionPath);
 
@@ -254,8 +251,8 @@ test.describe('Request Payout (UC-OPP-06)', () => {
     const consentAcceptButton = participantPage.locator("[data-testid='consent-accept-button']");
     if (await consentAcceptButton.isVisible({ timeout: 5000 })) {
       await consentAcceptButton.click();
-      // consent → publish_event(:accept) → parent recomputes view model → CrewPage re-renders.
-      await participantPage.waitForTimeout(2000);
+      // The next isVisible() poll on activate-account-check-button below catches
+      // the CrewPage re-render after the consent event propagates.
     }
 
     if (await participantPage.locator("[data-testid='activate-account-check-button']").isVisible({ timeout: 3000 })) {
