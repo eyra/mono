@@ -18,14 +18,13 @@ defmodule CoreWeb.Features.FundAssignmentTest do
 
   import Mox
 
-  alias Systems.Budget
   alias Systems.Payment.ProviderMock
 
   setup :set_mox_global
   setup :verify_on_exit!
 
   setup do
-    Budget.CurrencyLedgerModel.create(:EUR) |> Core.Repo.insert!()
+    Factories.insert!(:currency_ledger, %{currency: :EUR})
     :ok
   end
 
