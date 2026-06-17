@@ -17,6 +17,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
+  alias Systems.Budget
   alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
@@ -187,6 +188,10 @@ defmodule Core.Factories do
 
   def build(:fund) do
     build(:fund, %{name: Faker.Lorem.sentence()})
+  end
+
+  def build(:currency_ledger) do
+    build(:currency_ledger, %{currency: Faker.Util.pick([:EUR, :USD])})
   end
 
   def build(:book_account) do
@@ -918,6 +923,18 @@ defmodule Core.Factories do
       available: available,
       pending: pending,
       auth_node: auth_node
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:currency_ledger, %{} = attributes) do
+    {currency, attributes} = Map.pop(attributes, :currency, :EUR)
+    id = currency |> Atom.to_string() |> String.downcase()
+
+    %Budget.CurrencyLedgerModel{
+      currency: currency,
+      inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
+      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
     }
     |> struct!(attributes)
   end
