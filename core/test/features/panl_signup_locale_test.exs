@@ -33,7 +33,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant?post_signup_action=add_to_panl")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='signup-page']"))
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
@@ -57,7 +57,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='signup-page']"))
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
@@ -65,7 +65,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
       Query.css("[data-selector-item='next_privacy_policy_accepted'] .selector-icon-inactive")
     )
     |> click(Query.css("button[type='submit']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='await-confirmation-page']"))
     |> assert_has(Query.text("Activeer je account"))
   end
 end

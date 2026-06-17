@@ -55,28 +55,57 @@ defmodule CoreWeb.FeatureCase do
 
   @doc """
   Signs in a user through the browser login form.
+
+  Post-signin destination varies by user type (participant → home,
+  creator → projects, etc.), so we wait on URL change rather than a
+  destination data-testid. See `assert_path_changed_from/3`.
   """
   def sign_in(session, user, password) do
     import Wallaby.Browser
     import Wallaby.Query
 
-    session =
-      session
-      |> visit("/user/signin")
-      |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
-      |> fill_in(css("[data-testid='signin-password-input']"), with: password)
-      |> click(css("[data-testid='signin-submit-button']"))
-      # Wait for the post-login LiveView to be fully connected. That signal
-      # proves the auth cookie was set, the destination LiveView mounted,
-      # and its WebSocket is up. We deliberately DO NOT add
-      # refute_has(signin-form) before this: refute_has polls the full
-      # max_wait_time even when the element is already absent (Wallaby's
-      # Browser.retry design), which floods chromedriver with hundreds of
-      # HTTP requests per sign_in. With multiple sign_ins in a suite, that
-      # backlog surfaces as HTTPoison :timeout on the next visit.
-      |> assert_has(css("[data-phx-main].phx-connected"))
-
     session
+    |> visit("/user/signin")
+    |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
+    |> fill_in(css("[data-testid='signin-password-input']"), with: password)
+    |> click(css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
+  end
+
+  @doc """
+  Polls until the current URL path is no longer `from_path`. Use after an
+  action that navigates when the destination path varies (e.g., post-signin
+  landing depends on user type).
+
+  Mirrors Playwright's `page.waitForURL` and Cypress's `cy.url().should(...)`.
+  URL changes are atomic, so this is race-free — no DOM polling, no
+  stale-element exposure. Works for full page loads AND LiveView
+  `push_navigate` / `push_patch` (both update `window.location` via
+  `history.pushState`).
+
+  Does NOT apply to in-page LiveView updates that don't change the URL
+  (modal open, save-in-place, etc.) — use `assert_has(destination-testid)`
+  for those.
+  """
+  def assert_path_changed_from(session, from_path, timeout \\ 5_000) do
+    deadline = System.monotonic_time(:millisecond) + timeout
+    do_wait_path_change(session, from_path, deadline)
+  end
+
+  defp do_wait_path_change(session, from_path, deadline) do
+    case Wallaby.Browser.current_path(session) do
+      ^from_path ->
+        if System.monotonic_time(:millisecond) > deadline do
+          raise Wallaby.ExpectationNotMetError,
+            message: "Expected URL path to change from #{from_path}"
+        end
+
+        Process.sleep(50)
+        do_wait_path_change(session, from_path, deadline)
+
+      _ ->
+        session
+    end
   end
 
   @doc """

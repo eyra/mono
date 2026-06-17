@@ -66,7 +66,7 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
   end
 
   defp create_project_item(session, template) do
@@ -82,21 +82,21 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='assignment-tab-workflow']"))
   end
 
   defp open_workflow_tab(session) do
     session
     |> assert_has(Query.css("[data-testid='assignment-tab-workflow']"))
     |> click(Query.css("[data-testid='assignment-tab-workflow']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid^='add-library-item-']", count: :any))
   end
 
   defp add_library_item(session, item_id) do
     session
     |> assert_has(Query.css("[data-testid='add-library-item-#{item_id}']"))
     |> click(Query.css("[data-testid='add-library-item-#{item_id}']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css(".cell-expand-button"))
   end
 
   defp expand_cell(session) do

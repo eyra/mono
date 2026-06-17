@@ -35,7 +35,7 @@ defmodule Systems.Account.AwaitConfirmation do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
-      <div>
+      <div data-testid="await-confirmation-page">
         <Area.content>
           <Area.sheet>
             <Margin.y id={:page_top} />

@@ -36,6 +36,28 @@ session
 |> assert_has(Query.css("[data-testid='expected-element']"))  # one wait, on the target
 ```
 
+#### When the destination varies — wait on URL change
+When the post-action destination differs by user/state (e.g., post-signin
+landing depends on user type), waiting on a destination data-testid isn't
+possible. Use `assert_path_changed_from/3` — the industry-standard URL-based
+wait (mirrors Playwright's `page.waitForURL` and Cypress's
+`cy.url().should(...)`):
+
+```elixir
+session
+|> click(Query.css("[data-testid='signin-submit-button']"))
+|> assert_path_changed_from("/user/signin")
+```
+
+URL changes are atomic, so this is race-free — no DOM polling, no
+stale-element exposure. Works for full page loads AND LiveView
+`push_navigate` / `push_patch` (both update `window.location` via
+`history.pushState`).
+
+Does **not** apply to in-page LiveView updates that don't change the URL
+(modal open, save-in-place, etc.) — use `assert_has(destination-testid)` for
+those.
+
 ### 3. Use data-testid naming conventions
 ```
 element_id          -> card_7, form_signup

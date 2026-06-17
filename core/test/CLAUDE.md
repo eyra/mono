@@ -380,15 +380,19 @@ The Playwright/Cypress consensus, and what we follow here:
    extra work (active WebSocket teardown) that pushes a follow-up `visit` past
    the HTTPoison timeout, surfacing as a hard `RuntimeError` instead of a clean
    assertion failure.
-5. **Helpers like `sign_in` end at a *negative* signal on the source page**
-   (`refute_has(signin-form)` — proves we left). They MUST NOT add positive
-   waits on the destination — that belongs to the caller, on the page they
-   actually need.
+5. **Helpers like `sign_in` end at `assert_path_changed_from/3`** — when the
+   post-action destination varies (e.g., participant → home, creator →
+   projects), DOM-based waits don't fit. Use the URL-based wait — it's the
+   industry-standard helper (mirrors Playwright's `page.waitForURL` and
+   Cypress's `cy.url().should(...)`). URL changes are atomic, so no
+   stale-element race. Works for full page loads AND LiveView
+   `push_navigate` / `push_patch`. Don't use it for in-page LiveView updates
+   that don't change the URL — use a destination `data-testid` for those.
 
 ```elixir
 # ✅ CORRECT — wait on a user-visible element of the page we actually want
 session
-|> sign_in(user, password)                            # ends at refute_has(signin-form)
+|> sign_in(user, password)                            # ends at assert_path_changed_from("/user/signin")
 |> visit("/user/onboarding")
 |> assert_has(Query.css("[data-testid='profile-view']"))
 
@@ -399,6 +403,11 @@ researcher
 |> click(Query.css(@card_selector))
 |> assert_has(Query.css("[data-testid='my-button']"))
 |> click(Query.css("[data-testid='my-button']"))
+
+# ✅ CORRECT — destination varies, wait on URL change
+session
+|> click(Query.css("[data-testid='signin-submit-button']"))
+|> assert_path_changed_from("/user/signin")
 
 # ❌ WRONG — waits on source/framework state, not destination content
 session
