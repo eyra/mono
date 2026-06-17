@@ -35,6 +35,21 @@ defmodule Systems.Support.OverviewTab do
          } = ticket,
          _socket
        ) do
+    build_item(ticket, title, subtitle, photo_url, features, updated_at)
+  end
+
+  defp to_view_model(
+         %Support.TicketModel{
+           updated_at: updated_at,
+           title: title,
+           user: %{email: email, features: features}
+         } = ticket,
+         _socket
+       ) do
+    build_item(ticket, title, email, nil, features, updated_at)
+  end
+
+  defp build_item(ticket, title, subtitle, photo_url, features, updated_at) do
     gender = gender(features)
 
     quick_summery =

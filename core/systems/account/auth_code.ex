@@ -52,9 +52,13 @@ defmodule Systems.Account.AuthCodeModel do
   end
 
   defp generate_code do
-    :rand.uniform(round(:math.pow(10, @code_length)))
+    min = Integer.pow(10, @code_length - 1)
+    max = Integer.pow(10, @code_length) - 1
+
+    random_int = :crypto.strong_rand_bytes(4) |> :binary.decode_unsigned()
+
+    (min + rem(random_int, max - min + 1))
     |> Integer.to_string()
-    |> String.pad_leading(@code_length, "0")
   end
 
   defp hash_code(code), do: :crypto.hash(@hash_algorithm, code)

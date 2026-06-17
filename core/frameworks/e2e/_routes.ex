@@ -19,6 +19,7 @@ defmodule Frameworks.E2E.Routes do
         pipe_through([:api, :require_authenticated_user])
 
         post("/setup", Controller, :setup)
+        post("/inject", Controller, :inject)
       end
     end
   end

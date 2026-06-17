@@ -80,10 +80,13 @@ defmodule Systems.Home.PageBuilder do
       %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
         nil
 
-      totals ->
+      %{approved_cents: approved_cents} = totals ->
         %{
           module: Home.RewardsSummaryView,
-          params: Map.put(totals, :labels, rewards_summary_labels())
+          params:
+            totals
+            |> Map.put(:labels, rewards_summary_labels(approved_cents))
+            |> Map.put(:user, user)
         }
     end
   end
@@ -159,14 +162,28 @@ defmodule Systems.Home.PageBuilder do
 
   defp block(_, _, _assigns, _opts), do: nil
 
-  defp rewards_summary_labels do
+  defp rewards_summary_labels(approved_cents) do
     %{
       title: dgettext("eyra-fund", "rewards_summary.title"),
       pending_pill: dgettext("eyra-fund", "rewards_summary.pending.pill"),
       pending_caption: dgettext("eyra-fund", "rewards_summary.pending.caption"),
       approved_pill: dgettext("eyra-fund", "rewards_summary.approved.pill"),
       approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
-      rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill")
+      rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill"),
+      payout_button: dgettext("eyra-fund", "rewards_summary.payout.button"),
+      payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
+      payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
+      payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),
+      payout_handoff_title: dgettext("eyra-fund", "rewards_summary.payout.handoff.title"),
+      payout_handoff_body:
+        dgettext("eyra-fund", "rewards_summary.payout.handoff.body",
+          amount: Assignment.CurrencyHelpers.format_cents(approved_cents)
+        ),
+      payout_handoff_confirm: dgettext("eyra-fund", "rewards_summary.payout.handoff.confirm"),
+      payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel"),
+      payout_kyc_title: dgettext("eyra-fund", "rewards_summary.payout.kyc.title"),
+      payout_kyc_body: dgettext("eyra-fund", "rewards_summary.payout.kyc.body"),
+      payout_kyc_confirm: dgettext("eyra-fund", "rewards_summary.payout.kyc.confirm")
     }
   end
 

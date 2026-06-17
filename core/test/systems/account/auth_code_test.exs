@@ -16,7 +16,7 @@ defmodule Systems.Account.AuthCodeTest do
       assert String.match?(code, ~r/^\d{6}$/)
     end
 
-    test "code is padded to 6 digits" do
+    test "code is always 6 digits, never more, never less" do
       codes =
         for _ <- 1..100 do
           {code, _} = AuthCodeModel.build("user@example.com", nil)
@@ -24,6 +24,7 @@ defmodule Systems.Account.AuthCodeTest do
         end
 
       assert Enum.all?(codes, &(String.length(&1) == 6))
+      assert Enum.all?(codes, &String.match?(&1, ~r/^\d{6}$/))
     end
 
     test "stores hashed code, not plaintext" do

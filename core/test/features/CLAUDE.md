@@ -17,14 +17,23 @@ session |> click(Query.text("Start browsing"))
 session |> click(Query.css("[data-testid='onboarding-continue']"))
 ```
 
-### 2. Wait for LiveView to be ready
-After navigation, wait for `.phx-connected` to avoid stale element errors.
+### 2. Wait on the destination, not on `.phx-connected`
+After navigation, wait on a user-visible `data-testid` of the **target page**.
+`assert_has` already polls — that one assertion both waits for the navigation
+and verifies the page rendered.
+
+Do not insert `assert_has(".phx-connected")` between an action and the target
+assertion: it waits on the *source* page's framework state, doesn't prove the
+next page is ready, and can leave chromedriver tearing down an active
+WebSocket on the next `visit` — surfacing as a Wallaby HTTPoison timeout.
+
+See `core/test/CLAUDE.md` → "Waiting After Navigation — Project Policy" for
+the full rule.
 
 ```elixir
 session
 |> click(Query.css("[data-testid='some-link']"))
-|> assert_has(Query.css("[data-phx-main].phx-connected"))  # Wait for LiveView
-|> assert_has(Query.css("[data-testid='expected-element']"))
+|> assert_has(Query.css("[data-testid='expected-element']"))  # one wait, on the target
 ```
 
 ### 3. Use data-testid naming conventions
@@ -65,7 +74,7 @@ defmodule CoreWeb.Features.MyFeatureTest do
   feature "description", %{session: session} do
     session
     |> visit("/path")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='target-page-element']"))
     |> click(Query.css("[data-testid='my-button']"))
     |> assert_has(Query.css("[data-testid='expected-result']"))
   end

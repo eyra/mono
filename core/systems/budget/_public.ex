@@ -46,9 +46,7 @@ defmodule Systems.Budget.Public do
     total_amount = base_amount + partner_fee
 
     if total_amount > 0 do
-      with {:ok, user} <- ensure_user_merchant(user) do
-        create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
-      end
+      create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
     else
       create_free_pay_in(fund, user_id, subject_count)
     end
@@ -64,11 +62,12 @@ defmodule Systems.Budget.Public do
            },
            fund: fund
          } = assignment,
-         %Account.User{id: user_id, merchant_uid: merchant_uid},
+         %Account.User{id: user_id} = user,
          subject_count,
          total_amount,
          partner_fee
        ) do
+    merchant_uid = pay_in_merchant_uid(user)
     reward_per_participant = subject_reward || 0
     currency = get_currency(fund)
     idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
@@ -124,6 +123,19 @@ defmodule Systems.Budget.Public do
     end
   end
 
+  # Pay-ins fund the platform merchant (the float for payout charges); fall back
+  # to the user's own merchant only when no platform merchant is configured.
+  defp pay_in_merchant_uid(user) do
+    case Payment.Public.platform_merchant_uid() do
+      nil ->
+        {:ok, {_user, %{uid: uid}}} = Payment.Public.ensure_merchant_for(user)
+        uid
+
+      uid ->
+        uid
+    end
+  end
+
   defp create_free_pay_in(%Fund.Model{id: fund_id}, user_id, subject_count) do
     idempotence_key = "pay_in:fund=#{fund_id}:#{Ecto.UUID.generate()}"
     invoice_id = generate_invoice_id()
@@ -144,66 +156,6 @@ defmodule Systems.Budget.Public do
       increment_subject_count(fund_id, subject_count)
       {:ok, %{transaction: transaction, payment_url: nil}}
     end
-  end
-
-  # --- User merchant ---
-
-  defp ensure_user_merchant(%Account.User{} = user) do
-    ensure_merchant_for(Repo.reload!(user))
-  end
-
-  defp ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
-       when is_binary(merchant_uid) do
-    {:ok, user}
-  end
-
-  defp ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
-    webhook_url = Payment.Public.webhook_url()
-
-    Logger.info("[Budget] Creating OPP merchant for user ##{user_id} (#{email})")
-
-    case Payment.Public.create_merchant(%{
-           emailaddress: email,
-           country: "NLD",
-           notify_url: webhook_url,
-           metadata: %{user_id: "#{user_id}"}
-         }) do
-      {:ok, %{uid: merchant_uid}} ->
-        Logger.info("[Budget] Merchant created: #{merchant_uid} for user ##{user_id}")
-        save_merchant_uid(user, merchant_uid)
-
-      {:error, %{details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => _}}}}}} ->
-        Logger.info("[Budget] Merchant already exists at OPP for #{email}, looking up...")
-        lookup_merchant_by_email(user)
-
-      {:error, error} ->
-        Logger.warning(
-          "[Budget] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
-        )
-
-        {:error, error}
-    end
-  end
-
-  defp lookup_merchant_by_email(%Account.User{email: email} = user) do
-    case Payment.Public.find_merchant_by_email(email) do
-      {:ok, %{uid: merchant_uid}} ->
-        Logger.info("[Budget] Found existing merchant: #{merchant_uid} for #{email}")
-        save_merchant_uid(user, merchant_uid)
-
-      {:error, error} ->
-        Logger.warning("[Budget] Merchant lookup failed for #{email}: #{inspect(error)}")
-        {:error, error}
-    end
-  end
-
-  defp save_merchant_uid(user, merchant_uid) do
-    user =
-      user
-      |> Ecto.Changeset.change(%{merchant_uid: merchant_uid})
-      |> Repo.update!()
-
-    {:ok, user}
   end
 
   # --- Transaction completion ---
@@ -285,10 +237,6 @@ defmodule Systems.Budget.Public do
   @doc """
   Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
 
-  The OPP hosted checkout keeps the transaction open on their side, but once we've
-  marked it failed locally `complete_transaction/1` refuses to complete it even if
-  the webhook arrives later, so the user has to start a new pay-in.
-
   Returns the number of transactions that were expired.
   """
   def expire_stale_pay_ins(max_age_minutes \\ @pay_in_expiration_minutes)
@@ -309,6 +257,8 @@ defmodule Systems.Budget.Public do
 
     count
   end
+
+  def reconcile_transactions(opts, state), do: Budget.TransactionReconciliation.run(opts, state)
 
   # --- Helpers ---
 

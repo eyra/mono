@@ -691,6 +691,51 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "list_pending_payouts/1" do
+    setup do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment(31, 1)
+      %{fund: fund, crew: crew} = assignment
+      member = Crew.Factories.create_member(crew, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+
+      assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      {:ok, assignment: assignment, crew: crew, member: member}
+    end
+
+    test "lists a pending-approval reward backed by a completed task", %{
+      assignment: assignment,
+      crew: crew,
+      member: member
+    } do
+      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+        status: :completed
+      )
+
+      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+    end
+
+    test "lists the reward even when the participant's newest task is not the completed one", %{
+      assignment: assignment,
+      crew: crew,
+      member: member
+    } do
+      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
+        status: :completed,
+        minutes_ago: 60
+      )
+
+      # A newer (higher-id) non-completed task must not hide the payout.
+      Crew.Factories.create_task(crew, member, ["task2", "member=#{member.id}"], minutes_ago: 1)
+
+      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+    end
+  end
+
   describe "add_participant!/2 reserves reward at join" do
     setup do
       user = Factories.insert!(:member)

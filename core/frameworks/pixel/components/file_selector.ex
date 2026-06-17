@@ -27,7 +27,7 @@ defmodule Frameworks.Pixel.FileSelector do
       end
 
     upload_in_progress =
-      case assigns[:uploads][:file].entries do
+      case assigns[:uploads][assigns[:file_key]].entries do
         [first_entry | _] -> first_entry.progress != 100
         _ -> false
       end
@@ -54,11 +54,11 @@ defmodule Frameworks.Pixel.FileSelector do
 
             <div>
               <%= if @upload_in_progress do %>
-                <%= if @uploads[:file].entries do %>
+                <%= if @uploads[@file_key].entries do %>
                   <LoadingSpinner.progress_spinner progress={Enum.at(@uploads[@file_key].entries, 0).progress} />
                 <% end %>
               <% else %>
-              <label for={@uploads.file.ref}>
+              <label for={@uploads[@file_key].ref}>
                 <Button.Face.primary label={@button_label} bg_color="bg-tertiary" text_color="text-grey1" />
               </label>
               <% end %>
@@ -70,7 +70,7 @@ defmodule Frameworks.Pixel.FileSelector do
 
         </div>
         <div class="hidden">
-          <.live_file_input upload={@uploads.file} />
+          <.live_file_input upload={@uploads[@file_key]} />
         </div>
 
       </.form>

@@ -10,6 +10,7 @@ defmodule Systems.Fund.Public do
   alias Ecto.Multi
   alias Core.Repo
 
+  alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
 
   alias Systems.Account
@@ -17,6 +18,7 @@ defmodule Systems.Fund.Public do
   alias Systems.Fund
   alias Systems.Bookkeeping
   alias Systems.Banking
+  alias Systems.Payment
 
   defmodule FundError do
     @moduledoc false
@@ -100,8 +102,6 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
-  # Default preload includes `:payment` so callers can read
-  # `payment.inserted_at` as the settlement timestamp.
   def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do
     reward_query(fund, :paid)
     |> preload(^preload)
@@ -906,18 +906,7 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Rolls up a participant's reward situation into three amounts (in cents),
-  used by the home page rewards-summary card:
-
-  - `pending_cents` — status `:reserved` or `:pending_approval`.
-  - `approved_cents` — status `:approved` or `:paid`.
-  - `rejected_cents` — status `:rejected`.
-
-  All three are immutable per-status earned-amount snapshots (sum of
-  `Fund.RewardModel.amount`) sharing a single source of truth (the reward
-  rows), so they cannot drift relative to each other the way mixing reward
-  sums with live wallet balances would. `:paid` folds into `approved_cents`
-  (a paid reward is an approved reward that has been transferred out).
+  Per-status reward totals (in cents) for the home rewards-summary card.
   """
   def summarize_rewards(%Account.User{id: user_id}) do
     totals =
@@ -933,10 +922,348 @@ defmodule Systems.Fund.Public do
 
     %{
       pending_cents: amount.(:reserved) + amount.(:pending_approval),
-      approved_cents: amount.(:approved) + amount.(:paid),
+      approved_cents: amount.(:approved),
+      pending_payout_cents: amount.(:pending_payout),
+      paid_out_cents: amount.(:paid),
       rejected_cents: amount.(:rejected)
     }
   end
+
+  @payout_threshold_cents 500
+
+  @doc """
+  Minimum approved balance (in cents) required to request a payout — €5.
+  """
+  def payout_threshold_cents, do: @payout_threshold_cents
+
+  @doc """
+  Requests a payout for all of the participant's `:approved` rewards: locks
+  them, then charges and withdraws via OPP. Returns `{:ok, result}` or
+  `{:error, reason}`.
+  """
+  def request_payout(%Account.User{} = user) do
+    # Reload: the caller may hold a struct from before prepare_payout/1 set merchant_uid.
+    case Repo.reload!(user) do
+      %Account.User{merchant_uid: nil} ->
+        {:error, :no_merchant}
+
+      %Account.User{id: user_id, merchant_uid: merchant_uid} ->
+        approved = list_approved_rewards(user_id)
+        total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+
+        if total < @payout_threshold_cents do
+          {:error, {:below_threshold, total}}
+        else
+          do_request_payout(user_id, merchant_uid, approved, total)
+        end
+    end
+  end
+
+  @doc """
+  Pure pre-flight threshold check (no side effects), used by `prepare_payout/1`.
+  """
+  def payout_eligibility(%Account.User{id: user_id}) do
+    total =
+      list_approved_rewards(user_id)
+      |> Enum.reduce(0, fn %{amount: amount}, acc -> acc + amount end)
+
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      :ok
+    end
+  end
+
+  @doc """
+  Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
+  account exist, then reports payout readiness via `payout_ready_for/2`.
+  """
+  def prepare_payout(%Account.User{} = user) do
+    with :ok <- payout_eligibility(user),
+         {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
+         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
+      payout_ready_for(merchant, bank_account)
+    end
+  end
+
+  # Check the bank status explicitly so a live withdrawal never fires against an
+  # unapproved account, even though "verified" is documented to subsume it.
+  defp payout_ready_for(
+         %{status: "live", compliance_status: "verified"},
+         %{status: "approved"}
+       ),
+       do: :ok
+
+  defp payout_ready_for(
+         %{status: "live", compliance_status: "verified"},
+         %{verification_url: verification_url}
+       )
+       when is_binary(verification_url) and verification_url != "",
+       do: {:error, {:kyc_required, verification_url}}
+
+  defp payout_ready_for(%{overview_url: overview_url}, _bank_account)
+       when is_binary(overview_url) and overview_url != "",
+       do: {:error, {:kyc_required, overview_url}}
+
+  defp payout_ready_for(_merchant, %{verification_url: verification_url})
+       when is_binary(verification_url) and verification_url != "",
+       do: {:error, {:kyc_required, verification_url}}
+
+  defp payout_ready_for(_merchant, _bank_account), do: {:error, :kyc_unavailable}
+
+  # Re-check readiness at confirm time against fresh OPP state (TOCTOU guard).
+  defp recheck_payout_ready(merchant_uid) do
+    with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
+         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant_uid) do
+      payout_ready_for(merchant, bank_account)
+    end
+  end
+
+  defp do_request_payout(user_id, merchant_uid, approved, total) do
+    case recheck_payout_ready(merchant_uid) do
+      :ok -> lock_and_withdraw(user_id, merchant_uid, approved, total)
+      {:error, _} = error -> error
+    end
+  end
+
+  defp lock_and_withdraw(user_id, merchant_uid, approved, total) do
+    reward_ids = Enum.map(approved, fn %{id: id} -> id end)
+
+    with platform_uid when not is_nil(platform_uid) <- Payment.Public.platform_merchant_uid(),
+         {:ok, payout} <- lock_for_payout(user_id, reward_ids, total) do
+      withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids)
+    else
+      nil -> {:error, :no_platform_merchant}
+      {:error, _reason} -> {:error, :lock_failed}
+    end
+  end
+
+  # Per-leg idempotence keys so retries never double-move money.
+  defp withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids) do
+    base_key = Fund.PayoutModel.idempotence_key(payout)
+
+    case Payment.Public.create_charge(
+           platform_uid,
+           merchant_uid,
+           total,
+           base_key <> ",type=charge"
+         ) do
+      {:ok, _charge} ->
+        # OPP accepted the charge — never revert past here (double-payout risk).
+        withdraw_after_charge(payout, merchant_uid, total, base_key)
+
+      {:error, reason} ->
+        # Nothing moved yet — safe to revert (UC-OPP-06.A3).
+        revert_payout_lock(reward_ids, "opp_charge_failed: #{inspect(reason)}")
+        {:error, {:opp_failed, reason}}
+    end
+  end
+
+  defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
+    attrs = %{amount: total, description: "Reward payout"}
+
+    case Payment.Public.create_withdrawal(
+           merchant_uid,
+           :EUR,
+           attrs,
+           base_key <> ",type=withdrawal"
+         ) do
+      {:ok, withdrawal} ->
+        record_withdrawal(payout, withdrawal, total)
+
+      {:error, reason} ->
+        # Funds already on the participant merchant — don't revert; SF-OPP-02 completes it.
+        Logger.error(
+          "[Fund] charge succeeded but withdrawal failed for payout #{payout.id}; " <>
+            "left :pending for reconciliation: #{inspect(reason)}"
+        )
+
+        {:error, {:opp_failed, reason}}
+    end
+  end
+
+  defp record_withdrawal(payout, %{uid: uid} = withdrawal, total) do
+    case payout |> Fund.PayoutModel.changeset(%{provider_uid: uid}) |> Repo.update() do
+      {:ok, payout} ->
+        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+
+      {:error, _changeset} ->
+        # Withdrawal exists at OPP but uid unsaved — don't revert; SF-OPP-02 recovers it.
+        Logger.error(
+          "[Fund] OPP withdrawal #{uid} created but provider_uid not persisted for " <>
+            "payout #{payout.id}; left :pending for reconciliation"
+        )
+
+        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+    end
+  end
+
+  defp lock_for_payout(user_id, reward_ids, total) do
+    Multi.new()
+    |> Multi.insert(:payout, new_payout_changeset(user_id, total))
+    |> Multi.run(:lock_rewards, fn _repo, %{payout: %{id: payout_id}} ->
+      lock_approved_rewards(reward_ids, payout_id)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{payout: payout}} -> {:ok, payout}
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp new_payout_changeset(user_id, total) do
+    Fund.PayoutModel.changeset(%Fund.PayoutModel{}, %{
+      user_id: user_id,
+      amount_cents: total,
+      status: :pending
+    })
+  end
+
+  # CAS on :approved — a concurrent payout leaves us short of the count, so we
+  # roll back rather than fire a duplicate OPP payout.
+  defp lock_approved_rewards(reward_ids, payout_id) do
+    {count, _} =
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
+      |> Repo.update_all(set: [status: :pending_payout, payout_id: payout_id, updated_at: now()])
+
+    if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
+  end
+
+  defp revert_payout_lock(reward_ids, failure_reason) do
+    Multi.new()
+    |> Multi.run(:payout, fn _repo, _changes -> fail_batch_payout(reward_ids, failure_reason) end)
+    |> Multi.update_all(
+      :rewards,
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids),
+      set: [status: :approved, payout_id: nil, updated_at: now()]
+    )
+    |> Repo.commit()
+    |> case do
+      {:ok, _changes} ->
+        :ok
+
+      {:error, step, reason, _changes} ->
+        Logger.error(
+          "[Fund] failed to revert payout lock for rewards #{inspect(reward_ids)} at " <>
+            "#{step} (#{failure_reason}); they remain :pending_payout: #{inspect(reason)}"
+        )
+
+        {:error, reason}
+    end
+  end
+
+  # Rewards in a batch share one payout_id; mark that payout :failed.
+  defp fail_batch_payout(reward_ids, failure_reason) do
+    case batch_payout_id(reward_ids) do
+      nil ->
+        {:ok, nil}
+
+      payout_id ->
+        Repo.get!(Fund.PayoutModel, payout_id)
+        |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
+        |> Repo.update()
+    end
+  end
+
+  defp batch_payout_id(reward_ids) do
+    Repo.one(
+      from(r in Fund.RewardModel,
+        where: r.id in ^reward_ids and not is_nil(r.payout_id),
+        select: r.payout_id,
+        limit: 1
+      )
+    )
+  end
+
+  defp list_approved_rewards(user_id) do
+    from(r in Fund.RewardModel,
+      where: r.user_id == ^user_id and r.status == :approved
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Applies an OPP withdrawal status change to the linked payout and its rewards.
+  Idempotent: terminal payouts short-circuit. Returns `{:ok, payout}` when a
+  payout was found, `{:ok, nil}` when none matched the uid, or `{:error, reason}`.
+  """
+  def apply_withdrawal_status(provider_uid, opp_status)
+      when is_binary(provider_uid) and is_binary(opp_status) do
+    case Repo.get_by(Fund.PayoutModel, provider_uid: provider_uid) do
+      nil ->
+        Logger.warning("[Fund] withdrawal #{provider_uid} not linked to any Payout — ignoring")
+
+        {:ok, nil}
+
+      %Fund.PayoutModel{status: status} = payout when status in [:completed, :failed] ->
+        # Already terminal; tolerate OPP's webhook retries.
+        {:ok, payout}
+
+      %Fund.PayoutModel{} = payout ->
+        apply_status(payout, opp_status)
+    end
+  end
+
+  defp apply_status(%Fund.PayoutModel{} = payout, "completed") do
+    finalize_payout(payout, :completed, :paid, nil)
+  end
+
+  defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
+       when opp_status in ["failed", "disapproved"] do
+    # Charge already moved funds — don't revert to :approved (would re-charge). SF-OPP-02 reconciles.
+    fail_payout(payout, "opp_status: #{opp_status}")
+  end
+
+  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, opp_status) do
+    Logger.info("[Fund] withdrawal #{uid} OPP status=#{opp_status} — no local transition")
+
+    {:ok, payout}
+  end
+
+  defp finalize_payout(
+         %Fund.PayoutModel{id: payout_id} = payout,
+         payout_status,
+         reward_status,
+         failure_reason
+       ) do
+    Multi.new()
+    |> Multi.update(
+      :payout,
+      Fund.PayoutModel.changeset(payout, %{status: payout_status, failure_reason: failure_reason})
+    )
+    |> Multi.update_all(
+      :rewards,
+      from(r in Fund.RewardModel,
+        where: r.payout_id == ^payout_id and r.status == :pending_payout
+      ),
+      set: [status: reward_status, updated_at: now()]
+    )
+    |> Repo.commit()
+    |> case do
+      {:ok, %{payout: payout}} -> notify_rewards_summary(payout)
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp fail_payout(%Fund.PayoutModel{} = payout, failure_reason) do
+    case payout
+         |> Fund.PayoutModel.changeset(%{status: :failed, failure_reason: failure_reason})
+         |> Repo.update() do
+      {:ok, payout} -> notify_rewards_summary(payout)
+      {:error, _changeset} = error -> error
+    end
+  end
+
+  defp notify_rewards_summary(%Fund.PayoutModel{user_id: user_id} = payout) do
+    Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
+    {:ok, payout}
+  end
+
+  @doc """
+  Reconciles `:pending` payouts against the payment provider.
+  See `Systems.Fund.PayoutReconciliation`.
+  """
+  def reconcile_pending_payouts(opts, state), do: Fund.PayoutReconciliation.run(opts, state)
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)

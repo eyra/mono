@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { activateLocalPayment, snapshotCardTestids, pickNewCardTestid } from './lib';
+import { missingFeaturesReason } from './lib/features';
 
 /**
  * Fund Assignment E2E Test (PR #1468)
@@ -21,8 +23,6 @@ import { test, expect } from '@playwright/test';
  *   - A creator account (defaults match seeds.exs)
  */
 
-const ENABLED_FEATURES = (process.env.ENABLED_APP_FEATURES || '').split(',').map(f => f.trim());
-const PANL_ENABLED = ENABLED_FEATURES.includes('panl');
 
 const RESEARCHER_EMAIL = process.env.E2E_RESEARCHER_EMAIL || 'researcher@eyra.co';
 const RESEARCHER_PASSWORD = process.env.E2E_RESEARCHER_PASSWORD || 'asdf;lkjASDF0987';
@@ -31,7 +31,6 @@ const SUBJECT_COUNT = '10';
 const SUBJECT_REWARD = '5.00';
 const AIM_OF_STUDY = 'E2E fund assignment test';
 
-const CARD_SELECTOR = "[data-testid^='card_']";
 const CONNECTED_SELECTOR = '[data-phx-main].phx-connected';
 const ADD_ITEM_SELECTOR = "[data-testid='create-first-item-button'],[data-testid='add-item-button'],[phx-click='create_item']";
 
@@ -51,7 +50,7 @@ async function clickAddItemButton(page: any) {
 }
 
 test.describe('Fund Assignment via BudgetForm', () => {
-  test.skip(!PANL_ENABLED, 'PaNL feature not enabled (set ENABLED_APP_FEATURES=...,panl)');
+  test.skip(!!missingFeaturesReason('panl', 'panl_post_launch'), missingFeaturesReason('panl', 'panl_post_launch'));
 
   test('researcher can assign budget to a questionnaire and complete local payment', async ({ page }) => {
     page.on('console', msg => {
@@ -69,24 +68,27 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Step 2: Open existing project, or create one
     console.log('[TEST] Step 2: Opening / creating project');
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
     const createNewProject = page.locator("[data-testid='create-project-button']");
+    const projectsBefore = await snapshotCardTestids(page);
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
       await createFirstProject.click();
     } else {
       await createNewProject.click();
     }
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).first().click();
+    const newProjectTestid = await pickNewCardTestid(page, projectsBefore);
+    await page.locator(`[data-testid='${newProjectTestid}']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Step 3: Create a fresh questionnaire study so the test is self-contained
     console.log('[TEST] Step 3: Creating questionnaire study');
+    const itemsBefore = await snapshotCardTestids(page);
     await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
@@ -98,10 +100,10 @@ test.describe('Fund Assignment via BudgetForm', () => {
 
     // Step 4: Open the newly created study (last card)
     console.log('[TEST] Step 4: Opening study');
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    const lastCard = page.locator(CARD_SELECTOR).last();
-    await lastCard.scrollIntoViewIfNeeded();
-    await lastCard.click();
+    const newItemTestid = await pickNewCardTestid(page, itemsBefore);
+    const newItem = page.locator(`[data-testid='${newItemTestid}']`);
+    await newItem.scrollIntoViewIfNeeded();
+    await newItem.click();
     await page.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     const assignmentUrl = page.url();
@@ -181,24 +183,27 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
     const createNewProject = page.locator("[data-testid='create-project-button']");
+    const projectsBefore = await snapshotCardTestids(page);
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
       await createFirstProject.click();
     } else {
       await createNewProject.click();
     }
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).first().click();
+    const newProjectTestid = await pickNewCardTestid(page, projectsBefore);
+    await page.locator(`[data-testid='${newProjectTestid}']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Create a fresh questionnaire study (independent from the previous test)
     console.log('[TEST] Step 3: Creating questionnaire study');
+    const itemsBefore = await snapshotCardTestids(page);
     await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
@@ -209,10 +214,10 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.waitForTimeout(500);
 
     // Open the newly created study (last card)
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    const lastCard = page.locator(CARD_SELECTOR).last();
-    await lastCard.scrollIntoViewIfNeeded();
-    await lastCard.click();
+    const newItemTestid = await pickNewCardTestid(page, itemsBefore);
+    const newItem = page.locator(`[data-testid='${newItemTestid}']`);
+    await newItem.scrollIntoViewIfNeeded();
+    await newItem.click();
     await page.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
@@ -298,24 +303,27 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
     const createNewProject = page.locator("[data-testid='create-project-button']");
+    const projectsBefore = await snapshotCardTestids(page);
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
       await createFirstProject.click();
     } else {
       await createNewProject.click();
     }
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).first().click();
+    const newProjectTestid = await pickNewCardTestid(page, projectsBefore);
+    await page.locator(`[data-testid='${newProjectTestid}']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Create a fresh questionnaire study
     console.log('[TEST] Step 3: Creating questionnaire study');
+    const itemsBefore = await snapshotCardTestids(page);
     await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
@@ -326,10 +334,10 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.waitForTimeout(500);
 
     // Open the newly created study
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    const lastCard = page.locator(CARD_SELECTOR).last();
-    await lastCard.scrollIntoViewIfNeeded();
-    await lastCard.click();
+    const newItemTestid = await pickNewCardTestid(page, itemsBefore);
+    const newItem = page.locator(`[data-testid='${newItemTestid}']`);
+    await newItem.scrollIntoViewIfNeeded();
+    await newItem.click();
     await page.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
@@ -411,24 +419,27 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     console.log('[TEST] Step 2: Opening / creating project');
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
     const createNewProject = page.locator("[data-testid='create-project-button']");
+    const projectsBefore = await snapshotCardTestids(page);
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
       await createFirstProject.click();
     } else {
       await createNewProject.click();
     }
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).first().click();
+    const newProjectTestid = await pickNewCardTestid(page, projectsBefore);
+    await page.locator(`[data-testid='${newProjectTestid}']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Create a fresh questionnaire study
     console.log('[TEST] Step 3: Creating questionnaire study');
+    const itemsBefore = await snapshotCardTestids(page);
     await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
@@ -438,8 +449,8 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).last().click();
+    const newItemTestid = await pickNewCardTestid(page, itemsBefore);
+    await page.locator(`[data-testid='${newItemTestid}']`).click();
     await page.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 
@@ -477,22 +488,25 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.locator("#account_signin-tab_panel_creator [data-testid='signin-submit-button']").click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 15000 });
     await page.waitForTimeout(1000);
+    await activateLocalPayment(page);
 
     // Open / create project
     const createFirstProject = page.locator("[data-testid='create-first-project-button']");
     const createNewProject = page.locator("[data-testid='create-project-button']");
+    const projectsBefore = await snapshotCardTestids(page);
     if (await createFirstProject.isVisible({ timeout: 3000 })) {
       await createFirstProject.click();
     } else {
       await createNewProject.click();
     }
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).first().click();
+    const newProjectTestid = await pickNewCardTestid(page, projectsBefore);
+    await page.locator(`[data-testid='${newProjectTestid}']`).click();
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
     // Create study
+    const itemsBefore = await snapshotCardTestids(page);
     await clickAddItemButton(page);
 
     await page.waitForSelector("[data-testid='selector-item-questionnaire']", { timeout: 10000 });
@@ -502,8 +516,8 @@ test.describe('Fund Assignment via BudgetForm', () => {
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
     await page.waitForTimeout(500);
 
-    await page.waitForSelector(CARD_SELECTOR, { timeout: 10000 });
-    await page.locator(CARD_SELECTOR).last().click();
+    const newItemTestid = await pickNewCardTestid(page, itemsBefore);
+    await page.locator(`[data-testid='${newItemTestid}']`).click();
     await page.waitForURL(/\/assignment\/\d+\/content/, { timeout: 15000 });
     await page.waitForSelector(CONNECTED_SELECTOR, { timeout: 10000 });
 

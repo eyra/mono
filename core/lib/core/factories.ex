@@ -978,6 +978,18 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:payout, %{} = attributes) do
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+
+    %Fund.PayoutModel{
+      user: user,
+      amount_cents: 1000,
+      currency: "eur",
+      status: :pending
+    }
+    |> struct!(attributes)
+  end
+
   def build(:text_bundle, %{} = attributes) do
     {items, attributes} = Map.pop(attributes, :items, [])
 

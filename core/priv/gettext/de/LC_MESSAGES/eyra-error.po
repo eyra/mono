@@ -13,11 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "403.body"
-msgstr ""
+msgstr "Leider haben Sie keinen Zugriff auf diese Seite. Wenn Sie meinen, dass dies ein Fehler unsererseits ist, melden Sie es uns bitte per E-Mail an <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co?subject=[403] %{status}\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "page.title"
-msgstr ""
+msgstr "Entschuldigung"
 
 #, elixir-autogen, elixir-format
 msgid "404.body"

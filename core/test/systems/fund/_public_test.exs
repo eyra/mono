@@ -1,12 +1,16 @@
 defmodule Systems.Fund.PublicTest do
   use Core.DataCase
+  import Mox
 
   alias Systems.{
     Fund,
     Bookkeeping
   }
 
+  alias Systems.Payment.ProviderMock
   alias Core.Factories
+
+  setup :verify_on_exit!
 
   setup do
     currency = Fund.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -738,7 +742,7 @@ defmodule Systems.Fund.PublicTest do
                Fund.Public.summarize_rewards(user)
     end
 
-    test "folds :paid and :approved into approved_cents", %{fund: fund} do
+    test "approved_cents only counts :approved rewards (excludes :paid)", %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -757,7 +761,22 @@ defmodule Systems.Fund.PublicTest do
         idempotence_key: "sr-paid-400-#{System.unique_integer([:positive])}"
       })
 
-      assert %{pending_cents: 0, approved_cents: 500, rejected_cents: 0} =
+      assert %{approved_cents: 100, paid_out_cents: 400} =
+               Fund.Public.summarize_rewards(user)
+    end
+
+    test "pending_payout_cents sums rewards locked for payout", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 250,
+        status: :pending_payout,
+        idempotence_key: "sr-pendingpayout-250-#{System.unique_integer([:positive])}"
+      })
+
+      assert %{approved_cents: 0, pending_payout_cents: 250} =
                Fund.Public.summarize_rewards(user)
     end
 
@@ -834,6 +853,621 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:ok, %{noop: :pre}} = result
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
+    end
+  end
+
+  describe "request_payout/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_test_123"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp insert_reward(user, fund, amount, status) do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: amount,
+        status: status,
+        idempotence_key: "rp-#{status}-#{amount}-#{System.unique_integer([:positive])}"
+      })
+    end
+
+    # request_payout/1 re-verifies readiness against fresh OPP state before
+    # locking (get_merchant + list_bank_accounts). Stub a fully-ready merchant.
+    defp stub_payout_ready(merchant_uid) do
+      expect(ProviderMock, :get_merchant, fn ^merchant_uid ->
+        {:ok,
+         %{
+           uid: merchant_uid,
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
+        {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+      end)
+    end
+
+    # The payout first charges the funds platform (eyra) -> participant merchant,
+    # then withdraws. Stub the charge leg as succeeding.
+    defp stub_charge_ok do
+      expect(ProviderMock, :create_charge, fn _from, _to, _amount, _key ->
+        {:ok, %{uid: "chg_ok", status: "created", amount: 0}}
+      end)
+    end
+
+    test "returns :no_merchant when participant has no merchant_uid", %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
+      insert_reward(user, fund, 1000, :approved)
+
+      assert {:error, :no_merchant} = Fund.Public.request_payout(user)
+    end
+
+    test "returns :below_threshold when approved balance is under €5", %{user: user, fund: fund} do
+      insert_reward(user, fund, 499, :approved)
+
+      assert {:error, {:below_threshold, 499}} = Fund.Public.request_payout(user)
+    end
+
+    test "returns :below_threshold with 0 when participant has no approved rewards", %{user: user} do
+      assert {:error, {:below_threshold, 0}} = Fund.Public.request_payout(user)
+    end
+
+    test "locks approved rewards as :pending_payout on success", %{user: user, fund: fund} do
+      %{id: id1} = insert_reward(user, fund, 600, :approved)
+      %{id: id2} = insert_reward(user, fund, 400, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
+
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
+        {:ok, %{uid: "w_1", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.request_payout(user)
+
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id1), [])
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id2), [])
+    end
+
+    test "calls OPP with the participant's merchant_uid, :EUR, and summed amount",
+         %{user: %{merchant_uid: merchant_uid} = user, fund: fund} do
+      insert_reward(user, fund, 600, :approved)
+      insert_reward(user, fund, 400, :approved)
+
+      stub_payout_ready(merchant_uid)
+
+      # Charge moves the funds platform (eyra) -> participant merchant first.
+      expect(ProviderMock, :create_charge, fn "mer_platform_test",
+                                              ^merchant_uid,
+                                              1000,
+                                              "payout=" <> _ ->
+        {:ok, %{uid: "chg_2", status: "created", amount: 1000}}
+      end)
+
+      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid,
+                                                  :EUR,
+                                                  %{amount: 1000},
+                                                  "payout=" <> _ ->
+        {:ok, %{uid: "w_2", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{amount: 1000, withdrawal: %{uid: "w_2"}}} =
+               Fund.Public.request_payout(user)
+    end
+
+    test "reverts the lock when OPP returns an error", %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+
+      # Charge (platform -> participant) fails before any money moves -> revert.
+      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} = Fund.Public.request_payout(user)
+
+      assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
+    end
+
+    test "rolls back without an OPP charge when the rewards are locked concurrently",
+         %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      # Simulate a concurrent payout (other tab/device) that locks these rewards
+      # during this request's OPP readiness recheck. get_merchant runs inside
+      # recheck_payout_ready, just before lock_for_payout's compare-and-swap.
+      expect(ProviderMock, :get_merchant, fn merchant_uid ->
+        Core.Repo.get!(Fund.RewardModel, id)
+        |> Ecto.Changeset.change(%{status: :pending_payout})
+        |> Core.Repo.update!()
+
+        {:ok,
+         %{
+           uid: merchant_uid,
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
+        {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+      end)
+
+      # No create_charge / create_withdrawal expectations: the compare-and-swap
+      # lock must find 0 approved rows and bail before any money moves. Mox's
+      # verify_on_exit! raises if either OPP call is made.
+      assert {:error, :lock_failed} = Fund.Public.request_payout(user)
+
+      # The losing attempt's payout insert was rolled back with the failed lock.
+      assert Core.Repo.all(Fund.PayoutModel) == []
+    end
+
+    test "ignores rewards in other statuses when computing the payout", %{user: user, fund: fund} do
+      insert_reward(user, fund, 1000, :approved)
+      insert_reward(user, fund, 9000, :pending_approval)
+      insert_reward(user, fund, 9000, :paid)
+
+      stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
+
+      expect(ProviderMock, :create_withdrawal, fn _, _, %{amount: 1000}, _ ->
+        {:ok, %{uid: "w_3", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{amount: 1000}} = Fund.Public.request_payout(user)
+    end
+
+    test "creates a Fund.Payout aggregate linked to the locked rewards on success",
+         %{user: %{id: user_id} = user, fund: fund} do
+      %{id: r1_id} = insert_reward(user, fund, 600, :approved)
+      %{id: r2_id} = insert_reward(user, fund, 400, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
+
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
+        {:ok, %{uid: "w_aggregate_1", status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, %{payout: payout}} = Fund.Public.request_payout(user)
+
+      assert %Fund.PayoutModel{
+               user_id: ^user_id,
+               amount_cents: 1000,
+               currency: "eur",
+               status: :pending,
+               provider_uid: "w_aggregate_1",
+               failure_reason: nil
+             } = Core.Repo.reload!(payout)
+
+      payout_id = payout.id
+      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r1_id)
+      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r2_id)
+    end
+
+    test "marks the Payout :failed (with reason) and detaches reverted rewards on OPP failure",
+         %{user: user, fund: fund} do
+      %{id: r_id} = insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+
+      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user)
+
+      reward = Core.Repo.get!(Fund.RewardModel, r_id)
+      assert reward.status == :approved
+      assert reward.payout_id == nil
+
+      [payout] = Core.Repo.all(Fund.PayoutModel)
+      assert payout.status == :failed
+      assert payout.failure_reason =~ "opp_charge_failed"
+      assert payout.provider_uid == nil
+    end
+
+    defp reward_key(id) do
+      Core.Repo.get!(Fund.RewardModel, id).idempotence_key
+    end
+  end
+
+  describe "payout_eligibility/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_elig_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    test "returns :below_threshold with the current total when under €5", %{
+      user: user,
+      fund: fund
+    } do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 499,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert {:error, {:below_threshold, 499}} = Fund.Public.payout_eligibility(user)
+    end
+
+    test "returns :ok when at or above €5", %{user: user, fund: fund} do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 500,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert :ok = Fund.Public.payout_eligibility(user)
+    end
+
+    test "does not lock rewards or create a Payout row", %{user: user, fund: fund} do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: 1000,
+        status: :approved,
+        idempotence_key: "elig-#{System.unique_integer([:positive])}"
+      })
+
+      assert :ok = Fund.Public.payout_eligibility(user)
+
+      [reward] = Core.Repo.all(Fund.RewardModel)
+      assert reward.status == :approved
+      assert reward.payout_id == nil
+      assert Core.Repo.all(Fund.PayoutModel) == []
+    end
+  end
+
+  describe "prepare_payout/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_prep_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp eligible_reward(user, fund, amount \\ 1000) do
+      Factories.insert!(:reward, %{
+        user: user,
+        fund: fund,
+        amount: amount,
+        status: :approved,
+        idempotence_key: "prep-#{System.unique_integer([:positive])}"
+      })
+    end
+
+    # Pre-existing bank account on the merchant — keeps ensure_bank_account_for
+    # idempotent in tests that don't care about that step.
+    defp stub_existing_bank_account(merchant_uid) do
+      expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
+        {:ok, [%{uid: "ba_existing", status: "approved", verification_url: nil}]}
+      end)
+    end
+
+    test "returns :ok when merchant is live + verified AND balance >= threshold",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub_existing_bank_account("m_prep_1")
+
+      assert :ok = Fund.Public.prepare_payout(user)
+    end
+
+    test ~s(returns {:kyc_required, overview_url} when compliance_status != "verified"),
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "unverified",
+           overview_url: "https://opp.test/kyc/m_prep_1"
+         }}
+      end)
+
+      stub_existing_bank_account("m_prep_1")
+
+      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+               Fund.Public.prepare_payout(user)
+    end
+
+    test ~s(returns {:kyc_required, overview_url} when merchant.status != "live"),
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "pending",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: "https://opp.test/kyc/m_prep_1"
+         }}
+      end)
+
+      stub_existing_bank_account("m_prep_1")
+
+      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+               Fund.Public.prepare_payout(user)
+    end
+
+    test "creates a merchant for users with no merchant_uid and persists the uid",
+         %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :create_merchant, fn %{emailaddress: email} ->
+        assert email == user.email
+
+        {:ok,
+         %{
+           uid: "m_created_inline",
+           status: "pending",
+           kyc_level: 0,
+           compliance_status: "unverified",
+           overview_url: "https://opp.test/kyc/m_created_inline"
+         }}
+      end)
+
+      stub_existing_bank_account("m_created_inline")
+
+      assert {:error, {:kyc_required, "https://opp.test/kyc/m_created_inline"}} =
+               Fund.Public.prepare_payout(user)
+
+      assert %{merchant_uid: "m_created_inline"} = Core.Repo.reload!(user)
+    end
+
+    test "creates a bank account when none exist for the merchant",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "pending",
+           kyc_level: 0,
+           compliance_status: "unverified",
+           overview_url: "https://opp.test/kyc/m_prep_1"
+         }}
+      end)
+
+      ProviderMock
+      |> expect(:list_bank_accounts, fn "m_prep_1" -> {:ok, []} end)
+      |> expect(:create_bank_account, fn "m_prep_1", attrs ->
+        # Caller supplies notify_url and return_url so OPP can complete
+        # the verification round-trip.
+        assert is_binary(attrs.notify_url)
+        assert is_binary(attrs.return_url)
+
+        {:ok, %{uid: "ba_new", status: "new", verification_url: "https://opp.test/ba/verify"}}
+      end)
+
+      # Merchant is not yet verified, so routing prefers the merchant overview.
+      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+               Fund.Public.prepare_payout(user)
+    end
+
+    test "returns :below_threshold WITHOUT calling OPP when balance is too low",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund, 100)
+      # No ProviderMock expectation -> Mox would fail if get_merchant was called.
+
+      assert {:error, {:below_threshold, 100}} = Fund.Public.prepare_payout(user)
+    end
+
+    test "returns :kyc_unavailable when not ready and OPP gives no usable URL",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "pending",
+           kyc_level: 0,
+           compliance_status: "unverified",
+           overview_url: nil
+         }}
+      end)
+
+      stub_existing_bank_account("m_prep_1")
+
+      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user)
+    end
+
+    test "falls back to the bank verification_url when the merchant has no overview_url",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
+        {:ok,
+         [%{uid: "ba_pending", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+      end)
+
+      assert {:error, {:kyc_required, "https://opp.test/ba/verify"}} =
+               Fund.Public.prepare_payout(user)
+    end
+
+    test "is NOT :ok when merchant is verified but the bank account is not approved",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: "https://opp.test/overview/m_prep_1"
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
+        {:ok, [%{uid: "ba_pending", status: "new", verification_url: nil}]}
+      end)
+
+      assert {:error, {:kyc_required, "https://opp.test/overview/m_prep_1"}} =
+               Fund.Public.prepare_payout(user)
+    end
+  end
+
+  describe "apply_withdrawal_status/2" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_apply_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp insert_pending_payout(user, fund, amounts, provider_uid) do
+      total = Enum.sum(amounts)
+
+      payout =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: total,
+          currency: "eur",
+          status: :pending,
+          provider_uid: provider_uid
+        })
+
+      rewards =
+        Enum.map(amounts, fn amount ->
+          Factories.insert!(:reward, %{
+            user: user,
+            fund: fund,
+            amount: amount,
+            status: :pending_payout,
+            payout_id: payout.id,
+            idempotence_key: "apply-#{System.unique_integer([:positive])}"
+          })
+        end)
+
+      {payout, rewards}
+    end
+
+    test ~s(maps OPP "completed" to Payout :completed and rewards :paid),
+         %{user: user, fund: fund} do
+      {payout, [r1, r2]} = insert_pending_payout(user, fund, [600, 400], "w_completed_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :completed, failure_reason: nil}} =
+               Fund.Public.apply_withdrawal_status("w_completed_1", "completed")
+
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+      assert %{status: :paid} = Core.Repo.reload!(r2)
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+    end
+
+    test ~s(maps OPP "failed" to Payout :failed and leaves rewards :pending_payout),
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_failed_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
+               Fund.Public.apply_withdrawal_status("w_failed_1", "failed")
+
+      assert reason =~ "failed"
+      # The charge already funded the participant merchant, so the rewards stay
+      # locked (:pending_payout) for reconciliation rather than reverting to
+      # :approved (a re-payout would charge the platform again).
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
+    end
+
+    test ~s(maps OPP "disapproved" to Payout :failed with a disapproved reason),
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
+
+      assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
+               Fund.Public.apply_withdrawal_status("w_disapproved_1", "disapproved")
+
+      assert reason =~ "disapproved"
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :failed} = Core.Repo.reload!(payout)
+    end
+
+    test "intermediate OPP statuses (approved/pending/new) are no-ops",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_intermediate_1")
+
+      for opp_status <- ["approved", "pending", "new", "unknown_future_value"] do
+        assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
+      end
+
+      # Nothing should have moved from the original :pending / :pending_payout state.
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :pending} = Core.Repo.reload!(payout)
+    end
+
+    test "returns {:ok, nil} and does nothing when the provider_uid is unknown" do
+      assert {:ok, nil} = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
+    end
+
+    test "is idempotent: re-applying to an already-:completed payout short-circuits",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_completed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+
+      # A second "completed" webhook must not flip the (now :paid) reward back
+      # to :pending_payout or otherwise change state.
+      assert {:ok, %Fund.PayoutModel{status: :completed}} =
+               Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+
+      assert %{status: :paid} = Core.Repo.reload!(r1)
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+    end
+
+    test "is idempotent: a stray late status after :failed does not re-transition",
+         %{user: user, fund: fund} do
+      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_failed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_failed", "failed")
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+
+      # Late "completed" must not flip a :failed payout to :completed or move
+      # the still-locked reward.
+      assert {:ok, %Fund.PayoutModel{status: :failed}} =
+               Fund.Public.apply_withdrawal_status("w_idempotent_failed", "completed")
+
+      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :failed} = Core.Repo.reload!(payout)
     end
   end
 end

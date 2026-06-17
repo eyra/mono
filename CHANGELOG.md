@@ -9,6 +9,16 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#25.1 2026-06-14
+* Fixed - Affiliate URLs with `?p=null` or `?p=undefined` now return 403 instead of silently creating ghost affiliate users (came from external panels coercing an empty JS variable to the string "null")
+* Fixed - 403 page and other status pages showed raw msgids ("page.title" / "403.body") instead of translated text on DE / ES / IT / LT / RO
+
+## \#25 2026-06-10
+* Fixed - "Participants waiting for pay out" banner on the Participants tab was lost in the milestone 23 refactor; restored with correct copy
+* Fixed - Pay-out modal translations (payout.*) were wiped in the SURFconext-auth merge; EN and NL strings restored
+* Added - Pay-out Overview tab now shows a list of completed payouts instead of the "coming soon" placeholder
+* Changed - Updated PaNL onboarding copy
+
 ## \#24 Unreleased
 * Changed - SURFconext userinfo (name, email, affiliation) is now stored as a raw JSON map; individual parsed columns removed from the database
 * Fixed - Auth signup page (/user/auth/:provider) had no side margins on mobile

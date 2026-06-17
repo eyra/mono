@@ -92,6 +92,25 @@ defmodule Frameworks.E2E.Controller do
     end
   end
 
+  def inject(conn, params) do
+    if feature_enabled?(:e2e) do
+      conn
+      |> put_session("need", resolve_injections(params))
+      |> json(%{ok: true})
+    else
+      conn |> put_status(403) |> json(%{error: "E2E not available"})
+    end
+  end
+
+  defp resolve_injections(%{"payment_provider" => "local"} = params) do
+    params
+    |> Map.delete("payment_provider")
+    |> resolve_injections()
+    |> Map.put(:payment_provider, Systems.Payment.Provider.Local)
+  end
+
+  defp resolve_injections(_), do: %{}
+
   def setup(conn, _params) do
     if feature_enabled?(:e2e) do
       case setup_fixtures() do

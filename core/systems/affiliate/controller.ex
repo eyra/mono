@@ -159,6 +159,8 @@ defmodule Systems.Affiliate.Controller do
 
   def valid_id?(nil), do: false
   def valid_id?("participant_id"), do: false
+  def valid_id?("null"), do: false
+  def valid_id?("undefined"), do: false
 
   def valid_id?(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
