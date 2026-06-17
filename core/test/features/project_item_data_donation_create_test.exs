@@ -35,8 +35,8 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
 
-    # Wait for LiveView to be connected
-    session |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    # Wait for project page to be connected
+    session |> assert_has(Query.css("[data-testid='create-first-item-button']"))
 
     # Create assignment
     session

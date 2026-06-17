@@ -53,7 +53,7 @@ framework state of the page you just left.
 - **Wait on a user-visible signal**, not `.phx-connected` and not `data-phx-main`. The destination's own `data-testid` *is* the signal.
 - **Let `assert_has` do the polling.** Wallaby's `assert_has` retries up to `max_wait_time` (5s default). One `assert_has` on a target-page testid handles both "wait for navigation" and "verify page rendered" in one step.
 - **No `assert_has(".phx-connected")` after navigation.** It waits on the source page's WebSocket handshake instead of the destination's content; it doesn't prove the next page is ready; and it can leave chromedriver tearing down an active WebSocket on the next `visit` — surfacing as a Wallaby HTTPoison timeout.
-- **Helpers like `sign_in` end at a *negative* signal on the source page** (`refute_has(signin-form)` — proves we left). They MUST NOT add positive waits on the destination — that belongs to the caller, on the page they actually need.
+- **Helpers like `sign_in` end at `assert_path_changed_from/3`** — see the subsection below. The destination varies by user type, so DOM-based waits don't fit.
 
 ```elixir
 # ✅ CORRECT — wait on a user-visible element of the destination
@@ -76,6 +76,20 @@ session
 |> assert_has(Query.css("[data-phx-main].phx-connected"))
 |> visit("/user/onboarding")
 ```
+
+#### When the destination varies — wait on URL change
+
+When the post-action destination differs by user/state (e.g., post-signin landing depends on user type), waiting on a destination `data-testid` isn't possible. Use `assert_path_changed_from/3` — the industry-standard URL-based wait (mirrors Playwright's `page.waitForURL` and Cypress's `cy.url().should(...)`):
+
+```elixir
+session
+|> click(Query.css("[data-testid='signin-submit-button']"))
+|> assert_path_changed_from("/user/signin")
+```
+
+URL changes are atomic, so this is race-free — no DOM polling, no stale-element exposure. Works for full page loads AND LiveView `push_navigate`/`push_patch` (both update `window.location` via `history.pushState`).
+
+Does **not** apply to in-page LiveView updates that don't change the URL (modal open, save-in-place, etc.) — use `assert_has(destination-testid)` for those.
 
 The same rule applies to E2E (Playwright) tests in `core/test/e2e/` — prefer `expect(...).toBeVisible()` on a target-page `data-testid`.
 

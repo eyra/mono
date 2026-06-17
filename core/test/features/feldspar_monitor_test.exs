@@ -49,7 +49,7 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
 
     # Wait for sign in to complete
     session
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='home-page']"))
 
     # Visit the mock Feldspar app page
     session
@@ -57,7 +57,7 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
 
     # Wait for LiveView to connect
     session
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("iframe"))
 
     # The mock app should show "Logs sent!" after sending monitor:log messages
     # This indicates the JavaScript successfully processed the monitor:log messages
