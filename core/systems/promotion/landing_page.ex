@@ -126,21 +126,14 @@ defmodule Systems.Promotion.LandingPage do
   attr(:event, :string, required: true)
   attr(:testid, :string, required: true)
 
-  defp apply_button(%{active?: true} = assigns) do
+  defp apply_button(assigns) do
     ~H"""
-    <Button.primary_live_view label={@label} event={@event} testid={@testid} />
-    """
-  end
-
-  defp apply_button(%{active?: false} = assigns) do
-    ~H"""
-    <button
-      disabled
-      data-testid={@testid <> "-disabled"}
-      class="pt-15px pb-15px leading-none font-button text-button text-white rounded bg-grey3 pl-4 pr-4 cursor-not-allowed"
-    >
-      <%= @label %>
-    </button>
+    <Button.dynamic
+      action={%{type: :send, event: @event}}
+      face={%{type: :primary, label: @label}}
+      enabled?={@active?}
+      testid={if @active?, do: @testid, else: @testid <> "-disabled"}
+    />
     """
   end
 

@@ -46,8 +46,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
 
       view
-      |> element("[phx-click=\"call-to-action-1\"]")
-      |> render_click()
+      |> render_click("call-to-action-1")
 
       assert_redirected(view, "/assignment/#{assignment_id}/apply")
       assert Pool.Public.participant?(Pool.Public.get_by_submission!(submission_id), participant)
