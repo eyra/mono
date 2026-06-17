@@ -245,7 +245,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp provider do
-    Frameworks.Need.resolve(:payment_provider)
+    Application.fetch_env!(:core, :payment_provider)
   end
 
   defp provider_name do
