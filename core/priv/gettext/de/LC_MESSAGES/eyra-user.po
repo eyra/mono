@@ -82,3 +82,7 @@ msgstr "Passwort geändert"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
 msgstr "Passwort aktualisiert"
+
+#, elixir-autogen, elixir-format
+msgid "auth.session.expired"
+msgstr ""

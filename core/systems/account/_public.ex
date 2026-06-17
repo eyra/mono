@@ -246,6 +246,28 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Registers a new user from just an email (OTP-only auth flow). Generates
+  a random password the user can never use to sign in (they always come
+  through OTP), and marks the account confirmed since email ownership is
+  already proven by the OTP verification.
+  """
+  def register_user_with_email(email) when is_binary(email) do
+    password = random_password()
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    %User{}
+    |> User.registration_changeset(%{email: email, password: password, creator: false})
+    |> Ecto.Changeset.put_change(:confirmed_at, now)
+    |> Repo.insert()
+  end
+
+  defp random_password do
+    # Must satisfy User.validate_password: ≥12 chars, lower + upper + (digit|punct).
+    suffix = :crypto.strong_rand_bytes(24) |> Base.url_encode64() |> binary_part(0, 24)
+    "Aa1" <> suffix
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples

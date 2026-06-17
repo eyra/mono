@@ -53,6 +53,38 @@ defmodule Next.Account.SessionController do
     end
   end
 
+  def redeem_otp(conn, %{"token" => token}) do
+    if feature_enabled?(:otp) do
+      do_redeem_otp(conn, token)
+    else
+      redirect(conn, to: ~p"/user/signin")
+    end
+  end
+
+  defp do_redeem_otp(conn, token) do
+    case Next.Account.AuthCodeVerifyPage.decode_redeem_token(token) do
+      {:ok, %{user_id: nil, email: email}} ->
+        case Account.Public.register_user_with_email(email) do
+          {:ok, user} ->
+            Account.UserAuth.log_in_user(conn, user, true, %{})
+
+          {:error, _changeset} ->
+            conn
+            |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
+            |> redirect(to: ~p"/user/auth/identify")
+        end
+
+      {:ok, %{user_id: user_id}} ->
+        user = Account.Public.get_user!(user_id)
+        Account.UserAuth.log_in_user(conn, user, false, %{})
+
+      _ ->
+        conn
+        |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
+        |> redirect(to: ~p"/user/auth/identify")
+    end
+  end
+
   defp render_new(conn) do
     redirect(conn, to: ~p"/user/signin")
   end

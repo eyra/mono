@@ -81,3 +81,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "password.updated.successfully"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.session.expired"
+msgstr ""

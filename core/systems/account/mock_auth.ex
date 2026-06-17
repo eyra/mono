@@ -84,7 +84,7 @@ defmodule Systems.Account.MockAuth.ResetController do
 
       conn
       |> Systems.Account.UserAuth.sign_out_current_user()
-      |> redirect(to: ~p"/user/auth/mock")
+      |> redirect(to: ~p"/user/auth/identify/mock")
     else
       conn |> send_resp(404, "Not found") |> halt()
     end

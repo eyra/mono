@@ -105,7 +105,7 @@ defmodule Systems.Pool.PanlSignupTest do
     test "Google signin URL includes add_to_panl parameter", %{conn: conn} do
       conn = get(conn, ~p"/user/signin/participant?post_signin_action=add_to_panl")
       response = html_response(conn, 200)
-      assert response =~ "/google-sign-in?post_signin_action=add_to_panl&amp;creator=false"
+      assert response =~ "/auth/google?post_signin_action=add_to_panl&amp;creator=false"
     end
   end
 end

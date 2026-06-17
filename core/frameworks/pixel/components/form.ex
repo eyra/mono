@@ -494,9 +494,10 @@ defmodule Frameworks.Pixel.Form do
 
   attr(:form, :any, required: true)
   attr(:field, :atom, required: true)
-  attr(:label_text, :string)
+  attr(:label_text, :string, default: nil)
   attr(:label_color, :string, default: "text-grey1")
   attr(:background, :atom, default: :light)
+  attr(:placeholder, :string, default: "")
   attr(:reserve_error_space, :boolean, default: true)
   attr(:testid, :string, default: nil)
 
@@ -508,6 +509,7 @@ defmodule Frameworks.Pixel.Form do
       label_text={@label_text}
       label_color={@label_color}
       background={@background}
+      placeholder={@placeholder}
       reserve_error_space={@reserve_error_space}
       testid={@testid}
       type="email"
