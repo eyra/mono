@@ -1,47 +1,85 @@
 # Wallaby Feature Tests
 
-These are browser-based feature tests using Wallaby (Elixir WebDriver).
+Browser-based tests using Wallaby (Elixir WebDriver) that walk a user
+journey end-to-end through the UI.
 
-See also: `core/test/CLAUDE.md` for detailed Wallaby patterns.
+For *which kind of test to write* (unit / feature / e2e / smoke), see
+`core/test/CLAUDE.md` → "When to write which kind of test".
 
-## Key Principles
+## When to add a broad journey test on top of narrow ones
+
+Don't, by default. Cost is duplication.
+
+Add a broad journey test on top of narrow ones **only when narrow tests Factory-skip a signal chain that has realistic breakage risk.** All three conditions must hold:
+
+1. The flow has **signal chains or state machines crossing system boundaries** (e.g. Eyra payment flow: task-completion → reward state → wallet entry).
+2. Those chains have **broken before** or are **realistic to break** (look at the bug-fix history — if the answer is "yes, the signal handler stops firing every few months," that's the case).
+3. The narrow tests **Factory-build the intermediate state**, bypassing the chain (so they can't catch chain breakage).
+
+When any one is false, narrow is enough. Don't preemptively add coverage for breakage that hasn't happened.
+
+## Running feature tests
+
+```bash
+mix test.feature                                       # all feature tests
+mix test.feature test/features/smoke_test.exs          # one file
+WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
+```
+
+`mix test.feature` runs `test --only feature`.
+`mix test.unit` runs `test --exclude feature`.
+`mix test.ci` runs both halves + JS.
+
+## Key principles
 
 ### 1. Never rely on labels
-Labels change with translations. Always use `data-testid` attributes.
+
+Labels change with translations. Always use `data-testid`.
 
 ```elixir
-# WRONG - label can change
+# WRONG — label can change
 session |> click(Query.text("Start browsing"))
 
-# CORRECT - stable selector
+# CORRECT — stable selector
 session |> click(Query.css("[data-testid='onboarding-continue']"))
 ```
 
 ### 2. Wait on the destination, not on `.phx-connected`
-After navigation, wait on a user-visible `data-testid` of the **target page**.
-`assert_has` already polls — that one assertion both waits for the navigation
-and verifies the page rendered.
 
-Do not insert `assert_has(".phx-connected")` between an action and the target
-assertion: it waits on the *source* page's framework state, doesn't prove the
-next page is ready, and can leave chromedriver tearing down an active
-WebSocket on the next `visit` — surfacing as a Wallaby HTTPoison timeout.
+After an action that navigates (click, visit, form submit), the next
+assertion must be on something visible on the **target page** — never on
+framework state of the page you just left.
 
-See `core/test/CLAUDE.md` → "Waiting After Navigation — Project Policy" for
-the full rule.
+- **Wait on a user-visible signal**, not `.phx-connected` and not `data-phx-main`. The destination's own `data-testid` *is* the signal.
+- **Let `assert_has` do the polling.** Wallaby's `assert_has` retries up to `max_wait_time` (5s default). One `assert_has` on a target-page testid handles both "wait for navigation" and "verify page rendered" in one step.
+- **No `assert_has(".phx-connected")` after navigation.** It waits on the source page's WebSocket handshake instead of the destination's content; it doesn't prove the next page is ready; and it can leave chromedriver tearing down an active WebSocket on the next `visit` — surfacing as a Wallaby HTTPoison timeout.
+- **Helpers like `sign_in` end at `assert_path_changed_from/3`** — see the subsection below. The destination varies by user type, so DOM-based waits don't fit.
 
 ```elixir
+# ✅ CORRECT — wait on a user-visible element of the destination
 session
-|> click(Query.css("[data-testid='some-link']"))
-|> assert_has(Query.css("[data-testid='expected-element']"))  # one wait, on the target
+|> sign_in(user, password)
+|> visit("/user/onboarding")
+|> assert_has(Query.css("[data-testid='profile-view']"))
+
+# ✅ CORRECT — same rule for in-page clicks. The destination testid wait
+# also prevents stale-element races, because the assertion polls until the
+# DOM morph settles.
+researcher
+|> click(Query.css(@card_selector))
+|> assert_has(Query.css("[data-testid='my-button']"))
+|> click(Query.css("[data-testid='my-button']"))
+
+# ❌ WRONG — waits on source/framework state, not destination content
+session
+|> sign_in(user, password)
+|> assert_has(Query.css("[data-phx-main].phx-connected"))
+|> visit("/user/onboarding")
 ```
 
 #### When the destination varies — wait on URL change
-When the post-action destination differs by user/state (e.g., post-signin
-landing depends on user type), waiting on a destination data-testid isn't
-possible. Use `assert_path_changed_from/3` — the industry-standard URL-based
-wait (mirrors Playwright's `page.waitForURL` and Cypress's
-`cy.url().should(...)`):
+
+When the post-action destination differs by user/state (e.g., post-signin landing depends on user type), waiting on a destination `data-testid` isn't possible. Use `assert_path_changed_from/3` — the industry-standard URL-based wait (mirrors Playwright's `page.waitForURL` and Cypress's `cy.url().should(...)`):
 
 ```elixir
 session
@@ -49,23 +87,59 @@ session
 |> assert_path_changed_from("/user/signin")
 ```
 
-URL changes are atomic, so this is race-free — no DOM polling, no
-stale-element exposure. Works for full page loads AND LiveView
-`push_navigate` / `push_patch` (both update `window.location` via
-`history.pushState`).
+URL changes are atomic, so this is race-free — no DOM polling, no stale-element exposure. Works for full page loads AND LiveView `push_navigate`/`push_patch` (both update `window.location` via `history.pushState`).
 
-Does **not** apply to in-page LiveView updates that don't change the URL
-(modal open, save-in-place, etc.) — use `assert_has(destination-testid)` for
-those.
+Does **not** apply to in-page LiveView updates that don't change the URL (modal open, save-in-place, etc.) — use `assert_has(destination-testid)` for those.
 
-### 3. Use data-testid naming conventions
+The same rule applies to E2E (Playwright) tests in `core/test/e2e/` — prefer `expect(...).toBeVisible()` on a target-page `data-testid`.
+
+### 3. Multi-Session Tests
+
+Use `@sessions N` to create multiple browser sessions:
+
+```elixir
+@sessions 2
+@tag :feature
+feature "two users interact", %{sessions: [researcher, participant]} do
+  # researcher and participant are separate browser sessions
+end
 ```
-element_id          -> card_7, form_signup
-action__element_id  -> delete__action__card_7
+
+### 4. `data-testid` naming convention
+
+- **Main elements**: `{element}_{id}` → `card_7`
+- **Actions/buttons**: `{event}__action__{element}_{id}` → `delete__action__card_7`
+
+Separators:
+- `_` within a segment (e.g. `create_first_item`)
+- `__` between hierarchy levels (e.g. `delete__action__card_7`)
+
+CSS prefix selectors like `[data-testid^='card_']` then only match main cards, not action buttons.
+
+```elixir
+data-testid={"card_#{@id}"}                          # main card
+data-testid={"show_more__action__card_#{@card_id}"}  # show-more action
+data-testid={"delete__action__card_#{@card_id}"}     # delete action
 ```
 
-### 4. Debug with logging
-When selectors don't match, log what's actually on the page:
+CSS attribute selector reference:
+
+- `^=` starts with: `[data-testid^='card_']` matches `card_7`
+- `$=` ends with: `[data-testid$='_button']` matches `submit_button`
+- `*=` contains: `[data-testid*='action']` matches `delete__action__card_7`
+- `=` exact: `[data-testid='card_7']` matches only `card_7`
+
+### 5. Sign in via the helper, not inline steps
+
+`CoreWeb.FeatureCase` exposes `sign_in_as_participant/3` and `sign_in_as_creator/3`. The signin page renders both tab panels in the DOM, with tab-scoped testids. The helpers pick the right ones. **Don't** inline the visit + fill + click steps.
+
+### 6. Unique testids when a component is rendered twice
+
+If a component appears in multiple panels/contexts on the same page (the signin form is the canonical example — it lives in both tab panels), namespace the testid value at the source. Don't try to scope at the test site with parent selectors or `:visible` filters — both are brittle.
+
+## Debugging
+
+When a selector doesn't match, log what's actually on the page:
 
 ```elixir
 html = Wallaby.Browser.page_source(session)
@@ -73,42 +147,39 @@ testids = Regex.scan(~r/data-testid="([^"]+)"/, html) |> Enum.map(&List.last/1)
 IO.inspect(testids, label: "Available data-testids")
 ```
 
-## Running Feature Tests
+Don't assume bugs in Wallaby — log and verify what was actually rendered first.
 
-```bash
-# All feature tests
-mix test test/features --include feature
+Getting an element attribute (e.g. to extract an id from a `card_N` testid):
 
-# Single test
-mix test test/features/smoke_test.exs --include feature
-
-# With debug output
-mix test test/features/smoke_test.exs --include feature --trace
+```elixir
+element = session |> find(Query.css("[data-testid^='card_']"))
+testid = Wallaby.Element.attr(element, "data-testid")
+card_id = testid |> String.replace("card_", "")
 ```
 
-## Test Structure
+## File template
 
 ```elixir
 defmodule CoreWeb.Features.MyFeatureTest do
   use CoreWeb.FeatureCase
 
+  @card_selector "[data-testid^='card_']"
+
   @tag :feature
   feature "description", %{session: session} do
-    session
-    |> visit("/path")
-    |> assert_has(Query.css("[data-testid='target-page-element']"))
-    |> click(Query.css("[data-testid='my-button']"))
-    |> assert_has(Query.css("[data-testid='expected-result']"))
+    password = Factories.valid_user_password()
+
+    user =
+      Factories.insert!(:member, %{
+        password: password,
+        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        creator: true
+      })
+
+    sign_in_as_creator(session, user, password)
+
+    # Test actions...
   end
-end
-```
-
-## Multi-Session Tests
-
-```elixir
-@sessions 2
-@tag :feature
-feature "two users interact", %{sessions: [user1, user2]} do
-  # user1 and user2 are separate browser sessions
 end
 ```

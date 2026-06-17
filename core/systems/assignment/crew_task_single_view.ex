@@ -54,11 +54,6 @@ defmodule Systems.Assignment.CrewTaskSingleView do
     {:noreply, socket |> complete_task()}
   end
 
-  @impl true
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
-  end
-
   # Private
 
   defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket)

@@ -4,6 +4,7 @@ defmodule Systems.Zircon.Screening.PaperSetView do
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Observatory.LiveFeature
   use CoreWeb.UI
+  use Frameworks.Signal.LiveFeature
 
   import Systems.Zircon.HTML, only: [paper_set_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
@@ -73,11 +74,6 @@ defmodule Systems.Zircon.Screening.PaperSetView do
       |> assign(page_index: 0, query: query, query_string: query_string)
       |> update_view_model()
     }
-  end
-
-  @impl true
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
   end
 
   @impl true
