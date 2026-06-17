@@ -128,27 +128,27 @@ msgstr "Financiën"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.pill"
-msgstr ""
+msgstr "Goedgekeurd"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.threshold"
-msgstr ""
+msgstr "Uitbetalen of doneren is mogelijk vanaf € 5"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.caption"
-msgstr ""
+msgstr "Wacht op goedkeuring"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.pill"
-msgstr ""
+msgstr "In afwachting"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.rejected.pill"
-msgstr ""
+msgstr "Afgekeurd"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
-msgstr ""
+msgstr "Vergoedingen"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.below_threshold"
