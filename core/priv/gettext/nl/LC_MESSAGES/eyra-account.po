@@ -276,4 +276,4 @@ msgstr "jij@example.com"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
-msgstr ""
+msgstr "Te veel verzoeken. Probeer het zo opnieuw."

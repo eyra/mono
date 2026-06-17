@@ -286,4 +286,4 @@ msgstr "tu@example.com"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
-msgstr ""
+msgstr "Per daug užklausų. Pabandykite dar kartą po akimirkos."
