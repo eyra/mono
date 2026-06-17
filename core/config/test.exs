@@ -148,8 +148,11 @@ config :core, :rate,
     [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :feldspar_log, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local],
-    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
+    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local],
+    [service: :provider_reconcile, limit: 100_000, unit: :call, window: :minute, scope: :global]
   ]
+
+config :core, :reconciliation, backoff_ms: 0
 
 try do
   import_config "test.secret.exs"

@@ -43,6 +43,7 @@ defmodule Systems.Payment.Controller do
   defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)
   defp handle_event("transaction.status.changed", uid), do: handle_transaction_status_change(uid)
 
+  defp handle_event("withdrawal.status_changed", uid), do: handle_withdrawal_status_change(uid)
   defp handle_event("withdrawal.status.changed", uid), do: handle_withdrawal_status_change(uid)
 
   defp handle_event(type, _uid) do

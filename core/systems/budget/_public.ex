@@ -237,10 +237,6 @@ defmodule Systems.Budget.Public do
   @doc """
   Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
 
-  The OPP hosted checkout keeps the transaction open on their side, but once we've
-  marked it failed locally `complete_transaction/1` refuses to complete it even if
-  the webhook arrives later, so the user has to start a new pay-in.
-
   Returns the number of transactions that were expired.
   """
   def expire_stale_pay_ins(max_age_minutes \\ @pay_in_expiration_minutes)
@@ -261,6 +257,8 @@ defmodule Systems.Budget.Public do
 
     count
   end
+
+  def reconcile_transactions(opts, state), do: Budget.TransactionReconciliation.run(opts, state)
 
   # --- Helpers ---
 
