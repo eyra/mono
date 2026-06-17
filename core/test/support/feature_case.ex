@@ -35,6 +35,15 @@ defmodule CoreWeb.FeatureCase do
 
       alias Core.Factories
       alias Core.Repo
+
+      # Feature tests drive a real headless Chrome via chromedriver. Under
+      # full-suite load chromedriver intermittently takes 30–60s to ack a
+      # single /url POST (Wallaby gotcha — recv_timeout is :infinity in
+      # config/test.exs so a real hang is caught by this ExUnit timeout
+      # rather than a false-positive HTTPoison error). 120s gives that
+      # natural variability headroom while still failing hard on a genuine
+      # hang.
+      @moduletag timeout: 120_000
     end
   end
 
@@ -51,18 +60,23 @@ defmodule CoreWeb.FeatureCase do
     import Wallaby.Browser
     import Wallaby.Query
 
+    session =
+      session
+      |> visit("/user/signin")
+      |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
+      |> fill_in(css("[data-testid='signin-password-input']"), with: password)
+      |> click(css("[data-testid='signin-submit-button']"))
+      # Wait for the post-login LiveView to be fully connected. That signal
+      # proves the auth cookie was set, the destination LiveView mounted,
+      # and its WebSocket is up. We deliberately DO NOT add
+      # refute_has(signin-form) before this: refute_has polls the full
+      # max_wait_time even when the element is already absent (Wallaby's
+      # Browser.retry design), which floods chromedriver with hundreds of
+      # HTTP requests per sign_in. With multiple sign_ins in a suite, that
+      # backlog surfaces as HTTPoison :timeout on the next visit.
+      |> assert_has(css("[data-phx-main].phx-connected"))
+
     session
-    |> visit("/user/signin")
-    |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
-    |> fill_in(css("[data-testid='signin-password-input']"), with: password)
-    |> click(css("[data-testid='signin-submit-button']"))
-    # Block until login actually completes. Submitting posts to /user/session
-    # and redirects away from the sign-in form. Without waiting here, a caller
-    # can navigate (e.g. visit("/user/onboarding")) before the auth session
-    # cookie is set and get bounced back to /user/signin — a race that surfaces
-    # as flaky "element not found" failures under load. Waiting for the sign-in
-    # form to disappear confirms we've landed on the authenticated page.
-    |> refute_has(css("[data-testid='signin-form']"))
   end
 
   @doc """

@@ -27,19 +27,21 @@ defmodule Systems.Feldspar.ToolForm do
     placeholder = dgettext("eyra-feldspar", "zip-select-placeholder")
     select_button = dgettext("eyra-feldspar", "zip-select-file-button")
     replace_button = dgettext("eyra-feldspar", "zip-replace-file-button")
+    upload_key = :"file_#{id}"
 
     {
       :ok,
       socket
       |> assign(
         id: id,
+        upload_key: upload_key,
         label: label,
         placeholder: placeholder,
         select_button: select_button,
         replace_button: replace_button,
         entity: entity
       )
-      |> init_file_uploader(:file)
+      |> init_file_uploader(upload_key)
     }
   end
 
@@ -64,11 +66,15 @@ defmodule Systems.Feldspar.ToolForm do
     socket
   end
 
-  defp has_upload_error(%{assigns: %{uploads: %{file: %{errors: [_ | _]}}}}), do: true
-  defp has_upload_error(_), do: false
+  defp has_upload_error(%{assigns: %{uploads: uploads, upload_key: key}}) do
+    match?(%{errors: [_ | _]}, uploads[key])
+  end
 
-  defp has_upload_error(%{assigns: %{uploads: %{file: %{errors: errors}}}}, error_type) do
-    Enum.find(errors, fn {_, type} -> type === error_type end) != nil
+  defp has_upload_error(%{assigns: %{uploads: uploads, upload_key: key}}, error_type) do
+    case uploads[key] do
+      %{errors: errors} -> Enum.any?(errors, fn {_, type} -> type === error_type end)
+      _ -> false
+    end
   end
 
   # Saving
@@ -91,6 +97,7 @@ defmodule Systems.Feldspar.ToolForm do
         replace_button={@replace_button}
         select_button={@select_button}
         uploads={@uploads}
+        file_key={@upload_key}
         target={@myself}
       />
     </div>
