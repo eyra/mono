@@ -4,12 +4,12 @@ defmodule Next.Account.AuthOtpFlagTest do
 
   import Phoenix.LiveViewTest
 
-  describe "/user/auth with :otp feature flag disabled" do
+  describe "/user/auth/identify with :otp feature flag disabled" do
     test "redirects to /user/signin", %{conn: conn} do
       set_feature_flag(:otp, false)
 
       assert {:error, {:redirect, %{to: "/user/signin"}}} =
-               live(conn, ~p"/user/auth")
+               live(conn, ~p"/user/auth/identify")
     end
   end
 
@@ -22,11 +22,11 @@ defmodule Next.Account.AuthOtpFlagTest do
     end
   end
 
-  describe "GET /user/auth/finalize with :otp feature flag disabled" do
+  describe "GET /user/auth/redeem with :otp feature flag disabled" do
     test "redirects to /user/signin", %{conn: conn} do
       set_feature_flag(:otp, false)
 
-      conn = get(conn, ~p"/user/auth/finalize?token=irrelevant")
+      conn = get(conn, ~p"/user/auth/redeem?token=irrelevant")
       assert redirected_to(conn) == "/user/signin"
     end
   end

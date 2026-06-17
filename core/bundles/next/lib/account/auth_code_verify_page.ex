@@ -13,7 +13,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
   alias Frameworks.Pixel.Button
   alias Systems.Account
 
-  @token_salt "otp-finalize"
+  @token_salt "otp-redeem"
   @token_max_age 120
 
   @impl true
@@ -43,7 +43,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
       {:ok, user} ->
         payload = %{user_id: user && user.id, email: email}
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
-        {:noreply, redirect(socket, to: ~p"/user/auth/finalize?token=#{token}")}
+        {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
 
       {:error, :invalid} ->
         {:noreply,
@@ -61,11 +61,11 @@ defmodule Next.Account.AuthCodeVerifyPage do
         {:noreply,
          socket
          |> put_flash(:error, message)
-         |> push_navigate(to: ~p"/user/auth")}
+         |> push_navigate(to: ~p"/user/auth/identify")}
     end
   end
 
-  def verify_finalize_token(token) do
+  def decode_redeem_token(token) do
     Phoenix.Token.verify(Endpoint, @token_salt, token, max_age: @token_max_age)
   end
 

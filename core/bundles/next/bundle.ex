@@ -10,16 +10,16 @@ defmodule Next.Bundle do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", Account.SigninPage)
           live("/user/signin/:user_type", Account.SigninPage)
-          live("/user/auth", Account.AuthPage)
+          live("/user/auth/identify", Account.AuthPage)
+          live("/user/auth/identify/:provider", Account.AuthSignupPage)
           live("/user/auth/verify", Account.AuthCodeVerifyPage)
-          live("/user/auth/:provider", Account.AuthSignupPage)
           get("/user/session", Account.SessionController, :new)
           post("/user/session", Account.SessionController, :create)
         end
 
         scope "/", Next do
           pipe_through([:browser])
-          get("/user/auth/finalize", Account.SessionController, :finalize_otp)
+          get("/user/auth/redeem", Account.SessionController, :redeem_otp)
           delete("/user/session", Account.SessionController, :delete)
         end
       end
