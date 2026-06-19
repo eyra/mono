@@ -239,9 +239,6 @@ defmodule Systems.Assignment.Controller do
     |> render(:"503")
   end
 
-  # A full study is not an error: show a friendly "study is full" page (200)
-  # instead of the generic 503, so a participant arriving via a direct invite
-  # link sees a clear message rather than a server error.
   defp study_full(conn) do
     conn
     |> put_view(html: CoreWeb.ErrorHTML)
