@@ -115,8 +115,34 @@ defmodule Systems.Pool.Public do
     |> Enum.map(&Directable.director/1)
   end
 
-  def list_participants(%Pool.Model{} = pool) do
-    auth_module().users_with_role(pool, :participant)
+  def list_participants(%Pool.Model{} = pool, preload \\ []) do
+    auth_module().users_with_role(pool, :participant, preload)
+  end
+
+  @doc """
+  Like `list_participants/2` but returns `{user, added_at}` tuples where
+  `added_at` is the timestamp at which the `:participant` role was granted
+  on the pool's auth_node.
+  """
+  def list_participants_with_added_at(%Pool.Model{auth_node_id: auth_node_id}) do
+    rows =
+      from(ra in Core.Authorization.RoleAssignment,
+        join: u in Account.User,
+        on: u.id == ra.principal_id,
+        where: ra.node_id == ^auth_node_id and ra.role == :participant,
+        select: {u, ra.inserted_at}
+      )
+      |> Repo.all()
+
+    profiles_by_id =
+      rows
+      |> Enum.map(&elem(&1, 0))
+      |> Repo.preload(:profile)
+      |> Map.new(&{&1.id, &1.profile})
+
+    Enum.map(rows, fn {user, added_at} ->
+      {%{user | profile: Map.get(profiles_by_id, user.id)}, added_at}
+    end)
   end
 
   @doc """

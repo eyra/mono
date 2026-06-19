@@ -83,12 +83,16 @@ msgid "director.student"
 msgstr "Student"
 
 #, elixir-autogen, elixir-format
-msgid "participants.placeholder"
-msgstr "Deelnemerslijst komt in een vervolgcommit."
-
-#, elixir-autogen, elixir-format
 msgid "participants.title"
 msgstr "Deelnemers"
+
+#, elixir-autogen, elixir-format
+msgid "participants.search.placeholder"
+msgstr "Zoek op e-mailadres of naam"
+
+#, elixir-autogen, elixir-format
+msgid "participants.added.label"
+msgstr "Toegevoegd"
 
 #, elixir-autogen, elixir-format
 msgid "settings.placeholder"
