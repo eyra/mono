@@ -2,6 +2,7 @@ defmodule Systems.Assignment.ControllerTest do
   use CoreWeb.ConnCase, async: true
 
   alias Systems.Assignment
+  alias Systems.Fund
   alias Systems.Workflow
   alias Systems.Monitor
 
@@ -50,6 +51,45 @@ defmodule Systems.Assignment.ControllerTest do
       conn = get(conn, "/assignment/1/invite")
       response = html_response(conn, 302)
       assert response =~ "href=\"/user/signin"
+    end
+  end
+
+  describe "apply with budget capacity" do
+    setup :login_as_member
+
+    test "blocks apply when the budget cannot cover one more reward", %{conn: conn} do
+      id = online_paid_assignment_id(6000)
+
+      conn = get(conn, "/assignment/#{id}/apply")
+      html_response(conn, 503)
+    end
+
+    test "allows apply when the budget can cover one more reward", %{conn: conn} do
+      id = online_paid_assignment_id(100)
+
+      conn = get(conn, "/assignment/#{id}/apply")
+      response = html_response(conn, 302)
+      assert response =~ "href=\"/assignment/#{id}"
+    end
+
+    test "allows a participant who already joined to return when the budget is full",
+         %{conn: conn} do
+      id = online_paid_assignment_id(100)
+
+      # Join while there is still capacity (reserves the reward).
+      conn = get(conn, "/assignment/#{id}/apply")
+      html_response(conn, 302)
+
+      # Budget becomes full afterwards.
+      assignment = Assignment.Public.get!(id, [:info])
+
+      assignment.info
+      |> Ecto.Changeset.change(subject_reward: 6000)
+      |> Core.Repo.update!()
+
+      # The returning participant is not blocked.
+      conn = get(conn, "/assignment/#{id}/apply")
+      html_response(conn, 302)
     end
   end
 
@@ -365,5 +405,22 @@ defmodule Systems.Assignment.ControllerTest do
       assert response.resp_body =~ "external_id_2,yes,accepted,finished\r\n"
       assert response.resp_body =~ "external_id_3,no,n/a,n/a\r\n"
     end
+  end
+
+  defp online_paid_assignment_id(subject_reward) do
+    currency = Fund.Factories.create_currency("eur_apply_#{subject_reward}", :legal, "€", 2)
+    fund = Fund.Factories.create_fund("apply_fund_#{subject_reward}", currency)
+
+    info =
+      Factories.insert!(:assignment_info, %{
+        subject_count: 10,
+        subject_reward: subject_reward,
+        duration: "31",
+        language: :en,
+        devices: [:desktop]
+      })
+
+    %{id: id} = Factories.insert!(:assignment, %{info: info, fund: fund, status: :online})
+    id
   end
 end

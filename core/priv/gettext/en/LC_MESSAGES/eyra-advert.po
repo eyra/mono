@@ -161,3 +161,7 @@ msgstr "Need more participants? Add more spots to your study."
 #, elixir-autogen, elixir-format
 msgid "pool.visibility.filled.banner.title"
 msgstr "All spots are filled"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.button"
+msgstr "Fully booked"

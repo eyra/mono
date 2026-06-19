@@ -113,3 +113,7 @@ msgstr "Continue"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "You are about to start a questionnaire. Once you have completed it, you will automatically return to this page."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Fully booked"
