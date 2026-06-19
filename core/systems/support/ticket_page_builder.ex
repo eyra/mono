@@ -21,6 +21,7 @@ defmodule Systems.Support.TicketPageBuilder do
       face: %{
         type: :secondary,
         label: dgettext("eyra-admin", "close.ticket.button"),
+        border_color: "border-delete",
         text_color: "text-delete"
       }
     }
@@ -49,13 +50,22 @@ defmodule Systems.Support.TicketPageBuilder do
          user: %{
            email: email,
            creator: creator,
-           profile: %{
-             fullname: fullname,
-             photo_url: photo_url
-           },
+           profile: %{fullname: fullname, photo_url: photo_url},
            features: features
          }
        }) do
+    build_member(id, title, email, creator, fullname, photo_url, features)
+  end
+
+  defp to_member(%{
+         id: id,
+         title: title,
+         user: %{email: email, creator: creator, features: features}
+       }) do
+    build_member(id, title, email, creator, email, nil, features)
+  end
+
+  defp build_member(id, title, email, creator, fullname, photo_url, features) do
     role =
       if creator do
         dgettext("eyra-admin", "role.creator")

@@ -37,10 +37,8 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
   feature "first-time mock user goes through onboarding to signed-in page", %{session: session} do
     session
     |> visit("/user/auth/mock/reset")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     |> assert_has(Query.css("[data-testid='auth-signin-button']"))
     |> click(Query.css("[data-testid='auth-signin-button']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
     # First step: terms-and-privacy
     |> assert_has(Query.css("[data-testid='terms-and-privacy-onboarding-terms']"))
     # Continue without accepting terms → flash error

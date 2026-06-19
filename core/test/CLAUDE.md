@@ -331,117 +331,65 @@ end
 - Database isolation still works with `async: false`
 - Use `async: true` when not testing signals for better performance
 
-## Wallaby Feature Testing
+## When to write which kind of test
 
-### Multi-Session Tests
-Use `@sessions N` to create multiple browser sessions:
-```elixir
-@sessions 2
-@tag :feature
-feature "two users interact", %{sessions: [researcher, participant]} do
-  # researcher and participant are separate browser sessions
-end
-```
+Eyra has four test categories. They live in different directories, have different mechanics, and answer different questions. Pick the right one *before* writing.
 
-### data-testid Naming Convention
-Use this convention to avoid CSS selector collisions:
+| Category | Directory | What it answers | Speed | External systems |
+|---|---|---|---|---|
+| **Unit** | `test/systems/...`, `test/core_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
+| **Feature (Wallaby)** | `test/features/` | "Does this user journey work end-to-end through the UI, happy path?" | seconds | mocked via Mox |
+| **E2E (Playwright)** | `test/e2e/` | "Does the deployed system work in a real browser, with real external integrations (real OPP sandbox, real Feldspar, real storage)?" | tens of seconds | real |
+| **Smoke (Playwright)** | `test/smoke/` | "Did the latest deploy survive its own boot? Are the critical endpoints reachable?" | seconds | real |
 
-- **Main elements**: `{element}_{id}` → `card_7`
-- **Actions/buttons**: `{event}__action__{element}_{id}` → `delete__action__card_7`
+### Unit (`test/systems/...`)
 
-**Separators**:
-- `_` for words within a segment (e.g., `create_first_item`)
-- `__` for hierarchy levels (e.g., `delete__action__card_7`)
+Use for:
+- State-machine clause coverage (each `when` guard, each branch)
+- Changesets, validations
+- Error / failure branches (`{:error, _}` paths)
+- Business-logic edges: "rapid double-click doesn't create duplicates," "button is disabled when reward = 0," "second transaction on same assignment uses fresh provider uid"
+- `live_isolated` tests for view-builder + event-handler logic without full browser stack
 
-**Why**: CSS prefix selectors like `[data-testid^='card_']` only match main cards, not action buttons.
+If the question is "what does function X return when input is Y?" — unit.
+If the question is "what does the LV render when assigns look like Z?" — `live_isolated` LV test.
 
-```elixir
-# In clickable_card.ex
-data-testid={"card_#{@id}"}                           # Main card
-data-testid={"show_more__action__card_#{@card_id}"}   # Show more button
-data-testid={"delete__action__card_#{@card_id}"}      # Delete action
-```
+### Feature (`test/features/`)
 
-### Waiting for LiveView to be Ready (Stale Reference Prevention)
-After navigation, LiveView may still be connecting or morphing the DOM. Wait for the `.phx-connected` class:
+Use for:
+- One *user journey* walked end-to-end through the UI, happy path only
+- Cross-system flows where the UI integration matters
+- Multi-session interactions (researcher + participant)
 
-```elixir
-# ❌ WRONG: Element becomes stale during LiveView DOM morphing
-researcher |> click(Query.css(@card_selector))
-researcher |> assert_has(Query.css("[data-testid='my-button']"))
-researcher |> click(Query.css("[data-testid='my-button']"))  # StaleReferenceError!
+**Edge cases do NOT belong here.** Disabled-button state, double-click idempotency, error branches, state-machine transitions, "field X is hidden when Y" — these all live in unit tests or `live_isolated` LV tests. Feature tests are slow (browser, chromedriver, full LV stack); don't load them with assertions a unit test can make in 1ms.
 
-# ✅ CORRECT: Wait for LiveView WebSocket connection to be established
-researcher |> click(Query.css(@card_selector))
-researcher |> assert_has(Query.css("[data-phx-main].phx-connected"))  # Wait for LiveView ready
-researcher |> assert_has(Query.css("[data-testid='my-button']"))
-researcher |> click(Query.css("[data-testid='my-button']"))
-```
+If the question is "does the user journey from signin → action → result work?" — feature.
 
-**Why this works**: Phoenix LiveView adds `.phx-connected` class to the main container (`[data-phx-main]`)
-when the WebSocket connection is established and the view is ready. Before this, the DOM may be morphing
-and elements can become stale between `find` and interaction.
+Mechanics, scope, multi-session, testids, waiting: `test/features/CLAUDE.md`.
 
-### Debugging Wallaby Tests
-When a selector doesn't match, **add logging** to see what's actually on the page:
+### E2E (`test/e2e/`)
 
-```elixir
-# Log all data-testids on the page
-html = Wallaby.Browser.page_source(session)
-testids = Regex.scan(~r/data-testid="([^"]+)"/, html) |> Enum.map(&List.last/1)
-IO.puts("\n=== ALL DATA-TESTIDS ===")
-testids |> Enum.each(&IO.puts/1)
-IO.puts("=== END ===\n")
-```
+Use for:
+- Verifying the *deployed system* works against real external dependencies (OPP sandbox, Feldspar storage backends, real Phoenix runtime)
+- Things only real deployments break: cookies across navigation, CSP headers, asset pipeline, environment-specific config
 
-**Key principle**: Don't assume bugs in Wallaby. Always log and verify what's actually rendered.
+If the journey can be mocked via Mox without losing what you're testing → feature, not E2E. E2E is for the "real integrations" bucket; if it doesn't exercise a real external system, it's a feature test in disguise.
 
-### Getting Element Attributes
-```elixir
-# Find element and get attribute
-element = session |> find(Query.css("[data-testid^='card_']"))
-testid = Wallaby.Element.attr(element, "data-testid")
-# Extract ID: "card_7" -> "7"
-card_id = testid |> String.replace("card_", "")
-```
+Mechanics: `test/e2e/CLAUDE.md`.
 
-### CSS Attribute Selectors
-- `^=` starts with: `[data-testid^='card_']` matches `card_7`
-- `$=` ends with: `[data-testid$='_button']` matches `submit_button`
-- `*=` contains: `[data-testid*='action']` matches `delete__action__card_7`
-- `=` exact match: `[data-testid='card_7']` matches only `card_7`
+### Smoke (`test/smoke/`)
 
-### Feature Test File Template
-```elixir
-defmodule CoreWeb.Features.MyFeatureTest do
-  use CoreWeb.FeatureCase
+Use for:
+- Post-deploy verification — does the env at URL X respond to GET /, do the auth endpoints return their expected shape, does Feldspar load
+- Run as part of the deploy pipeline against a freshly-rolled env
 
-  @card_selector "[data-testid^='card_']"
+Smoke tests are *not* feature tests with a shorter list. They're targeted assertions on specific endpoints/pages that tell you a deploy is alive.
 
-  @sessions 2
-  @tag :feature
-  feature "description", %{sessions: [user1, user2]} do
-    # Setup users
-    password = Factories.valid_user_password()
-    user = Factories.insert!(:member, %{
-      password: password,
-      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      creator: true
-    })
+### How the four interact
 
-    # Login
-    user1
-    |> visit("/user/signin")
-    |> click(Query.css("[data-testid='signin-tab-creator']"))
-    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: user.email)
-    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
-    |> click(Query.css("[data-testid='signin-submit-button']"))
-
-    # Test actions...
-  end
-end
-```
+- A new flow gets a **happy-path feature test** (one journey, one `feature` block) plus **unit tests for every state-machine clause and error branch.** That's the default.
+- An **E2E test** is added on top *only* when a real external integration needs verification (OPP sandbox, real storage upload). Otherwise the feature test covers it.
+- **Smoke** is for deploy-time, not for verifying behavior.
 
 ## Pre-commit Hook Rules
 

@@ -24,6 +24,7 @@ import { LiveContent, LiveField } from "./live_content";
 import { Tab, TabBar, TabContent, TabFooterItem } from "./tabbed";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
+import { AuthCodeInput } from "./auth_code_input";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { ResetScroll } from "./reset_scroll";
@@ -83,6 +84,7 @@ const NativeWrapper = {
 };
 
 let Hooks = {
+  AuthCodeInput,
   Cell,
   Clipboard,
   FeldsparApp,

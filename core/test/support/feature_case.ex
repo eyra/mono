@@ -35,6 +35,15 @@ defmodule CoreWeb.FeatureCase do
 
       alias Core.Factories
       alias Core.Repo
+
+      # Feature tests drive a real headless Chrome via chromedriver. Under
+      # full-suite load chromedriver intermittently takes 30–60s to ack a
+      # single /url POST (Wallaby gotcha — recv_timeout is :infinity in
+      # config/test.exs so a real hang is caught by this ExUnit timeout
+      # rather than a false-positive HTTPoison error). 120s gives that
+      # natural variability headroom while still failing hard on a genuine
+      # hang.
+      @moduletag timeout: 120_000
     end
   end
 
@@ -46,6 +55,10 @@ defmodule CoreWeb.FeatureCase do
 
   @doc """
   Signs in a user through the browser login form.
+
+  Post-signin destination varies by user type (participant → home,
+  creator → projects, etc.), so we wait on URL change rather than a
+  destination data-testid. See `assert_path_changed_from/3`.
   """
   def sign_in(session, user, password) do
     import Wallaby.Browser
@@ -56,13 +69,43 @@ defmodule CoreWeb.FeatureCase do
     |> fill_in(css("[data-testid='signin-email-input']"), with: user.email)
     |> fill_in(css("[data-testid='signin-password-input']"), with: password)
     |> click(css("[data-testid='signin-submit-button']"))
-    # Block until login actually completes. Submitting posts to /user/session
-    # and redirects away from the sign-in form. Without waiting here, a caller
-    # can navigate (e.g. visit("/user/onboarding")) before the auth session
-    # cookie is set and get bounced back to /user/signin — a race that surfaces
-    # as flaky "element not found" failures under load. Waiting for the sign-in
-    # form to disappear confirms we've landed on the authenticated page.
-    |> refute_has(css("[data-testid='signin-form']"))
+    |> assert_path_changed_from("/user/signin")
+  end
+
+  @doc """
+  Polls until the current URL path is no longer `from_path`. Use after an
+  action that navigates when the destination path varies (e.g., post-signin
+  landing depends on user type).
+
+  Mirrors Playwright's `page.waitForURL` and Cypress's `cy.url().should(...)`.
+  URL changes are atomic, so this is race-free — no DOM polling, no
+  stale-element exposure. Works for full page loads AND LiveView
+  `push_navigate` / `push_patch` (both update `window.location` via
+  `history.pushState`).
+
+  Does NOT apply to in-page LiveView updates that don't change the URL
+  (modal open, save-in-place, etc.) — use `assert_has(destination-testid)`
+  for those.
+  """
+  def assert_path_changed_from(session, from_path, timeout \\ 5_000) do
+    deadline = System.monotonic_time(:millisecond) + timeout
+    do_wait_path_change(session, from_path, deadline)
+  end
+
+  defp do_wait_path_change(session, from_path, deadline) do
+    case Wallaby.Browser.current_path(session) do
+      ^from_path ->
+        if System.monotonic_time(:millisecond) > deadline do
+          raise Wallaby.ExpectationNotMetError,
+            message: "Expected URL path to change from #{from_path}"
+        end
+
+        Process.sleep(50)
+        do_wait_path_change(session, from_path, deadline)
+
+      _ ->
+        session
+    end
   end
 
   @doc """

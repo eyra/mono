@@ -37,12 +37,14 @@ defmodule Frameworks.Pixel.ConfirmationModal do
        ) do
     confirm = %{
       action: confirm_action || %{type: :send, target: myself, event: "confirm"},
-      face: %{type: :primary, label: confirm_label}
+      face: %{type: :primary, label: confirm_label},
+      testid: "confirmation-modal-confirm-button"
     }
 
     cancel = %{
       action: %{type: :send, target: myself, event: "cancel"},
-      face: %{type: :secondary, label: cancel_label}
+      face: %{type: :secondary, label: cancel_label},
+      testid: "confirmation-modal-cancel-button"
     }
 
     assign(socket, buttons: [confirm, cancel])

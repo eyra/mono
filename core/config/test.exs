@@ -98,6 +98,16 @@ config :wallaby,
   js_logger: if(System.get_env("WALLABY_JS_LOGGER") == "1", do: :stdio, else: nil),
   # Increase wait time for slow CI environments where JS takes longer to execute
   max_wait_time: String.to_integer(System.get_env("WALLABY_MAX_WAIT_TIME", "5000")),
+  # Remove the HTTPoison recv_timeout cap on requests to chromedriver. The
+  # 5s default fires false-positive `HTTPoison.Error{reason: :timeout}`
+  # failures even when the page server-side mount completed promptly,
+  # because chromedriver intermittently delays its response to `/url`
+  # (POST visit) past 5s under suite load. This is a documented Wallaby
+  # gotcha — see https://elixirforum.com/t/workaround-for-wallaby-httpoison-error/29018.
+  # Wallaby itself retries 5 times around `HTTPoison.Error{:timeout}`, so an
+  # *actually* hung chromedriver still fails fast via the
+  # `wait_until_ready` + ExUnit test timeout.
+  hackney_options: [recv_timeout: :infinity, hackney: [pool: :wallaby_pool]],
   chromedriver: [
     headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
   ]
@@ -110,7 +120,8 @@ config :core, :features,
   debug_expire_force: true,
   panl: true,
   panl_post_launch: true,
-  e2e: true
+  e2e: true,
+  otp: true
 
 config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
@@ -138,8 +149,11 @@ config :core, :rate,
     [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :feldspar_log, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :signup, limit: 100, unit: :call, window: :minute, scope: :local],
-    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
+    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local],
+    [service: :provider_reconcile, limit: 100_000, unit: :call, window: :minute, scope: :global]
   ]
+
+config :core, :reconciliation, backoff_ms: 0
 
 try do
   import_config "test.secret.exs"

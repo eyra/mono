@@ -81,3 +81,7 @@ msgstr "Wachtwoord veranderd"
 #, elixir-autogen, elixir-format
 msgid "password.updated.successfully"
 msgstr "Wachtwoord aangepast"
+
+#, elixir-autogen, elixir-format
+msgid "auth.session.expired"
+msgstr ""

@@ -17,6 +17,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
+  alias Systems.Budget
   alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
@@ -187,6 +188,10 @@ defmodule Core.Factories do
 
   def build(:fund) do
     build(:fund, %{name: Faker.Lorem.sentence()})
+  end
+
+  def build(:currency_ledger) do
+    build(:currency_ledger, %{currency: Faker.Util.pick([:EUR, :USD])})
   end
 
   def build(:book_account) do
@@ -922,6 +927,18 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
+  def build(:currency_ledger, %{} = attributes) do
+    {currency, attributes} = Map.pop(attributes, :currency, :EUR)
+    id = currency |> Atom.to_string() |> String.downcase()
+
+    %Budget.CurrencyLedgerModel{
+      currency: currency,
+      inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
+      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
+    }
+    |> struct!(attributes)
+  end
+
   def build(:bank_account, %{} = attributes) do
     {currency, attributes} = Map.pop(attributes, :currency, build(:currency))
     {account, attributes} = Map.pop(attributes, :account, build(:book_account))
@@ -974,6 +991,18 @@ defmodule Core.Factories do
       user: user,
       deposit: deposit,
       payment: payment
+    }
+    |> struct!(attributes)
+  end
+
+  def build(:payout, %{} = attributes) do
+    {user, attributes} = Map.pop(attributes, :user, build(:member))
+
+    %Fund.PayoutModel{
+      user: user,
+      amount_cents: 1000,
+      currency: "eur",
+      status: :pending
     }
     |> struct!(attributes)
   end

@@ -9,6 +9,13 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#26 2026-06-17
+* Added - Participant pay-out request (UC-OPP-06): "Uitbetalen" button on the home rewards card opens a handoff modal, then routes through the OPP withdrawal flow (pay-in via the platform merchant, withdrawal backed by a platform→participant charge); home rewards card refreshes reactively as the payout transitions
+* Added - OTP authentication backend (dormant until UI lands): 6-digit code, 10-minute TTL, 5-attempt cap, rate-limited to 3 requests/minute per email
+* Changed - Pay-out concurrency hardened: a second tab/device firing pay-out loses the race and rolls back instead of double-charging
+* Changed - Home rewards card keeps showing locked funds while a pay-out is in flight; "Being paid out" line removed
+* Fixed - "Participants waiting for pay out" banner intermittently hid pending money for participants with more than one task
+
 ## \#25.1 2026-06-14
 * Fixed - Affiliate URLs with `?p=null` or `?p=undefined` now return 403 instead of silently creating ghost affiliate users (came from external panels coercing an empty JS variable to the string "null")
 * Fixed - 403 page and other status pages showed raw msgids ("page.title" / "403.body") instead of translated text on DE / ES / IT / LT / RO

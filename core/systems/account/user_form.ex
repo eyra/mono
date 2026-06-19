@@ -163,7 +163,7 @@ defmodule Systems.Account.UserForm do
       end)
       |> URI.encode_query()
 
-    assigns = assign(assigns, :google_url, "/google-sign-in?#{query_string}")
+    assigns = assign(assigns, :google_url, "/auth/google?#{query_string}")
 
     ~H"""
       <a href={@google_url}>

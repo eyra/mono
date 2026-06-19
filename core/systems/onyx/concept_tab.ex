@@ -3,6 +3,7 @@ defmodule Systems.Onyx.ConceptTab do
   use LiveNest, :embedded_live_view
   use CoreWeb.UI
   use Frameworks.Pixel
+  use Frameworks.Signal.LiveFeature
 
   alias Frameworks.Pixel.Grid
 

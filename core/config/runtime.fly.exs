@@ -99,6 +99,9 @@ if config_env() == :prod do
           "pay_in_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Budget.PayInExpirationWorker}]}
 
+          "payment_reconciliation" ->
+            {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
+
           _ ->
             nil
         end
@@ -158,7 +161,7 @@ if config_env() == :prod do
   # =============================================================================
 
   config :core, GoogleSignIn,
-    redirect_uri: "#{base_url}/google-sign-in/auth",
+    redirect_uri: "#{base_url}/auth/google/callback",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 

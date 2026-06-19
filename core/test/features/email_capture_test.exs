@@ -44,25 +44,24 @@ defmodule CoreWeb.Features.EmailCaptureTest do
     # Login as participant
     session
     |> visit("/user/signin")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='signin-email-input']"))
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='home-page']"))
 
     # Verify we're logged in by checking home page loaded
     session
     |> visit("/")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='home-page']"))
 
     # Navigate to the assignment — should show finished view
     session
     |> visit("/assignment/#{assignment.id}")
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='email-capture-block']"))
 
     # Should see the email capture form
     session
-    |> assert_has(Query.css("[data-testid='email-capture-block']"))
     |> assert_has(Query.css("[data-testid='email-capture-input']"))
     |> assert_has(Query.css("[data-testid='email-capture-submit']"))
 
