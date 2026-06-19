@@ -69,3 +69,31 @@ msgstr "Toon meer"
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marketplace"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr "Burger"
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr "Student"
+
+#, elixir-autogen, elixir-format
+msgid "participants.placeholder"
+msgstr "Deelnemerslijst komt in een vervolgcommit."
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr "Deelnemers"
+
+#, elixir-autogen, elixir-format
+msgid "settings.placeholder"
+msgstr "Pool-instellingen vervangen de Citizen Pool modal in een vervolgcommit."
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Instellingen"

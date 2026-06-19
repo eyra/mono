@@ -119,6 +119,22 @@ defmodule Systems.Pool.Public do
     auth_module().users_with_role(pool, :participant)
   end
 
+  @doc """
+  Whether `user` can manage `pool` from the Pool Admin page.
+
+  System admins can manage any pool. Otherwise the user must be an owner
+  of the org that the pool belongs to.
+  """
+  def can_manage?(%Pool.Model{org: %Org.NodeModel{} = org}, %Account.User{} = user) do
+    Org.Public.can_manage?(org, user)
+  end
+
+  def can_manage?(%Pool.Model{} = pool, %Account.User{} = user) do
+    pool |> Repo.preload(:org) |> can_manage?(user)
+  end
+
+  def can_manage?(_, _), do: false
+
   def list_participant_ids do
     pool_ids =
       from(p in Pool.Model, select: p.auth_node_id)

@@ -26,6 +26,11 @@ defmodule Systems.Org.PoolsView do
   end
 
   @impl true
+  def handle_event("card_clicked", %{"item" => pool_id}, socket) do
+    {:noreply, push_navigate(socket, to: ~p"/pool/#{pool_id}/content")}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div data-testid="org-pools-view">

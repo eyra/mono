@@ -72,12 +72,13 @@ defmodule Systems.Org.PoolsViewBuilderTest do
       assert item.description =~ "1"
     end
 
-    test "currency appears as a tag chip", %{org: org} do
+    test "director and currency appear as tag chips", %{org: org} do
       vm = Org.PoolsViewBuilder.view_model(org, %{locale: :en})
 
       [item] = vm.pools
       assert is_list(item.tags)
-      assert length(item.tags) == 1
+      assert dgettext("eyra-pool", "director.citizen") in item.tags
+      assert length(item.tags) == 2
     end
   end
 end

@@ -69,3 +69,31 @@ msgstr "Show more"
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marketplace"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr "Citizen"
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr "Student"
+
+#, elixir-autogen, elixir-format
+msgid "participants.placeholder"
+msgstr "Participant list lands in a follow-up commit."
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "settings.placeholder"
+msgstr "Pool settings replace the Citizen Pool modal in a follow-up commit."
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Settings"
