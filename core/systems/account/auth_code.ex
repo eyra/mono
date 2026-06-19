@@ -51,6 +51,12 @@ defmodule Systems.Account.AuthCodeModel do
     )
   end
 
+  def expired_query do
+    from(t in __MODULE__,
+      where: t.inserted_at <= ago(@validity_in_minutes, "minute")
+    )
+  end
+
   defp generate_code do
     min = Integer.pow(10, @code_length - 1)
     max = Integer.pow(10, @code_length) - 1

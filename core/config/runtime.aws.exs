@@ -98,6 +98,11 @@ if config_env() == :prod do
           "payment_reconciliation" ->
             {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
 
+          # Prunes auth_codes older than the validity window
+          # Add "auth_code_cleanup" to ENABLED_OBAN_PLUGINS to enable
+          "auth_code_cleanup" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
+
           _ ->
             nil
         end
