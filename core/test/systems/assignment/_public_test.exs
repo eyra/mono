@@ -976,6 +976,13 @@ defmodule Systems.Assignment.PublicTest do
 
       assert Assignment.Public.has_budget_capacity?(assignment)
     end
+
+    # A paid assignment whose fund can't be resolved fails closed (treated as
+    # full) and logs a warning via the budget_capacity/1 fallback. The warning
+    # itself isn't asserted here because the test logger runs at :error.
+    test "false for a paid assignment without a fund" do
+      refute Assignment.Public.has_budget_capacity?(funded_assignment(nil, 6000))
+    end
   end
 
   defp funded_assignment(fund, subject_reward) do

@@ -71,6 +71,26 @@ defmodule Systems.Assignment.ControllerTest do
       response = html_response(conn, 302)
       assert response =~ "href=\"/assignment/#{id}"
     end
+
+    test "allows a participant who already joined to return when the budget is full",
+         %{conn: conn} do
+      id = online_paid_assignment_id(100)
+
+      # Join while there is still capacity (reserves the reward).
+      conn = get(conn, "/assignment/#{id}/apply")
+      html_response(conn, 302)
+
+      # Budget becomes full afterwards.
+      assignment = Assignment.Public.get!(id, [:info])
+
+      assignment.info
+      |> Ecto.Changeset.change(subject_reward: 6000)
+      |> Core.Repo.update!()
+
+      # The returning participant is not blocked.
+      conn = get(conn, "/assignment/#{id}/apply")
+      html_response(conn, 302)
+    end
   end
 
   describe "progress report" do

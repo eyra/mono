@@ -918,6 +918,11 @@ defmodule Systems.Assignment.Public do
   Returns true when the assignment's fund can cover at least one more
   participant's reward. Free assignments and virtual currencies always pass;
   a paid assignment without a resolvable legal-currency fund never passes.
+
+  The available balance already excludes rewards reserved for in-flight
+  participants: reserving a reward debits the fund's available account (and
+  credits the reserve account), so `Fund.Model.amount_available/1` reflects
+  only the genuinely unreserved balance.
   """
   def has_budget_capacity?(%Assignment.Model{} = assignment) do
     assignment
@@ -937,8 +942,10 @@ defmodule Systems.Assignment.Public do
     Fund.Model.amount_available(fund) >= reward
   end
 
-  defp budget_capacity(%Assignment.Model{fund: %Fund.Model{currency: %Fund.CurrencyModel{}}}),
-    do: true
+  defp budget_capacity(%Assignment.Model{
+         fund: %Fund.Model{currency: %Fund.CurrencyModel{type: :virtual}}
+       }),
+       do: true
 
   defp budget_capacity(%Assignment.Model{id: id}) do
     Logger.warning("[Assignment] paid assignment ##{id} has no resolvable fund; treating as full")
