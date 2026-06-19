@@ -5,6 +5,7 @@ defmodule Systems.Org.ContentPageBuilder do
   alias Systems.Admin
   alias Systems.Content
   alias Systems.Org
+  alias Systems.Pool
 
   def view_model(
         %{id: node_id, full_name_bundle: full_name_bundle} = node,
@@ -26,7 +27,7 @@ defmodule Systems.Org.ContentPageBuilder do
     assigns_with_context = Map.put(assigns, :live_context, live_context)
 
     %{
-      title: dgettext("eyra-admin", "config.title"),
+      title: dgettext("eyra-org", "content.title"),
       tabs: create_tabs(node, assigns_with_context),
       breadcrumbs: create_breadcrumbs(org_name, is_admin?, governable_orgs),
       show_errors: false,
@@ -57,8 +58,16 @@ defmodule Systems.Org.ContentPageBuilder do
   end
 
   defp create_tabs(node, assigns) do
-    [:users, :node]
+    tab_ids(node)
     |> Enum.map(&create_tab(&1, node, assigns))
+  end
+
+  defp tab_ids(node) do
+    if Pool.Public.list_by_orgs([node]) |> Enum.any?() do
+      [:users, :pools, :node]
+    else
+      [:users, :node]
+    end
   end
 
   defp create_tab(:node, %{id: node_id}, %{live_context: context}) do
@@ -92,6 +101,24 @@ defmodule Systems.Org.ContentPageBuilder do
       ready: true,
       show_errors: false,
       title: dgettext("eyra-org", "user.title"),
+      type: :fullpage,
+      element: element
+    }
+  end
+
+  defp create_tab(:pools, %{id: node_id}, %{live_context: context}) do
+    element =
+      CoreWeb.Live.Element.prepare_live_view(
+        "org_pools_view_#{node_id}",
+        Org.PoolsView,
+        live_context: context
+      )
+
+    %{
+      id: :pools,
+      ready: true,
+      show_errors: false,
+      title: dgettext("eyra-org", "pools.title"),
       type: :fullpage,
       element: element
     }

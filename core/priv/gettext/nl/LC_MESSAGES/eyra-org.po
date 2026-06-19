@@ -91,3 +91,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "domain.match.next_action.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pools.title"
+msgstr "Pools"
+
+#, elixir-autogen, elixir-format
+msgid "pools.participants.label"
+msgstr "Deelnemers"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Organisatie"
