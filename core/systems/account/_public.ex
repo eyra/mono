@@ -451,6 +451,17 @@ defmodule Systems.Account.Public do
     Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
 
+  @doc """
+  Deletes auth codes that are past their validity window.
+
+  Codes older than the validity window can no longer satisfy `active_query/1`,
+  so the rows are dead weight. Returns the number of rows deleted.
+  """
+  def cleanup_expired_auth_codes do
+    {deleted_count, _} = Repo.delete_all(Account.AuthCodeModel.expired_query())
+    deleted_count
+  end
+
   def verify_otp(email, code) when is_binary(email) and is_binary(code) do
     case Account.AuthCodeModel.active_query(email) |> Repo.one() do
       nil ->
