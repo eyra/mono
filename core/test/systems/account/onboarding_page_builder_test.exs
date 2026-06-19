@@ -146,7 +146,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     end
   end
 
-  describe "view_model/2 with unactivated SSO user" do
+  describe "view_model/2 with unactivated passwordless user (SSO)" do
     setup do
       {:ok, user} =
         %Account.User{}
@@ -189,7 +189,36 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
       assert vm.continue_button == nil
     end
 
-    test "no activate_account step for SSO users (terms step activates them)", %{user: user} do
+    test "no activate_account step (terms step activates them)", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      refute :activate_account in vm.steps
+    end
+  end
+
+  describe "view_model/2 with unactivated passwordless user (OTP)" do
+    setup do
+      email = "otp-#{System.unique_integer([:positive])}@example.com"
+      {:ok, user} = Account.Public.register_user_with_email(email)
+      user = Core.Repo.preload(user, [:features, :profile])
+
+      %{user: user}
+    end
+
+    test "first step is terms_and_privacy", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.current_step == :terms_and_privacy
+      assert hd(vm.steps) == :terms_and_privacy
+    end
+
+    test "step_view is TermsAndPrivacyView", %{user: user} do
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
+
+      assert vm.step_view.implementation == Account.TermsAndPrivacyView
+    end
+
+    test "no activate_account step (terms step activates them)", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
 
       refute :activate_account in vm.steps

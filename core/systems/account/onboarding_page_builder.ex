@@ -53,7 +53,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
       Account.Public.activated?(user) ->
         steps
 
-      Account.Public.sso_user?(user) ->
+      Account.Public.passwordless?(user) ->
         [:terms_and_privacy | steps]
 
       true ->

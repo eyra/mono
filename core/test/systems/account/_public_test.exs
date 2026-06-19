@@ -119,6 +119,45 @@ defmodule Systems.Account.PublicTest do
     end
   end
 
+  describe "register_user_with_email/1" do
+    test "creates a passwordless user" do
+      email = Faker.Internet.email()
+
+      {:ok, user} = Account.Public.register_user_with_email(email)
+
+      assert user.email == email
+      assert user.hashed_password == "no-password-set"
+      assert Account.Public.passwordless?(user)
+    end
+
+    test "does not set confirmed_at (terms acceptance will)" do
+      {:ok, user} = Account.Public.register_user_with_email(Faker.Internet.email())
+
+      assert is_nil(user.confirmed_at)
+      refute Account.Public.activated?(user)
+    end
+
+    test "marks email as verified (OTP code proved possession)" do
+      {:ok, user} = Account.Public.register_user_with_email(Faker.Internet.email())
+
+      assert %NaiveDateTime{} = user.verified_at
+    end
+
+    test "validates email format" do
+      {:error, changeset} = Account.Public.register_user_with_email("not-an-email")
+
+      assert "must have the @ sign and no spaces" in errors_on(changeset).email
+    end
+
+    test "rejects duplicate email" do
+      %{email: email} = Factories.insert!(:member)
+
+      {:error, changeset} = Account.Public.register_user_with_email(email)
+
+      assert "has already been taken" in errors_on(changeset).email
+    end
+  end
+
   describe "sso_changeset/2" do
     test "returns error changeset when email already exists" do
       # Create existing user with email
