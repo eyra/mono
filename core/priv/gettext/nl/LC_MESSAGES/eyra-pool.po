@@ -99,9 +99,17 @@ msgid "participants.email.button"
 msgstr "E-mail"
 
 #, elixir-autogen, elixir-format
-msgid "settings.placeholder"
-msgstr "Pool-instellingen vervangen de Citizen Pool modal in een vervolgcommit."
-
-#, elixir-autogen, elixir-format
 msgid "settings.title"
 msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "settings.name.label"
+msgstr "Naam"
+
+#, elixir-autogen, elixir-format
+msgid "settings.icon.label"
+msgstr "Icoon"
+
+#, elixir-autogen, elixir-format
+msgid "settings.currency.label"
+msgstr "Valuta"

@@ -2,13 +2,17 @@ defmodule Systems.Pool.SettingsView do
   @moduledoc """
   Embedded LiveView for the Settings tab on the Pool Admin page.
 
-  Placeholder. Pool settings (name, target, currency, archive) currently
-  live in the `Citizen.Pool.Form` modal; this tab will replace it.
+  Lets a pool admin edit name and icon. Currency is shown read-only —
+  changing it post-creation would break bookkeeping. Replaces the
+  Citizen.Pool.Form modal for the cases this tab covers.
   """
   use CoreWeb, :embedded_live_view
+  use CoreWeb.Live.FlashHelpers
 
   alias Frameworks.Pixel.Text
   alias Systems.Pool
+
+  import Frameworks.Pixel.Form
 
   def dependencies(), do: [:pool_id]
 
@@ -22,12 +26,60 @@ defmodule Systems.Pool.SettingsView do
   end
 
   @impl true
+  def handle_view_model_updated(socket), do: socket
+
+  @impl true
+  def handle_event("save", %{"model" => attrs}, %{assigns: %{model: pool}} = socket) do
+    {:noreply, save(socket, pool, attrs)}
+  end
+
+  defp save(socket, pool, attrs) do
+    changeset = Pool.Model.change(pool, attrs)
+
+    case Core.Repo.update(changeset) do
+      {:ok, updated_pool} ->
+        socket
+        |> assign(model: updated_pool)
+        |> update_view_model()
+        |> flash_persister_saved()
+
+      {:error, changeset} ->
+        socket
+        |> assign(changeset: changeset)
+        |> flash_error()
+    end
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div data-testid="pool-settings-view">
       <Area.content>
         <Margin.y id={:page_top} />
-        <Text.body><%= dgettext("eyra-pool", "settings.placeholder") %></Text.body>
+        <Text.title2><%= dgettext("eyra-pool", "settings.title") %></Text.title2>
+        <.spacing value="S" />
+
+        <.form id="pool_settings_form" :let={form} for={@vm.changeset} phx-change="save">
+          <.text_input
+            form={form}
+            field={:name}
+            label_text={dgettext("eyra-pool", "settings.name.label")}
+          />
+          <.spacing value="XS" />
+
+          <.text_input
+            form={form}
+            field={:virtual_icon}
+            maxlength="2"
+            label_text={dgettext("eyra-pool", "settings.icon.label")}
+          />
+          <.spacing value="XS" />
+
+          <Text.form_field_label id={:currency_label}>
+            <%= dgettext("eyra-pool", "settings.currency.label") %>
+          </Text.form_field_label>
+          <Text.body color="text-grey2"><%= @vm.currency_label %></Text.body>
+        </.form>
       </Area.content>
     </div>
     """
