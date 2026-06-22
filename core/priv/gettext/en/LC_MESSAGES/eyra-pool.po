@@ -109,7 +109,3 @@ msgstr "Name"
 #, elixir-autogen, elixir-format
 msgid "settings.icon.label"
 msgstr "Icon"
-
-#, elixir-autogen, elixir-format
-msgid "settings.currency.label"
-msgstr "Currency"

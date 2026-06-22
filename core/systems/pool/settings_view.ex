@@ -73,12 +73,6 @@ defmodule Systems.Pool.SettingsView do
             maxlength="2"
             label_text={dgettext("eyra-pool", "settings.icon.label")}
           />
-          <.spacing value="XS" />
-
-          <Text.form_field_label id={:currency_label}>
-            <%= dgettext("eyra-pool", "settings.currency.label") %>
-          </Text.form_field_label>
-          <Text.body color="text-grey2"><%= @vm.currency_label %></Text.body>
         </.form>
       </Area.content>
     </div>
