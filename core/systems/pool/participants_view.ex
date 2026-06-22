@@ -10,6 +10,7 @@ defmodule Systems.Pool.ParticipantsView do
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
+  alias Frameworks.Pixel.UserListItem
   alias Systems.Pool
 
   def dependencies(), do: [:pool_id]
@@ -62,24 +63,13 @@ defmodule Systems.Pool.ParticipantsView do
         </div>
         <.spacing value="M" />
 
-        <table class="w-full" data-testid="pool-participants-table">
+        <table class="w-full" data-testid="pool-participants-list">
           <%= for {person, index} <- Enum.with_index(@vm.people) do %>
-            <tbody class="h-12 border-b border-grey5" data-testid={"pool-participant-row-#{index}"}>
-              <tr>
-                <td class="w-[44px]">
-                  <img src={person.photo_url} class="rounded-full w-8 h-8 border-2 border-grey4" alt="" />
-                </td>
-                <td>
-                  <Text.label><%= person.name %></Text.label>
-                </td>
-                <td>
-                  <Text.body_small><%= person.email %></Text.body_small>
-                </td>
-                <td class="text-right">
-                  <Text.body_small color="text-grey2"><%= person.info %></Text.body_small>
-                </td>
-              </tr>
-            </tbody>
+            <.live_component
+              module={UserListItem}
+              id={"pool-participant-#{index}"}
+              people_item={person}
+            />
           <% end %>
         </table>
       </Area.content>

@@ -45,7 +45,18 @@ defmodule Systems.Pool.ParticipantsViewBuilder do
       name: user.displayname,
       email: user.email,
       info: added_at_label(added_at),
-      action_buttons: nil
+      action_buttons: [mail_button(user)]
+    }
+  end
+
+  defp mail_button(%Account.User{email: email}) do
+    %{
+      action: %{type: :http_get, to: "mailto:#{email}"},
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-pool", "participants.email.button"),
+        icon: :mail
+      }
     }
   end
 
