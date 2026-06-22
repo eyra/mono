@@ -534,3 +534,12 @@ defmodule Systems.Pool.Public do
   defp update_pool(pool, user, :add), do: add_participant!(pool, user)
   defp update_pool(pool, user, :delete), do: remove_participant(pool, user)
 end
+
+defimpl Core.Persister, for: Systems.Pool.Model do
+  def save(_pool, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :pool) do
+      {:ok, %{pool: pool}} -> {:ok, pool}
+      _ -> {:error, changeset}
+    end
+  end
+end

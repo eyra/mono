@@ -2,7 +2,6 @@ defmodule Systems.Org.NodeView do
   use CoreWeb, :embedded_live_view
   use CoreWeb.Live.FlashHelpers
 
-  alias Core.Repo
   alias Frameworks.Pixel.Text
   alias Systems.Content
   alias Systems.Org
@@ -33,21 +32,17 @@ defmodule Systems.Org.NodeView do
   defp save(socket, entity, attrs) do
     changeset = Org.NodeModel.changeset(entity, attrs)
 
-    socket
-    |> hide_flash()
-    |> do_save(changeset)
-  end
-
-  defp do_save(socket, changeset) do
-    case Repo.update(changeset) do
+    case Core.Persister.save(entity, changeset) do
       {:ok, updated_entity} ->
         socket
+        |> hide_flash()
         |> assign(model: updated_entity)
         |> update_view_model()
         |> flash_persister_saved()
 
       {:error, changeset} ->
         socket
+        |> hide_flash()
         |> assign(changeset: changeset)
         |> flash_error()
     end

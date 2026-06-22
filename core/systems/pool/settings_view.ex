@@ -36,7 +36,7 @@ defmodule Systems.Pool.SettingsView do
   defp save(socket, pool, attrs) do
     changeset = Pool.Model.change(pool, attrs)
 
-    case Core.Repo.update(changeset) do
+    case Core.Persister.save(pool, changeset) do
       {:ok, updated_pool} ->
         socket
         |> assign(model: updated_pool)
