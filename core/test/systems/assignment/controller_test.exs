@@ -63,7 +63,7 @@ defmodule Systems.Assignment.ControllerTest do
 
       conn = get(conn, "/assignment/#{id}/apply")
       response = html_response(conn, 200)
-      assert response =~ "error-study_full"
+      assert response =~ "error-assignment_full"
       assert response =~ "This study is full"
     end
 

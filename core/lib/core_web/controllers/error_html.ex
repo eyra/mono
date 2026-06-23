@@ -24,29 +24,6 @@ defmodule CoreWeb.ErrorHTML do
   defp error_code("503.html"), do: "503"
   defp error_code(_), do: "unknown"
 
-  def render("study_full.html", assigns) do
-    menus = build_menus(stripped_menus_config(), nil, nil)
-
-    assigns =
-      Map.merge(assigns, %{
-        title: dgettext("eyra-assignment", "study_full.title"),
-        menus: menus,
-        body: dgettext("eyra-assignment", "study_full.body"),
-        image: image("503.html"),
-        error_code: "study_full"
-      })
-
-    ~H"""
-    <.error
-      title={@title}
-      menus={@menus}
-      body={@body}
-      image={@image}
-      error_code={@error_code}
-    />
-    """
-  end
-
   def render(template, assigns) do
     status = status(template)
     menus = build_menus(stripped_menus_config(), nil, nil)

@@ -717,9 +717,9 @@ msgid "pending_approvals.title"
 msgstr "Participants waiting for pay out"
 
 #, elixir-autogen, elixir-format
-msgid "study_full.body"
+msgid "assignment_full.body"
 msgstr "Unfortunately, this study is full and is no longer accepting new participants."
 
 #, elixir-autogen, elixir-format
-msgid "study_full.title"
+msgid "assignment_full.title"
 msgstr "This study is full"

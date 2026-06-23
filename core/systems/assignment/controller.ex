@@ -56,7 +56,7 @@ defmodule Systems.Assignment.Controller do
         service_unavailable(conn)
 
       full?(assignment) and not returning_participant?(conn, assignment) ->
-        study_full(conn)
+        assignment_full(conn)
 
       true ->
         start_participant(conn, assignment)
@@ -239,10 +239,10 @@ defmodule Systems.Assignment.Controller do
     |> render(:"503")
   end
 
-  defp study_full(conn) do
+  defp assignment_full(conn) do
     conn
-    |> put_view(html: CoreWeb.ErrorHTML)
-    |> render(:study_full)
+    |> put_view(html: Assignment.ErrorHTML)
+    |> render(:assignment_full)
   end
 
   defp start_participant(conn, %{id: id} = assignment) do

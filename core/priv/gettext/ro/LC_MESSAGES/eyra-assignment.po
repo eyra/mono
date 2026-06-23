@@ -728,9 +728,9 @@ msgid "pending_approvals.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "study_full.body"
-msgstr ""
+msgid "assignment_full.body"
+msgstr "Din păcate, acest studiu este complet și nu mai acceptă participanți noi."
 
 #, elixir-autogen, elixir-format
-msgid "study_full.title"
-msgstr ""
+msgid "assignment_full.title"
+msgstr "Acest studiu este complet"

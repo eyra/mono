@@ -717,9 +717,9 @@ msgid "pending_approvals.title"
 msgstr "Deelnemers wachten op uitbetaling"
 
 #, elixir-autogen, elixir-format
-msgid "study_full.body"
-msgstr ""
+msgid "assignment_full.body"
+msgstr "Helaas zit deze studie vol en worden er geen nieuwe deelnemers meer aangenomen."
 
 #, elixir-autogen, elixir-format
-msgid "study_full.title"
-msgstr ""
+msgid "assignment_full.title"
+msgstr "Deze studie zit vol"
