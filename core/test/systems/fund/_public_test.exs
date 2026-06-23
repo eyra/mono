@@ -1191,7 +1191,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+      assert {:error, {:kyc_required, :merchant, "https://opp.test/kyc/m_prep_1"}} =
                Fund.Public.prepare_payout(user)
     end
 
@@ -1212,7 +1212,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+      assert {:error, {:kyc_required, :merchant, "https://opp.test/kyc/m_prep_1"}} =
                Fund.Public.prepare_payout(user)
     end
 
@@ -1236,7 +1236,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_created_inline")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_created_inline"}} =
+      assert {:error, {:kyc_required, :merchant, "https://opp.test/kyc/m_created_inline"}} =
                Fund.Public.prepare_payout(user)
 
       assert %{merchant_uid: "m_created_inline"} = Core.Repo.reload!(user)
@@ -1269,7 +1269,7 @@ defmodule Systems.Fund.PublicTest do
       end)
 
       # Merchant is not yet verified, so routing prefers the merchant overview.
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+      assert {:error, {:kyc_required, :merchant, "https://opp.test/kyc/m_prep_1"}} =
                Fund.Public.prepare_payout(user)
     end
 
@@ -1321,7 +1321,7 @@ defmodule Systems.Fund.PublicTest do
          [%{uid: "ba_pending", status: "new", verification_url: "https://opp.test/ba/verify"}]}
       end)
 
-      assert {:error, {:kyc_required, "https://opp.test/ba/verify"}} =
+      assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
                Fund.Public.prepare_payout(user)
     end
 
@@ -1344,7 +1344,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, [%{uid: "ba_pending", status: "new", verification_url: nil}]}
       end)
 
-      assert {:error, {:kyc_required, "https://opp.test/overview/m_prep_1"}} =
+      assert {:error, {:kyc_required, :merchant, "https://opp.test/overview/m_prep_1"}} =
                Fund.Public.prepare_payout(user)
     end
   end

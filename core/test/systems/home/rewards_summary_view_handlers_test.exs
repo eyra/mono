@@ -35,9 +35,9 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
     payout_handoff_cancel: "Cancel",
-    payout_kyc_title: "Verification required",
-    payout_kyc_body: "KYC body",
-    payout_kyc_confirm: "Continue to verification"
+    payout_verify_title: "Bank account not verified",
+    payout_verify_body: "Verify your bank account first",
+    payout_verify_confirm: "Go to verification"
   }
 
   defp socket(user, extra \\ %{}) do
@@ -50,7 +50,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           user: user,
           labels: @labels,
           handoff_mode: :payout,
-          kyc_overview_url: nil,
           pending_cents: 0,
           approved_cents: 1000,
           rejected_cents: 0
@@ -114,7 +113,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc -> composes the kyc handoff modal with the overview url" do
+    test "merchant kyc -> presents the verify modal" do
       user = user_with_reward(1000, "m_kyc")
 
       stub(ProviderMock, :get_merchant, fn _ ->
@@ -134,8 +133,32 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      assert socket.assigns.handoff_mode == :kyc
-      assert socket.assigns.kyc_overview_url == "https://opp.test/kyc"
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    test "bank kyc -> presents the verify modal" do
+      user = user_with_reward(1000, "m_bank")
+
+      # Merchant verified, but the bank account still needs verification.
+      stub(ProviderMock, :get_merchant, fn _ ->
+        {:ok,
+         %{
+           uid: "m_bank",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub(ProviderMock, :list_bank_accounts, fn _ ->
+        {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+      end)
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :verify
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 

@@ -10,8 +10,9 @@ defmodule Systems.Home.RewardsSummaryView do
 
     * `:ok` — `:payout` variant ("you are leaving Next to be sent to OPP");
       confirming fires `Fund.Public.request_payout/1`.
-    * `{:kyc_required, url}` — `:kyc` variant; confirming redirects to OPP to
-      complete onboarding.
+    * `{:kyc_required, _, _}` — `:verify` variant; the bank account isn't
+      verified yet, so an info modal lets the participant close it or continue to
+      the account page (`/user/profile/payouts`), where verification lives.
     * `{:below_threshold, _}` / other errors — a flash, no modal.
 
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
@@ -47,28 +48,10 @@ defmodule Systems.Home.RewardsSummaryView do
         user: user
       )
       |> assign_new(:handoff_mode, fn -> :payout end)
-      |> assign_new(:kyc_overview_url, fn -> nil end)
     }
   end
 
   @impl true
-  def compose(:handoff_modal, %{handoff_mode: :kyc, kyc_overview_url: url, labels: labels})
-      when is_binary(url) do
-    # KYC confirm is an external link (http_get); a redirect from the send_update cycle would be dropped.
-    %{
-      module: Pixel.ConfirmationModal,
-      params: %{
-        assigns: %{
-          title: labels.payout_kyc_title,
-          body: labels.payout_kyc_body,
-          confirm_label: labels.payout_kyc_confirm,
-          cancel_label: labels.payout_handoff_cancel,
-          confirm_action: %{type: :http_get, to: url}
-        }
-      }
-    }
-  end
-
   def compose(:handoff_modal, %{handoff_mode: :payout, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -83,14 +66,33 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
+  # Bank account not verified yet: an info modal that lets the participant close
+  # it or continue to the account page (`/user/profile/payouts`) to verify.
+  def compose(:handoff_modal, %{handoff_mode: :verify, labels: labels}) do
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_verify_title,
+          body: labels.payout_verify_body,
+          confirm_label: labels.payout_verify_confirm,
+          cancel_label: labels.payout_handoff_cancel,
+          confirm_action: %{type: :http_get, to: ~p"/user/profile/payouts"}
+        }
+      }
+    }
+  end
+
   @impl true
   def handle_event("request_payout", _params, %{assigns: %{user: user, labels: labels}} = socket) do
     case Fund.Public.prepare_payout(user) do
       :ok ->
-        {:noreply, present_handoff(socket, :payout, nil)}
+        {:noreply, present_handoff(socket, :payout)}
 
-      {:error, {:kyc_required, kyc_url}} when is_binary(kyc_url) ->
-        {:noreply, present_handoff(socket, :kyc, kyc_url)}
+      {:error, {:kyc_required, _source, _url}} ->
+        # Bank account not verified yet: show an info modal offering to continue
+        # to the account page, where the "Uitbetalingen" tab handles verification.
+        {:noreply, present_handoff(socket, :verify)}
 
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
@@ -134,9 +136,9 @@ defmodule Systems.Home.RewardsSummaryView do
   defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:error, _reason}),
     do: Flash.push_error(socket, labels.payout_failed)
 
-  defp present_handoff(socket, mode, kyc_overview_url) do
+  defp present_handoff(socket, mode) do
     socket
-    |> assign(handoff_mode: mode, kyc_overview_url: kyc_overview_url)
+    |> assign(handoff_mode: mode)
     |> compose_child(:handoff_modal)
     |> show_modal(:handoff_modal, :compact)
   end

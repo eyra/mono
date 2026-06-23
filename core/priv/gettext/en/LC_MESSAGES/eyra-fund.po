@@ -179,17 +179,17 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Pay out now"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.body"
-msgstr "🔒 You first need to verify your identity with our payment provider. You will be redirected to complete this step, then come back to start your payout."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr "Continue to verification"
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
 msgstr "Start payout"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.title"
-msgstr "Verification required"
+msgid "rewards_summary.payout.verify.body"
+msgstr "Please verify your bank account first before you can request a payout."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Go to verification"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bank account not yet verified"

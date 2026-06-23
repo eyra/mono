@@ -180,17 +180,17 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.title"
-msgstr ""
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.body"
+msgstr "Verifica primero tu cuenta bancaria antes de solicitar un pago."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Ir a verificación"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Cuenta bancaria aún no verificada"

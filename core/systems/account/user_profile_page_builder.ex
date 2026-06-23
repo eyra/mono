@@ -8,6 +8,7 @@ defmodule Systems.Account.UserProfilePageBuilder do
 
   @tabs [
     Systems.Account.ProfileTab,
+    Systems.Account.PayoutsTab,
     Systems.Account.FeaturesTab
   ]
 

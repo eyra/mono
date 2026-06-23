@@ -187,6 +187,14 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Gets the user linked to an OPP merchant, or nil. Used by the payment webhook to
+  route a bank-account/merchant KYC change back to the owning participant.
+  """
+  def get_user_by_merchant_uid(merchant_uid) when is_binary(merchant_uid) do
+    Repo.get_by(User, merchant_uid: merchant_uid)
+  end
+
+  @doc """
   Gets a user by email and password.
 
   ## Examples

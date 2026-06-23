@@ -277,3 +277,107 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.add"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.manage"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.not_verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.verified.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.amount"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.status"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.payouts.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.continue"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.action_required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.title"
+msgstr ""

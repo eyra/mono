@@ -100,7 +100,7 @@ defmodule Systems.Payment.Public do
 
   defp return_url do
     base_url = Application.fetch_env!(:core, :base_url)
-    "#{base_url}/"
+    "#{base_url}/user/profile?tab=payouts"
   end
 
   defp lookup_merchant_by_email(%Account.User{email: email} = user) do

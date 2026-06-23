@@ -1,9 +1,10 @@
 defmodule Systems.Home.RewardsSummaryViewTest do
   @moduledoc """
-  Unit coverage for the payout handoff modal *configuration*: compose/2 maps
-  the handoff mode to the right shared ConfirmationModal assigns (title, body,
-  confirm/cancel labels). The handler dispatch + the rendered modal chrome are
-  covered by Fund.Public tests and the ConfirmationModal component test.
+  Unit coverage for the payout handoff modal *configuration*: compose/2 maps the
+  payout handoff to the shared ConfirmationModal assigns. The handler dispatch —
+  including the redirect to the account page when the bank account still needs
+  verification — is covered by the handlers test; rendered modal chrome by the
+  ConfirmationModal component test.
   """
   use ExUnit.Case, async: true
 
@@ -15,9 +16,9 @@ defmodule Systems.Home.RewardsSummaryViewTest do
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
     payout_handoff_cancel: "Cancel",
-    payout_kyc_title: "Verification required",
-    payout_kyc_body: "KYC body",
-    payout_kyc_confirm: "Continue to verification"
+    payout_verify_title: "Bank account not verified",
+    payout_verify_body: "Verify your bank account first",
+    payout_verify_confirm: "Go to verification"
   }
 
   describe "compose/2 :handoff_modal" do
@@ -39,22 +40,21 @@ defmodule Systems.Home.RewardsSummaryViewTest do
                })
     end
 
-    test "kyc mode maps to the kyc labels + an external-link confirm action" do
+    test "verify mode maps to the verify labels + a link to the account payouts tab" do
       assert %{
                module: Pixel.ConfirmationModal,
                params: %{
                  assigns: %{
-                   title: "Verification required",
-                   body: "KYC body",
-                   confirm_label: "Continue to verification",
+                   title: "Bank account not verified",
+                   body: "Verify your bank account first",
+                   confirm_label: "Go to verification",
                    cancel_label: "Cancel",
-                   confirm_action: %{type: :http_get, to: "https://opp.test/kyc"}
+                   confirm_action: %{type: :http_get, to: "/user/profile/payouts"}
                  }
                }
              } =
                RewardsSummaryView.compose(:handoff_modal, %{
-                 handoff_mode: :kyc,
-                 kyc_overview_url: "https://opp.test/kyc",
+                 handoff_mode: :verify,
                  labels: @labels
                })
     end

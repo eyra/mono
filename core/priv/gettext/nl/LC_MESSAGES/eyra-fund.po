@@ -179,17 +179,17 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Nu uitbetalen"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.body"
-msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider. U wordt doorgestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr "Doorgaan naar verificatie"
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
 msgstr "Uitbetaling starten"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.title"
-msgstr "Verificatie nodig"
+msgid "rewards_summary.payout.verify.body"
+msgstr "Verifieer eerst je bankrekening voordat je een uitbetaling kunt aanvragen."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Naar verificatie"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bankrekening nog niet geverifieerd"

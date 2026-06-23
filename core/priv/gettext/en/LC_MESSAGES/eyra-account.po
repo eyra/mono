@@ -277,3 +277,109 @@ msgstr "you@example.com"
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
 msgstr "Too many requests. Please try again in a moment."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.add"
+msgstr "Add"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.manage"
+msgstr "Manage"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.error.flash"
+msgstr "Something went wrong verifying your bank account. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.intro"
+msgstr "Payouts are handled by our payment partner Online Payment Platform"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.not_verified"
+msgstr "Not verified"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.pending"
+msgstr "Being verified"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.verified"
+msgstr "Verified"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.title"
+msgstr "Bank account"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.verified.flash"
+msgstr "Your bank account has been verified."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.empty"
+msgstr ""
+"No payouts have been made yet. Once payouts have taken place, you will find an "
+"overview here."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.intro"
+msgstr "Below you will find an overview of all your payouts."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.title"
+msgstr "Overview"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.total"
+msgstr "Total"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.completed"
+msgstr "Paid out"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.failed"
+msgstr "Failed"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.pending"
+msgstr "Pending"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.amount"
+msgstr "Amount"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.date"
+msgstr "Date"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.status"
+msgstr "Status"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.title"
+msgstr "Payouts"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.payouts.title"
+msgstr "Payouts"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.continue"
+msgstr "Continue verification"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.action_required"
+msgstr "Action required"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.body"
+msgstr "You'll be redirected to our payment partner Online Payment Platform to verify your bank account via iDEAL."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.confirm"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.title"
+msgstr "Verify bank account"

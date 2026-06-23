@@ -83,7 +83,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
 
       result = Account.UserProfilePageBuilder.tab_keys(user)
 
-      assert result == [:profile, :features]
+      assert result == [:profile, :payouts, :features]
     end
 
     test "excludes features key when user is not PANL participant" do
@@ -92,7 +92,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
 
       result = Account.UserProfilePageBuilder.tab_keys(user)
 
-      assert result == [:profile]
+      assert result == [:profile, :payouts]
     end
 
     test "excludes features key when PANL pool does not exist" do
@@ -104,7 +104,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
 
       result = Account.UserProfilePageBuilder.tab_keys(user)
 
-      assert result == [:profile]
+      assert result == [:profile, :payouts]
     end
   end
 end

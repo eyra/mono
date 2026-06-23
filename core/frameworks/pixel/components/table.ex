@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Table do
   use CoreWeb, :html
 
   alias Frameworks.Pixel.Spinner
+  alias Frameworks.Pixel.Tag
 
   attr(:layout, :list, required: true)
   attr(:head_cells, :list, required: true)
@@ -172,6 +173,12 @@ defmodule Frameworks.Pixel.Table do
       <div class="truncate">
         <%= @value %>
       </div>
+    """
+  end
+
+  def content(%{type: :tag} = assigns) do
+    ~H"""
+      <Tag.tag text={@value.text} bg_color={@value.bg_color} text_color={@value.text_color} />
     """
   end
 

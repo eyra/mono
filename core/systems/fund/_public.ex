@@ -96,6 +96,18 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  @doc """
+  All payouts (withdrawal requests) for a participant, newest first. Powers the
+  "Uitbetalingen > Overzicht" history on the account page.
+  """
+  def list_payouts_for_user(%Account.User{id: user_id}) do
+    from(payout in Fund.PayoutModel,
+      where: payout.user_id == ^user_id,
+      order_by: [desc: payout.inserted_at]
+    )
+    |> Repo.all()
+  end
+
   def list_pending_approvals(%Fund.Model{} = fund, preload \\ [:user]) do
     reward_query(fund, :pending_approval)
     |> preload(^preload)
@@ -999,17 +1011,108 @@ defmodule Systems.Fund.Public do
          %{verification_url: verification_url}
        )
        when is_binary(verification_url) and verification_url != "",
-       do: {:error, {:kyc_required, verification_url}}
+       do: {:error, {:kyc_required, :bank, verification_url}}
 
   defp payout_ready_for(%{overview_url: overview_url}, _bank_account)
        when is_binary(overview_url) and overview_url != "",
-       do: {:error, {:kyc_required, overview_url}}
+       do: {:error, {:kyc_required, :merchant, overview_url}}
 
   defp payout_ready_for(_merchant, %{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
-       do: {:error, {:kyc_required, verification_url}}
+       do: {:error, {:kyc_required, :bank, verification_url}}
 
   defp payout_ready_for(_merchant, _bank_account), do: {:error, :kyc_unavailable}
+
+  @doc """
+  Read-only KYC/bank-account verification status for the account page's
+  "Bankrekening" section. Never creates a merchant: a user without a
+  `merchant_uid` (never started a payout) is simply `:not_verified`.
+
+  Unlike `payout_ready_for/2` (which collapses "no redirect URL yet" into
+  `:kyc_unavailable`), this distinguishes `:pending` — a bank account submitted
+  to OPP that is still being reviewed — so the UI can show "Wordt geverifiëerd".
+  """
+  @spec verification_status(Account.User.t()) ::
+          :not_verified | :pending | :verified | {:merchant_blocked, String.t()}
+  def verification_status(%Account.User{merchant_uid: nil}), do: :not_verified
+
+  def verification_status(%Account.User{merchant_uid: merchant_uid}) do
+    with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
+         {:ok, accounts} <- Payment.Public.list_bank_accounts(merchant_uid) do
+      bank_account = Enum.find(accounts, &(&1.status != "disapproved"))
+      verification_status_for(merchant, bank_account)
+    else
+      {:error, _} -> :not_verified
+    end
+  end
+
+  # Bank-account verification (the seamless iDEAL flow) is the primary step. Only
+  # once the bank account is approved do we surface any remaining merchant
+  # compliance/identity block — so participants are driven into iDEAL first
+  # rather than OPP's hosted merchant overview.
+  defp verification_status_for(merchant, bank_account) do
+    case bank_account_status(bank_account) do
+      :verified -> merchant_status(merchant)
+      bank_status -> bank_status
+    end
+  end
+
+  defp merchant_status(%{overview_url: overview_url})
+       when is_binary(overview_url) and overview_url != "",
+       do: {:merchant_blocked, overview_url}
+
+  defp merchant_status(_merchant), do: :verified
+
+  # OPP's `status` is authoritative for the display state. A bank account that is
+  # under review ("pending") can still carry a `verification_url`, so status must
+  # be matched before any URL fallback — otherwise a pending account is mislabeled
+  # "not verified". "new" means the participant still has to complete verification
+  # (the "Toevoegen" iDEAL flow); anything else non-approved is being reviewed.
+  defp bank_account_status(%{status: "approved"}), do: :verified
+  defp bank_account_status(%{status: "new"}), do: :not_verified
+
+  defp bank_account_status(%{status: status}) when is_binary(status) and status != "",
+    do: :pending
+
+  defp bank_account_status(_bank_account), do: :not_verified
+
+  @doc """
+  Onboarding entry point for the "Toevoegen" action: ensures the merchant + bank
+  account exist (creating them if needed) and reports how to continue. Independent
+  of payout-threshold eligibility — a participant can verify their bank before
+  earning anything.
+
+  Returns `{:bank, verification_url}` (drive the seamless iDEAL picker),
+  `{:merchant, overview_url}` (hand off to OPP's hosted compliance screen),
+  `:verified`, or `{:error, reason}`.
+
+  Bank-first: as long as the bank account can be verified directly (it carries a
+  `verification_url`), we boot the participant into the seamless iDEAL flow rather
+  than OPP's hosted merchant overview. The merchant handoff is only used once the
+  bank account is approved but OPP still requires merchant compliance.
+  """
+  @spec start_bank_verification(Account.User.t()) ::
+          {:bank, String.t()} | {:merchant, String.t()} | :verified | {:error, term()}
+  def start_bank_verification(%Account.User{} = user) do
+    with {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
+         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
+      bank_handoff(merchant, bank_account)
+    end
+  end
+
+  defp bank_handoff(merchant, %{status: "approved"}), do: merchant_handoff(merchant)
+
+  defp bank_handoff(_merchant, %{verification_url: verification_url})
+       when is_binary(verification_url) and verification_url != "",
+       do: {:bank, verification_url}
+
+  defp bank_handoff(merchant, _bank_account), do: merchant_handoff(merchant)
+
+  defp merchant_handoff(%{overview_url: overview_url})
+       when is_binary(overview_url) and overview_url != "",
+       do: {:merchant, overview_url}
+
+  defp merchant_handoff(_merchant), do: :verified
 
   # Re-check readiness at confirm time against fresh OPP state (TOCTOU guard).
   defp recheck_payout_ready(merchant_uid) do

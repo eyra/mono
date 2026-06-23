@@ -277,3 +277,109 @@ msgstr "jij@example.com"
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
 msgstr "Te veel verzoeken. Probeer het zo opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.add"
+msgstr "Toevoegen"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.manage"
+msgstr "Beheren"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.error.flash"
+msgstr "Er ging iets mis bij het verifiëren van je bankrekening. Probeer het later opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.intro"
+msgstr "Uitbetalingen gaan via onze betalingspartner Online Payment Platform"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.not_verified"
+msgstr "Niet geverifiëerd"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.pending"
+msgstr "Wordt geverifiëerd"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.verified"
+msgstr "Geverifiëerd"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.title"
+msgstr "Bankrekening"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.verified.flash"
+msgstr "Je bankrekening is geverifiëerd."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.empty"
+msgstr ""
+"Er zijn nog geen uitbetalingen uitgevoerd. Zodra er uitbetalingen plaats "
+"hebben gevonden, vind je hieronder een overzicht."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.intro"
+msgstr "Hieronder vind je een overzicht van al je uitbetalingen."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.title"
+msgstr "Overzicht"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.total"
+msgstr "Totaal"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.completed"
+msgstr "Uitbetaald"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.failed"
+msgstr "Mislukt"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.pending"
+msgstr "In behandeling"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.amount"
+msgstr "Bedrag"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.date"
+msgstr "Datum"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.status"
+msgstr "Status"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.title"
+msgstr "Uitbetalingen"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.payouts.title"
+msgstr "Uitbetalingen"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.continue"
+msgstr "Verificatie afronden"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.action_required"
+msgstr "Actie vereist"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.body"
+msgstr "Je wordt doorgestuurd naar onze betaalpartner Online Payment Platform om je bankrekening via iDEAL te verifiëren."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.confirm"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.title"
+msgstr "Bankrekening verifiëren"
