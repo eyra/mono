@@ -56,6 +56,31 @@ defmodule Systems.Account.UserProfilePageTest do
     end
   end
 
+  describe "layout selection" do
+    test "participant gets the website layout (no workspace sidebar)", %{conn: conn} do
+      {:ok, _view, html} = live(conn, "/user/profile")
+
+      # Website layout's modal wrapper is unique to live_website
+      assert html =~ "live_website_modal"
+      refute html =~ "live_workspace_modal"
+    end
+
+    test "creator gets the workspace layout", %{conn: conn} do
+      creator =
+        Factories.insert!(:member, %{
+          creator: true,
+          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+
+      {:ok, conn: conn, user: _user} = login(creator, %{conn: conn})
+
+      {:ok, _view, html} = live(conn, "/user/profile")
+
+      assert html =~ "live_workspace_modal"
+      refute html =~ "live_website_modal"
+    end
+  end
+
   describe "tab navigation" do
     test "can navigate to profile tab via URL", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/profile/profile")

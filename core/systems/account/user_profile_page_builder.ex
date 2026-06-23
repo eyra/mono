@@ -19,8 +19,21 @@ defmodule Systems.Account.UserProfilePageBuilder do
       items: build_items(user, live_context),
       signout_button: build_signout_button(),
       user: user,
-      active_menu_item: :profile
+      active_menu_item: :profile,
+      layout: layout_for(user),
+      menus_config: menus_config_for(user)
     }
+  end
+
+  defp layout_for(%Account.User{creator: true}), do: :workspace
+  defp layout_for(%Account.User{}), do: :website
+
+  defp menus_config_for(%Account.User{creator: true}) do
+    {:workspace_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_menu, :tablet_menu]}
+  end
+
+  defp menus_config_for(%Account.User{}) do
+    {:website_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_navbar]}
   end
 
   defp build_signout_button do
