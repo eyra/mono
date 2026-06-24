@@ -254,27 +254,27 @@ msgstr "Sveiki"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
-msgstr ""
+msgstr "Šio kodo galiojimas baigėsi. Prašykite naujo."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.invalid"
-msgstr ""
+msgstr "Neteisingas kodas. Bandykite dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr ""
+msgstr "Per daug neteisingų bandymų. Prašykite naujo kodo."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr ""
+msgstr "Patikrinkite el. paštą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr ""
+msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr ""
+msgstr "Įveskite galiojantį el. pašto adresą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
