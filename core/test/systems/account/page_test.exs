@@ -21,7 +21,7 @@ defmodule Systems.Account.PageTest do
 
   describe "rendering" do
     test "renders user profile page", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       # Should render the page with profile content
       assert html =~ "profile" or html =~ "Profile"
@@ -30,26 +30,26 @@ defmodule Systems.Account.PageTest do
     # Regression coverage for FX#9867397728 — the LiveView mount runs in
     # a separate process from the HTTP request, so unless the Locale
     # hook reads the session, pages without their own put_locale call
-    # fall back to English. Iris confirmed `/` rendered NL while
-    # `/user/profile` rendered EN for the same panl-onboarded session.
-    test "honours the browser locale on /user/profile", %{conn: conn} do
+    # fall back to English. Iris confirmed `/` rendered NL while the
+    # Account page rendered EN for the same panl-onboarded session.
+    test "honours the browser locale on /user/account", %{conn: conn} do
       conn = Plug.Conn.put_req_header(conn, "accept-language", "nl-NL,nl;q=0.9")
 
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       assert html =~ "Mijn profiel"
       refute html =~ "My profile"
     end
 
     test "renders profile tab by default", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/profile")
+      {:ok, view, _html} = live(conn, "/user/account")
 
       # Should render the profile view
       assert view |> has_element?("[data-testid='profile-view']")
     end
 
     test "renders tabbar", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       # Should have a tab bar
       assert html =~ "user_profile"
@@ -58,7 +58,7 @@ defmodule Systems.Account.PageTest do
 
   describe "layout selection" do
     test "participant gets the stripped layout (no workspace sidebar)", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       assert html =~ "live_stripped_modal"
       refute html =~ "live_workspace_modal"
@@ -73,7 +73,7 @@ defmodule Systems.Account.PageTest do
 
       {:ok, conn: conn, user: _user} = login(creator, %{conn: conn})
 
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       assert html =~ "live_workspace_modal"
       refute html =~ "live_stripped_modal"
@@ -82,7 +82,7 @@ defmodule Systems.Account.PageTest do
 
   describe "tab navigation" do
     test "can navigate to profile tab via URL", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/profile/profile")
+      {:ok, view, _html} = live(conn, "/user/account/profile")
 
       assert view |> has_element?("[data-testid='profile-view']")
     end
@@ -106,7 +106,7 @@ defmodule Systems.Account.PageTest do
     end
 
     test "shows features tab for PANL participant", %{conn: conn} do
-      {:ok, _view, html} = live(conn, "/user/profile")
+      {:ok, _view, html} = live(conn, "/user/account")
 
       # Should have both profile and features tabs
       assert html =~ "profile" or html =~ "Profile"
@@ -114,7 +114,7 @@ defmodule Systems.Account.PageTest do
     end
 
     test "can navigate to features tab via URL", %{conn: conn} do
-      {:ok, view, _html} = live(conn, "/user/profile/features")
+      {:ok, view, _html} = live(conn, "/user/account/features")
 
       assert view |> has_element?("[data-testid='features-view']")
     end

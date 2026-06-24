@@ -1,6 +1,6 @@
 defmodule Systems.Account.Page do
   @moduledoc """
-  The Account page (`/user/profile`).
+  The Account page (`/user/account`).
 
   Renders inside the workspace layout for creators and the stripped
   layout (same as the auth and onboarding pages) for participants —
