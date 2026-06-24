@@ -53,7 +53,7 @@ defmodule Systems.Org.MemberViewBuilder do
     excluded_ids = member_ids ++ owner_ids
 
     users =
-      Account.Public.list_creators([:profile])
+      Account.Public.list_users([:profile])
       |> Enum.reject(&(&1.id in excluded_ids))
 
     domain_matched = Org.Public.find_domain_matched_users(domains, all_members ++ owners)
