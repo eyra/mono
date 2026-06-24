@@ -36,17 +36,8 @@ defmodule Systems.Advert.Builders.Highlight do
   end
 
   def view_model(%Assignment.Model{} = assignment, :status) do
-    has_open_spots? = Assignment.Public.has_open_spots?(assignment)
     status_title = dgettext("eyra-alliance", "status.highlight.title")
-
-    status_text =
-      if has_open_spots? do
-        dgettext("eyra-alliance", "status.open.highlight.text")
-      else
-        dgettext("eyra-alliance", "status.closed.highlight.text")
-      end
-
-    %{title: status_title, text: status_text}
+    %{title: status_title, text: status_text(assignment)}
   end
 
   def view_model(%Assignment.Model{} = assignment, :language) do
@@ -58,6 +49,19 @@ defmodule Systems.Advert.Builders.Highlight do
       |> language_text()
 
     %{title: language_title, text: language_text}
+  end
+
+  defp status_text(assignment) do
+    cond do
+      not Assignment.Public.has_open_spots?(assignment) ->
+        dgettext("eyra-alliance", "status.closed.highlight.text")
+
+      not Assignment.Public.has_budget_capacity?(assignment) ->
+        dgettext("eyra-alliance", "status.full.highlight.text")
+
+      true ->
+        dgettext("eyra-alliance", "status.open.highlight.text")
+    end
   end
 
   defp language_text([]), do: "?"

@@ -82,3 +82,7 @@ msgstr "Contraseña cambiada"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "password.updated.successfully"
 msgstr "Contraseña actualizada"
+
+#, elixir-autogen, elixir-format
+msgid "auth.session.expired"
+msgstr ""

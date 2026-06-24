@@ -95,6 +95,14 @@ if config_env() == :prod do
                 queue: storage_delivery_queue}
              ]}
 
+          "payment_reconciliation" ->
+            {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
+
+          # Prunes auth_codes older than the validity window
+          # Add "auth_code_cleanup" to ENABLED_OBAN_PLUGINS to enable
+          "auth_code_cleanup" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
+
           _ ->
             nil
         end
@@ -180,7 +188,7 @@ if config_env() == :prod do
   # END DATABASE
 
   config :core, GoogleSignIn,
-    redirect_uri: "#{base_url}/google-sign-in/auth",
+    redirect_uri: "#{base_url}/auth/google/callback",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 

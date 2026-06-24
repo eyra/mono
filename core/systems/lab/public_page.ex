@@ -44,10 +44,6 @@ defmodule Systems.Lab.PublicPage do
     {:noreply, socket |> assign(:reservation, nil)}
   end
 
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
-  end
-
   # data(reservation, :any, default: nil)
   @impl true
   def render(assigns) do

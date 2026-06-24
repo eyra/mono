@@ -241,3 +241,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.expired"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.max_attempts"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.continue.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.email.rate_limited"
+msgstr ""

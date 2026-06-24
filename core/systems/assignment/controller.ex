@@ -39,7 +39,7 @@ defmodule Systems.Assignment.Controller do
 
   def invite(conn, %{"id" => id}) do
     if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if offline?(assignment) do
+      if blocked?(conn, assignment) do
         service_unavailable(conn)
       else
         start_participant(conn, assignment)
@@ -51,7 +51,7 @@ defmodule Systems.Assignment.Controller do
 
   def apply(conn, %{"id" => id}) do
     if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if offline?(assignment) do
+      if blocked?(conn, assignment) do
         service_unavailable(conn)
       else
         start_participant(conn, assignment)
@@ -63,7 +63,7 @@ defmodule Systems.Assignment.Controller do
 
   def join(conn, %{"id" => id}) do
     if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if offline?(assignment) do
+      if blocked?(conn, assignment) do
         service_unavailable(conn)
       else
         start_participant(conn, assignment)
@@ -232,6 +232,18 @@ defmodule Systems.Assignment.Controller do
 
   defp offline?(%{status: status}) do
     status != :online
+  end
+
+  defp blocked?(conn, %Assignment.Model{} = assignment) do
+    offline?(assignment) or (full?(assignment) and not returning_participant?(conn, assignment))
+  end
+
+  defp full?(%Assignment.Model{} = assignment) do
+    not Assignment.Public.has_budget_capacity?(assignment)
+  end
+
+  defp returning_participant?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment) do
+    Assignment.Public.member?(assignment, user)
   end
 
   defp service_unavailable(conn) do

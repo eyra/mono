@@ -192,7 +192,8 @@ defmodule Systems.Advert.ContentPageBuilder do
             label: dgettext("eyra-advert", "retract.button"),
             text_color: "text-error",
             border_color: "border-error"
-          }
+          },
+          testid: "advert-retract-button"
         },
         icon: %{
           action: retract_action,

@@ -9,7 +9,6 @@
  */
 
 import { Page, Locator, expect } from '@playwright/test';
-import { featureEnabled } from './features';
 
 /**
  * Wait for a LiveView page to be ready for interaction.
@@ -134,22 +133,6 @@ export async function waitForNavigation(
   const result = await waitForLiveView(page, { timeout, requireConnection });
 
   return { ...result, url: page.url() };
-}
-
-/**
- * Activate the local payment provider for the current browser session.
- *
- * Calls POST /api/e2e/use_local_payment which sets a session flag that the
- * Payment LiveView hook picks up. Allows staging (configured with OPP sandbox)
- * to use the local simulator for E2E payment flows without affecting manual testers.
- *
- * No-op when the :e2e feature is not enabled on the target server.
- */
-export async function activateLocalPayment(page: Page): Promise<void> {
-  if (!featureEnabled('e2e')) return;
-  await page.request.post('/api/e2e/inject', {
-    data: { payment_provider: 'local' }
-  });
 }
 
 /**

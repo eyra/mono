@@ -113,13 +113,25 @@ defmodule Systems.Promotion.LandingPage do
     {:noreply, socket |> assign(dialog: nil)}
   end
 
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
-  end
-
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
+
+  attr(:active?, :boolean, required: true)
+  attr(:label, :string, required: true)
+  attr(:event, :string, required: true)
+  attr(:testid, :string, required: true)
+
+  defp apply_button(assigns) do
+    ~H"""
+    <Button.dynamic
+      action={%{type: :send, event: @event}}
+      face={%{type: :primary, label: @label}}
+      enabled?={@active?}
+      testid={if @active?, do: @testid, else: @testid <> "-disabled"}
+    />
+    """
+  end
 
   @impl true
   def render(assigns) do
@@ -130,7 +142,7 @@ defmodule Systems.Promotion.LandingPage do
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
             <:call_to_action>
-              <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
+              <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
             </:call_to_action>
           </Hero.image_large>
         </div>
@@ -182,7 +194,7 @@ defmodule Systems.Promotion.LandingPage do
           logo_url={@vm.logo_url}
         />
         <.spacing value="XL" />
-        <Button.primary_live_view label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
+        <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
       </Area.content>
     </.live_website>
     </div>

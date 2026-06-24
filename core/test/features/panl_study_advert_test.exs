@@ -64,7 +64,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     researcher_session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
 
     # Create PaNL study (questionnaire assignment)
     researcher_session
@@ -78,13 +78,13 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     researcher_session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
 
     # Navigate to participants tab
     researcher_session
     |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
     |> click(Query.css("[data-testid='assignment-tab-participants']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='create-advert-button']"))
 
     # For PaNL studies, subject_count is managed via the Payment tab (slot purchasing).
     # Set it directly in the DB so the advert flow has open spots.
@@ -127,7 +127,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     researcher_session
     |> assert_has(Query.css("[data-testid='advert-publish-button']"))
     |> click(Query.css("[data-testid='advert-publish-button']"))
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='advert-retract-button']"))
 
     # === PARTICIPANT SESSION ===
 
@@ -140,7 +140,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
 
     # Verify participant is on home page and sees the advert
     participant_session
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid='adverts']"))
     |> assert_has(Query.css(@card_selector))
   end
 end

@@ -113,3 +113,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr ""

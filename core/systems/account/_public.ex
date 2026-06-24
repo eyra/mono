@@ -163,8 +163,8 @@ defmodule Systems.Account.Public do
     get!(user_id) |> confirmed?()
   end
 
-  def sso_user?(%User{hashed_password: "no-password-set"}), do: true
-  def sso_user?(%User{}), do: false
+  def passwordless?(%User{hashed_password: "no-password-set"}), do: true
+  def passwordless?(%User{}), do: false
 
   def show_profile_menu_item?(user), do: internal?(user)
 
@@ -242,6 +242,22 @@ defmodule Systems.Account.Public do
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Registers a new user from just an email (OTP-only auth flow). Creates a
+  passwordless account (`hashed_password: "no-password-set"`) with email
+  ownership marked as verified (the OTP code itself proves possession of
+  the inbox). The account stays unconfirmed until the user accepts terms
+  & privacy in the onboarding step.
+  """
+  def register_user_with_email(email) when is_binary(email) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    %User{}
+    |> User.sso_changeset(%{email: email, creator: false, verified_at: now})
+    |> User.validate_email()
     |> Repo.insert()
   end
 
@@ -427,6 +443,17 @@ defmodule Systems.Account.Public do
     :ok
   rescue
     Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  @doc """
+  Deletes auth codes that are past their validity window.
+
+  Codes older than the validity window can no longer satisfy `active_query/1`,
+  so the rows are dead weight. Returns the number of rows deleted.
+  """
+  def cleanup_expired_auth_codes do
+    {deleted_count, _} = Repo.delete_all(Account.AuthCodeModel.expired_query())
+    deleted_count
   end
 
   def verify_otp(email, code) when is_binary(email) and is_binary(code) do

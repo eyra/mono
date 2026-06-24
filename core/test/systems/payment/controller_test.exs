@@ -85,6 +85,21 @@ defmodule Systems.Payment.ControllerTest do
       assert %{status: :paid} = Core.Repo.reload!(reward)
     end
 
+    test ~s(routes the underscore variant "withdrawal.status_changed" OPP actually sends),
+         %{conn: conn, fund: fund, user: user} do
+      {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_underscore")
+
+      expect(ProviderMock, :get_withdrawal, fn "w_ctrl_underscore" ->
+        {:ok, %{uid: "w_ctrl_underscore", status: "completed", amount: 1000}}
+      end)
+
+      conn = post_webhook(conn, "withdrawal.status_changed", "w_ctrl_underscore")
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Core.Repo.reload!(reward)
+    end
+
     test ~s(routes "failed" to Fund.Public, :failed payout, rewards stay :pending_payout),
          %{conn: conn, fund: fund, user: user} do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_failed")

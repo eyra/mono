@@ -87,10 +87,6 @@ defmodule Systems.Zircon.Screening.CriteriaView do
   end
 
   @impl true
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
-  end
-
   def handle_info({:handle_auto_save_done, _}, socket) do
     {:noreply, socket |> assign_criteria_elements()}
   end

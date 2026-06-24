@@ -123,3 +123,7 @@ msgstr "Continuă"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Sunteți pe cale să începeți un chestionar. După ce îl finalizați, veți reveni automat la această pagină."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Complet ocupat"

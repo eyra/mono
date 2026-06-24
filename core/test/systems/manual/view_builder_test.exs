@@ -1,5 +1,13 @@
 defmodule Systems.Manual.ViewBuilderTest do
-  use Core.DataCase
+  # `async: true` runs each test in Ecto's ownership mode instead of the
+  # shared mode DataCase defaults to. The test only does synchronous DB
+  # inserts + pure view-model building — no signals, no LiveView, no
+  # spawned processes — so it's safe to isolate. Without this, the test
+  # was racing other non-async DataCase tests on the global shared sandbox
+  # owner registration, producing intermittent
+  # `DBConnection.ConnectionError{message: "client #PID<…> exited"}`
+  # during setup. (FX#9998325274)
+  use Core.DataCase, async: true
 
   alias Systems.Manual
 

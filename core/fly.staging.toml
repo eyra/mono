@@ -34,6 +34,8 @@ org = 'eyra'
   FELDSPAR_DATA_DONATION_PATH = '/app/data/datadonation'
   FELDSPAR_DATA_DONATION_RETENTION = '336'
 
+  OPP_BASE_URL = 'https://api-sandbox.onlinebetaalplatform.nl/v1'
+
   # Oban plugins
   ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
 

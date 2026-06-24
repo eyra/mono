@@ -48,7 +48,9 @@ defmodule Systems.Home.Page do
       <:hero>
         <Hero.dynamic {@vm.hero} />
       </:hero>
-      <.child name={:home_view} fabric={@fabric} />
+      <div data-testid="home-page">
+        <.child name={:home_view} fabric={@fabric} />
+      </div>
     </.live_website>
     """
   end

@@ -114,3 +114,7 @@ msgstr "Weiter"
 #, elixir-autogen, elixir-format
 msgid "tool.description"
 msgstr "Sie sind im Begriff, einen Fragebogen zu starten. Sobald Sie ihn abgeschlossen haben, kehren Sie automatisch zu dieser Seite zurück."
+
+#, elixir-autogen, elixir-format
+msgid "status.full.highlight.text"
+msgstr "Ausgebucht"

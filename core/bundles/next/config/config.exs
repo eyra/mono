@@ -25,6 +25,7 @@ config :core, :features,
   panl: true,
   panl_post_launch: false,
   onyx: false,
+  otp: false,
   e2e: false
 
 config :core, :meta,

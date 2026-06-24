@@ -39,11 +39,6 @@ defmodule Systems.Assignment.OnboardingView do
   end
 
   @impl true
-  def handle_info({:signal_test, _}, socket) do
-    {:noreply, socket}
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
       <div>

@@ -82,9 +82,9 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
 
-    # Wait for LiveView to be fully connected
+    # Wait for project node page to be fully connected
     researcher
-    |> assert_has(Query.css("[data-phx-main].phx-connected"))
+    |> assert_has(Query.css("[data-testid^='show_more__action__card_']", count: :any))
 
     # Use retry_stale to handle DOM morphing between find and click
     retry_stale do

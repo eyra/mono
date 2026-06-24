@@ -231,7 +231,7 @@ defmodule Systems.Account.SignupPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
-      <div id="signup_content" phx-hook="LiveContent" data-show-errors={true}>
+      <div id="signup_content" phx-hook="LiveContent" data-show-errors={true} data-testid="signup-page">
         <Area.content>
         <Margin.y id={:page_top} />
         <Area.form>

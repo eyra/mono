@@ -33,11 +33,6 @@ defmodule Systems.Content.Composer do
       def handle_event("inform_ok", _params, socket) do
         {:noreply, socket |> assign(dialog: nil)}
       end
-
-      @impl true
-      def handle_info({:signal_test, _}, socket) do
-        {:noreply, socket}
-      end
     end
   end
 
@@ -66,11 +61,6 @@ defmodule Systems.Content.Composer do
       @impl true
       def handle_event("inform_ok", _params, socket) do
         {:noreply, socket |> assign(dialog: nil)}
-      end
-
-      @impl true
-      def handle_info({:signal_test, _}, socket) do
-        {:noreply, socket}
       end
     end
   end
