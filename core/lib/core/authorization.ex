@@ -61,6 +61,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.Onyx.LandingPage, [:admin])
   grant_access(Systems.Org.ContentPage, [:admin])
+  grant_access(Systems.Pool.ContentPage, [:admin])
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.MarketplacePage, [:visitor, :member, :owner])

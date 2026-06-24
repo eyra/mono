@@ -69,3 +69,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""

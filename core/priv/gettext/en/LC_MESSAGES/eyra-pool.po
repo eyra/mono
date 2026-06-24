@@ -69,3 +69,43 @@ msgstr "Show more"
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marketplace"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr "Citizen"
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr "Student"
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "participants.search.placeholder"
+msgstr "Search by email or name"
+
+#, elixir-autogen, elixir-format
+msgid "participants.added.label"
+msgstr "Joined"
+
+#, elixir-autogen, elixir-format
+msgid "participants.email.button"
+msgstr "Email"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Settings"
+
+#, elixir-autogen, elixir-format
+msgid "settings.name.label"
+msgstr "Name"
+
+#, elixir-autogen, elixir-format
+msgid "settings.icon.label"
+msgstr "Icon"

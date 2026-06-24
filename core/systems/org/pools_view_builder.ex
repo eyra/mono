@@ -19,16 +19,22 @@ defmodule Systems.Org.PoolsViewBuilder do
     }
   end
 
-  defp pool_item(%Pool.Model{id: id, name: name, currency: currency} = pool, locale) do
+  defp pool_item(
+         %Pool.Model{id: id, name: name, currency: currency, director: director} = pool,
+         locale
+       ) do
     %{
       item: id,
       title: name,
       description: build_description(pool),
-      tags: [Fund.CurrencyModel.title(currency, locale)],
+      tags: [director_label(director), Fund.CurrencyModel.title(currency, locale)],
       left_actions: [],
       right_actions: []
     }
   end
+
+  defp director_label(:citizen), do: dgettext("eyra-pool", "director.citizen")
+  defp director_label(:student), do: dgettext("eyra-pool", "director.student")
 
   defp build_description(%Pool.Model{} = pool) do
     participant_count = length(Pool.Public.list_participants(pool))
