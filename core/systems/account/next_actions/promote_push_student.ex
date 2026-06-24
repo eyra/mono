@@ -10,7 +10,7 @@ defmodule Systems.Account.NextActions.PromotePushStudent do
       title: dgettext("eyra-nextaction", "promote.push.student.title"),
       description: dgettext("eyra-nextaction", "promote.push.student.description"),
       cta_label: dgettext("eyra-nextaction", "promote.push.student.cta"),
-      cta_action: %{type: :redirect, to: ~p"/user/profile?tab=settings"}
+      cta_action: %{type: :redirect, to: ~p"/user/account?tab=settings"}
     }
   end
 end

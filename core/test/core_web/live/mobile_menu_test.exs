@@ -69,7 +69,7 @@ defmodule CoreWeb.Live.MobileMenuTest do
 
       # Check that the mobile menu contains expected navigation structure
       assert html =~ ~r/id="mobile-menu".*mobile_menu_profile/s
-      assert html =~ ~r/id="mobile-menu".*\/user\/profile/s
+      assert html =~ ~r/id="mobile-menu".*\/user\/account/s
     end
   end
 end

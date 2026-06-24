@@ -3,7 +3,7 @@ defmodule Systems.Account.ProfileTab do
   Profile tab implementation.
   This tab is always visible for all users.
   """
-  @behaviour Systems.Account.UserProfileTab
+  @behaviour Systems.Account.Page.Tab
 
   use Gettext, backend: CoreWeb.Gettext
 
@@ -20,7 +20,7 @@ defmodule Systems.Account.ProfileTab do
   def build(_user, live_context) do
     profile_context =
       LiveContext.extend(live_context, %{
-        show_signout_button: false,
+        show_signout_button: true,
         show_email: true,
         show_top_margin: true
       })

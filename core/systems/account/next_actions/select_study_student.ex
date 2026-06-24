@@ -10,7 +10,7 @@ defmodule Systems.Account.NextActions.SelectStudyStudent do
       title: dgettext("eyra-nextaction", "select.study.student.title"),
       description: dgettext("eyra-nextaction", "select.study.student.description"),
       cta_label: dgettext("eyra-nextaction", "select.study.student.cta"),
-      cta_action: %{type: :redirect, to: ~p"/user/profile?tab=study"}
+      cta_action: %{type: :redirect, to: ~p"/user/account?tab=study"}
     }
   end
 end

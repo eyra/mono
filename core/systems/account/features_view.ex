@@ -1,7 +1,7 @@
 defmodule Systems.Account.FeaturesView do
   @moduledoc """
   Embedded LiveView for editing user features (gender, birth_year).
-  Used in both UserProfilePage (as a tab) and OnboardingPage (as a step).
+  Used in both Account.Page (as a tab) and OnboardingPage (as a step).
   """
   use CoreWeb, :embedded_live_view
 

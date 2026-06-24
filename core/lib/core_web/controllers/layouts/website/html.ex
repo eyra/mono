@@ -64,7 +64,8 @@ defmodule CoreWeb.Layouts.Website.Html do
                 </div>
               </div>
             </div>
-            <div class="pb-0 lg:pb-10 bg-grey5">
+            <div class="bg-grey5">
+              <.platform_footer />
             </div>
           </div>
         </div>

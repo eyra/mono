@@ -713,7 +713,7 @@ defmodule Systems.Account.PublicTest do
       url_resolver = fn target, _ ->
         case target do
           Systems.Account.UserSettings -> "/settings"
-          Account.UserProfilePage -> "/profile"
+          Account.Page -> "/account"
         end
       end
 
