@@ -1,14 +1,16 @@
-defmodule Systems.Account.UserProfilePage do
+defmodule Systems.Account.Page do
   @moduledoc """
-  The user profile page.
+  The Account page (`/user/profile`).
 
-  Renders inside the workspace layout for creators and the website layout
-  for participants — `UserProfilePageBuilder` decides which, and which menu
-  set to use, based on the current user.
+  Renders inside the workspace layout for creators and the stripped
+  layout (same as the auth and onboarding pages) for participants —
+  `Account.PageBuilder` decides which, and which menu set to use,
+  based on the current user.
 
   Within the chosen layout the body is an adaptable_layout: a single
   pane for users with one tab (the common case) and a tabbar for users
-  with two or more (PANL participants get a Features tab).
+  with two or more (PANL participants get a Features tab). The Profile
+  tab owns the Sign-out action.
   """
   use CoreWeb, :routed_live_view
   use Gettext, backend: CoreWeb.Gettext
@@ -16,7 +18,6 @@ defmodule Systems.Account.UserProfilePage do
   import Systems.Content.Html
 
   alias Core
-  alias Frameworks.Pixel.Hero
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
@@ -75,26 +76,16 @@ defmodule Systems.Account.UserProfilePage do
   def handle_view_model_updated(socket), do: socket
 
   @impl true
-  def render(%{vm: %{layout: :website}} = assigns) do
+  def render(%{vm: %{layout: :stripped}} = assigns) do
     ~H"""
-    <.live_website
-      user={@current_user}
-      user_agent={Browser.Ua.to_ua(@socket)}
-      menus={@menus}
-      modal={@modal}
-      socket={@socket}
-    >
-      <:hero>
-        <Hero.landing_page title={@vm.title} />
-      </:hero>
+    <.live_stripped menus={@menus} modal={@modal} socket={@socket}>
       <.adaptable_layout
         socket={@socket}
         items={@vm.items}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
-        toolbar_buttons={[@vm.signout_button]}
       />
-    </.live_website>
+    </.live_stripped>
     """
   end
 
@@ -106,7 +97,6 @@ defmodule Systems.Account.UserProfilePage do
         items={@vm.items}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
-        toolbar_buttons={[@vm.signout_button]}
       />
     </.live_workspace>
     """

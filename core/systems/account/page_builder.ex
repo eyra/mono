@@ -1,4 +1,4 @@
-defmodule Systems.Account.UserProfilePageBuilder do
+defmodule Systems.Account.PageBuilder do
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
@@ -17,7 +17,6 @@ defmodule Systems.Account.UserProfilePageBuilder do
     %{
       title: dgettext("eyra-account", "profile.title"),
       items: build_items(user, live_context),
-      signout_button: build_signout_button(),
       user: user,
       active_menu_item: :profile,
       layout: layout_for(user),
@@ -26,26 +25,15 @@ defmodule Systems.Account.UserProfilePageBuilder do
   end
 
   defp layout_for(%Account.User{creator: true}), do: :workspace
-  defp layout_for(%Account.User{}), do: :website
+  defp layout_for(%Account.User{}), do: :stripped
 
   defp menus_config_for(%Account.User{creator: true}) do
     {:workspace_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_menu, :tablet_menu]}
   end
 
+  # Participants share the bare auth/onboarding navbar — Account is a utility page.
   defp menus_config_for(%Account.User{}) do
-    {:website_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_navbar]}
-  end
-
-  defp build_signout_button do
-    %{
-      action: %{type: :http_delete, to: ~p"/user/session"},
-      face: %{
-        type: :secondary,
-        label: dgettext("eyra-ui", "menu.item.signout"),
-        border_color: "border-delete",
-        text_color: "text-delete"
-      }
-    }
+    {:stripped_menu_builder, [:mobile_navbar, :desktop_navbar]}
   end
 
   def build_items(user, live_context) do

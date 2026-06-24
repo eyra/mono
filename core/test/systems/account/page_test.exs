@@ -1,4 +1,4 @@
-defmodule Systems.Account.UserProfilePageTest do
+defmodule Systems.Account.PageTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
@@ -57,11 +57,10 @@ defmodule Systems.Account.UserProfilePageTest do
   end
 
   describe "layout selection" do
-    test "participant gets the website layout (no workspace sidebar)", %{conn: conn} do
+    test "participant gets the stripped layout (no workspace sidebar)", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/user/profile")
 
-      # Website layout's modal wrapper is unique to live_website
-      assert html =~ "live_website_modal"
+      assert html =~ "live_stripped_modal"
       refute html =~ "live_workspace_modal"
     end
 
@@ -77,7 +76,7 @@ defmodule Systems.Account.UserProfilePageTest do
       {:ok, _view, html} = live(conn, "/user/profile")
 
       assert html =~ "live_workspace_modal"
-      refute html =~ "live_website_modal"
+      refute html =~ "live_stripped_modal"
     end
   end
 

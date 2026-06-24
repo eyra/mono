@@ -1,6 +1,6 @@
-defmodule Systems.Account.UserProfileTab do
+defmodule Systems.Account.Page.Tab do
   @moduledoc """
-  Behaviour for user profile tabs.
+  Behaviour for tabs hosted by `Systems.Account.Page` (Profile, Features, …).
 
   Each tab module must implement:
   - key/0: Returns the unique key for this tab
