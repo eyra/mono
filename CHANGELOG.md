@@ -9,6 +9,16 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#27 2026-06-24
+* Added - OTP email-first authentication (behind `:otp` flag, off in prod): single email field at /user/auth, 6-digit code page, then routed through terms & privacy on first sign-up; SurfConext / Google domains still hand off to their SSO providers from the same entry point
+* Added - Hourly cron prunes expired OTP codes so the auth_codes table stays bounded
+* Added - Budget capacity (SF-OPP-08): paid-slot adverts switch to a disabled "Fully booked" state once the budget is exhausted; returning participants can still re-enter assignments they had already joined
+* Added - OPP reconciliation worker (SF-OPP-02): periodic background job re-syncs OPP payment state against internal records, isolating per-item failures
+* Fixed - SurfConext signup auto-activates new accounts (`confirmed_at`) but no longer auto-marks them as Verified — verification stays a manual admin step
+* Fixed - Filing a support ticket as a fresh creator (no profile / no features) crashed /support/ticket and /support/ticket/:id; the user's email now stands in for the missing name + avatar
+* Fixed - Close-ticket button border colour now matches its red text instead of the default blue outline
+* Fixed - Data Donation file upload broke (reconnect loop) when a workflow had more than one task
+
 ## \#26 2026-06-17
 * Added - Participant pay-out request (UC-OPP-06): "Uitbetalen" button on the home rewards card opens a handoff modal, then routes through the OPP withdrawal flow (pay-in via the platform merchant, withdrawal backed by a platform→participant charge); home rewards card refreshes reactively as the payout transitions
 * Added - OTP authentication backend (dormant until UI lands): 6-digit code, 10-minute TTL, 5-attempt cap, rate-limited to 3 requests/minute per email
