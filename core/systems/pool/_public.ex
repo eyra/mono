@@ -151,6 +151,8 @@ defmodule Systems.Pool.Public do
   System admins can manage any pool. Otherwise the user must be an owner
   of the org that the pool belongs to.
   """
+  def can_manage?(%Pool.Model{org: nil}, _), do: false
+
   def can_manage?(%Pool.Model{org: %Org.NodeModel{} = org}, %Account.User{} = user) do
     Org.Public.can_manage?(org, user)
   end
