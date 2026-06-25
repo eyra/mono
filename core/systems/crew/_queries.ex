@@ -33,9 +33,23 @@ defmodule Systems.Crew.Queries do
     build(member_query(crew), :member, user: [id == ^user_id])
   end
 
-  def members_by_user_query(%Ecto.Query{} = users) do
-    user_ids = select(users, [user: u], u.id)
-    build(member_query(), :member, user: [id in subquery(user_ids)])
+  def members_by_task_query(%Ecto.Query{} = tasks) do
+    task_ids = select(tasks, [task: t], t.id)
+
+    member_ids =
+      member_query()
+      |> join(:inner, [member: m], ra in Core.Authorization.RoleAssignment,
+        as: :task_role,
+        on: ra.principal_id == m.user_id and ra.role == :owner
+      )
+      |> join(:inner, [member: m, task_role: ra], t in Crew.TaskModel,
+        as: :task,
+        on: t.auth_node_id == ra.node_id and t.crew_id == m.crew_id
+      )
+      |> where([task: t], t.id in subquery(task_ids))
+      |> select([member: m], m.id)
+
+    build(member_query(), :member, [id in subquery(member_ids)])
   end
 
   def members_by_task_status_query(%Crew.Model{} = crew, status_list) when is_list(status_list) do

@@ -513,8 +513,7 @@ defmodule Systems.Crew.Public do
     #   3. end of survey pointing to wrong url (redirecting, but to the wrong advert)
 
     tasks = tasks_soft_expired_query()
-    users = users_by_task_query(tasks)
-    members = members_by_user_query(users)
+    members = members_by_task_query(tasks)
 
     Multi.new()
     |> Multi.update_all(:members, members, set: [expired: true])
@@ -534,8 +533,7 @@ defmodule Systems.Crew.Public do
         tasks_expired_pending_query(crew, expiration_timeout)
       end
 
-    users = users_by_task_query(tasks)
-    members = members_by_user_query(users)
+    members = members_by_task_query(tasks)
 
     Multi.new()
     |> Multi.update_all(:members, members, set: [expired: true])

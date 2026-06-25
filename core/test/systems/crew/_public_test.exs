@@ -304,6 +304,30 @@ defmodule Systems.Crew.PublicTest do
       assert Crew.Public.member?(crew, user2)
     end
 
+    test "mark_expired/0 does not expire member in unrelated crew" do
+      user = Factories.insert!(:member)
+
+      crew1 = Factories.insert!(:crew)
+      crew2 = Factories.insert!(:crew)
+
+      {:ok, %{member: member1, crew_task: task1}} =
+        Crew.Public.apply_member(crew1, user, ["task1"], expire_at(-1))
+
+      {:ok, %{member: member2, crew_task: task2}} =
+        Crew.Public.apply_member(crew2, user, ["task2"], expire_at(1))
+
+      assert Crew.Public.mark_expired()
+
+      assert %{expired: true} = Crew.Public.get_member!(member1.id)
+      assert %{expired: true} = Crew.Public.get_task!(task1.id)
+
+      assert %{expired: false} = Crew.Public.get_member!(member2.id)
+      assert %{expired: false} = Crew.Public.get_task!(task2.id)
+
+      assert not Crew.Public.member?(crew1, user)
+      assert Crew.Public.member?(crew2, user)
+    end
+
     test "cancel/2 does expire member" do
       user = Factories.insert!(:member)
       crew = Factories.insert!(:crew)
