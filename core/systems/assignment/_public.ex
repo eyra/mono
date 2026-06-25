@@ -914,6 +914,44 @@ defmodule Systems.Assignment.Public do
     max(0, subject_count - all_non_expired_members)
   end
 
+  @doc """
+  Returns true when the assignment's fund can cover at least one more
+  participant's reward. Free assignments and virtual currencies always pass;
+  a paid assignment without a resolvable legal-currency fund never passes.
+
+  The available balance already excludes rewards reserved for in-flight
+  participants: reserving a reward debits the fund's available account (and
+  credits the reserve account), so `Fund.Model.amount_available/1` reflects
+  only the genuinely unreserved balance.
+  """
+  def has_budget_capacity?(%Assignment.Model{} = assignment) do
+    assignment
+    |> Repo.preload([:info, fund: [:available, :currency]])
+    |> budget_capacity()
+  end
+
+  defp budget_capacity(%Assignment.Model{info: %{subject_reward: reward}})
+       when not (is_integer(reward) and reward > 0),
+       do: true
+
+  defp budget_capacity(%Assignment.Model{
+         info: %{subject_reward: reward},
+         fund: %Fund.Model{currency: %Fund.CurrencyModel{type: :legal}} = fund
+       })
+       when is_integer(reward) and reward > 0 do
+    Fund.Model.amount_available(fund) >= reward
+  end
+
+  defp budget_capacity(%Assignment.Model{
+         fund: %Fund.Model{currency: %Fund.CurrencyModel{type: :virtual}}
+       }),
+       do: true
+
+  defp budget_capacity(%Assignment.Model{id: id}) do
+    Logger.warning("[Assignment] paid assignment ##{id} has no resolvable fund; treating as full")
+    false
+  end
+
   def mark_expired_debug(%{info: %{duration: duration}, crew: crew} = _assignment, force) do
     expiration_timeout = max(@min_expiration_timeout, duration)
     Crew.Public.mark_expired_debug(crew, expiration_timeout, force)

@@ -715,3 +715,11 @@ msgstr "Bekijk uitbetalingen"
 #, elixir-autogen, elixir-format
 msgid "pending_approvals.title"
 msgstr "Deelnemers wachten op uitbetaling"
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.body"
+msgstr "Helaas zit deze studie vol en worden er geen nieuwe deelnemers meer aangenomen."
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.title"
+msgstr "Deze studie zit vol"

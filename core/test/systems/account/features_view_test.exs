@@ -17,7 +17,7 @@ defmodule Systems.Account.FeaturesViewTest do
 
   describe "rendering" do
     test "renders features view with title and form", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile/features")
+      conn = conn |> Map.put(:request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -39,7 +39,7 @@ defmodule Systems.Account.FeaturesViewTest do
     end
 
     test "renders gender options", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile/features")
+      conn = conn |> Map.put(:request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -58,7 +58,7 @@ defmodule Systems.Account.FeaturesViewTest do
 
   describe "form interactions" do
     test "saves birth year on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile/features")
+      conn = conn |> Map.put(:request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -78,7 +78,7 @@ defmodule Systems.Account.FeaturesViewTest do
     end
 
     test "saves gender on selection", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile/features")
+      conn = conn |> Map.put(:request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -103,7 +103,7 @@ defmodule Systems.Account.FeaturesViewTest do
 
   describe "validation" do
     test "shows error for invalid birth year", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile/features")
+      conn = conn |> Map.put(:request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{

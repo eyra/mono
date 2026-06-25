@@ -245,27 +245,27 @@ msgstr "Benvenuto"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
-msgstr ""
+msgstr "Questo codice è scaduto. Richiedine uno nuovo."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.invalid"
-msgstr ""
+msgstr "Codice errato. Riprova."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr ""
+msgstr "Troppi tentativi errati. Richiedi un nuovo codice."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr ""
+msgstr "Controlla la tua email"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr ""
+msgstr "Continua"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr ""
+msgstr "Inserisci un indirizzo email valido."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"

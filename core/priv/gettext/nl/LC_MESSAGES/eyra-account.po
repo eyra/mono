@@ -244,27 +244,27 @@ msgstr "Welkom"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
-msgstr ""
+msgstr "Deze code is verlopen. Vraag een nieuwe aan."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.invalid"
-msgstr ""
+msgstr "Onjuiste code. Probeer het opnieuw."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr ""
+msgstr "Te veel onjuiste pogingen. Vraag een nieuwe code aan."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr ""
+msgstr "Controleer je e-mail"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr ""
+msgstr "Doorgaan"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr ""
+msgstr "Voer een geldig e-mailadres in."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"

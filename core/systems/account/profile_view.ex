@@ -1,7 +1,7 @@
 defmodule Systems.Account.ProfileView do
   @moduledoc """
   Embedded LiveView for editing user profile (name, photo, etc.).
-  Used in both UserProfilePage (as a tab) and OnboardingPage (as a step).
+  Used in both Account.Page (as a tab) and OnboardingPage (as a step).
   """
   use CoreWeb, :embedded_live_view
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
@@ -107,9 +107,9 @@ defmodule Systems.Account.ProfileView do
         </div>
         <%= if @vm.signout_button do %>
           <.spacing value="M" />
-          <.wrap>
+          <div class="flex flex-row justify-start">
             <Button.dynamic {@vm.signout_button} />
-          </.wrap>
+          </div>
         <% end %>
       </Area.form>
     </div>

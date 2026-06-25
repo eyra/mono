@@ -69,3 +69,43 @@ msgstr "Toon meer"
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
 msgstr "Marketplace"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Pool"
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr "Burger"
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr "Student"
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr "Deelnemers"
+
+#, elixir-autogen, elixir-format
+msgid "participants.search.placeholder"
+msgstr "Zoek op e-mailadres of naam"
+
+#, elixir-autogen, elixir-format
+msgid "participants.added.label"
+msgstr "Toegevoegd"
+
+#, elixir-autogen, elixir-format
+msgid "participants.email.button"
+msgstr "E-mail"
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr "Instellingen"
+
+#, elixir-autogen, elixir-format
+msgid "settings.name.label"
+msgstr "Naam"
+
+#, elixir-autogen, elixir-format
+msgid "settings.icon.label"
+msgstr "Icoon"

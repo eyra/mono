@@ -726,3 +726,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pending_approvals.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.body"
+msgstr "Din păcate, acest studiu este complet și nu mai acceptă participanți noi."
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.title"
+msgstr "Acest studiu este complet"

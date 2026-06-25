@@ -161,3 +161,7 @@ msgstr "Meer deelnemers nodig? Voeg meer plekken toe."
 #, elixir-autogen, elixir-format
 msgid "pool.visibility.filled.banner.title"
 msgstr "Alle plekken gereserveerd"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.button"
+msgstr "Volgeboekt"

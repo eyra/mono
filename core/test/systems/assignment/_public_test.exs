@@ -928,4 +928,73 @@ defmodule Systems.Assignment.PublicTest do
       assert [%{paid_at: ^updated_at}] = Assignment.Public.list_completed_payouts(assignment)
     end
   end
+
+  describe "has_budget_capacity?/1" do
+    setup do
+      legal = Fund.Factories.create_currency("eur_capacity", :legal, "€", 2)
+      virtual = Fund.Factories.create_currency("credits_capacity", :virtual, "c", 0)
+      {:ok, legal: legal, virtual: virtual}
+    end
+
+    test "crashes on non-Assignment input" do
+      assert_raise FunctionClauseError, fn ->
+        apply(Assignment.Public, :has_budget_capacity?, [%{}])
+      end
+    end
+
+    test "true when the legal fund covers the reward", %{legal: legal} do
+      fund = Fund.Factories.create_fund("capacity_ok", legal)
+      assignment = funded_assignment(fund, 100)
+
+      assert Assignment.Public.has_budget_capacity?(assignment)
+    end
+
+    test "true at the exact boundary where available equals reward", %{legal: legal} do
+      fund = Fund.Factories.create_fund("capacity_boundary", legal)
+      assignment = funded_assignment(fund, 5000)
+
+      assert Assignment.Public.has_budget_capacity?(assignment)
+    end
+
+    test "false when the legal fund cannot cover one more reward", %{legal: legal} do
+      fund = Fund.Factories.create_fund("capacity_broke", legal)
+      assignment = funded_assignment(fund, 6000)
+
+      refute Assignment.Public.has_budget_capacity?(assignment)
+    end
+
+    test "true for a free assignment regardless of balance", %{legal: legal} do
+      fund = Fund.Factories.create_fund("capacity_free", legal)
+      assignment = funded_assignment(fund, 0)
+
+      assert Assignment.Public.has_budget_capacity?(assignment)
+    end
+
+    test "true for a virtual currency even below the reward", %{virtual: virtual} do
+      fund = Fund.Factories.create_fund("capacity_virtual", virtual)
+      assignment = funded_assignment(fund, 6000)
+
+      assert Assignment.Public.has_budget_capacity?(assignment)
+    end
+
+    # A paid assignment whose fund can't be resolved fails closed (treated as
+    # full) and logs a warning via the budget_capacity/1 fallback. The warning
+    # itself isn't asserted here because the test logger runs at :error.
+    test "false for a paid assignment without a fund" do
+      refute Assignment.Public.has_budget_capacity?(funded_assignment(nil, 6000))
+    end
+  end
+
+  defp funded_assignment(fund, subject_reward) do
+    info =
+      Factories.insert!(:assignment_info, %{
+        subject_count: 1,
+        subject_reward: subject_reward,
+        duration: "31",
+        language: :en,
+        devices: [:desktop]
+      })
+
+    Factories.insert!(:assignment, %{info: info, fund: fund})
+  end
 end

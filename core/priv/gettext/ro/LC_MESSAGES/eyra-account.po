@@ -254,27 +254,27 @@ msgstr "Bun venit"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
-msgstr ""
+msgstr "Acest cod a expirat. Te rugăm să soliciți unul nou."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.invalid"
-msgstr ""
+msgstr "Cod incorect. Te rugăm să încerci din nou."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr ""
+msgstr "Prea multe încercări incorecte. Te rugăm să soliciți un cod nou."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr ""
+msgstr "Verifică-ți emailul"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr ""
+msgstr "Continuă"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr ""
+msgstr "Te rugăm să introduci o adresă de email validă."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"

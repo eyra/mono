@@ -115,3 +115,7 @@ msgstr "Admins"
 #, elixir-autogen, elixir-format
 msgid "org.admins.title"
 msgstr "Admins"
+
+#, elixir-autogen, elixir-format
+msgid "org.panel.tag"
+msgstr "Panel"

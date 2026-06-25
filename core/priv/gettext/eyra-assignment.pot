@@ -715,3 +715,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pending_approvals.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.title"
+msgstr ""

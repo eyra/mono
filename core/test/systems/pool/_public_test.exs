@@ -173,6 +173,29 @@ defmodule Systems.Pool.PublicTest do
     end
   end
 
+  describe "can_manage?/2" do
+    test "false when the pool has no associated org", %{user: user} do
+      pool = Factories.insert!(:pool, %{name: "no_org_pool", director: :citizen, org_node: nil})
+      assert Public.can_manage?(pool, user) == false
+    end
+
+    test "true when user is an owner of the pool's org", %{user: user, pool: pool} do
+      pool = Core.Repo.preload(pool, :org)
+      Core.Authorization.assign_role(user, pool.org, :owner)
+      assert Public.can_manage?(pool, user) == true
+    end
+
+    test "false when user has no role on the pool's org", %{user: user, pool: pool} do
+      assert Public.can_manage?(pool, user) == false
+    end
+
+    test "preloads org when the association is not loaded", %{user: user, pool: pool} do
+      stripped = %{pool | org: %Ecto.Association.NotLoaded{}}
+      Core.Authorization.assign_role(user, Core.Repo.preload(pool, :org).org, :owner)
+      assert Public.can_manage?(stripped, user) == true
+    end
+  end
+
   describe "list_participant_ids/0" do
     test "returns user ids of pool participants", %{user: user, pool: pool} do
       Public.add_participant!(pool, user)

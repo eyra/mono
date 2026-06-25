@@ -10,7 +10,7 @@ defmodule Systems.Account.NextActions.FillinCharacteristics do
       title: dgettext("eyra-nextaction", "fillin.characteristics.title"),
       description: dgettext("eyra-nextaction", "fillin.characteristics.description"),
       cta_label: dgettext("eyra-nextaction", "fillin.characteristics.cta"),
-      cta_action: %{type: :redirect, to: ~p"/user/profile?tab=features"}
+      cta_action: %{type: :redirect, to: ~p"/user/account?tab=features"}
     }
   end
 end

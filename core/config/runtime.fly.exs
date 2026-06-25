@@ -102,6 +102,9 @@ if config_env() == :prod do
           "payment_reconciliation" ->
             {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
 
+          "auth_code_cleanup" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
+
           _ ->
             nil
         end

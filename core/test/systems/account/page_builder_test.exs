@@ -1,4 +1,4 @@
-defmodule Systems.Account.UserProfilePageBuilderTest do
+defmodule Systems.Account.PageBuilderTest do
   use Core.DataCase
   use Gettext, backend: CoreWeb.Gettext
 
@@ -14,32 +14,32 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
     end
 
     test "builds view model with title", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       assert vm.title == dgettext("eyra-account", "profile.title")
     end
 
     test "builds view model with user", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       assert vm.user == user
     end
 
     test "builds view model with active_menu_item", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       assert vm.active_menu_item == :profile
     end
 
     test "includes profile item for regular user", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       item_ids = Enum.map(vm.items, & &1.id)
       assert :profile in item_ids
     end
 
     test "excludes features item for non-PANL user", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       item_ids = Enum.map(vm.items, & &1.id)
       refute :features in item_ids
@@ -54,7 +54,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
       Pool.Public.add_participant!(panl_pool, user)
 
       user = Core.Repo.preload(user, [:features, :profile])
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       item_ids = Enum.map(vm.items, & &1.id)
       assert :profile in item_ids
@@ -62,7 +62,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
     end
 
     test "items have LiveNest element structure", %{user: user} do
-      vm = Account.UserProfilePageBuilder.view_model(user, %{})
+      vm = Account.PageBuilder.view_model(user, %{})
 
       profile_item = Enum.find(vm.items, &(&1.id == :profile))
       assert profile_item != nil
@@ -81,7 +81,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
 
       Pool.Public.add_participant!(panl_pool, user)
 
-      result = Account.UserProfilePageBuilder.tab_keys(user)
+      result = Account.PageBuilder.tab_keys(user)
 
       assert result == [:profile, :payouts, :features]
     end
@@ -90,7 +90,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
       user = Factories.insert!(:member)
       Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
 
-      result = Account.UserProfilePageBuilder.tab_keys(user)
+      result = Account.PageBuilder.tab_keys(user)
 
       assert result == [:profile, :payouts]
     end
@@ -102,7 +102,7 @@ defmodule Systems.Account.UserProfilePageBuilderTest do
         Repo.delete(panl_pool)
       end
 
-      result = Account.UserProfilePageBuilder.tab_keys(user)
+      result = Account.PageBuilder.tab_keys(user)
 
       assert result == [:profile, :payouts]
     end
