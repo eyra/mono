@@ -57,11 +57,14 @@ defmodule Systems.Assignment.ControllerTest do
   describe "apply with budget capacity" do
     setup :login_as_member
 
-    test "blocks apply when the budget cannot cover one more reward", %{conn: conn} do
+    test "shows a friendly 'study is full' page when the budget cannot cover one more reward",
+         %{conn: conn} do
       id = online_paid_assignment_id(6000)
 
       conn = get(conn, "/assignment/#{id}/apply")
-      html_response(conn, 503)
+      response = html_response(conn, 200)
+      assert response =~ "error-assignment_full"
+      assert response =~ "This study is full"
     end
 
     test "allows apply when the budget can cover one more reward", %{conn: conn} do

@@ -726,3 +726,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "pending_approvals.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.body"
+msgstr "Deja, šis tyrimas yra pilnas ir nebepriima naujų dalyvių."
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.title"
+msgstr "Šis tyrimas yra pilnas"

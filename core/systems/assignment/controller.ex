@@ -37,39 +37,29 @@ defmodule Systems.Assignment.Controller do
     |> redirect(to: ~p"/assignment/#{id}")
   end
 
-  def invite(conn, %{"id" => id}) do
-    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if blocked?(conn, assignment) do
-        service_unavailable(conn)
-      else
-        start_participant(conn, assignment)
-      end
-    else
-      service_unavailable(conn)
+  def invite(conn, %{"id" => id}), do: participate(conn, id)
+
+  def apply(conn, %{"id" => id}), do: participate(conn, id)
+
+  def join(conn, %{"id" => id}), do: participate(conn, id)
+
+  defp participate(conn, id) when is_binary(id) do
+    case Assignment.Public.get(String.to_integer(id), [:crew]) do
+      %Assignment.Model{} = assignment -> participate(conn, assignment)
+      nil -> service_unavailable(conn)
     end
   end
 
-  def apply(conn, %{"id" => id}) do
-    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if blocked?(conn, assignment) do
+  defp participate(conn, %Assignment.Model{} = assignment) do
+    cond do
+      offline?(assignment) ->
         service_unavailable(conn)
-      else
-        start_participant(conn, assignment)
-      end
-    else
-      service_unavailable(conn)
-    end
-  end
 
-  def join(conn, %{"id" => id}) do
-    if assignment = Assignment.Public.get(String.to_integer(id), [:crew]) do
-      if blocked?(conn, assignment) do
-        service_unavailable(conn)
-      else
+      full?(assignment) and not returning_participant?(conn, assignment) ->
+        assignment_full(conn)
+
+      true ->
         start_participant(conn, assignment)
-      end
-    else
-      service_unavailable(conn)
     end
   end
 
@@ -234,10 +224,6 @@ defmodule Systems.Assignment.Controller do
     status != :online
   end
 
-  defp blocked?(conn, %Assignment.Model{} = assignment) do
-    offline?(assignment) or (full?(assignment) and not returning_participant?(conn, assignment))
-  end
-
   defp full?(%Assignment.Model{} = assignment) do
     not Assignment.Public.has_budget_capacity?(assignment)
   end
@@ -251,6 +237,12 @@ defmodule Systems.Assignment.Controller do
     |> put_status(:service_unavailable)
     |> put_view(html: CoreWeb.ErrorHTML)
     |> render(:"503")
+  end
+
+  defp assignment_full(conn) do
+    conn
+    |> put_view(html: Assignment.ErrorHTML)
+    |> render(:assignment_full)
   end
 
   defp start_participant(conn, %{id: id} = assignment) do
