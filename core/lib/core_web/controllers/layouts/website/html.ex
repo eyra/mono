@@ -36,36 +36,38 @@ defmodule CoreWeb.Layouts.Website.Html do
           >
             <Navigation.mobile_menu {@menus.mobile_menu} />
           </div>
-          <div id="main-content" class="flex flex-col w-full h-viewport">
-            <div class="flex-wrap lg:hidden">
-              <Navigation.mobile_navbar {@menus.mobile_navbar} />
-            </div>
-            <div class="flex-wrap hidden lg:flex">
-              <Navigation.desktop_navbar {@menus.desktop_navbar} />
-            </div>
-            <div class="flex-1">
-              <div class="flex flex-col h-full border-t border-b border-grey4">
-                <div class="bg-white">
-                  <%= render_slot(@hero) %>
-                </div>
-                <div class="flex-1 bg-white">
-                  <div class="flex flex-row">
-                    <div id="layout-inner-block" class="flex-1">
-                      <%= render_slot(@inner_block) %>
-                      <Margin.y id={:page_footer_top} />
+          <div class="bg-grey5 lg:px-16">
+            <div id="main-content" class="flex flex-col w-full h-viewport lg:max-w-[1536px] lg:mx-auto">
+              <div class="flex-wrap lg:hidden">
+                <Navigation.mobile_navbar {@menus.mobile_navbar} />
+              </div>
+              <div class="flex-wrap hidden lg:flex">
+                <Navigation.desktop_navbar {@menus.desktop_navbar} />
+              </div>
+              <div class="flex-1 lg:relative lg:z-10">
+                <div class="flex flex-col h-full lg:shadow-prism-container">
+                  <div class="bg-white">
+                    <%= render_slot(@hero) %>
+                  </div>
+                  <div class="flex-1 bg-white">
+                    <div class="flex flex-row">
+                      <div id="layout-inner-block" class="flex-1">
+                        <%= render_slot(@inner_block) %>
+                        <Margin.y id={:page_footer_top} />
+                      </div>
+                      <%= if @include_right_sidepadding? do %>
+                        <div class="w-0 md:w-sidepadding"></div>
+                      <% end %>
                     </div>
-                    <%= if @include_right_sidepadding? do %>
-                      <div class="w-0 md:w-sidepadding"></div>
-                    <% end %>
+                  </div>
+                  <div class="bg-white">
+                    <.content_footer />
                   </div>
                 </div>
-                <div class="bg-white">
-                  <.content_footer />
-                </div>
               </div>
-            </div>
-            <div class="bg-grey5">
-              <.platform_footer />
+              <div class="bg-grey5">
+                <.platform_footer />
+              </div>
             </div>
           </div>
         </div>
