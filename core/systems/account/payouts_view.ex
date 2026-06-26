@@ -5,10 +5,13 @@ defmodule Systems.Account.PayoutsView do
   Shows the participant's bank-account verification status and payout history:
 
     * Bankrekening — a colored status badge (`:not_verified` red, `:pending`
-      orange, `:verified` green) plus an action button. "Toevoegen" runs
-      `Fund.Public.start_bank_verification/1` and opens a confirmation modal that
-      hands the participant off to OPP's hosted iDEAL flow, where OPP lets them
-      pick their bank (we keep no bank list of our own).
+      orange, `:verified` green) plus an action button. "Toevoegen" first opens
+      an in-platform phone form (`Systems.Account.PhoneForm`) when no phone is
+      known — pushing it to OPP via the API avoids a hosted phone-entry redirect.
+      With a phone already on file it runs `Fund.Public.start_bank_verification/1`
+      and opens a confirmation modal. Either way the participant ends up at OPP's
+      hosted iDEAL flow, where OPP lets them pick their bank (we keep no bank list
+      of our own).
 
     * Overzicht — payout history (`Fund.Public.list_payouts_for_user/1`) grouped
       by year, with a year filter and a per-year total.
@@ -52,9 +55,18 @@ defmodule Systems.Account.PayoutsView do
   end
 
   @impl true
+  def handle_event(
+        "start_verification",
+        _params,
+        %{assigns: %{model: %{phone: nil} = user}} = socket
+      ) do
+    {:noreply, present_modal(socket, Account.PayoutsViewBuilder.phone_form_modal(user))}
+  end
+
+  @impl true
   def handle_event("start_verification", _params, %{assigns: %{model: user}} = socket) do
     case Fund.Public.start_bank_verification(user) do
-      {source, url} when source in [:bank, :merchant] and is_binary(url) ->
+      {:bank, url} when is_binary(url) ->
         {:noreply, present_modal(socket, Account.PayoutsViewBuilder.bank_verification_modal(url))}
 
       :verified ->
@@ -66,11 +78,6 @@ defmodule Systems.Account.PayoutsView do
       {:error, _reason} ->
         {:noreply, Flash.push_error(socket, dgettext("eyra-account", "payouts.bank.error.flash"))}
     end
-  end
-
-  @impl true
-  def handle_event("manage", _params, socket) do
-    {:noreply, update_view_model(socket)}
   end
 
   @impl true

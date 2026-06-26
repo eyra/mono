@@ -37,9 +37,8 @@ defmodule CoreWeb.Features.RequestPayoutTest do
           %{session: session} do
     merchant_uid = "m_kyc_test"
 
-    # Merchant exists at the provider but isn't verified — drives the
-    # `{:error, {:kyc_required, overview_url}}` branch of
-    # Fund.Public.prepare_payout/1.
+    # Bank account isn't verified yet — drives the
+    # `{:error, {:kyc_required, :bank, _}}` branch of Fund.Public.prepare_payout/1.
     ProviderMock
     |> stub(:get_merchant, fn ^merchant_uid ->
       {:ok,
@@ -48,11 +47,11 @@ defmodule CoreWeb.Features.RequestPayoutTest do
          status: "pending",
          kyc_level: 0,
          compliance_status: "unverified",
-         overview_url: "https://opp.test/kyc-onboarding"
+         overview_url: nil
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_test", status: "new", verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     password = Factories.valid_user_password()

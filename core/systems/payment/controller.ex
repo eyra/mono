@@ -40,6 +40,17 @@ defmodule Systems.Payment.Controller do
     Logger.info("[Payment.Webhook] Processing event type=#{type} object_uid=#{uid}")
     Logger.info("[Payment.Webhook] Full event: #{inspect(event)}")
 
+    route_event(object_type, type, uid, event)
+  end
+
+  # Route on the authoritative `object_type`. OPP prefixes the event `type` with
+  # the owning resource (e.g. "merchant.withdrawal.status.changed"), so matching
+  # the type string alone misclassifies withdrawal/transaction events as KYC —
+  # their object_type is settled first, before the KYC type-prefix heuristic.
+  defp route_event("withdrawal", _type, uid, _event), do: handle_withdrawal_status_change(uid)
+  defp route_event("transaction", _type, uid, _event), do: handle_transaction_status_change(uid)
+
+  defp route_event(object_type, type, uid, event) do
     if kyc_event?(type, object_type) do
       handle_kyc_change(event)
     else

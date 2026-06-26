@@ -283,10 +283,6 @@ msgid "payouts.bank.button.add"
 msgstr "Add"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr "Manage"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr "Something went wrong verifying your bank account. Please try again later."
 
@@ -365,14 +361,6 @@ msgid "profile.tab.payouts.title"
 msgstr "Payouts"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr "Continue verification"
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr "Action required"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr "You'll be redirected to our payment partner Online Payment Platform to verify your bank account via iDEAL."
 
@@ -382,4 +370,24 @@ msgstr "Continue"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr "Verify bank account"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.flash"
+msgstr "Something went wrong verifying your bank account. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr "Mobile phone number"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.body"
+msgstr "Enter your mobile phone number. We'll then take you to your bank to verify your account via iDEAL."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.confirm"
+msgstr "Continue"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.title"
 msgstr "Verify bank account"

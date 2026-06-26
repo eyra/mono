@@ -283,10 +283,6 @@ msgid "payouts.bank.button.add"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr ""
 
@@ -363,14 +359,6 @@ msgid "profile.tab.payouts.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr ""
 
@@ -380,4 +368,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.title"
 msgstr ""

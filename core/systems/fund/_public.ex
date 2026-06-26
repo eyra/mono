@@ -988,40 +988,26 @@ defmodule Systems.Fund.Public do
 
   @doc """
   Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
-  account exist, then reports payout readiness via `payout_ready_for/2`.
+  account exist, then reports payout readiness via `payout_ready_for/1`.
   """
   def prepare_payout(%Account.User{} = user) do
     with :ok <- payout_eligibility(user),
          {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
          {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
-      payout_ready_for(merchant, bank_account)
+      payout_ready_for(bank_account)
     end
   end
 
-  # Check the bank status explicitly so a live withdrawal never fires against an
-  # unapproved account, even though "verified" is documented to subsume it.
-  defp payout_ready_for(
-         %{status: "live", compliance_status: "verified"},
-         %{status: "approved"}
-       ),
-       do: :ok
+  # A verified bank account (OPP Level 200) is sufficient for participant payouts;
+  # merchant identity-KYC (Level 400) is never required. Ready iff the bank
+  # account is approved, so a withdrawal never fires against an unapproved account.
+  defp payout_ready_for(%{status: "approved"}), do: :ok
 
-  defp payout_ready_for(
-         %{status: "live", compliance_status: "verified"},
-         %{verification_url: verification_url}
-       )
+  defp payout_ready_for(%{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, :bank, verification_url}}
 
-  defp payout_ready_for(%{overview_url: overview_url}, _bank_account)
-       when is_binary(overview_url) and overview_url != "",
-       do: {:error, {:kyc_required, :merchant, overview_url}}
-
-  defp payout_ready_for(_merchant, %{verification_url: verification_url})
-       when is_binary(verification_url) and verification_url != "",
-       do: {:error, {:kyc_required, :bank, verification_url}}
-
-  defp payout_ready_for(_merchant, _bank_account), do: {:error, :kyc_unavailable}
+  defp payout_ready_for(_bank_account), do: {:error, :kyc_unavailable}
 
   @doc """
   Read-only KYC/bank-account verification status for the account page's
@@ -1032,36 +1018,20 @@ defmodule Systems.Fund.Public do
   `:kyc_unavailable`), this distinguishes `:pending` — a bank account submitted
   to OPP that is still being reviewed — so the UI can show "Wordt geverifiëerd".
   """
-  @spec verification_status(Account.User.t()) ::
-          :not_verified | :pending | :verified | {:merchant_blocked, String.t()}
+  @spec verification_status(Account.User.t()) :: :not_verified | :pending | :verified
   def verification_status(%Account.User{merchant_uid: nil}), do: :not_verified
 
   def verification_status(%Account.User{merchant_uid: merchant_uid}) do
-    with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
-         {:ok, accounts} <- Payment.Public.list_bank_accounts(merchant_uid) do
-      bank_account = Enum.find(accounts, &(&1.status != "disapproved"))
-      verification_status_for(merchant, bank_account)
-    else
-      {:error, _} -> :not_verified
+    case Payment.Public.list_bank_accounts(merchant_uid) do
+      {:ok, accounts} ->
+        accounts
+        |> Enum.find(&(&1.status != "disapproved"))
+        |> bank_account_status()
+
+      {:error, _} ->
+        :not_verified
     end
   end
-
-  # Bank-account verification (the seamless iDEAL flow) is the primary step. Only
-  # once the bank account is approved do we surface any remaining merchant
-  # compliance/identity block — so participants are driven into iDEAL first
-  # rather than OPP's hosted merchant overview.
-  defp verification_status_for(merchant, bank_account) do
-    case bank_account_status(bank_account) do
-      :verified -> merchant_status(merchant)
-      bank_status -> bank_status
-    end
-  end
-
-  defp merchant_status(%{overview_url: overview_url})
-       when is_binary(overview_url) and overview_url != "",
-       do: {:merchant_blocked, overview_url}
-
-  defp merchant_status(_merchant), do: :verified
 
   # OPP's `status` is authoritative for the display state. A bank account that is
   # under review ("pending") can still carry a `verification_url`, so status must
@@ -1083,42 +1053,43 @@ defmodule Systems.Fund.Public do
   earning anything.
 
   Returns `{:bank, verification_url}` (drive the seamless iDEAL picker),
-  `{:merchant, overview_url}` (hand off to OPP's hosted compliance screen),
   `:verified`, or `{:error, reason}`.
 
-  Bank-first: as long as the bank account can be verified directly (it carries a
-  `verification_url`), we boot the participant into the seamless iDEAL flow rather
-  than OPP's hosted merchant overview. The merchant handoff is only used once the
-  bank account is approved but OPP still requires merchant compliance.
+  The arity-2 form pushes the given phone to the merchant — used when collecting
+  it in the phone form. The arity-1 form is for the already-on-file case and does
+  not re-push (the phone was pushed to OPP when first collected).
   """
   @spec start_bank_verification(Account.User.t()) ::
-          {:bank, String.t()} | {:merchant, String.t()} | :verified | {:error, term()}
+          {:bank, String.t()} | :verified | {:error, term()}
   def start_bank_verification(%Account.User{} = user) do
-    with {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
+    start_bank_verification(user, nil)
+  end
+
+  @spec start_bank_verification(Account.User.t(), String.t() | nil) ::
+          {:bank, String.t()} | :verified | {:error, term()}
+  def start_bank_verification(%Account.User{} = user, phone) do
+    with {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user, phone),
          {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
       bank_handoff(merchant, bank_account)
     end
   end
 
-  defp bank_handoff(merchant, %{status: "approved"}), do: merchant_handoff(merchant)
+  # A verified bank account is all we need; we never hand off to OPP's hosted
+  # merchant-overview screen. Approved → done; otherwise drive the iDEAL flow.
+  defp bank_handoff(_merchant, %{status: "approved"}), do: :verified
 
   defp bank_handoff(_merchant, %{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:bank, verification_url}
 
-  defp bank_handoff(merchant, _bank_account), do: merchant_handoff(merchant)
-
-  defp merchant_handoff(%{overview_url: overview_url})
-       when is_binary(overview_url) and overview_url != "",
-       do: {:merchant, overview_url}
-
-  defp merchant_handoff(_merchant), do: :verified
+  defp bank_handoff(_merchant, _bank_account), do: :verified
 
   # Re-check readiness at confirm time against fresh OPP state (TOCTOU guard).
+  # Only the bank account gates the payout, so we re-fetch just that.
   defp recheck_payout_ready(merchant_uid) do
-    with {:ok, merchant} <- Payment.Public.get_merchant(merchant_uid),
-         {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant_uid) do
-      payout_ready_for(merchant, bank_account)
+    case Payment.Public.ensure_bank_account_for(merchant_uid) do
+      {:ok, bank_account} -> payout_ready_for(bank_account)
+      {:error, _} = error -> error
     end
   end
 

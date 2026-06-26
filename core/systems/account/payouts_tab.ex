@@ -4,7 +4,7 @@ defmodule Systems.Account.PayoutsTab do
   Visible for all participants: shows the bank-account verification status and
   the payout history.
   """
-  @behaviour Systems.Account.UserProfileTab
+  @behaviour Systems.Account.Page.Tab
 
   use Gettext, backend: CoreWeb.Gettext
 

@@ -293,10 +293,6 @@ msgid "payouts.bank.button.add"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr ""
 
@@ -373,14 +369,6 @@ msgid "profile.tab.payouts.title"
 msgstr "Plăți"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr "Continuă verificarea"
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr "Acțiune necesară"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr "Vei fi redirecționat către partenerul nostru de plăți Online Payment Platform pentru a verifica contul bancar prin iDEAL."
 
@@ -390,4 +378,24 @@ msgstr "Continuă"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr "Verifică contul bancar"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.body"
+msgstr "Vei fi redirecționat către partenerul nostru de plăți Online Payment Platform pentru a verifica contul bancar prin iDEAL."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.confirm"
+msgstr "Continuă"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.title"
 msgstr "Verifică contul bancar"

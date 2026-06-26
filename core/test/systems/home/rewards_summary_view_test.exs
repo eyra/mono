@@ -49,7 +49,7 @@ defmodule Systems.Home.RewardsSummaryViewTest do
                    body: "Verify your bank account first",
                    confirm_label: "Go to verification",
                    cancel_label: "Cancel",
-                   confirm_action: %{type: :http_get, to: "/user/profile/payouts"}
+                   confirm_action: %{type: :http_get, to: "/user/account?tab=payouts"}
                  }
                }
              } =

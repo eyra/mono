@@ -12,7 +12,7 @@ defmodule Systems.Home.RewardsSummaryView do
       confirming fires `Fund.Public.request_payout/1`.
     * `{:kyc_required, _, _}` — `:verify` variant; the bank account isn't
       verified yet, so an info modal lets the participant close it or continue to
-      the account page (`/user/profile/payouts`), where verification lives.
+      the account page (`/user/account?tab=payouts`), where verification lives.
     * `{:below_threshold, _}` / other errors — a flash, no modal.
 
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
@@ -67,7 +67,7 @@ defmodule Systems.Home.RewardsSummaryView do
   end
 
   # Bank account not verified yet: an info modal that lets the participant close
-  # it or continue to the account page (`/user/profile/payouts`) to verify.
+  # it or continue to the account page (`/user/account?tab=payouts`) to verify.
   def compose(:handoff_modal, %{handoff_mode: :verify, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -77,7 +77,7 @@ defmodule Systems.Home.RewardsSummaryView do
           body: labels.payout_verify_body,
           confirm_label: labels.payout_verify_confirm,
           cancel_label: labels.payout_handoff_cancel,
-          confirm_action: %{type: :http_get, to: ~p"/user/profile/payouts"}
+          confirm_action: %{type: :http_get, to: ~p"/user/account?tab=payouts"}
         }
       }
     }
@@ -109,11 +109,19 @@ defmodule Systems.Home.RewardsSummaryView do
         %{assigns: %{user: user}} = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
-    result = Fund.Public.request_payout(user)
 
-    # Refresh either way: success zeroes the locked balance, a lost lock-race
-    # hides the now-stale payout button.
-    {:noreply, socket |> flash_payout_result(result) |> refresh_totals(user)}
+    case Fund.Public.request_payout(user) do
+      {:ok, _result} ->
+        # Redirecting here is forbidden — this handler runs inside the
+        # component's update/2 lifecycle (Fabric delivers the modal event via
+        # send_update). Hand off to Home.Page, which redirects from handle_info.
+        send(self(), :payout_completed)
+        {:noreply, socket}
+
+      error ->
+        # Refresh: a lost lock-race hides the now-stale payout button.
+        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+    end
   end
 
   @impl true
@@ -123,9 +131,6 @@ defmodule Systems.Home.RewardsSummaryView do
 
   @impl true
   def handle_modal_closed(socket, :handoff_modal), do: socket
-
-  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:ok, _result}),
-    do: Flash.push_info(socket, labels.payout_success)
 
   defp flash_payout_result(
          %{assigns: %{labels: labels}} = socket,

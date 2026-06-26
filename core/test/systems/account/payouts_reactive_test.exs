@@ -30,7 +30,14 @@ defmodule Systems.Account.PayoutsReactiveTest do
     end)
 
     stub(ProviderMock, :list_bank_accounts, fn "m_rx" ->
-      {:ok, [%{uid: "ba", status: Agent.get(bank, & &1), verification_url: "https://opp.test/ba/verify"}]}
+      {:ok,
+       [
+         %{
+           uid: "ba",
+           status: Agent.get(bank, & &1),
+           verification_url: "https://opp.test/ba/verify"
+         }
+       ]}
     end)
 
     %{user: user, bank: bank}

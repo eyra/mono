@@ -24,9 +24,8 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       assert vm.bank.button.face.label == t("payouts.bank.button.add")
     end
 
-    test "merchant verified + bank approved -> verified (green, Manage)" do
+    test "bank approved -> verified (green, no button)" do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_v"})
-      stub_merchant("m_v")
 
       expect(ProviderMock, :list_bank_accounts, fn "m_v" ->
         {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
@@ -36,12 +35,11 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
 
       assert vm.bank.status == :verified
       assert vm.bank.status_variant == :info
-      assert vm.bank.button.action.event == "manage"
+      assert vm.bank.button == nil
     end
 
     test "merchant verified + bank pending (with lingering url) -> pending (orange, no button)" do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_p"})
-      stub_merchant("m_p")
 
       # A pending account can still carry a verification_url; status must win.
       expect(ProviderMock, :list_bank_accounts, fn "m_p" ->
@@ -58,7 +56,6 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
 
     test "merchant verified + bank new (not yet verified) -> not_verified" do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_nv"})
-      stub_merchant("m_nv")
 
       expect(ProviderMock, :list_bank_accounts, fn "m_nv" ->
         {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
@@ -69,35 +66,21 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       assert vm.bank.status == :not_verified
     end
 
-    test "bank approved but merchant compliance still open -> merchant_blocked" do
+    test "bank approved -> verified even when merchant identity-KYC is still open" do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_b"})
 
-      expect(ProviderMock, :get_merchant, fn "m_b" ->
-        {:ok,
-         %{
-           uid: "m_b",
-           status: "live",
-           kyc_level: 0,
-           compliance_status: "unverified",
-           overview_url: "https://opp.test/overview/m_b"
-         }}
-      end)
-
-      # Bank is already approved; the only remaining blocker is merchant KYC.
+      # No get_merchant expectation: the badge is derived from the bank account
+      # only, so a lingering merchant overview_url (Level 400) is irrelevant.
       expect(ProviderMock, :list_bank_accounts, fn "m_b" ->
         {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
       end)
 
       vm = Account.PayoutsViewBuilder.view_model(user, %{})
 
-      assert vm.bank.status == {:merchant_blocked, "https://opp.test/overview/m_b"}
-      assert vm.bank.merchant_url == "https://opp.test/overview/m_b"
-      # Started but OPP still needs something -> action-required (orange), with a
-      # link back to OPP to finish.
-      assert vm.bank.status_variant == :warning
-      assert vm.bank.status_label == t("payouts.bank.status.action_required")
-      assert vm.bank.button.action == %{type: :http_get, to: "https://opp.test/overview/m_b"}
-      assert vm.bank.button.face.label == t("payouts.bank.button.continue")
+      assert vm.bank.status == :verified
+      assert vm.bank.status_variant == :info
+      assert vm.bank.status_label == t("payouts.bank.status.verified")
+      assert vm.bank.button == nil
     end
   end
 
@@ -123,7 +106,7 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       assert {:bank, "https://opp.test/ba/verify"} = Fund.Public.start_bank_verification(user)
     end
 
-    test "falls back to the merchant overview once the bank account is approved" do
+    test "returns :verified once the bank account is approved (never the merchant overview)" do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_b"})
 
       expect(ProviderMock, :get_merchant, fn "m_b" ->
@@ -141,8 +124,7 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
         {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
       end)
 
-      assert {:merchant, "https://opp.test/overview/m_b"} =
-               Fund.Public.start_bank_verification(user)
+      assert :verified = Fund.Public.start_bank_verification(user)
     end
   end
 
@@ -157,6 +139,18 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       assert assigns.confirm_action == %{type: :http_get, to: "https://opp.test/ba/verify"}
       assert assigns.title == t("payouts.bank.modal.title")
       assert assigns.confirm_label == t("payouts.bank.modal.confirm")
+    end
+  end
+
+  describe "phone_form_modal/1" do
+    test "builds a PhoneForm modal for the given user" do
+      user = Factories.insert!(:member, %{creator: false})
+
+      modal = Account.PayoutsViewBuilder.phone_form_modal(user)
+
+      assert %LiveNest.Modal{style: :compact, element: element} = modal
+      assert element.implementation == Systems.Account.PhoneForm
+      assert Keyword.fetch!(element.options, :user).id == user.id
     end
   end
 
@@ -203,19 +197,6 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       assert [[_date, amount, _status]] = vm.overview.rows_by_year[2025]
       assert amount == CurrencyHelpers.format_cents(500)
     end
-  end
-
-  defp stub_merchant(uid) do
-    expect(ProviderMock, :get_merchant, fn ^uid ->
-      {:ok,
-       %{
-         uid: uid,
-         status: "live",
-         kyc_level: 100,
-         compliance_status: "verified",
-         overview_url: nil
-       }}
-    end)
   end
 
   defp payout(user, cents, status, inserted_at) do

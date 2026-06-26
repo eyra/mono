@@ -28,24 +28,35 @@ defmodule Systems.Payment.Public do
     provider().find_merchant_by_email(email)
   end
 
-  @spec ensure_merchant_for(Account.User.t()) ::
+  @spec ensure_merchant_for(Account.User.t(), String.t() | nil) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
-  def ensure_merchant_for(%Account.User{} = user) do
-    do_ensure_merchant_for(Repo.reload!(user))
+  def ensure_merchant_for(%Account.User{} = user, phone \\ nil) do
+    do_ensure_merchant_for(Repo.reload!(user), phone)
   end
 
-  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
+  @doc """
+  Sets the phone number on an existing merchant's primary contact so OPP's
+  `contact.phonenumber.required` requirement is satisfied via the API.
+  """
+  @spec set_merchant_phone(String.t(), String.t()) ::
+          {:ok, Provider.merchant()} | {:error, Error.t()}
+  def set_merchant_phone(merchant_uid, phone)
+      when is_binary(merchant_uid) and is_binary(phone) do
+    provider().add_merchant_phone(merchant_uid, phone)
+  end
+
+  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user, phone)
        when is_binary(merchant_uid) do
     case get_merchant(merchant_uid) do
-      {:ok, merchant} -> {:ok, {user, merchant}}
+      {:ok, merchant} -> ensure_merchant_phone(user, merchant, phone)
       {:error, _} = error -> error
     end
   end
 
-  defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
+  defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user, phone) do
     Logger.info("[Payment] Creating merchant for user ##{user_id} (#{email})")
 
-    case create_merchant(merchant_attrs(user)) do
+    case create_merchant(merchant_attrs(user, phone)) do
       {:ok, %{uid: merchant_uid} = merchant} ->
         register_merchant(user, merchant_uid, merchant)
 
@@ -62,6 +73,18 @@ defmodule Systems.Payment.Public do
     end
   end
 
+  # Push the phone to an already-existing merchant so a merchant created before
+  # we collected the phone still satisfies OPP's phone requirement via the API
+  # (idempotent at OPP). No phone supplied → leave the merchant untouched.
+  defp ensure_merchant_phone(user, merchant, phone) when is_binary(phone) and phone != "" do
+    case set_merchant_phone(merchant.uid, phone) do
+      {:ok, merchant} -> {:ok, {user, merchant}}
+      {:error, _} = error -> error
+    end
+  end
+
+  defp ensure_merchant_phone(user, merchant, _phone), do: {:ok, {user, merchant}}
+
   defp register_merchant(%Account.User{id: user_id} = user, merchant_uid, merchant) do
     Logger.info("[Payment] Merchant created: #{merchant_uid} for user ##{user_id}")
     persist_merchant(user, merchant_uid, merchant)
@@ -72,7 +95,7 @@ defmodule Systems.Payment.Public do
     {:ok, {user, merchant}}
   end
 
-  defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}) do
+  defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}, phone) do
     {first, last} = split_name(displayname)
 
     %{
@@ -86,7 +109,13 @@ defmodule Systems.Payment.Public do
       return_url: return_url(),
       metadata: %{user_id: "#{user_id}"}
     }
+    |> maybe_put_phone(phone)
   end
+
+  defp maybe_put_phone(attrs, phone) when is_binary(phone) and phone != "",
+    do: Map.put(attrs, :phone, phone)
+
+  defp maybe_put_phone(attrs, _phone), do: attrs
 
   defp split_name(nil), do: {"", ""}
   defp split_name(""), do: {"", ""}
@@ -100,7 +129,7 @@ defmodule Systems.Payment.Public do
 
   defp return_url do
     base_url = Application.fetch_env!(:core, :base_url)
-    "#{base_url}/user/profile?tab=payouts"
+    "#{base_url}/user/account?tab=payouts"
   end
 
   defp lookup_merchant_by_email(%Account.User{email: email} = user) do

@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr "Uitbetaling kan op dit moment niet worden verwerkt. Probeer het later opnieuw."
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr "🔒 %{amount} wordt uitbetaald naar uw bankrekening. Betalingen worden veilig verwerkt door onze betaalprovider."
 

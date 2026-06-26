@@ -293,10 +293,6 @@ msgid "payouts.bank.button.add"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr ""
 
@@ -373,14 +369,6 @@ msgid "profile.tab.payouts.title"
 msgstr "Išmokos"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr "Tęsti patikrą"
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr "Reikia veiksmų"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr "Būsite nukreipti į mūsų mokėjimų partnerį Online Payment Platform, kad patvirtintumėte savo banko sąskaitą per iDEAL."
 
@@ -390,4 +378,24 @@ msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr "Patvirtinti banko sąskaitą"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.body"
+msgstr "Būsite nukreipti į mūsų mokėjimų partnerį Online Payment Platform, kad patvirtintumėte savo banko sąskaitą per iDEAL."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.confirm"
+msgstr "Tęsti"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.title"
 msgstr "Patvirtinti banko sąskaitą"

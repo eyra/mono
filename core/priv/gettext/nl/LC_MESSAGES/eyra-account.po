@@ -283,10 +283,6 @@ msgid "payouts.bank.button.add"
 msgstr "Toevoegen"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr "Beheren"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr "Er ging iets mis bij het verifiëren van je bankrekening. Probeer het later opnieuw."
 
@@ -365,14 +361,6 @@ msgid "profile.tab.payouts.title"
 msgstr "Uitbetalingen"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr "Verificatie afronden"
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr "Actie vereist"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr "Je wordt doorgestuurd naar onze betaalpartner Online Payment Platform om je bankrekening via iDEAL te verifiëren."
 
@@ -382,4 +370,24 @@ msgstr "Doorgaan"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr "Bankrekening verifiëren"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.flash"
+msgstr "Er ging iets mis bij het verifiëren van je bankrekening. Probeer het later opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr "Mobiel telefoonnummer"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.body"
+msgstr "Vul je mobiele telefoonnummer in. Daarna sturen we je door naar je bank om je bankrekening via iDEAL te verifiëren."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.confirm"
+msgstr "Doorgaan"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.modal.title"
 msgstr "Bankrekening verifiëren"

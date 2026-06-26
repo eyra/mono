@@ -97,6 +97,16 @@ defmodule Systems.Account.Public do
     |> Repo.commit()
   end
 
+  @doc """
+  Persists the participant's phone number (payouts flow). Returns
+  `{:ok, user}` or `{:error, changeset}`.
+  """
+  def update_phone(%User{} = user, phone) when is_binary(phone) do
+    user
+    |> User.phone_changeset(%{phone: phone})
+    |> Repo.update()
+  end
+
   def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)

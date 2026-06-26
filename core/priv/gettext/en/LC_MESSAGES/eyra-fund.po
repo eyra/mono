@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr "Payout could not be processed right now. Please try again later."
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr "Payout requested. Your reward is on its way to your bank account."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr "🔒 Pay out %{amount} to your bank account. Payments are processed securely by our payment provider."
 

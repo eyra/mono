@@ -46,6 +46,21 @@ defmodule Systems.Account.PayoutsViewBuilder do
     )
   end
 
+  @doc """
+  In-platform modal that collects the participant's phone number before handing
+  off to OPP's iDEAL bank verification. Pushing the phone via the API satisfies
+  OPP's compliance requirement so the participant is not redirected to OPP's
+  hosted merchant-overview page to enter one (see `Systems.Account.PhoneForm`).
+  """
+  def phone_form_modal(%Account.User{} = user) do
+    LiveNest.Modal.prepare_live_component(
+      "phone_form",
+      Account.PhoneForm,
+      params: [user: user],
+      style: :compact
+    )
+  end
+
   defp build_bank(status) do
     %{
       title: dgettext("eyra-account", "payouts.bank.title"),
@@ -53,38 +68,23 @@ defmodule Systems.Account.PayoutsViewBuilder do
       status: status,
       status_label: status_label(status),
       status_variant: status_variant(status),
-      button: bank_button(status),
-      merchant_url: merchant_url(status)
+      button: bank_button(status)
     }
   end
 
   # :info (green), :warning (orange), :error (red) — maps to Pixel.Status.*
-  # `:merchant_blocked` means the participant has started OPP onboarding and the
-  # merchant KYC is under way — that reads as in-progress (orange), not red.
   defp status_variant(:verified), do: :info
   defp status_variant(:pending), do: :warning
-  defp status_variant({:merchant_blocked, _url}), do: :warning
   defp status_variant(_status), do: :error
 
   defp status_label(:verified), do: dgettext("eyra-account", "payouts.bank.status.verified")
-
-  defp status_label({:merchant_blocked, _url}),
-    do: dgettext("eyra-account", "payouts.bank.status.action_required")
-
   defp status_label(:pending), do: dgettext("eyra-account", "payouts.bank.status.pending")
   defp status_label(_status), do: dgettext("eyra-account", "payouts.bank.status.not_verified")
 
-  defp bank_button(:verified),
-    do: send_button("manage", :secondary, dgettext("eyra-account", "payouts.bank.button.manage"))
-
-  # Under review at OPP — no manual action; the badge updates reactively (webhook
-  # + slow poll), so there is no "check status" button.
+  # Verified or under review at OPP — no manual action; the badge updates
+  # reactively (webhook + slow poll), so there is no button.
+  defp bank_button(:verified), do: nil
   defp bank_button(:pending), do: nil
-
-  # OPP still needs something from the participant to finish merchant KYC; the
-  # button takes them back there to complete the remaining steps.
-  defp bank_button({:merchant_blocked, url}),
-    do: link_button(url, dgettext("eyra-account", "payouts.bank.button.continue"))
 
   defp bank_button(_status),
     do:
@@ -100,16 +100,6 @@ defmodule Systems.Account.PayoutsViewBuilder do
       face: %{type: face_type, label: label}
     }
   end
-
-  defp link_button(url, label) do
-    %{
-      action: %{type: :http_get, to: url},
-      face: %{type: :secondary, label: label}
-    }
-  end
-
-  defp merchant_url({:merchant_blocked, url}), do: url
-  defp merchant_url(_status), do: nil
 
   defp build_overview([]) do
     base_overview()

@@ -42,6 +42,24 @@ defmodule Systems.Account.PayoutsViewTest do
     end
   end
 
+  describe "start verification" do
+    # The phone form is presented in-platform (no OPP hand-off yet) when the
+    # participant has no phone. The modal itself is rendered by the parent
+    # presenter, which is absent under live_isolated, so we assert the event
+    # is handled without hitting OPP and the view stays intact. (No ProviderMock
+    # expectations are set: if start_verification reached OPP, Mox would fail.)
+    test "clicking Add with no phone is handled without an OPP hand-off", %{
+      conn: conn,
+      user: user
+    } do
+      {:ok, view, _html} = mount(conn, user)
+
+      view |> render_click("start_verification")
+
+      assert view |> has_element?("[data-testid='payouts-view']")
+    end
+  end
+
   describe "overview" do
     test "shows the empty-state message when there are no payouts", %{conn: conn, user: user} do
       {:ok, _view, html} = mount(conn, user)

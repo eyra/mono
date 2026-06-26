@@ -284,10 +284,6 @@ msgid "payouts.bank.button.add"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.manage"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
 msgstr ""
 
@@ -364,14 +360,6 @@ msgid "profile.tab.payouts.title"
 msgstr "Pagamenti"
 
 #, elixir-autogen, elixir-format
-msgid "payouts.bank.button.continue"
-msgstr "Continua la verifica"
-
-#, elixir-autogen, elixir-format
-msgid "payouts.bank.status.action_required"
-msgstr "Azione richiesta"
-
-#, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.body"
 msgstr "Verrai reindirizzato al nostro partner di pagamento Online Payment Platform per verificare il tuo conto bancario tramite iDEAL."
 
@@ -381,4 +369,24 @@ msgstr "Continua"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.modal.title"
+msgstr "Verifica conto bancario"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.body"
+msgstr "Verrai reindirizzato al nostro partner di pagamento Online Payment Platform per verificare il tuo conto bancario tramite iDEAL."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.confirm"
+msgstr "Continua"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.title"
 msgstr "Verifica conto bancario"

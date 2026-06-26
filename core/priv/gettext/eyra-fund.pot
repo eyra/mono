@@ -163,10 +163,6 @@ msgid "rewards_summary.payout.failed"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr ""
 

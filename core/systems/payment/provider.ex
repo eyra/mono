@@ -23,12 +23,24 @@ defmodule Systems.Payment.Provider do
     * `type` - "consumer" (default for participants) or "business"
     * `name_first` - first name (consumer merchants)
     * `name_last` - last name (consumer merchants)
+    * `phone` - phone number (satisfies the `contact.phonenumber.required`
+      compliance requirement up front, so the participant is not redirected to
+      OPP's hosted page to enter one)
     * `locale` - language for verification screens ("nl", "en", "fr", "de")
     * `metadata` - key/value pairs for additional data
   """
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+
+  @doc """
+  Set (or add) a phone number on an existing merchant's primary contact,
+  satisfying OPP's `contact.phonenumber.required` compliance requirement via the
+  API. Used when a merchant was created before we collected the phone, so the
+  participant is not redirected to OPP's hosted merchant-overview page.
+  """
+  @callback add_merchant_phone(merchant_uid :: String.t(), phone :: String.t()) ::
+              {:ok, merchant()} | {:error, Error.t()}
 
   # Bank accounts
 

@@ -28,7 +28,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     approved_caption: "min €5",
     rejected_pill: "R",
     payout_button: "Uitbetalen",
-    payout_success: "Payout started",
     payout_below_threshold: "Minimum €5 required",
     payout_failed: "Could not start payout",
     payout_handoff_title: "Start payout",
@@ -113,9 +112,11 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "merchant kyc -> presents the verify modal" do
+    test "approved bank with a lingering merchant overview_url -> payout (not verify)" do
       user = user_with_reward(1000, "m_kyc")
 
+      # Merchant identity-KYC (overview_url) is no longer required: a verified
+      # bank account is enough, so this proceeds straight to the payout handoff.
       stub(ProviderMock, :get_merchant, fn _ ->
         {:ok,
          %{
@@ -133,7 +134,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      assert socket.assigns.handoff_mode == :verify
+      assert socket.assigns.handoff_mode == :payout
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
@@ -222,6 +223,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert reward_status(user) == :pending_payout
+      # On success the view bubbles to Home.Page, which redirects to the
+      # payouts overview from handle_info (redirecting here would crash —
+      # this handler runs in the component's update/2 lifecycle).
+      assert_received :payout_completed
     end
 
     test "stale-user regression: confirm reloads merchant_uid provisioned this session" do
