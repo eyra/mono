@@ -164,10 +164,6 @@ msgid "rewards_summary.payout.failed"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.success"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.body"
 msgstr ""
 
@@ -180,17 +176,17 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.title"
-msgstr ""
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.body"
+msgstr "Bitte verifizieren Sie zuerst Ihr Bankkonto, bevor Sie eine Auszahlung beantragen können."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Zur Verifizierung"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bankkonto noch nicht verifiziert"

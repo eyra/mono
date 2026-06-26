@@ -108,6 +108,75 @@ defmodule Systems.Payment.PublicTest do
     end
   end
 
+  describe "ensure_merchant_for/2 — phone" do
+    test "passes the phone to create_merchant for a new merchant" do
+      user = fresh_user(%{merchant_uid: nil})
+
+      expect(ProviderMock, :create_merchant, fn attrs ->
+        assert attrs.phone == "+31612345678"
+        {:ok, merchant(%{uid: "m_with_phone"})}
+      end)
+
+      assert {:ok, {%Account.User{}, %{uid: "m_with_phone"}}} =
+               Payment.Public.ensure_merchant_for(user, "+31612345678")
+    end
+
+    test "omits the phone from create_merchant when none is given" do
+      user = fresh_user(%{merchant_uid: nil})
+
+      expect(ProviderMock, :create_merchant, fn attrs ->
+        refute Map.has_key?(attrs, :phone)
+        {:ok, merchant(%{uid: "m_no_phone"})}
+      end)
+
+      assert {:ok, _} = Payment.Public.ensure_merchant_for(user, nil)
+    end
+
+    test "pushes the phone to an already-existing merchant via add_merchant_phone" do
+      user = fresh_user(%{merchant_uid: "m_existing"})
+
+      ProviderMock
+      |> expect(:get_merchant, fn "m_existing" -> {:ok, merchant(%{uid: "m_existing"})} end)
+      |> expect(:add_merchant_phone, fn "m_existing", "+31612345678" ->
+        {:ok, merchant(%{uid: "m_existing"})}
+      end)
+
+      assert {:ok, {%Account.User{merchant_uid: "m_existing"}, %{uid: "m_existing"}}} =
+               Payment.Public.ensure_merchant_for(user, "+31612345678")
+    end
+
+    test "leaves an existing merchant untouched when no phone is given" do
+      user = fresh_user(%{merchant_uid: "m_existing"})
+
+      # No :add_merchant_phone expectation -> Mox fails if invoked.
+      expect(ProviderMock, :get_merchant, fn "m_existing" ->
+        {:ok, merchant(%{uid: "m_existing"})}
+      end)
+
+      assert {:ok, {%Account.User{}, %{uid: "m_existing"}}} =
+               Payment.Public.ensure_merchant_for(user, nil)
+    end
+  end
+
+  describe "set_merchant_phone/2" do
+    test "delegates to the provider" do
+      expect(ProviderMock, :add_merchant_phone, fn "m_1", "+31611112222" ->
+        {:ok, merchant(%{uid: "m_1"})}
+      end)
+
+      assert {:ok, %{uid: "m_1"}} = Payment.Public.set_merchant_phone("m_1", "+31611112222")
+    end
+
+    test "propagates a provider error" do
+      expect(ProviderMock, :add_merchant_phone, fn "m_1", _phone ->
+        {:error, %Systems.Payment.Error{code: :http_error, message: "down"}}
+      end)
+
+      assert {:error, %Systems.Payment.Error{code: :http_error}} =
+               Payment.Public.set_merchant_phone("m_1", "+31611112222")
+    end
+  end
+
   describe "ensure_bank_account_for/1" do
     test "returns the existing bank account when one already exists (no create call)" do
       existing = %{uid: "ba_existing", status: "approved", verification_url: nil}

@@ -3,6 +3,8 @@ defmodule Systems.Payment.Controller do
 
   require Logger
 
+  alias Frameworks.Signal
+  alias Systems.Account
   alias Systems.Payment.Webhook
   alias Systems.Budget
 
@@ -34,10 +36,63 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp process_event(%{type: type, object_uid: uid} = event) do
+  defp process_event(%{type: type, object_uid: uid, object_type: object_type} = event) do
     Logger.info("[Payment.Webhook] Processing event type=#{type} object_uid=#{uid}")
     Logger.info("[Payment.Webhook] Full event: #{inspect(event)}")
-    handle_event(type, uid)
+
+    route_event(object_type, type, uid, event)
+  end
+
+  # Route on the authoritative `object_type`. OPP prefixes the event `type` with
+  # the owning resource (e.g. "merchant.withdrawal.status.changed"), so matching
+  # the type string alone misclassifies withdrawal/transaction events as KYC —
+  # their object_type is settled first, before the KYC type-prefix heuristic.
+  defp route_event("withdrawal", _type, uid, _event), do: handle_withdrawal_status_change(uid)
+  defp route_event("transaction", _type, uid, _event), do: handle_transaction_status_change(uid)
+
+  defp route_event(object_type, type, uid, event) do
+    if kyc_event?(type, object_type) do
+      handle_kyc_change(event)
+    else
+      handle_event(type, uid)
+    end
+  end
+
+  # OPP's exact bank-account/merchant event-type strings vary; match on either the
+  # object_type or a type prefix so a KYC status change is never missed.
+  defp kyc_event?(type, object_type) do
+    object_type in ["bank_account", "merchant"] or
+      String.starts_with?(type, "bank_account") or
+      String.starts_with?(type, "merchant")
+  end
+
+  # A bank-account event's owning merchant is the parent; a merchant event is itself.
+  defp handle_kyc_change(%{object_type: "merchant", object_uid: merchant_uid}),
+    do: notify_kyc(merchant_uid)
+
+  defp handle_kyc_change(%{parent_type: "merchant", parent_uid: merchant_uid})
+       when is_binary(merchant_uid),
+       do: notify_kyc(merchant_uid)
+
+  defp handle_kyc_change(%{object_uid: merchant_uid} = event) do
+    case String.starts_with?(event.type, "merchant") do
+      true -> notify_kyc(merchant_uid)
+      false -> Logger.warning("[Payment.Webhook] KYC event without merchant: #{inspect(event)}")
+    end
+  end
+
+  defp notify_kyc(merchant_uid) do
+    case Account.Public.get_user_by_merchant_uid(merchant_uid) do
+      %Account.User{id: user_id} ->
+        Logger.info(
+          "[Payment.Webhook] KYC update for user ##{user_id} (merchant #{merchant_uid})"
+        )
+
+        Signal.Public.dispatch({:payment_kyc, :updated}, %{user_id: user_id})
+
+      nil ->
+        Logger.warning("[Payment.Webhook] No user for merchant #{merchant_uid}")
+    end
   end
 
   defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)

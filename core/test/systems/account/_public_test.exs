@@ -739,4 +739,35 @@ defmodule Systems.Account.PublicTest do
       assert user.id |> Account.Public.get_user!() |> Account.Public.visited?(:settings)
     end
   end
+
+  describe "phone" do
+    test "phone_changeset normalizes a Dutch 06-number to E.164" do
+      changeset = User.phone_changeset(%User{}, %{phone: "06 12 34 56 78"})
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :phone) == "+31612345678"
+    end
+
+    test "phone_changeset keeps an explicit +31 number" do
+      changeset = User.phone_changeset(%User{}, %{phone: "+31612345678"})
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :phone) == "+31612345678"
+    end
+
+    test "phone_changeset rejects a too-short number" do
+      refute User.phone_changeset(%User{}, %{phone: "123"}).valid?
+    end
+
+    test "phone_changeset requires a phone" do
+      refute User.phone_changeset(%User{}, %{}).valid?
+    end
+
+    test "update_phone/2 persists the normalized phone" do
+      user = Factories.insert!(:member)
+
+      assert {:ok, %User{phone: "+31612345678"}} =
+               Account.Public.update_phone(user, "0612345678")
+
+      assert %User{phone: "+31612345678"} = Account.Public.get_user!(user.id)
+    end
+  end
 end
