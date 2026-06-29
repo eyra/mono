@@ -18,7 +18,7 @@ jobs:
         run: echo ::set-output "name=TAG::banking_proxy_$(date +%F)_${{github.run_number}}"
 
       - id: setup-elixir
-        uses: erlef/setup-elixir@v1.24.0
+        uses: erlef/setup-elixir@v1.24.1
         with:
           otp-version: "25.3.2.7"
           elixir-version: "1.14.0"
