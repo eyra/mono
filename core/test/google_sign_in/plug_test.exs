@@ -115,12 +115,13 @@ defmodule GoogleSignIn.CallbackPlug.Test do
     end
 
     test "authenticates an existing user" do
-      email = Faker.Internet.email()
+      email = GoogleSignIn.FakeGoogle.email()
 
       given_name = Faker.Person.first_name()
       family_name = Faker.Person.last_name()
 
-      GoogleSignIn.register_user(
+      Core.Identity.authenticate(
+        GoogleSignIn,
         %{
           "sub" => GoogleSignIn.FakeGoogle.sub(),
           "name" => "#{given_name} #{family_name}",
@@ -131,7 +132,7 @@ defmodule GoogleSignIn.CallbackPlug.Test do
           "picture" => Faker.Internet.url(),
           "locale" => "en"
         },
-        true
+        %{creator: true}
       )
 
       user =

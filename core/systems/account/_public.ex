@@ -246,6 +246,34 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Registers a new user from an SSO-provided attrs map. The IdP (SURFconext,
+  Google, …) has already proven email ownership, so the account is created
+  with `confirmed_at`/`verified_at` set by the caller's attrs and is
+  immediately usable. Dispatches `{:user, :created}`.
+
+  `attrs` is the flat normalized map produced by a `Core.Identity.Provider`'s
+  `user_attrs/1` callback — the User vs Profile schema split is an internal
+  concern handled here, not something the IdP has to know about. See
+  `Core.Identity.Provider.user_attrs/0` for the allowed keys.
+  """
+  def register_via_sso(%{email: _} = attrs) do
+    with {:ok, user} <-
+           %User{}
+           |> User.sso_changeset(nest_profile_attrs(attrs))
+           |> Repo.insert() do
+      Frameworks.Signal.Public.dispatch!({:user, :created}, %{user: user})
+      {:ok, user}
+    end
+  end
+
+  @profile_keys [:fullname, :title, :photo_url]
+
+  defp nest_profile_attrs(attrs) do
+    {profile_attrs, user_attrs} = Map.split(attrs, @profile_keys)
+    Map.put(user_attrs, :profile, profile_attrs)
+  end
+
+  @doc """
   Registers a new user from just an email (OTP-only auth flow). Creates a
   passwordless account (`hashed_password: "no-password-set"`) with email
   ownership marked as verified (the OTP code itself proves possession of

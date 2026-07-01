@@ -102,19 +102,10 @@ defmodule GoogleSignIn.CallbackPlug do
       throw("Google login is disabled")
     end
 
-    if user = GoogleSignIn.get_user_by_sub(google_user["sub"]) do
-      dispatch_post_signin_action(user, post_action)
-      log_in_user(config, conn, user, false)
-    else
-      register_new_user(conn, config, google_user, creator?, post_action)
-    end
-  end
-
-  defp register_new_user(conn, config, google_user, creator?, post_action) do
-    case GoogleSignIn.register_user(google_user, creator?) do
-      {:ok, google_sign_in_user} ->
-        dispatch_post_signin_action(google_sign_in_user.user, post_action)
-        log_in_user(config, conn, google_sign_in_user.user, true)
+    case Core.Identity.authenticate(GoogleSignIn, google_user, %{creator: creator?}) do
+      {:ok, %{user: user, first_time?: first_time?}} ->
+        dispatch_post_signin_action(user, post_action)
+        log_in_user(config, conn, user, first_time?)
 
       {:error, changeset} ->
         Core.SSOHelpers.handle_registration_error(conn, changeset)
