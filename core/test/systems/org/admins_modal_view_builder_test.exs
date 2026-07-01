@@ -21,19 +21,20 @@ defmodule Systems.Org.AdminsModalViewBuilderTest do
       assert owner2.id in people_ids
     end
 
-    test "returns available creators as users" do
-      creator1 = Factories.insert!(:creator)
-      creator2 = Factories.insert!(:creator)
+    test "returns available users (any role) as candidates, excluding current owners" do
+      creator = Factories.insert!(:creator)
+      participant = Factories.insert!(:member, %{creator: false})
+      existing_owner = Factories.insert!(:creator)
       org = Factories.insert!(:org_node, %{identifier: ["avail_users_org"]})
 
-      # creator1 is already an owner, so should not be in users
-      Core.Authorization.assign_role(creator1, org, :owner)
+      Core.Authorization.assign_role(existing_owner, org, :owner)
 
       vm = AdminsModalViewBuilder.view_model(org, %{})
 
       user_ids = Enum.map(vm.users, & &1.id)
-      refute creator1.id in user_ids
-      assert creator2.id in user_ids
+      refute existing_owner.id in user_ids
+      assert creator.id in user_ids
+      assert participant.id in user_ids
     end
 
     test "returns title in view model" do

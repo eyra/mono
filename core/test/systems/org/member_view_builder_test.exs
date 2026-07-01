@@ -39,6 +39,17 @@ defmodule Systems.Org.MemberViewBuilderTest do
       assert vm.people == []
       assert vm.user_count == 0
     end
+
+    test "users includes participants, not only creators", %{org: org, assigns: assigns} do
+      participant = Factories.insert!(:member, %{creator: false})
+      creator = Factories.insert!(:creator)
+
+      vm = Org.MemberViewBuilder.view_model(org, assigns)
+
+      user_ids = Enum.map(vm.users, & &1.id)
+      assert participant.id in user_ids
+      assert creator.id in user_ids
+    end
   end
 
   describe "view_model/2 cap" do
