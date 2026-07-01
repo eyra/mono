@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run Claude Review
-        uses: anthropics/claude-code-action@v1.0.161
+        uses: anthropics/claude-code-action@v1.0.162
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: "Review PR #${{ github.event.inputs.pr_number }}"
