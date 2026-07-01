@@ -47,7 +47,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
           %{sessions: [researcher_session, participant_session]} do
     merchant_uid = "m_journey_test"
 
-    # KYC-not-verified merchant — drives the `{:error, {:kyc_required, _}}`
+    # Bank-not-verified — drives the `{:error, {:kyc_required, :bank, _}}`
     # branch of Fund.Public.prepare_payout/1 at the end of the journey.
     ProviderMock
     |> stub(:get_merchant, fn ^merchant_uid ->
@@ -57,11 +57,11 @@ defmodule CoreWeb.Features.PayoutFlowTest do
          status: "pending",
          kyc_level: 0,
          compliance_status: "unverified",
-         overview_url: "https://opp.test/kyc-onboarding"
+         overview_url: nil
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_test", status: "new", verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     researcher_password = Factories.valid_user_password()

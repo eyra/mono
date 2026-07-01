@@ -142,6 +142,38 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
+  describe "add_merchant_phone/2" do
+    test "fetches the primary contact, posts the phone, returns the refreshed merchant",
+         %{bypass: bypass} do
+      # Called twice: once to read the contact uid, once to re-fetch the merchant.
+      Bypass.expect(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "m_1", "contacts": {"data": [{"uid": "c_1"}]}, "compliance": {"level": 200, "status": "verified"}}>
+        )
+      end)
+
+      Bypass.expect_once(bypass, "POST", "/merchants/m_1/contacts/c_1", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert [%{"phonenumber" => "+31612345678"}] = body["phonenumbers"]
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "c_1"}>)
+      end)
+
+      assert {:ok, %{uid: "m_1", compliance_status: "verified", kyc_level: 200}} =
+               OPP.add_merchant_phone("m_1", "+31612345678")
+    end
+
+    test "returns a not_found error when the merchant has no contact", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "m_1"}>)
+      end)
+
+      assert {:error, %Error{code: :not_found}} = OPP.add_merchant_phone("m_1", "+31612345678")
+    end
+  end
+
   describe "create_withdrawal/4" do
     test "maps the currency, sends the idempotency key + reference, and parses the response",
          %{bypass: bypass} do

@@ -24,6 +24,7 @@ defmodule Systems.Account.User do
     field(:visited_pages, {:array, :string})
     field(:creator, :boolean)
     field(:merchant_uid, :string)
+    field(:phone, :string)
 
     has_one(:profile, Systems.Account.UserProfileModel)
     has_one(:features, Systems.Account.FeaturesModel)
@@ -42,6 +43,8 @@ defmodule Systems.Account.User do
           displayname: String.t() | nil,
           visited_pages: list(String.t()) | nil,
           creator: boolean() | nil,
+          merchant_uid: String.t() | nil,
+          phone: String.t() | nil,
           profile: Systems.Account.UserProfileModel.t() | Ecto.Association.NotLoaded.t() | nil,
           features: Systems.Account.FeaturesModel.t() | Ecto.Association.NotLoaded.t() | nil,
           inserted_at: NaiveDateTime.t(),
@@ -82,6 +85,33 @@ defmodule Systems.Account.User do
   def user_profile_changeset(user, attrs) do
     user
     |> cast(attrs, [:creator, :displayname])
+  end
+
+  @doc """
+  Changeset for the participant's phone number, collected in the payouts
+  ("Uitbetalingen") flow and pushed to the payment provider so OPP no longer
+  redirects the participant to its hosted page to enter one. Normalizes to
+  E.164 (defaulting a bare Dutch number to +31) and validates the format.
+  """
+  def phone_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:phone])
+    |> validate_required([:phone])
+    |> update_change(:phone, &normalize_phone/1)
+    |> validate_format(:phone, ~r/^\+[1-9]\d{7,14}$/, message: "must be a valid phone number")
+  end
+
+  defp normalize_phone(nil), do: nil
+
+  defp normalize_phone(phone) when is_binary(phone) do
+    trimmed = String.replace(phone, ~r/[\s\-().]/, "")
+
+    cond do
+      String.starts_with?(trimmed, "+") -> trimmed
+      String.starts_with?(trimmed, "00") -> "+" <> String.slice(trimmed, 2..-1//1)
+      String.starts_with?(trimmed, "0") -> "+31" <> String.slice(trimmed, 1..-1//1)
+      true -> trimmed
+    end
   end
 
   def valid_email?(email) when is_binary(email) do

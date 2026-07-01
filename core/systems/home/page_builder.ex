@@ -171,7 +171,6 @@ defmodule Systems.Home.PageBuilder do
       approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
       rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill"),
       payout_button: dgettext("eyra-fund", "rewards_summary.payout.button"),
-      payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
       payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
       payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),
       payout_handoff_title: dgettext("eyra-fund", "rewards_summary.payout.handoff.title"),
@@ -181,9 +180,9 @@ defmodule Systems.Home.PageBuilder do
         ),
       payout_handoff_confirm: dgettext("eyra-fund", "rewards_summary.payout.handoff.confirm"),
       payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel"),
-      payout_kyc_title: dgettext("eyra-fund", "rewards_summary.payout.kyc.title"),
-      payout_kyc_body: dgettext("eyra-fund", "rewards_summary.payout.kyc.body"),
-      payout_kyc_confirm: dgettext("eyra-fund", "rewards_summary.payout.kyc.confirm")
+      payout_verify_title: dgettext("eyra-fund", "rewards_summary.payout.verify.title"),
+      payout_verify_body: dgettext("eyra-fund", "rewards_summary.payout.verify.body"),
+      payout_verify_confirm: dgettext("eyra-fund", "rewards_summary.payout.verify.confirm")
     }
   end
 
