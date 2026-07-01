@@ -1,114 +1,90 @@
 defmodule Core.SurfConext.Test do
   use Core.DataCase, async: true
-  import Frameworks.Signal.TestHelper
 
   alias Core.Factories
+  alias Core.SurfConext
 
-  describe "get_user_by_sub/1" do
-    test "get a user by their subject id" do
+  describe "user_attrs/1" do
+    test "maps proprietary fields to the normalized Account.User attrs" do
+      userinfo = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => "researcher@uva.nl",
+        "given_name" => "Re",
+        "family_name" => "Searcher"
+      }
+
+      attrs = SurfConext.user_attrs(userinfo)
+
+      assert attrs.email == "researcher@uva.nl"
+      assert attrs.displayname == "Re"
+      assert attrs.creator == true
+      assert attrs.fullname == "Re Searcher"
+      assert %NaiveDateTime{} = attrs.confirmed_at
+    end
+
+    test "displayname falls back to fullname when given_name is missing" do
+      userinfo = %{"sub" => "x", "email" => "x@uva.nl", "family_name" => "Only"}
+
+      attrs = SurfConext.user_attrs(userinfo)
+
+      assert attrs.displayname == "Only"
+    end
+
+    test "raises when email is missing" do
+      userinfo = %{"sub" => "x", "given_name" => "Re"}
+
+      assert_raise SurfConext.SurfConextError, fn -> SurfConext.user_attrs(userinfo) end
+    end
+  end
+
+  describe "get/1" do
+    test "returns the satellite linked to the user" do
       user = Factories.insert!(:member)
-      Repo.insert!(%Core.SurfConext.User{sub: "test", user: user})
+      satellite = Repo.insert!(%SurfConext.User{sub: "x", user: user})
 
-      loaded_user = Core.SurfConext.get_user_by_sub("test")
+      assert SurfConext.get(user).id == satellite.id
+    end
 
-      assert loaded_user.id == user.id
+    test "returns nil when the user has no satellite" do
+      user = Factories.insert!(:member)
+
+      assert SurfConext.get(user) == nil
     end
   end
 
-  describe "get_surfconext_user_by_user/1" do
-    test "get a surf conext user by a core user reference" do
-      core_user = Factories.insert!(:member)
-      surfconext_user = Repo.insert!(%Core.SurfConext.User{sub: "test", user: core_user})
+  describe "attach/2" do
+    test "inserts a satellite row linked to the user" do
+      user = Factories.insert!(:member, %{email: "researcher@uva.nl"})
 
-      loaded_surfconext_user = Core.SurfConext.get_surfconext_user_by_user(core_user)
+      userinfo = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => "researcher@uva.nl",
+        "given_name" => "Re"
+      }
 
-      assert loaded_surfconext_user.id == surfconext_user.id
+      {:ok, satellite} = SurfConext.attach(user, userinfo)
+
+      assert satellite.user_id == user.id
+      assert satellite.sub == userinfo["sub"]
+      assert satellite.email == "researcher@uva.nl"
+      assert satellite.userinfo == userinfo
     end
   end
 
-  describe "register_surfconext_user/1" do
-    test "fails to register: missing email" do
-      sso_info = %{
-        "sub" => Faker.UUID.v4(),
-        "given_name" => Faker.Person.name(),
-        "family_name" => Faker.Person.name()
-      }
+  describe "refresh/2" do
+    test "replaces userinfo on the existing satellite without touching sub or user" do
+      user = Factories.insert!(:member)
 
-      assert_raise Core.SurfConext.SurfConextError, fn ->
-        Core.SurfConext.register_user(sso_info)
-      end
-    end
+      original = %{"sub" => "stable", "email" => "first@uva.nl", "given_name" => "First"}
+      {:ok, before} = SurfConext.attach(user, original)
 
-    test "creates a user with a profile" do
-      sso_info = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "given_name" => Faker.Person.name(),
-        "family_name" => Faker.Person.name()
-      }
+      updated = %{"sub" => "stable", "email" => "second@uva.nl", "given_name" => "Second"}
+      refreshed = SurfConext.refresh(user, updated)
 
-      {:ok, surf_user} = Core.SurfConext.register_user(sso_info)
-
-      assert surf_user.sub == Map.get(sso_info, "sub")
-      assert surf_user.email == Map.get(sso_info, "email")
-      assert surf_user.userinfo == sso_info
-
-      assert surf_user.user.email == Map.get(sso_info, "email")
-      assert surf_user.user.displayname == "#{sso_info["given_name"]}"
-
-      assert surf_user.user.profile.fullname ==
-               "#{sso_info["given_name"]} #{sso_info["family_name"]}"
-    end
-
-    test "dispatches signal" do
-      isolate_signals()
-
-      sso_info = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "preferred_username" => Faker.Person.name()
-      }
-
-      {:ok, %{user: user}} = Core.SurfConext.register_user(sso_info)
-
-      message = assert_signal_dispatched({:user, :created})
-      assert %{user: ^user} = message
-    end
-  end
-
-  describe "update_surfconext_user/1" do
-    test "refreshes userinfo on re-authentication; sub/email columns are stable" do
-      sso_info1 = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "given_name" => Faker.Person.name(),
-        "family_name" => Faker.Person.name()
-      }
-
-      {:ok, surf_user1} = Core.SurfConext.register_user(sso_info1)
-
-      sso_info2 = %{
-        "sub" => Faker.UUID.v4(),
-        "email" => Faker.Internet.email(),
-        "given_name" => Faker.Person.name(),
-        "family_name" => Faker.Person.name()
-      }
-
-      surf_user2 = Core.SurfConext.update_user(surf_user1.user, sso_info2)
-      core_user2 = Systems.Account.Public.get_user!(surf_user2.user_id)
-      profile2 = Systems.Account.Public.get_profile(core_user2)
-
-      # userinfo is fully replaced
-      assert surf_user2.userinfo == sso_info2
-
-      # identity columns (sub/email) and the general user model are not touched
-      assert surf_user2.sub != sso_info2["sub"]
-      assert surf_user2.email != sso_info2["email"]
-      assert core_user2.email != sso_info2["email"]
-      assert core_user2.displayname != sso_info2["given_name"]
-
-      assert profile2.fullname !=
-               "#{sso_info2["given_name"]} #{sso_info2["family_name"]}"
+      assert refreshed.id == before.id
+      assert refreshed.user_id == user.id
+      assert refreshed.sub == "stable"
+      assert refreshed.userinfo == updated
     end
   end
 end

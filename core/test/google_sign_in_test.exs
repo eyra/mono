@@ -3,43 +3,86 @@ defmodule GoogleSignIn.Test do
 
   alias Core.Factories
 
-  describe "get_user_by_sub/1" do
-    test "get a user by their subject id" do
-      user = Factories.insert!(:member)
-      Repo.insert!(%GoogleSignIn.User{sub: "test", user: user})
+  describe "user_attrs/1" do
+    test "maps proprietary fields to the normalized Account.User attrs" do
+      userinfo = %{
+        "sub" => Faker.UUID.v4(),
+        "email" => "user@example.com",
+        "given_name" => "Re",
+        "family_name" => "Searcher"
+      }
 
-      loaded_user = GoogleSignIn.get_user_by_sub("test")
+      attrs = GoogleSignIn.user_attrs(userinfo)
 
-      assert loaded_user.id == user.id
+      assert attrs.email == "user@example.com"
+      assert attrs.displayname == "Re"
+      assert attrs.fullname == "Re Searcher"
+      assert %NaiveDateTime{} = attrs.verified_at
+      refute Map.has_key?(attrs, :creator)
     end
   end
 
-  describe "register_google_sign_in_user/1" do
-    test "creates a user with a profile" do
-      given_name = Faker.Person.first_name()
-      family_name = Faker.Person.last_name()
+  describe "get/1" do
+    test "returns the satellite linked to the user" do
+      user = Factories.insert!(:member)
+      satellite = Repo.insert!(%GoogleSignIn.User{sub: "test", user: user})
 
-      sso_info = %{
+      assert GoogleSignIn.get(user).id == satellite.id
+    end
+
+    test "returns nil when the user has no satellite" do
+      user = Factories.insert!(:member)
+
+      assert GoogleSignIn.get(user) == nil
+    end
+  end
+
+  describe "attach/2" do
+    test "inserts a satellite row linked to the user" do
+      user = Factories.insert!(:member, %{email: "user@example.com"})
+
+      userinfo = %{
         "sub" => Faker.UUID.v4(),
-        "name" => "#{given_name} #{family_name}",
-        "email" => Faker.Internet.email(),
+        "email" => "user@example.com",
         "email_verified" => true,
-        "given_name" => given_name,
-        "family_name" => family_name,
-        "picture" => Faker.Internet.url(),
-        "locale" => "en"
+        "given_name" => "First",
+        "family_name" => "Last"
       }
 
-      {:ok, google_user} = GoogleSignIn.register_user(sso_info, false)
+      {:ok, satellite} = GoogleSignIn.attach(user, userinfo)
 
-      for key <- Map.keys(sso_info) do
-        assert Map.get(google_user, String.to_atom(key)) == Map.get(sso_info, key)
-      end
+      assert satellite.user_id == user.id
+      assert satellite.sub == userinfo["sub"]
+      assert satellite.email == "user@example.com"
+      assert satellite.email_verified == true
+    end
+  end
 
-      assert google_user.user.creator == false
-      assert google_user.user.email == Map.get(sso_info, "email")
-      assert google_user.user.displayname == "#{given_name}"
-      assert google_user.user.profile.fullname == "#{given_name} #{family_name}"
+  describe "refresh/2" do
+    test "replaces userinfo on the existing satellite without touching sub or user" do
+      user = Factories.insert!(:member)
+
+      original = %{
+        "sub" => "stable",
+        "email" => "first@example.com",
+        "given_name" => "First"
+      }
+
+      {:ok, before} = GoogleSignIn.attach(user, original)
+
+      updated = %{
+        "sub" => "stable",
+        "email" => "second@example.com",
+        "given_name" => "Second"
+      }
+
+      refreshed = GoogleSignIn.refresh(user, updated)
+
+      assert refreshed.id == before.id
+      assert refreshed.user_id == user.id
+      assert refreshed.sub == "stable"
+      assert refreshed.email == "second@example.com"
+      assert refreshed.given_name == "Second"
     end
   end
 end
