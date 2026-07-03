@@ -172,6 +172,25 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:error, %Error{code: :not_found}} = OPP.add_merchant_phone("m_1", "+31612345678")
     end
+
+    test "accepts a bare-list contacts shape (no data wrapper)", %{bypass: bypass} do
+      # OPP has been observed returning both shapes; the code handles either.
+      # Pin the bare-list variant so a future refactor can't silently drop it.
+      Bypass.expect(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "m_1", "contacts": [{"uid": "c_1"}], "compliance": {"level": 200, "status": "verified"}}>
+        )
+      end)
+
+      Bypass.expect_once(bypass, "POST", "/merchants/m_1/contacts/c_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "c_1"}>)
+      end)
+
+      assert {:ok, %{uid: "m_1", compliance_status: "verified", kyc_level: 200}} =
+               OPP.add_merchant_phone("m_1", "+31612345678")
+    end
   end
 
   describe "create_withdrawal/4" do
