@@ -12,6 +12,8 @@ defmodule Systems.Account.PhoneForm do
   """
   use CoreWeb, :live_component
 
+  require Logger
+
   import Frameworks.Pixel.Form
 
   alias Ecto.Changeset
@@ -66,23 +68,38 @@ defmodule Systems.Account.PhoneForm do
     end
   end
 
-  # Persist the phone, push it to OPP via the merchant API, then hand off to the
-  # iDEAL bank verification (the one OPP-hosted step). A leaving redirect makes
-  # dismissing the modal moot; only failures keep the form open with an error.
-  # Push the phone to OPP first; persist it locally only once OPP accepted it, so
-  # `user.phone` reliably reflects "OPP has it" and later visits never re-push.
+  # Persist the phone only after OPP accepted it, so `user.phone` reliably
+  # reflects "OPP has it" and later visits never re-push. A leaving redirect
+  # makes dismissing the modal moot; only failures keep the form open with an error.
   defp start_verification(%{assigns: %{user: user}} = socket, phone) do
     case Fund.Public.start_bank_verification(user, phone) do
       {:bank, url} when is_binary(url) ->
-        Account.Public.update_phone(user, phone)
+        persist_phone(user, phone)
         redirect(socket, external: url)
 
       :verified ->
-        Account.Public.update_phone(user, phone)
+        persist_phone(user, phone)
         redirect(socket, to: @payouts_path)
 
       {:error, _reason} ->
         assign(socket, error: dgettext("eyra-account", "payouts.phone.error.flash"))
+    end
+  end
+
+  # A local persist failure after OPP accepted the phone leaves user.phone nil,
+  # so the next payouts visit re-collects and re-pushes to OPP (idempotent).
+  # Nothing breaks — just log so the divergence is traceable.
+  defp persist_phone(%Account.User{id: user_id} = user, phone) do
+    case Account.Public.update_phone(user, phone) do
+      {:ok, _user} ->
+        :ok
+
+      {:error, changeset} ->
+        Logger.warning(
+          "[Account] update_phone failed for user ##{user_id} after OPP accepted the phone: #{inspect(changeset.errors)}"
+        )
+
+        :ok
     end
   end
 
