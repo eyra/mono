@@ -739,4 +739,55 @@ defmodule Systems.Account.PublicTest do
       assert user.id |> Account.Public.get_user!() |> Account.Public.visited?(:settings)
     end
   end
+
+  describe "phone" do
+    test "phone_changeset normalizes a Dutch 06-number to E.164" do
+      changeset = User.phone_changeset(%User{}, %{phone: "06 12 34 56 78"})
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :phone) == "+31612345678"
+    end
+
+    test "phone_changeset keeps an explicit +31 number" do
+      changeset = User.phone_changeset(%User{}, %{phone: "+31612345678"})
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :phone) == "+31612345678"
+    end
+
+    test "phone_changeset rejects a too-short number" do
+      refute User.phone_changeset(%User{}, %{phone: "123"}).valid?
+    end
+
+    test "phone_changeset guides users with a country-code hint on bare-digit input" do
+      # "612345678" — no +, no leading 0. Would otherwise fail the generic
+      # format regex; a targeted message tells the user what's missing.
+      changeset = User.phone_changeset(%User{}, %{phone: "612345678"})
+
+      refute changeset.valid?
+
+      assert "must start with a country code (e.g. +31) or leading 0" in errors_on(changeset).phone
+    end
+
+    test "phone_changeset uses the generic message when a +-prefixed number is malformed" do
+      # Country code present but too short — the "add a country code" hint
+      # would be misleading here, so the generic format message applies.
+      changeset = User.phone_changeset(%User{}, %{phone: "+3161"})
+
+      refute changeset.valid?
+
+      assert "must be a valid phone number" in errors_on(changeset).phone
+    end
+
+    test "phone_changeset requires a phone" do
+      refute User.phone_changeset(%User{}, %{}).valid?
+    end
+
+    test "update_phone/2 persists the normalized phone" do
+      user = Factories.insert!(:member)
+
+      assert {:ok, %User{phone: "+31612345678"}} =
+               Account.Public.update_phone(user, "0612345678")
+
+      assert %User{phone: "+31612345678"} = Account.Public.get_user!(user.id)
+    end
+  end
 end

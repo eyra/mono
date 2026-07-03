@@ -38,6 +38,13 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, stub_merchant(uid)}
   end
 
+  @impl true
+  def add_merchant_phone(merchant_uid, phone)
+      when is_binary(merchant_uid) and is_binary(phone) do
+    Logger.info("[Payment.Local] add_merchant_phone merchant=#{merchant_uid} phone=#{phone}")
+    {:ok, stub_merchant(merchant_uid)}
+  end
+
   # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
 
   defp stub_bank_account(uid) do

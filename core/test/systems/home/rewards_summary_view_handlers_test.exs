@@ -28,16 +28,15 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     approved_caption: "min €5",
     rejected_pill: "R",
     payout_button: "Uitbetalen",
-    payout_success: "Payout started",
     payout_below_threshold: "Minimum €5 required",
     payout_failed: "Could not start payout",
     payout_handoff_title: "Start payout",
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
     payout_handoff_cancel: "Cancel",
-    payout_kyc_title: "Verification required",
-    payout_kyc_body: "KYC body",
-    payout_kyc_confirm: "Continue to verification"
+    payout_verify_title: "Bank account not verified",
+    payout_verify_body: "Verify your bank account first",
+    payout_verify_confirm: "Go to verification"
   }
 
   defp socket(user, extra \\ %{}) do
@@ -50,7 +49,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           user: user,
           labels: @labels,
           handoff_mode: :payout,
-          kyc_overview_url: nil,
           pending_cents: 0,
           approved_cents: 1000,
           rejected_cents: 0
@@ -114,9 +112,11 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc -> composes the kyc handoff modal with the overview url" do
+    test "approved bank with a lingering merchant overview_url -> payout (not verify)" do
       user = user_with_reward(1000, "m_kyc")
 
+      # Merchant identity-KYC (overview_url) is no longer required: a verified
+      # bank account is enough, so this proceeds straight to the payout handoff.
       stub(ProviderMock, :get_merchant, fn _ ->
         {:ok,
          %{
@@ -134,8 +134,32 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      assert socket.assigns.handoff_mode == :kyc
-      assert socket.assigns.kyc_overview_url == "https://opp.test/kyc"
+      assert socket.assigns.handoff_mode == :payout
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    test "bank kyc -> presents the verify modal" do
+      user = user_with_reward(1000, "m_bank")
+
+      # Merchant verified, but the bank account still needs verification.
+      stub(ProviderMock, :get_merchant, fn _ ->
+        {:ok,
+         %{
+           uid: "m_bank",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub(ProviderMock, :list_bank_accounts, fn _ ->
+        {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+      end)
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :verify
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
@@ -199,6 +223,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert reward_status(user) == :pending_payout
+      # On success the view bubbles to Home.Page, which redirects to the
+      # payouts overview from handle_info (redirecting here would crash —
+      # this handler runs in the component's update/2 lifecycle).
+      assert_received :payout_completed
     end
 
     test "stale-user regression: confirm reloads merchant_uid provisioned this session" do

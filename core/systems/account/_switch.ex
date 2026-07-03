@@ -8,6 +8,9 @@ defmodule Systems.Account.Switch do
     Org
   }
 
+  alias Systems.Account
+  alias Systems.Observatory
+
   alias Systems.Account.NextActions.{CompleteProfile, PromotePushStudent}
 
   @impl true
@@ -54,6 +57,15 @@ defmodule Systems.Account.Switch do
     # Sync NextActions for org owners whose domains match this new user
     Org.Public.sync_next_actions_for_new_user(user)
 
+    :ok
+  end
+
+  # An OPP bank-account/merchant webhook reports a KYC change. Re-render the
+  # participant's "Uitbetalingen" tab so the status badge flips without a reload.
+  @impl true
+  def intercept({:payment_kyc, :updated}, %{user_id: user_id}) do
+    user = Account.Public.get_user!(user_id)
+    Observatory.Public.dispatch(Account.PayoutsView, [user_id], %{model: user})
     :ok
   end
 end

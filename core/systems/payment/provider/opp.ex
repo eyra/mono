@@ -57,6 +57,39 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  @impl true
+  def add_merchant_phone(merchant_uid, phone)
+      when is_binary(merchant_uid) and is_binary(phone) do
+    with {:ok, contact_uid} <- primary_contact_uid(merchant_uid),
+         {:ok, _contact} <-
+           HTTP.post("/merchants/#{merchant_uid}/contacts/#{contact_uid}", %{
+             phonenumbers: [%{phonenumber: phone}]
+           }) do
+      # Re-fetch so the returned merchant reflects the updated compliance state.
+      get_merchant(merchant_uid)
+    end
+  end
+
+  # OPP auto-creates a primary contact with each merchant; the phone number lives
+  # on that contact. Fetch it (contacts may be returned as a bare list or wrapped
+  # in `data`) so we can attach the phone via the contacts endpoint.
+  defp primary_contact_uid(merchant_uid) do
+    case HTTP.get("/merchants/#{merchant_uid}?expand[]=contacts") do
+      {:ok, %{"contacts" => %{"data" => [%{"uid" => uid} | _]}}} ->
+        {:ok, uid}
+
+      {:ok, %{"contacts" => [%{"uid" => uid} | _]}} ->
+        {:ok, uid}
+
+      {:ok, _data} ->
+        {:error,
+         %Error{code: :not_found, message: "No contact found for merchant #{merchant_uid}"}}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   # Transactions
 
   @impl true

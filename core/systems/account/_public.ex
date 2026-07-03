@@ -97,6 +97,16 @@ defmodule Systems.Account.Public do
     |> Repo.commit()
   end
 
+  @doc """
+  Persists the participant's phone number (payouts flow). Returns
+  `{:ok, user}` or `{:error, changeset}`.
+  """
+  def update_phone(%User{} = user, phone) when is_binary(phone) do
+    user
+    |> User.phone_changeset(%{phone: phone})
+    |> Repo.update()
+  end
+
   def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
@@ -184,6 +194,14 @@ defmodule Systems.Account.Public do
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
+  end
+
+  @doc """
+  Gets the user linked to an OPP merchant, or nil. Used by the payment webhook to
+  route a bank-account/merchant KYC change back to the owning participant.
+  """
+  def get_user_by_merchant_uid(merchant_uid) when is_binary(merchant_uid) do
+    Repo.get_by(User, merchant_uid: merchant_uid)
   end
 
   @doc """

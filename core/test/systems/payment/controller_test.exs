@@ -100,6 +100,23 @@ defmodule Systems.Payment.ControllerTest do
       assert %{status: :paid} = Core.Repo.reload!(reward)
     end
 
+    test ~s(routes the real "merchant.withdrawal.status.changed" type OPP actually sends),
+         %{conn: conn, fund: fund, user: user} do
+      # OPP prefixes the event type with the owning resource. This must route to
+      # the withdrawal handler, not be misclassified as a merchant KYC event.
+      {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_merchant_prefixed")
+
+      expect(ProviderMock, :get_withdrawal, fn "w_ctrl_merchant_prefixed" ->
+        {:ok, %{uid: "w_ctrl_merchant_prefixed", status: "completed", amount: 1000}}
+      end)
+
+      conn = post_webhook(conn, "merchant.withdrawal.status.changed", "w_ctrl_merchant_prefixed")
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert %{status: :completed} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Core.Repo.reload!(reward)
+    end
+
     test ~s(routes "failed" to Fund.Public, :failed payout, rewards stay :pending_payout),
          %{conn: conn, fund: fund, user: user} do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_failed")
@@ -133,18 +150,54 @@ defmodule Systems.Payment.ControllerTest do
       assert %{status: :pending_payout} = Core.Repo.reload!(reward)
     end
 
-    test "unknown event types are acknowledged with 200 and no state change",
+    test "a non-terminal withdrawal status leaves the payout pending",
          %{conn: conn, fund: fund, user: user} do
-      {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_unknown_event")
+      # Withdrawal events are routed by object_type and re-fetched, so any status
+      # is applied. A non-terminal provider status must not complete the payout.
+      {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_non_terminal")
 
-      # No ProviderMock expectation: the controller must not call get_withdrawal
-      # for unrecognized event types.
+      expect(ProviderMock, :get_withdrawal, fn "w_ctrl_non_terminal" ->
+        {:ok, %{uid: "w_ctrl_non_terminal", status: "processing", amount: 1000}}
+      end)
 
-      conn = post_webhook(conn, "withdrawal.something_else", "w_ctrl_unknown_event")
+      conn = post_webhook(conn, "merchant.withdrawal.status.changed", "w_ctrl_non_terminal")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
       assert %{status: :pending} = Core.Repo.reload!(payout)
       assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+    end
+  end
+
+  describe "POST /api/payment/webhook/opp — unroutable KYC event" do
+    # A bank_account event without parent info can't be resolved to a merchant,
+    # so the participant's badge won't refresh. Logging at :error with the
+    # identifying fields makes a real occurrence visible in production.
+    test "logs at :error with the identifying fields when parent info is missing",
+         %{conn: conn} do
+      body = %{
+        "uid" => "notif_orphan",
+        "type" => "bank_account.status.changed",
+        "object_uid" => "ba_orphan",
+        "object_type" => "bank_account",
+        "object_url" => "https://example.test/v1/bank_accounts/ba_orphan"
+      }
+
+      log =
+        ExUnit.CaptureLog.capture_log([level: :error], fn ->
+          conn =
+            conn
+            |> Plug.Conn.put_req_header("content-type", "application/json")
+            |> post(~p"/api/payment/webhook/opp", Jason.encode!(body))
+
+          assert json_response(conn, 200) == %{"status" => "ok"}
+        end)
+
+      assert log =~ "KYC event missing merchant reference"
+      assert log =~ ~s(object_type="bank_account")
+      assert log =~ ~s(object_uid="ba_orphan")
+      assert log =~ ~s(type="bank_account.status.changed")
+      assert log =~ "parent_type=nil"
+      assert log =~ "parent_uid=nil"
     end
   end
 end

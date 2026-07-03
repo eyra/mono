@@ -287,3 +287,115 @@ msgstr "tu@example.com"
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
 msgstr "Prea multe solicitări. Încearcă din nou într-un moment."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.add"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.not_verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.verified"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.verified.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.intro"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.completed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.pending"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.amount"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.status"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.title"
+msgstr "Plăți"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.payouts.title"
+msgstr "Plăți"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.body"
+msgstr "Vei fi redirecționat către partenerul nostru de plăți Online Payment Platform pentru a verifica contul bancar prin iDEAL."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.confirm"
+msgstr "Continuă"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.title"
+msgstr "Verifică contul bancar"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.error.flash"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.body"
+msgstr "Vei fi redirecționat către partenerul nostru de plăți Online Payment Platform pentru a verifica contul bancar prin iDEAL."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.confirm"
+msgstr "Continuă"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.title"
+msgstr "Verifică contul bancar"

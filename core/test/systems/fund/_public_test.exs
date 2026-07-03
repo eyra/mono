@@ -873,19 +873,8 @@ defmodule Systems.Fund.PublicTest do
     end
 
     # request_payout/1 re-verifies readiness against fresh OPP state before
-    # locking (get_merchant + list_bank_accounts). Stub a fully-ready merchant.
+    # locking (list_bank_accounts only — the bank account gates the payout).
     defp stub_payout_ready(merchant_uid) do
-      expect(ProviderMock, :get_merchant, fn ^merchant_uid ->
-        {:ok,
-         %{
-           uid: merchant_uid,
-           status: "live",
-           kyc_level: 100,
-           compliance_status: "verified",
-           overview_url: nil
-         }}
-      end)
-
       expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
         {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
       end)
@@ -979,24 +968,13 @@ defmodule Systems.Fund.PublicTest do
       %{id: id} = insert_reward(user, fund, 1000, :approved)
 
       # Simulate a concurrent payout (other tab/device) that locks these rewards
-      # during this request's OPP readiness recheck. get_merchant runs inside
-      # recheck_payout_ready, just before lock_for_payout's compare-and-swap.
-      expect(ProviderMock, :get_merchant, fn merchant_uid ->
+      # during this request's OPP readiness recheck. list_bank_accounts runs
+      # inside recheck_payout_ready, just before lock_for_payout's compare-and-swap.
+      expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
         Core.Repo.get!(Fund.RewardModel, id)
         |> Ecto.Changeset.change(%{status: :pending_payout})
         |> Core.Repo.update!()
 
-        {:ok,
-         %{
-           uid: merchant_uid,
-           status: "live",
-           kyc_level: 100,
-           compliance_status: "verified",
-           overview_url: nil
-         }}
-      end)
-
-      expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
         {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
       end)
 
@@ -1174,7 +1152,7 @@ defmodule Systems.Fund.PublicTest do
       assert :ok = Fund.Public.prepare_payout(user)
     end
 
-    test ~s(returns {:kyc_required, overview_url} when compliance_status != "verified"),
+    test ~s(is :ok with an approved bank even when merchant compliance_status != "verified"),
          %{user: user, fund: fund} do
       eligible_reward(user, fund)
 
@@ -1191,11 +1169,10 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
-               Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user)
     end
 
-    test ~s(returns {:kyc_required, overview_url} when merchant.status != "live"),
+    test ~s(is :ok with an approved bank even when merchant.status != "live"),
          %{user: user, fund: fund} do
       eligible_reward(user, fund)
 
@@ -1212,8 +1189,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
-               Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user)
     end
 
     test "creates a merchant for users with no merchant_uid and persists the uid",
@@ -1236,8 +1212,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_created_inline")
 
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_created_inline"}} =
-               Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user)
 
       assert %{merchant_uid: "m_created_inline"} = Core.Repo.reload!(user)
     end
@@ -1268,8 +1243,8 @@ defmodule Systems.Fund.PublicTest do
         {:ok, %{uid: "ba_new", status: "new", verification_url: "https://opp.test/ba/verify"}}
       end)
 
-      # Merchant is not yet verified, so routing prefers the merchant overview.
-      assert {:error, {:kyc_required, "https://opp.test/kyc/m_prep_1"}} =
+      # Freshly created bank account is not yet approved -> drive the iDEAL flow.
+      assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
                Fund.Public.prepare_payout(user)
     end
 
@@ -1296,7 +1271,10 @@ defmodule Systems.Fund.PublicTest do
          }}
       end)
 
-      stub_existing_bank_account("m_prep_1")
+      # Bank account is not approved and carries no verification_url.
+      expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
+        {:ok, [%{uid: "ba", status: "new", verification_url: nil}]}
+      end)
 
       assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user)
     end
@@ -1321,11 +1299,11 @@ defmodule Systems.Fund.PublicTest do
          [%{uid: "ba_pending", status: "new", verification_url: "https://opp.test/ba/verify"}]}
       end)
 
-      assert {:error, {:kyc_required, "https://opp.test/ba/verify"}} =
+      assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
                Fund.Public.prepare_payout(user)
     end
 
-    test "is NOT :ok when merchant is verified but the bank account is not approved",
+    test "is :kyc_unavailable when the bank is not approved, ignoring any merchant overview_url",
          %{user: user, fund: fund} do
       eligible_reward(user, fund)
 
@@ -1340,12 +1318,13 @@ defmodule Systems.Fund.PublicTest do
          }}
       end)
 
+      # Bank not approved and no verification_url; the merchant overview_url is
+      # irrelevant now that a verified bank account is all we require.
       expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
         {:ok, [%{uid: "ba_pending", status: "new", verification_url: nil}]}
       end)
 
-      assert {:error, {:kyc_required, "https://opp.test/overview/m_prep_1"}} =
-               Fund.Public.prepare_payout(user)
+      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user)
     end
   end
 
