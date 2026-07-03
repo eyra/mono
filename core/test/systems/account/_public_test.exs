@@ -757,6 +757,26 @@ defmodule Systems.Account.PublicTest do
       refute User.phone_changeset(%User{}, %{phone: "123"}).valid?
     end
 
+    test "phone_changeset guides users with a country-code hint on bare-digit input" do
+      # "612345678" — no +, no leading 0. Would otherwise fail the generic
+      # format regex; a targeted message tells the user what's missing.
+      changeset = User.phone_changeset(%User{}, %{phone: "612345678"})
+
+      refute changeset.valid?
+
+      assert "must start with a country code (e.g. +31) or leading 0" in errors_on(changeset).phone
+    end
+
+    test "phone_changeset uses the generic message when a +-prefixed number is malformed" do
+      # Country code present but too short — the "add a country code" hint
+      # would be misleading here, so the generic format message applies.
+      changeset = User.phone_changeset(%User{}, %{phone: "+3161"})
+
+      refute changeset.valid?
+
+      assert "must be a valid phone number" in errors_on(changeset).phone
+    end
+
     test "phone_changeset requires a phone" do
       refute User.phone_changeset(%User{}, %{}).valid?
     end

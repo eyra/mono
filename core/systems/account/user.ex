@@ -98,7 +98,25 @@ defmodule Systems.Account.User do
     |> cast(attrs, [:phone])
     |> validate_required([:phone])
     |> update_change(:phone, &normalize_phone/1)
-    |> validate_format(:phone, ~r/^\+[1-9]\d{7,14}$/, message: "must be a valid phone number")
+    |> validate_phone_format()
+  end
+
+  # After normalize_phone, anything without a `+` prefix is a bare-digit input
+  # (leading `0`/`00` would have been transformed to `+`). Distinguish the two
+  # cases so a user missing the country code gets an actionable message.
+  defp validate_phone_format(changeset) do
+    case get_change(changeset, :phone) do
+      nil ->
+        changeset
+
+      "+" <> _ ->
+        validate_format(changeset, :phone, ~r/^\+[1-9]\d{7,14}$/,
+          message: "must be a valid phone number"
+        )
+
+      _ ->
+        add_error(changeset, :phone, "must start with a country code (e.g. +31) or leading 0")
+    end
   end
 
   defp normalize_phone(nil), do: nil
