@@ -74,11 +74,24 @@ defmodule Systems.Payment.Controller do
        when is_binary(merchant_uid),
        do: notify_kyc(merchant_uid)
 
-  defp handle_kyc_change(%{object_uid: merchant_uid} = event) do
-    case String.starts_with?(event.type, "merchant") do
-      true -> notify_kyc(merchant_uid)
-      false -> Logger.warning("[Payment.Webhook] KYC event without merchant: #{inspect(event)}")
-    end
+  # OPP's type-prefix carries the ownership when object_type isn't "merchant"
+  # itself — e.g. "merchant.something.changed" on an untyped envelope.
+  defp handle_kyc_change(%{type: "merchant" <> _, object_uid: merchant_uid}),
+    do: notify_kyc(merchant_uid)
+
+  # A bank_account event without parent info is unroutable — we can't resolve
+  # the owning merchant, so the participant's badge won't refresh reactively.
+  # Log at :error with the identifying fields so a real occurrence is visible
+  # in production (and can drive a follow-up fetch-by-uid resolver).
+  defp handle_kyc_change(event) do
+    Logger.error(
+      "[Payment.Webhook] KYC event missing merchant reference — badge will not refresh. " <>
+        "type=#{inspect(Map.get(event, :type))} " <>
+        "object_type=#{inspect(Map.get(event, :object_type))} " <>
+        "object_uid=#{inspect(Map.get(event, :object_uid))} " <>
+        "parent_type=#{inspect(Map.get(event, :parent_type))} " <>
+        "parent_uid=#{inspect(Map.get(event, :parent_uid))}"
+    )
   end
 
   defp notify_kyc(merchant_uid) do

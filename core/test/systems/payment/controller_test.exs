@@ -167,4 +167,37 @@ defmodule Systems.Payment.ControllerTest do
       assert %{status: :pending_payout} = Core.Repo.reload!(reward)
     end
   end
+
+  describe "POST /api/payment/webhook/opp — unroutable KYC event" do
+    # A bank_account event without parent info can't be resolved to a merchant,
+    # so the participant's badge won't refresh. Logging at :error with the
+    # identifying fields makes a real occurrence visible in production.
+    test "logs at :error with the identifying fields when parent info is missing",
+         %{conn: conn} do
+      body = %{
+        "uid" => "notif_orphan",
+        "type" => "bank_account.status.changed",
+        "object_uid" => "ba_orphan",
+        "object_type" => "bank_account",
+        "object_url" => "https://example.test/v1/bank_accounts/ba_orphan"
+      }
+
+      log =
+        ExUnit.CaptureLog.capture_log([level: :error], fn ->
+          conn =
+            conn
+            |> Plug.Conn.put_req_header("content-type", "application/json")
+            |> post(~p"/api/payment/webhook/opp", Jason.encode!(body))
+
+          assert json_response(conn, 200) == %{"status" => "ok"}
+        end)
+
+      assert log =~ "KYC event missing merchant reference"
+      assert log =~ ~s(object_type="bank_account")
+      assert log =~ ~s(object_uid="ba_orphan")
+      assert log =~ ~s(type="bank_account.status.changed")
+      assert log =~ "parent_type=nil"
+      assert log =~ "parent_uid=nil"
+    end
+  end
 end
