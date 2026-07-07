@@ -34,6 +34,8 @@ defmodule Systems.Account.UserAuth do
         do: ~p"/user/onboarding",
         else: redirect_path_after_signin(conn, user)
 
+    redirect_to = append_after_action(redirect_to, params)
+
     conn
     |> renew_session()
     |> put_session(:user_token, token)
@@ -41,6 +43,14 @@ defmodule Systems.Account.UserAuth do
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: redirect_to)
   end
+
+  defp append_after_action(path, %{"after" => after_action})
+       when is_binary(after_action) and after_action != "" do
+    sep = if String.contains?(path, "?"), do: "&", else: "?"
+    "#{path}#{sep}after=#{URI.encode_www_form(after_action)}"
+  end
+
+  defp append_after_action(path, _params), do: path
 
   def log_in_user_without_redirect(conn, user) do
     token = Account.Public.generate_user_session_token(user)

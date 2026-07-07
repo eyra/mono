@@ -17,12 +17,17 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @token_max_age 120
 
   @impl true
-  def mount(%{"email" => email}, _session, socket) do
+  def mount(%{"email" => email} = params, _session, socket) do
     if feature_enabled?(:otp) do
       {
         :ok,
         socket
-        |> assign(email: email, form: to_form(%{"code" => ""}), error: nil)
+        |> assign(
+          email: email,
+          form: to_form(%{"code" => ""}),
+          error: nil,
+          after_action: Map.get(params, "after")
+        )
         |> update_menus()
       }
     else
@@ -38,10 +43,11 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @impl true
   def handle_event("verify", %{"code" => code}, %{assigns: %{email: email}} = socket) do
     code = String.trim(code)
+    after_action = socket.assigns[:after_action]
 
     case Account.Public.verify_otp(email, code) do
       {:ok, user} ->
-        payload = %{user_id: user && user.id, email: email}
+        payload = %{user_id: user && user.id, email: email, after: after_action}
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
         {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
 

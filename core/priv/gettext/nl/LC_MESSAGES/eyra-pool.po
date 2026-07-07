@@ -109,3 +109,19 @@ msgstr "Icoon"
 #, elixir-autogen, elixir-format
 msgid "settings.name.label"
 msgstr "Naam"
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.accept.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.decline.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.title"
+msgstr ""

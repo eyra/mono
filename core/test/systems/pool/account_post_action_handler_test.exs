@@ -56,6 +56,37 @@ defmodule Systems.Pool.AccountPostActionHandlerTest do
     end
   end
 
+  describe "handle/2 with join_pool:<slug> action" do
+    test "adds non-creator user to the resolved pool" do
+      user = Factories.insert!(:member, %{creator: false})
+      _panl_pool = Pool.Assembly.get_or_create_panl()
+
+      refute Pool.Public.participant?(:panl, user)
+
+      assert :ok = AccountPostActionHandler.handle(user, "join_pool:panl")
+
+      assert Pool.Public.participant?(:panl, user)
+    end
+
+    test "returns :ok and does not add when the slug does not resolve to a pool" do
+      user = Factories.insert!(:member, %{creator: false})
+      _panl_pool = Pool.Assembly.get_or_create_panl()
+
+      assert :ok = AccountPostActionHandler.handle(user, "join_pool:panl_unknown")
+
+      refute Pool.Public.participant?(:panl, user)
+    end
+
+    test "skips creators" do
+      creator = Factories.insert!(:member, %{creator: true})
+      _panl_pool = Pool.Assembly.get_or_create_panl()
+
+      assert :ok = AccountPostActionHandler.handle(creator, "join_pool:panl")
+
+      refute Pool.Public.participant?(:panl, creator)
+    end
+  end
+
   describe "handle/2 with unknown action" do
     test "returns :ok for unknown action" do
       user = Factories.insert!(:member, %{creator: false})

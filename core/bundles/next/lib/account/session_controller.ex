@@ -63,10 +63,10 @@ defmodule Next.Account.SessionController do
 
   defp do_redeem_otp(conn, token) do
     case Next.Account.AuthCodeVerifyPage.decode_redeem_token(token) do
-      {:ok, %{user_id: nil, email: email}} ->
+      {:ok, %{user_id: nil, email: email} = payload} ->
         case Account.Public.register_user_with_email(email) do
           {:ok, user} ->
-            Account.UserAuth.log_in_user(conn, user, true, %{})
+            Account.UserAuth.log_in_user(conn, user, true, log_in_params(payload))
 
           {:error, _changeset} ->
             conn
@@ -74,9 +74,9 @@ defmodule Next.Account.SessionController do
             |> redirect(to: ~p"/user/auth/identify")
         end
 
-      {:ok, %{user_id: user_id}} ->
+      {:ok, %{user_id: user_id} = payload} ->
         user = Account.Public.get_user!(user_id)
-        Account.UserAuth.log_in_user(conn, user, false, %{})
+        Account.UserAuth.log_in_user(conn, user, false, log_in_params(payload))
 
       _ ->
         conn
@@ -84,6 +84,15 @@ defmodule Next.Account.SessionController do
         |> redirect(to: ~p"/user/auth/identify")
     end
   end
+
+  # Forwards the (signed) `after` action from the redeem token to
+  # `Account.UserAuth.log_in_user/4` so the landing page (onboarding for
+  # new users, home for existing users) gets it as `?after=…` and can
+  # surface the informed-consent UI.
+  defp log_in_params(%{after: after_action}) when is_binary(after_action) and after_action != "",
+    do: %{"after" => after_action}
+
+  defp log_in_params(_), do: %{}
 
   defp render_new(conn) do
     redirect(conn, to: ~p"/user/signin")
