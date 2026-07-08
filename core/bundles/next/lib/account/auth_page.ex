@@ -14,18 +14,28 @@ defmodule Next.Account.AuthPage do
   alias Systems.Account
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     if feature_enabled?(:otp) do
       {
         :ok,
         socket
-        |> assign(form: to_form(%{"email" => ""}), error: nil, loading: false)
+        |> assign(
+          form: to_form(%{"email" => ""}),
+          error: nil,
+          loading: false,
+          return_to: sanitize_return_to(Map.get(params, "return_to"))
+        )
         |> update_menus()
       }
     else
       {:ok, redirect(socket, to: ~p"/user/signin")}
     end
   end
+
+  # Only same-origin paths are accepted, so an attacker cannot craft a link
+  # that ends up bouncing the user to an external site after login.
+  defp sanitize_return_to("/" <> _rest = path), do: path
+  defp sanitize_return_to(_), do: nil
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     menus = build_menus(stripped_menus_config(), user, uri)
@@ -59,17 +69,19 @@ defmodule Next.Account.AuthPage do
 
   @impl true
   def handle_info({:route_email, email}, socket) do
+    return_to = socket.assigns[:return_to]
+
     case Account.EmailRouter.route(email) do
       :google ->
-        {:noreply, redirect(socket, to: "/auth/google?login_hint=#{URI.encode_www_form(email)}")}
+        {:noreply, redirect(socket, to: append_return_to(google_url(email), return_to))}
 
       :surfconext ->
-        {:noreply, redirect(socket, to: "/auth/surfconext")}
+        {:noreply, redirect(socket, to: append_return_to("/auth/surfconext", return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email) do
           :ok ->
-            {:noreply, push_navigate(socket, to: ~p"/user/auth/verify?email=#{email}")}
+            {:noreply, push_navigate(socket, to: verify_url(email, return_to))}
 
           {:error, :rate_limited} ->
             {:noreply,
@@ -79,6 +91,20 @@ defmodule Next.Account.AuthPage do
              )}
         end
     end
+  end
+
+  defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
+
+  defp verify_url(email, nil), do: ~p"/user/auth/verify?email=#{email}"
+
+  defp verify_url(email, return_to),
+    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
+
+  defp append_return_to(url, nil), do: url
+
+  defp append_return_to(url, return_to) do
+    sep = if String.contains?(url, "?"), do: "&", else: "?"
+    "#{url}#{sep}return_to=#{URI.encode_www_form(return_to)}"
   end
 
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)

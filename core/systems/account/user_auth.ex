@@ -29,10 +29,17 @@ defmodule Systems.Account.UserAuth do
   def log_in_user(conn, user, first_time?, params \\ %{}) do
     token = Account.Public.generate_user_session_token(user)
 
+    # For first-time users, we always land on onboarding — but if the caller
+    # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
+    # `?return_to=/pool/panl/join` into the OTP flow), we forward it as a URL
+    # param so onboarding can honour it on its final step. Existing users go
+    # straight to their return_to via `redirect_path_after_signin/2`.
     redirect_to =
-      if first_time?,
-        do: ~p"/user/onboarding",
-        else: redirect_path_after_signin(conn, user)
+      if first_time? do
+        with_return_to(~p"/user/onboarding", get_session(conn, :user_return_to))
+      else
+        redirect_path_after_signin(conn, user)
+      end
 
     conn
     |> renew_session()
@@ -40,6 +47,13 @@ defmodule Systems.Account.UserAuth do
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: redirect_to)
+  end
+
+  defp with_return_to(path, nil), do: path
+
+  defp with_return_to(path, return_to) when is_binary(return_to) do
+    sep = if String.contains?(path, "?"), do: "&", else: "?"
+    "#{path}#{sep}return_to=#{URI.encode_www_form(return_to)}"
   end
 
   def log_in_user_without_redirect(conn, user) do

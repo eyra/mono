@@ -289,6 +289,7 @@ defmodule Systems.Content.Html do
   attr(:initial_item, :any, default: nil)
   attr(:empty_state, :map, default: nil)
   attr(:toolbar_buttons, :list, default: [])
+  attr(:area_type, :atom, default: :content)
 
   def adaptable_layout(assigns) do
     Adaptable.layout(assigns)

@@ -123,10 +123,12 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
-    %Pool.Model{id: panl_id} = Pool.Public.get_panl()
+    %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
 
     adverts =
-      Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
+      Advert.Public.list_by_pool_and_status(panl, :online,
+        preload: Advert.Model.preload_graph(:down)
+      )
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
 
     cards =

@@ -11,7 +11,7 @@ defmodule Systems.Account.FeaturesView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  def dependencies(), do: [:user_id]
+  def dependencies(), do: [:user_id, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     user = Account.Public.get_user!(user_id)
@@ -72,27 +72,27 @@ defmodule Systems.Account.FeaturesView do
   def render(assigns) do
     ~H"""
     <div data-testid="features-view">
-      <Area.form>
+      <%= if @show_title do %>
         <Text.title2><%= @vm.title %></Text.title2>
-        <Text.body_medium><%= @vm.description %></Text.body_medium>
+      <% end %>
+      <Text.body_medium><%= @vm.description %></Text.body_medium>
 
-        <.spacing value="XL" />
+      <.spacing value="XL" />
 
-        <Text.title3><%= @vm.gender_title %></Text.title3>
-        <.element {Map.from_struct(@vm.gender_selector)} socket={@socket} />
+      <Text.title3><%= @vm.gender_title %></Text.title3>
+      <.element {Map.from_struct(@vm.gender_selector)} socket={@socket} />
 
-        <.spacing value="XL" />
+      <.spacing value="XL" />
 
-        <Text.title3><%= @vm.birth_year_title %></Text.title3>
-        <.spacing value="S" />
-        <.form :let={form} for={@vm.changeset} phx-change="change" phx-submit="submit">
-          <.number_input
-            form={form}
-            field={:birth_year}
-            label_text=""
-          />
-        </.form>
-      </Area.form>
+      <Text.title3><%= @vm.birth_year_title %></Text.title3>
+      <.spacing value="S" />
+      <.form :let={form} for={@vm.changeset} phx-change="change" phx-submit="submit">
+        <.number_input
+          form={form}
+          field={:birth_year}
+          label_text=""
+        />
+      </.form>
     </div>
     """
   end

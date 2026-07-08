@@ -12,7 +12,7 @@ defmodule Systems.Account.ProfileView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  def dependencies(), do: [:user_id, :show_signout_button, :show_email]
+  def dependencies(), do: [:user_id, :show_signout_button, :show_email, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     user = Account.Public.get_user!(user_id)
@@ -75,43 +75,43 @@ defmodule Systems.Account.ProfileView do
   def render(assigns) do
     ~H"""
     <div data-testid="profile-view">
-      <Area.form>
+      <%= if @show_title do %>
         <Text.title2><%= @vm.title %></Text.title2>
-        <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
-          <.form id="main_form" :let={form} for={@vm.changeset} phx-submit="save" phx-change="save">
-            <.photo_input
-              static_path={&CoreWeb.Endpoint.static_path/1}
-              photo_url={@vm.photo_url}
-              uploads={@uploads}
-              primary_button_text={@vm.choose_photo_text}
-              secondary_button_text={@vm.choose_other_photo_text}
-            />
-            <.spacing value="M" />
-
-            <.text_input form={form} field={:fullname} label_text={@vm.fullname_label} />
-            <.text_input form={form} field={:displayname} label_text={@vm.displayname_label} />
-
-            <%= if @vm.user.creator do %>
-              <.text_input form={form} field={:title} label_text={@vm.title_label} />
-            <% end %>
-
-            <%= if @vm.show_email do %>
-              <Text.form_field_label id={:user_email_label}>
-                <%= @vm.email_label %>
-              </Text.form_field_label>
-              <div class="text-grey1 text-bodymedium font-body">
-                <%= @vm.user.email %>
-              </div>
-            <% end %>
-          </.form>
-        </div>
-        <%= if @vm.signout_button do %>
+      <% end %>
+      <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
+        <.form id="main_form" :let={form} for={@vm.changeset} phx-submit="save" phx-change="save">
+          <.photo_input
+            static_path={&CoreWeb.Endpoint.static_path/1}
+            photo_url={@vm.photo_url}
+            uploads={@uploads}
+            primary_button_text={@vm.choose_photo_text}
+            secondary_button_text={@vm.choose_other_photo_text}
+          />
           <.spacing value="M" />
-          <div class="flex flex-row justify-start">
-            <Button.dynamic {@vm.signout_button} />
-          </div>
-        <% end %>
-      </Area.form>
+
+          <.text_input form={form} field={:fullname} label_text={@vm.fullname_label} />
+          <.text_input form={form} field={:displayname} label_text={@vm.displayname_label} />
+
+          <%= if @vm.user.creator do %>
+            <.text_input form={form} field={:title} label_text={@vm.title_label} />
+          <% end %>
+
+          <%= if @vm.show_email do %>
+            <Text.form_field_label id={:user_email_label}>
+              <%= @vm.email_label %>
+            </Text.form_field_label>
+            <div class="text-grey1 text-bodymedium font-body">
+              <%= @vm.user.email %>
+            </div>
+          <% end %>
+        </.form>
+      </div>
+      <%= if @vm.signout_button do %>
+        <.spacing value="M" />
+        <div class="flex flex-row justify-start">
+          <Button.dynamic {@vm.signout_button} />
+        </div>
+      <% end %>
     </div>
     """
   end

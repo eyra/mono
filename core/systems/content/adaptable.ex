@@ -96,6 +96,10 @@ defmodule Systems.Content.Adaptable do
   attr(:initial_item, :any, default: nil)
   attr(:empty_state, :map, default: nil)
   attr(:toolbar_buttons, :list, default: [])
+  # Column width for the content area. Defaults to `:content` (uncapped, minus
+  # horizontal page margins). Callers with narrower content — e.g. the Account
+  # settings page — pass `:sheet` or `:form` so all tabs share one column.
+  attr(:area_type, :atom, default: :content)
 
   def layout(assigns) do
     assigns = assign(assigns, :layout_mode, determine_layout(assigns.items))
@@ -105,7 +109,7 @@ defmodule Systems.Content.Adaptable do
       <% :empty -> %>
         <.empty_layout empty_state={@empty_state} creatables={@creatables} />
       <% :single -> %>
-        <.single_layout socket={@socket} item={hd(@items)} creatables={@creatables} toolbar_buttons={@toolbar_buttons} />
+        <.single_layout socket={@socket} item={hd(@items)} creatables={@creatables} toolbar_buttons={@toolbar_buttons} area_type={@area_type} />
       <% :individual_tabs -> %>
         <.individual_tabs_layout
           socket={@socket}
@@ -114,6 +118,7 @@ defmodule Systems.Content.Adaptable do
           tabbar_id={@tabbar_id}
           initial_item={@initial_item}
           toolbar_buttons={@toolbar_buttons}
+          area_type={@area_type}
         />
       <% :grouped_tabs -> %>
         <.grouped_tabs_layout
@@ -122,6 +127,7 @@ defmodule Systems.Content.Adaptable do
           creatables={@creatables}
           tabbar_id={@tabbar_id}
           initial_item={@initial_item}
+          area_type={@area_type}
         />
     <% end %>
     """
@@ -165,11 +171,12 @@ defmodule Systems.Content.Adaptable do
   attr(:item, :map, required: true)
   attr(:creatables, :list, default: [])
   attr(:toolbar_buttons, :list, default: [])
+  attr(:area_type, :atom, default: :content)
 
   defp single_layout(assigns) do
     ~H"""
     <div>
-      <Area.content>
+      <Area.dynamic type={@area_type}>
         <Margin.y id={:page_top} />
         <.item_content socket={@socket} item={@item} />
         <%= if Enum.any?(@toolbar_buttons) do %>
@@ -178,7 +185,7 @@ defmodule Systems.Content.Adaptable do
             <Button.dynamic_bar buttons={@toolbar_buttons} />
           </div>
         <% end %>
-      </Area.content>
+      </Area.dynamic>
     </div>
     """
   end
@@ -190,6 +197,7 @@ defmodule Systems.Content.Adaptable do
   attr(:tabbar_id, :any, required: true)
   attr(:initial_item, :any, default: nil)
   attr(:toolbar_buttons, :list, default: [])
+  attr(:area_type, :atom, default: :content)
 
   defp individual_tabs_layout(assigns) do
     tabs = items_to_tabs(assigns.items)
@@ -201,7 +209,7 @@ defmodule Systems.Content.Adaptable do
       |> assign(:initial_tab, initial_tab)
 
     ~H"""
-    <Navigation.action_bar breadcrumbs={[]} right_bar_buttons={@toolbar_buttons}>
+    <Navigation.action_bar breadcrumbs={[]} right_bar_buttons={@toolbar_buttons} align={:center}>
       <Tabbed.bar
         id={@tabbar_id}
         tabs={@tabs}
@@ -211,10 +219,10 @@ defmodule Systems.Content.Adaptable do
         preserve_tab_in_url={true}
       />
     </Navigation.action_bar>
-    <Area.content>
+    <Area.dynamic type={@area_type}>
       <Margin.y id={:page_top} />
       <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
-    </Area.content>
+    </Area.dynamic>
     """
   end
 
@@ -224,6 +232,7 @@ defmodule Systems.Content.Adaptable do
   attr(:creatables, :list, default: [])
   attr(:tabbar_id, :any, required: true)
   attr(:initial_item, :any, default: nil)
+  attr(:area_type, :atom, default: :content)
 
   defp grouped_tabs_layout(assigns) do
     groups = group_items_by_type(assigns.items)
@@ -254,12 +263,13 @@ defmodule Systems.Content.Adaptable do
           data-tab-id={group_type}
           class="tab-panel hidden"
         >
-          <.group_content
+          <.group_body
             socket={@socket}
             group_type={group_type}
             items={group_items}
             creatables={filter_creatables(@creatables, group_type)}
             tabbar_id={"#{@tabbar_id}_#{group_type}"}
+            area_type={@area_type}
           />
         </div>
       <% end %>
@@ -273,8 +283,9 @@ defmodule Systems.Content.Adaptable do
   attr(:items, :list, required: true)
   attr(:creatables, :list, default: [])
   attr(:tabbar_id, :any, required: true)
+  attr(:area_type, :atom, default: :content)
 
-  defp group_content(assigns) do
+  defp group_body(assigns) do
     tabs = items_to_tabs(assigns.items)
     initial_tab = hd(assigns.items).id
 
@@ -297,10 +308,10 @@ defmodule Systems.Content.Adaptable do
           <.add_button creatables={@creatables} />
         <% end %>
       </div>
-      <Area.content>
+      <Area.dynamic type={@area_type}>
         <Margin.y id={:page_top} />
         <Tabbed.content socket={@socket} bar_id={@tabbar_id} tabs={@tabs} />
-      </Area.content>
+      </Area.dynamic>
     </div>
     """
   end

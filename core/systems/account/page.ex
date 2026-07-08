@@ -84,6 +84,7 @@ defmodule Systems.Account.Page do
         items={@vm.items}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
+        area_type={:sheet}
       />
     </.live_stripped>
     """
@@ -97,6 +98,7 @@ defmodule Systems.Account.Page do
         items={@vm.items}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
+        area_type={:sheet}
       />
     </.live_workspace>
     """

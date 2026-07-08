@@ -37,8 +37,8 @@ defmodule Systems.Account.PageTest do
 
       {:ok, _view, html} = live(conn, "/user/account")
 
-      assert html =~ "Mijn profiel"
-      refute html =~ "My profile"
+      assert html =~ "Profiel"
+      refute html =~ "Profile"
     end
 
     test "renders profile tab by default", %{conn: conn} do

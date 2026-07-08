@@ -3,19 +3,15 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
-  alias Systems.Pool
 
-  describe "view_model/2 with confirmed PANL participant" do
+  # Note: `:features` has moved to `Systems.Pool.OnboardingPageBuilder`.
+  # These tests only cover the account-level steps (profile, terms,
+  # activate_account) — pool participation no longer affects this list.
+
+  describe "view_model/2 with confirmed user" do
     setup do
       user = Factories.insert!(:member)
-
-      panl_pool =
-        Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
-
-      Pool.Public.add_participant!(panl_pool, user)
-
       user = Core.Repo.preload(user, [:features, :profile])
-
       %{user: user}
     end
 
@@ -25,37 +21,21 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
       assert vm.hero_title == dgettext("eyra-account", "onboarding.hero.title")
     end
 
-    test "includes profile and features steps (no activate_account)", %{user: user} do
+    test "has only the profile step", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
 
-      assert vm.steps == [:profile, :features]
-      refute :activate_account in vm.steps
+      assert vm.steps == [:profile]
     end
 
-    test "first step is profile", %{user: user} do
+    test "first step is profile with ProfileView", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
 
       assert vm.current_step == :profile
-      assert vm.step_view != nil
       assert vm.step_view.implementation == Account.ProfileView
     end
 
-    test "features step has features view", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 1})
-
-      assert vm.current_step == :features
-      assert vm.step_view != nil
-      assert vm.step_view.implementation == Account.FeaturesView
-    end
-
-    test "is_last_step is false on first step", %{user: user} do
+    test "is_last_step is true (single step)", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
-
-      assert vm.is_last_step == false
-    end
-
-    test "is_last_step is true on last step", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 1})
 
       assert vm.is_last_step == true
     end
@@ -72,28 +52,21 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     end
   end
 
-  describe "view_model/2 with unconfirmed PANL participant" do
+  describe "view_model/2 with unconfirmed user" do
     setup do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-
-      panl_pool =
-        Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
-
-      Pool.Public.add_participant!(panl_pool, user)
-
       user = Core.Repo.preload(user, [:features, :profile])
-
       %{user: user}
     end
 
-    test "includes activate_account as last step", %{user: user} do
+    test "has profile and activate_account steps", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
 
-      assert vm.steps == [:profile, :features, :activate_account]
+      assert vm.steps == [:profile, :activate_account]
     end
 
     test "activate_account step has no step_view but has title and body", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 2})
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 1})
 
       assert vm.current_step == :activate_account
       assert vm.step_view == nil
@@ -102,47 +75,10 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     end
 
     test "activate_account step has special continue button label", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 2})
+      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 1})
 
       assert vm.continue_button.face.label ==
                dgettext("eyra-account", "onboarding.activate_account.continue.button")
-    end
-  end
-
-  describe "view_model/2 with confirmed non-PANL user" do
-    setup do
-      user = Factories.insert!(:member)
-      user = Core.Repo.preload(user, [:features, :profile])
-
-      %{user: user}
-    end
-
-    test "has only profile step", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
-
-      assert vm.steps == [:profile]
-    end
-
-    test "first step is profile with step_view", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
-
-      assert vm.step_view != nil
-      assert vm.step_view.implementation == Account.ProfileView
-    end
-  end
-
-  describe "view_model/2 with unconfirmed non-PANL user" do
-    setup do
-      user = Factories.insert!(:member, %{confirmed_at: nil})
-      user = Core.Repo.preload(user, [:features, :profile])
-
-      %{user: user}
-    end
-
-    test "has profile and activate_account steps", %{user: user} do
-      vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
-
-      assert vm.steps == [:profile, :activate_account]
     end
   end
 
@@ -228,14 +164,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
   describe "view_model/2 defaults" do
     setup do
       user = Factories.insert!(:member)
-
-      panl_pool =
-        Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
-
-      Pool.Public.add_participant!(panl_pool, user)
-
       user = Core.Repo.preload(user, [:features, :profile])
-
       %{user: user}
     end
 
