@@ -3,6 +3,8 @@ defmodule Systems.Pool.Routes do
     quote do
       scope "/", Systems.Pool do
         pipe_through([:browser, :require_authenticated_user])
+        get("/pool/:slug/join", Controller, :join)
+        live("/pool/:slug/onboarding", OnboardingPage)
         live("/pool/:id", LandingPage)
         live("/pool/:id/content", ContentPage)
         live("/pool/:id/marketplace", MarketplacePage)

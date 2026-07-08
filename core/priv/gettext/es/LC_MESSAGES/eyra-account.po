@@ -161,7 +161,7 @@ msgstr "Panl"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.profile.title"
-msgstr "Mi perfil"
+msgstr "Perfil"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"

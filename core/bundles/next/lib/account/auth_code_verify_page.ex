@@ -26,7 +26,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
           email: email,
           form: to_form(%{"code" => ""}),
           error: nil,
-          after_action: Map.get(params, "after")
+          return_to: sanitize_return_to(Map.get(params, "return_to"))
         )
         |> update_menus()
       }
@@ -34,6 +34,9 @@ defmodule Next.Account.AuthCodeVerifyPage do
       {:ok, redirect(socket, to: ~p"/user/signin")}
     end
   end
+
+  defp sanitize_return_to("/" <> _rest = path), do: path
+  defp sanitize_return_to(_), do: nil
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     menus = build_menus(stripped_menus_config(), user, uri)
@@ -43,11 +46,11 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @impl true
   def handle_event("verify", %{"code" => code}, %{assigns: %{email: email}} = socket) do
     code = String.trim(code)
-    after_action = socket.assigns[:after_action]
+    return_to = socket.assigns[:return_to]
 
     case Account.Public.verify_otp(email, code) do
       {:ok, user} ->
-        payload = %{user_id: user && user.id, email: email, after: after_action}
+        payload = %{user_id: user && user.id, email: email, return_to: return_to}
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
         {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
 

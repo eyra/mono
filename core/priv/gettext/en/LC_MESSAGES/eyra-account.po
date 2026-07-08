@@ -160,7 +160,7 @@ msgstr "Panl"
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.profile.title"
-msgstr "My profile"
+msgstr "Profile"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.continue.button"
@@ -168,7 +168,7 @@ msgstr "Continue"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Onboarding"
+msgstr "Welcome"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"

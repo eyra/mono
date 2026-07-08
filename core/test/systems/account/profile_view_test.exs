@@ -24,7 +24,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -32,7 +33,7 @@ defmodule Systems.Account.ProfileViewTest do
       {:ok, view, html} = live_isolated(conn, Account.ProfileView, session: session)
 
       # Should render title
-      assert html =~ "My profile"
+      assert html =~ "Profile"
 
       # Should render form elements
       assert view |> has_element?("[data-testid='profile-view']")
@@ -53,7 +54,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -74,7 +76,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -97,7 +100,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -125,7 +129,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: creator.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -144,7 +149,8 @@ defmodule Systems.Account.ProfileViewTest do
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}

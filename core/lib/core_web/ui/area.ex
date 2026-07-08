@@ -51,7 +51,7 @@ defmodule CoreWeb.UI.Area do
 
   def form(assigns) do
     ~H"""
-    <div class={"flex justify-center #{@class}"}>
+    <div class={"flex justify-center items-start #{@class}"}>
       <div class="flex-grow sm:max-w-form">
         <%= render_slot(@inner_block) %>
       </div>
@@ -64,7 +64,7 @@ defmodule CoreWeb.UI.Area do
 
   def sheet(assigns) do
     ~H"""
-    <div class={"flex justify-center #{@class}"}>
+    <div class={"flex justify-center items-start #{@class}"}>
       <div class="flex-grow sm:max-w-sheet">
         <%= render_slot(@inner_block) %>
       </div>

@@ -23,7 +23,7 @@ defmodule Next.Account.AuthPage do
           form: to_form(%{"email" => ""}),
           error: nil,
           loading: false,
-          after_action: Map.get(params, "after")
+          return_to: sanitize_return_to(Map.get(params, "return_to"))
         )
         |> update_menus()
       }
@@ -31,6 +31,11 @@ defmodule Next.Account.AuthPage do
       {:ok, redirect(socket, to: ~p"/user/signin")}
     end
   end
+
+  # Only same-origin paths are accepted, so an attacker cannot craft a link
+  # that ends up bouncing the user to an external site after login.
+  defp sanitize_return_to("/" <> _rest = path), do: path
+  defp sanitize_return_to(_), do: nil
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     menus = build_menus(stripped_menus_config(), user, uri)
@@ -64,19 +69,19 @@ defmodule Next.Account.AuthPage do
 
   @impl true
   def handle_info({:route_email, email}, socket) do
-    after_action = socket.assigns[:after_action]
+    return_to = socket.assigns[:return_to]
 
     case Account.EmailRouter.route(email) do
       :google ->
-        {:noreply, redirect(socket, to: append_after(google_url(email), after_action))}
+        {:noreply, redirect(socket, to: append_return_to(google_url(email), return_to))}
 
       :surfconext ->
-        {:noreply, redirect(socket, to: append_after("/auth/surfconext", after_action))}
+        {:noreply, redirect(socket, to: append_return_to("/auth/surfconext", return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email) do
           :ok ->
-            {:noreply, push_navigate(socket, to: verify_url(email, after_action))}
+            {:noreply, push_navigate(socket, to: verify_url(email, return_to))}
 
           {:error, :rate_limited} ->
             {:noreply,
@@ -92,14 +97,14 @@ defmodule Next.Account.AuthPage do
 
   defp verify_url(email, nil), do: ~p"/user/auth/verify?email=#{email}"
 
-  defp verify_url(email, after_action),
-    do: ~p"/user/auth/verify?email=#{email}&after=#{after_action}"
+  defp verify_url(email, return_to),
+    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
 
-  defp append_after(url, nil), do: url
+  defp append_return_to(url, nil), do: url
 
-  defp append_after(url, after_action) do
+  defp append_return_to(url, return_to) do
     sep = if String.contains?(url, "?"), do: "&", else: "?"
-    "#{url}#{sep}after=#{URI.encode_www_form(after_action)}"
+    "#{url}#{sep}return_to=#{URI.encode_www_form(return_to)}"
   end
 
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)

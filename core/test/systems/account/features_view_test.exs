@@ -21,7 +21,8 @@ defmodule Systems.Account.FeaturesViewTest do
 
       live_context =
         LiveContext.new(%{
-          user_id: user.id
+          user_id: user.id,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -43,7 +44,8 @@ defmodule Systems.Account.FeaturesViewTest do
 
       live_context =
         LiveContext.new(%{
-          user_id: user.id
+          user_id: user.id,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -62,7 +64,8 @@ defmodule Systems.Account.FeaturesViewTest do
 
       live_context =
         LiveContext.new(%{
-          user_id: user.id
+          user_id: user.id,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -82,7 +85,8 @@ defmodule Systems.Account.FeaturesViewTest do
 
       live_context =
         LiveContext.new(%{
-          user_id: user.id
+          user_id: user.id,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -107,7 +111,8 @@ defmodule Systems.Account.FeaturesViewTest do
 
       live_context =
         LiveContext.new(%{
-          user_id: user.id
+          user_id: user.id,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}

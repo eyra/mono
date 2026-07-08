@@ -15,11 +15,15 @@ defmodule Systems.Pool.JoinConsentView do
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   @impl true
-  def update(%{id: id, pool: pool}, socket) do
+  def update(%{id: id, pool: pool} = assigns, socket) do
     {
       :ok,
       socket
-      |> assign(id: id, pool: pool)
+      |> assign(
+        id: id,
+        pool: pool,
+        show_title: Map.get(assigns, :show_title, true)
+      )
       |> update_buttons()
     }
   end
@@ -60,10 +64,12 @@ defmodule Systems.Pool.JoinConsentView do
   def render(assigns) do
     ~H"""
     <div data-testid="pool-join-consent-view">
-      <Text.title2>
-        <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
-      </Text.title2>
-      <.spacing value="M" />
+      <%= if @show_title do %>
+        <Text.title2>
+          <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
+        </Text.title2>
+        <.spacing value="M" />
+      <% end %>
       <Text.body>
         <%= dgettext("eyra-pool", "join_consent.body", pool_name: @pool.name) %>
       </Text.body>

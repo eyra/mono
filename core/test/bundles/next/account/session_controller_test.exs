@@ -15,7 +15,7 @@ defmodule Next.Account.SessionControllerTest do
     %{conn: conn}
   end
 
-  describe "GET /user/auth/redeem — new user, no after action" do
+  describe "GET /user/auth/redeem — new user, no return_to" do
     test "registers, logs in, and lands on /user/onboarding", %{conn: conn} do
       email = "fresh-#{Faker.UUID.v4()}@example.com"
 
@@ -23,7 +23,7 @@ defmodule Next.Account.SessionControllerTest do
         Phoenix.Token.sign(Endpoint, @token_salt, %{
           user_id: nil,
           email: email,
-          after: nil
+          return_to: nil
         })
 
       conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
@@ -32,25 +32,30 @@ defmodule Next.Account.SessionControllerTest do
     end
   end
 
-  describe "GET /user/auth/redeem — new user, with after action" do
-    test "lands on /user/onboarding?after=<action>", %{conn: conn} do
+  describe "GET /user/auth/redeem — new user, with return_to" do
+    # New users always land on /user/onboarding first; the return_to is
+    # preserved as a URL param so onboarding can chain the user into the
+    # requested destination when the flow finishes.
+    test "lands on /user/onboarding?return_to=<path>", %{conn: conn} do
       email = "fresh-#{Faker.UUID.v4()}@example.com"
 
       token =
         Phoenix.Token.sign(Endpoint, @token_salt, %{
           user_id: nil,
           email: email,
-          after: "join_pool:panl"
+          return_to: "/pool/panl/join"
         })
 
       conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
 
-      assert redirected_to(conn) == "/user/onboarding?after=join_pool%3Apanl"
+      assert redirected_to(conn) == "/user/onboarding?return_to=%2Fpool%2Fpanl%2Fjoin"
     end
   end
 
-  describe "GET /user/auth/redeem — existing user, with after action" do
-    test "lands on the post-signin destination with ?after=<action> appended", %{conn: conn} do
+  describe "GET /user/auth/redeem — existing user, with return_to" do
+    # Existing users go straight to the return_to destination — no
+    # onboarding stop needed.
+    test "lands on the return_to path directly", %{conn: conn} do
       user =
         Factories.insert!(:member, %{
           email: "existing-#{Faker.UUID.v4()}@example.com",
@@ -62,19 +67,18 @@ defmodule Next.Account.SessionControllerTest do
         Phoenix.Token.sign(Endpoint, @token_salt, %{
           user_id: user.id,
           email: user.email,
-          after: "join_pool:panl"
+          return_to: "/pool/panl/join"
         })
 
       conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
 
-      redirected = redirected_to(conn)
-      assert redirected =~ "after=join_pool%3Apanl"
+      assert redirected_to(conn) == "/pool/panl/join"
     end
   end
 
   describe "AuthCodeVerifyPage.decode_redeem_token/1" do
-    test "roundtrips :after alongside :user_id and :email" do
-      payload = %{user_id: 42, email: "x@example.com", after: "join_pool:panl"}
+    test "roundtrips :return_to alongside :user_id and :email" do
+      payload = %{user_id: 42, email: "x@example.com", return_to: "/pool/panl/join"}
       token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
 
       assert {:ok, ^payload} = AuthCodeVerifyPage.decode_redeem_token(token)

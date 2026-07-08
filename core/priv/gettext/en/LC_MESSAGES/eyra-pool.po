@@ -116,7 +116,7 @@ msgstr "Join %{pool_name}"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr "Would you like to join the %{pool_name} pool? Participants get invited to research studies and can earn rewards. You can leave the pool any time from your account settings."
+msgstr "Would you like to join the %{pool_name} pool? Participants get invited to research studies and can earn rewards."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.decline.button"
@@ -125,3 +125,15 @@ msgstr "Not now"
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
 msgstr "Join %{pool_name}"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Join %{pool_name}"
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr "You already joined %{pool_name}"
+
+#, elixir-autogen, elixir-format
+msgid "already_member.home.button"
+msgstr "Back to home"

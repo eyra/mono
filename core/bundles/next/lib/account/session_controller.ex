@@ -66,7 +66,9 @@ defmodule Next.Account.SessionController do
       {:ok, %{user_id: nil, email: email} = payload} ->
         case Account.Public.register_user_with_email(email) do
           {:ok, user} ->
-            Account.UserAuth.log_in_user(conn, user, true, log_in_params(payload))
+            conn
+            |> stash_return_to(payload)
+            |> Account.UserAuth.log_in_user(user, true)
 
           {:error, _changeset} ->
             conn
@@ -76,7 +78,10 @@ defmodule Next.Account.SessionController do
 
       {:ok, %{user_id: user_id} = payload} ->
         user = Account.Public.get_user!(user_id)
-        Account.UserAuth.log_in_user(conn, user, false, log_in_params(payload))
+
+        conn
+        |> stash_return_to(payload)
+        |> Account.UserAuth.log_in_user(user, false)
 
       _ ->
         conn
@@ -85,14 +90,14 @@ defmodule Next.Account.SessionController do
     end
   end
 
-  # Forwards the (signed) `after` action from the redeem token to
-  # `Account.UserAuth.log_in_user/4` so the landing page (onboarding for
-  # new users, home for existing users) gets it as `?after=…` and can
-  # surface the informed-consent UI.
-  defp log_in_params(%{after: after_action}) when is_binary(after_action) and after_action != "",
-    do: %{"after" => after_action}
+  # `log_in_user/4` reads `:user_return_to` from the session (via
+  # `redirect_path_after_signin/2`) before renewing the session, so
+  # placing it here honours the caller's intent for both new users
+  # (falls back to onboarding) and existing users (honoured).
+  defp stash_return_to(conn, %{return_to: "/" <> _rest = path}),
+    do: put_session(conn, :user_return_to, path)
 
-  defp log_in_params(_), do: %{}
+  defp stash_return_to(conn, _payload), do: conn
 
   defp render_new(conn) do
     redirect(conn, to: ~p"/user/signin")

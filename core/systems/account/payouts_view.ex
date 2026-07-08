@@ -111,67 +111,64 @@ defmodule Systems.Account.PayoutsView do
   def render(assigns) do
     ~H"""
     <div data-testid="payouts-view">
-      <Area.content>
-        <.spacing value="L" />
-        <Text.title2><%= @vm.title %></Text.title2>
+      <Text.title2><%= @vm.title %></Text.title2>
 
-        <.spacing value="M" />
-        <Text.title3><%= @vm.bank.title %></Text.title3>
-        <.spacing value="XS" />
-        <.bank_status variant={@vm.bank.status_variant} label={@vm.bank.status_label} />
+      <.spacing value="M" />
+      <Text.title3><%= @vm.bank.title %></Text.title3>
+      <.spacing value="XS" />
+      <.bank_status variant={@vm.bank.status_variant} label={@vm.bank.status_label} />
+      <.spacing value="S" />
+      <Text.body><%= @vm.bank.intro %></Text.body>
+      <%= if @vm.bank.button do %>
         <.spacing value="S" />
-        <Text.body><%= @vm.bank.intro %></Text.body>
-        <%= if @vm.bank.button do %>
-          <.spacing value="S" />
-          <Button.dynamic {@vm.bank.button} />
-        <% end %>
+        <Button.dynamic {@vm.bank.button} />
+      <% end %>
 
-        <.spacing value="L" />
-        <div class="border-t border-grey4"></div>
-        <.spacing value="L" />
+      <.spacing value="L" />
+      <div class="border-t border-grey4"></div>
+      <.spacing value="L" />
 
-        <Text.title3><%= @vm.overview.title %></Text.title3>
-        <.spacing value="XS" />
-        <Text.body><%= @vm.overview.intro %></Text.body>
+      <Text.title3><%= @vm.overview.title %></Text.title3>
+      <.spacing value="XS" />
+      <Text.body><%= @vm.overview.intro %></Text.body>
+      <.spacing value="M" />
+
+      <%= if @vm.overview.empty? do %>
+        <Text.body><%= @vm.overview.empty_message %></Text.body>
+      <% else %>
+        <% selected = @selected_year || List.first(@vm.overview.years) %>
+        <div class="flex flex-row flex-wrap gap-3 items-center" data-testid="year-filter">
+          <%= for year <- @vm.overview.years do %>
+            <button
+              type="button"
+              phx-click="select_year"
+              phx-value-year={year}
+              class={[
+                "rounded-full px-6 py-3 text-label font-label select-none",
+                year == selected && "bg-primary text-white",
+                year != selected && "bg-grey5 text-grey2"
+              ]}
+            >
+              <%= year %>
+            </button>
+          <% end %>
+        </div>
         <.spacing value="M" />
+        <Text.title4>
+          <%= @vm.overview.total_label %>: <%= Map.get(@vm.overview.totals_by_year, selected) %>
+        </Text.title4>
+        <.spacing value="S" />
+        <Table.table
+          id="payouts-table"
+          layout={payout_table_layout()}
+          head_cells={@vm.overview.table_headers}
+          rows={Map.get(@vm.overview.rows_by_year, selected, [])}
+          border={false}
+          top_line?={true}
+        />
+      <% end %>
 
-        <%= if @vm.overview.empty? do %>
-          <Text.body><%= @vm.overview.empty_message %></Text.body>
-        <% else %>
-          <% selected = @selected_year || List.first(@vm.overview.years) %>
-          <div class="flex flex-row flex-wrap gap-3 items-center" data-testid="year-filter">
-            <%= for year <- @vm.overview.years do %>
-              <button
-                type="button"
-                phx-click="select_year"
-                phx-value-year={year}
-                class={[
-                  "rounded-full px-6 py-3 text-label font-label select-none",
-                  year == selected && "bg-primary text-white",
-                  year != selected && "bg-grey5 text-grey2"
-                ]}
-              >
-                <%= year %>
-              </button>
-            <% end %>
-          </div>
-          <.spacing value="M" />
-          <Text.title4>
-            <%= @vm.overview.total_label %>: <%= Map.get(@vm.overview.totals_by_year, selected) %>
-          </Text.title4>
-          <.spacing value="S" />
-          <Table.table
-            id="payouts-table"
-            layout={payout_table_layout()}
-            head_cells={@vm.overview.table_headers}
-            rows={Map.get(@vm.overview.rows_by_year, selected, [])}
-            border={false}
-            top_line?={true}
-          />
-        <% end %>
-
-        <.spacing value="XL" />
-      </Area.content>
+      <.spacing value="XL" />
     </div>
     """
   end

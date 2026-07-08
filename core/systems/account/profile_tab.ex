@@ -22,7 +22,8 @@ defmodule Systems.Account.ProfileTab do
       LiveContext.extend(live_context, %{
         show_signout_button: true,
         show_email: true,
-        show_top_margin: true
+        show_top_margin: true,
+        show_title: true
       })
 
     element =

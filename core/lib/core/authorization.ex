@@ -65,6 +65,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.MarketplacePage, [:visitor, :member, :owner])
+  grant_access(Systems.Pool.OnboardingPage, [:member])
   grant_access(Systems.Pool.ParticipantPage, [:creator])
   grant_access(Systems.Pool.SubmissionPage, [:creator])
   grant_access(Systems.Project.NodePage, [:owner])
