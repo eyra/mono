@@ -18,7 +18,7 @@ defmodule Systems.Home.LoggedInView do
   def render(assigns) do
     ~H"""
     <div>
-      <div class="bg-grey6 px-6 lg:px-8 py-6 lg:py-8">
+      <div class="px-6 lg:px-8 py-6 lg:py-8">
         <div class="space-y-6">
           <%= for {name, _} <- @blocks do %>
             <.child name={name} fabric={@fabric} />
