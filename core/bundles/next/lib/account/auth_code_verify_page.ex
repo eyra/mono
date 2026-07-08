@@ -82,9 +82,9 @@ defmodule Next.Account.AuthCodeVerifyPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
+      <div class="h-full flex flex-col justify-center">
       <Area.content>
         <Area.form>
-          <Margin.y id={:page_top} />
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
           <.spacing value="L" />
           <.form id="auth_code_form" for={@form} phx-submit="verify">
@@ -122,6 +122,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
           </.form>
         </Area.form>
       </Area.content>
+      </div>
     </.stripped>
     """
   end
