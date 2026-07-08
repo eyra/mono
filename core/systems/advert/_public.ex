@@ -174,6 +174,18 @@ defmodule Systems.Advert.Public do
     |> Repo.preload(preload)
   end
 
+  def list_by_pool_and_status(%Pool.Model{id: pool_id}, status, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
+    from(a in Advert.Model,
+      inner_join: ps in Pool.SubmissionModel,
+      on: ps.id == a.submission_id,
+      where: a.status == ^status and ps.pool_id == ^pool_id,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def list_excluded_user_ids(advert_ids) when is_list(advert_ids) do
     from(u in User,
       join: m in Crew.MemberModel,

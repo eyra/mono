@@ -15,13 +15,23 @@ defmodule Systems.Home.PageBuilderTest do
     params
   end
 
-  # Build an online + funded + open advert that passes validate_open/2 for any
-  # panl participant. reward_value 0 short-circuits the funding check so we
-  # don't need to wire up a Fund + currency.
+  # Build an online + funded + open advert placed inside the Panl pool so it
+  # surfaces on the home page's Panl marketplace block. reward_value 0
+  # short-circuits the funding check so we don't need to wire up a Fund +
+  # currency. The factory's own `test_pool` is discarded — we swap the
+  # submission's pool to Panl so the pool-scoped query sees it.
   defp create_open_online_advert(creator) do
+    panl_pool =
+      Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
     advert = Advert.Factories.create_advert(creator, :accepted, 1)
     {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
-    {:ok, _} = advert.submission |> Ecto.Changeset.change(reward_value: 0) |> Repo.update()
+
+    {:ok, _} =
+      advert.submission
+      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl_pool.id)
+      |> Repo.update()
+
     advert
   end
 
