@@ -137,6 +137,9 @@ defmodule Systems.Assignment.FinishedView do
             <Button.dynamic {@email_capture.submit_button} testid="email-capture-submit" />
           </form>
         <% end %>
+        <%= if Map.has_key?(@email_capture, :cta_button) do %>
+          <Button.dynamic {@email_capture.cta_button} testid="panl-cta-button" />
+        <% end %>
       </InlineBlock.inline_block>
     </div>
     """

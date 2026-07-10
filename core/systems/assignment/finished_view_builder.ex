@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.FinishedViewBuilder do
   use Gettext, backend: CoreWeb.Gettext
+  use Core.FeatureFlags
 
   alias Systems.Assignment
   alias Systems.Affiliate
@@ -39,6 +40,19 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     Assignment.Template.runtime_config(template)
   end
 
+  # The finished-page Panl block. One block, four states — chosen by
+  # feature flags + Panl membership:
+  #
+  #   :panl off                             → no block
+  #   pre-launch (:panl on)                 → email-capture form
+  #                                           (or submitted ack, once the
+  #                                           user has joined)
+  #   post-launch (:panl_post_launch on),
+  #     not yet a Panl member               → "Join Panl" CTA
+  #   post-launch, already a Panl member    → "Home" CTA
+  #
+  # Only shown to affiliate visitors — non-affiliate direct traffic
+  # (e.g. researcher preview) never sees the block.
   defp build_email_capture(true = _declined?, _runtime_config, _user, _submitting?), do: nil
   defp build_email_capture(_declined?, %{post_action: nil}, _user, _submitting?), do: nil
 
@@ -48,16 +62,31 @@ defmodule Systems.Assignment.FinishedViewBuilder do
          user,
          submitting?
        ) do
-    case Affiliate.Public.get_user(user) do
-      {:ok, _affiliate_user} ->
-        cond do
-          Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted()
-          EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted()
-          true -> build_email_capture_form(action, submitting?)
+    with true <- feature_enabled?(:panl),
+         {:ok, _affiliate_user} <- Affiliate.Public.get_user(user) do
+      build_panl_block(pool_slug, action, user, submitting?)
+    else
+      _ -> nil
+    end
+  end
+
+  defp build_panl_block(pool_slug, action, user, submitting?) do
+    cond do
+      feature_enabled?(:panl_post_launch) ->
+        if Pool.Public.participant?(pool_slug, user) do
+          build_home_cta()
+        else
+          build_join_cta(pool_slug)
         end
 
-      {:error, :user_not_found} ->
-        nil
+      Pool.Public.participant?(pool_slug, user) ->
+        build_email_capture_submitted()
+
+      EmailSignUp.get_by_user(user) != nil ->
+        build_email_capture_submitted()
+
+      true ->
+        build_email_capture_form(action, submitting?)
     end
   end
 
@@ -82,6 +111,43 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     %{
       title: dgettext("eyra-assignment", "email_capture.success.title"),
       body: dgettext("eyra-assignment", "email_capture.success.body")
+    }
+  end
+
+  # Post-launch: affiliate visitor is not yet a Panl member. CTA sends them
+  # through auth identify → verify → redeem. `return_to` steers them into
+  # `/pool/<slug>/join` after auth so the join gate + onboarding runs and
+  # they end on Home.
+  defp build_join_cta(pool_slug) do
+    %{
+      title: dgettext("eyra-assignment", "panl.cta.join.title"),
+      body: dgettext("eyra-assignment", "panl.cta.join.body"),
+      cta_button: %{
+        action: %{
+          type: :http_get,
+          to: "/user/auth/identify?return_to=/pool/#{pool_slug}/join"
+        },
+        face: %{
+          type: :primary,
+          label: dgettext("eyra-assignment", "panl.cta.join.button")
+        }
+      }
+    }
+  end
+
+  # Post-launch: affiliate visitor is already a Panl member. Send them home;
+  # the home page carries their wallet / rewards summary.
+  defp build_home_cta do
+    %{
+      title: dgettext("eyra-assignment", "panl.cta.home.title"),
+      body: dgettext("eyra-assignment", "panl.cta.home.body"),
+      cta_button: %{
+        action: %{type: :http_get, to: "/"},
+        face: %{
+          type: :primary,
+          label: dgettext("eyra-assignment", "panl.cta.home.button")
+        }
+      }
     }
   end
 
