@@ -351,8 +351,39 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
                dgettext("eyra-assignment", "panl.cta.home.button")
     end
 
-    test "no block for a non-affiliate user" do
-      user = Factories.insert!(:member)
+    test "renders a Join CTA that skips auth for a non-affiliate user (they already have a real email)" do
+      user = Factories.insert!(:member, %{creator: false})
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
+
+      assert vm.email_capture.cta_button.action == %{
+               type: :http_get,
+               to: "/pool/panl/join"
+             }
+    end
+
+    test "renders a Home CTA for a non-affiliate user who is already a pool member" do
+      user = Factories.insert!(:member, %{creator: false})
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.home.title")
+      assert vm.email_capture.cta_button.action == %{type: :http_get, to: "/"}
+    end
+
+    test "no block for a creator user (researcher preview)" do
+      user = Factories.insert!(:creator)
       assignment = Assignment.Factories.create_questionnaire_assignment()
 
       assigns = build_assigns(user)
