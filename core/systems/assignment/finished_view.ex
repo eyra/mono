@@ -88,7 +88,9 @@ defmodule Systems.Assignment.FinishedView do
               <%= @vm.body %>
             </Text.body_large>
             <%= if @vm.email_capture do %>
-              <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} email_value={@email_value} />
+              <Area.sheet>
+                <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} email_value={@email_value} />
+              </Area.sheet>
             <% else %>
               <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
                 <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
