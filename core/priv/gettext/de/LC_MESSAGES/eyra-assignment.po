@@ -542,6 +542,30 @@ msgid "email_capture.error.role_account"
 msgstr "Bitte verwenden Sie eine persönliche E-Mail-Adresse, keine geteilte (z.B. info@, admin@)."
 
 #, elixir-autogen, elixir-format
+msgid "panl.cta.join.title"
+msgstr "Möchtest du öfter an Forschung teilnehmen?"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr "Werde Mitglied von Panl — dem Teilnehmerpool, der Bürger und Wissenschaft verbindet. Du entscheidest, wann du teilnimmst, und erhältst eine Vergütung für jede Studie."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr "Panl beitreten"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr "Sieh, was du verdient hast"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr "Dein Guthaben, vergangene Studien und verfügbare Studien findest du auf deiner Startseite."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr "Zur Startseite"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.aim.label"
 msgstr ""
 
