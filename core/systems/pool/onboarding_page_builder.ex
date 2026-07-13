@@ -59,8 +59,10 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   # own step_title and doesn't get a hero.
   defp build_hero_title(:already_member, _pool), do: nil
 
-  defp build_hero_title(_step, %Pool.Model{name: name}),
-    do: dgettext("eyra-pool", "onboarding.hero.title", pool_name: name)
+  # Copy is generic — the pool identity is carried by the pool logo
+  # rendered next to the title on the OnboardingPage hero row.
+  defp build_hero_title(_step, %Pool.Model{}),
+    do: dgettext("eyra-pool", "onboarding.hero.title")
 
   # Where the flow exits — the user's signed-in landing. Owned by the
   # builder so the page never has to know the URL scheme; a decline or

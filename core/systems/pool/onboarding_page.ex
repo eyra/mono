@@ -30,6 +30,7 @@ defmodule Systems.Pool.OnboardingPage do
   import LiveNest.HTML
 
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Text
   alias Systems.Pool
 
@@ -86,7 +87,11 @@ defmodule Systems.Pool.OnboardingPage do
             </div>
           <% end %>
           <%= if @vm.hero_title do %>
-            <Text.title1>{@vm.hero_title}</Text.title1>
+            <div class="flex flex-row items-center gap-4">
+              <Text.title1 margin="">{@vm.hero_title}</Text.title1>
+              <div class="flex-grow" />
+              <Logo.pool name={Pool.Model.slug(@model)} variant={:wide} class="h-12" />
+            </div>
             <.spacing value="L" />
           <% end %>
           <%= if @vm.step_view do %>

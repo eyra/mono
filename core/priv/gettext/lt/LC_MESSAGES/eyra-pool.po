@@ -113,16 +113,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.accept.button"
-msgstr ""
+msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "join_consent.decline.button"
-msgstr ""
+msgstr "Ketinate prisijungti prie %{pool_name} fondo. Kaip narys galėsite teikti paraiškas dalyvauti tyrimuose ir uždirbti atlygius."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Prisijunk prie fondo"

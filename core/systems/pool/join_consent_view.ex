@@ -15,9 +15,6 @@ defmodule Systems.Pool.JoinConsentView do
   use CoreWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
-  alias Frameworks.Pixel.Logo
-  alias Systems.Pool
-
   @impl true
   def update(%{id: id, pool: pool} = assigns, socket) do
     {
@@ -54,15 +51,12 @@ defmodule Systems.Pool.JoinConsentView do
   def render(assigns) do
     ~H"""
     <div data-testid="pool-join-consent-view">
-      <div class="flex flex-row items-center gap-4" data-testid="pool-join-consent-header">
-        <Logo.pool name={Pool.Model.slug(@pool)} class="w-12 h-12" />
-        <%= if @show_title do %>
-          <Text.title2 margin="">
-            <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
-          </Text.title2>
-        <% end %>
-      </div>
-      <.spacing value="M" />
+      <%= if @show_title do %>
+        <Text.title2>
+          <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
+        </Text.title2>
+        <.spacing value="M" />
+      <% end %>
       <Text.body>
         <%= dgettext("eyra-pool", "join_consent.body", pool_name: @pool.name) %>
       </Text.body>

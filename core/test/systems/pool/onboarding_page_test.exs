@@ -96,10 +96,7 @@ defmodule Systems.Pool.OnboardingPageTest do
     test "shows the pool avatar next to the title", %{conn: conn} do
       {:ok, _view, html} = live(conn, ~p"/pool/panl/onboarding")
 
-      # <Logo.pool> renders an <img> whose src maps to the pool's slug —
-      # `Pool.Model.slug/1` for the Panl pool returns "panl", so the
-      # rendered path points at `/images/logos/pools/panl.svg`.
-      assert html =~ ~s(src="/images/logos/pools/panl.svg")
+      assert html =~ ~s(src="/images/logos/pools/panl_wide.svg")
     end
   end
 
