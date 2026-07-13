@@ -261,7 +261,7 @@ defmodule Systems.Assignment.ParticipantsView do
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
                 button={@advert_button}
-                icon={Logo.path(:panl, {:product, :standing})}
+                icon={Logo.path(:panl, :pool)}
               />
             <% end %>
 

@@ -2,17 +2,20 @@ defmodule Systems.Pool.JoinConsentView do
   @moduledoc """
   Informed-consent view for joining a pool.
 
-  Renders a short "would you like to join this pool?" prompt with accept and
-  decline actions. Publishes `:accept` on accept and `:decline` on decline;
-  the parent handles the actual join (typically by dispatching
-  `{:account, :post_signup}` with `"join_pool:<slug>"`) and manages its own
-  container UI (close the modal, advance the onboarding step, …).
+  Renders a short "would you like to join this pool?" prompt with an
+  Accept action. Publishes `:accept` on click; the parent handles the
+  actual join and container UI (advance the onboarding step, close a
+  modal, ...).
 
-  Soft consent only — no signed record is created. If the pool ever needs a
-  proper signed agreement, wrap `Systems.Consent.ClickWrapView` instead.
+  No explicit decline action — users hit browser Back to exit, same
+  convention as the auth identify/verify pages. Soft consent only —
+  no signed record is created. If the pool ever needs a proper signed
+  agreement, wrap `Systems.Consent.ClickWrapView` instead.
   """
   use CoreWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
+
+  alias Frameworks.Pixel.Logo
 
   @impl true
   def update(%{id: id, pool: pool} = assigns, socket) do
@@ -24,11 +27,11 @@ defmodule Systems.Pool.JoinConsentView do
         pool: pool,
         show_title: Map.get(assigns, :show_title, true)
       )
-      |> update_buttons()
+      |> update_accept_button()
     }
   end
 
-  defp update_buttons(%{assigns: %{myself: myself, pool: pool}} = socket) do
+  defp update_accept_button(%{assigns: %{myself: myself, pool: pool}} = socket) do
     accept_button = %{
       action: %{type: :send, event: "accept", target: myself},
       face: %{
@@ -38,16 +41,7 @@ defmodule Systems.Pool.JoinConsentView do
       testid: "pool-join-consent-accept-button"
     }
 
-    decline_button = %{
-      action: %{type: :send, event: "decline", target: myself},
-      face: %{
-        type: :label,
-        label: dgettext("eyra-pool", "join_consent.decline.button")
-      },
-      testid: "pool-join-consent-decline-button"
-    }
-
-    assign(socket, buttons: [accept_button, decline_button])
+    assign(socket, accept_button: accept_button)
   end
 
   @impl true
@@ -56,28 +50,29 @@ defmodule Systems.Pool.JoinConsentView do
   end
 
   @impl true
-  def handle_event("decline", _payload, socket) do
-    {:noreply, socket |> publish_event(:decline)}
-  end
-
-  @impl true
   def render(assigns) do
     ~H"""
     <div data-testid="pool-join-consent-view">
-      <%= if @show_title do %>
-        <Text.title2>
-          <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
-        </Text.title2>
-        <.spacing value="M" />
-      <% end %>
+      <div class="flex flex-row items-center gap-4">
+        <img
+          src={Logo.path(@pool.name, :pool)}
+          alt={"#{@pool.name} logo"}
+          class="w-12 h-12"
+          data-testid="pool-join-consent-icon"
+        />
+        <%= if @show_title do %>
+          <Text.title2 margin="">
+            <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>
+          </Text.title2>
+        <% end %>
+      </div>
+      <.spacing value="M" />
       <Text.body>
         <%= dgettext("eyra-pool", "join_consent.body", pool_name: @pool.name) %>
       </Text.body>
       <.spacing value="L" />
       <div class="flex flex-row gap-4">
-        <%= for button <- @buttons do %>
-          <Button.dynamic {button} />
-        <% end %>
+        <Button.dynamic {@accept_button} />
       </div>
     </div>
     """

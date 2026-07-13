@@ -17,9 +17,9 @@ defmodule Systems.Pool.OnboardingPage do
 
   Steps:
 
-    * `:join_consent` — `Pool.JoinConsentView` publishes `:accept` or
-      `:decline`. Accept adds the user as a participant and advances
-      to `:features`; decline skips remaining steps and goes home.
+    * `:join_consent` — `Pool.JoinConsentView` publishes `:accept`.
+      Accept adds the user as a participant and advances to `:features`.
+      There is no decline action — users hit browser Back to exit.
     * `:features` — `Account.FeaturesView` (embedded LiveView) captures
       gender / birth year. A page-level continue button advances.
     * `:already_member` — static info block; no interaction.
@@ -51,16 +51,6 @@ defmodule Systems.Pool.OnboardingPage do
     Pool.Public.add_participant!(pool, user)
 
     {:stop, socket |> advance_or_finish()}
-  end
-
-  # Decline short-circuits the remaining steps: features is only
-  # meaningful for someone who has just joined, so a declined user
-  # goes straight home.
-  def consume_event(
-        %{name: :decline},
-        %{assigns: %{vm: %{finish_path: finish_path}}} = socket
-      ) do
-    {:stop, socket |> push_navigate(to: finish_path)}
   end
 
   @impl true
