@@ -291,18 +291,22 @@ defmodule Systems.Fund.Public do
          amount
        )
        when is_integer(amount) do
-    multi
-    |> Multi.run(:fund_balance, fn _, _ ->
-      if Fund.Model.amount_available(fund) >= amount do
-        {:ok, true}
-      else
-        Logger.warning("Fund has not enough funds to make reward reservation")
-        {:error, :no_funding}
-      end
-    end)
+    Multi.run(multi, :fund_balance, fn repo, _ -> verify_fund_balance(repo, fund, amount) end)
   end
 
   defp guard_fund_balance(multi, _, _), do: multi
+
+  defp verify_fund_balance(repo, %Fund.Model{available: %{id: account_id}}, amount) do
+    query = from(a in Bookkeeping.AccountModel, where: a.id == ^account_id, lock: "FOR UPDATE")
+    account = repo.one!(query)
+
+    if Bookkeeping.AccountModel.balance(account) >= amount do
+      {:ok, true}
+    else
+      Logger.warning("Fund has not enough funds to make reward reservation")
+      {:error, :no_funding}
+    end
+  end
 
   def payout_reward(idempotence_key) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
