@@ -84,4 +84,118 @@ defmodule Next.Account.SessionControllerTest do
       assert {:ok, ^payload} = AuthCodeVerifyPage.decode_redeem_token(token)
     end
   end
+
+  describe "GET /user/auth/redeem — new email, provisional user in session" do
+    # The affiliate → post-launch CTA journey. After the user finishes an
+    # assignment they're already logged in as a provisional synth
+    # Account.User (no password, no confirmed_at). Clicking "Join Panl"
+    # sends them through auth. At redeem, the controller must link the
+    # real email to that existing user — NOT register a fresh duplicate.
+    setup %{conn: conn} do
+      provisional_user =
+        Factories.insert!(:member, %{
+          email: "synth-#{Faker.UUID.v4()}@example.com",
+          hashed_password: "no-password-set",
+          confirmed_at: nil
+        })
+
+      token = Systems.Account.Public.generate_user_session_token(provisional_user)
+
+      conn =
+        conn
+        |> Phoenix.ConnTest.init_test_session(%{})
+        |> Plug.Conn.put_session(:user_token, token)
+
+      %{conn: conn, provisional_user: provisional_user}
+    end
+
+    test "links the real email to the provisional user (no new user created)", %{
+      conn: conn,
+      provisional_user: provisional_user
+    } do
+      new_email = "real-#{Faker.UUID.v4()}@example.com"
+      before_count = user_count()
+
+      redeem_token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: nil,
+          email: new_email,
+          return_to: "/pool/panl/join"
+        })
+
+      conn = get(conn, ~p"/user/auth/redeem?token=#{redeem_token}")
+
+      assert redirected_to(conn) == "/pool/panl/join"
+      assert user_count() == before_count
+
+      updated_user = Systems.Account.Public.get_user!(provisional_user.id)
+      assert updated_user.email == new_email
+    end
+
+    test "creates a satellite EmailSignUp record for the linked email", %{
+      conn: conn,
+      provisional_user: provisional_user
+    } do
+      new_email = "real-#{Faker.UUID.v4()}@example.com"
+      refute EmailSignUp.get_by_user(provisional_user)
+
+      redeem_token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: nil,
+          email: new_email,
+          return_to: nil
+        })
+
+      _conn = get(conn, ~p"/user/auth/redeem?token=#{redeem_token}")
+
+      assert EmailSignUp.get_by_user(provisional_user) != nil
+    end
+  end
+
+  describe "GET /user/auth/redeem — new email, activated user in session" do
+    # Guardrail: even if a fully-activated (non-provisional) user is
+    # logged in when the redeem hits, we must NOT hijack their email.
+    # Register a new user, as if there were no session.
+    setup %{conn: conn} do
+      activated_user = Factories.insert!(:member, %{creator: false})
+      original_email = activated_user.email
+
+      token = Systems.Account.Public.generate_user_session_token(activated_user)
+
+      conn =
+        conn
+        |> Phoenix.ConnTest.init_test_session(%{})
+        |> Plug.Conn.put_session(:user_token, token)
+
+      %{conn: conn, activated_user: activated_user, original_email: original_email}
+    end
+
+    test "registers a new user and leaves the logged-in user's email untouched", %{
+      conn: conn,
+      activated_user: activated_user,
+      original_email: original_email
+    } do
+      new_email = "real-#{Faker.UUID.v4()}@example.com"
+      before_count = user_count()
+
+      redeem_token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: nil,
+          email: new_email,
+          return_to: nil
+        })
+
+      _conn = get(conn, ~p"/user/auth/redeem?token=#{redeem_token}")
+
+      assert user_count() == before_count + 1
+
+      assert Systems.Account.Public.get_user!(activated_user.id).email ==
+               original_email
+    end
+  end
+
+  defp user_count do
+    import Ecto.Query
+    Core.Repo.aggregate(from(u in Systems.Account.User), :count, :id)
+  end
 end
