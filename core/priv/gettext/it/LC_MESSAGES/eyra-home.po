@@ -13,19 +13,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Servizi software"
+msgstr "Attività"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.title"
-msgstr "Contributi"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "available.visitor.title"
-msgstr "Studi Panl"
-
-#, elixir-autogen, elixir-format
-msgid "member.caption"
-msgstr "Sviluppati per e con i ricercatori"
+msgstr "Cronologia"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
@@ -46,3 +38,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
 msgstr "Contributi"
+
+#, elixir-autogen, elixir-format
+msgid "guest.caption"
+msgstr "Sviluppati per e con i ricercatori"
+
+#, elixir-autogen, elixir-format
+msgid "guest.title"
+msgstr "Servizi software"

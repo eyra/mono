@@ -22,19 +22,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Programinės paslaugos"
+msgstr "Veiklos"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Indėliai"
-
-#, elixir-autogen, elixir-format
-msgid "available.visitor.title"
-msgstr "Panl tyrimai"
-
-#, elixir-autogen, elixir-format
-msgid "member.caption"
-msgstr "Sukurta mokslininkams ir kartu su jais"
+msgstr "Istorija"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
@@ -55,3 +47,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
 msgstr "Indėliai"
+
+#, elixir-autogen, elixir-format
+msgid "guest.caption"
+msgstr "Sukurta mokslininkams ir kartu su jais"
+
+#, elixir-autogen, elixir-format
+msgid "guest.title"
+msgstr "Programinės paslaugos"

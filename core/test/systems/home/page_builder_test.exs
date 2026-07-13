@@ -93,13 +93,13 @@ defmodule Systems.Home.PageBuilderTest do
       refute :rewards_summary in block_keys(vm)
     end
 
-    test "creator WITH rewards does not see rewards_summary" do
+    test "creator WITH rewards sees rewards_summary (creators can participate too)" do
       user = Factories.insert!(:member, %{creator: true})
       give_reward(user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      refute :rewards_summary in block_keys(vm)
+      assert :rewards_summary in block_keys(vm)
     end
 
     test "payout handoff body interpolates the approved amount (no stray placeholder)" do

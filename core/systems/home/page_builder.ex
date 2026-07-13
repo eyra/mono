@@ -26,8 +26,8 @@ defmodule Systems.Home.PageBuilder do
       hero: %{
         type: :landing_page,
         params: %{
-          title: dgettext("eyra-home", "member.title"),
-          caption: dgettext("eyra-home", "member.caption")
+          title: dgettext("eyra-home", "guest.title"),
+          caption: dgettext("eyra-home", "guest.caption")
         }
       },
       active_menu_item: :home,
@@ -45,8 +45,7 @@ defmodule Systems.Home.PageBuilder do
       hero: %{
         type: :landing_page,
         params: %{
-          title: dgettext("eyra-home", "member.title"),
-          caption: dgettext("eyra-home", "member.caption")
+          title: dgettext("eyra-home", "member.title")
         }
       },
       active_menu_item: :home,
@@ -57,14 +56,11 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
-  defp block_keys(%Account.User{creator: creator}, opts) do
+  defp block_keys(%Account.User{}, opts) do
     panl_member? = Keyword.get(opts, :panl_member?, false)
 
     [:next_best_action]
-    |> append_if(
-      :rewards_summary,
-      feature_enabled?(:panl_post_launch) and creator != true
-    )
+    |> append_if(:rewards_summary, feature_enabled?(:panl_post_launch))
     |> append_if(:panl_marketplace, feature_enabled?(:panl_post_launch) and panl_member?)
     |> append_if(:participated, feature_enabled?(:panl_post_launch))
   end
