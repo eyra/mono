@@ -142,7 +142,8 @@ defmodule Systems.Home.PageBuilder do
         title: dgettext("eyra-pool", "marketplace.title"),
         cards: cards,
         count: Enum.count(adverts),
-        more_path: ~p"/pool/#{panl_id}/marketplace"
+        more_path: ~p"/pool/#{panl_id}/marketplace",
+        pool_slug: Pool.Model.slug(panl)
       }
     }
   end

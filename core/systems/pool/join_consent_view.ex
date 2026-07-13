@@ -16,6 +16,7 @@ defmodule Systems.Pool.JoinConsentView do
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   alias Frameworks.Pixel.Logo
+  alias Systems.Pool
 
   @impl true
   def update(%{id: id, pool: pool} = assigns, socket) do
@@ -53,13 +54,8 @@ defmodule Systems.Pool.JoinConsentView do
   def render(assigns) do
     ~H"""
     <div data-testid="pool-join-consent-view">
-      <div class="flex flex-row items-center gap-4">
-        <img
-          src={Logo.path(@pool.name, :pool)}
-          alt={"#{@pool.name} logo"}
-          class="w-12 h-12"
-          data-testid="pool-join-consent-icon"
-        />
+      <div class="flex flex-row items-center gap-4" data-testid="pool-join-consent-header">
+        <Logo.pool name={Pool.Model.slug(@pool)} class="w-12 h-12" />
         <%= if @show_title do %>
           <Text.title2 margin="">
             <%= dgettext("eyra-pool", "join_consent.title", pool_name: @pool.name) %>

@@ -116,7 +116,7 @@ defmodule Systems.Assignment.FinishedView do
       <InlineBlock.inline_block
         title={@email_capture.title}
         description={@email_capture.body}
-        icon={Logo.path(:panl, :pool)}
+        icon={Logo.path(@email_capture.pool_slug, :pool)}
       >
         <%= if Map.has_key?(@email_capture, :submit_button) do %>
           <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">

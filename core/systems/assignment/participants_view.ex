@@ -46,6 +46,7 @@ defmodule Systems.Assignment.ParticipantsView do
       )
       |> compose_child(:general)
       |> update_advert_button()
+      |> update_advert_pool_slug()
       |> update_affiliate_title()
       |> update_affiliate_url()
       |> update_affiliate_annotation()
@@ -156,6 +157,21 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, advert_button: advert_button)
   end
 
+  # The block is a CTA/pointer to the pool where this study is (or will
+  # be) advertised. Today that's hardcoded to Panl — the same pool the
+  # `create_advert` handler reaches for. Threading the slug through the
+  # assigns keeps the Panl atom in one place; when the block later
+  # generalises to per-pool selection, only this helper changes.
+  defp update_advert_pool_slug(socket) do
+    slug =
+      case Pool.Public.get_panl() do
+        %Pool.Model{} = pool -> Pool.Model.slug(pool)
+        _ -> nil
+      end
+
+    assign(socket, advert_pool_slug: slug)
+  end
+
   defp update_invite_title(socket) do
     invite_title = dgettext("eyra-assignment", "invite.panel.title")
     assign(socket, invite_title: invite_title)
@@ -261,7 +277,7 @@ defmodule Systems.Assignment.ParticipantsView do
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
                 button={@advert_button}
-                icon={Logo.path(:panl, :pool)}
+                icon={Logo.path(@advert_pool_slug, :pool)}
               />
             <% end %>
 

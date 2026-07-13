@@ -35,9 +35,23 @@ defmodule Frameworks.Pixel.Logo do
   def path(name, {:platform, variant}), do: build_path(:platforms, name, variant)
   def path(name, {:platform}), do: build_path(:platforms, name, :default)
   def path(name, :platform), do: build_path(:platforms, name, :default)
-  def path(name, {:pool, variant}), do: build_path(:pools, name, variant)
-  def path(name, {:pool}), do: build_path(:pools, name, :default)
-  def path(name, :pool), do: build_path(:pools, name, :default)
+  def path(name, {:pool, variant}), do: pool_path(name, variant)
+  def path(name, {:pool}), do: pool_path(name, :default)
+  def path(name, :pool), do: pool_path(name, :default)
+
+  # Pool assets are optional. Returns nil when the SVG hasn't been
+  # shipped for the given slug — callers pattern-match on nil (or lean
+  # on `:if={@icon}` in downstream components like InlineBlock) to
+  # simply omit the icon slot instead of rendering a broken image.
+  defp pool_path(name, variant) do
+    path = build_path(:pools, name, variant)
+    if pool_asset_exists?(path), do: path, else: nil
+  end
+
+  defp pool_asset_exists?("/" <> rel_path) do
+    Path.join(Application.app_dir(:core, "priv/static"), rel_path)
+    |> File.exists?()
+  end
 
   defp build_path(type, name, variant) do
     name
@@ -89,15 +103,16 @@ defmodule Frameworks.Pixel.Logo do
     """
   end
 
-  attr(:name, :atom, required: true)
+  attr(:name, :any, required: true)
   attr(:variant, :atom, default: :default, values: [:default, :wide])
   attr(:class, :string, default: "")
 
   def pool(assigns) do
-    assigns = assign(assigns, :src, build_path(:pools, assigns.name, assigns.variant))
+    src = pool_path(assigns.name, assigns.variant)
+    assigns = assign(assigns, :src, src)
 
     ~H"""
-    <img class={@class} src={@src} alt={"#{@name} logo"} />
+    <img :if={@src} class={@class} src={@src} alt={"#{@name} logo"} />
     """
   end
 end

@@ -94,9 +94,12 @@ defmodule Systems.Pool.OnboardingPageTest do
 
   describe "join consent renders the pool icon" do
     test "shows the pool avatar next to the title", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, _view, html} = live(conn, ~p"/pool/panl/onboarding")
 
-      assert view |> has_element?("[data-testid='pool-join-consent-icon']")
+      # <Logo.pool> renders an <img> whose src maps to the pool's slug —
+      # `Pool.Model.slug/1` for the Panl pool returns "panl", so the
+      # rendered path points at `/images/logos/pools/panl.svg`.
+      assert html =~ ~s(src="/images/logos/pools/panl.svg")
     end
   end
 
