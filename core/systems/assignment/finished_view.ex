@@ -34,7 +34,7 @@ defmodule Systems.Assignment.FinishedView do
   def handle_event(
         "submit_email",
         %{"email" => email},
-        %{assigns: %{vm: %{email_capture: %{action: {:add_to_pool, _}}}}} = socket
+        %{assigns: %{vm: %{email_capture: %{pool_slug: _}}}} = socket
       ) do
     send(self(), {:do_submit_email, email})
 
@@ -50,7 +50,7 @@ defmodule Systems.Assignment.FinishedView do
         %{
           assigns: %{
             current_user: user,
-            vm: %{email_capture: %{action: {:add_to_pool, pool_slug}}}
+            vm: %{email_capture: %{pool_slug: pool_slug}}
           }
         } =
           socket

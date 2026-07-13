@@ -39,7 +39,7 @@ defmodule Systems.Home.PageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl? = Pool.Public.participant?(:panl, user)
+    panl_member? = Pool.Public.participant?(:panl, user)
 
     %{
       hero: %{
@@ -52,20 +52,20 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
       view_type: :logged_in,
-      blocks: blocks(user, assigns, panl?: panl?),
+      blocks: blocks(user, assigns, panl_member?: panl_member?),
       include_right_sidepadding?: false
     }
   end
 
   defp block_keys(%Account.User{creator: creator}, opts) do
-    panl? = Keyword.get(opts, :panl?, false)
+    panl_member? = Keyword.get(opts, :panl_member?, false)
 
     [:next_best_action]
     |> append_if(
       :rewards_summary,
       feature_enabled?(:panl_post_launch) and creator != true
     )
-    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch) and panl?)
+    |> append_if(:panl_marketplace, feature_enabled?(:panl_post_launch) and panl_member?)
     |> append_if(:participated, feature_enabled?(:panl_post_launch))
   end
 
@@ -122,7 +122,7 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
+  defp block(:panl_marketplace, %Account.User{} = user, assigns, _opts) do
     %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
 
     adverts =
@@ -144,21 +144,6 @@ defmodule Systems.Home.PageBuilder do
         count: Enum.count(adverts),
         more_path: ~p"/pool/#{panl_id}/marketplace",
         pool_slug: Pool.Model.slug(panl)
-      }
-    }
-  end
-
-  defp block(:available_adverts, _, assigns, _opts) do
-    cards =
-      Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
-      |> Enum.filter(&Advert.Public.validate_open(&1))
-      |> Enum.map(&to_card(&1, assigns))
-
-    %{
-      module: Home.AdvertsView,
-      params: %{
-        title: dgettext("eyra-home", "available.visitor.title"),
-        cards: cards
       }
     }
   end

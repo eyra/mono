@@ -1,8 +1,6 @@
 defmodule Systems.Assignment.ParticipantsView do
   use CoreWeb, :live_component
 
-  require Logger
-
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic
 
@@ -24,7 +22,8 @@ defmodule Systems.Assignment.ParticipantsView do
           content_flags: content_flags,
           user: user,
           viewport: viewport,
-          breakpoint: breakpoint
+          breakpoint: breakpoint,
+          pool: pool
         },
         socket
       ) do
@@ -40,13 +39,13 @@ defmodule Systems.Assignment.ParticipantsView do
         title: title,
         content_flags: content_flags,
         user: user,
+        pool: pool,
         external_panel_link?: external_panel_link?,
         viewport: viewport,
         breakpoint: breakpoint
       )
       |> compose_child(:general)
       |> update_advert_button()
-      |> update_advert_pool_slug()
       |> update_affiliate_title()
       |> update_affiliate_url()
       |> update_affiliate_annotation()
@@ -91,15 +90,9 @@ defmodule Systems.Assignment.ParticipantsView do
   def handle_event(
         "create_advert",
         _payload,
-        %{assigns: %{assignment: assignment, user: user}} = socket
+        %{assigns: %{assignment: assignment, user: user, pool: %Pool.Model{} = pool}} = socket
       ) do
-    if pool = Pool.Public.get_panl() do
-      Advert.Assembly.create(assignment, user, pool)
-    else
-      Logger.error("Panl pool not found")
-      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
-    end
-
+    Advert.Assembly.create(assignment, user, pool)
     {:noreply, socket}
   end
 
@@ -155,21 +148,6 @@ defmodule Systems.Assignment.ParticipantsView do
     }
 
     assign(socket, advert_button: advert_button)
-  end
-
-  # The block is a CTA/pointer to the pool where this study is (or will
-  # be) advertised. Today that's hardcoded to Panl — the same pool the
-  # `create_advert` handler reaches for. Threading the slug through the
-  # assigns keeps the Panl atom in one place; when the block later
-  # generalises to per-pool selection, only this helper changes.
-  defp update_advert_pool_slug(socket) do
-    slug =
-      case Pool.Public.get_panl() do
-        %Pool.Model{} = pool -> Pool.Model.slug(pool)
-        _ -> nil
-      end
-
-    assign(socket, advert_pool_slug: slug)
   end
 
   defp update_invite_title(socket) do
@@ -272,12 +250,12 @@ defmodule Systems.Assignment.ParticipantsView do
           <% end %>
 
           <div class="flex flex-col gap-8">
-            <%= if @content_flags[:advert_in_pool] do %>
+            <%= if @content_flags[:advert_in_pool] and @pool do %>
               <InlineBlock.inline_block
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
                 button={@advert_button}
-                icon={Logo.path(@advert_pool_slug, :pool)}
+                icon={Logo.path(Pool.Model.slug(@pool), :pool)}
               />
             <% end %>
 

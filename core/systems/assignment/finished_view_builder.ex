@@ -40,20 +40,15 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   end
 
   defp build_email_capture(true = _declined?, _runtime_config, _user, _submitting?), do: nil
-  defp build_email_capture(_declined?, %{post_action: nil}, _user, _submitting?), do: nil
+  defp build_email_capture(_declined?, %{pool: nil}, _user, _submitting?), do: nil
 
-  defp build_email_capture(
-         _declined?,
-         %{post_action: {:add_to_pool, pool_slug} = action},
-         user,
-         submitting?
-       ) do
+  defp build_email_capture(_declined?, %{pool: pool_slug}, user, submitting?) do
     case Affiliate.Public.get_user(user) do
       {:ok, _affiliate_user} ->
         cond do
           Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted(pool_slug)
           EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted(pool_slug)
-          true -> build_email_capture_form(action, pool_slug, submitting?)
+          true -> build_email_capture_form(pool_slug, submitting?)
         end
 
       {:error, :user_not_found} ->
@@ -61,9 +56,8 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     end
   end
 
-  defp build_email_capture_form(action, pool_slug, submitting?) do
+  defp build_email_capture_form(pool_slug, submitting?) do
     %{
-      action: action,
       pool_slug: pool_slug,
       title: dgettext("eyra-assignment", "email_capture.title"),
       body: dgettext("eyra-assignment", "email_capture.body"),
