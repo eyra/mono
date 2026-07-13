@@ -625,9 +625,11 @@ defmodule Systems.Fund.PublicTest do
       [u1, u2, u3] =
         for _ <- 1..3, do: Factories.insert!(:member, %{creator: false})
 
+      # Total (4500) must fit the fund's 5000 available: the balance guard now
+      # reads the live balance, so an over-budget reservation is refused.
       {:ok, _} = Fund.Public.create_reward(fund, 1000, u1, "k1")
       {:ok, _} = Fund.Public.create_reward(fund, 2000, u2, "k2")
-      {:ok, _} = Fund.Public.create_reward(fund, 3000, u3, "k3")
+      {:ok, _} = Fund.Public.create_reward(fund, 1500, u3, "k3")
 
       {:ok, _} = Fund.Public.mark_pending_approval("k1")
       {:ok, _} = Fund.Public.approve_reward("k2")
