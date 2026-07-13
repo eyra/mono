@@ -1,154 +1,153 @@
 ---
 name: eyra-test-scan
 description: |
-  Test gap-analyse voor een nieuwe feature, milestone of branch in het Eyra Next platform (mono repo).
-  Scant gewijzigde productiecode en checkt of er voldoende unit tests (ExUnit), feature tests (Wallaby)
-  en E2E tests (Playwright) zijn. Output is concreet advies voor developers,
-  plus de vraag of er nog een E2E spec ontbreekt.
+  Test gap analysis for a new feature, milestone, or branch in the Eyra Next platform (mono repo).
+  Scans changed production code and checks whether there are enough unit tests (ExUnit), feature
+  tests (Wallaby), and E2E tests (Playwright). Output is concrete advice for developers,
+  plus the question whether an E2E spec is still missing.
 triggers:
   - test-scan
   - /test-scan
   - test gap
   - test gap analysis
-  - testdekking
+  - test coverage
   - test coverage check
 ---
 
-# Test Scan — gap-analyse voor Eyra Next
+# Test Scan — gap analysis for Eyra Next
 
-Deze skill helpt bij het beoordelen van een nieuwe feature of milestone:
+This skill helps assess a new feature or milestone:
 
-1. Of de developers genoeg unit/feature tests hebben geschreven (zo niet → advies terug).
-2. Of er nog een E2E spec moet komen (zo ja → `/e2e-create`).
+1. Whether the developers have written enough unit/feature tests (if not → advice back).
+2. Whether an E2E spec is still needed (if so → `/e2e-create`).
 
-## Stap 1 — Scope bepalen
+## Step 1 — Determine scope
 
-Vraag (als niet gegeven): wat is de scope?
+Ask (if not given): what is the scope?
 
-- **Branch** — feature branch die nog open staat. Gebruik `git diff develop..HEAD --stat`
-  om gewijzigde files te vinden.
-- **PR-nummer / URL** — `gh pr view <id>` om de branch te krijgen, dan diff zoals boven.
-- **Vrij** — een feature wordt bij naam genoemd. Vraag dan welke modules dat raakt of zoek met
-  `grep -r` naar relevante symbolen.
+- **Branch** — a feature branch that is still open. Use `git diff develop..HEAD --stat`
+  to find changed files.
+- **PR number / URL** — `gh pr view <id>` to get the branch, then diff as above.
+- **Free-form** — a feature is mentioned by name. Then ask which modules that touches or search
+  with `grep -r` for relevant symbols.
 
-## Stap 2 — Conventies inlezen
+## Step 2 — Read the conventions
 
-Voor je gaat oordelen, **lees eerst** de actuele test-conventies in mono. Doe een find — paden
-kunnen verschuiven:
+Before judging, **first read** the current test conventions in mono. Do a find — paths can shift:
 
 ```bash
 find core/test -maxdepth 4 -name CLAUDE.md
 find core/test -maxdepth 4 -name AGENTS.md
 ```
 
-Verwacht (op moment van schrijven): `core/test/.claude/CLAUDE.md` (de 5 regels: atomic, guards
-eerst, let-it-crash, standaard tuples, pattern match in function heads), `core/test/CLAUDE.md`
-(Wallaby selectors, signal isolation), `core/test/e2e/CLAUDE.md` (Playwright conventies). Lees ze
-allemaal voor je adviezen formuleert.
+Expected (at time of writing): `core/test/.claude/CLAUDE.md` (the 5 rules: atomic, guards first,
+let-it-crash, standard tuples, pattern match in function heads), `core/test/CLAUDE.md`
+(Wallaby selectors, signal isolation), `core/test/e2e/CLAUDE.md` (Playwright conventions). Read
+all of them before formulating advice.
 
-## Stap 3 — Productiecode lijsten
+## Step 3 — List production code
 
 ```bash
 git diff develop..HEAD --stat -- 'core/lib/**' 'core/systems/**' 'core/frameworks/**'
 git diff develop..HEAD --stat -- 'core/test/**'
 ```
 
-Maak twee lijsten:
-- **Nieuwe of zwaar gewijzigde productie-modules** (ratio additions/deletions hoog).
-- **Tegelijk gewijzigde test files**.
+Make two lists:
+- **New or heavily changed production modules** (high additions/deletions ratio).
+- **Test files changed at the same time**.
 
-## Stap 4 — Per module checken
+## Step 4 — Check per module
 
-Voor elke productie-module:
+For each production module:
 
-1. Bestaat er een `*_test.exs` op het gespiegelde pad in `core/test/`?
-   - Bv. `core/systems/foo/bar.ex` → `core/test/systems/foo/bar_test.exs`
-2. Tel atomic tests:
+1. Does a `*_test.exs` exist at the mirrored path in `core/test/`?
+   - E.g. `core/systems/foo/bar.ex` → `core/test/systems/foo/bar_test.exs`
+2. Count atomic tests:
    ```bash
    grep -c "^    test " core/test/systems/foo/bar_test.exs
    ```
-3. **LiveComponent of LiveView?** (grep op `use Phoenix.LiveComponent` / `use Phoenix.LiveView`)
-   - Check of de test `live_isolated` gebruikt. Zo niet → vlag dit specifiek; LiveComponent state
-     hoort op unit-niveau getest, niet uitgesteld naar feature/E2E.
-4. **Public functions zonder guards?** Vlag het, want regel 3 zegt: guards eerst, met tests.
-5. **Coverage cijfer** voor de touched paths:
+3. **LiveComponent or LiveView?** (grep for `use Phoenix.LiveComponent` / `use Phoenix.LiveView`)
+   - Check whether the test uses `live_isolated`. If not → flag this specifically; LiveComponent
+     state should be tested at the unit level, not deferred to feature/E2E.
+4. **Public functions without guards?** Flag it, since rule 3 says: guards first, with tests.
+5. **Coverage number** for the touched paths:
    ```bash
    cd core && mix test --cover test/systems/foo
    ```
-   (Alleen draaien als de branch lokaal uitgechecked is en de DB klaar staat — `mix ecto.migrate`
-   in `core/` bij twijfel.)
+   (Only run this if the branch is checked out locally and the DB is ready — `mix ecto.migrate`
+   in `core/` if in doubt.)
 
-## Testverdeling — streefverhouding
+## Test distribution — target ratio
 
-De afgesproken verdeling voor deze codebase:
+The agreed distribution for this codebase:
 
-| Laag | Tool | Stijl | Aandeel |
+| Layer | Tool | Style | Share |
 |---|---|---|---|
-| Unit | ExUnit (Phoenix) | **Whitebox** — interne logica, edge cases, regression-safety | 90% |
-| Feature | Wallaby (headless browser, mini-E2E) | **Greybox** — UI flows, multi-user of JS-hooks | 9% |
-| E2E | Playwright | **Blackbox** — happy path zoals de gebruiker die doorloopt, één flow per kritiek systeem | 1% |
+| Unit | ExUnit (Phoenix) | **Whitebox** — internal logic, edge cases, regression safety | 90% |
+| Feature | Wallaby (headless browser, mini-E2E) | **Greybox** — UI flows, multi-user or JS hooks | 9% |
+| E2E | Playwright | **Blackbox** — happy path as the user walks through it, one flow per critical system | 1% |
 
-Gebruik dit als ijkpunt bij het beoordelen van een PR. Als een PR relatief veel feature- of E2E-tests toevoegt ten opzichte van unit tests, is dat een vlag.
+Use this as a benchmark when assessing a PR. If a PR adds relatively many feature or E2E tests compared to unit tests, that's a flag.
 
-## Stap 5 — Feature-tests beoordelen
+## Step 5 — Assess feature tests
 
-Default voor UI-werk is **unit** via `live_isolated`, niet feature. Feature is alleen nodig als:
+The default for UI work is **unit** via `live_isolated`, not feature. Feature is only needed if:
 
-- Echt twee gebruikers tegelijk meedoen (`@sessions 2` in Wallaby), of
-- JavaScript-hooks die je niet in `live_isolated` kunt namaken.
+- Two users genuinely participate at the same time (`@sessions 2` in Wallaby), or
+- JavaScript hooks that you can't replicate in `live_isolated`.
 
-Voor de PR-scope: kijk in `core/test/features/` of er al een relevante flow-test bestaat. Als de PR
-zo'n flow toevoegt, vraag jezelf af of het écht niet door unit-laag afgevangen kan worden — vlag
-dat in je advies als de keuze niet evident is.
+For the PR scope: check `core/test/features/` to see whether a relevant flow test already exists.
+If the PR adds such a flow, ask yourself whether it really can't be covered at the unit layer —
+flag that in your advice if the choice isn't obvious.
 
-## Stap 6 — E2E checken
+## Step 6 — Check E2E
 
-E2E test de happy path zoals een gebruiker die doorloopt — één flow per kritiek systeem. Check `core/test/e2e/`:
+E2E tests the happy path as a user walks through it — one flow per critical system. Check `core/test/e2e/`:
 
 ```bash
 ls core/test/e2e/*.spec.ts
 ```
 
-Als de PR een nieuw kritiek systeem introduceert (= een nieuwe top-level user journey) zonder
-bestaande E2E spec → noteer dit als kandidaat voor `/e2e-create`. Als het systeem al een spec
-heeft → niets toevoegen, E2E is geen edge-case-laag.
+If the PR introduces a new critical system (= a new top-level user journey) without an existing
+E2E spec → note this as a candidate for `/e2e-create`. If the system already has a spec →
+add nothing, E2E is not an edge-case layer.
 
-## Stap 7 — Rapport schrijven
+## Step 7 — Write the report
 
-Output in dit formaat:
+Output in this format:
 
 ```
 ## Test Scan — <scope>
 
-### Unit (ExUnit) — advies aan developers
-- <module>: <bevinding>
-  Voorstel: <concrete actie>
+### Unit (ExUnit) — advice to developers
+- <module>: <finding>
+  Suggestion: <concrete action>
 
-### Feature (Wallaby) — advies aan developers
-- <flow>: <bevinding>
-  Voorstel: <concrete actie>
+### Feature (Wallaby) — advice to developers
+- <flow>: <finding>
+  Suggestion: <concrete action>
 
 ### E2E (Playwright)
-- [ ] E2E spec ontbreekt voor <systeem> → kandidaat voor /e2e-create
-- [x] Bestaande spec dekt het systeem af (<spec.ts>) — niets toevoegen
+- [ ] E2E spec missing for <system> → candidate for /e2e-create
+- [x] Existing spec covers the system (<spec.ts>) — nothing to add
 
-### Samenvatting
-- Productie-regels toegevoegd: <N>
-- Test-regels toegevoegd: <M>
-- Ratio: <M/N> (rode vlag als < 1:1 bij kerncomponenten)
-- Verdeling nieuwe tests: <X>% unit / <Y>% feature / <Z>% E2E (streef: 90/9/1)
+### Summary
+- Production lines added: <N>
+- Test lines added: <M>
+- Ratio: <M/N> (red flag if < 1:1 for core components)
+- New test distribution: <X>% unit / <Y>% feature / <Z>% E2E (target: 90/9/1)
 ```
 
-## Belangrijke do's en don'ts
+## Important do's and don'ts
 
-- **Adviseer niet om feature tests toe te voegen als unit-laag het beter kan** — de testpiramide
-  zegt: focus op unit, feature is middenweg, E2E is de happy path. Wees streng.
-- **Vlag LiveComponent zonder `live_isolated`-test** als regelmatige gap — dit wordt vaak vergeten.
-- **Buggy-gedrag-tests die na een fix breken** zijn normaal — als je die ziet, geen rode vlag, maar wel even melden dat ze actie nodig hebben na de fix.
-- **Mix taken botsen niet met `mix phx.server`** zolang ze geen endpoint starten. `mix ecto.migrate`
-  en `mix seed` zijn veilig parallel, `mix run priv/repo/seeds.exs` niet (start de hele app).
-- **Geen aanbeveling om `mix test --cover` op de hele suite te draaien** — alleen op de touched
-  paths. Anders te traag en niet PR-relevant.
-- Pad-shifts: als `find core/test -name CLAUDE.md` minder oplevert dan vroeger, kijk of de inhoud
-  naar `AGENTS.md` of een andere locatie is verhuisd voor je oordelen baseert op een verouderd
+- **Don't advise adding feature tests if the unit layer can do it better** — the test pyramid
+  says: focus on unit, feature is the middle ground, E2E is the happy path. Be strict.
+- **Flag a LiveComponent without a `live_isolated` test** as a recurring gap — this is often forgotten.
+- **Buggy-behavior tests that break after a fix** are normal — if you see these, no red flag, but do mention they'll need action after the fix.
+- **Mix tasks don't clash with `mix phx.server`** as long as they don't start an endpoint. `mix ecto.migrate`
+  and `mix seed` are safe in parallel, `mix run priv/repo/seeds.exs` is not (it starts the whole app).
+- **No recommendation to run `mix test --cover` on the whole suite** — only on the touched
+  paths. Otherwise too slow and not PR-relevant.
+- Path shifts: if `find core/test -name CLAUDE.md` returns less than before, check whether the content
+  has moved to `AGENTS.md` or another location before basing your judgment on an outdated
   document.
