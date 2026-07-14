@@ -65,7 +65,7 @@ defmodule CoreWeb.UI.Area do
   def sheet(assigns) do
     ~H"""
     <div class={"flex justify-center items-start #{@class}"}>
-      <div class="flex-grow sm:max-w-sheet">
+      <div class="flex-grow mx-6 sm:mx-0 sm:max-w-sheet">
         <%= render_slot(@inner_block) %>
       </div>
     </div>
