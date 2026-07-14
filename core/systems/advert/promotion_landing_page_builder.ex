@@ -75,6 +75,11 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   defp cta_label(true), do: dgettext("eyra-advert", "promotion.apply.button")
   defp cta_label(false), do: dgettext("eyra-advert", "promotion.full.button")
 
+  # Existing pool members bypass the consent screen and go straight
+  # to the assignment; non-members are routed through the pool join
+  # gate with a `return_to` so they land on the same assignment after
+  # accepting the join consent, instead of being silently added and
+  # sent straight in.
   def handle_apply(
         %{
           assigns: %{
@@ -87,8 +92,14 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
           }
         } = socket
       ) do
-    Pool.Public.add_participant!(pool, user)
     Promotion.Private.log_performance_event(promotion, :clicks)
-    LiveView.push_navigate(socket, to: ~p"/assignment/#{id}/apply")
+    apply_path = ~p"/assignment/#{id}/apply"
+
+    if Pool.Public.participant?(pool, user) do
+      LiveView.push_navigate(socket, to: apply_path)
+    else
+      slug = Pool.Model.slug(pool)
+      LiveView.push_navigate(socket, to: ~p"/pool/#{slug}/join?return_to=#{apply_path}")
+    end
   end
 end

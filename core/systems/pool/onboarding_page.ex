@@ -42,7 +42,14 @@ defmodule Systems.Pool.OnboardingPage do
   end
 
   @impl true
-  def mount(_params, _session, socket), do: {:ok, socket}
+  def mount(params, _session, socket) do
+    {:ok, socket |> assign(return_to: sanitize_return_to(Map.get(params, "return_to")))}
+  end
+
+  # Same-origin paths only, so a hostile CTA can't bounce the user to an
+  # external site after the flow completes.
+  defp sanitize_return_to("/" <> _rest = path), do: path
+  defp sanitize_return_to(_), do: nil
 
   @impl true
   def consume_event(

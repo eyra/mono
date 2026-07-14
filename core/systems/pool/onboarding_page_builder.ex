@@ -27,6 +27,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   def view_model(%Pool.Model{} = pool, assigns) do
     current_step_index = Map.get(assigns, :current_step_index, 0)
     user = Map.get(assigns, :current_user)
+    return_to = Map.get(assigns, :return_to)
     steps = build_steps(pool, user, current_step_index)
     current_step = Enum.at(steps, current_step_index)
     live_context = build_live_context(user)
@@ -41,7 +42,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
       step_body: build_step_body(current_step, pool),
       continue_button: build_continue_button(current_step),
       is_last_step: current_step_index >= length(steps) - 1,
-      finish_path: build_finish_path(user),
+      finish_path: build_finish_path(return_to, user),
       hero_title: build_hero_title(current_step, pool),
       progress_dots: build_progress_dots(steps, current_step_index)
     }
@@ -64,11 +65,13 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   defp build_hero_title(_step, %Pool.Model{}),
     do: dgettext("eyra-pool", "onboarding.hero.title")
 
-  # Where the flow exits — the user's signed-in landing. Owned by the
-  # builder so the page never has to know the URL scheme; a decline or
-  # a "continue" on the last step just reads `vm.finish_path`.
-  defp build_finish_path(%Account.User{} = user), do: Account.UserAuth.signed_in_path(user)
-  defp build_finish_path(_), do: "/"
+  # Where the flow exits. When a caller (e.g. Promotion apply) sent the
+  # user through the join gate with a `?return_to=<path>`, we honour it
+  # so they land back where they started instead of on the generic home.
+  # Otherwise fall back to the user's signed-in landing.
+  defp build_finish_path(return_to, _user) when is_binary(return_to), do: return_to
+  defp build_finish_path(_, %Account.User{} = user), do: Account.UserAuth.signed_in_path(user)
+  defp build_finish_path(_, _), do: "/"
 
   # `show_title: false` hides each step view's own title so the page-level
   # `hero_title` is the sole visual anchor across the flow.

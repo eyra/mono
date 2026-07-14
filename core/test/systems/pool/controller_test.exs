@@ -22,6 +22,18 @@ defmodule Systems.Pool.ControllerTest do
       assert redirected_to(conn) == "/pool/panl/onboarding"
     end
 
+    test "forwards return_to to the onboarding page for non-participants", %{
+      conn: conn,
+      user: user
+    } do
+      pool = panl_pool()
+      refute Pool.Public.participant?(pool, user)
+
+      conn = get(conn, ~p"/pool/panl/join?return_to=/assignment/42/apply")
+
+      assert redirected_to(conn) == "/pool/panl/onboarding?return_to=%2Fassignment%2F42%2Fapply"
+    end
+
     test "redirects existing participants to the home page", %{conn: conn, user: user} do
       pool = panl_pool()
       Pool.Public.add_participant!(pool, user)
@@ -30,6 +42,24 @@ defmodule Systems.Pool.ControllerTest do
 
       # Home lives at "/" for members via Account.UserAuth.signed_in_path/1.
       assert redirected_to(conn) == "/"
+    end
+
+    test "redirects existing participants to return_to when provided", %{conn: conn, user: user} do
+      pool = panl_pool()
+      Pool.Public.add_participant!(pool, user)
+
+      conn = get(conn, ~p"/pool/panl/join?return_to=/assignment/42/apply")
+
+      assert redirected_to(conn) == "/assignment/42/apply"
+    end
+
+    test "ignores off-site return_to (only same-origin paths allowed)", %{conn: conn, user: user} do
+      pool = panl_pool()
+      refute Pool.Public.participant?(pool, user)
+
+      conn = get(conn, ~p"/pool/panl/join?return_to=https://evil.example.com/steal")
+
+      assert redirected_to(conn) == "/pool/panl/onboarding"
     end
   end
 

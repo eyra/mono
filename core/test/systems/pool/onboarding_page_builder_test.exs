@@ -171,5 +171,15 @@ defmodule Systems.Pool.OnboardingPageBuilderTest do
 
       assert vm.finish_path == "/"
     end
+
+    test "prefers return_to over the signed-in landing when present", %{user: user, pool: pool} do
+      vm =
+        Pool.OnboardingPageBuilder.view_model(pool, %{
+          current_user: user,
+          return_to: "/assignment/42/apply"
+        })
+
+      assert vm.finish_path == "/assignment/42/apply"
+    end
   end
 end
