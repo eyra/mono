@@ -112,8 +112,8 @@ defmodule Next.Account.AuthPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped menus={@menus}>
-      <div class="h-full flex flex-col justify-center">
+    <.stripped menus={@menus} centered?>
+      <div class="h-full flex flex-col justify-center pb-16">
       <Area.content>
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
