@@ -73,6 +73,11 @@ defmodule Systems.Account.Page do
   end
 
   @impl true
+  def handle_event("close_modal", %{"item" => modal_id}, socket) do
+    {:noreply, socket |> handle_close_modal(modal_id)}
+  end
+
+  @impl true
   def handle_view_model_updated(socket), do: socket
 
   @impl true
