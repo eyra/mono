@@ -20,6 +20,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   """
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Concept.LiveContext
   alias Systems.Pool
   alias Systems.Account
@@ -65,13 +66,10 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   defp build_hero_title(_step, %Pool.Model{}),
     do: dgettext("eyra-pool", "onboarding.hero.title")
 
-  # Where the flow exits. When a caller (e.g. Promotion apply) sent the
-  # user through the join gate with a `?return_to=<path>`, we honour it
-  # so they land back where they started instead of on the generic home.
-  # Otherwise fall back to the user's signed-in landing.
-  defp build_finish_path(return_to, _user) when is_binary(return_to), do: return_to
-  defp build_finish_path(_, %Account.User{} = user), do: Account.UserAuth.signed_in_path(user)
-  defp build_finish_path(_, _), do: "/"
+  defp build_finish_path(return_to, %Account.User{} = user),
+    do: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user))
+
+  defp build_finish_path(return_to, _user), do: ReturnTo.resolve(return_to, "/")
 
   # `show_title: false` hides each step view's own title so the page-level
   # `hero_title` is the sole visual anchor across the flow.

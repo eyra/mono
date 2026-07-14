@@ -29,6 +29,7 @@ defmodule Systems.Pool.OnboardingPage do
 
   import LiveNest.HTML
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Text
@@ -43,13 +44,8 @@ defmodule Systems.Pool.OnboardingPage do
 
   @impl true
   def mount(params, _session, socket) do
-    {:ok, socket |> assign(return_to: sanitize_return_to(Map.get(params, "return_to")))}
+    {:ok, socket |> assign(return_to: ReturnTo.sanitize(Map.get(params, "return_to")))}
   end
-
-  # Same-origin paths only, so a hostile CTA can't bounce the user to an
-  # external site after the flow completes.
-  defp sanitize_return_to("/" <> _rest = path), do: path
-  defp sanitize_return_to(_), do: nil
 
   @impl true
   def consume_event(
