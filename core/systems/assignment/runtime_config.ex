@@ -2,20 +2,20 @@ defmodule Systems.Assignment.RuntimeConfig do
   @moduledoc """
   Configuration for participant-facing runtime behavior of an assignment.
 
-  Returned by `Assignment.Template.runtime_config/1` and used by the
-  crew page / finished view to drive post-completion actions.
+  Returned by `Assignment.Template.runtime_config/1` and consumed by the
+  parts of the system that need to know which pool a template targets —
+  today: the finished view (post-completion email capture) and the
+  participants view (advert-in-pool CTA).
 
-  ## Post-actions
+  ## Fields
 
-    * `{:add_to_pool, :panl}` — capture email and add user to the named pool (atom is the slug of the pool name)
-    * `nil` — no post-completion action (default)
+    * `:pool` — atom slug of the pool this template targets, e.g. `:panl`.
+      `nil` means the template is not pool-scoped.
   """
 
-  @type post_action :: {:add_to_pool, atom()} | nil
-
   @type t :: %__MODULE__{
-          post_action: post_action()
+          pool: atom() | nil
         }
 
-  defstruct post_action: nil
+  defstruct pool: nil
 end

@@ -2,11 +2,16 @@ defmodule Frameworks.Pixel.Logo do
   use CoreWeb, :pixel
 
   @moduledoc """
-  Logo component for product and platform logos.
+  Logo component for product, platform, and pool logos.
 
   Directory structure:
-  - /images/logos/products/  - Our product logos (Next, Eyra, PaNL, etc.)
-  - /images/logos/platforms/ - External DDP platform logos (Facebook, Instagram, etc.)
+  - /images/logos/products/  - Eyra's own product family (Next, Eyra, Self, Yoda, ...)
+  - /images/logos/platforms/ - External third-party brands (Google, Apple, TikTok, SurfConext, ...)
+  - /images/logos/pools/     - Participant pool brand marks (Panl, LISS Panel, ...) —
+                               neither Eyra products nor external third parties.
+                               Each pool ships two assets: `<slug>.svg` (icon-only
+                               avatar) and `<slug>_wide.svg` (wordmark for wider
+                               contexts).
 
   Product logo variants:
   - {name}.svg - Icon only (scalable)
@@ -16,6 +21,10 @@ defmodule Frameworks.Pixel.Logo do
   Platform logo variants:
   - {name}.svg - Circle variant (scalable, text-free)
   - {name}_square.svg - Square variant (scalable, text-free)
+
+  Pool logo variants:
+  - {name}.svg - Icon-only avatar (default)
+  - {name}_wide.svg - Wordmark (with integrated text)
   """
 
   # Path functions for use outside of components
@@ -26,6 +35,26 @@ defmodule Frameworks.Pixel.Logo do
   def path(name, {:platform, variant}), do: build_path(:platforms, name, variant)
   def path(name, {:platform}), do: build_path(:platforms, name, :default)
   def path(name, :platform), do: build_path(:platforms, name, :default)
+  def path(name, {:pool, variant}), do: pool_path(name, variant)
+  def path(name, {:pool}), do: pool_path(name, :default)
+  def path(name, :pool), do: pool_path(name, :default)
+
+  # Pool assets are optional. Configured per bundle via
+  # `config :core, :pixel, pool_assets: […]`; returns nil for anything
+  # not listed so callers can omit the icon slot instead of rendering
+  # a broken image. Compile-time list so we don't stat the filesystem
+  # on every render.
+  @pool_assets Application.compile_env(:core, [:pixel, :pool_assets], [])
+               |> Enum.map(&to_string/1)
+
+  defp pool_path(name, variant) do
+    path = build_path(:pools, name, variant)
+    if pool_asset_exists?(path), do: path, else: nil
+  end
+
+  defp pool_asset_exists?("/images/logos/pools/" <> file_with_ext) do
+    Path.rootname(file_with_ext) in @pool_assets
+  end
 
   defp build_path(type, name, variant) do
     name
@@ -74,6 +103,19 @@ defmodule Frameworks.Pixel.Logo do
 
     ~H"""
     <img class={@class} src={@src} alt={"#{@platform}"} />
+    """
+  end
+
+  attr(:name, :any, required: true)
+  attr(:variant, :atom, default: :default, values: [:default, :wide])
+  attr(:class, :string, default: "")
+
+  def pool(assigns) do
+    src = pool_path(assigns.name, assigns.variant)
+    assigns = assign(assigns, :src, src)
+
+    ~H"""
+    <img :if={@src} class={@class} src={@src} alt={"#{@name} logo"} />
     """
   end
 end

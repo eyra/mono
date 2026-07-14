@@ -47,11 +47,10 @@ defmodule Systems.Pool.OnboardingPageTest do
     end
   end
 
-  # Accept/decline goes through JoinConsentView -> LiveNest publish_event
-  # -> parent `handle_info` -> `consume_event`, so an eventual
-  # push_navigate lands *after* `render_click` returns. `assert_redirect/2`
-  # waits on the navigation message — the same helper Phoenix uses for
-  # any async navigation.
+  # Accept goes through JoinConsentView -> LiveNest publish_event ->
+  # parent `handle_info` -> `consume_event`, so any downstream navigation
+  # lands *after* `render_click` returns. A subsequent `render/1` flushes
+  # the async chain.
   describe "join consent accepted" do
     test "adds the user as a participant", %{conn: conn, user: user, pool: pool} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
@@ -84,26 +83,20 @@ defmodule Systems.Pool.OnboardingPageTest do
     end
   end
 
-  describe "join consent declined" do
-    test "does not add the user as a participant", %{conn: conn, user: user, pool: pool} do
+  describe "join consent has no decline action" do
+    test "does not render a decline button (users hit browser Back to exit)",
+         %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
 
-      view
-      |> element("[data-testid='pool-join-consent-decline-button']")
-      |> render_click()
-
-      assert_redirect(view, "/")
-      refute Pool.Public.participant?(pool, user)
+      refute view |> has_element?("[data-testid='pool-join-consent-decline-button']")
     end
+  end
 
-    test "redirects to home (skips remaining steps)", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+  describe "join consent renders the pool icon" do
+    test "shows the pool avatar next to the title", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/pool/panl/onboarding")
 
-      view
-      |> element("[data-testid='pool-join-consent-decline-button']")
-      |> render_click()
-
-      assert_redirect(view, "/")
+      assert html =~ ~s(src="/images/logos/pools/panl_wide.svg")
     end
   end
 

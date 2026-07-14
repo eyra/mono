@@ -58,19 +58,14 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   #     regular user (has a real email)    → "Join Panl" CTA → straight
   #                                          to `/pool/:slug/join`
   defp build_email_capture(true = _declined?, _runtime_config, _user, _submitting?), do: nil
-  defp build_email_capture(_declined?, %{post_action: nil}, _user, _submitting?), do: nil
+  defp build_email_capture(_declined?, %{pool: nil}, _user, _submitting?), do: nil
 
-  defp build_email_capture(
-         _declined?,
-         %{post_action: {:add_to_pool, pool_slug} = action},
-         user,
-         submitting?
-       ) do
+  defp build_email_capture(_declined?, %{pool: pool_slug}, user, submitting?) do
     cond do
       not feature_enabled?(:panl) -> nil
       creator?(user) -> nil
       feature_enabled?(:panl_post_launch) -> build_post_launch_block(pool_slug, user)
-      true -> build_pre_launch_block(action, pool_slug, user, submitting?)
+      true -> build_pre_launch_block(pool_slug, user, submitting?)
     end
   end
 
@@ -81,7 +76,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   # isn't already a Panl member.
   defp build_post_launch_block(pool_slug, user) do
     if Pool.Public.participant?(pool_slug, user) do
-      build_home_cta()
+      build_home_cta(pool_slug)
     else
       build_join_cta(pool_slug, user)
     end
@@ -90,13 +85,13 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   # Pre-launch block — affiliate-only (matches the pre-launch UX; a
   # regular user already has a real email, so there's nothing for the
   # email-capture form to collect).
-  defp build_pre_launch_block(action, pool_slug, user, submitting?) do
+  defp build_pre_launch_block(pool_slug, user, submitting?) do
     case Affiliate.Public.get_user(user) do
       {:ok, _affiliate_user} ->
         cond do
-          Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted()
-          EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted()
-          true -> build_email_capture_form(action, submitting?)
+          Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted(pool_slug)
+          EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted(pool_slug)
+          true -> build_email_capture_form(pool_slug, submitting?)
         end
 
       {:error, :user_not_found} ->
@@ -104,9 +99,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     end
   end
 
-  defp build_email_capture_form(action, submitting?) do
+  defp build_email_capture_form(pool_slug, submitting?) do
     %{
-      action: action,
+      pool_slug: pool_slug,
       title: dgettext("eyra-assignment", "email_capture.title"),
       body: dgettext("eyra-assignment", "email_capture.body"),
       email_label: dgettext("eyra-assignment", "email_capture.email.label"),
@@ -121,8 +116,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     }
   end
 
-  defp build_email_capture_submitted do
+  defp build_email_capture_submitted(pool_slug) do
     %{
+      pool_slug: pool_slug,
       title: dgettext("eyra-assignment", "email_capture.success.title"),
       body: dgettext("eyra-assignment", "email_capture.success.body")
     }
@@ -135,6 +131,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   # real email, so we skip auth and go straight to the join gate.
   defp build_join_cta(pool_slug, user) do
     %{
+      pool_slug: pool_slug,
       title: dgettext("eyra-assignment", "panl.cta.join.title"),
       body: dgettext("eyra-assignment", "panl.cta.join.body"),
       cta_button: %{
@@ -159,8 +156,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
   # Post-launch: affiliate visitor is already a Panl member. Send them home;
   # the home page carries their wallet / rewards summary.
-  defp build_home_cta do
+  defp build_home_cta(pool_slug) do
     %{
+      pool_slug: pool_slug,
       title: dgettext("eyra-assignment", "panl.cta.home.title"),
       body: dgettext("eyra-assignment", "panl.cta.home.body"),
       cta_button: %{

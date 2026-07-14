@@ -11,6 +11,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
+  alias Systems.Pool
   alias Systems.Project
   alias Systems.Workflow
   alias Systems.Zircon
@@ -384,7 +385,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
         title: title,
         viewport: viewport,
         breakpoint: breakpoint,
-        content_flags: content_flags
+        content_flags: content_flags,
+        pool: pool(assignment)
       })
 
     %{
@@ -427,6 +429,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       child: child
     }
+  end
+
+  defp pool(assignment) do
+    case Assignment.Template.runtime_config(Assignment.Private.get_template(assignment)) do
+      %{pool: pool_slug} when not is_nil(pool_slug) -> Pool.Public.get_by_slug(pool_slug)
+      _ -> nil
+    end
   end
 
   defp number_widgets(assignment) do

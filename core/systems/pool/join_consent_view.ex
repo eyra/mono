@@ -2,14 +2,15 @@ defmodule Systems.Pool.JoinConsentView do
   @moduledoc """
   Informed-consent view for joining a pool.
 
-  Renders a short "would you like to join this pool?" prompt with accept and
-  decline actions. Publishes `:accept` on accept and `:decline` on decline;
-  the parent handles the actual join (typically by dispatching
-  `{:account, :post_signup}` with `"join_pool:<slug>"`) and manages its own
-  container UI (close the modal, advance the onboarding step, …).
+  Renders a short "would you like to join this pool?" prompt with an
+  Accept action. Publishes `:accept` on click; the parent handles the
+  actual join and container UI (advance the onboarding step, close a
+  modal, ...).
 
-  Soft consent only — no signed record is created. If the pool ever needs a
-  proper signed agreement, wrap `Systems.Consent.ClickWrapView` instead.
+  No explicit decline action — users hit browser Back to exit, same
+  convention as the auth identify/verify pages. Soft consent only —
+  no signed record is created. If the pool ever needs a proper signed
+  agreement, wrap `Systems.Consent.ClickWrapView` instead.
   """
   use CoreWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
@@ -24,11 +25,11 @@ defmodule Systems.Pool.JoinConsentView do
         pool: pool,
         show_title: Map.get(assigns, :show_title, true)
       )
-      |> update_buttons()
+      |> update_accept_button()
     }
   end
 
-  defp update_buttons(%{assigns: %{myself: myself, pool: pool}} = socket) do
+  defp update_accept_button(%{assigns: %{myself: myself, pool: pool}} = socket) do
     accept_button = %{
       action: %{type: :send, event: "accept", target: myself},
       face: %{
@@ -38,26 +39,12 @@ defmodule Systems.Pool.JoinConsentView do
       testid: "pool-join-consent-accept-button"
     }
 
-    decline_button = %{
-      action: %{type: :send, event: "decline", target: myself},
-      face: %{
-        type: :label,
-        label: dgettext("eyra-pool", "join_consent.decline.button")
-      },
-      testid: "pool-join-consent-decline-button"
-    }
-
-    assign(socket, buttons: [accept_button, decline_button])
+    assign(socket, accept_button: accept_button)
   end
 
   @impl true
   def handle_event("accept", _payload, socket) do
     {:noreply, socket |> publish_event(:accept)}
-  end
-
-  @impl true
-  def handle_event("decline", _payload, socket) do
-    {:noreply, socket |> publish_event(:decline)}
   end
 
   @impl true
@@ -75,9 +62,7 @@ defmodule Systems.Pool.JoinConsentView do
       </Text.body>
       <.spacing value="L" />
       <div class="flex flex-row gap-4">
-        <%= for button <- @buttons do %>
-          <Button.dynamic {button} />
-        <% end %>
+        <Button.dynamic {@accept_button} />
       </div>
     </div>
     """

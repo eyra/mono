@@ -33,3 +33,5 @@ config :core, :meta,
   bundle: :next
 
 config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
+
+config :core, :pixel, pool_assets: [:panl, :panl_wide]

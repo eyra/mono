@@ -222,7 +222,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
       assert vm.email_capture != nil
-      assert vm.email_capture.action == {:add_to_pool, :panl}
+      assert vm.email_capture.pool_slug == :panl
       assert vm.email_capture.title != nil
       assert vm.email_capture.body != nil
       assert vm.email_capture.email_label != nil

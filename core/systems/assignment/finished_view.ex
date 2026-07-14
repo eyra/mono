@@ -34,7 +34,7 @@ defmodule Systems.Assignment.FinishedView do
   def handle_event(
         "submit_email",
         %{"email" => email},
-        %{assigns: %{vm: %{email_capture: %{action: {:add_to_pool, _}}}}} = socket
+        %{assigns: %{vm: %{email_capture: %{pool_slug: _}}}} = socket
       ) do
     send(self(), {:do_submit_email, email})
 
@@ -50,7 +50,7 @@ defmodule Systems.Assignment.FinishedView do
         %{
           assigns: %{
             current_user: user,
-            vm: %{email_capture: %{action: {:add_to_pool, pool_slug}}}
+            vm: %{email_capture: %{pool_slug: pool_slug}}
           }
         } =
           socket
@@ -118,7 +118,7 @@ defmodule Systems.Assignment.FinishedView do
       <InlineBlock.inline_block
         title={@email_capture.title}
         description={@email_capture.body}
-        icon={Logo.path(:panl, {:product, :standing})}
+        icon={Logo.path(@email_capture.pool_slug, :pool)}
       >
         <%= if Map.has_key?(@email_capture, :submit_button) do %>
           <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">

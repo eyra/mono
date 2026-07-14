@@ -93,13 +93,13 @@ defmodule Systems.Home.PageBuilderTest do
       refute :rewards_summary in block_keys(vm)
     end
 
-    test "creator WITH rewards does not see rewards_summary" do
+    test "creator WITH rewards sees rewards_summary (creators can participate too)" do
       user = Factories.insert!(:member, %{creator: true})
       give_reward(user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      refute :rewards_summary in block_keys(vm)
+      assert :rewards_summary in block_keys(vm)
     end
 
     test "payout handoff body interpolates the approved amount (no stray placeholder)" do
@@ -120,28 +120,28 @@ defmodule Systems.Home.PageBuilderTest do
     end
   end
 
-  describe "view_model/2 available_adverts (future studies) visibility" do
-    test "non-panl member does not see available_adverts" do
+  describe "view_model/2 panl_marketplace (future studies) visibility" do
+    test "non-panl member does not see panl_marketplace" do
       user = Factories.insert!(:member, %{creator: false})
 
       refute Pool.Public.participant?(:panl, user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      refute :available_adverts in block_keys(vm)
+      refute :panl_marketplace in block_keys(vm)
     end
 
-    test "panl member sees available_adverts" do
+    test "panl member sees panl_marketplace" do
       user = Factories.insert!(:member, %{creator: false})
       make_panl_participant(user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert :available_adverts in block_keys(vm)
+      assert :panl_marketplace in block_keys(vm)
     end
   end
 
-  describe "view_model/2 available_adverts shape (home card limit / more link)" do
+  describe "view_model/2 panl_marketplace shape (home card limit / more link)" do
     setup do
       researcher = Factories.insert!(:creator)
       user = Factories.insert!(:member, %{creator: false})
@@ -155,21 +155,21 @@ defmodule Systems.Home.PageBuilderTest do
     test "caps displayed cards at the home page limit", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert %{cards: cards} = block_params(vm, :available_adverts)
+      assert %{cards: cards} = block_params(vm, :panl_marketplace)
       assert length(cards) == 3
     end
 
     test "reports the total advert count, not the capped card count", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert %{count: 5} = block_params(vm, :available_adverts)
+      assert %{count: 5} = block_params(vm, :panl_marketplace)
     end
 
     test "links to the panl pool marketplace via more_path", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
       %Pool.Model{id: panl_id} = Pool.Public.get_panl()
-      assert %{more_path: more_path} = block_params(vm, :available_adverts)
+      assert %{more_path: more_path} = block_params(vm, :panl_marketplace)
       assert more_path == "/pool/#{panl_id}/marketplace"
     end
   end

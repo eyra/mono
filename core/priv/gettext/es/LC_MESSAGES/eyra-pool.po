@@ -113,16 +113,24 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.accept.button"
-msgstr ""
+msgstr "Continuar"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "join_consent.decline.button"
-msgstr ""
+msgstr "Estás a punto de unirte al grupo %{pool_name}. Como miembro, podrás postularte a estudios de investigación y ganar recompensas."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Unirse al pool"
