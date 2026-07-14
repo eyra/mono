@@ -81,4 +81,25 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       assert_redirected(view, "/assignment/#{assignment_id}/apply")
     end
   end
+
+  describe "Promotion Landing Page — anonymous visitor" do
+    test "Apply routes through auth identify → pool join → assignment", %{conn: conn} do
+      creator = Factories.insert!(:creator)
+
+      %{promotion_id: promotion_id, submission_id: submission_id, assignment_id: assignment_id} =
+        Advert.Factories.create_advert(creator, :accepted, 1)
+
+      slug = Pool.Model.slug(Pool.Public.get_by_submission!(submission_id))
+
+      {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
+
+      view |> render_click("call-to-action-1")
+
+      apply_path = "/assignment/#{assignment_id}/apply"
+      join_path = "/pool/#{slug}/join?return_to=#{URI.encode_www_form(apply_path)}"
+      identify_path = "/user/auth/identify?return_to=#{URI.encode_www_form(join_path)}"
+
+      assert_redirected(view, identify_path)
+    end
+  end
 end
