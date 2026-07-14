@@ -10,6 +10,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
   import CoreWeb.Menus
 
   alias CoreWeb.Endpoint
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
 
@@ -26,7 +27,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
           email: email,
           form: to_form(%{"code" => ""}),
           error: nil,
-          return_to: sanitize_return_to(Map.get(params, "return_to"))
+          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
         )
         |> update_menus()
       }
@@ -34,9 +35,6 @@ defmodule Next.Account.AuthCodeVerifyPage do
       {:ok, redirect(socket, to: ~p"/user/signin")}
     end
   end
-
-  defp sanitize_return_to("/" <> _rest = path), do: path
-  defp sanitize_return_to(_), do: nil
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     menus = build_menus(stripped_menus_config(), user, uri)

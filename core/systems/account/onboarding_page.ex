@@ -12,6 +12,7 @@ defmodule Systems.Account.OnboardingPage do
 
   import LiveNest.HTML
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
   alias Systems.Account
@@ -30,14 +31,9 @@ defmodule Systems.Account.OnboardingPage do
      |> assign(
        current_step_index: 0,
        modal_toolbar_buttons: [],
-       return_to: sanitize_return_to(Map.get(params, "return_to"))
+       return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
      )}
   end
-
-  # Same-origin paths only, so a hostile CTA can't bounce the user to an
-  # external site after login.
-  defp sanitize_return_to("/" <> _rest = path), do: path
-  defp sanitize_return_to(_), do: nil
 
   @impl true
   def handle_view_model_updated(socket) do
@@ -90,11 +86,8 @@ defmodule Systems.Account.OnboardingPage do
     {:noreply, socket |> push_navigate(to: post_onboarding_path(socket, user))}
   end
 
-  defp post_onboarding_path(%{assigns: %{return_to: return_to}}, _user)
-       when is_binary(return_to),
-       do: return_to
-
-  defp post_onboarding_path(_socket, user), do: Account.UserAuth.signed_in_path(user)
+  defp post_onboarding_path(%{assigns: %{return_to: return_to}}, user),
+    do: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user))
 
   defp activated?(%{assigns: %{current_user: %{id: user_id}}}) do
     user_id

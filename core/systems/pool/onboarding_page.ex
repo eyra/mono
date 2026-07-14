@@ -29,6 +29,7 @@ defmodule Systems.Pool.OnboardingPage do
 
   import LiveNest.HTML
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Text
@@ -42,7 +43,9 @@ defmodule Systems.Pool.OnboardingPage do
   end
 
   @impl true
-  def mount(_params, _session, socket), do: {:ok, socket}
+  def mount(params, _session, socket) do
+    {:ok, socket |> assign(return_to: ReturnTo.sanitize(Map.get(params, "return_to")))}
+  end
 
   @impl true
   def consume_event(

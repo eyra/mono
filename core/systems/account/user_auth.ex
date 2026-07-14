@@ -5,6 +5,7 @@ defmodule Systems.Account.UserAuth do
   import Phoenix.Controller
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.ReturnTo
   alias Systems.Account
 
   # Make the remember me cookie valid for 60 days.
@@ -36,7 +37,7 @@ defmodule Systems.Account.UserAuth do
     # straight to their return_to via `redirect_path_after_signin/2`.
     redirect_to =
       if first_time? do
-        with_return_to(~p"/user/onboarding", get_session(conn, :user_return_to))
+        ReturnTo.append(~p"/user/onboarding", get_session(conn, :user_return_to))
       else
         redirect_path_after_signin(conn, user)
       end
@@ -47,13 +48,6 @@ defmodule Systems.Account.UserAuth do
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: redirect_to)
-  end
-
-  defp with_return_to(path, nil), do: path
-
-  defp with_return_to(path, return_to) when is_binary(return_to) do
-    sep = if String.contains?(path, "?"), do: "&", else: "?"
-    "#{path}#{sep}return_to=#{URI.encode_www_form(return_to)}"
   end
 
   def log_in_user_without_redirect(conn, user) do
