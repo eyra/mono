@@ -402,4 +402,4 @@ msgstr "Verifică contul bancar"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "Am trimis un cod la %{email}"
+msgstr "Ți-am trimis un cod"

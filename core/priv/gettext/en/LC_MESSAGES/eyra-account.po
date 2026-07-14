@@ -394,4 +394,4 @@ msgstr "Verify bank account"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "We sent a code to %{email}"
+msgstr "We've emailed you a code"

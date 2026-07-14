@@ -402,4 +402,4 @@ msgstr "Patvirtinti banko sąskaitą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "Kodą išsiuntėme adresu %{email}"
+msgstr "Išsiuntėme tau kodą"
