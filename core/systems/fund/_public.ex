@@ -1114,17 +1114,17 @@ defmodule Systems.Fund.Public do
 
   # Per-leg idempotence keys so retries never double-move money.
   defp withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids) do
-    base_key = Fund.PayoutModel.idempotence_key(payout)
-
     case Payment.Public.transfer_to_merchant(
            platform_uid,
            merchant_uid,
            total,
-           base_key <> ",type=transfer"
+           Fund.PayoutModel.transfer_key(payout)
          ) do
-      {:ok, _transfer} ->
+      {:ok, transfer} ->
         # Provider accepted the transfer — never revert past here (double-payout risk).
-        withdraw_after_transfer(payout, merchant_uid, total, base_key)
+        payout
+        |> commit_funds(transfer)
+        |> withdraw_after_transfer(merchant_uid, total)
 
       {:error, reason} ->
         # Nothing moved yet — safe to revert (UC-OPP-06.A3).
@@ -1133,14 +1133,35 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  defp withdraw_after_transfer(payout, merchant_uid, total, base_key) do
+  # Record that the money has moved, before anything downstream can fail. Charges
+  # have no list endpoint at OPP, so a transfer uid we never persist cannot be
+  # looked up again — this write is the only handle we keep on it.
+  defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
+    payout
+    |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
+    |> Repo.update()
+    |> case do
+      {:ok, payout} ->
+        payout
+
+      {:error, _changeset} ->
+        Logger.error(
+          "[Fund] transfer #{transfer_uid} accepted but not persisted for payout " <>
+            "##{payout.id}; the funds are committed and the uid is lost"
+        )
+
+        payout
+    end
+  end
+
+  defp withdraw_after_transfer(%Fund.PayoutModel{} = payout, merchant_uid, total) do
     attrs = %{amount: total, description: "Reward payout"}
 
     case Payment.Public.create_withdrawal(
            merchant_uid,
            :EUR,
            attrs,
-           base_key <> ",type=withdrawal"
+           Fund.PayoutModel.withdrawal_key(payout)
          ) do
       {:ok, withdrawal} ->
         record_withdrawal(payout, withdrawal, total)
