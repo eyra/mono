@@ -4,6 +4,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
 
   alias Phoenix.LiveView
 
+  alias CoreWeb.ReturnTo
   alias Systems.Advert
   alias Systems.Pool
   alias Systems.Promotion
@@ -75,15 +76,15 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   defp cta_label(true), do: dgettext("eyra-advert", "promotion.apply.button")
   defp cta_label(false), do: dgettext("eyra-advert", "promotion.full.button")
 
-  # Existing pool members bypass the consent screen and go straight
-  # to the assignment; non-members are routed through the pool join
-  # gate with a `return_to` so they land on the same assignment after
-  # accepting the join consent, instead of being silently added and
-  # sent straight in.
+  # Three cases:
+  #   * anonymous visitor  → auth identify → pool join → assignment
+  #     (nested return_to's carry the destination through the whole flow)
+  #   * existing member    → straight to the assignment
+  #   * signed-in non-member → pool join gate → assignment
   def handle_apply(
         %{
           assigns: %{
-            current_user: user,
+            current_user: current_user,
             vm: %{
               call_to_action: %{
                 advert: %{assignment: %{id: id}, promotion: promotion, submission: %{pool: pool}}
@@ -94,12 +95,18 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
       ) do
     Promotion.Private.log_performance_event(promotion, :clicks)
     apply_path = ~p"/assignment/#{id}/apply"
+    slug = Pool.Model.slug(pool)
 
-    if Pool.Public.participant?(pool, user) do
-      LiveView.push_navigate(socket, to: apply_path)
-    else
-      slug = Pool.Model.slug(pool)
-      LiveView.push_navigate(socket, to: ~p"/pool/#{slug}/join?return_to=#{apply_path}")
+    cond do
+      is_nil(current_user) ->
+        join_path = ReturnTo.append(~p"/pool/#{slug}/join", apply_path)
+        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/user/auth/identify", join_path))
+
+      Pool.Public.participant?(pool, current_user) ->
+        LiveView.push_navigate(socket, to: apply_path)
+
+      true ->
+        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/pool/#{slug}/join", apply_path))
     end
   end
 end
