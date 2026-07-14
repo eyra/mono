@@ -86,6 +86,8 @@ defmodule Next.Account.AuthCodeVerifyPage do
       <Area.content>
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
+          <.spacing value="XS" />
+          <Text.body_medium align="text-center"><%= dgettext("eyra-account", "auth.code.body", email: @email) %></Text.body_medium>
           <.spacing value="L" />
           <.form id="auth_code_form" for={@form} phx-submit="verify">
             <div

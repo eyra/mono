@@ -257,7 +257,7 @@ msgstr "Zu viele falsche Versuche. Bitte fordere einen neuen Code an."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Überprüfe deine E-Mails"
+msgstr "E-Mail bestätigen"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -269,7 +269,7 @@ msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Wie lautet deine E-Mail-Adresse?"
+msgstr "Los geht's"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -390,3 +390,7 @@ msgstr "Weiter"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.title"
 msgstr "Bankkonto verifizieren"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "Wir haben einen Code an %{email} geschickt"

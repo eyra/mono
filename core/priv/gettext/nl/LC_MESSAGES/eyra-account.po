@@ -256,7 +256,7 @@ msgstr "Te veel onjuiste pogingen. Vraag een nieuwe code aan."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Controleer je e-mail"
+msgstr "E-mail verifiëren"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -268,7 +268,7 @@ msgstr "Voer een geldig e-mailadres in."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Wat is je e-mailadres?"
+msgstr "Aan de slag"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -391,3 +391,7 @@ msgstr "Doorgaan"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.modal.title"
 msgstr "Bankrekening verifiëren"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "We hebben een code gestuurd naar %{email}"
