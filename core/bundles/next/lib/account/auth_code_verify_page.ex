@@ -119,6 +119,10 @@ defmodule Next.Account.AuthCodeVerifyPage do
               bg_color="bg-grey1"
               testid="auth-code-verify-button"
             />
+            <.spacing value="S" />
+            <div class="text-center">
+              <Text.footnote color="text-grey3"><%= dgettext("eyra-account", "auth.code.body") %></Text.footnote>
+            </div>
           </.form>
         </Area.form>
       </Area.content>

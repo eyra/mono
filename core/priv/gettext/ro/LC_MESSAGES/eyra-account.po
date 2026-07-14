@@ -266,7 +266,7 @@ msgstr "Prea multe încercări incorecte. Te rugăm să soliciți un cod nou."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Verifică-ți emailul"
+msgstr "Verifică emailul"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -278,7 +278,7 @@ msgstr "Te rugăm să introduci o adresă de email validă."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Care este adresa ta de email?"
+msgstr "Să începem"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -399,3 +399,7 @@ msgstr "Continuă"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.title"
 msgstr "Verifică contul bancar"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "Ți-am trimis un cod"

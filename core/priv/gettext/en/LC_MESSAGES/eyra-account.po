@@ -256,7 +256,7 @@ msgstr "Too many incorrect attempts. Please request a new code."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Check your email"
+msgstr "Verify email"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -268,7 +268,7 @@ msgstr "Please enter a valid email address."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "What is your email?"
+msgstr "Get started"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -391,3 +391,7 @@ msgstr "Continue"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.modal.title"
 msgstr "Verify bank account"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "We've emailed you a code"
