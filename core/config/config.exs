@@ -119,6 +119,11 @@ config :core,
   },
   tool_directors: [:assignment]
 
+# Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
+# Compile-time list so Logo.pool doesn't stat the filesystem on every render.
+# Override per bundle (see bundles/*/config/config.exs).
+config :core, :pixel, pool_assets: []
+
 # Generic compile-time flag for E2E support facilities baked into the build
 # (e.g. the local payment simulator routes /payment/local/...). Off by default
 # so production never compiles in these stubs; enabled for :dev/:test (see

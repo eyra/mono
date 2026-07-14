@@ -39,18 +39,21 @@ defmodule Frameworks.Pixel.Logo do
   def path(name, {:pool}), do: pool_path(name, :default)
   def path(name, :pool), do: pool_path(name, :default)
 
-  # Pool assets are optional. Returns nil when the SVG hasn't been
-  # shipped for the given slug — callers pattern-match on nil (or lean
-  # on `:if={@icon}` in downstream components like InlineBlock) to
-  # simply omit the icon slot instead of rendering a broken image.
+  # Pool assets are optional. Configured per bundle via
+  # `config :core, :pixel, pool_assets: […]`; returns nil for anything
+  # not listed so callers can omit the icon slot instead of rendering
+  # a broken image. Compile-time list so we don't stat the filesystem
+  # on every render.
+  @pool_assets Application.compile_env(:core, [:pixel, :pool_assets], [])
+               |> Enum.map(&to_string/1)
+
   defp pool_path(name, variant) do
     path = build_path(:pools, name, variant)
     if pool_asset_exists?(path), do: path, else: nil
   end
 
-  defp pool_asset_exists?("/" <> rel_path) do
-    Path.join(Application.app_dir(:core, "priv/static"), rel_path)
-    |> File.exists?()
+  defp pool_asset_exists?("/images/logos/pools/" <> file_with_ext) do
+    Path.rootname(file_with_ext) in @pool_assets
   end
 
   defp build_path(type, name, variant) do
