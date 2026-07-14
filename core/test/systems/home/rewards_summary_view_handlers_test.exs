@@ -207,7 +207,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_c_pay")
       stub_ready("m_c_pay")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 
@@ -235,7 +235,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_provisioned")
       stub_ready("m_provisioned")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 

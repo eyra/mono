@@ -215,10 +215,11 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-  # Charges
+  # Transfers
 
+  # OPP models a merchant-to-merchant transfer as a charge of type `balance`.
   @impl true
-  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+  def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
       when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
              is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     body = %{
@@ -231,7 +232,7 @@ defmodule Systems.Payment.Provider.OPP do
 
     case HTTP.post("/charges", body, [{"Idempotency-Key", idempotence_key}]) do
       {:ok, %{"uid" => uid} = data} ->
-        {:ok, parse_charge(uid, data)}
+        {:ok, parse_transfer(uid, data)}
 
       {:error, %Error{}} = error ->
         error
@@ -281,14 +282,25 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   defp parse_withdrawal(uid, data) do
+    raw_status = Map.get(data, "status", "unknown")
+
     %{
       uid: uid,
-      status: Map.get(data, "status", "unknown"),
+      status: normalize_withdrawal_status(raw_status),
+      raw_status: raw_status,
       amount: Map.get(data, "amount", 0)
     }
   end
 
-  defp parse_charge(uid, data) do
+  # Only OPP's two terminal words are recognised. Everything else — including a
+  # status OPP adds later — stays :pending, so an unknown state can never
+  # finalize or fail a payout.
+  defp normalize_withdrawal_status("completed"), do: :completed
+  defp normalize_withdrawal_status("failed"), do: :failed
+  defp normalize_withdrawal_status("disapproved"), do: :failed
+  defp normalize_withdrawal_status(_status), do: :pending
+
+  defp parse_transfer(uid, data) do
     %{
       uid: uid,
       status: Map.get(data, "status", "unknown"),

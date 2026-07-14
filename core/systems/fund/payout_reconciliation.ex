@@ -55,8 +55,8 @@ defmodule Systems.Fund.PayoutReconciliation do
 
   defp reconcile_payout(%Fund.PayoutModel{id: id, status: status, provider_uid: uid}, state) do
     case Payment.Public.reconcile_get_withdrawal(state, uid) do
-      {{:ok, %{status: provider_status}}, state} ->
-        apply_status(state, id, uid, status, provider_status)
+      {{:ok, withdrawal}, state} ->
+        apply_status(state, id, uid, status, withdrawal)
 
       {:not_found, state} ->
         Logger.error("[Fund] reconcile: payout ##{id} (#{status}) missing at provider #{uid}")
@@ -71,34 +71,34 @@ defmodule Systems.Fund.PayoutReconciliation do
     end
   end
 
-  defp apply_status(state, _id, _uid, :completed, _provider_status),
+  defp apply_status(state, _id, _uid, :completed, _withdrawal),
     do: State.tally(state, :verified)
 
-  defp apply_status(state, id, uid, local_status, provider_status) do
-    case resolve(uid, provider_status) do
+  defp apply_status(state, id, uid, local_status, %{raw_status: raw_status} = withdrawal) do
+    case resolve(uid, withdrawal) do
       {:ok, :still_pending} ->
         State.tally(state, :still_pending)
 
       {:ok, outcome} ->
-        record(state, outcome, id, uid, local_status, provider_status, %{})
+        record(state, outcome, id, uid, local_status, raw_status, %{})
 
       {:error, reason} ->
-        record(state, :errors, id, uid, local_status, provider_status, %{error: inspect(reason)})
+        record(state, :errors, id, uid, local_status, raw_status, %{error: inspect(reason)})
     end
   end
 
-  defp resolve(uid, provider_status) do
-    case Fund.Public.apply_withdrawal_status(uid, provider_status) do
-      {:ok, _} -> {:ok, withdrawal_outcome(provider_status)}
+  defp resolve(uid, %{status: status} = withdrawal) do
+    case Fund.Public.apply_withdrawal_status(uid, withdrawal) do
+      {:ok, _} -> {:ok, withdrawal_outcome(status)}
       other -> {:error, other}
     end
   rescue
     error -> {:error, error}
   end
 
-  defp withdrawal_outcome("completed"), do: :resolved_completed
-  defp withdrawal_outcome(status) when status in ["failed", "disapproved"], do: :resolved_failed
-  defp withdrawal_outcome(_status), do: :still_pending
+  defp withdrawal_outcome(:completed), do: :resolved_completed
+  defp withdrawal_outcome(:failed), do: :resolved_failed
+  defp withdrawal_outcome(:pending), do: :still_pending
 
   defp record(state, outcome, id, uid, local_status, provider_status, details) do
     finding = %{

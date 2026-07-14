@@ -950,7 +950,7 @@ defmodule Systems.Fund.Public do
 
   @doc """
   Requests a payout for all of the participant's `:approved` rewards: locks
-  them, then charges and withdraws via OPP. Returns `{:ok, result}` or
+  them, then transfers and withdraws via the payment provider. Returns `{:ok, result}` or
   `{:error, reason}`.
   """
   def request_payout(%Account.User{} = user) do
@@ -1116,24 +1116,24 @@ defmodule Systems.Fund.Public do
   defp withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids) do
     base_key = Fund.PayoutModel.idempotence_key(payout)
 
-    case Payment.Public.create_charge(
+    case Payment.Public.transfer_to_merchant(
            platform_uid,
            merchant_uid,
            total,
-           base_key <> ",type=charge"
+           base_key <> ",type=transfer"
          ) do
-      {:ok, _charge} ->
-        # OPP accepted the charge — never revert past here (double-payout risk).
-        withdraw_after_charge(payout, merchant_uid, total, base_key)
+      {:ok, _transfer} ->
+        # Provider accepted the transfer — never revert past here (double-payout risk).
+        withdraw_after_transfer(payout, merchant_uid, total, base_key)
 
       {:error, reason} ->
         # Nothing moved yet — safe to revert (UC-OPP-06.A3).
-        revert_payout_lock(reward_ids, "opp_charge_failed: #{inspect(reason)}")
+        revert_payout_lock(reward_ids, "transfer_failed: #{inspect(reason)}")
         {:error, {:opp_failed, reason}}
     end
   end
 
-  defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
+  defp withdraw_after_transfer(payout, merchant_uid, total, base_key) do
     attrs = %{amount: total, description: "Reward payout"}
 
     case Payment.Public.create_withdrawal(
@@ -1148,7 +1148,7 @@ defmodule Systems.Fund.Public do
       {:error, reason} ->
         # Funds already on the participant merchant — don't revert; SF-OPP-02 completes it.
         Logger.error(
-          "[Fund] charge succeeded but withdrawal failed for payout #{payout.id}; " <>
+          "[Fund] transfer succeeded but withdrawal failed for payout #{payout.id}; " <>
             "left :pending for reconciliation: #{inspect(reason)}"
         )
 
@@ -1257,39 +1257,39 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Applies an OPP withdrawal status change to the linked payout and its rewards.
+  Applies a provider withdrawal status change to the linked payout and its rewards.
   Idempotent: terminal payouts short-circuit. Returns `{:ok, payout}` when a
   payout was found, `{:ok, nil}` when none matched the uid, or `{:error, reason}`.
   """
-  def apply_withdrawal_status(provider_uid, opp_status)
-      when is_binary(provider_uid) and is_binary(opp_status) do
+  def apply_withdrawal_status(provider_uid, %{status: status, raw_status: raw_status})
+      when is_binary(provider_uid) and is_atom(status) and is_binary(raw_status) do
     case Repo.get_by(Fund.PayoutModel, provider_uid: provider_uid) do
       nil ->
         Logger.warning("[Fund] withdrawal #{provider_uid} not linked to any Payout — ignoring")
 
         {:ok, nil}
 
-      %Fund.PayoutModel{status: status} = payout when status in [:completed, :failed] ->
-        # Already terminal; tolerate OPP's webhook retries.
+      %Fund.PayoutModel{status: payout_status} = payout
+      when payout_status in [:completed, :failed] ->
+        # Already terminal; tolerate the provider's webhook retries.
         {:ok, payout}
 
       %Fund.PayoutModel{} = payout ->
-        apply_status(payout, opp_status)
+        apply_status(payout, status, raw_status)
     end
   end
 
-  defp apply_status(%Fund.PayoutModel{} = payout, "completed") do
+  defp apply_status(%Fund.PayoutModel{} = payout, :completed, _raw_status) do
     finalize_payout(payout, :completed, :paid, nil)
   end
 
-  defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
-       when opp_status in ["failed", "disapproved"] do
-    # Charge already moved funds — don't revert to :approved (would re-charge). SF-OPP-02 reconciles.
-    fail_payout(payout, "opp_status: #{opp_status}")
+  defp apply_status(%Fund.PayoutModel{} = payout, :failed, raw_status) do
+    # Transfer already moved funds — don't revert to :approved (would re-pay). SF-OPP-02 reconciles.
+    fail_payout(payout, "provider_status: #{raw_status}")
   end
 
-  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, opp_status) do
-    Logger.info("[Fund] withdrawal #{uid} OPP status=#{opp_status} — no local transition")
+  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, :pending, raw_status) do
+    Logger.info("[Fund] withdrawal #{uid} provider status=#{raw_status} — no local transition")
 
     {:ok, payout}
   end

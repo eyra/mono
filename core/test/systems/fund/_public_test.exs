@@ -883,7 +883,7 @@ defmodule Systems.Fund.PublicTest do
     # The payout first charges the funds platform (eyra) -> participant merchant,
     # then withdraws. Stub the charge leg as succeeding.
     defp stub_charge_ok do
-      expect(ProviderMock, :create_charge, fn _from, _to, _amount, _key ->
+      expect(ProviderMock, :transfer_to_merchant, fn _from, _to, _amount, _key ->
         {:ok, %{uid: "chg_ok", status: "created", amount: 0}}
       end)
     end
@@ -930,10 +930,10 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(merchant_uid)
 
       # Charge moves the funds platform (eyra) -> participant merchant first.
-      expect(ProviderMock, :create_charge, fn "mer_platform_test",
-                                              ^merchant_uid,
-                                              1000,
-                                              "payout=" <> _ ->
+      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform_test",
+                                                     ^merchant_uid,
+                                                     1000,
+                                                     "payout=" <> _ ->
         {:ok, %{uid: "chg_2", status: "created", amount: 1000}}
       end)
 
@@ -954,7 +954,7 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(user.merchant_uid)
 
       # Charge (platform -> participant) fails before any money moves -> revert.
-      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
@@ -978,7 +978,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
       end)
 
-      # No create_charge / create_withdrawal expectations: the compare-and-swap
+      # No transfer_to_merchant / create_withdrawal expectations: the compare-and-swap
       # lock must find 0 approved rows and bail before any money moves. Mox's
       # verify_on_exit! raises if either OPP call is made.
       assert {:error, :lock_failed} = Fund.Public.request_payout(user)
@@ -1036,7 +1036,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_payout_ready(user.merchant_uid)
 
-      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
@@ -1048,7 +1048,7 @@ defmodule Systems.Fund.PublicTest do
 
       [payout] = Core.Repo.all(Fund.PayoutModel)
       assert payout.status == :failed
-      assert payout.failure_reason =~ "opp_charge_failed"
+      assert payout.failure_reason =~ "transfer_failed"
       assert payout.provider_uid == nil
     end
 
@@ -1361,51 +1361,68 @@ defmodule Systems.Fund.PublicTest do
       {payout, rewards}
     end
 
-    test ~s(maps OPP "completed" to Payout :completed and rewards :paid),
+    # The provider adapter normalizes its own vocabulary before the domain sees
+    # it (see Provider.OPPTest); the domain only ever handles these three atoms.
+    defp withdrawal(status, raw_status) do
+      %{uid: "w_test", status: status, raw_status: raw_status, amount: 0}
+    end
+
+    test "maps :completed to Payout :completed and rewards :paid",
          %{user: user, fund: fund} do
       {payout, [r1, r2]} = insert_pending_payout(user, fund, [600, 400], "w_completed_1")
 
       assert {:ok, %Fund.PayoutModel{status: :completed, failure_reason: nil}} =
-               Fund.Public.apply_withdrawal_status("w_completed_1", "completed")
+               Fund.Public.apply_withdrawal_status(
+                 "w_completed_1",
+                 withdrawal(:completed, "completed")
+               )
 
       assert %{status: :paid} = Core.Repo.reload!(r1)
       assert %{status: :paid} = Core.Repo.reload!(r2)
       assert %{status: :completed} = Core.Repo.reload!(payout)
     end
 
-    test ~s(maps OPP "failed" to Payout :failed and leaves rewards :pending_payout),
+    test "maps :failed to Payout :failed and leaves rewards :pending_payout",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_failed_1")
 
       assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
-               Fund.Public.apply_withdrawal_status("w_failed_1", "failed")
+               Fund.Public.apply_withdrawal_status("w_failed_1", withdrawal(:failed, "failed"))
 
       assert reason =~ "failed"
-      # The charge already funded the participant merchant, so the rewards stay
+      # The transfer already funded the participant merchant, so the rewards stay
       # locked (:pending_payout) for reconciliation rather than reverting to
       # :approved (a re-payout would charge the platform again).
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
     end
 
-    test ~s(maps OPP "disapproved" to Payout :failed with a disapproved reason),
+    test ~s(records the provider's own word, not the normalized atom, as the failure reason),
          %{user: user, fund: fund} do
-      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
+      {payout, _} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
 
       assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
-               Fund.Public.apply_withdrawal_status("w_disapproved_1", "disapproved")
+               Fund.Public.apply_withdrawal_status(
+                 "w_disapproved_1",
+                 withdrawal(:failed, "disapproved")
+               )
 
+      # :failed collapses OPP's "failed" and "disapproved"; the audit trail must
+      # still say which one it actually was.
       assert reason =~ "disapproved"
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
     end
 
-    test "intermediate OPP statuses (approved/pending/new) are no-ops",
+    test ":pending is a no-op regardless of the provider's own word",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_intermediate_1")
 
-      for opp_status <- ["approved", "pending", "new", "unknown_future_value"] do
-        assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
+      for raw_status <- ["approved", "pending", "new", "unknown_future_value"] do
+        assert {:ok, _} =
+                 Fund.Public.apply_withdrawal_status(
+                   "w_intermediate_1",
+                   withdrawal(:pending, raw_status)
+                 )
       end
 
       # Nothing should have moved from the original :pending / :pending_payout state.
@@ -1414,20 +1431,26 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "returns {:ok, nil} and does nothing when the provider_uid is unknown" do
-      assert {:ok, nil} = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
+      assert {:ok, nil} =
+               Fund.Public.apply_withdrawal_status(
+                 "w_unknown_999",
+                 withdrawal(:completed, "completed")
+               )
     end
 
     test "is idempotent: re-applying to an already-:completed payout short-circuits",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_completed")
 
-      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+      done = withdrawal(:completed, "completed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
       assert %{status: :paid} = Core.Repo.reload!(r1)
 
       # A second "completed" webhook must not flip the (now :paid) reward back
       # to :pending_payout or otherwise change state.
       assert {:ok, %Fund.PayoutModel{status: :completed}} =
-               Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+               Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
 
       assert %{status: :paid} = Core.Repo.reload!(r1)
       assert %{status: :completed} = Core.Repo.reload!(payout)
@@ -1437,13 +1460,21 @@ defmodule Systems.Fund.PublicTest do
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_failed")
 
-      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_failed", "failed")
+      assert {:ok, _} =
+               Fund.Public.apply_withdrawal_status(
+                 "w_idempotent_failed",
+                 withdrawal(:failed, "failed")
+               )
+
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
 
-      # Late "completed" must not flip a :failed payout to :completed or move
+      # Late :completed must not flip a :failed payout to :completed or move
       # the still-locked reward.
       assert {:ok, %Fund.PayoutModel{status: :failed}} =
-               Fund.Public.apply_withdrawal_status("w_idempotent_failed", "completed")
+               Fund.Public.apply_withdrawal_status(
+                 "w_idempotent_failed",
+                 withdrawal(:completed, "completed")
+               )
 
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)

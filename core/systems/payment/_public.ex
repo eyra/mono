@@ -233,21 +233,21 @@ defmodule Systems.Payment.Public do
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run
 
-  # Charges
+  # Transfers
 
-  @spec create_charge(
+  @spec transfer_to_merchant(
           from_owner_uid :: String.t(),
           to_owner_uid :: String.t(),
           amount :: non_neg_integer(),
           idempotence_key :: String.t()
-        ) :: {:ok, Provider.charge()} | {:error, Error.t()}
-  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key) do
-    provider().create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+        ) :: {:ok, Provider.transfer()} | {:error, Error.t()}
+  def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key) do
+    provider().transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
   end
 
   @doc """
   The platform (eyra) merchant UID that holds the float — the `from_owner` of
-  participant payout charges. Sourced from the OPP `merchant_uid` config
+  participant payout transfers. Sourced from the OPP `merchant_uid` config
   (`OPP_MERCHANT_UID`).
   """
   @spec platform_merchant_uid() :: String.t() | nil

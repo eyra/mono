@@ -110,7 +110,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     transaction = stuck_transaction()
 
     expect(ProviderMock, :get_withdrawal, fn "w_payout" ->
-      {:ok, %{uid: "w_payout", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_payout", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->
@@ -128,7 +128,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     transaction = stuck_transaction()
 
     expect(ProviderMock, :get_withdrawal, fn "w_payout" ->
-      {:ok, %{uid: "w_payout", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_payout", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->

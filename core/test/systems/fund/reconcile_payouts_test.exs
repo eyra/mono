@@ -74,7 +74,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, reward} = insert_payout(user, fund, 1000, "w_done")
 
     expect(ProviderMock, :get_withdrawal, fn "w_done" ->
-      {:ok, %{uid: "w_done", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_done", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     assert %{scanned: 1, resolved_completed: 1} = reconcile()
@@ -86,12 +86,12 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, reward} = insert_payout(user, fund, 1000, "w_failed")
 
     expect(ProviderMock, :get_withdrawal, fn "w_failed" ->
-      {:ok, %{uid: "w_failed", status: "failed", amount: 1000}}
+      {:ok, %{uid: "w_failed", status: :failed, raw_status: "failed", amount: 1000}}
     end)
 
     assert %{scanned: 1, resolved_failed: 1} = reconcile()
     assert %{status: :failed} = Repo.reload!(payout)
-    # Charge already moved funds, so rewards stay locked for reconciliation.
+    # Transfer already moved funds, so rewards stay locked for reconciliation.
     assert %{status: :pending_payout} = Repo.reload!(reward)
   end
 
@@ -99,7 +99,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, _reward} = insert_payout(user, fund, 1000, "w_inflight")
 
     expect(ProviderMock, :get_withdrawal, fn "w_inflight" ->
-      {:ok, %{uid: "w_inflight", status: "pending", amount: 1000}}
+      {:ok, %{uid: "w_inflight", status: :pending, raw_status: "pending", amount: 1000}}
     end)
 
     assert %{scanned: 1, still_pending: 1} = reconcile()

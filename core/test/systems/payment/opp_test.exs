@@ -210,7 +210,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "w_1", "status": "pending", "amount": 1000}>)
       end)
 
-      assert {:ok, %{uid: "w_1", status: "pending", amount: 1000}} =
+      assert {:ok, %{uid: "w_1", status: :pending, raw_status: "pending", amount: 1000}} =
                OPP.create_withdrawal("m_1", :EUR, %{amount: 1000}, "payout=7")
     end
 
@@ -224,11 +224,55 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
-  describe "create_charge/4" do
+  # The adapter owns the vocabulary: OPP's status strings are normalized here so
+  # that no domain code ever matches on them. `raw_status` keeps OPP's own word
+  # for the audit trail.
+  describe "get_withdrawal/1 status normalization" do
+    defp stub_withdrawal_status(bypass, opp_status) do
+      Bypass.expect_once(bypass, "GET", "/withdrawals/w_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "w_1", "status": "#{opp_status}", "amount": 1000}>)
+      end)
+    end
+
+    test ~s(normalizes "completed" to :completed), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "completed")
+
+      assert {:ok, %{status: :completed, raw_status: "completed"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "failed" to :failed), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "failed")
+
+      assert {:ok, %{status: :failed, raw_status: "failed"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "disapproved" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "disapproved")
+
+      assert {:ok, %{status: :failed, raw_status: "disapproved"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "pending" to :pending), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "pending")
+
+      assert {:ok, %{status: :pending, raw_status: "pending"}} = OPP.get_withdrawal("w_1")
+    end
+
+    # The safety property: a status OPP adds later must never finalize or fail a
+    # payout, so anything unrecognised is :pending.
+    test "normalizes an unrecognised status to :pending", %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "some_future_status")
+
+      assert {:ok, %{status: :pending, raw_status: "some_future_status"}} =
+               OPP.get_withdrawal("w_1")
+    end
+  end
+
+  describe "transfer_to_merchant/4" do
     test "POSTs a balance charge from->to with idempotency key and parses the response",
          %{bypass: bypass} do
       Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
-        assert ["payout=7,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        assert ["payout=7,type=transfer"] = Plug.Conn.get_req_header(conn, "idempotency-key")
         {:ok, raw, conn} = Plug.Conn.read_body(conn)
         body = Jason.decode!(raw)
         assert body["type"] == "balance"
@@ -241,7 +285,12 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:ok, %{uid: "chg_1", status: "created", amount: 1000}} =
-               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
+               OPP.transfer_to_merchant(
+                 "mer_platform",
+                 "mer_participant",
+                 1000,
+                 "payout=7,type=transfer"
+               )
     end
 
     test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
@@ -250,7 +299,12 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:error, %Error{code: :api_error}} =
-               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
+               OPP.transfer_to_merchant(
+                 "mer_platform",
+                 "mer_participant",
+                 1000,
+                 "payout=7,type=transfer"
+               )
     end
   end
 end
