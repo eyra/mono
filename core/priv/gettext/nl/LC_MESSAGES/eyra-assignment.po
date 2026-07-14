@@ -541,6 +541,30 @@ msgid "email_capture.error.role_account"
 msgstr "Gebruik een persoonlijk e-mailadres, geen gedeeld adres (bijv. info@, admin@)."
 
 #, elixir-autogen, elixir-format
+msgid "panl.cta.join.title"
+msgstr "Wil je vaker meedoen aan onderzoek?"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr "Word lid van Panl — de deelnemerspool die burgers en wetenschap verbindt. Jij bepaalt wanneer je meedoet en je ontvangt een vergoeding voor elk onderzoek."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr "Word lid van Panl"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr "Bekijk wat je hebt verdiend"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr "Je uitbetalingen, eerdere onderzoeken en beschikbare onderzoeken vind je allemaal op je startpagina."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr "Naar startpagina"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.aim.label"
 msgstr ""
 

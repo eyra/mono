@@ -541,6 +541,30 @@ msgid "email_capture.error.role_account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "panl.cta.join.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.aim.label"
 msgstr ""
 

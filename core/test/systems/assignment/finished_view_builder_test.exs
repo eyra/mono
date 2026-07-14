@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.FinishedViewBuilderTest do
   use Core.DataCase
+  use Core.FeatureFlags.Test
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
@@ -204,14 +205,17 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     end
   end
 
-  describe "email_capture" do
+  describe "panl block (pre-launch: :panl on)" do
     setup do
       affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
       user = affiliate_user.user
+      set_feature_flag(:panl, true)
+      set_feature_flag(:panl_post_launch, false)
       %{user: user}
     end
 
-    test "includes email_capture for questionnaire assignment", %{user: user} do
+    test "renders the email-capture form for an affiliate on a questionnaire assignment",
+         %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
 
       assigns = build_assigns(user)
@@ -226,7 +230,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.email_capture.submit_button.face.type == :primary
     end
 
-    test "email_capture is nil for non-affiliate user on questionnaire assignment", %{} do
+    test "no block for a non-affiliate user" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_questionnaire_assignment()
 
@@ -236,7 +240,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.email_capture == nil
     end
 
-    test "email_capture is nil for non-questionnaire assignment", %{user: user} do
+    test "no block for a non-questionnaire assignment", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
 
       assigns = build_assigns(user)
@@ -245,7 +249,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.email_capture == nil
     end
 
-    test "email_capture shows success when user is already a pool member", %{user: user} do
+    test "shows the submitted acknowledgment once the user is a pool member",
+         %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
       panl_pool = Systems.Pool.Assembly.get_or_create_panl()
       Systems.Pool.Public.add_participant!(panl_pool, user)
@@ -259,7 +264,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       refute Map.has_key?(vm.email_capture, :submit_button)
     end
 
-    test "email_capture is nil when consent declined", %{} do
+    test "no block when the participant declined consent" do
       user = Factories.insert!(:member)
       consent_agreement = Factories.insert!(:consent_agreement)
       _revision = Factories.insert!(:consent_revision, %{agreement: consent_agreement})
@@ -288,6 +293,117 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         |> Assignment.Factories.add_participant(user)
 
       Assignment.Public.decline_member(assignment, user)
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
+    end
+  end
+
+  describe "panl block (post-launch: :panl_post_launch on)" do
+    setup do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      user = affiliate_user.user
+      set_feature_flag(:panl, true)
+      set_feature_flag(:panl_post_launch, true)
+      %{user: user}
+    end
+
+    test "renders a Join CTA when the affiliate is not yet a pool member",
+         %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
+      assert vm.email_capture.body == dgettext("eyra-assignment", "panl.cta.join.body")
+      refute Map.has_key?(vm.email_capture, :submit_button)
+
+      assert vm.email_capture.cta_button.action == %{
+               type: :http_get,
+               to: "/user/auth/identify?return_to=/pool/panl/join"
+             }
+
+      assert vm.email_capture.cta_button.face.label ==
+               dgettext("eyra-assignment", "panl.cta.join.button")
+    end
+
+    test "renders a Home CTA once the affiliate has joined the pool",
+         %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.home.title")
+      assert vm.email_capture.body == dgettext("eyra-assignment", "panl.cta.home.body")
+      refute Map.has_key?(vm.email_capture, :submit_button)
+
+      assert vm.email_capture.cta_button.action == %{type: :http_get, to: "/"}
+
+      assert vm.email_capture.cta_button.face.label ==
+               dgettext("eyra-assignment", "panl.cta.home.button")
+    end
+
+    test "renders a Join CTA that skips auth for a non-affiliate user (they already have a real email)" do
+      user = Factories.insert!(:member, %{creator: false})
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
+
+      assert vm.email_capture.cta_button.action == %{
+               type: :http_get,
+               to: "/pool/panl/join"
+             }
+    end
+
+    test "renders a Home CTA for a non-affiliate user who is already a pool member" do
+      user = Factories.insert!(:member, %{creator: false})
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture != nil
+      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.home.title")
+      assert vm.email_capture.cta_button.action == %{type: :http_get, to: "/"}
+    end
+
+    test "no block for a creator user (researcher preview)" do
+      user = Factories.insert!(:creator)
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assigns = build_assigns(user)
+      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert vm.email_capture == nil
+    end
+  end
+
+  describe "panl block (:panl off)" do
+    setup do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      user = affiliate_user.user
+      set_feature_flag(:panl, false)
+      %{user: user}
+    end
+
+    test "no block regardless of Panl membership or :panl_post_launch state",
+         %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)

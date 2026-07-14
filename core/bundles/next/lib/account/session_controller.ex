@@ -64,17 +64,7 @@ defmodule Next.Account.SessionController do
   defp do_redeem_otp(conn, token) do
     case Next.Account.AuthCodeVerifyPage.decode_redeem_token(token) do
       {:ok, %{user_id: nil, email: email} = payload} ->
-        case Account.Public.register_user_with_email(email) do
-          {:ok, user} ->
-            conn
-            |> stash_return_to(payload)
-            |> Account.UserAuth.log_in_user(user, true)
-
-          {:error, _changeset} ->
-            conn
-            |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
-            |> redirect(to: ~p"/user/auth/identify")
-        end
+        handle_new_email_redeem(conn, email, payload)
 
       {:ok, %{user_id: user_id} = payload} ->
         user = Account.Public.get_user!(user_id)
@@ -84,6 +74,49 @@ defmodule Next.Account.SessionController do
         |> Account.UserAuth.log_in_user(user, false)
 
       _ ->
+        conn
+        |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
+        |> redirect(to: ~p"/user/auth/identify")
+    end
+  end
+
+  # When the redeem token was minted for an email that had no user yet, we
+  # normally register a fresh Account.User. But if a provisional user is
+  # already logged in — an affiliate synth account that never had a real
+  # email — link the real email to *that* user instead. Without this,
+  # completing auth from the finished-page "Join Panl" CTA would leave the
+  # synth affiliate record behind and mint a new duplicate user.
+  defp handle_new_email_redeem(
+         %{assigns: %{current_user: %Account.User{} = user}} = conn,
+         email,
+         payload
+       ) do
+    if EmailSignUp.provisional?(user) do
+      case EmailSignUp.link(user, email) do
+        {:ok, linked_user} ->
+          conn
+          |> stash_return_to(payload)
+          |> Account.UserAuth.log_in_user(linked_user, false)
+
+        {:error, _} ->
+          register_new_email_user(conn, email, payload)
+      end
+    else
+      register_new_email_user(conn, email, payload)
+    end
+  end
+
+  defp handle_new_email_redeem(conn, email, payload),
+    do: register_new_email_user(conn, email, payload)
+
+  defp register_new_email_user(conn, email, payload) do
+    case Account.Public.register_user_with_email(email) do
+      {:ok, user} ->
+        conn
+        |> stash_return_to(payload)
+        |> Account.UserAuth.log_in_user(user, true)
+
+      {:error, _changeset} ->
         conn
         |> put_flash(:error, dgettext("eyra-user", "auth.session.expired"))
         |> redirect(to: ~p"/user/auth/identify")

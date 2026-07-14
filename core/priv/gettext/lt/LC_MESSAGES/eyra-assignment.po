@@ -552,6 +552,30 @@ msgid "email_capture.error.role_account"
 msgstr "Naudokite asmeninį el. pašto adresą, ne bendrinamą (pvz. info@, admin@)."
 
 #, elixir-autogen, elixir-format
+msgid "panl.cta.join.title"
+msgstr "Norite dažniau dalyvauti tyrimuose?"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr "Prisijunkite prie Panl — dalyvių pulo, jungiančio piliečius su mokslu. Jūs sprendžiate, kada dalyvauti, ir gaunate atlygį už kiekvieną tyrimą."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr "Prisijungti prie Panl"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr "Peržiūrėkite, kiek uždirbote"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr "Jūsų piniginė, ankstesni tyrimai ir prieinami tyrimai — viskas yra jūsų pradžios puslapyje."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr "Į pradžios puslapį"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.aim.label"
 msgstr ""
 

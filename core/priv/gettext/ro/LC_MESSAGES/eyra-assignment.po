@@ -552,6 +552,30 @@ msgid "email_capture.error.role_account"
 msgstr "Te rugăm să folosești o adresă de email personală, nu una partajată (ex. info@, admin@)."
 
 #, elixir-autogen, elixir-format
+msgid "panl.cta.join.title"
+msgstr "Vrei să participi mai des la cercetare?"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr "Alătură-te Panl — comunitatea de participanți care conectează cetățenii cu știința. Tu decizi când participi și primești o recompensă pentru fiecare studiu."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr "Alătură-te Panl"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr "Vezi cât ai câștigat"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr "Portofelul tău, studiile anterioare și cele disponibile sunt toate pe pagina ta principală."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr "Către pagina principală"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.aim.label"
 msgstr ""
 
