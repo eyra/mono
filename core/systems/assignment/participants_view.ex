@@ -1,8 +1,6 @@
 defmodule Systems.Assignment.ParticipantsView do
   use CoreWeb, :live_component
 
-  require Logger
-
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic
 
@@ -24,7 +22,8 @@ defmodule Systems.Assignment.ParticipantsView do
           content_flags: content_flags,
           user: user,
           viewport: viewport,
-          breakpoint: breakpoint
+          breakpoint: breakpoint,
+          pool: pool
         },
         socket
       ) do
@@ -40,6 +39,7 @@ defmodule Systems.Assignment.ParticipantsView do
         title: title,
         content_flags: content_flags,
         user: user,
+        pool: pool,
         external_panel_link?: external_panel_link?,
         viewport: viewport,
         breakpoint: breakpoint
@@ -90,15 +90,9 @@ defmodule Systems.Assignment.ParticipantsView do
   def handle_event(
         "create_advert",
         _payload,
-        %{assigns: %{assignment: assignment, user: user}} = socket
+        %{assigns: %{assignment: assignment, user: user, pool: %Pool.Model{} = pool}} = socket
       ) do
-    if pool = Pool.Public.get_panl() do
-      Advert.Assembly.create(assignment, user, pool)
-    else
-      Logger.error("Panl pool not found")
-      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
-    end
-
+    Advert.Assembly.create(assignment, user, pool)
     {:noreply, socket}
   end
 
@@ -256,12 +250,12 @@ defmodule Systems.Assignment.ParticipantsView do
           <% end %>
 
           <div class="flex flex-col gap-8">
-            <%= if @content_flags[:advert_in_pool] do %>
+            <%= if @content_flags[:advert_in_pool] and @pool do %>
               <InlineBlock.inline_block
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
                 button={@advert_button}
-                icon={Logo.path(:panl, {:product, :standing})}
+                icon={Logo.path(Pool.Model.slug(@pool), :pool)}
               />
             <% end %>
 

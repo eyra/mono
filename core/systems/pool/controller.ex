@@ -12,17 +12,19 @@ defmodule Systems.Pool.Controller do
   """
   use CoreWeb, {:controller, [formats: [:html]]}
 
+  alias CoreWeb.ReturnTo
   alias Systems.Pool
   alias Systems.Account
 
-  def join(conn, %{"slug" => slug}) do
+  def join(conn, %{"slug" => slug} = params) do
     user = conn.assigns.current_user
     %Pool.Model{} = pool = Pool.Public.get_by_slug(String.to_existing_atom(slug))
+    return_to = ReturnTo.sanitize(Map.get(params, "return_to"))
 
     if Pool.Public.participant?(pool, user) do
-      redirect(conn, to: Account.UserAuth.signed_in_path(user))
+      redirect(conn, to: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user)))
     else
-      redirect(conn, to: ~p"/pool/#{slug}/onboarding")
+      redirect(conn, to: ReturnTo.append(~p"/pool/#{slug}/onboarding", return_to))
     end
   end
 end

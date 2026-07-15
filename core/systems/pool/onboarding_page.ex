@@ -17,9 +17,9 @@ defmodule Systems.Pool.OnboardingPage do
 
   Steps:
 
-    * `:join_consent` — `Pool.JoinConsentView` publishes `:accept` or
-      `:decline`. Accept adds the user as a participant and advances
-      to `:features`; decline skips remaining steps and goes home.
+    * `:join_consent` — `Pool.JoinConsentView` publishes `:accept`.
+      Accept adds the user as a participant and advances to `:features`.
+      There is no decline action — users hit browser Back to exit.
     * `:features` — `Account.FeaturesView` (embedded LiveView) captures
       gender / birth year. A page-level continue button advances.
     * `:already_member` — static info block; no interaction.
@@ -29,7 +29,9 @@ defmodule Systems.Pool.OnboardingPage do
 
   import LiveNest.HTML
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Text
   alias Systems.Pool
 
@@ -41,7 +43,9 @@ defmodule Systems.Pool.OnboardingPage do
   end
 
   @impl true
-  def mount(_params, _session, socket), do: {:ok, socket}
+  def mount(params, _session, socket) do
+    {:ok, socket |> assign(return_to: ReturnTo.sanitize(Map.get(params, "return_to")))}
+  end
 
   @impl true
   def consume_event(
@@ -51,16 +55,6 @@ defmodule Systems.Pool.OnboardingPage do
     Pool.Public.add_participant!(pool, user)
 
     {:stop, socket |> advance_or_finish()}
-  end
-
-  # Decline short-circuits the remaining steps: features is only
-  # meaningful for someone who has just joined, so a declined user
-  # goes straight home.
-  def consume_event(
-        %{name: :decline},
-        %{assigns: %{vm: %{finish_path: finish_path}}} = socket
-      ) do
-    {:stop, socket |> push_navigate(to: finish_path)}
   end
 
   @impl true
@@ -96,7 +90,11 @@ defmodule Systems.Pool.OnboardingPage do
             </div>
           <% end %>
           <%= if @vm.hero_title do %>
-            <Text.title1>{@vm.hero_title}</Text.title1>
+            <div class="flex flex-row items-center gap-4">
+              <Text.title1 margin="">{@vm.hero_title}</Text.title1>
+              <div class="flex-grow" />
+              <Logo.pool name={Pool.Model.slug(@model)} variant={:wide} class="h-12" />
+            </div>
             <.spacing value="L" />
           <% end %>
           <%= if @vm.step_view do %>

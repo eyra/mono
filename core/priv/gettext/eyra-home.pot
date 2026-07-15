@@ -19,14 +19,6 @@ msgid "participated.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "available.visitor.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "member.caption"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
 msgstr ""
 
@@ -44,4 +36,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "guest.caption"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "guest.title"
 msgstr ""

@@ -389,3 +389,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.modal.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr ""

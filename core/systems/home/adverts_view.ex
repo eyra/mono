@@ -18,6 +18,7 @@ defmodule Systems.Home.AdvertsView do
         cards: cards,
         count: Map.get(params, :count, Enum.count(cards)),
         more_path: Map.get(params, :more_path),
+        pool_slug: Map.get(params, :pool_slug),
         sub_heading_text: sub_heading_text
       )
     }
@@ -49,7 +50,7 @@ defmodule Systems.Home.AdvertsView do
           </Text.title2>
           <div class="flex-grow" />
           <div>
-            <Logo.product name={:panl} variant={:wide} class="h-12" />
+            <Logo.pool name={@pool_slug} variant={:wide} class="h-12" />
           </div>
         </div>
         <.spacing value="S" />

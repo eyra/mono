@@ -42,7 +42,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ "Software Services"
+      assert response =~ "Activities"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do

@@ -119,9 +119,17 @@ msgid "join_consent.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "join_consent.decline.button"
+msgid "join_consent.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "join_consent.title"
+msgid "already_member.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
 msgstr ""

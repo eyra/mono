@@ -10,6 +10,7 @@ defmodule Next.Account.AuthPage do
   import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
 
@@ -23,7 +24,7 @@ defmodule Next.Account.AuthPage do
           form: to_form(%{"email" => ""}),
           error: nil,
           loading: false,
-          return_to: sanitize_return_to(Map.get(params, "return_to"))
+          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
         )
         |> update_menus()
       }
@@ -31,11 +32,6 @@ defmodule Next.Account.AuthPage do
       {:ok, redirect(socket, to: ~p"/user/signin")}
     end
   end
-
-  # Only same-origin paths are accepted, so an attacker cannot craft a link
-  # that ends up bouncing the user to an external site after login.
-  defp sanitize_return_to("/" <> _rest = path), do: path
-  defp sanitize_return_to(_), do: nil
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     menus = build_menus(stripped_menus_config(), user, uri)
@@ -73,10 +69,10 @@ defmodule Next.Account.AuthPage do
 
     case Account.EmailRouter.route(email) do
       :google ->
-        {:noreply, redirect(socket, to: append_return_to(google_url(email), return_to))}
+        {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}
 
       :surfconext ->
-        {:noreply, redirect(socket, to: append_return_to("/auth/surfconext", return_to))}
+        {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email) do
@@ -100,20 +96,13 @@ defmodule Next.Account.AuthPage do
   defp verify_url(email, return_to),
     do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
 
-  defp append_return_to(url, nil), do: url
-
-  defp append_return_to(url, return_to) do
-    sep = if String.contains?(url, "?"), do: "&", else: "?"
-    "#{url}#{sep}return_to=#{URI.encode_www_form(return_to)}"
-  end
-
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped menus={@menus}>
-      <div class="h-full flex flex-col justify-center">
+    <.stripped menus={@menus} centered?>
+      <div class="h-full flex flex-col justify-center pb-16">
       <Area.content>
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>

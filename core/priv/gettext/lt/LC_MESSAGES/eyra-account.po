@@ -266,7 +266,7 @@ msgstr "Per daug neteisingų bandymų. Prašykite naujo kodo."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Patikrinkite el. paštą"
+msgstr "Patvirtinti el. paštą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -278,7 +278,7 @@ msgstr "Įveskite galiojantį el. pašto adresą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Koks tavo el. paštas?"
+msgstr "Pradėkime"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -399,3 +399,7 @@ msgstr "Tęsti"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.title"
 msgstr "Patvirtinti banko sąskaitą"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "Išsiuntėme tau kodą"

@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.FinishedViewTest do
   use CoreWeb.ConnCase, async: false
+  use Core.FeatureFlags.Test
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
@@ -216,9 +217,11 @@ defmodule Systems.Assignment.FinishedViewTest do
     end
   end
 
-  describe "email capture form" do
+  describe "email capture form (pre-launch: :panl on)" do
     setup do
       affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      set_feature_flag(:panl, true)
+      set_feature_flag(:panl_post_launch, false)
       %{user: affiliate_user.user}
     end
 
@@ -348,6 +351,63 @@ defmodule Systems.Assignment.FinishedViewTest do
       view |> render_submit("submit_email", %{"email" => "taken-capture@example.com"})
 
       assert view |> has_element?("[data-testid='email-capture-error']")
+    end
+  end
+
+  describe "panl CTA (post-launch: :panl_post_launch on)" do
+    setup do
+      affiliate_user = Factories.insert!(:affiliate_user, %{identifier: "test_participant"})
+      set_feature_flag(:panl, true)
+      set_feature_flag(:panl_post_launch, true)
+      %{user: affiliate_user.user}
+    end
+
+    test "renders a Join CTA for an affiliate who is not yet a Panl member",
+         %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      assert view |> has_element?("[data-testid='email-capture-block']")
+      assert view |> has_element?("[data-testid='panl-cta-button']")
+      refute view |> has_element?("[data-testid='email-capture-input']")
+
+      # Anchor the destination on the actual HTML so a refactor of the CTA
+      # href surfaces here.
+      assert html =~ "/user/auth/identify?return_to=/pool/panl/join"
+    end
+
+    test "renders a Home CTA for an affiliate who is already a Panl member",
+         %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
+      Systems.Pool.Public.add_participant!(panl_pool, user)
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      session = %{"live_context" => live_context}
+      {:ok, view, html} = live_isolated(conn, Assignment.FinishedView, session: session)
+
+      assert view |> has_element?("[data-testid='email-capture-block']")
+      assert view |> has_element?("[data-testid='panl-cta-button']")
+      refute view |> has_element?("[data-testid='email-capture-input']")
+
+      assert html =~ ~s(href="/")
     end
   end
 
