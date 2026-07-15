@@ -48,7 +48,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
         amount_cents: 1000,
         currency: "eur",
         status: :pending,
-        provider_uid: "w_payout"
+        provider_uid: "w_payout",
+        funds_committed_at: ~N[2026-01-01 00:00:00]
       })
 
     Factories.insert!(:reward, %{
