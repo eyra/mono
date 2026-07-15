@@ -948,19 +948,43 @@ defmodule Systems.Fund.PublicTest do
                Fund.Public.request_payout(user)
     end
 
-    test "reverts the lock when OPP returns an error", %{user: user, fund: fund} do
+    test "reverts the lock when the provider definitively rejects the transfer",
+         %{user: user, fund: fund} do
       %{id: id} = insert_reward(user, fund, 1000, :approved)
 
       stub_payout_ready(user.merchant_uid)
 
-      # Charge (platform -> participant) fails before any money moves -> revert.
+      # A 4xx means the provider received the transfer and refused it before
+      # moving any money, so releasing the lock is safe.
       expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
       end)
 
       assert {:error, {:opp_failed, %Systems.Payment.Error{}}} = Fund.Public.request_payout(user)
 
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
+    end
+
+    test "leaves the lock in place when the transfer outcome is uncertain",
+         %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+
+      # A dropped connection tells us nothing: the transfer may have moved the
+      # money. Reverting would let a retry charge again, so the rewards stay
+      # locked and the payout stays :pending for reconciliation.
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
+               Fund.Public.request_payout(user)
+
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id), [])
+
+      [payout] = Core.Repo.all(Fund.PayoutModel)
+      assert payout.status == :pending
     end
 
     test "rolls back without an OPP charge when the rewards are locked concurrently",
@@ -1030,14 +1054,14 @@ defmodule Systems.Fund.PublicTest do
       assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r2_id)
     end
 
-    test "marks the Payout :failed (with reason) and detaches reverted rewards on OPP failure",
+    test "marks the Payout :failed (with reason) and detaches reverted rewards on a rejected transfer",
          %{user: user, fund: fund} do
       %{id: r_id} = insert_reward(user, fund, 1000, :approved)
 
       stub_payout_ready(user.merchant_uid)
 
       expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
       end)
 
       assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user)
@@ -1048,7 +1072,7 @@ defmodule Systems.Fund.PublicTest do
 
       [payout] = Core.Repo.all(Fund.PayoutModel)
       assert payout.status == :failed
-      assert payout.failure_reason =~ "transfer_failed"
+      assert payout.failure_reason =~ "transfer_rejected"
       assert payout.provider_uid == nil
     end
 

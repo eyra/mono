@@ -1126,12 +1126,39 @@ defmodule Systems.Fund.Public do
         |> commit_funds(transfer)
         |> withdraw_after_transfer(merchant_uid, total)
 
-      {:error, reason} ->
-        # Nothing moved yet — safe to revert (UC-OPP-06.A3).
-        revert_payout_lock(reward_ids, "transfer_failed: #{inspect(reason)}")
-        {:error, {:opp_failed, reason}}
+      {:error, %Payment.Error{} = error} ->
+        handle_transfer_error(error, reward_ids)
     end
   end
+
+  # Reverting the reward lock is only safe when the money definitely did not
+  # move: a later payout re-locks the same rewards and charges again, so a revert
+  # after a transfer that actually landed pays the participant twice.
+  #
+  # A 4xx from the provider is a definitive rejection — the request was received
+  # and refused before anything happened. Everything else is ambiguous: a 5xx may
+  # have moved the money then errored, an unparseable 2xx almost certainly moved
+  # it, and a dropped connection tells us nothing. Those stay :pending so
+  # reconciliation resolves them against the provider rather than guessing.
+  defp handle_transfer_error(%Payment.Error{} = error, reward_ids) do
+    if transfer_rejected?(error) do
+      revert_payout_lock(reward_ids, "transfer_rejected: #{inspect(error)}")
+      {:error, {:opp_failed, error}}
+    else
+      Logger.error(
+        "[Fund] transfer outcome uncertain, leaving payout :pending for reconciliation: " <>
+          inspect(error)
+      )
+
+      {:error, {:opp_uncertain, error}}
+    end
+  end
+
+  defp transfer_rejected?(%Payment.Error{code: :api_error, details: %{status: status}})
+       when is_integer(status) and status >= 400 and status < 500,
+       do: true
+
+  defp transfer_rejected?(%Payment.Error{}), do: false
 
   # Record that the money has moved, before anything downstream can fail. Charges
   # have no list endpoint at OPP, so a transfer uid we never persist cannot be
