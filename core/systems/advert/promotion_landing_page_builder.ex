@@ -5,6 +5,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
   alias Phoenix.LiveView
 
   alias CoreWeb.ReturnTo
+  alias Frameworks.Pixel.Logo
   alias Systems.Advert
   alias Systems.Pool
   alias Systems.Promotion
@@ -30,7 +31,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     |> CoreWeb.Live.Hook.Locale.put_locale()
 
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
-    icon_url = "/images/logos/products/#{String.downcase(pool_name)}_wide.svg"
+    icon_url = Logo.path(pool_name, {:pool, {:wide, :dark}})
 
     %{
       id: id,
