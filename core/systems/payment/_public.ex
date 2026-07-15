@@ -225,6 +225,16 @@ defmodule Systems.Payment.Public do
     provider().get_withdrawal(uid)
   end
 
+  @doc """
+  Every withdrawal the provider holds for a merchant, so one whose uid was never
+  recorded can still be found by its `reference`.
+  """
+  @spec list_withdrawals(merchant_uid :: String.t()) ::
+          {:ok, [Provider.withdrawal()]} | {:error, Error.t()}
+  def list_withdrawals(merchant_uid) do
+    provider().list_withdrawals(merchant_uid)
+  end
+
   # Reconciliation
 
   defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state

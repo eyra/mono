@@ -7,7 +7,6 @@ defmodule Systems.Payment.Provider.Local do
 
   # Merchants
 
-  # Always "fully verified" so the dev/test pay-out path skips OPP's KYC funnel.
   defp stub_merchant(uid) do
     %{
       uid: uid,
@@ -113,13 +112,25 @@ defmodule Systems.Payment.Provider.Local do
     )
 
     {:ok,
-     %{uid: uid, status: :pending, raw_status: "created", amount: Map.get(attrs, :amount, 0)}}
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       reference: idempotence_key,
+       amount: Map.get(attrs, :amount, 0)
+     }}
   end
 
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
-    {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: 0}}
+    {:ok, %{uid: uid, status: :pending, raw_status: "created", reference: nil, amount: 0}}
+  end
+
+  @impl true
+  def list_withdrawals(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_withdrawals merchant=#{merchant_uid} -> []")
+    {:ok, []}
   end
 
   @impl true

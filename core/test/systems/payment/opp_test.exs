@@ -227,6 +227,47 @@ defmodule Systems.Payment.Provider.OPPTest do
   # The adapter owns the vocabulary: OPP's status strings are normalized here so
   # that no domain code ever matches on them. `raw_status` keeps OPP's own word
   # for the audit trail.
+  # How a stranded withdrawal is found again: its uid was never recorded, so the
+  # only handle left is the `reference` we set when creating it.
+  describe "list_withdrawals/1" do
+    test "lists a merchant's withdrawals with their reference", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"data": [
+          {"uid": "w_1", "status": "completed", "reference": "payout=abc,type=withdrawal,attempt=0", "amount": 1000},
+          {"uid": "w_2", "status": "failed", "reference": "payout=def,type=withdrawal,attempt=0", "amount": 500}
+        ]}>)
+      end)
+
+      assert {:ok, [first, second]} = OPP.list_withdrawals("m_1")
+
+      assert %{
+               uid: "w_1",
+               status: :completed,
+               reference: "payout=abc,type=withdrawal,attempt=0",
+               amount: 1000
+             } = first
+
+      assert %{uid: "w_2", status: :failed, reference: "payout=def,type=withdrawal,attempt=0"} =
+               second
+    end
+
+    test "a merchant with no withdrawals returns an empty list, not an error", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"data": []}>)
+      end)
+
+      assert {:ok, []} = OPP.list_withdrawals("m_1")
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "boom"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} = OPP.list_withdrawals("m_1")
+    end
+  end
+
   describe "get_withdrawal/1 status normalization" do
     defp stub_withdrawal_status(bypass, opp_status) do
       Bypass.expect_once(bypass, "GET", "/withdrawals/w_1", fn conn ->
@@ -280,6 +321,10 @@ defmodule Systems.Payment.Provider.OPPTest do
         assert body["from_owner_uid"] == "mer_platform"
         assert body["to_owner_uid"] == "mer_participant"
         assert body["amount"] == 1000
+
+        # A charge has no `reference` field and cannot be listed, so metadata is
+        # the only thing tying it back to its payout for a manual investigation.
+        assert body["metadata"]["reference"] == "payout=7,type=transfer"
 
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
       end)

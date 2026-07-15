@@ -215,6 +215,20 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  @impl true
+  def list_withdrawals(merchant_uid) when is_binary(merchant_uid) do
+    case HTTP.get("/merchants/#{merchant_uid}/withdrawals") do
+      {:ok, %{"data" => items}} when is_list(items) ->
+        {:ok, Enum.map(items, &parse_withdrawal(Map.get(&1, "uid"), &1))}
+
+      {:ok, _data} ->
+        {:ok, []}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   # Transfers
 
   # OPP models a merchant-to-merchant transfer as a charge of type `balance`.
@@ -227,7 +241,8 @@ defmodule Systems.Payment.Provider.OPP do
       amount: amount,
       currency: "EUR",
       from_owner_uid: from_owner_uid,
-      to_owner_uid: to_owner_uid
+      to_owner_uid: to_owner_uid,
+      metadata: %{reference: idempotence_key}
     }
 
     case HTTP.post("/charges", body, [{"Idempotency-Key", idempotence_key}]) do
@@ -288,6 +303,7 @@ defmodule Systems.Payment.Provider.OPP do
       uid: uid,
       status: normalize_withdrawal_status(raw_status),
       raw_status: raw_status,
+      reference: Map.get(data, "reference"),
       amount: Map.get(data, "amount", 0)
     }
   end

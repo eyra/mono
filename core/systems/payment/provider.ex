@@ -119,6 +119,7 @@ defmodule Systems.Payment.Provider do
           uid: String.t(),
           status: lifecycle_status(),
           raw_status: String.t(),
+          reference: String.t() | nil,
           amount: integer()
         }
 
@@ -145,6 +146,18 @@ defmodule Systems.Payment.Provider do
             ) ::
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
+
+  @doc """
+  Every withdrawal the provider holds for a merchant.
+
+  This is how a withdrawal is found again when its uid was never recorded — the
+  caller matches on `reference`, which carries the caller's own idempotence key.
+  Deliberately unfiltered: these are participant merchants, which have a handful
+  of withdrawals in their lifetime, so there is nothing to paginate around and no
+  need to depend on a provider's filter vocabulary.
+  """
+  @callback list_withdrawals(merchant_uid :: String.t()) ::
+              {:ok, [withdrawal()]} | {:error, Error.t()}
 
   # Transfers
 

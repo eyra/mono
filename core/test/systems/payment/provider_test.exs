@@ -119,10 +119,38 @@ defmodule Systems.Payment.ProviderTest do
     test "delegates to configured provider" do
       ProviderMock
       |> expect(:get_withdrawal, fn "w1" ->
-        {:ok, %{uid: "w1", status: :completed, raw_status: "completed", amount: 500}}
+        {:ok,
+         %{
+           uid: "w1",
+           status: :completed,
+           raw_status: "completed",
+           reference: "payout=abc,type=withdrawal,attempt=0",
+           amount: 500
+         }}
       end)
 
       assert {:ok, %{uid: "w1", status: :completed}} = ProviderMock.get_withdrawal("w1")
+    end
+  end
+
+  describe "list_withdrawals/1" do
+    test "delegates to configured provider" do
+      ProviderMock
+      |> expect(:list_withdrawals, fn "m1" ->
+        {:ok,
+         [
+           %{
+             uid: "w1",
+             status: :pending,
+             raw_status: "pending",
+             reference: "payout=abc,type=withdrawal,attempt=0",
+             amount: 500
+           }
+         ]}
+      end)
+
+      assert {:ok, [%{uid: "w1", reference: "payout=abc,type=withdrawal,attempt=0"}]} =
+               ProviderMock.list_withdrawals("m1")
     end
   end
 end
