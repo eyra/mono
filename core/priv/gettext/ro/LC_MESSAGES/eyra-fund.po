@@ -190,3 +190,15 @@ msgstr "Către verificare"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.title"
 msgstr "Contul bancar nu este încă verificat"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.retry"
+msgstr ""

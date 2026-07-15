@@ -189,3 +189,15 @@ msgstr "Go to verification"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.title"
 msgstr "Bank account not yet verified"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.in_progress"
+msgstr "Your payout is being processed."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.manual"
+msgstr "Your payout is being processed. Please contact support if this takes a while."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Retry payout"

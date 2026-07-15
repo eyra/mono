@@ -17,6 +17,9 @@ defmodule Systems.Fund.PayoutWithdrawal do
 
   alias Core.Repo
   alias Systems.Account
+  import Ecto.Query
+
+  alias Ecto.Multi
   alias Systems.Fund
   alias Systems.Payment
 
@@ -68,9 +71,27 @@ defmodule Systems.Fund.PayoutWithdrawal do
     be looked up at the provider, so we cannot tell whether the money moved.
     Re-driving risks a double charge; this is the one case left for a human.
   """
-  def resume(%Fund.PayoutModel{} = payout) do
+  def resume(%Fund.PayoutModel{id: id}) do
+    Multi.new()
+    |> Multi.run(:resume, fn repo, _ -> {:ok, resume_locked(repo, id)} end)
+    |> Repo.commit()
+    |> unwrap_resume()
+  end
+
+  # The retry button and the reconciler can hit the same payout at once. Locking
+  # the row and re-reading it fresh means the loser dispatches on the phase the
+  # winner advanced it to — usually a no-op — not a stale one.
+  defp resume_locked(repo, id) do
+    payout =
+      from(p in Fund.PayoutModel, where: p.id == ^id, lock: "FOR UPDATE")
+      |> repo.one!()
+
     resume_by_phase(Fund.PayoutModel.phase(payout), payout)
   end
+
+  # Wrapped in {:ok, _} so a domain error still commits; only a raise rolls back.
+  defp unwrap_resume({:ok, %{resume: result}}), do: result
+  defp unwrap_resume({:error, _step, reason, _changes}), do: {:error, reason}
 
   defp resume_by_phase(:awaiting_withdrawal, payout), do: resume_withdrawal(payout)
   defp resume_by_phase(:withdrawal_retryable, payout), do: retry_withdrawal(payout)

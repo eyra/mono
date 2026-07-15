@@ -1312,6 +1312,53 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "payout_status/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_status_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    test "is :none without an unresolved payout", %{user: user} do
+      assert :none = Fund.Public.payout_status(user)
+    end
+
+    test "is :in_progress while the withdrawal is in flight", %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: "w_inflight"
+      })
+
+      assert :in_progress = Fund.Public.payout_status(user)
+    end
+
+    test "is :retryable when funds moved but no withdrawal was recorded",
+         %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: nil
+      })
+
+      assert :retryable = Fund.Public.payout_status(user)
+    end
+
+    test "is :retryable when a withdrawal failed after the funds moved",
+         %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        status: :failed,
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: "w_failed"
+      })
+
+      assert :retryable = Fund.Public.payout_status(user)
+    end
+
+    test "is :manual when the transfer was never confirmed", %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      assert :manual = Fund.Public.payout_status(user)
+    end
+  end
+
   describe "payout_eligibility/1" do
     setup %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_elig_1"})

@@ -996,6 +996,30 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
+  The participant's payout situation for display, so the home card can surface a
+  stranded payout the reward-status columns don't show:
+
+    * `:none`        — no unresolved payout; the normal "Uitbetalen" flow applies.
+    * `:in_progress` — issued and awaiting the bank; nothing for the user to do.
+    * `:retryable`   — stranded but recoverable; a "retry" resumes it.
+    * `:manual`      — an unconfirmed transfer that only support can resolve.
+  """
+  @spec payout_status(Account.User.t()) :: :none | :in_progress | :retryable | :manual
+  def payout_status(%Account.User{id: user_id}) do
+    case find_unresolved_payout(user_id) do
+      nil -> :none
+      payout -> display_status(Fund.PayoutModel.phase(payout))
+    end
+  end
+
+  defp display_status(:awaiting_provider), do: :in_progress
+
+  defp display_status(phase) when phase in [:awaiting_withdrawal, :withdrawal_retryable],
+    do: :retryable
+
+  defp display_status(:awaiting_transfer), do: :manual
+
+  @doc """
   Pure pre-flight threshold check (no side effects), used by `prepare_payout/1`.
   """
   def payout_eligibility(%Account.User{id: user_id}) do
