@@ -64,7 +64,9 @@ defmodule Frameworks.Pixel.Logo do
     |> then(&"/images/logos/#{type}/#{&1}.svg")
   end
 
+  defp file_with_variant(name, {:wide, :dark}), do: "#{name}_wide_dark"
   defp file_with_variant(name, :wide), do: "#{name}_wide"
+  defp file_with_variant(name, :dark), do: "#{name}_dark"
   defp file_with_variant(name, :standing), do: "#{name}_standing"
   defp file_with_variant(name, :square), do: "#{name}_square"
   defp file_with_variant(name, _), do: name
@@ -107,7 +109,7 @@ defmodule Frameworks.Pixel.Logo do
   end
 
   attr(:name, :any, required: true)
-  attr(:variant, :atom, default: :default, values: [:default, :wide])
+  attr(:variant, :any, default: :default)
   attr(:class, :string, default: "")
 
   def pool(assigns) do
