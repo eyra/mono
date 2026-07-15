@@ -954,21 +954,41 @@ defmodule Systems.Fund.Public do
   `{:error, reason}`.
   """
   def request_payout(%Account.User{} = user) do
-    # Reload: the caller may hold a struct from before prepare_payout/1 set merchant_uid.
-    case Repo.reload!(user) do
-      %Account.User{merchant_uid: nil} ->
-        {:error, :no_merchant}
+    user |> Repo.reload!() |> resume_or_start_payout()
+  end
 
-      %Account.User{id: user_id, merchant_uid: merchant_uid} ->
-        approved = list_approved_rewards(user_id)
-        total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+  defp resume_or_start_payout(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
 
-        if total < @payout_threshold_cents do
-          {:error, {:below_threshold, total}}
-        else
-          do_request_payout(user_id, merchant_uid, approved, total)
-        end
+  # Resume an unresolved payout rather than start a fresh one: a new payout only
+  # sees :approved rewards, so it would strand the ones locked on the old one.
+  defp resume_or_start_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}) do
+    case find_unresolved_payout(user_id) do
+      %Fund.PayoutModel{} = payout -> resume_payout(payout)
+      nil -> start_new_payout(user_id, merchant_uid)
     end
+  end
+
+  defp start_new_payout(user_id, merchant_uid) do
+    approved = list_approved_rewards(user_id)
+    total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      do_request_payout(user_id, merchant_uid, approved, total)
+    end
+  end
+
+  # A :failed payout is still unresolved only if its funds moved; without a
+  # commit it reverted its own lock and its rewards are back in :approved.
+  defp find_unresolved_payout(user_id) do
+    from(p in Fund.PayoutModel,
+      where: p.user_id == ^user_id,
+      where: p.status == :pending or (p.status == :failed and not is_nil(p.funds_committed_at)),
+      order_by: [asc: p.inserted_at],
+      limit: 1
+    )
+    |> Repo.one()
   end
 
   @doc """
@@ -1121,7 +1141,6 @@ defmodule Systems.Fund.Public do
            Fund.PayoutModel.transfer_key(payout)
          ) do
       {:ok, transfer} ->
-        # Provider accepted the transfer — never revert past here (double-payout risk).
         payout
         |> commit_funds(transfer)
         |> Fund.PayoutWithdrawal.issue(merchant_uid, total)
@@ -1131,15 +1150,8 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  # Reverting the reward lock is only safe when the money definitely did not
-  # move: a later payout re-locks the same rewards and charges again, so a revert
-  # after a transfer that actually landed pays the participant twice.
-  #
-  # A 4xx from the provider is a definitive rejection — the request was received
-  # and refused before anything happened. Everything else is ambiguous: a 5xx may
-  # have moved the money then errored, an unparseable 2xx almost certainly moved
-  # it, and a dropped connection tells us nothing. Those stay :pending so
-  # reconciliation resolves them against the provider rather than guessing.
+  # Reverting after the money moved lets a later payout re-lock and re-charge, so
+  # only revert on a definitive rejection; leave an uncertain outcome to reconciliation.
   defp handle_transfer_error(%Payment.Error{} = error, reward_ids) do
     if transfer_rejected?(error) do
       revert_payout_lock(reward_ids, "transfer_rejected: #{inspect(error)}")
@@ -1160,9 +1172,8 @@ defmodule Systems.Fund.Public do
 
   defp transfer_rejected?(%Payment.Error{}), do: false
 
-  # Record that the money has moved, before anything downstream can fail. Charges
-  # have no list endpoint at OPP, so a transfer uid we never persist cannot be
-  # looked up again — this write is the only handle we keep on it.
+  # A charge cannot be listed at OPP, so this uid is the only handle on the
+  # transfer — persist it before anything downstream can fail.
   defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
     payout
     |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})

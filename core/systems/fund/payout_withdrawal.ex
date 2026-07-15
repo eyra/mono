@@ -86,9 +86,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
     {:error, :manual_review}
   end
 
-  # Funds committed, no withdrawal uid recorded. Either a withdrawal was created
-  # and we lost the response, or none was ever created. List-and-match tells the
-  # two apart safely; issuing blindly would double-withdraw in the first case.
+  # List first: issuing blind would double-withdraw if one was already created.
   defp resume_withdrawal(%Fund.PayoutModel{amount_cents: total} = payout) do
     merchant_uid = merchant_uid_for(payout)
 
@@ -99,9 +97,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  # The current withdrawal is terminally failed but the money is still on the
-  # participant's merchant. A rejected withdrawal keeps its idempotency key, so
-  # the retry runs under a fresh attempt.
+  # A rejected withdrawal keeps its idempotency key, so the retry needs a fresh attempt.
   defp retry_withdrawal(%Fund.PayoutModel{amount_cents: total} = payout) do
     merchant_uid = merchant_uid_for(payout)
 
@@ -129,8 +125,6 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  # A withdrawal already existed; we just never recorded it. Persist its uid, then
-  # apply whatever status it already carries (it may be terminal).
   defp adopt_withdrawal(%Fund.PayoutModel{} = payout, %{uid: uid} = withdrawal, total) do
     with {:ok, _result} <- record_uid(payout, withdrawal, total) do
       Fund.Public.apply_withdrawal_status(uid, withdrawal)
@@ -154,8 +148,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
         {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
 
       {:error, _changeset} ->
-        # Withdrawal exists at the provider but uid unsaved — don't revert;
-        # reconciliation recovers it by its reference.
+        # Don't revert — reconciliation recovers the withdrawal by its reference.
         Logger.error(
           "[Fund] withdrawal #{uid} created but provider_uid not persisted for " <>
             "payout #{payout.id}; left :pending for reconciliation"

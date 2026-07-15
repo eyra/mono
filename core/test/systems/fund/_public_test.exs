@@ -1076,6 +1076,83 @@ defmodule Systems.Fund.PublicTest do
       assert payout.provider_uid == nil
     end
 
+    # The shortchange fix: a participant with a stranded payout must not have a
+    # fresh one started for only their newly-earned rewards — that would silently
+    # abandon the money locked on the stranded payout.
+    test "resumes an unresolved payout instead of starting a new one",
+         %{user: user, fund: fund} do
+      # Stranded: funds moved to the participant merchant, no withdrawal recorded.
+      stranded =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: 1000,
+          currency: "eur",
+          status: :pending,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      locked =
+        insert_reward(user, fund, 1000, :pending_payout)
+        |> Ecto.Changeset.change(%{payout_id: stranded.id})
+        |> Core.Repo.update!()
+
+      # A newly-earned reward the participant would be shortchanged out of.
+      fresh = insert_reward(user, fund, 500, :approved)
+
+      # Resume drives the stranded payout: it looks for an existing withdrawal
+      # (none) and issues one. No new payout, no charge, no bank recheck.
+      expect(ProviderMock, :list_withdrawals, fn "m_test_123" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_test_123", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{
+           uid: "w_resumed",
+           status: :pending,
+           raw_status: "created",
+           reference: nil,
+           amount: 1000
+         }}
+      end)
+
+      assert {:ok, _} = Fund.Public.request_payout(user)
+
+      # Exactly one payout — the stranded one, now driven forward.
+      assert [%{id: id, provider_uid: "w_resumed"}] = Core.Repo.all(Fund.PayoutModel)
+      assert id == stranded.id
+
+      # The locked reward stays with it; the fresh reward is untouched, to be paid
+      # out on a later request once this payout resolves.
+      assert %{status: :pending_payout, payout_id: ^id} = Core.Repo.reload!(locked)
+      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+    end
+
+    # A :failed payout that moved no money already released its lock, so it must
+    # not block a fresh payout of the reverted (now :approved) rewards.
+    test "starts a new payout when the only prior one failed before moving money",
+         %{user: user, fund: fund} do
+      Core.Repo.insert!(%Fund.PayoutModel{
+        user_id: user.id,
+        amount_cents: 1000,
+        currency: "eur",
+        status: :failed,
+        funds_committed_at: nil,
+        provider_uid: nil
+      })
+
+      insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
+
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
+        {:ok,
+         %{uid: "w_fresh", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      end)
+
+      assert {:ok, %{payout: %{provider_uid: "w_fresh"}}} = Fund.Public.request_payout(user)
+    end
+
     defp reward_key(id) do
       Core.Repo.get!(Fund.RewardModel, id).idempotence_key
     end
