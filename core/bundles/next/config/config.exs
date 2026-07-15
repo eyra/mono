@@ -34,4 +34,4 @@ config :core, :meta,
 
 config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
 
-config :core, :pixel, pool_assets: [:panl, :panl_wide]
+config :core, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]
