@@ -166,3 +166,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "promotion.full.button"
 msgstr "Vietų nebėra"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.title"
+msgstr "Šis tyrimas jau užpildytas"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.text"
+msgstr "Deja, visos vietos šiame tyrime jau užimtos. Sekite naujienas — netrukus bus daugiau tyrimų!"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.button"
+msgstr "Uždaryti"

@@ -166,3 +166,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "promotion.full.button"
 msgstr "Al completo"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.title"
+msgstr "Questo studio è al completo"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.text"
+msgstr "Purtroppo tutti i posti per questo studio sono stati occupati. Resta sintonizzato — presto arriveranno altri studi!"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.button"
+msgstr "Chiudi"

@@ -166,3 +166,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "promotion.full.button"
 msgstr "Ausgebucht"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.title"
+msgstr "Diese Studie ist ausgebucht"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.text"
+msgstr "Leider sind alle Plätze für diese Studie bereits vergeben. Bleib dran — weitere Studien sind unterwegs!"
+
+#, elixir-autogen, elixir-format
+msgid "promotion.full.inform.button"
+msgstr "Schließen"

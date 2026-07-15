@@ -62,20 +62,14 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     ]
   end
 
-  defp apply_call_to_action(%Advert.Model{assignment: assignment} = advert) do
-    active? = Assignment.Public.has_budget_capacity?(assignment)
-
+  defp apply_call_to_action(%Advert.Model{} = advert) do
     %{
-      label: cta_label(active?),
-      active?: active?,
+      label: dgettext("eyra-advert", "promotion.apply.button"),
       target: %{type: :event, value: "apply"},
       advert: advert,
       handle: &handle_apply/1
     }
   end
-
-  defp cta_label(true), do: dgettext("eyra-advert", "promotion.apply.button")
-  defp cta_label(false), do: dgettext("eyra-advert", "promotion.full.button")
 
   # Three cases:
   #   * anonymous visitor  → auth identify → pool join → assignment
