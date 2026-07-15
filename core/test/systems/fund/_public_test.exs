@@ -1081,6 +1081,158 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "resume_payout/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_resume_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp stranded_payout(user, fund, attrs) do
+      payout =
+        Core.Repo.insert!(
+          struct!(
+            %Fund.PayoutModel{
+              user_id: user.id,
+              amount_cents: 1000,
+              currency: "eur",
+              status: :pending
+            },
+            attrs
+          )
+        )
+
+      reward =
+        Factories.insert!(:reward, %{
+          user: user,
+          fund: fund,
+          amount: 1000,
+          status: :pending_payout,
+          payout_id: payout.id,
+          idempotence_key: "resume-#{System.unique_integer([:positive])}"
+        })
+
+      {payout, reward}
+    end
+
+    # :awaiting_withdrawal, and the withdrawal was created at the provider but its
+    # uid was never recorded. Resume must adopt the existing one, not issue a new
+    # one (that would withdraw twice).
+    test "adopts an existing withdrawal found by reference instead of issuing another",
+         %{user: user, fund: fund} do
+      {payout, reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" ->
+        {:ok,
+         [
+           %{
+             uid: "w_found",
+             status: :completed,
+             raw_status: "completed",
+             reference: prefix <> ",attempt=0",
+             amount: 1000
+           }
+         ]}
+      end)
+
+      # No create_withdrawal expectation: issuing one would be a second withdrawal.
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{status: :completed, provider_uid: "w_found"} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Core.Repo.reload!(reward)
+    end
+
+    # :awaiting_withdrawal, and no withdrawal was ever created. Resume must issue
+    # one under the current attempt.
+    test "issues a withdrawal when the provider holds none for the payout",
+         %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
+        assert key =~ "type=withdrawal,attempt=0"
+
+        {:ok,
+         %{uid: "w_new", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending, provider_uid: "w_new"} = Core.Repo.reload!(payout)
+    end
+
+    # :withdrawal_retryable — a withdrawal failed after the money moved. Resume
+    # must issue a fresh one under a NEW attempt (the failed one keeps its key).
+    test "retries a failed withdrawal under a fresh attempt", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          status: :failed,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_failed",
+          withdrawal_attempt: 0,
+          failure_reason: "provider_status: disapproved"
+        })
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
+        # A fresh key, distinct from the failed attempt=0 withdrawal.
+        assert key =~ "type=withdrawal,attempt=1"
+
+        {:ok,
+         %{uid: "w_retry", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{
+               status: :pending,
+               provider_uid: "w_retry",
+               withdrawal_attempt: 1,
+               failure_reason: nil
+             } =
+               Core.Repo.reload!(payout)
+    end
+
+    # :awaiting_transfer — the transfer was never confirmed and a charge cannot be
+    # looked up, so resume must not guess. No provider calls at all.
+    test "leaves an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending} = Core.Repo.reload!(payout)
+    end
+
+    test "is a no-op for a healthy in-flight payout", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_inflight"
+        })
+
+      assert {:ok, {:in_flight, _}} = Fund.Public.resume_payout(payout)
+    end
+
+    test "is a no-op for a completed payout", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          status: :completed,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_done"
+        })
+
+      assert {:ok, {:resolved, _}} = Fund.Public.resume_payout(payout)
+    end
+  end
+
   describe "payout_eligibility/1" do
     setup %{fund: fund} do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_elig_1"})

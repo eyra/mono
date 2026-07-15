@@ -1124,7 +1124,7 @@ defmodule Systems.Fund.Public do
         # Provider accepted the transfer — never revert past here (double-payout risk).
         payout
         |> commit_funds(transfer)
-        |> withdraw_after_transfer(merchant_uid, total)
+        |> Fund.PayoutWithdrawal.issue(merchant_uid, total)
 
       {:error, %Payment.Error{} = error} ->
         handle_transfer_error(error, reward_ids)
@@ -1178,45 +1178,6 @@ defmodule Systems.Fund.Public do
         )
 
         payout
-    end
-  end
-
-  defp withdraw_after_transfer(%Fund.PayoutModel{} = payout, merchant_uid, total) do
-    attrs = %{amount: total, description: "Reward payout"}
-
-    case Payment.Public.create_withdrawal(
-           merchant_uid,
-           :EUR,
-           attrs,
-           Fund.PayoutModel.withdrawal_key(payout)
-         ) do
-      {:ok, withdrawal} ->
-        record_withdrawal(payout, withdrawal, total)
-
-      {:error, reason} ->
-        # Funds already on the participant merchant — don't revert; SF-OPP-02 completes it.
-        Logger.error(
-          "[Fund] transfer succeeded but withdrawal failed for payout #{payout.id}; " <>
-            "left :pending for reconciliation: #{inspect(reason)}"
-        )
-
-        {:error, {:opp_failed, reason}}
-    end
-  end
-
-  defp record_withdrawal(payout, %{uid: uid} = withdrawal, total) do
-    case payout |> Fund.PayoutModel.changeset(%{provider_uid: uid}) |> Repo.update() do
-      {:ok, payout} ->
-        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
-
-      {:error, _changeset} ->
-        # Withdrawal exists at OPP but uid unsaved — don't revert; SF-OPP-02 recovers it.
-        Logger.error(
-          "[Fund] OPP withdrawal #{uid} created but provider_uid not persisted for " <>
-            "payout #{payout.id}; left :pending for reconciliation"
-        )
-
-        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
     end
   end
 
@@ -1380,6 +1341,12 @@ defmodule Systems.Fund.Public do
     Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
     {:ok, payout}
   end
+
+  @doc """
+  Drives a stranded payout forward, without ever re-moving money.
+  See `Systems.Fund.PayoutWithdrawal.resume/1`.
+  """
+  def resume_payout(%Fund.PayoutModel{} = payout), do: Fund.PayoutWithdrawal.resume(payout)
 
   @doc """
   Reconciles `:pending` payouts against the payment provider.
