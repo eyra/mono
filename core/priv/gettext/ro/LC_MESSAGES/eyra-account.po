@@ -290,75 +290,75 @@ msgstr "Prea multe solicitări. Încearcă din nou într-un moment."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
-msgstr ""
+msgstr "Adaugă"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
-msgstr ""
+msgstr "Ceva nu a mers bine la verificarea contului bancar. Încearcă din nou mai târziu."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.intro"
-msgstr ""
+msgstr "Plățile sunt gestionate de partenerul nostru de plăți Online Payment Platform"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.not_verified"
-msgstr ""
+msgstr "Neverificat"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.pending"
-msgstr ""
+msgstr "Se verifică"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.verified"
-msgstr ""
+msgstr "Verificat"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.title"
-msgstr ""
+msgstr "Cont bancar"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.verified.flash"
-msgstr ""
+msgstr "Contul tău bancar a fost verificat."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.empty"
-msgstr ""
+msgstr "Nu au fost efectuate plăți încă. Odată efectuate, vei găsi aici o listă."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.intro"
-msgstr ""
+msgstr "Mai jos vei găsi o listă cu toate plățile tale."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.title"
-msgstr ""
+msgstr "Listă"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.total"
-msgstr ""
+msgstr "Total"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.completed"
-msgstr ""
+msgstr "Plătit"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.failed"
-msgstr ""
+msgstr "Eșuat"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.pending"
-msgstr ""
+msgstr "În așteptare"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.amount"
-msgstr ""
+msgstr "Sumă"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.date"
-msgstr ""
+msgstr "Data"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.status"
-msgstr ""
+msgstr "Stare"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.title"
@@ -382,11 +382,11 @@ msgstr "Verifică contul bancar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.error.flash"
-msgstr ""
+msgstr "Ceva nu a mers bine la verificarea contului bancar. Încearcă din nou mai târziu."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.label"
-msgstr ""
+msgstr "Număr de telefon mobil"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.body"

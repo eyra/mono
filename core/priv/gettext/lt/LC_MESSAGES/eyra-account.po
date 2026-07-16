@@ -290,75 +290,75 @@ msgstr "Per daug užklausų. Pabandykite dar kartą po akimirkos."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
-msgstr ""
+msgstr "Pridėti"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
-msgstr ""
+msgstr "Tikrinant tavo banko sąskaitą įvyko klaida. Pabandyk vėliau dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.intro"
-msgstr ""
+msgstr "Išmokas tvarko mūsų mokėjimo partneris „Online Payment Platform“"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.not_verified"
-msgstr ""
+msgstr "Nepatvirtinta"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.pending"
-msgstr ""
+msgstr "Tikrinama"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.verified"
-msgstr ""
+msgstr "Patvirtinta"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.title"
-msgstr ""
+msgstr "Banko sąskaita"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.verified.flash"
-msgstr ""
+msgstr "Tavo banko sąskaita patvirtinta."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.empty"
-msgstr ""
+msgstr "Kol kas nėra atliktų išmokų. Kai išmokos bus atliktos, čia rasi apžvalgą."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.intro"
-msgstr ""
+msgstr "Žemiau rasi visų tavo išmokų apžvalgą."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.title"
-msgstr ""
+msgstr "Apžvalga"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.total"
-msgstr ""
+msgstr "Iš viso"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.completed"
-msgstr ""
+msgstr "Išmokėta"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.failed"
-msgstr ""
+msgstr "Nepavyko"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.pending"
-msgstr ""
+msgstr "Laukiama"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.amount"
-msgstr ""
+msgstr "Suma"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.date"
-msgstr ""
+msgstr "Data"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.status"
-msgstr ""
+msgstr "Būsena"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.title"
@@ -382,11 +382,11 @@ msgstr "Patvirtinti banko sąskaitą"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.error.flash"
-msgstr ""
+msgstr "Tikrinant tavo banko sąskaitą įvyko klaida. Pabandyk vėliau dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.label"
-msgstr ""
+msgstr "Mobiliojo telefono numeris"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.body"
