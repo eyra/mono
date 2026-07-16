@@ -138,6 +138,23 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     assert %{status: :failed} = Repo.reload!(transaction)
   end
 
+  test "verifies (does not error) a pending transaction the provider completes mid-sweep" do
+    transaction = setup_transaction(:pending)
+
+    # The provider reports "failed", but between our scan and the fail write the
+    # transaction completes (a winning "completed" webhook). The guard refuses the
+    # stale "failed"; that benign race must be tallied as verified, not as an error.
+    expect(ProviderMock, :get_transaction, fn uid ->
+      from(t in Budget.TransactionModel, where: t.transaction_id == ^uid)
+      |> Repo.update_all(set: [status: :completed])
+
+      {:ok, %{uid: uid, status: "failed", payment_url: nil, amount: 0}}
+    end)
+
+    assert %{scanned: 1, verified: 1, errors: 0, resolved_failed: 0} = reconcile()
+    assert %{status: :completed} = Repo.reload!(transaction)
+  end
+
   test "leaves a pending transaction that OPP is still processing" do
     transaction = setup_transaction(:pending)
     stub_opp_status(transaction.transaction_id, "new")

@@ -183,7 +183,7 @@ defmodule Systems.Budget.Public do
 
     case transaction.status do
       :completed ->
-        {:error, "Transaction already completed"}
+        {:error, :already_completed}
 
       _ ->
         do_complete_transaction(transaction)
@@ -234,7 +234,7 @@ defmodule Systems.Budget.Public do
             "fund stays credited"
         )
 
-        {:error, "Transaction already completed"}
+        {:error, :already_completed}
 
       _ ->
         transaction

@@ -117,6 +117,9 @@ defmodule Systems.Budget.TransactionReconciliation do
   defp resolve(%{status: :pending, transaction_id: uid}, "failed") do
     case Budget.Public.fail_transaction(uid) do
       {:ok, _} -> {:ok, :resolved_failed}
+      # Provider completed the transaction in the gap between our read and this
+      # write; the guard refused the stale "failed" — a benign no-op, not an error.
+      {:error, :already_completed} -> {:ok, :verified}
       other -> {:error, other}
     end
   rescue

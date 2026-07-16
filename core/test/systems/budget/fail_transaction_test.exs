@@ -21,7 +21,7 @@ defmodule Systems.Budget.FailTransactionTest do
 
       log =
         capture_log(fn ->
-          assert {:error, "Transaction already completed"} =
+          assert {:error, :already_completed} =
                    Budget.Public.fail_transaction(transaction.transaction_id)
         end)
 
