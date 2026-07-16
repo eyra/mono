@@ -80,7 +80,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus} centered?>
-      <div class="h-full flex flex-col justify-center pt-11 pb-16">
+      <div class="h-full flex flex-col justify-center pt-14 pb-16">
       <Area.content>
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
@@ -102,7 +102,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
                   pattern="[0-9]*"
                   autocomplete={if i == 0, do: "one-time-code", else: "off"}
                   data-testid={"auth-code-cell-#{i}"}
-                  class="text-center text-title4 font-title4 text-grey1 w-12 h-14 rounded border-2 border-grey3 focus:border-primary focus:outline-none bg-white"
+                  class="text-center text-title4 font-title4 text-grey1 w-12 h-11 rounded border-2 border-grey3 focus:border-primary focus:outline-none bg-white"
                 />
               <% end %>
               <input type="hidden" name="code" data-otp-value />
