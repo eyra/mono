@@ -114,7 +114,8 @@ defmodule Systems.Budget.Public do
              idempotence_key: idempotence_key,
              invoice_id: invoice_id,
              subject_count: subject_count,
-             total_amount: total_amount
+             total_amount: total_amount,
+             partner_fee: partner_fee
            })
            |> Ecto.Changeset.put_change(:user_id, user_id)
            |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
@@ -179,7 +180,9 @@ defmodule Systems.Budget.Public do
   def complete_transaction(provider_uid) when is_binary(provider_uid) do
     transaction =
       get_transaction_by_provider_uid!(provider_uid)
-      |> Repo.preload(target_fund: [:available, :pending, currency_ledger: [:inbound, :outbound]])
+      |> Repo.preload(
+        target_fund: [:available, :pending, currency_ledger: [:inbound, :outbound, :margin]]
+      )
 
     case transaction.status do
       :completed ->
@@ -193,14 +196,18 @@ defmodule Systems.Budget.Public do
   defp do_complete_transaction(
          %Budget.TransactionModel{
            subject_count: subject_count,
+           total_amount: total_amount,
+           partner_fee: partner_fee,
            target_fund: %{
              available: %{identifier: fund_account_id},
-             currency_ledger: %{inbound: %{identifier: inbound_account_id}}
+             currency_ledger: %{
+               inbound: %{identifier: inbound_account_id},
+               margin: %{identifier: margin_account_id}
+             }
            }
          } = transaction
        ) do
-    reward_per_participant = get_reward_per_participant(transaction)
-    total_amount = subject_count * reward_per_participant
+    base_amount = total_amount - partner_fee
 
     Multi.new()
     |> Multi.update(
@@ -211,17 +218,26 @@ defmodule Systems.Budget.Public do
       Bookkeeping.Public.enter(%{
         idempotence_key: "complete:#{transaction.idempotence_key}",
         journal_message:
-          "Pay-in #{total_amount} cents for #{subject_count} participants on fund ##{transaction.target_fund_id}",
-        lines: [
-          %{account: inbound_account_id, debit: total_amount},
-          %{account: fund_account_id, credit: total_amount}
-        ]
+          "Pay-in #{total_amount} cents (#{base_amount} to fund, #{partner_fee} fee) for #{subject_count} participants on fund ##{transaction.target_fund_id}",
+        lines:
+          [
+            %{account: inbound_account_id, debit: total_amount},
+            %{account: fund_account_id, credit: base_amount}
+          ] ++ margin_lines(margin_account_id, partner_fee)
       })
     end)
     |> Multi.run(:update_subject_count, fn _, _ ->
       increment_subject_count(transaction.target_fund_id, subject_count)
     end)
     |> Repo.commit()
+  end
+
+  # The partner fee is platform revenue, booked to the ledger margin — never into
+  # the fund, which only holds what the researcher can pay participants with.
+  defp margin_lines(_margin_account_id, 0), do: []
+
+  defp margin_lines(margin_account_id, partner_fee) do
+    [%{account: margin_account_id, credit: partner_fee}]
   end
 
   def fail_transaction(provider_uid) when is_binary(provider_uid) do
@@ -261,15 +277,6 @@ defmodule Systems.Budget.Public do
   def reconcile_transactions(opts, state), do: Budget.TransactionReconciliation.run(opts, state)
 
   # --- Helpers ---
-
-  defp get_reward_per_participant(%Budget.TransactionModel{target_fund_id: fund_id}) do
-    from(a in Assignment.Model,
-      join: i in assoc(a, :info),
-      where: a.fund_id == ^fund_id,
-      select: i.subject_reward
-    )
-    |> Repo.one() || 0
-  end
 
   defp increment_subject_count(fund_id, additional_count) do
     from(i in Assignment.InfoModel,

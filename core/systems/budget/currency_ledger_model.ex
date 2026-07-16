@@ -12,6 +12,7 @@ defmodule Systems.Budget.CurrencyLedgerModel do
 
     belongs_to(:inbound, Bookkeeping.AccountModel)
     belongs_to(:outbound, Bookkeeping.AccountModel)
+    belongs_to(:margin, Bookkeeping.AccountModel)
 
     timestamps()
   end
@@ -24,7 +25,8 @@ defmodule Systems.Budget.CurrencyLedgerModel do
     %__MODULE__{
       currency: currency,
       inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
-      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
+      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"]),
+      margin: Bookkeeping.AccountModel.create(["ledger", id, "margin"])
     }
   end
 
@@ -47,5 +49,9 @@ defmodule Systems.Budget.CurrencyLedgerModel do
     Core.Repo.get_by(__MODULE__, currency: currency)
   end
 
-  def preload_graph(:full), do: [:inbound, :outbound]
+  def amount_margin(%{margin: margin}) do
+    Bookkeeping.AccountModel.balance(margin)
+  end
+
+  def preload_graph(:full), do: [:inbound, :outbound, :margin]
 end

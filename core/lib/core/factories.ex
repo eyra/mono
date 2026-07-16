@@ -934,7 +934,8 @@ defmodule Core.Factories do
     %Budget.CurrencyLedgerModel{
       currency: currency,
       inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
-      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
+      outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"]),
+      margin: Bookkeeping.AccountModel.create(["ledger", id, "margin"])
     }
     |> struct!(attributes)
   end
