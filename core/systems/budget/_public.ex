@@ -227,9 +227,20 @@ defmodule Systems.Budget.Public do
   def fail_transaction(provider_uid) when is_binary(provider_uid) do
     transaction = get_transaction_by_provider_uid!(provider_uid)
 
-    transaction
-    |> Budget.TransactionModel.changeset(%{status: :failed})
-    |> Repo.update()
+    case transaction.status do
+      :completed ->
+        Logger.error(
+          "[Budget] refusing late 'failed' for already-completed transaction #{provider_uid}; " <>
+            "fund stays credited"
+        )
+
+        {:error, "Transaction already completed"}
+
+      _ ->
+        transaction
+        |> Budget.TransactionModel.changeset(%{status: :failed})
+        |> Repo.update()
+    end
   end
 
   @pay_in_expiration_minutes 15
