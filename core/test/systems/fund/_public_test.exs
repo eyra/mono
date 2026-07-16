@@ -859,9 +859,16 @@ defmodule Systems.Fund.PublicTest do
   end
 
   describe "request_payout/1" do
-    setup %{fund: fund} do
+    setup do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_test_123"})
-      {:ok, fund: fund, user: user}
+      {:ok, fund: euro_fund(), user: user}
+    end
+
+    # Payouts settle in EUR, so the payout paths only see euro-fund rewards
+    # (see list_approved_rewards); tests exercise them against a euro fund.
+    defp euro_fund do
+      euro = Fund.Factories.create_currency("euro", :legal, "€", 2)
+      Fund.Factories.create_fund("euro-fund-#{System.unique_integer([:positive])}", euro)
     end
 
     defp insert_reward(user, fund, amount, status) do
@@ -948,6 +955,33 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:ok, %{amount: 1000, withdrawal: %{uid: "w_2"}}} =
                Fund.Public.request_payout(user)
+    end
+
+    test "pays out only euro rewards, leaving other-currency rewards :approved",
+         %{user: %{merchant_uid: merchant_uid} = user, fund: euro_fund} do
+      insert_reward(user, euro_fund, 600, :approved)
+
+      dollar = Fund.Factories.create_currency("dollar", :legal, "$", 2)
+
+      dollar_fund =
+        Fund.Factories.create_fund("usd-fund-#{System.unique_integer([:positive])}", dollar)
+
+      %{id: dollar_reward_id} = insert_reward(user, dollar_fund, 600, :approved)
+
+      stub_payout_ready(merchant_uid)
+
+      # Only the 600 euro cents move — the 600 dollar cents are not summed in.
+      expect(ProviderMock, :create_charge, fn _from, ^merchant_uid, 600, _key ->
+        {:ok, %{uid: "chg_eur", status: "created", amount: 600}}
+      end)
+
+      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid, :EUR, %{amount: 600}, _key ->
+        {:ok, %{uid: "w_eur", status: "created", amount: 600}}
+      end)
+
+      assert {:ok, %{amount: 600}} = Fund.Public.request_payout(user)
+
+      assert %{status: :approved} = Fund.Public.get_reward(reward_key(dollar_reward_id), [])
     end
 
     test "reverts the lock when OPP returns an error", %{user: user, fund: fund} do
@@ -1060,9 +1094,9 @@ defmodule Systems.Fund.PublicTest do
   end
 
   describe "payout_eligibility/1" do
-    setup %{fund: fund} do
+    setup do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_elig_1"})
-      {:ok, fund: fund, user: user}
+      {:ok, fund: euro_fund(), user: user}
     end
 
     test "returns :below_threshold with the current total when under €5", %{
@@ -1111,9 +1145,9 @@ defmodule Systems.Fund.PublicTest do
   end
 
   describe "prepare_payout/1" do
-    setup %{fund: fund} do
+    setup do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_prep_1"})
-      {:ok, fund: fund, user: user}
+      {:ok, fund: euro_fund(), user: user}
     end
 
     defp eligible_reward(user, fund, amount \\ 1000) do

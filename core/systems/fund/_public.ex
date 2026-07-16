@@ -947,6 +947,10 @@ defmodule Systems.Fund.Public do
 
   @payout_threshold_cents 500
 
+  # OPP settles payouts to a EUR bank account, so only euro-fund rewards are
+  # payable. The canonical euro currency is named "euro" (see Fund.Assembly).
+  @payout_currency_name "euro"
+
   @doc """
   Minimum approved balance (in cents) required to request a payout — €5.
   """
@@ -1253,9 +1257,17 @@ defmodule Systems.Fund.Public do
     )
   end
 
+  # Scoped to euro funds so rewards in other currencies are never summed into a
+  # EUR withdrawal; they stay :approved until multi-currency payouts exist.
   defp list_approved_rewards(user_id) do
     from(r in Fund.RewardModel,
-      where: r.user_id == ^user_id and r.status == :approved
+      join: f in Fund.Model,
+      on: f.id == r.fund_id,
+      join: c in Fund.CurrencyModel,
+      on: c.id == f.currency_id,
+      where:
+        r.user_id == ^user_id and r.status == :approved and
+          c.name == ^@payout_currency_name
     )
     |> Repo.all()
   end
