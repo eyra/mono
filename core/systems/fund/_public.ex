@@ -276,6 +276,11 @@ defmodule Systems.Fund.Public do
     |> Repo.commit()
   end
 
+  def create_reward(multi, %Fund.Model{}, amount, _user, idempotence_key)
+      when is_integer(amount) and amount <= 0 and is_binary(idempotence_key) do
+    Multi.error(multi, :create_reward, :non_positive_amount)
+  end
+
   def create_reward(
         multi,
         %Fund.Model{} = fund,
@@ -283,7 +288,7 @@ defmodule Systems.Fund.Public do
         user,
         idempotence_key
       )
-      when is_integer(amount) and is_binary(idempotence_key) do
+      when is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     multi
     |> guard_fund_balance(fund, amount)
     |> upsert_reward(fund, amount, user, idempotence_key)
