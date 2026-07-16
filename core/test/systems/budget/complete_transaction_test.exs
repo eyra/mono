@@ -28,7 +28,7 @@ defmodule Systems.Budget.CompleteTransactionTest do
     test "refuses a transaction that is already :completed" do
       %{transaction: transaction} = setup_transaction(status: :completed)
 
-      assert {:error, "Transaction already completed"} =
+      assert {:error, :already_completed} =
                Budget.Public.complete_transaction(transaction.transaction_id)
     end
   end
