@@ -64,6 +64,35 @@ defmodule Systems.Fund.PublicTest do
            } = reward
   end
 
+  test "create_reward/4 rejects a negative amount without touching the ledger", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+
+    assert {:error, :non_positive_amount} =
+             Fund.Public.create_reward(fund, -500, participant, "neg-key")
+
+    assert Repo.all(Fund.RewardModel) == []
+  end
+
+  test "create_reward/4 rejects a zero amount", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+
+    assert {:error, :non_positive_amount} =
+             Fund.Public.create_reward(fund, 0, participant, "zero-key")
+
+    assert Repo.all(Fund.RewardModel) == []
+  end
+
+  test "create_reward/5 injects a clean failure for a non-positive amount", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+
+    assert {:error, :create_reward, :non_positive_amount, _changes} =
+             Ecto.Multi.new()
+             |> Fund.Public.create_reward(fund, -500, participant, "neg-key-multi")
+             |> Repo.commit()
+
+    assert Repo.all(Fund.RewardModel) == []
+  end
+
   test "rollback_deposit/4 fails without deposit", %{fund: fund} do
     participant = Factories.insert!(:member, %{creator: false})
 
