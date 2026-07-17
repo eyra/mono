@@ -6,9 +6,7 @@ defmodule Systems.Payment.Provider.OPP do
   alias Systems.Payment.Provider.OPP.HTTP
 
   @currency_mapping %{
-    EUR: "EUR",
-    USD: "USD",
-    GBP: "GBP"
+    EUR: "EUR"
   }
 
   @default_withdrawal_description "Payout"

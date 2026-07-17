@@ -713,15 +713,18 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
-  describe "summarize_rewards/1" do
-    test "returns all zeros when the user has no rewards" do
+  describe "summarize_rewards/2" do
+    test "returns all zeros when the user has no rewards", %{currency: currency} do
       user = Factories.insert!(:member, %{creator: false})
 
       assert %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} =
-               Fund.Public.summarize_rewards(user)
+               Fund.Public.summarize_rewards(user, currency.name)
     end
 
-    test "sums :reserved and :pending_approval into pending_cents", %{fund: fund} do
+    test "sums :reserved and :pending_approval into pending_cents", %{
+      currency: currency,
+      fund: fund
+    } do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -741,10 +744,13 @@ defmodule Systems.Fund.PublicTest do
       })
 
       assert %{pending_cents: 350, approved_cents: 0, rejected_cents: 0} =
-               Fund.Public.summarize_rewards(user)
+               Fund.Public.summarize_rewards(user, currency.name)
     end
 
-    test "approved_cents only counts :approved rewards (excludes :paid)", %{fund: fund} do
+    test "approved_cents only counts :approved rewards (excludes :paid)", %{
+      currency: currency,
+      fund: fund
+    } do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -764,10 +770,10 @@ defmodule Systems.Fund.PublicTest do
       })
 
       assert %{approved_cents: 100, paid_out_cents: 400} =
-               Fund.Public.summarize_rewards(user)
+               Fund.Public.summarize_rewards(user, currency.name)
     end
 
-    test "pending_payout_cents sums rewards locked for payout", %{fund: fund} do
+    test "pending_payout_cents sums rewards locked for payout", %{currency: currency, fund: fund} do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -779,10 +785,10 @@ defmodule Systems.Fund.PublicTest do
       })
 
       assert %{approved_cents: 0, pending_payout_cents: 250} =
-               Fund.Public.summarize_rewards(user)
+               Fund.Public.summarize_rewards(user, currency.name)
     end
 
-    test "sums :rejected into rejected_cents", %{fund: fund} do
+    test "sums :rejected into rejected_cents", %{currency: currency, fund: fund} do
       user = Factories.insert!(:member, %{creator: false})
 
       Factories.insert!(:reward, %{
@@ -794,7 +800,7 @@ defmodule Systems.Fund.PublicTest do
       })
 
       assert %{pending_cents: 0, approved_cents: 0, rejected_cents: 75} =
-               Fund.Public.summarize_rewards(user)
+               Fund.Public.summarize_rewards(user, currency.name)
     end
   end
 
@@ -901,17 +907,17 @@ defmodule Systems.Fund.PublicTest do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: nil})
       insert_reward(user, fund, 1000, :approved)
 
-      assert {:error, :no_merchant} = Fund.Public.request_payout(user)
+      assert {:error, :no_merchant} = Fund.Public.request_payout(user, "euro")
     end
 
     test "returns :below_threshold when approved balance is under €5", %{user: user, fund: fund} do
       insert_reward(user, fund, 499, :approved)
 
-      assert {:error, {:below_threshold, 499}} = Fund.Public.request_payout(user)
+      assert {:error, {:below_threshold, 499}} = Fund.Public.request_payout(user, "euro")
     end
 
     test "returns :below_threshold with 0 when participant has no approved rewards", %{user: user} do
-      assert {:error, {:below_threshold, 0}} = Fund.Public.request_payout(user)
+      assert {:error, {:below_threshold, 0}} = Fund.Public.request_payout(user, "euro")
     end
 
     test "locks approved rewards as :pending_payout on success", %{user: user, fund: fund} do
@@ -925,7 +931,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, %{uid: "w_1", status: "created", amount: 1000}}
       end)
 
-      assert {:ok, _} = Fund.Public.request_payout(user)
+      assert {:ok, _} = Fund.Public.request_payout(user, "euro")
 
       assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id1), [])
       assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id2), [])
@@ -954,7 +960,7 @@ defmodule Systems.Fund.PublicTest do
       end)
 
       assert {:ok, %{amount: 1000, withdrawal: %{uid: "w_2"}}} =
-               Fund.Public.request_payout(user)
+               Fund.Public.request_payout(user, "euro")
     end
 
     test "pays out only euro rewards, leaving other-currency rewards :approved",
@@ -979,7 +985,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, %{uid: "w_eur", status: "created", amount: 600}}
       end)
 
-      assert {:ok, %{amount: 600}} = Fund.Public.request_payout(user)
+      assert {:ok, %{amount: 600}} = Fund.Public.request_payout(user, "euro")
 
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(dollar_reward_id), [])
     end
@@ -994,7 +1000,8 @@ defmodule Systems.Fund.PublicTest do
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
-      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} = Fund.Public.request_payout(user)
+      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
+               Fund.Public.request_payout(user, "euro")
 
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
     end
@@ -1017,7 +1024,7 @@ defmodule Systems.Fund.PublicTest do
       # No create_charge / create_withdrawal expectations: the compare-and-swap
       # lock must find 0 approved rows and bail before any money moves. Mox's
       # verify_on_exit! raises if either OPP call is made.
-      assert {:error, :lock_failed} = Fund.Public.request_payout(user)
+      assert {:error, :lock_failed} = Fund.Public.request_payout(user, "euro")
 
       # The losing attempt's payout insert was rolled back with the failed lock.
       assert Core.Repo.all(Fund.PayoutModel) == []
@@ -1035,7 +1042,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, %{uid: "w_3", status: "created", amount: 1000}}
       end)
 
-      assert {:ok, %{amount: 1000}} = Fund.Public.request_payout(user)
+      assert {:ok, %{amount: 1000}} = Fund.Public.request_payout(user, "euro")
     end
 
     test "creates a Fund.Payout aggregate linked to the locked rewards on success",
@@ -1050,7 +1057,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, %{uid: "w_aggregate_1", status: "created", amount: 1000}}
       end)
 
-      assert {:ok, %{payout: payout}} = Fund.Public.request_payout(user)
+      assert {:ok, %{payout: payout}} = Fund.Public.request_payout(user, "euro")
 
       assert %Fund.PayoutModel{
                user_id: ^user_id,
@@ -1076,7 +1083,7 @@ defmodule Systems.Fund.PublicTest do
         {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
       end)
 
-      assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user)
+      assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user, "euro")
 
       reward = Core.Repo.get!(Fund.RewardModel, r_id)
       assert reward.status == :approved
@@ -1111,7 +1118,7 @@ defmodule Systems.Fund.PublicTest do
         idempotence_key: "elig-#{System.unique_integer([:positive])}"
       })
 
-      assert {:error, {:below_threshold, 499}} = Fund.Public.payout_eligibility(user)
+      assert {:error, {:below_threshold, 499}} = Fund.Public.payout_eligibility(user, "euro")
     end
 
     test "returns :ok when at or above €5", %{user: user, fund: fund} do
@@ -1123,7 +1130,7 @@ defmodule Systems.Fund.PublicTest do
         idempotence_key: "elig-#{System.unique_integer([:positive])}"
       })
 
-      assert :ok = Fund.Public.payout_eligibility(user)
+      assert :ok = Fund.Public.payout_eligibility(user, "euro")
     end
 
     test "does not lock rewards or create a Payout row", %{user: user, fund: fund} do
@@ -1135,7 +1142,7 @@ defmodule Systems.Fund.PublicTest do
         idempotence_key: "elig-#{System.unique_integer([:positive])}"
       })
 
-      assert :ok = Fund.Public.payout_eligibility(user)
+      assert :ok = Fund.Public.payout_eligibility(user, "euro")
 
       [reward] = Core.Repo.all(Fund.RewardModel)
       assert reward.status == :approved
@@ -1185,7 +1192,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert :ok = Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user, "euro")
     end
 
     test ~s(is :ok with an approved bank even when merchant compliance_status != "verified"),
@@ -1205,7 +1212,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert :ok = Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user, "euro")
     end
 
     test ~s(is :ok with an approved bank even when merchant.status != "live"),
@@ -1225,7 +1232,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_prep_1")
 
-      assert :ok = Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user, "euro")
     end
 
     test "creates a merchant for users with no merchant_uid and persists the uid",
@@ -1248,7 +1255,7 @@ defmodule Systems.Fund.PublicTest do
 
       stub_existing_bank_account("m_created_inline")
 
-      assert :ok = Fund.Public.prepare_payout(user)
+      assert :ok = Fund.Public.prepare_payout(user, "euro")
 
       assert %{merchant_uid: "m_created_inline"} = Core.Repo.reload!(user)
     end
@@ -1281,7 +1288,7 @@ defmodule Systems.Fund.PublicTest do
 
       # Freshly created bank account is not yet approved -> drive the iDEAL flow.
       assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
-               Fund.Public.prepare_payout(user)
+               Fund.Public.prepare_payout(user, "euro")
     end
 
     test "returns :below_threshold WITHOUT calling OPP when balance is too low",
@@ -1289,7 +1296,7 @@ defmodule Systems.Fund.PublicTest do
       eligible_reward(user, fund, 100)
       # No ProviderMock expectation -> Mox would fail if get_merchant was called.
 
-      assert {:error, {:below_threshold, 100}} = Fund.Public.prepare_payout(user)
+      assert {:error, {:below_threshold, 100}} = Fund.Public.prepare_payout(user, "euro")
     end
 
     test "returns :kyc_unavailable when not ready and OPP gives no usable URL",
@@ -1312,7 +1319,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, [%{uid: "ba", status: "new", verification_url: nil}]}
       end)
 
-      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user)
+      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user, "euro")
     end
 
     test "falls back to the bank verification_url when the merchant has no overview_url",
@@ -1336,7 +1343,7 @@ defmodule Systems.Fund.PublicTest do
       end)
 
       assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
-               Fund.Public.prepare_payout(user)
+               Fund.Public.prepare_payout(user, "euro")
     end
 
     test "is :kyc_unavailable when the bank is not approved, ignoring any merchant overview_url",
@@ -1360,7 +1367,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, [%{uid: "ba_pending", status: "new", verification_url: nil}]}
       end)
 
-      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user)
+      assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user, "euro")
     end
   end
 

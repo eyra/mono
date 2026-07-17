@@ -20,6 +20,13 @@ defmodule Systems.Home.PageBuilder do
   # Number of studies shown on the home page before linking to the marketplace
   @home_card_limit 3
 
+  # The currency participants are paid out in. Hardcoded to euro for now: OPP
+  # settles to a EUR bank account, so only euro-fund rewards are payable and
+  # listed. This is the single place to change when multi-currency payouts land —
+  # the currency is supplied from here (the UI layer) into Fund.Public, never
+  # pinned inside the domain.
+  @payout_currency "euro"
+
   # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
@@ -72,7 +79,7 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
-    case Fund.Public.summarize_rewards(user) do
+    case Fund.Public.summarize_rewards(user, @payout_currency) do
       %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
         nil
 
@@ -83,6 +90,7 @@ defmodule Systems.Home.PageBuilder do
             totals
             |> Map.put(:labels, rewards_summary_labels(approved_cents))
             |> Map.put(:user, user)
+            |> Map.put(:payout_currency, @payout_currency)
         }
     end
   end

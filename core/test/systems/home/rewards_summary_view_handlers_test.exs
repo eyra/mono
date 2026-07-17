@@ -49,6 +49,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           user: user,
           labels: @labels,
           handoff_mode: :payout,
+          payout_currency: "euro",
           pending_cents: 0,
           approved_cents: 1000,
           rejected_cents: 0

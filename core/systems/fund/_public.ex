@@ -924,10 +924,14 @@ defmodule Systems.Fund.Public do
   @doc """
   Per-status reward totals (in cents) for the home rewards-summary card.
   """
-  def summarize_rewards(%Account.User{id: user_id}) do
+  def summarize_rewards(%Account.User{id: user_id}, currency) do
     totals =
       from(r in Fund.RewardModel,
-        where: r.user_id == ^user_id,
+        join: f in Fund.Model,
+        on: f.id == r.fund_id,
+        join: c in Fund.CurrencyModel,
+        on: c.id == f.currency_id,
+        where: r.user_id == ^user_id and c.name == ^currency,
         group_by: r.status,
         select: {r.status, sum(r.amount)}
       )
@@ -947,10 +951,6 @@ defmodule Systems.Fund.Public do
 
   @payout_threshold_cents 500
 
-  # OPP settles payouts to a EUR bank account, so only euro-fund rewards are
-  # payable. The canonical euro currency is named "euro" (see Fund.Assembly).
-  @payout_currency_name "euro"
-
   @doc """
   Minimum approved balance (in cents) required to request a payout — €5.
   """
@@ -961,14 +961,14 @@ defmodule Systems.Fund.Public do
   them, then charges and withdraws via OPP. Returns `{:ok, result}` or
   `{:error, reason}`.
   """
-  def request_payout(%Account.User{} = user) do
+  def request_payout(%Account.User{} = user, currency) do
     # Reload: the caller may hold a struct from before prepare_payout/1 set merchant_uid.
     case Repo.reload!(user) do
       %Account.User{merchant_uid: nil} ->
         {:error, :no_merchant}
 
       %Account.User{id: user_id, merchant_uid: merchant_uid} ->
-        approved = list_approved_rewards(user_id)
+        approved = list_approved_rewards(user_id, currency)
         total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
 
         if total < @payout_threshold_cents do
@@ -980,11 +980,12 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Pure pre-flight threshold check (no side effects), used by `prepare_payout/1`.
+  Pure pre-flight threshold check (no side effects), used by `prepare_payout/2`.
+  Scoped to `currency` (the payable currency is decided by the UI layer).
   """
-  def payout_eligibility(%Account.User{id: user_id}) do
+  def payout_eligibility(%Account.User{id: user_id}, currency) do
     total =
-      list_approved_rewards(user_id)
+      list_approved_rewards(user_id, currency)
       |> Enum.reduce(0, fn %{amount: amount}, acc -> acc + amount end)
 
     if total < @payout_threshold_cents do
@@ -998,8 +999,8 @@ defmodule Systems.Fund.Public do
   Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
   account exist, then reports payout readiness via `payout_ready_for/1`.
   """
-  def prepare_payout(%Account.User{} = user) do
-    with :ok <- payout_eligibility(user),
+  def prepare_payout(%Account.User{} = user, currency) do
+    with :ok <- payout_eligibility(user, currency),
          {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
          {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
       payout_ready_for(bank_account)
@@ -1259,7 +1260,7 @@ defmodule Systems.Fund.Public do
 
   # Scoped to euro funds so rewards in other currencies are never summed into a
   # EUR withdrawal; they stay :approved until multi-currency payouts exist.
-  defp list_approved_rewards(user_id) do
+  defp list_approved_rewards(user_id, currency) do
     from(r in Fund.RewardModel,
       join: f in Fund.Model,
       on: f.id == r.fund_id,
@@ -1267,7 +1268,7 @@ defmodule Systems.Fund.Public do
       on: c.id == f.currency_id,
       where:
         r.user_id == ^user_id and r.status == :approved and
-          c.name == ^@payout_currency_name
+          c.name == ^currency
     )
     |> Repo.all()
   end
