@@ -21,6 +21,7 @@ defmodule Systems.Home.RewardsSummaryView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
@@ -224,15 +225,11 @@ defmodule Systems.Home.RewardsSummaryView do
   defp payout_status_section(%{status: :retryable} = assigns) do
     ~H"""
     <div class="mt-6" data-testid="payout-retry">
-      <button
-        type="button"
-        phx-click="retry_payout"
-        phx-target={@target}
-        data-testid="payout-retry-button"
-        class="self-start text-button font-button text-primary hover:underline"
-      >
-        <%= @labels.payout_retry_button %>
-      </button>
+      <Button.dynamic
+        action={%{type: :send, event: "retry_payout", target: @target}}
+        face={%{type: :link, text: @labels.payout_retry_button}}
+        testid="payout-retry-button"
+      />
     </div>
     """
   end
@@ -295,15 +292,13 @@ defmodule Systems.Home.RewardsSummaryView do
         <%= CurrencyHelpers.format_cents(@amount_cents) %>
       </div>
       <%= if @payout_enabled? do %>
-        <button
-          type="button"
-          phx-click="request_payout"
-          phx-target={@target}
-          data-testid="payout-button"
-          class="self-start text-button font-button text-primary hover:underline"
-        >
-          <%= @payout_button_label %>
-        </button>
+        <div class="self-start">
+          <Button.dynamic
+            action={%{type: :send, event: "request_payout", target: @target}}
+            face={%{type: :link, text: @payout_button_label}}
+            testid="payout-button"
+          />
+        </div>
       <% end %>
       <div class="text-bodysmall font-body text-grey2">
         <%= @caption %>

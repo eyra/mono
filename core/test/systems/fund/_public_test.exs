@@ -1129,6 +1129,35 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
     end
 
+    # The unconfirmed-transfer case: the money may or may not have moved and no
+    # charge can be looked up, so request_payout must surface it for manual review
+    # — never start a fresh payout over the approved rewards (risking a double
+    # charge) nor touch them.
+    test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
+         %{user: user, fund: fund} do
+      stranded =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: 1000,
+          currency: "eur",
+          status: :pending,
+          funds_committed_at: nil,
+          provider_uid: nil
+        })
+
+      # A newly-earned reward that must not be swept into a fresh payout.
+      fresh = insert_reward(user, fund, 500, :approved)
+
+      # No provider calls at all: an unconfirmed transfer with no findable charge
+      # is left for a human — nothing is issued and no bank recheck happens.
+      assert {:error, :manual_review} = Fund.Public.request_payout(user)
+
+      # Still exactly one payout (the stranded one); the fresh reward is untouched.
+      assert [%{id: id}] = Core.Repo.all(Fund.PayoutModel)
+      assert id == stranded.id
+      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+    end
+
     # A :failed payout that moved no money already released its lock, so it must
     # not block a fresh payout of the reverted (now :approved) rewards.
     test "starts a new payout when the only prior one failed before moving money",
@@ -1224,6 +1253,53 @@ defmodule Systems.Fund.PublicTest do
 
       assert %{status: :completed, provider_uid: "w_found"} = Core.Repo.reload!(payout)
       assert %{status: :paid} = Core.Repo.reload!(reward)
+    end
+
+    # :awaiting_withdrawal after a retry whose response was lost: the provider now
+    # holds both the rejected attempt=0 and a still-pending attempt=1. Matching by
+    # prefix alone could adopt the failed attempt (listed first here), mark the
+    # payout :failed, and drive a fresh retry while attempt=1 is still live —
+    # paying the participant twice. Resume must adopt the *current* attempt.
+    test "adopts the live current attempt, never a stale failed one, when both exist",
+         %{user: user, fund: fund} do
+      {payout, reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil,
+          withdrawal_attempt: 1
+        })
+
+      prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" ->
+        {:ok,
+         [
+           # The earlier, rejected attempt — listed first, must NOT be adopted.
+           %{
+             uid: "w_failed_0",
+             status: :failed,
+             raw_status: "disapproved",
+             reference: prefix <> ",attempt=0",
+             amount: 1000
+           },
+           # The current attempt, still pending after the lost response.
+           %{
+             uid: "w_live_1",
+             status: :pending,
+             raw_status: "pending",
+             reference: prefix <> ",attempt=1",
+             amount: 1000
+           }
+         ]}
+      end)
+
+      # No create_withdrawal: a live attempt already exists, so nothing new is issued.
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      # Adopts the live current attempt and stays pending — not :failed (which would
+      # trigger a double-paying retry).
+      assert %{status: :pending, provider_uid: "w_live_1"} = Core.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
     end
 
     # :awaiting_withdrawal, and no withdrawal was ever created. Resume must issue

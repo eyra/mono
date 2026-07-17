@@ -128,15 +128,14 @@ defmodule Systems.Fund.PayoutWithdrawal do
   end
 
   defp find_existing_withdrawal(%Fund.PayoutModel{} = payout, merchant_uid) do
+    exact_key = Fund.PayoutModel.withdrawal_key(payout)
     prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
 
     case Payment.Public.list_withdrawals(merchant_uid) do
       {:ok, withdrawals} ->
-        withdrawals
-        |> Enum.find(fn %{reference: ref} ->
-          is_binary(ref) and String.starts_with?(ref, prefix)
-        end)
-        |> case do
+        exact = Enum.find(withdrawals, &(&1.reference == exact_key))
+
+        case exact || Enum.find(withdrawals, &live_prefix_match?(&1, prefix)) do
           nil -> :none
           withdrawal -> {:ok, withdrawal}
         end
@@ -145,6 +144,11 @@ defmodule Systems.Fund.PayoutWithdrawal do
         error
     end
   end
+
+  defp live_prefix_match?(%{reference: ref, status: status}, prefix) when is_binary(ref),
+    do: status != :failed and String.starts_with?(ref, prefix)
+
+  defp live_prefix_match?(_withdrawal, _prefix), do: false
 
   defp adopt_withdrawal(%Fund.PayoutModel{} = payout, %{uid: uid} = withdrawal, total) do
     with {:ok, _result} <- record_uid(payout, withdrawal, total) do
