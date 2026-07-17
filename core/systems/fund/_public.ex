@@ -926,15 +926,9 @@ defmodule Systems.Fund.Public do
   """
   def summarize_rewards(%Account.User{id: user_id}, currency) do
     totals =
-      from(r in Fund.RewardModel,
-        join: f in Fund.Model,
-        on: f.id == r.fund_id,
-        join: c in Fund.CurrencyModel,
-        on: c.id == f.currency_id,
-        where: r.user_id == ^user_id and c.name == ^currency,
-        group_by: r.status,
-        select: {r.status, sum(r.amount)}
-      )
+      reward_query_in_currency(user_id, currency)
+      |> group_by([reward: r], r.status)
+      |> select([reward: r], {r.status, sum(r.amount)})
       |> Repo.all()
       |> Enum.into(%{})
 
@@ -1261,15 +1255,8 @@ defmodule Systems.Fund.Public do
   # Scoped to euro funds so rewards in other currencies are never summed into a
   # EUR withdrawal; they stay :approved until multi-currency payouts exist.
   defp list_approved_rewards(user_id, currency) do
-    from(r in Fund.RewardModel,
-      join: f in Fund.Model,
-      on: f.id == r.fund_id,
-      join: c in Fund.CurrencyModel,
-      on: c.id == f.currency_id,
-      where:
-        r.user_id == ^user_id and r.status == :approved and
-          c.name == ^currency
-    )
+    reward_query_in_currency(user_id, currency)
+    |> where([reward: r], r.status == :approved)
     |> Repo.all()
   end
 
