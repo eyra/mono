@@ -190,3 +190,15 @@ msgstr "Zur Verifizierung"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.title"
 msgstr "Bankkonto noch nicht verifiziert"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.retry"
+msgstr ""

@@ -202,7 +202,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_c_pay")
       stub_ready("m_c_pay")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 
@@ -230,7 +230,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_provisioned")
       stub_ready("m_provisioned")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 
@@ -287,5 +287,60 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       refute Fabric.get_child(closed.assigns.fabric, :handoff_modal)
       assert reward_status(user) == :approved
     end
+  end
+
+  describe "retry_payout (stranded-payout recovery)" do
+    # A stranded payout is past the bank-verification handoff, so retry resumes
+    # it directly — no modal — and completes like a confirmed payout.
+    test "resumes the stranded payout and bubbles completion" do
+      {user, payout} = user_with_stranded_payout("m_retry")
+
+      # :awaiting_withdrawal: the provider holds no withdrawal, so resume issues one.
+      expect(ProviderMock, :list_withdrawals, fn "m_retry" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_retry", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      end)
+
+      {:noreply, _socket} = RewardsSummaryView.handle_event("retry_payout", %{}, socket(user))
+
+      assert %{provider_uid: "w_retry"} = Core.Repo.reload!(payout)
+      assert_received :payout_completed
+    end
+  end
+
+  defp user_with_stranded_payout(merchant_uid) do
+    currency =
+      Fund.Factories.create_currency(
+        "s_cur_#{System.unique_integer([:positive])}",
+        :legal,
+        "ƒ",
+        2
+      )
+
+    fund = Fund.Factories.create_fund("s_fund_#{System.unique_integer([:positive])}", currency)
+    user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
+
+    payout =
+      Core.Repo.insert!(%Fund.PayoutModel{
+        user_id: user.id,
+        amount_cents: 1000,
+        currency: "eur",
+        status: :pending,
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: nil
+      })
+
+    Factories.insert!(:reward, %{
+      user: user,
+      fund: fund,
+      amount: 1000,
+      status: :pending_payout,
+      payout_id: payout.id,
+      idempotence_key: "s-#{System.unique_integer([:positive])}"
+    })
+
+    {user, payout}
   end
 end

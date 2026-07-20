@@ -21,6 +21,7 @@ defmodule Systems.Home.RewardsSummaryView do
   use CoreWeb, :live_component
 
   alias Frameworks.Pixel
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
@@ -32,6 +33,7 @@ defmodule Systems.Home.RewardsSummaryView do
           pending_cents: pending_cents,
           approved_cents: approved_cents,
           rejected_cents: rejected_cents,
+          payout_status: payout_status,
           labels: labels,
           user: user,
           payout_currency: payout_currency
@@ -45,6 +47,7 @@ defmodule Systems.Home.RewardsSummaryView do
         pending_cents: pending_cents,
         approved_cents: approved_cents,
         rejected_cents: rejected_cents,
+        payout_status: payout_status,
         labels: labels,
         user: user,
         payout_currency: payout_currency
@@ -108,6 +111,25 @@ defmodule Systems.Home.RewardsSummaryView do
     end
   end
 
+  # A stranded payout is already past the bank-verification handoff, so the retry
+  # resumes it directly. request_payout resumes an unresolved payout rather than
+  # starting a new one, so the currency only satisfies the signature here.
+  @impl true
+  def handle_event(
+        "retry_payout",
+        _params,
+        %{assigns: %{user: user, payout_currency: payout_currency}} = socket
+      ) do
+    case Fund.Public.request_payout(user, payout_currency) do
+      {:ok, _result} ->
+        send(self(), :payout_completed)
+        {:noreply, socket}
+
+      error ->
+        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+    end
+  end
+
   @impl true
   def handle_event(
         "confirmed",
@@ -164,7 +186,8 @@ defmodule Systems.Home.RewardsSummaryView do
     assign(socket,
       pending_cents: pending_cents,
       approved_cents: approved_cents,
-      rejected_cents: rejected_cents
+      rejected_cents: rejected_cents,
+      payout_status: Fund.Public.payout_status(user)
     )
   end
 
@@ -189,7 +212,7 @@ defmodule Systems.Home.RewardsSummaryView do
           amount_cents={@approved_cents}
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
-          payout_enabled?={@approved_cents > 0}
+          payout_enabled?={@payout_status == :none and @approved_cents > 0}
           target={@myself}
         />
         <.column
@@ -198,9 +221,46 @@ defmodule Systems.Home.RewardsSummaryView do
           amount_cents={@rejected_cents}
         />
       </div>
+      <.payout_status_section status={@payout_status} labels={@labels} target={@myself} />
     </div>
     """
   end
+
+  attr(:status, :atom, required: true)
+  attr(:labels, :map, required: true)
+  attr(:target, :any, required: true)
+
+  # Surfaces a payout the reward columns can't: its rewards are locked, so they
+  # show in no bucket. :retryable is the only state the participant can act on.
+  defp payout_status_section(%{status: :retryable} = assigns) do
+    ~H"""
+    <div class="mt-6" data-testid="payout-retry">
+      <Button.dynamic
+        action={%{type: :send, event: "retry_payout", target: @target}}
+        face={%{type: :link, text: @labels.payout_retry_button}}
+        testid="payout-retry-button"
+      />
+    </div>
+    """
+  end
+
+  defp payout_status_section(%{status: :in_progress} = assigns) do
+    ~H"""
+    <div class="mt-6 text-bodysmall font-body text-grey2" data-testid="payout-in-progress">
+      <%= @labels.payout_in_progress %>
+    </div>
+    """
+  end
+
+  defp payout_status_section(%{status: :manual} = assigns) do
+    ~H"""
+    <div class="mt-6 text-bodysmall font-body text-grey2" data-testid="payout-manual">
+      <%= @labels.payout_manual %>
+    </div>
+    """
+  end
+
+  defp payout_status_section(%{status: :none} = assigns), do: ~H""
 
   attr(:pill_label, :string, required: true)
   attr(:pill_color, :string, required: true)
@@ -242,15 +302,13 @@ defmodule Systems.Home.RewardsSummaryView do
         <%= CurrencyHelpers.format_cents(@amount_cents) %>
       </div>
       <%= if @payout_enabled? do %>
-        <button
-          type="button"
-          phx-click="request_payout"
-          phx-target={@target}
-          data-testid="payout-button"
-          class="self-start text-button font-button text-primary hover:underline"
-        >
-          <%= @payout_button_label %>
-        </button>
+        <div class="self-start">
+          <Button.dynamic
+            action={%{type: :send, event: "request_payout", target: @target}}
+            face={%{type: :link, text: @payout_button_label}}
+            testid="payout-button"
+          />
+        </div>
       <% end %>
       <div class="text-bodysmall font-body text-grey2">
         <%= @caption %>
