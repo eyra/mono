@@ -49,6 +49,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           user: user,
           labels: @labels,
           handoff_mode: :payout,
+          payout_currency: "euro",
           pending_cents: 0,
           approved_cents: 1000,
           rejected_cents: 0
@@ -60,13 +61,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   end
 
   defp user_with_reward(amount, merchant_uid) do
-    currency =
-      Fund.Factories.create_currency(
-        "h_cur_#{System.unique_integer([:positive])}",
-        :legal,
-        "ƒ",
-        2
-      )
+    currency = Fund.Factories.create_currency("euro", :legal, "€", 2)
 
     fund = Fund.Factories.create_fund("h_fund_#{System.unique_integer([:positive])}", currency)
     user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
