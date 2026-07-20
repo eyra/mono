@@ -5,6 +5,7 @@ defmodule Systems.Affiliate.RecruitTest do
 
   alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Fund
 
   describe "GET /r/:sqid" do
     setup do
@@ -59,5 +60,47 @@ defmodule Systems.Affiliate.RecruitTest do
 
       assert conn.status == 503
     end
+  end
+
+  describe "GET /a/:sqid (participant start)" do
+    setup do
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+      %{assignment: assignment}
+    end
+
+    test "shows a friendly 'study is full' page when the budget cannot cover one more reward",
+         %{conn: conn, assignment: assignment} do
+      make_paid(assignment, 6000)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-full-1")
+
+      response = html_response(conn, 200)
+      assert response =~ "error-assignment_full"
+      assert response =~ "This study is full"
+    end
+
+    test "starts the participant when the budget can cover one more reward",
+         %{conn: conn, assignment: assignment} do
+      make_paid(assignment, 100)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-ok-1")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+    end
+  end
+
+  defp make_paid(%{info: info} = assignment, subject_reward) do
+    currency = Fund.Factories.create_currency("eur_aff_#{subject_reward}", :legal, "€", 2)
+    fund = Fund.Factories.create_fund("aff_fund_#{subject_reward}", currency)
+
+    assignment
+    |> Assignment.Model.changeset(fund)
+    |> Core.Repo.update!()
+
+    info
+    |> Ecto.Changeset.change(subject_reward: subject_reward)
+    |> Core.Repo.update!()
   end
 end
