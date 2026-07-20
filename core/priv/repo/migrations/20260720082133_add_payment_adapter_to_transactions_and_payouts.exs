@@ -5,34 +5,23 @@ defmodule Core.Repo.Migrations.AddPaymentAdapterToTransactionsAndPayouts do
   # "local"), set at creation, so reconciliation can skip local-only records
   # instead of guessing from the "free_" id prefix.
   def up do
+    # Default "opp" (NOT NULL) so existing rows — and any created by old app
+    # instances still live during a rolling deploy, before the new code sets the
+    # adapter — satisfy the constraint. Only local-only rows deviate.
     alter table(:transactions) do
-      add(:payment_adapter, :string)
+      add(:payment_adapter, :string, null: false, default: "opp")
     end
 
     alter table(:fund_payouts) do
-      add(:payment_adapter, :string)
+      add(:payment_adapter, :string, null: false, default: "opp")
     end
 
     flush()
 
-    # Legacy rows: free pay-ins were local-only; everything else was OPP.
-    execute("""
-    UPDATE transactions
-    SET payment_adapter = CASE
-      WHEN transaction_id LIKE 'free_%' THEN 'local'
-      ELSE 'opp'
-    END
-    """)
-
-    execute("UPDATE fund_payouts SET payment_adapter = 'opp'")
-
-    alter table(:transactions) do
-      modify(:payment_adapter, :string, null: false)
-    end
-
-    alter table(:fund_payouts) do
-      modify(:payment_adapter, :string, null: false)
-    end
+    # Legacy free pay-ins were local-only, not OPP.
+    execute(
+      "UPDATE transactions SET payment_adapter = 'local' WHERE transaction_id LIKE 'free_%'"
+    )
   end
 
   def down do

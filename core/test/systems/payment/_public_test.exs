@@ -243,4 +243,21 @@ defmodule Systems.Payment.PublicTest do
       assert Payment.Public.platform_merchant_uid() == "mer_platform_test"
     end
   end
+
+  describe "adapter_name/0" do
+    setup do
+      original = Application.fetch_env!(:core, :payment_provider)
+      on_exit(fn -> Application.put_env(:core, :payment_provider, original) end)
+    end
+
+    test ~s(resolves the OPP provider to its registry key "opp") do
+      Application.put_env(:core, :payment_provider, Systems.Payment.Provider.OPP)
+      assert Payment.Public.adapter_name() == "opp"
+    end
+
+    test ~s(resolves the Local provider to its registry key "local") do
+      Application.put_env(:core, :payment_provider, Systems.Payment.Provider.Local)
+      assert Payment.Public.adapter_name() == "local"
+    end
+  end
 end

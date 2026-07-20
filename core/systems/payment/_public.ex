@@ -293,12 +293,25 @@ defmodule Systems.Payment.Public do
   end
 
   @doc """
-  Short name of the currently configured payment adapter ("opp" or "local"),
-  stored on transactions and payouts at creation so reconciliation can skip
-  local-only records instead of guessing from the id.
+  Canonical name of the currently configured payment adapter (e.g. "opp" or
+  "local"), stored on transactions and payouts at creation so reconciliation can
+  skip local-only records instead of guessing from the id.
+
+  Resolved from the `:payment_providers` registry, whose keys are the canonical
+  names reconciliation filters on. Real deployments always select their provider
+  through that registry (see `Core.Config.payment_provider/0`), so the name is
+  guaranteed; only a provider configured outside it — the test mock — falls back
+  to its own short module name.
   """
   @spec adapter_name() :: String.t()
-  def adapter_name, do: provider_name()
+  def adapter_name do
+    provider = provider()
+
+    Application.fetch_env!(:core, :payment_providers)
+    |> Enum.find_value(provider_name(), fn {name, module} ->
+      if module == provider, do: name
+    end)
+  end
 
   defp provider do
     Application.fetch_env!(:core, :payment_provider)
