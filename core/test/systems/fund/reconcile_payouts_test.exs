@@ -122,13 +122,13 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     assert %{status: :pending} = Repo.reload!(payout)
   end
 
-  test "skips a local-only payout without querying the provider", %{user: user, fund: fund} do
+  test "does not scan a local-only payout", %{user: user, fund: fund} do
     # A payout realized by the local simulator never existed at OPP; the stored
-    # adapter tells reconciliation to leave it alone.
+    # adapter keeps it out of the scan entirely.
     {payout, _reward} = insert_payout(user, fund, 1000, "w_local", adapter: "local")
 
     # No ProviderMock stub: verify_on_exit! fails if the provider is queried.
-    assert %{scanned: 1, verified: 1} = reconcile()
+    assert %{scanned: 0} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
   end
 

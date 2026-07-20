@@ -172,13 +172,13 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     assert %{scanned: 0} = reconcile()
   end
 
-  test "skips a local-only transaction without querying the provider" do
+  test "does not scan a local-only transaction" do
     # Free pay-ins and local-simulator transactions never existed at OPP; the
-    # stored adapter — not the id — tells reconciliation to leave them alone.
+    # stored adapter — not the id — keeps them out of the scan entirely.
     transaction = setup_transaction(:completed, adapter: "local")
 
     # No ProviderMock stub: verify_on_exit! fails if the provider is queried.
-    assert %{scanned: 1, verified: 1} = reconcile()
+    assert %{scanned: 0} = reconcile()
     assert %{status: :completed} = Repo.reload!(transaction)
   end
 

@@ -38,18 +38,14 @@ defmodule Systems.Budget.TransactionReconciliation do
     age_cutoff = NaiveDateTime.add(now, -min_age_minutes * 60, :second)
     lookback_cutoff = NaiveDateTime.add(now, -max_age_days * 24 * 60 * 60, :second)
 
+    # Local-only rows (free pay-ins, local simulator) never existed at the
+    # provider, so they are excluded here rather than fetched and skipped.
     from(t in Budget.TransactionModel,
       where:
-        t.status in [:pending, :failed, :completed] and t.inserted_at < ^age_cutoff and
-          t.inserted_at > ^lookback_cutoff
+        t.status in [:pending, :failed, :completed] and t.payment_adapter != "local" and
+          t.inserted_at < ^age_cutoff and t.inserted_at > ^lookback_cutoff
     )
     |> Repo.all()
-  end
-
-  # Local-only (free pay-ins, local simulator) never existed at the provider, so
-  # there is nothing to reconcile against.
-  defp reconcile_transaction(%Budget.TransactionModel{payment_adapter: "local"}, state) do
-    State.tally(state, :verified)
   end
 
   defp reconcile_transaction(

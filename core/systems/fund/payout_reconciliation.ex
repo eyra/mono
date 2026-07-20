@@ -38,19 +38,16 @@ defmodule Systems.Fund.PayoutReconciliation do
 
     # A :failed payout whose funds moved (:withdrawal_retryable) is still open;
     # one that moved nothing already released its lock and is terminal.
+    # Local-only payouts (local simulator) never existed at the provider, so they
+    # are excluded here rather than fetched and skipped.
     from(p in Fund.PayoutModel,
       where:
         (p.status in [:pending, :completed] or
            (p.status == :failed and not is_nil(p.funds_committed_at))) and
+          p.payment_adapter != "local" and
           p.inserted_at < ^age_cutoff and p.inserted_at > ^lookback_cutoff
     )
     |> Repo.all()
-  end
-
-  # Local-only payouts (local simulator) never existed at the provider, so there
-  # is nothing to reconcile against.
-  defp reconcile_payout(%Fund.PayoutModel{payment_adapter: "local"}, state) do
-    State.tally(state, :verified)
   end
 
   defp reconcile_payout(%Fund.PayoutModel{} = payout, state) do
